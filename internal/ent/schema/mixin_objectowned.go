@@ -2,14 +2,12 @@ package schema
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"slices"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -26,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
+	access "github.com/theopenlane/core/internal/ent/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 )
@@ -182,14 +181,19 @@ func withParents(schemas ...any) objectOwnedOption {
 	}
 }
 
+// orgOwnedSettings are settings common for schemas with parent organizations owners
+func orgOwnedSettings(o *ObjectOwnedMixin) {
+	o.IncludeOrganizationOwner = true
+
+	o.HookFuncs = append(o.HookFuncs, orgHookCreateFunc)
+	o.InterceptorFuncs = append(o.InterceptorFuncs, defaultOrgInterceptorFunc)
+}
+
 // withOrganizationOwner adds the organization owner_id field and hooks to the schema
 // and optionally allows system admins to have empty owner_id
 func withOrganizationOwner() objectOwnedOption {
 	return func(o *ObjectOwnedMixin) {
-		o.IncludeOrganizationOwner = true
-
-		o.HookFuncs = append(o.HookFuncs, orgHookCreateFunc)
-		o.InterceptorFuncs = append(o.InterceptorFuncs, defaultOrgInterceptorFunc)
+		orgOwnedSettings(o)
 	}
 }
 
@@ -198,11 +202,9 @@ func withOrganizationOwner() objectOwnedOption {
 // permissions from parents and not the organization directly
 func withOrganizationOwnerFieldOnly() objectOwnedOption {
 	return func(o *ObjectOwnedMixin) {
-		o.IncludeOrganizationOwner = true
 		o.SkipParentContextTuple = true
 
-		o.HookFuncs = append(o.HookFuncs, orgHookCreateFunc)
-		o.InterceptorFuncs = append(o.InterceptorFuncs, defaultOrgInterceptorFunc)
+		orgOwnedSettings(o)
 	}
 }
 
@@ -458,7 +460,7 @@ func skipQueryModeCheck(ctx context.Context, mode interceptors.SkipMode) bool {
 // this can be used when an object adds tuples for explicit behavior, but all org members should be able to view the object
 // for example, a questionnaire template owned by the organization but is sent to an external user to fill out
 func skipInterceptorForOrgMembers(ctx context.Context) bool {
-	if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.CanView); errors.Is(err, privacy.Allow) {
+	if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.CanView); access.Allow(err) {
 		return true
 	}
 

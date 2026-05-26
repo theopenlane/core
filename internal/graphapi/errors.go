@@ -7,7 +7,7 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	access "github.com/theopenlane/core/internal/ent/privacy"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/pkg/logx"
@@ -73,7 +73,7 @@ func parseRequestError(ctx context.Context, err error, a common.Action) error {
 		logx.FromContext(ctx).Info().Err(err).Msg("request object was not found")
 
 		return common.NewNotFoundError(a.Object)
-	case errors.Is(err, privacy.Deny):
+	case access.Deny(err):
 		logx.FromContext(ctx).Info().Err(err).Msg("user has no access to the requested object due to privacy rules")
 
 		return common.NewNotFoundError(a.Object)

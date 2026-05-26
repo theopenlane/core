@@ -69,6 +69,8 @@ const (
 	EdgeControlImplementationCreators = "control_implementation_creators"
 	// EdgeControlObjectiveCreators holds the string denoting the control_objective_creators edge name in mutations.
 	EdgeControlObjectiveCreators = "control_objective_creators"
+	// EdgeCustomDomainCreators holds the string denoting the custom_domain_creators edge name in mutations.
+	EdgeCustomDomainCreators = "custom_domain_creators"
 	// EdgeCustomTypeEnumCreators holds the string denoting the custom_type_enum_creators edge name in mutations.
 	EdgeCustomTypeEnumCreators = "custom_type_enum_creators"
 	// EdgeDirectoryAccountCreators holds the string denoting the directory_account_creators edge name in mutations.
@@ -95,6 +97,8 @@ const (
 	EdgeFileCreators = "file_creators"
 	// EdgeFindingCreators holds the string denoting the finding_creators edge name in mutations.
 	EdgeFindingCreators = "finding_creators"
+	// EdgeFindingControlCreators holds the string denoting the finding_control_creators edge name in mutations.
+	EdgeFindingControlCreators = "finding_control_creators"
 	// EdgeGroupCreators holds the string denoting the group_creators edge name in mutations.
 	EdgeGroupCreators = "group_creators"
 	// EdgeGroupMembershipCreators holds the string denoting the group_membership_creators edge name in mutations.
@@ -147,6 +151,8 @@ const (
 	EdgeScheduledJobCreators = "scheduled_job_creators"
 	// EdgeScheduledJobRunCreators holds the string denoting the scheduled_job_run_creators edge name in mutations.
 	EdgeScheduledJobRunCreators = "scheduled_job_run_creators"
+	// EdgeSLADefinitionCreators holds the string denoting the sla_definition_creators edge name in mutations.
+	EdgeSLADefinitionCreators = "sla_definition_creators"
 	// EdgeStandardCreators holds the string denoting the standard_creators edge name in mutations.
 	EdgeStandardCreators = "standard_creators"
 	// EdgeSubcontrolCreators holds the string denoting the subcontrol_creators edge name in mutations.
@@ -181,6 +187,8 @@ const (
 	EdgeTrustCenterWatermarkConfigCreators = "trust_center_watermark_config_creators"
 	// EdgeVendorRiskScoreCreators holds the string denoting the vendor_risk_score_creators edge name in mutations.
 	EdgeVendorRiskScoreCreators = "vendor_risk_score_creators"
+	// EdgeVendorScoringConfigCreators holds the string denoting the vendor_scoring_config_creators edge name in mutations.
+	EdgeVendorScoringConfigCreators = "vendor_scoring_config_creators"
 	// EdgeVulnerabilityCreators holds the string denoting the vulnerability_creators edge name in mutations.
 	EdgeVulnerabilityCreators = "vulnerability_creators"
 	// EdgeWorkflowDefinitionCreators holds the string denoting the workflow_definition_creators edge name in mutations.
@@ -458,6 +466,13 @@ const (
 	ControlObjectiveCreatorsInverseTable = "groups"
 	// ControlObjectiveCreatorsColumn is the table column denoting the control_objective_creators relation/edge.
 	ControlObjectiveCreatorsColumn = "organization_control_objective_creators"
+	// CustomDomainCreatorsTable is the table that holds the custom_domain_creators relation/edge.
+	CustomDomainCreatorsTable = "groups"
+	// CustomDomainCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	CustomDomainCreatorsInverseTable = "groups"
+	// CustomDomainCreatorsColumn is the table column denoting the custom_domain_creators relation/edge.
+	CustomDomainCreatorsColumn = "organization_custom_domain_creators"
 	// CustomTypeEnumCreatorsTable is the table that holds the custom_type_enum_creators relation/edge.
 	CustomTypeEnumCreatorsTable = "groups"
 	// CustomTypeEnumCreatorsInverseTable is the table name for the Group entity.
@@ -549,6 +564,13 @@ const (
 	FindingCreatorsInverseTable = "groups"
 	// FindingCreatorsColumn is the table column denoting the finding_creators relation/edge.
 	FindingCreatorsColumn = "organization_finding_creators"
+	// FindingControlCreatorsTable is the table that holds the finding_control_creators relation/edge.
+	FindingControlCreatorsTable = "groups"
+	// FindingControlCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	FindingControlCreatorsInverseTable = "groups"
+	// FindingControlCreatorsColumn is the table column denoting the finding_control_creators relation/edge.
+	FindingControlCreatorsColumn = "organization_finding_control_creators"
 	// GroupCreatorsTable is the table that holds the group_creators relation/edge.
 	GroupCreatorsTable = "groups"
 	// GroupCreatorsInverseTable is the table name for the Group entity.
@@ -731,6 +753,13 @@ const (
 	ScheduledJobRunCreatorsInverseTable = "groups"
 	// ScheduledJobRunCreatorsColumn is the table column denoting the scheduled_job_run_creators relation/edge.
 	ScheduledJobRunCreatorsColumn = "organization_scheduled_job_run_creators"
+	// SLADefinitionCreatorsTable is the table that holds the sla_definition_creators relation/edge.
+	SLADefinitionCreatorsTable = "groups"
+	// SLADefinitionCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	SLADefinitionCreatorsInverseTable = "groups"
+	// SLADefinitionCreatorsColumn is the table column denoting the sla_definition_creators relation/edge.
+	SLADefinitionCreatorsColumn = "organization_sla_definition_creators"
 	// StandardCreatorsTable is the table that holds the standard_creators relation/edge.
 	StandardCreatorsTable = "groups"
 	// StandardCreatorsInverseTable is the table name for the Group entity.
@@ -850,6 +879,13 @@ const (
 	VendorRiskScoreCreatorsInverseTable = "groups"
 	// VendorRiskScoreCreatorsColumn is the table column denoting the vendor_risk_score_creators relation/edge.
 	VendorRiskScoreCreatorsColumn = "organization_vendor_risk_score_creators"
+	// VendorScoringConfigCreatorsTable is the table that holds the vendor_scoring_config_creators relation/edge.
+	VendorScoringConfigCreatorsTable = "groups"
+	// VendorScoringConfigCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	VendorScoringConfigCreatorsInverseTable = "groups"
+	// VendorScoringConfigCreatorsColumn is the table column denoting the vendor_scoring_config_creators relation/edge.
+	VendorScoringConfigCreatorsColumn = "organization_vendor_scoring_config_creators"
 	// VulnerabilityCreatorsTable is the table that holds the vulnerability_creators relation/edge.
 	VulnerabilityCreatorsTable = "groups"
 	// VulnerabilityCreatorsInverseTable is the table name for the Group entity.
@@ -1583,7 +1619,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [84]ent.Hook
+	Hooks        [88]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -1847,6 +1883,20 @@ func ByControlObjectiveCreators(term sql.OrderTerm, terms ...sql.OrderTerm) Orde
 	}
 }
 
+// ByCustomDomainCreatorsCount orders the results by custom_domain_creators count.
+func ByCustomDomainCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCustomDomainCreatorsStep(), opts...)
+	}
+}
+
+// ByCustomDomainCreators orders the results by custom_domain_creators terms.
+func ByCustomDomainCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCustomDomainCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByCustomTypeEnumCreatorsCount orders the results by custom_type_enum_creators count.
 func ByCustomTypeEnumCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -2026,6 +2076,20 @@ func ByFindingCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByFindingCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newFindingCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByFindingControlCreatorsCount orders the results by finding_control_creators count.
+func ByFindingControlCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFindingControlCreatorsStep(), opts...)
+	}
+}
+
+// ByFindingControlCreators orders the results by finding_control_creators terms.
+func ByFindingControlCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFindingControlCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -2393,6 +2457,20 @@ func ByScheduledJobRunCreators(term sql.OrderTerm, terms ...sql.OrderTerm) Order
 	}
 }
 
+// BySLADefinitionCreatorsCount orders the results by sla_definition_creators count.
+func BySLADefinitionCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSLADefinitionCreatorsStep(), opts...)
+	}
+}
+
+// BySLADefinitionCreators orders the results by sla_definition_creators terms.
+func BySLADefinitionCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSLADefinitionCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByStandardCreatorsCount orders the results by standard_creators count.
 func ByStandardCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -2628,6 +2706,20 @@ func ByVendorRiskScoreCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByVendorRiskScoreCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newVendorRiskScoreCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByVendorScoringConfigCreatorsCount orders the results by vendor_scoring_config_creators count.
+func ByVendorScoringConfigCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVendorScoringConfigCreatorsStep(), opts...)
+	}
+}
+
+// ByVendorScoringConfigCreators orders the results by vendor_scoring_config_creators terms.
+func ByVendorScoringConfigCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVendorScoringConfigCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -4072,6 +4164,13 @@ func newControlObjectiveCreatorsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, ControlObjectiveCreatorsTable, ControlObjectiveCreatorsColumn),
 	)
 }
+func newCustomDomainCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CustomDomainCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CustomDomainCreatorsTable, CustomDomainCreatorsColumn),
+	)
+}
 func newCustomTypeEnumCreatorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -4161,6 +4260,13 @@ func newFindingCreatorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FindingCreatorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, FindingCreatorsTable, FindingCreatorsColumn),
+	)
+}
+func newFindingControlCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FindingControlCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, FindingControlCreatorsTable, FindingControlCreatorsColumn),
 	)
 }
 func newGroupCreatorsStep() *sqlgraph.Step {
@@ -4345,6 +4451,13 @@ func newScheduledJobRunCreatorsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, ScheduledJobRunCreatorsTable, ScheduledJobRunCreatorsColumn),
 	)
 }
+func newSLADefinitionCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SLADefinitionCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, SLADefinitionCreatorsTable, SLADefinitionCreatorsColumn),
+	)
+}
 func newStandardCreatorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -4462,6 +4575,13 @@ func newVendorRiskScoreCreatorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(VendorRiskScoreCreatorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, VendorRiskScoreCreatorsTable, VendorRiskScoreCreatorsColumn),
+	)
+}
+func newVendorScoringConfigCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VendorScoringConfigCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, VendorScoringConfigCreatorsTable, VendorScoringConfigCreatorsColumn),
 	)
 }
 func newVulnerabilityCreatorsStep() *sqlgraph.Step {

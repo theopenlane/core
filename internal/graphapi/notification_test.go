@@ -76,7 +76,7 @@ func TestMutationCreateNotification(t *testing.T) {
 			assert.Check(t, is.Equal(tc.request.Body, resp.CreateNotification.Notification.Body))
 			assert.Check(t, is.Equal(tc.request.ObjectType, resp.CreateNotification.Notification.ObjectType))
 
-			(&Cleanup[*generated.NotificationDeleteOne]{client: suite.client.db.Notification, ID: resp.CreateNotification.Notification.ID}).MustDelete(sharedAdminUser.UserCtx, t)
+			(&Cleanup[*generated.NotificationDeleteOne]{client: suite.client.db.Notification, ID: resp.CreateNotification.Notification.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 		})
 	}
 }

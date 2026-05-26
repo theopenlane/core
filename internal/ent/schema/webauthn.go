@@ -149,6 +149,7 @@ func (w Webauthn) Annotations() []schema.Annotation {
 // Policy of the Webauthn
 func (w Webauthn) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithSkipDenyOrganizationRule(),
 		policy.WithMutationRules(
 			privacy.AlwaysAllowRule(),
 		),

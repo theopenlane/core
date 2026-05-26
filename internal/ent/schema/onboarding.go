@@ -124,6 +124,7 @@ func (Onboarding) Hooks() []ent.Hook {
 // Policy of the Onboarding
 func (o Onboarding) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithSkipDenyOrganizationRule(),
 		policy.WithQueryRules(
 			privacy.AlwaysDenyRule(), // deny all queries by default
 		),

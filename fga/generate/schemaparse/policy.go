@@ -23,10 +23,9 @@ var (
 	}
 
 	ignoreNames = map[string]struct{}{
-		"NewPolicy":           {},
-		"AllowIfSelf":         {}, // these are user owned objects, not token permissions
-		"AllowCreate":         {}, // this only gives create access, not full crud
-		"CheckOrgWriteAccess": {}, // does not imply there are tuples to manage this, do not add to total count
+		"NewPolicy":   {},
+		"AllowIfSelf": {}, // these are user owned objects, not token permissions
+		"AllowCreate": {}, // this only gives create access, not full crud
 	}
 
 	queryRuleNames = map[string]struct{}{

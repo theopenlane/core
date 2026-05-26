@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	access "github.com/theopenlane/core/internal/ent/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
@@ -274,7 +275,7 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 
 			allowScopeCheck := true
 			if err := rule.EnsureObjectInOrganization(ctx, m, edgeMap.ObjectType, idStr, orgID); err != nil {
-				if errors.Is(err, privacy.Deny) {
+				if access.Deny(err) {
 					logx.FromContext(ctx).Error().Err(err).Msg("object is not part of the organization")
 
 					return fmt.Errorf("%s (id: %s) was not found: %w", edgeMap.ObjectType, idStr, generated.ErrPermissionDenied)
@@ -286,7 +287,7 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 			// check api token scope first, as api tokens will have full access to object types they have scope for
 			if allowScopeCheck {
 				if err := rule.CheckSubjectScope(ctx, edgeMap.ObjectType, relationCheck, nil); err != nil {
-					if errors.Is(err, privacy.Allow) {
+					if access.Allow(err) {
 						return nil
 					}
 				}

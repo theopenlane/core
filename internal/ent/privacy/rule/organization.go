@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	access "github.com/theopenlane/core/internal/ent/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/permissioncache"
@@ -92,7 +93,7 @@ func CheckOrgAccessBasedOnRequest(ctx context.Context, relation string, query *g
 	}
 
 	for _, org := range requestedOrgs {
-		if err := checkOrgAccess(ctx, relation, org.ID); err != nil && errors.Is(err, privacy.Deny) {
+		if err := checkOrgAccess(ctx, relation, org.ID); err != nil && access.Deny(err) {
 			return err
 		}
 	}

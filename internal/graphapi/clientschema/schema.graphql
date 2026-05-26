@@ -15029,6 +15029,7 @@ input CreateOrganizationInput {
 	controlCreatorIDs: [ID!]
 	controlImplementationCreatorIDs: [ID!]
 	controlObjectiveCreatorIDs: [ID!]
+	customDomainCreatorIDs: [ID!]
 	customTypeEnumCreatorIDs: [ID!]
 	directoryAccountCreatorIDs: [ID!]
 	directoryGroupCreatorIDs: [ID!]
@@ -15042,6 +15043,7 @@ input CreateOrganizationInput {
 	evidenceCreatorIDs: [ID!]
 	fileCreatorIDs: [ID!]
 	findingCreatorIDs: [ID!]
+	findingControlCreatorIDs: [ID!]
 	groupCreatorIDs: [ID!]
 	groupMembershipCreatorIDs: [ID!]
 	groupSettingCreatorIDs: [ID!]
@@ -15068,6 +15070,7 @@ input CreateOrganizationInput {
 	scanCreatorIDs: [ID!]
 	scheduledJobCreatorIDs: [ID!]
 	scheduledJobRunCreatorIDs: [ID!]
+	slaDefinitionCreatorIDs: [ID!]
 	standardCreatorIDs: [ID!]
 	subcontrolCreatorIDs: [ID!]
 	subprocessorCreatorIDs: [ID!]
@@ -15085,6 +15088,7 @@ input CreateOrganizationInput {
 	trustCenterSubprocessorCreatorIDs: [ID!]
 	trustCenterWatermarkConfigCreatorIDs: [ID!]
 	vendorRiskScoreCreatorIDs: [ID!]
+	vendorScoringConfigCreatorIDs: [ID!]
 	vulnerabilityCreatorIDs: [ID!]
 	workflowDefinitionCreatorIDs: [ID!]
 	campaignsManagerIDs: [ID!]
@@ -53214,6 +53218,37 @@ type Organization implements Node {
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
+	customDomainCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 	customTypeEnumCreators(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -53587,6 +53622,37 @@ type Organization implements Node {
 		where: GroupWhereInput
 	): GroupConnection!
 	findingCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	findingControlCreators(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -54423,6 +54489,37 @@ type Organization implements Node {
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
+	slaDefinitionCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 	standardCreators(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -54920,6 +55017,37 @@ type Organization implements Node {
 		where: GroupWhereInput
 	): GroupConnection!
 	vendorRiskScoreCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	vendorScoringConfigCreators(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -58689,6 +58817,11 @@ input OrganizationWhereInput {
 	hasControlObjectiveCreators: Boolean
 	hasControlObjectiveCreatorsWith: [GroupWhereInput!]
 	"""
+	custom_domain_creators edge predicates
+	"""
+	hasCustomDomainCreators: Boolean
+	hasCustomDomainCreatorsWith: [GroupWhereInput!]
+	"""
 	custom_type_enum_creators edge predicates
 	"""
 	hasCustomTypeEnumCreators: Boolean
@@ -58753,6 +58886,11 @@ input OrganizationWhereInput {
 	"""
 	hasFindingCreators: Boolean
 	hasFindingCreatorsWith: [GroupWhereInput!]
+	"""
+	finding_control_creators edge predicates
+	"""
+	hasFindingControlCreators: Boolean
+	hasFindingControlCreatorsWith: [GroupWhereInput!]
 	"""
 	group_creators edge predicates
 	"""
@@ -58884,6 +59022,11 @@ input OrganizationWhereInput {
 	hasScheduledJobRunCreators: Boolean
 	hasScheduledJobRunCreatorsWith: [GroupWhereInput!]
 	"""
+	sla_definition_creators edge predicates
+	"""
+	hasSLADefinitionCreators: Boolean
+	hasSLADefinitionCreatorsWith: [GroupWhereInput!]
+	"""
 	standard_creators edge predicates
 	"""
 	hasStandardCreators: Boolean
@@ -58968,6 +59111,11 @@ input OrganizationWhereInput {
 	"""
 	hasVendorRiskScoreCreators: Boolean
 	hasVendorRiskScoreCreatorsWith: [GroupWhereInput!]
+	"""
+	vendor_scoring_config_creators edge predicates
+	"""
+	hasVendorScoringConfigCreators: Boolean
+	hasVendorScoringConfigCreatorsWith: [GroupWhereInput!]
 	"""
 	vulnerability_creators edge predicates
 	"""
@@ -92699,6 +92847,9 @@ input UpdateOrganizationInput {
 	addControlObjectiveCreatorIDs: [ID!]
 	removeControlObjectiveCreatorIDs: [ID!]
 	clearControlObjectiveCreators: Boolean
+	addCustomDomainCreatorIDs: [ID!]
+	removeCustomDomainCreatorIDs: [ID!]
+	clearCustomDomainCreators: Boolean
 	addCustomTypeEnumCreatorIDs: [ID!]
 	removeCustomTypeEnumCreatorIDs: [ID!]
 	clearCustomTypeEnumCreators: Boolean
@@ -92738,6 +92889,9 @@ input UpdateOrganizationInput {
 	addFindingCreatorIDs: [ID!]
 	removeFindingCreatorIDs: [ID!]
 	clearFindingCreators: Boolean
+	addFindingControlCreatorIDs: [ID!]
+	removeFindingControlCreatorIDs: [ID!]
+	clearFindingControlCreators: Boolean
 	addGroupCreatorIDs: [ID!]
 	removeGroupCreatorIDs: [ID!]
 	clearGroupCreators: Boolean
@@ -92816,6 +92970,9 @@ input UpdateOrganizationInput {
 	addScheduledJobRunCreatorIDs: [ID!]
 	removeScheduledJobRunCreatorIDs: [ID!]
 	clearScheduledJobRunCreators: Boolean
+	addSLADefinitionCreatorIDs: [ID!]
+	removeSLADefinitionCreatorIDs: [ID!]
+	clearSLADefinitionCreators: Boolean
 	addStandardCreatorIDs: [ID!]
 	removeStandardCreatorIDs: [ID!]
 	clearStandardCreators: Boolean
@@ -92867,6 +93024,9 @@ input UpdateOrganizationInput {
 	addVendorRiskScoreCreatorIDs: [ID!]
 	removeVendorRiskScoreCreatorIDs: [ID!]
 	clearVendorRiskScoreCreators: Boolean
+	addVendorScoringConfigCreatorIDs: [ID!]
+	removeVendorScoringConfigCreatorIDs: [ID!]
+	clearVendorScoringConfigCreators: Boolean
 	addVulnerabilityCreatorIDs: [ID!]
 	removeVulnerabilityCreatorIDs: [ID!]
 	clearVulnerabilityCreators: Boolean

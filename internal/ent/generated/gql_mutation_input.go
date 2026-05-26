@@ -15977,6 +15977,7 @@ type CreateOrganizationInput struct {
 	ControlCreatorIDs                    []string
 	ControlImplementationCreatorIDs      []string
 	ControlObjectiveCreatorIDs           []string
+	CustomDomainCreatorIDs               []string
 	CustomTypeEnumCreatorIDs             []string
 	DirectoryAccountCreatorIDs           []string
 	DirectoryGroupCreatorIDs             []string
@@ -15990,6 +15991,7 @@ type CreateOrganizationInput struct {
 	EvidenceCreatorIDs                   []string
 	FileCreatorIDs                       []string
 	FindingCreatorIDs                    []string
+	FindingControlCreatorIDs             []string
 	GroupCreatorIDs                      []string
 	GroupMembershipCreatorIDs            []string
 	GroupSettingCreatorIDs               []string
@@ -16016,6 +16018,7 @@ type CreateOrganizationInput struct {
 	ScanCreatorIDs                       []string
 	ScheduledJobCreatorIDs               []string
 	ScheduledJobRunCreatorIDs            []string
+	SLADefinitionCreatorIDs              []string
 	StandardCreatorIDs                   []string
 	SubcontrolCreatorIDs                 []string
 	SubprocessorCreatorIDs               []string
@@ -16033,6 +16036,7 @@ type CreateOrganizationInput struct {
 	TrustCenterSubprocessorCreatorIDs    []string
 	TrustCenterWatermarkConfigCreatorIDs []string
 	VendorRiskScoreCreatorIDs            []string
+	VendorScoringConfigCreatorIDs        []string
 	VulnerabilityCreatorIDs              []string
 	WorkflowDefinitionCreatorIDs         []string
 	CampaignsManagerIDs                  []string
@@ -16177,6 +16181,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ControlObjectiveCreatorIDs; len(v) > 0 {
 		m.AddControlObjectiveCreatorIDs(v...)
 	}
+	if v := i.CustomDomainCreatorIDs; len(v) > 0 {
+		m.AddCustomDomainCreatorIDs(v...)
+	}
 	if v := i.CustomTypeEnumCreatorIDs; len(v) > 0 {
 		m.AddCustomTypeEnumCreatorIDs(v...)
 	}
@@ -16215,6 +16222,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.FindingCreatorIDs; len(v) > 0 {
 		m.AddFindingCreatorIDs(v...)
+	}
+	if v := i.FindingControlCreatorIDs; len(v) > 0 {
+		m.AddFindingControlCreatorIDs(v...)
 	}
 	if v := i.GroupCreatorIDs; len(v) > 0 {
 		m.AddGroupCreatorIDs(v...)
@@ -16294,6 +16304,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ScheduledJobRunCreatorIDs; len(v) > 0 {
 		m.AddScheduledJobRunCreatorIDs(v...)
 	}
+	if v := i.SLADefinitionCreatorIDs; len(v) > 0 {
+		m.AddSLADefinitionCreatorIDs(v...)
+	}
 	if v := i.StandardCreatorIDs; len(v) > 0 {
 		m.AddStandardCreatorIDs(v...)
 	}
@@ -16344,6 +16357,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.VendorRiskScoreCreatorIDs; len(v) > 0 {
 		m.AddVendorRiskScoreCreatorIDs(v...)
+	}
+	if v := i.VendorScoringConfigCreatorIDs; len(v) > 0 {
+		m.AddVendorScoringConfigCreatorIDs(v...)
 	}
 	if v := i.VulnerabilityCreatorIDs; len(v) > 0 {
 		m.AddVulnerabilityCreatorIDs(v...)
@@ -16662,6 +16678,9 @@ type UpdateOrganizationInput struct {
 	ClearControlObjectiveCreators              bool
 	AddControlObjectiveCreatorIDs              []string
 	RemoveControlObjectiveCreatorIDs           []string
+	ClearCustomDomainCreators                  bool
+	AddCustomDomainCreatorIDs                  []string
+	RemoveCustomDomainCreatorIDs               []string
 	ClearCustomTypeEnumCreators                bool
 	AddCustomTypeEnumCreatorIDs                []string
 	RemoveCustomTypeEnumCreatorIDs             []string
@@ -16701,6 +16720,9 @@ type UpdateOrganizationInput struct {
 	ClearFindingCreators                       bool
 	AddFindingCreatorIDs                       []string
 	RemoveFindingCreatorIDs                    []string
+	ClearFindingControlCreators                bool
+	AddFindingControlCreatorIDs                []string
+	RemoveFindingControlCreatorIDs             []string
 	ClearGroupCreators                         bool
 	AddGroupCreatorIDs                         []string
 	RemoveGroupCreatorIDs                      []string
@@ -16779,6 +16801,9 @@ type UpdateOrganizationInput struct {
 	ClearScheduledJobRunCreators               bool
 	AddScheduledJobRunCreatorIDs               []string
 	RemoveScheduledJobRunCreatorIDs            []string
+	ClearSLADefinitionCreators                 bool
+	AddSLADefinitionCreatorIDs                 []string
+	RemoveSLADefinitionCreatorIDs              []string
 	ClearStandardCreators                      bool
 	AddStandardCreatorIDs                      []string
 	RemoveStandardCreatorIDs                   []string
@@ -16830,6 +16855,9 @@ type UpdateOrganizationInput struct {
 	ClearVendorRiskScoreCreators               bool
 	AddVendorRiskScoreCreatorIDs               []string
 	RemoveVendorRiskScoreCreatorIDs            []string
+	ClearVendorScoringConfigCreators           bool
+	AddVendorScoringConfigCreatorIDs           []string
+	RemoveVendorScoringConfigCreatorIDs        []string
 	ClearVulnerabilityCreators                 bool
 	AddVulnerabilityCreatorIDs                 []string
 	RemoveVulnerabilityCreatorIDs              []string
@@ -17222,6 +17250,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveControlObjectiveCreatorIDs; len(v) > 0 {
 		m.RemoveControlObjectiveCreatorIDs(v...)
 	}
+	if i.ClearCustomDomainCreators {
+		m.ClearCustomDomainCreators()
+	}
+	if v := i.AddCustomDomainCreatorIDs; len(v) > 0 {
+		m.AddCustomDomainCreatorIDs(v...)
+	}
+	if v := i.RemoveCustomDomainCreatorIDs; len(v) > 0 {
+		m.RemoveCustomDomainCreatorIDs(v...)
+	}
 	if i.ClearCustomTypeEnumCreators {
 		m.ClearCustomTypeEnumCreators()
 	}
@@ -17338,6 +17375,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveFindingCreatorIDs; len(v) > 0 {
 		m.RemoveFindingCreatorIDs(v...)
+	}
+	if i.ClearFindingControlCreators {
+		m.ClearFindingControlCreators()
+	}
+	if v := i.AddFindingControlCreatorIDs; len(v) > 0 {
+		m.AddFindingControlCreatorIDs(v...)
+	}
+	if v := i.RemoveFindingControlCreatorIDs; len(v) > 0 {
+		m.RemoveFindingControlCreatorIDs(v...)
 	}
 	if i.ClearGroupCreators {
 		m.ClearGroupCreators()
@@ -17573,6 +17619,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveScheduledJobRunCreatorIDs; len(v) > 0 {
 		m.RemoveScheduledJobRunCreatorIDs(v...)
 	}
+	if i.ClearSLADefinitionCreators {
+		m.ClearSLADefinitionCreators()
+	}
+	if v := i.AddSLADefinitionCreatorIDs; len(v) > 0 {
+		m.AddSLADefinitionCreatorIDs(v...)
+	}
+	if v := i.RemoveSLADefinitionCreatorIDs; len(v) > 0 {
+		m.RemoveSLADefinitionCreatorIDs(v...)
+	}
 	if i.ClearStandardCreators {
 		m.ClearStandardCreators()
 	}
@@ -17725,6 +17780,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveVendorRiskScoreCreatorIDs; len(v) > 0 {
 		m.RemoveVendorRiskScoreCreatorIDs(v...)
+	}
+	if i.ClearVendorScoringConfigCreators {
+		m.ClearVendorScoringConfigCreators()
+	}
+	if v := i.AddVendorScoringConfigCreatorIDs; len(v) > 0 {
+		m.AddVendorScoringConfigCreatorIDs(v...)
+	}
+	if v := i.RemoveVendorScoringConfigCreatorIDs; len(v) > 0 {
+		m.RemoveVendorScoringConfigCreatorIDs(v...)
 	}
 	if i.ClearVulnerabilityCreators {
 		m.ClearVulnerabilityCreators()

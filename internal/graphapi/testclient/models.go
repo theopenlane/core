@@ -8161,6 +8161,7 @@ type CreateOrganizationInput struct {
 	ControlCreatorIDs                    []string                        `json:"controlCreatorIDs,omitempty"`
 	ControlImplementationCreatorIDs      []string                        `json:"controlImplementationCreatorIDs,omitempty"`
 	ControlObjectiveCreatorIDs           []string                        `json:"controlObjectiveCreatorIDs,omitempty"`
+	CustomDomainCreatorIDs               []string                        `json:"customDomainCreatorIDs,omitempty"`
 	CustomTypeEnumCreatorIDs             []string                        `json:"customTypeEnumCreatorIDs,omitempty"`
 	DirectoryAccountCreatorIDs           []string                        `json:"directoryAccountCreatorIDs,omitempty"`
 	DirectoryGroupCreatorIDs             []string                        `json:"directoryGroupCreatorIDs,omitempty"`
@@ -8174,6 +8175,7 @@ type CreateOrganizationInput struct {
 	EvidenceCreatorIDs                   []string                        `json:"evidenceCreatorIDs,omitempty"`
 	FileCreatorIDs                       []string                        `json:"fileCreatorIDs,omitempty"`
 	FindingCreatorIDs                    []string                        `json:"findingCreatorIDs,omitempty"`
+	FindingControlCreatorIDs             []string                        `json:"findingControlCreatorIDs,omitempty"`
 	GroupCreatorIDs                      []string                        `json:"groupCreatorIDs,omitempty"`
 	GroupMembershipCreatorIDs            []string                        `json:"groupMembershipCreatorIDs,omitempty"`
 	GroupSettingCreatorIDs               []string                        `json:"groupSettingCreatorIDs,omitempty"`
@@ -8200,6 +8202,7 @@ type CreateOrganizationInput struct {
 	ScanCreatorIDs                       []string                        `json:"scanCreatorIDs,omitempty"`
 	ScheduledJobCreatorIDs               []string                        `json:"scheduledJobCreatorIDs,omitempty"`
 	ScheduledJobRunCreatorIDs            []string                        `json:"scheduledJobRunCreatorIDs,omitempty"`
+	SLADefinitionCreatorIDs              []string                        `json:"slaDefinitionCreatorIDs,omitempty"`
 	StandardCreatorIDs                   []string                        `json:"standardCreatorIDs,omitempty"`
 	SubcontrolCreatorIDs                 []string                        `json:"subcontrolCreatorIDs,omitempty"`
 	SubprocessorCreatorIDs               []string                        `json:"subprocessorCreatorIDs,omitempty"`
@@ -8217,6 +8220,7 @@ type CreateOrganizationInput struct {
 	TrustCenterSubprocessorCreatorIDs    []string                        `json:"trustCenterSubprocessorCreatorIDs,omitempty"`
 	TrustCenterWatermarkConfigCreatorIDs []string                        `json:"trustCenterWatermarkConfigCreatorIDs,omitempty"`
 	VendorRiskScoreCreatorIDs            []string                        `json:"vendorRiskScoreCreatorIDs,omitempty"`
+	VendorScoringConfigCreatorIDs        []string                        `json:"vendorScoringConfigCreatorIDs,omitempty"`
 	VulnerabilityCreatorIDs              []string                        `json:"vulnerabilityCreatorIDs,omitempty"`
 	WorkflowDefinitionCreatorIDs         []string                        `json:"workflowDefinitionCreatorIDs,omitempty"`
 	CampaignsManagerIDs                  []string                        `json:"campaignsManagerIDs,omitempty"`
@@ -25452,6 +25456,7 @@ type Organization struct {
 	ControlCreators                    *GroupConnection                      `json:"controlCreators"`
 	ControlImplementationCreators      *GroupConnection                      `json:"controlImplementationCreators"`
 	ControlObjectiveCreators           *GroupConnection                      `json:"controlObjectiveCreators"`
+	CustomDomainCreators               *GroupConnection                      `json:"customDomainCreators"`
 	CustomTypeEnumCreators             *GroupConnection                      `json:"customTypeEnumCreators"`
 	DirectoryAccountCreators           *GroupConnection                      `json:"directoryAccountCreators"`
 	DirectoryGroupCreators             *GroupConnection                      `json:"directoryGroupCreators"`
@@ -25465,6 +25470,7 @@ type Organization struct {
 	EvidenceCreators                   *GroupConnection                      `json:"evidenceCreators"`
 	FileCreators                       *GroupConnection                      `json:"fileCreators"`
 	FindingCreators                    *GroupConnection                      `json:"findingCreators"`
+	FindingControlCreators             *GroupConnection                      `json:"findingControlCreators"`
 	GroupCreators                      *GroupConnection                      `json:"groupCreators"`
 	GroupMembershipCreators            *GroupConnection                      `json:"groupMembershipCreators"`
 	GroupSettingCreators               *GroupConnection                      `json:"groupSettingCreators"`
@@ -25491,6 +25497,7 @@ type Organization struct {
 	ScanCreators                       *GroupConnection                      `json:"scanCreators"`
 	ScheduledJobCreators               *GroupConnection                      `json:"scheduledJobCreators"`
 	ScheduledJobRunCreators            *GroupConnection                      `json:"scheduledJobRunCreators"`
+	SLADefinitionCreators              *GroupConnection                      `json:"slaDefinitionCreators"`
 	StandardCreators                   *GroupConnection                      `json:"standardCreators"`
 	SubcontrolCreators                 *GroupConnection                      `json:"subcontrolCreators"`
 	SubprocessorCreators               *GroupConnection                      `json:"subprocessorCreators"`
@@ -25508,6 +25515,7 @@ type Organization struct {
 	TrustCenterSubprocessorCreators    *GroupConnection                      `json:"trustCenterSubprocessorCreators"`
 	TrustCenterWatermarkConfigCreators *GroupConnection                      `json:"trustCenterWatermarkConfigCreators"`
 	VendorRiskScoreCreators            *GroupConnection                      `json:"vendorRiskScoreCreators"`
+	VendorScoringConfigCreators        *GroupConnection                      `json:"vendorScoringConfigCreators"`
 	VulnerabilityCreators              *GroupConnection                      `json:"vulnerabilityCreators"`
 	WorkflowDefinitionCreators         *GroupConnection                      `json:"workflowDefinitionCreators"`
 	CampaignsManager                   *GroupConnection                      `json:"campaignsManager"`
@@ -26333,6 +26341,9 @@ type OrganizationWhereInput struct {
 	// control_objective_creators edge predicates
 	HasControlObjectiveCreators     *bool              `json:"hasControlObjectiveCreators,omitempty"`
 	HasControlObjectiveCreatorsWith []*GroupWhereInput `json:"hasControlObjectiveCreatorsWith,omitempty"`
+	// custom_domain_creators edge predicates
+	HasCustomDomainCreators     *bool              `json:"hasCustomDomainCreators,omitempty"`
+	HasCustomDomainCreatorsWith []*GroupWhereInput `json:"hasCustomDomainCreatorsWith,omitempty"`
 	// custom_type_enum_creators edge predicates
 	HasCustomTypeEnumCreators     *bool              `json:"hasCustomTypeEnumCreators,omitempty"`
 	HasCustomTypeEnumCreatorsWith []*GroupWhereInput `json:"hasCustomTypeEnumCreatorsWith,omitempty"`
@@ -26372,6 +26383,9 @@ type OrganizationWhereInput struct {
 	// finding_creators edge predicates
 	HasFindingCreators     *bool              `json:"hasFindingCreators,omitempty"`
 	HasFindingCreatorsWith []*GroupWhereInput `json:"hasFindingCreatorsWith,omitempty"`
+	// finding_control_creators edge predicates
+	HasFindingControlCreators     *bool              `json:"hasFindingControlCreators,omitempty"`
+	HasFindingControlCreatorsWith []*GroupWhereInput `json:"hasFindingControlCreatorsWith,omitempty"`
 	// group_creators edge predicates
 	HasGroupCreators     *bool              `json:"hasGroupCreators,omitempty"`
 	HasGroupCreatorsWith []*GroupWhereInput `json:"hasGroupCreatorsWith,omitempty"`
@@ -26450,6 +26464,9 @@ type OrganizationWhereInput struct {
 	// scheduled_job_run_creators edge predicates
 	HasScheduledJobRunCreators     *bool              `json:"hasScheduledJobRunCreators,omitempty"`
 	HasScheduledJobRunCreatorsWith []*GroupWhereInput `json:"hasScheduledJobRunCreatorsWith,omitempty"`
+	// sla_definition_creators edge predicates
+	HasSLADefinitionCreators     *bool              `json:"hasSLADefinitionCreators,omitempty"`
+	HasSLADefinitionCreatorsWith []*GroupWhereInput `json:"hasSLADefinitionCreatorsWith,omitempty"`
 	// standard_creators edge predicates
 	HasStandardCreators     *bool              `json:"hasStandardCreators,omitempty"`
 	HasStandardCreatorsWith []*GroupWhereInput `json:"hasStandardCreatorsWith,omitempty"`
@@ -26501,6 +26518,9 @@ type OrganizationWhereInput struct {
 	// vendor_risk_score_creators edge predicates
 	HasVendorRiskScoreCreators     *bool              `json:"hasVendorRiskScoreCreators,omitempty"`
 	HasVendorRiskScoreCreatorsWith []*GroupWhereInput `json:"hasVendorRiskScoreCreatorsWith,omitempty"`
+	// vendor_scoring_config_creators edge predicates
+	HasVendorScoringConfigCreators     *bool              `json:"hasVendorScoringConfigCreators,omitempty"`
+	HasVendorScoringConfigCreatorsWith []*GroupWhereInput `json:"hasVendorScoringConfigCreatorsWith,omitempty"`
 	// vulnerability_creators edge predicates
 	HasVulnerabilityCreators     *bool              `json:"hasVulnerabilityCreators,omitempty"`
 	HasVulnerabilityCreatorsWith []*GroupWhereInput `json:"hasVulnerabilityCreatorsWith,omitempty"`
@@ -42675,6 +42695,9 @@ type UpdateOrganizationInput struct {
 	AddControlObjectiveCreatorIDs              []string                        `json:"addControlObjectiveCreatorIDs,omitempty"`
 	RemoveControlObjectiveCreatorIDs           []string                        `json:"removeControlObjectiveCreatorIDs,omitempty"`
 	ClearControlObjectiveCreators              *bool                           `json:"clearControlObjectiveCreators,omitempty"`
+	AddCustomDomainCreatorIDs                  []string                        `json:"addCustomDomainCreatorIDs,omitempty"`
+	RemoveCustomDomainCreatorIDs               []string                        `json:"removeCustomDomainCreatorIDs,omitempty"`
+	ClearCustomDomainCreators                  *bool                           `json:"clearCustomDomainCreators,omitempty"`
 	AddCustomTypeEnumCreatorIDs                []string                        `json:"addCustomTypeEnumCreatorIDs,omitempty"`
 	RemoveCustomTypeEnumCreatorIDs             []string                        `json:"removeCustomTypeEnumCreatorIDs,omitempty"`
 	ClearCustomTypeEnumCreators                *bool                           `json:"clearCustomTypeEnumCreators,omitempty"`
@@ -42714,6 +42737,9 @@ type UpdateOrganizationInput struct {
 	AddFindingCreatorIDs                       []string                        `json:"addFindingCreatorIDs,omitempty"`
 	RemoveFindingCreatorIDs                    []string                        `json:"removeFindingCreatorIDs,omitempty"`
 	ClearFindingCreators                       *bool                           `json:"clearFindingCreators,omitempty"`
+	AddFindingControlCreatorIDs                []string                        `json:"addFindingControlCreatorIDs,omitempty"`
+	RemoveFindingControlCreatorIDs             []string                        `json:"removeFindingControlCreatorIDs,omitempty"`
+	ClearFindingControlCreators                *bool                           `json:"clearFindingControlCreators,omitempty"`
 	AddGroupCreatorIDs                         []string                        `json:"addGroupCreatorIDs,omitempty"`
 	RemoveGroupCreatorIDs                      []string                        `json:"removeGroupCreatorIDs,omitempty"`
 	ClearGroupCreators                         *bool                           `json:"clearGroupCreators,omitempty"`
@@ -42792,6 +42818,9 @@ type UpdateOrganizationInput struct {
 	AddScheduledJobRunCreatorIDs               []string                        `json:"addScheduledJobRunCreatorIDs,omitempty"`
 	RemoveScheduledJobRunCreatorIDs            []string                        `json:"removeScheduledJobRunCreatorIDs,omitempty"`
 	ClearScheduledJobRunCreators               *bool                           `json:"clearScheduledJobRunCreators,omitempty"`
+	AddSLADefinitionCreatorIDs                 []string                        `json:"addSLADefinitionCreatorIDs,omitempty"`
+	RemoveSLADefinitionCreatorIDs              []string                        `json:"removeSLADefinitionCreatorIDs,omitempty"`
+	ClearSLADefinitionCreators                 *bool                           `json:"clearSLADefinitionCreators,omitempty"`
 	AddStandardCreatorIDs                      []string                        `json:"addStandardCreatorIDs,omitempty"`
 	RemoveStandardCreatorIDs                   []string                        `json:"removeStandardCreatorIDs,omitempty"`
 	ClearStandardCreators                      *bool                           `json:"clearStandardCreators,omitempty"`
@@ -42843,6 +42872,9 @@ type UpdateOrganizationInput struct {
 	AddVendorRiskScoreCreatorIDs               []string                        `json:"addVendorRiskScoreCreatorIDs,omitempty"`
 	RemoveVendorRiskScoreCreatorIDs            []string                        `json:"removeVendorRiskScoreCreatorIDs,omitempty"`
 	ClearVendorRiskScoreCreators               *bool                           `json:"clearVendorRiskScoreCreators,omitempty"`
+	AddVendorScoringConfigCreatorIDs           []string                        `json:"addVendorScoringConfigCreatorIDs,omitempty"`
+	RemoveVendorScoringConfigCreatorIDs        []string                        `json:"removeVendorScoringConfigCreatorIDs,omitempty"`
+	ClearVendorScoringConfigCreators           *bool                           `json:"clearVendorScoringConfigCreators,omitempty"`
 	AddVulnerabilityCreatorIDs                 []string                        `json:"addVulnerabilityCreatorIDs,omitempty"`
 	RemoveVulnerabilityCreatorIDs              []string                        `json:"removeVulnerabilityCreatorIDs,omitempty"`
 	ClearVulnerabilityCreators                 *bool                           `json:"clearVulnerabilityCreators,omitempty"`

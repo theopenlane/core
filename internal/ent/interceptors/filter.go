@@ -2,7 +2,6 @@ package interceptors
 
 import (
 	"context"
-	"errors"
 	"strings"
 
 	"entgo.io/ent"
@@ -15,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	access "github.com/theopenlane/core/internal/ent/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -64,7 +64,7 @@ func AddIDPredicate(ctx context.Context, q Query) error {
 		relation = fgax.CanView
 		// skip filter if the subject has full organization view access for the object type
 		if err := rule.CheckSubjectScope(ctx, objectType, fgax.CanView, nil); err != nil {
-			if errors.Is(err, privacy.Allow) {
+			if access.Allow(err) {
 				return nil
 			}
 		}
@@ -245,7 +245,7 @@ func skipFilter(ctx context.Context, q intercept.Query, forceFilter skipperFunc,
 	// only check subject scope when the caller has not indicated that filtering must always run
 	if forceFilter == nil || !forceFilter(ctx) {
 		if err := rule.CheckSubjectScope(ctx, objectType, fgax.CanView, nil); err != nil {
-			if errors.Is(err, privacy.Allow) {
+			if access.Allow(err) {
 				return true
 			}
 		}

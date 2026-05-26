@@ -2,7 +2,6 @@ package schema
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"entgo.io/contrib/entgql"
@@ -25,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	access "github.com/theopenlane/core/internal/ent/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/entx/accessmap"
@@ -238,7 +238,7 @@ func groupPermissionInterceptorSkipper(ctx context.Context, caller *auth.Caller)
 	}
 
 	// skip for org owners + super admins (full_access), they might not have explicit access to the object, but they can view all objects in the org
-	if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.FullAccessRelation); errors.Is(err, privacy.Allow) {
+	if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.FullAccessRelation); access.Allow(err) {
 		return true
 	}
 

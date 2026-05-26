@@ -1421,6 +1421,35 @@ func HasControlObjectiveCreatorsWith(preds ...predicate.Group) predicate.Organiz
 	})
 }
 
+// HasCustomDomainCreators applies the HasEdge predicate on the "custom_domain_creators" edge.
+func HasCustomDomainCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, CustomDomainCreatorsTable, CustomDomainCreatorsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCustomDomainCreatorsWith applies the HasEdge predicate on the "custom_domain_creators" edge with a given conditions (other predicates).
+func HasCustomDomainCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newCustomDomainCreatorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasCustomTypeEnumCreators applies the HasEdge predicate on the "custom_type_enum_creators" edge.
 func HasCustomTypeEnumCreators() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
@@ -1787,6 +1816,35 @@ func HasFindingCreators() predicate.Organization {
 func HasFindingCreatorsWith(preds ...predicate.Group) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := newFindingCreatorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFindingControlCreators applies the HasEdge predicate on the "finding_control_creators" edge.
+func HasFindingControlCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, FindingControlCreatorsTable, FindingControlCreatorsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFindingControlCreatorsWith applies the HasEdge predicate on the "finding_control_creators" edge with a given conditions (other predicates).
+func HasFindingControlCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newFindingControlCreatorsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.Group
@@ -2552,6 +2610,35 @@ func HasScheduledJobRunCreatorsWith(preds ...predicate.Group) predicate.Organiza
 	})
 }
 
+// HasSLADefinitionCreators applies the HasEdge predicate on the "sla_definition_creators" edge.
+func HasSLADefinitionCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, SLADefinitionCreatorsTable, SLADefinitionCreatorsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSLADefinitionCreatorsWith applies the HasEdge predicate on the "sla_definition_creators" edge with a given conditions (other predicates).
+func HasSLADefinitionCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newSLADefinitionCreatorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasStandardCreators applies the HasEdge predicate on the "standard_creators" edge.
 func HasStandardCreators() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
@@ -3034,6 +3121,35 @@ func HasVendorRiskScoreCreators() predicate.Organization {
 func HasVendorRiskScoreCreatorsWith(preds ...predicate.Group) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := newVendorRiskScoreCreatorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasVendorScoringConfigCreators applies the HasEdge predicate on the "vendor_scoring_config_creators" edge.
+func HasVendorScoringConfigCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, VendorScoringConfigCreatorsTable, VendorScoringConfigCreatorsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVendorScoringConfigCreatorsWith applies the HasEdge predicate on the "vendor_scoring_config_creators" edge with a given conditions (other predicates).
+func HasVendorScoringConfigCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newVendorScoringConfigCreatorsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.Group

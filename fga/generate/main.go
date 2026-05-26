@@ -169,7 +169,7 @@ func main() {
 }
 
 func getCrudRelation(relation, object string) string {
-	if strings.HasPrefix("_", relation) {
+	if strings.HasPrefix(relation, "_") {
 		// relation is a suffix so return in reverse
 		return fmt.Sprintf("%s%s", object, relation)
 	}

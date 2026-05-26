@@ -154,7 +154,7 @@ func HookUpdateAPIToken() ent.Hook {
 
 			return at, nil
 		})
-	}, ent.OpUpdate|ent.OpUpdateOne)
+	}, ent.OpUpdateOne)
 }
 
 // / createScopeTuples creates the relationship tuples for the token

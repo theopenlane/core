@@ -144,6 +144,7 @@ func (UserSetting) Interceptors() []ent.Interceptor {
 
 func (UserSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithSkipDenyOrganizationRule(),
 		policy.WithOnMutationRules(
 			ent.OpCreate,
 			policy.AllowCreate(),

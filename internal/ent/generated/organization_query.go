@@ -124,6 +124,7 @@ type OrganizationQuery struct {
 	withControlCreators                         *GroupQuery
 	withControlImplementationCreators           *GroupQuery
 	withControlObjectiveCreators                *GroupQuery
+	withCustomDomainCreators                    *GroupQuery
 	withCustomTypeEnumCreators                  *GroupQuery
 	withDirectoryAccountCreators                *GroupQuery
 	withDirectoryGroupCreators                  *GroupQuery
@@ -137,6 +138,7 @@ type OrganizationQuery struct {
 	withEvidenceCreators                        *GroupQuery
 	withFileCreators                            *GroupQuery
 	withFindingCreators                         *GroupQuery
+	withFindingControlCreators                  *GroupQuery
 	withGroupCreators                           *GroupQuery
 	withGroupMembershipCreators                 *GroupQuery
 	withGroupSettingCreators                    *GroupQuery
@@ -163,6 +165,7 @@ type OrganizationQuery struct {
 	withScanCreators                            *GroupQuery
 	withScheduledJobCreators                    *GroupQuery
 	withScheduledJobRunCreators                 *GroupQuery
+	withSLADefinitionCreators                   *GroupQuery
 	withStandardCreators                        *GroupQuery
 	withSubcontrolCreators                      *GroupQuery
 	withSubprocessorCreators                    *GroupQuery
@@ -180,6 +183,7 @@ type OrganizationQuery struct {
 	withTrustCenterSubprocessorCreators         *GroupQuery
 	withTrustCenterWatermarkConfigCreators      *GroupQuery
 	withVendorRiskScoreCreators                 *GroupQuery
+	withVendorScoringConfigCreators             *GroupQuery
 	withVulnerabilityCreators                   *GroupQuery
 	withWorkflowDefinitionCreators              *GroupQuery
 	withCampaignsManager                        *GroupQuery
@@ -292,6 +296,7 @@ type OrganizationQuery struct {
 	withNamedControlCreators                    map[string]*GroupQuery
 	withNamedControlImplementationCreators      map[string]*GroupQuery
 	withNamedControlObjectiveCreators           map[string]*GroupQuery
+	withNamedCustomDomainCreators               map[string]*GroupQuery
 	withNamedCustomTypeEnumCreators             map[string]*GroupQuery
 	withNamedDirectoryAccountCreators           map[string]*GroupQuery
 	withNamedDirectoryGroupCreators             map[string]*GroupQuery
@@ -305,6 +310,7 @@ type OrganizationQuery struct {
 	withNamedEvidenceCreators                   map[string]*GroupQuery
 	withNamedFileCreators                       map[string]*GroupQuery
 	withNamedFindingCreators                    map[string]*GroupQuery
+	withNamedFindingControlCreators             map[string]*GroupQuery
 	withNamedGroupCreators                      map[string]*GroupQuery
 	withNamedGroupMembershipCreators            map[string]*GroupQuery
 	withNamedGroupSettingCreators               map[string]*GroupQuery
@@ -331,6 +337,7 @@ type OrganizationQuery struct {
 	withNamedScanCreators                       map[string]*GroupQuery
 	withNamedScheduledJobCreators               map[string]*GroupQuery
 	withNamedScheduledJobRunCreators            map[string]*GroupQuery
+	withNamedSLADefinitionCreators              map[string]*GroupQuery
 	withNamedStandardCreators                   map[string]*GroupQuery
 	withNamedSubcontrolCreators                 map[string]*GroupQuery
 	withNamedSubprocessorCreators               map[string]*GroupQuery
@@ -348,6 +355,7 @@ type OrganizationQuery struct {
 	withNamedTrustCenterSubprocessorCreators    map[string]*GroupQuery
 	withNamedTrustCenterWatermarkConfigCreators map[string]*GroupQuery
 	withNamedVendorRiskScoreCreators            map[string]*GroupQuery
+	withNamedVendorScoringConfigCreators        map[string]*GroupQuery
 	withNamedVulnerabilityCreators              map[string]*GroupQuery
 	withNamedWorkflowDefinitionCreators         map[string]*GroupQuery
 	withNamedCampaignsManager                   map[string]*GroupQuery
@@ -755,6 +763,31 @@ func (_q *OrganizationQuery) QueryControlObjectiveCreators() *GroupQuery {
 	return query
 }
 
+// QueryCustomDomainCreators chains the current query on the "custom_domain_creators" edge.
+func (_q *OrganizationQuery) QueryCustomDomainCreators() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.CustomDomainCreatorsTable, organization.CustomDomainCreatorsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryCustomTypeEnumCreators chains the current query on the "custom_type_enum_creators" edge.
 func (_q *OrganizationQuery) QueryCustomTypeEnumCreators() *GroupQuery {
 	query := (&GroupClient{config: _q.config}).Query()
@@ -1070,6 +1103,31 @@ func (_q *OrganizationQuery) QueryFindingCreators() *GroupQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.FindingCreatorsTable, organization.FindingCreatorsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFindingControlCreators chains the current query on the "finding_control_creators" edge.
+func (_q *OrganizationQuery) QueryFindingControlCreators() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.FindingControlCreatorsTable, organization.FindingControlCreatorsColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
@@ -1730,6 +1788,31 @@ func (_q *OrganizationQuery) QueryScheduledJobRunCreators() *GroupQuery {
 	return query
 }
 
+// QuerySLADefinitionCreators chains the current query on the "sla_definition_creators" edge.
+func (_q *OrganizationQuery) QuerySLADefinitionCreators() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.SLADefinitionCreatorsTable, organization.SLADefinitionCreatorsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryStandardCreators chains the current query on the "standard_creators" edge.
 func (_q *OrganizationQuery) QueryStandardCreators() *GroupQuery {
 	query := (&GroupClient{config: _q.config}).Query()
@@ -2145,6 +2228,31 @@ func (_q *OrganizationQuery) QueryVendorRiskScoreCreators() *GroupQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.VendorRiskScoreCreatorsTable, organization.VendorRiskScoreCreatorsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryVendorScoringConfigCreators chains the current query on the "vendor_scoring_config_creators" edge.
+func (_q *OrganizationQuery) QueryVendorScoringConfigCreators() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.VendorScoringConfigCreatorsTable, organization.VendorScoringConfigCreatorsColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
@@ -4833,6 +4941,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withControlCreators:                    _q.withControlCreators.Clone(),
 		withControlImplementationCreators:      _q.withControlImplementationCreators.Clone(),
 		withControlObjectiveCreators:           _q.withControlObjectiveCreators.Clone(),
+		withCustomDomainCreators:               _q.withCustomDomainCreators.Clone(),
 		withCustomTypeEnumCreators:             _q.withCustomTypeEnumCreators.Clone(),
 		withDirectoryAccountCreators:           _q.withDirectoryAccountCreators.Clone(),
 		withDirectoryGroupCreators:             _q.withDirectoryGroupCreators.Clone(),
@@ -4846,6 +4955,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withEvidenceCreators:                   _q.withEvidenceCreators.Clone(),
 		withFileCreators:                       _q.withFileCreators.Clone(),
 		withFindingCreators:                    _q.withFindingCreators.Clone(),
+		withFindingControlCreators:             _q.withFindingControlCreators.Clone(),
 		withGroupCreators:                      _q.withGroupCreators.Clone(),
 		withGroupMembershipCreators:            _q.withGroupMembershipCreators.Clone(),
 		withGroupSettingCreators:               _q.withGroupSettingCreators.Clone(),
@@ -4872,6 +4982,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withScanCreators:                       _q.withScanCreators.Clone(),
 		withScheduledJobCreators:               _q.withScheduledJobCreators.Clone(),
 		withScheduledJobRunCreators:            _q.withScheduledJobRunCreators.Clone(),
+		withSLADefinitionCreators:              _q.withSLADefinitionCreators.Clone(),
 		withStandardCreators:                   _q.withStandardCreators.Clone(),
 		withSubcontrolCreators:                 _q.withSubcontrolCreators.Clone(),
 		withSubprocessorCreators:               _q.withSubprocessorCreators.Clone(),
@@ -4889,6 +5000,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withTrustCenterSubprocessorCreators:    _q.withTrustCenterSubprocessorCreators.Clone(),
 		withTrustCenterWatermarkConfigCreators: _q.withTrustCenterWatermarkConfigCreators.Clone(),
 		withVendorRiskScoreCreators:            _q.withVendorRiskScoreCreators.Clone(),
+		withVendorScoringConfigCreators:        _q.withVendorScoringConfigCreators.Clone(),
 		withVulnerabilityCreators:              _q.withVulnerabilityCreators.Clone(),
 		withWorkflowDefinitionCreators:         _q.withWorkflowDefinitionCreators.Clone(),
 		withCampaignsManager:                   _q.withCampaignsManager.Clone(),
@@ -5116,6 +5228,17 @@ func (_q *OrganizationQuery) WithControlObjectiveCreators(opts ...func(*GroupQue
 	return _q
 }
 
+// WithCustomDomainCreators tells the query-builder to eager-load the nodes that are connected to
+// the "custom_domain_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithCustomDomainCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCustomDomainCreators = query
+	return _q
+}
+
 // WithCustomTypeEnumCreators tells the query-builder to eager-load the nodes that are connected to
 // the "custom_type_enum_creators" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithCustomTypeEnumCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
@@ -5256,6 +5379,17 @@ func (_q *OrganizationQuery) WithFindingCreators(opts ...func(*GroupQuery)) *Org
 		opt(query)
 	}
 	_q.withFindingCreators = query
+	return _q
+}
+
+// WithFindingControlCreators tells the query-builder to eager-load the nodes that are connected to
+// the "finding_control_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithFindingControlCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFindingControlCreators = query
 	return _q
 }
 
@@ -5545,6 +5679,17 @@ func (_q *OrganizationQuery) WithScheduledJobRunCreators(opts ...func(*GroupQuer
 	return _q
 }
 
+// WithSLADefinitionCreators tells the query-builder to eager-load the nodes that are connected to
+// the "sla_definition_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithSLADefinitionCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSLADefinitionCreators = query
+	return _q
+}
+
 // WithStandardCreators tells the query-builder to eager-load the nodes that are connected to
 // the "standard_creators" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithStandardCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
@@ -5729,6 +5874,17 @@ func (_q *OrganizationQuery) WithVendorRiskScoreCreators(opts ...func(*GroupQuer
 		opt(query)
 	}
 	_q.withVendorRiskScoreCreators = query
+	return _q
+}
+
+// WithVendorScoringConfigCreators tells the query-builder to eager-load the nodes that are connected to
+// the "vendor_scoring_config_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithVendorScoringConfigCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withVendorScoringConfigCreators = query
 	return _q
 }
 
@@ -6905,7 +7061,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [166]bool{
+		loadedTypes = [170]bool{
 			_q.withActionPlanCreators != nil,
 			_q.withAPITokenCreators != nil,
 			_q.withAssessmentCreators != nil,
@@ -6917,6 +7073,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
+			_q.withCustomDomainCreators != nil,
 			_q.withCustomTypeEnumCreators != nil,
 			_q.withDirectoryAccountCreators != nil,
 			_q.withDirectoryGroupCreators != nil,
@@ -6930,6 +7087,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withEvidenceCreators != nil,
 			_q.withFileCreators != nil,
 			_q.withFindingCreators != nil,
+			_q.withFindingControlCreators != nil,
 			_q.withGroupCreators != nil,
 			_q.withGroupMembershipCreators != nil,
 			_q.withGroupSettingCreators != nil,
@@ -6956,6 +7114,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withScanCreators != nil,
 			_q.withScheduledJobCreators != nil,
 			_q.withScheduledJobRunCreators != nil,
+			_q.withSLADefinitionCreators != nil,
 			_q.withStandardCreators != nil,
 			_q.withSubcontrolCreators != nil,
 			_q.withSubprocessorCreators != nil,
@@ -6973,6 +7132,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withTrustCenterSubprocessorCreators != nil,
 			_q.withTrustCenterWatermarkConfigCreators != nil,
 			_q.withVendorRiskScoreCreators != nil,
+			_q.withVendorScoringConfigCreators != nil,
 			_q.withVulnerabilityCreators != nil,
 			_q.withWorkflowDefinitionCreators != nil,
 			_q.withCampaignsManager != nil,
@@ -7180,6 +7340,15 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withCustomDomainCreators; query != nil {
+		if err := _q.loadCustomDomainCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.CustomDomainCreators = []*Group{} },
+			func(n *Organization, e *Group) {
+				n.Edges.CustomDomainCreators = append(n.Edges.CustomDomainCreators, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withCustomTypeEnumCreators; query != nil {
 		if err := _q.loadCustomTypeEnumCreators(ctx, query, nodes,
 			func(n *Organization) { n.Edges.CustomTypeEnumCreators = []*Group{} },
@@ -7282,6 +7451,15 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadFindingCreators(ctx, query, nodes,
 			func(n *Organization) { n.Edges.FindingCreators = []*Group{} },
 			func(n *Organization, e *Group) { n.Edges.FindingCreators = append(n.Edges.FindingCreators, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFindingControlCreators; query != nil {
+		if err := _q.loadFindingControlCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.FindingControlCreators = []*Group{} },
+			func(n *Organization, e *Group) {
+				n.Edges.FindingControlCreators = append(n.Edges.FindingControlCreators, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -7491,6 +7669,15 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withSLADefinitionCreators; query != nil {
+		if err := _q.loadSLADefinitionCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.SLADefinitionCreators = []*Group{} },
+			func(n *Organization, e *Group) {
+				n.Edges.SLADefinitionCreators = append(n.Edges.SLADefinitionCreators, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withStandardCreators; query != nil {
 		if err := _q.loadStandardCreators(ctx, query, nodes,
 			func(n *Organization) { n.Edges.StandardCreators = []*Group{} },
@@ -7628,6 +7815,15 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			func(n *Organization) { n.Edges.VendorRiskScoreCreators = []*Group{} },
 			func(n *Organization, e *Group) {
 				n.Edges.VendorRiskScoreCreators = append(n.Edges.VendorRiskScoreCreators, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withVendorScoringConfigCreators; query != nil {
+		if err := _q.loadVendorScoringConfigCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.VendorScoringConfigCreators = []*Group{} },
+			func(n *Organization, e *Group) {
+				n.Edges.VendorScoringConfigCreators = append(n.Edges.VendorScoringConfigCreators, e)
 			}); err != nil {
 			return nil, err
 		}
@@ -8453,6 +8649,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedCustomDomainCreators {
+		if err := _q.loadCustomDomainCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedCustomDomainCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedCustomDomainCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedCustomTypeEnumCreators {
 		if err := _q.loadCustomTypeEnumCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedCustomTypeEnumCreators(name) },
@@ -8541,6 +8744,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadFindingCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedFindingCreators(name) },
 			func(n *Organization, e *Group) { n.appendNamedFindingCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFindingControlCreators {
+		if err := _q.loadFindingControlCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedFindingControlCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedFindingControlCreators(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -8726,6 +8936,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedSLADefinitionCreators {
+		if err := _q.loadSLADefinitionCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedSLADefinitionCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedSLADefinitionCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedStandardCreators {
 		if err := _q.loadStandardCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedStandardCreators(name) },
@@ -8842,6 +9059,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadVendorRiskScoreCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedVendorRiskScoreCreators(name) },
 			func(n *Organization, e *Group) { n.appendNamedVendorRiskScoreCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedVendorScoringConfigCreators {
+		if err := _q.loadVendorScoringConfigCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedVendorScoringConfigCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedVendorScoringConfigCreators(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -9870,6 +10094,37 @@ func (_q *OrganizationQuery) loadControlObjectiveCreators(ctx context.Context, q
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadCustomDomainCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.CustomDomainCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_custom_domain_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_custom_domain_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_custom_domain_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadCustomTypeEnumCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -10268,6 +10523,37 @@ func (_q *OrganizationQuery) loadFindingCreators(ctx context.Context, query *Gro
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "organization_finding_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadFindingControlCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.FindingControlCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_finding_control_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_finding_control_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_finding_control_creators" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -11079,6 +11365,37 @@ func (_q *OrganizationQuery) loadScheduledJobRunCreators(ctx context.Context, qu
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadSLADefinitionCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.SLADefinitionCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_sla_definition_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_sla_definition_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_sla_definition_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadStandardCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -11601,6 +11918,37 @@ func (_q *OrganizationQuery) loadVendorRiskScoreCreators(ctx context.Context, qu
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "organization_vendor_risk_score_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadVendorScoringConfigCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.VendorScoringConfigCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_vendor_scoring_config_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_vendor_scoring_config_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_vendor_scoring_config_creators" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -15000,6 +15348,20 @@ func (_q *OrganizationQuery) WithNamedControlObjectiveCreators(name string, opts
 	return _q
 }
 
+// WithNamedCustomDomainCreators tells the query-builder to eager-load the nodes that are connected to the "custom_domain_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedCustomDomainCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCustomDomainCreators == nil {
+		_q.withNamedCustomDomainCreators = make(map[string]*GroupQuery)
+	}
+	_q.withNamedCustomDomainCreators[name] = query
+	return _q
+}
+
 // WithNamedCustomTypeEnumCreators tells the query-builder to eager-load the nodes that are connected to the "custom_type_enum_creators"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithNamedCustomTypeEnumCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
@@ -15179,6 +15541,20 @@ func (_q *OrganizationQuery) WithNamedFindingCreators(name string, opts ...func(
 		_q.withNamedFindingCreators = make(map[string]*GroupQuery)
 	}
 	_q.withNamedFindingCreators[name] = query
+	return _q
+}
+
+// WithNamedFindingControlCreators tells the query-builder to eager-load the nodes that are connected to the "finding_control_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedFindingControlCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFindingControlCreators == nil {
+		_q.withNamedFindingControlCreators = make(map[string]*GroupQuery)
+	}
+	_q.withNamedFindingControlCreators[name] = query
 	return _q
 }
 
@@ -15546,6 +15922,20 @@ func (_q *OrganizationQuery) WithNamedScheduledJobRunCreators(name string, opts 
 	return _q
 }
 
+// WithNamedSLADefinitionCreators tells the query-builder to eager-load the nodes that are connected to the "sla_definition_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedSLADefinitionCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSLADefinitionCreators == nil {
+		_q.withNamedSLADefinitionCreators = make(map[string]*GroupQuery)
+	}
+	_q.withNamedSLADefinitionCreators[name] = query
+	return _q
+}
+
 // WithNamedStandardCreators tells the query-builder to eager-load the nodes that are connected to the "standard_creators"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithNamedStandardCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
@@ -15781,6 +16171,20 @@ func (_q *OrganizationQuery) WithNamedVendorRiskScoreCreators(name string, opts 
 		_q.withNamedVendorRiskScoreCreators = make(map[string]*GroupQuery)
 	}
 	_q.withNamedVendorRiskScoreCreators[name] = query
+	return _q
+}
+
+// WithNamedVendorScoringConfigCreators tells the query-builder to eager-load the nodes that are connected to the "vendor_scoring_config_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedVendorScoringConfigCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedVendorScoringConfigCreators == nil {
+		_q.withNamedVendorScoringConfigCreators = make(map[string]*GroupQuery)
+	}
+	_q.withNamedVendorScoringConfigCreators[name] = query
 	return _q
 }
 

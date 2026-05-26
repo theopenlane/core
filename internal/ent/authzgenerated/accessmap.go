@@ -2404,6 +2404,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "custom_domain_creators": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "custom_type_enum_creators": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
@@ -2453,6 +2457,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "finding_creators": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "finding_control_creators": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
@@ -2560,6 +2568,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "sla_definition_creators": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "standard_creators": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
@@ -2625,6 +2637,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "vendor_risk_score_creators": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "vendor_scoring_config_creators": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,

@@ -4,8 +4,6 @@ import (
 	"context"
 	"strings"
 
-	"errors"
-
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/privacy"
@@ -15,29 +13,23 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	access "github.com/theopenlane/core/internal/ent/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 )
-
-// skipperType are types that are generally user owned where the owner_id is a user
-// not an organization
-var skipperType = map[string]struct{}{
-	"Onboarding":             {},
-	"User":                   {},
-	"UserSetting":            {},
-	"EmailVerificationToken": {},
-	"PasswordResetToken":     {},
-	"TFASetting":             {},
-	"Webauthn":               {},
-}
 
 // DenyIfNotInOrganization runs to ensure the object being updated is part of the user's
 // authorized organization; it will only ever return skip or deny
 // this is never intended to approve access
 func DenyIfNotInOrganization() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
+		if skip := skipOrgDenyCheck(ctx, m); skip {
+			return privacy.Skip
+		}
+
 		actor, ok := auth.CallerFromContext(ctx)
 		if !ok || actor == nil || actor.IsAnonymous() {
 			logx.FromContext(ctx).Error().Msg("unable to get caller from context")
@@ -45,16 +37,7 @@ func DenyIfNotInOrganization() privacy.MutationRule {
 			return auth.ErrNoAuthUser
 		}
 
-		if _, ok := skipperType[m.Type()]; ok {
-			return privacy.Skip
-		}
-
 		orgID := actor.OrganizationID
-
-		// History happens automatically, there are no external mutations to create history records
-		if strings.Contains(m.Type(), "History") {
-			return privacy.Allow
-		}
 
 		// special cases
 		switch m := m.(type) {
@@ -68,6 +51,7 @@ func DenyIfNotInOrganization() privacy.MutationRule {
 			return checkProgramMembershipMutation(ctx, m, orgID)
 		}
 
+		// if it was not a special case, we can skip for any other create requests
 		if m.Op().Is(ent.OpCreate) {
 			return privacy.Skip
 		}
@@ -91,7 +75,7 @@ func DenyIfNotInOrganization() privacy.MutationRule {
 
 		if okOrg {
 			// ensure the object being mutated is in the organization specified in the owner_id field
-			if err := EnsureObjectInOrganization(ctx, m, m.Type(), id, orgID); errors.Is(err, privacy.Deny) {
+			if err := EnsureObjectInOrganization(ctx, m, m.Type(), id, orgID); access.Deny(err) {
 				return err
 			}
 
@@ -99,12 +83,28 @@ func DenyIfNotInOrganization() privacy.MutationRule {
 		}
 
 		// ensure the object being mutated is in the organization specified in the owner_id field
-		if err := EnsureTrustCenterInOrganization(ctx, m, orgID); errors.Is(err, privacy.Deny) {
+		if err := EnsureTrustCenterInOrganization(ctx, m, orgID); access.Deny(err) {
 			return err
 		}
 
 		return privacy.Skip
 	})
+}
+
+// skipOrgDenyCheck are conditions where the deny should not apply on the top level rules and instead
+// should skip to the next check
+func skipOrgDenyCheck(ctx context.Context, m ent.Mutation) bool {
+	// skip check for system admins, this will shortcut other checks that allow the admin to access
+	if auth.IsSystemAdminFromContext(ctx) {
+		return true
+	}
+
+	// History happens automatically, there are no external mutations to create history records
+	if history.IsHistoryRequest(ctx) {
+		return true
+	}
+
+	return false
 }
 
 // checkOrganizationMutation checks to see the user has access to the organization mutation
@@ -120,7 +120,7 @@ func checkOrganizationMutation(ctx context.Context, m ent.Mutation, orgID string
 			return privacy.Skip
 		}
 
-		if err := checkOrgAccess(ctx, fgax.CanView, parentOrgID); errors.Is(err, privacy.Allow) {
+		if err := checkOrgAccess(ctx, fgax.CanView, parentOrgID); access.Allow(err) {
 			return privacy.Skip
 		}
 
@@ -132,7 +132,7 @@ func checkOrganizationMutation(ctx context.Context, m ent.Mutation, orgID string
 		return privacy.Skip
 	}
 
-	if err := EnsureObjectInOrganization(ctx, mut, m.Type(), objID, orgID); errors.Is(err, privacy.Deny) {
+	if err := EnsureObjectInOrganization(ctx, mut, m.Type(), objID, orgID); access.Deny(err) {
 		return err
 	}
 
@@ -153,7 +153,7 @@ func checkOrgMembershipMutation(ctx context.Context, m ent.Mutation, orgID strin
 		return privacy.Skipf("unable to get org membership: %v", err)
 	}
 
-	if err := EnsureObjectInOrganization(ctx, m, orgmembership.Label, orgMembership.ID, orgID); errors.Is(err, privacy.Deny) {
+	if err := EnsureObjectInOrganization(ctx, m, orgmembership.Label, orgMembership.ID, orgID); access.Deny(err) {
 		return err
 	}
 
@@ -174,7 +174,7 @@ func checkGroupMembershipMutation(ctx context.Context, m ent.Mutation, orgID str
 		return privacy.Skipf("unable to get group membership: %v", err)
 	}
 
-	if err := EnsureObjectInOrganization(ctx, m, "group", member.GroupID, orgID); errors.Is(err, privacy.Deny) {
+	if err := EnsureObjectInOrganization(ctx, m, "group", member.GroupID, orgID); access.Deny(err) {
 		return err
 	}
 
@@ -195,7 +195,7 @@ func checkProgramMembershipMutation(ctx context.Context, m ent.Mutation, orgID s
 		return privacy.Skipf("unable to get group membership: %v", err)
 	}
 
-	if err := EnsureObjectInOrganization(ctx, m, "program", member.ProgramID, orgID); errors.Is(err, privacy.Deny) {
+	if err := EnsureObjectInOrganization(ctx, m, "program", member.ProgramID, orgID); access.Deny(err) {
 		return err
 	}
 
@@ -217,7 +217,7 @@ func EnsureObjectInOrganization(ctx context.Context, m ent.Mutation, objectType 
 			return privacy.Denyf("user does not have access to the requested organization")
 		}
 
-		if err := CheckCurrentOrgAccess(ctx, m, fgax.CanView); errors.Is(err, privacy.Allow) {
+		if err := CheckCurrentOrgAccess(ctx, m, fgax.CanView); access.Allow(err) {
 			// if its an allow, we want to return no error, this check just ensures its in the organization, it does
 			// not say they have access to the specific object
 			return privacy.Skip
@@ -227,7 +227,7 @@ func EnsureObjectInOrganization(ctx context.Context, m ent.Mutation, objectType 
 	}
 
 	if strings.EqualFold(objectType, orgmembership.Label) {
-		if err := CheckCurrentOrgAccess(ctx, m, fgax.CanView); errors.Is(err, privacy.Allow) {
+		if err := CheckCurrentOrgAccess(ctx, m, fgax.CanView); access.Allow(err) {
 			// if its an allow, we want to return no error, this check just ensures its in the organization, it does
 			// not say they have access to the specific object
 			return privacy.Skip

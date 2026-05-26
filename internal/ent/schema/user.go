@@ -331,6 +331,7 @@ func (u User) Annotations() []schema.Annotation {
 // Policy of the User
 func (User) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithSkipDenyOrganizationRule(),
 		policy.WithOnMutationRules(
 			// the user hook has update operations on user create so we need to allow email
 			// token sign up for update operations as well
