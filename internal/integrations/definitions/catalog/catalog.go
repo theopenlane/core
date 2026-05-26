@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/okta"
 	"github.com/theopenlane/core/internal/integrations/definitions/scim"
 	"github.com/theopenlane/core/internal/integrations/definitions/slack"
+	"github.com/theopenlane/core/internal/integrations/definitions/tailscale"
 	"github.com/theopenlane/core/internal/integrations/registry"
 )
 
@@ -39,5 +40,6 @@ func Builders(cfg Config, devMode bool) []registry.Builder {
 		okta.Builder(),
 		scim.Builder(),
 		slack.Builder(cfg.Slack, &cfg.SlackRuntime, devMode),
+		tailscale.Builder(),
 	}
 }
