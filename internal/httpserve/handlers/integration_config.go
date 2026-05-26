@@ -5,15 +5,14 @@ import (
 
 	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
-
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/utils/rout"
 )
 
 // ConfigureIntegrationProvider stores non-OAuth credentials for a provider definition.
@@ -36,11 +35,11 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	requestCtx = auth.WithCaller(
+	systemCtx := auth.WithCaller(
 		privacy.DecisionContext(requestCtx, privacy.Allow),
 		caller.WithCapabilities(auth.CapBypassOrgFilter|auth.CapBypassFGA|auth.CapInternalOperation),
 	)
-	ctx.SetRequest(ctx.Request().WithContext(requestCtx))
+	ctx.SetRequest(ctx.Request().WithContext(systemCtx))
 
 	def, ok := h.IntegrationsRuntime.Registry().Definition(payload.DefinitionID)
 	if !ok || !def.Active {
@@ -60,7 +59,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		credential = &types.CredentialSet{Data: jsonx.CloneRawMessage(payload.Body)}
 	}
 
-	if err := h.IntegrationsRuntime.Reconcile(requestCtx, installationRec, payload.UserInput, types.NewCredentialSlotID(payload.CredentialRef), credential, nil); err != nil {
+	if err := h.IntegrationsRuntime.Reconcile(systemCtx, installationRec, payload.UserInput, types.NewCredentialSlotID(payload.CredentialRef), credential, nil); err != nil {
 		// do not log payload, it can contain secrets
 		logx.FromContext(requestCtx).Error().Err(err).Msg("reconcile failed")
 
@@ -91,8 +90,6 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	var primaryWebhookURL string
 	var primaryWebhookSecret string
 
-	systemCtx := privacy.DecisionContext(requestCtx, privacy.Allow)
-
 	for i, registration := range def.Webhooks {
 		webhook, webhookErr := h.IntegrationsRuntime.EnsureWebhook(systemCtx, installationRec, registration.Name, "")
 		if webhookErr != nil {
@@ -116,7 +113,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	// operation that was just re-enabled needs a new job seeded - this is a no-op
 	// when all jobs are already active
 	if installationRec.Status == enums.IntegrationStatusConnected {
-		if err := h.IntegrationsRuntime.SeedReconcileJobsForInstallation(requestCtx, installationRec); err != nil {
+		if err := h.IntegrationsRuntime.SeedReconcileJobsForInstallation(systemCtx, installationRec); err != nil {
 			logx.FromContext(requestCtx).Warn().Err(err).Str("installation_id", installationRec.ID).Msg("failed to seed missing reconcile jobs after config update")
 		}
 	}

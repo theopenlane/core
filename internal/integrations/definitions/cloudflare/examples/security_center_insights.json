@@ -1,0 +1,44 @@
+{
+  "result": {
+    "issues": [
+      {
+        "id": "8f13fada5c4fc26f2a4d795361185c7e-security_txt_not_enabled",
+        "issue_class": "security_txt_not_enabled",
+        "issue_type": "configuration_suggestion",
+        "payload": {
+          "zone_tag": "8f13fada5c4fc26f2a4d795361185c7e"
+        },
+        "severity": "Low",
+        "subject": "google.com",
+        "timestamp": "2026-05-19T01:31:29.583623Z",
+        "dismissed": false,
+        "since": "2026-04-28T01:28:27.64868Z",
+        "resolve_link": "",
+        "resolve_text": "",
+        "status": "active"
+      },
+      {
+        "id": "d5da3c3b1596d9f70fa7905aa7b54ac9-security_txt_not_enabled",
+        "issue_class": "security_txt_not_enabled",
+        "issue_type": "configuration_suggestion",
+        "payload": {
+          "zone_tag": "d5da3c3b1596d9f70fa7905aa7b54ac9"
+        },
+        "severity": "Low",
+        "subject": "nvidia.com",
+        "timestamp": "2026-05-19T01:31:29.809528Z",
+        "dismissed": false,
+        "since": "2026-04-28T01:28:34.895576Z",
+        "resolve_link": "",
+        "resolve_text": "",
+        "status": "active"
+      }
+    ],
+    "count": 2,
+    "page": 1,
+    "per_page": 50
+  },
+  "success": true,
+  "errors": [],
+  "messages": []
+}
