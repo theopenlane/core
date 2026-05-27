@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -139,6 +140,50 @@ func HookUpdateManagedGroups() ent.Hook {
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne) // handle soft deletes as well as hard deletes
+}
+
+// HookBlockOwnerRoleChange blocks direct owner role changes and enforces it goes through the transfer route
+func HookBlockOwnerRoleChange() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.OrgMembershipFunc(func(ctx context.Context, m *generated.OrgMembershipMutation) (generated.Value, error) {
+			if _, allow := privacy.DecisionFromContext(ctx); allow {
+				return next.Mutate(ctx, m)
+			}
+
+			newRole, ok := m.Role()
+			if !ok {
+				return next.Mutate(ctx, m)
+			}
+
+			oldRole, err := getUserMembershipRole(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			if newRole == enums.RoleOwner || oldRole == enums.RoleOwner {
+				return nil, ErrOrgOwnerCannotBeUpdated
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpUpdate|ent.OpUpdateOne)
+}
+
+func getUserMembershipRole(ctx context.Context, m *generated.OrgMembershipMutation) (enums.Role, error) {
+	id, ok := m.ID()
+	if !ok {
+		return "", fmt.Errorf("%w: %s", ErrInvalidInput, "id is required")
+	}
+
+	member, err := m.Client().OrgMembership.Query().
+		Where(orgmembership.ID(id)).
+		Select(orgmembership.FieldRole).
+		Only(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	return member.Role, nil
 }
 
 // HookOrgMembersDelete is a hook that runs during the delete operation of an org membership

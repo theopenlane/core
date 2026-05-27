@@ -2,7 +2,6 @@ package rule
 
 import (
 	"context"
-	"strings"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -102,16 +101,5 @@ func getRelationToCheck(ctx context.Context, m *generated.InviteMutation) (strin
 		}
 	}
 
-	switch strings.ToLower(role.String()) {
-	case fgax.MemberRelation:
-		return inviteMemberRelation, nil
-	case fgax.AdminRelation:
-		return inviteAdminRelation, nil
-	case fgax.SuperAdminRelation:
-		return inviteSuperAdminRelation, nil
-	case fgax.AuditorRelation:
-		return inviteAuditors, nil
-	default:
-		return inviteSuperAdminRelation, nil
-	}
+	return InviteRelationForRole(role), nil
 }
