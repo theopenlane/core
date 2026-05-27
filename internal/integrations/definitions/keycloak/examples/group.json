@@ -1,0 +1,12 @@
+{
+  "id": "488f8a0c-c0b6-4dce-bf79-82db3af7cdac",
+  "name": "Engineering",
+  "path": "/Engineering",
+  "attributes": {
+    "team": ["backend"],
+    "location": ["remote"]
+  },
+  "realmRoles": [],
+  "clientRoles": {},
+  "subGroups": []
+}

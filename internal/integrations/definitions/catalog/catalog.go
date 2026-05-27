@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/gcpscc"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/internal/integrations/definitions/googleworkspace"
+	"github.com/theopenlane/core/internal/integrations/definitions/keycloak"
 	"github.com/theopenlane/core/internal/integrations/definitions/microsoftteams"
 	"github.com/theopenlane/core/internal/integrations/definitions/oidclocal"
 	"github.com/theopenlane/core/internal/integrations/definitions/okta"
@@ -32,6 +33,7 @@ func Builders(cfg Config, devMode bool) []registry.Builder {
 		gcpscc.Builder(),
 		githubapp.Builder(cfg.GitHubApp),
 		googleworkspace.Builder(cfg.GoogleWorkspace),
+		keycloak.Builder(),
 		microsoftteams.Builder(cfg.MicrosoftTeams),
 		oidclocal.Builder(cfg.OIDCLocal),
 		okta.Builder(),
