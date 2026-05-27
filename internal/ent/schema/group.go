@@ -266,7 +266,7 @@ func (g Group) Annotations() []schema.Annotation {
 // Interceptors of the Group
 func (g Group) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.FilterQueryResults[generated.Group](),
+		interceptors.FilterQueryResults[generated.Group](nil),
 	}
 }
 

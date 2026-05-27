@@ -170,7 +170,6 @@ query GetOrganizationByID ($organizationId: ID!) {
 		avatarUpdatedAt
 		createdAt
 		createdBy
-		dedicatedDb
 		description
 		displayName
 		id

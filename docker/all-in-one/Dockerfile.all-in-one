@@ -24,9 +24,9 @@ COPY --from=redis:7.4.9 /usr/local/bin/redis-server /bin/redis-server
 COPY --from=openfga/openfga:v1.15.1 /openfga /bin/openfga
 
 # Copy default model into image
-COPY fga/model/model.fga fga/model/model.fga
+COPY fga/model/ fga/model/
 
-COPY --from=ghcr.io/grpc-ecosystem/grpc-health-probe:v0.4.49 /ko-app/grpc-health-probe /bin/grpc_health_probe
+COPY --from=ghcr.io/grpc-ecosystem/grpc-health-probe:v0.4.50 /ko-app/grpc-health-probe /bin/grpc_health_probe
 
 # Copy entrypoint and env files
 COPY docker/all-in-one/docker_entrypoint.sh /bin/docker_entrypoint.sh

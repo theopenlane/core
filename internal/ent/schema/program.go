@@ -285,7 +285,7 @@ func (Program) Hooks() []ent.Hook {
 // Interceptors of the Program
 func (p Program) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.FilterQueryResults[generated.Program](),
+		interceptors.FilterQueryResults[generated.Program](nil),
 	}
 }
 

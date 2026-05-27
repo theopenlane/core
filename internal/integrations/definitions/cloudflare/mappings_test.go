@@ -1,11 +1,14 @@
 package cloudflare
 
 import (
+	"encoding/json"
 	"testing"
 
 	"gotest.tools/v3/assert"
 
+	"github.com/theopenlane/core/internal/integrations/mappingtest"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 func TestMappingExpressionsValid(t *testing.T) {
@@ -23,4 +26,45 @@ func TestMappingExpressionsValid(t *testing.T) {
 			assert.NilError(t, providerkit.ValidateExpr(m.Spec.MapExpr))
 		})
 	}
+}
+
+func TestSecurityCenterInsightsMapping(t *testing.T) {
+	spec := mappingtest.MappingSpec(t, cloudflareMappings(), "Finding")
+
+	sampleInsights := mappingtest.LoadExample(t, "examples", "security_center_insights.json")
+
+	var response struct {
+		Result struct {
+			Issues []json.RawMessage `json:"issues"`
+		} `json:"result"`
+	}
+
+	assert.NilError(t, json.Unmarshal(sampleInsights, &response))
+	assert.Assert(t, len(response.Result.Issues) > 0, "expected example to include at least one issue")
+
+	envelope := types.MappingEnvelope{
+		Resource: "6d3decf3259345241e8984cc27982f77",
+		Payload:  response.Result.Issues[0],
+	}
+
+	assert.Assert(t, mappingtest.AssertFiltered(t, spec, envelope), "expected security_center_insights.json issue to pass the Finding filter")
+
+	mapped := mappingtest.EvalMap(t, spec, envelope)
+
+	assert.Equal(t, "8f13fada5c4fc26f2a4d795361185c7e-security_txt_not_enabled", mapped["externalID"])
+	assert.Equal(t, "6d3decf3259345241e8984cc27982f77", mapped["externalOwnerID"])
+	assert.Equal(t, "security_txt_not_enabled", mapped["displayName"])
+	assert.Equal(t, "google.com", mapped["resourceName"])
+	assert.Equal(t, "configuration_suggestion", mapped["category"])
+	assert.Equal(t, "Low", mapped["severity"])
+	assert.Equal(t, true, mapped["open"])
+	assert.Equal(t, "active", mapped["findingStatusName"])
+	assert.Equal(t, "active", mapped["state"])
+	assert.Equal(t, "2026-05-19T01:31:29.583623Z", mapped["eventTime"])
+	assert.Equal(t, "2026-04-28T01:28:27.64868Z", mapped["sourceUpdatedAt"])
+	assert.Equal(t, "", mapped["recommendedActions"])
+	assert.Equal(t, "", mapped["externalURI"])
+	assert.DeepEqual(t, []any{"google.com"}, mapped["targets"])
+	assert.DeepEqual(t, map[string]any{"affected_endpoints": []any{"google.com"}}, mapped["targetDetails"])
+	assert.DeepEqual(t, []any{}, mapped["references"])
 }

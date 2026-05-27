@@ -114,7 +114,7 @@ func (s Subscriber) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(s,
-				withSkipTokenTypesObjects(&token.VerifyToken{}, &token.SignUpToken{}), withSkipForSystemAdmin(true)),
+				withSkipTokenTypesObjects(&token.VerifyToken{}, &token.SignUpToken{}), withSkipForSystemAdmin()),
 		},
 	}.getMixins(s)
 }
@@ -166,6 +166,7 @@ func (Subscriber) Policy() ent.Policy {
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.SignUpToken](),
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.VerifyToken](),
+			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

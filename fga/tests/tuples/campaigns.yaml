@@ -1,16 +1,23 @@
-# campaign with organization parent
+# set parent contexts for campaigns, these would be set via contextual tuples in the application
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: campaign:campaign-1
+- user: organization:openlane
+  relation: parent_context
+  object: campaign:campaign-2
+- user: organization:openlane
+  relation: parent_context
+  object: campaign:campaign-3
 
 # campaign with user parent (for webhook/service contexts)
+
 - user: user:ulid-of-owner
-  relation: parent
+  relation: editor
   object: campaign:campaign-2
 
 # campaign with service parent
 - user: service:ulid-of-service-editor
-  relation: parent
+  relation: editor
   object: campaign:campaign-3
 
 # campaign_target with campaign parent
@@ -18,13 +25,13 @@
   relation: parent
   object: campaign_target:target-1
 
-# campaign_target with user parent (for webhook/service contexts)
-- user: user:ulid-of-owner
+# campaign_target with campaign parent
+- user: campaign:campaign-2
   relation: parent
   object: campaign_target:target-2
 
 # campaign_target with service parent
-- user: service:ulid-of-service-editor
+- user: campaign:campaign-3
   relation: parent
   object: campaign_target:target-3
 
@@ -37,3 +44,15 @@
 - user: user:ulid-blocked
   relation: blocked
   object: campaign_target:target-1
+
+- user: user:ulid-of-member
+  relation: member
+  object: group:campaign-manager-group
+
+- user: group:campaign-manager-group#member
+  relation: editor
+  object: campaign:campaign-3
+
+- user: user:ulid-of-another-member
+  relation: campaign_manager
+  object: organization:openlane

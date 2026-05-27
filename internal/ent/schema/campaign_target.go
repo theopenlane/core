@@ -124,7 +124,7 @@ func (c CampaignTarget) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.CampaignTarget](c,
 				withParents(Campaign{}),
-				withOrganizationOwner(true),
+				withOrganizationOwnerFieldOnly(),
 			),
 			WorkflowApprovalMixin{},
 		},

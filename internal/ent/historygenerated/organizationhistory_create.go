@@ -251,20 +251,6 @@ func (_c *OrganizationHistoryCreate) SetNillableAvatarUpdatedAt(v *time.Time) *O
 	return _c
 }
 
-// SetDedicatedDb sets the "dedicated_db" field.
-func (_c *OrganizationHistoryCreate) SetDedicatedDb(v bool) *OrganizationHistoryCreate {
-	_c.mutation.SetDedicatedDb(v)
-	return _c
-}
-
-// SetNillableDedicatedDb sets the "dedicated_db" field if the given value is not nil.
-func (_c *OrganizationHistoryCreate) SetNillableDedicatedDb(v *bool) *OrganizationHistoryCreate {
-	if v != nil {
-		_c.SetDedicatedDb(*v)
-	}
-	return _c
-}
-
 // SetStripeCustomerID sets the "stripe_customer_id" field.
 func (_c *OrganizationHistoryCreate) SetStripeCustomerID(v string) *OrganizationHistoryCreate {
 	_c.mutation.SetStripeCustomerID(v)
@@ -370,10 +356,6 @@ func (_c *OrganizationHistoryCreate) defaults() error {
 		v := organizationhistory.DefaultAvatarUpdatedAt()
 		_c.mutation.SetAvatarUpdatedAt(v)
 	}
-	if _, ok := _c.mutation.DedicatedDb(); !ok {
-		v := organizationhistory.DefaultDedicatedDb
-		_c.mutation.SetDedicatedDb(v)
-	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if organizationhistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized organizationhistory.DefaultID (forgotten import historygenerated/runtime?)")
@@ -402,9 +384,6 @@ func (_c *OrganizationHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.DisplayName(); !ok {
 		return &ValidationError{Name: "display_name", err: errors.New(`historygenerated: missing required field "OrganizationHistory.display_name"`)}
-	}
-	if _, ok := _c.mutation.DedicatedDb(); !ok {
-		return &ValidationError{Name: "dedicated_db", err: errors.New(`historygenerated: missing required field "OrganizationHistory.dedicated_db"`)}
 	}
 	return nil
 }
@@ -513,10 +492,6 @@ func (_c *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgra
 	if value, ok := _c.mutation.AvatarUpdatedAt(); ok {
 		_spec.SetField(organizationhistory.FieldAvatarUpdatedAt, field.TypeTime, value)
 		_node.AvatarUpdatedAt = &value
-	}
-	if value, ok := _c.mutation.DedicatedDb(); ok {
-		_spec.SetField(organizationhistory.FieldDedicatedDb, field.TypeBool, value)
-		_node.DedicatedDb = value
 	}
 	if value, ok := _c.mutation.StripeCustomerID(); ok {
 		_spec.SetField(organizationhistory.FieldStripeCustomerID, field.TypeString, value)

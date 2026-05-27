@@ -168,21 +168,32 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 			}
 
 			// look up the enum by name, object type, and field
-			// and ensure it exists
-			enumPredicates := []predicate.CustomTypeEnum{
+			// and ensure it exists; prefer system owned
+			basePredicates := []predicate.CustomTypeEnum{
 				customtypeenum.NameEqualFold(enumValue),
 				customtypeenum.Field(in.Field),
 				customtypeenum.DeletedAtIsNil(),
-				customtypeenum.Or(
-					customtypeenum.SystemOwned(true),
-					customtypeenum.OwnerID(orgID),
-				),
 			}
 
-			// lookupEnum fetches a custom enum by object type
+			// lookupEnum fetches a custom enum by object type, preferring
+			// system-owned enums (always seeded) over org-owned
 			lookupEnum := func(objectType string) (*generated.CustomTypeEnum, error) {
+				preds := append([]predicate.CustomTypeEnum{}, basePredicates...)
+				preds = append(preds, customtypeenum.ObjectType(objectType))
+
+				sysEnum, err := client.CustomTypeEnum.Query().
+					Where(append(preds, customtypeenum.SystemOwned(true))...).
+					Only(ctx)
+				if err == nil {
+					return sysEnum, nil
+				}
+
+				if !generated.IsNotFound(err) {
+					return nil, err
+				}
+
 				return client.CustomTypeEnum.Query().
-					Where(append(enumPredicates, customtypeenum.ObjectType(objectType))...).
+					Where(append(preds, customtypeenum.OwnerID(orgID))...).
 					Only(ctx)
 			}
 

@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/theopenlane/newman"
-	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/iam/tokens"
 
@@ -90,7 +89,7 @@ func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationReques
 		return err
 	}
 
-	authURL, err := questionnaireAuthURL(ctx, db, client, camp, email)
+	authURL, err := QuestionnaireAuthURL(ctx, db, camp.AssessmentID, camp.OwnerID, email)
 	if err != nil {
 		return err
 	}
@@ -126,21 +125,21 @@ func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationReques
 	return markCampaignTargetSent(ctx, db, campaignTargetID)
 }
 
-// questionnaireAuthURL generates an anonymous access token URL for the campaign's assessment questionnaire
-func questionnaireAuthURL(ctx context.Context, db *generated.Client, client *Client, camp *generated.Campaign, recipientEmail string) (string, error) {
-	baseURL, err := url.Parse(client.Config.ProductURL + "/questionnaire")
+// QuestionnaireAuthURL generates an anonymous access token URL for questionnaire access
+func QuestionnaireAuthURL(ctx context.Context, db *generated.Client, assessmentID, ownerID, recipientEmail string) (string, error) {
+	baseURL, err := url.Parse(db.EntConfig.QuestionnaireProductURL + "/questionnaire")
 	if err != nil {
 		return "", fmt.Errorf("parse questionnaire URL: %w", err)
 	}
 
 	result, err := urlx.GenerateAnonTokenURL(ctx, db.TokenManager, db.Shortlinks, *baseURL, urlx.AnonTokenRequest{
 		Prefix:    authmanager.AnonQuestionnaireJWTPrefix,
-		SubjectID: ulids.New().String(),
-		OrgID:     camp.OwnerID,
+		SubjectID: assessmentID,
+		OrgID:     ownerID,
 		Email:     recipientEmail,
 		Duration:  db.TokenManager.Config().AssessmentAccessDuration,
 		ExtraClaims: func(c *tokens.Claims) {
-			c.AssessmentID = camp.AssessmentID
+			c.AssessmentID = assessmentID
 		},
 	})
 	if err != nil {

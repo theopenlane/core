@@ -1,7 +1,6 @@
 package graphapi_test
 
 import (
-	"context"
 	"testing"
 
 	"github.com/99designs/gqlgen/graphql"
@@ -13,7 +12,6 @@ import (
 
 	auth "github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
@@ -28,12 +26,12 @@ func TestQueryUser(t *testing.T) {
 	}{
 		{
 			name:     "happy path user",
-			queryID:  testUser1.ID,
-			expected: testUser1.UserInfo,
+			queryID:  sharedTestUser1.ID,
+			expected: sharedTestUser1.UserInfo,
 		},
 		{
 			name:     "valid user, but no auth",
-			queryID:  testUser2.ID,
+			queryID:  sharedTestUser2.ID,
 			errorMsg: "user not found",
 		},
 		{
@@ -45,7 +43,7 @@ func TestQueryUser(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			resp, err := suite.client.api.GetUserByID(testUser1.UserCtx, tc.queryID)
+			resp, err := suite.client.api.GetUserByID(sharedTestUser1.UserCtx, tc.queryID)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
@@ -65,7 +63,7 @@ func TestQueryUser(t *testing.T) {
 func TestQueryUsers(t *testing.T) {
 
 	t.Run("Get Users", func(t *testing.T) {
-		resp, err := suite.client.api.GetAllUsers(testUser1.UserCtx)
+		resp, err := suite.client.api.GetAllUsers(sharedTestUser1.UserCtx)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -75,7 +73,7 @@ func TestQueryUsers(t *testing.T) {
 		assert.Check(t, is.Len(resp.Users.Edges, 1))
 
 		// setup valid user context
-		reqCtx := testUser1.UserCtx
+		reqCtx := sharedTestUser1.UserCtx
 
 		resp, err = suite.client.api.GetAllUsers(reqCtx)
 
@@ -90,9 +88,9 @@ func TestQueryUsers(t *testing.T) {
 		user2Found := false
 
 		for _, o := range resp.Users.Edges {
-			if o.Node.ID == testUser1.ID {
+			if o.Node.ID == sharedTestUser1.ID {
 				user1Found = true
-			} else if o.Node.ID == testUser2.ID {
+			} else if o.Node.ID == sharedTestUser2.ID {
 				user2Found = true
 			}
 		}
@@ -128,7 +126,7 @@ func TestMutationCreateUser(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			resp, err := suite.client.api.CreateUser(testUser1.UserCtx, tc.userInput, tc.avatarFile, nil)
+			resp, err := suite.client.api.CreateUser(sharedTestUser1.UserCtx, tc.userInput, tc.avatarFile, nil)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
@@ -155,7 +153,7 @@ func TestMutationCreateUser(t *testing.T) {
 			// default org will always be the personal org when the user is first created
 			personalOrgID := resp.CreateUser.User.Setting.DefaultOrg.ID
 
-			org, err := suite.client.api.GetOrganizationByID(testUser1.UserCtx, personalOrgID)
+			org, err := suite.client.api.GetOrganizationByID(sharedTestUser1.UserCtx, personalOrgID)
 			assert.NilError(t, err)
 			assert.Check(t, is.Equal(personalOrgID, org.Organization.ID))
 			assert.Check(t, *org.Organization.PersonalOrg)
@@ -170,7 +168,7 @@ func TestMutationUpdateUser(t *testing.T) {
 	displayNameUpdate := gofakeit.LetterN(40)
 	nameUpdateLong := gofakeit.LetterN(200)
 
-	user := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	user := (&UserBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	orgID := user.Edges.Setting.Edges.DefaultOrg.ID
 
@@ -312,7 +310,7 @@ func TestMutationUpdateUser(t *testing.T) {
 
 func TestMutationDeleteUser(t *testing.T) {
 	// bypass auth on object creation
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx := privacy.DecisionContext(sharedTestUser1.UserCtx, privacy.Allow)
 
 	user := (&UserBuilder{client: suite.client}).MustNew(ctx, t)
 
@@ -373,29 +371,19 @@ func TestMutationDeleteUser(t *testing.T) {
 }
 
 func TestMutationDeleteUser_OrgOwnerCannotBeDeleted(t *testing.T) {
-	orgUser := suite.userBuilder(context.Background(), t)
+	t.Parallel()
+	localTestOrg := suite.seedFreshOrgUsers(t)
 
-	org := (&OrganizationBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
-
-	newMember := (&UserBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
-
-	orgCtx := auth.NewTestContextWithOrgID(orgUser.ID, org.ID)
-
-	_, err := suite.client.api.AddUserToOrgWithRole(orgCtx, testclient.CreateOrgMembershipInput{
-		UserID: newMember.ID,
-		Role:   &enums.RoleOwner,
-	})
-	assert.NilError(t, err)
-
-	deleteCtx := auth.NewTestContextWithOrgID(newMember.ID, org.ID)
-
-	_, err = suite.client.api.DeleteUser(deleteCtx, newMember.ID)
+	_, err := suite.client.api.DeleteUser(localTestOrg.owner.UserCtx, localTestOrg.owner.ID)
 
 	assert.ErrorContains(t, err, "organization owner cannot be deleted")
+
+	// cleanup
+	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
 }
 
 func TestMutationUserCascadeDelete(t *testing.T) {
-	user := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	user := (&UserBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	reqCtx := auth.NewTestContextWithOrgID(user.ID, user.Edges.Setting.Edges.DefaultOrg.ID)
 

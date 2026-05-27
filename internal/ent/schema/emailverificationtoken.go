@@ -128,6 +128,7 @@ func (EmailVerificationToken) Hooks() []ent.Hook {
 // Policy of the EmailVerificationToken
 func (e EmailVerificationToken) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithSkipDenyOrganizationRule(),
 		policy.WithQueryRules(
 			rule.AllowAfterApplyingPrivacyTokenFilter[*token.VerifyToken](),
 		),

@@ -8,7 +8,7 @@
   relation: member
   object: organization:openlane
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: group:group-editor
   condition:
     name: public_group
@@ -22,7 +22,7 @@
   relation: member
   object: organization:openlane
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: group:group-blocked
   condition:
     name: public_group
@@ -34,10 +34,10 @@
 
 # setup procedure
 - user: user:ulid-admin
-  relation: admin
+  relation: editor
   object: procedure:procedure-1
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: procedure:procedure-1
 
 # setup group permissions for procedure
@@ -47,12 +47,6 @@
 - user: group:group-blocked#member
   relation: blocked
   object: procedure:procedure-1
-
-# setup view permissions for auditors
-- user: program:program-1#auditor
-  relation: viewer
-  object: procedure:procedure-1
-
 
 # setup approver permissions for the procedure
 - user: group:internal-policy-approver#member

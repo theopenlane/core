@@ -2,9 +2,11 @@ package cloudflare
 
 import (
 	"context"
+	"net/http"
+	"time"
 
-	cf "github.com/cloudflare/cloudflare-go/v6"
-	"github.com/cloudflare/cloudflare-go/v6/option"
+	cf "github.com/cloudflare/cloudflare-go/v7"
+	"github.com/cloudflare/cloudflare-go/v7/option"
 
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -23,7 +25,10 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error
 		return nil, ErrAPITokenMissing
 	}
 
-	return cf.NewClient(option.WithAPIToken(cred.APIToken)), nil
+	return cf.NewClient(
+		option.WithAPIToken(cred.APIToken),
+		option.WithHTTPClient(&http.Client{Timeout: time.Minute}),
+	), nil
 }
 
 func resolveCredential(bindings types.CredentialBindings) (CredentialSchema, error) {

@@ -241,7 +241,6 @@ func (r Review) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Review](r,
 				withParents(
-					Organization{},
 					Program{},
 					Control{},
 					Subcontrol{},
@@ -253,7 +252,8 @@ func (r Review) Mixin() []ent.Mixin {
 					Entity{},
 					Task{},
 				),
-				withOrganizationOwner(true),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 			),
 			newGroupPermissionsMixin(),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),

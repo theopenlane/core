@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"errors"
 	"slices"
 	"strings"
 
@@ -13,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	access "github.com/theopenlane/core/internal/ent/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
@@ -58,13 +58,13 @@ func HookMembershipSelf(table string) ent.Hook {
 				}
 			}
 
-			// fallback to fgax check for owner relation access if org role is not available
+			// fallback to fgax check for full_access relation access if org role is not available
 			// in the context
 			if caller.OrganizationRole == "" {
-				if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.OwnerRelation); errors.Is(err, privacy.Allow) {
+				if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.FullAccessRelation); access.Allow(err) {
 					// ensure this is not an org membership mutation, owners cannot update their own membership
 					// in the organization, it must be done via a transfer
-					if m.Type() != generated.TypeOrgMembership {
+					if m.Type() != generated.TypeOrgMembership && caller.OrganizationRole == auth.OwnerRole {
 						return next.Mutate(ctx, m)
 					}
 				}

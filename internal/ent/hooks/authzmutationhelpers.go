@@ -27,11 +27,11 @@ func GetObjectTypeFromEntMutation(m ent.Mutation) string {
 	return strcase.SnakeCase(m.Type())
 }
 
-// getTuplesToAdd is the generic function to get the tuples that need to be added to the authz service based on the edges that were added
+// GetTuplesToAdd is the generic function to get the tuples that need to be added to the authz service based on the edges that were added
 // it is recommend to use the helper functions that call this instead of calling this directly
 // for example, to add a parent relationship, use createParentTuples, or for an org owner relationship, use createOrgOwnerParentTuple
 // this takes in the tuple request and sets the subject and subject id based on the edge field and tuple set relation
-func getTuplesToAdd(ctx context.Context, m ent.Mutation, tr fgax.TupleRequest, edgeField string) ([]fgax.TupleKey, error) {
+func GetTuplesToAdd(ctx context.Context, m ent.Mutation, tr fgax.TupleRequest, edgeField string) ([]fgax.TupleKey, error) {
 	var addTuples []fgax.TupleKey
 
 	if strings.EqualFold(edgeField, "organization_id") {
@@ -75,12 +75,14 @@ func createParentTuples(ctx context.Context, m ent.Mutation, objectID string, pa
 			Relation:    fgax.ParentRelation,
 		}
 
-		t, err := getTuplesToAdd(ctx, m, tr, parent)
+		t, err := GetTuplesToAdd(ctx, m, tr, parent)
 		if err != nil {
 			return nil, err
 		}
 
-		addTuples = append(addTuples, t...)
+		if len(t) > 0 {
+			addTuples = append(addTuples, t...)
+		}
 	}
 
 	return addTuples, nil
@@ -96,10 +98,10 @@ func createOrgOwnerParentTuple(ctx context.Context, m ent.Mutation, objectID str
 		SubjectType: generated.TypeOrganization,
 		ObjectID:    objectID,                        // this is the object id being created
 		ObjectType:  GetObjectTypeFromEntMutation(m), // this is the object type being created
-		Relation:    fgax.ParentRelation,
+		Relation:    fgax.ParentContextRelation,
 	}
 
-	t, err := getTuplesToAdd(ctx, m, tr, ownerFieldName)
+	t, err := GetTuplesToAdd(ctx, m, tr, ownerFieldName)
 	if err != nil {
 		return nil, err
 	}
@@ -126,7 +128,7 @@ func createTuplesByRelation(ctx context.Context, m ent.Mutation, objectID string
 		}
 
 		// this will create tuples such as group:ulid-of-group#member with the relation provided
-		t, err := getTuplesToAdd(ctx, m, tr, edgeField)
+		t, err := GetTuplesToAdd(ctx, m, tr, edgeField)
 		if err != nil {
 			return nil, err
 		}
@@ -402,35 +404,6 @@ func parseGraphqlInputForEdgeIDs(ctx context.Context, parentField string) ([]str
 	}
 
 	return ids, nil
-}
-
-// addTokenEditPermissions adds the edit permissions for the api token to the object
-func addTokenEditPermissions(ctx context.Context, m generated.Mutation, oID string, objectType string) error {
-	subjectID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("unable to get subject id from context, cannot update token permissions")
-
-		return err
-	}
-
-	req := fgax.TupleRequest{
-		SubjectID:   subjectID,
-		SubjectType: auth.GetAuthzSubjectType(ctx),
-		Relation:    fgax.CanEdit,
-		ObjectID:    oID,
-		ObjectType:  objectType,
-	}
-
-	logx.FromContext(ctx).Debug().Interface("request", req).
-		Msg("creating edit tuples for api token")
-
-	if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(req)}, nil); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
-
-		return ErrInternalServerError
-	}
-
-	return nil
 }
 
 // getOrgMemberID gets the org member id for the user in the organization if they are a member

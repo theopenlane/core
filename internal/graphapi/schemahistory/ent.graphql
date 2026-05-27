@@ -795,7 +795,7 @@ type AssessmentHistory implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
@@ -21542,6 +21542,8 @@ enum OrgMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/commo
   ADMIN
   MEMBER
   OWNER
+  SUPER_ADMIN
+  AUDITOR
 }
 """
 OrgMembershipHistoryWhereInput is used for filtering OrgMembershipHistory objects.
@@ -22072,10 +22074,6 @@ type OrganizationHistory implements Node {
   The time the user's (local) avatar was last updated
   """
   avatarUpdatedAt: Time
-  """
-  Whether the organization has a dedicated database
-  """
-  dedicatedDb: Boolean!
   """
   the stripe customer ID this organization is associated to
   """
@@ -25542,6 +25540,7 @@ ProgramMembershipHistoryRole is enum for the field role
 enum ProgramMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/common/enums.Role") {
   ADMIN
   MEMBER
+  AUDITOR
 }
 """
 ProgramMembershipHistoryWhereInput is used for filtering ProgramMembershipHistory objects.
@@ -34616,7 +34615,7 @@ type TemplateHistory implements Node {
   """
   trustCenterID: String
   """
-  configuration for converting a submitted assesment into records for the organization
+  configuration for converting a submitted assessment into records for the organization
   """
   transformConfiguration: TemplateProjectionConfig
 }

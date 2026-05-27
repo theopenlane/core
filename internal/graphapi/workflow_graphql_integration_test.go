@@ -186,6 +186,7 @@ func TestWorkflowGraphQLUserApproval(t *testing.T) {
 }
 
 func TestWorkflowGraphQLUpdateControlRespectsPermissions(t *testing.T) {
+	t.Parallel()
 	initiator := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 	viewer := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 	suite.addUserToOrganization(initiator.UserCtx, t, &viewer, enums.RoleMember, initiator.OrganizationID)
@@ -253,6 +254,8 @@ func TestWorkflowGraphQLUpdateControlRespectsPermissions(t *testing.T) {
 
 // TestWorkflowGraphQLGroupApproval tests group-based approval workflows through GraphQL API
 func TestWorkflowGraphQLGroupApproval(t *testing.T) {
+	t.Parallel()
+
 	// Create dedicated test users for workflow testing
 	initiator := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 	approver1 := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
@@ -431,6 +434,8 @@ func TestWorkflowGraphQLGroupApproval(t *testing.T) {
 
 // TestWorkflowGraphQLMultiStepApproval tests multi-step approval workflows through GraphQL API
 func TestWorkflowGraphQLMultiStepApproval(t *testing.T) {
+	t.Parallel()
+
 	// Create dedicated test users
 	initiator := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 	approver1 := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
@@ -623,6 +628,8 @@ func TestWorkflowGraphQLMultiStepApproval(t *testing.T) {
 
 // TestWorkflowGraphQLMyAssignments tests the MyWorkflowAssignments query
 func TestWorkflowGraphQLMyAssignments(t *testing.T) {
+	t.Parallel()
+
 	// Create dedicated test users
 	initiator := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 	approver1 := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
@@ -744,6 +751,8 @@ func TestWorkflowGraphQLMyAssignments(t *testing.T) {
 
 // TestWorkflowGraphQLApprovalAuthorization tests that only authorized users can approve/reject assignments
 func TestWorkflowGraphQLApprovalAuthorization(t *testing.T) {
+	t.Parallel()
+
 	// Create dedicated test users for workflow testing
 	initiator := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 	approver := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
@@ -997,6 +1006,8 @@ func TestWorkflowGraphQLApprovalAuthorization(t *testing.T) {
 
 // TestWorkflowGraphQLGroupApprovalAuthorization tests authorization for group-targeted assignments
 func TestWorkflowGraphQLGroupApprovalAuthorization(t *testing.T) {
+	t.Parallel()
+
 	// Create dedicated test users
 	initiator := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 	groupMember := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
@@ -1281,6 +1292,8 @@ func TestWorkflowGraphQLGroupApprovalAuthorization(t *testing.T) {
 
 // TestWorkflowGraphQLObjectRef tests that WorkflowObjectRef is created correctly
 func TestWorkflowGraphQLObjectRef(t *testing.T) {
+	t.Parallel()
+
 	// Create dedicated test user
 	initiator := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 	approver := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)

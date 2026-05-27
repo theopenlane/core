@@ -17,7 +17,7 @@ import (
 )
 
 func TestQueryIdentityHolder(t *testing.T) {
-	ih := (&IdentityHolderBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	ih := (&IdentityHolderBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -30,13 +30,13 @@ func TestQueryIdentityHolder(t *testing.T) {
 			name:    "happy path",
 			queryID: ih.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path, view only user",
 			queryID: ih.ID,
 			client:  suite.client.api,
-			ctx:     viewOnlyUser.UserCtx,
+			ctx:     sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path, with api token",
@@ -54,14 +54,14 @@ func TestQueryIdentityHolder(t *testing.T) {
 			name:     "not found, no access",
 			queryID:  ih.ID,
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "not found, invalid id",
 			queryID:  "invalid",
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      sharedTestUser1.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -81,12 +81,12 @@ func TestQueryIdentityHolder(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.IdentityHolderDeleteOne]{client: suite.client.db.IdentityHolder, ID: ih.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.IdentityHolderDeleteOne]{client: suite.client.db.IdentityHolder, ID: ih.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestQueryIdentityHolders(t *testing.T) {
-	ih1 := (&IdentityHolderBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	ih2 := (&IdentityHolderBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	ih1 := (&IdentityHolderBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	ih2 := (&IdentityHolderBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name   string
@@ -96,12 +96,12 @@ func TestQueryIdentityHolders(t *testing.T) {
 		{
 			name:   "happy path",
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name:   "happy path, view only user",
 			client: suite.client.api,
-			ctx:    viewOnlyUser.UserCtx,
+			ctx:    sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:   "happy path, using api token",
@@ -116,7 +116,7 @@ func TestQueryIdentityHolders(t *testing.T) {
 		{
 			name:   "another user, no identity holders should be returned",
 			client: suite.client.api,
-			ctx:    testUser2.UserCtx,
+			ctx:    sharedTestUser2.UserCtx,
 		},
 	}
 
@@ -128,8 +128,8 @@ func TestQueryIdentityHolders(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.IdentityHolderDeleteOne]{client: suite.client.db.IdentityHolder, ID: ih1.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.IdentityHolderDeleteOne]{client: suite.client.db.IdentityHolder, ID: ih2.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.IdentityHolderDeleteOne]{client: suite.client.db.IdentityHolder, ID: ih1.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.IdentityHolderDeleteOne]{client: suite.client.db.IdentityHolder, ID: ih2.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationCreateIdentityHolder(t *testing.T) {
@@ -147,7 +147,7 @@ func TestMutationCreateIdentityHolder(t *testing.T) {
 				Email:    gofakeit.Email(),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all input",
@@ -164,14 +164,14 @@ func TestMutationCreateIdentityHolder(t *testing.T) {
 				Status:             &enums.UserStatusOnboarding,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateIdentityHolderInput{
 				FullName: gofakeit.Name(),
 				Email:    gofakeit.Email(),
-				OwnerID:  &testUser1.OrganizationID,
+				OwnerID:  &sharedTestUser1.OrganizationID,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -192,7 +192,7 @@ func TestMutationCreateIdentityHolder(t *testing.T) {
 				Email:    gofakeit.Email(),
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -202,7 +202,7 @@ func TestMutationCreateIdentityHolder(t *testing.T) {
 			},
 			expectedErr: "value is less than the required length",
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 		},
 		{
 			name: "missing required field, no name",
@@ -211,7 +211,7 @@ func TestMutationCreateIdentityHolder(t *testing.T) {
 			},
 			expectedErr: "value is less than the required length",
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 		},
 		{
 			name: "invalid email",
@@ -221,7 +221,7 @@ func TestMutationCreateIdentityHolder(t *testing.T) {
 			},
 			expectedErr: "mail: missing '@' or angle-addr",
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 		},
 		{
 			name: "invalid phone number",
@@ -232,7 +232,7 @@ func TestMutationCreateIdentityHolder(t *testing.T) {
 			},
 			expectedErr: rout.InvalidField("phone_number").Error(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 		},
 	}
 
@@ -291,13 +291,13 @@ func TestMutationCreateIdentityHolder(t *testing.T) {
 
 			assert.Check(t, ih.IsActive)
 
-			(&Cleanup[*generated.IdentityHolderDeleteOne]{client: suite.client.db.IdentityHolder, ID: ih.ID}).MustDelete(testUser1.UserCtx, t)
+			(&Cleanup[*generated.IdentityHolderDeleteOne]{client: suite.client.db.IdentityHolder, ID: ih.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 		})
 	}
 }
 
 func TestMutationUpdateIdentityHolder(t *testing.T) {
-	ih := (&IdentityHolderBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	ih := (&IdentityHolderBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -312,7 +312,7 @@ func TestMutationUpdateIdentityHolder(t *testing.T) {
 				FullName: lo.ToPtr(gofakeit.Name()),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, update email",
@@ -320,7 +320,7 @@ func TestMutationUpdateIdentityHolder(t *testing.T) {
 				Email: lo.ToPtr(gofakeit.Email()),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, update department and team",
@@ -345,7 +345,7 @@ func TestMutationUpdateIdentityHolder(t *testing.T) {
 				IdentityHolderType: &enums.IdentityHolderTypeContractor,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, update title and location",
@@ -354,7 +354,7 @@ func TestMutationUpdateIdentityHolder(t *testing.T) {
 				Location: lo.ToPtr(gofakeit.City()),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "not authorized, view only user",
@@ -362,7 +362,7 @@ func TestMutationUpdateIdentityHolder(t *testing.T) {
 				FullName: lo.ToPtr(gofakeit.Name()),
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -371,7 +371,7 @@ func TestMutationUpdateIdentityHolder(t *testing.T) {
 				FullName: lo.ToPtr(gofakeit.Name()),
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
@@ -380,7 +380,7 @@ func TestMutationUpdateIdentityHolder(t *testing.T) {
 				PhoneNumber: lo.ToPtr("not a phone number"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: rout.InvalidField("phone_number").Error(),
 		},
 		{
@@ -389,7 +389,7 @@ func TestMutationUpdateIdentityHolder(t *testing.T) {
 				Email: lo.ToPtr("not-an-email"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "validator failed for field",
 		},
 	}
@@ -445,13 +445,13 @@ func TestMutationUpdateIdentityHolder(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.IdentityHolderDeleteOne]{client: suite.client.db.IdentityHolder, ID: ih.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.IdentityHolderDeleteOne]{client: suite.client.db.IdentityHolder, ID: ih.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteIdentityHolder(t *testing.T) {
-	ih1 := (&IdentityHolderBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	ih2 := (&IdentityHolderBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	ih3 := (&IdentityHolderBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	ih1 := (&IdentityHolderBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	ih2 := (&IdentityHolderBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	ih3 := (&IdentityHolderBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -464,27 +464,27 @@ func TestMutationDeleteIdentityHolder(t *testing.T) {
 			name:        "not allowed to delete, view only user",
 			idToDelete:  ih1.ID,
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "not allowed to delete, no access",
 			idToDelete:  ih1.ID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
 			idToDelete: ih1.ID,
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        sharedTestUser1.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  ih1.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
@@ -503,7 +503,7 @@ func TestMutationDeleteIdentityHolder(t *testing.T) {
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}

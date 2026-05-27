@@ -16,7 +16,7 @@
   object: standard:standard-2
 # org owned standard
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: standard:standard-org-custom
 # control under standard
 - user: standard:standard-system-owned-1

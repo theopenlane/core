@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -50,10 +51,10 @@ func HookCreateAssessmentResponse() ent.Hook {
 			}
 
 			if existingResponse != nil {
-				return handleExistingAssessmentResponse(ctx, m, existingResponse, isTest)
+				return handleExistingAssessmentResponse(ctx, m, existingResponse, isTest, campaignID)
 			}
 
-			return createNewAssessmentResponse(ctx, m, next, email)
+			return createNewAssessmentResponse(ctx, m, next, email, campaignID)
 		})
 	}, ent.OpCreate)
 }
@@ -91,8 +92,8 @@ func findExistingAssessmentResponse(ctx context.Context, client *generated.Clien
 
 // handleExistingAssessmentResponse processes a resend or draft-update request for an existing
 // assessment response. For drafts it updates due date only. For non-drafts it increments send
-// attempts, resets overdue status, and sends a new email invitation.
-func handleExistingAssessmentResponse(ctx context.Context, m *generated.AssessmentResponseMutation, existingResponse *generated.AssessmentResponse, isTest bool) (*generated.AssessmentResponse, error) {
+// attempts, resets overdue status, and sends a new email invitation
+func handleExistingAssessmentResponse(ctx context.Context, m *generated.AssessmentResponseMutation, existingResponse *generated.AssessmentResponse, isTest bool, campaignID string) (*generated.AssessmentResponse, error) {
 	if existingResponse.Status == enums.AssessmentResponseStatusCompleted &&
 		!isTest {
 		return nil, ErrAssessmentInCompleted
@@ -127,13 +128,25 @@ func handleExistingAssessmentResponse(ctx context.Context, m *generated.Assessme
 		update = update.SetStatus(enums.AssessmentResponseStatusSent)
 	}
 
-	return update.Save(ctx)
+	resp, err := update.Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if campaignID == "" {
+		if err := sendResponseEmail(ctx, m.Client(), existingResponse.AssessmentID, existingResponse.OwnerID, existingResponse.Email); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to resend assessment response email")
+			return nil, err
+		}
+	}
+
+	return resp, nil
 }
 
-// createNewAssessmentResponse creates a new assessment response record and handles contact creation.
-// It handles race conditions by detecting unique constraint violations and re-querying to update
-// the existing record. Email dispatch is handled by the integration operation layer.
-func createNewAssessmentResponse(ctx context.Context, m *generated.AssessmentResponseMutation, next ent.Mutator, email string) (generated.Value, error) {
+// createNewAssessmentResponse creates a new assessment response record, handles contact creation,
+// and sends the questionnaire access email. It handles race conditions by detecting unique
+// constraint violations and re-querying to update the existing record
+func createNewAssessmentResponse(ctx context.Context, m *generated.AssessmentResponseMutation, next ent.Mutator, email, campaignID string) (generated.Value, error) {
 	isDraft, _ := m.IsDraft()
 
 	if isDraft {
@@ -165,6 +178,16 @@ func createNewAssessmentResponse(ctx context.Context, m *generated.AssessmentRes
 		return nil, err
 	}
 
+	if !isDraft && campaignID == "" {
+		assessmentID, _ := m.AssessmentID()
+		ownerID, _ := m.OwnerID()
+
+		if err := sendResponseEmail(ctx, m.Client(), assessmentID, ownerID, email); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to send assessment response email")
+			return nil, err
+		}
+	}
+
 	return value, nil
 }
 
@@ -190,7 +213,7 @@ func handleConstraintViolation(ctx context.Context, m *generated.AssessmentRespo
 		return nil, ErrUnableToCreateAssessmentResponse
 	}
 
-	return handleExistingAssessmentResponse(ctx, m, existingResponse, isTest)
+	return handleExistingAssessmentResponse(ctx, m, existingResponse, isTest, campaignID)
 }
 
 // isUniqueConstraintError checks if the error is a unique constraint violation.
@@ -343,6 +366,28 @@ func updateCampaignCompletionFromTargets(ctx context.Context, client *generated.
 	}
 
 	return update.Exec(ctx)
+}
+
+// sendResponseEmail builds the questionnaire auth URL and dispatches the questionnaire access email
+func sendResponseEmail(ctx context.Context, client *generated.Client, assessmentID, ownerID, email string) error {
+	assessmentObj, err := client.Assessment.Query().
+		Where(assessment.IDEQ(assessmentID)).
+		Select(assessment.FieldName).
+		Only(ctx)
+	if err != nil {
+		return err
+	}
+
+	authURL, err := emaildef.QuestionnaireAuthURL(ctx, client, assessmentID, ownerID, email)
+	if err != nil {
+		return err
+	}
+
+	return sendSystemEmail(ctx, client, emaildef.QuestionnaireAuthOp.Name(), emaildef.QuestionnaireAuthEmail{
+		RecipientInfo:  emaildef.RecipientInfo{Email: email},
+		AssessmentName: assessmentObj.Name,
+		AuthURL:        authURL,
+	})
 }
 
 // validateAndSetDueDate validates the due_date field and sets it based on the assessment's response_due_duration if not provided

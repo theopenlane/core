@@ -1425,6 +1425,11 @@ func (_u *ActionPlanUpdate) check() error {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.review_frequency": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.URL(); ok {
+		if err := actionplan.URLValidator(v); err != nil {
+			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.url": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Title(); ok {
 		if err := actionplan.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.title": %w`, err)}
@@ -3924,6 +3929,11 @@ func (_u *ActionPlanUpdateOne) check() error {
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := actionplan.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.review_frequency": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.URL(); ok {
+		if err := actionplan.URLValidator(v); err != nil {
+			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.url": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.Title(); ok {

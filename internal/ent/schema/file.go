@@ -157,12 +157,15 @@ func (f File) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.File](f,
 				withParents(
-					// used to create parent tuples for the file, ensure these are added tot he fga model as well
+					// used to create parent tuples for the file, ensure these are added to the fga model as well
+					// Organization{} is a special case for files for backwards compatibility
 					Organization{}, Program{}, Platform{}, Scan{}, Control{}, Procedure{}, Template{}, Subcontrol{}, DocumentData{},
 					Contact{}, InternalPolicy{}, Narrative{}, Evidence{}, TrustCenterSetting{}, Subprocessor{}, Export{},
 					TrustCenterDoc{}, Standard{}, TrustCenterEntity{}, TrustCenterSubprocessor{}, Entity{}, IdentityHolder{}, Contact{}, Review{}),
 				withHookFuncs(), // use an empty hook, file processing is handled in middleware
 				withAllowAnonymousTrustCenterAccess(true),
+				withSkipperFunc(skipInterceptorForSystemAdmins),
+				withForceFilter(), // files are not all org-owned; scope check cannot short-circuit filtering
 			),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(f, withEnumFieldName("environment"), withGlobalEnum()),

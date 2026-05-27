@@ -26,7 +26,6 @@ func init() {
 	command.AddCommand(updateCmd)
 
 	updateCmd.Flags().StringP("id", "i", "", "org id to update")
-	updateCmd.Flags().StringP("name", "n", "", "name of the organization")
 	updateCmd.Flags().StringP("display-name", "s", "", "display name of the organization")
 	updateCmd.Flags().StringP("description", "d", "", "description of the organization")
 }
@@ -36,11 +35,6 @@ func updateValidation() (id string, input graphclient.UpdateOrganizationInput, a
 	id = cmd.Config.String("id")
 	if id == "" {
 		return id, input, nil, cmd.NewRequiredFieldMissingError("organization id")
-	}
-
-	name := cmd.Config.String("name")
-	if name != "" {
-		input.Name = &name
 	}
 
 	displayName := cmd.Config.String("display-name")

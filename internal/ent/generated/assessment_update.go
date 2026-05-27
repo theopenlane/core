@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -126,26 +125,6 @@ func (_u *AssessmentUpdate) AppendTags(v []string) *AssessmentUpdate {
 // ClearTags clears the value of the "tags" field.
 func (_u *AssessmentUpdate) ClearTags() *AssessmentUpdate {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *AssessmentUpdate) SetOwnerID(v string) *AssessmentUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *AssessmentUpdate) SetNillableOwnerID(v *string) *AssessmentUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *AssessmentUpdate) ClearOwnerID() *AssessmentUpdate {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -274,11 +253,6 @@ func (_u *AssessmentUpdate) ClearResponseDueDuration() *AssessmentUpdate {
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *AssessmentUpdate) SetOwner(v *Organization) *AssessmentUpdate {
-	return _u.SetOwnerID(v.ID)
-}
-
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *AssessmentUpdate) AddBlockedGroupIDs(ids ...string) *AssessmentUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -392,12 +366,6 @@ func (_u *AssessmentUpdate) AddCampaigns(v ...*Campaign) *AssessmentUpdate {
 // Mutation returns the AssessmentMutation object of the builder.
 func (_u *AssessmentUpdate) Mutation() *AssessmentMutation {
 	return _u.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *AssessmentUpdate) ClearOwner() *AssessmentUpdate {
-	_u.mutation.ClearOwner()
-	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -702,37 +670,6 @@ func (_u *AssessmentUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if _u.mutation.ResponseDueDurationCleared() {
 		_spec.ClearField(assessment.FieldResponseDueDuration, field.TypeInt64)
-	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   assessment.OwnerTable,
-			Columns: []string{assessment.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Assessment
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   assessment.OwnerTable,
-			Columns: []string{assessment.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Assessment
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1215,26 +1152,6 @@ func (_u *AssessmentUpdateOne) ClearTags() *AssessmentUpdateOne {
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *AssessmentUpdateOne) SetOwnerID(v string) *AssessmentUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *AssessmentUpdateOne) SetNillableOwnerID(v *string) *AssessmentUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *AssessmentUpdateOne) ClearOwnerID() *AssessmentUpdateOne {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *AssessmentUpdateOne) SetInternalNotes(v string) *AssessmentUpdateOne {
 	_u.mutation.SetInternalNotes(v)
@@ -1360,11 +1277,6 @@ func (_u *AssessmentUpdateOne) ClearResponseDueDuration() *AssessmentUpdateOne {
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *AssessmentUpdateOne) SetOwner(v *Organization) *AssessmentUpdateOne {
-	return _u.SetOwnerID(v.ID)
-}
-
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *AssessmentUpdateOne) AddBlockedGroupIDs(ids ...string) *AssessmentUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -1478,12 +1390,6 @@ func (_u *AssessmentUpdateOne) AddCampaigns(v ...*Campaign) *AssessmentUpdateOne
 // Mutation returns the AssessmentMutation object of the builder.
 func (_u *AssessmentUpdateOne) Mutation() *AssessmentMutation {
 	return _u.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *AssessmentUpdateOne) ClearOwner() *AssessmentUpdateOne {
-	_u.mutation.ClearOwner()
-	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -1818,37 +1724,6 @@ func (_u *AssessmentUpdateOne) sqlSave(ctx context.Context) (_node *Assessment, 
 	}
 	if _u.mutation.ResponseDueDurationCleared() {
 		_spec.ClearField(assessment.FieldResponseDueDuration, field.TypeInt64)
-	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   assessment.OwnerTable,
-			Columns: []string{assessment.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Assessment
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   assessment.OwnerTable,
-			Columns: []string{assessment.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Assessment
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{

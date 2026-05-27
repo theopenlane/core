@@ -15321,10 +15321,6 @@ func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetNillableAvatarUpdatedAt(&avatarUpdatedAt)
 	}
 
-	if dedicatedDb, exists := m.DedicatedDb(); exists {
-		create = create.SetDedicatedDb(dedicatedDb)
-	}
-
 	if stripeCustomerID, exists := m.StripeCustomerID(); exists {
 		create = create.SetNillableStripeCustomerID(&stripeCustomerID)
 	}
@@ -15450,12 +15446,6 @@ func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetNillableAvatarUpdatedAt(organization.AvatarUpdatedAt)
 		}
 
-		if dedicatedDb, exists := m.DedicatedDb(); exists {
-			create = create.SetDedicatedDb(dedicatedDb)
-		} else {
-			create = create.SetDedicatedDb(organization.DedicatedDb)
-		}
-
 		if stripeCustomerID, exists := m.StripeCustomerID(); exists {
 			create = create.SetNillableStripeCustomerID(&stripeCustomerID)
 		} else {
@@ -15512,7 +15502,6 @@ func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetNillableAvatarRemoteURL(organization.AvatarRemoteURL).
 			SetNillableAvatarLocalFileID(organization.AvatarLocalFileID).
 			SetNillableAvatarUpdatedAt(organization.AvatarUpdatedAt).
-			SetDedicatedDb(organization.DedicatedDb).
 			SetNillableStripeCustomerID(organization.StripeCustomerID).
 			Save(ctx)
 		if err != nil {

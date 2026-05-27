@@ -248,7 +248,6 @@ func (r Remediation) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Remediation](r,
 				withParents(
-					Organization{},
 					ActionPlan{},
 					Program{},
 					Control{},
@@ -260,7 +259,8 @@ func (r Remediation) Mixin() []ent.Mixin {
 					Entity{},
 					Task{},
 				),
-				withOrganizationOwner(true),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 			),
 			newGroupPermissionsMixin(),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),

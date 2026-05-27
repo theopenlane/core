@@ -126,6 +126,7 @@ func TestSystemEmailSubjects(t *testing.T) {
 			name: "questionnaire auth",
 			subject: questionnaireAuth.Subject(cfg, QuestionnaireAuthEmail{
 				AssessmentName: "SOC2 Review",
+				OrgName:        "Acme",
 			}),
 			contains: []string{"SOC2 Review", "Acme"},
 		},
@@ -382,6 +383,7 @@ func TestQuestionnaireAuthContent(t *testing.T) {
 	}
 
 	req := QuestionnaireAuthEmail{
+		OrgName:        "AuditCo",
 		AssessmentName: "SOC2 Review",
 		AuthURL:        "https://q.auditco.com/auth?tok=abc",
 	}

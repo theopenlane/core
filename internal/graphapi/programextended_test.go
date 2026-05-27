@@ -14,28 +14,31 @@ import (
 
 func TestMutationCreateProgramWithMembers(t *testing.T) {
 	// setup a separate user
-	user := suite.userBuilder(context.Background(), t)
+	t.Parallel()
 
-	member := (&OrgMemberBuilder{client: suite.client}).MustNew(user.UserCtx, t)
-	admin := (&OrgMemberBuilder{client: suite.client, Role: enums.RoleAdmin.String()}).MustNew(user.UserCtx, t)
+	localTestOrg := suite.seedFreshMinimalOrgUsers(t, false)
+	user := localTestOrg.owner
+
+	member := localTestOrg.member
+	admin := localTestOrg.admin
 
 	members := []*testclient.CreateMemberWithProgramInput{
 		{
-			UserID: member.UserID,
+			UserID: member.ID,
 			Role:   &enums.RoleMember,
 		},
 		{
-			UserID: admin.UserID,
+			UserID: admin.ID,
 			Role:   &enums.RoleAdmin,
 		},
 	}
 
-	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	numAdminControls := 5
 	adminControlIDs := []string{}
 	for range numAdminControls {
-		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(systemAdminUser.UserCtx, t)
+		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(sharedSystemAdminUser.UserCtx, t)
 		adminControlIDs = append(adminControlIDs, control.ID)
 	}
 
@@ -112,16 +115,18 @@ func TestMutationCreateProgramWithMembers(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: adminControlIDs}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
 }
 
 func TestMutationCreateFullProgram(t *testing.T) {
 	// setup a separate user
-	user := suite.userBuilder(context.Background(), t)
+	t.Parallel()
 
-	member := (&OrgMemberBuilder{client: suite.client}).MustNew(user.UserCtx, t)
-	admin := (&OrgMemberBuilder{client: suite.client, Role: enums.RoleAdmin.String()}).MustNew(user.UserCtx, t)
+	localTestOrg := suite.seedFreshMinimalOrgUsers(t, false)
+	user := localTestOrg.owner
+
+	member := localTestOrg.member
+	admin := localTestOrg.admin
 
 	numControls := 5
 	controlIDs := []string{}
@@ -138,22 +143,22 @@ func TestMutationCreateFullProgram(t *testing.T) {
 
 	orgStandard := resp.CreateStandard.Standard
 
-	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	numAdminControls := 5
 	adminControlIDs := []string{}
 	for range numAdminControls {
-		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(systemAdminUser.UserCtx, t)
+		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(sharedSystemAdminUser.UserCtx, t)
 		adminControlIDs = append(adminControlIDs, control.ID)
 	}
 
 	members := []*testclient.CreateMemberWithProgramInput{
 		{
-			UserID: member.UserID,
+			UserID: member.ID,
 			Role:   &enums.RoleMember,
 		},
 		{
-			UserID: admin.UserID,
+			UserID: admin.ID,
 			Role:   &enums.RoleAdmin,
 		},
 	}
@@ -278,7 +283,6 @@ func TestMutationCreateFullProgram(t *testing.T) {
 	}
 
 	// cleanup seeded input
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(user.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: orgStandard.ID}).MustDelete(user.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 }

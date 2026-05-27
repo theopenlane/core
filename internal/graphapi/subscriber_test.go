@@ -16,8 +16,8 @@ import (
 )
 
 func TestQuerySubscriber(t *testing.T) {
-	subscriber := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	subscriber2 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	subscriber := (&SubscriberBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	subscriber2 := (&SubscriberBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 
 	testCases := []struct {
 		name    string
@@ -30,7 +30,7 @@ func TestQuerySubscriber(t *testing.T) {
 			name:    "happy path",
 			email:   subscriber.Email,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 			wantErr: false,
 		},
 		{
@@ -51,14 +51,14 @@ func TestQuerySubscriber(t *testing.T) {
 			name:    "invalid email",
 			email:   "beep@boop.com",
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 			wantErr: true,
 		},
 		{
 			name:    "subscriber for another org",
 			email:   subscriber2.Email,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 			wantErr: true,
 		},
 		{
@@ -99,14 +99,14 @@ func TestQuerySubscriber(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: subscriber.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: subscriber2.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: subscriber.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: subscriber2.ID}).MustDelete(sharedTestUser2.UserCtx, t)
 }
 
 func TestQuerySubscribers(t *testing.T) {
-	s1 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	s2 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	s3 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	s1 := (&SubscriberBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	s2 := (&SubscriberBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	s3 := (&SubscriberBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -117,7 +117,7 @@ func TestQuerySubscribers(t *testing.T) {
 		{
 			name:        "happy path, multiple subscribers",
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			numExpected: 2,
 		},
 		{
@@ -135,7 +135,7 @@ func TestQuerySubscribers(t *testing.T) {
 		{
 			name:        "happy path, one subscriber",
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			numExpected: 1,
 		},
 	}
@@ -151,8 +151,8 @@ func TestQuerySubscribers(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, IDs: []string{s1.ID, s2.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, IDs: []string{s3.ID}}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, IDs: []string{s1.ID, s2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, IDs: []string{s3.ID}}).MustDelete(sharedTestUser2.UserCtx, t)
 }
 
 func TestMutationCreateBulkSubscribers(t *testing.T) {
@@ -222,7 +222,7 @@ func TestMutationCreateBulkSubscribers(t *testing.T) {
 
 			// cleanup
 			for _, v := range resp.CreateBulkSubscriber.Subscribers {
-				(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: v.ID}).MustDelete(testUser1.UserCtx, t)
+				(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: v.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 			}
 		})
 	}
@@ -250,7 +250,7 @@ func TestMutationCreateSubscriber_Tokens(t *testing.T) {
 		{
 			name:    "happy path, new subscriber using personal access token",
 			email:   "a.stark@example.com",
-			ownerID: testUser1.OrganizationID,
+			ownerID: sharedTestUser1.OrganizationID,
 			client:  suite.client.apiWithPAT,
 			ctx:     context.Background(),
 			wantErr: false,
@@ -258,7 +258,7 @@ func TestMutationCreateSubscriber_Tokens(t *testing.T) {
 		{
 			name:    "missing email",
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 			wantErr: true,
 		},
 	}
@@ -290,7 +290,7 @@ func TestMutationCreateSubscriber_Tokens(t *testing.T) {
 			assert.Check(t, !resp.CreateSubscriber.Subscriber.Unsubscribed)
 
 			// cleanup
-			(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: resp.CreateSubscriber.Subscriber.ID}).MustDelete(testUser1.UserCtx, t)
+			(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: resp.CreateSubscriber.Subscriber.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 		})
 	}
 }
@@ -315,7 +315,7 @@ func TestMutationCreateSubscriber_SendAttempts(t *testing.T) {
 			email:            "c.stark@example.com",
 			setUnsubscribed:  true, //unsubscribe the subscriber to test for re-creation
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			ctx:              sharedTestUser1.UserCtx,
 			wantErr:          false,
 			expectedAttempts: 0, // since we unsubscribe, it should reset
 		},
@@ -323,7 +323,7 @@ func TestMutationCreateSubscriber_SendAttempts(t *testing.T) {
 			name:             "happy path, duplicate subscriber but original was unsubscribed",
 			email:            "c.stark@example.com",
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			ctx:              sharedTestUser1.UserCtx,
 			wantErr:          false,
 			expectedAttempts: 1,
 		},
@@ -331,7 +331,7 @@ func TestMutationCreateSubscriber_SendAttempts(t *testing.T) {
 			name:             "happy path, duplicate subscriber, case insensitive",
 			email:            "c.STARK@example.com",
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			ctx:              sharedTestUser1.UserCtx,
 			wantErr:          false,
 			expectedAttempts: 2,
 		},
@@ -339,7 +339,7 @@ func TestMutationCreateSubscriber_SendAttempts(t *testing.T) {
 			name:             "happy path, duplicate subscriber, case insensitive",
 			email:            "c.STARK@example.com",
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			ctx:              sharedTestUser1.UserCtx,
 			wantErr:          false,
 			expectedAttempts: 3,
 		},
@@ -347,7 +347,7 @@ func TestMutationCreateSubscriber_SendAttempts(t *testing.T) {
 			name:             "happy path, duplicate subscriber, case insensitive",
 			email:            "c.STARK@example.com",
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			ctx:              sharedTestUser1.UserCtx,
 			wantErr:          false,
 			expectedAttempts: 4,
 		},
@@ -355,7 +355,7 @@ func TestMutationCreateSubscriber_SendAttempts(t *testing.T) {
 			name:             "happy path, duplicate subscriber, case insensitive",
 			email:            "c.STARK@example.com",
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			ctx:              sharedTestUser1.UserCtx,
 			wantErr:          false,
 			expectedAttempts: 5,
 		},
@@ -363,7 +363,7 @@ func TestMutationCreateSubscriber_SendAttempts(t *testing.T) {
 			name:              "happy path, duplicate subscriber, case insensitive, max attempts",
 			email:             "c.STARK@example.com",
 			client:            suite.client.api,
-			ctx:               testUser1.UserCtx,
+			ctx:               sharedTestUser1.UserCtx,
 			wantErr:           true,
 			expectedErrorCode: gqlerrors.MaxAttemptsErrorCode,
 			expectedMessage:   "max attempts reached for this email, please reach out to support",
@@ -372,7 +372,7 @@ func TestMutationCreateSubscriber_SendAttempts(t *testing.T) {
 		{
 			name:              "missing email",
 			client:            suite.client.api,
-			ctx:               testUser1.UserCtx,
+			ctx:               sharedTestUser1.UserCtx,
 			expectedErrorCode: gqlerrors.BadRequestErrorCode,
 			expectedMessage:   "subscriber email is required, please provide a valid email",
 			wantErr:           true,
@@ -440,14 +440,14 @@ func TestMutationCreateSubscriber_SendAttempts(t *testing.T) {
 
 	// cleanup
 	for _, v := range createdSubscriberEmails {
-		_, err := suite.client.api.DeleteSubscriber(testUser1.UserCtx, v, nil)
+		_, err := suite.client.api.DeleteSubscriber(sharedTestUser1.UserCtx, v, nil)
 		assert.NilError(t, err)
 	}
 }
 
 func TestUpdateSubscriber(t *testing.T) {
-	subscriber := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	subscriber2 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	subscriber := (&SubscriberBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	subscriber2 := (&SubscriberBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -464,7 +464,7 @@ func TestUpdateSubscriber(t *testing.T) {
 				PhoneNumber: lo.ToPtr("+1-555-867-5309"),
 			},
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 			wantErr: false,
 		},
 		{
@@ -504,7 +504,7 @@ func TestUpdateSubscriber(t *testing.T) {
 				PhoneNumber: lo.ToPtr("+1-555-867-5309"),
 			},
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 			wantErr: true,
 		},
 		{
@@ -514,7 +514,7 @@ func TestUpdateSubscriber(t *testing.T) {
 				PhoneNumber: lo.ToPtr("+1-555-867-5309"),
 			},
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 			wantErr: true,
 		},
 	}
@@ -552,16 +552,16 @@ func TestUpdateSubscriber(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: subscriber.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: subscriber2.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: subscriber.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: subscriber2.ID}).MustDelete(sharedTestUser2.UserCtx, t)
 }
 
 func TestDeleteSubscriber(t *testing.T) {
-	subscriber1 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	subscriber2 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	subscriber3 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	subscriber1 := (&SubscriberBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	subscriber2 := (&SubscriberBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	subscriber3 := (&SubscriberBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
-	subscriberOtherOrg := (&SubscriberBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	subscriberOtherOrg := (&SubscriberBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 
 	testCases := []struct {
 		name           string
@@ -575,7 +575,7 @@ func TestDeleteSubscriber(t *testing.T) {
 			name:    "happy path",
 			email:   subscriber1.Email,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 			wantErr: false,
 		},
 		{
@@ -588,7 +588,7 @@ func TestDeleteSubscriber(t *testing.T) {
 		{
 			name:           "happy path, using personal access token",
 			email:          subscriber3.Email,
-			organizationID: testUser1.OrganizationID,
+			organizationID: sharedTestUser1.OrganizationID,
 			client:         suite.client.apiWithPAT,
 			ctx:            context.Background(),
 			wantErr:        false,
@@ -597,14 +597,14 @@ func TestDeleteSubscriber(t *testing.T) {
 			name:    "invalid email",
 			email:   "beep@boop.com",
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 			wantErr: true,
 		},
 		{
 			name:    "subscriber for another org",
 			email:   subscriberOtherOrg.Email,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 			wantErr: true,
 		},
 	}
@@ -626,7 +626,7 @@ func TestDeleteSubscriber(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: subscriberOtherOrg.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: subscriberOtherOrg.ID}).MustDelete(sharedTestUser2.UserCtx, t)
 }
 
 func TestActiveSubscriber(t *testing.T) {
@@ -644,7 +644,7 @@ func TestActiveSubscriber(t *testing.T) {
 			name:       "happy path, active subscriber",
 			email:      "c.stark@example.com",
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        sharedTestUser1.UserCtx,
 			wantErr:    false,
 			markActive: true,
 		},
@@ -652,7 +652,7 @@ func TestActiveSubscriber(t *testing.T) {
 			name:       "happy path, resubscribing",
 			email:      "aa.stark@example.com",
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        sharedTestUser1.UserCtx,
 			wantErr:    false,
 			markActive: false,
 		},

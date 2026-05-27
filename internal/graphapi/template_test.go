@@ -16,11 +16,11 @@ import (
 )
 
 func TestQueryTemplate(t *testing.T) {
-	// create an template to be queried using testUser1
-	template := (&TemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	// create an template to be queried using sharedTestUser1
+	template := (&TemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// create a system admin root template
-	templateRoot := (&TemplateBuilder{client: suite.client, TemplateType: enums.RootTemplate}).MustNew(systemAdminUser.UserCtx, t)
+	templateRoot := (&TemplateBuilder{client: suite.client, TemplateType: enums.RootTemplate}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	// add test cases for querying the Template
 	testCases := []struct {
@@ -34,25 +34,25 @@ func TestQueryTemplate(t *testing.T) {
 			name:    "happy path",
 			queryID: template.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path, root template",
 			queryID: templateRoot.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path, root template, view only user",
 			queryID: templateRoot.ID,
 			client:  suite.client.api,
-			ctx:     viewOnlyUser.UserCtx,
+			ctx:     sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path, read only user",
 			queryID: template.ID,
 			client:  suite.client.api,
-			ctx:     viewOnlyUser.UserCtx,
+			ctx:     sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path using personal access token",
@@ -64,21 +64,21 @@ func TestQueryTemplate(t *testing.T) {
 			name:     "template not found, invalid ID",
 			queryID:  "invalid",
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      sharedTestUser1.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "template not found, using not authorized user",
 			queryID:  template.ID,
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:    "anonymous user can access root template",
 			queryID: templateRoot.ID,
 			client:  suite.client.api,
-			ctx:     createAnonymousTrustCenterContext(ulids.New().String(), testUser1.OrganizationID),
+			ctx:     createAnonymousTrustCenterContext(ulids.New().String(), sharedTestUser1.OrganizationID),
 		},
 	}
 
@@ -100,8 +100,8 @@ func TestQueryTemplate(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: templateRoot.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: templateRoot.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 }
 
 func TestMutationCreateTemplate(t *testing.T) {
@@ -109,7 +109,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 	createPDFUpload := uploadFileFunc(t, pdfFilePath)
 	createPNGUpload := logoFileFunc(t)
 
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -135,7 +135,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			},
 			templateFiles: nil,
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, full input without files",
@@ -176,7 +176,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			},
 			templateFiles: nil,
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, with single PDF file",
@@ -196,7 +196,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			templateFiles: []*graphql.Upload{createPDFUpload()},
 			expectedKind:  &enums.TemplateKindQuestionnaire,
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, with multiple files",
@@ -217,7 +217,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			templateFiles: []*graphql.Upload{createPDFUpload(), createPNGUpload()},
 			expectedKind:  &enums.TemplateKindQuestionnaire,
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 		},
 		{
 			name: "missing required name field",
@@ -228,7 +228,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			},
 			templateFiles: nil,
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 			expectedErr:   "value is less than the required length",
 		},
 		{
@@ -238,7 +238,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			},
 			templateFiles: nil,
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 			expectedErr:   "cannot be null",
 		},
 		{
@@ -257,7 +257,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			},
 			templateFiles: nil,
 			client:        suite.client.api,
-			ctx:           systemAdminUser.UserCtx,
+			ctx:           sharedSystemAdminUser.UserCtx,
 		},
 		{
 			name: "trust center NDA with no trust center",
@@ -275,7 +275,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			},
 			templateFiles: nil,
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 			expectedErr:   "generated: constraint failed: pq: new row for relation",
 		},
 		{
@@ -295,7 +295,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			},
 			templateFiles: nil,
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 		},
 		{
 			name: "trust center NDA with trust center and file",
@@ -315,7 +315,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			templateFiles: []*graphql.Upload{createPDFUpload()},
 			expectedKind:  &enums.TemplateKindTrustCenterNda,
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 		},
 	}
 
@@ -381,7 +381,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(tc.ctx, t)
 		})
 	}
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationUpdateTemplate(t *testing.T) {
@@ -390,15 +390,15 @@ func TestMutationUpdateTemplate(t *testing.T) {
 	createPNGUpload := logoFileFunc(t)
 
 	// Create a template to be updated
-	template := (&TemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	template2 := (&TemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	template := (&TemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	template2 := (&TemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// Create a root template for system admin tests
 	rootTemplate := (&TemplateBuilder{
 		client:       suite.client,
 		TemplateType: enums.RootTemplate,
 		Name:         "Root Template for Update",
-	}).MustNew(systemAdminUser.UserCtx, t)
+	}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -417,7 +417,7 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			},
 			templateFiles: nil,
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 		},
 		{
 			name:       "happy path, update description",
@@ -427,7 +427,7 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			},
 			templateFiles: nil,
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 		},
 		{
 			name:       "happy path, update multiple fields",
@@ -466,7 +466,7 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			},
 			templateFiles: nil,
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 		},
 		{
 			name:       "happy path, update with single file",
@@ -485,7 +485,7 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			},
 			templateFiles: []*graphql.Upload{createPDFUpload()},
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 		},
 		{
 			name:       "happy path, update with multiple files",
@@ -505,7 +505,7 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			},
 			templateFiles: []*graphql.Upload{createPDFUpload(), createPNGUpload()},
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 		},
 		{
 			name:       "happy path, update tags",
@@ -515,7 +515,7 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			},
 			templateFiles: nil,
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 		},
 		{
 			name:       "happy path, append tags",
@@ -525,7 +525,7 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			},
 			templateFiles: nil,
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 		},
 		{
 			name:       "happy path, using personal access token",
@@ -546,7 +546,7 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			},
 			templateFiles: nil,
 			client:        suite.client.api,
-			ctx:           systemAdminUser.UserCtx,
+			ctx:           sharedSystemAdminUser.UserCtx,
 		},
 		{
 			name:       "template not found, invalid ID",
@@ -556,7 +556,7 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			},
 			templateFiles: nil,
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 			expectedErr:   notFoundErrorMsg,
 		},
 		{
@@ -567,7 +567,7 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			},
 			templateFiles: nil,
 			client:        suite.client.api,
-			ctx:           testUser2.UserCtx,
+			ctx:           sharedTestUser2.UserCtx,
 			expectedErr:   notFoundErrorMsg,
 		},
 	}
@@ -669,7 +669,7 @@ func TestMutationUpdateTemplate(t *testing.T) {
 	}
 
 	// Cleanup the created templates
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template2.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: rootTemplate.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template2.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: rootTemplate.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 }

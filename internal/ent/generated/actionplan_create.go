@@ -978,6 +978,11 @@ func (_c *ActionPlanCreate) check() error {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.review_frequency": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.URL(); ok {
+		if err := actionplan.URLValidator(v); err != nil {
+			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.url": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := actionplan.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.owner_id": %w`, err)}

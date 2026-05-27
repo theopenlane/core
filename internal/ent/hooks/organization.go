@@ -7,14 +7,13 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
 	"github.com/stripe/stripe-go/v84"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/gravatar"
-
-	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -102,27 +101,6 @@ func HookOrganization() ent.Hook {
 				// otherwise add the API token for admin access to the newly created organization
 				if err := createOrgMemberOwner(ctx, orgCreated.ID, m); err != nil {
 					return v, err
-				}
-
-				// create the database, if the org has a dedicated db and dbx is available
-				if orgCreated.DedicatedDb {
-					// on create the org will not yet have access to the settings
-					// allow the request to proceed to get the org settings
-					allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-					settings, err := orgCreated.Setting(allowCtx)
-					if err != nil {
-						logx.FromContext(ctx).Error().Err(err).Msg("unable to get organization settings")
-
-						return nil, err
-					}
-
-					if _, err := m.Job.Insert(ctx, jobs.DatabaseArgs{
-						OrganizationID: orgCreated.ID,
-						Location:       settings.GeoLocation.String(),
-					}, nil); err != nil {
-						return nil, err
-					}
 				}
 
 				// update the session to drop the user into the new organization
@@ -500,6 +478,13 @@ func checkAndUpdateDefaultOrg(ctx context.Context, userID string, oldOrgID strin
 		newDefaultOrgID, err := client.
 			Organization.
 			Query().
+			Where(
+				organization.IDNEQ(oldOrgID),
+			).
+			Order(
+				// order by personal orgs last so that if there is another org available it will be set as the default instead of the personal org
+				organization.ByPersonalOrg(sql.OrderAsc()),
+			).
 			FirstID(ctx)
 		if err != nil {
 			return "", err
@@ -616,11 +601,6 @@ func createOrgMemberOwner(ctx context.Context, oID string, m *generated.Organiza
 	parentOrgID, ok := m.ParentID()
 	if ok && parentOrgID != "" {
 		return createParentOrgTuple(ctx, m, parentOrgID, oID)
-	}
-
-	// if this was created with an API token, do not create an owner but add the service tuple to fga
-	if auth.IsAPITokenAuthentication(ctx) {
-		return addTokenEditPermissions(ctx, m, oID, GetObjectTypeFromEntMutation(m))
 	}
 
 	// get userID from context

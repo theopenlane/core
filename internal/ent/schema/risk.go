@@ -377,7 +377,8 @@ func (r Risk) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.Risk](r,
 				withParents(
 					Program{}, Control{}, Procedure{}, ControlObjective{}, InternalPolicy{}, Subcontrol{}, Platform{}),
-				withOrganizationOwner(true),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 			),
 			// add groups permissions with viewer, editor, and blocked groups
 			newGroupPermissionsMixin(),

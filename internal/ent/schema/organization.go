@@ -112,17 +112,6 @@ func (Organization) Fields() []ent.Field {
 			Default(time.Now).
 			Optional().
 			Nillable(),
-		field.Bool("dedicated_db").
-			Comment("Whether the organization has a dedicated database").
-			Default(false). // default to shared db
-			// TODO: https://github.com/theopenlane/core/issues/734
-			// update this once feature functionality is enabled
-			// Annotations(
-			// 	entgql.Skip(),
-			// ),
-			Annotations(
-				entgql.Skip(entgql.SkipWhereInput, entgql.SkipMutationUpdateInput, entgql.SkipOrderField),
-			),
 		field.String("stripe_customer_id").
 			Comment("the stripe customer ID this organization is associated to").
 			Optional().
@@ -639,6 +628,7 @@ func (o Organization) Annotations() []schema.Annotation {
 		),
 		entx.FileCategory(SchemaOrganization),
 		entfga.SelfAccessChecks(),
+		entx.FGACrudSkip(entx.SkipDelete | entx.SkipCreate),
 	}
 }
 
@@ -659,6 +649,7 @@ func (Organization) Policy() ent.Policy {
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](), // Allow invite tokens to query the org ID they are invited to
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.SignUpToken](),    // Allow sign-up tokens to query the org ID they are subscribing to
 			policy.CheckOrgReadAccess(),                                       // access based on query and auth context
+			policy.CheckOrgAuditorAccess(),
 			rule.AllowQueryIfSystemAdmin(),
 		),
 		policy.WithMutationRules(

@@ -13,6 +13,7 @@ services:
     networks:
       - default
     restart: unless-stopped # allow it to keep trying if postgres is not up yet
+
   river-ui:
     image: ghcr.io/riverqueue/riverui:latest
     ports:

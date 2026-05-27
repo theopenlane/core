@@ -191,6 +191,8 @@ type TrustCenterAuthEmail struct {
 // QuestionnaireAuthEmail is the input for questionnaire access authentication
 type QuestionnaireAuthEmail struct {
 	RecipientInfo
+	// OrgName is the name of the organization sending the questionnaire; resolved from auth context when empty
+	OrgName string `json:"org_name,omitempty" jsonschema:"description=Organization name"`
 	// AssessmentName is the name of the assessment/questionnaire
 	AssessmentName string `json:"assessment_name" jsonschema:"required,description=Assessment name"`
 	// AuthURL is the authentication URL for questionnaire access
@@ -624,17 +626,18 @@ var _ = RegisterEmailOperation(Operation[TrustCenterAuthEmail]{
 var questionnaireAuthEmail = RegisterEmailOperation(Operation[QuestionnaireAuthEmail]{
 	Op: QuestionnaireAuthOp, Schema: questionnaireAuthSchema, Theme: baseTheme,
 	Description: "System email delivering a time-limited authentication link to a questionnaire",
-	Subject: func(cfg RuntimeEmailConfig, req QuestionnaireAuthEmail) string {
-		return "Access " + req.AssessmentName + " Questionnaire from " + cfg.CompanyName
+	PreHook:     resolveQuestionnaireOrgName,
+	Subject: func(_ RuntimeEmailConfig, req QuestionnaireAuthEmail) string {
+		return "Access " + req.AssessmentName + " Questionnaire from " + req.OrgName
 	},
 	Build: func(cfg RuntimeEmailConfig, req QuestionnaireAuthEmail) render.ContentBody {
 		return render.ContentBody{
-			Preheader: req.AssessmentName + " — complete your questionnaire from " + cfg.CompanyName,
+			Preheader: req.AssessmentName + " — complete your questionnaire from " + req.OrgName,
 			Header:    defaultHeader(cfg),
-			Title:     cfg.CompanyName + " sent you an assessment to complete",
+			Title:     req.OrgName + " sent you an assessment to complete",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
-					cfg.CompanyName + " has shared a form (" + req.AssessmentName + ") for you to complete. Click the button below to access it.",
+					req.OrgName + " has shared a form (" + req.AssessmentName + ") for you to complete. Click the button below to access it.",
 				},
 			},
 			Actions: []render.Action{{

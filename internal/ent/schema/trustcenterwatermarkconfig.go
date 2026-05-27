@@ -116,7 +116,9 @@ func (t TrustCenterWatermarkConfig) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.TrustCenterWatermarkConfig](t,
 				withParents(TrustCenter{}),
-				withOrganizationOwner(true),
+				withOrganizationOwnerFieldOnly(),
+				withSkipForSystemAdmin(),
+				withSkipperFunc(skipInterceptorForSystemAdmins),
 			),
 			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
@@ -184,6 +186,7 @@ func (TrustCenterWatermarkConfig) Annotations() []schema.Annotation {
 				"text_or_logo_id_not_null": "(text IS NOT NULL) OR (logo_id IS NOT NULL)",
 			},
 		},
+		entx.FGACrudSkip(entx.SkipDelete | entx.SkipCreate),
 	}
 }
 

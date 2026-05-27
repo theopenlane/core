@@ -128,14 +128,14 @@ func (s Scan) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Scan](s,
 				withParents(
-					Organization{},
 					Control{},
 					Subcontrol{},
 					Risk{},
 					Asset{},
 					Entity{},
 				),
-				withOrganizationOwner(true),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 			), newGroupPermissionsMixin(),
 			newResponsibilityMixin(s, withReviewedBy(), withAssignedTo()),
 			newCustomEnumMixin(s, withEnumFieldName("environment"), withGlobalEnum()),

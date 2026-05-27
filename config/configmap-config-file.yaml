@@ -597,6 +597,19 @@ data:
       {{- if .Values.openlane.coreConfiguration.authz.maxbatchwritesize }}
       maxbatchwritesize: {{ .Values.openlane.coreConfiguration.authz.maxbatchwritesize }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.authz.enableparentcontext }}
+      enableparentcontext: {{ .Values.openlane.coreConfiguration.authz.enableparentcontext }}
+      {{- end }}
+      {{- $sliceValue := (.Values.openlane.coreConfiguration.authz.parentcontextskipkinds | default (list)) }}
+      {{- if gt (len $sliceValue) 0 }}
+      parentcontextskipkinds:
+      {{- toYaml $sliceValue | nindent 8 }}
+      {{- end }}
+      {{- $sliceValue := (.Values.openlane.coreConfiguration.authz.parentcontextconditions | default (list)) }}
+      {{- if gt (len $sliceValue) 0 }}
+      parentcontextconditions:
+      {{- toYaml $sliceValue | nindent 8 }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.db }}
     db:

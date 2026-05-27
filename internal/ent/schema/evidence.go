@@ -167,7 +167,8 @@ func (e Evidence) Mixin() []ent.Mixin {
 				withParents(
 					Control{}, Subcontrol{}, ControlObjective{}, Program{},
 					Task{}, Procedure{}, InternalPolicy{}, Platform{}, Scan{}), // used to create parent tuples for the evidence
-				withOrganizationOwner(true),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 			),
 			newCustomEnumMixin(e, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(e, withEnumFieldName("scope"), withGlobalEnum()),

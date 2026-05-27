@@ -191,8 +191,8 @@ func (s Platform) Mixin() []ent.Mixin {
 		prefix: "PLT",
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Platform](s,
-				withParents(Organization{}),
-				withOrganizationOwner(true),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 			),
 			newGroupPermissionsMixin(),
 			newResponsibilityMixin(

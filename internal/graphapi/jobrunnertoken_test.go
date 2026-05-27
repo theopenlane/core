@@ -76,8 +76,8 @@ func TestQueryJobRunnerTokens(t *testing.T) {
 }
 
 func TestMutationDeleteJobRunnerToken(t *testing.T) {
-	firstToken := (&JobRunnerTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	secondToken := (&JobRunnerTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	firstToken := (&JobRunnerTokenBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	secondToken := (&JobRunnerTokenBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -90,14 +90,14 @@ func TestMutationDeleteJobRunnerToken(t *testing.T) {
 		{
 			name:     "not enough permissions",
 			client:   suite.client.api,
-			ctx:      viewOnlyUser.UserCtx,
+			ctx:      sharedViewOnlyUser.UserCtx,
 			tokenID:  firstToken.ID,
 			errorMsg: notAuthorizedErrorMsg,
 		},
 		{
 			name:    "happy path user",
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 			tokenID: firstToken.ID,
 		},
 		{
@@ -111,7 +111,7 @@ func TestMutationDeleteJobRunnerToken(t *testing.T) {
 		{
 			name:     "not found, not in the correct org",
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			tokenID:  secondToken.ID,
 			errorMsg: notFoundErrorMsg,
 		},

@@ -1,4 +1,4 @@
-h1:N+B8qLWKXWFu6Ns3xAs6bqqzEJlOd1BF7jvTl3gErWc=
+h1:bdYTMDSsq0r1koYBwcvUCTg4ay4vY+xQHDf1hVlrp6A=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -133,3 +133,6 @@ h1:N+B8qLWKXWFu6Ns3xAs6bqqzEJlOd1BF7jvTl3gErWc=
 20260516001056_add_management_mode.sql h1:tTCfJDZTtYF8IwGP1r8zxkncQArdMAS9FZoJxKaWhYE=
 20260516001108_add_management_mode_history.sql h1:wA3k3BqIaR3+DA4zRVvVZ9el2qAit1UEsoJEmDeEFFY=
 20260516143012_backfill_management_mode.sql h1:qlRDjSzovC+2xzfWpxC5JhPH53mSbsFTFScroeiJcBA=
+20260525161846_remove_dedicated_db.sql h1:AWuCvcgel7Bz+GrZz2x+pQ8kVTzoRKKXGW4LoJNB7nw=
+20260525161851_remove_dedicated_db_history.sql h1:8wQkTCs5n7cWLfI4d1DtsO/t7IWbMBsVNQz5uh2cUh4=
+20260526053031_perms_revamp.sql h1:JgXPG8gy+GaA06SRcrF1dePB8LwRVwwUkFctnK5GouU=

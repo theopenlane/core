@@ -185,7 +185,7 @@ func (p Procedure) Annotations() []schema.Annotation {
 func (Procedure) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hook.On(
-			hooks.OrgOwnedTuplesHookWithAdmin(),
+			hooks.OrgOwnedTuplesHook(),
 			ent.OpCreate,
 		),
 	}
@@ -195,7 +195,7 @@ func (Procedure) Hooks() []ent.Hook {
 func (p Procedure) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		// procedures are org owned, but we need to ensure the groups are filtered as well
-		interceptors.FilterQueryResults[generated.Procedure](),
+		interceptors.FilterQueryResults[generated.Procedure](nil),
 	}
 }
 

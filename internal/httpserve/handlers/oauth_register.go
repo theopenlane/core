@@ -87,7 +87,7 @@ func (h *Handler) verifyClientToken(ctx context.Context, provider string, token 
 	switch strings.ToLower(provider) {
 	case githubProvider:
 		config := h.getGithubOauth2Config()
-		cc := github.ClientConfig{IsEnterprise: false, IsMock: h.IsTest}
+		cc := github.ClientConfig{IsMock: h.IsTest}
 
 		return github.VerifyClientToken(ctx, token, config, email, &cc)
 	case googleProvider:

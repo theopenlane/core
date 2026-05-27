@@ -12,7 +12,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/jobspec"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
@@ -20,20 +19,19 @@ import (
 // Note: Trust center settings are created automatically when a trust center is created (both live and preview).
 // This test verifies that we can create a deleted setting again after deletion.
 func TestCreateTrustCenterSetting(t *testing.T) {
+	t.Parallel()
 	// Test 1: happy path - recreate a deleted live setting
 	t.Run("Create happy path - recreate deleted live setting", func(t *testing.T) {
-		cleanupTrustCenterData(t)
-
-		trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-		settingID := trustCenter.Edges.Setting.ID
+		tcOrg := createFreshOrgWithTrustCenter(t)
+		settingID := tcOrg.trustCenter.Edges.Setting.ID
 
 		// Delete the live setting
-		_, err := suite.client.api.DeleteTrustCenterSetting(testUser1.UserCtx, settingID)
+		_, err := suite.client.api.DeleteTrustCenterSetting(tcOrg.owner.UserCtx, settingID)
 		assert.NilError(t, err)
 
 		// Recreate the setting
-		resp, err := suite.client.api.CreateTrustCenterSetting(testUser1.UserCtx, testclient.CreateTrustCenterSettingInput{
-			TrustCenterID: &trustCenter.ID,
+		resp, err := suite.client.api.CreateTrustCenterSetting(tcOrg.owner.UserCtx, testclient.CreateTrustCenterSettingInput{
+			TrustCenterID: &tcOrg.trustCenter.ID,
 			Title:         lo.ToPtr("Test Setting"),
 			Overview:      lo.ToPtr("Test Overview"),
 			PrimaryColor:  lo.ToPtr("#FF0000"),
@@ -43,32 +41,25 @@ func TestCreateTrustCenterSetting(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 		assert.Check(t, resp.CreateTrustCenterSetting.TrustCenterSetting.ID != "")
-		assert.Check(t, is.Equal(trustCenter.ID, *resp.CreateTrustCenterSetting.TrustCenterSetting.TrustCenterID))
+		assert.Check(t, is.Equal(tcOrg.trustCenter.ID, *resp.CreateTrustCenterSetting.TrustCenterSetting.TrustCenterID))
 		assert.Check(t, is.Equal("Test Setting", *resp.CreateTrustCenterSetting.TrustCenterSetting.Title))
 		assert.Check(t, is.Equal("#FF0000", *resp.CreateTrustCenterSetting.TrustCenterSetting.PrimaryColor))
 
 		// Clean up
-		(&Cleanup[*generated.TrustCenterSettingDeleteOne]{
-			client: suite.client.db.TrustCenterSetting,
-			ID:     resp.CreateTrustCenterSetting.TrustCenterSetting.ID,
-		}).MustDelete(testUser1.UserCtx, t)
-		(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+		cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 	})
 
 	// Test 2: happy path - recreate with all color fields
 	t.Run("Create happy path - recreate with all color fields", func(t *testing.T) {
-		cleanupTrustCenterData(t)
-
-		trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-		settingID := trustCenter.Edges.Setting.ID
+		tcOrg := createFreshOrgWithTrustCenter(t)
+		settingID := tcOrg.trustCenter.Edges.Setting.ID
 
 		// Delete the live setting
-		_, err := suite.client.api.DeleteTrustCenterSetting(testUser1.UserCtx, settingID)
+		_, err := suite.client.api.DeleteTrustCenterSetting(tcOrg.owner.UserCtx, settingID)
 		assert.NilError(t, err)
 
 		// Recreate with all color fields
-		resp, err := suite.client.api.CreateTrustCenterSetting(testUser1.UserCtx, testclient.CreateTrustCenterSettingInput{
-			TrustCenterID:            &trustCenter.ID,
+		resp, err := suite.client.api.CreateTrustCenterSetting(tcOrg.owner.UserCtx, testclient.CreateTrustCenterSettingInput{
 			Title:                    lo.ToPtr("Full Color Setting"),
 			PrimaryColor:             lo.ToPtr("#FF0000"),
 			ForegroundColor:          lo.ToPtr("#000000"),
@@ -85,31 +76,24 @@ func TestCreateTrustCenterSetting(t *testing.T) {
 		assert.Check(t, is.Equal("#000000", *resp.CreateTrustCenterSetting.TrustCenterSetting.ForegroundColor))
 
 		// Clean up
-		(&Cleanup[*generated.TrustCenterSettingDeleteOne]{
-			client: suite.client.db.TrustCenterSetting,
-			ID:     resp.CreateTrustCenterSetting.TrustCenterSetting.ID,
-		}).MustDelete(testUser1.UserCtx, t)
-		(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+		cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 	})
 
 	// Test 3: happy path - recreate with theme mode
 	t.Run("Create happy path - recreate with theme mode", func(t *testing.T) {
-		cleanupTrustCenterData(t)
-
-		trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-		settingID := trustCenter.Edges.Setting.ID
+		tcOrg := createFreshOrgWithTrustCenter(t)
+		settingID := tcOrg.trustCenter.Edges.Setting.ID
 
 		// Delete the live setting
-		_, err := suite.client.api.DeleteTrustCenterSetting(testUser1.UserCtx, settingID)
+		_, err := suite.client.api.DeleteTrustCenterSetting(tcOrg.owner.UserCtx, settingID)
 		assert.NilError(t, err)
 
 		// Recreate with theme mode
-		resp, err := suite.client.api.CreateTrustCenterSetting(testUser1.UserCtx, testclient.CreateTrustCenterSettingInput{
-			TrustCenterID: &trustCenter.ID,
-			Title:         lo.ToPtr("Theme Setting"),
-			ThemeMode:     lo.ToPtr(enums.TrustCenterThemeModeAdvanced),
-			Font:          lo.ToPtr("Arial, sans-serif"),
-			Environment:   lo.ToPtr(enums.TrustCenterEnvironmentLive),
+		resp, err := suite.client.api.CreateTrustCenterSetting(tcOrg.owner.UserCtx, testclient.CreateTrustCenterSettingInput{
+			Title:       lo.ToPtr("Theme Setting"),
+			ThemeMode:   lo.ToPtr(enums.TrustCenterThemeModeAdvanced),
+			Font:        lo.ToPtr("Arial, sans-serif"),
+			Environment: lo.ToPtr(enums.TrustCenterEnvironmentLive),
 		}, nil, nil, nil, nil)
 
 		assert.NilError(t, err)
@@ -117,42 +101,36 @@ func TestCreateTrustCenterSetting(t *testing.T) {
 		assert.Check(t, is.Equal(enums.TrustCenterThemeModeAdvanced, *resp.CreateTrustCenterSetting.TrustCenterSetting.ThemeMode))
 
 		// Clean up
-		(&Cleanup[*generated.TrustCenterSettingDeleteOne]{
-			client: suite.client.db.TrustCenterSetting,
-			ID:     resp.CreateTrustCenterSetting.TrustCenterSetting.ID,
-		}).MustDelete(testUser1.UserCtx, t)
-		(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+		cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 	})
 
 	// Test 4: not authorized - view only user cannot create
 	t.Run("Create not authorized - view only user", func(t *testing.T) {
-		cleanupTrustCenterData(t)
-
-		trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-		settingID := trustCenter.Edges.Setting.ID
+		tcOrg := createFreshOrgWithTrustCenter(t)
+		settingID := tcOrg.trustCenter.Edges.Setting.ID
 
 		// Delete the live setting
-		_, err := suite.client.api.DeleteTrustCenterSetting(testUser1.UserCtx, settingID)
+		_, err := suite.client.api.DeleteTrustCenterSetting(tcOrg.owner.UserCtx, settingID)
 		assert.NilError(t, err)
 
 		// Try to recreate as view only user
-		_, err = suite.client.api.CreateTrustCenterSetting(viewOnlyUser.UserCtx, testclient.CreateTrustCenterSettingInput{
-			TrustCenterID: &trustCenter.ID,
-			Title:         lo.ToPtr("Unauthorized"),
-			Environment:   lo.ToPtr(enums.TrustCenterEnvironmentLive),
+		_, err = suite.client.api.CreateTrustCenterSetting(tcOrg.member.UserCtx, testclient.CreateTrustCenterSettingInput{
+			Title:       lo.ToPtr("Unauthorized"),
+			Environment: lo.ToPtr(enums.TrustCenterEnvironmentLive),
 		}, nil, nil, nil, nil)
 
 		assert.ErrorContains(t, err, notAuthorizedErrorMsg)
 
 		// Clean up
-		(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+		cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 	})
 }
 
 // TestQueryTrustCenterSetting tests the trustCenterSetting query
 func TestQueryTrustCenterSetting(t *testing.T) {
-	cleanupTrustCenterData(t)
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t, withAllUserTypes())
+	trustCenter := tcOrg.trustCenter
 
 	testCases := []struct {
 		name        string
@@ -165,19 +143,19 @@ func TestQueryTrustCenterSetting(t *testing.T) {
 			name:      "happy path - query trust center setting by ID",
 			settingID: trustCenter.Edges.Setting.ID,
 			client:    suite.client.api,
-			ctx:       testUser1.UserCtx,
+			ctx:       tcOrg.superAdmin.UserCtx,
 		},
 		{
 			name:      "happy path - query trust center preview setting by ID",
 			settingID: trustCenter.Edges.PreviewSetting.ID,
 			client:    suite.client.api,
-			ctx:       testUser1.UserCtx,
+			ctx:       tcOrg.superAdmin.UserCtx,
 		},
 		{
 			name:        "trust center setting not found",
 			settingID:   "non-existent-id",
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -198,15 +176,15 @@ func TestQueryTrustCenterSetting(t *testing.T) {
 	}
 
 	// Clean up
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 // TestUpdateTrustCenterSetting tests the updateTrustCenterSetting mutation
 func TestUpdateTrustCenterSetting(t *testing.T) {
-	cleanupTrustCenterData(t)
+	tcOrg := createFreshOrgWithTrustCenter(t, withAllUserTypes())
+	trustCenter := tcOrg.trustCenter
 
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
 
 	testCases := []struct {
 		name        string
@@ -224,7 +202,7 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 				Title: lo.ToPtr("Updated Title"),
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    tcOrg.admin.UserCtx,
 		},
 		{
 			name:      "happy path - update title of preview setting",
@@ -233,7 +211,7 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 				Title: lo.ToPtr("Updated Title Preview"),
 			},
 			client:    suite.client.api,
-			ctx:       testUser1.UserCtx,
+			ctx:       tcOrg.superAdmin.UserCtx,
 			expectJob: true, // updating preview setting should enqueue a job to create preview domain
 		},
 		{
@@ -246,7 +224,7 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 				ForegroundColor: lo.ToPtr("#111111"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name:      "happy path - update theme mode",
@@ -255,7 +233,7 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 				ThemeMode: lo.ToPtr(enums.TrustCenterThemeModeEasy),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name:      "not authorized - view only user",
@@ -264,18 +242,19 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 				Title: lo.ToPtr("Unauthorized"),
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         tcOrg.member.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:      "not authorized - different org user",
 			settingID: trustCenter.Edges.Setting.ID,
 			input: testclient.UpdateTrustCenterSettingInput{
-				Title: lo.ToPtr("Unauthorized"),
+				TrustCenterID: &tcOrg.trustCenter.ID,
+				Title:         lo.ToPtr("Unauthorized"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			ctx:         tcOrg2.owner.UserCtx,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:      "trust center setting not found",
@@ -284,7 +263,7 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 				Title: lo.ToPtr("Not Found"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -337,63 +316,61 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 	}
 
 	// Clean up
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg2.owner.UserCtx, t)
 }
 
 // TestDeleteTrustCenterSetting tests the deleteTrustCenterSetting mutation
 func TestDeleteTrustCenterSetting(t *testing.T) {
+	t.Parallel()
 	// Test 1: happy path - delete trust center setting
 	t.Run("Delete happy path - delete trust center setting", func(t *testing.T) {
-		cleanupTrustCenterData(t)
+		tcOrg := createFreshOrgWithTrustCenter(t)
+		settingID := tcOrg.trustCenter.Edges.Setting.ID
 
-		trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-		settingID := trustCenter.Edges.Setting.ID
-
-		resp, err := suite.client.api.DeleteTrustCenterSetting(testUser1.UserCtx, settingID)
+		resp, err := suite.client.api.DeleteTrustCenterSetting(tcOrg.owner.UserCtx, settingID)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 		assert.Check(t, is.Equal(settingID, resp.DeleteTrustCenterSetting.DeletedID))
 
 		// Verify the setting is deleted
-		_, err = suite.client.api.GetTrustCenterSettingByID(testUser1.UserCtx, settingID)
+		_, err = suite.client.api.GetTrustCenterSettingByID(tcOrg.owner.UserCtx, settingID)
 		assert.ErrorContains(t, err, notFoundErrorMsg)
 
 		// Clean up
-		(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+		cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 	})
 
 	// Test 2: not authorized - view only user
 	t.Run("Delete not authorized - view only user", func(t *testing.T) {
-		cleanupTrustCenterData(t)
+		tcOrg := createFreshOrgWithTrustCenter(t)
+		settingID := tcOrg.trustCenter.Edges.Setting.ID
 
-		trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-		settingID := trustCenter.Edges.Setting.ID
-
-		_, err := suite.client.api.DeleteTrustCenterSetting(viewOnlyUser.UserCtx, settingID)
+		_, err := suite.client.api.DeleteTrustCenterSetting(tcOrg.member.UserCtx, settingID)
 		assert.ErrorContains(t, err, notAuthorizedErrorMsg)
 
 		// Clean up
-		(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+		cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 	})
 
 	// Test 3: not authorized - different org user
 	t.Run("Delete not authorized - different org user", func(t *testing.T) {
-		cleanupTrustCenterData(t)
+		tcOrg := createFreshOrgWithTrustCenter(t)
+		settingID := tcOrg.trustCenter.Edges.Setting.ID
 
-		trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-		settingID := trustCenter.Edges.Setting.ID
-
-		_, err := suite.client.api.DeleteTrustCenterSetting(testUser2.UserCtx, settingID)
-		assert.ErrorContains(t, err, notAuthorizedErrorMsg)
+		_, err := suite.client.api.DeleteTrustCenterSetting(sharedTestUser2.UserCtx, settingID)
+		assert.ErrorContains(t, err, notFoundErrorMsg)
 
 		// Clean up
-		(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+		cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 	})
 
 	// Test 4: trust center setting not found
 	t.Run("Delete trust center setting not found", func(t *testing.T) {
-		_, err := suite.client.api.DeleteTrustCenterSetting(testUser1.UserCtx, "non-existent-id")
+		localTestUser := suite.seedFreshOrgUsers(t) // create new org with no trust center
+		_, err := suite.client.api.DeleteTrustCenterSetting(localTestUser.owner.UserCtx, "non-existent-id")
 		assert.ErrorContains(t, err, notFoundErrorMsg)
+
+		cleanupOrganizationDataWithContext(localTestUser.owner.UserCtx, t)
 	})
 }
