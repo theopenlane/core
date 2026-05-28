@@ -2,9 +2,6 @@ module github.com/theopenlane/core/cli
 
 go 1.26.3
 
-// temporary replace for core local while fga package does not exist
-replace github.com/theopenlane/core => ../.
-
 require (
 	github.com/99designs/gqlgen v0.17.90
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
@@ -20,8 +17,8 @@ require (
 	github.com/rs/zerolog v1.35.1
 	github.com/samber/lo v1.53.0
 	github.com/spf13/cobra v1.10.2
-	github.com/theopenlane/core v1.21.22
-	github.com/theopenlane/core/common v1.0.23
+	github.com/theopenlane/core v1.22.0
+	github.com/theopenlane/core/common v1.0.24
 	github.com/theopenlane/go-client v0.11.0
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.31.1
