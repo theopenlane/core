@@ -45,7 +45,7 @@ type document_data
 type assessment
   relations
     # base permissions - these should all be derived permissions
-    define can_view: (viewer but not blocked)
+    define can_view: [user:*, service:*] or (viewer but not blocked)
     define can_edit: (editor but not blocked) or can_delete
     define can_delete: (editor but not blocked)
 
@@ -71,11 +71,11 @@ type assessment_response
     # base permissions - these should all be derived permissions
     define can_view: (viewer but not blocked)
     define can_edit: (editor but not blocked) or can_delete
-    define can_delete: (editor but not blocked)
+    define can_delete: parent_editor # response owners cannot delete
 
     # tuple based permissions for edit, view, blocked, and audit log viewing
-    define editor: [user, service, group#member] or parent_editor
-    define viewer: [user, service, group#member] or editor or parent_viewer or response_owner
+    define editor: [user, service, group#member] or parent_editor or response_owner
+    define viewer: [user, service, group#member] or editor or parent_viewer
     define blocked: [user, service, group#member]
     define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent) and can_view
 

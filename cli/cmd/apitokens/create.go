@@ -28,7 +28,7 @@ func init() {
 	createCmd.Flags().StringP("name", "n", "", "name of the api token token")
 	createCmd.Flags().StringP("description", "d", "", "description of the api token")
 	createCmd.Flags().DurationP("expiration", "e", 0, "duration of the api token to be valid, leave empty to never expire")
-	createCmd.Flags().StringSlice("scopes", []string{"can_view", "can_edit"}, "scopes to associate with the api token"+scopeFlagConfig())
+	createCmd.Flags().StringSlice("scopes", []string{}, "scopes to associate with the api token, use scopes command to see all available scopes")
 }
 
 // createValidation validates the required fields for the command
