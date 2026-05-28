@@ -1,0 +1,19 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.2.4
+    command: start-dev
+    env_file:
+      - ${PWD}/docker/configs/keycloak/.env-example
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: postgres
+      KC_HOSTNAME: localhost
+      KC_HTTP_PORT: 8180
+    ports:
+      - 8180:8180
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - default
