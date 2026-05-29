@@ -17,7 +17,7 @@ server:
     enabled: false
   cors:
     alloworigins:
-      - http://localhost:3001od
+      - http://localhost:3001
       - https://studio.apollographql.com
       - https://sandbox.embed.apollographql.com
       - http://localhost:8000
