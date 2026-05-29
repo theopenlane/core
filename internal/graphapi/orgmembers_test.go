@@ -386,7 +386,7 @@ func TestMutationUpdateOrgMembers(t *testing.T) {
 			name:        "update self from admin to member, not allowed",
 			orgMemberID: testUserOrgMember,
 			role:        enums.RoleMember,
-			errMsg:      notAuthorizedErrorMsg,
+			errMsg:      hooks.ErrOrgOwnerCannotBeUpdated.Error(),
 		},
 		{
 			name:        "invalid role",
