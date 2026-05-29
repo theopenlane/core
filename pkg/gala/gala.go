@@ -54,6 +54,9 @@ type Config struct {
 	FetchPollInterval time.Duration
 }
 
+// ContextEnricher augments the handler context before listener invocation
+type ContextEnricher func(ctx context.Context, injector do.Injector) context.Context
+
 // Gala provides cohesive event dispatch + worker lifecycle management
 // no black tie required, but a riverboat and some confetti wouldn't hurt
 type Gala struct {
@@ -73,6 +76,8 @@ type Gala struct {
 	dispatchMode DispatchMode
 	// inMemoryPool backs in-process dispatch when DispatchModeInMemory is enabled.
 	inMemoryPool *Pool
+	// contextEnrichers are called before listener invocation to augment the handler context
+	contextEnrichers []ContextEnricher
 }
 
 // NewGala initializes your gala, initializes dependencies, and starts workers

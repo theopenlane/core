@@ -5,6 +5,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
@@ -106,14 +107,15 @@ func Builder(cfg Config) registry.Builder {
 					Description: "List Google Docs in the configured folder and emit policy ingest envelopes",
 					Topic:       definitionID.OperationTopic(folderSyncOperation.Name()),
 					ClientRef:   driveClient.ID(),
-					Policy:      types.ExecutionPolicy{Inline: true},
+					Policy:      types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaInternalPolicy,
 						},
 					},
-					IngestHandle: FolderSync{}.IngestHandle(),
-					ConfigSchema: folderSyncSchema,
+					IngestHandle:      FolderSync{}.IngestHandle(),
+					ConfigSchema:      folderSyncSchema,
+					ReconcileSchedule: gala.NewFullFetchSchedule(),
 				},
 			},
 			Mappings: googleDriveMappings(),
