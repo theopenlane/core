@@ -376,7 +376,8 @@ func TestAPITokenScopeEnforcement(t *testing.T) {
 	orgCtx := auth.NewTestContextWithOrgID(localTestUser.owner.ID, localTestUser.owner.OrganizationID)
 
 	// create scoped tokens (read-only vs write)
-	readToken := (&APITokenBuilder{client: suite.client, Scopes: []string{"organization:read", "group:read"}}).MustNew(orgCtx, t)
+	// the non-obvious scopes are required because of the query being used in the test-client having edges to other fields
+	readToken := (&APITokenBuilder{client: suite.client, Scopes: []string{"organization:read", "group:read", "org_subscription:read", "org_membership:read", "file:read"}}).MustNew(orgCtx, t)
 	writeToken := (&APITokenBuilder{client: suite.client, Scopes: []string{"group:write"}}).MustNew(orgCtx, t)
 
 	makeClient := func(token string) *testclient.TestClient {
@@ -402,13 +403,13 @@ func TestAPITokenScopeEnforcement(t *testing.T) {
 	assert.NilError(t, err)
 
 	// read-only scope cannot create a group (requires edit)
-	_, err = readClient.CreateGroup(context.Background(), testclient.CreateGroupInput{
+	_, err = readClient.CreateGroupSimple(context.Background(), testclient.CreateGroupInput{
 		Name: gofakeit.AppName(),
 	})
-	assert.ErrorContains(t, err, notAuthorizedErrorMsg)
+	assert.ErrorContains(t, err, missingScopeErrorMsg)
 
 	// write scope can create a group
-	groupResp, err := writeClient.CreateGroup(context.Background(), testclient.CreateGroupInput{
+	groupResp, err := writeClient.CreateGroupSimple(context.Background(), testclient.CreateGroupInput{
 		Name: gofakeit.AppName(),
 	})
 	assert.NilError(t, err)
@@ -482,7 +483,7 @@ func TestAPITokenObjectScopeTuples(t *testing.T) {
 	editRelation := fgamodel.NormalizeScope("evidence:write")
 
 	t.Run("read-only evidence scope", func(t *testing.T) {
-		token, client := makeTokenClient([]string{"evidence:read", "file:read", "control:read", "task:read", "subcontrol:read"})
+		token, client := makeTokenClient([]string{"evidence:read", "file:read", "control:read", "task:read", "subcontrol:read", "program:read", "control_objective:read"})
 
 		ids := listScopedOrgIDs(token.ID, viewRelation)
 		assert.Check(t, lo.Contains(ids, orgUser.OrganizationID))
@@ -496,11 +497,11 @@ func TestAPITokenObjectScopeTuples(t *testing.T) {
 		_, err = client.UpdateEvidence(context.Background(), evidence.ID, testclient.UpdateEvidenceInput{
 			Name: lo.ToPtr(gofakeit.Word()),
 		}, nil)
-		assert.ErrorContains(t, err, notAuthorizedErrorMsg)
+		assert.ErrorContains(t, err, missingScopeErrorMsg)
 	})
 
 	t.Run("scope addition and removal update tuples", func(t *testing.T) {
-		token, client := makeTokenClient([]string{"evidence:read", "file:read", "control:read"})
+		token, client := makeTokenClient([]string{"evidence:read", "file:read", "control:read", "task:read", "subcontrol:read", "program:read", "control_objective:read"})
 
 		assert.Check(t, lo.Contains(listScopedOrgIDs(token.ID, viewRelation), orgUser.OrganizationID))
 		assert.Check(t, !lo.Contains(listScopedOrgIDs(token.ID, editRelation), orgUser.OrganizationID))
@@ -528,7 +529,7 @@ func TestAPITokenObjectScopeTuples(t *testing.T) {
 		_, err = client.UpdateEvidence(context.Background(), evidence.ID, testclient.UpdateEvidenceInput{
 			Name: lo.ToPtr(gofakeit.Word()),
 		}, nil)
-		assert.ErrorContains(t, err, notAuthorizedErrorMsg)
+		assert.ErrorContains(t, err, missingScopeErrorMsg)
 	})
 
 	cleanupOrganizationDataWithContext(orgCtx, t)

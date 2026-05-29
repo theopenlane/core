@@ -82,6 +82,7 @@ const (
 	// common error message strings
 	notFoundErrorMsg         = "not found"
 	notAuthorizedErrorMsg    = "you are not authorized to perform this action"
+	missingScopeErrorMsg     = "lacks the required scopes"
 	invalidInputErrorMsg     = "invalid input"
 	seedStripeSubscriptionID = "sub_test_subscription"
 	webhookSecret            = "whsec_test_secret"

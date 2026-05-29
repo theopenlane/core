@@ -2,6 +2,7 @@ package schema
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"entgo.io/ent"
@@ -252,6 +253,13 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			}
 		} else if !o.AllowAnonymousTrustCenterAccess && hasAnonTCUser {
 			return privacy.Denyf("anonymous trust center access not allowed")
+		}
+
+		// check API Token scope and return error if scope not set on token for object
+		if auth.IsAPITokenAuthentication(ctx) {
+			if err := rule.CheckSubjectScope(ctx, q.Type(), fgax.CanView, nil); errors.Is(err, rule.ErrRequiredScopeNotSet) {
+				return err
+			}
 		}
 
 		// add owner id(s) to the query

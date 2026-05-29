@@ -151,7 +151,9 @@ func CheckSubjectScope(ctx context.Context, objectType string, relation string, 
 	}
 
 	if auth.IsAPITokenAuthentication(ctx) {
-		return generated.ErrPermissionDenied
+		logx.FromContext(ctx).Info().Str("scope", scopedRelation).Str("token_id", caller.SubjectID).Msg("token does not have required scope to make request")
+
+		return ErrRequiredScopeNotSet
 	}
 
 	return privacy.Skip

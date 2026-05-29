@@ -38,10 +38,8 @@ func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string)
 	genericMut, ok := m.(utils.GenericMutation)
 	if ok {
 		op := genericMut.Op()
-		if err := CheckSubjectScope(ctx, genericMut.Type(), relation, &op); err != nil {
-			if !errors.Is(err, privacy.Skip) {
-				return err
-			}
+		if err := CheckSubjectScope(ctx, genericMut.Type(), relation, &op); !errors.Is(err, privacy.Skip) {
+			return err
 		}
 	}
 

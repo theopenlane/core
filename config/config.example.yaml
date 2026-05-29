@@ -75,9 +75,9 @@ authz:
     enableparentcontext: false
     hosturl: https://authz.theopenlane.io
     maxbatchwritesize: 100
-    modelfile: fga/model/model.fga
+    modelfile: ""
     modelid: ""
-    modulefile: ""
+    modulefile: fga/model/fga.mod
     parentcontextconditions: []
     parentcontextskipkinds: []
     storeid: ""
