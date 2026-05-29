@@ -32,10 +32,8 @@ func CheckGroupBasedObjectCreationAccess() privacy.MutationRuleFunc {
 
 func checkCreateAccess(ctx context.Context, m generated.Mutation, serviceOnly bool) error {
 	op := m.Op()
-	if err := CheckSubjectScope(ctx, m.Type(), "", &op); err != nil {
-		if !errors.Is(err, privacy.Skip) {
-			return err
-		}
+	if err := CheckSubjectScope(ctx, m.Type(), "", &op); !errors.Is(err, privacy.Skip) {
+		return err
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)

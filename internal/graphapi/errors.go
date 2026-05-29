@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	access "github.com/theopenlane/core/internal/ent/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/pkg/logx"
@@ -27,6 +28,9 @@ func parseRequestError(ctx context.Context, err error, a common.Action) error {
 		Msg("error processing request")
 
 	switch {
+	case errors.Is(err, rule.ErrRequiredScopeNotSet):
+		// The access token lacks the required scopes for this request.
+		return common.NewErrorWithCode(common.ErrMissingRequireScopes, gqlerrors.InsufficientScopes)
 	case generated.IsValidationError(err):
 		validationError := err.(*generated.ValidationError)
 

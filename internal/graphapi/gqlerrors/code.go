@@ -22,6 +22,8 @@ const (
 	// specific schema and module
 	NoAccessToModule = "MODULE_NO_ACCESS"
 	// BulkActionIncomplete is the error code for when a bulk action does not apply to all the
-	// provided IDs probably because of a permission error or simialr
+	// provided IDs probably because of a permission error or similar
 	BulkActionIncomplete = "BULK_ACTION_INCOMPLETELY_APPLIED"
+	// InsufficientScopes is the error code returned when an API Request using an API token does not include the require scope(s) for the request
+	InsufficientScopes = "INSUFFICIENT_SCOPES"
 )
