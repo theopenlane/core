@@ -121,6 +121,7 @@ type SchemaConfig struct {
 	IntegrationEvents                  string // Integration-events->Event table.
 	IntegrationFindings                string // Integration-findings->Finding table.
 	IntegrationVulnerabilities         string // Integration-vulnerabilities->Vulnerability table.
+	IntegrationInternalPolicies        string // Integration-internal_policies->InternalPolicy table.
 	IntegrationReviews                 string // Integration-reviews->Review table.
 	IntegrationRemediations            string // Integration-remediations->Remediation table.
 	IntegrationActionPlans             string // Integration-action_plans->ActionPlan table.

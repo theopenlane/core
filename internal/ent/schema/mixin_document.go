@@ -81,6 +81,7 @@ func getDocumentFields(documentType string) []ent.Field {
 		Annotations(
 			entx.FieldSearchable(),
 			entgql.OrderField("name"),
+			entx.IntegrationMappingField(),
 		).
 		NotEmpty(),
 		field.Enum("status").
@@ -97,6 +98,7 @@ func getDocumentFields(documentType string) []ent.Field {
 			Default(enums.DocumentManagementModeOpenlaneManaged.String()).
 			Annotations(
 				entgql.OrderField("MANAGEMENT_MODE"),
+				entx.IntegrationMappingField(),
 			).
 			Optional().
 			Comment(fmt.Sprintf("how the %s is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)", documentType)),
@@ -189,6 +191,20 @@ func getDocumentFields(documentType string) []ent.Field {
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			).
 			Nillable(),
+		field.String("external_file_id").
+			Comment("Documents managed externally may have IDs we need to reference, this holds them").
+			Optional().
+			Nillable().
+			Annotations(
+				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+			),
+		field.String("external_contents").
+			Comment("The contents of externally managed files, if available").
+			Optional().
+			Nillable().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 	}
 }
 

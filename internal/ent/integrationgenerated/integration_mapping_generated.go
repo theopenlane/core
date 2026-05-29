@@ -56,6 +56,7 @@ type IntegrationIngestMetadata struct {
 }
 
 const (
+	IntegrationMappingSchemaActionPlan          = "ActionPlan"
 	IntegrationMappingSchemaAsset               = "Asset"
 	IntegrationMappingSchemaCheckResult         = "CheckResult"
 	IntegrationMappingSchemaContact             = "Contact"
@@ -64,9 +65,22 @@ const (
 	IntegrationMappingSchemaDirectoryMembership = "DirectoryMembership"
 	IntegrationMappingSchemaEntity              = "Entity"
 	IntegrationMappingSchemaFinding             = "Finding"
+	IntegrationMappingSchemaInternalPolicy      = "InternalPolicy"
+	IntegrationMappingSchemaProcedure           = "Procedure"
 	IntegrationMappingSchemaRisk                = "Risk"
 	IntegrationMappingSchemaVulnerability       = "Vulnerability"
 )
+
+// IntegrationIngestActionPlanRequested is the typed second-stage ingest contract for ActionPlan records
+type IntegrationIngestActionPlanRequested struct {
+	Metadata IntegrationIngestMetadata       `json:"metadata"`
+	Input    generated.CreateActionPlanInput `json:"input"`
+}
+
+// IntegrationIngestActionPlanRequestedTopic is the typed Gala topic for ActionPlan ingest requests
+var IntegrationIngestActionPlanRequestedTopic = gala.Topic[IntegrationIngestActionPlanRequested]{
+	Name: "integration.ingest.action_plan.requested",
+}
 
 // IntegrationIngestAssetRequested is the typed second-stage ingest contract for Asset records
 type IntegrationIngestAssetRequested struct {
@@ -156,6 +170,28 @@ var IntegrationIngestFindingRequestedTopic = gala.Topic[IntegrationIngestFinding
 	Name: "integration.ingest.finding.requested",
 }
 
+// IntegrationIngestInternalPolicyRequested is the typed second-stage ingest contract for InternalPolicy records
+type IntegrationIngestInternalPolicyRequested struct {
+	Metadata IntegrationIngestMetadata           `json:"metadata"`
+	Input    generated.CreateInternalPolicyInput `json:"input"`
+}
+
+// IntegrationIngestInternalPolicyRequestedTopic is the typed Gala topic for InternalPolicy ingest requests
+var IntegrationIngestInternalPolicyRequestedTopic = gala.Topic[IntegrationIngestInternalPolicyRequested]{
+	Name: "integration.ingest.internal_policy.requested",
+}
+
+// IntegrationIngestProcedureRequested is the typed second-stage ingest contract for Procedure records
+type IntegrationIngestProcedureRequested struct {
+	Metadata IntegrationIngestMetadata      `json:"metadata"`
+	Input    generated.CreateProcedureInput `json:"input"`
+}
+
+// IntegrationIngestProcedureRequestedTopic is the typed Gala topic for Procedure ingest requests
+var IntegrationIngestProcedureRequestedTopic = gala.Topic[IntegrationIngestProcedureRequested]{
+	Name: "integration.ingest.procedure.requested",
+}
+
 // IntegrationIngestRiskRequested is the typed second-stage ingest contract for Risk records
 type IntegrationIngestRiskRequested struct {
 	Metadata IntegrationIngestMetadata `json:"metadata"`
@@ -177,6 +213,14 @@ type IntegrationIngestVulnerabilityRequested struct {
 var IntegrationIngestVulnerabilityRequestedTopic = gala.Topic[IntegrationIngestVulnerabilityRequested]{
 	Name: "integration.ingest.vulnerability.requested",
 }
+
+// Integration mapping keys for ActionPlan.
+const (
+	IntegrationMappingActionPlanExternalContents = "externalContents"
+	IntegrationMappingActionPlanExternalFileID   = "externalFileID"
+	IntegrationMappingActionPlanManagementMode   = "managementMode"
+	IntegrationMappingActionPlanName             = "name"
+)
 
 // Integration mapping keys for Asset.
 const (
@@ -454,6 +498,48 @@ const (
 	IntegrationMappingFindingVector             = "vector"
 )
 
+// Integration mapping keys for InternalPolicy.
+const (
+	IntegrationMappingInternalPolicyApprovalRequired                = "approvalRequired"
+	IntegrationMappingInternalPolicyApproverID                      = "approverID"
+	IntegrationMappingInternalPolicyControlSuggestions              = "controlSuggestions"
+	IntegrationMappingInternalPolicyDelegateID                      = "delegateID"
+	IntegrationMappingInternalPolicyDetails                         = "details"
+	IntegrationMappingInternalPolicyDetailsJSON                     = "detailsJSON"
+	IntegrationMappingInternalPolicyDismissedControlSuggestions     = "dismissedControlSuggestions"
+	IntegrationMappingInternalPolicyDismissedImprovementSuggestions = "dismissedImprovementSuggestions"
+	IntegrationMappingInternalPolicyDismissedTagSuggestions         = "dismissedTagSuggestions"
+	IntegrationMappingInternalPolicyEnvironmentID                   = "environmentID"
+	IntegrationMappingInternalPolicyEnvironmentName                 = "environmentName"
+	IntegrationMappingInternalPolicyExternalContents                = "externalContents"
+	IntegrationMappingInternalPolicyExternalFileID                  = "externalFileID"
+	IntegrationMappingInternalPolicyExternalUUID                    = "externalUUID"
+	IntegrationMappingInternalPolicyImprovementSuggestions          = "improvementSuggestions"
+	IntegrationMappingInternalPolicyInternalNotes                   = "internalNotes"
+	IntegrationMappingInternalPolicyInternalPolicyKindID            = "internalPolicyKindID"
+	IntegrationMappingInternalPolicyInternalPolicyKindName          = "internalPolicyKindName"
+	IntegrationMappingInternalPolicyManagementMode                  = "managementMode"
+	IntegrationMappingInternalPolicyName                            = "name"
+	IntegrationMappingInternalPolicyReviewDue                       = "reviewDue"
+	IntegrationMappingInternalPolicyReviewFrequency                 = "reviewFrequency"
+	IntegrationMappingInternalPolicyRevision                        = "revision"
+	IntegrationMappingInternalPolicyScopeID                         = "scopeID"
+	IntegrationMappingInternalPolicyScopeName                       = "scopeName"
+	IntegrationMappingInternalPolicyStatus                          = "status"
+	IntegrationMappingInternalPolicySystemInternalID                = "systemInternalID"
+	IntegrationMappingInternalPolicyTagSuggestions                  = "tagSuggestions"
+	IntegrationMappingInternalPolicyTags                            = "tags"
+	IntegrationMappingInternalPolicyURL                             = "url"
+)
+
+// Integration mapping keys for Procedure.
+const (
+	IntegrationMappingProcedureExternalContents = "externalContents"
+	IntegrationMappingProcedureExternalFileID   = "externalFileID"
+	IntegrationMappingProcedureManagementMode   = "managementMode"
+	IntegrationMappingProcedureName             = "name"
+)
+
 // Integration mapping keys for Risk.
 const (
 	IntegrationMappingRiskBusinessCosts     = "businessCosts"
@@ -548,6 +634,60 @@ const (
 
 // IntegrationMappingSchemas maps schema names to their mapping metadata
 var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
+	"ActionPlan": {
+		Name: "ActionPlan",
+		Fields: []IntegrationMappingField{
+			{
+				InputKey:  "externalContents",
+				GoField:   "ExternalContents",
+				EntField:  "external_contents",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "externalFileID",
+				GoField:   "ExternalFileID",
+				EntField:  "external_file_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: true,
+				LookupKey: true,
+			},
+			{
+				InputKey:  "managementMode",
+				GoField:   "ManagementMode",
+				EntField:  "management_mode",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "name",
+				GoField:   "Name",
+				EntField:  "name",
+				Type:      "string",
+				Required:  true,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+		},
+		AllowedKeys: map[string]struct{}{
+			"externalContents": {},
+			"externalFileID":   {},
+			"managementMode":   {},
+			"name":             {},
+		},
+		RequiredKeys: []string{
+			"name",
+		},
+		UpsertKeys: []string{
+			"externalFileID",
+		},
+		StockPersist: false,
+	},
 	"Asset": {
 		Name: "Asset",
 		Fields: []IntegrationMappingField{
@@ -3123,6 +3263,374 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"externalID",
 		},
 		StockPersist: true,
+	},
+	"InternalPolicy": {
+		Name: "InternalPolicy",
+		Fields: []IntegrationMappingField{
+			{
+				InputKey:  "approvalRequired",
+				GoField:   "ApprovalRequired",
+				EntField:  "approval_required",
+				Type:      "bool",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "approverID",
+				GoField:   "ApproverID",
+				EntField:  "approver_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "controlSuggestions",
+				GoField:   "ControlSuggestions",
+				EntField:  "control_suggestions",
+				Type:      "json.RawMessage",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "delegateID",
+				GoField:   "DelegateID",
+				EntField:  "delegate_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "details",
+				GoField:   "Details",
+				EntField:  "details",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "detailsJSON",
+				GoField:   "DetailsJSON",
+				EntField:  "details_json",
+				Type:      "json.RawMessage",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "dismissedControlSuggestions",
+				GoField:   "DismissedControlSuggestions",
+				EntField:  "dismissed_control_suggestions",
+				Type:      "json.RawMessage",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "dismissedImprovementSuggestions",
+				GoField:   "DismissedImprovementSuggestions",
+				EntField:  "dismissed_improvement_suggestions",
+				Type:      "json.RawMessage",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "dismissedTagSuggestions",
+				GoField:   "DismissedTagSuggestions",
+				EntField:  "dismissed_tag_suggestions",
+				Type:      "json.RawMessage",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "environmentID",
+				GoField:   "EnvironmentID",
+				EntField:  "environment_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "environmentName",
+				GoField:   "EnvironmentName",
+				EntField:  "environment_name",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "externalContents",
+				GoField:   "ExternalContents",
+				EntField:  "external_contents",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "externalFileID",
+				GoField:   "ExternalFileID",
+				EntField:  "external_file_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: true,
+				LookupKey: true,
+			},
+			{
+				InputKey:  "externalUUID",
+				GoField:   "ExternalUUID",
+				EntField:  "external_uuid",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "improvementSuggestions",
+				GoField:   "ImprovementSuggestions",
+				EntField:  "improvement_suggestions",
+				Type:      "json.RawMessage",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "internalNotes",
+				GoField:   "InternalNotes",
+				EntField:  "internal_notes",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "internalPolicyKindID",
+				GoField:   "InternalPolicyKindID",
+				EntField:  "internal_policy_kind_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "internalPolicyKindName",
+				GoField:   "InternalPolicyKindName",
+				EntField:  "internal_policy_kind_name",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "managementMode",
+				GoField:   "ManagementMode",
+				EntField:  "management_mode",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "name",
+				GoField:   "Name",
+				EntField:  "name",
+				Type:      "string",
+				Required:  true,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "reviewDue",
+				GoField:   "ReviewDue",
+				EntField:  "review_due",
+				Type:      "time.Time",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "reviewFrequency",
+				GoField:   "ReviewFrequency",
+				EntField:  "review_frequency",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "revision",
+				GoField:   "Revision",
+				EntField:  "revision",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "scopeID",
+				GoField:   "ScopeID",
+				EntField:  "scope_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "scopeName",
+				GoField:   "ScopeName",
+				EntField:  "scope_name",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "status",
+				GoField:   "Status",
+				EntField:  "status",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "systemInternalID",
+				GoField:   "SystemInternalID",
+				EntField:  "system_internal_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "tagSuggestions",
+				GoField:   "TagSuggestions",
+				EntField:  "tag_suggestions",
+				Type:      "json.RawMessage",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "tags",
+				GoField:   "Tags",
+				EntField:  "tags",
+				Type:      "json.RawMessage",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "url",
+				GoField:   "URL",
+				EntField:  "url",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+		},
+		AllowedKeys: map[string]struct{}{
+			"approvalRequired":                {},
+			"approverID":                      {},
+			"controlSuggestions":              {},
+			"delegateID":                      {},
+			"details":                         {},
+			"detailsJSON":                     {},
+			"dismissedControlSuggestions":     {},
+			"dismissedImprovementSuggestions": {},
+			"dismissedTagSuggestions":         {},
+			"environmentID":                   {},
+			"environmentName":                 {},
+			"externalContents":                {},
+			"externalFileID":                  {},
+			"externalUUID":                    {},
+			"improvementSuggestions":          {},
+			"internalNotes":                   {},
+			"internalPolicyKindID":            {},
+			"internalPolicyKindName":          {},
+			"managementMode":                  {},
+			"name":                            {},
+			"reviewDue":                       {},
+			"reviewFrequency":                 {},
+			"revision":                        {},
+			"scopeID":                         {},
+			"scopeName":                       {},
+			"status":                          {},
+			"systemInternalID":                {},
+			"tagSuggestions":                  {},
+			"tags":                            {},
+			"url":                             {},
+		},
+		RequiredKeys: []string{
+			"name",
+		},
+		UpsertKeys: []string{
+			"externalFileID",
+		},
+		StockPersist: true,
+	},
+	"Procedure": {
+		Name: "Procedure",
+		Fields: []IntegrationMappingField{
+			{
+				InputKey:  "externalContents",
+				GoField:   "ExternalContents",
+				EntField:  "external_contents",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "externalFileID",
+				GoField:   "ExternalFileID",
+				EntField:  "external_file_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: true,
+				LookupKey: true,
+			},
+			{
+				InputKey:  "managementMode",
+				GoField:   "ManagementMode",
+				EntField:  "management_mode",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "name",
+				GoField:   "Name",
+				EntField:  "name",
+				Type:      "string",
+				Required:  true,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+		},
+		AllowedKeys: map[string]struct{}{
+			"externalContents": {},
+			"externalFileID":   {},
+			"managementMode":   {},
+			"name":             {},
+		},
+		RequiredKeys: []string{
+			"name",
+		},
+		UpsertKeys: []string{
+			"externalFileID",
+		},
+		StockPersist: false,
 	},
 	"Risk": {
 		Name: "Risk",

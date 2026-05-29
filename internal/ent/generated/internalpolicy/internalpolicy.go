@@ -82,6 +82,10 @@ const (
 	FieldURL = "url"
 	// FieldFileID holds the string denoting the file_id field in the database.
 	FieldFileID = "file_id"
+	// FieldExternalFileID holds the string denoting the external_file_id field in the database.
+	FieldExternalFileID = "external_file_id"
+	// FieldExternalContents holds the string denoting the external_contents field in the database.
+	FieldExternalContents = "external_contents"
 	// FieldInternalPolicyKindName holds the string denoting the internal_policy_kind_name field in the database.
 	FieldInternalPolicyKindName = "internal_policy_kind_name"
 	// FieldInternalPolicyKindID holds the string denoting the internal_policy_kind_id field in the database.
@@ -148,6 +152,8 @@ const (
 	EdgeIdentityHolders = "identity_holders"
 	// EdgeReviews holds the string denoting the reviews edge name in mutations.
 	EdgeReviews = "reviews"
+	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
+	EdgeIntegrations = "integrations"
 	// Table holds the table name of the internalpolicy in the database.
 	Table = "internal_policies"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -297,6 +303,11 @@ const (
 	// ReviewsInverseTable is the table name for the Review entity.
 	// It exists in this package in order to avoid circular dependency with the "review" package.
 	ReviewsInverseTable = "reviews"
+	// IntegrationsTable is the table that holds the integrations relation/edge. The primary key declared below.
+	IntegrationsTable = "integration_internal_policies"
+	// IntegrationsInverseTable is the table name for the Integration entity.
+	// It exists in this package in order to avoid circular dependency with the "integration" package.
+	IntegrationsInverseTable = "integrations"
 )
 
 // Columns holds all SQL columns for internalpolicy fields.
@@ -334,6 +345,8 @@ var Columns = []string{
 	FieldDismissedImprovementSuggestions,
 	FieldURL,
 	FieldFileID,
+	FieldExternalFileID,
+	FieldExternalContents,
 	FieldInternalPolicyKindName,
 	FieldInternalPolicyKindID,
 	FieldEnvironmentName,
@@ -393,6 +406,9 @@ var (
 	// ReviewsPrimaryKey and ReviewsColumn2 are the table columns denoting the
 	// primary key for the reviews relation (M2M).
 	ReviewsPrimaryKey = []string{"review_id", "internal_policy_id"}
+	// IntegrationsPrimaryKey and IntegrationsColumn2 are the table columns denoting the
+	// primary key for the integrations relation (M2M).
+	IntegrationsPrimaryKey = []string{"integration_id", "internal_policy_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -478,7 +494,7 @@ const DefaultManagementMode enums.DocumentManagementMode = "OPENLANE_MANAGED"
 // ManagementModeValidator is a validator for the "management_mode" field enum values. It is called by the builders before save.
 func ManagementModeValidator(mm enums.DocumentManagementMode) error {
 	switch mm.String() {
-	case "OPENLANE_MANAGED", "EXTERNAL_REFERENCE":
+	case "OPENLANE_MANAGED", "EXTERNAL_REFERENCE", "INTEGRATION":
 		return nil
 	default:
 		return fmt.Errorf("internalpolicy: invalid enum value for management_mode field: %q", mm)
@@ -623,6 +639,16 @@ func ByURL(opts ...sql.OrderTermOption) OrderOption {
 // ByFileID orders the results by the file_id field.
 func ByFileID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFileID, opts...).ToFunc()
+}
+
+// ByExternalFileID orders the results by the external_file_id field.
+func ByExternalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalFileID, opts...).ToFunc()
+}
+
+// ByExternalContents orders the results by the external_contents field.
+func ByExternalContents(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalContents, opts...).ToFunc()
 }
 
 // ByInternalPolicyKindName orders the results by the internal_policy_kind_name field.
@@ -965,6 +991,20 @@ func ByReviews(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newReviewsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByIntegrationsCount orders the results by integrations count.
+func ByIntegrationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationsStep(), opts...)
+	}
+}
+
+// ByIntegrations orders the results by integrations terms.
+func ByIntegrations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1138,6 +1178,13 @@ func newReviewsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ReviewsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ReviewsTable, ReviewsPrimaryKey...),
+	)
+}
+func newIntegrationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, IntegrationsTable, IntegrationsPrimaryKey...),
 	)
 }
 

@@ -191,6 +191,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplan.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: actionplan.FieldDismissedImprovementSuggestions},
 			actionplan.FieldURL:                             {Type: field.TypeString, Column: actionplan.FieldURL},
 			actionplan.FieldFileID:                          {Type: field.TypeString, Column: actionplan.FieldFileID},
+			actionplan.FieldExternalFileID:                  {Type: field.TypeString, Column: actionplan.FieldExternalFileID},
+			actionplan.FieldExternalContents:                {Type: field.TypeString, Column: actionplan.FieldExternalContents},
 			actionplan.FieldOwnerID:                         {Type: field.TypeString, Column: actionplan.FieldOwnerID},
 			actionplan.FieldSystemOwned:                     {Type: field.TypeBool, Column: actionplan.FieldSystemOwned},
 			actionplan.FieldInternalNotes:                   {Type: field.TypeString, Column: actionplan.FieldInternalNotes},
@@ -1712,6 +1714,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicy.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: internalpolicy.FieldDismissedImprovementSuggestions},
 			internalpolicy.FieldURL:                             {Type: field.TypeString, Column: internalpolicy.FieldURL},
 			internalpolicy.FieldFileID:                          {Type: field.TypeString, Column: internalpolicy.FieldFileID},
+			internalpolicy.FieldExternalFileID:                  {Type: field.TypeString, Column: internalpolicy.FieldExternalFileID},
+			internalpolicy.FieldExternalContents:                {Type: field.TypeString, Column: internalpolicy.FieldExternalContents},
 			internalpolicy.FieldInternalPolicyKindName:          {Type: field.TypeString, Column: internalpolicy.FieldInternalPolicyKindName},
 			internalpolicy.FieldInternalPolicyKindID:            {Type: field.TypeString, Column: internalpolicy.FieldInternalPolicyKindID},
 			internalpolicy.FieldEnvironmentName:                 {Type: field.TypeString, Column: internalpolicy.FieldEnvironmentName},
@@ -2510,6 +2514,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedure.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: procedure.FieldDismissedImprovementSuggestions},
 			procedure.FieldURL:                             {Type: field.TypeString, Column: procedure.FieldURL},
 			procedure.FieldFileID:                          {Type: field.TypeString, Column: procedure.FieldFileID},
+			procedure.FieldExternalFileID:                  {Type: field.TypeString, Column: procedure.FieldExternalFileID},
+			procedure.FieldExternalContents:                {Type: field.TypeString, Column: procedure.FieldExternalContents},
 			procedure.FieldSystemOwned:                     {Type: field.TypeBool, Column: procedure.FieldSystemOwned},
 			procedure.FieldInternalNotes:                   {Type: field.TypeString, Column: procedure.FieldInternalNotes},
 			procedure.FieldSystemInternalID:                {Type: field.TypeString, Column: procedure.FieldSystemInternalID},
@@ -9282,6 +9288,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Vulnerability",
 	)
 	graph.MustAddE(
+		"internal_policies",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   integration.InternalPoliciesTable,
+			Columns: integration.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+		},
+		"Integration",
+		"InternalPolicy",
+	)
+	graph.MustAddE(
 		"reviews",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -9868,6 +9886,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"InternalPolicy",
 		"Review",
+	)
+	graph.MustAddE(
+		"integrations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.IntegrationsTable,
+			Columns: internalpolicy.IntegrationsPrimaryKey,
+			Bidi:    false,
+		},
+		"InternalPolicy",
+		"Integration",
 	)
 	graph.MustAddE(
 		"owner",
@@ -18576,6 +18606,16 @@ func (f *ActionPlanFilter) WhereURL(p entql.StringP) {
 // WhereFileID applies the entql string predicate on the file_id field.
 func (f *ActionPlanFilter) WhereFileID(p entql.StringP) {
 	f.Where(p.Field(actionplan.FieldFileID))
+}
+
+// WhereExternalFileID applies the entql string predicate on the external_file_id field.
+func (f *ActionPlanFilter) WhereExternalFileID(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldExternalFileID))
+}
+
+// WhereExternalContents applies the entql string predicate on the external_contents field.
+func (f *ActionPlanFilter) WhereExternalContents(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldExternalContents))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.
@@ -30955,6 +30995,20 @@ func (f *IntegrationFilter) WhereHasVulnerabilitiesWith(preds ...predicate.Vulne
 	})))
 }
 
+// WhereHasInternalPolicies applies a predicate to check if query has an edge internal_policies.
+func (f *IntegrationFilter) WhereHasInternalPolicies() {
+	f.Where(entql.HasEdge("internal_policies"))
+}
+
+// WhereHasInternalPoliciesWith applies a predicate to check if query has an edge internal_policies with a given conditions (other predicates).
+func (f *IntegrationFilter) WhereHasInternalPoliciesWith(preds ...predicate.InternalPolicy) {
+	f.Where(entql.HasEdgeWith("internal_policies", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasReviews applies a predicate to check if query has an edge reviews.
 func (f *IntegrationFilter) WhereHasReviews() {
 	f.Where(entql.HasEdge("reviews"))
@@ -31791,6 +31845,16 @@ func (f *InternalPolicyFilter) WhereFileID(p entql.StringP) {
 	f.Where(p.Field(internalpolicy.FieldFileID))
 }
 
+// WhereExternalFileID applies the entql string predicate on the external_file_id field.
+func (f *InternalPolicyFilter) WhereExternalFileID(p entql.StringP) {
+	f.Where(p.Field(internalpolicy.FieldExternalFileID))
+}
+
+// WhereExternalContents applies the entql string predicate on the external_contents field.
+func (f *InternalPolicyFilter) WhereExternalContents(p entql.StringP) {
+	f.Where(p.Field(internalpolicy.FieldExternalContents))
+}
+
 // WhereInternalPolicyKindName applies the entql string predicate on the internal_policy_kind_name field.
 func (f *InternalPolicyFilter) WhereInternalPolicyKindName(p entql.StringP) {
 	f.Where(p.Field(internalpolicy.FieldInternalPolicyKindName))
@@ -32175,6 +32239,20 @@ func (f *InternalPolicyFilter) WhereHasReviews() {
 // WhereHasReviewsWith applies a predicate to check if query has an edge reviews with a given conditions (other predicates).
 func (f *InternalPolicyFilter) WhereHasReviewsWith(preds ...predicate.Review) {
 	f.Where(entql.HasEdgeWith("reviews", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasIntegrations applies a predicate to check if query has an edge integrations.
+func (f *InternalPolicyFilter) WhereHasIntegrations() {
+	f.Where(entql.HasEdge("integrations"))
+}
+
+// WhereHasIntegrationsWith applies a predicate to check if query has an edge integrations with a given conditions (other predicates).
+func (f *InternalPolicyFilter) WhereHasIntegrationsWith(preds ...predicate.Integration) {
+	f.Where(entql.HasEdgeWith("integrations", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -39662,6 +39740,16 @@ func (f *ProcedureFilter) WhereURL(p entql.StringP) {
 // WhereFileID applies the entql string predicate on the file_id field.
 func (f *ProcedureFilter) WhereFileID(p entql.StringP) {
 	f.Where(p.Field(procedure.FieldFileID))
+}
+
+// WhereExternalFileID applies the entql string predicate on the external_file_id field.
+func (f *ProcedureFilter) WhereExternalFileID(p entql.StringP) {
+	f.Where(p.Field(procedure.FieldExternalFileID))
+}
+
+// WhereExternalContents applies the entql string predicate on the external_contents field.
+func (f *ProcedureFilter) WhereExternalContents(p entql.StringP) {
+	f.Where(p.Field(procedure.FieldExternalContents))
 }
 
 // WhereSystemOwned applies the entql bool predicate on the system_owned field.

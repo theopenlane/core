@@ -349,6 +349,10 @@ type ActionPlan struct {
 	URL *string `json:"url,omitempty"`
 	// This will contain the most recent file id if this action_plan was created from a file
 	FileID *string `json:"fileID,omitempty"`
+	// Documents managed externally may have IDs we need to reference, this holds them
+	ExternalFileID *string `json:"externalFileID,omitempty"`
+	// The contents of externally managed files, if available
+	ExternalContents *string `json:"externalContents,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -704,6 +708,38 @@ type ActionPlanWhereInput struct {
 	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
 	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
 	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+	// external_file_id field predicates
+	ExternalFileID             *string  `json:"externalFileID,omitempty"`
+	ExternalFileIdneq          *string  `json:"externalFileIDNEQ,omitempty"`
+	ExternalFileIDIn           []string `json:"externalFileIDIn,omitempty"`
+	ExternalFileIDNotIn        []string `json:"externalFileIDNotIn,omitempty"`
+	ExternalFileIdgt           *string  `json:"externalFileIDGT,omitempty"`
+	ExternalFileIdgte          *string  `json:"externalFileIDGTE,omitempty"`
+	ExternalFileIdlt           *string  `json:"externalFileIDLT,omitempty"`
+	ExternalFileIdlte          *string  `json:"externalFileIDLTE,omitempty"`
+	ExternalFileIDContains     *string  `json:"externalFileIDContains,omitempty"`
+	ExternalFileIDHasPrefix    *string  `json:"externalFileIDHasPrefix,omitempty"`
+	ExternalFileIDHasSuffix    *string  `json:"externalFileIDHasSuffix,omitempty"`
+	ExternalFileIDIsNil        *bool    `json:"externalFileIDIsNil,omitempty"`
+	ExternalFileIDNotNil       *bool    `json:"externalFileIDNotNil,omitempty"`
+	ExternalFileIDEqualFold    *string  `json:"externalFileIDEqualFold,omitempty"`
+	ExternalFileIDContainsFold *string  `json:"externalFileIDContainsFold,omitempty"`
+	// external_contents field predicates
+	ExternalContents             *string  `json:"externalContents,omitempty"`
+	ExternalContentsNeq          *string  `json:"externalContentsNEQ,omitempty"`
+	ExternalContentsIn           []string `json:"externalContentsIn,omitempty"`
+	ExternalContentsNotIn        []string `json:"externalContentsNotIn,omitempty"`
+	ExternalContentsGt           *string  `json:"externalContentsGT,omitempty"`
+	ExternalContentsGte          *string  `json:"externalContentsGTE,omitempty"`
+	ExternalContentsLt           *string  `json:"externalContentsLT,omitempty"`
+	ExternalContentsLte          *string  `json:"externalContentsLTE,omitempty"`
+	ExternalContentsContains     *string  `json:"externalContentsContains,omitempty"`
+	ExternalContentsHasPrefix    *string  `json:"externalContentsHasPrefix,omitempty"`
+	ExternalContentsHasSuffix    *string  `json:"externalContentsHasSuffix,omitempty"`
+	ExternalContentsIsNil        *bool    `json:"externalContentsIsNil,omitempty"`
+	ExternalContentsNotNil       *bool    `json:"externalContentsNotNil,omitempty"`
+	ExternalContentsEqualFold    *string  `json:"externalContentsEqualFold,omitempty"`
+	ExternalContentsContainsFold *string  `json:"externalContentsContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -6095,6 +6131,10 @@ type CreateActionPlanInput struct {
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
 	// This will contain the url used to create or update the action_plan
 	URL *string `json:"url,omitempty"`
+	// Documents managed externally may have IDs we need to reference, this holds them
+	ExternalFileID *string `json:"externalFileID,omitempty"`
+	// The contents of externally managed files, if available
+	ExternalContents *string `json:"externalContents,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
@@ -7730,6 +7770,10 @@ type CreateInternalPolicyInput struct {
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
 	// This will contain the url used to create or update the policy
 	URL *string `json:"url,omitempty"`
+	// Documents managed externally may have IDs we need to reference, this holds them
+	ExternalFileID *string `json:"externalFileID,omitempty"`
+	// The contents of externally managed files, if available
+	ExternalContents *string `json:"externalContents,omitempty"`
 	// the kind of the internal_policy
 	InternalPolicyKindName *string `json:"internalPolicyKindName,omitempty"`
 	// the environment of the internal_policy
@@ -7765,6 +7809,7 @@ type CreateInternalPolicyInput struct {
 	EntityIDs                []string `json:"entityIDs,omitempty"`
 	IdentityHolderIDs        []string `json:"identityHolderIDs,omitempty"`
 	ReviewIDs                []string `json:"reviewIDs,omitempty"`
+	IntegrationIDs           []string `json:"integrationIDs,omitempty"`
 }
 
 // CreateInviteInput is used for create Invite object.
@@ -8536,6 +8581,10 @@ type CreateProcedureInput struct {
 	DismissedImprovementSuggestions []string `json:"dismissedImprovementSuggestions,omitempty"`
 	// This will contain the url used to create or update the procedure
 	URL *string `json:"url,omitempty"`
+	// Documents managed externally may have IDs we need to reference, this holds them
+	ExternalFileID *string `json:"externalFileID,omitempty"`
+	// The contents of externally managed files, if available
+	ExternalContents *string `json:"externalContents,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
@@ -20208,6 +20257,7 @@ type Integration struct {
 	Events               *EventConnection               `json:"events"`
 	Findings             *FindingConnection             `json:"findings"`
 	Vulnerabilities      *VulnerabilityConnection       `json:"vulnerabilities"`
+	InternalPolicies     *InternalPolicyConnection      `json:"internalPolicies"`
 	Reviews              *ReviewConnection              `json:"reviews"`
 	Remediations         *RemediationConnection         `json:"remediations"`
 	Tasks                *TaskConnection                `json:"tasks"`
@@ -20612,6 +20662,9 @@ type IntegrationWhereInput struct {
 	// vulnerabilities edge predicates
 	HasVulnerabilities     *bool                      `json:"hasVulnerabilities,omitempty"`
 	HasVulnerabilitiesWith []*VulnerabilityWhereInput `json:"hasVulnerabilitiesWith,omitempty"`
+	// internal_policies edge predicates
+	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
+	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
 	// reviews edge predicates
 	HasReviews     *bool               `json:"hasReviews,omitempty"`
 	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
@@ -20718,6 +20771,10 @@ type InternalPolicy struct {
 	URL *string `json:"url,omitempty"`
 	// This will contain the most recent file id if this policy was created from a file
 	FileID *string `json:"fileID,omitempty"`
+	// Documents managed externally may have IDs we need to reference, this holds them
+	ExternalFileID *string `json:"externalFileID,omitempty"`
+	// The contents of externally managed files, if available
+	ExternalContents *string `json:"externalContents,omitempty"`
 	// the kind of the internal_policy
 	InternalPolicyKindName *string `json:"internalPolicyKindName,omitempty"`
 	// the kind of the internal_policy
@@ -20761,6 +20818,7 @@ type InternalPolicy struct {
 	Entities               *EntityConnection                `json:"entities"`
 	IdentityHolders        *IdentityHolderConnection        `json:"identityHolders"`
 	Reviews                *ReviewConnection                `json:"reviews"`
+	Integrations           *IntegrationConnection           `json:"integrations"`
 	// Indicates if this internalPolicy has pending changes awaiting workflow approval
 	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
 	// Indicates if this internalPolicy has any workflow history (completed or failed instances)
@@ -20769,6 +20827,9 @@ type InternalPolicy struct {
 	ActiveWorkflowInstances []*WorkflowInstance `json:"activeWorkflowInstances"`
 	// Returns the workflow event timeline for this internalPolicy across all workflow instances
 	WorkflowTimeline *WorkflowEventConnection `json:"workflowTimeline"`
+	// Live external document contents fetched from the integration provider (e.g. Google Drive HTML export).
+	// Only populated when managementMode is INTEGRATION and an externalFileID is set.
+	LiveExternalContents *string `json:"liveExternalContents,omitempty"`
 }
 
 func (InternalPolicy) IsNode() {}
@@ -21126,6 +21187,38 @@ type InternalPolicyWhereInput struct {
 	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
 	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
 	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+	// external_file_id field predicates
+	ExternalFileID             *string  `json:"externalFileID,omitempty"`
+	ExternalFileIdneq          *string  `json:"externalFileIDNEQ,omitempty"`
+	ExternalFileIDIn           []string `json:"externalFileIDIn,omitempty"`
+	ExternalFileIDNotIn        []string `json:"externalFileIDNotIn,omitempty"`
+	ExternalFileIdgt           *string  `json:"externalFileIDGT,omitempty"`
+	ExternalFileIdgte          *string  `json:"externalFileIDGTE,omitempty"`
+	ExternalFileIdlt           *string  `json:"externalFileIDLT,omitempty"`
+	ExternalFileIdlte          *string  `json:"externalFileIDLTE,omitempty"`
+	ExternalFileIDContains     *string  `json:"externalFileIDContains,omitempty"`
+	ExternalFileIDHasPrefix    *string  `json:"externalFileIDHasPrefix,omitempty"`
+	ExternalFileIDHasSuffix    *string  `json:"externalFileIDHasSuffix,omitempty"`
+	ExternalFileIDIsNil        *bool    `json:"externalFileIDIsNil,omitempty"`
+	ExternalFileIDNotNil       *bool    `json:"externalFileIDNotNil,omitempty"`
+	ExternalFileIDEqualFold    *string  `json:"externalFileIDEqualFold,omitempty"`
+	ExternalFileIDContainsFold *string  `json:"externalFileIDContainsFold,omitempty"`
+	// external_contents field predicates
+	ExternalContents             *string  `json:"externalContents,omitempty"`
+	ExternalContentsNeq          *string  `json:"externalContentsNEQ,omitempty"`
+	ExternalContentsIn           []string `json:"externalContentsIn,omitempty"`
+	ExternalContentsNotIn        []string `json:"externalContentsNotIn,omitempty"`
+	ExternalContentsGt           *string  `json:"externalContentsGT,omitempty"`
+	ExternalContentsGte          *string  `json:"externalContentsGTE,omitempty"`
+	ExternalContentsLt           *string  `json:"externalContentsLT,omitempty"`
+	ExternalContentsLte          *string  `json:"externalContentsLTE,omitempty"`
+	ExternalContentsContains     *string  `json:"externalContentsContains,omitempty"`
+	ExternalContentsHasPrefix    *string  `json:"externalContentsHasPrefix,omitempty"`
+	ExternalContentsHasSuffix    *string  `json:"externalContentsHasSuffix,omitempty"`
+	ExternalContentsIsNil        *bool    `json:"externalContentsIsNil,omitempty"`
+	ExternalContentsNotNil       *bool    `json:"externalContentsNotNil,omitempty"`
+	ExternalContentsEqualFold    *string  `json:"externalContentsEqualFold,omitempty"`
+	ExternalContentsContainsFold *string  `json:"externalContentsContainsFold,omitempty"`
 	// internal_policy_kind_name field predicates
 	InternalPolicyKindName             *string  `json:"internalPolicyKindName,omitempty"`
 	InternalPolicyKindNameNeq          *string  `json:"internalPolicyKindNameNEQ,omitempty"`
@@ -21318,6 +21411,9 @@ type InternalPolicyWhereInput struct {
 	// reviews edge predicates
 	HasReviews     *bool               `json:"hasReviews,omitempty"`
 	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
+	// integrations edge predicates
+	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
+	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 	// Filter for tagSuggestionsHas to contain a specific value
@@ -28227,6 +28323,10 @@ type Procedure struct {
 	URL *string `json:"url,omitempty"`
 	// This will contain the most recent file id if this procedure was created from a file
 	FileID *string `json:"fileID,omitempty"`
+	// Documents managed externally may have IDs we need to reference, this holds them
+	ExternalFileID *string `json:"externalFileID,omitempty"`
+	// The contents of externally managed files, if available
+	ExternalContents *string `json:"externalContents,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
@@ -28596,6 +28696,38 @@ type ProcedureWhereInput struct {
 	FileIDNotNil       *bool    `json:"fileIDNotNil,omitempty"`
 	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
 	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+	// external_file_id field predicates
+	ExternalFileID             *string  `json:"externalFileID,omitempty"`
+	ExternalFileIdneq          *string  `json:"externalFileIDNEQ,omitempty"`
+	ExternalFileIDIn           []string `json:"externalFileIDIn,omitempty"`
+	ExternalFileIDNotIn        []string `json:"externalFileIDNotIn,omitempty"`
+	ExternalFileIdgt           *string  `json:"externalFileIDGT,omitempty"`
+	ExternalFileIdgte          *string  `json:"externalFileIDGTE,omitempty"`
+	ExternalFileIdlt           *string  `json:"externalFileIDLT,omitempty"`
+	ExternalFileIdlte          *string  `json:"externalFileIDLTE,omitempty"`
+	ExternalFileIDContains     *string  `json:"externalFileIDContains,omitempty"`
+	ExternalFileIDHasPrefix    *string  `json:"externalFileIDHasPrefix,omitempty"`
+	ExternalFileIDHasSuffix    *string  `json:"externalFileIDHasSuffix,omitempty"`
+	ExternalFileIDIsNil        *bool    `json:"externalFileIDIsNil,omitempty"`
+	ExternalFileIDNotNil       *bool    `json:"externalFileIDNotNil,omitempty"`
+	ExternalFileIDEqualFold    *string  `json:"externalFileIDEqualFold,omitempty"`
+	ExternalFileIDContainsFold *string  `json:"externalFileIDContainsFold,omitempty"`
+	// external_contents field predicates
+	ExternalContents             *string  `json:"externalContents,omitempty"`
+	ExternalContentsNeq          *string  `json:"externalContentsNEQ,omitempty"`
+	ExternalContentsIn           []string `json:"externalContentsIn,omitempty"`
+	ExternalContentsNotIn        []string `json:"externalContentsNotIn,omitempty"`
+	ExternalContentsGt           *string  `json:"externalContentsGT,omitempty"`
+	ExternalContentsGte          *string  `json:"externalContentsGTE,omitempty"`
+	ExternalContentsLt           *string  `json:"externalContentsLT,omitempty"`
+	ExternalContentsLte          *string  `json:"externalContentsLTE,omitempty"`
+	ExternalContentsContains     *string  `json:"externalContentsContains,omitempty"`
+	ExternalContentsHasPrefix    *string  `json:"externalContentsHasPrefix,omitempty"`
+	ExternalContentsHasSuffix    *string  `json:"externalContentsHasSuffix,omitempty"`
+	ExternalContentsIsNil        *bool    `json:"externalContentsIsNil,omitempty"`
+	ExternalContentsNotNil       *bool    `json:"externalContentsNotNil,omitempty"`
+	ExternalContentsEqualFold    *string  `json:"externalContentsEqualFold,omitempty"`
+	ExternalContentsContainsFold *string  `json:"externalContentsContainsFold,omitempty"`
 	// system_owned field predicates
 	SystemOwned       *bool `json:"systemOwned,omitempty"`
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
@@ -39430,6 +39562,12 @@ type UpdateActionPlanInput struct {
 	// This will contain the url used to create or update the action_plan
 	URL      *string `json:"url,omitempty"`
 	ClearURL *bool   `json:"clearURL,omitempty"`
+	// Documents managed externally may have IDs we need to reference, this holds them
+	ExternalFileID      *string `json:"externalFileID,omitempty"`
+	ClearExternalFileID *bool   `json:"clearExternalFileID,omitempty"`
+	// The contents of externally managed files, if available
+	ExternalContents      *string `json:"externalContents,omitempty"`
+	ClearExternalContents *bool   `json:"clearExternalContents,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes      *string `json:"internalNotes,omitempty"`
 	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
@@ -42100,6 +42238,12 @@ type UpdateInternalPolicyInput struct {
 	// This will contain the url used to create or update the policy
 	URL      *string `json:"url,omitempty"`
 	ClearURL *bool   `json:"clearURL,omitempty"`
+	// Documents managed externally may have IDs we need to reference, this holds them
+	ExternalFileID      *string `json:"externalFileID,omitempty"`
+	ClearExternalFileID *bool   `json:"clearExternalFileID,omitempty"`
+	// The contents of externally managed files, if available
+	ExternalContents      *string `json:"externalContents,omitempty"`
+	ClearExternalContents *bool   `json:"clearExternalContents,omitempty"`
 	// the kind of the internal_policy
 	InternalPolicyKindName      *string `json:"internalPolicyKindName,omitempty"`
 	ClearInternalPolicyKindName *bool   `json:"clearInternalPolicyKindName,omitempty"`
@@ -42183,6 +42327,9 @@ type UpdateInternalPolicyInput struct {
 	AddReviewIDs                   []string                `json:"addReviewIDs,omitempty"`
 	RemoveReviewIDs                []string                `json:"removeReviewIDs,omitempty"`
 	ClearReviews                   *bool                   `json:"clearReviews,omitempty"`
+	AddIntegrationIDs              []string                `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs           []string                `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations              *bool                   `json:"clearIntegrations,omitempty"`
 	AddDiscussion                  *CreateDiscussionInput  `json:"addDiscussion,omitempty"`
 	UpdateDiscussion               *UpdateDiscussionsInput `json:"updateDiscussion,omitempty"`
 	DeleteDiscussion               *string                 `json:"deleteDiscussion,omitempty"`
@@ -43530,6 +43677,12 @@ type UpdateProcedureInput struct {
 	// This will contain the url used to create or update the procedure
 	URL      *string `json:"url,omitempty"`
 	ClearURL *bool   `json:"clearURL,omitempty"`
+	// Documents managed externally may have IDs we need to reference, this holds them
+	ExternalFileID      *string `json:"externalFileID,omitempty"`
+	ClearExternalFileID *bool   `json:"clearExternalFileID,omitempty"`
+	// The contents of externally managed files, if available
+	ExternalContents      *string `json:"externalContents,omitempty"`
+	ClearExternalContents *bool   `json:"clearExternalContents,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes      *string `json:"internalNotes,omitempty"`
 	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`

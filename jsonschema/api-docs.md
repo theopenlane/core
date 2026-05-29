@@ -130,6 +130,7 @@ Config contains the configuration for the core server
         "githubapp": {},
         "slack": {},
         "slackruntime": {},
+        "googledrive": {},
         "googleworkspace": {},
         "azureentraid": {},
         "microsoftteams": {},
@@ -1573,6 +1574,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |[**githubapp**](#integrationsgithubapp)|`object`|||
 |[**slack**](#integrationsslack)|`object`|||
 |[**slackruntime**](#integrationsslackruntime)|`object`|||
+|[**googledrive**](#integrationsgoogledrive)|`object`|||
 |[**googleworkspace**](#integrationsgoogleworkspace)|`object`|||
 |[**azureentraid**](#integrationsazureentraid)|`object`|||
 |[**microsoftteams**](#integrationsmicrosoftteams)|`object`|||
@@ -1589,6 +1591,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
     "githubapp": {},
     "slack": {},
     "slackruntime": {},
+    "googledrive": {},
     "googleworkspace": {},
     "azureentraid": {},
     "microsoftteams": {},
@@ -1649,6 +1652,18 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**webhookURL**|`string`|Slack incoming webhook URL for fire-and-forget system notifications<br/>||
 |**botToken**|`string`|Bot User OAuth Token for full Web API access to the platform workspace<br/>||
 |**defaultChannel**|`string`|Default channel id for system messages when no explicit channel is provided<br/>||
+
+**Additional Properties:** not allowed  
+<a name="integrationsgoogledrive"></a>
+### integrations\.googledrive: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**clientid**|`string`|||
+|**clientsecret**|`string`|||
+|**redirecturl**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="integrationsgoogleworkspace"></a>

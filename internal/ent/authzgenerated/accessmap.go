@@ -1845,6 +1845,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "vulnerability",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "internal_policies": {
+	ObjectType:      "internal_policy",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "reviews": {
 	ObjectType:      "review",
 	SkipEditCheck:   false,
@@ -2042,6 +2046,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "reviews": {
 	ObjectType:      "review",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "integrations": {
+	ObjectType:      "integration",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },

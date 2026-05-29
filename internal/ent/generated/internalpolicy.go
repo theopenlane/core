@@ -87,6 +87,10 @@ type InternalPolicy struct {
 	URL *string `json:"url,omitempty"`
 	// This will contain the most recent file id if this policy was created from a file
 	FileID *string `json:"file_id,omitempty"`
+	// Documents managed externally may have IDs we need to reference, this holds them
+	ExternalFileID *string `json:"external_file_id,omitempty"`
+	// The contents of externally managed files, if available
+	ExternalContents *string `json:"external_contents,omitempty"`
 	// the kind of the internal_policy
 	InternalPolicyKindName string `json:"internal_policy_kind_name,omitempty"`
 	// the kind of the internal_policy
@@ -162,11 +166,13 @@ type InternalPolicyEdges struct {
 	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
 	// Reviews holds the value of the reviews edge.
 	Reviews []*Review `json:"reviews,omitempty"`
+	// integration that manages this policy (if applicable)
+	Integrations []*Integration `json:"integrations,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [25]bool
+	loadedTypes [26]bool
 	// totalCount holds the count of the edges above.
-	totalCount [25]map[string]int
+	totalCount [26]map[string]int
 
 	namedBlockedGroups          map[string][]*Group
 	namedEditors                map[string][]*Group
@@ -186,6 +192,7 @@ type InternalPolicyEdges struct {
 	namedEntities               map[string][]*Entity
 	namedIdentityHolders        map[string][]*IdentityHolder
 	namedReviews                map[string][]*Review
+	namedIntegrations           map[string][]*Integration
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -427,6 +434,15 @@ func (e InternalPolicyEdges) ReviewsOrErr() ([]*Review, error) {
 	return nil, &NotLoadedError{edge: "reviews"}
 }
 
+// IntegrationsOrErr returns the Integrations value or an error if the edge
+// was not loaded in eager-loading.
+func (e InternalPolicyEdges) IntegrationsOrErr() ([]*Integration, error) {
+	if e.loadedTypes[25] {
+		return e.Integrations, nil
+	}
+	return nil, &NotLoadedError{edge: "integrations"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -436,7 +452,7 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case internalpolicy.FieldSystemOwned, internalpolicy.FieldApprovalRequired, internalpolicy.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldRevision, internalpolicy.FieldOwnerID, internalpolicy.FieldInternalNotes, internalpolicy.FieldSystemInternalID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldManagementMode, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency, internalpolicy.FieldApproverID, internalpolicy.FieldDelegateID, internalpolicy.FieldSummary, internalpolicy.FieldURL, internalpolicy.FieldFileID, internalpolicy.FieldInternalPolicyKindName, internalpolicy.FieldInternalPolicyKindID, internalpolicy.FieldEnvironmentName, internalpolicy.FieldEnvironmentID, internalpolicy.FieldScopeName, internalpolicy.FieldScopeID, internalpolicy.FieldExternalUUID:
+		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldRevision, internalpolicy.FieldOwnerID, internalpolicy.FieldInternalNotes, internalpolicy.FieldSystemInternalID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldManagementMode, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency, internalpolicy.FieldApproverID, internalpolicy.FieldDelegateID, internalpolicy.FieldSummary, internalpolicy.FieldURL, internalpolicy.FieldFileID, internalpolicy.FieldExternalFileID, internalpolicy.FieldExternalContents, internalpolicy.FieldInternalPolicyKindName, internalpolicy.FieldInternalPolicyKindID, internalpolicy.FieldEnvironmentName, internalpolicy.FieldEnvironmentID, internalpolicy.FieldScopeName, internalpolicy.FieldScopeID, internalpolicy.FieldExternalUUID:
 			values[i] = new(sql.NullString)
 		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt, internalpolicy.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -675,6 +691,20 @@ func (_m *InternalPolicy) assignValues(columns []string, values []any) error {
 				_m.FileID = new(string)
 				*_m.FileID = value.String
 			}
+		case internalpolicy.FieldExternalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_file_id", values[i])
+			} else if value.Valid {
+				_m.ExternalFileID = new(string)
+				*_m.ExternalFileID = value.String
+			}
+		case internalpolicy.FieldExternalContents:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_contents", values[i])
+			} else if value.Valid {
+				_m.ExternalContents = new(string)
+				*_m.ExternalContents = value.String
+			}
 		case internalpolicy.FieldInternalPolicyKindName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field internal_policy_kind_name", values[i])
@@ -869,6 +899,11 @@ func (_m *InternalPolicy) QueryReviews() *ReviewQuery {
 	return NewInternalPolicyClient(_m.config).QueryReviews(_m)
 }
 
+// QueryIntegrations queries the "integrations" edge of the InternalPolicy entity.
+func (_m *InternalPolicy) QueryIntegrations() *IntegrationQuery {
+	return NewInternalPolicyClient(_m.config).QueryIntegrations(_m)
+}
+
 // Update returns a builder for updating this InternalPolicy.
 // Note that you need to call InternalPolicy.Unwrap() before calling this method if this InternalPolicy
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -993,6 +1028,16 @@ func (_m *InternalPolicy) String() string {
 	builder.WriteString(", ")
 	if v := _m.FileID; v != nil {
 		builder.WriteString("file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.ExternalFileID; v != nil {
+		builder.WriteString("external_file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.ExternalContents; v != nil {
+		builder.WriteString("external_contents=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
@@ -1454,6 +1499,30 @@ func (_m *InternalPolicy) appendNamedReviews(name string, edges ...*Review) {
 		_m.Edges.namedReviews[name] = []*Review{}
 	} else {
 		_m.Edges.namedReviews[name] = append(_m.Edges.namedReviews[name], edges...)
+	}
+}
+
+// NamedIntegrations returns the Integrations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *InternalPolicy) NamedIntegrations(name string) ([]*Integration, error) {
+	if _m.Edges.namedIntegrations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *InternalPolicy) appendNamedIntegrations(name string, edges ...*Integration) {
+	if _m.Edges.namedIntegrations == nil {
+		_m.Edges.namedIntegrations = make(map[string][]*Integration)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrations[name] = []*Integration{}
+	} else {
+		_m.Edges.namedIntegrations[name] = append(_m.Edges.namedIntegrations[name], edges...)
 	}
 }
 
