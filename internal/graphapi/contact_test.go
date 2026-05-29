@@ -16,19 +16,25 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
 func TestQueryContact(t *testing.T) {
 	contact := (&ContactBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
+	// test scopes return error, this is also to test that write -> gives read
+	apiClientNoContactScope := setupAPIToken(sharedTestUser1.UserCtx, t, []string{"control:write"})
+	apiClientWithSpecificScope := setupAPIToken(sharedTestUser1.UserCtx, t, []string{"contact:write"})
+
 	testCases := []struct {
-		name     string
-		queryID  string
-		client   *testclient.TestClient
-		ctx      context.Context
-		expected *ent.Contact
-		errorMsg string
+		name      string
+		queryID   string
+		client    *testclient.TestClient
+		ctx       context.Context
+		expected  *ent.Contact
+		errorMsg  string
+		errorCode string
 	}{
 		{
 			name:    "happy path contact",
@@ -56,6 +62,20 @@ func TestQueryContact(t *testing.T) {
 			ctx:     context.Background(),
 		},
 		{
+			name:    "happy path contact, with api token with required scope",
+			queryID: contact.ID,
+			client:  apiClientWithSpecificScope,
+			ctx:     context.Background(),
+		},
+		{
+			name:      "api token without required scope",
+			queryID:   contact.ID,
+			client:    apiClientNoContactScope,
+			ctx:       context.Background(),
+			errorMsg:  missingScopeErrorMsg,
+			errorCode: gqlerrors.InsufficientScopes,
+		},
+		{
 			name:     "not found by api token from another org",
 			queryID:  contact.ID,
 			client:   suite.client.apiWithTokenOrg2,
@@ -76,11 +96,19 @@ func TestQueryContact(t *testing.T) {
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
+				errors := parseClientError(t, err)
+				for _, e := range errors {
+					if tc.errorCode != "" {
+						assertErrorCode(t, e, tc.errorCode)
+					}
+				}
+
 				return
 			}
 
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
+			assert.Assert(t, resp.Contact.ID == tc.queryID)
 		})
 	}
 
@@ -91,6 +119,10 @@ func TestQueryContacts(t *testing.T) {
 	contact1 := (&ContactBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	contact2 := (&ContactBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
+	// test scopes return error, this is also to test that write -> gives read
+	apiClientNoContactScope := setupAPIToken(sharedTestUser1.UserCtx, t, []string{"control:write"})
+	apiClientWithSpecificScope := setupAPIToken(sharedTestUser1.UserCtx, t, []string{"contact:write"})
+
 	// other tests like assessment responses may add contacts
 	// so we do not want to check length
 	testCases := []struct {
@@ -98,6 +130,8 @@ func TestQueryContacts(t *testing.T) {
 		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
+		errorMsg        string
+		errorCode       string
 	}{
 		{
 			name:   "happy path",
@@ -115,6 +149,18 @@ func TestQueryContacts(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
+			name:   "happy path, using api token with required scope",
+			client: apiClientWithSpecificScope,
+			ctx:    context.Background(),
+		},
+		{
+			name:      "api token without required scope",
+			client:    apiClientNoContactScope,
+			ctx:       context.Background(),
+			errorMsg:  missingScopeErrorMsg,
+			errorCode: gqlerrors.InsufficientScopes,
+		},
+		{
 			name:   "happy path, using pat",
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -129,6 +175,18 @@ func TestQueryContacts(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetAllContacts(tc.ctx)
+			if tc.errorMsg != "" {
+				assert.ErrorContains(t, err, tc.errorMsg)
+				errors := parseClientError(t, err)
+				for _, e := range errors {
+					if tc.errorCode != "" {
+						assertErrorCode(t, e, tc.errorCode)
+					}
+				}
+
+				return
+			}
+
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 		})

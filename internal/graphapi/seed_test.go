@@ -163,6 +163,11 @@ func (suite *GraphTestSuite) setupAPITokenClient(ctx context.Context, t *testing
 		}
 	}
 
+	return setupAPIToken(ctx, t, scopes)
+}
+
+// setupAPIToken takes scopes and returns an api client with those scopes set
+func setupAPIToken(ctx context.Context, t *testing.T, scopes []string) *testclient.TestClient {
 	apiToken := (&APITokenBuilder{client: suite.client, Scopes: scopes}).MustNew(ctx, t)
 
 	authHeaderAPIToken := testclient.Authorization{
