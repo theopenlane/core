@@ -510,6 +510,69 @@ func TestMutationUpdateOrgMemberRole(t *testing.T) {
 	cleanupOrganizationDataWithContext(org.owner.UserCtx, t)
 }
 
+func TestMutationBulkUpdateOrgMemberRole(t *testing.T) {
+	t.Parallel()
+
+	org := suite.seedFreshOrgUsers(t)
+	allowCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
+
+	user1 := suite.userBuilder(context.Background(), t)
+	user2 := suite.userBuilder(context.Background(), t)
+
+	suite.addUserToOrganization(org.owner.UserCtx, t, &user1, enums.RoleMember, org.owner.OrganizationID)
+	suite.addUserToOrganization(org.owner.UserCtx, t, &user2, enums.RoleMember, org.owner.OrganizationID)
+
+	currentMembers, err := suite.client.db.OrgMembership.Query().
+		Where(
+			orgmembership.OrganizationID(org.owner.OrganizationID),
+			orgmembership.UserIDIn(user1.ID, user2.ID),
+		).
+		All(allowCtx)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(currentMembers, 2))
+
+	ids := make([]string, len(currentMembers))
+	for i, member := range currentMembers {
+		ids[i] = member.ID
+	}
+
+	adminRole := enums.RoleAdmin
+
+	input := testclient.UpdateOrgMembershipInput{
+		Role: &adminRole,
+	}
+
+	for _, id := range ids {
+		_, err = suite.client.api.UpdateUserRoleInOrg(org.admin.UserCtx, id, input)
+		assert.NilError(t, err)
+	}
+
+	updatedMembers, err := suite.client.db.OrgMembership.Query().
+		Where(orgmembership.IDIn(ids...)).
+		All(allowCtx)
+	assert.NilError(t, err)
+
+	for _, member := range updatedMembers {
+		assert.Check(t, is.Equal(enums.RoleAdmin, member.Role))
+	}
+
+	ownerMember, err := suite.client.db.OrgMembership.Query().
+		Where(
+			orgmembership.OrganizationID(org.owner.OrganizationID),
+			orgmembership.UserID(org.owner.ID),
+		).
+		Only(allowCtx)
+	assert.NilError(t, err)
+
+	memberRole := enums.RoleMember
+	input.Role = &memberRole
+
+	_, err = suite.client.api.UpdateUserRoleInOrg(org.admin.UserCtx, ownerMember.ID, input)
+	assert.ErrorContains(t, err, hooks.ErrOrgOwnerCannotBeUpdated.Error())
+
+	cleanupOrganizationDataWithContext(org.owner.UserCtx, t)
+}
+
 func TestMutationDeleteOrgMembers(t *testing.T) {
 	t.Parallel()
 

@@ -3,6 +3,8 @@ package rule
 import (
 	"context"
 
+	"entgo.io/ent"
+
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -50,20 +52,41 @@ func AllowOrgMemberRoleUpdate() privacy.OrgMembershipMutationRuleFunc {
 			return privacy.Skip
 		}
 
-		id, ok := m.ID()
-		if !ok {
-			return privacy.Skip
+		var ids []string
+		var err error
+
+		switch {
+		case m.Op().Is(ent.OpUpdateOne):
+
+			if id, ok := m.ID(); ok {
+				ids = []string{id}
+			}
+
+		case m.Op().Is(ent.OpUpdate):
+
+			ids, err = m.IDs(ctx)
+			if err != nil {
+				return privacy.Skipf("unable to get org membership ids: %v", err)
+			}
 		}
 
-		member, err := m.Client().OrgMembership.Query().
-			Where(orgmembership.ID(id)).
+		if len(ids) == 0 {
+			ids, err = m.IDs(ctx)
+		}
+
+		members, err := m.Client().OrgMembership.Query().
+			Where(orgmembership.IDIn(ids...)).
 			Select(orgmembership.FieldOrganizationID, orgmembership.FieldRole).
-			Only(ctx)
+			All(ctx)
 		if err != nil {
 			return privacy.Skipf("unable to get org membership: %v", err)
 		}
 
-		if newRole == enums.RoleOwner || member.Role == enums.RoleOwner {
+		if len(members) == 0 {
+			return privacy.Allow
+		}
+
+		if newRole == enums.RoleOwner {
 			return privacy.Skip
 		}
 
@@ -72,35 +95,41 @@ func AllowOrgMemberRoleUpdate() privacy.OrgMembershipMutationRuleFunc {
 			return auth.ErrNoAuthUser
 		}
 
-		check := fgax.AccessCheck{
-			SubjectID:   caller.SubjectID,
-			SubjectType: caller.SubjectType(),
-			ObjectID:    member.OrganizationID,
-			Relation:    InviteRelationForRole(member.Role),
-			Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
-		}
+		for _, member := range members {
+			if member.Role == enums.RoleOwner {
+				return privacy.Skip
+			}
 
-		access, err := m.Authz.CheckOrgAccess(ctx, check)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Interface("tuple", check).Msg("unable to check role assignment access")
-			return privacy.Skipf("unable to check access: %v", err)
-		}
+			check := fgax.AccessCheck{
+				SubjectID:   caller.SubjectID,
+				SubjectType: caller.SubjectType(),
+				ObjectID:    member.OrganizationID,
+				Relation:    InviteRelationForRole(member.Role),
+				Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
+			}
 
-		if !access {
-			return generated.ErrPermissionDenied
-		}
+			access, err := m.Authz.CheckOrgAccess(ctx, check)
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Interface("tuple", check).Msg("unable to check role assignment access")
+				return privacy.Skipf("unable to check access: %v", err)
+			}
 
-		newRoleAccess := check
-		newRoleAccess.Relation = InviteRelationForRole(newRole)
+			if !access {
+				return generated.ErrPermissionDenied
+			}
 
-		access, err = m.Authz.CheckOrgAccess(ctx, newRoleAccess)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Interface("tuple", newRoleAccess).Msg("unable to check role assignment access")
-			return privacy.Skipf("unable to check access: %v", err)
-		}
+			newRoleAccess := check
+			newRoleAccess.Relation = InviteRelationForRole(newRole)
 
-		if !access {
-			return generated.ErrPermissionDenied
+			access, err = m.Authz.CheckOrgAccess(ctx, newRoleAccess)
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Interface("tuple", newRoleAccess).Msg("unable to check role assignment access")
+				return privacy.Skipf("unable to check access: %v", err)
+			}
+
+			if !access {
+				return generated.ErrPermissionDenied
+			}
 		}
 
 		return privacy.Allow

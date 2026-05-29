@@ -155,13 +155,19 @@ func HookBlockOwnerRoleChange() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			oldRole, err := getUserMembershipRole(ctx, m)
+			oldRoles, err := getUserMembershipRoles(ctx, m)
 			if err != nil {
 				return nil, err
 			}
 
-			if newRole == enums.RoleOwner || oldRole == enums.RoleOwner {
+			if newRole == enums.RoleOwner {
 				return nil, ErrOrgOwnerCannotBeUpdated
+			}
+
+			for _, oldRole := range oldRoles {
+				if oldRole == enums.RoleOwner {
+					return nil, ErrOrgOwnerCannotBeUpdated
+				}
 			}
 
 			return next.Mutate(ctx, m)
@@ -169,21 +175,44 @@ func HookBlockOwnerRoleChange() ent.Hook {
 	}, ent.OpUpdate|ent.OpUpdateOne)
 }
 
-func getUserMembershipRole(ctx context.Context, m *generated.OrgMembershipMutation) (enums.Role, error) {
-	id, ok := m.ID()
-	if !ok {
-		return "", fmt.Errorf("%w: %s", ErrInvalidInput, "id is required")
+func getUserMembershipRoles(ctx context.Context, m *generated.OrgMembershipMutation) ([]enums.Role, error) {
+	var ids []string
+	var err error
+
+	switch {
+	case m.Op().Is(ent.OpUpdateOne):
+		if id, exists := m.ID(); exists {
+			ids = []string{id}
+		}
+
+	case m.Op().Is(ent.OpUpdate):
+		ids, err = m.IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	member, err := m.Client().OrgMembership.Query().
-		Where(orgmembership.ID(id)).
-		Select(orgmembership.FieldRole).
-		Only(ctx)
+	if len(ids) == 0 {
+		ids, err = m.IDs(ctx)
+	}
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return member.Role, nil
+	members, err := m.Client().OrgMembership.Query().
+		Where(orgmembership.IDIn(ids...)).
+		Select(orgmembership.FieldRole).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	roles := make([]enums.Role, len(members))
+	for i, member := range members {
+		roles[i] = member.Role
+	}
+
+	return roles, nil
 }
 
 // HookOrgMembersDelete is a hook that runs during the delete operation of an org membership
