@@ -130,6 +130,11 @@ func (i InternalPolicy) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(i, Entity{}),
 		defaultEdgeToWithPagination(i, IdentityHolder{}),
 		defaultEdgeFromWithPagination(i, Review{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: i,
+			edgeSchema: Integration{},
+			comment:    "integration that manages this policy (if applicable)",
+		}),
 	}
 }
 
@@ -182,6 +187,7 @@ func (i InternalPolicy) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("component"),
 		),
+		entx.IntegrationMappingSchema().StockPersist(),
 	}
 }
 

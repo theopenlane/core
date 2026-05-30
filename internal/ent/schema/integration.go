@@ -174,6 +174,7 @@ func (i Integration) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(i, Event{}),
 		defaultEdgeToWithPagination(i, Finding{}),
 		defaultEdgeToWithPagination(i, Vulnerability{}),
+		defaultEdgeToWithPagination(i, InternalPolicy{}),
 		defaultEdgeToWithPagination(i, Review{}),
 		defaultEdgeToWithPagination(i, Remediation{}),
 		defaultEdgeToWithPagination(i, Task{}),

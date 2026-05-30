@@ -92,6 +92,10 @@ type InternalPolicyHistory struct {
 	URL *string `json:"url,omitempty"`
 	// This will contain the most recent file id if this policy was created from a file
 	FileID *string `json:"file_id,omitempty"`
+	// Documents managed externally may have IDs we need to reference, this holds them
+	ExternalFileID *string `json:"external_file_id,omitempty"`
+	// The contents of externally managed files, if available
+	ExternalContents *string `json:"external_contents,omitempty"`
 	// the kind of the internal_policy
 	InternalPolicyKindName string `json:"internal_policy_kind_name,omitempty"`
 	// the kind of the internal_policy
@@ -122,7 +126,7 @@ func (*InternalPolicyHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case internalpolicyhistory.FieldSystemOwned, internalpolicyhistory.FieldApprovalRequired, internalpolicyhistory.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldRevision, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldInternalNotes, internalpolicyhistory.FieldSystemInternalID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldManagementMode, internalpolicyhistory.FieldDetails, internalpolicyhistory.FieldReviewFrequency, internalpolicyhistory.FieldApproverID, internalpolicyhistory.FieldDelegateID, internalpolicyhistory.FieldSummary, internalpolicyhistory.FieldURL, internalpolicyhistory.FieldFileID, internalpolicyhistory.FieldInternalPolicyKindName, internalpolicyhistory.FieldInternalPolicyKindID, internalpolicyhistory.FieldEnvironmentName, internalpolicyhistory.FieldEnvironmentID, internalpolicyhistory.FieldScopeName, internalpolicyhistory.FieldScopeID, internalpolicyhistory.FieldExternalUUID:
+		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldRevision, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldInternalNotes, internalpolicyhistory.FieldSystemInternalID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldManagementMode, internalpolicyhistory.FieldDetails, internalpolicyhistory.FieldReviewFrequency, internalpolicyhistory.FieldApproverID, internalpolicyhistory.FieldDelegateID, internalpolicyhistory.FieldSummary, internalpolicyhistory.FieldURL, internalpolicyhistory.FieldFileID, internalpolicyhistory.FieldExternalFileID, internalpolicyhistory.FieldExternalContents, internalpolicyhistory.FieldInternalPolicyKindName, internalpolicyhistory.FieldInternalPolicyKindID, internalpolicyhistory.FieldEnvironmentName, internalpolicyhistory.FieldEnvironmentID, internalpolicyhistory.FieldScopeName, internalpolicyhistory.FieldScopeID, internalpolicyhistory.FieldExternalUUID:
 			values[i] = new(sql.NullString)
 		case internalpolicyhistory.FieldHistoryTime, internalpolicyhistory.FieldCreatedAt, internalpolicyhistory.FieldUpdatedAt, internalpolicyhistory.FieldDeletedAt, internalpolicyhistory.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -377,6 +381,20 @@ func (_m *InternalPolicyHistory) assignValues(columns []string, values []any) er
 				_m.FileID = new(string)
 				*_m.FileID = value.String
 			}
+		case internalpolicyhistory.FieldExternalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_file_id", values[i])
+			} else if value.Valid {
+				_m.ExternalFileID = new(string)
+				*_m.ExternalFileID = value.String
+			}
+		case internalpolicyhistory.FieldExternalContents:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_contents", values[i])
+			} else if value.Valid {
+				_m.ExternalContents = new(string)
+				*_m.ExternalContents = value.String
+			}
 		case internalpolicyhistory.FieldInternalPolicyKindName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field internal_policy_kind_name", values[i])
@@ -572,6 +590,16 @@ func (_m *InternalPolicyHistory) String() string {
 	builder.WriteString(", ")
 	if v := _m.FileID; v != nil {
 		builder.WriteString("file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.ExternalFileID; v != nil {
+		builder.WriteString("external_file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.ExternalContents; v != nil {
+		builder.WriteString("external_contents=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")

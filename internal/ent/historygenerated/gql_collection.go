@@ -251,6 +251,16 @@ func (_q *ActionPlanHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, actionplanhistory.FieldFileID)
 				fieldSeen[actionplanhistory.FieldFileID] = struct{}{}
 			}
+		case "externalFileID":
+			if _, ok := fieldSeen[actionplanhistory.FieldExternalFileID]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldExternalFileID)
+				fieldSeen[actionplanhistory.FieldExternalFileID] = struct{}{}
+			}
+		case "externalContents":
+			if _, ok := fieldSeen[actionplanhistory.FieldExternalContents]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldExternalContents)
+				fieldSeen[actionplanhistory.FieldExternalContents] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[actionplanhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, actionplanhistory.FieldOwnerID)
@@ -7270,6 +7280,16 @@ func (_q *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldFileID)
 				fieldSeen[internalpolicyhistory.FieldFileID] = struct{}{}
 			}
+		case "externalFileID":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldExternalFileID]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldExternalFileID)
+				fieldSeen[internalpolicyhistory.FieldExternalFileID] = struct{}{}
+			}
+		case "externalContents":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldExternalContents]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldExternalContents)
+				fieldSeen[internalpolicyhistory.FieldExternalContents] = struct{}{}
+			}
 		case "internalPolicyKindName":
 			if _, ok := fieldSeen[internalpolicyhistory.FieldInternalPolicyKindName]; !ok {
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldInternalPolicyKindName)
@@ -9916,6 +9936,16 @@ func (_q *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[procedurehistory.FieldFileID]; !ok {
 				selectedFields = append(selectedFields, procedurehistory.FieldFileID)
 				fieldSeen[procedurehistory.FieldFileID] = struct{}{}
+			}
+		case "externalFileID":
+			if _, ok := fieldSeen[procedurehistory.FieldExternalFileID]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldExternalFileID)
+				fieldSeen[procedurehistory.FieldExternalFileID] = struct{}{}
+			}
+		case "externalContents":
+			if _, ok := fieldSeen[procedurehistory.FieldExternalContents]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldExternalContents)
+				fieldSeen[procedurehistory.FieldExternalContents] = struct{}{}
 			}
 		case "systemOwned":
 			if _, ok := fieldSeen[procedurehistory.FieldSystemOwned]; !ok {

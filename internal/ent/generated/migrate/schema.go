@@ -74,7 +74,7 @@ var (
 		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
 		{Name: "name", Type: field.TypeString},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED", "PENDING"}, Default: "DRAFT"},
-		{Name: "management_mode", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPENLANE_MANAGED", "EXTERNAL_REFERENCE"}, Default: "OPENLANE_MANAGED"},
+		{Name: "management_mode", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPENLANE_MANAGED", "EXTERNAL_REFERENCE", "INTEGRATION"}, Default: "OPENLANE_MANAGED"},
 		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details_json", Type: field.TypeJSON, Nullable: true},
 		{Name: "approval_required", Type: field.TypeBool, Nullable: true, Default: true},
@@ -88,6 +88,8 @@ var (
 		{Name: "improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "dismissed_improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "url", Type: field.TypeString, Nullable: true},
+		{Name: "external_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "external_contents", Type: field.TypeString, Nullable: true},
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
@@ -121,49 +123,49 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "action_plans_groups_approver",
-				Columns:    []*schema.Column{ActionPlansColumns[41]},
+				Columns:    []*schema.Column{ActionPlansColumns[43]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_groups_delegate",
-				Columns:    []*schema.Column{ActionPlansColumns[42]},
+				Columns:    []*schema.Column{ActionPlansColumns[44]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_custom_type_enums_action_plan_kind",
-				Columns:    []*schema.Column{ActionPlansColumns[43]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "action_plans_files_file",
-				Columns:    []*schema.Column{ActionPlansColumns[44]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "action_plans_custom_type_enums_action_plans",
 				Columns:    []*schema.Column{ActionPlansColumns[45]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "action_plans_organizations_action_plans",
+				Symbol:     "action_plans_files_file",
 				Columns:    []*schema.Column{ActionPlansColumns[46]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "action_plans_custom_type_enums_action_plans",
+				Columns:    []*schema.Column{ActionPlansColumns[47]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "action_plans_organizations_action_plans",
+				Columns:    []*schema.Column{ActionPlansColumns[48]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_subcontrols_action_plans",
-				Columns:    []*schema.Column{ActionPlansColumns[47]},
+				Columns:    []*schema.Column{ActionPlansColumns[49]},
 				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_users_action_plans",
-				Columns:    []*schema.Column{ActionPlansColumns[48]},
+				Columns:    []*schema.Column{ActionPlansColumns[50]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -172,7 +174,7 @@ var (
 			{
 				Name:    "actionplan_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ActionPlansColumns[46]},
+				Columns: []*schema.Column{ActionPlansColumns[48]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4475,7 +4477,7 @@ var (
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED", "PENDING"}, Default: "DRAFT"},
-		{Name: "management_mode", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPENLANE_MANAGED", "EXTERNAL_REFERENCE"}, Default: "OPENLANE_MANAGED"},
+		{Name: "management_mode", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPENLANE_MANAGED", "EXTERNAL_REFERENCE", "INTEGRATION"}, Default: "OPENLANE_MANAGED"},
 		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details_json", Type: field.TypeJSON, Nullable: true},
 		{Name: "approval_required", Type: field.TypeBool, Nullable: true, Default: true},
@@ -4489,6 +4491,8 @@ var (
 		{Name: "improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "dismissed_improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "url", Type: field.TypeString, Nullable: true},
+		{Name: "external_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "external_contents", Type: field.TypeString, Nullable: true},
 		{Name: "internal_policy_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "environment_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
@@ -4511,49 +4515,49 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "internal_policies_custom_type_enums_internal_policies",
-				Columns:    []*schema.Column{InternalPoliciesColumns[34]},
+				Columns:    []*schema.Column{InternalPoliciesColumns[36]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "internal_policies_groups_approver",
-				Columns:    []*schema.Column{InternalPoliciesColumns[35]},
+				Columns:    []*schema.Column{InternalPoliciesColumns[37]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "internal_policies_groups_delegate",
-				Columns:    []*schema.Column{InternalPoliciesColumns[36]},
+				Columns:    []*schema.Column{InternalPoliciesColumns[38]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "internal_policies_custom_type_enums_internal_policy_kind",
-				Columns:    []*schema.Column{InternalPoliciesColumns[37]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "internal_policies_custom_type_enums_environment",
-				Columns:    []*schema.Column{InternalPoliciesColumns[38]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "internal_policies_custom_type_enums_scope",
 				Columns:    []*schema.Column{InternalPoliciesColumns[39]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "internal_policies_files_file",
+				Symbol:     "internal_policies_custom_type_enums_environment",
 				Columns:    []*schema.Column{InternalPoliciesColumns[40]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "internal_policies_custom_type_enums_scope",
+				Columns:    []*schema.Column{InternalPoliciesColumns[41]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "internal_policies_files_file",
+				Columns:    []*schema.Column{InternalPoliciesColumns[42]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "internal_policies_organizations_internal_policies",
-				Columns:    []*schema.Column{InternalPoliciesColumns[41]},
+				Columns:    []*schema.Column{InternalPoliciesColumns[43]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4562,12 +4566,12 @@ var (
 			{
 				Name:    "internalpolicy_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{InternalPoliciesColumns[7], InternalPoliciesColumns[41]},
+				Columns: []*schema.Column{InternalPoliciesColumns[7], InternalPoliciesColumns[43]},
 			},
 			{
 				Name:    "internalpolicy_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{InternalPoliciesColumns[41]},
+				Columns: []*schema.Column{InternalPoliciesColumns[43]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4575,7 +4579,7 @@ var (
 			{
 				Name:    "internalpolicy_external_uuid_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{InternalPoliciesColumns[33], InternalPoliciesColumns[41]},
+				Columns: []*schema.Column{InternalPoliciesColumns[35], InternalPoliciesColumns[43]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6082,7 +6086,7 @@ var (
 		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
 		{Name: "name", Type: field.TypeString},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED", "PENDING"}, Default: "DRAFT"},
-		{Name: "management_mode", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPENLANE_MANAGED", "EXTERNAL_REFERENCE"}, Default: "OPENLANE_MANAGED"},
+		{Name: "management_mode", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPENLANE_MANAGED", "EXTERNAL_REFERENCE", "INTEGRATION"}, Default: "OPENLANE_MANAGED"},
 		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details_json", Type: field.TypeJSON, Nullable: true},
 		{Name: "approval_required", Type: field.TypeBool, Nullable: true, Default: true},
@@ -6096,6 +6100,8 @@ var (
 		{Name: "improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "dismissed_improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "url", Type: field.TypeString, Nullable: true},
+		{Name: "external_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "external_contents", Type: field.TypeString, Nullable: true},
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
@@ -6121,55 +6127,55 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "procedures_control_objectives_procedures",
-				Columns:    []*schema.Column{ProceduresColumns[33]},
+				Columns:    []*schema.Column{ProceduresColumns[35]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "procedures_custom_type_enums_procedures",
-				Columns:    []*schema.Column{ProceduresColumns[34]},
+				Columns:    []*schema.Column{ProceduresColumns[36]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "procedures_organizations_procedures",
-				Columns:    []*schema.Column{ProceduresColumns[35]},
+				Columns:    []*schema.Column{ProceduresColumns[37]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "procedures_groups_approver",
-				Columns:    []*schema.Column{ProceduresColumns[36]},
+				Columns:    []*schema.Column{ProceduresColumns[38]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "procedures_groups_delegate",
-				Columns:    []*schema.Column{ProceduresColumns[37]},
+				Columns:    []*schema.Column{ProceduresColumns[39]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "procedures_custom_type_enums_procedure_kind",
-				Columns:    []*schema.Column{ProceduresColumns[38]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "procedures_custom_type_enums_environment",
-				Columns:    []*schema.Column{ProceduresColumns[39]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "procedures_custom_type_enums_scope",
 				Columns:    []*schema.Column{ProceduresColumns[40]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "procedures_files_file",
+				Symbol:     "procedures_custom_type_enums_environment",
 				Columns:    []*schema.Column{ProceduresColumns[41]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "procedures_custom_type_enums_scope",
+				Columns:    []*schema.Column{ProceduresColumns[42]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "procedures_files_file",
+				Columns:    []*schema.Column{ProceduresColumns[43]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6178,12 +6184,12 @@ var (
 			{
 				Name:    "procedure_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ProceduresColumns[7], ProceduresColumns[35]},
+				Columns: []*schema.Column{ProceduresColumns[7], ProceduresColumns[37]},
 			},
 			{
 				Name:    "procedure_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ProceduresColumns[35]},
+				Columns: []*schema.Column{ProceduresColumns[37]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -11177,6 +11183,31 @@ var (
 			},
 		},
 	}
+	// IntegrationInternalPoliciesColumns holds the columns for the "integration_internal_policies" table.
+	IntegrationInternalPoliciesColumns = []*schema.Column{
+		{Name: "integration_id", Type: field.TypeString},
+		{Name: "internal_policy_id", Type: field.TypeString},
+	}
+	// IntegrationInternalPoliciesTable holds the schema information for the "integration_internal_policies" table.
+	IntegrationInternalPoliciesTable = &schema.Table{
+		Name:       "integration_internal_policies",
+		Columns:    IntegrationInternalPoliciesColumns,
+		PrimaryKey: []*schema.Column{IntegrationInternalPoliciesColumns[0], IntegrationInternalPoliciesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "integration_internal_policies_integration_id",
+				Columns:    []*schema.Column{IntegrationInternalPoliciesColumns[0]},
+				RefColumns: []*schema.Column{IntegrationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "integration_internal_policies_internal_policy_id",
+				Columns:    []*schema.Column{IntegrationInternalPoliciesColumns[1]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// IntegrationReviewsColumns holds the columns for the "integration_reviews" table.
 	IntegrationReviewsColumns = []*schema.Column{
 		{Name: "integration_id", Type: field.TypeString},
@@ -14284,6 +14315,7 @@ var (
 		IntegrationEventsTable,
 		IntegrationFindingsTable,
 		IntegrationVulnerabilitiesTable,
+		IntegrationInternalPoliciesTable,
 		IntegrationReviewsTable,
 		IntegrationRemediationsTable,
 		IntegrationActionPlansTable,
@@ -15162,6 +15194,8 @@ func init() {
 	IntegrationFindingsTable.ForeignKeys[1].RefTable = FindingsTable
 	IntegrationVulnerabilitiesTable.ForeignKeys[0].RefTable = IntegrationsTable
 	IntegrationVulnerabilitiesTable.ForeignKeys[1].RefTable = VulnerabilitiesTable
+	IntegrationInternalPoliciesTable.ForeignKeys[0].RefTable = IntegrationsTable
+	IntegrationInternalPoliciesTable.ForeignKeys[1].RefTable = InternalPoliciesTable
 	IntegrationReviewsTable.ForeignKeys[0].RefTable = IntegrationsTable
 	IntegrationReviewsTable.ForeignKeys[1].RefTable = ReviewsTable
 	IntegrationRemediationsTable.ForeignKeys[0].RefTable = IntegrationsTable

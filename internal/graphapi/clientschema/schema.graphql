@@ -507,6 +507,14 @@ type ActionPlan implements Node {
 	"""
 	fileID: ID
 	"""
+	Documents managed externally may have IDs we need to reference, this holds them
+	"""
+	externalFileID: String
+	"""
+	The contents of externally managed files, if available
+	"""
+	externalContents: String
+	"""
 	the ID of the organization owner of the object
 	"""
 	ownerID: ID
@@ -1120,6 +1128,7 @@ ActionPlanDocumentManagementMode is enum for the field management_mode
 enum ActionPlanDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
 	OPENLANE_MANAGED
 	EXTERNAL_REFERENCE
+	INTEGRATION
 }
 """
 ActionPlanDocumentStatus is enum for the field status
@@ -1459,6 +1468,42 @@ input ActionPlanWhereInput {
 	fileIDNotNil: Boolean
 	fileIDEqualFold: ID
 	fileIDContainsFold: ID
+	"""
+	external_file_id field predicates
+	"""
+	externalFileID: String
+	externalFileIDNEQ: String
+	externalFileIDIn: [String!]
+	externalFileIDNotIn: [String!]
+	externalFileIDGT: String
+	externalFileIDGTE: String
+	externalFileIDLT: String
+	externalFileIDLTE: String
+	externalFileIDContains: String
+	externalFileIDHasPrefix: String
+	externalFileIDHasSuffix: String
+	externalFileIDIsNil: Boolean
+	externalFileIDNotNil: Boolean
+	externalFileIDEqualFold: String
+	externalFileIDContainsFold: String
+	"""
+	external_contents field predicates
+	"""
+	externalContents: String
+	externalContentsNEQ: String
+	externalContentsIn: [String!]
+	externalContentsNotIn: [String!]
+	externalContentsGT: String
+	externalContentsGTE: String
+	externalContentsLT: String
+	externalContentsLTE: String
+	externalContentsContains: String
+	externalContentsHasPrefix: String
+	externalContentsHasSuffix: String
+	externalContentsIsNil: Boolean
+	externalContentsNotNil: Boolean
+	externalContentsEqualFold: String
+	externalContentsContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -11654,6 +11699,14 @@ input CreateActionPlanInput {
 	"""
 	url: String
 	"""
+	Documents managed externally may have IDs we need to reference, this holds them
+	"""
+	externalFileID: String
+	"""
+	The contents of externally managed files, if available
+	"""
+	externalContents: String
+	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""
 	internalNotes: String @readOnly
@@ -14334,6 +14387,14 @@ input CreateInternalPolicyInput {
 	"""
 	url: String
 	"""
+	Documents managed externally may have IDs we need to reference, this holds them
+	"""
+	externalFileID: String
+	"""
+	The contents of externally managed files, if available
+	"""
+	externalContents: String
+	"""
 	the kind of the internal_policy
 	"""
 	internalPolicyKindName: String
@@ -14378,6 +14439,7 @@ input CreateInternalPolicyInput {
 	entityIDs: [ID!]
 	identityHolderIDs: [ID!]
 	reviewIDs: [ID!]
+	integrationIDs: [ID!]
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -15562,6 +15624,14 @@ input CreateProcedureInput {
 	This will contain the url used to create or update the procedure
 	"""
 	url: String
+	"""
+	Documents managed externally may have IDs we need to reference, this holds them
+	"""
+	externalFileID: String
+	"""
+	The contents of externally managed files, if available
+	"""
+	externalContents: String
 	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""
@@ -37466,6 +37536,37 @@ type Integration implements Node {
 		"""
 		where: VulnerabilityWhereInput
 	): VulnerabilityConnection!
+	internalPolicies(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
+
+		"""
+		Filtering options for InternalPolicies returned from the connection.
+		"""
+		where: InternalPolicyWhereInput
+	): InternalPolicyConnection!
 	reviews(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -38401,6 +38502,11 @@ input IntegrationWhereInput {
 	hasVulnerabilities: Boolean
 	hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
 	"""
+	internal_policies edge predicates
+	"""
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
+	"""
 	reviews edge predicates
 	"""
 	hasReviews: Boolean
@@ -38587,6 +38693,14 @@ type InternalPolicy implements Node {
 	This will contain the most recent file id if this policy was created from a file
 	"""
 	fileID: ID
+	"""
+	Documents managed externally may have IDs we need to reference, this holds them
+	"""
+	externalFileID: String
+	"""
+	The contents of externally managed files, if available
+	"""
+	externalContents: String
 	"""
 	the kind of the internal_policy
 	"""
@@ -39190,6 +39304,37 @@ type InternalPolicy implements Node {
 		"""
 		where: ReviewWhereInput
 	): ReviewConnection!
+	integrations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Integrations returned from the connection.
+		"""
+		orderBy: [IntegrationOrder!]
+
+		"""
+		Filtering options for Integrations returned from the connection.
+		"""
+		where: IntegrationWhereInput
+	): IntegrationConnection!
 	"""
 	Indicates if this internalPolicy has pending changes awaiting workflow approval
 	"""
@@ -39206,6 +39351,11 @@ type InternalPolicy implements Node {
 	Returns the workflow event timeline for this internalPolicy across all workflow instances
 	"""
 	workflowTimeline(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [WorkflowEventOrder!], where: WorkflowEventWhereInput, includeEmitFailures: Boolean): WorkflowEventConnection!
+	"""
+	Live external document contents fetched from the integration provider (e.g. Google Drive HTML export).
+	Only populated when managementMode is INTEGRATION and an externalFileID is set.
+	"""
+	liveExternalContents: String
 }
 """
 Return response for createBulkInternalPolicy mutation
@@ -39287,6 +39437,7 @@ InternalPolicyDocumentManagementMode is enum for the field management_mode
 enum InternalPolicyDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
 	OPENLANE_MANAGED
 	EXTERNAL_REFERENCE
+	INTEGRATION
 }
 """
 InternalPolicyDocumentStatus is enum for the field status
@@ -39691,6 +39842,42 @@ input InternalPolicyWhereInput {
 	fileIDEqualFold: ID
 	fileIDContainsFold: ID
 	"""
+	external_file_id field predicates
+	"""
+	externalFileID: String
+	externalFileIDNEQ: String
+	externalFileIDIn: [String!]
+	externalFileIDNotIn: [String!]
+	externalFileIDGT: String
+	externalFileIDGTE: String
+	externalFileIDLT: String
+	externalFileIDLTE: String
+	externalFileIDContains: String
+	externalFileIDHasPrefix: String
+	externalFileIDHasSuffix: String
+	externalFileIDIsNil: Boolean
+	externalFileIDNotNil: Boolean
+	externalFileIDEqualFold: String
+	externalFileIDContainsFold: String
+	"""
+	external_contents field predicates
+	"""
+	externalContents: String
+	externalContentsNEQ: String
+	externalContentsIn: [String!]
+	externalContentsNotIn: [String!]
+	externalContentsGT: String
+	externalContentsGTE: String
+	externalContentsLT: String
+	externalContentsLTE: String
+	externalContentsContains: String
+	externalContentsHasPrefix: String
+	externalContentsHasSuffix: String
+	externalContentsIsNil: Boolean
+	externalContentsNotNil: Boolean
+	externalContentsEqualFold: String
+	externalContentsContainsFold: String
+	"""
 	internal_policy_kind_name field predicates
 	"""
 	internalPolicyKindName: String
@@ -39948,6 +40135,11 @@ input InternalPolicyWhereInput {
 	"""
 	hasReviews: Boolean
 	hasReviewsWith: [ReviewWhereInput!]
+	"""
+	integrations edge predicates
+	"""
+	hasIntegrations: Boolean
+	hasIntegrationsWith: [IntegrationWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -62437,6 +62629,14 @@ type Procedure implements Node {
 	"""
 	fileID: ID
 	"""
+	Documents managed externally may have IDs we need to reference, this holds them
+	"""
+	externalFileID: String
+	"""
+	The contents of externally managed files, if available
+	"""
+	externalContents: String
+	"""
 	indicates if the record is owned by the the openlane system and not by an organization
 	"""
 	systemOwned: Boolean
@@ -62958,6 +63158,7 @@ ProcedureDocumentManagementMode is enum for the field management_mode
 enum ProcedureDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
 	OPENLANE_MANAGED
 	EXTERNAL_REFERENCE
+	INTEGRATION
 }
 """
 ProcedureDocumentStatus is enum for the field status
@@ -63318,6 +63519,42 @@ input ProcedureWhereInput {
 	fileIDNotNil: Boolean
 	fileIDEqualFold: ID
 	fileIDContainsFold: ID
+	"""
+	external_file_id field predicates
+	"""
+	externalFileID: String
+	externalFileIDNEQ: String
+	externalFileIDIn: [String!]
+	externalFileIDNotIn: [String!]
+	externalFileIDGT: String
+	externalFileIDGTE: String
+	externalFileIDLT: String
+	externalFileIDLTE: String
+	externalFileIDContains: String
+	externalFileIDHasPrefix: String
+	externalFileIDHasSuffix: String
+	externalFileIDIsNil: Boolean
+	externalFileIDNotNil: Boolean
+	externalFileIDEqualFold: String
+	externalFileIDContainsFold: String
+	"""
+	external_contents field predicates
+	"""
+	externalContents: String
+	externalContentsNEQ: String
+	externalContentsIn: [String!]
+	externalContentsNotIn: [String!]
+	externalContentsGT: String
+	externalContentsGTE: String
+	externalContentsLT: String
+	externalContentsLTE: String
+	externalContentsContains: String
+	externalContentsHasPrefix: String
+	externalContentsHasSuffix: String
+	externalContentsIsNil: Boolean
+	externalContentsNotNil: Boolean
+	externalContentsEqualFold: String
+	externalContentsContainsFold: String
 	"""
 	system_owned field predicates
 	"""
@@ -88374,6 +88611,16 @@ input UpdateActionPlanInput {
 	url: String
 	clearURL: Boolean
 	"""
+	Documents managed externally may have IDs we need to reference, this holds them
+	"""
+	externalFileID: String
+	clearExternalFileID: Boolean
+	"""
+	The contents of externally managed files, if available
+	"""
+	externalContents: String
+	clearExternalContents: Boolean
+	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""
 	internalNotes: String @readOnly
@@ -92038,6 +92285,16 @@ input UpdateInternalPolicyInput {
 	url: String
 	clearURL: Boolean
 	"""
+	Documents managed externally may have IDs we need to reference, this holds them
+	"""
+	externalFileID: String
+	clearExternalFileID: Boolean
+	"""
+	The contents of externally managed files, if available
+	"""
+	externalContents: String
+	clearExternalContents: Boolean
+	"""
 	the kind of the internal_policy
 	"""
 	internalPolicyKindName: String
@@ -92130,6 +92387,9 @@ input UpdateInternalPolicyInput {
 	addReviewIDs: [ID!]
 	removeReviewIDs: [ID!]
 	clearReviews: Boolean
+	addIntegrationIDs: [ID!]
+	removeIntegrationIDs: [ID!]
+	clearIntegrations: Boolean
 	addDiscussion: CreateDiscussionInput
 	updateDiscussion: UpdateDiscussionsInput
 	deleteDiscussion: ID
@@ -93842,6 +94102,16 @@ input UpdateProcedureInput {
 	"""
 	url: String
 	clearURL: Boolean
+	"""
+	Documents managed externally may have IDs we need to reference, this holds them
+	"""
+	externalFileID: String
+	clearExternalFileID: Boolean
+	"""
+	The contents of externally managed files, if available
+	"""
+	externalContents: String
+	clearExternalContents: Boolean
 	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""

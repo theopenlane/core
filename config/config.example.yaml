@@ -165,6 +165,10 @@ integrations:
         appslug: ""
         privatekey: ""
         webhooksecret: ""
+    googledrive:
+        clientid: ""
+        clientsecret: ""
+        redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     googleworkspace:
         clientid: ""
         clientsecret: ""

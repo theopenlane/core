@@ -995,6 +995,15 @@ data:
         defaultChannel: {{ .Values.openlane.coreConfiguration.integrations.slackruntime.defaultChannel | quote }}
         {{- end }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.googledrive }}
+      googledrive:
+        {{- if .Values.openlane.coreConfiguration.integrations.googledrive.clientid }}
+        clientid: {{ .Values.openlane.coreConfiguration.integrations.googledrive.clientid | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.googledrive.redirecturl }}
+        redirecturl: {{ .Values.openlane.coreConfiguration.integrations.googledrive.redirecturl | quote }}
+        {{- end }}
+      {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.googleworkspace }}
       googleworkspace:
         {{- if .Values.openlane.coreConfiguration.integrations.googleworkspace.clientid }}

@@ -196,6 +196,8 @@ type CreateActionPlanInput struct {
 	ImprovementSuggestions          []string
 	DismissedImprovementSuggestions []string
 	URL                             *string
+	ExternalFileID                  *string
+	ExternalContents                *string
 	InternalNotes                   *string
 	SystemInternalID                *string
 	ActionPlanKindName              *string
@@ -282,6 +284,12 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.URL; v != nil {
 		m.SetURL(*v)
+	}
+	if v := i.ExternalFileID; v != nil {
+		m.SetExternalFileID(*v)
+	}
+	if v := i.ExternalContents; v != nil {
+		m.SetExternalContents(*v)
 	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
@@ -434,6 +442,10 @@ type UpdateActionPlanInput struct {
 	AppendDismissedImprovementSuggestions []string
 	ClearURL                              bool
 	URL                                   *string
+	ClearExternalFileID                   bool
+	ExternalFileID                        *string
+	ClearExternalContents                 bool
+	ExternalContents                      *string
 	ClearInternalNotes                    bool
 	InternalNotes                         *string
 	ClearSystemInternalID                 bool
@@ -637,6 +649,18 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.URL; v != nil {
 		m.SetURL(*v)
+	}
+	if i.ClearExternalFileID {
+		m.ClearExternalFileID()
+	}
+	if v := i.ExternalFileID; v != nil {
+		m.SetExternalFileID(*v)
+	}
+	if i.ClearExternalContents {
+		m.ClearExternalContents()
+	}
+	if v := i.ExternalContents; v != nil {
+		m.SetExternalContents(*v)
 	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
@@ -12970,6 +12994,8 @@ type CreateInternalPolicyInput struct {
 	ImprovementSuggestions          []string
 	DismissedImprovementSuggestions []string
 	URL                             *string
+	ExternalFileID                  *string
+	ExternalContents                *string
 	InternalPolicyKindName          *string
 	EnvironmentName                 *string
 	ScopeName                       *string
@@ -13000,6 +13026,7 @@ type CreateInternalPolicyInput struct {
 	EntityIDs                       []string
 	IdentityHolderIDs               []string
 	ReviewIDs                       []string
+	IntegrationIDs                  []string
 }
 
 // Mutate applies the CreateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -13058,6 +13085,12 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.URL; v != nil {
 		m.SetURL(*v)
+	}
+	if v := i.ExternalFileID; v != nil {
+		m.SetExternalFileID(*v)
+	}
+	if v := i.ExternalContents; v != nil {
+		m.SetExternalContents(*v)
 	}
 	if v := i.InternalPolicyKindName; v != nil {
 		m.SetInternalPolicyKindName(*v)
@@ -13149,6 +13182,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.ReviewIDs; len(v) > 0 {
 		m.AddReviewIDs(v...)
 	}
+	if v := i.IntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateInternalPolicyInput on the InternalPolicyCreate builder.
@@ -13204,6 +13240,10 @@ type UpdateInternalPolicyInput struct {
 	AppendDismissedImprovementSuggestions []string
 	ClearURL                              bool
 	URL                                   *string
+	ClearExternalFileID                   bool
+	ExternalFileID                        *string
+	ClearExternalContents                 bool
+	ExternalContents                      *string
 	ClearInternalPolicyKindName           bool
 	InternalPolicyKindName                *string
 	ClearEnvironmentName                  bool
@@ -13282,6 +13322,9 @@ type UpdateInternalPolicyInput struct {
 	ClearReviews                          bool
 	AddReviewIDs                          []string
 	RemoveReviewIDs                       []string
+	ClearIntegrations                     bool
+	AddIntegrationIDs                     []string
+	RemoveIntegrationIDs                  []string
 }
 
 // Mutate applies the UpdateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -13420,6 +13463,18 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.URL; v != nil {
 		m.SetURL(*v)
+	}
+	if i.ClearExternalFileID {
+		m.ClearExternalFileID()
+	}
+	if v := i.ExternalFileID; v != nil {
+		m.SetExternalFileID(*v)
+	}
+	if i.ClearExternalContents {
+		m.ClearExternalContents()
+	}
+	if v := i.ExternalContents; v != nil {
+		m.SetExternalContents(*v)
 	}
 	if i.ClearInternalPolicyKindName {
 		m.ClearInternalPolicyKindName()
@@ -13654,6 +13709,15 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.RemoveReviewIDs; len(v) > 0 {
 		m.RemoveReviewIDs(v...)
+	}
+	if i.ClearIntegrations {
+		m.ClearIntegrations()
+	}
+	if v := i.AddIntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+	if v := i.RemoveIntegrationIDs; len(v) > 0 {
+		m.RemoveIntegrationIDs(v...)
 	}
 }
 
@@ -20162,6 +20226,8 @@ type CreateProcedureInput struct {
 	ImprovementSuggestions          []string
 	DismissedImprovementSuggestions []string
 	URL                             *string
+	ExternalFileID                  *string
+	ExternalContents                *string
 	InternalNotes                   *string
 	SystemInternalID                *string
 	ProcedureKindName               *string
@@ -20239,6 +20305,12 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.URL; v != nil {
 		m.SetURL(*v)
+	}
+	if v := i.ExternalFileID; v != nil {
+		m.SetExternalFileID(*v)
+	}
+	if v := i.ExternalContents; v != nil {
+		m.SetExternalContents(*v)
 	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
@@ -20366,6 +20438,10 @@ type UpdateProcedureInput struct {
 	AppendDismissedImprovementSuggestions []string
 	ClearURL                              bool
 	URL                                   *string
+	ClearExternalFileID                   bool
+	ExternalFileID                        *string
+	ClearExternalContents                 bool
+	ExternalContents                      *string
 	ClearInternalNotes                    bool
 	InternalNotes                         *string
 	ClearSystemInternalID                 bool
@@ -20554,6 +20630,18 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.URL; v != nil {
 		m.SetURL(*v)
+	}
+	if i.ClearExternalFileID {
+		m.ClearExternalFileID()
+	}
+	if v := i.ExternalFileID; v != nil {
+		m.SetExternalFileID(*v)
+	}
+	if i.ClearExternalContents {
+		m.ClearExternalContents()
+	}
+	if v := i.ExternalContents; v != nil {
+		m.SetExternalContents(*v)
 	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()

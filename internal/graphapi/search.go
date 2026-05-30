@@ -126,6 +126,8 @@ func adminSearchActionPlans(ctx context.Context, query string, after *entgql.Cur
 				},
 				actionplan.URLContainsFold(query),                // search by URL
 				actionplan.FileIDContainsFold(query),             // search by FileID
+				actionplan.ExternalFileIDContainsFold(query),     // search by ExternalFileID
+				actionplan.ExternalContentsContainsFold(query),   // search by ExternalContents
 				actionplan.OwnerIDContainsFold(query),            // search by OwnerID
 				actionplan.InternalNotesContainsFold(query),      // search by InternalNotes
 				actionplan.SystemInternalIDContainsFold(query),   // search by SystemInternalID
@@ -136,11 +138,11 @@ func adminSearchActionPlans(ctx context.Context, query string, after *entgql.Cur
 				actionplan.BlockerReasonContainsFold(query),      // search by BlockerReason
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(metadata)::text LIKE $25", likeQuery)) // search by Metadata
+					s.Where(sql.ExprP("(metadata)::text LIKE $27", likeQuery)) // search by Metadata
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(raw_payload)::text LIKE $26", likeQuery)) // search by RawPayload
+					s.Where(sql.ExprP("(raw_payload)::text LIKE $28", likeQuery)) // search by RawPayload
 				},
 				actionplan.SourceContainsFold(query), // search by Source
 			),
@@ -1140,6 +1142,8 @@ func adminSearchInternalPolicies(ctx context.Context, query string, after *entgq
 				},
 				internalpolicy.URLContainsFold(query),                    // search by URL
 				internalpolicy.FileIDContainsFold(query),                 // search by FileID
+				internalpolicy.ExternalFileIDContainsFold(query),         // search by ExternalFileID
+				internalpolicy.ExternalContentsContainsFold(query),       // search by ExternalContents
 				internalpolicy.InternalPolicyKindNameContainsFold(query), // search by InternalPolicyKindName
 				internalpolicy.InternalPolicyKindIDContainsFold(query),   // search by InternalPolicyKindID
 				internalpolicy.EnvironmentNameContainsFold(query),        // search by EnvironmentName
@@ -1530,6 +1534,8 @@ func adminSearchProcedures(ctx context.Context, query string, after *entgql.Curs
 				},
 				procedure.URLContainsFold(query),               // search by URL
 				procedure.FileIDContainsFold(query),            // search by FileID
+				procedure.ExternalFileIDContainsFold(query),    // search by ExternalFileID
+				procedure.ExternalContentsContainsFold(query),  // search by ExternalContents
 				procedure.InternalNotesContainsFold(query),     // search by InternalNotes
 				procedure.SystemInternalIDContainsFold(query),  // search by SystemInternalID
 				procedure.ProcedureKindNameContainsFold(query), // search by ProcedureKindName

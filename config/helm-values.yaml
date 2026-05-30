@@ -528,6 +528,9 @@ coreConfiguration:
       botToken: ""  # @schema type:string
       # -- Default channel id for system messages when no explicit channel is provided
       defaultChannel: ""  # @schema type:string
+    googledrive:
+      clientid: ""  # @schema type:string
+      redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
     googleworkspace:
       clientid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
@@ -943,6 +946,14 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_SLACK_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-slack-clientsecret"  # @schema type:string
+    # -- core-integrations-googledrive-clientsecret secret configuration
+    core-integrations-googledrive-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.googledrive.clientsecret
+      secretKey: "CORE_INTEGRATIONS_GOOGLEDRIVE_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-googledrive-clientsecret"  # @schema type:string
     # -- core-integrations-googleworkspace-clientsecret secret configuration
     core-integrations-googleworkspace-clientsecret:
       # -- Enable this external secret
