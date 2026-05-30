@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 const (
@@ -92,6 +93,8 @@ func listFolderDocs(ctx context.Context, svc *drive.Service, folderID string) ([
 
 		resp, err := call.Do()
 		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("Failed to list drive files inside of folder")
+
 			return nil, ErrFolderListFailed
 		}
 

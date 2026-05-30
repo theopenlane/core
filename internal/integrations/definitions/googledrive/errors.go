@@ -5,8 +5,6 @@ import "errors"
 var (
 	// ErrOAuthTokenMissing indicates the OAuth access token is missing
 	ErrOAuthTokenMissing = errors.New("googledrive: oauth token missing")
-	// ErrClientType indicates the provided client is not the expected type
-	ErrClientType = errors.New("googledrive: unexpected client type")
 	// ErrDriveServiceBuildFailed indicates the Drive SDK client could not be constructed
 	ErrDriveServiceBuildFailed = errors.New("googledrive: drive service build failed")
 	// ErrHealthCheckFailed indicates the health check request failed

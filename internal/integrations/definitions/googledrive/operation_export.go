@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 const exportMIMEType = "text/html"
@@ -34,12 +35,17 @@ func (DocumentExport) Run(ctx context.Context, svc *drive.Service, cfg DocumentE
 
 	resp, err := svc.Files.Export(cfg.FileID, exportMIMEType).Context(ctx).Download()
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("Failed to create HTML export of drive file")
+
 		return nil, ErrExportFailed
 	}
+
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("Failed to parse exported drive file contents")
+
 		return nil, ErrExportFailed
 	}
 

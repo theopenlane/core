@@ -22,17 +22,14 @@ type Client struct {
 func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
 	cred, _, err := driveCredential.Resolve(req.Credentials)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("Failed to resolve drive credentials")
+
 		return nil, ErrCredentialDecode
 	}
 
 	if cred.AccessToken == "" {
 		return nil, ErrOAuthTokenMissing
 	}
-
-	logx.FromContext(ctx).Debug().
-		Bool("has_refresh_token", cred.RefreshToken != "").
-		Bool("has_expiry", cred.Expiry != nil).
-		Msg("googledrive: building client")
 
 	tok := &oauth2.Token{
 		AccessToken:  cred.AccessToken,
@@ -44,6 +41,7 @@ func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, e
 		tok.Expiry = *cred.Expiry
 	}
 
+	// context background used intentionally in this slot
 	ts := (&oauth2.Config{
 		ClientID:     c.cfg.ClientID,
 		ClientSecret: c.cfg.ClientSecret,
@@ -52,6 +50,8 @@ func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, e
 
 	svc, err := drive.NewService(ctx, option.WithTokenSource(ts))
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("Failed to init drive client with provided credentials")
+
 		return nil, ErrDriveServiceBuildFailed
 	}
 
