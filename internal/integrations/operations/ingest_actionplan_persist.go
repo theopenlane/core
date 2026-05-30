@@ -8,7 +8,7 @@ import (
 )
 
 // persistActionPlanInput upserts one ActionPlan record using the ingest lookup key fields
-func persistActionPlanInput(_ context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateActionPlanInput) error {
+func persistActionPlanInput(_ context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateActionPlanInput) error { //nolint:revive
 	// Custom persistence logic required for ActionPlan.
 	// Implement lookup and upsert logic below using the createInput fields.
 	panic("not implemented: persistActionPlanInput")
