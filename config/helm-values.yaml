@@ -253,7 +253,7 @@ coreConfiguration:
     # -- Providers contains supported oauth2 providers configuration
     providers:
       # -- RedirectURL is the URL that the OAuth2 client will redirect to after authentication is complete
-      redirecturl: "http://localhost:3001/api/auth/callback/theopenlane"  # @schema type:string; default:http://localhost:3001/api/auth/callback/theopenlane
+      redirecturl: "http://localhost:3001/login/sso"  # @schema type:string; default:http://localhost:3001/login/sso
       # -- Github contains the configuration settings for the Github Oauth Provider
       github:
         clientid: ""  # @schema type:string

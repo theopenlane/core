@@ -197,6 +197,10 @@ func TestQueryContacts(t *testing.T) {
 }
 
 func TestMutationCreateContact(t *testing.T) {
+	// test scopes return error, this is also to test that write -> gives read
+	apiClientNoContactScope := setupAPIToken(sharedTestUser1.UserCtx, t, []string{"control:write"})
+	apiClientWithSpecificScope := setupAPIToken(sharedTestUser1.UserCtx, t, []string{"contact:write"})
+
 	testCases := []struct {
 		name        string
 		request     testclient.CreateContactInput
@@ -226,8 +230,17 @@ func TestMutationCreateContact(t *testing.T) {
 			request: testclient.CreateContactInput{
 				FullName: lo.ToPtr("Rhaenys Targaryen"),
 			},
-			client: suite.client.apiWithToken,
+			client: apiClientWithSpecificScope,
 			ctx:    context.Background(),
+		},
+		{
+			name: "using api token without required scope",
+			request: testclient.CreateContactInput{
+				FullName: lo.ToPtr("Rhaenys Targaryen"),
+			},
+			client:      apiClientNoContactScope,
+			ctx:         context.Background(),
+			expectedErr: missingScopeErrorMsg,
 		},
 		{
 			name: "happy path, using pat",

@@ -17,27 +17,28 @@ All tuples where:
 - `_user LIKE 'organization:%'`
 - `object_type != 'file'` (files use a separate ownership model)
 
-### Steps
+---
 
-**1. Preview the rows that will be migrated**
+## Pre-release steps
+
+**1. Preview what will be migrated**
 
 ```sql
-SELECT
-    store,
-    object_type,
-    object_id,
-    'parent_context' AS relation,
-    _user,
-    user_type
+SELECT object_type, COUNT(*) AS row_count
 FROM tuple
 WHERE relation = 'parent'
   AND _user LIKE 'organization:%'
-  AND object_type != 'file';
+  AND object_type != 'file'
+GROUP BY object_type
+ORDER BY object_type;
 ```
 
-**2. Run the migration**
+**2. Record the migration start time, then run the migration**
 
 ```sql
+-- record this value; you will need it for rollback if something goes wrong
+SELECT NOW() AS migration_start;
+
 INSERT INTO tuple (store, object_type, object_id, relation, _user, user_type, ulid, inserted_at)
 SELECT
     store,
@@ -46,7 +47,7 @@ SELECT
     'parent_context',
     _user,
     user_type,
-    md5(store || object_type || object_id || 'parent_context' || _user),
+    generate_ulid(),
     NOW()
 FROM tuple
 WHERE relation = 'parent'
@@ -55,14 +56,10 @@ WHERE relation = 'parent'
 ON CONFLICT (store, object_type, object_id, relation, _user) DO NOTHING;
 ```
 
-The `ulid` is derived deterministically from the natural key so the insert is idempotent — safe to re-run.
-
-**3. Verify**
-
-Spot-check that `parent_context` rows now exist for the same objects that had `parent` rows:
+**3. Verify row counts match step 1**
 
 ```sql
-SELECT object_type, COUNT(*)
+SELECT object_type, COUNT(*) AS migrated
 FROM tuple
 WHERE relation = 'parent_context'
   AND _user LIKE 'organization:%'
@@ -70,17 +67,58 @@ GROUP BY object_type
 ORDER BY object_type;
 ```
 
-**4. Deploy the updated FGA model**
+**If something looks wrong — rollback before releasing**
 
-The new model must be deployed after the tuples are written. Deploying the model before the migration means objects will temporarily lose org-context permissions.
+Substitute `$migration_start` with the timestamp recorded in step 2.
 
-**5. (Optional) Clean up old `parent` tuples**
+```sql
+DELETE FROM tuple
+WHERE relation = 'parent_context'
+  AND _user LIKE 'organization:%'
+  AND inserted_at >= '$migration_start';
+```
 
-Once the new model is live and verified, the old `parent` + `organization:*` tuples are no longer used and can be deleted:
+---
+
+## Release
+
+Deploy the updated FGA model after the tuples are written. Deploying the model before the migration means objects will temporarily lose org-context permissions.
+
+---
+
+## Post-release steps
+
+**4. Verify the new model is using `parent_context`**
+
+Spot-check a known object in a known org and confirm permissions resolve correctly. Then confirm the counts are still what you expect:
+
+```sql
+SELECT object_type, COUNT(*) AS migrated
+FROM tuple
+WHERE relation = 'parent_context'
+  AND _user LIKE 'organization:%'
+GROUP BY object_type
+ORDER BY object_type;
+```
+
+**5. Clean up old `parent` tuples**
+
+Once the new model is live and verified, the old `parent` + `organization:*` tuples are no longer read by the model and can be deleted:
 
 ```sql
 DELETE FROM tuple
 WHERE relation = 'parent'
   AND _user LIKE 'organization:%'
   AND object_type != 'file';
+```
+
+Confirm the expected number of rows were removed:
+
+```sql
+SELECT COUNT(*)
+FROM tuple
+WHERE relation = 'parent'
+  AND _user LIKE 'organization:%'
+  AND object_type != 'file';
+-- should return 0
 ```

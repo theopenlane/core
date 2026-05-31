@@ -13,7 +13,7 @@ auth:
             clientsecret: ""
             redirecturl: /v1/google/callback
             scopes: []
-        redirecturl: http://localhost:3001/api/auth/callback/theopenlane
+        redirecturl: http://localhost:3001/login/sso
         webauthn:
             debug: false
             displayname: ""

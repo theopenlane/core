@@ -9,7 +9,7 @@ permissions:
   contents: write
 jobs:
   ldflags_args:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       commit-date: ${{ steps.ldflags.outputs.commit-date }}
       commit: ${{ steps.ldflags.outputs.commit }}
@@ -35,7 +35,7 @@ jobs:
     permissions:
       contents: write # To add assets to a release.
       id-token: write # To do keyless signing with cosign
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v6
