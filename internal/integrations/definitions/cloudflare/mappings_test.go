@@ -70,7 +70,7 @@ func TestSecurityCenterInsightsMapping(t *testing.T) {
 }
 
 func TestDomainRegistrationsAssetMapping(t *testing.T) {
-	spec := mappingtest.MappingSpec(t, cloudflareMappings(), "asset")
+	spec := mappingtest.MappingSpec(t, cloudflareMappings(), "Asset")
 	sampleRegistrations := mappingtest.LoadExample(t, "examples", "registrar_registrations.json")
 
 	var response struct {
