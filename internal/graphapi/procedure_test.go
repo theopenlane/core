@@ -157,9 +157,9 @@ func TestQueryProcedures(t *testing.T) {
 }
 
 func TestQueryProcedureTaskTemplates(t *testing.T) {
-	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
-	templateTask, err := suite.client.api.CreateTask(testUser1.UserCtx, testclient.CreateTaskInput{
+	templateTask, err := suite.client.api.CreateTask(sharedTestUser1.UserCtx, testclient.CreateTaskInput{
 		Title:        "procedure task template",
 		IsTemplate:   lo.ToPtr(true),
 		ProcedureIDs: []string{procedure.ID},
@@ -167,14 +167,14 @@ func TestQueryProcedureTaskTemplates(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Assert(t, templateTask != nil)
 
-	task, err := suite.client.api.CreateTask(testUser1.UserCtx, testclient.CreateTaskInput{
+	task, err := suite.client.api.CreateTask(sharedTestUser1.UserCtx, testclient.CreateTaskInput{
 		Title:        "procedure standard task",
 		ProcedureIDs: []string{procedure.ID},
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, task != nil)
 
-	resp, err := suite.client.api.GetTasks(testUser1.UserCtx, nil, nil, nil, nil, nil, &testclient.TaskWhereInput{
+	resp, err := suite.client.api.GetTasks(sharedTestUser1.UserCtx, nil, nil, nil, nil, nil, &testclient.TaskWhereInput{
 		IsTemplate: lo.ToPtr(true),
 		HasProceduresWith: []*testclient.ProcedureWhereInput{
 			{
@@ -190,8 +190,8 @@ func TestQueryProcedureTaskTemplates(t *testing.T) {
 	assert.Check(t, is.Equal(templateTask.CreateTask.Task.ID, resp.Tasks.Edges[0].Node.ID))
 	assert.Check(t, resp.Tasks.Edges[0].Node.IsTemplate)
 
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: []string{templateTask.CreateTask.Task.ID, task.CreateTask.Task.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedure.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: []string{templateTask.CreateTask.Task.ID, task.CreateTask.Task.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedure.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationCreateProcedure(t *testing.T) {
