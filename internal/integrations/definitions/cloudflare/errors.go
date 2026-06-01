@@ -29,4 +29,6 @@ var (
 	ErrOperationConfigInvalid = errors.New("cloudflare: operation config invalid")
 	// ErrFindingsFetchFailed indicates the Security Center insights list request failed
 	ErrFindingsFetchFailed = errors.New("cloudflare: findings fetch failed")
+	// ErrAssetsFetchFailed indicates the Registrar registrations list request failed
+	ErrAssetsFetchFailed = errors.New("cloudflare: assets fetch failed")
 )
