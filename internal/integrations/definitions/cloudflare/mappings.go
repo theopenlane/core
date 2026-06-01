@@ -55,6 +55,15 @@ var mapExprFinding = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingFindingRawPayload, Expr: "payload"},
 })
 
+// mapExprAsset is the CEL mapping expression for Cloudflare Registrar domain payloads mapped to Asset
+var mapExprAsset = providerkit.CelMapExpr([]providerkit.CelMapEntry{
+	{Key: integrationgenerated.IntegrationMappingAssetSourceIdentifier, Expr: `'domain_name' in payload ? payload.domain_name : ""`},
+	{Key: integrationgenerated.IntegrationMappingAssetDisplayName, Expr: `'domain_name' in payload ? payload.domain_name : ""`},
+	{Key: integrationgenerated.IntegrationMappingAssetName, Expr: `'domain_name' in payload ? payload.domain_name : ""`},
+	{Key: integrationgenerated.IntegrationMappingAssetAssetType, Expr: `"DOMAIN"`},
+	{Key: integrationgenerated.IntegrationMappingAssetObservedAt, Expr: `'created_at' in payload && payload.created_at != "" ? payload.created_at : null`},
+})
+
 // cloudflareMappings returns the built-in Cloudflare ingest mappings
 func cloudflareMappings() []types.MappingRegistration {
 	return []types.MappingRegistration{
@@ -84,6 +93,13 @@ func cloudflareMappings() []types.MappingRegistration {
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprFinding,
+			},
+		},
+		{
+			Schema: integrationgenerated.IntegrationMappingSchemaAsset,
+			Spec: types.MappingOverride{
+				FilterExpr: "true",
+				MapExpr:    mapExprAsset,
 			},
 		},
 	}
