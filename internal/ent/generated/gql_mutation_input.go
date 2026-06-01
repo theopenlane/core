@@ -26003,6 +26003,7 @@ type CreateTaskInput struct {
 	Due                      *models.DateTime
 	Completed                *models.DateTime
 	SystemGenerated          *bool
+	IsTemplate               *bool
 	ExternalReferenceURL     []string
 	OwnerID                  *string
 	TaskKindID               *string
@@ -26067,6 +26068,9 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.SystemGenerated; v != nil {
 		m.SetSystemGenerated(*v)
+	}
+	if v := i.IsTemplate; v != nil {
+		m.SetIsTemplate(*v)
 	}
 	if v := i.ExternalReferenceURL; v != nil {
 		m.SetExternalReferenceURL(v)
@@ -26182,6 +26186,7 @@ type UpdateTaskInput struct {
 	ClearCompleted                 bool
 	Completed                      *models.DateTime
 	SystemGenerated                *bool
+	IsTemplate                     *bool
 	ClearExternalReferenceURL      bool
 	ExternalReferenceURL           []string
 	AppendExternalReferenceURL     []string
@@ -26326,6 +26331,9 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.SystemGenerated; v != nil {
 		m.SetSystemGenerated(*v)
+	}
+	if v := i.IsTemplate; v != nil {
+		m.SetIsTemplate(*v)
 	}
 	if i.ClearExternalReferenceURL {
 		m.ClearExternalReferenceURL()

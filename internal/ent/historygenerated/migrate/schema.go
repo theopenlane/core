@@ -2682,6 +2682,7 @@ var (
 		{Name: "assignee_id", Type: field.TypeString, Nullable: true},
 		{Name: "assigner_id", Type: field.TypeString, Nullable: true},
 		{Name: "system_generated", Type: field.TypeBool, Default: false},
+		{Name: "is_template", Type: field.TypeBool, Default: false},
 		{Name: "idempotency_key", Type: field.TypeString, Nullable: true},
 		{Name: "external_reference_url", Type: field.TypeJSON, Nullable: true},
 		{Name: "parent_task_id", Type: field.TypeString, Nullable: true},

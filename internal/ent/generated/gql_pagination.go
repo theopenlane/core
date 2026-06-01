@@ -33486,6 +33486,20 @@ var (
 			}
 		},
 	}
+	// TaskOrderFieldIsTemplate orders Task by is_template.
+	TaskOrderFieldIsTemplate = &TaskOrderField{
+		Value: func(_m *Task) (ent.Value, error) {
+			return _m.IsTemplate, nil
+		},
+		column: task.FieldIsTemplate,
+		toTerm: task.ByIsTemplate,
+		toCursor: func(_m *Task) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IsTemplate,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -33504,6 +33518,8 @@ func (f TaskOrderField) String() string {
 		str = "due"
 	case TaskOrderFieldCompleted.column:
 		str = "completed"
+	case TaskOrderFieldIsTemplate.column:
+		str = "is_template"
 	}
 	return str
 }
@@ -33532,6 +33548,8 @@ func (f *TaskOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TaskOrderFieldDue
 	case "completed":
 		*f = *TaskOrderFieldCompleted
+	case "is_template":
+		*f = *TaskOrderFieldIsTemplate
 	default:
 		return fmt.Errorf("%s is not a valid TaskOrderField", str)
 	}

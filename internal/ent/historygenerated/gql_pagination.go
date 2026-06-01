@@ -25416,6 +25416,20 @@ var (
 			}
 		},
 	}
+	// TaskHistoryOrderFieldIsTemplate orders TaskHistory by is_template.
+	TaskHistoryOrderFieldIsTemplate = &TaskHistoryOrderField{
+		Value: func(_m *TaskHistory) (ent.Value, error) {
+			return _m.IsTemplate, nil
+		},
+		column: taskhistory.FieldIsTemplate,
+		toTerm: taskhistory.ByIsTemplate,
+		toCursor: func(_m *TaskHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IsTemplate,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -25436,6 +25450,8 @@ func (f TaskHistoryOrderField) String() string {
 		str = "due"
 	case TaskHistoryOrderFieldCompleted.column:
 		str = "completed"
+	case TaskHistoryOrderFieldIsTemplate.column:
+		str = "is_template"
 	}
 	return str
 }
@@ -25466,6 +25482,8 @@ func (f *TaskHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TaskHistoryOrderFieldDue
 	case "completed":
 		*f = *TaskHistoryOrderFieldCompleted
+	case "is_template":
+		*f = *TaskHistoryOrderFieldIsTemplate
 	default:
 		return fmt.Errorf("%s is not a valid TaskHistoryOrderField", str)
 	}

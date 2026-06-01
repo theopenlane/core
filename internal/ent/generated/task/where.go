@@ -179,6 +179,11 @@ func SystemGenerated(v bool) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldSystemGenerated, v))
 }
 
+// IsTemplate applies equality check predicate on the "is_template" field. It's identical to IsTemplateEQ.
+func IsTemplate(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldIsTemplate, v))
+}
+
 // IdempotencyKey applies equality check predicate on the "idempotency_key" field. It's identical to IdempotencyKeyEQ.
 func IdempotencyKey(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldIdempotencyKey, v))
@@ -1677,6 +1682,16 @@ func SystemGeneratedEQ(v bool) predicate.Task {
 // SystemGeneratedNEQ applies the NEQ predicate on the "system_generated" field.
 func SystemGeneratedNEQ(v bool) predicate.Task {
 	return predicate.Task(sql.FieldNEQ(FieldSystemGenerated, v))
+}
+
+// IsTemplateEQ applies the EQ predicate on the "is_template" field.
+func IsTemplateEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldIsTemplate, v))
+}
+
+// IsTemplateNEQ applies the NEQ predicate on the "is_template" field.
+func IsTemplateNEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldIsTemplate, v))
 }
 
 // IdempotencyKeyEQ applies the EQ predicate on the "idempotency_key" field.

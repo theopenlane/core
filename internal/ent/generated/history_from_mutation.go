@@ -21833,6 +21833,10 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetSystemGenerated(systemGenerated)
 	}
 
+	if isTemplate, exists := m.IsTemplate(); exists {
+		create = create.SetIsTemplate(isTemplate)
+	}
+
 	if idempotencyKey, exists := m.IdempotencyKey(); exists {
 		create = create.SetIdempotencyKey(idempotencyKey)
 	}
@@ -22026,6 +22030,12 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetSystemGenerated(task.SystemGenerated)
 		}
 
+		if isTemplate, exists := m.IsTemplate(); exists {
+			create = create.SetIsTemplate(isTemplate)
+		} else {
+			create = create.SetIsTemplate(task.IsTemplate)
+		}
+
 		if idempotencyKey, exists := m.IdempotencyKey(); exists {
 			create = create.SetIdempotencyKey(idempotencyKey)
 		} else {
@@ -22104,6 +22114,7 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetAssigneeID(task.AssigneeID).
 			SetAssignerID(task.AssignerID).
 			SetSystemGenerated(task.SystemGenerated).
+			SetIsTemplate(task.IsTemplate).
 			SetIdempotencyKey(task.IdempotencyKey).
 			SetExternalReferenceURL(task.ExternalReferenceURL).
 			SetNillableParentTaskID(task.ParentTaskID).
