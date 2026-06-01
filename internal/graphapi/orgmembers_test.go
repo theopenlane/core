@@ -542,10 +542,11 @@ func TestMutationBulkUpdateOrgMemberRole(t *testing.T) {
 		Role: &adminRole,
 	}
 
-	for _, id := range ids {
-		_, err = suite.client.api.UpdateUserRoleInOrg(org.admin.UserCtx, id, input)
-		assert.NilError(t, err)
-	}
+	resp, err := suite.client.api.UpdateBulkOrgMemberRoles(org.admin.UserCtx, ids, input)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Len(resp.UpdateBulkOrgMembership.UpdatedIDs, len(ids)))
+	assert.Check(t, is.Len(resp.UpdateBulkOrgMembership.OrgMemberships, len(ids)))
 
 	updatedMembers, err := suite.client.db.OrgMembership.Query().
 		Where(orgmembership.IDIn(ids...)).
@@ -567,8 +568,17 @@ func TestMutationBulkUpdateOrgMemberRole(t *testing.T) {
 	memberRole := enums.RoleMember
 	input.Role = &memberRole
 
-	_, err = suite.client.api.UpdateUserRoleInOrg(org.admin.UserCtx, ownerMember.ID, input)
-	assert.ErrorContains(t, err, hooks.ErrOrgOwnerCannotBeUpdated.Error())
+	ownerResp, err := suite.client.api.UpdateBulkOrgMemberRoles(org.admin.UserCtx, []string{ownerMember.ID}, input)
+	assert.NilError(t, err)
+	assert.Assert(t, ownerResp != nil)
+	assert.Check(t, is.Len(ownerResp.UpdateBulkOrgMembership.UpdatedIDs, 0))
+	assert.Check(t, is.Len(ownerResp.UpdateBulkOrgMembership.OrgMemberships, 0))
+
+	ownerMember, err = suite.client.db.OrgMembership.Query().
+		Where(orgmembership.ID(ownerMember.ID)).
+		Only(allowCtx)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(enums.RoleOwner, ownerMember.Role))
 
 	cleanupOrganizationDataWithContext(org.owner.UserCtx, t)
 }
