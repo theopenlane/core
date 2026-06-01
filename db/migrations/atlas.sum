@@ -1,4 +1,4 @@
-h1:kG+UIcx2924LRiSGwkRp6juqMILB7a2h8cULsDSRtVw=
+h1:fjQjDC4EWWq78qOAsihJRAbtnXJBqnJYeBQ7Gx4EAEY=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -135,3 +135,6 @@ h1:kG+UIcx2924LRiSGwkRp6juqMILB7a2h8cULsDSRtVw=
 20260516143000_backfill_management_mode.sql h1:jrRd3QPKqumqeZP1BALxI8bfKXP5RP6/le412BOjd8c=
 20260525161834_remove_dedicated_db.sql h1:jOOBPwjkga08nkjHlBgPeAJztBOzUh25yKb36xSYp1g=
 20260525161839_remove_dedicated_db_history.sql h1:sOPH2ZDby0LwD16w1/+hmK5gJoM+lBVClDUe3ixkrEQ=
+20260526053023_perms_revamp.sql h1:wVxfu7zgJwtrHf99mFfFpJX1kl95plng1cb92lCMywM=
+20260529171317_googledriveintegration.sql h1:9l7t2llhZZIdL9wW1xUwKdzpacDu5RY+bq1hHmU/Yhc=
+20260529171320_googledriveintegration_history.sql h1:nvLG0JqXucPFdqLTjY835U0cTQoLiMAbRtjayGCUwf8=

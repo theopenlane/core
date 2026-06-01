@@ -517,6 +517,46 @@ func (_u *ActionPlanUpdate) ClearFileID() *ActionPlanUpdate {
 	return _u
 }
 
+// SetExternalFileID sets the "external_file_id" field.
+func (_u *ActionPlanUpdate) SetExternalFileID(v string) *ActionPlanUpdate {
+	_u.mutation.SetExternalFileID(v)
+	return _u
+}
+
+// SetNillableExternalFileID sets the "external_file_id" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableExternalFileID(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetExternalFileID(*v)
+	}
+	return _u
+}
+
+// ClearExternalFileID clears the value of the "external_file_id" field.
+func (_u *ActionPlanUpdate) ClearExternalFileID() *ActionPlanUpdate {
+	_u.mutation.ClearExternalFileID()
+	return _u
+}
+
+// SetExternalContents sets the "external_contents" field.
+func (_u *ActionPlanUpdate) SetExternalContents(v string) *ActionPlanUpdate {
+	_u.mutation.SetExternalContents(v)
+	return _u
+}
+
+// SetNillableExternalContents sets the "external_contents" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableExternalContents(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetExternalContents(*v)
+	}
+	return _u
+}
+
+// ClearExternalContents clears the value of the "external_contents" field.
+func (_u *ActionPlanUpdate) ClearExternalContents() *ActionPlanUpdate {
+	_u.mutation.ClearExternalContents()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *ActionPlanUpdate) SetInternalNotes(v string) *ActionPlanUpdate {
 	_u.mutation.SetInternalNotes(v)
@@ -1635,6 +1675,18 @@ func (_u *ActionPlanUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if _u.mutation.URLCleared() {
 		_spec.ClearField(actionplan.FieldURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalFileID(); ok {
+		_spec.SetField(actionplan.FieldExternalFileID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalFileIDCleared() {
+		_spec.ClearField(actionplan.FieldExternalFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalContents(); ok {
+		_spec.SetField(actionplan.FieldExternalContents, field.TypeString, value)
+	}
+	if _u.mutation.ExternalContentsCleared() {
+		_spec.ClearField(actionplan.FieldExternalContents, field.TypeString)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(actionplan.FieldSystemOwned, field.TypeBool)
@@ -3010,6 +3062,46 @@ func (_u *ActionPlanUpdateOne) ClearFileID() *ActionPlanUpdateOne {
 	return _u
 }
 
+// SetExternalFileID sets the "external_file_id" field.
+func (_u *ActionPlanUpdateOne) SetExternalFileID(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetExternalFileID(v)
+	return _u
+}
+
+// SetNillableExternalFileID sets the "external_file_id" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableExternalFileID(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetExternalFileID(*v)
+	}
+	return _u
+}
+
+// ClearExternalFileID clears the value of the "external_file_id" field.
+func (_u *ActionPlanUpdateOne) ClearExternalFileID() *ActionPlanUpdateOne {
+	_u.mutation.ClearExternalFileID()
+	return _u
+}
+
+// SetExternalContents sets the "external_contents" field.
+func (_u *ActionPlanUpdateOne) SetExternalContents(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetExternalContents(v)
+	return _u
+}
+
+// SetNillableExternalContents sets the "external_contents" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableExternalContents(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetExternalContents(*v)
+	}
+	return _u
+}
+
+// ClearExternalContents clears the value of the "external_contents" field.
+func (_u *ActionPlanUpdateOne) ClearExternalContents() *ActionPlanUpdateOne {
+	_u.mutation.ClearExternalContents()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *ActionPlanUpdateOne) SetInternalNotes(v string) *ActionPlanUpdateOne {
 	_u.mutation.SetInternalNotes(v)
@@ -4158,6 +4250,18 @@ func (_u *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, 
 	}
 	if _u.mutation.URLCleared() {
 		_spec.ClearField(actionplan.FieldURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalFileID(); ok {
+		_spec.SetField(actionplan.FieldExternalFileID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalFileIDCleared() {
+		_spec.ClearField(actionplan.FieldExternalFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalContents(); ok {
+		_spec.SetField(actionplan.FieldExternalContents, field.TypeString, value)
+	}
+	if _u.mutation.ExternalContentsCleared() {
+		_spec.ClearField(actionplan.FieldExternalContents, field.TypeString)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(actionplan.FieldSystemOwned, field.TypeBool)

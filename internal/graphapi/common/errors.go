@@ -60,6 +60,9 @@ var (
 
 	// ErrMappableDomainNotConfigured is returned when the mappable domain for the trust center cname target is not found
 	ErrMappableDomainNotConfigured = errors.New("mappable domain not configured for trust center cname target")
+
+	// ErrMissingRequireScopes is the response when an API request does not include the required scope(s) for the request
+	ErrMissingRequireScopes = errors.New("api token lacks the required scopes for this request")
 )
 
 func NewCascadeDeleteError(ctx context.Context, err error) error {
@@ -270,4 +273,38 @@ func GetConstraintField(err error, object string) string {
 	}
 
 	return ""
+}
+
+// ErrorWithCode is a wrapper to return an error code with a generic error message
+type ErrorWithCode struct {
+	ErrorResponse error
+	ErrorCode     string
+}
+
+// Code returns the ErrorWithCode code
+func (e *ErrorWithCode) Code() string {
+	return e.ErrorCode
+}
+
+// Message returns the ErrorWithCode message
+func (e *ErrorWithCode) Message() string {
+	return e.ErrorResponse.Error()
+}
+
+// Error returns the ConstraintError in string format
+func (e *ErrorWithCode) Error() string {
+	return e.ErrorResponse.Error()
+}
+
+// Module implements the CustomErrorType interface
+func (e *ErrorWithCode) Module() models.OrgModule {
+	return ""
+}
+
+// NewConstraintError returns a ConstraintError
+func NewErrorWithCode(err error, code string) *ErrorWithCode {
+	return &ErrorWithCode{
+		ErrorResponse: err,
+		ErrorCode:     code,
+	}
 }

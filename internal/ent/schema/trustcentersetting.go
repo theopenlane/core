@@ -240,11 +240,15 @@ func (TrustCenterSetting) Hooks() []ent.Hook {
 // Policy of the TrustCenterSetting
 func (t TrustCenterSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithMutationRules(
+		policy.WithOnMutationRules(ent.OpCreate,
 			rule.AllowIfTrustCenterEditor(),
 			policy.CanCreateObjectsUnderParents([]string{
 				TrustCenter{}.Name(),
 			}),
+			policy.CheckOrgWriteAccess(),
+		),
+		policy.WithOnMutationRules(ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne,
+			rule.AllowIfTrustCenterEditor(),
 			entfga.CheckEditAccess[*generated.TrustCenterSettingMutation](),
 		),
 	)
@@ -267,5 +271,6 @@ func (t TrustCenterSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaTrustCenterSetting),
 		entfga.SettingsChecks("trust_center"),
+		entx.FGACrudSkip(entx.SkipDelete | entx.SkipCreate),
 	}
 }

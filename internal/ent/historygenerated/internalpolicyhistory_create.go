@@ -426,6 +426,34 @@ func (_c *InternalPolicyHistoryCreate) SetNillableFileID(v *string) *InternalPol
 	return _c
 }
 
+// SetExternalFileID sets the "external_file_id" field.
+func (_c *InternalPolicyHistoryCreate) SetExternalFileID(v string) *InternalPolicyHistoryCreate {
+	_c.mutation.SetExternalFileID(v)
+	return _c
+}
+
+// SetNillableExternalFileID sets the "external_file_id" field if the given value is not nil.
+func (_c *InternalPolicyHistoryCreate) SetNillableExternalFileID(v *string) *InternalPolicyHistoryCreate {
+	if v != nil {
+		_c.SetExternalFileID(*v)
+	}
+	return _c
+}
+
+// SetExternalContents sets the "external_contents" field.
+func (_c *InternalPolicyHistoryCreate) SetExternalContents(v string) *InternalPolicyHistoryCreate {
+	_c.mutation.SetExternalContents(v)
+	return _c
+}
+
+// SetNillableExternalContents sets the "external_contents" field if the given value is not nil.
+func (_c *InternalPolicyHistoryCreate) SetNillableExternalContents(v *string) *InternalPolicyHistoryCreate {
+	if v != nil {
+		_c.SetExternalContents(*v)
+	}
+	return _c
+}
+
 // SetInternalPolicyKindName sets the "internal_policy_kind_name" field.
 func (_c *InternalPolicyHistoryCreate) SetInternalPolicyKindName(v string) *InternalPolicyHistoryCreate {
 	_c.mutation.SetInternalPolicyKindName(v)
@@ -889,6 +917,14 @@ func (_c *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *sq
 	if value, ok := _c.mutation.FileID(); ok {
 		_spec.SetField(internalpolicyhistory.FieldFileID, field.TypeString, value)
 		_node.FileID = &value
+	}
+	if value, ok := _c.mutation.ExternalFileID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldExternalFileID, field.TypeString, value)
+		_node.ExternalFileID = &value
+	}
+	if value, ok := _c.mutation.ExternalContents(); ok {
+		_spec.SetField(internalpolicyhistory.FieldExternalContents, field.TypeString, value)
+		_node.ExternalContents = &value
 	}
 	if value, ok := _c.mutation.InternalPolicyKindName(); ok {
 		_spec.SetField(internalpolicyhistory.FieldInternalPolicyKindName, field.TypeString, value)

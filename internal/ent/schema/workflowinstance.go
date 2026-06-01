@@ -231,7 +231,8 @@ func (WorkflowInstance) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.WorkflowInstance](WorkflowInstance{},
 				withParents(Control{}, InternalPolicy{}, Evidence{}, Subcontrol{}, ActionPlan{}, Procedure{}, Campaign{}, CampaignTarget{}, IdentityHolder{}, Platform{}, WorkflowDefinition{}),
-				withOrganizationOwnerServiceOnly(true),
+				withOrganizationOwnerServiceOnly(),
+				withSkipForSystemAdmin(),
 			),
 		},
 	}.getMixins(WorkflowInstance{})
@@ -261,7 +262,7 @@ func (WorkflowInstance) Hooks() []ent.Hook {
 func (WorkflowInstance) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			policy.CheckCreateAccess(),
+			policy.CheckServiceCreateAccess(),
 			entfga.CheckEditAccess[*generated.WorkflowInstanceMutation](),
 		),
 	)

@@ -158,6 +158,16 @@ func FileID(v string) predicate.ActionPlanHistory {
 	return predicate.ActionPlanHistory(sql.FieldEQ(FieldFileID, v))
 }
 
+// ExternalFileID applies equality check predicate on the "external_file_id" field. It's identical to ExternalFileIDEQ.
+func ExternalFileID(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldEQ(FieldExternalFileID, v))
+}
+
+// ExternalContents applies equality check predicate on the "external_contents" field. It's identical to ExternalContentsEQ.
+func ExternalContents(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldEQ(FieldExternalContents, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.ActionPlanHistory {
 	return predicate.ActionPlanHistory(sql.FieldEQ(FieldOwnerID, v))
@@ -1601,6 +1611,156 @@ func FileIDEqualFold(v string) predicate.ActionPlanHistory {
 // FileIDContainsFold applies the ContainsFold predicate on the "file_id" field.
 func FileIDContainsFold(v string) predicate.ActionPlanHistory {
 	return predicate.ActionPlanHistory(sql.FieldContainsFold(FieldFileID, v))
+}
+
+// ExternalFileIDEQ applies the EQ predicate on the "external_file_id" field.
+func ExternalFileIDEQ(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldEQ(FieldExternalFileID, v))
+}
+
+// ExternalFileIDNEQ applies the NEQ predicate on the "external_file_id" field.
+func ExternalFileIDNEQ(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNEQ(FieldExternalFileID, v))
+}
+
+// ExternalFileIDIn applies the In predicate on the "external_file_id" field.
+func ExternalFileIDIn(vs ...string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldIn(FieldExternalFileID, vs...))
+}
+
+// ExternalFileIDNotIn applies the NotIn predicate on the "external_file_id" field.
+func ExternalFileIDNotIn(vs ...string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNotIn(FieldExternalFileID, vs...))
+}
+
+// ExternalFileIDGT applies the GT predicate on the "external_file_id" field.
+func ExternalFileIDGT(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldGT(FieldExternalFileID, v))
+}
+
+// ExternalFileIDGTE applies the GTE predicate on the "external_file_id" field.
+func ExternalFileIDGTE(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldGTE(FieldExternalFileID, v))
+}
+
+// ExternalFileIDLT applies the LT predicate on the "external_file_id" field.
+func ExternalFileIDLT(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldLT(FieldExternalFileID, v))
+}
+
+// ExternalFileIDLTE applies the LTE predicate on the "external_file_id" field.
+func ExternalFileIDLTE(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldLTE(FieldExternalFileID, v))
+}
+
+// ExternalFileIDContains applies the Contains predicate on the "external_file_id" field.
+func ExternalFileIDContains(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldContains(FieldExternalFileID, v))
+}
+
+// ExternalFileIDHasPrefix applies the HasPrefix predicate on the "external_file_id" field.
+func ExternalFileIDHasPrefix(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldHasPrefix(FieldExternalFileID, v))
+}
+
+// ExternalFileIDHasSuffix applies the HasSuffix predicate on the "external_file_id" field.
+func ExternalFileIDHasSuffix(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldHasSuffix(FieldExternalFileID, v))
+}
+
+// ExternalFileIDIsNil applies the IsNil predicate on the "external_file_id" field.
+func ExternalFileIDIsNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldIsNull(FieldExternalFileID))
+}
+
+// ExternalFileIDNotNil applies the NotNil predicate on the "external_file_id" field.
+func ExternalFileIDNotNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNotNull(FieldExternalFileID))
+}
+
+// ExternalFileIDEqualFold applies the EqualFold predicate on the "external_file_id" field.
+func ExternalFileIDEqualFold(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldEqualFold(FieldExternalFileID, v))
+}
+
+// ExternalFileIDContainsFold applies the ContainsFold predicate on the "external_file_id" field.
+func ExternalFileIDContainsFold(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldContainsFold(FieldExternalFileID, v))
+}
+
+// ExternalContentsEQ applies the EQ predicate on the "external_contents" field.
+func ExternalContentsEQ(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldEQ(FieldExternalContents, v))
+}
+
+// ExternalContentsNEQ applies the NEQ predicate on the "external_contents" field.
+func ExternalContentsNEQ(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNEQ(FieldExternalContents, v))
+}
+
+// ExternalContentsIn applies the In predicate on the "external_contents" field.
+func ExternalContentsIn(vs ...string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldIn(FieldExternalContents, vs...))
+}
+
+// ExternalContentsNotIn applies the NotIn predicate on the "external_contents" field.
+func ExternalContentsNotIn(vs ...string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNotIn(FieldExternalContents, vs...))
+}
+
+// ExternalContentsGT applies the GT predicate on the "external_contents" field.
+func ExternalContentsGT(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldGT(FieldExternalContents, v))
+}
+
+// ExternalContentsGTE applies the GTE predicate on the "external_contents" field.
+func ExternalContentsGTE(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldGTE(FieldExternalContents, v))
+}
+
+// ExternalContentsLT applies the LT predicate on the "external_contents" field.
+func ExternalContentsLT(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldLT(FieldExternalContents, v))
+}
+
+// ExternalContentsLTE applies the LTE predicate on the "external_contents" field.
+func ExternalContentsLTE(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldLTE(FieldExternalContents, v))
+}
+
+// ExternalContentsContains applies the Contains predicate on the "external_contents" field.
+func ExternalContentsContains(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldContains(FieldExternalContents, v))
+}
+
+// ExternalContentsHasPrefix applies the HasPrefix predicate on the "external_contents" field.
+func ExternalContentsHasPrefix(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldHasPrefix(FieldExternalContents, v))
+}
+
+// ExternalContentsHasSuffix applies the HasSuffix predicate on the "external_contents" field.
+func ExternalContentsHasSuffix(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldHasSuffix(FieldExternalContents, v))
+}
+
+// ExternalContentsIsNil applies the IsNil predicate on the "external_contents" field.
+func ExternalContentsIsNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldIsNull(FieldExternalContents))
+}
+
+// ExternalContentsNotNil applies the NotNil predicate on the "external_contents" field.
+func ExternalContentsNotNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNotNull(FieldExternalContents))
+}
+
+// ExternalContentsEqualFold applies the EqualFold predicate on the "external_contents" field.
+func ExternalContentsEqualFold(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldEqualFold(FieldExternalContents, v))
+}
+
+// ExternalContentsContainsFold applies the ContainsFold predicate on the "external_contents" field.
+func ExternalContentsContainsFold(v string) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldContainsFold(FieldExternalContents, v))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.

@@ -505,6 +505,46 @@ func (_u *ActionPlanHistoryUpdate) ClearFileID() *ActionPlanHistoryUpdate {
 	return _u
 }
 
+// SetExternalFileID sets the "external_file_id" field.
+func (_u *ActionPlanHistoryUpdate) SetExternalFileID(v string) *ActionPlanHistoryUpdate {
+	_u.mutation.SetExternalFileID(v)
+	return _u
+}
+
+// SetNillableExternalFileID sets the "external_file_id" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdate) SetNillableExternalFileID(v *string) *ActionPlanHistoryUpdate {
+	if v != nil {
+		_u.SetExternalFileID(*v)
+	}
+	return _u
+}
+
+// ClearExternalFileID clears the value of the "external_file_id" field.
+func (_u *ActionPlanHistoryUpdate) ClearExternalFileID() *ActionPlanHistoryUpdate {
+	_u.mutation.ClearExternalFileID()
+	return _u
+}
+
+// SetExternalContents sets the "external_contents" field.
+func (_u *ActionPlanHistoryUpdate) SetExternalContents(v string) *ActionPlanHistoryUpdate {
+	_u.mutation.SetExternalContents(v)
+	return _u
+}
+
+// SetNillableExternalContents sets the "external_contents" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdate) SetNillableExternalContents(v *string) *ActionPlanHistoryUpdate {
+	if v != nil {
+		_u.SetExternalContents(*v)
+	}
+	return _u
+}
+
+// ClearExternalContents clears the value of the "external_contents" field.
+func (_u *ActionPlanHistoryUpdate) ClearExternalContents() *ActionPlanHistoryUpdate {
+	_u.mutation.ClearExternalContents()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *ActionPlanHistoryUpdate) SetInternalNotes(v string) *ActionPlanHistoryUpdate {
 	_u.mutation.SetInternalNotes(v)
@@ -1076,6 +1116,18 @@ func (_u *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	}
 	if _u.mutation.FileIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalFileID(); ok {
+		_spec.SetField(actionplanhistory.FieldExternalFileID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalFileIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldExternalFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalContents(); ok {
+		_spec.SetField(actionplanhistory.FieldExternalContents, field.TypeString, value)
+	}
+	if _u.mutation.ExternalContentsCleared() {
+		_spec.ClearField(actionplanhistory.FieldExternalContents, field.TypeString)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldOwnerID, field.TypeString)
@@ -1661,6 +1713,46 @@ func (_u *ActionPlanHistoryUpdateOne) SetNillableFileID(v *string) *ActionPlanHi
 // ClearFileID clears the value of the "file_id" field.
 func (_u *ActionPlanHistoryUpdateOne) ClearFileID() *ActionPlanHistoryUpdateOne {
 	_u.mutation.ClearFileID()
+	return _u
+}
+
+// SetExternalFileID sets the "external_file_id" field.
+func (_u *ActionPlanHistoryUpdateOne) SetExternalFileID(v string) *ActionPlanHistoryUpdateOne {
+	_u.mutation.SetExternalFileID(v)
+	return _u
+}
+
+// SetNillableExternalFileID sets the "external_file_id" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdateOne) SetNillableExternalFileID(v *string) *ActionPlanHistoryUpdateOne {
+	if v != nil {
+		_u.SetExternalFileID(*v)
+	}
+	return _u
+}
+
+// ClearExternalFileID clears the value of the "external_file_id" field.
+func (_u *ActionPlanHistoryUpdateOne) ClearExternalFileID() *ActionPlanHistoryUpdateOne {
+	_u.mutation.ClearExternalFileID()
+	return _u
+}
+
+// SetExternalContents sets the "external_contents" field.
+func (_u *ActionPlanHistoryUpdateOne) SetExternalContents(v string) *ActionPlanHistoryUpdateOne {
+	_u.mutation.SetExternalContents(v)
+	return _u
+}
+
+// SetNillableExternalContents sets the "external_contents" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdateOne) SetNillableExternalContents(v *string) *ActionPlanHistoryUpdateOne {
+	if v != nil {
+		_u.SetExternalContents(*v)
+	}
+	return _u
+}
+
+// ClearExternalContents clears the value of the "external_contents" field.
+func (_u *ActionPlanHistoryUpdateOne) ClearExternalContents() *ActionPlanHistoryUpdateOne {
+	_u.mutation.ClearExternalContents()
 	return _u
 }
 
@@ -2265,6 +2357,18 @@ func (_u *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Actio
 	}
 	if _u.mutation.FileIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalFileID(); ok {
+		_spec.SetField(actionplanhistory.FieldExternalFileID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalFileIDCleared() {
+		_spec.ClearField(actionplanhistory.FieldExternalFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalContents(); ok {
+		_spec.SetField(actionplanhistory.FieldExternalContents, field.TypeString, value)
+	}
+	if _u.mutation.ExternalContentsCleared() {
+		_spec.ClearField(actionplanhistory.FieldExternalContents, field.TypeString)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldOwnerID, field.TypeString)

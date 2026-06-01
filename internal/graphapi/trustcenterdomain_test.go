@@ -13,13 +13,14 @@ import (
 )
 
 func TestMutationCreateTrustCenterDomain(t *testing.T) {
-	testUser := suite.userBuilder(t.Context(), t)
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	mappableDomain := (&MappableDomainBuilder{client: suite.client, Name: testutils.TrustCenterCnameTarget}).MustNew(systemAdminUser.UserCtx, t)
+	t.Parallel()
+
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	mappableDomain := (&MappableDomainBuilder{client: suite.client, Name: testutils.TrustCenterCnameTarget}).MustNew(tcOrg.admin.UserCtx, t)
 
 	t.Run("happy path, do not require TrustCenterID", func(t *testing.T) {
 		domain := gofakeit.DomainName()
-		resp, err := suite.client.api.CreateTrustCenterDomain(testUser.UserCtx, testclient.CreateTrustCenterDomainInput{
+		resp, err := suite.client.api.CreateTrustCenterDomain(tcOrg.owner.UserCtx, testclient.CreateTrustCenterDomainInput{
 			CnameRecord: domain,
 		})
 		assert.NilError(t, err)
@@ -27,23 +28,23 @@ func TestMutationCreateTrustCenterDomain(t *testing.T) {
 
 		assert.Check(t, is.Equal(domain, resp.CreateTrustCenterDomain.CustomDomain.CnameRecord))
 		assert.Check(t, resp.CreateTrustCenterDomain.CustomDomain.TrustCenterID != nil)
-		assert.Check(t, is.Equal(trustCenter.ID, *resp.CreateTrustCenterDomain.CustomDomain.TrustCenterID))
-		(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: resp.CreateTrustCenterDomain.CustomDomain.ID}).MustDelete(testUser.UserCtx, t)
+		assert.Check(t, is.Equal(tcOrg.trustCenter.ID, *resp.CreateTrustCenterDomain.CustomDomain.TrustCenterID))
+		(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: resp.CreateTrustCenterDomain.CustomDomain.ID}).MustDelete(tcOrg.owner.UserCtx, t)
 	})
 
 	t.Run("normalizes cname record input", func(t *testing.T) {
 		inputDomain := "https://Trust.Example.com/path"
-		resp, err := suite.client.api.CreateTrustCenterDomain(testUser.UserCtx, testclient.CreateTrustCenterDomainInput{
+		resp, err := suite.client.api.CreateTrustCenterDomain(tcOrg.owner.UserCtx, testclient.CreateTrustCenterDomainInput{
 			CnameRecord: inputDomain,
 		})
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 		assert.Check(t, is.Equal("trust.example.com", resp.CreateTrustCenterDomain.CustomDomain.CnameRecord))
-		(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: resp.CreateTrustCenterDomain.CustomDomain.ID}).MustDelete(testUser.UserCtx, t)
+		(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: resp.CreateTrustCenterDomain.CustomDomain.ID}).MustDelete(tcOrg.owner.UserCtx, t)
 	})
 
 	t.Run("trust center not found", func(t *testing.T) {
-		_, err := suite.client.api.CreateTrustCenterDomain(testUser.UserCtx, testclient.CreateTrustCenterDomainInput{
+		_, err := suite.client.api.CreateTrustCenterDomain(tcOrg.owner.UserCtx, testclient.CreateTrustCenterDomainInput{
 			CnameRecord:   gofakeit.DomainName(),
 			TrustCenterID: "non-existent-id",
 		})
@@ -55,20 +56,22 @@ func TestMutationCreateTrustCenterDomain(t *testing.T) {
 		testUserForViewOnly := suite.userBuilder(t.Context(), t)
 
 		// Add viewOnlyUser to this new organization as a member (view-only)
-		suite.addUserToOrganization(testUserForViewOnly.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser.OrganizationID)
+		suite.addUserToOrganization(testUserForViewOnly.UserCtx, t, &sharedViewOnlyUser, enums.RoleMember, tcOrg.organizationID)
 
-		_, err := suite.client.api.CreateTrustCenterDomain(viewOnlyUser.UserCtx, testclient.CreateTrustCenterDomainInput{
+		_, err := suite.client.api.CreateTrustCenterDomain(sharedViewOnlyUser.UserCtx, testclient.CreateTrustCenterDomainInput{
 			CnameRecord:   gofakeit.DomainName(),
-			TrustCenterID: trustCenter.ID,
+			TrustCenterID: tcOrg.trustCenter.ID,
 		})
 		assert.ErrorContains(t, err, notAuthorizedErrorMsg)
+
+		cleanupOrganizationDataWithContext(testUserForViewOnly.UserCtx, t)
 	})
 
 	t.Run("user from different organization cannot access trust center", func(t *testing.T) {
 
-		_, err := suite.client.api.CreateTrustCenterDomain(testUser2.UserCtx, testclient.CreateTrustCenterDomainInput{
+		_, err := suite.client.api.CreateTrustCenterDomain(sharedTestUser2.UserCtx, testclient.CreateTrustCenterDomainInput{
 			CnameRecord:   gofakeit.DomainName(),
-			TrustCenterID: trustCenter.ID,
+			TrustCenterID: tcOrg.owner.ID,
 		})
 		assert.ErrorContains(t, err, notFoundErrorMsg)
 	})
@@ -93,25 +96,27 @@ func TestMutationCreateTrustCenterDomain(t *testing.T) {
 		assert.ErrorContains(t, err, "domain already exists for this trust center")
 
 		// Cleanup
-		(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: existingDomain.ID}).MustDelete(testUserDomainExists.UserCtx, t)
-		(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter4.ID}).MustDelete(testUserDomainExists.UserCtx, t)
+		cleanupOrganizationDataWithContext(testUserDomainExists.UserCtx, t)
 	})
 
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, IDs: []string{mappableDomain.ID}}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+
 }
 
 func TestMutationCreateTrustCenterDomainMappableDomainNotExists(t *testing.T) {
+	t.Parallel()
 	// Create a new user to avoid slug conflicts
 	testUser := suite.userBuilder(t.Context(), t)
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	t.Run("mappable domain does not exist", func(t *testing.T) {
-
 		_, err := suite.client.api.CreateTrustCenterDomain(testUser.UserCtx, testclient.CreateTrustCenterDomainInput{
 			CnameRecord:   gofakeit.DomainName(),
 			TrustCenterID: trustCenter.ID,
 		})
 		assert.ErrorContains(t, err, notFoundErrorMsg)
 	})
+
+	cleanupOrganizationDataWithContext(testUser.UserCtx, t)
 }

@@ -2,14 +2,12 @@ package schema
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"slices"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -26,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
+	access "github.com/theopenlane/core/internal/ent/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 )
@@ -52,6 +51,9 @@ type ObjectOwnedMixin struct {
 	SkipListFilterInterceptor interceptors.SkipMode
 	// SkipListFilterInterceptorSkipperFunc is a custom function to determine if the list filter interceptor should be skipped
 	SkipListFilterInterceptorSkipperFunc func(ctx context.Context) bool
+	// ForceFilterFn when set, prevents the scope check from short-circuiting the filter
+	// use this for schemas where org-wide scope does not imply access to all objects of this type
+	ForceFilterFn func(ctx context.Context) bool
 	// SkipTokenType skips the traverser or hook if the token type is found in the context
 	SkipTokenType []token.PrivacyToken
 	// IncludeOrganizationOwner adds the organization owner_id field and hooks to the schema
@@ -73,6 +75,9 @@ type ObjectOwnedMixin struct {
 	SkipDeletedAt bool
 	// WorkflowEdgeEligible marks owner edges as workflow-eligible for trigger detection.
 	WorkflowEdgeEligible bool
+	// SkipParentContextTuple skips the parent context tuple creation for schemas that have owner_id but permissions
+	// are not based on the parent organization, and instead based on other parents
+	SkipParentContextTuple bool
 }
 
 type HookFunc func(o ObjectOwnedMixin) ent.Hook
@@ -130,11 +135,9 @@ func withHookFuncs(hookFuncs ...HookFunc) objectOwnedOption {
 }
 
 // withSkipForSystemAdmin allows the owner id field to be empty for system admins
-// if the mixin config is used and also includes the system owned mixin, this will be
-// automatically set to true
-func withSkipForSystemAdmin(allow bool) objectOwnedOption {
+func withSkipForSystemAdmin() objectOwnedOption {
 	return func(o *ObjectOwnedMixin) {
-		o.AllowEmptyForSystemAdmin = allow
+		o.AllowEmptyForSystemAdmin = true
 	}
 }
 
@@ -178,18 +181,30 @@ func withParents(schemas ...any) objectOwnedOption {
 	}
 }
 
+// orgOwnedSettings are settings common for schemas with parent organizations owners
+func orgOwnedSettings(o *ObjectOwnedMixin) {
+	o.IncludeOrganizationOwner = true
+
+	o.HookFuncs = append(o.HookFuncs, orgHookCreateFunc)
+	o.InterceptorFuncs = append(o.InterceptorFuncs, defaultOrgInterceptorFunc)
+}
+
 // withOrganizationOwner adds the organization owner_id field and hooks to the schema
 // and optionally allows system admins to have empty owner_id
-func withOrganizationOwner(skipSystemAdmin bool) objectOwnedOption {
+func withOrganizationOwner() objectOwnedOption {
 	return func(o *ObjectOwnedMixin) {
-		o.IncludeOrganizationOwner = true
+		orgOwnedSettings(o)
+	}
+}
 
-		if skipSystemAdmin {
-			o.AllowEmptyForSystemAdmin = skipSystemAdmin
-		}
+// withOrganizationOwnerFieldOnly adds the organization owner_id field but
+// does not have a parent_context check for the organization; schemas that use this inherit
+// permissions from parents and not the organization directly
+func withOrganizationOwnerFieldOnly() objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		o.SkipParentContextTuple = true
 
-		o.HookFuncs = append(o.HookFuncs, orgHookCreateFunc)
-		o.InterceptorFuncs = append(o.InterceptorFuncs, defaultOrgInterceptorFunc)
+		orgOwnedSettings(o)
 	}
 }
 
@@ -197,31 +212,14 @@ func withOrganizationOwner(skipSystemAdmin bool) objectOwnedOption {
 // but does NOT add the editor relation tuple. This is for system-driven objects where
 // only services should be able to create/edit/delete, but users can view based on org membership.
 // It also replaces the default tuple update hook with one that skips creating user parent tuples.
-func withOrganizationOwnerServiceOnly(skipSystemAdmin bool) objectOwnedOption {
+func withOrganizationOwnerServiceOnly() objectOwnedOption {
 	return func(o *ObjectOwnedMixin) {
 		o.IncludeOrganizationOwner = true
-
-		if skipSystemAdmin {
-			o.AllowEmptyForSystemAdmin = skipSystemAdmin
-		}
 
 		// Replace the default tuple update hook with a service-only version
 		// that skips creating user parent tuples (since users are not allowed as parent types)
 		o.HookFuncs = []HookFunc{serviceOnlyTupleUpdateFunc, orgHookCreateServiceOnlyFunc}
 		o.InterceptorFuncs = append(o.InterceptorFuncs, defaultOrgInterceptorFunc)
-	}
-}
-
-// withListObjectsFilter allows to use the list objects filter for the object owned mixin instead of batch checks
-func withListObjectsFilter() objectOwnedOption { //nolint:unused
-	return func(o *ObjectOwnedMixin) {
-		o.UseListObjectsFilter = true
-	}
-}
-
-func withOverrideOwnerFieldName(fieldName string) objectOwnedOption { //nolint:unused
-	return func(o *ObjectOwnedMixin) {
-		o.OwnerFieldName = fieldName
 	}
 }
 
@@ -235,6 +233,14 @@ func withOverrideOwnerFieldName(fieldName string) objectOwnedOption { //nolint:u
 func withSkipFilterInterceptor(mode interceptors.SkipMode) objectOwnedOption {
 	return func(o *ObjectOwnedMixin) {
 		o.SkipListFilterInterceptor = mode
+	}
+}
+
+// withForceFilter prevents the scope check from short-circuiting the filter for this schema
+// use when org-wide scope does not imply access to all objects of this type (e.g. File)
+func withForceFilter() objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		o.ForceFilterFn = func(_ context.Context) bool { return true }
 	}
 }
 
@@ -373,19 +379,6 @@ func (o ObjectOwnedMixin) P(w interface{ WhereP(...func(*sql.Selector)) }, objec
 	o.PWithField(w, "id", objectIDs)
 }
 
-// defaultSkipCreateUserPermissionsFunc is the default function to skip creating user permissions
-var defaultSkipCreateUserPermissionsFunc = func(ctx context.Context, m ent.Mutation) bool {
-	if m.Op() != ent.OpCreate {
-		return true
-	}
-
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapBypassFGA) {
-		return true
-	}
-
-	return false
-}
-
 // defaultTupleUpdateFunc is the default hook function for the object owned mixin
 // to add tuples to the database when creating or updating an object based on the edges
 // that can own the object
@@ -396,7 +389,7 @@ var defaultTupleUpdateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	}
 
 	return hook.On(
-		hooks.HookObjectOwnedTuples(o.FieldNames, ownerRelation, defaultSkipCreateUserPermissionsFunc),
+		hooks.HookObjectOwnedTuples(o.FieldNames, ownerRelation),
 		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 	)
 }
@@ -410,7 +403,7 @@ var serviceOnlyTupleUpdateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	}
 
 	return hook.On(
-		hooks.HookObjectOwnedTuples(o.FieldNames, ownerRelation, skipUserParentTupleFunc),
+		hooks.HookObjectOwnedTuples(o.FieldNames, ownerRelation),
 		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 	)
 }
@@ -467,7 +460,7 @@ func skipQueryModeCheck(ctx context.Context, mode interceptors.SkipMode) bool {
 // this can be used when an object adds tuples for explicit behavior, but all org members should be able to view the object
 // for example, a questionnaire template owned by the organization but is sent to an external user to fill out
 func skipInterceptorForOrgMembers(ctx context.Context) bool {
-	if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.CanView); errors.Is(err, privacy.Allow) {
+	if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.CanView); access.Allow(err) {
 		return true
 	}
 
@@ -513,7 +506,9 @@ func getObjectInterceptor[V any](o *ObjectOwnedMixin) {
 		}
 	}
 
+	forceFilterFn := o.ForceFilterFn
+
 	o.InterceptorFuncs = append(o.InterceptorFuncs, func(_ ObjectOwnedMixin) ent.Interceptor {
-		return interceptors.FilterQueryResults[V](customSkipperFunc)
+		return interceptors.FilterQueryResults[V](forceFilterFn, customSkipperFunc)
 	})
 }

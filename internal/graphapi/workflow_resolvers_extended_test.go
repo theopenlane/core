@@ -129,6 +129,7 @@ func createWorkflowProposal(t *testing.T, ctx context.Context, ownerID string, i
 
 func TestRequestChangesWorkflowAssignment(t *testing.T) {
 	ensureWorkflowEngine(t)
+	t.Parallel()
 
 	user := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 	ctx := setContext(user.UserCtx, suite.client.db)
@@ -179,6 +180,7 @@ func TestRequestChangesWorkflowAssignment(t *testing.T) {
 
 func TestReassignWorkflowAssignment(t *testing.T) {
 	ensureWorkflowEngine(t)
+	t.Parallel()
 
 	owner := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 	newTarget := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
@@ -209,6 +211,7 @@ func TestReassignWorkflowAssignment(t *testing.T) {
 
 func TestAdminReassignWorkflowAssignment(t *testing.T) {
 	ensureWorkflowEngine(t)
+	t.Parallel()
 
 	owner := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 	oldTarget := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
@@ -308,6 +311,7 @@ func TestWorkflowProposalSubmitAndWithdraw(t *testing.T) {
 
 func TestWorkflowProposalPreview(t *testing.T) {
 	ensureWorkflowEngine(t)
+	t.Parallel()
 
 	user := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 	ctx := setContext(user.UserCtx, suite.client.db)

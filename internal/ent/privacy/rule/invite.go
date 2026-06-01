@@ -2,7 +2,6 @@ package rule
 
 import (
 	"context"
-	"strings"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -14,8 +13,10 @@ import (
 )
 
 const (
-	inviteMemberRelation = "can_invite_members"
-	inviteAdminRelation  = "can_invite_admins"
+	inviteMemberRelation     = "can_invite_members"
+	inviteAdminRelation      = "can_invite_admins"
+	inviteSuperAdminRelation = "can_invite_super_admins"
+	inviteAuditors           = "can_invite_auditors"
 )
 
 // CanInviteUsers is a rule that returns allow decision if user has access to invite members or admins to the organization
@@ -100,11 +101,5 @@ func getRelationToCheck(ctx context.Context, m *generated.InviteMutation) (strin
 		}
 	}
 
-	// allow member to invite members
-	if strings.EqualFold(role.String(), fgax.MemberRelation) {
-		return inviteMemberRelation, nil
-	}
-
-	// default to admin
-	return inviteAdminRelation, nil
+	return InviteRelationForRole(role), nil
 }

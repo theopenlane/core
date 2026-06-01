@@ -52,6 +52,17 @@ mutation RemoveUserFromOrg ($deleteOrgMembershipId: ID!) {
 		deletedID
 	}
 }
+mutation UpdateBulkOrgMemberRoles ($ids: [ID!]!, $input: UpdateOrgMembershipInput!) {
+	updateBulkOrgMembership(ids: $ids, input: $input) {
+		orgMemberships {
+			id
+			role
+			userID
+			organizationID
+		}
+		updatedIDs
+	}
+}
 mutation UpdateUserRoleInOrg ($updateOrgMemberId: ID!, $input: UpdateOrgMembershipInput!) {
 	updateOrgMembership(id: $updateOrgMemberId, input: $input) {
 		orgMembership {

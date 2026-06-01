@@ -4,6 +4,8 @@ import (
 	"context"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
+	"github.com/gertd/go-pluralize"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -12,12 +14,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 )
-
-// trustCenterMutation defines an interface for mutations that involve a trust center ID.
-type trustCenterMutation interface {
-	TrustCenterID() (string, bool)
-	OldTrustCenterID(context.Context) (string, error)
-}
 
 // AllowIfTrustCenterEditor checks if the user has edit access to the trust center associated with the mutation
 // so it can be used to allow mutations on trust center related entities.
@@ -38,7 +34,7 @@ func AllowIfTrustCenterEditor() privacy.MutationRule {
 // getTrustCenterIDFromMutation extracts the trust center ID from the mutation
 // if available, otherwise tries to query it from the database.
 func getTrustCenterIDFromMutation(ctx context.Context, m ent.Mutation) string {
-	tcMutation, ok := m.(trustCenterMutation)
+	tcMutation, ok := m.(utils.TrustCenterMutation)
 	if !ok {
 		logx.FromContext(ctx).Warn().Str("mutation", m.Type()).Str("rule", "AllowIfTrustCenterEditor").Msg("mutation does not implement trustCenterMutation interface")
 
@@ -51,13 +47,38 @@ func getTrustCenterIDFromMutation(ctx context.Context, m ent.Mutation) string {
 		return id
 	}
 
-	// try to get the old trust center id if available (for updates)
+	// try to get the old trust center id if available (for updates), this does not work for delete
 	id, err := tcMutation.OldTrustCenterID(ctx)
 	if err == nil {
 		return id
 	}
 
-	logx.FromContext(ctx).Debug().Msgf("error getting old trust center id from mutation :%v", err)
+	objectID, ok := tcMutation.ID()
+	if !ok {
+		return ""
+	}
+
+	objectType := m.Type()
+	pluralObjectType := pluralize.NewClient().Plural(objectType)
+	tableName := strcase.SnakeCase(pluralObjectType)
+
+	query := "SELECT trust_center_id FROM " + tableName + " WHERE id = $1"
+
+	var rows sql.Rows
+	if err := tcMutation.Client().Driver().Query(ctx, query, []any{objectID}, &rows); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to check for object in organization")
+
+		return ""
+	}
+
+	defer rows.Close()
+
+	if rows.Next() {
+		var trustCenterID string
+		if err := rows.Scan(&trustCenterID); err == nil {
+			return trustCenterID
+		}
+	}
 
 	return ""
 }

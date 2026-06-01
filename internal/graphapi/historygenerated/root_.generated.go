@@ -54,6 +54,8 @@ type ComplexityRoot struct {
 		DismissedImprovementSuggestions func(childComplexity int) int
 		DismissedTagSuggestions         func(childComplexity int) int
 		DueDate                         func(childComplexity int) int
+		ExternalContents                func(childComplexity int) int
+		ExternalFileID                  func(childComplexity int) int
 		FileID                          func(childComplexity int) int
 		HistoryTime                     func(childComplexity int) int
 		ID                              func(childComplexity int) int
@@ -1393,6 +1395,8 @@ type ComplexityRoot struct {
 		DisplayID                       func(childComplexity int) int
 		EnvironmentID                   func(childComplexity int) int
 		EnvironmentName                 func(childComplexity int) int
+		ExternalContents                func(childComplexity int) int
+		ExternalFileID                  func(childComplexity int) int
 		ExternalUUID                    func(childComplexity int) int
 		FileID                          func(childComplexity int) int
 		HistoryTime                     func(childComplexity int) int
@@ -1909,6 +1913,8 @@ type ComplexityRoot struct {
 		DisplayID                       func(childComplexity int) int
 		EnvironmentID                   func(childComplexity int) int
 		EnvironmentName                 func(childComplexity int) int
+		ExternalContents                func(childComplexity int) int
+		ExternalFileID                  func(childComplexity int) int
 		FileID                          func(childComplexity int) int
 		HistoryTime                     func(childComplexity int) int
 		ID                              func(childComplexity int) int
@@ -3476,6 +3482,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ActionPlanHistory.DueDate(childComplexity), true
+
+	case "ActionPlanHistory.externalContents":
+		if e.ComplexityRoot.ActionPlanHistory.ExternalContents == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlanHistory.ExternalContents(childComplexity), true
+
+	case "ActionPlanHistory.externalFileID":
+		if e.ComplexityRoot.ActionPlanHistory.ExternalFileID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlanHistory.ExternalFileID(childComplexity), true
 
 	case "ActionPlanHistory.fileID":
 		if e.ComplexityRoot.ActionPlanHistory.FileID == nil {
@@ -10897,6 +10917,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.InternalPolicyHistory.EnvironmentName(childComplexity), true
 
+	case "InternalPolicyHistory.externalContents":
+		if e.ComplexityRoot.InternalPolicyHistory.ExternalContents == nil {
+			break
+		}
+
+		return e.ComplexityRoot.InternalPolicyHistory.ExternalContents(childComplexity), true
+
+	case "InternalPolicyHistory.externalFileID":
+		if e.ComplexityRoot.InternalPolicyHistory.ExternalFileID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.InternalPolicyHistory.ExternalFileID(childComplexity), true
+
 	case "InternalPolicyHistory.externalUUID":
 		if e.ComplexityRoot.InternalPolicyHistory.ExternalUUID == nil {
 			break
@@ -13668,6 +13702,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ProcedureHistory.EnvironmentName(childComplexity), true
+
+	case "ProcedureHistory.externalContents":
+		if e.ComplexityRoot.ProcedureHistory.ExternalContents == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProcedureHistory.ExternalContents(childComplexity), true
+
+	case "ProcedureHistory.externalFileID":
+		if e.ComplexityRoot.ProcedureHistory.ExternalFileID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProcedureHistory.ExternalFileID(childComplexity), true
 
 	case "ProcedureHistory.fileID":
 		if e.ComplexityRoot.ProcedureHistory.FileID == nil {
@@ -22319,6 +22367,14 @@ type ActionPlanHistory implements Node {
   """
   fileID: String
   """
+  Documents managed externally may have IDs we need to reference, this holds them
+  """
+  externalFileID: String
+  """
+  The contents of externally managed files, if available
+  """
+  externalContents: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -22414,6 +22470,7 @@ ActionPlanHistoryDocumentManagementMode is enum for the field management_mode
 enum ActionPlanHistoryDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
   OPENLANE_MANAGED
   EXTERNAL_REFERENCE
+  INTEGRATION
 }
 """
 ActionPlanHistoryDocumentStatus is enum for the field status
@@ -22790,6 +22847,42 @@ input ActionPlanHistoryWhereInput {
   fileIDEqualFold: String
   fileIDContainsFold: String
   """
+  external_file_id field predicates
+  """
+  externalFileID: String
+  externalFileIDNEQ: String
+  externalFileIDIn: [String!]
+  externalFileIDNotIn: [String!]
+  externalFileIDGT: String
+  externalFileIDGTE: String
+  externalFileIDLT: String
+  externalFileIDLTE: String
+  externalFileIDContains: String
+  externalFileIDHasPrefix: String
+  externalFileIDHasSuffix: String
+  externalFileIDIsNil: Boolean
+  externalFileIDNotNil: Boolean
+  externalFileIDEqualFold: String
+  externalFileIDContainsFold: String
+  """
+  external_contents field predicates
+  """
+  externalContents: String
+  externalContentsNEQ: String
+  externalContentsIn: [String!]
+  externalContentsNotIn: [String!]
+  externalContentsGT: String
+  externalContentsGTE: String
+  externalContentsLT: String
+  externalContentsLTE: String
+  externalContentsContains: String
+  externalContentsHasPrefix: String
+  externalContentsHasSuffix: String
+  externalContentsIsNil: Boolean
+  externalContentsNotNil: Boolean
+  externalContentsEqualFold: String
+  externalContentsContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -23023,7 +23116,7 @@ type AssessmentHistory implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
@@ -40177,6 +40270,14 @@ type InternalPolicyHistory implements Node {
   """
   fileID: String
   """
+  Documents managed externally may have IDs we need to reference, this holds them
+  """
+  externalFileID: String
+  """
+  The contents of externally managed files, if available
+  """
+  externalContents: String
+  """
   the kind of the internal_policy
   """
   internalPolicyKindName: String
@@ -40232,6 +40333,7 @@ InternalPolicyHistoryDocumentManagementMode is enum for the field management_mod
 enum InternalPolicyHistoryDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
   OPENLANE_MANAGED
   EXTERNAL_REFERENCE
+  INTEGRATION
 }
 """
 InternalPolicyHistoryDocumentStatus is enum for the field status
@@ -40671,6 +40773,42 @@ input InternalPolicyHistoryWhereInput {
   fileIDNotNil: Boolean
   fileIDEqualFold: String
   fileIDContainsFold: String
+  """
+  external_file_id field predicates
+  """
+  externalFileID: String
+  externalFileIDNEQ: String
+  externalFileIDIn: [String!]
+  externalFileIDNotIn: [String!]
+  externalFileIDGT: String
+  externalFileIDGTE: String
+  externalFileIDLT: String
+  externalFileIDLTE: String
+  externalFileIDContains: String
+  externalFileIDHasPrefix: String
+  externalFileIDHasSuffix: String
+  externalFileIDIsNil: Boolean
+  externalFileIDNotNil: Boolean
+  externalFileIDEqualFold: String
+  externalFileIDContainsFold: String
+  """
+  external_contents field predicates
+  """
+  externalContents: String
+  externalContentsNEQ: String
+  externalContentsIn: [String!]
+  externalContentsNotIn: [String!]
+  externalContentsGT: String
+  externalContentsGTE: String
+  externalContentsLT: String
+  externalContentsLTE: String
+  externalContentsContains: String
+  externalContentsHasPrefix: String
+  externalContentsHasSuffix: String
+  externalContentsIsNil: Boolean
+  externalContentsNotNil: Boolean
+  externalContentsEqualFold: String
+  externalContentsContainsFold: String
   """
   internal_policy_kind_name field predicates
   """
@@ -43770,6 +43908,8 @@ enum OrgMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/commo
   ADMIN
   MEMBER
   OWNER
+  SUPER_ADMIN
+  AUDITOR
 }
 """
 OrgMembershipHistoryWhereInput is used for filtering OrgMembershipHistory objects.
@@ -46528,6 +46668,14 @@ type ProcedureHistory implements Node {
   """
   fileID: String
   """
+  Documents managed externally may have IDs we need to reference, this holds them
+  """
+  externalFileID: String
+  """
+  The contents of externally managed files, if available
+  """
+  externalContents: String
+  """
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
@@ -46591,6 +46739,7 @@ ProcedureHistoryDocumentManagementMode is enum for the field management_mode
 enum ProcedureHistoryDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
   OPENLANE_MANAGED
   EXTERNAL_REFERENCE
+  INTEGRATION
 }
 """
 ProcedureHistoryDocumentStatus is enum for the field status
@@ -46987,6 +47136,42 @@ input ProcedureHistoryWhereInput {
   fileIDNotNil: Boolean
   fileIDEqualFold: String
   fileIDContainsFold: String
+  """
+  external_file_id field predicates
+  """
+  externalFileID: String
+  externalFileIDNEQ: String
+  externalFileIDIn: [String!]
+  externalFileIDNotIn: [String!]
+  externalFileIDGT: String
+  externalFileIDGTE: String
+  externalFileIDLT: String
+  externalFileIDLTE: String
+  externalFileIDContains: String
+  externalFileIDHasPrefix: String
+  externalFileIDHasSuffix: String
+  externalFileIDIsNil: Boolean
+  externalFileIDNotNil: Boolean
+  externalFileIDEqualFold: String
+  externalFileIDContainsFold: String
+  """
+  external_contents field predicates
+  """
+  externalContents: String
+  externalContentsNEQ: String
+  externalContentsIn: [String!]
+  externalContentsNotIn: [String!]
+  externalContentsGT: String
+  externalContentsGTE: String
+  externalContentsLT: String
+  externalContentsLTE: String
+  externalContentsContains: String
+  externalContentsHasPrefix: String
+  externalContentsHasSuffix: String
+  externalContentsIsNil: Boolean
+  externalContentsNotNil: Boolean
+  externalContentsEqualFold: String
+  externalContentsContainsFold: String
   """
   system_owned field predicates
   """
@@ -47766,6 +47951,7 @@ ProgramMembershipHistoryRole is enum for the field role
 enum ProgramMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/common/enums.Role") {
   ADMIN
   MEMBER
+  AUDITOR
 }
 """
 ProgramMembershipHistoryWhereInput is used for filtering ProgramMembershipHistory objects.
@@ -66239,6 +66425,10 @@ func (ec *executionContext) childFields_ActionPlanHistory(ctx context.Context, f
 		return ec.fieldContext_ActionPlanHistory_url(ctx, field)
 	case "fileID":
 		return ec.fieldContext_ActionPlanHistory_fileID(ctx, field)
+	case "externalFileID":
+		return ec.fieldContext_ActionPlanHistory_externalFileID(ctx, field)
+	case "externalContents":
+		return ec.fieldContext_ActionPlanHistory_externalContents(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_ActionPlanHistory_ownerID(ctx, field)
 	case "systemOwned":
@@ -68935,6 +69125,10 @@ func (ec *executionContext) childFields_InternalPolicyHistory(ctx context.Contex
 		return ec.fieldContext_InternalPolicyHistory_url(ctx, field)
 	case "fileID":
 		return ec.fieldContext_InternalPolicyHistory_fileID(ctx, field)
+	case "externalFileID":
+		return ec.fieldContext_InternalPolicyHistory_externalFileID(ctx, field)
+	case "externalContents":
+		return ec.fieldContext_InternalPolicyHistory_externalContents(ctx, field)
 	case "internalPolicyKindName":
 		return ec.fieldContext_InternalPolicyHistory_internalPolicyKindName(ctx, field)
 	case "internalPolicyKindID":
@@ -69961,6 +70155,10 @@ func (ec *executionContext) childFields_ProcedureHistory(ctx context.Context, fi
 		return ec.fieldContext_ProcedureHistory_url(ctx, field)
 	case "fileID":
 		return ec.fieldContext_ProcedureHistory_fileID(ctx, field)
+	case "externalFileID":
+		return ec.fieldContext_ProcedureHistory_externalFileID(ctx, field)
+	case "externalContents":
+		return ec.fieldContext_ProcedureHistory_externalContents(ctx, field)
 	case "systemOwned":
 		return ec.fieldContext_ProcedureHistory_systemOwned(ctx, field)
 	case "internalNotes":

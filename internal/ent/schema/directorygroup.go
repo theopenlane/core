@@ -266,6 +266,7 @@ func (g DirectoryGroup) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
+			policy.CheckCreateAccess(),
 		),
 	)
 }

@@ -25,7 +25,7 @@ func TestNotificationCreated(t *testing.T) {
 	}{
 		{
 			name:        "happy path",
-			testUser:    testUser1,
+			testUser:    sharedTestUser1,
 			expectError: false,
 		},
 		{

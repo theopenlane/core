@@ -97,7 +97,7 @@ var (
 )
 
 const (
-	fgaModelFile             = "../../../fga/model/model.fga"
+	fgaModuleFile            = "../../../fga/model/fga.mod"
 	seedStripeSubscriptionID = "sub_test_subscription"
 )
 
@@ -151,7 +151,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 	// setup openFGA container
 	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
-		fgatest.WithModelFile(fgaModelFile),
+		fgatest.WithModuleFile(fgaModuleFile),
 		fgatest.WithEnvVars(coreutils.GetDefaultFGAEnvs()),
 		fgatest.WithVersion(version),
 	)

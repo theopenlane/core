@@ -75,13 +75,14 @@ import (
 )
 
 const (
-	fgaModelFile = "../../fga/model/model.fga"
+	fgaModuleFile = "../../fga/model/fga.mod"
 
 	redacted = "*****************************"
 
 	// common error message strings
 	notFoundErrorMsg         = "not found"
 	notAuthorizedErrorMsg    = "you are not authorized to perform this action"
+	missingScopeErrorMsg     = "lacks the required scopes"
 	invalidInputErrorMsg     = "invalid input"
 	seedStripeSubscriptionID = "sub_test_subscription"
 	webhookSecret            = "whsec_test_secret"
@@ -104,13 +105,14 @@ type GraphTestSuite struct {
 
 // client contains all the clients the test need to interact with
 type client struct {
-	db           *ent.Client
-	api          *testclient.TestClient
-	apiWithPAT   *testclient.TestClient
-	apiWithToken *testclient.TestClient
-	fga          *fgax.Client
-	objectStore  *objects.Service
-	mockProvider *mock_shared.MockProvider
+	db               *ent.Client
+	api              *testclient.TestClient
+	apiWithPAT       *testclient.TestClient
+	apiWithToken     *testclient.TestClient
+	apiWithTokenOrg2 *testclient.TestClient
+	fga              *fgax.Client
+	objectStore      *objects.Service
+	mockProvider     *mock_shared.MockProvider
 }
 
 var suite = &GraphTestSuite{}
@@ -167,7 +169,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	// setup openFGA container
 	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
-		fgatest.WithModelFile(fgaModelFile),
+		fgatest.WithModuleFile(fgaModuleFile),
 		fgatest.WithEnvVars(coreutils.GetDefaultFGAEnvs()),
 		fgatest.WithVersion(version),
 	)
@@ -607,6 +609,19 @@ func requireNoError(t *testing.T, err error) {
 
 		os.Exit(1)
 	}
+}
+
+func failNow(t *testing.T, msgs ...string) {
+	t.Helper()
+	logMsg := log.Error()
+
+	for _, m := range msgs {
+		logMsg.Str("msg", m)
+	}
+
+	logMsg.Msg("fatal error during test setup or teardown")
+
+	os.Exit(1)
 }
 
 func testPDFBytes() []byte {

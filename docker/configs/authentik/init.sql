@@ -1,0 +1,3 @@
+CREATE DATABASE authentik;
+
+GRANT ALL PRIVILEGES ON DATABASE authentik TO postgres;

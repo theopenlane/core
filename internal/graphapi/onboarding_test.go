@@ -14,6 +14,8 @@ import (
 )
 
 func TestMutationCreateOnboarding(t *testing.T) {
+	t.Parallel()
+
 	// create another user for this test
 	// so it doesn't interfere with the other tests
 	onboardingUser := suite.userBuilder(context.Background(), t)

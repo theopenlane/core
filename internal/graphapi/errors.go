@@ -7,7 +7,8 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	access "github.com/theopenlane/core/internal/ent/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/pkg/logx"
@@ -27,6 +28,9 @@ func parseRequestError(ctx context.Context, err error, a common.Action) error {
 		Msg("error processing request")
 
 	switch {
+	case errors.Is(err, rule.ErrRequiredScopeNotSet):
+		// The access token lacks the required scopes for this request.
+		return common.NewErrorWithCode(common.ErrMissingRequireScopes, gqlerrors.InsufficientScopes)
 	case generated.IsValidationError(err):
 		validationError := err.(*generated.ValidationError)
 
@@ -73,7 +77,7 @@ func parseRequestError(ctx context.Context, err error, a common.Action) error {
 		logx.FromContext(ctx).Info().Err(err).Msg("request object was not found")
 
 		return common.NewNotFoundError(a.Object)
-	case errors.Is(err, privacy.Deny):
+	case access.Deny(err):
 		logx.FromContext(ctx).Info().Err(err).Msg("user has no access to the requested object due to privacy rules")
 
 		return common.NewNotFoundError(a.Object)

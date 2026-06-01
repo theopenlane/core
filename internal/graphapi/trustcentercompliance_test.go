@@ -10,21 +10,22 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/ulids"
 )
 
 func TestMutationCreateTrustCenterCompliance(t *testing.T) {
-	cleanupTrustCenterData(t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t, withAllUserTypes())
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
 
 	// Create test data - standards and trust centers
-	standard1 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	standard2 := (&StandardBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
-	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+	standard1 := (&StandardBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+	standard2 := (&StandardBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
-	trustCenter1 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	trustCenter1 := tcOrg.trustCenter
+	trustCenter2 := tcOrg2.trustCenter
 
 	testCases := []struct {
 		name        string
@@ -39,7 +40,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 				StandardID: standard1.ID,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name: "happy path, with trust center and tags",
@@ -49,7 +50,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 				Tags:          []string{"compliance", "test"},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.admin.UserCtx,
 		},
 		{
 			name: "happy path, using public standard",
@@ -59,7 +60,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 				Tags:          []string{"public", "compliance"},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.superAdmin.UserCtx,
 		},
 		{
 			name: "happy path, using personal access token",
@@ -68,7 +69,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 				TrustCenterID: &trustCenter1.ID,
 				Tags:          []string{"pat", "test"},
 			},
-			client: suite.client.apiWithPAT,
+			client: tcOrg.adminPatClient,
 			ctx:    context.Background(),
 		},
 		{
@@ -78,7 +79,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 				TrustCenterID: &trustCenter1.ID,
 				Tags:          []string{"api", "token"},
 			},
-			client: suite.client.apiWithToken,
+			client: tcOrg.adminApiClient,
 			ctx:    context.Background(),
 		},
 		{
@@ -88,8 +89,8 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 				TrustCenterID: &trustCenter1.ID,
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			ctx:         tcOrg.owner.UserCtx,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name: "user not authorized, different org trust center",
@@ -98,7 +99,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 				TrustCenterID: &trustCenter2.ID,
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -108,7 +109,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 				TrustCenterID: &trustCenter1.ID,
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         tcOrg.member.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -118,7 +119,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 				TrustCenterID: &trustCenter1.ID,
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
@@ -128,8 +129,8 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 				TrustCenterID: &trustCenter1.ID,
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			ctx:         tcOrg.owner.UserCtx,
+			expectedErr: "invalid input",
 		},
 		{
 			name: "invalid trust center id",
@@ -138,7 +139,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 				TrustCenterID: lo.ToPtr("invalid-id"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 	}
@@ -170,7 +171,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 			// cleanup the created trust center compliance
 			ctx := tc.ctx
 			if tc.client != suite.client.api {
-				ctx = testUser1.UserCtx
+				ctx = tcOrg.owner.UserCtx
 			}
 
 			(&Cleanup[*generated.TrustCenterComplianceDeleteOne]{client: suite.client.db.TrustCenterCompliance, ID: resp.CreateTrustCenterCompliance.TrustCenterCompliance.ID}).MustDelete(ctx, t)
@@ -178,39 +179,32 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 	}
 
 	// Cleanup test data
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{standard1.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{publicStandard.ID, standard2.ID}}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter1.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestQueryTrustCenterCompliance(t *testing.T) {
-	newUser := suite.userBuilder(context.Background(), t)
-	apiClient := suite.setupAPITokenClient(newUser.UserCtx, t)
-	patClient := suite.setupPatClient(newUser, t)
-
-	orgMember := (&OrgMemberBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
-	orgMemberCtx := auth.NewTestContextWithOrgID(orgMember.UserID, newUser.OrganizationID)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t, withAllUserTypes())
 
 	// Create test data
-	standard := (&StandardBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
+	standard := (&StandardBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+	trustCenter := tcOrg.trustCenter
 
 	compliance := (&TrustCenterComplianceBuilder{
 		client:        suite.client,
 		StandardID:    standard.ID,
 		TrustCenterID: trustCenter.ID,
 		Tags:          []string{"test", "query"},
-	}).MustNew(newUser.UserCtx, t)
+	}).MustNew(tcOrg.owner.UserCtx, t)
 
-	newUser2 := suite.userBuilder(context.Background(), t)
+	users2 := suite.seedFreshOrgUsers(t)
 
 	// Create compliance for different org
-	standardOther := (&StandardBuilder{client: suite.client}).MustNew(newUser2.UserCtx, t)
+	standardOther := (&StandardBuilder{client: suite.client}).MustNew(users2.owner.UserCtx, t)
 	complianceOther := (&TrustCenterComplianceBuilder{
 		client:     suite.client,
 		StandardID: standardOther.ID,
-	}).MustNew(newUser2.UserCtx, t)
+	}).MustNew(users2.owner.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -223,51 +217,51 @@ func TestQueryTrustCenterCompliance(t *testing.T) {
 			name:    "happy path",
 			queryID: compliance.ID,
 			client:  suite.client.api,
-			ctx:     newUser.UserCtx,
+			ctx:     tcOrg.admin.UserCtx,
 		},
 		{
 			name:    "happy path, view only user",
 			queryID: compliance.ID,
 			client:  suite.client.api,
-			ctx:     orgMemberCtx,
+			ctx:     tcOrg.member.UserCtx,
 		},
 		{
 			name:    "happy path, anonymous user",
 			queryID: compliance.ID,
 			client:  suite.client.api,
-			ctx:     createAnonymousTrustCenterContext(trustCenter.ID, newUser.OrganizationID),
+			ctx:     createAnonymousTrustCenterContext(trustCenter.ID, tcOrg.owner.OrganizationID),
 		},
 		{
 			name:    "happy path using personal access token",
 			queryID: compliance.ID,
-			client:  patClient,
+			client:  tcOrg.adminPatClient,
 			ctx:     context.Background(),
 		},
 		{
 			name:    "happy path using api token",
 			queryID: compliance.ID,
-			client:  apiClient,
+			client:  tcOrg.adminApiClient,
 			ctx:     context.Background(),
 		},
 		{
 			name:     "trust center compliance not found, invalid ID",
 			queryID:  "invalid",
 			client:   suite.client.api,
-			ctx:      newUser.UserCtx,
+			ctx:      tcOrg.owner.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "trust center compliance not found, using not authorized user",
 			queryID:  compliance.ID,
 			client:   suite.client.api,
-			ctx:      newUser2.UserCtx,
+			ctx:      users2.owner.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "trust center compliance not found, different org",
 			queryID:  complianceOther.ID,
 			client:   suite.client.api,
-			ctx:      newUser.UserCtx,
+			ctx:      tcOrg.owner.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -292,21 +286,18 @@ func TestQueryTrustCenterCompliance(t *testing.T) {
 	}
 
 	// Cleanup
-	(&Cleanup[*generated.TrustCenterComplianceDeleteOne]{client: suite.client.db.TrustCenterCompliance, ID: compliance.ID}).MustDelete(newUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterComplianceDeleteOne]{client: suite.client.db.TrustCenterCompliance, ID: complianceOther.ID}).MustDelete(newUser2.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(newUser.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardOther.ID}).MustDelete(newUser2.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(newUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestUpdateTrustCenterComplianceUpdatesFgaTuples(t *testing.T) {
-	cleanupTrustCenterData(t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.trustCenter
 
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	standard1 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	standard2 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	standard1 := (&StandardBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+	standard2 := (&StandardBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
 
-	resp, err := suite.client.api.CreateTrustCenterCompliance(testUser1.UserCtx, testclient.CreateTrustCenterComplianceInput{
+	resp, err := suite.client.api.CreateTrustCenterCompliance(tcOrg.owner.UserCtx, testclient.CreateTrustCenterComplianceInput{
 		TrustCenterID: &trustCenter.ID,
 		StandardID:    standard1.ID,
 	})
@@ -321,7 +312,7 @@ func TestUpdateTrustCenterComplianceUpdatesFgaTuples(t *testing.T) {
 			ObjectType:  "standard",
 			Relation:    "associated_with",
 		}
-		exists, err := suite.client.db.Authz.CheckAccess(testUser1.UserCtx, ac)
+		exists, err := suite.client.db.Authz.CheckAccess(tcOrg.owner.UserCtx, ac)
 		assert.NilError(t, err)
 		if shouldExist {
 			assert.Assert(t, exists)
@@ -332,7 +323,7 @@ func TestUpdateTrustCenterComplianceUpdatesFgaTuples(t *testing.T) {
 
 	checkTuple(standard1.ID, true)
 
-	_, err = suite.client.api.UpdateTrustCenterCompliance(testUser1.UserCtx, complianceID, testclient.UpdateTrustCenterComplianceInput{
+	_, err = suite.client.api.UpdateTrustCenterCompliance(tcOrg.owner.UserCtx, complianceID, testclient.UpdateTrustCenterComplianceInput{
 		StandardID: &standard2.ID,
 	})
 	assert.NilError(t, err)
@@ -340,20 +331,20 @@ func TestUpdateTrustCenterComplianceUpdatesFgaTuples(t *testing.T) {
 	checkTuple(standard1.ID, false)
 	checkTuple(standard2.ID, true)
 
-	(&Cleanup[*generated.TrustCenterComplianceDeleteOne]{client: suite.client.db.TrustCenterCompliance, ID: complianceID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{standard1.ID, standard2.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestQueryTrustCenterCompliances(t *testing.T) {
-	cleanupTrustCenterData(t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t, withAPIClients())
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
 
 	// Create test data
-	standard1 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	standard2 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	standard1 := (&StandardBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+	standard2 := (&StandardBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+	trustCenter := tcOrg.trustCenter
 
-	// Create multiple compliances for testUser1
+	// Create multiple compliances for tcOrg.owner
 	countOrgOwned := 2
 	orgOwnedComplianceIDs := []string{}
 	for i := range countOrgOwned {
@@ -366,19 +357,19 @@ func TestQueryTrustCenterCompliances(t *testing.T) {
 			StandardID:    standardID,
 			TrustCenterID: trustCenter.ID,
 			Tags:          []string{"org", "test"},
-		}).MustNew(testUser1.UserCtx, t)
+		}).MustNew(tcOrg.owner.UserCtx, t)
 		orgOwnedComplianceIDs = append(orgOwnedComplianceIDs, compliance.ID)
 	}
 
 	// Create compliance for different org
-	standardOther := (&StandardBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
-	trustCenterOther := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
-	complianceOther := (&TrustCenterComplianceBuilder{
+	standardOther := (&StandardBuilder{client: suite.client}).MustNew(tcOrg2.owner.UserCtx, t)
+	trustCenterOther := tcOrg2.trustCenter
+	(&TrustCenterComplianceBuilder{
 		client:        suite.client,
 		StandardID:    standardOther.ID,
 		TrustCenterID: trustCenterOther.ID,
 		Tags:          []string{"other", "org"},
-	}).MustNew(testUser2.UserCtx, t)
+	}).MustNew(tcOrg2.owner.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -389,37 +380,37 @@ func TestQueryTrustCenterCompliances(t *testing.T) {
 		{
 			name:            "happy path, org user should get all org owned compliances",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             tcOrg.owner.UserCtx,
 			expectedResults: countOrgOwned,
 		},
 		{
 			name:            "happy path, using read only user of the same org",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             tcOrg.member.UserCtx,
 			expectedResults: countOrgOwned,
 		},
 		{
 			name:            "happy path, anonymous user",
 			client:          suite.client.api,
-			ctx:             createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID),
+			ctx:             createAnonymousTrustCenterContext(trustCenter.ID, tcOrg.owner.OrganizationID),
 			expectedResults: countOrgOwned,
 		},
 		{
 			name:            "happy path, using api token",
-			client:          suite.client.apiWithToken,
+			client:          tcOrg.adminApiClient,
 			ctx:             context.Background(),
 			expectedResults: countOrgOwned,
 		},
 		{
 			name:            "happy path, using pat",
-			client:          suite.client.apiWithPAT,
+			client:          tcOrg.adminPatClient,
 			ctx:             context.Background(),
 			expectedResults: countOrgOwned,
 		},
 		{
 			name:            "another user, should see their own compliance",
 			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
+			ctx:             tcOrg2.owner.UserCtx,
 			expectedResults: 1, // only their own compliance
 		},
 	}
@@ -445,27 +436,19 @@ func TestQueryTrustCenterCompliances(t *testing.T) {
 	}
 
 	// Cleanup
-	(&Cleanup[*generated.TrustCenterComplianceDeleteOne]{client: suite.client.db.TrustCenterCompliance, IDs: orgOwnedComplianceIDs}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterComplianceDeleteOne]{client: suite.client.db.TrustCenterCompliance, ID: complianceOther.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{standard1.ID, standard2.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardOther.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenterOther.ID}).MustDelete(testUser2.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg2.owner.UserCtx, t)
 }
 
 func TestMutationDeleteTrustCenterCompliance(t *testing.T) {
-	newUser := suite.userBuilder(context.Background(), t)
-	apiClient := suite.setupAPITokenClient(newUser.UserCtx, t)
-	patClient := suite.setupPatClient(newUser, t)
-
-	orgMember := (&OrgMemberBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
-	orgMemberCtx := auth.NewTestContextWithOrgID(orgMember.UserID, newUser.OrganizationID)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t, withAPIClients())
 
 	// Create test data for deletion
-	standard1 := (&StandardBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
-	standard2 := (&StandardBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
-	standard3 := (&StandardBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
-	trustCenter1 := (&TrustCenterBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
+	standard1 := (&StandardBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+	standard2 := (&StandardBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+	standard3 := (&StandardBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+	trustCenter1 := tcOrg.trustCenter
 
 	// Create compliance objects to delete
 	compliance1 := (&TrustCenterComplianceBuilder{
@@ -473,33 +456,33 @@ func TestMutationDeleteTrustCenterCompliance(t *testing.T) {
 		StandardID:    standard1.ID,
 		TrustCenterID: trustCenter1.ID,
 		Tags:          []string{"delete", "test1"},
-	}).MustNew(newUser.UserCtx, t)
+	}).MustNew(tcOrg.owner.UserCtx, t)
 
 	compliance2 := (&TrustCenterComplianceBuilder{
 		client:        suite.client,
 		StandardID:    standard2.ID,
 		TrustCenterID: trustCenter1.ID,
 		Tags:          []string{"delete", "test2"},
-	}).MustNew(newUser.UserCtx, t)
+	}).MustNew(tcOrg.owner.UserCtx, t)
 
 	compliance3 := (&TrustCenterComplianceBuilder{
 		client:        suite.client,
 		StandardID:    standard3.ID,
 		TrustCenterID: trustCenter1.ID,
 		Tags:          []string{"delete", "test3"},
-	}).MustNew(newUser.UserCtx, t)
+	}).MustNew(tcOrg.owner.UserCtx, t)
 
-	newUser2 := suite.userBuilder(context.Background(), t)
+	tcOrg2 := createFreshOrgWithTrustCenter(t, withAPIClients())
 
 	// Create compliance for different org
-	standardOther := (&StandardBuilder{client: suite.client}).MustNew(newUser2.UserCtx, t)
-	trustCenterOther := (&TrustCenterBuilder{client: suite.client}).MustNew(newUser2.UserCtx, t)
+	standardOther := (&StandardBuilder{client: suite.client}).MustNew(tcOrg2.owner.UserCtx, t)
+	trustCenterOther := tcOrg2.trustCenter
 	complianceOther := (&TrustCenterComplianceBuilder{
 		client:        suite.client,
 		StandardID:    standardOther.ID,
 		TrustCenterID: trustCenterOther.ID,
 		Tags:          []string{"other", "org"},
-	}).MustNew(newUser2.UserCtx, t)
+	}).MustNew(tcOrg2.owner.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -512,46 +495,53 @@ func TestMutationDeleteTrustCenterCompliance(t *testing.T) {
 			name:       "happy path, delete trust center compliance",
 			idToDelete: compliance1.ID,
 			client:     suite.client.api,
-			ctx:        newUser.UserCtx,
+			ctx:        tcOrg.owner.UserCtx,
+		},
+		{
+			name:        "not authorized, different org compliance api token",
+			idToDelete:  compliance2.ID,
+			client:      tcOrg2.adminApiClient,
+			ctx:         context.Background(),
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete using personal access token",
 			idToDelete: compliance2.ID,
-			client:     patClient,
+			client:     tcOrg.adminPatClient,
 			ctx:        context.Background(),
 		},
 		{
 			name:       "happy path, delete using api token",
 			idToDelete: compliance3.ID,
-			client:     apiClient,
+			client:     tcOrg.adminApiClient,
 			ctx:        context.Background(),
 		},
 		{
-			name:        "not authorized, different org compliance",
+			name:        "not authorized, different org compliance via jwt",
 			idToDelete:  complianceOther.ID,
 			client:      suite.client.api,
-			ctx:         newUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			ctx:         tcOrg.owner.UserCtx,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "not authorized, view only user",
 			idToDelete:  complianceOther.ID, // use different org compliance to test permissions
 			client:      suite.client.api,
-			ctx:         orgMemberCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			ctx:         tcOrg.member.UserCtx,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "trust center compliance not found, invalid ID",
 			idToDelete:  "invalid-id",
 			client:      suite.client.api,
-			ctx:         newUser.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "trust center compliance not found, non-existent ID",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         newUser.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -575,10 +565,5 @@ func TestMutationDeleteTrustCenterCompliance(t *testing.T) {
 		})
 	}
 
-	// Cleanup remaining test data
-	(&Cleanup[*generated.TrustCenterComplianceDeleteOne]{client: suite.client.db.TrustCenterCompliance, ID: complianceOther.ID}).MustDelete(newUser2.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{standard1.ID, standard2.ID, standard3.ID}}).MustDelete(newUser.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardOther.ID}).MustDelete(newUser2.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter1.ID}).MustDelete(newUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenterOther.ID}).MustDelete(newUser2.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }

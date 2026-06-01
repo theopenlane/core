@@ -207,8 +207,9 @@ func (c Control) Mixin() []ent.Mixin {
 			// controls must be associated with an organization but do not inherit permissions from the organization
 			// controls can inherit permissions from the associated programs
 			newObjectOwnedMixin[generated.Control](c,
-				withParents(Organization{}, Program{}, Standard{}),
-				withOrganizationOwner(true),
+				withParents(Program{}, Standard{}),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 				// controls are generally viewable by all users in the organization
 				// exceptions are based on group based access so we can safely
 				// skip the interceptor

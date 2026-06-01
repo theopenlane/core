@@ -15,7 +15,7 @@ import (
 )
 
 func TestQuerySLADefinition(t *testing.T) {
-	sla := (&SLADefinitionBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	sla := (&SLADefinitionBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -28,13 +28,13 @@ func TestQuerySLADefinition(t *testing.T) {
 			name:    "happy path",
 			queryID: sla.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path, read only user",
 			queryID: sla.ID,
 			client:  suite.client.api,
-			ctx:     viewOnlyUser.UserCtx,
+			ctx:     sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path using personal access token",
@@ -46,14 +46,14 @@ func TestQuerySLADefinition(t *testing.T) {
 			name:     "not found, invalid ID",
 			queryID:  "invalid",
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      sharedTestUser1.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "not found, using not authorized user",
 			queryID:  sla.ID,
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -76,11 +76,11 @@ func TestQuerySLADefinition(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.SLADefinitionDeleteOne]{client: suite.client.db.SLADefinition, ID: sla.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SLADefinitionDeleteOne]{client: suite.client.db.SLADefinition, ID: sla.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestQuerySLADefinitions(t *testing.T) {
-	sla1 := (&SLADefinitionBuilder{client: suite.client, SLADays: 7, SecurityLevel: enums.SecurityLevelNone}).MustNew(testUser1.UserCtx, t)
+	sla1 := (&SLADefinitionBuilder{client: suite.client, SLADays: 7, SecurityLevel: enums.SecurityLevelNone}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -91,13 +91,13 @@ func TestQuerySLADefinitions(t *testing.T) {
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             sharedTestUser1.UserCtx,
 			expectedResults: 5,
 		},
 		{
 			name:            "happy path, using read only user of the same org",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             sharedViewOnlyUser.UserCtx,
 			expectedResults: 5,
 		},
 		{
@@ -115,7 +115,7 @@ func TestQuerySLADefinitions(t *testing.T) {
 		{
 			name:            "another user, no results from this org",
 			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
+			ctx:             sharedTestUser2.UserCtx,
 			expectedResults: 4,
 		},
 	}
@@ -130,7 +130,7 @@ func TestQuerySLADefinitions(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.SLADefinitionDeleteOne]{client: suite.client.db.SLADefinition, ID: sla1.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SLADefinitionDeleteOne]{client: suite.client.db.SLADefinition, ID: sla1.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationCreateSLADefinition(t *testing.T) {
@@ -147,7 +147,7 @@ func TestMutationCreateSLADefinition(t *testing.T) {
 				SLADays: 30,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, using pat",
@@ -158,20 +158,12 @@ func TestMutationCreateSLADefinition(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
-			name: "happy path, using api token",
-			request: testclient.CreateSLADefinitionInput{
-				SLADays: 7,
-			},
-			client: suite.client.apiWithToken,
-			ctx:    context.Background(),
-		},
-		{
 			name: "user not authorized, not enough permissions",
 			request: testclient.CreateSLADefinitionInput{
 				SLADays: 60,
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 	}
@@ -191,13 +183,13 @@ func TestMutationCreateSLADefinition(t *testing.T) {
 			assert.Check(t, resp.CreateSLADefinition.SLADefinition.ID != "")
 			assert.Check(t, is.Equal(tc.request.SLADays, resp.CreateSLADefinition.SLADefinition.SLADays))
 
-			(&Cleanup[*generated.SLADefinitionDeleteOne]{client: suite.client.db.SLADefinition, ID: resp.CreateSLADefinition.SLADefinition.ID}).MustDelete(testUser1.UserCtx, t)
+			(&Cleanup[*generated.SLADefinitionDeleteOne]{client: suite.client.db.SLADefinition, ID: resp.CreateSLADefinition.SLADefinition.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 		})
 	}
 }
 
 func TestMutationUpdateSLADefinition(t *testing.T) {
-	sla := (&SLADefinitionBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	sla := (&SLADefinitionBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -212,7 +204,7 @@ func TestMutationUpdateSLADefinition(t *testing.T) {
 				SLADays: lo.ToPtr(int64(14)),
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name: "happy path, update using pat",
@@ -223,12 +215,20 @@ func TestMutationUpdateSLADefinition(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
+			name: "happy path, update using api token",
+			request: testclient.UpdateSLADefinitionInput{
+				SLADays: lo.ToPtr(int64(9)),
+			},
+			client: suite.client.apiWithToken,
+			ctx:    context.Background(),
+		},
+		{
 			name: "update not allowed, not enough permissions as view only user",
 			request: testclient.UpdateSLADefinitionInput{
 				SLADays: lo.ToPtr(int64(60)),
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -237,7 +237,7 @@ func TestMutationUpdateSLADefinition(t *testing.T) {
 				SLADays: lo.ToPtr(int64(60)),
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -260,13 +260,13 @@ func TestMutationUpdateSLADefinition(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.SLADefinitionDeleteOne]{client: suite.client.db.SLADefinition, ID: sla.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SLADefinitionDeleteOne]{client: suite.client.db.SLADefinition, ID: sla.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteSLADefinition(t *testing.T) {
-	sla1 := (&SLADefinitionBuilder{client: suite.client, SecurityLevel: enums.SecurityLevelLow}).MustNew(testUser1.UserCtx, t)
-	sla2 := (&SLADefinitionBuilder{client: suite.client, SecurityLevel: enums.SecurityLevelMedium}).MustNew(testUser1.UserCtx, t)
-	sla3 := (&SLADefinitionBuilder{client: suite.client, SecurityLevel: enums.SecurityLevelHigh}).MustNew(testUser1.UserCtx, t)
+	sla1 := (&SLADefinitionBuilder{client: suite.client, SecurityLevel: enums.SecurityLevelLow}).MustNew(sharedTestUser1.UserCtx, t)
+	sla2 := (&SLADefinitionBuilder{client: suite.client, SecurityLevel: enums.SecurityLevelMedium}).MustNew(sharedTestUser1.UserCtx, t)
+	sla3 := (&SLADefinitionBuilder{client: suite.client, SecurityLevel: enums.SecurityLevelHigh}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -279,27 +279,27 @@ func TestMutationDeleteSLADefinition(t *testing.T) {
 			name:        "not found, delete",
 			idToDelete:  sla1.ID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "not authorized, delete",
 			idToDelete:  sla1.ID,
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
 			idToDelete: sla1.ID,
 			client:     suite.client.api,
-			ctx:        adminUser.UserCtx,
+			ctx:        sharedAdminUser.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  sla1.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
@@ -318,7 +318,7 @@ func TestMutationDeleteSLADefinition(t *testing.T) {
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}

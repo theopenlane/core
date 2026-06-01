@@ -17,19 +17,19 @@ import (
 )
 
 func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
-	cleanupTrustCenterData(t)
-
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t, withAllUserTypes())
+	trustCenter := tcOrg.trustCenter
 
 	// delete the auto created watermark config for the trust center
 	// so we can test creating a new one
-	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	allowCtx := privacy.DecisionContext(tcOrg.owner.UserCtx, privacy.Allow)
 	trustCenterWatermarkConfig, err := suite.client.db.TrustCenterWatermarkConfig.Query().
 		Where(trustcenterwatermarkconfig.TrustCenterID(trustCenter.ID)).
 		Only(allowCtx)
 
 	assert.NilError(t, err)
-	(&Cleanup[*generated.TrustCenterWatermarkConfigDeleteOne]{client: suite.client.db.TrustCenterWatermarkConfig, ID: trustCenterWatermarkConfig.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterWatermarkConfigDeleteOne]{client: suite.client.db.TrustCenterWatermarkConfig, ID: trustCenterWatermarkConfig.ID}).MustDelete(tcOrg.owner.UserCtx, t)
 
 	createImageUpload := logoFileFunc(t)
 	testCases := []struct {
@@ -46,7 +46,7 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 				Text: lo.ToPtr("Test Text"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name: "happy path, minimal, logo",
@@ -55,7 +55,7 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 			},
 			watermarkFile: createImageUpload(),
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           tcOrg.superAdmin.UserCtx,
 		},
 		{
 			name: "happy path, all fields as admin",
@@ -69,7 +69,7 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 				Font:          &enums.FontHelvetica,
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    tcOrg.admin.UserCtx,
 		},
 		{
 			name: "not authorized",
@@ -78,8 +78,8 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 				Text:          lo.ToPtr("Test Text"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			ctx:         sharedTestUser2.UserCtx,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name: "missing required field, trust center id, no trust center found for org",
@@ -87,7 +87,7 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 				Text: lo.ToPtr("Test Text"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: "trustCenterID is required",
 		},
 		{
@@ -96,7 +96,7 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 				TrustCenterID: &trustCenter.ID,
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: "text_or_logo_id_not_null",
 		},
 	}
@@ -153,15 +153,15 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestQueryTrustCenterWatermarkConfig(t *testing.T) {
-	cleanupTrustCenterData(t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.trustCenter
 
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-
-	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	allowCtx := privacy.DecisionContext(tcOrg.owner.UserCtx, privacy.Allow)
 	watermarkConfig, err := suite.client.db.TrustCenterWatermarkConfig.Query().
 		Where(trustcenterwatermarkconfig.TrustCenterID(trustCenter.ID)).
 		Only(allowCtx)
@@ -179,33 +179,33 @@ func TestQueryTrustCenterWatermarkConfig(t *testing.T) {
 			name:    "happy path",
 			queryID: watermarkConfig.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     tcOrg.admin.UserCtx,
 		},
 		{
 			name:    "happy path by system admin",
 			queryID: watermarkConfig.ID,
 			client:  suite.client.api,
-			ctx:     systemAdminUser.UserCtx,
+			ctx:     sharedSystemAdminUser.UserCtx,
 		},
 		{
 			name:        "not found",
 			queryID:     "non-existent-id",
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "not authorized",
 			queryID:     watermarkConfig.ID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "anonymous user cannot access trust center watermark config",
 			queryID:     watermarkConfig.ID,
 			client:      suite.client.api,
-			ctx:         createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID),
+			ctx:         createAnonymousTrustCenterContext(trustCenter.ID, tcOrg.organizationID),
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -241,16 +241,15 @@ func TestQueryTrustCenterWatermarkConfig(t *testing.T) {
 			assert.Check(t, is.Equal(tc.queryID, resp2.TrustCenterWatermarkConfigs.Edges[0].Node.ID))
 		})
 	}
-	(&Cleanup[*generated.TrustCenterWatermarkConfigDeleteOne]{client: suite.client.db.TrustCenterWatermarkConfig, ID: watermarkConfig.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
-	cleanupTrustCenterData(t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.trustCenter
 
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-
-	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	allowCtx := privacy.DecisionContext(tcOrg.owner.UserCtx, privacy.Allow)
 	watermarkConfig, err := suite.client.db.TrustCenterWatermarkConfig.Query().
 		Where(trustcenterwatermarkconfig.TrustCenterID(trustCenter.ID)).
 		Only(allowCtx)
@@ -272,7 +271,7 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 				Text: lo.ToPtr("Updated Text"),
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    tcOrg.admin.UserCtx,
 		},
 		{
 			name: "happy path, update logo",
@@ -281,7 +280,7 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 			},
 			watermarkFile: createImageUpload(),
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           tcOrg.owner.UserCtx,
 		},
 		{
 			name: "happy path, update all fields as admin",
@@ -294,7 +293,7 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 				Font:     &enums.FontHelvetica,
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    tcOrg.admin.UserCtx,
 		},
 		{
 			name: "not authorized",
@@ -302,7 +301,7 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 				Text: lo.ToPtr("Updated Text"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -328,6 +327,6 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 			assert.Check(t, is.Equal(watermarkConfig.ID, resp.UpdateTrustCenterWatermarkConfig.TrustCenterWatermarkConfig.ID))
 		})
 	}
-	(&Cleanup[*generated.TrustCenterWatermarkConfigDeleteOne]{client: suite.client.db.TrustCenterWatermarkConfig, ID: watermarkConfig.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
