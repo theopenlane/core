@@ -132,7 +132,6 @@ type vendor_scoring_config
     define can_edit: (editor but not blocked) or can_delete
     define can_delete: (editor but not blocked)
 
-
     # tuple based permissions for edit, view, blocked, and audit log viewing
     define editor: [user, service, group#member] or parent_editor
     define viewer: [user, service, group#member] or editor or parent_viewer
@@ -151,7 +150,6 @@ type vendor_risk_score
     define can_edit: (editor but not blocked) or can_delete
     define can_delete: (editor but not blocked)
 
-
     # tuple based permissions for edit, view, blocked, and audit log viewing
     define editor: [user, service, group#member] or parent_editor
     define viewer: [user, service, group#member] or editor or parent_viewer
@@ -164,14 +162,12 @@ type vendor_risk_score
     define parent_context: [organization]
     define parent: [vendor_scoring_config, entity, assessment_response]
 
-
 type sla_definition
   relations
     # base permissions - these should all be derived permissions
     define can_view: (viewer but not blocked)
     define can_edit: (editor but not blocked) or can_delete
     define can_delete: (editor but not blocked)
-
 
     # tuple based permissions for edit, view, blocked, and audit log viewing
     define editor: [user, service, group#member] or parent_editor

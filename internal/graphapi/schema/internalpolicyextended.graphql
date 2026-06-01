@@ -1,0 +1,7 @@
+extend type InternalPolicy {
+    """
+    Live external document contents fetched from the integration provider (e.g. Google Drive HTML export).
+    Only populated when managementMode is INTEGRATION and an externalFileID is set.
+    """
+    liveExternalContents: String
+}

@@ -291,9 +291,9 @@ coreConfiguration:
     # -- force create a new model
     createnewmodel: false  # @schema type:boolean; default:false
     # -- path to the fga model file
-    modelfile: "fga/model/model.fga"  # @schema type:string; default:fga/model/model.fga
+    modelfile: ""  # @schema type:string
     # -- path to the fga module file
-    modulefile: ""  # @schema type:string
+    modulefile: "fga/model/fga.mod"  # @schema type:string; default:fga/model/fga.mod
     # -- credentials for the openFGA client
     credentials:
       # -- client id for the openFGA client
@@ -528,6 +528,9 @@ coreConfiguration:
       botToken: ""  # @schema type:string
       # -- Default channel id for system messages when no explicit channel is provided
       defaultChannel: ""  # @schema type:string
+    googledrive:
+      clientid: ""  # @schema type:string
+      redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
     googleworkspace:
       clientid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
@@ -943,6 +946,14 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_SLACK_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-slack-clientsecret"  # @schema type:string
+    # -- core-integrations-googledrive-clientsecret secret configuration
+    core-integrations-googledrive-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.googledrive.clientsecret
+      secretKey: "CORE_INTEGRATIONS_GOOGLEDRIVE_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-googledrive-clientsecret"  # @schema type:string
     # -- core-integrations-googleworkspace-clientsecret secret configuration
     core-integrations-googleworkspace-clientsecret:
       # -- Enable this external secret

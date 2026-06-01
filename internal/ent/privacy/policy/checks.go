@@ -97,10 +97,8 @@ func CheckOrgReadAccess() privacy.QueryRule {
 
 		relation := fgax.CanView
 
-		if err := rule.CheckSubjectScope(ctx, generated.TypeOrganization, relation, nil); err != nil {
-			if !errors.Is(err, privacy.Skip) {
-				return err
-			}
+		if err := rule.CheckSubjectScope(ctx, generated.TypeOrganization, relation, nil); !errors.Is(err, privacy.Skip) {
+			return err
 		}
 
 		// check if the user has access to view the organization
@@ -126,10 +124,8 @@ func CheckOrgEditAccess() privacy.QueryRule {
 	return privacy.QueryRuleFunc(func(ctx context.Context, _ ent.Query) error {
 		relation := fgax.CanEdit
 
-		if err := rule.CheckSubjectScope(ctx, generated.TypeOrganization, relation, nil); err != nil {
-			if !errors.Is(err, privacy.Skip) {
-				return err
-			}
+		if err := rule.CheckSubjectScope(ctx, generated.TypeOrganization, relation, nil); !errors.Is(err, privacy.Skip) {
+			return err
 		}
 
 		// otherwise check against the current context
@@ -160,10 +156,8 @@ func CheckOrgAccess() privacy.MutationRule {
 
 		logx.FromContext(ctx).Debug().Msg("checking org read access")
 
-		if err := rule.CheckSubjectScope(ctx, m.Type(), relation, nil); err != nil {
-			if !errors.Is(err, privacy.Skip) {
-				return err
-			}
+		if err := rule.CheckSubjectScope(ctx, m.Type(), relation, nil); !errors.Is(err, privacy.Skip) {
+			return err
 		}
 
 		return rule.CheckCurrentOrgAccess(ctx, m, relation)
@@ -286,10 +280,8 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 
 			// check api token scope first, as api tokens will have full access to object types they have scope for
 			if allowScopeCheck {
-				if err := rule.CheckSubjectScope(ctx, edgeMap.ObjectType, relationCheck, nil); err != nil {
-					if access.Allow(err) {
-						return nil
-					}
+				if err := rule.CheckSubjectScope(ctx, edgeMap.ObjectType, relationCheck, nil); access.Allow(err) {
+					return nil
 				}
 			}
 

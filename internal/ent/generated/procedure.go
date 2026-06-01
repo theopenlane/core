@@ -81,6 +81,10 @@ type Procedure struct {
 	URL *string `json:"url,omitempty"`
 	// This will contain the most recent file id if this procedure was created from a file
 	FileID *string `json:"file_id,omitempty"`
+	// Documents managed externally may have IDs we need to reference, this holds them
+	ExternalFileID *string `json:"external_file_id,omitempty"`
+	// The contents of externally managed files, if available
+	ExternalContents *string `json:"external_contents,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned bool `json:"system_owned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
@@ -363,7 +367,7 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case procedure.FieldApprovalRequired, procedure.FieldSystemOwned, procedure.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldManagementMode, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldApproverID, procedure.FieldDelegateID, procedure.FieldSummary, procedure.FieldURL, procedure.FieldFileID, procedure.FieldInternalNotes, procedure.FieldSystemInternalID, procedure.FieldProcedureKindName, procedure.FieldProcedureKindID, procedure.FieldEnvironmentName, procedure.FieldEnvironmentID, procedure.FieldScopeName, procedure.FieldScopeID:
+		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldManagementMode, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldApproverID, procedure.FieldDelegateID, procedure.FieldSummary, procedure.FieldURL, procedure.FieldFileID, procedure.FieldExternalFileID, procedure.FieldExternalContents, procedure.FieldInternalNotes, procedure.FieldSystemInternalID, procedure.FieldProcedureKindName, procedure.FieldProcedureKindID, procedure.FieldEnvironmentName, procedure.FieldEnvironmentID, procedure.FieldScopeName, procedure.FieldScopeID:
 			values[i] = new(sql.NullString)
 		case procedure.FieldCreatedAt, procedure.FieldUpdatedAt, procedure.FieldDeletedAt, procedure.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -583,6 +587,20 @@ func (_m *Procedure) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.FileID = new(string)
 				*_m.FileID = value.String
+			}
+		case procedure.FieldExternalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_file_id", values[i])
+			} else if value.Valid {
+				_m.ExternalFileID = new(string)
+				*_m.ExternalFileID = value.String
+			}
+		case procedure.FieldExternalContents:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_contents", values[i])
+			} else if value.Valid {
+				_m.ExternalContents = new(string)
+				*_m.ExternalContents = value.String
 			}
 		case procedure.FieldSystemOwned:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -879,6 +897,16 @@ func (_m *Procedure) String() string {
 	builder.WriteString(", ")
 	if v := _m.FileID; v != nil {
 		builder.WriteString("file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.ExternalFileID; v != nil {
+		builder.WriteString("external_file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.ExternalContents; v != nil {
+		builder.WriteString("external_contents=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")

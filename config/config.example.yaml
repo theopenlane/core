@@ -75,9 +75,9 @@ authz:
     enableparentcontext: false
     hosturl: https://authz.theopenlane.io
     maxbatchwritesize: 100
-    modelfile: fga/model/model.fga
+    modelfile: ""
     modelid: ""
-    modulefile: ""
+    modulefile: fga/model/fga.mod
     parentcontextconditions: []
     parentcontextskipkinds: []
     storeid: ""
@@ -165,6 +165,10 @@ integrations:
         appslug: ""
         privatekey: ""
         webhooksecret: ""
+    googledrive:
+        clientid: ""
+        clientsecret: ""
+        redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     googleworkspace:
         clientid: ""
         clientsecret: ""
