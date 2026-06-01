@@ -72,6 +72,9 @@ func AllowOrgMemberRoleUpdate() privacy.OrgMembershipMutationRuleFunc {
 
 		if len(ids) == 0 {
 			ids, err = m.IDs(ctx)
+			if err != nil {
+				return privacy.Skipf("unable to get org membership ids: %v", err)
+			}
 		}
 
 		members, err := m.Client().OrgMembership.Query().
