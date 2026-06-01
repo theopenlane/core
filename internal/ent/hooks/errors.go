@@ -16,6 +16,8 @@ var (
 	ErrPersonalOrgsNoMembers = errors.New("personal organizations are not allowed to have members other than the owner")
 	// ErrOrgOwnerCannotBeDeleted is returned when an org owner is attempted to be deleted
 	ErrOrgOwnerCannotBeDeleted = errors.New("organization owner cannot be deleted, it must be transferred to a new owner first")
+	// ErrOrgOwnerCannotBeUpdated is returned when an org owner role is attempted to be changed directly via mutations
+	ErrOrgOwnerCannotBeUpdated = errors.New("organization owner role cannot be changed directly, it must be transferred")
 	// ErrPersonalOrgsNoUser is returned when personal org has no user associated, so no permissions can be added
 	ErrPersonalOrgsNoUser = errors.New("personal organizations missing user association")
 	// ErrUserNotInOrg is returned when a user is not a member of an organization when trying to add them to a group
