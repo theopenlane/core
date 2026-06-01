@@ -91,9 +91,9 @@ func (EntityType) Indexes() []ent.Index {
 // Policy of the EntityType
 func (e EntityType) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
+			policy.CheckCreateAccess(),
 		),
 	)
 }

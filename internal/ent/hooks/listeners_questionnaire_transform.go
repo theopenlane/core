@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -107,6 +108,7 @@ func handleAssessmentResponse(ctx gala.HandlerContext, payload eventqueue.Mutati
 	err = transformQuestionnaire(allowCtx, client, questionnaireTransformRequest{
 		OrganizationID:       organizationID,
 		TemplateID:           assessment.TemplateID,
+		TemplateKind:         assessment.Edges.Template.Kind,
 		AssessmentID:         assessment.ID,
 		AssessmentResponseID: response.ID,
 		DocumentDataID:       response.DocumentDataID,
@@ -172,6 +174,7 @@ func questionnaireTransformFieldChanged(payload eventqueue.MutationGalaPayload) 
 
 const transformMetadataKey = "questionnaire_transform"
 const entityTransformFieldNotes = "notes"
+const entityTransformFieldEntityTypeID = "entityTypeID"
 const questionnaireTransformDefinitionID = "questionnaire_transform"
 
 type questionnaireValidationError struct {
@@ -188,6 +191,7 @@ func isQuestionnaireValidationError(err error) bool {
 type questionnaireTransformRequest struct {
 	OrganizationID       string
 	TemplateID           string
+	TemplateKind         enums.TemplateKind
 	AssessmentID         string
 	AssessmentResponseID string
 	DocumentDataID       string
@@ -232,6 +236,10 @@ func handleEntityTransform(ctx context.Context, client *entgen.Client, req quest
 
 	mapped, err := buildMappedTransformPayload(integrationgenerated.IntegrationMappingSchemaEntity, values, req)
 	if err != nil {
+		return err
+	}
+
+	if err := setVendorEntityType(ctx, client, req, mapped.Payload); err != nil {
 		return err
 	}
 
@@ -405,6 +413,30 @@ func resolveEnvironment(ctx context.Context, client *entgen.Client, organization
 	values[entity.FieldEnvironmentID] = enum.ID
 	values[entity.FieldEnvironmentName] = enum.Name
 
+	return nil
+}
+
+func setVendorEntityType(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, payload map[string]any) error {
+	if req.TemplateKind != enums.TemplateKindExternalIntake || payload[entityTransformFieldEntityTypeID] != nil {
+		return nil
+	}
+
+	id, err := client.EntityType.Query().
+		Where(
+			entitytype.OwnerIDEQ(req.OrganizationID),
+			entitytype.NameEqualFold("vendor"),
+		).
+		FirstID(ctx)
+
+	if entgen.IsNotFound(err) {
+		return nil
+	}
+
+	if err != nil {
+		return fmt.Errorf("resolve external intake entity type: %w", err)
+	}
+
+	payload[entityTransformFieldEntityTypeID] = id
 	return nil
 }
 

@@ -59,7 +59,8 @@ func (d Discussion) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.Discussion](
 				d,
 				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Risk{}, Evidence{}),
-				withOrganizationOwner(true),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 			),
 		},
 	}.getMixins(d)

@@ -5,11 +5,7 @@
 
 # asset-1 is owned by openlane organization
 - user: organization:openlane
-  relation: parent
-  object: asset:asset-1
-# org owner has editor access via organization
-- user: organization:openlane#owner
-  relation: editor
+  relation: parent_context
   object: asset:asset-1
 # blocked user
 - user: user:ulid-blocked
@@ -20,14 +16,14 @@
   relation: parent
   object: asset:asset-2
 # org owner has editor access via platform
-- user: organization:openlane#owner
-  relation: editor
+- user: organization:openlane
+  relation: parent_context
   object: asset:asset-2
 # asset-3 is associated with entity-1
 - user: entity:entity-1
   relation: parent
   object: asset:asset-3
 # org owner has editor access via entity
-- user: organization:openlane#owner
-  relation: editor
+- user: organization:openlane
+  relation: parent_context
   object: asset:asset-3

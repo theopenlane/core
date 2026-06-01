@@ -9,6 +9,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
@@ -19,7 +20,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
-	"github.com/theopenlane/entx/accessmap"
 )
 
 // OrgMembership holds the schema definition for the OrgMembership entity
@@ -48,11 +48,11 @@ func (OrgMembership) Fields() []ent.Field {
 	return []ent.Field{
 		field.Enum("role").
 			GoType(enums.Role("")).
-			Values(string(enums.RoleOwner)).
+			Values(enums.RoleOwner.String(), enums.RoleSuperAdmin.String(), enums.RoleAuditor.String()).
 			Annotations(
 				entgql.OrderField("ROLE"),
 			).
-			Default(string(enums.RoleMember)),
+			Default(enums.RoleMember.String()),
 		field.String("organization_id").Immutable(),
 		field.String("user_id").Immutable(),
 	}
@@ -102,6 +102,7 @@ func (OrgMembership) Annotations() []schema.Annotation {
 				},
 			},
 		),
+		entx.FGACrudParent(Organization{}.Name()),
 	}
 }
 
@@ -120,6 +121,7 @@ func (OrgMembership) Mixin() []ent.Mixin {
 // Hooks of the OrgMembership
 func (OrgMembership) Hooks() []ent.Hook {
 	return []ent.Hook{
+		hooks.HookBlockOwnerRoleChange(),
 		hooks.HookUpdateManagedGroups(),
 		hooks.HookOrgMembers(),
 		hooks.HookMembershipSelf("org_memberships"),
@@ -144,6 +146,10 @@ func (OrgMembership) Policy() ent.Policy {
 		policy.WithOnMutationRules(
 			ent.OpDelete|ent.OpDeleteOne,
 			rule.AllowSelfOrgMembershipDelete(),
+		),
+		policy.WithOnMutationRules(
+			ent.OpUpdate|ent.OpUpdateOne,
+			rule.AllowOrgMemberRoleUpdate(),
 		),
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),

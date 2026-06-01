@@ -72,6 +72,10 @@ const (
 	FieldURL = "url"
 	// FieldFileID holds the string denoting the file_id field in the database.
 	FieldFileID = "file_id"
+	// FieldExternalFileID holds the string denoting the external_file_id field in the database.
+	FieldExternalFileID = "external_file_id"
+	// FieldExternalContents holds the string denoting the external_contents field in the database.
+	FieldExternalContents = "external_contents"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
@@ -287,6 +291,8 @@ var Columns = []string{
 	FieldDismissedImprovementSuggestions,
 	FieldURL,
 	FieldFileID,
+	FieldExternalFileID,
+	FieldExternalContents,
 	FieldOwnerID,
 	FieldSystemOwned,
 	FieldInternalNotes,
@@ -446,7 +452,7 @@ const DefaultManagementMode enums.DocumentManagementMode = "OPENLANE_MANAGED"
 // ManagementModeValidator is a validator for the "management_mode" field enum values. It is called by the builders before save.
 func ManagementModeValidator(mm enums.DocumentManagementMode) error {
 	switch mm.String() {
-	case "OPENLANE_MANAGED", "EXTERNAL_REFERENCE":
+	case "OPENLANE_MANAGED", "EXTERNAL_REFERENCE", "INTEGRATION":
 		return nil
 	default:
 		return fmt.Errorf("actionplan: invalid enum value for management_mode field: %q", mm)
@@ -576,6 +582,16 @@ func ByURL(opts ...sql.OrderTermOption) OrderOption {
 // ByFileID orders the results by the file_id field.
 func ByFileID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFileID, opts...).ToFunc()
+}
+
+// ByExternalFileID orders the results by the external_file_id field.
+func ByExternalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalFileID, opts...).ToFunc()
+}
+
+// ByExternalContents orders the results by the external_contents field.
+func ByExternalContents(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalContents, opts...).ToFunc()
 }
 
 // ByOwnerID orders the results by the owner_id field.

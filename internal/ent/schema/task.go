@@ -173,7 +173,8 @@ func (t Task) Mixin() []ent.Mixin {
 				// ensure these are added to the fga model so that permissions can be set properly
 				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{},
 					Program{}, Risk{}, Asset{}, Platform{}, IdentityHolder{}, Scan{}, ActionPlan{}, Task{}),
-				withOrganizationOwner(true),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 			),
 			newCustomEnumMixin(t),
 			newCustomEnumMixin(t, withEnumFieldName("environment"), withGlobalEnum()),

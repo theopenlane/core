@@ -15,8 +15,6 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-type skipCreateUserPermissions func(context.Context, ent.Mutation) bool
-
 // HookObjectOwnedTuples is a hook that adds object owned tuples for the object being created
 // given a set of parent id fields, it will add the user and parent permissions to the object
 // on creation
@@ -24,7 +22,7 @@ type skipCreateUserPermissions func(context.Context, ent.Mutation) bool
 // ownerRelation should normally be set to fgax.ParentRelation, but in some cases
 // this is set to owner to account for different inherited permissions from parent objects
 // vs. the user/service owner of the object (see notes as an example)
-func HookObjectOwnedTuples(parents []string, ownerRelation string, skipCreateUserPermissions skipCreateUserPermissions) ent.Hook {
+func HookObjectOwnedTuples(parents []string, ownerRelation string) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			retVal, err := next.Mutate(ctx, m)
@@ -39,7 +37,9 @@ func HookObjectOwnedTuples(parents []string, ownerRelation string, skipCreateUse
 
 			var addTuples []fgax.TupleKey
 
-			if skip := skipCreateUserPermissions(ctx, m); !skip {
+			objectType := GetObjectTypeFromEntMutation(m)
+
+			if ownerRelation != fgax.ParentRelation {
 				// add user permissions to the object on creation
 				objCaller, ok := auth.CallerFromContext(ctx)
 				if !ok || objCaller == nil {
@@ -50,8 +50,8 @@ func HookObjectOwnedTuples(parents []string, ownerRelation string, skipCreateUse
 				userTuple := fgax.GetTupleKey(fgax.TupleRequest{
 					SubjectID:   objCaller.SubjectID,
 					SubjectType: objCaller.SubjectType(),
-					ObjectID:    objectID,                        // this is the object id being created
-					ObjectType:  GetObjectTypeFromEntMutation(m), // this is the object type being created
+					ObjectID:    objectID,   // this is the object id being created
+					ObjectType:  objectType, // this is the object type being created
 					Relation:    ownerRelation,
 				})
 

@@ -308,6 +308,16 @@ func (inv *entitlementInvocation) reconcile() error {
 	}
 
 	if _, err := reconciler.Reconcile(inv.Context(), []string{inv.orgID}); err != nil {
+		unwrapped := errors.Unwrap(err)
+		// if this is a constraint error, log as warning - this is common in tests and we will still have the logs
+		// in production
+		if unwrapped != nil && entgen.IsConstraintError(unwrapped) {
+			inv.Logger().Warn().Err(err).Msgf("entitlement reconciliation failed, organization with stripe customer id already exits")
+
+			// do not retry a constraint error
+			return nil
+		}
+
 		inv.Logger().Err(err).Msg("entitlement reconciliation failed")
 
 		return err

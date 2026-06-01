@@ -31,6 +31,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
@@ -59,6 +60,7 @@ type IntegrationQuery struct {
 	withEvents                     *EventQuery
 	withFindings                   *FindingQuery
 	withVulnerabilities            *VulnerabilityQuery
+	withInternalPolicies           *InternalPolicyQuery
 	withReviews                    *ReviewQuery
 	withRemediations               *RemediationQuery
 	withTasks                      *TaskQuery
@@ -84,6 +86,7 @@ type IntegrationQuery struct {
 	withNamedEvents                map[string]*EventQuery
 	withNamedFindings              map[string]*FindingQuery
 	withNamedVulnerabilities       map[string]*VulnerabilityQuery
+	withNamedInternalPolicies      map[string]*InternalPolicyQuery
 	withNamedReviews               map[string]*ReviewQuery
 	withNamedRemediations          map[string]*RemediationQuery
 	withNamedTasks                 map[string]*TaskQuery
@@ -330,6 +333,31 @@ func (_q *IntegrationQuery) QueryVulnerabilities() *VulnerabilityQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Vulnerability
 		step.Edge.Schema = schemaConfig.IntegrationVulnerabilities
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalPolicies chains the current query on the "internal_policies" edge.
+func (_q *IntegrationQuery) QueryInternalPolicies() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, selector),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, integration.InternalPoliciesTable, integration.InternalPoliciesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.IntegrationInternalPolicies
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -961,6 +989,7 @@ func (_q *IntegrationQuery) Clone() *IntegrationQuery {
 		withEvents:                _q.withEvents.Clone(),
 		withFindings:              _q.withFindings.Clone(),
 		withVulnerabilities:       _q.withVulnerabilities.Clone(),
+		withInternalPolicies:      _q.withInternalPolicies.Clone(),
 		withReviews:               _q.withReviews.Clone(),
 		withRemediations:          _q.withRemediations.Clone(),
 		withTasks:                 _q.withTasks.Clone(),
@@ -1070,6 +1099,17 @@ func (_q *IntegrationQuery) WithVulnerabilities(opts ...func(*VulnerabilityQuery
 		opt(query)
 	}
 	_q.withVulnerabilities = query
+	return _q
+}
+
+// WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *IntegrationQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalPolicies = query
 	return _q
 }
 
@@ -1345,7 +1385,7 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		nodes       = []*Integration{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [25]bool{
+		loadedTypes = [26]bool{
 			_q.withOwner != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
@@ -1354,6 +1394,7 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			_q.withEvents != nil,
 			_q.withFindings != nil,
 			_q.withVulnerabilities != nil,
+			_q.withInternalPolicies != nil,
 			_q.withReviews != nil,
 			_q.withRemediations != nil,
 			_q.withTasks != nil,
@@ -1449,6 +1490,15 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := _q.loadVulnerabilities(ctx, query, nodes,
 			func(n *Integration) { n.Edges.Vulnerabilities = []*Vulnerability{} },
 			func(n *Integration, e *Vulnerability) { n.Edges.Vulnerabilities = append(n.Edges.Vulnerabilities, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalPolicies; query != nil {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *Integration) { n.Edges.InternalPolicies = []*InternalPolicy{} },
+			func(n *Integration, e *InternalPolicy) {
+				n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -1612,6 +1662,13 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := _q.loadVulnerabilities(ctx, query, nodes,
 			func(n *Integration) { n.appendNamedVulnerabilities(name) },
 			func(n *Integration, e *Vulnerability) { n.appendNamedVulnerabilities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedInternalPolicies {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *Integration) { n.appendNamedInternalPolicies(name) },
+			func(n *Integration, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2094,6 +2151,68 @@ func (_q *IntegrationQuery) loadVulnerabilities(ctx context.Context, query *Vuln
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "vulnerabilities" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *IntegrationQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *InternalPolicy)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Integration)
+	nids := make(map[string]map[*Integration]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(integration.InternalPoliciesTable)
+		joinT.Schema(_q.schemaConfig.IntegrationInternalPolicies)
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(integration.InternalPoliciesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(integration.InternalPoliciesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(integration.InternalPoliciesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Integration]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*InternalPolicy](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "internal_policies" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -2918,6 +3037,20 @@ func (_q *IntegrationQuery) WithNamedVulnerabilities(name string, opts ...func(*
 		_q.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery)
 	}
 	_q.withNamedVulnerabilities[name] = query
+	return _q
+}
+
+// WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *IntegrationQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedInternalPolicies == nil {
+		_q.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
+	}
+	_q.withNamedInternalPolicies[name] = query
 	return _q
 }
 

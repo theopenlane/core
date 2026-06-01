@@ -537,6 +537,46 @@ func (_u *ProcedureUpdate) ClearFileID() *ProcedureUpdate {
 	return _u
 }
 
+// SetExternalFileID sets the "external_file_id" field.
+func (_u *ProcedureUpdate) SetExternalFileID(v string) *ProcedureUpdate {
+	_u.mutation.SetExternalFileID(v)
+	return _u
+}
+
+// SetNillableExternalFileID sets the "external_file_id" field if the given value is not nil.
+func (_u *ProcedureUpdate) SetNillableExternalFileID(v *string) *ProcedureUpdate {
+	if v != nil {
+		_u.SetExternalFileID(*v)
+	}
+	return _u
+}
+
+// ClearExternalFileID clears the value of the "external_file_id" field.
+func (_u *ProcedureUpdate) ClearExternalFileID() *ProcedureUpdate {
+	_u.mutation.ClearExternalFileID()
+	return _u
+}
+
+// SetExternalContents sets the "external_contents" field.
+func (_u *ProcedureUpdate) SetExternalContents(v string) *ProcedureUpdate {
+	_u.mutation.SetExternalContents(v)
+	return _u
+}
+
+// SetNillableExternalContents sets the "external_contents" field if the given value is not nil.
+func (_u *ProcedureUpdate) SetNillableExternalContents(v *string) *ProcedureUpdate {
+	if v != nil {
+		_u.SetExternalContents(*v)
+	}
+	return _u
+}
+
+// ClearExternalContents clears the value of the "external_contents" field.
+func (_u *ProcedureUpdate) ClearExternalContents() *ProcedureUpdate {
+	_u.mutation.ClearExternalContents()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *ProcedureUpdate) SetInternalNotes(v string) *ProcedureUpdate {
 	_u.mutation.SetInternalNotes(v)
@@ -1500,6 +1540,18 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.URLCleared() {
 		_spec.ClearField(procedure.FieldURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalFileID(); ok {
+		_spec.SetField(procedure.FieldExternalFileID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalFileIDCleared() {
+		_spec.ClearField(procedure.FieldExternalFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalContents(); ok {
+		_spec.SetField(procedure.FieldExternalContents, field.TypeString, value)
+	}
+	if _u.mutation.ExternalContentsCleared() {
+		_spec.ClearField(procedure.FieldExternalContents, field.TypeString)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(procedure.FieldSystemOwned, field.TypeBool)
@@ -2847,6 +2899,46 @@ func (_u *ProcedureUpdateOne) ClearFileID() *ProcedureUpdateOne {
 	return _u
 }
 
+// SetExternalFileID sets the "external_file_id" field.
+func (_u *ProcedureUpdateOne) SetExternalFileID(v string) *ProcedureUpdateOne {
+	_u.mutation.SetExternalFileID(v)
+	return _u
+}
+
+// SetNillableExternalFileID sets the "external_file_id" field if the given value is not nil.
+func (_u *ProcedureUpdateOne) SetNillableExternalFileID(v *string) *ProcedureUpdateOne {
+	if v != nil {
+		_u.SetExternalFileID(*v)
+	}
+	return _u
+}
+
+// ClearExternalFileID clears the value of the "external_file_id" field.
+func (_u *ProcedureUpdateOne) ClearExternalFileID() *ProcedureUpdateOne {
+	_u.mutation.ClearExternalFileID()
+	return _u
+}
+
+// SetExternalContents sets the "external_contents" field.
+func (_u *ProcedureUpdateOne) SetExternalContents(v string) *ProcedureUpdateOne {
+	_u.mutation.SetExternalContents(v)
+	return _u
+}
+
+// SetNillableExternalContents sets the "external_contents" field if the given value is not nil.
+func (_u *ProcedureUpdateOne) SetNillableExternalContents(v *string) *ProcedureUpdateOne {
+	if v != nil {
+		_u.SetExternalContents(*v)
+	}
+	return _u
+}
+
+// ClearExternalContents clears the value of the "external_contents" field.
+func (_u *ProcedureUpdateOne) ClearExternalContents() *ProcedureUpdateOne {
+	_u.mutation.ClearExternalContents()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *ProcedureUpdateOne) SetInternalNotes(v string) *ProcedureUpdateOne {
 	_u.mutation.SetInternalNotes(v)
@@ -3840,6 +3932,18 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 	}
 	if _u.mutation.URLCleared() {
 		_spec.ClearField(procedure.FieldURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalFileID(); ok {
+		_spec.SetField(procedure.FieldExternalFileID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalFileIDCleared() {
+		_spec.ClearField(procedure.FieldExternalFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalContents(); ok {
+		_spec.SetField(procedure.FieldExternalContents, field.TypeString, value)
+	}
+	if _u.mutation.ExternalContentsCleared() {
+		_spec.ClearField(procedure.FieldExternalContents, field.TypeString)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(procedure.FieldSystemOwned, field.TypeBool)

@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -95,6 +96,7 @@ func HookOrgMembers() ent.Hook {
 			}
 
 			if err := checkAllowedEmailDomain(user.Email, org.Edges.Setting); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("email", user.Email).Msg("error adding user to organization")
 				return nil, err
 			}
 
@@ -138,6 +140,79 @@ func HookUpdateManagedGroups() ent.Hook {
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne) // handle soft deletes as well as hard deletes
+}
+
+// HookBlockOwnerRoleChange blocks direct owner role changes and enforces it goes through the transfer route
+func HookBlockOwnerRoleChange() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.OrgMembershipFunc(func(ctx context.Context, m *generated.OrgMembershipMutation) (generated.Value, error) {
+			if _, allow := privacy.DecisionFromContext(ctx); allow {
+				return next.Mutate(ctx, m)
+			}
+
+			newRole, ok := m.Role()
+			if !ok {
+				return next.Mutate(ctx, m)
+			}
+
+			oldRoles, err := getUserMembershipRoles(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			if newRole == enums.RoleOwner {
+				return nil, ErrOrgOwnerCannotBeUpdated
+			}
+
+			for _, oldRole := range oldRoles {
+				if oldRole == enums.RoleOwner {
+					return nil, ErrOrgOwnerCannotBeUpdated
+				}
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpUpdate|ent.OpUpdateOne)
+}
+
+func getUserMembershipRoles(ctx context.Context, m *generated.OrgMembershipMutation) ([]enums.Role, error) {
+	var ids []string
+	var err error
+
+	switch {
+	case m.Op().Is(ent.OpUpdateOne):
+		if id, exists := m.ID(); exists {
+			ids = []string{id}
+		}
+
+	case m.Op().Is(ent.OpUpdate):
+		ids, err = m.IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if len(ids) == 0 {
+		ids, err = m.IDs(ctx)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	members, err := m.Client().OrgMembership.Query().
+		Where(orgmembership.IDIn(ids...)).
+		Select(orgmembership.FieldRole).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	roles := make([]enums.Role, len(members))
+	for i, member := range members {
+		roles[i] = member.Role
+	}
+
+	return roles, nil
 }
 
 // HookOrgMembersDelete is a hook that runs during the delete operation of an org membership

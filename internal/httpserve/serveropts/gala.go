@@ -128,6 +128,12 @@ func provideGalaDependencies(injector do.Injector, galaApp *gala.Gala, dbClient 
 
 	do.ProvideValue(injector, dbClient)
 
+	if err := galaApp.ContextManager().Register(
+		gala.NewInjectorCodec("ent_client", injector, ent.NewContext),
+	); err != nil {
+		log.Error().Err(err).Msg("failed to register ent client context codec")
+	}
+
 	if !setWorkflowRuntime {
 		return
 	}

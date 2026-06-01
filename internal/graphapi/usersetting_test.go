@@ -14,7 +14,7 @@ import (
 
 func TestQueryUserSetting(t *testing.T) {
 	// setup user context
-	reqCtx := testUser1.UserCtx
+	reqCtx := sharedTestUser1.UserCtx
 
 	user2 := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
 	user2Setting, err := user2.Setting(reqCtx)
@@ -87,7 +87,7 @@ func TestQueryUserSetting(t *testing.T) {
 
 func TestQueryUserSettings(t *testing.T) {
 	// setup user context
-	reqCtx := testUser1.UserCtx
+	reqCtx := sharedTestUser1.UserCtx
 
 	user1 := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
 	user1Setting, err := user1.Setting(reqCtx)

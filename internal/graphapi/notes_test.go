@@ -13,7 +13,7 @@ import (
 )
 
 func TestMutationUpdateNoteForTask(t *testing.T) {
-	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	task := (&TaskBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -30,14 +30,14 @@ func TestMutationUpdateNoteForTask(t *testing.T) {
 				},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path with PAT",
 			request: testclient.UpdateTaskInput{
 				AddComment: &testclient.CreateNoteInput{
 					Text:    "This is a test note using PAT",
-					OwnerID: &testUser1.OrganizationID,
+					OwnerID: &sharedTestUser1.OrganizationID,
 				},
 			},
 			client: suite.client.apiWithPAT,
@@ -49,7 +49,7 @@ func TestMutationUpdateNoteForTask(t *testing.T) {
 				AddComment: &testclient.CreateNoteInput{},
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
@@ -57,11 +57,11 @@ func TestMutationUpdateNoteForTask(t *testing.T) {
 			request: testclient.UpdateTaskInput{
 				AddComment: &testclient.CreateNoteInput{
 					Text:    "This is a test note",
-					OwnerID: &testUser1.OrganizationID,
+					OwnerID: &sharedTestUser1.OrganizationID,
 				},
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx, // wrong user
+			ctx:         sharedViewOnlyUser.UserCtx, // wrong user
 			expectedErr: notAuthorizedErrorMsg,
 		},
 	}
@@ -89,14 +89,14 @@ func TestMutationUpdateNoteForTask(t *testing.T) {
 	}
 
 	// clean up
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationAddNoteForControl(t *testing.T) {
-	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// ensure view only user caan see the control
-	_, err := suite.client.api.GetControlByID(viewOnlyUser.UserCtx, control.ID)
+	_, err := suite.client.api.GetControlByID(sharedViewOnlyUser.UserCtx, control.ID)
 	assert.NilError(t, err)
 	assert.Assert(t, control.ID != "")
 
@@ -115,7 +115,7 @@ func TestMutationAddNoteForControl(t *testing.T) {
 				},
 			},
 			client: suite.client.api,
-			ctx:    viewOnlyUser.UserCtx,
+			ctx:    sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name: "happy path, add discussion",
@@ -129,7 +129,7 @@ func TestMutationAddNoteForControl(t *testing.T) {
 				},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, minimal input",
@@ -139,14 +139,14 @@ func TestMutationAddNoteForControl(t *testing.T) {
 				},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path with PAT",
 			request: testclient.UpdateControlInput{
 				AddComment: &testclient.CreateNoteInput{
 					Text:    "This is a test note using PAT",
-					OwnerID: &testUser1.OrganizationID,
+					OwnerID: &sharedTestUser1.OrganizationID,
 				},
 			},
 			client: suite.client.apiWithPAT,
@@ -159,7 +159,7 @@ func TestMutationAddNoteForControl(t *testing.T) {
 				AddComment: &testclient.CreateNoteInput{},
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 	}
@@ -199,14 +199,14 @@ func TestMutationAddNoteForControl(t *testing.T) {
 	}
 
 	// clean up
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationUpdateDiscussionForControl(t *testing.T) {
-	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add initial discussion to update
-	resp, err := suite.client.api.UpdateControl(testUser1.UserCtx, control.ID, testclient.UpdateControlInput{
+	resp, err := suite.client.api.UpdateControl(sharedTestUser1.UserCtx, control.ID, testclient.UpdateControlInput{
 		AddDiscussion: &testclient.CreateDiscussionInput{
 			ExternalID: lo.ToPtr("DISC-22401"),
 			IsResolved: lo.ToPtr(false),
@@ -229,7 +229,7 @@ func TestMutationUpdateDiscussionForControl(t *testing.T) {
 	discussionID := resp.UpdateControl.Control.Discussions.Edges[0].Node.ID
 
 	// now update the discussion by adding another comment
-	updateResp, err := suite.client.api.UpdateControl(testUser1.UserCtx, control.ID, testclient.UpdateControlInput{
+	updateResp, err := suite.client.api.UpdateControl(sharedTestUser1.UserCtx, control.ID, testclient.UpdateControlInput{
 		UpdateDiscussion: &testclient.UpdateDiscussionsInput{
 			ID: discussionID,
 			Input: &testclient.UpdateDiscussionInput{
@@ -258,7 +258,7 @@ func TestMutationUpdateDiscussionForControl(t *testing.T) {
 	// now lets try to update the second comment in the discussion
 	noteToUpdateID := updatedDiscussion.Comments.Edges[1].Node.ID
 	updatedText := "This is an updated additional comment in the discussion"
-	updateComment, err := suite.client.api.UpdateControlComment(testUser1.UserCtx, noteToUpdateID, testclient.UpdateNoteInput{
+	updateComment, err := suite.client.api.UpdateControlComment(sharedTestUser1.UserCtx, noteToUpdateID, testclient.UpdateNoteInput{
 		Text: &updatedText,
 	})
 
@@ -285,7 +285,7 @@ func TestMutationUpdateDiscussionForControl(t *testing.T) {
 	// now lets try to remove a comment from the discussion
 	noteToRemoveID := updatedDiscussion.Comments.Edges[0].Node.ID
 
-	updateResp2, err := suite.client.api.UpdateControl(testUser1.UserCtx, control.ID, testclient.UpdateControlInput{
+	updateResp2, err := suite.client.api.UpdateControl(sharedTestUser1.UserCtx, control.ID, testclient.UpdateControlInput{
 		UpdateDiscussion: &testclient.UpdateDiscussionsInput{
 			ID: discussionID,
 			Input: &testclient.UpdateDiscussionInput{
@@ -305,14 +305,14 @@ func TestMutationUpdateDiscussionForControl(t *testing.T) {
 	assert.Check(t, is.Equal(updatedText, updatedDiscussion2.Comments.Edges[0].Node.Text))
 
 	// clean up
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationUpdateDiscussionForPolicy(t *testing.T) {
-	policy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	policy := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add initial discussion to update
-	resp, err := suite.client.api.UpdateInternalPolicy(testUser1.UserCtx, policy.ID, testclient.UpdateInternalPolicyInput{
+	resp, err := suite.client.api.UpdateInternalPolicy(sharedTestUser1.UserCtx, policy.ID, testclient.UpdateInternalPolicyInput{
 		AddDiscussion: &testclient.CreateDiscussionInput{
 			ExternalID: lo.ToPtr("DISC-22402"),
 			IsResolved: lo.ToPtr(false),
@@ -335,7 +335,7 @@ func TestMutationUpdateDiscussionForPolicy(t *testing.T) {
 	discussionID := resp.UpdateInternalPolicy.InternalPolicy.Discussions.Edges[0].Node.ID
 
 	// now update the discussion by adding another comment
-	updateResp, err := suite.client.api.UpdateInternalPolicy(testUser1.UserCtx, policy.ID, testclient.UpdateInternalPolicyInput{
+	updateResp, err := suite.client.api.UpdateInternalPolicy(sharedTestUser1.UserCtx, policy.ID, testclient.UpdateInternalPolicyInput{
 		UpdateDiscussion: &testclient.UpdateDiscussionsInput{
 			ID: discussionID,
 			Input: &testclient.UpdateDiscussionInput{
@@ -364,7 +364,7 @@ func TestMutationUpdateDiscussionForPolicy(t *testing.T) {
 	// now lets try to update the second comment in the discussion
 	noteToUpdateID := updatedDiscussion.Comments.Edges[1].Node.ID
 	updatedText := "This is an updated additional comment in the discussion for the policy"
-	updateComment, err := suite.client.api.UpdateInternalPolicyComment(testUser1.UserCtx, noteToUpdateID, testclient.UpdateNoteInput{
+	updateComment, err := suite.client.api.UpdateInternalPolicyComment(sharedTestUser1.UserCtx, noteToUpdateID, testclient.UpdateNoteInput{
 		Text: &updatedText,
 	})
 
@@ -391,7 +391,7 @@ func TestMutationUpdateDiscussionForPolicy(t *testing.T) {
 	// now lets try to remove a comment from the discussion
 	noteToRemoveID := updatedDiscussion.Comments.Edges[0].Node.ID
 
-	updateResp2, err := suite.client.api.UpdateInternalPolicy(testUser1.UserCtx, policy.ID, testclient.UpdateInternalPolicyInput{
+	updateResp2, err := suite.client.api.UpdateInternalPolicy(sharedTestUser1.UserCtx, policy.ID, testclient.UpdateInternalPolicyInput{
 		UpdateDiscussion: &testclient.UpdateDiscussionsInput{
 			ID: discussionID,
 			Input: &testclient.UpdateDiscussionInput{
@@ -411,13 +411,13 @@ func TestMutationUpdateDiscussionForPolicy(t *testing.T) {
 	assert.Check(t, is.Equal(updatedText, updatedDiscussion2.Comments.Edges[0].Node.Text))
 
 	// clean up
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: policy.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: policy.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteNoteForTask(t *testing.T) {
-	userTask := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	userTask := (&TaskBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
-	createResp, err := suite.client.api.UpdateTask(testUser1.UserCtx, userTask.ID, testclient.UpdateTaskInput{
+	createResp, err := suite.client.api.UpdateTask(sharedTestUser1.UserCtx, userTask.ID, testclient.UpdateTaskInput{
 		AddComment: &testclient.CreateNoteInput{
 			Text: "Here is my comment",
 		},
@@ -429,15 +429,15 @@ func TestMutationDeleteNoteForTask(t *testing.T) {
 	assert.Assert(t, len(createResp.UpdateTask.Task.Comments.Edges) != 0)
 	noteID := createResp.UpdateTask.Task.Comments.Edges[0].Node.ID
 
-	_, err = suite.client.api.DeleteNote(testUser1.UserCtx, noteID)
+	_, err = suite.client.api.DeleteNote(sharedTestUser1.UserCtx, noteID)
 	assert.NilError(t, err)
 
 	// cleanup task
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: userTask.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: userTask.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteTaskNotes(t *testing.T) {
-	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	task := (&TaskBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -449,7 +449,7 @@ func TestMutationDeleteTaskNotes(t *testing.T) {
 		{
 			name: "happy path",
 			request: func() testclient.UpdateTaskInput {
-				createResp, err := suite.client.api.UpdateTask(testUser1.UserCtx, task.ID, testclient.UpdateTaskInput{
+				createResp, err := suite.client.api.UpdateTask(sharedTestUser1.UserCtx, task.ID, testclient.UpdateTaskInput{
 					AddComment: &testclient.CreateNoteInput{
 						Text: "Note to be deleted",
 					},
@@ -463,13 +463,13 @@ func TestMutationDeleteTaskNotes(t *testing.T) {
 				}
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path with PAT",
 			request: func() testclient.UpdateTaskInput {
 				// create a note to delete
-				createResp, err := suite.client.api.UpdateTask(testUser1.UserCtx, task.ID, testclient.UpdateTaskInput{
+				createResp, err := suite.client.api.UpdateTask(sharedTestUser1.UserCtx, task.ID, testclient.UpdateTaskInput{
 					AddComment: &testclient.CreateNoteInput{
 						Text: "Note to be deleted with PAT",
 					},
@@ -493,7 +493,7 @@ func TestMutationDeleteTaskNotes(t *testing.T) {
 				}
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "comment not found",
 		},
 	}
@@ -517,13 +517,13 @@ func TestMutationDeleteTaskNotes(t *testing.T) {
 	}
 
 	// clean up
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestQueryNote(t *testing.T) {
-	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	task := (&TaskBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
-	createResp, err := suite.client.api.UpdateTask(testUser1.UserCtx, task.ID, testclient.UpdateTaskInput{
+	createResp, err := suite.client.api.UpdateTask(sharedTestUser1.UserCtx, task.ID, testclient.UpdateTaskInput{
 		AddComment: &testclient.CreateNoteInput{
 			Text: "Note for querying",
 		},
@@ -544,7 +544,7 @@ func TestQueryNote(t *testing.T) {
 			name:   "happy path",
 			noteID: noteID,
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name:   "happy path with PAT",
@@ -556,14 +556,14 @@ func TestQueryNote(t *testing.T) {
 			name:        "note not found",
 			noteID:      "non-existent-id",
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "note not found",
 		},
 		{
 			name:        "unauthorized user",
 			noteID:      noteID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: "note not found",
 		},
 	}
@@ -584,5 +584,5 @@ func TestQueryNote(t *testing.T) {
 	}
 
 	// clean up
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }

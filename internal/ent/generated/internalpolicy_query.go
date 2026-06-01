@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
@@ -72,6 +73,7 @@ type InternalPolicyQuery struct {
 	withEntities                    *EntityQuery
 	withIdentityHolders             *IdentityHolderQuery
 	withReviews                     *ReviewQuery
+	withIntegrations                *IntegrationQuery
 	withFKs                         bool
 	loadTotal                       []func(context.Context, []*InternalPolicy) error
 	modifiers                       []func(*sql.Selector)
@@ -93,6 +95,7 @@ type InternalPolicyQuery struct {
 	withNamedEntities               map[string]*EntityQuery
 	withNamedIdentityHolders        map[string]*IdentityHolderQuery
 	withNamedReviews                map[string]*ReviewQuery
+	withNamedIntegrations           map[string]*IntegrationQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -754,6 +757,31 @@ func (_q *InternalPolicyQuery) QueryReviews() *ReviewQuery {
 	return query
 }
 
+// QueryIntegrations chains the current query on the "integrations" edge.
+func (_q *InternalPolicyQuery) QueryIntegrations() *IntegrationQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, internalpolicy.IntegrationsTable, internalpolicy.IntegrationsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.IntegrationInternalPolicies
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first InternalPolicy entity from the query.
 // Returns a *NotFoundError when no InternalPolicy was found.
 func (_q *InternalPolicyQuery) First(ctx context.Context) (*InternalPolicy, error) {
@@ -971,6 +999,7 @@ func (_q *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 		withEntities:               _q.withEntities.Clone(),
 		withIdentityHolders:        _q.withIdentityHolders.Clone(),
 		withReviews:                _q.withReviews.Clone(),
+		withIntegrations:           _q.withIntegrations.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -1253,6 +1282,17 @@ func (_q *InternalPolicyQuery) WithReviews(opts ...func(*ReviewQuery)) *Internal
 	return _q
 }
 
+// WithIntegrations tells the query-builder to eager-load the nodes that are connected to
+// the "integrations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *InternalPolicyQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *InternalPolicyQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrations = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -1338,7 +1378,7 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		nodes       = []*InternalPolicy{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [25]bool{
+		loadedTypes = [26]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1364,6 +1404,7 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			_q.withEntities != nil,
 			_q.withIdentityHolders != nil,
 			_q.withReviews != nil,
+			_q.withIntegrations != nil,
 		}
 	)
 	if withFKs {
@@ -1568,6 +1609,13 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
+	if query := _q.withIntegrations; query != nil {
+		if err := _q.loadIntegrations(ctx, query, nodes,
+			func(n *InternalPolicy) { n.Edges.Integrations = []*Integration{} },
+			func(n *InternalPolicy, e *Integration) { n.Edges.Integrations = append(n.Edges.Integrations, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedBlockedGroups {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *InternalPolicy) { n.appendNamedBlockedGroups(name) },
@@ -1691,6 +1739,13 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		if err := _q.loadReviews(ctx, query, nodes,
 			func(n *InternalPolicy) { n.appendNamedReviews(name) },
 			func(n *InternalPolicy, e *Review) { n.appendNamedReviews(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIntegrations {
+		if err := _q.loadIntegrations(ctx, query, nodes,
+			func(n *InternalPolicy) { n.appendNamedIntegrations(name) },
+			func(n *InternalPolicy, e *Integration) { n.appendNamedIntegrations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2900,6 +2955,68 @@ func (_q *InternalPolicyQuery) loadReviews(ctx context.Context, query *ReviewQue
 	}
 	return nil
 }
+func (_q *InternalPolicyQuery) loadIntegrations(ctx context.Context, query *IntegrationQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Integration)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*InternalPolicy)
+	nids := make(map[string]map[*InternalPolicy]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(internalpolicy.IntegrationsTable)
+		joinT.Schema(_q.schemaConfig.IntegrationInternalPolicies)
+		s.Join(joinT).On(s.C(integration.FieldID), joinT.C(internalpolicy.IntegrationsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(internalpolicy.IntegrationsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(internalpolicy.IntegrationsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*InternalPolicy]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Integration](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "integrations" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (_q *InternalPolicyQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -3269,6 +3386,20 @@ func (_q *InternalPolicyQuery) WithNamedReviews(name string, opts ...func(*Revie
 		_q.withNamedReviews = make(map[string]*ReviewQuery)
 	}
 	_q.withNamedReviews[name] = query
+	return _q
+}
+
+// WithNamedIntegrations tells the query-builder to eager-load the nodes that are connected to the "integrations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *InternalPolicyQuery) WithNamedIntegrations(name string, opts ...func(*IntegrationQuery)) *InternalPolicyQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrations == nil {
+		_q.withNamedIntegrations = make(map[string]*IntegrationQuery)
+	}
+	_q.withNamedIntegrations[name] = query
 	return _q
 }
 

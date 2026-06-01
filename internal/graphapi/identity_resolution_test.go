@@ -15,7 +15,7 @@ import (
 )
 
 func TestIdentityResolution(t *testing.T) {
-	ctx := setContext(testUser1.UserCtx, suite.client.db)
+	ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
 
 	irSetup, err := graphapi.SetupIdentityResolution(ctx, suite.client.db, suite.tf.URI)
 	assert.NilError(t, err)
@@ -37,7 +37,7 @@ func TestIdentityResolution(t *testing.T) {
 			Department:     lo.ToPtr("Platform"),
 			PhoneNumber:    lo.ToPtr("800-867-5309"),
 			EmailAliases:   []string{"single-create@mail.testresolution.io"},
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 			ExternalID:     "1234871001",
 		}).MustNew(ctx, t)
 
@@ -78,7 +78,7 @@ func TestIdentityResolution(t *testing.T) {
 			Status:         enums.DirectoryAccountStatusActive,
 			JobTitle:       lo.ToPtr("SRE"),
 			Department:     lo.ToPtr("Infra"),
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -95,7 +95,7 @@ func TestIdentityResolution(t *testing.T) {
 			DisplayName:    "Cross Dir User (GitHub)",
 			DirectoryName:  lo.ToPtr("github"),
 			Status:         enums.DirectoryAccountStatusActive,
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 			PhoneNumber:    lo.ToPtr("800-867-5309"),
 			EmailAliases:   []string{"single-create@mail.testresolution.io"},
 			ExternalID:     "1234871001",
@@ -132,7 +132,7 @@ func TestIdentityResolution(t *testing.T) {
 			DirectoryName:  lo.ToPtr("googleworkspace"),
 			PrimarySource:  true,
 			Status:         enums.DirectoryAccountStatusActive,
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -149,7 +149,7 @@ func TestIdentityResolution(t *testing.T) {
 			FamilyName:     lo.ToPtr("Tester"),
 			DirectoryName:  lo.ToPtr("github"),
 			Status:         enums.DirectoryAccountStatusActive,
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -179,7 +179,7 @@ func TestIdentityResolution(t *testing.T) {
 			Status:         enums.DirectoryAccountStatusActive,
 			JobTitle:       lo.ToPtr("Slack Title"),
 			Department:     lo.ToPtr("Slack Dept"),
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -204,7 +204,7 @@ func TestIdentityResolution(t *testing.T) {
 			Status:         enums.DirectoryAccountStatusSuspended,
 			JobTitle:       lo.ToPtr("Staff Engineer"),
 			Department:     lo.ToPtr("Platform"),
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -249,7 +249,7 @@ func TestIdentityResolution(t *testing.T) {
 					DirectoryName:  lo.ToPtr("googleworkspace"),
 					PrimarySource:  true,
 					Status:         tc.dirStatus,
-					OwnerID:        testUser1.OrganizationID,
+					OwnerID:        sharedTestUser1.OrganizationID,
 				}).MustNew(ctx, t)
 
 				irSetup.Runtime.WaitIdle()
@@ -276,7 +276,7 @@ func TestIdentityResolution(t *testing.T) {
 			DisplayName:   "No Email User",
 			DirectoryName: lo.ToPtr("github"),
 			Status:        enums.DirectoryAccountStatusActive,
-			OwnerID:       testUser1.OrganizationID,
+			OwnerID:       sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -300,7 +300,7 @@ func TestIdentityResolution(t *testing.T) {
 			DirectoryName:  lo.ToPtr("googleworkspace"),
 			PrimarySource:  true,
 			Status:         enums.DirectoryAccountStatusActive,
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -317,7 +317,7 @@ func TestIdentityResolution(t *testing.T) {
 			FamilyName:     lo.ToPtr("Sync"),
 			DirectoryName:  lo.ToPtr("github"),
 			Status:         enums.DirectoryAccountStatusActive,
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -359,7 +359,7 @@ func TestIdentityResolution(t *testing.T) {
 			DirectoryName:  lo.ToPtr("googleworkspace"),
 			PrimarySource:  true,
 			Status:         enums.DirectoryAccountStatusActive,
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -376,7 +376,7 @@ func TestIdentityResolution(t *testing.T) {
 			FamilyName:     lo.ToPtr("Test"),
 			DirectoryName:  lo.ToPtr("github"),
 			Status:         enums.DirectoryAccountStatusActive,
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -411,7 +411,7 @@ func TestIdentityResolution(t *testing.T) {
 			Status:         enums.DirectoryAccountStatusActive,
 			JobTitle:       lo.ToPtr("Engineer"),
 			Department:     lo.ToPtr("Platform"),
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -448,7 +448,7 @@ func TestIdentityResolution(t *testing.T) {
 			DisplayName:   "Unlinked Update",
 			DirectoryName: lo.ToPtr("github"),
 			Status:        enums.DirectoryAccountStatusActive,
-			OwnerID:       testUser1.OrganizationID,
+			OwnerID:       sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -494,7 +494,7 @@ func TestIdentityResolution(t *testing.T) {
 			DisplayName:    "Preexisting Match",
 			DirectoryName:  lo.ToPtr("googleworkspace"),
 			Status:         enums.DirectoryAccountStatusActive,
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -517,7 +517,7 @@ func TestIdentityResolution(t *testing.T) {
 			DirectoryName:  lo.ToPtr("googleworkspace"),
 			PrimarySource:  true,
 			Status:         enums.DirectoryAccountStatusActive,
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -543,7 +543,7 @@ func TestIdentityResolution(t *testing.T) {
 			DirectoryName:  lo.ToPtr("googleworkspace"),
 			PrimarySource:  true,
 			Status:         enums.DirectoryAccountStatusActive,
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -571,7 +571,7 @@ func TestIdentityResolution(t *testing.T) {
 			DirectoryName:  lo.ToPtr("googleworkspace"),
 			PrimarySource:  true,
 			Status:         enums.DirectoryAccountStatusActive,
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -603,7 +603,7 @@ func TestIdentityResolution(t *testing.T) {
 			Status:         enums.DirectoryAccountStatusActive,
 			JobTitle:       lo.ToPtr("Principal Engineer"),
 			Department:     lo.ToPtr("Engineering"),
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -620,7 +620,7 @@ func TestIdentityResolution(t *testing.T) {
 			FamilyName:     lo.ToPtr("Source"),
 			DirectoryName:  lo.ToPtr("slack"),
 			Status:         enums.DirectoryAccountStatusActive,
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -636,7 +636,7 @@ func TestIdentityResolution(t *testing.T) {
 			FamilyName:     lo.ToPtr("Source"),
 			DirectoryName:  lo.ToPtr("github"),
 			Status:         enums.DirectoryAccountStatusActive,
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -680,7 +680,7 @@ func TestIdentityResolution(t *testing.T) {
 			DirectoryName:  lo.ToPtr("googleworkspace"),
 			PrimarySource:  true,
 			Status:         enums.DirectoryAccountStatusActive,
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -698,7 +698,7 @@ func TestIdentityResolution(t *testing.T) {
 			DirectoryName:  lo.ToPtr("slack"),
 			PrimarySource:  false,
 			Status:         enums.DirectoryAccountStatusActive,
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -727,7 +727,7 @@ func TestIdentityResolution(t *testing.T) {
 			DirectoryName:  lo.ToPtr("github"),
 			PrimarySource:  false,
 			Status:         enums.DirectoryAccountStatusActive,
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -765,7 +765,7 @@ func TestIdentityResolution(t *testing.T) {
 			Status:         enums.DirectoryAccountStatusActive,
 			JobTitle:       lo.ToPtr("Should Not Propagate"),
 			Department:     lo.ToPtr("Should Not Propagate"),
-			OwnerID:        testUser1.OrganizationID,
+			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()

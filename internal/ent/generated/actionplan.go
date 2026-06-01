@@ -77,6 +77,10 @@ type ActionPlan struct {
 	URL *string `json:"url,omitempty"`
 	// This will contain the most recent file id if this action_plan was created from a file
 	FileID *string `json:"file_id,omitempty"`
+	// Documents managed externally may have IDs we need to reference, this holds them
+	ExternalFileID *string `json:"external_file_id,omitempty"`
+	// The contents of externally managed files, if available
+	ExternalContents *string `json:"external_contents,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -374,7 +378,7 @@ func (*ActionPlan) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case actionplan.FieldApprovalRequired, actionplan.FieldSystemOwned, actionplan.FieldWorkflowEligibleMarker, actionplan.FieldRequiresApproval, actionplan.FieldBlocked:
 			values[i] = new(sql.NullBool)
-		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldDeletedBy, actionplan.FieldRevision, actionplan.FieldName, actionplan.FieldStatus, actionplan.FieldManagementMode, actionplan.FieldDetails, actionplan.FieldReviewFrequency, actionplan.FieldApproverID, actionplan.FieldDelegateID, actionplan.FieldSummary, actionplan.FieldURL, actionplan.FieldFileID, actionplan.FieldOwnerID, actionplan.FieldInternalNotes, actionplan.FieldSystemInternalID, actionplan.FieldActionPlanKindName, actionplan.FieldActionPlanKindID, actionplan.FieldTitle, actionplan.FieldDescription, actionplan.FieldPriority, actionplan.FieldBlockerReason, actionplan.FieldSource:
+		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldDeletedBy, actionplan.FieldRevision, actionplan.FieldName, actionplan.FieldStatus, actionplan.FieldManagementMode, actionplan.FieldDetails, actionplan.FieldReviewFrequency, actionplan.FieldApproverID, actionplan.FieldDelegateID, actionplan.FieldSummary, actionplan.FieldURL, actionplan.FieldFileID, actionplan.FieldExternalFileID, actionplan.FieldExternalContents, actionplan.FieldOwnerID, actionplan.FieldInternalNotes, actionplan.FieldSystemInternalID, actionplan.FieldActionPlanKindName, actionplan.FieldActionPlanKindID, actionplan.FieldTitle, actionplan.FieldDescription, actionplan.FieldPriority, actionplan.FieldBlockerReason, actionplan.FieldSource:
 			values[i] = new(sql.NullString)
 		case actionplan.FieldCreatedAt, actionplan.FieldUpdatedAt, actionplan.FieldDeletedAt, actionplan.FieldReviewDue, actionplan.FieldDueDate, actionplan.FieldCompletedAt:
 			values[i] = new(sql.NullTime)
@@ -584,6 +588,20 @@ func (_m *ActionPlan) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.FileID = new(string)
 				*_m.FileID = value.String
+			}
+		case actionplan.FieldExternalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_file_id", values[i])
+			} else if value.Valid {
+				_m.ExternalFileID = new(string)
+				*_m.ExternalFileID = value.String
+			}
+		case actionplan.FieldExternalContents:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_contents", values[i])
+			} else if value.Valid {
+				_m.ExternalContents = new(string)
+				*_m.ExternalContents = value.String
 			}
 		case actionplan.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -934,6 +952,16 @@ func (_m *ActionPlan) String() string {
 	builder.WriteString(", ")
 	if v := _m.FileID; v != nil {
 		builder.WriteString("file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.ExternalFileID; v != nil {
+		builder.WriteString("external_file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.ExternalContents; v != nil {
+		builder.WriteString("external_contents=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")

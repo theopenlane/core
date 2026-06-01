@@ -439,6 +439,27 @@ query GetTrustCenters ($first: Int, $last: Int, $where: TrustCenterWhereInput) {
 					backgroundColor
 					accentColor
 				}
+				previewSetting {
+					id
+					overview
+					title
+					primaryColor
+					logoRemoteURL
+					logoLocalFileID
+					logoFile {
+						presignedURL
+					}
+					faviconRemoteURL
+					faviconLocalFileID
+					faviconFile {
+						presignedURL
+					}
+					themeMode
+					font
+					foregroundColor
+					backgroundColor
+					accentColor
+				}
 			}
 		}
 	}

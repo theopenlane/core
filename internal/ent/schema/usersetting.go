@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 )
 
@@ -143,8 +144,11 @@ func (UserSetting) Interceptors() []ent.Interceptor {
 
 func (UserSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithMutationRules(
+		policy.WithSkipDenyOrganizationRule(),
+		policy.WithOnMutationRules(
+			ent.OpCreate,
 			policy.AllowCreate(),
+			policy.CheckServiceCreateAccess(),
 		),
 		policy.WithOnMutationRules(
 			ent.OpUpdateOne|ent.OpUpdate,
@@ -153,4 +157,12 @@ func (UserSetting) Policy() ent.Policy {
 			rule.AllowIfSelf(),
 		),
 	)
+}
+
+// Annotations of the UserSetting
+func (u UserSetting) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entx.FGACrudSkip(entx.SkipAll),
+		entx.FGACrudParent(User{}.Name()),
+	}
 }

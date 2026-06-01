@@ -25,9 +25,9 @@ import (
 )
 
 func TestQueryTrustCenterByID(t *testing.T) {
-	cleanupTrustCenterData(t)
-
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.trustCenter
 
 	testCases := []struct {
 		name     string
@@ -40,26 +40,26 @@ func TestQueryTrustCenterByID(t *testing.T) {
 			name:    "happy path",
 			queryID: trustCenter.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     tcOrg.owner.UserCtx,
 		},
 		{
 			name:    "happy path, view only user",
 			queryID: trustCenter.ID,
 			client:  suite.client.api,
-			ctx:     viewOnlyUser.UserCtx,
+			ctx:     tcOrg.member.UserCtx,
 		},
 		{
 			name:     "trust center not found",
 			queryID:  "non-existent-id",
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      tcOrg.owner.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "not authorized to query org",
 			queryID:  trustCenter.ID,
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -79,7 +79,7 @@ func TestQueryTrustCenterByID(t *testing.T) {
 			assert.Check(t, is.Equal(tc.queryID, resp.TrustCenter.ID))
 			assert.Check(t, resp.TrustCenter.Slug != nil)
 			assert.Check(t, resp.TrustCenter.OwnerID != nil)
-			assert.Check(t, is.Equal(testUser1.OrganizationID, *resp.TrustCenter.OwnerID))
+			assert.Check(t, is.Equal(tcOrg.organizationID, *resp.TrustCenter.OwnerID))
 
 			setting := resp.TrustCenter.GetSetting()
 			assert.Assert(t, setting != nil)
@@ -89,18 +89,23 @@ func TestQueryTrustCenterByID(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestQueryTrustCenters(t *testing.T) {
-	cleanupTrustCenterData(t)
-
-	cnameRecord := gofakeit.DomainName()
-	customDomain := (&CustomDomainBuilder{client: suite.client, CnameRecord: cnameRecord}).MustNew(testUser1.UserCtx, t)
-	trustCenter1 := (&TrustCenterBuilder{client: suite.client, CustomDomainID: customDomain.ID}).MustNew(testUser1.UserCtx, t)
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t, withCustomDomain(), withAllUserTypes())
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
+	trustCenter1 := tcOrg.trustCenter
 
 	nonExistentSlug := "nonexistent-slug"
+
+	if trustCenter1.CustomDomainID == nil {
+		failNow(t, "expected trust center custom domain but no ID was returned")
+
+	}
+	customDomainTrustCenter1, err := suite.client.api.GetCustomDomainByID(tcOrg.owner.UserCtx, *trustCenter1.CustomDomainID)
+	requireNoError(t, err)
 
 	testCases := []struct {
 		name            string
@@ -112,28 +117,28 @@ func TestQueryTrustCenters(t *testing.T) {
 		{
 			name:            "return all",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             tcOrg.owner.UserCtx,
 			expectedResults: 1,
 		},
 		{
 			name:            "return all, ro user",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             tcOrg.member.UserCtx,
 			expectedResults: 1,
 		},
 		{
 			name:   "query by org ID",
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.superAdmin.UserCtx,
 			where: &testclient.TrustCenterWhereInput{
-				OwnerID: &testUser1.OrganizationID,
+				OwnerID: &tcOrg.organizationID,
 			},
 			expectedResults: 1,
 		},
 		{
 			name:   "query by slug",
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.admin.UserCtx,
 			where: &testclient.TrustCenterWhereInput{
 				Slug: &trustCenter1.Slug,
 			},
@@ -142,7 +147,7 @@ func TestQueryTrustCenters(t *testing.T) {
 		{
 			name:   "query by slug, not found",
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 			where: &testclient.TrustCenterWhereInput{
 				Slug: &nonExistentSlug,
 			},
@@ -151,7 +156,7 @@ func TestQueryTrustCenters(t *testing.T) {
 		{
 			name:   "query by custom domain, slug",
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 			where: &testclient.TrustCenterWhereInput{
 				And: []*testclient.TrustCenterWhereInput{
 					{
@@ -160,7 +165,7 @@ func TestQueryTrustCenters(t *testing.T) {
 					{
 						HasCustomDomainWith: []*testclient.CustomDomainWhereInput{
 							{
-								CnameRecord: &cnameRecord,
+								CnameRecord: &customDomainTrustCenter1.CustomDomain.CnameRecord,
 							},
 						},
 					},
@@ -171,7 +176,7 @@ func TestQueryTrustCenters(t *testing.T) {
 		{
 			name:   "query by non existent custom domain, slug",
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 			where: &testclient.TrustCenterWhereInput{
 				And: []*testclient.TrustCenterWhereInput{
 					{
@@ -199,12 +204,12 @@ func TestQueryTrustCenters(t *testing.T) {
 
 			assert.Check(t, is.Equal(tc.expectedResults, resp.TrustCenters.TotalCount))
 			for _, node := range resp.TrustCenters.Edges {
-				assert.Check(t, node.Node != nil)
+				assert.Assert(t, node.Node != nil)
 				assert.Check(t, node.Node.Slug != nil)
 				assert.Check(t, node.Node.OwnerID != nil)
-				assert.Check(t, is.Equal(testUser1.OrganizationID, *node.Node.OwnerID))
+				assert.Check(t, is.Equal(tcOrg.organizationID, *node.Node.OwnerID))
 				setting := node.Node.GetSetting()
-				assert.Check(t, setting != nil)
+				assert.Assert(t, setting != nil)
 				assert.Check(t, setting.Title != nil)
 				assert.Check(t, setting.Overview != nil)
 				assert.Check(t, setting.PrimaryColor != nil)
@@ -213,28 +218,28 @@ func TestQueryTrustCenters(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter1.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg2.owner.UserCtx, t)
 }
 
 func TestMutationCreateTrustCenter(t *testing.T) {
-	cleanupTrustCenterData(t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t, withCustomDomain())
+	customDomainAnotherOrg, err := suite.client.api.GetCustomDomainByID(tcOrg.owner.UserCtx, *tcOrg.trustCenter.CustomDomainID)
+	requireNoError(t, err)
 
-	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
-	customDomainAnotherOrg := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	localTestUser := suite.seedFreshMinimalOrgUsers(t, false)
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(localTestUser.owner.UserCtx, t)
 
 	// create trust center standard
-	trustCenterControlStd := (&StandardBuilder{client: suite.client, Name: "OTS", Framework: "openlane-trust-center", IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+	trustCenterControlStd := (&StandardBuilder{client: suite.client, Name: "OTS", Framework: "openlane-trust-center", IsPublic: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	trustCenterControlIDs := []string{}
 	numTrustCenterControls := 5
 	for range numTrustCenterControls {
-		control := (&ControlBuilder{client: suite.client, StandardID: trustCenterControlStd.ID}).MustNew(systemAdminUser.UserCtx, t)
+		control := (&ControlBuilder{client: suite.client, StandardID: trustCenterControlStd.ID}).MustNew(sharedSystemAdminUser.UserCtx, t)
 		trustCenterControlIDs = append(trustCenterControlIDs, control.ID)
 	}
-
-	// Create a trust center first to test the duplicate constraint
-	existingTrustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -247,16 +252,16 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 			name:    "happy path for different organization",
 			request: testclient.CreateTrustCenterInput{},
 			client:  suite.client.api,
-			ctx:     testUser2.UserCtx,
+			ctx:     localTestUser.owner.UserCtx,
 		},
 		{
 			name: "custom domain for different organization should error",
 			request: testclient.CreateTrustCenterInput{
-				CustomDomainID: &customDomainAnotherOrg.ID,
+				CustomDomainID: &customDomainAnotherOrg.CustomDomain.ID,
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			ctx:         localTestUser.owner.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "custom domain setting",
@@ -264,7 +269,7 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 				CustomDomainID: &customDomain.ID,
 			},
 			client: suite.client.api,
-			ctx:    testUser2.UserCtx,
+			ctx:    localTestUser.owner.UserCtx,
 		},
 		{
 			name: "happy path with settings for different organization",
@@ -274,20 +279,20 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 				},
 			},
 			client: suite.client.api,
-			ctx:    testUser2.UserCtx,
+			ctx:    localTestUser.owner.UserCtx,
 		},
 		{
 			name:        "not authorized",
 			request:     testclient.CreateTrustCenterInput{},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         localTestUser.member.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "duplicate trust center for same organization",
 			request:     testclient.CreateTrustCenterInput{},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: "one trust center at a time",
 		},
 	}
@@ -353,26 +358,14 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 	}
 
 	// Clean up the existing trust center
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: existingTrustCenter.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
-	// cleanup trust center standard and control
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: trustCenterControlIDs}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: trustCenterControlStd.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(localTestUser.owner.UserCtx, t)
 }
 
 func TestGetAllTrustCenters(t *testing.T) {
-	// Clean up any existing trust centers
-	cleanupTrustCenterData(t)
-	// Create test trust centers with different users
-	// Each organization can only have one trust center
-	trustCenter1 := (&TrustCenterBuilder{
-		client: suite.client,
-	}).MustNew(testUser1.UserCtx, t)
-
-	trustCenter2 := (&TrustCenterBuilder{
-		client: suite.client,
-	}).MustNew(testUser2.UserCtx, t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t, withAllUserTypes())
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
 
 	testCases := []struct {
 		name            string
@@ -384,26 +377,26 @@ func TestGetAllTrustCenters(t *testing.T) {
 		{
 			name:            "happy path - regular user sees only their trust centers",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
-			expectedResults: 1, // Should see only trust centers owned by testUser1
+			ctx:             tcOrg.owner.UserCtx,
+			expectedResults: 1,
 		},
 		{
 			name:            "happy path - admin user sees all trust centers",
 			client:          suite.client.api,
-			ctx:             adminUser.UserCtx,
-			expectedResults: 1, // Should see all owned by testUser
+			ctx:             tcOrg.admin.UserCtx,
+			expectedResults: 1,
 		},
 		{
 			name:            "happy path - view only user",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
-			expectedResults: 1, // Should see only trust centers from their organization
+			ctx:             tcOrg.member.UserCtx,
+			expectedResults: 1,
 		},
 		{
 			name:            "happy path - different user sees only their trust centers",
 			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
-			expectedResults: 1, // Should see only trust centers owned by testUser2
+			ctx:             tcOrg2.owner.UserCtx,
+			expectedResults: 1,
 		},
 	}
 
@@ -438,28 +431,33 @@ func TestGetAllTrustCenters(t *testing.T) {
 
 			// Verify that users only see trust centers from their organization
 			switch tc.ctx {
-			case testUser1.UserCtx, viewOnlyUser.UserCtx:
+			case tcOrg.owner.UserCtx, tcOrg.admin.UserCtx, tcOrg.member.UserCtx, tcOrg.superAdmin.UserCtx:
 				for _, edge := range resp.TrustCenters.Edges {
-					assert.Check(t, is.Equal(testUser1.OrganizationID, *edge.Node.OwnerID))
+					assert.Check(t, is.Equal(tcOrg.organizationID, *edge.Node.OwnerID))
 				}
-			case testUser2.UserCtx:
+			case tcOrg2.owner.UserCtx:
 				for _, edge := range resp.TrustCenters.Edges {
-					assert.Check(t, is.Equal(testUser2.OrganizationID, *edge.Node.OwnerID))
+					assert.Check(t, is.Equal(tcOrg2.organizationID, *edge.Node.OwnerID))
 				}
 			}
 		})
 	}
 
 	// Clean up created trust centers
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter1.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestMutationUpdateTrustCenter(t *testing.T) {
-	cleanupTrustCenterData(t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t, withCustomDomain(), withAllUserTypes())
+	trustCenter := tcOrg.trustCenter
 
-	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	if trustCenter.CustomDomainID == nil {
+		failNow(t, "expected trust center custom domain but no ID was returned")
+
+	}
+	customDomainTrustCenter, err := suite.client.api.GetCustomDomainByID(tcOrg.owner.UserCtx, *trustCenter.CustomDomainID)
+	requireNoError(t, err)
 
 	testCases := []struct {
 		name          string
@@ -476,19 +474,19 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 				Tags: []string{"updated", "test"},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name:          "happy path, update custom domain",
 			trustCenterID: trustCenter.ID,
 			request: testclient.UpdateTrustCenterInput{
-				CustomDomainID: &customDomain.ID,
+				CustomDomainID: &customDomainTrustCenter.CustomDomain.ID,
 				AddPost: &testclient.CreateNoteInput{
 					Text: "Adding a post about obtaining our SOC 2 compliance attestation.",
 				},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.superAdmin.UserCtx,
 		},
 		{
 			name:          "happy path, update settings",
@@ -504,7 +502,7 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 				},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.admin.UserCtx,
 		},
 		{
 			name:          "happy path, append tags",
@@ -513,7 +511,7 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 				AppendTags: []string{"appended", "tag"},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name:          "happy path, using admin user",
@@ -522,7 +520,7 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 				Tags: []string{"admin", "update"},
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    tcOrg.admin.UserCtx,
 		},
 		{
 			name:          "happy path, using personal access token",
@@ -530,7 +528,7 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 			request: testclient.UpdateTrustCenterInput{
 				Tags: []string{"pat", "update"},
 			},
-			client: suite.client.apiWithPAT,
+			client: tcOrg.adminPatClient,
 			ctx:    context.Background(),
 		},
 		{
@@ -540,7 +538,7 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 				Tags: []string{"unauthorized"},
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         tcOrg.member.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -550,7 +548,7 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 				Tags: []string{"unauthorized"},
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
@@ -560,7 +558,7 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 				Tags: []string{"test"},
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -615,21 +613,16 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestMutationDeleteTrustCenter(t *testing.T) {
-	cleanupTrustCenterData(t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
 
-	// Create new test users
-	testUser := suite.userBuilder(context.Background(), t)
-	testUserOther := suite.userBuilder(testUser.UserCtx, t)
-
-	// create objects to be deleted
-	trustCenter1 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUserOther.UserCtx, t)
+	trustCenter1 := tcOrg.trustCenter
+	trustCenter2 := tcOrg2.trustCenter
 
 	testCases := []struct {
 		name        string
@@ -642,20 +635,20 @@ func TestMutationDeleteTrustCenter(t *testing.T) {
 			name:       "happy path, delete trust center",
 			idToDelete: trustCenter1.ID,
 			client:     suite.client.api,
-			ctx:        testUser.UserCtx,
+			ctx:        tcOrg.owner.UserCtx,
 		},
 		{
 			name:        "not authorized, different org user",
 			idToDelete:  trustCenter2.ID,
 			client:      suite.client.api,
-			ctx:         testUser.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "trust center not found",
 			idToDelete:  "non-existent-id",
 			client:      suite.client.api,
-			ctx:         testUser.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -674,50 +667,53 @@ func TestMutationDeleteTrustCenter(t *testing.T) {
 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteTrustCenter.DeletedID))
 		})
 	}
+
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg2.owner.UserCtx, t)
 }
 
 func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
+	t.Parallel()
 	// create new test users
-	testUser := suite.userBuilder(context.Background(), t)
-	testUserOther := suite.userBuilder(context.Background(), t)
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
 
-	// Create a trust center for testing
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	trustCenter := tcOrg.trustCenter
+
 	// create trust center entities for the trust center
 	createLogoUpload := logoFileFunc(t)
 	logoFile := createLogoUpload()
 
 	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*logoFile})
 
-	entity1, err := suite.client.api.CreateTrustCenterEntity(testUser.UserCtx, testclient.CreateTrustCenterEntityInput{
+	_, err := suite.client.api.CreateTrustCenterEntity(tcOrg.owner.UserCtx, testclient.CreateTrustCenterEntityInput{
 		Name:          "test entity 1",
 		TrustCenterID: &trustCenter.ID,
 		URL:           lo.ToPtr(gofakeit.URL()),
 	}, logoFile, nil)
 	assert.NilError(t, err)
 
-	_, err = suite.client.api.UpdateTrustCenter(testUser.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
+	_, err = suite.client.api.UpdateTrustCenter(tcOrg.owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
 		AddPost: &testclient.CreateNoteInput{
 			Text: "this is an update",
 		},
 	})
 	assert.NilError(t, err)
-	var postID string
 
 	// create trust center compliance
-	std := (&StandardBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	tcc, err := suite.client.api.CreateTrustCenterCompliance(testUser.UserCtx, testclient.CreateTrustCenterComplianceInput{
+	std := (&StandardBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+	_, err = suite.client.api.CreateTrustCenterCompliance(tcOrg.owner.UserCtx, testclient.CreateTrustCenterComplianceInput{
 		StandardID: std.ID,
 	})
 	assert.NilError(t, err)
 
 	// create subprocessor
-	sbpr := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	sbpr := (&SubprocessorBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
 	sbprKind := (&CustomTypeEnumBuilder{
 		client:     suite.client,
 		ObjectType: "trust_center_subprocessor",
-	}).MustNew(testUser.UserCtx, t)
-	tcs, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
+	}).MustNew(tcOrg.owner.UserCtx, t)
+	_, err = suite.client.api.CreateTrustCenterSubprocessor(tcOrg.owner.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 		SubprocessorID:                  sbpr.ID,
 		TrustCenterSubprocessorKindName: &sbprKind.Name,
 		Countries:                       []string{"United States"},
@@ -728,14 +724,14 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 	docKind := (&CustomTypeEnumBuilder{
 		client:     suite.client,
 		ObjectType: "trust_center_doc",
-	}).MustNew(testUser.UserCtx, t)
+	}).MustNew(tcOrg.owner.UserCtx, t)
 
 	// create trust center doc
 	createFileUpload := uploadFileFunc(t, pdfFilePath)
 	fileUpload := createFileUpload()
 
 	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
-	doc, err := suite.client.api.CreateTrustCenterDoc(testUser.UserCtx, testclient.CreateTrustCenterDocInput{
+	doc, err := suite.client.api.CreateTrustCenterDoc(tcOrg.owner.UserCtx, testclient.CreateTrustCenterDocInput{
 		Title:                  "Test Doc",
 		TrustCenterDocKindName: &docKind.Name,
 		Visibility:             &enums.TrustCenterDocumentVisibilityPubliclyVisible,
@@ -745,11 +741,10 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 	assert.Check(t, doc.CreateTrustCenterDoc.TrustCenterDoc.OriginalFile != nil)
 	assert.Check(t, doc.CreateTrustCenterDoc.TrustCenterDoc.OriginalFileID != nil)
 	assert.Check(t, doc.CreateTrustCenterDoc.TrustCenterDoc.Title == "Test Doc")
-	docID := doc.CreateTrustCenterDoc.TrustCenterDoc.ID
 
 	// create trust center FAQ
-	faqNote := (&NoteBuilder{client: suite.client, TrustCenterID: trustCenter.ID}).MustNew(testUser.UserCtx, t)
-	faqResp, err := suite.client.api.CreateTrustCenterFaq(testUser.UserCtx, testclient.CreateTrustCenterFAQInput{
+	faqNote := (&NoteBuilder{client: suite.client, TrustCenterID: trustCenter.ID}).MustNew(tcOrg.owner.UserCtx, t)
+	_, err = suite.client.api.CreateTrustCenterFaq(tcOrg.owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 		NoteID:        faqNote.ID,
 		TrustCenterID: &trustCenter.ID,
 		ReferenceLink: lo.ToPtr("https://example.com/faq"),
@@ -758,7 +753,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 	assert.NilError(t, err)
 
 	// Create another trust center that the anonymous user should NOT have access to
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUserOther.UserCtx, t)
+	trustCenter2 := tcOrg2.trustCenter
 
 	testCases := []struct {
 		name           string
@@ -774,7 +769,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 			name:           "list query - anonymous user can query their trust center, only one returned",
 			queryID:        trustCenter.ID,
 			trustCenterID:  trustCenter.ID,
-			organizationID: testUser.OrganizationID,
+			organizationID: tcOrg.organizationID,
 			client:         suite.client.api,
 			shouldSucceed:  true,
 			isList:         true,
@@ -783,7 +778,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 			name:           "anonymous user cannot query different trust center by id",
 			queryID:        trustCenter2.ID,
 			trustCenterID:  trustCenter.ID, // Anonymous user has access to trustCenter, not trustCenter2
-			organizationID: testUser.OrganizationID,
+			organizationID: tcOrg.organizationID,
 			client:         suite.client.api,
 			expectedErr:    notFoundErrorMsg,
 			shouldSucceed:  false,
@@ -792,7 +787,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 			name:           "anonymous user cannot query non-existent trust center by id",
 			queryID:        "non-existent-id",
 			trustCenterID:  trustCenter.ID,
-			organizationID: testUser.OrganizationID,
+			organizationID: tcOrg.organizationID,
 			client:         suite.client.api,
 			expectedErr:    notFoundErrorMsg,
 			shouldSucceed:  false,
@@ -839,7 +834,6 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 			// // Verify that children are accessible
 			assert.Assert(t, trustCenter.Posts.Edges != nil)
 			assert.Assert(t, is.Len(trustCenter.Posts.Edges, 2))
-			postID = trustCenter.Posts.Edges[0].Node.ID
 
 			assert.Assert(t, trustCenter.TrustCenterCompliances.Edges != nil)
 			assert.Assert(t, is.Len(trustCenter.TrustCenterCompliances.Edges, 1))
@@ -873,40 +867,40 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 	}
 
 	// create a trust center control and verify frontend query still works with controls present
-	dbCtx := setContext(testUser.UserCtx, suite.client.db)
+	dbCtx := setContext(tcOrg.owner.UserCtx, suite.client.db)
 
 	tcControl, err := suite.client.db.Control.Create().
 		SetRefCode("OTS-TC-" + ulids.New().String()).
 		SetTitle("Trust Center Control").
 		SetSource(enums.ControlSourceUserDefined).
 		SetIsTrustCenterControl(true).
-		SetOwnerID(testUser.OrganizationID).
+		SetOwnerID(tcOrg.organizationID).
 		Save(dbCtx)
 	assert.NilError(t, err)
 
-	_, err = suite.client.api.UpdateControl(testUser.UserCtx, tcControl.ID, testclient.UpdateControlInput{
+	_, err = suite.client.api.UpdateControl(tcOrg.owner.UserCtx, tcControl.ID, testclient.UpdateControlInput{
 		TrustCenterVisibility: &enums.TrustCenterControlVisibilityPubliclyVisible,
 	})
 	assert.NilError(t, err)
 
 	// create another trust center control for another trust center to ensure only controls for the queried trust center are returned in the frontend query
-	dbCtx2 := setContext(testUser2.UserCtx, suite.client.db)
+	dbCtx2 := setContext(tcOrg2.owner.UserCtx, suite.client.db)
 	tcControlForAnotherOrg, err := suite.client.db.Control.Create().
 		SetRefCode("OTS-TC-" + ulids.New().String()).
 		SetTitle("Trust Center Control").
 		SetSource(enums.ControlSourceUserDefined).
 		SetIsTrustCenterControl(true).
-		SetOwnerID(testUser2.OrganizationID).
+		SetOwnerID(tcOrg2.organizationID).
 		Save(dbCtx2)
 	assert.NilError(t, err)
 
-	_, err = suite.client.api.UpdateControl(testUser2.UserCtx, tcControlForAnotherOrg.ID, testclient.UpdateControlInput{
+	_, err = suite.client.api.UpdateControl(tcOrg2.owner.UserCtx, tcControlForAnotherOrg.ID, testclient.UpdateControlInput{
 		TrustCenterVisibility: &enums.TrustCenterControlVisibilityPubliclyVisible,
 	})
 	assert.NilError(t, err)
 
 	t.Run("anonymous user frontend query returns all child objects with controls present", func(t *testing.T) {
-		anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser.OrganizationID)
+		anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, tcOrg.owner.OrganizationID)
 
 		resp, err := suite.client.api.GetTrustCenterFrontendQuery(anonCtx)
 		assert.NilError(t, err)
@@ -930,7 +924,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 	})
 
 	t.Run("anonymous user can query publicly visible trust center controls", func(t *testing.T) {
-		anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser.OrganizationID)
+		anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, tcOrg.organizationID)
 
 		resp, err := suite.client.api.GetAllControls(anonCtx)
 		assert.NilError(t, err)
@@ -940,34 +934,18 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 		assert.Check(t, resp.Controls.Edges[0].Node.RefCode != "")
 	})
 
-	// Cleanup Trust Center Children
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: tcControl.ID}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: tcControlForAnotherOrg.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterEntityDeleteOne]{client: suite.client.db.TrustCenterEntity, ID: entity1.CreateTrustCenterEntity.TrustCenterEntity.ID}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterFAQDeleteOne]{client: suite.client.db.TrustCenterFAQ, ID: faqResp.CreateTrustCenterFaq.TrustCenterFaq.ID}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.NoteDeleteOne]{client: suite.client.db.Note, ID: postID}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterComplianceDeleteOne]{client: suite.client.db.TrustCenterCompliance, ID: tcc.CreateTrustCenterCompliance.TrustCenterCompliance.ID}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterSubprocessorDeleteOne]{client: suite.client.db.TrustCenterSubprocessor, ID: tcs.CreateTrustCenterSubprocessor.TrustCenterSubprocessor.ID}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: docID}).MustDelete(testUser.UserCtx, t)
-
-	// Clean up
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUserOther.UserCtx, t)
-
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: std.ID}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: sbpr.ID}).MustDelete(testUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg2.owner.UserCtx, t)
 }
 
 func TestQueryTrustCentersAsAnonymousUser(t *testing.T) {
+	t.Parallel()
 	// create new test users
-	testUser := suite.userBuilder(context.Background(), t)
-	testUserOther := suite.userBuilder(context.Background(), t)
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
 
-	// Create a trust center for testing
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-
-	// Create another trust center that the anonymous user should NOT have access to
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUserOther.UserCtx, t)
+	trustCenter := tcOrg.trustCenter
+	trustCenter2 := tcOrg2.trustCenter
 
 	testCases := []struct {
 		name           string
@@ -979,14 +957,14 @@ func TestQueryTrustCentersAsAnonymousUser(t *testing.T) {
 		{
 			name:           "anonymous user can only see their trust center in list query",
 			trustCenterID:  trustCenter.ID,
-			organizationID: testUser.OrganizationID,
+			organizationID: tcOrg.organizationID,
 			client:         suite.client.api,
 			expectedCount:  1, // Should only see the one trust center they have access to
 		},
 		{
 			name:           "anonymous user with different trust center sees only their trust center",
 			trustCenterID:  trustCenter2.ID,
-			organizationID: testUserOther.OrganizationID,
+			organizationID: tcOrg2.organizationID,
 			client:         suite.client.api,
 			expectedCount:  1, // Should only see the one trust center they have access to
 		},
@@ -1013,14 +991,16 @@ func TestQueryTrustCentersAsAnonymousUser(t *testing.T) {
 	}
 
 	// Clean up
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUserOther.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg2.owner.UserCtx, t)
 }
 
 func TestMutationUpdateTrustCenterSetting(t *testing.T) {
-	cleanupTrustCenterData(t)
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t, withAllUserTypes())
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
+
+	trustCenter := tcOrg.trustCenter
 
 	testCases := []struct {
 		name        string
@@ -1038,7 +1018,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 			logoPath:    logoFilePath,
 			updateInput: testclient.UpdateTrustCenterSettingInput{},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 		},
 		{
 			name:      "happy path - update logo with other fields",
@@ -1049,7 +1029,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 				PrimaryColor: lo.ToPtr("#FF5733"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.admin.UserCtx,
 		},
 
 		{
@@ -1059,7 +1039,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 			invalidFile: true,
 			updateInput: testclient.UpdateTrustCenterSettingInput{},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         tcOrg.superAdmin.UserCtx,
 			expectedErr: "unsupported mime type uploaded: text/plain",
 		},
 		{
@@ -1067,7 +1047,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 			settingID:   trustCenter.Edges.Setting.ID,
 			updateInput: testclient.UpdateTrustCenterSettingInput{},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         tcOrg.member.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -1075,15 +1055,15 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 			settingID:   trustCenter.Edges.Setting.ID,
 			updateInput: testclient.UpdateTrustCenterSettingInput{},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			ctx:         tcOrg2.owner.UserCtx,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "trust center setting not found",
 			settingID:   "non-existent-setting-id",
 			updateInput: testclient.UpdateTrustCenterSettingInput{},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
@@ -1096,7 +1076,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 				PrimaryColor: lo.ToPtr("#00FF00"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name:      "happy path - update theme mode to EASY",
@@ -1105,7 +1085,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 				ThemeMode: lo.ToPtr(enums.TrustCenterThemeModeEasy),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name:      "happy path - update theme mode to ADVANCED",
@@ -1114,7 +1094,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 				ThemeMode: lo.ToPtr(enums.TrustCenterThemeModeAdvanced),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name:      "happy path - update font",
@@ -1123,7 +1103,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 				Font: lo.ToPtr("Arial, sans-serif"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name:      "happy path - update foreground color",
@@ -1132,7 +1112,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 				ForegroundColor: lo.ToPtr("#333333"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.superAdmin.UserCtx,
 		},
 		{
 			name:      "happy path - update background color",
@@ -1141,7 +1121,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 				BackgroundColor: lo.ToPtr("#FFFFFF"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.admin.UserCtx,
 		},
 		{
 			name:      "happy path - update accent color",
@@ -1150,7 +1130,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 				AccentColor: lo.ToPtr("#007BFF"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name:      "happy path - update all theme fields together",
@@ -1164,7 +1144,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 				AccentColor:     lo.ToPtr("#28A745"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 	}
 
@@ -1230,15 +1210,14 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 	}
 
 	// Clean up
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 // TestTrustCenterCreateHookWithCustomDomain tests that CreatePirschDomain job is called when custom_domain_id is set during creation
 func TestTrustCenterCreateHookWithCustomDomain(t *testing.T) {
-	cleanupTrustCenterData(t)
+	users := suite.seedFreshOrgUsers(t)
 
-	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(users.owner.UserCtx, t)
 
 	testCases := []struct {
 		name                  string
@@ -1254,14 +1233,14 @@ func TestTrustCenterCreateHookWithCustomDomain(t *testing.T) {
 				CustomDomainID: &customDomain.ID,
 			},
 			client:                suite.client.api,
-			ctx:                   testUser1.UserCtx,
+			ctx:                   users.owner.UserCtx,
 			expectCreatePirschJob: true,
 		},
 		{
 			name:                  "create trust center without custom domain - should NOT trigger CreatePirschDomain job",
 			request:               testclient.CreateTrustCenterInput{},
 			client:                suite.client.api,
-			ctx:                   testUser1.UserCtx,
+			ctx:                   users.owner.UserCtx,
 			expectCreatePirschJob: false,
 		},
 	}
@@ -1303,16 +1282,15 @@ func TestTrustCenterCreateHookWithCustomDomain(t *testing.T) {
 	}
 
 	// Clean up custom domain
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(users.owner.UserCtx, t)
 }
 
 // TestTrustCenterUpdateHookWithCustomDomain tests that CreatePirschDomain job is called when custom_domain_id changes from empty to non-empty
 func TestTrustCenterUpdateHookWithCustomDomain(t *testing.T) {
-	cleanupTrustCenterData(t)
+	tcOrg := createFreshOrgWithTrustCenter(t, withAllUserTypes())
+	trustCenter := tcOrg.trustCenter
 
-	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
 
 	testCases := []struct {
 		name                  string
@@ -1330,7 +1308,7 @@ func TestTrustCenterUpdateHookWithCustomDomain(t *testing.T) {
 				CustomDomainID: &customDomain.ID,
 			},
 			client:                suite.client.api,
-			ctx:                   testUser1.UserCtx,
+			ctx:                   tcOrg.owner.UserCtx,
 			expectCreatePirschJob: true,
 		},
 		{
@@ -1340,7 +1318,7 @@ func TestTrustCenterUpdateHookWithCustomDomain(t *testing.T) {
 				Tags: []string{"test", "tag"},
 			},
 			client:                suite.client.api,
-			ctx:                   testUser1.UserCtx,
+			ctx:                   tcOrg.superAdmin.UserCtx,
 			expectCreatePirschJob: false,
 		},
 	}
@@ -1379,24 +1357,19 @@ func TestTrustCenterUpdateHookWithCustomDomain(t *testing.T) {
 	}
 
 	// Clean up
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 // TestTrustCenterUpdateHookWithPirschDomainUpdate tests that UpdatePirschDomain job is called when custom_domain_id changes from one domain to another
 func TestTrustCenterUpdateHookWithPirschDomainUpdate(t *testing.T) {
-	cleanupTrustCenterData(t)
+	tcOrgWithDomain := createFreshOrgWithTrustCenter(t, withCustomDomain())
+	trustCenterWithDomain := tcOrgWithDomain.trustCenter
 
 	// Create two custom domains
-	customDomain1 := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	customDomain2 := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-
-	// Create trust center with first custom domain
-	trustCenterWithDomain := (&TrustCenterBuilder{client: suite.client, CustomDomainID: customDomain1.ID}).MustNew(testUser1.UserCtx, t)
+	customDomain2 := (&CustomDomainBuilder{client: suite.client}).MustNew(tcOrgWithDomain.owner.UserCtx, t)
 
 	// Manually set pirsch_domain_id to simulate what would happen after the CreatePirschDomain job completes
-	ctx := setContext(testUser1.UserCtx, suite.client.db)
+	ctx := setContext(tcOrgWithDomain.owner.UserCtx, suite.client.db)
 	fakePirschDomainID := "fake-pirsch-domain-id-for-update-test"
 	_, err := suite.client.db.TrustCenter.UpdateOneID(trustCenterWithDomain.ID).SetPirschDomainID(fakePirschDomainID).Save(ctx)
 	assert.NilError(t, err)
@@ -1417,7 +1390,7 @@ func TestTrustCenterUpdateHookWithPirschDomainUpdate(t *testing.T) {
 				CustomDomainID: &customDomain2.ID,
 			},
 			client:                suite.client.api,
-			ctx:                   testUser1.UserCtx,
+			ctx:                   tcOrgWithDomain.owner.UserCtx,
 			expectUpdatePirschJob: true,
 		},
 		{
@@ -1427,7 +1400,7 @@ func TestTrustCenterUpdateHookWithPirschDomainUpdate(t *testing.T) {
 				Tags: []string{"test", "tag"},
 			},
 			client:                suite.client.api,
-			ctx:                   testUser1.UserCtx,
+			ctx:                   tcOrgWithDomain.owner.UserCtx,
 			expectUpdatePirschJob: false,
 		},
 	}
@@ -1466,37 +1439,31 @@ func TestTrustCenterUpdateHookWithPirschDomainUpdate(t *testing.T) {
 	}
 
 	// Clean up
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenterWithDomain.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain1.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain1.ID}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain2.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain2.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrgWithDomain.owner.UserCtx, t)
 }
 
 // TestTrustCenterUpdateHookWithCustomDomainRemoval tests that DeletePirschDomain job is called when custom_domain_id is cleared
 func TestTrustCenterUpdateHookWithCustomDomainRemoval(t *testing.T) {
-	cleanupTrustCenterData(t)
+	tcOrg := createFreshOrgWithTrustCenter(t, withCustomDomain())
+	trustCenter := tcOrg.trustCenter
 
-	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	trustCenterWithDomain := (&TrustCenterBuilder{client: suite.client, CustomDomainID: customDomain.ID}).MustNew(testUser1.UserCtx, t)
-
-	ctx := setContext(testUser1.UserCtx, suite.client.db)
+	ctx := setContext(tcOrg.owner.UserCtx, suite.client.db)
 	fakePirschDomainID := "fake-pirsch-domain-id-clear-test"
-	_, err := suite.client.db.TrustCenter.UpdateOneID(trustCenterWithDomain.ID).
+	_, err := suite.client.db.TrustCenter.UpdateOneID(trustCenter.ID).
 		SetPirschDomainID(fakePirschDomainID).
 		Save(ctx)
 	assert.NilError(t, err)
 
-	err = suite.client.db.Job.TruncateRiverTables(testUser1.UserCtx)
+	err = suite.client.db.Job.TruncateRiverTables(tcOrg.owner.UserCtx)
 	assert.NilError(t, err)
 
-	resp, err := suite.client.api.UpdateTrustCenter(testUser1.UserCtx, trustCenterWithDomain.ID, testclient.UpdateTrustCenterInput{
+	resp, err := suite.client.api.UpdateTrustCenter(tcOrg.owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
 		ClearCustomDomain: lo.ToPtr(true),
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)
 
-	jobs := rivertest.RequireManyInserted(testUser1.UserCtx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
+	jobs := rivertest.RequireManyInserted(tcOrg.owner.UserCtx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
 		[]rivertest.ExpectedJob{
 			{
 				Args: jobspec.DeletePirschDomainArgs{
@@ -1507,28 +1474,22 @@ func TestTrustCenterUpdateHookWithCustomDomainRemoval(t *testing.T) {
 	assert.Assert(t, jobs != nil)
 	assert.Assert(t, is.Len(jobs, 1))
 
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenterWithDomain.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 // TestTrustCenterDeleteHookWithPirschDomain tests that DeletePirschDomain job is called when pirsch_domain_id exists during deletion
 func TestTrustCenterDeleteHookWithPirschDomain(t *testing.T) {
-	cleanupTrustCenterData(t)
-
-	// Create trust center with custom domain for testUser1
-	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	trustCenterWithDomain := (&TrustCenterBuilder{client: suite.client, CustomDomainID: customDomain.ID}).MustNew(testUser1.UserCtx, t)
+	tcOrg := createFreshOrgWithTrustCenter(t, withCustomDomain())
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
+	trustCenterWithDomain := tcOrg.trustCenter
+	trustCenterWithoutDomain := tcOrg2.trustCenter
 
 	// Manually set pirsch_domain_id to simulate what would happen after the CreatePirschDomain job completes
 	// This is necessary because the job runs asynchronously and we need the field set for the delete hook to trigger
-	ctx := setContext(testUser1.UserCtx, suite.client.db)
+	ctx := setContext(tcOrg.owner.UserCtx, suite.client.db)
 	fakePirschDomainID := "fake-pirsch-domain-id-123"
 	_, err := suite.client.db.TrustCenter.UpdateOneID(trustCenterWithDomain.ID).SetPirschDomainID(fakePirschDomainID).Save(ctx)
 	assert.NilError(t, err)
-
-	// Create trust center without custom domain for testUser2 (different organization)
-	trustCenterWithoutDomain := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
 		name                  string
@@ -1542,14 +1503,14 @@ func TestTrustCenterDeleteHookWithPirschDomain(t *testing.T) {
 			name:                  "delete trust center with pirsch domain - should trigger DeletePirschDomain job",
 			trustCenterID:         trustCenterWithDomain.ID,
 			client:                suite.client.api,
-			ctx:                   testUser1.UserCtx,
+			ctx:                   tcOrg.owner.UserCtx,
 			expectDeletePirschJob: true,
 		},
 		{
 			name:                  "delete trust center without pirsch domain - should NOT trigger DeletePirschDomain job",
 			trustCenterID:         trustCenterWithoutDomain.ID,
 			client:                suite.client.api,
-			ctx:                   testUser2.UserCtx,
+			ctx:                   tcOrg2.owner.UserCtx,
 			expectDeletePirschJob: false,
 		},
 	}
@@ -1587,22 +1548,23 @@ func TestTrustCenterDeleteHookWithPirschDomain(t *testing.T) {
 		})
 	}
 
-	// Clean up custom domain
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg2.owner.UserCtx, t)
 }
 
 func TestTrustCenterDocStandards(t *testing.T) {
-	cleanupTrustCenterData(t)
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	standard1 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	standard2 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.trustCenter
+
+	standard1 := (&StandardBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+	standard2 := (&StandardBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
 
 	(&CustomTypeEnumBuilder{
 		client:     suite.client,
 		Name:       "Policy",
 		ObjectType: "trust_center_doc",
-	}).MustNew(testUser1.UserCtx, t)
+	}).MustNew(tcOrg.owner.UserCtx, t)
 
 	createPDFUpload := uploadFileFunc(t, pdfFilePath)
 
@@ -1618,7 +1580,7 @@ func TestTrustCenterDocStandards(t *testing.T) {
 			Tags:                   []string{"test", "standard"},
 		}
 
-		createResp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, input, *fileUpload)
+		createResp, err := suite.client.api.CreateTrustCenterDoc(tcOrg.owner.UserCtx, input, *fileUpload)
 		assert.NilError(t, err)
 		assert.Assert(t, createResp != nil)
 
@@ -1630,7 +1592,7 @@ func TestTrustCenterDocStandards(t *testing.T) {
 		assert.Check(t, is.Equal(standard1.ID, doc.Standard.ID))
 		assert.Check(t, is.Equal(standard1.Name, doc.Standard.Name))
 
-		getResp, err := suite.client.api.GetTrustCenterDocByID(testUser1.UserCtx, doc.ID)
+		getResp, err := suite.client.api.GetTrustCenterDocByID(tcOrg.owner.UserCtx, doc.ID)
 		assert.NilError(t, err)
 		assert.Assert(t, getResp != nil)
 		assert.Check(t, getResp.TrustCenterDoc.StandardID != nil)
@@ -1638,8 +1600,6 @@ func TestTrustCenterDocStandards(t *testing.T) {
 		assert.Check(t, getResp.TrustCenterDoc.Standard != nil)
 		assert.Check(t, is.Equal(standard1.ID, getResp.TrustCenterDoc.Standard.ID))
 		assert.Check(t, is.Equal(standard1.Name, getResp.TrustCenterDoc.Standard.Name))
-
-		(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: doc.ID}).MustDelete(testUser1.UserCtx, t)
 	})
 
 	t.Run("update trust center doc to set standard and retrieve it", func(t *testing.T) {
@@ -1653,13 +1613,13 @@ func TestTrustCenterDocStandards(t *testing.T) {
 			Tags:                   []string{"test"},
 		}
 
-		createResp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, createInput, *fileUpload)
+		createResp, err := suite.client.api.CreateTrustCenterDoc(tcOrg.owner.UserCtx, createInput, *fileUpload)
 		assert.NilError(t, err)
 		assert.Assert(t, createResp != nil)
 
 		docID := createResp.CreateTrustCenterDoc.TrustCenterDoc.ID
 
-		getResp, err := suite.client.api.GetTrustCenterDocByID(testUser1.UserCtx, docID)
+		getResp, err := suite.client.api.GetTrustCenterDocByID(tcOrg.owner.UserCtx, docID)
 		assert.NilError(t, err)
 		assert.Assert(t, getResp != nil)
 		assert.Check(t, getResp.TrustCenterDoc.StandardID == nil || *getResp.TrustCenterDoc.StandardID == "")
@@ -1668,7 +1628,7 @@ func TestTrustCenterDocStandards(t *testing.T) {
 			StandardID: &standard1.ID,
 		}
 
-		updateResp, err := suite.client.api.UpdateTrustCenterDoc(testUser1.UserCtx, docID, updateInput, nil, nil)
+		updateResp, err := suite.client.api.UpdateTrustCenterDoc(tcOrg.owner.UserCtx, docID, updateInput, nil, nil)
 		assert.NilError(t, err)
 		assert.Assert(t, updateResp != nil)
 
@@ -1679,7 +1639,7 @@ func TestTrustCenterDocStandards(t *testing.T) {
 		assert.Check(t, is.Equal(standard1.ID, updatedDoc.Standard.ID))
 		assert.Check(t, is.Equal(standard1.Name, updatedDoc.Standard.Name))
 
-		getResp2, err := suite.client.api.GetTrustCenterDocByID(testUser1.UserCtx, docID)
+		getResp2, err := suite.client.api.GetTrustCenterDocByID(tcOrg.owner.UserCtx, docID)
 		assert.NilError(t, err)
 		assert.Assert(t, getResp2 != nil)
 		assert.Check(t, getResp2.TrustCenterDoc.StandardID != nil)
@@ -1691,7 +1651,7 @@ func TestTrustCenterDocStandards(t *testing.T) {
 			StandardID: &standard2.ID,
 		}
 
-		updateResp2, err := suite.client.api.UpdateTrustCenterDoc(testUser1.UserCtx, docID, updateInput2, nil, nil)
+		updateResp2, err := suite.client.api.UpdateTrustCenterDoc(tcOrg.owner.UserCtx, docID, updateInput2, nil, nil)
 		assert.NilError(t, err)
 		assert.Assert(t, updateResp2 != nil)
 
@@ -1702,39 +1662,34 @@ func TestTrustCenterDocStandards(t *testing.T) {
 		assert.Check(t, is.Equal(standard2.ID, updatedDoc2.Standard.ID))
 		assert.Check(t, is.Equal(standard2.Name, updatedDoc2.Standard.Name))
 
-		getResp3, err := suite.client.api.GetTrustCenterDocByID(testUser1.UserCtx, docID)
+		getResp3, err := suite.client.api.GetTrustCenterDocByID(tcOrg.owner.UserCtx, docID)
 		assert.NilError(t, err)
 		assert.Assert(t, getResp3 != nil)
 		assert.Check(t, getResp3.TrustCenterDoc.StandardID != nil)
 		assert.Check(t, is.Equal(standard2.ID, *getResp3.TrustCenterDoc.StandardID))
 		assert.Check(t, getResp3.TrustCenterDoc.Standard != nil)
 		assert.Check(t, is.Equal(standard2.ID, getResp3.TrustCenterDoc.Standard.ID))
-
-		(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: docID}).MustDelete(testUser1.UserCtx, t)
 	})
 
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestMutationDeleteTrustCenterWithPreviewDomain(t *testing.T) {
-	// Create a new test user
-	testUser := suite.userBuilder(context.Background(), t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.trustCenter
 
 	// Create a preview domain (custom domain)
-	previewDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	previewDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
 
-	// Create a trust center and manually set the preview domain ID
-	// We need to use the database directly to set the preview domain
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-
-	dbCtx := setContext(testUser.UserCtx, suite.client.db)
+	dbCtx := setContext(tcOrg.owner.UserCtx, suite.client.db)
 	trustCenter, err := suite.client.db.TrustCenter.UpdateOneID(trustCenter.ID).
 		SetPreviewDomainID(previewDomain.ID).
 		Save(dbCtx)
 	assert.NilError(t, err)
 
 	// Delete the trust center
-	resp, err := suite.client.api.DeleteTrustCenter(testUser.UserCtx, trustCenter.ID)
+	resp, err := suite.client.api.DeleteTrustCenter(tcOrg.owner.UserCtx, trustCenter.ID)
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)
 	assert.Check(t, is.Equal(trustCenter.ID, resp.DeleteTrustCenter.DeletedID))
@@ -1746,7 +1701,5 @@ func TestMutationDeleteTrustCenterWithPreviewDomain(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Check(t, exists, "preview domain should still exist (will be deleted by job)")
 
-	// Clean up the preview domain and mappable domain
-	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: previewDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: previewDomain.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }

@@ -24,7 +24,7 @@ import (
 // campaign emails with the correct branding, template variables, and
 // metadata, then sends one email per target via the mock sender
 func TestCampaignEmailDispatch(t *testing.T) {
-	ctx := setContext(testUser1.UserCtx, suite.client.db)
+	ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
 
 	// --- fixtures ---
 
@@ -43,7 +43,7 @@ func TestCampaignEmailDispatch(t *testing.T) {
 	campaignObj := suite.client.db.Campaign.Create().
 		SetName("Dispatch Integration Test Campaign").
 		SetDescription("Testing email dispatch pipeline").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SetEmailTemplateID(emailTemplate.ID).
 		SetRecurrenceFrequency(enums.FrequencyNone).
 		SetMetadata(map[string]any{
@@ -55,29 +55,29 @@ func TestCampaignEmailDispatch(t *testing.T) {
 		SetCampaignID(campaignObj.ID).
 		SetEmail("alice@test.example").
 		SetFullName("Alice Smith").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SaveX(ctx)
 
 	targetBob := suite.client.db.CampaignTarget.Create().
 		SetCampaignID(campaignObj.ID).
 		SetEmail("bob@test.example").
 		SetFullName("Bob Jones").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SaveX(ctx)
 
 	defer func() {
 		(&Cleanup[*generated.CampaignTargetDeleteOne]{
 			client: suite.client.db.CampaignTarget,
 			IDs:    []string{targetAlice.ID, targetBob.ID},
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 		(&Cleanup[*generated.CampaignDeleteOne]{
 			client: suite.client.db.Campaign,
 			ID:     campaignObj.ID,
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 		(&Cleanup[*generated.EmailTemplateDeleteOne]{
 			client: suite.client.db.EmailTemplate,
 			ID:     emailTemplate.ID,
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 	}()
 
 	// --- dispatch via SendBrandedCampaign operation ---
@@ -186,7 +186,7 @@ func TestCampaignEmailDispatch(t *testing.T) {
 // TestCampaignEmailDispatchSkipsSentTargets verifies that targets with
 // sent_at already set are not re-dispatched
 func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
-	ctx := setContext(testUser1.UserCtx, suite.client.db)
+	ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
 
 	emailTemplate := suite.client.db.EmailTemplate.Create().
 		SetName("Skip Sent Test Template").
@@ -201,7 +201,7 @@ func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 
 	campaignObj := suite.client.db.Campaign.Create().
 		SetName("Skip Sent Test Campaign").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SetEmailTemplateID(emailTemplate.ID).
 		SetRecurrenceFrequency(enums.FrequencyNone).
 		SaveX(ctx)
@@ -210,7 +210,7 @@ func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 		SetCampaignID(campaignObj.ID).
 		SetEmail("already-sent@test.example").
 		SetFullName("Already Sent").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SaveX(ctx)
 
 	sentAt := models.DateTime(time.Now())
@@ -222,22 +222,22 @@ func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 		SetCampaignID(campaignObj.ID).
 		SetEmail("unsent@test.example").
 		SetFullName("Unsent Target").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SaveX(ctx)
 
 	defer func() {
 		(&Cleanup[*generated.CampaignTargetDeleteOne]{
 			client: suite.client.db.CampaignTarget,
 			IDs:    []string{sentTarget.ID, unsentTarget.ID},
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 		(&Cleanup[*generated.CampaignDeleteOne]{
 			client: suite.client.db.Campaign,
 			ID:     campaignObj.ID,
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 		(&Cleanup[*generated.EmailTemplateDeleteOne]{
 			client: suite.client.db.EmailTemplate,
 			ID:     emailTemplate.ID,
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 	}()
 
 	mockSender, err := mock.New("")
@@ -273,7 +273,7 @@ func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 // TestCampaignEmailDispatchNoBranding verifies dispatch works without
 // an EmailBranding record attached to the campaign
 func TestCampaignEmailDispatchNoBranding(t *testing.T) {
-	ctx := setContext(testUser1.UserCtx, suite.client.db)
+	ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
 
 	emailTemplate := suite.client.db.EmailTemplate.Create().
 		SetName("No Branding Test Template").
@@ -288,7 +288,7 @@ func TestCampaignEmailDispatchNoBranding(t *testing.T) {
 
 	campaignObj := suite.client.db.Campaign.Create().
 		SetName("No Branding Campaign").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SetEmailTemplateID(emailTemplate.ID).
 		SetRecurrenceFrequency(enums.FrequencyNone).
 		SaveX(ctx)
@@ -297,22 +297,22 @@ func TestCampaignEmailDispatchNoBranding(t *testing.T) {
 		SetCampaignID(campaignObj.ID).
 		SetEmail("charlie@test.example").
 		SetFullName("Charlie Brown").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SaveX(ctx)
 
 	defer func() {
 		(&Cleanup[*generated.CampaignTargetDeleteOne]{
 			client: suite.client.db.CampaignTarget,
 			ID:     target.ID,
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 		(&Cleanup[*generated.CampaignDeleteOne]{
 			client: suite.client.db.Campaign,
 			ID:     campaignObj.ID,
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 		(&Cleanup[*generated.EmailTemplateDeleteOne]{
 			client: suite.client.db.EmailTemplate,
 			ID:     emailTemplate.ID,
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 	}()
 
 	mockSender, err := mock.New("")
@@ -349,11 +349,11 @@ func TestCampaignEmailDispatchNoBranding(t *testing.T) {
 // TestCampaignEmailDispatchNoTemplate verifies dispatch is a no-op
 // when no email template is linked to the campaign
 func TestCampaignEmailDispatchNoTemplate(t *testing.T) {
-	ctx := setContext(testUser1.UserCtx, suite.client.db)
+	ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
 
 	campaignObj := suite.client.db.Campaign.Create().
 		SetName("No Template Campaign").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SetRecurrenceFrequency(enums.FrequencyNone).
 		SaveX(ctx)
 
@@ -361,18 +361,18 @@ func TestCampaignEmailDispatchNoTemplate(t *testing.T) {
 		SetCampaignID(campaignObj.ID).
 		SetEmail("nobody@test.example").
 		SetFullName("No Body").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SaveX(ctx)
 
 	defer func() {
 		(&Cleanup[*generated.CampaignTargetDeleteOne]{
 			client: suite.client.db.CampaignTarget,
 			ID:     target.ID,
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 		(&Cleanup[*generated.CampaignDeleteOne]{
 			client: suite.client.db.Campaign,
 			ID:     campaignObj.ID,
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 	}()
 
 	mockSender, err := mock.New("")
@@ -407,13 +407,13 @@ func TestCampaignEmailDispatchNoTemplate(t *testing.T) {
 // TestQuestionnaireTestEmailDispatch verifies the questionnaire test-send
 // operation creates a test assessment response and sends one auth email.
 func TestQuestionnaireTestEmailDispatch(t *testing.T) {
-	ctx := setContext(testUser1.UserCtx, suite.client.db)
+	ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
 
-	assessmentObj := (&AssessmentBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	assessmentObj := (&AssessmentBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	campaignObj := suite.client.db.Campaign.Create().
 		SetName("Questionnaire Test Send Campaign").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SetCampaignType(enums.CampaignTypeQuestionnaire).
 		SetAssessmentID(assessmentObj.ID).
 		SetRecurrenceFrequency(enums.FrequencyNone).
@@ -425,20 +425,20 @@ func TestQuestionnaireTestEmailDispatch(t *testing.T) {
 			(&Cleanup[*generated.AssessmentResponseDeleteOne]{
 				client: suite.client.db.AssessmentResponse,
 				IDs:    responseIDs,
-			}).MustDelete(testUser1.UserCtx, t)
+			}).MustDelete(sharedTestUser1.UserCtx, t)
 		}
 		(&Cleanup[*generated.CampaignDeleteOne]{
 			client: suite.client.db.Campaign,
 			ID:     campaignObj.ID,
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 		(&Cleanup[*generated.AssessmentDeleteOne]{
 			client: suite.client.db.Assessment,
 			ID:     assessmentObj.ID,
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 		(&Cleanup[*generated.TemplateDeleteOne]{
 			client: suite.client.db.Template,
 			ID:     assessmentObj.TemplateID,
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 	}()
 
 	mockSender, err := mock.New("")

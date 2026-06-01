@@ -171,7 +171,7 @@ func HookTrustCenter() ent.Hook {
 			}
 
 			// create trust center controls by cloning the controls from the trust center standard
-			if err := controls.CloneTrustCenterControls(ctx); err != nil {
+			if err := controls.CloneTrustCenterControls(ctx, m); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("failed to clone trust center controls")
 
 				return nil, ErrInternalServerError

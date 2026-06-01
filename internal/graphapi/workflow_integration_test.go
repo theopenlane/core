@@ -19,6 +19,8 @@ import (
 )
 
 func TestWorkflowIntegrationApproval(t *testing.T) {
+	t.Parallel()
+
 	// Create dedicated test users for workflow testing
 	initiator := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 	approver := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
@@ -206,6 +208,8 @@ func TestWorkflowIntegrationApproval(t *testing.T) {
 }
 
 func TestWorkflowIntegrationMultipleApprovers(t *testing.T) {
+	t.Parallel()
+
 	// Create dedicated test users
 	initiator := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 	approver1 := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)

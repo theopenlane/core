@@ -1232,7 +1232,7 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireDraft() {
 	t.Run("cannot draft after completed", func(t *testing.T) {
 		draftReq := models.SubmitQuestionnaireRequest{
 			AssessmentID: assessment.ID,
-			Data:         map[string]any{"q1": "should fail"},
+			Data:         map[string]any{"q1": "should not be allowed"},
 			IsDraft:      true,
 		}
 

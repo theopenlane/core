@@ -178,7 +178,8 @@ func (r IntegrationRun) Mixin() []ent.Mixin {
 		excludeAnnotations: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.IntegrationRun](r,
-				withOrganizationOwnerServiceOnly(true),
+				withOrganizationOwnerServiceOnly(),
+				withSkipForSystemAdmin(),
 				withParents(Integration{}),
 			),
 		},

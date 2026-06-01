@@ -37,6 +37,7 @@ type schemaRegistration struct {
 
 // ingestSchemaOrder defines the registration order for ingest schema listeners
 var ingestSchemaOrder = []string{
+	integrationgenerated.IntegrationMappingSchemaActionPlan,
 	integrationgenerated.IntegrationMappingSchemaAsset,
 	integrationgenerated.IntegrationMappingSchemaCheckResult,
 	integrationgenerated.IntegrationMappingSchemaContact,
@@ -45,12 +46,28 @@ var ingestSchemaOrder = []string{
 	integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
 	integrationgenerated.IntegrationMappingSchemaEntity,
 	integrationgenerated.IntegrationMappingSchemaFinding,
+	integrationgenerated.IntegrationMappingSchemaInternalPolicy,
+	integrationgenerated.IntegrationMappingSchemaProcedure,
 	integrationgenerated.IntegrationMappingSchemaRisk,
 	integrationgenerated.IntegrationMappingSchemaVulnerability,
 }
 
 // schemaRegistrations maps each supported ingest schema to its registration
 var schemaRegistrations = map[string]schemaRegistration{
+	integrationgenerated.IntegrationMappingSchemaActionPlan: buildSchemaRegistration(
+		integrationgenerated.IntegrationIngestActionPlanRequestedTopic,
+		prepareActionPlanInput,
+		func(metadata integrationgenerated.IntegrationIngestMetadata, input ent.CreateActionPlanInput) integrationgenerated.IntegrationIngestActionPlanRequested {
+			return integrationgenerated.IntegrationIngestActionPlanRequested{
+				Metadata: metadata,
+				Input:    input,
+			}
+		},
+		func(payload integrationgenerated.IntegrationIngestActionPlanRequested) (string, ent.CreateActionPlanInput) {
+			return payload.Metadata.IntegrationID, payload.Input
+		},
+		persistActionPlanInput,
+	),
 	integrationgenerated.IntegrationMappingSchemaAsset: buildSchemaRegistration(
 		integrationgenerated.IntegrationIngestAssetRequestedTopic,
 		prepareAssetInput,
@@ -162,6 +179,34 @@ var schemaRegistrations = map[string]schemaRegistration{
 			return payload.Metadata.IntegrationID, payload.Input
 		},
 		persistFindingInput,
+	),
+	integrationgenerated.IntegrationMappingSchemaInternalPolicy: buildSchemaRegistration(
+		integrationgenerated.IntegrationIngestInternalPolicyRequestedTopic,
+		prepareInternalPolicyInput,
+		func(metadata integrationgenerated.IntegrationIngestMetadata, input ent.CreateInternalPolicyInput) integrationgenerated.IntegrationIngestInternalPolicyRequested {
+			return integrationgenerated.IntegrationIngestInternalPolicyRequested{
+				Metadata: metadata,
+				Input:    input,
+			}
+		},
+		func(payload integrationgenerated.IntegrationIngestInternalPolicyRequested) (string, ent.CreateInternalPolicyInput) {
+			return payload.Metadata.IntegrationID, payload.Input
+		},
+		persistInternalPolicyInput,
+	),
+	integrationgenerated.IntegrationMappingSchemaProcedure: buildSchemaRegistration(
+		integrationgenerated.IntegrationIngestProcedureRequestedTopic,
+		prepareProcedureInput,
+		func(metadata integrationgenerated.IntegrationIngestMetadata, input ent.CreateProcedureInput) integrationgenerated.IntegrationIngestProcedureRequested {
+			return integrationgenerated.IntegrationIngestProcedureRequested{
+				Metadata: metadata,
+				Input:    input,
+			}
+		},
+		func(payload integrationgenerated.IntegrationIngestProcedureRequested) (string, ent.CreateProcedureInput) {
+			return payload.Metadata.IntegrationID, payload.Input
+		},
+		persistProcedureInput,
 	),
 	integrationgenerated.IntegrationMappingSchemaRisk: buildSchemaRegistration(
 		integrationgenerated.IntegrationIngestRiskRequestedTopic,
@@ -396,6 +441,16 @@ func buildIngestHeaders(record mappedIngestRecord, metadata integrationgenerated
 	}
 }
 
+// prepareActionPlanInput applies integration-scoped defaults before emit or sync persistence.
+func prepareActionPlanInput(_ context.Context, input ent.CreateActionPlanInput, integration *ent.Integration) ent.CreateActionPlanInput {
+
+	if input.OwnerID == nil && integration.OwnerID != "" {
+		input.OwnerID = &integration.OwnerID
+	}
+
+	return input
+}
+
 // prepareAssetInput applies integration-scoped defaults before emit or sync persistence.
 func prepareAssetInput(_ context.Context, input ent.CreateAssetInput, integration *ent.Integration) ent.CreateAssetInput {
 
@@ -486,6 +541,26 @@ func prepareEntityInput(_ context.Context, input ent.CreateEntityInput, integrat
 func prepareFindingInput(_ context.Context, input ent.CreateFindingInput, integration *ent.Integration) ent.CreateFindingInput {
 
 	input = integrationgenerated.PrepareFindingInput(input, integration)
+
+	return input
+}
+
+// prepareInternalPolicyInput applies integration-scoped defaults before emit or sync persistence.
+func prepareInternalPolicyInput(_ context.Context, input ent.CreateInternalPolicyInput, integration *ent.Integration) ent.CreateInternalPolicyInput {
+
+	if input.OwnerID == nil && integration.OwnerID != "" {
+		input.OwnerID = &integration.OwnerID
+	}
+
+	return input
+}
+
+// prepareProcedureInput applies integration-scoped defaults before emit or sync persistence.
+func prepareProcedureInput(_ context.Context, input ent.CreateProcedureInput, integration *ent.Integration) ent.CreateProcedureInput {
+
+	if input.OwnerID == nil && integration.OwnerID != "" {
+		input.OwnerID = &integration.OwnerID
+	}
 
 	return input
 }

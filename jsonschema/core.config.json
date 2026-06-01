@@ -149,6 +149,9 @@
         "slackruntime": {
           "$ref": "#/$defs/slack.RuntimeSlackConfig"
         },
+        "googledrive": {
+          "$ref": "#/$defs/googledrive.Config"
+        },
         "googleworkspace": {
           "$ref": "#/$defs/googleworkspace.Config"
         },
@@ -927,6 +930,21 @@
         "scopes",
         "redirecturl"
       ]
+    },
+    "googledrive.Config": {
+      "properties": {
+        "clientid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "redirecturl": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "googleworkspace.Config": {
       "properties": {

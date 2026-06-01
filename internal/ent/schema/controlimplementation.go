@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/oscalgen"
 
 	"github.com/theopenlane/iam/entfga"
@@ -98,10 +99,10 @@ func (ControlImplementation) Fields() []ent.Field {
 func (c ControlImplementation) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			// subcontrols can inherit permissions from the parent control
 			newObjectOwnedMixin[generated.ControlImplementation](c,
 				withParents(Control{}, Subcontrol{}),
-				withOrganizationOwner(true),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 			),
 			newGroupPermissionsMixin(),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
@@ -159,6 +160,7 @@ func (c ControlImplementation) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("implemented-requirement"),
 		),
+		entx.FGACrudParent(Control{}.Name()),
 	}
 }
 

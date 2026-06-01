@@ -26,7 +26,7 @@ import (
 // recurring campaign updates last_run_at, advances next_run_at, and sends
 // emails to all targets
 func TestRecurringCampaignDispatchAdvancesSchedule(t *testing.T) {
-	ctx := setContext(testUser1.UserCtx, suite.client.db)
+	ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
 
 	emailTemplate := suite.client.db.EmailTemplate.Create().
 		SetName("Recurring Schedule Test Template").
@@ -44,7 +44,7 @@ func TestRecurringCampaignDispatchAdvancesSchedule(t *testing.T) {
 
 	campaignObj := suite.client.db.Campaign.Create().
 		SetName("Recurring Schedule Test").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SetEmailTemplateID(emailTemplate.ID).
 		SetIsRecurring(true).
 		SetIsActive(true).
@@ -58,22 +58,22 @@ func TestRecurringCampaignDispatchAdvancesSchedule(t *testing.T) {
 		SetCampaignID(campaignObj.ID).
 		SetEmail("recurring@test.example").
 		SetFullName("Recurring User").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SaveX(ctx)
 
 	defer func() {
 		(&Cleanup[*generated.CampaignTargetDeleteOne]{
 			client: suite.client.db.CampaignTarget,
 			ID:     target.ID,
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 		(&Cleanup[*generated.CampaignDeleteOne]{
 			client: suite.client.db.Campaign,
 			ID:     campaignObj.ID,
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 		(&Cleanup[*generated.EmailTemplateDeleteOne]{
 			client: suite.client.db.EmailTemplate,
 			ID:     emailTemplate.ID,
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 	}()
 
 	mockSender, err := mock.New("")
@@ -116,7 +116,7 @@ func TestRecurringCampaignDispatchAdvancesSchedule(t *testing.T) {
 // TestRecurringCampaignExhaustion verifies that when next_run_at exceeds
 // recurrence_end_at the campaign is marked completed and deactivated
 func TestRecurringCampaignExhaustion(t *testing.T) {
-	ctx := setContext(testUser1.UserCtx, suite.client.db)
+	ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
 
 	emailTemplate := suite.client.db.EmailTemplate.Create().
 		SetName("Exhaustion Test Template").
@@ -135,7 +135,7 @@ func TestRecurringCampaignExhaustion(t *testing.T) {
 
 	campaignObj := suite.client.db.Campaign.Create().
 		SetName("Exhaustion Test Campaign").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SetEmailTemplateID(emailTemplate.ID).
 		SetIsRecurring(true).
 		SetIsActive(true).
@@ -150,22 +150,22 @@ func TestRecurringCampaignExhaustion(t *testing.T) {
 		SetCampaignID(campaignObj.ID).
 		SetEmail("exhaust@test.example").
 		SetFullName("Exhaust User").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SaveX(ctx)
 
 	defer func() {
 		(&Cleanup[*generated.CampaignTargetDeleteOne]{
 			client: suite.client.db.CampaignTarget,
 			ID:     target.ID,
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 		(&Cleanup[*generated.CampaignDeleteOne]{
 			client: suite.client.db.Campaign,
 			ID:     campaignObj.ID,
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 		(&Cleanup[*generated.EmailTemplateDeleteOne]{
 			client: suite.client.db.EmailTemplate,
 			ID:     emailTemplate.ID,
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 	}()
 
 	mockSender, err := mock.New("")
@@ -300,7 +300,7 @@ func TestNextCampaignRunAtTimezoneHandling(t *testing.T) {
 // TestDueCampaignPredicatesFiltering verifies that campaigns are correctly
 // identified as due for recurring dispatch based on their state
 func TestDueCampaignPredicatesFiltering(t *testing.T) {
-	ctx := setContext(testUser1.UserCtx, suite.client.db)
+	ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
 
 	now := time.Now().UTC()
 	pastRun := models.DateTime(now.Add(-time.Hour))
@@ -310,7 +310,7 @@ func TestDueCampaignPredicatesFiltering(t *testing.T) {
 
 	dueActive := suite.client.db.Campaign.Create().
 		SetName("Due Active Campaign").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SetIsRecurring(true).
 		SetIsActive(true).
 		SetStatus(enums.CampaignStatusActive).
@@ -320,7 +320,7 @@ func TestDueCampaignPredicatesFiltering(t *testing.T) {
 
 	notYetDue := suite.client.db.Campaign.Create().
 		SetName("Not Yet Due Campaign").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SetIsRecurring(true).
 		SetIsActive(true).
 		SetStatus(enums.CampaignStatusActive).
@@ -330,7 +330,7 @@ func TestDueCampaignPredicatesFiltering(t *testing.T) {
 
 	notRecurring := suite.client.db.Campaign.Create().
 		SetName("Non-Recurring Campaign").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SetIsRecurring(false).
 		SetIsActive(true).
 		SetStatus(enums.CampaignStatusActive).
@@ -340,7 +340,7 @@ func TestDueCampaignPredicatesFiltering(t *testing.T) {
 
 	inactive := suite.client.db.Campaign.Create().
 		SetName("Inactive Campaign").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SetIsRecurring(true).
 		SetIsActive(false).
 		SetStatus(enums.CampaignStatusActive).
@@ -350,7 +350,7 @@ func TestDueCampaignPredicatesFiltering(t *testing.T) {
 
 	completed := suite.client.db.Campaign.Create().
 		SetName("Completed Campaign").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SetIsRecurring(true).
 		SetIsActive(true).
 		SetStatus(enums.CampaignStatusCompleted).
@@ -360,7 +360,7 @@ func TestDueCampaignPredicatesFiltering(t *testing.T) {
 
 	pastEndAt := suite.client.db.Campaign.Create().
 		SetName("Past End At Campaign").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SetIsRecurring(true).
 		SetIsActive(true).
 		SetStatus(enums.CampaignStatusActive).
@@ -371,7 +371,7 @@ func TestDueCampaignPredicatesFiltering(t *testing.T) {
 
 	futureEndAt := suite.client.db.Campaign.Create().
 		SetName("Future End At Campaign").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SetIsRecurring(true).
 		SetIsActive(true).
 		SetStatus(enums.CampaignStatusActive).
@@ -382,7 +382,7 @@ func TestDueCampaignPredicatesFiltering(t *testing.T) {
 
 	draftCampaign := suite.client.db.Campaign.Create().
 		SetName("Draft Campaign").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		SetIsRecurring(true).
 		SetIsActive(true).
 		SetStatus(enums.CampaignStatusDraft).
@@ -399,7 +399,7 @@ func TestDueCampaignPredicatesFiltering(t *testing.T) {
 		(&Cleanup[*generated.CampaignDeleteOne]{
 			client: suite.client.db.Campaign,
 			IDs:    allIDs,
-		}).MustDelete(testUser1.UserCtx, t)
+		}).MustDelete(sharedTestUser1.UserCtx, t)
 	}()
 
 	dueCampaigns, err := suite.client.db.Campaign.Query().

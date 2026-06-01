@@ -15,6 +15,8 @@ import (
 )
 
 func TestVendorScoringEntityManualRiskFieldsPersistWithoutScores(t *testing.T) {
+	t.Parallel()
+
 	scoringUser := suite.userBuilder(context.Background(), t)
 	entity := newVendorScoringEntity(scoringUser.UserCtx, t)
 
@@ -41,15 +43,12 @@ func TestVendorScoringEntityManualRiskFieldsPersistWithoutScores(t *testing.T) {
 	assert.Check(t, is.Equal(manualRiskScore, *entityResp.Entity.RiskScore))
 	assert.Check(t, is.Equal(manualRiskRating, *entityResp.Entity.RiskRating))
 
-	(&Cleanup[*generated.VendorScoringConfigDeleteOne]{
-		client: suite.client.db.VendorScoringConfig,
-		ID:     configResp.CreateVendorScoringConfig.VendorScoringConfig.ID,
-	}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(scoringUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(scoringUser.UserCtx, t)
 }
 
 func TestVendorScoringEntityManualRiskFieldsOverriddenByScores(t *testing.T) {
+	t.Parallel()
+
 	scoringUser := suite.userBuilder(context.Background(), t)
 	entity := newVendorScoringEntity(scoringUser.UserCtx, t)
 
@@ -85,12 +84,12 @@ func TestVendorScoringEntityManualRiskFieldsOverriddenByScores(t *testing.T) {
 	assert.Check(t, is.Equal(6.0, scoreResp.CreateVendorRiskScore.VendorRiskScore.Score))
 	assertEntityRiskState(t, scoringUser.UserCtx, entity.ID, 6, "MEDIUM", 1)
 
-	(&Cleanup[*generated.VendorRiskScoreDeleteOne]{client: suite.client.db.VendorRiskScore, ID: scoreResp.CreateVendorRiskScore.VendorRiskScore.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(scoringUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(scoringUser.UserCtx, t)
 }
 
 func TestVendorScoringConfigCustomQuestionRoundTrip(t *testing.T) {
+	t.Parallel()
+
 	scoringUser := suite.userBuilder(context.Background(), t)
 	entity := newVendorScoringEntity(scoringUser.UserCtx, t)
 
@@ -165,13 +164,12 @@ func TestVendorScoringConfigCustomQuestionRoundTrip(t *testing.T) {
 
 	assertEntityRiskState(t, scoringUser.UserCtx, entity.ID, 12, "HIGH", 1)
 
-	(&Cleanup[*generated.VendorRiskScoreDeleteOne]{client: suite.client.db.VendorRiskScore, ID: scoreID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.VendorScoringConfigDeleteOne]{client: suite.client.db.VendorScoringConfig, ID: configID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(scoringUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(scoringUser.UserCtx, t)
 }
 
 func TestVendorScoringCustomQuestionOverridesDefaultKey(t *testing.T) {
+	t.Parallel()
+
 	scoringUser := suite.userBuilder(context.Background(), t)
 	entity := newVendorScoringEntity(scoringUser.UserCtx, t)
 
@@ -221,13 +219,12 @@ func TestVendorScoringCustomQuestionOverridesDefaultKey(t *testing.T) {
 
 	assertEntityRiskState(t, scoringUser.UserCtx, entity.ID, 15, "HIGH", 1)
 
-	(&Cleanup[*generated.VendorRiskScoreDeleteOne]{client: suite.client.db.VendorRiskScore, ID: scoreResp.CreateVendorRiskScore.VendorRiskScore.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.VendorScoringConfigDeleteOne]{client: suite.client.db.VendorScoringConfig, ID: configID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(scoringUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(scoringUser.UserCtx, t)
 }
 
 func TestVendorRiskScoreComputedValues(t *testing.T) {
+	t.Parallel()
+
 	scoringUser := suite.userBuilder(context.Background(), t)
 	entity := newVendorScoringEntity(scoringUser.UserCtx, t)
 
@@ -286,12 +283,12 @@ func TestVendorRiskScoreComputedValues(t *testing.T) {
 	assert.Assert(t, clearedResp.UpdateVendorRiskScore.VendorRiskScore.Answer == nil)
 	assertEntityRiskState(t, scoringUser.UserCtx, entity.ID, 0, "NONE", 0)
 
-	(&Cleanup[*generated.VendorRiskScoreDeleteOne]{client: suite.client.db.VendorRiskScore, ID: scoreID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(scoringUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(scoringUser.UserCtx, t)
 }
 
 func TestVendorRiskScorePartialSubmissions(t *testing.T) {
+	t.Parallel()
+
 	scoringUser := suite.userBuilder(context.Background(), t)
 	entity := newVendorScoringEntity(scoringUser.UserCtx, t)
 
@@ -353,12 +350,12 @@ func TestVendorRiskScorePartialSubmissions(t *testing.T) {
 
 	assertEntityRiskState(t, scoringUser.UserCtx, entity.ID, 9, "MEDIUM", 1)
 
-	(&Cleanup[*generated.VendorRiskScoreDeleteOne]{client: suite.client.db.VendorRiskScore, IDs: []string{firstScoreID, secondScoreID}}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(scoringUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(scoringUser.UserCtx, t)
 }
 
 func TestVendorRiskScoreAllDefaultQuestions(t *testing.T) {
+	t.Parallel()
+
 	scoringUser := suite.userBuilder(context.Background(), t)
 	entity := newVendorScoringEntity(scoringUser.UserCtx, t)
 
@@ -393,12 +390,12 @@ func TestVendorRiskScoreAllDefaultQuestions(t *testing.T) {
 	assert.Check(t, is.Equal(int64(len(models.DefaultVendorScoringQuestions)), *entityResp.Entity.RiskScoreCoverage))
 	assert.Check(t, is.Equal(int64(expectedTotal), *entityResp.Entity.RiskScore))
 
-	(&Cleanup[*generated.VendorRiskScoreDeleteOne]{client: suite.client.db.VendorRiskScore, IDs: scoreIDs}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(scoringUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(scoringUser.UserCtx, t)
 }
 
 func TestVendorRiskScoreDefaultPlusCustomQuestions(t *testing.T) {
+	t.Parallel()
+
 	scoringUser := suite.userBuilder(context.Background(), t)
 	entity := newVendorScoringEntity(scoringUser.UserCtx, t)
 
@@ -471,16 +468,12 @@ func TestVendorRiskScoreDefaultPlusCustomQuestions(t *testing.T) {
 	// Aggregate: 15 + 8 = 23, coverage = 2
 	assertEntityRiskState(t, scoringUser.UserCtx, entity.ID, 23, "CRITICAL", 2)
 
-	(&Cleanup[*generated.VendorRiskScoreDeleteOne]{
-		client: suite.client.db.VendorRiskScore,
-		IDs:    []string{defaultResp.CreateVendorRiskScore.VendorRiskScore.ID, customResp.CreateVendorRiskScore.VendorRiskScore.ID},
-	}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.VendorScoringConfigDeleteOne]{client: suite.client.db.VendorScoringConfig, ID: configID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(scoringUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(scoringUser.UserCtx, t)
 }
 
 func TestVendorRiskScoreMultipleSubmissionsAggregateAcrossAssessments(t *testing.T) {
+	t.Parallel()
+
 	scoringUser := suite.userBuilder(context.Background(), t)
 	entity := newVendorScoringEntity(scoringUser.UserCtx, t)
 	assessment := (&AssessmentBuilder{client: suite.client}).MustNew(scoringUser.UserCtx, t)
@@ -545,21 +538,11 @@ func TestVendorRiskScoreMultipleSubmissionsAggregateAcrossAssessments(t *testing
 
 	assertEntityRiskState(t, scoringUser.UserCtx, entity.ID, 18, "CRITICAL", 2)
 
-	(&Cleanup[*generated.VendorRiskScoreDeleteOne]{
-		client: suite.client.db.VendorRiskScore,
-		IDs: []string{
-			firstScoreResp.CreateVendorRiskScore.VendorRiskScore.ID,
-			secondScoreResp.CreateVendorRiskScore.VendorRiskScore.ID,
-		},
-	}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.AssessmentResponseDeleteOne]{client: suite.client.db.AssessmentResponse, IDs: []string{responseOne.ID, responseTwo.ID}}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessment.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: assessment.TemplateID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(scoringUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(scoringUser.UserCtx, t)
 }
 
 func TestVendorScoringConfigScoringModeDefault(t *testing.T) {
+	t.Parallel()
 	scoringUser := suite.userBuilder(context.Background(), t)
 
 	configResp, err := suite.client.api.CreateVendorScoringConfig(scoringUser.UserCtx, testclient.CreateVendorScoringConfigInput{
@@ -576,10 +559,12 @@ func TestVendorScoringConfigScoringModeDefault(t *testing.T) {
 	assert.Check(t, is.Len(fetched.VendorScoringConfig.RiskThresholds.Custom, 0))
 	assert.Check(t, is.Len(fetched.VendorScoringConfig.RiskThresholds.All(), len(models.DefaultRiskThresholds)))
 
-	(&Cleanup[*generated.VendorScoringConfigDeleteOne]{client: suite.client.db.VendorScoringConfig, ID: configID}).MustDelete(scoringUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(scoringUser.UserCtx, t)
 }
 
 func TestVendorScoringConfigCustomThresholds(t *testing.T) {
+	t.Parallel()
+
 	scoringUser := suite.userBuilder(context.Background(), t)
 	entity := newVendorScoringEntity(scoringUser.UserCtx, t)
 
@@ -635,13 +620,12 @@ func TestVendorScoringConfigCustomThresholds(t *testing.T) {
 	// 4 > 3 (LOW) and <= 11 (MEDIUM), so rating should be MEDIUM
 	assertEntityRiskState(t, scoringUser.UserCtx, entity.ID, 4, "MEDIUM", 1)
 
-	(&Cleanup[*generated.VendorRiskScoreDeleteOne]{client: suite.client.db.VendorRiskScore, ID: scoreResp.CreateVendorRiskScore.VendorRiskScore.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.VendorScoringConfigDeleteOne]{client: suite.client.db.VendorScoringConfig, ID: configID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(scoringUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(scoringUser.UserCtx, t)
 }
 
 func TestVendorScoringConfigManualModeSkipsAggregation(t *testing.T) {
+	t.Parallel()
+
 	scoringUser := suite.userBuilder(context.Background(), t)
 	entity := newVendorScoringEntity(scoringUser.UserCtx, t)
 
@@ -708,13 +692,12 @@ func TestVendorScoringConfigManualModeSkipsAggregation(t *testing.T) {
 	assert.Check(t, is.Equal(manualRiskScore, *entityResp2.Entity.RiskScore))
 	assert.Check(t, is.Equal(manualRiskRating, *entityResp2.Entity.RiskRating))
 
-	(&Cleanup[*generated.VendorRiskScoreDeleteOne]{client: suite.client.db.VendorRiskScore, ID: scoreResp.CreateVendorRiskScore.VendorRiskScore.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.VendorScoringConfigDeleteOne]{client: suite.client.db.VendorScoringConfig, ID: configID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(scoringUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(scoringUser.UserCtx, t)
 }
 
 func TestVendorScoringConfigFullQuestionnaireMode(t *testing.T) {
+	t.Parallel()
+
 	scoringUser := suite.userBuilder(context.Background(), t)
 	entity := newVendorScoringEntity(scoringUser.UserCtx, t)
 
@@ -761,13 +744,12 @@ func TestVendorScoringConfigFullQuestionnaireMode(t *testing.T) {
 	assert.Check(t, is.Equal(int64(1), *entityResp.Entity.RiskScoreCoverage))
 	assert.Check(t, is.Equal("CRITICAL", *entityResp.Entity.RiskRating))
 
-	(&Cleanup[*generated.VendorRiskScoreDeleteOne]{client: suite.client.db.VendorRiskScore, ID: scoreResp.CreateVendorRiskScore.VendorRiskScore.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.VendorScoringConfigDeleteOne]{client: suite.client.db.VendorScoringConfig, ID: configID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(scoringUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(scoringUser.UserCtx, t)
 }
 
 func TestVendorScoringConfigSwitchModeRecomputes(t *testing.T) {
+	t.Parallel()
+
 	scoringUser := suite.userBuilder(context.Background(), t)
 	entity := newVendorScoringEntity(scoringUser.UserCtx, t)
 
@@ -848,13 +830,12 @@ func TestVendorScoringConfigSwitchModeRecomputes(t *testing.T) {
 	// HIGH (4) * MEDIUM (2) = 8; entity should now reflect the computed aggregate
 	assertEntityRiskState(t, scoringUser.UserCtx, entity.ID, 8, "MEDIUM", 1)
 
-	(&Cleanup[*generated.VendorRiskScoreDeleteOne]{client: suite.client.db.VendorRiskScore, ID: scoreResp.CreateVendorRiskScore.VendorRiskScore.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.VendorScoringConfigDeleteOne]{client: suite.client.db.VendorScoringConfig, ID: configID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(scoringUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(scoringUser.UserCtx, t)
 }
 
 func TestVendorScoringConfigThresholdUpdateChangesRating(t *testing.T) {
+	t.Parallel()
+
 	scoringUser := suite.userBuilder(context.Background(), t)
 	entity := newVendorScoringEntity(scoringUser.UserCtx, t)
 
@@ -907,13 +888,12 @@ func TestVendorScoringConfigThresholdUpdateChangesRating(t *testing.T) {
 	// Score is still 6 but now 6 <= 8 (widened LOW), so rating should be LOW
 	assertEntityRiskState(t, scoringUser.UserCtx, entity.ID, 6, "LOW", 1)
 
-	(&Cleanup[*generated.VendorRiskScoreDeleteOne]{client: suite.client.db.VendorRiskScore, ID: scoreResp.CreateVendorRiskScore.VendorRiskScore.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.VendorScoringConfigDeleteOne]{client: suite.client.db.VendorScoringConfig, ID: configID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(scoringUser.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(scoringUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(scoringUser.UserCtx, t)
 }
 
 func TestVendorScoringConfigCustomKeyGeneration(t *testing.T) {
+	t.Parallel()
+
 	scoringUser := suite.userBuilder(context.Background(), t)
 
 	// Create config with custom questions that have no CUST- prefix keys — hook should assign them
@@ -983,7 +963,7 @@ func TestVendorScoringConfigCustomKeyGeneration(t *testing.T) {
 		assert.Check(t, is.Equal(fetched.VendorScoringConfig.Questions.Custom[i].Key, q.Key))
 	}
 
-	(&Cleanup[*generated.VendorScoringConfigDeleteOne]{client: suite.client.db.VendorScoringConfig, ID: configID}).MustDelete(scoringUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(scoringUser.UserCtx, t)
 }
 
 func assertEntityRiskState(t *testing.T, ctx context.Context, entityID string, wantRiskScore int64, wantRiskRating string, wantCoverage int64) {

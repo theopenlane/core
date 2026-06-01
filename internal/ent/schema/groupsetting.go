@@ -7,6 +7,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
@@ -81,7 +82,8 @@ func (GroupSetting) Modules() []models.OrgModule {
 // Annotations of the GroupSetting
 func (g GroupSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entfga.SettingsChecks("group"),
+		entfga.SettingsChecks(Group{}.Name()),
+		entx.FGACrudParent(Group{}.Name()),
 	}
 }
 

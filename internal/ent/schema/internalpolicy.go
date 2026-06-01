@@ -130,6 +130,11 @@ func (i InternalPolicy) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(i, Entity{}),
 		defaultEdgeToWithPagination(i, IdentityHolder{}),
 		defaultEdgeFromWithPagination(i, Review{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: i,
+			edgeSchema: Integration{},
+			comment:    "integration that manages this policy (if applicable)",
+		}),
 	}
 }
 
@@ -182,6 +187,7 @@ func (i InternalPolicy) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("component"),
 		),
+		entx.IntegrationMappingSchema().StockPersist(),
 	}
 }
 
@@ -189,7 +195,7 @@ func (i InternalPolicy) Annotations() []schema.Annotation {
 func (InternalPolicy) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hook.On(
-			hooks.OrgOwnedTuplesHookWithAdmin(),
+			hooks.OrgOwnedTuplesHook(),
 			ent.OpCreate,
 		),
 	}
@@ -199,7 +205,7 @@ func (InternalPolicy) Hooks() []ent.Hook {
 func (InternalPolicy) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		// policies are org owned, but we need to ensure the groups are filtered as well
-		interceptors.FilterQueryResults[generated.InternalPolicy](),
+		interceptors.FilterQueryResults[generated.InternalPolicy](nil),
 	}
 }
 

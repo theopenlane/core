@@ -2491,3 +2491,79 @@ var ExampleSnapshotSuccessResponse = SnapshotReply{
 	Image:    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO3Zf6kAAAAASUVORK5CYII=",
 	MIMEType: "image/png",
 }
+
+// =========
+// SCOPES
+// =========
+
+// ScopesRequest contains scopes that can be used for an API token
+type ScopesRequest struct{}
+
+// ScopesReply holds the fields that are sent on a response to the `/scopes` endpoint
+type ScopesReply struct {
+	// Reply is the reply value.
+	rout.Reply
+	// Scopes is a map of object types to the scopes
+	Scopes map[string][]string `json:"scopes,omitempty" description:"A map of object types to operations that can be set for an API Token"`
+}
+
+// ExampleResponse returns an example ScopesReply for OpenAPI documentation
+func (r *ScopesReply) ExampleResponse() any {
+	return ExampleScopesReply
+}
+
+// Validate ensures the required fields are set on the ScopesRequest
+func (r *ScopesRequest) Validate() error {
+	return nil
+}
+
+// ExampleScopesRequest is an example of a successful `/scopes` request for OpenAPI documentation
+var ExampleScopesRequest = ScopesRequest{}
+
+// ExampleScopesReply is an example of a successful `/scopes` response for OpenAPI documentation
+var ExampleScopesReply = ScopesReply{
+	Reply: rout.Reply{Success: true},
+	Scopes: map[string][]string{
+		"internal_policy": []string{"read", "write", "delete"},
+		"procedure":       []string{"read", "write", "delete"},
+		"control":         []string{"read", "write", "delete"},
+	},
+}
+
+// =========
+// Roles
+// =========
+
+// RolesRequest contains roles that can be assigned to users on top of org roles
+type RolesRequest struct{}
+
+// RolesReply holds the fields that are sent on a response to the `/roles` endpoint
+type RolesReply struct {
+	// Reply is the reply value.
+	rout.Reply
+	// Scopes is a list of roles that can be assigned
+	Roles []string `json:"roles,omitempty" description:"A map of object types to operations that can be set for an API Token"`
+}
+
+// ExampleResponse returns an example ScopesReply for OpenAPI documentation
+func (r *RolesReply) ExampleResponse() any {
+	return ExampleScopesReply
+}
+
+// Validate ensures the required fields are set on the RolesRequest
+func (r *ScopesReply) Validate() error {
+	return nil
+}
+
+// ExampleRolesRequest is an example of a successful `/roles` request for OpenAPI documentation
+var ExampleRolesRequest = RolesRequest{}
+
+// ExampleRolesReply is an example of a successful `/roles` response for OpenAPI documentation
+var ExampleRolesReply = RolesReply{
+	Reply: rout.Reply{Success: true},
+	Roles: []string{
+		"compliance_manager",
+		"risk_manager",
+		"policy_manager",
+	},
+}

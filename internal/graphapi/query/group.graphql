@@ -197,6 +197,13 @@ mutation CreateGroupByClone ($groupInput: CreateGroupInput!, $inheritGroupPermis
 		}
 	}
 }
+mutation CreateGroupSimple ($input: CreateGroupInput!) {
+	createGroup(input: $input) {
+		group {
+			id
+		}
+	}
+}
 mutation CreateGroupWithMembers ($groupInput: CreateGroupInput!, $members: [GroupMembersInput!]) {
 	createGroupWithMembers(groupInput: $groupInput, members: $members) {
 		group {

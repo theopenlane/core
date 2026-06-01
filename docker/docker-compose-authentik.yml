@@ -1,4 +1,8 @@
 services:
+  postgres:
+    volumes:
+      - ./configs/authentik/init.sql:/docker-entrypoint-initdb.d/init_authentik.sql
+
   authentik-server:
     command: server
     depends_on:

@@ -8,7 +8,7 @@
   relation: member
   object: organization:openlane
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: group:group-editor
   condition:
     name: public_group
@@ -22,7 +22,7 @@
   relation: member
   object: organization:openlane
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: group:group-blocked
   condition:
     name: public_group
@@ -34,10 +34,10 @@
 
 # setup internal_policy
 - user: user:ulid-admin
-  relation: admin
+  relation: editor
   object: internal_policy:internal_policy-1
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: internal_policy:internal_policy-1
 
 # setup group permissions for internal_policy
@@ -47,12 +47,6 @@
 - user: group:group-blocked#member
   relation: blocked
   object: internal_policy:internal_policy-1
-
-# setup view permissions for auditors
-- user: program:program-1#auditor
-  relation: viewer
-  object: internal_policy:internal_policy-1
-
 
 # setup approver permissions for the internal_policy
 - user: group:internal-policy-approver#member
@@ -69,3 +63,10 @@
 - user: user:user-in-group-delegate
   relation: member
   object: group:internal-policy-delegate
+
+
+# add parent program to policy
+- user: program:program-1
+  relation: parent
+  object: internal_policy:internal_policy-1
+

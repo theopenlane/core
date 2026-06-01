@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/integrations/definitions/gcpscc"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
+	"github.com/theopenlane/core/internal/integrations/definitions/googledrive"
 	"github.com/theopenlane/core/internal/integrations/definitions/googleworkspace"
 	"github.com/theopenlane/core/internal/integrations/definitions/microsoftteams"
 	"github.com/theopenlane/core/internal/integrations/definitions/oidclocal"
@@ -31,6 +32,7 @@ func Builders(cfg Config, devMode bool) []registry.Builder {
 		email.Builder(&cfg.Email, devMode),
 		gcpscc.Builder(),
 		githubapp.Builder(cfg.GitHubApp),
+		googledrive.Builder(cfg.GoogleDrive),
 		googleworkspace.Builder(cfg.GoogleWorkspace),
 		microsoftteams.Builder(cfg.MicrosoftTeams),
 		oidclocal.Builder(cfg.OIDCLocal),

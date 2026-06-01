@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
@@ -49,7 +50,8 @@ func (ProgramMembership) Fields() []ent.Field {
 	return []ent.Field{
 		field.Enum("role").
 			GoType(enums.Role("")).
-			Default(string(enums.RoleMember)).
+			Default(enums.RoleMember.String()).
+			Values(enums.RoleAuditor.String()).
 			Annotations(
 				entgql.OrderField("ROLE"),
 			),
@@ -93,6 +95,7 @@ func (p ProgramMembership) Edges() []ent.Edge {
 func (ProgramMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.MembershipChecks("program"),
+		entx.FGACrudParent(Program{}.Name()),
 	}
 }
 

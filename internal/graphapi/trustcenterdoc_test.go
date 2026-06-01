@@ -20,24 +20,25 @@ import (
 )
 
 func TestQueryTrustCenterDocByID(t *testing.T) {
-	cleanupTrustCenterData(t)
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
-	trustCenterDocPublic := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityPubliclyVisible}).MustNew(testUser1.UserCtx, t)
-	trustCenterDocNotVisible := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityNotVisible}).MustNew(testUser1.UserCtx, t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
 
-	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
+	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: tcOrg.trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(tcOrg.owner.UserCtx, t)
+	trustCenterDocPublic := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: tcOrg.trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityPubliclyVisible}).MustNew(tcOrg.owner.UserCtx, t)
+	trustCenterDocNotVisible := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: tcOrg.trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityNotVisible}).MustNew(tcOrg.owner.UserCtx, t)
+
+	signedNdaAnonCtx := createAnonymousTrustCenterContext(tcOrg.trustCenter.ID, tcOrg.owner.OrganizationID)
 	signedNDACaller, _ := auth.CallerFromContext(signedNdaAnonCtx)
 	req := fgax.TupleRequest{
 		SubjectID:   signedNDACaller.SubjectID,
 		SubjectType: "user",
-		ObjectID:    trustCenter.ID,
+		ObjectID:    tcOrg.trustCenter.ID,
 		ObjectType:  "trust_center",
 		Relation:    "nda_signed",
 	}
 
 	tuple := fgax.GetTupleKey(req)
-	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
+	if _, err := suite.client.db.Authz.WriteTupleKeys(tcOrg.owner.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
 		requireNoError(t, err)
 	}
 	testCases := []struct {
@@ -52,42 +53,42 @@ func TestQueryTrustCenterDocByID(t *testing.T) {
 			name:                  "happy path",
 			queryID:               trustCenterDocProtected.ID,
 			client:                suite.client.api,
-			ctx:                   testUser1.UserCtx,
+			ctx:                   tcOrg.owner.UserCtx,
 			shouldShowFileDetails: true,
 		},
 		{
 			name:                  "happy path, by system admin can see not visible docs",
 			queryID:               trustCenterDocNotVisible.ID,
 			client:                suite.client.api,
-			ctx:                   systemAdminUser.UserCtx,
+			ctx:                   sharedSystemAdminUser.UserCtx,
 			shouldShowFileDetails: true,
 		},
 		{
 			name:                  "happy path, view only user",
 			queryID:               trustCenterDocProtected.ID,
 			client:                suite.client.api,
-			ctx:                   viewOnlyUser.UserCtx,
+			ctx:                   tcOrg.member.UserCtx,
 			shouldShowFileDetails: true,
 		},
 		{
 			name:     "trust center doc not found",
 			queryID:  "non-existent-id",
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      tcOrg.owner.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "not authorized to query org",
 			queryID:  trustCenterDocProtected.ID,
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:                  "anonymous user can query trust center doc, but can't see files",
 			queryID:               trustCenterDocProtected.ID,
 			client:                suite.client.api,
-			ctx:                   createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID),
+			ctx:                   createAnonymousTrustCenterContext(tcOrg.trustCenter.ID, tcOrg.owner.OrganizationID),
 			shouldShowFileDetails: false,
 		},
 		{
@@ -101,7 +102,7 @@ func TestQueryTrustCenterDocByID(t *testing.T) {
 			name:                  "anonymous user can query trust center doc, can see public files",
 			queryID:               trustCenterDocPublic.ID,
 			client:                suite.client.api,
-			ctx:                   createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID),
+			ctx:                   createAnonymousTrustCenterContext(tcOrg.trustCenter.ID, tcOrg.owner.OrganizationID),
 			shouldShowFileDetails: true,
 		},
 		{
@@ -115,7 +116,7 @@ func TestQueryTrustCenterDocByID(t *testing.T) {
 			name:     "anonymous user can't see not visible docs",
 			queryID:  trustCenterDocNotVisible.ID,
 			client:   suite.client.api,
-			ctx:      createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID),
+			ctx:      createAnonymousTrustCenterContext(tcOrg.trustCenter.ID, tcOrg.owner.OrganizationID),
 			errorMsg: notFoundErrorMsg,
 		},
 		{
@@ -129,14 +130,14 @@ func TestQueryTrustCenterDocByID(t *testing.T) {
 			name:                  "org user can see visible docs",
 			queryID:               trustCenterDocNotVisible.ID,
 			client:                suite.client.api,
-			ctx:                   testUser1.UserCtx,
+			ctx:                   tcOrg.admin.UserCtx,
 			shouldShowFileDetails: true,
 		},
 		{
 			name:     "org user can see not see other orgs files",
 			queryID:  trustCenterDocPublic.ID,
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -168,35 +169,33 @@ func TestQueryTrustCenterDocByID(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocProtected.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocPublic.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocNotVisible.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestQueryTrustCenterDocByIDWithStandardForAnonymousUsers(t *testing.T) {
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.trustCenter
+	standard := (&StandardBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
 
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	standard := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-
-	compliance := (&TrustCenterComplianceBuilder{
+	(&TrustCenterComplianceBuilder{
 		client:        suite.client,
 		TrustCenterID: trustCenter.ID,
 		StandardID:    standard.ID,
-	}).MustNew(testUser1.UserCtx, t)
+	}).MustNew(tcOrg.owner.UserCtx, t)
 
-	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
-	trustCenterDocPublic := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityPubliclyVisible}).MustNew(testUser1.UserCtx, t)
+	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(tcOrg.owner.UserCtx, t)
+	trustCenterDocPublic := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityPubliclyVisible}).MustNew(tcOrg.owner.UserCtx, t)
 
-	dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+	dbCtx := setContext(tcOrg.owner.UserCtx, suite.client.db)
 	_, err := suite.client.db.TrustCenterDoc.UpdateOneID(trustCenterDocProtected.ID).SetStandardID(standard.ID).Save(dbCtx)
 	assert.NilError(t, err)
 	_, err = suite.client.db.TrustCenterDoc.UpdateOneID(trustCenterDocPublic.ID).SetStandardID(standard.ID).Save(dbCtx)
 	assert.NilError(t, err)
 
 	// anonymous contexts
-	anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
-	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
+	anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, tcOrg.owner.OrganizationID)
+	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter.ID, tcOrg.owner.OrganizationID)
 	signedNDACaller, _ := auth.CallerFromContext(signedNdaAnonCtx)
 	req := fgax.TupleRequest{
 		SubjectID:   signedNDACaller.SubjectID,
@@ -207,7 +206,7 @@ func TestQueryTrustCenterDocByIDWithStandardForAnonymousUsers(t *testing.T) {
 	}
 
 	tuple := fgax.GetTupleKey(req)
-	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
+	if _, err := suite.client.db.Authz.WriteTupleKeys(tcOrg.owner.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
 		requireNoError(t, err)
 	}
 
@@ -256,7 +255,7 @@ func TestQueryTrustCenterDocByIDWithStandardForAnonymousUsers(t *testing.T) {
 			name:                  "regular user can query protected doc and get standard",
 			queryID:               trustCenterDocProtected.ID,
 			client:                suite.client.api,
-			ctx:                   testUser1.UserCtx,
+			ctx:                   tcOrg.admin.UserCtx,
 			shouldShowFileDetails: true,
 			shouldHaveStandard:    true,
 		},
@@ -297,19 +296,18 @@ func TestQueryTrustCenterDocByIDWithStandardForAnonymousUsers(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocProtected.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocPublic.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterComplianceDeleteOne]{client: suite.client.db.TrustCenterCompliance, ID: compliance.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestMutationCreateTrustCenterDoc(t *testing.T) {
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t, withAllUserTypes())
+	trustCenter := tcOrg.trustCenter
 
 	docKind := (&CustomTypeEnumBuilder{
 		client:     suite.client,
 		ObjectType: "trust_center_doc",
-	}).MustNew(testUser1.UserCtx, t)
+	}).MustNew(tcOrg.owner.UserCtx, t)
 
 	// Helper function to create fresh file uploads for each test case
 	createPDFUpload := uploadFileFunc(t, pdfFilePath)
@@ -324,17 +322,18 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 		expectedErr string
 	}{
 		{
-			name: "happy path, create trust center doc with PDF file",
+			name: "happy path, create trust center doc with PDF file, disable watermarking",
 			input: testclient.CreateTrustCenterDocInput{
 				Title:                  "Test Document",
 				TrustCenterDocKindName: &docKind.Name,
 				TrustCenterID:          &trustCenter.ID,
 				Tags:                   []string{"test", "document"},
 				Visibility:             &enums.TrustCenterDocumentVisibilityPubliclyVisible,
+				WatermarkingEnabled:    lo.ToPtr(false),
 			},
 			file:   createPDFUpload(),
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name: "happy path, create trust center doc with watermarking",
@@ -348,7 +347,7 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			},
 			file:   createPDFUpload(),
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name: "happy path, protected, create trust center doc with PDF file",
@@ -361,7 +360,7 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			},
 			file:   createPDFUpload(),
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name: "happy path, protected, create trust center doc with watermarking",
@@ -375,7 +374,7 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			},
 			file:   createPDFUpload(),
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name: "happy path, not visible, create trust center doc with PDF file",
@@ -388,7 +387,7 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			},
 			file:   createPDFUpload(),
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name: "happy path, not visible, create trust center doc with watermarking",
@@ -401,7 +400,7 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			},
 			file:   createPDFUpload(),
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.superAdmin.UserCtx,
 		},
 		{
 			name: "happy path, minimal required fields",
@@ -412,7 +411,7 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			},
 			file:   createPDFUpload(),
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.admin.UserCtx,
 		},
 		{
 			name: "happy path, using personal access token",
@@ -422,7 +421,7 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 				TrustCenterID:          &trustCenter.ID,
 			},
 			file:   createPDFUpload(),
-			client: suite.client.apiWithPAT,
+			client: tcOrg.adminPatClient,
 			ctx:    context.Background(),
 		},
 		{
@@ -432,8 +431,8 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 				TrustCenterDocKindName: &docKind.Name,
 			},
 			file:        createTXTUpload(),
-			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			client:      tcOrg.adminApiClient,
+			ctx:         context.Background(),
 			expectedErr: "unsupported mime type",
 		},
 		{
@@ -444,7 +443,7 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			},
 			file:        createPDFUpload(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: "title",
 		},
 		{
@@ -455,7 +454,7 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			},
 			file:   createPDFUpload(),
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name: "not authorized, view only user",
@@ -466,7 +465,7 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			},
 			file:        createPDFUpload(),
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         tcOrg.member.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -478,7 +477,7 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			},
 			file:        createPDFUpload(),
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 	}
@@ -538,7 +537,11 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			assert.Check(t, trustCenterDoc.CreatedAt != nil)
 			assert.Check(t, trustCenterDoc.UpdatedAt != nil)
 			assert.Check(t, trustCenterDoc.CreatedBy != nil)
-			if tc.input.WatermarkingEnabled != nil && *tc.input.WatermarkingEnabled {
+
+			// if watermarking is enabled, the file id will not be set because its set
+			// by the jobs
+			// the default true so either nil, or explicitly true should be checked
+			if tc.input.WatermarkingEnabled == nil || *tc.input.WatermarkingEnabled {
 				assert.Check(t, trustCenterDoc.File == nil)
 			} else {
 				assert.Assert(t, trustCenterDoc.File != nil)
@@ -546,24 +549,24 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 				assert.Check(t, trustCenterDoc.FileID != nil)
 				assert.Check(t, is.Equal(*trustCenterDoc.FileID, trustCenterDoc.File.ID))
 			}
-
-			// Clean up the created trust center doc
-			(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
 		})
 	}
 
 	// Clean up the trust center
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestQueryTrustCenterDocs(t *testing.T) {
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t, withAllUserTypes())
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
+	trustCenter1 := tcOrg.trustCenter
+	trustCenter2 := tcOrg2.trustCenter
 
-	trustCenter1 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	trustCenterDoc1 := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter1.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(tcOrg.owner.UserCtx, t)
 
-	trustCenterDoc1 := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter1.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
-	trustCenterDoc2 := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter2.ID}).MustNew(testUser2.UserCtx, t)
-	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter1.ID, testUser1.OrganizationID)
+	(&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter2.ID}).MustNew(tcOrg2.owner.UserCtx, t)
+	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter1.ID, tcOrg.owner.OrganizationID)
 	signedNDACaller, _ := auth.CallerFromContext(signedNdaAnonCtx)
 	req := fgax.TupleRequest{
 		SubjectID:   signedNDACaller.SubjectID,
@@ -574,7 +577,7 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 	}
 
 	tuple := fgax.GetTupleKey(req)
-	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
+	if _, err := suite.client.db.Authz.WriteTupleKeys(tcOrg.owner.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
 		requireNoError(t, err)
 	}
 
@@ -590,21 +593,21 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 		{
 			name:                  "return all for user1",
 			client:                suite.client.api,
-			ctx:                   testUser1.UserCtx,
+			ctx:                   tcOrg.owner.UserCtx,
 			expectedResults:       1,
 			shouldShowFileDetails: true,
 		},
 		{
 			name:                  "return all, ro user",
 			client:                suite.client.api,
-			ctx:                   viewOnlyUser.UserCtx,
+			ctx:                   tcOrg.member.UserCtx,
 			expectedResults:       1,
 			shouldShowFileDetails: true,
 		},
 		{
 			name:   "query by trust center ID",
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.admin.UserCtx,
 			where: &testclient.TrustCenterDocWhereInput{
 				TrustCenterID: &trustCenter1.ID,
 			},
@@ -614,7 +617,7 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 		{
 			name:   "query by title",
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.superAdmin.UserCtx,
 			where: &testclient.TrustCenterDocWhereInput{
 				Title: &trustCenterDoc1.Title,
 			},
@@ -624,7 +627,7 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 		{
 			name:   "query by category",
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 			where: &testclient.TrustCenterDocWhereInput{
 				TrustCenterDocKindName: &trustCenterDoc1.TrustCenterDocKindName,
 			},
@@ -634,7 +637,7 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 		{
 			name:   "query by visibility",
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 			where: &testclient.TrustCenterDocWhereInput{
 				Visibility: &trustCenterDoc1.Visibility,
 			},
@@ -644,7 +647,7 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 		{
 			name:   "query by non-existent title",
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 			where: &testclient.TrustCenterDocWhereInput{
 				Title: lo.ToPtr("non-existent-title"),
 			},
@@ -653,7 +656,7 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 		{
 			name:   "anonymous user can query trust center docs",
 			client: suite.client.api,
-			ctx:    createAnonymousTrustCenterContext(trustCenter1.ID, testUser1.OrganizationID),
+			ctx:    createAnonymousTrustCenterContext(trustCenter1.ID, tcOrg.owner.OrganizationID),
 			where: &testclient.TrustCenterDocWhereInput{
 				Title: &trustCenterDoc1.Title,
 			},
@@ -701,29 +704,29 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 	}
 
 	// Clean up
-	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDoc1.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDoc2.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter1.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg2.owner.UserCtx, t)
 }
 
 func TestMutationUpdateTrustCenterDoc(t *testing.T) {
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	trustCenterDoc := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID}).MustNew(testUser1.UserCtx, t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t, withAllUserTypes())
+	trustCenter := tcOrg.trustCenter
+	trustCenterDoc := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID}).MustNew(tcOrg.owner.UserCtx, t)
 
-	systemAdminPatClient := suite.setupPatClient(systemAdminUser, t)
+	systemAdminPatClient := suite.setupPatClient(sharedSystemAdminUser, t)
 
 	(&CustomTypeEnumBuilder{
 		client:     suite.client,
 		Name:       "UpdatedCategory",
 		ObjectType: "trust_center_doc",
-	}).MustNew(testUser1.UserCtx, t)
+	}).MustNew(tcOrg.owner.UserCtx, t)
 
 	(&CustomTypeEnumBuilder{
 		client:     suite.client,
 		Name:       "MultiCategory",
 		ObjectType: "trust_center_doc",
-	}).MustNew(testUser1.UserCtx, t)
+	}).MustNew(tcOrg.owner.UserCtx, t)
 
 	testCases := []struct {
 		name             string
@@ -740,7 +743,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 				Title: lo.ToPtr("Updated Document Title"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.admin.UserCtx,
 		},
 		{
 			name:             "happy path, update watermark status by system admin pat",
@@ -759,7 +762,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 				TrustCenterDocKindName: lo.ToPtr("UpdatedCategory"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.superAdmin.UserCtx,
 		},
 		{
 			name:             "happy path, update visibility",
@@ -768,7 +771,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 				Visibility: &enums.TrustCenterDocumentVisibilityProtected,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name:             "happy path, update multiple fields",
@@ -780,7 +783,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 				Tags:                   []string{"multi", "update"},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name:             "happy path, using personal access token",
@@ -788,7 +791,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 			request: testclient.UpdateTrustCenterDocInput{
 				Title: lo.ToPtr("PAT Updated Title"),
 			},
-			client: suite.client.apiWithPAT,
+			client: tcOrg.adminApiClient,
 			ctx:    context.Background(),
 		},
 		{
@@ -798,7 +801,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 				Title: lo.ToPtr("Unauthorized Update"),
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         tcOrg.member.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -808,8 +811,8 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 				Title: lo.ToPtr("Unauthorized Update"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			ctx:         sharedTestUser2.UserCtx,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:             "trust center doc not found",
@@ -818,7 +821,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 				Title: lo.ToPtr("Update Non-existent"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -854,18 +857,20 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestTrustCenterDocUpdateSysAdmin(t *testing.T) {
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.trustCenter
+
+	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(tcOrg.owner.UserCtx, t)
 
 	// Helper function to create fresh file uploads
 	createPDFUpload := uploadFileFunc(t, pdfFilePath)
 
-	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
+	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter.ID, tcOrg.owner.OrganizationID)
 	signedNDACaller, _ := auth.CallerFromContext(signedNdaAnonCtx)
 	req := fgax.TupleRequest{
 		SubjectID:   signedNDACaller.SubjectID,
@@ -876,7 +881,7 @@ func TestTrustCenterDocUpdateSysAdmin(t *testing.T) {
 	}
 
 	tuple := fgax.GetTupleKey(req)
-	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
+	if _, err := suite.client.db.Authz.WriteTupleKeys(tcOrg.owner.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
 		requireNoError(t, err)
 	}
 
@@ -886,11 +891,11 @@ func TestTrustCenterDocUpdateSysAdmin(t *testing.T) {
 		upload := createPDFUpload()
 		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*upload})
 
-		resp, err := suite.client.api.UpdateTrustCenterDoc(systemAdminUser.UserCtx, trustCenterDocProtected.ID, input, nil, upload)
+		resp, err := suite.client.api.UpdateTrustCenterDoc(sharedSystemAdminUser.UserCtx, trustCenterDocProtected.ID, input, nil, upload)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
-		getResp, err := suite.client.api.GetTrustCenterDocByID(testUser1.UserCtx, trustCenterDocProtected.ID)
+		getResp, err := suite.client.api.GetTrustCenterDocByID(tcOrg.owner.UserCtx, trustCenterDocProtected.ID)
 		assert.NilError(t, err)
 		assert.Assert(t, getResp.TrustCenterDoc.File != nil)
 
@@ -900,23 +905,23 @@ func TestTrustCenterDocUpdateSysAdmin(t *testing.T) {
 		assert.Assert(t, getResp.TrustCenterDoc.File != nil)
 
 		// Verify that anonymous user can't access the file if the doc is set to protected
-		getResp, err = suite.client.api.GetTrustCenterDocByID(createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID), trustCenterDocProtected.ID)
+		getResp, err = suite.client.api.GetTrustCenterDocByID(createAnonymousTrustCenterContext(trustCenter.ID, tcOrg.owner.OrganizationID), trustCenterDocProtected.ID)
 		assert.NilError(t, err)
 		assert.Assert(t, getResp.TrustCenterDoc.File == nil)
 	})
 
-	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocProtected.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestTrustCenterDocWatermarkingFGATuples(t *testing.T) {
-
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.trustCenter
 
 	docKind := (&CustomTypeEnumBuilder{
 		client:     suite.client,
 		ObjectType: "trust_center_doc",
-	}).MustNew(testUser1.UserCtx, t)
+	}).MustNew(tcOrg.owner.UserCtx, t)
 
 	// Helper function to create fresh file uploads
 	createPDFUpload := uploadFileFunc(t, pdfFilePath)
@@ -927,10 +932,10 @@ func TestTrustCenterDocWatermarkingFGATuples(t *testing.T) {
 		for _, tuple := range wildcardTuples {
 			ac := fgax.AccessCheck{
 				SubjectID:   tuple.Subject.Identifier,
-				SubjectType: string(tuple.Subject.Kind),
+				SubjectType: tuple.Subject.Kind.String(),
 				ObjectID:    tuple.Object.Identifier,
 				ObjectType:  tuple.Object.Kind,
-				Relation:    string(tuple.Relation),
+				Relation:    tuple.Relation.String(),
 			}
 			exists, err := suite.client.db.Authz.CheckAccess(ctx, ac)
 			assert.NilError(t, err)
@@ -954,23 +959,20 @@ func TestTrustCenterDocWatermarkingFGATuples(t *testing.T) {
 			Visibility:             &enums.TrustCenterDocumentVisibilityPubliclyVisible,
 		}
 
-		resp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, input, *file)
+		resp, err := suite.client.api.CreateTrustCenterDoc(tcOrg.owner.UserCtx, input, *file)
 		assert.NilError(t, err)
 
 		doc := resp.CreateTrustCenterDoc.TrustCenterDoc
 
 		// Check that wildcard viewer tuples exist for the document
-		checkWildcardViewerTuples(testUser1.UserCtx, doc.ID, "trust_center_doc", true)
+		checkWildcardViewerTuples(tcOrg.owner.UserCtx, doc.ID, "trust_center_doc", true)
 
 		// Check that wildcard viewer tuples exist for the original file (since it's publicly visible)
 		assert.Assert(t, doc.OriginalFileID != nil)
-		checkWildcardViewerTuples(testUser1.UserCtx, *doc.OriginalFileID, generated.TypeFile, true)
+		checkWildcardViewerTuples(tcOrg.owner.UserCtx, *doc.OriginalFileID, generated.TypeFile, true)
 
 		// FileID should be nil initially when watermarking is enabled
 		assert.Assert(t, doc.FileID == nil)
-
-		// Clean up
-		(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: doc.ID}).MustDelete(testUser1.UserCtx, t)
 	})
 
 	t.Run("update document with watermarked file upload - should create tuples for watermarked file", func(t *testing.T) {
@@ -979,7 +981,7 @@ func TestTrustCenterDocWatermarkingFGATuples(t *testing.T) {
 			client:        suite.client,
 			TrustCenterID: trustCenter.ID,
 			Visibility:    enums.TrustCenterDocumentVisibilityPubliclyVisible,
-		}).MustNew(testUser1.UserCtx, t)
+		}).MustNew(tcOrg.owner.UserCtx, t)
 
 		originalFileID := *doc.OriginalFileID
 
@@ -991,29 +993,26 @@ func TestTrustCenterDocWatermarkingFGATuples(t *testing.T) {
 			Title: lo.ToPtr("Updated with Watermarked File"),
 		}
 
-		resp, err := suite.client.api.UpdateTrustCenterDoc(testUser1.UserCtx, doc.ID, input, nil, watermarkedFile)
+		resp, err := suite.client.api.UpdateTrustCenterDoc(tcOrg.owner.UserCtx, doc.ID, input, nil, watermarkedFile)
 		assert.NilError(t, err)
 
 		updatedDoc := resp.UpdateTrustCenterDoc.TrustCenterDoc
 
 		// Get the updated document from database to check FileID
-		dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+		dbCtx := setContext(tcOrg.owner.UserCtx, suite.client.db)
 		dbDoc, err := suite.client.db.TrustCenterDoc.Get(dbCtx, updatedDoc.ID)
 		assert.NilError(t, err)
 
 		// Check that wildcard viewer tuples exist for the document
-		checkWildcardViewerTuples(testUser1.UserCtx, updatedDoc.ID, "trust_center_doc", true)
+		checkWildcardViewerTuples(tcOrg.owner.UserCtx, updatedDoc.ID, "trust_center_doc", true)
 
 		// Check that wildcard viewer tuples exist for the original file
-		checkWildcardViewerTuples(testUser1.UserCtx, originalFileID, generated.TypeFile, true)
+		checkWildcardViewerTuples(tcOrg.owner.UserCtx, originalFileID, generated.TypeFile, true)
 
 		// Check that wildcard viewer tuples exist for the watermarked file (if FileID is set)
 		if dbDoc.FileID != nil {
-			checkWildcardViewerTuples(testUser1.UserCtx, *dbDoc.FileID, generated.TypeFile, true)
+			checkWildcardViewerTuples(tcOrg.owner.UserCtx, *dbDoc.FileID, generated.TypeFile, true)
 		}
-
-		// Clean up
-		(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: doc.ID}).MustDelete(testUser1.UserCtx, t)
 	})
 
 	t.Run("change visibility from public to protected - should remove file tuples", func(t *testing.T) {
@@ -1022,40 +1021,38 @@ func TestTrustCenterDocWatermarkingFGATuples(t *testing.T) {
 			client:        suite.client,
 			TrustCenterID: trustCenter.ID,
 			Visibility:    enums.TrustCenterDocumentVisibilityPubliclyVisible,
-		}).MustNew(testUser1.UserCtx, t)
+		}).MustNew(tcOrg.owner.UserCtx, t)
 
 		originalFileID := *doc.OriginalFileID
 
 		// Verify tuples exist initially
-		checkWildcardViewerTuples(testUser1.UserCtx, doc.ID, "trust_center_doc", true)
-		checkWildcardViewerTuples(testUser1.UserCtx, originalFileID, generated.TypeFile, true)
+		checkWildcardViewerTuples(tcOrg.owner.UserCtx, doc.ID, "trust_center_doc", true)
+		checkWildcardViewerTuples(tcOrg.owner.UserCtx, originalFileID, generated.TypeFile, true)
 
 		// Update visibility to protected
 		input := testclient.UpdateTrustCenterDocInput{
 			Visibility: &enums.TrustCenterDocumentVisibilityProtected,
 		}
 
-		resp, err := suite.client.api.UpdateTrustCenterDoc(testUser1.UserCtx, doc.ID, input, nil, nil)
+		resp, err := suite.client.api.UpdateTrustCenterDoc(tcOrg.owner.UserCtx, doc.ID, input, nil, nil)
 		assert.NilError(t, err)
 
 		updatedDoc := resp.UpdateTrustCenterDoc.TrustCenterDoc
 
 		// Check that wildcard viewer tuples still exist for the document (protected is still viewable)
-		checkWildcardViewerTuples(testUser1.UserCtx, updatedDoc.ID, "trust_center_doc", true)
+		checkWildcardViewerTuples(tcOrg.owner.UserCtx, updatedDoc.ID, "trust_center_doc", true)
 
 		// Check that wildcard viewer tuples are removed for the file (no longer publicly visible)
-		checkWildcardViewerTuples(testUser1.UserCtx, originalFileID, generated.TypeFile, false)
-
-		// Clean up
-		(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: doc.ID}).MustDelete(testUser1.UserCtx, t)
+		checkWildcardViewerTuples(tcOrg.owner.UserCtx, originalFileID, generated.TypeFile, false)
 	})
 
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestMutationUpdateTrustCenterDocWithFGATuples(t *testing.T) {
-
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t, withAllUserTypes())
+	trustCenter := tcOrg.trustCenter
 
 	testCases := []struct {
 		name                  string
@@ -1075,7 +1072,7 @@ func TestMutationUpdateTrustCenterDocWithFGATuples(t *testing.T) {
 			expectedDocTuples:  []string{"trust_center_doc"},
 			expectedFileTuples: []string{"file"},
 			client:             suite.client.api,
-			ctx:                testUser1.UserCtx,
+			ctx:                tcOrg.owner.UserCtx,
 		},
 		{
 			name:              "update from not_visible to protected creates doc tuple only",
@@ -1083,7 +1080,7 @@ func TestMutationUpdateTrustCenterDocWithFGATuples(t *testing.T) {
 			updateVisibility:  enums.TrustCenterDocumentVisibilityProtected,
 			expectedDocTuples: []string{"trust_center_doc"},
 			client:            suite.client.api,
-			ctx:               testUser1.UserCtx,
+			ctx:               tcOrg.superAdmin.UserCtx,
 		},
 		{
 			name:                  "update from publicly_visible to not_visible deletes all tuples",
@@ -1091,7 +1088,7 @@ func TestMutationUpdateTrustCenterDocWithFGATuples(t *testing.T) {
 			updateVisibility:      enums.TrustCenterDocumentVisibilityNotVisible,
 			expectedDeletedTuples: []string{"trust_center_doc", "file"},
 			client:                suite.client.api,
-			ctx:                   testUser1.UserCtx,
+			ctx:                   tcOrg.admin.UserCtx,
 		},
 		{
 			name:                  "update from publicly_visible to protected deletes file tuples only",
@@ -1099,7 +1096,7 @@ func TestMutationUpdateTrustCenterDocWithFGATuples(t *testing.T) {
 			updateVisibility:      enums.TrustCenterDocumentVisibilityProtected,
 			expectedDeletedTuples: []string{"file"},
 			client:                suite.client.api,
-			ctx:                   testUser1.UserCtx,
+			ctx:                   tcOrg.owner.UserCtx,
 		},
 		{
 			name:               "update from protected to publicly_visible creates file tuples",
@@ -1107,14 +1104,14 @@ func TestMutationUpdateTrustCenterDocWithFGATuples(t *testing.T) {
 			updateVisibility:   enums.TrustCenterDocumentVisibilityPubliclyVisible,
 			expectedFileTuples: []string{"file"},
 			client:             suite.client.api,
-			ctx:                testUser1.UserCtx,
+			ctx:                tcOrg.owner.UserCtx,
 		},
 		{
 			name:              "not authorized, view only user",
 			initialVisibility: enums.TrustCenterDocumentVisibilityNotVisible,
 			updateVisibility:  enums.TrustCenterDocumentVisibilityPubliclyVisible,
 			client:            suite.client.api,
-			ctx:               viewOnlyUser.UserCtx,
+			ctx:               tcOrg.member.UserCtx,
 			expectedErr:       notAuthorizedErrorMsg,
 		},
 	}
@@ -1126,7 +1123,7 @@ func TestMutationUpdateTrustCenterDocWithFGATuples(t *testing.T) {
 				client:        suite.client,
 				TrustCenterID: trustCenter.ID,
 				Visibility:    tc.initialVisibility,
-			}).MustNew(testUser1.UserCtx, t)
+			}).MustNew(tcOrg.owner.UserCtx, t)
 
 			// Perform the update
 			updateInput := testclient.UpdateTrustCenterDocInput{
@@ -1138,7 +1135,7 @@ func TestMutationUpdateTrustCenterDocWithFGATuples(t *testing.T) {
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 				// Clean up and return early for error cases
-				(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
+				(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDoc.ID}).MustDelete(tcOrg.owner.UserCtx, t)
 				return
 			}
 
@@ -1150,7 +1147,7 @@ func TestMutationUpdateTrustCenterDocWithFGATuples(t *testing.T) {
 			// We verify tuples indirectly by testing access with different user contexts
 
 			// Test anonymous user access based on expected visibility
-			anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
+			anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, tcOrg.owner.OrganizationID)
 
 			if tc.updateVisibility == enums.TrustCenterDocumentVisibilityPubliclyVisible {
 				// Should be able to access the doc and files
@@ -1171,7 +1168,7 @@ func TestMutationUpdateTrustCenterDocWithFGATuples(t *testing.T) {
 			}
 
 			// Verify the organization user can always access the doc (regardless of visibility)
-			orgDocResp, orgDocErr := suite.client.api.GetTrustCenterDocByID(testUser1.UserCtx, trustCenterDoc.ID)
+			orgDocResp, orgDocErr := suite.client.api.GetTrustCenterDocByID(tcOrg.owner.UserCtx, trustCenterDoc.ID)
 			assert.NilError(t, orgDocErr)
 			assert.Assert(t, orgDocResp != nil)
 			assert.Check(t, orgDocResp.TrustCenterDoc.OriginalFile != nil, "Organization user should always see files")
@@ -1201,27 +1198,25 @@ func TestMutationUpdateTrustCenterDocWithFGATuples(t *testing.T) {
 					assert.ErrorContains(t, docErr, notFoundErrorMsg)
 				}
 			}
-
-			// Clean up the created trust center doc
-			(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
 		})
 	}
 
 	// Clean up the trust center
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestMutationDeleteTrustCenterDoc(t *testing.T) {
+	t.Parallel()
 	// Create new test users
-	testUser := suite.userBuilder(context.Background(), t)
-	testUserOther := suite.userBuilder(testUser.UserCtx, t)
+	tcOrg1 := createFreshOrgWithTrustCenter(t, withAllUserTypes())
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
 
 	// create objects to be deleted
-	trustCenter1 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUserOther.UserCtx, t)
+	trustCenter1 := tcOrg1.trustCenter
+	trustCenter2 := tcOrg2.trustCenter
 
-	trustCenterDoc1 := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter1.ID}).MustNew(testUser.UserCtx, t)
-	trustCenterDoc2 := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter2.ID}).MustNew(testUserOther.UserCtx, t)
+	trustCenterDoc1 := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter1.ID}).MustNew(tcOrg1.owner.UserCtx, t)
+	trustCenterDoc2 := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter2.ID}).MustNew(tcOrg2.owner.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -1234,20 +1229,20 @@ func TestMutationDeleteTrustCenterDoc(t *testing.T) {
 			name:       "happy path, delete trust center doc",
 			idToDelete: trustCenterDoc1.ID,
 			client:     suite.client.api,
-			ctx:        testUser.UserCtx,
+			ctx:        tcOrg1.owner.UserCtx,
 		},
 		{
 			name:        "not authorized, different org user",
 			idToDelete:  trustCenterDoc2.ID,
 			client:      suite.client.api,
-			ctx:         testUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			ctx:         tcOrg1.owner.UserCtx,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "trust center doc not found",
 			idToDelete:  "non-existent-id",
 			client:      suite.client.api,
-			ctx:         testUser.UserCtx,
+			ctx:         tcOrg1.superAdmin.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -1265,37 +1260,40 @@ func TestMutationDeleteTrustCenterDoc(t *testing.T) {
 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteTrustCenterDoc.DeletedID))
 		})
 	}
+
+	cleanupOrganizationDataWithContext(tcOrg1.owner.UserCtx, t)
 }
 
 func TestGetAllTrustCenterDocs(t *testing.T) {
-	// Clean up any existing trust center docs
-	cleanupTrustCenterData(t)
+	t.Parallel()
+	tcOrg1 := createFreshOrgWithTrustCenter(t)
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
 
 	// Create test trust center docs with different users
-	trustCenter1 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	trustCenter1 := tcOrg1.trustCenter
+	trustCenter2 := tcOrg2.trustCenter
 
-	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter1.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
-	trustCenterDocPublic := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter1.ID, Visibility: enums.TrustCenterDocumentVisibilityPubliclyVisible}).MustNew(testUser1.UserCtx, t)
-	trustCenterDocNotVisible := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter1.ID, Visibility: enums.TrustCenterDocumentVisibilityNotVisible}).MustNew(testUser1.UserCtx, t)
+	(&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter1.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(tcOrg1.owner.UserCtx, t)
+	(&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter1.ID, Visibility: enums.TrustCenterDocumentVisibilityPubliclyVisible}).MustNew(tcOrg1.owner.UserCtx, t)
+	(&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter1.ID, Visibility: enums.TrustCenterDocumentVisibilityNotVisible}).MustNew(tcOrg1.owner.UserCtx, t)
 
-	trustCenterDoc2 := (&TrustCenterDocBuilder{
+	(&TrustCenterDocBuilder{
 		client:        suite.client,
 		TrustCenterID: trustCenter2.ID,
-	}).MustNew(testUser2.UserCtx, t)
+	}).MustNew(tcOrg2.owner.UserCtx, t)
 
-	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter1.ID, testUser1.OrganizationID)
+	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter1.ID, tcOrg1.owner.OrganizationID)
 	signedNDACaller, _ := auth.CallerFromContext(signedNdaAnonCtx)
 	req := fgax.TupleRequest{
 		SubjectID:   signedNDACaller.SubjectID,
 		SubjectType: "user",
-		ObjectID:    trustCenter1.ID,
+		ObjectID:    tcOrg1.owner.ID,
 		ObjectType:  "trust_center",
 		Relation:    "nda_signed",
 	}
 
 	tuple := fgax.GetTupleKey(req)
-	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
+	if _, err := suite.client.db.Authz.WriteTupleKeys(tcOrg1.owner.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
 		requireNoError(t, err)
 	}
 
@@ -1309,31 +1307,31 @@ func TestGetAllTrustCenterDocs(t *testing.T) {
 		{
 			name:            "happy path - regular user sees only their trust center docs",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
-			expectedResults: 3, // Should see only trust center docs owned by testUser1
+			ctx:             tcOrg1.owner.UserCtx,
+			expectedResults: 3, // Should see only trust center docs owned by their org
 		},
 		{
 			name:            "happy path - admin user sees all trust center docs",
 			client:          suite.client.api,
-			ctx:             adminUser.UserCtx,
-			expectedResults: 3, // Should see all owned by testUser
+			ctx:             tcOrg1.admin.UserCtx,
+			expectedResults: 3, // Should see all owned by their org
 		},
 		{
 			name:            "happy path - view only user",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             tcOrg1.member.UserCtx,
 			expectedResults: 3, // Should see only trust center docs from their organization
 		},
 		{
 			name:            "happy path - different user sees only their trust center docs",
 			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
-			expectedResults: 1, // Should see only trust center docs owned by testUser2
+			ctx:             tcOrg2.owner.UserCtx,
+			expectedResults: 1, // Should see only trust center docs owned by tcOrg2
 		},
 		{
 			name:            "anonymous user can't see not visible docs",
 			client:          suite.client.api,
-			ctx:             createAnonymousTrustCenterContext(trustCenter1.ID, testUser1.OrganizationID),
+			ctx:             createAnonymousTrustCenterContext(trustCenter1.ID, tcOrg1.owner.OrganizationID),
 			expectedResults: 2,
 		},
 		{
@@ -1376,11 +1374,11 @@ func TestGetAllTrustCenterDocs(t *testing.T) {
 
 			// Verify that users only see trust center docs from their organization
 			switch tc.ctx {
-			case testUser1.UserCtx, viewOnlyUser.UserCtx:
+			case tcOrg1.owner.UserCtx, tcOrg1.admin.UserCtx, tcOrg1.member.UserCtx:
 				for _, edge := range resp.TrustCenterDocs.Edges {
 					assert.Check(t, is.Equal(trustCenter1.ID, *edge.Node.TrustCenterID))
 				}
-			case testUser2.UserCtx:
+			case tcOrg2.owner.UserCtx:
 				for _, edge := range resp.TrustCenterDocs.Edges {
 					assert.Check(t, is.Equal(trustCenter2.ID, *edge.Node.TrustCenterID))
 				}
@@ -1388,24 +1386,22 @@ func TestGetAllTrustCenterDocs(t *testing.T) {
 		})
 	}
 
-	// Clean up created trust center docs
-	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDoc2.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocProtected.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocPublic.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocNotVisible.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter1.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
+	// Clean up
+	cleanupOrganizationDataWithContext(tcOrg1.owner.UserCtx, t)
 }
 
 func TestTrustCenterDoc_NotVisible(t *testing.T) {
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+
 	docKind := (&CustomTypeEnumBuilder{
 		client:     suite.client,
 		ObjectType: "trust_center_doc",
-	}).MustNew(testUser1.UserCtx, t)
+	}).MustNew(tcOrg.owner.UserCtx, t)
+
+	trustCenter := tcOrg.trustCenter
 
 	t.Run("doc without file should set to NOT_VISIBLE", func(t *testing.T) {
-
-		trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 		testCases := []struct {
 			name                    string
@@ -1447,7 +1443,7 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 
 		for _, tc := range testCases {
 			t.Run(tc.name, func(t *testing.T) {
-				allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+				allowCtx := privacy.DecisionContext(tcOrg.owner.UserCtx, privacy.Allow)
 
 				create := suite.client.db.TrustCenterDoc.Create().
 					SetTitle("My Test Document").
@@ -1473,19 +1469,11 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 				assert.Check(t, trustCenterDoc.OriginalFileID == nil, "Original file ID should be nil")
 				assert.Check(t, trustCenterDoc.FileID == nil, "File ID should be nil")
 				assert.Check(t, is.Equal(tc.expectedFinalVisibility, trustCenterDoc.Visibility), "Visibility should be set to NOT_VISIBLE")
-
-				(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
 			})
 		}
-
-		cleanupWatermarkConfigs(t)
-		(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 	})
 
 	t.Run("when you clear an existing doc, it should set it to NO_VISIBLE", func(t *testing.T) {
-
-		trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-
 		upload := uploadFile(t, pdfFilePath)
 
 		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*upload})
@@ -1497,7 +1485,7 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 			Visibility:             &enums.TrustCenterDocumentVisibilityPubliclyVisible,
 		}
 
-		createResp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, createInput, *upload)
+		createResp, err := suite.client.api.CreateTrustCenterDoc(tcOrg.owner.UserCtx, createInput, *upload)
 		assert.NilError(t, err)
 		assert.Assert(t, createResp != nil)
 
@@ -1505,7 +1493,7 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 		assert.Check(t, trustCenterDoc.OriginalFileID != nil, "Original file ID should be set")
 		assert.Check(t, is.Equal(enums.TrustCenterDocumentVisibilityPubliclyVisible, *trustCenterDoc.Visibility))
 
-		allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+		allowCtx := privacy.DecisionContext(tcOrg.owner.UserCtx, privacy.Allow)
 
 		updatedDoc, err := suite.client.db.TrustCenterDoc.UpdateOneID(trustCenterDoc.ID).
 			ClearOriginalFileID().
@@ -1517,22 +1505,23 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 		assert.Check(t, updatedDoc.OriginalFileID == nil, "Original file ID should be nil after clearing")
 		assert.Check(t, updatedDoc.FileID == nil, "File ID should be nil after clearing")
 		assert.Check(t, is.Equal(enums.TrustCenterDocumentVisibilityNotVisible, updatedDoc.Visibility), "Visibility should be automatically set to NOT_VISIBLE when file is cleared")
-
-		(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
-		cleanupWatermarkConfigs(t)
-		(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 	})
+
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+
 	docKind := (&CustomTypeEnumBuilder{
 		client:     suite.client,
 		ObjectType: "trust_center_doc",
-	}).MustNew(testUser1.UserCtx, t)
+	}).MustNew(tcOrg.owner.UserCtx, t)
 
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	trustCenter := tcOrg.trustCenter
 
-	dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+	dbCtx := setContext(tcOrg.owner.UserCtx, suite.client.db)
 	allowCtx := privacy.DecisionContext(dbCtx, privacy.Allow)
 
 	watermarkConfig, err := suite.client.db.TrustCenterWatermarkConfig.Query().
@@ -1589,17 +1578,15 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 				input.WatermarkingEnabled = tc.watermarkingEnabled
 			}
 
-			resp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, input, *file)
+			resp, err := suite.client.api.CreateTrustCenterDoc(tcOrg.owner.UserCtx, input, *file)
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
-			dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+			dbCtx := setContext(tcOrg.owner.UserCtx, suite.client.db)
 			dbDoc, err := suite.client.db.TrustCenterDoc.Get(dbCtx, resp.CreateTrustCenterDoc.TrustCenterDoc.ID)
 			assert.NilError(t, err)
 			assert.Check(t, is.Equal(tc.expectedWatermarking, dbDoc.WatermarkingEnabled))
 			assert.Check(t, is.Equal(tc.expectedWatermarkStatus, dbDoc.WatermarkStatus))
-
-			(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: resp.CreateTrustCenterDoc.TrustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
 		})
 	}
 
@@ -1619,33 +1606,32 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 			WatermarkingEnabled:    lo.ToPtr(false),
 		}
 
-		resp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, input, *file)
+		resp, err := suite.client.api.CreateTrustCenterDoc(tcOrg.owner.UserCtx, input, *file)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
-		dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+		dbCtx := setContext(tcOrg.owner.UserCtx, suite.client.db)
 		dbDoc, err := suite.client.db.TrustCenterDoc.Get(dbCtx, resp.CreateTrustCenterDoc.TrustCenterDoc.ID)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(false, dbDoc.WatermarkingEnabled))
 		assert.Check(t, is.Equal(enums.WatermarkStatusDisabled, dbDoc.WatermarkStatus))
-
-		(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: resp.CreateTrustCenterDoc.TrustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
 	})
 
-	(&Cleanup[*generated.TrustCenterWatermarkConfigDeleteOne]{client: suite.client.db.TrustCenterWatermarkConfig, ID: watermarkConfig.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
 
 	docKind := (&CustomTypeEnumBuilder{
 		client:     suite.client,
 		ObjectType: "trust_center_doc",
-	}).MustNew(testUser1.UserCtx, t)
+	}).MustNew(tcOrg.owner.UserCtx, t)
 
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	trustCenter := tcOrg.trustCenter
 
-	dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+	dbCtx := setContext(tcOrg.owner.UserCtx, suite.client.db)
 	allowCtx := privacy.DecisionContext(dbCtx, privacy.Allow)
 
 	watermarkConfig, err := suite.client.db.TrustCenterWatermarkConfig.Query().
@@ -1703,16 +1689,14 @@ func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
 					input.WatermarkingEnabled = tc.watermarkingEnabled
 				}
 
-				resp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, input, *file)
+				resp, err := suite.client.api.CreateTrustCenterDoc(tcOrg.owner.UserCtx, input, *file)
 				assert.NilError(t, err, tc.description)
 				assert.Assert(t, resp != nil)
 
-				dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+				dbCtx := setContext(tcOrg.owner.UserCtx, suite.client.db)
 				dbDoc, err := suite.client.db.TrustCenterDoc.Get(dbCtx, resp.CreateTrustCenterDoc.TrustCenterDoc.ID)
 				assert.NilError(t, err)
 				assert.Check(t, is.Equal(tc.expectedWatermarking, dbDoc.WatermarkingEnabled), tc.description)
-
-				(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: resp.CreateTrustCenterDoc.TrustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
 			})
 		}
 	})
@@ -1765,30 +1749,31 @@ func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
 					input.WatermarkingEnabled = tc.watermarkingEnabled
 				}
 
-				resp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, input, *file)
+				resp, err := suite.client.api.CreateTrustCenterDoc(tcOrg.owner.UserCtx, input, *file)
 				assert.NilError(t, err, tc.description)
 				assert.Assert(t, resp != nil)
 
-				dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+				dbCtx := setContext(tcOrg.owner.UserCtx, suite.client.db)
 				dbDoc, err := suite.client.db.TrustCenterDoc.Get(dbCtx, resp.CreateTrustCenterDoc.TrustCenterDoc.ID)
 				assert.NilError(t, err)
 				assert.Check(t, is.Equal(tc.expectedWatermarking, dbDoc.WatermarkingEnabled), tc.description)
-
-				(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: resp.CreateTrustCenterDoc.TrustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
 			})
 		}
 	})
 
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+
 	docKind := (&CustomTypeEnumBuilder{
 		client:     suite.client,
 		ObjectType: "trust_center_doc",
-	}).MustNew(testUser1.UserCtx, t)
+	}).MustNew(tcOrg.owner.UserCtx, t)
 
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	trustCenter := tcOrg.trustCenter
 
 	createPDFUpload := uploadFileFunc(t, pdfFilePath)
 
@@ -1802,12 +1787,12 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 		WatermarkingEnabled:    lo.ToPtr(true),
 	}
 
-	createResp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, createInput, *file)
+	createResp, err := suite.client.api.CreateTrustCenterDoc(tcOrg.owner.UserCtx, createInput, *file)
 	assert.NilError(t, err)
 	assert.Assert(t, createResp != nil)
 
 	docID := createResp.CreateTrustCenterDoc.TrustCenterDoc.ID
-	dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+	dbCtx := setContext(tcOrg.owner.UserCtx, suite.client.db)
 	dbDoc, err := suite.client.db.TrustCenterDoc.Get(dbCtx, docID)
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal(true, dbDoc.WatermarkingEnabled))
@@ -1817,7 +1802,7 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 			WatermarkingEnabled: lo.ToPtr(false),
 		}
 
-		updateResp, err := suite.client.api.UpdateTrustCenterDoc(testUser1.UserCtx, docID, updateInput, nil, nil)
+		updateResp, err := suite.client.api.UpdateTrustCenterDoc(tcOrg.owner.UserCtx, docID, updateInput, nil, nil)
 		assert.NilError(t, err)
 		assert.Assert(t, updateResp != nil)
 
@@ -1831,7 +1816,7 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 			Title: lo.ToPtr("Updated Title"),
 		}
 
-		updateResp, err := suite.client.api.UpdateTrustCenterDoc(testUser1.UserCtx, docID, updateInput, nil, nil)
+		updateResp, err := suite.client.api.UpdateTrustCenterDoc(tcOrg.owner.UserCtx, docID, updateInput, nil, nil)
 		assert.NilError(t, err)
 		assert.Assert(t, updateResp != nil)
 		assert.Check(t, is.Equal("Updated Title", updateResp.UpdateTrustCenterDoc.TrustCenterDoc.Title))
@@ -1863,7 +1848,7 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 			WatermarkingEnabled:    lo.ToPtr(false),
 		}
 
-		createResp2, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, createInput2, *file2)
+		createResp2, err := suite.client.api.CreateTrustCenterDoc(tcOrg.owner.UserCtx, createInput2, *file2)
 		assert.NilError(t, err)
 		assert.Assert(t, createResp2 != nil)
 
@@ -1877,7 +1862,7 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 			WatermarkingEnabled: lo.ToPtr(true),
 		}
 
-		updateResp, err := suite.client.api.UpdateTrustCenterDoc(testUser1.UserCtx, doc2ID, updateInput, nil, nil)
+		updateResp, err := suite.client.api.UpdateTrustCenterDoc(tcOrg.owner.UserCtx, doc2ID, updateInput, nil, nil)
 		assert.NilError(t, err)
 		assert.Assert(t, updateResp != nil)
 
@@ -1890,7 +1875,7 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 			WatermarkingEnabled: lo.ToPtr(false),
 		}
 
-		updateResp2, err := suite.client.api.UpdateTrustCenterDoc(testUser1.UserCtx, doc2ID, updateInput2, nil, nil)
+		updateResp2, err := suite.client.api.UpdateTrustCenterDoc(tcOrg.owner.UserCtx, doc2ID, updateInput2, nil, nil)
 		assert.NilError(t, err)
 		assert.Assert(t, updateResp2 != nil)
 
@@ -1898,10 +1883,7 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(true, dbDoc2.WatermarkingEnabled))
 		assert.Check(t, is.Equal(enums.WatermarkStatusPending, dbDoc2.WatermarkStatus))
-
-		(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: doc2ID}).MustDelete(testUser1.UserCtx, t)
 	})
 
-	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: docID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }

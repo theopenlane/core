@@ -11,10 +11,10 @@ import (
 )
 
 func TestQueryJobRunners(t *testing.T) {
-	systemJob := (&JobRunnerBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
-	firstJob := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	secondJob := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	thirdJob := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	systemJob := (&JobRunnerBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	firstJob := (&JobRunnerBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	secondJob := (&JobRunnerBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	thirdJob := (&JobRunnerBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -27,7 +27,7 @@ func TestQueryJobRunners(t *testing.T) {
 		{
 			name:          "happy path user",
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 			expectedCount: 2,
 		},
 		{
@@ -39,7 +39,7 @@ func TestQueryJobRunners(t *testing.T) {
 		{
 			name:          "valid test user 2",
 			client:        suite.client.api,
-			ctx:           testUser2.UserCtx,
+			ctx:           sharedTestUser2.UserCtx,
 			expectedCount: 1,
 		},
 		{
@@ -67,19 +67,18 @@ func TestQueryJobRunners(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.JobRunnerDeleteOne]{client: suite.client.db.JobRunner, ID: systemJob.ID}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.JobRunnerDeleteOne]{client: suite.client.db.JobRunner, ID: thirdJob.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.JobRunnerDeleteOne]{client: suite.client.db.JobRunner, IDs: []string{firstJob.ID, secondJob.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.JobRunnerDeleteOne]{client: suite.client.db.JobRunner, ID: systemJob.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.JobRunnerDeleteOne]{client: suite.client.db.JobRunner, ID: thirdJob.ID}).MustDelete(sharedTestUser2.UserCtx, t)
+	(&Cleanup[*generated.JobRunnerDeleteOne]{client: suite.client.db.JobRunner, IDs: []string{firstJob.ID, secondJob.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteJobRunner(t *testing.T) {
-	newUser := suite.userBuilder(context.Background(), t)
-	patClient := suite.setupPatClient(newUser, t)
-	apiTokenClient := suite.setupAPITokenClient(newUser.UserCtx, t)
+	t.Parallel()
+	localTestUser := suite.seedOrgOwner(t)
 
-	systemJob := (&JobRunnerBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
-	firstJob := (&JobRunnerBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
-	secondJob := (&JobRunnerBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
+	systemJob := (&JobRunnerBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	firstJob := (&JobRunnerBuilder{client: suite.client}).MustNew(localTestUser.owner.UserCtx, t)
+	secondJob := (&JobRunnerBuilder{client: suite.client}).MustNew(localTestUser.owner.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -92,27 +91,27 @@ func TestMutationDeleteJobRunner(t *testing.T) {
 		{
 			name:     "happy path user",
 			client:   suite.client.api,
-			ctx:      newUser.UserCtx,
+			ctx:      localTestUser.owner.UserCtx,
 			runnerID: firstJob.ID,
 		},
 		{
 			// the first test case should have deleted the runner
 			name:     "job runner already deleted",
-			client:   patClient,
+			client:   localTestUser.patClient,
 			ctx:      context.Background(),
 			runnerID: firstJob.ID,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "happy path user with pat",
-			client:   patClient,
+			client:   localTestUser.patClient,
 			ctx:      context.Background(),
 			runnerID: secondJob.ID,
 		},
 		{
 			name:     "happy path but cannot delete system runner",
-			client:   apiTokenClient,
-			ctx:      newUser.UserCtx,
+			client:   localTestUser.apiClient,
+			ctx:      context.Background(),
 			runnerID: systemJob.ID,
 			errorMsg: notAuthorizedErrorMsg,
 		},
@@ -133,5 +132,5 @@ func TestMutationDeleteJobRunner(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.JobRunnerDeleteOne]{client: suite.client.db.JobRunner, ID: systemJob.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(localTestUser.owner.UserCtx, t)
 }
