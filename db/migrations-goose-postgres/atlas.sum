@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-h1:q1grwAyI7OkD4vBNN01SXfvUb088Fx6XqXd9lgxRidA=
-||||||| 52677f0b5
-h1:AKTjrVF6/ndusn31xMy5nXE57yq2UR4w1I9jjcx+U8w=
-=======
-h1:RBrbP1pM3i4A0ol0Dgn3cP85BcYrfgupt8i4BdpQ/zE=
->>>>>>> origin/main
+h1:h2z+Vq/GsSQo69PVCum+HFVWbyFzLVMcdeVyoiu1HBw=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -141,12 +135,8 @@ h1:RBrbP1pM3i4A0ol0Dgn3cP85BcYrfgupt8i4BdpQ/zE=
 20260516143012_backfill_management_mode.sql h1:qlRDjSzovC+2xzfWpxC5JhPH53mSbsFTFScroeiJcBA=
 20260525161846_remove_dedicated_db.sql h1:AWuCvcgel7Bz+GrZz2x+pQ8kVTzoRKKXGW4LoJNB7nw=
 20260525161851_remove_dedicated_db_history.sql h1:8wQkTCs5n7cWLfI4d1DtsO/t7IWbMBsVNQz5uh2cUh4=
-<<<<<<< HEAD
-20260526144910_task_is_template.sql h1:A54scE3xGHcjjZAW4vWgCOHeclj3SSbeDocdewX9pnY=
-20260526144922_task_is_template_history.sql h1:uV+1aKRpGE2teUuPbh1x87ijibM8nS7J/laebASsY34=
-||||||| 52677f0b5
-=======
 20260526053031_perms_revamp.sql h1:JgXPG8gy+GaA06SRcrF1dePB8LwRVwwUkFctnK5GouU=
 20260529171325_googledriveintegration.sql h1:rO9KmB9DdRIbmdCr+P6JsMkFpA3esIK9RzocSWYB7aA=
 20260529171329_googledriveintegration_history.sql h1:Ij8rZgP/CoZRjFXVR5YTR24MwuyroRHVFuuODhYiL/g=
->>>>>>> origin/main
+20260601213403_task_is_template.sql h1:3bhGX/4BLwcE/wnr8RofKAkdyGENm4tLF1JJDA77Rac=
+20260601213412_task_is_template_history.sql h1:Acqiozh04KQ2lQ+A34L36qkJT9rDHp3+qe+3pHg8BT4=
