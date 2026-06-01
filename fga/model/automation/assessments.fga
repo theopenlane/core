@@ -85,7 +85,7 @@ type assessment_response
     # parent permissions derived based on `crud` permissions or parents
     define parent_editor: can_edit from parent
     define parent_viewer: can_view from parent
-    define parent: [assessment, campaign]
+    define parent: [assessment, campaign, entity]
 
 # campaign, similar to assessments, are viewable by organization admin+, by can_edit_campaign or inherited from the parent objects such as campaigns. They are not viewable by org members (view only) access by default
 type campaign

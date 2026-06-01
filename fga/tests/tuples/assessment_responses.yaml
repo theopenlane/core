@@ -18,6 +18,13 @@
   relation: parent
   object: assessment_response:response-1
 
+- user: organization:openlane
+  relation: parent_context
+  object: entity:entity-1
+- user: entity:entity-1
+  relation: parent
+  object: assessment_response:response-entity
+
 # response owner
 - user: user:ulid-response-owner
   relation: response_owner
