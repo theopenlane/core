@@ -13,7 +13,7 @@ require (
 	github.com/stretchr/testify v1.11.1
 	github.com/theopenlane/core v1.21.22
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/entx v0.28.1
+	github.com/theopenlane/entx v0.28.2-0.20260602015009-ecd0efbc34ea
 	github.com/theopenlane/utils v0.7.1
 	github.com/zitadel/oidc/v3 v3.47.5
 	golang.org/x/oauth2 v0.36.0
@@ -74,9 +74,9 @@ require (
 	github.com/zclconf/go-cty-yaml v1.2.0 // indirect
 	github.com/zitadel/schema v1.3.2 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
-	go.opentelemetry.io/otel v1.43.0 // indirect
-	go.opentelemetry.io/otel/metric v1.43.0 // indirect
-	go.opentelemetry.io/otel/trace v1.43.0 // indirect
+	go.opentelemetry.io/otel v1.44.0 // indirect
+	go.opentelemetry.io/otel/metric v1.44.0 // indirect
+	go.opentelemetry.io/otel/trace v1.44.0 // indirect
 	go.uber.org/goleak v1.3.0 // indirect
 	golang.org/x/crypto v0.52.0 // indirect
 	golang.org/x/exp v0.0.0-20260508232706-74f9aab9d74a // indirect
