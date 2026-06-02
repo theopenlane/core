@@ -19,6 +19,58 @@ All tuples where:
 
 ---
 
+## Prerequisites
+
+Install the `generate_ulid()` function first:
+
+```sql
+CREATE OR REPLACE FUNCTION generate_ulid() RETURNS TEXT AS $$
+DECLARE
+  encoding  BYTEA = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
+  output    TEXT = '';
+  unix_time BIGINT;
+  ulid      BYTEA;
+BEGIN
+  unix_time = (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT;
+  ulid = substring(int8send(unix_time) FROM 3);
+  ulid = ulid || gen_random_bytes(10);
+
+  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 0) & 224) >> 5));
+  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 0) & 31)));
+  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 1) & 248) >> 3));
+  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 1) & 7) << 2) | ((GET_BYTE(ulid, 2) & 192) >> 6)));
+  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 2) & 62) >> 1));
+  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 2) & 1) << 4) | ((GET_BYTE(ulid, 3) & 240) >> 4)));
+  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 3) & 15) << 1) | ((GET_BYTE(ulid, 4) & 128) >> 7)));
+  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 4) & 124) >> 2));
+  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 4) & 3) << 3) | ((GET_BYTE(ulid, 5) & 224) >> 5)));
+  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 5) & 31)));
+  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 6) & 248) >> 3));
+  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 6) & 7) << 2) | ((GET_BYTE(ulid, 7) & 192) >> 6)));
+  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 7) & 62) >> 1));
+  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 7) & 1) << 4) | ((GET_BYTE(ulid, 8) & 240) >> 4)));
+  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 8) & 15) << 1) | ((GET_BYTE(ulid, 9) & 128) >> 7)));
+  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 9) & 124) >> 2));
+  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 9) & 3) << 3) | ((GET_BYTE(ulid, 10) & 224) >> 5)));
+  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 10) & 31)));
+  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 11) & 248) >> 3));
+  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 11) & 7) << 2) | ((GET_BYTE(ulid, 12) & 192) >> 6)));
+  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 12) & 62) >> 1));
+  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 12) & 1) << 4) | ((GET_BYTE(ulid, 13) & 240) >> 4)));
+  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 13) & 15) << 1) | ((GET_BYTE(ulid, 14) & 128) >> 7)));
+  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 14) & 124) >> 2));
+  output = output || CHR(GET_BYTE(encoding, ((GET_BYTE(ulid, 14) & 3) << 3) | ((GET_BYTE(ulid, 15) & 224) >> 5)));
+  output = output || CHR(GET_BYTE(encoding, (GET_BYTE(ulid, 15) & 31)));
+
+  RETURN output;
+END
+$$ LANGUAGE plpgsql VOLATILE;
+```
+
+Requires `pgcrypto` (`CREATE EXTENSION IF NOT EXISTS pgcrypto;`).
+
+---
+
 ## Pre-release steps
 
 **1. Preview what will be migrated**
@@ -39,7 +91,7 @@ ORDER BY object_type;
 -- record this value; you will need it for rollback if something goes wrong
 SELECT NOW() AS migration_start;
 
-INSERT INTO tuple (store, object_type, object_id, relation, _user, user_type, ulid, inserted_at)
+INSERT INTO tuple (store, object_type, object_id, relation, _user, user_type, ulid, inserted_at, condition_name, condition_context)
 SELECT
     store,
     object_type,
@@ -48,12 +100,17 @@ SELECT
     _user,
     user_type,
     generate_ulid(),
-    NOW()
+    NOW(),
+    condition_name,
+    condition_context
 FROM tuple
 WHERE relation = 'parent'
   AND _user LIKE 'organization:%'
   AND object_type != 'file'
 ON CONFLICT (store, object_type, object_id, relation, _user) DO NOTHING;
+
+-- record this value; you will need it for rollback if something goes wrong
+SELECT NOW() AS migration_end;
 ```
 
 **3. Verify row counts match step 1**
@@ -69,13 +126,13 @@ ORDER BY object_type;
 
 **If something looks wrong — rollback before releasing**
 
-Substitute `$migration_start` with the timestamp recorded in step 2.
+Substitute `$migration_start` and `$migration_end` with the timestamps recorded in step 2.
 
 ```sql
 DELETE FROM tuple
 WHERE relation = 'parent_context'
   AND _user LIKE 'organization:%'
-  AND inserted_at >= '$migration_start';
+  AND inserted_at BETWEEN '$migration_start' AND '$migration_end';
 ```
 
 ---

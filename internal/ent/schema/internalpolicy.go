@@ -180,9 +180,7 @@ func (i InternalPolicy) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaInternalPolicy),
 		entfga.SelfAccessChecks(),
-		entx.NewExportable(
-			entx.WithOrgOwned(),
-		),
+		entx.NewExportable(),
 		oscalgen.NewOSCALModel(
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("component"),

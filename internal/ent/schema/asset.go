@@ -284,9 +284,7 @@ func (a Asset) Policy() ent.Policy {
 func (a Asset) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-		entx.NewExportable(
-			entx.WithOrgOwned(),
-		),
+		entx.NewExportable(),
 		oscalgen.NewOSCALModel(
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("inventory-item"),

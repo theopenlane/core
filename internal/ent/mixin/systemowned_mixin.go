@@ -8,6 +8,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
 
@@ -23,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/internal/graphapi/directives"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -120,6 +122,13 @@ func (d SystemOwnedMixin) Policy() ent.Policy {
 			rule.AllowMutationIfSystemAdmin(),
 			SystemOwnedSchema(),
 		},
+	}
+}
+
+// Annotations of the SystemOwnedMixin
+func (d SystemOwnedMixin) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entx.SystemOwnedSchema{},
 	}
 }
 

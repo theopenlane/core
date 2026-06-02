@@ -280,10 +280,7 @@ func (c Control) Annotations() []schema.Annotation {
 			},
 		),
 		entfga.SelfAccessChecks(),
-		entx.NewExportable(
-			entx.WithOrgOwned(),
-			entx.WithSystemOwned(),
-		),
+		entx.NewExportable(),
 		oscalgen.NewOSCALModel(
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("implemented-requirement"),

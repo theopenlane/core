@@ -131,10 +131,7 @@ func (CheckResult) Indexes() []ent.Index {
 func (CheckResult) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-		entx.NewExportable(
-			entx.WithOrgOwned(),
-			entx.WithSystemOwned(),
-		),
+		entx.NewExportable(),
 		entx.IntegrationMappingSchema().StockPersist(),
 	}
 }

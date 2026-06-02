@@ -286,10 +286,7 @@ func (Review) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaReview),
 		entfga.SelfAccessChecks(),
-		entx.NewExportable(
-			entx.WithOrgOwned(),
-			entx.WithSystemOwned(),
-		),
+		entx.NewExportable(),
 	}
 }
 

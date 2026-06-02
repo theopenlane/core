@@ -782,7 +782,9 @@ func TestMutationCreateTask(t *testing.T) {
 		{
 			name: "happy path, using api token",
 			request: testclient.CreateTaskInput{
-				Title: "test-task",
+				Title:      "test-task",
+				AssigneeID: &localTestOrg.member.ID, // assign the task to another user
+
 			},
 			client: localTestOrg.apiClient,
 			ctx:    context.Background(),
@@ -804,16 +806,26 @@ func TestMutationCreateTask(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
-			name: "not allowed to associated system owned subcontrol",
+			name: "not allowed to associate system owned subcontrol",
 			request: testclient.CreateTaskInput{
 				Title:      "test-task",
 				ControlIDs: []string{systemOwnedSubcontrol.ID},
 			},
 			client:      suite.client.api,
 			ctx:         testUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "not allowed to associate system owned subcontrol with api token either",
+			request: testclient.CreateTaskInput{
+				Title:      "test-task",
+				ControlIDs: []string{systemOwnedSubcontrol.ID},
+			},
+			client:      localTestOrg.apiClient,
+			ctx:         context.Background(),
 			expectedErr: notAuthorizedErrorMsg,
 		},
 	}

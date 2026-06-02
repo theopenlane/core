@@ -318,9 +318,7 @@ func (IdentityHolder) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaIdentityHolder),
 		entfga.SelfAccessChecks(),
-		entx.NewExportable(
-			entx.WithOrgOwned(),
-		),
+		entx.NewExportable(),
 	}
 }
 

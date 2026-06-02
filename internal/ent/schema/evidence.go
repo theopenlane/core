@@ -247,9 +247,7 @@ func (e Evidence) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaEvidence),
 		entfga.SelfAccessChecks(),
-		entx.NewExportable(
-			entx.WithOrgOwned(),
-		),
+		entx.NewExportable(),
 		oscalgen.NewOSCALModel(
 			oscalgen.WithOSCALModels(
 				oscalgen.OSCALModelComponentDefinition,

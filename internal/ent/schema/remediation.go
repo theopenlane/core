@@ -286,10 +286,7 @@ func (Remediation) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaRemediation),
 		entfga.SelfAccessChecks(),
-		entx.NewExportable(
-			entx.WithOrgOwned(),
-			entx.WithSystemOwned(),
-		),
+		entx.NewExportable(),
 	}
 }
 

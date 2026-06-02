@@ -363,10 +363,7 @@ func (Finding) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaFinding),
 		entfga.SelfAccessChecks(),
-		entx.NewExportable(
-			entx.WithOrgOwned(),
-			entx.WithSystemOwned(),
-		),
+		entx.NewExportable(),
 		entx.IntegrationMappingSchema().StockPersist(),
 	}
 }
