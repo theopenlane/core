@@ -145,7 +145,11 @@ func handleTrustCenterDocMutationGala(ctx gala.HandlerContext, payload eventqueu
 		return nil
 	}
 
-	return enqueueCacheRefresh(ctx.Context, client, trustCenterID)
+	if err := enqueueCacheRefresh(ctx.Context, client, trustCenterID); err != nil {
+		logx.FromContext(ctx.Context).Warn().Err(err).Str("trust_center_id", trustCenterID).Msg("failed to refresh trust center cache after doc mutation")
+	}
+
+	return nil
 }
 
 // handleNoteMutationGala processes Note mutations and invalidates cache when trust center linkage changes.
