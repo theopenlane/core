@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	notegen "github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
@@ -145,9 +146,7 @@ func handleTrustCenterDocMutationGala(ctx gala.HandlerContext, payload eventqueu
 		return nil
 	}
 
-	if err := enqueueCacheRefresh(ctx.Context, client, trustCenterID); err != nil {
-		logx.FromContext(ctx.Context).Warn().Err(err).Str("trust_center_id", trustCenterID).Msg("failed to refresh trust center cache after doc mutation")
-	}
+	refreshTrustCenterCache(ctx.Context, client, trustCenterID, "doc mutation")
 
 	return nil
 }
@@ -183,9 +182,7 @@ func handleNoteMutationGala(ctx gala.HandlerContext, payload eventqueue.Mutation
 	}
 
 	for _, tcID := range tcIDs {
-		if err := enqueueCacheRefresh(ctx.Context, client, tcID); err != nil {
-			logx.FromContext(ctx.Context).Warn().Err(err).Str("trust_center_id", tcID).Msg("failed to trigger cache invalidation for note")
-		}
+		refreshTrustCenterCache(ctx.Context, client, tcID, "note mutation")
 	}
 
 	return nil
@@ -213,7 +210,9 @@ func handleTrustCenterEntityMutationGala(ctx gala.HandlerContext, payload eventq
 		return nil
 	}
 
-	return enqueueCacheRefresh(ctx.Context, client, trustCenterID)
+	refreshTrustCenterCache(ctx.Context, client, trustCenterID, "entity mutation")
+
+	return nil
 }
 
 // handleTrustCenterFAQMutationGala processes TrustCenterFAQ mutations and invalidates cache.
@@ -241,7 +240,9 @@ func handleTrustCenterFAQMutationGala(ctx gala.HandlerContext, payload eventqueu
 		return nil
 	}
 
-	return enqueueCacheRefresh(ctx.Context, client, id)
+	refreshTrustCenterCache(ctx.Context, client, id, "faq mutation")
+
+	return nil
 }
 
 // handleTrustCenterSubprocessorMutationGala processes TrustCenterSubprocessor mutations and invalidates cache.
@@ -269,7 +270,9 @@ func handleTrustCenterSubprocessorMutationGala(ctx gala.HandlerContext, payload 
 		return nil
 	}
 
-	return enqueueCacheRefresh(ctx.Context, client, trustCenterID)
+	refreshTrustCenterCache(ctx.Context, client, trustCenterID, "trust center subprocessor mutation")
+
+	return nil
 }
 
 // handleTrustCenterComplianceMutationGala processes TrustCenterCompliance mutations and invalidates cache.
@@ -298,7 +301,9 @@ func handleTrustCenterComplianceMutationGala(ctx gala.HandlerContext, payload ev
 		return nil
 	}
 
-	return enqueueCacheRefresh(ctx.Context, client, trustCenterID)
+	refreshTrustCenterCache(ctx.Context, client, trustCenterID, "compliance mutation")
+
+	return nil
 }
 
 // handleSubprocessorMutationGala processes Subprocessor mutations and invalidates related trust center cache.
@@ -336,9 +341,7 @@ func handleSubprocessorMutationGala(ctx gala.HandlerContext, payload eventqueue.
 	}))
 
 	for _, tcID := range trustCenterIDs {
-		if err := enqueueCacheRefresh(ctx.Context, client, tcID); err != nil {
-			logx.FromContext(ctx.Context).Warn().Err(err).Str("trust_center_id", tcID).Msg("failed to trigger cache invalidation for subprocessor")
-		}
+		refreshTrustCenterCache(ctx.Context, client, tcID, "subprocessor mutation")
 	}
 
 	return nil
@@ -379,9 +382,7 @@ func handleStandardMutationGala(ctx gala.HandlerContext, payload eventqueue.Muta
 	}))
 
 	for _, tcID := range trustCenterIDs {
-		if err := enqueueCacheRefresh(ctx.Context, client, tcID); err != nil {
-			logx.FromContext(ctx.Context).Warn().Err(err).Str("trust_center_id", tcID).Msg("failed to trigger cache invalidation for standard")
-		}
+		refreshTrustCenterCache(ctx.Context, client, tcID, "standard mutation")
 	}
 
 	return nil
@@ -412,7 +413,9 @@ func handleTrustCenterSettingMutationGala(ctx gala.HandlerContext, payload event
 		return nil
 	}
 
-	return enqueueCacheRefresh(ctx.Context, client, trustCenterID)
+	refreshTrustCenterCache(ctx.Context, client, trustCenterID, "setting mutation")
+
+	return nil
 }
 
 // handleTrustCenterMutationGala processes TrustCenter mutations and refreshes cache.
@@ -427,7 +430,9 @@ func handleTrustCenterMutationGala(ctx gala.HandlerContext, payload eventqueue.M
 		return nil
 	}
 
-	return enqueueCacheRefresh(ctx.Context, client, trustCenterID)
+	refreshTrustCenterCache(ctx.Context, client, trustCenterID, "trust center mutation")
+
+	return nil
 }
 
 // shouldInvalidateCacheForSubprocessor determines if subprocessor changes require cache invalidation.
@@ -467,6 +472,13 @@ const (
 	cacheRefreshMaxBackoff     = 30 * time.Second
 )
 
+func refreshTrustCenterCache(ctx context.Context, client *entgen.Client, trustCenterID, source string) {
+	if err := enqueueCacheRefresh(ctx, client, trustCenterID); err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Str("trust_center_id", trustCenterID).
+			Str("caller", source).Msg("failed to refresh trust center cache")
+	}
+}
+
 // enqueueCacheRefresh triggers a cache refresh by hitting the trust center URL with ?fresh=1
 func enqueueCacheRefresh(ctx context.Context, client *entgen.Client, trustCenterID string) error {
 	// In durable dispatch the context is reconstructed from a snapshot that does not include the
@@ -487,17 +499,10 @@ func enqueueCacheRefresh(ctx context.Context, client *entgen.Client, trustCenter
 
 	var customDomain string
 	if tc.CustomDomainID != nil {
-		cd, err := client.CustomDomain.Query().
-			Where(customdomain.ID(*tc.CustomDomainID)).
-			Select(customdomain.FieldCnameRecord).
-			Only(ctx)
+		customDomain, err = getVerifiedDomain(ctx, client, *tc.CustomDomainID, false)
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", trustCenterID).Str("custom_domain_id", *tc.CustomDomainID).Msg("failed to query custom domain for cache invalidation")
-
 			return err
 		}
-
-		customDomain = cd.CnameRecord
 	}
 
 	targetURL := buildTrustCenterURL(customDomain, tc.Slug)
@@ -511,22 +516,58 @@ func enqueueCacheRefresh(ctx context.Context, client *entgen.Client, trustCenter
 		return nil
 	}
 
-	cd, err := client.CustomDomain.Query().
-		Where(customdomain.ID(tc.PreviewDomainID)).
-		Select(customdomain.FieldCnameRecord).
-		Only(ctx)
+	previewDomain, err := getVerifiedDomain(ctx, client, tc.PreviewDomainID, true)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", trustCenterID).Str("preview_domain_id", tc.PreviewDomainID).Msg("failed to query preview domain for cache invalidation")
-
 		return err
 	}
+	if previewDomain == "" {
+		return nil
+	}
 
-	previewURL := buildTrustCenterURL(cd.CnameRecord, "")
+	previewURL := buildTrustCenterURL(previewDomain, "")
 	if previewURL == "" {
 		return nil
 	}
 
 	return triggerCacheRefresh(ctx, previewURL)
+}
+
+func getVerifiedDomain(ctx context.Context, client *entgen.Client, domainID string, isPreviewDomain bool) (string, error) {
+	logField := trustcenter.FieldCustomDomainID
+	if isPreviewDomain {
+		logField = trustcenter.FieldPreviewDomainID
+	}
+
+	cd, err := client.CustomDomain.Query().
+		Where(customdomain.ID(domainID)).
+		Select(customdomain.FieldCnameRecord, customdomain.FieldDNSVerificationID).
+		WithDNSVerification(func(q *entgen.DNSVerificationQuery) {
+			q.Select(dnsverification.FieldDNSVerificationStatus)
+		}).
+		Only(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str(logField, domainID).Msg("failed to query custom domain for cache invalidation")
+
+		return "", err
+	}
+
+	dnsVerification, err := cd.Edges.DNSVerificationOrErr()
+	if err != nil || dnsVerification == nil {
+		logx.FromContext(ctx).Warn().Err(err).Str(logField, domainID).
+			Msg("dns verification not found for custom domain, skipping custom domain cache refresh url")
+
+		return "", nil
+	}
+
+	if dnsVerification.DNSVerificationStatus != enums.DNSVerificationStatusActive {
+		logx.FromContext(ctx).Info().Str(logField, domainID).
+			Str("dns_verification_status", dnsVerification.DNSVerificationStatus.String()).
+			Msg("custom domain dns verification is not active, skipping custom domain cache refresh url")
+
+		return "", nil
+	}
+
+	return cd.CnameRecord, nil
 }
 
 // buildTrustCenterURL constructs the trust center URL from custom domain or slug
