@@ -106,9 +106,7 @@ func (VendorScoringConfig) Policy() ent.Policy {
 // Annotations of the VendorScoringConfig
 func (VendorScoringConfig) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.NewExportable(
-			entx.WithOrgOwned(),
-		),
+		entx.NewExportable(),
 	}
 }
 

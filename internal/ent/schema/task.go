@@ -353,9 +353,7 @@ func (t Task) Edges() []ent.Edge {
 func (Task) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-		entx.NewExportable(
-			entx.WithOrgOwned(),
-		),
+		entx.NewExportable(),
 		oscalgen.NewOSCALModel(
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelSSP, oscalgen.OSCALModelPOAM),
 			oscalgen.WithOSCALAssembly("poam-item"),

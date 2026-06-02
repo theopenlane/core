@@ -168,9 +168,6 @@ func (Subprocessor) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaSubprocessor),
 		entfga.SelfAccessChecks(),
-		entx.NewExportable(
-			entx.WithOrgOwned(),
-			entx.WithSystemOwned(),
-		),
+		entx.NewExportable(),
 	}
 }

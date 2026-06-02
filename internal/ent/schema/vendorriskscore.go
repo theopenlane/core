@@ -165,9 +165,7 @@ func (VendorRiskScore) Hooks() []ent.Hook {
 func (VendorRiskScore) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-		entx.NewExportable(
-			entx.WithOrgOwned(),
-		),
+		entx.NewExportable(),
 	}
 }
 

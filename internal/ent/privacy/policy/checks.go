@@ -267,21 +267,26 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 				idStr = orgID
 			}
 
-			allowScopeCheck := true
+			confirmedInOrganization := true
 			if err := rule.EnsureObjectInOrganization(ctx, m, edgeMap.ObjectType, idStr, orgID); err != nil {
 				if access.Deny(err) {
-					logx.FromContext(ctx).Error().Err(err).Msg("object is not part of the organization")
+					// do not allow scope check if the object is not part of the organization, force
+					// fga checks
+					confirmedInOrganization = false
+					// if its not system owned, return error - not access will be allowed
+					if !edgeMap.HasSystemOwnedField || !rule.CheckIsSystemOwned(ctx, m, edgeMap.ObjectType, idStr) {
+						logx.FromContext(ctx).Error().Err(err).Msg("object is not part of the organization")
 
-					return fmt.Errorf("%s (id: %s) was not found: %w", edgeMap.ObjectType, idStr, generated.ErrPermissionDenied)
+						return fmt.Errorf("%s (id: %s) was not found: %w", edgeMap.ObjectType, idStr, generated.ErrPermissionDenied)
+					}
 				}
-
-				allowScopeCheck = false
 			}
 
 			// check api token scope first, as api tokens will have full access to object types they have scope for
-			if allowScopeCheck {
+			if confirmedInOrganization {
 				if err := rule.CheckSubjectScope(ctx, edgeMap.ObjectType, relationCheck, nil); access.Allow(err) {
-					return nil
+					// make sure continue so all edges are checked, but no need to check fga as access is already allowed
+					continue
 				}
 			}
 
@@ -297,7 +302,13 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 			if allow, err := utils.AuthzClient(ctx, m).CheckAccess(ctx, ac); err != nil || !allow {
 				logx.FromContext(ctx).Error().Err(err).Str("edge", edge).Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Str("object_type", edgeMap.ObjectType).Msg("user does not have access to the object for edge permissions")
 
-				return generated.ErrPermissionDenied
+				if confirmedInOrganization {
+					return generated.ErrPermissionDenied
+				}
+
+				// return privacy deny -> not found return if we did not confirm the object
+				// was in the organization
+				return privacy.Deny
 			}
 		}
 	}

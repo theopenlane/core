@@ -308,8 +308,8 @@ func getOSCALExtension() *oscalgen.Extension {
 
 func exportableSchema() {
 	// generate exportable schemas validation using existing entx method
-	exportableGen := entx.NewExportableGenerator(schemaPath, "internal/ent/hooks").
-		WithPackage("hooks")
+	exportableGen := entx.NewExportableGenerator(schemaPath, "internal/ent/exportablegenerated").
+		WithPackage("exportablegenerated")
 
 	if err := exportableGen.Generate(buildFlags); err != nil {
 		log.Fatal().Err(err).Msg("generating exportable validation")

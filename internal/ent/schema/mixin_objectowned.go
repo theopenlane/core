@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -352,6 +353,16 @@ func (o ObjectOwnedMixin) Interceptors() []ent.Interceptor {
 	}
 
 	return res
+}
+
+func (o ObjectOwnedMixin) Annotations() []schema.Annotation {
+	if o.IncludeOrganizationOwner || slices.Contains(o.FieldNames, o.OwnerFieldName) {
+		return []schema.Annotation{
+			entx.OrgOwnedSchema{},
+		}
+	}
+
+	return []schema.Annotation{}
 }
 
 // P adds a storage-level predicate to the queries and mutations for the provided field name

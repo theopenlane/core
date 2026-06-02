@@ -434,9 +434,7 @@ func (e Entity) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaEntity),
 		entfga.SelfAccessChecks(),
-		entx.NewExportable(
-			entx.WithOrgOwned(),
-		),
+		entx.NewExportable(),
 		entx.IntegrationMappingSchema().
 			StockPersist().
 			Exclude("entity_type_id", "linked_asset_ids"),
