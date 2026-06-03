@@ -102,12 +102,23 @@ func HookInvite() ent.Hook {
 				return retValue, ErrInternalServerError
 			}
 
+			// check if the recipient already has an account so the invite link can route accordingly
+			recipientExists, err := m.Client().User.Query().
+				Where(user.EmailEqualFold(emailAddress)).
+				Exist(privacy.DecisionContext(ctx, privacy.Allow))
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("error checking recipient account existence")
+
+				recipientExists = true
+			}
+
 			if err := sendSystemEmail(ctx, m.Client(), emaildef.InviteOp.Name(), emaildef.InviteRequest{
 				RecipientInfo: emaildef.RecipientInfo{Email: emailAddress},
 				InviterName:   inviterName,
 				OrgName:       orgName,
 				Role:          string(role),
 				Token:         tokenValue,
+				NewUser:       !recipientExists,
 			}); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("error sending email to user")
 
