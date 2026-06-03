@@ -4600,7 +4600,7 @@ var (
 		{Name: "expires", Type: field.TypeTime, Nullable: true},
 		{Name: "recipient", Type: field.TypeString},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"INVITATION_SENT", "APPROVAL_REQUIRED", "INVITATION_ACCEPTED", "INVITATION_EXPIRED"}, Default: "INVITATION_SENT"},
-		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER", "OWNER"}, Default: "MEMBER"},
+		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER", "OWNER", "SUPER_ADMIN", "AUDITOR"}, Default: "MEMBER"},
 		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
 		{Name: "secret", Type: field.TypeBytes},
 		{Name: "ownership_transfer", Type: field.TypeBool, Nullable: true, Default: false},
