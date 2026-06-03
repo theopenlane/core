@@ -642,7 +642,7 @@ var _ = RegisterEmailOperation(Operation[TrustCenterAuthEmail]{
 var _ = RegisterEmailOperation(Operation[TrustCenterNDAApprovalRequestEmail]{
 	Op: TCNDAApprovalRequestOp, Schema: tcNDAApprovalRequestSchema, Theme: baseTheme,
 	Description: "System email notifying a designated approver that a trust center NDA request is pending approval",
-	Subject: func(cfg RuntimeEmailConfig, req TrustCenterNDAApprovalRequestEmail) string {
+	Subject: func(cfg RuntimeEmailConfig, _ TrustCenterNDAApprovalRequestEmail) string {
 		return "Trust Center NDA Request Pending Approval in " + cfg.CompanyName
 	},
 	Build: func(cfg RuntimeEmailConfig, req TrustCenterNDAApprovalRequestEmail) render.ContentBody {
