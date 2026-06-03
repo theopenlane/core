@@ -38,8 +38,10 @@ type Dispatcher interface {
 
 // RecipientInfo holds recipient addressing fields embedded in every email operation input
 type RecipientInfo struct {
-	// Email is the recipient email address
+	// Email is the recipient email address; it is the primary recipient used for personalization and footer links
 	Email string `json:"email" jsonschema:"required,description=Recipient email address"`
+	// Recipients optionally addresses the message to multiple recipients in a single send; when set it replaces Email as the To list
+	Recipients []string `json:"recipients,omitempty" jsonschema:"description=Recipient email addresses for a single multi-recipient message; replaces the single recipient when set"`
 	// FirstName is the recipient first name
 	FirstName string `json:"firstName,omitempty" jsonschema:"description=Recipient first name"`
 	// LastName is the recipient last name
@@ -238,9 +240,14 @@ func renderMessage(client *Client, theme *render.Theme, recipient RecipientInfo,
 		return nil, fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
 	}
 
+	to := recipient.Recipients
+	if len(to) == 0 {
+		to = []string{recipient.Email}
+	}
+
 	opts := []newman.MessageOption{
 		newman.WithFrom(client.Config.FromEmail),
-		newman.WithTo([]string{recipient.Email}),
+		newman.WithTo(to),
 		newman.WithSubject(subject),
 		newman.WithHTML(htmlBody),
 		newman.WithText(textBody),
