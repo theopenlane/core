@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -13,6 +14,8 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
@@ -93,6 +96,11 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 				if err := createNDARequestNotification(ctx, request, tc.OwnerID); err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to create NDA request notification")
 				}
+
+				if err := sendNDAApprovalRequestEmails(ctx, m.Client(), request, tc.OwnerID); err != nil {
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to send NDA approval request emails")
+				}
+
 				return v, nil
 			}
 
@@ -142,6 +150,10 @@ func handleExistingNDARequest(ctx, queryCtx context.Context, client *generated.C
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to create NDA request notification")
 		}
 
+		if err := sendNDAApprovalRequestEmails(ctx, client, existing, tc.OwnerID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to send NDA approval request emails")
+		}
+
 		return existing, nil
 	case enums.TrustCenterNDARequestStatusDeclined:
 		// if previously declined, set to needs approval again to restart the process
@@ -159,6 +171,10 @@ func handleExistingNDARequest(ctx, queryCtx context.Context, client *generated.C
 
 		if err := createNDARequestNotification(ctx, existing, tc.OwnerID); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to create NDA request notification")
+		}
+
+		if err := sendNDAApprovalRequestEmails(ctx, client, existing, tc.OwnerID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to send NDA approval request emails")
 		}
 	}
 
@@ -316,4 +332,51 @@ func createNDARequestNotification(ctx context.Context, ndaRequest *generated.Tru
 	_, err := transactionFromContext(ctx).Notification.Create().SetInput(input).Save(allowCtx)
 
 	return err
+}
+
+// ndaApproverRoles are the organization roles permitted to review and approve trust center NDA requests
+var ndaApproverRoles = []enums.Role{enums.RoleOwner, enums.RoleSuperAdmin, enums.RoleAdmin}
+
+// sendNDAApprovalRequestEmails notifies the organization's owners and admins, in a single message,
+// that a trust center NDA request is pending their approval
+func sendNDAApprovalRequestEmails(ctx context.Context, client *generated.Client, ndaRequest *generated.TrustCenterNDARequest, ownerID string) error {
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	org, err := client.Organization.Query().
+		Where(organization.IDEQ(ownerID)).
+		Select(organization.FieldDisplayName).
+		Only(allowCtx)
+	if err != nil {
+		return err
+	}
+
+	approvers, err := client.OrgMembership.Query().
+		Where(
+			orgmembership.OrganizationID(ownerID),
+			orgmembership.RoleIn(ndaApproverRoles...),
+		).
+		WithUser().
+		All(allowCtx)
+	if err != nil {
+		return err
+	}
+
+	emails := lo.Map(approvers, func(approver *generated.OrgMembership, _ int) string {
+		return approver.Edges.User.Email
+	})
+	if len(emails) == 0 {
+		return nil
+	}
+
+	requesterName := fmt.Sprintf("%s %s", ndaRequest.FirstName, ndaRequest.LastName)
+	if requesterName == " " {
+		requesterName = ""
+	}
+
+	return sendSystemEmail(ctx, client, emaildef.TCNDAApprovalRequestOp.Name(), emaildef.TrustCenterNDAApprovalRequestEmail{
+		RecipientInfo:  emaildef.RecipientInfo{Email: emails[0], Recipients: emails},
+		OrgName:        org.DisplayName,
+		RequesterName:  requesterName,
+		RequesterEmail: ndaRequest.Email,
+	})
 }

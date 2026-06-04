@@ -57,6 +57,7 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 	reqCleanupOrg2 := []string{}
 	ndaEmail := "Trust Center NDA Request"
 	authEmail := "Access"
+	approvalEmail := "Pending Approval"
 	testCases := []struct {
 		name                   string
 		input                  testclient.CreateTrustCenterNDARequestInput
@@ -92,7 +93,7 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			client:                 suite.client.api,
 			ctx:                    tcOrg2.owner.UserCtx,
 			expectedStatus:         enums.TrustCenterNDARequestStatusNeedsApproval,
-			expectEmailSent:        "", // no email because not approved yet
+			expectEmailSent:        approvalEmail, // approvers notified the request is pending approval
 			setStatus:              &enums.TrustCenterNDARequestStatusApproved,
 			expectedSecondaryEmail: ndaEmail, // should get nda email
 		},
@@ -120,7 +121,7 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			client:                 suite.client.api,
 			ctx:                    tcOrg2.owner.UserCtx,
 			expectedStatus:         enums.TrustCenterNDARequestStatusNeedsApproval,
-			expectEmailSent:        "", // no email because not approved yet
+			expectEmailSent:        approvalEmail, // approvers notified the request is pending approval
 			setStatus:              &enums.TrustCenterNDARequestStatusDeclined,
 			expectedSecondaryEmail: "",
 		},
@@ -877,6 +878,7 @@ func TestMutationRequestNewTrustCenterToken(t *testing.T) {
 
 	ndaEmail := "Trust Center NDA Request"
 	authEmail := "Access"
+	approvalEmail := "Pending Approval"
 	testCases := []struct {
 		name            string
 		email           string
@@ -900,10 +902,11 @@ func TestMutationRequestNewTrustCenterToken(t *testing.T) {
 			expectEmailSent: ndaEmail,
 		},
 		{
-			name:   "needs approval, but no email sent still because not approved yet",
-			email:  ndaNeedsApproval.Email,
-			client: suite.client.api,
-			ctx:    anonCtxNeedsApproval,
+			name:            "needs approval, approver notification email sent, requester not emailed because not approved yet",
+			email:           ndaNeedsApproval.Email,
+			client:          suite.client.api,
+			ctx:             anonCtxNeedsApproval,
+			expectEmailSent: approvalEmail,
 		},
 		{
 			name:   "no nda request, no-op",

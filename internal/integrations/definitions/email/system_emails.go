@@ -35,6 +35,9 @@ const (
 	tcButtonTextColor = "#ffffff"
 )
 
+// ndaApprovalRequestPath is the console path where an approver reviews pending NDA requests
+const ndaApprovalRequestPath = "/trust-center/NDAs"
+
 // Brand palette colors sourced from the Openlane web design system (global.css)
 const (
 	brandDarkGreen = "#0f3d3a" // lightened from --color-brand-950 (#092a2a)
@@ -221,23 +224,36 @@ type OrgDeletionNoticeEmail struct {
 	DeletionDate time.Time `json:"deletion_date" jsonschema:"required,description=Scheduled deletion date"`
 }
 
+// TrustCenterNDAApprovalRequestEmail is the input for notifying the organization's
+// designated approver that an NDA request is pending approval.
+type TrustCenterNDAApprovalRequestEmail struct {
+	RecipientInfo
+	// OrgName is the organization whose trust center received the NDA request
+	OrgName string `json:"org_name" jsonschema:"required,description=Organization name"`
+	// RequesterName is the name of the person requesting access
+	RequesterName string `json:"requester_name,omitempty" jsonschema:"description=Name of the requester"`
+	// RequesterEmail is the email address of the person requesting access
+	RequesterEmail string `json:"requester_email" jsonschema:"required,description=Email address of the requester"`
+}
+
 // --- Schema + operation ref vars ---
 
 var (
-	verifyEmailSchema, VerifyEmailOp                 = providerkit.OperationSchema[VerifyEmailRequest]()          //nolint:revive
-	welcomeSchema, WelcomeOp                         = providerkit.OperationSchema[WelcomeRequest]()              //nolint:revive
-	inviteSchema, InviteOp                           = providerkit.OperationSchema[InviteRequest]()               //nolint:revive
-	inviteJoinedSchema, InviteJoinedOp               = providerkit.OperationSchema[InviteJoinedRequest]()         //nolint:revive
-	resetRequestSchema, ResetRequestOp               = providerkit.OperationSchema[PasswordResetEmailRequest]()   //nolint:revive
-	resetSuccessSchema, ResetSuccessOp               = providerkit.OperationSchema[PasswordResetSuccessRequest]() //nolint:revive
-	subscribeSchema, SubscribeOp                     = providerkit.OperationSchema[SubscribeRequest]()            //nolint:revive
-	verifyBillingSchema, VerifyBillingOp             = providerkit.OperationSchema[VerifyBillingRequest]()        //nolint:revive
-	tcNDARequestSchema, TCNDARequestOp               = providerkit.OperationSchema[TrustCenterNDARequestEmail]()  //nolint:revive
-	tcNDASignedSchema, TCNDASignedOp                 = providerkit.OperationSchema[TrustCenterNDASignedEmail]()   //nolint:revive
-	tcAuthSchema, TCAuthOp                           = providerkit.OperationSchema[TrustCenterAuthEmail]()        //nolint:revive
-	questionnaireAuthSchema, QuestionnaireAuthOp     = providerkit.OperationSchema[QuestionnaireAuthEmail]()      //nolint:revive
-	billingEmailChangedSchema, BillingEmailChangedOp = providerkit.OperationSchema[BillingEmailChangedEmail]()    //nolint:revive
-	orgDeletionNoticeSchema, OrgDeletionNoticeOp     = providerkit.OperationSchema[OrgDeletionNoticeEmail]()      //nolint:revive
+	verifyEmailSchema, VerifyEmailOp                   = providerkit.OperationSchema[VerifyEmailRequest]()                 //nolint:revive
+	welcomeSchema, WelcomeOp                           = providerkit.OperationSchema[WelcomeRequest]()                     //nolint:revive
+	inviteSchema, InviteOp                             = providerkit.OperationSchema[InviteRequest]()                      //nolint:revive
+	inviteJoinedSchema, InviteJoinedOp                 = providerkit.OperationSchema[InviteJoinedRequest]()                //nolint:revive
+	resetRequestSchema, ResetRequestOp                 = providerkit.OperationSchema[PasswordResetEmailRequest]()          //nolint:revive
+	resetSuccessSchema, ResetSuccessOp                 = providerkit.OperationSchema[PasswordResetSuccessRequest]()        //nolint:revive
+	subscribeSchema, SubscribeOp                       = providerkit.OperationSchema[SubscribeRequest]()                   //nolint:revive
+	verifyBillingSchema, VerifyBillingOp               = providerkit.OperationSchema[VerifyBillingRequest]()               //nolint:revive
+	tcNDARequestSchema, TCNDARequestOp                 = providerkit.OperationSchema[TrustCenterNDARequestEmail]()         //nolint:revive
+	tcNDASignedSchema, TCNDASignedOp                   = providerkit.OperationSchema[TrustCenterNDASignedEmail]()          //nolint:revive
+	tcAuthSchema, TCAuthOp                             = providerkit.OperationSchema[TrustCenterAuthEmail]()               //nolint:revive
+	questionnaireAuthSchema, QuestionnaireAuthOp       = providerkit.OperationSchema[QuestionnaireAuthEmail]()             //nolint:revive
+	billingEmailChangedSchema, BillingEmailChangedOp   = providerkit.OperationSchema[BillingEmailChangedEmail]()           //nolint:revive
+	orgDeletionNoticeSchema, OrgDeletionNoticeOp       = providerkit.OperationSchema[OrgDeletionNoticeEmail]()             //nolint:revive
+	tcNDAApprovalRequestSchema, TCNDAApprovalRequestOp = providerkit.OperationSchema[TrustCenterNDAApprovalRequestEmail]() //nolint:revive
 )
 
 // --- Email operation definitions ---
@@ -619,6 +635,46 @@ var _ = RegisterEmailOperation(Operation[TrustCenterAuthEmail]{
 					"This authentication link provides secure, time-limited access and will expire after a short period for your security.",
 				},
 			},
+		}
+	},
+})
+
+var _ = RegisterEmailOperation(Operation[TrustCenterNDAApprovalRequestEmail]{
+	Op: TCNDAApprovalRequestOp, Schema: tcNDAApprovalRequestSchema, Theme: baseTheme,
+	Description: "System email notifying a designated approver that a trust center NDA request is pending approval",
+	Subject: func(cfg RuntimeEmailConfig, _ TrustCenterNDAApprovalRequestEmail) string {
+		return "Trust Center NDA Request Pending Approval in " + cfg.CompanyName
+	},
+	Build: func(cfg RuntimeEmailConfig, req TrustCenterNDAApprovalRequestEmail) render.ContentBody {
+		requester := req.RequesterEmail
+		if req.RequesterName != "" {
+			requester = req.RequesterName + " (" + req.RequesterEmail + ")"
+		}
+
+		return render.ContentBody{
+			Preheader: "An NDA request is pending approval for " + req.OrgName + "'s Trust Center",
+			Header:    defaultHeader(cfg),
+			Title:     "NDA request pending approval",
+			Intros: render.IntrosBlock{
+				Paragraphs: []string{
+					"A new request to access protected Trust Center materials is pending your approval.",
+					"Please review the NDA request and approve or deny access as appropriate.",
+				},
+			},
+			Dictionary: render.Dictionary{
+				Cells: []render.Cell{
+					{Key: "Organization", Value: req.OrgName},
+					{Key: "Requester", Value: requester},
+				},
+			},
+			Actions: []render.Action{{
+				Button: render.Button{
+					Text:      "Review NDA Request",
+					Link:      cfg.ProductURL + ndaApprovalRequestPath,
+					Color:     tcButtonColor,
+					TextColor: tcButtonTextColor,
+				},
+			}},
 		}
 	},
 })
