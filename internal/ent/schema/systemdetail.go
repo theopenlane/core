@@ -162,9 +162,7 @@ func (SystemDetail) Modules() []models.OrgModule {
 func (SystemDetail) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-		entx.NewExportable(
-			entx.WithOrgOwned(),
-		),
+		entx.NewExportable(),
 		oscalgen.NewOSCALModel(
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("system-characteristics"),

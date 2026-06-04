@@ -50,7 +50,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 				Tags:          []string{"compliance", "test"},
 			},
 			client: suite.client.api,
-			ctx:    tcOrg.admin.UserCtx,
+			ctx:    tcOrg.superAdmin.UserCtx,
 		},
 		{
 			name: "happy path, using public standard",
@@ -60,7 +60,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 				Tags:          []string{"public", "compliance"},
 			},
 			client: suite.client.api,
-			ctx:    tcOrg.superAdmin.UserCtx,
+			ctx:    tcOrg.admin.UserCtx,
 		},
 		{
 			name: "happy path, using personal access token",
@@ -130,7 +130,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         tcOrg.owner.UserCtx,
-			expectedErr: "invalid input",
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "invalid trust center id",

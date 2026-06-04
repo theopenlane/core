@@ -290,7 +290,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 			},
 			client:                     suite.client.api,
 			ctx:                        sharedTestUser1.UserCtx,
-			expectedErr:                notAuthorizedErrorMsg,
+			expectedErr:                notFoundErrorMsg,
 			controlEdgeShouldBeCreated: false, // user does not have edit access to the control, it is owned by the system
 		},
 		{

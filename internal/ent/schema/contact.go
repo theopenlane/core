@@ -172,9 +172,7 @@ func (Contact) Modules() []models.OrgModule {
 func (c Contact) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaContact),
-		entx.NewExportable(
-			entx.WithOrgOwned(),
-		),
+		entx.NewExportable(),
 		entx.IntegrationMappingSchema().StockPersist(),
 	}
 }

@@ -102,24 +102,23 @@ func (si *SchemaInfo) checkEntGQLAnnotation(schema *load.Schema) {
 		return
 	}
 
-	entgqlAnt := entgql.Annotation{}
+	entgqlAnt, ok := entx.GetAnnotation[*entgql.Annotation](schema)
+	if !ok {
+		return
+	}
 
-	if raw, ok := schema.Annotations[entgqlAnt.Name()]; ok {
-		if err := entgqlAnt.Decode(raw); err == nil {
-			// skip means there is no external crud operations
-			// so this does't need to be included in crud scopes
-			if entgqlAnt.Skip.Is(entgql.SkipAll) {
-				si.ExcludeFromGeneration = true
-				return
-			}
+	// skip means there is no external crud operations
+	// so this does't need to be included in crud scopes
+	if entgqlAnt.Skip.Is(entgql.SkipAll) {
+		si.ExcludeFromGeneration = true
+		return
+	}
 
-			for _, mu := range entgqlAnt.MutationInputs {
-				if mu.IsCreate {
-					si.HasCreate = true
-				} else {
-					si.HasUpdate = true
-				}
-			}
+	for _, mu := range entgqlAnt.MutationInputs {
+		if mu.IsCreate {
+			si.HasCreate = true
+		} else {
+			si.HasUpdate = true
 		}
 	}
 }
@@ -131,23 +130,22 @@ func (si *SchemaInfo) checkSkipAnnotation(schema *load.Schema) {
 		return
 	}
 
-	entFGACrudAnt := entx.FGACrudAnnotation{}
+	entFGACrudAnt, ok := entx.GetAnnotation[*entx.FGACrudAnnotation](schema)
+	if !ok {
+		return
+	}
 
-	if raw, ok := schema.Annotations[entFGACrudAnt.Name()]; ok {
-		if err := entFGACrudAnt.Decode(raw); err == nil {
-			if entFGACrudAnt.Skip.Has(entx.SkipAll) {
-				si.ExcludeFromGeneration = true
-			} else {
-				if entFGACrudAnt.Skip.Has(entx.SkipCreate) {
-					si.HasCreate = false
-				}
-				if entFGACrudAnt.Skip.Has(entx.SkipUpdate) {
-					si.HasUpdate = false
-				}
-				if entFGACrudAnt.Skip.Has(entx.SkipDelete) {
-					si.HasDelete = false
-				}
-			}
+	if entFGACrudAnt.Skip.Has(entx.SkipAll) {
+		si.ExcludeFromGeneration = true
+	} else {
+		if entFGACrudAnt.Skip.Has(entx.SkipCreate) {
+			si.HasCreate = false
+		}
+		if entFGACrudAnt.Skip.Has(entx.SkipUpdate) {
+			si.HasUpdate = false
+		}
+		if entFGACrudAnt.Skip.Has(entx.SkipDelete) {
+			si.HasDelete = false
 		}
 	}
 }
@@ -159,9 +157,7 @@ func (si *SchemaInfo) checkGroupPermissions(schema *load.Schema) {
 		return
 	}
 
-	entFGACrudAnt := entx.GroupPermissionsEnabled{}
-
-	if _, ok := schema.Annotations[entFGACrudAnt.Name()]; ok {
+	if ok := entx.HasAnnotation[entx.GroupPermissionsEnabled](schema); ok {
 		si.HasGroupCreator = true
 	}
 }
@@ -173,11 +169,10 @@ func (si *SchemaInfo) getParentSchemas(schema *load.Schema) {
 		return
 	}
 
-	entFGAParentCrudAnt := entx.FGAParentCrudAnnotation{}
-
-	if raw, ok := schema.Annotations[entFGAParentCrudAnt.Name()]; ok {
-		if err := entFGAParentCrudAnt.Decode(raw); err == nil {
-			si.Parents = entFGAParentCrudAnt.ParentSchemas
-		}
+	ant, ok := entx.GetAnnotation[*entx.FGAParentCrudAnnotation](schema)
+	if !ok {
+		return
 	}
+
+	si.Parents = ant.ParentSchemas
 }

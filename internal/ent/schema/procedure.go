@@ -175,9 +175,7 @@ func (p Procedure) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaProcedure),
 		entfga.SelfAccessChecks(),
-		entx.NewExportable(
-			entx.WithOrgOwned(),
-		),
+		entx.NewExportable(),
 	}
 }
 

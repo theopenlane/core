@@ -330,7 +330,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name: "attempt to link system owned subcontrol",
@@ -341,7 +341,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name: "attempt to link system owned control and org owned control",
@@ -352,7 +352,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name: "happy path, using pat",

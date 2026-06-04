@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/jobspec"
+	"github.com/theopenlane/core/internal/ent/exportablegenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/logx"
@@ -39,7 +40,7 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 		return nil, errExportTypeNotProvided
 	}
 
-	if err := ValidateExportType(exportType.String()); err != nil {
+	if err := exportablegenerated.ValidateExportType(exportType.String()); err != nil {
 		return nil, err
 	}
 
@@ -105,8 +106,8 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 func getFinalFilters(filters string, m *generated.ExportMutation, ownerID string) (string, error) {
 	// check if it has owner field set
 	exportType, _ := m.ExportType()
-	addOwnerField := HasOwnerField(exportType.String())
-	addSystemOwnedField := HasSystemOwnedField(exportType.String())
+	addOwnerField := exportablegenerated.HasOwnerField(exportType.String())
+	addSystemOwnedField := exportablegenerated.HasSystemOwnedField(exportType.String())
 
 	if !addOwnerField && !addSystemOwnedField {
 		return filters, nil

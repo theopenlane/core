@@ -204,7 +204,7 @@ func checkProgramMembershipMutation(ctx context.Context, m ent.Mutation, orgID s
 
 // EnsureObjectInOrganization checks if the object is in the organization
 // it will only ever return skip or deny; this is never intended to approve access
-func EnsureObjectInOrganization(ctx context.Context, m ent.Mutation, objectType string, objectID, orgID string) error {
+func EnsureObjectInOrganization(ctx context.Context, m ent.Mutation, objectType, objectID, orgID string) error {
 	// also ensure the id is part of the organization
 	mut, ok := m.(utils.GenericMutation)
 	if !ok {
@@ -285,7 +285,7 @@ func EnsureTrustCenterInOrganization(ctx context.Context, m ent.Mutation, orgID 
 		trustcenter.ID(trustCenterID),
 	).Select(trustcenter.FieldOwnerID).String(ctx)
 	if err != nil {
-		return privacy.Denyf("requested object not in organization")
+		return privacy.Denyf("trustcenter: requested object not in organization")
 	}
 
 	if orgID == ownerID {
@@ -293,5 +293,38 @@ func EnsureTrustCenterInOrganization(ctx context.Context, m ent.Mutation, orgID 
 	}
 
 	// fall back to deny if the object is not in the organization
-	return privacy.Denyf("requested object not in organization")
+	return privacy.Denyf("trustcenter: requested object not in organization")
+}
+
+// CheckIsSystemOwned is used to check if the object is system owned, this helps with edge checks that only require
+// can view but are not necessarily within the organization
+func CheckIsSystemOwned(ctx context.Context, m ent.Mutation, objectType, objectID string) bool {
+	mut, ok := m.(utils.GenericMutation)
+	if !ok {
+		return false
+	}
+
+	// check if the object is in the organization
+	pluralObjectType := pluralize.NewClient().Plural(objectType)
+	tableName := strcase.SnakeCase(pluralObjectType)
+
+	query := "SELECT EXISTS (SELECT 1 FROM " + tableName + " WHERE id = $1 and (owner_id is null and system_owned = true))"
+
+	var rows sql.Rows
+	if err := mut.Client().Driver().Query(ctx, query, []any{objectID}, &rows); err != nil {
+		logx.FromContext(ctx).Debug().Err(err).Str("object", tableName).Msg("failed to check if object is system owned")
+
+		return false
+	}
+
+	defer rows.Close()
+
+	if rows.Next() {
+		var exists bool
+		if err := rows.Scan(&exists); err == nil && exists {
+			return true
+		}
+	}
+
+	return false
 }
