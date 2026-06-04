@@ -313,7 +313,7 @@ func checkNDAApprover(ctx context.Context, m *generated.TrustCenterNDARequestMut
 			return err
 		}
 
-		approverIDs, err := ndaApproverUserIDs(ctx, m.Client(), tc.OwnerID, tc.Edges.Setting)
+		approverIDs, err := getNDAApproverUserIDs(ctx, m.Client(), tc.OwnerID, tc.Edges.Setting)
 		if err != nil {
 			return err
 		}
@@ -409,7 +409,7 @@ func sendNDAApprovalRequestEmails(ctx context.Context, client *generated.Client,
 		return err
 	}
 
-	emails, err := ndaApproverEmails(ctx, client, tc.OwnerID, tc.Edges.Setting)
+	emails, err := getNDAApproverEmails(ctx, client, tc.OwnerID, tc.Edges.Setting)
 	if err != nil {
 		return err
 	}
@@ -430,8 +430,8 @@ func sendNDAApprovalRequestEmails(ctx context.Context, client *generated.Client,
 	})
 }
 
-func ndaApproverEmails(ctx context.Context, client *generated.Client, ownerID string, setting *generated.TrustCenterSetting) ([]string, error) {
-	ids, err := ndaApproverUserIDs(ctx, client, ownerID, setting)
+func getNDAApproverEmails(ctx context.Context, client *generated.Client, ownerID string, setting *generated.TrustCenterSetting) ([]string, error) {
+	ids, err := getNDAApproverUserIDs(ctx, client, ownerID, setting)
 	if err != nil {
 		return nil, err
 	}
@@ -457,7 +457,7 @@ func ndaApproverEmails(ctx context.Context, client *generated.Client, ownerID st
 	})), nil
 }
 
-func ndaApproverUserIDs(ctx context.Context, client *generated.Client, ownerID string, setting *generated.TrustCenterSetting) ([]string, error) {
+func getNDAApproverUserIDs(ctx context.Context, client *generated.Client, ownerID string, setting *generated.TrustCenterSetting) ([]string, error) {
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	if setting != nil && setting.NdaApproverGroupID != nil && *setting.NdaApproverGroupID != "" {
