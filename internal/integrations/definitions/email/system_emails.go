@@ -102,6 +102,8 @@ type InviteRequest struct {
 	Role string `json:"role,omitempty" jsonschema:"description=Invited role"`
 	// Token is the invite token appended to the invite URL
 	Token string `json:"token" jsonschema:"required,description=Invite token"`
+	// NewUser indicates the recipient has no existing account
+	NewUser bool `json:"newUser,omitempty" jsonschema:"description=Whether the recipient has no existing account"`
 }
 
 // InviteJoinedRequest is the input for the invite-accepted notification
@@ -336,7 +338,11 @@ var _ = RegisterEmailOperation(Operation[InviteRequest]{
 		return "Join Your Teammate " + req.InviterName + " on " + cfg.CompanyName + "!"
 	},
 	Build: func(cfg RuntimeEmailConfig, req InviteRequest) render.ContentBody {
-		inviteURL := tokenURL(cfg.ProductURL, "/invite", req.Token)
+		// append the recipient email and new-account hint so the invite page can route the recipient
+		inviteURL := tokenURL(cfg.ProductURL, "/invite", req.Token) + "&email=" + url.QueryEscape(req.Email)
+		if req.NewUser {
+			inviteURL += "&new=true"
+		}
 		inviteIntro := template.HTML("You're in - let's build trust without the busywork. "+html.EscapeString(req.InviterName)+" has invited you to collaborate in "+html.EscapeString(cfg.CompanyName)+", as part of the ") + //nolint:gosec // all user input is escaped via html.EscapeString
 			render.Bold(req.OrgName) + " organization"
 		if req.Role != "" {
