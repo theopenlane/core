@@ -2814,6 +2814,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersettinghistory.FieldCompanyDomain:            {Type: field.TypeString, Column: trustcentersettinghistory.FieldCompanyDomain},
 			trustcentersettinghistory.FieldSecurityContact:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldSecurityContact},
 			trustcentersettinghistory.FieldNdaApprovalRequired:      {Type: field.TypeBool, Column: trustcentersettinghistory.FieldNdaApprovalRequired},
+			trustcentersettinghistory.FieldNdaApproverGroupID:       {Type: field.TypeString, Column: trustcentersettinghistory.FieldNdaApproverGroupID},
 			trustcentersettinghistory.FieldStatusPageURL:            {Type: field.TypeString, Column: trustcentersettinghistory.FieldStatusPageURL},
 		},
 	}
@@ -15283,6 +15284,11 @@ func (f *TrustCenterSettingHistoryFilter) WhereSecurityContact(p entql.StringP) 
 // WhereNdaApprovalRequired applies the entql bool predicate on the nda_approval_required field.
 func (f *TrustCenterSettingHistoryFilter) WhereNdaApprovalRequired(p entql.BoolP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldNdaApprovalRequired))
+}
+
+// WhereNdaApproverGroupID applies the entql string predicate on the nda_approver_group_id field.
+func (f *TrustCenterSettingHistoryFilter) WhereNdaApproverGroupID(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldNdaApproverGroupID))
 }
 
 // WhereStatusPageURL applies the entql string predicate on the status_page_url field.

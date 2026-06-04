@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -20,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/pkg/logx"
@@ -97,7 +99,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to create NDA request notification")
 				}
 
-				if err := sendNDAApprovalRequestEmails(ctx, m.Client(), request, tc.OwnerID); err != nil {
+				if err := sendNDAApprovalRequestEmails(ctx, m.Client(), request, tc); err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to send NDA approval request emails")
 				}
 
@@ -150,7 +152,7 @@ func handleExistingNDARequest(ctx, queryCtx context.Context, client *generated.C
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to create NDA request notification")
 		}
 
-		if err := sendNDAApprovalRequestEmails(ctx, client, existing, tc.OwnerID); err != nil {
+		if err := sendNDAApprovalRequestEmails(ctx, client, existing, tc); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to send NDA approval request emails")
 		}
 
@@ -173,7 +175,7 @@ func handleExistingNDARequest(ctx, queryCtx context.Context, client *generated.C
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to create NDA request notification")
 		}
 
-		if err := sendNDAApprovalRequestEmails(ctx, client, existing, tc.OwnerID); err != nil {
+		if err := sendNDAApprovalRequestEmails(ctx, client, existing, tc); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to send NDA approval request emails")
 		}
 	}
@@ -186,6 +188,7 @@ func handleExistingNDARequest(ctx, queryCtx context.Context, client *generated.C
 func getTrustCenter(ctx context.Context, trustCenterID string) (*generated.TrustCenter, error) {
 	tc, err := transactionFromContext(ctx).TrustCenter.Query().
 		Where(trustcenter.IDEQ(trustCenterID)).
+		WithSetting().
 		Only(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", trustCenterID).Msg("failed to get trust center for existing NDA request")
@@ -219,8 +222,14 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 				}
 			}
 
-			if !ok || (status != enums.TrustCenterNDARequestStatusApproved && status != enums.TrustCenterNDARequestStatusSigned) {
+			if !ok || (status != enums.TrustCenterNDARequestStatusApproved && status != enums.TrustCenterNDARequestStatusSigned && status != enums.TrustCenterNDARequestStatusDeclined) {
 				return next.Mutate(ctx, m)
+			}
+
+			if status == enums.TrustCenterNDARequestStatusApproved || status == enums.TrustCenterNDARequestStatusDeclined {
+				if err := checkNDAApprover(ctx, m); err != nil {
+					return nil, err
+				}
 			}
 
 			// if approved or signed, set the timestamp in the ISO8601 format
@@ -238,6 +247,10 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 				}
 
 				return retVal, nil
+			}
+
+			if status == enums.TrustCenterNDARequestStatusDeclined {
+				return next.Mutate(ctx, m)
 			}
 
 			m.SetApprovedAt(*now)
@@ -263,6 +276,54 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 			return v, nil
 		})
 	}, ent.OpUpdateOne|ent.OpUpdate|ent.OpDeleteOne)
+}
+
+func checkNDAApprover(ctx context.Context, m *generated.TrustCenterNDARequestMutation) error {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || caller.IsAnonymous() {
+		return privacy.Denyf("NDA approval requires an authenticated user")
+	}
+
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	ids, err := m.IDs(allowCtx)
+	if err != nil {
+		return err
+	}
+
+	requests, err := m.Client().TrustCenterNDARequest.Query().
+		Where(trustcenterndarequest.IDIn(ids...)).
+		Select(trustcenterndarequest.FieldTrustCenterID).
+		All(allowCtx)
+	if err != nil {
+		return err
+	}
+
+	trustCenterIDs := make(map[string]struct{}, len(requests))
+	for _, request := range requests {
+		trustCenterIDs[request.TrustCenterID] = struct{}{}
+	}
+
+	for id := range trustCenterIDs {
+		tc, err := m.Client().TrustCenter.Query().
+			Where(trustcenter.IDEQ(id)).
+			WithSetting().
+			Only(allowCtx)
+		if err != nil {
+			return err
+		}
+
+		approverIDs, err := ndaApproverUserIDs(ctx, m.Client(), tc.OwnerID, tc.Edges.Setting)
+		if err != nil {
+			return err
+		}
+
+		if !lo.Contains(approverIDs, caller.SubjectID) {
+			return privacy.Denyf("request denied because user is not an NDA approver")
+		}
+	}
+
+	return nil
 }
 
 func handleNDARequestDelete(ctx context.Context, m *generated.TrustCenterNDARequestMutation) error {
@@ -337,33 +398,21 @@ func createNDARequestNotification(ctx context.Context, ndaRequest *generated.Tru
 // ndaApproverRoles are the organization roles permitted to review and approve trust center NDA requests
 var ndaApproverRoles = []enums.Role{enums.RoleOwner, enums.RoleSuperAdmin, enums.RoleAdmin}
 
-// sendNDAApprovalRequestEmails notifies the organization's owners and admins, in a single message,
-// that a trust center NDA request is pending their approval
-func sendNDAApprovalRequestEmails(ctx context.Context, client *generated.Client, ndaRequest *generated.TrustCenterNDARequest, ownerID string) error {
+func sendNDAApprovalRequestEmails(ctx context.Context, client *generated.Client, ndaRequest *generated.TrustCenterNDARequest, tc *generated.TrustCenter) error {
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	org, err := client.Organization.Query().
-		Where(organization.IDEQ(ownerID)).
+		Where(organization.IDEQ(tc.OwnerID)).
 		Select(organization.FieldDisplayName).
 		Only(allowCtx)
 	if err != nil {
 		return err
 	}
 
-	approvers, err := client.OrgMembership.Query().
-		Where(
-			orgmembership.OrganizationID(ownerID),
-			orgmembership.RoleIn(ndaApproverRoles...),
-		).
-		WithUser().
-		All(allowCtx)
+	emails, err := ndaApproverEmails(ctx, client, tc.OwnerID, tc.Edges.Setting)
 	if err != nil {
 		return err
 	}
-
-	emails := lo.Map(approvers, func(approver *generated.OrgMembership, _ int) string {
-		return approver.Edges.User.Email
-	})
 	if len(emails) == 0 {
 		return nil
 	}
@@ -379,4 +428,64 @@ func sendNDAApprovalRequestEmails(ctx context.Context, client *generated.Client,
 		RequesterName:  requesterName,
 		RequesterEmail: ndaRequest.Email,
 	})
+}
+
+func ndaApproverEmails(ctx context.Context, client *generated.Client, ownerID string, setting *generated.TrustCenterSetting) ([]string, error) {
+	ids, err := ndaApproverUserIDs(ctx, client, ownerID, setting)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(ids) == 0 {
+		return nil, nil
+	}
+
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	var emails []string
+
+	err = client.User.Query().
+		Where(user.IDIn(ids...)).
+		Select(user.FieldEmail).
+		Scan(allowCtx, &emails)
+	if err != nil {
+		return nil, err
+	}
+
+	return lo.Uniq(lo.Filter(emails, func(email string, _ int) bool {
+		return email != ""
+	})), nil
+}
+
+func ndaApproverUserIDs(ctx context.Context, client *generated.Client, ownerID string, setting *generated.TrustCenterSetting) ([]string, error) {
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	if setting != nil && setting.NdaApproverGroupID != nil && *setting.NdaApproverGroupID != "" {
+		var ids []string
+
+		err := client.GroupMembership.Query().
+			Where(groupmembership.GroupID(*setting.NdaApproverGroupID)).
+			Select(groupmembership.FieldUserID).
+			Scan(allowCtx, &ids)
+		if err != nil {
+			return nil, err
+		}
+
+		return lo.Uniq(ids), nil
+	}
+
+	var ids []string
+
+	err := client.OrgMembership.Query().
+		Where(
+			orgmembership.OrganizationID(ownerID),
+			orgmembership.RoleIn(ndaApproverRoles...),
+		).
+		Select(orgmembership.FieldUserID).
+		Scan(allowCtx, &ids)
+	if err != nil {
+		return nil, err
+	}
+
+	return lo.Uniq(ids), nil
 }

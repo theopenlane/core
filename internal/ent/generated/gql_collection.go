@@ -85056,6 +85056,21 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, trustcentersetting.FieldHeroImageLocalFileID)
 				fieldSeen[trustcentersetting.FieldHeroImageLocalFileID] = struct{}{}
 			}
+
+		case "ndaApproverGroup":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			_q.withNdaApproverGroup = query
+			if _, ok := fieldSeen[trustcentersetting.FieldNdaApproverGroupID]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldNdaApproverGroupID)
+				fieldSeen[trustcentersetting.FieldNdaApproverGroupID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[trustcentersetting.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, trustcentersetting.FieldCreatedAt)
@@ -85190,6 +85205,11 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[trustcentersetting.FieldNdaApprovalRequired]; !ok {
 				selectedFields = append(selectedFields, trustcentersetting.FieldNdaApprovalRequired)
 				fieldSeen[trustcentersetting.FieldNdaApprovalRequired] = struct{}{}
+			}
+		case "ndaApproverGroupID":
+			if _, ok := fieldSeen[trustcentersetting.FieldNdaApproverGroupID]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldNdaApproverGroupID)
+				fieldSeen[trustcentersetting.FieldNdaApproverGroupID] = struct{}{}
 			}
 		case "statusPageURL":
 			if _, ok := fieldSeen[trustcentersetting.FieldStatusPageURL]; !ok {

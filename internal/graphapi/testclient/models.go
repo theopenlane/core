@@ -9572,12 +9572,13 @@ type CreateTrustCenterSettingInput struct {
 	// whether NDA requests require approval before being processed
 	NdaApprovalRequired *bool `json:"ndaApprovalRequired,omitempty"`
 	// URL to the company's status page
-	StatusPageURL   *string  `json:"statusPageURL,omitempty"`
-	BlockedGroupIDs []string `json:"blockedGroupIDs,omitempty"`
-	EditorIDs       []string `json:"editorIDs,omitempty"`
-	LogoFileID      *string  `json:"logoFileID,omitempty"`
-	FaviconFileID   *string  `json:"faviconFileID,omitempty"`
-	HeroImageFileID *string  `json:"heroImageFileID,omitempty"`
+	StatusPageURL      *string  `json:"statusPageURL,omitempty"`
+	BlockedGroupIDs    []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs          []string `json:"editorIDs,omitempty"`
+	LogoFileID         *string  `json:"logoFileID,omitempty"`
+	FaviconFileID      *string  `json:"faviconFileID,omitempty"`
+	HeroImageFileID    *string  `json:"heroImageFileID,omitempty"`
+	NdaApproverGroupID *string  `json:"ndaApproverGroupID,omitempty"`
 }
 
 // CreateTrustCenterSubprocessorInput is used for create TrustCenterSubprocessor object.
@@ -38171,13 +38172,16 @@ type TrustCenterSetting struct {
 	SecurityContact *string `json:"securityContact,omitempty"`
 	// whether NDA requests require approval before being processed
 	NdaApprovalRequired *bool `json:"ndaApprovalRequired,omitempty"`
+	// group whose members approve trust center NDA requests
+	NdaApproverGroupID *string `json:"ndaApproverGroupID,omitempty"`
 	// URL to the company's status page
-	StatusPageURL *string          `json:"statusPageURL,omitempty"`
-	BlockedGroups *GroupConnection `json:"blockedGroups"`
-	Editors       *GroupConnection `json:"editors"`
-	LogoFile      *File            `json:"logoFile,omitempty"`
-	FaviconFile   *File            `json:"faviconFile,omitempty"`
-	HeroImageFile *File            `json:"heroImageFile,omitempty"`
+	StatusPageURL    *string          `json:"statusPageURL,omitempty"`
+	BlockedGroups    *GroupConnection `json:"blockedGroups"`
+	Editors          *GroupConnection `json:"editors"`
+	LogoFile         *File            `json:"logoFile,omitempty"`
+	FaviconFile      *File            `json:"faviconFile,omitempty"`
+	HeroImageFile    *File            `json:"heroImageFile,omitempty"`
+	NdaApproverGroup *Group           `json:"ndaApproverGroup,omitempty"`
 }
 
 func (TrustCenterSetting) IsNode() {}
@@ -38631,6 +38635,22 @@ type TrustCenterSettingWhereInput struct {
 	NdaApprovalRequiredNeq    *bool `json:"ndaApprovalRequiredNEQ,omitempty"`
 	NdaApprovalRequiredIsNil  *bool `json:"ndaApprovalRequiredIsNil,omitempty"`
 	NdaApprovalRequiredNotNil *bool `json:"ndaApprovalRequiredNotNil,omitempty"`
+	// nda_approver_group_id field predicates
+	NdaApproverGroupID             *string  `json:"ndaApproverGroupID,omitempty"`
+	NdaApproverGroupIdneq          *string  `json:"ndaApproverGroupIDNEQ,omitempty"`
+	NdaApproverGroupIDIn           []string `json:"ndaApproverGroupIDIn,omitempty"`
+	NdaApproverGroupIDNotIn        []string `json:"ndaApproverGroupIDNotIn,omitempty"`
+	NdaApproverGroupIdgt           *string  `json:"ndaApproverGroupIDGT,omitempty"`
+	NdaApproverGroupIdgte          *string  `json:"ndaApproverGroupIDGTE,omitempty"`
+	NdaApproverGroupIdlt           *string  `json:"ndaApproverGroupIDLT,omitempty"`
+	NdaApproverGroupIdlte          *string  `json:"ndaApproverGroupIDLTE,omitempty"`
+	NdaApproverGroupIDContains     *string  `json:"ndaApproverGroupIDContains,omitempty"`
+	NdaApproverGroupIDHasPrefix    *string  `json:"ndaApproverGroupIDHasPrefix,omitempty"`
+	NdaApproverGroupIDHasSuffix    *string  `json:"ndaApproverGroupIDHasSuffix,omitempty"`
+	NdaApproverGroupIDIsNil        *bool    `json:"ndaApproverGroupIDIsNil,omitempty"`
+	NdaApproverGroupIDNotNil       *bool    `json:"ndaApproverGroupIDNotNil,omitempty"`
+	NdaApproverGroupIDEqualFold    *string  `json:"ndaApproverGroupIDEqualFold,omitempty"`
+	NdaApproverGroupIDContainsFold *string  `json:"ndaApproverGroupIDContainsFold,omitempty"`
 	// status_page_url field predicates
 	StatusPageURL             *string  `json:"statusPageURL,omitempty"`
 	StatusPageURLNeq          *string  `json:"statusPageURLNEQ,omitempty"`
@@ -38662,6 +38682,9 @@ type TrustCenterSettingWhereInput struct {
 	// hero_image_file edge predicates
 	HasHeroImageFile     *bool             `json:"hasHeroImageFile,omitempty"`
 	HasHeroImageFileWith []*FileWhereInput `json:"hasHeroImageFileWith,omitempty"`
+	// nda_approver_group edge predicates
+	HasNdaApproverGroup     *bool              `json:"hasNdaApproverGroup,omitempty"`
+	HasNdaApproverGroupWith []*GroupWhereInput `json:"hasNdaApproverGroupWith,omitempty"`
 }
 
 type TrustCenterSubprocessor struct {
@@ -45314,6 +45337,8 @@ type UpdateTrustCenterSettingInput struct {
 	ClearFaviconFile      *bool    `json:"clearFaviconFile,omitempty"`
 	HeroImageFileID       *string  `json:"heroImageFileID,omitempty"`
 	ClearHeroImageFile    *bool    `json:"clearHeroImageFile,omitempty"`
+	NdaApproverGroupID    *string  `json:"ndaApproverGroupID,omitempty"`
+	ClearNdaApproverGroup *bool    `json:"clearNdaApproverGroup,omitempty"`
 }
 
 // UpdateTrustCenterSubprocessorInput is used for update TrustCenterSubprocessor object.

@@ -167,6 +167,10 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Comment("whether NDA requests require approval before being processed").
 			Default(false).
 			Optional(),
+		field.String("nda_approver_group_id").
+			Comment("group whose members approve trust center NDA requests").
+			Optional().
+			Nillable(),
 		field.String("status_page_url").
 			Comment("URL to the company's status page").
 			MaxLen(urlMaxLen).
@@ -217,6 +221,15 @@ func (t TrustCenterSetting) Edges() []ent.Edge {
 			field:      "hero_image_local_file_id",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(File{}.Name()),
+			},
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: t,
+			name:       "nda_approver_group",
+			t:          Group.Type,
+			field:      "nda_approver_group_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Group{}.Name()),
 			},
 		}),
 	}

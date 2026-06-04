@@ -5458,6 +5458,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
+}, "nda_approver_group": {
+	ObjectType:          "group",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 },
 }, "trust_center_subprocessor": {"trust_center_subprocessor_kind": {
 	ObjectType:          "trust_center_subprocessor_kind",

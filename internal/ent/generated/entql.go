@@ -3380,6 +3380,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersetting.FieldCompanyDomain:            {Type: field.TypeString, Column: trustcentersetting.FieldCompanyDomain},
 			trustcentersetting.FieldSecurityContact:          {Type: field.TypeString, Column: trustcentersetting.FieldSecurityContact},
 			trustcentersetting.FieldNdaApprovalRequired:      {Type: field.TypeBool, Column: trustcentersetting.FieldNdaApprovalRequired},
+			trustcentersetting.FieldNdaApproverGroupID:       {Type: field.TypeString, Column: trustcentersetting.FieldNdaApproverGroupID},
 			trustcentersetting.FieldStatusPageURL:            {Type: field.TypeString, Column: trustcentersetting.FieldStatusPageURL},
 		},
 	}
@@ -16751,6 +16752,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenterSetting",
 		"File",
+	)
+	graph.MustAddE(
+		"nda_approver_group",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.NdaApproverGroupTable,
+			Columns: []string{trustcentersetting.NdaApproverGroupColumn},
+			Bidi:    false,
+		},
+		"TrustCenterSetting",
+		"Group",
 	)
 	graph.MustAddE(
 		"trust_center_subprocessor_kind",
@@ -47214,6 +47227,11 @@ func (f *TrustCenterSettingFilter) WhereNdaApprovalRequired(p entql.BoolP) {
 	f.Where(p.Field(trustcentersetting.FieldNdaApprovalRequired))
 }
 
+// WhereNdaApproverGroupID applies the entql string predicate on the nda_approver_group_id field.
+func (f *TrustCenterSettingFilter) WhereNdaApproverGroupID(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldNdaApproverGroupID))
+}
+
 // WhereStatusPageURL applies the entql string predicate on the status_page_url field.
 func (f *TrustCenterSettingFilter) WhereStatusPageURL(p entql.StringP) {
 	f.Where(p.Field(trustcentersetting.FieldStatusPageURL))
@@ -47283,6 +47301,20 @@ func (f *TrustCenterSettingFilter) WhereHasHeroImageFile() {
 // WhereHasHeroImageFileWith applies a predicate to check if query has an edge hero_image_file with a given conditions (other predicates).
 func (f *TrustCenterSettingFilter) WhereHasHeroImageFileWith(preds ...predicate.File) {
 	f.Where(entql.HasEdgeWith("hero_image_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasNdaApproverGroup applies a predicate to check if query has an edge nda_approver_group.
+func (f *TrustCenterSettingFilter) WhereHasNdaApproverGroup() {
+	f.Where(entql.HasEdge("nda_approver_group"))
+}
+
+// WhereHasNdaApproverGroupWith applies a predicate to check if query has an edge nda_approver_group with a given conditions (other predicates).
+func (f *TrustCenterSettingFilter) WhereHasNdaApproverGroupWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("nda_approver_group", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

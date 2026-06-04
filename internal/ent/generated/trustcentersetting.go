@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 )
 
@@ -77,6 +78,8 @@ type TrustCenterSetting struct {
 	SecurityContact *string `json:"security_contact,omitempty"`
 	// whether NDA requests require approval before being processed
 	NdaApprovalRequired bool `json:"nda_approval_required,omitempty"`
+	// group whose members approve trust center NDA requests
+	NdaApproverGroupID *string `json:"nda_approver_group_id,omitempty"`
 	// URL to the company's status page
 	StatusPageURL *string `json:"status_page_url,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -97,11 +100,13 @@ type TrustCenterSettingEdges struct {
 	FaviconFile *File `json:"favicon_file,omitempty"`
 	// HeroImageFile holds the value of the hero_image_file edge.
 	HeroImageFile *File `json:"hero_image_file,omitempty"`
+	// NdaApproverGroup holds the value of the nda_approver_group edge.
+	NdaApproverGroup *Group `json:"nda_approver_group,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [6]map[string]int
 
 	namedBlockedGroups map[string][]*Group
 	namedEditors       map[string][]*Group
@@ -158,6 +163,17 @@ func (e TrustCenterSettingEdges) HeroImageFileOrErr() (*File, error) {
 	return nil, &NotLoadedError{edge: "hero_image_file"}
 }
 
+// NdaApproverGroupOrErr returns the NdaApproverGroup value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterSettingEdges) NdaApproverGroupOrErr() (*Group, error) {
+	if e.NdaApproverGroup != nil {
+		return e.NdaApproverGroup, nil
+	} else if e.loadedTypes[5] {
+		return nil, &NotFoundError{label: group.Label}
+	}
+	return nil, &NotLoadedError{edge: "nda_approver_group"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*TrustCenterSetting) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -165,7 +181,7 @@ func (*TrustCenterSetting) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcentersetting.FieldRemoveBranding, trustcentersetting.FieldNdaApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldCompanyName, trustcentersetting.FieldCompanyDescription, trustcentersetting.FieldOverview, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID, trustcentersetting.FieldHeroImageLocalFileID, trustcentersetting.FieldThemeMode, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldFont, trustcentersetting.FieldForegroundColor, trustcentersetting.FieldBackgroundColor, trustcentersetting.FieldAccentColor, trustcentersetting.FieldSecondaryBackgroundColor, trustcentersetting.FieldSecondaryForegroundColor, trustcentersetting.FieldEnvironment, trustcentersetting.FieldCompanyDomain, trustcentersetting.FieldSecurityContact, trustcentersetting.FieldStatusPageURL:
+		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldCompanyName, trustcentersetting.FieldCompanyDescription, trustcentersetting.FieldOverview, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID, trustcentersetting.FieldHeroImageLocalFileID, trustcentersetting.FieldThemeMode, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldFont, trustcentersetting.FieldForegroundColor, trustcentersetting.FieldBackgroundColor, trustcentersetting.FieldAccentColor, trustcentersetting.FieldSecondaryBackgroundColor, trustcentersetting.FieldSecondaryForegroundColor, trustcentersetting.FieldEnvironment, trustcentersetting.FieldCompanyDomain, trustcentersetting.FieldSecurityContact, trustcentersetting.FieldNdaApproverGroupID, trustcentersetting.FieldStatusPageURL:
 			values[i] = new(sql.NullString)
 		case trustcentersetting.FieldCreatedAt, trustcentersetting.FieldUpdatedAt, trustcentersetting.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -371,6 +387,13 @@ func (_m *TrustCenterSetting) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.NdaApprovalRequired = value.Bool
 			}
+		case trustcentersetting.FieldNdaApproverGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field nda_approver_group_id", values[i])
+			} else if value.Valid {
+				_m.NdaApproverGroupID = new(string)
+				*_m.NdaApproverGroupID = value.String
+			}
 		case trustcentersetting.FieldStatusPageURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status_page_url", values[i])
@@ -414,6 +437,11 @@ func (_m *TrustCenterSetting) QueryFaviconFile() *FileQuery {
 // QueryHeroImageFile queries the "hero_image_file" edge of the TrustCenterSetting entity.
 func (_m *TrustCenterSetting) QueryHeroImageFile() *FileQuery {
 	return NewTrustCenterSettingClient(_m.config).QueryHeroImageFile(_m)
+}
+
+// QueryNdaApproverGroup queries the "nda_approver_group" edge of the TrustCenterSetting entity.
+func (_m *TrustCenterSetting) QueryNdaApproverGroup() *GroupQuery {
+	return NewTrustCenterSettingClient(_m.config).QueryNdaApproverGroup(_m)
 }
 
 // Update returns a builder for updating this TrustCenterSetting.
@@ -539,6 +567,11 @@ func (_m *TrustCenterSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("nda_approval_required=")
 	builder.WriteString(fmt.Sprintf("%v", _m.NdaApprovalRequired))
+	builder.WriteString(", ")
+	if v := _m.NdaApproverGroupID; v != nil {
+		builder.WriteString("nda_approver_group_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	if v := _m.StatusPageURL; v != nil {
 		builder.WriteString("status_page_url=")

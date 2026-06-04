@@ -17445,6 +17445,14 @@ func (_m *TrustCenterSetting) HeroImageFile(ctx context.Context) (*File, error) 
 	return result, MaskNotFound(err)
 }
 
+func (_m *TrustCenterSetting) NdaApproverGroup(ctx context.Context) (*Group, error) {
+	result, err := _m.Edges.NdaApproverGroupOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryNdaApproverGroup().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *TrustCenterSubprocessor) TrustCenterSubprocessorKind(ctx context.Context) (*CustomTypeEnum, error) {
 	result, err := _m.Edges.TrustCenterSubprocessorKindOrErr()
 	if IsNotLoaded(err) {
