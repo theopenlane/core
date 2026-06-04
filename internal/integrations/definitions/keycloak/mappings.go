@@ -10,7 +10,7 @@ import (
 var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountExternalID, Expr: `'id' in payload ? payload.id : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountCanonicalEmail, Expr: `'email' in payload && payload.email != "" ? payload.email : ""`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDisplayName, Expr: `('firstName' in payload && payload.firstName != "" ? payload.firstName + " " : "") + ('lastName' in payload && payload.lastName != "" ? payload.lastName : ('username' in payload ? payload.username : ""))`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDisplayName, Expr: `'username' in payload ? payload.username : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountGivenName, Expr: `'firstName' in payload ? payload.firstName : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountFamilyName, Expr: `'lastName' in payload ? payload.lastName : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountStatus, Expr: `dyn('enabled' in payload ? (payload.enabled ? "ACTIVE" : "INACTIVE") : "INACTIVE")`},

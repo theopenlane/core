@@ -21,7 +21,7 @@ require (
 )
 
 require (
-	ariga.io/atlas v1.2.0 // indirect
+	ariga.io/atlas v1.2.1 // indirect
 	entgo.io/contrib v0.7.0 // indirect
 	github.com/99designs/gqlgen v0.17.90 // indirect
 	github.com/XSAM/otelsql v0.42.0 // indirect

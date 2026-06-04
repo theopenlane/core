@@ -1,4 +1,8 @@
 services:
+  postgres:
+    volumes:
+      - ./configs/keycloak/init.sql:/docker-entrypoint-initdb.d/init_keycloak.sql
+
   keycloak:
     image: quay.io/keycloak/keycloak:26.2.4
     command: start-dev

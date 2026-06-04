@@ -68,5 +68,3 @@ func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallati
 		ExternalID:   m.RealmID,
 	}
 }
-
-
