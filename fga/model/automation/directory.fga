@@ -29,13 +29,14 @@ type directory_account
     define can_delete: (editor but not blocked)
 
     # tuple based permissions for edit, view, blocked, and audit log viewing
-    define editor: [service]
+    define editor: [service] or parent_editor
     define viewer: [service] or editor or parent_viewer
     define blocked: [user, service, group#member]
     define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
 
     # parent permissions derived based on `crud` permissions or parents
     define parent_viewer: can_view from parent_context or can_view_directory_account from parent_context or can_view from parent
+    define parent_editor: full_access from parent_context or can_edit from parent
     define parent_context: [organization]
     define parent: [integration, directory_sync_run, identity_holder, platform]
 
@@ -56,7 +57,7 @@ type directory_group
     # parent permissions derived based on `crud` permissions or parents
     define parent_viewer: can_view from parent_context or can_view_directory_account from parent_context or can_view from parent
     define parent_context: [organization]
-    define parent: [integration, directory_sync_run, platform]
+    define parent: [integration, directory_sync_run, platform, identity_holder]
 
 
 # directory memberships are service-managed joins between directory accounts and groups

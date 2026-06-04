@@ -4984,6 +4984,8 @@ func init() {
 	orgmembership.Hooks[4] = orgmembershipHooks[2]
 
 	orgmembership.Hooks[5] = orgmembershipHooks[3]
+
+	orgmembership.Hooks[6] = orgmembershipHooks[4]
 	orgmembershipInters := schema.OrgMembership{}.Interceptors()
 	orgmembership.Interceptors[0] = orgmembershipInters[0]
 	orgmembership.Interceptors[1] = orgmembershipInters[1]
@@ -7468,8 +7470,12 @@ func init() {
 	taskDescSystemGenerated := taskFields[9].Descriptor()
 	// task.DefaultSystemGenerated holds the default value on creation for the system_generated field.
 	task.DefaultSystemGenerated = taskDescSystemGenerated.Default.(bool)
+	// taskDescIsTemplate is the schema descriptor for is_template field.
+	taskDescIsTemplate := taskFields[10].Descriptor()
+	// task.DefaultIsTemplate holds the default value on creation for the is_template field.
+	task.DefaultIsTemplate = taskDescIsTemplate.Default.(bool)
 	// taskDescExternalReferenceURL is the schema descriptor for external_reference_url field.
-	taskDescExternalReferenceURL := taskFields[11].Descriptor()
+	taskDescExternalReferenceURL := taskFields[12].Descriptor()
 	// task.ExternalReferenceURLValidator is a validator for the "external_reference_url" field. It is called by the builders before save.
 	task.ExternalReferenceURLValidator = taskDescExternalReferenceURL.Validators[0].(func([]string) error)
 	// taskDescID is the schema descriptor for id field.

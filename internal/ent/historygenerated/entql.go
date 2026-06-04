@@ -135,6 +135,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplanhistory.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: actionplanhistory.FieldDismissedImprovementSuggestions},
 			actionplanhistory.FieldURL:                             {Type: field.TypeString, Column: actionplanhistory.FieldURL},
 			actionplanhistory.FieldFileID:                          {Type: field.TypeString, Column: actionplanhistory.FieldFileID},
+			actionplanhistory.FieldExternalFileID:                  {Type: field.TypeString, Column: actionplanhistory.FieldExternalFileID},
+			actionplanhistory.FieldExternalContents:                {Type: field.TypeString, Column: actionplanhistory.FieldExternalContents},
 			actionplanhistory.FieldOwnerID:                         {Type: field.TypeString, Column: actionplanhistory.FieldOwnerID},
 			actionplanhistory.FieldSystemOwned:                     {Type: field.TypeBool, Column: actionplanhistory.FieldSystemOwned},
 			actionplanhistory.FieldInternalNotes:                   {Type: field.TypeString, Column: actionplanhistory.FieldInternalNotes},
@@ -1485,6 +1487,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicyhistory.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: internalpolicyhistory.FieldDismissedImprovementSuggestions},
 			internalpolicyhistory.FieldURL:                             {Type: field.TypeString, Column: internalpolicyhistory.FieldURL},
 			internalpolicyhistory.FieldFileID:                          {Type: field.TypeString, Column: internalpolicyhistory.FieldFileID},
+			internalpolicyhistory.FieldExternalFileID:                  {Type: field.TypeString, Column: internalpolicyhistory.FieldExternalFileID},
+			internalpolicyhistory.FieldExternalContents:                {Type: field.TypeString, Column: internalpolicyhistory.FieldExternalContents},
 			internalpolicyhistory.FieldInternalPolicyKindName:          {Type: field.TypeString, Column: internalpolicyhistory.FieldInternalPolicyKindName},
 			internalpolicyhistory.FieldInternalPolicyKindID:            {Type: field.TypeString, Column: internalpolicyhistory.FieldInternalPolicyKindID},
 			internalpolicyhistory.FieldEnvironmentName:                 {Type: field.TypeString, Column: internalpolicyhistory.FieldEnvironmentName},
@@ -1991,6 +1995,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedurehistory.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: procedurehistory.FieldDismissedImprovementSuggestions},
 			procedurehistory.FieldURL:                             {Type: field.TypeString, Column: procedurehistory.FieldURL},
 			procedurehistory.FieldFileID:                          {Type: field.TypeString, Column: procedurehistory.FieldFileID},
+			procedurehistory.FieldExternalFileID:                  {Type: field.TypeString, Column: procedurehistory.FieldExternalFileID},
+			procedurehistory.FieldExternalContents:                {Type: field.TypeString, Column: procedurehistory.FieldExternalContents},
 			procedurehistory.FieldSystemOwned:                     {Type: field.TypeBool, Column: procedurehistory.FieldSystemOwned},
 			procedurehistory.FieldInternalNotes:                   {Type: field.TypeString, Column: procedurehistory.FieldInternalNotes},
 			procedurehistory.FieldSystemInternalID:                {Type: field.TypeString, Column: procedurehistory.FieldSystemInternalID},
@@ -2539,6 +2545,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			taskhistory.FieldAssigneeID:           {Type: field.TypeString, Column: taskhistory.FieldAssigneeID},
 			taskhistory.FieldAssignerID:           {Type: field.TypeString, Column: taskhistory.FieldAssignerID},
 			taskhistory.FieldSystemGenerated:      {Type: field.TypeBool, Column: taskhistory.FieldSystemGenerated},
+			taskhistory.FieldIsTemplate:           {Type: field.TypeBool, Column: taskhistory.FieldIsTemplate},
 			taskhistory.FieldIdempotencyKey:       {Type: field.TypeString, Column: taskhistory.FieldIdempotencyKey},
 			taskhistory.FieldExternalReferenceURL: {Type: field.TypeJSON, Column: taskhistory.FieldExternalReferenceURL},
 			taskhistory.FieldParentTaskID:         {Type: field.TypeString, Column: taskhistory.FieldParentTaskID},
@@ -3506,6 +3513,16 @@ func (f *ActionPlanHistoryFilter) WhereURL(p entql.StringP) {
 // WhereFileID applies the entql string predicate on the file_id field.
 func (f *ActionPlanHistoryFilter) WhereFileID(p entql.StringP) {
 	f.Where(p.Field(actionplanhistory.FieldFileID))
+}
+
+// WhereExternalFileID applies the entql string predicate on the external_file_id field.
+func (f *ActionPlanHistoryFilter) WhereExternalFileID(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldExternalFileID))
+}
+
+// WhereExternalContents applies the entql string predicate on the external_contents field.
+func (f *ActionPlanHistoryFilter) WhereExternalContents(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldExternalContents))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.
@@ -9483,6 +9500,16 @@ func (f *InternalPolicyHistoryFilter) WhereFileID(p entql.StringP) {
 	f.Where(p.Field(internalpolicyhistory.FieldFileID))
 }
 
+// WhereExternalFileID applies the entql string predicate on the external_file_id field.
+func (f *InternalPolicyHistoryFilter) WhereExternalFileID(p entql.StringP) {
+	f.Where(p.Field(internalpolicyhistory.FieldExternalFileID))
+}
+
+// WhereExternalContents applies the entql string predicate on the external_contents field.
+func (f *InternalPolicyHistoryFilter) WhereExternalContents(p entql.StringP) {
+	f.Where(p.Field(internalpolicyhistory.FieldExternalContents))
+}
+
 // WhereInternalPolicyKindName applies the entql string predicate on the internal_policy_kind_name field.
 func (f *InternalPolicyHistoryFilter) WhereInternalPolicyKindName(p entql.StringP) {
 	f.Where(p.Field(internalpolicyhistory.FieldInternalPolicyKindName))
@@ -11686,6 +11713,16 @@ func (f *ProcedureHistoryFilter) WhereURL(p entql.StringP) {
 // WhereFileID applies the entql string predicate on the file_id field.
 func (f *ProcedureHistoryFilter) WhereFileID(p entql.StringP) {
 	f.Where(p.Field(procedurehistory.FieldFileID))
+}
+
+// WhereExternalFileID applies the entql string predicate on the external_file_id field.
+func (f *ProcedureHistoryFilter) WhereExternalFileID(p entql.StringP) {
+	f.Where(p.Field(procedurehistory.FieldExternalFileID))
+}
+
+// WhereExternalContents applies the entql string predicate on the external_contents field.
+func (f *ProcedureHistoryFilter) WhereExternalContents(p entql.StringP) {
+	f.Where(p.Field(procedurehistory.FieldExternalContents))
 }
 
 // WhereSystemOwned applies the entql bool predicate on the system_owned field.
@@ -14101,6 +14138,11 @@ func (f *TaskHistoryFilter) WhereAssignerID(p entql.StringP) {
 // WhereSystemGenerated applies the entql bool predicate on the system_generated field.
 func (f *TaskHistoryFilter) WhereSystemGenerated(p entql.BoolP) {
 	f.Where(p.Field(taskhistory.FieldSystemGenerated))
+}
+
+// WhereIsTemplate applies the entql bool predicate on the is_template field.
+func (f *TaskHistoryFilter) WhereIsTemplate(p entql.BoolP) {
+	f.Where(p.Field(taskhistory.FieldIsTemplate))
 }
 
 // WhereIdempotencyKey applies the entql string predicate on the idempotency_key field.

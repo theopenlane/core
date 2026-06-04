@@ -5,32 +5,51 @@ package apitokens
 import (
 	"fmt"
 	"sort"
-	"strings"
 
+	"github.com/spf13/cobra"
 	fgamodel "github.com/theopenlane/core/fga/model"
 )
 
-// scopeFlagConfig returns a description suffix listing available scopes.
-func scopeFlagConfig() string {
-	scopes, err := fgamodel.RelationsForService()
+var scopesCmd = &cobra.Command{
+	Use:   "scopes",
+	Short: "list scopes available for an api token",
+	Run: func(cmd *cobra.Command, args []string) {
+		err := allScopes()
+		cobra.CheckErr(err)
+	},
+}
+
+func init() {
+	command.AddCommand(scopesCmd)
+}
+
+const (
+	boldStart = "\033[1m"
+	boldEnd   = "\033[0m"
+)
+
+// allScopes returns all available scopes
+func allScopes() error {
+	scopes, err := fgamodel.ScopeOptions()
 	if err != nil {
-		panic(fmt.Sprintf("failed to load service scopes: %v", err))
+		return fmt.Errorf("failed to load service scopes: %v", err)
 	}
 
-	desc := fmt.Sprintf(" (available: %s)", strings.Join(scopes, ", "))
+	objects := make([]string, 0, len(scopes))
+	for obj := range scopes {
+		objects = append(objects, obj)
+	}
+	sort.Strings(objects)
 
-	aliases := fgamodel.ScopeAliases()
-	if len(aliases) > 0 {
-		aliasPairs := make([]string, 0, len(aliases))
-
-		for alias, relation := range aliases {
-			aliasPairs = append(aliasPairs, fmt.Sprintf("%s->%s", alias, relation))
+	desc := fmt.Sprintf(boldStart + "Available Scopes: \n\n" + boldEnd)
+	for _, obj := range objects {
+		for _, v := range scopes[obj] {
+			desc += fmt.Sprintf(boldStart+"%s"+boldEnd+":%s ", obj, v)
 		}
-
-		sort.Strings(aliasPairs)
-
-		desc = fmt.Sprintf("%s; aliases: %s", desc, strings.Join(aliasPairs, ", "))
+		desc += fmt.Sprintf("\n")
 	}
 
-	return desc
+	fmt.Println(desc)
+
+	return nil
 }

@@ -2,6 +2,7 @@ package interceptors
 
 import (
 	"context"
+	"errors"
 	"strings"
 
 	"entgo.io/ent"
@@ -66,6 +67,10 @@ func AddIDPredicate(ctx context.Context, q Query) error {
 		if err := rule.CheckSubjectScope(ctx, objectType, fgax.CanView, nil); err != nil {
 			if access.Allow(err) {
 				return nil
+			}
+
+			if errors.Is(err, rule.ErrRequiredScopeNotSet) {
+				return err
 			}
 		}
 	} else {
@@ -244,10 +249,8 @@ func skipFilter(ctx context.Context, q intercept.Query, forceFilter skipperFunc,
 
 	// only check subject scope when the caller has not indicated that filtering must always run
 	if forceFilter == nil || !forceFilter(ctx) {
-		if err := rule.CheckSubjectScope(ctx, objectType, fgax.CanView, nil); err != nil {
-			if access.Allow(err) {
-				return true
-			}
+		if err := rule.CheckSubjectScope(ctx, objectType, fgax.CanView, nil); access.Allow(err) {
+			return true
 		}
 	}
 

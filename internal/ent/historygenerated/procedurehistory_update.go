@@ -525,6 +525,46 @@ func (_u *ProcedureHistoryUpdate) ClearFileID() *ProcedureHistoryUpdate {
 	return _u
 }
 
+// SetExternalFileID sets the "external_file_id" field.
+func (_u *ProcedureHistoryUpdate) SetExternalFileID(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetExternalFileID(v)
+	return _u
+}
+
+// SetNillableExternalFileID sets the "external_file_id" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdate) SetNillableExternalFileID(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetExternalFileID(*v)
+	}
+	return _u
+}
+
+// ClearExternalFileID clears the value of the "external_file_id" field.
+func (_u *ProcedureHistoryUpdate) ClearExternalFileID() *ProcedureHistoryUpdate {
+	_u.mutation.ClearExternalFileID()
+	return _u
+}
+
+// SetExternalContents sets the "external_contents" field.
+func (_u *ProcedureHistoryUpdate) SetExternalContents(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetExternalContents(v)
+	return _u
+}
+
+// SetNillableExternalContents sets the "external_contents" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdate) SetNillableExternalContents(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetExternalContents(*v)
+	}
+	return _u
+}
+
+// ClearExternalContents clears the value of the "external_contents" field.
+func (_u *ProcedureHistoryUpdate) ClearExternalContents() *ProcedureHistoryUpdate {
+	_u.mutation.ClearExternalContents()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *ProcedureHistoryUpdate) SetInternalNotes(v string) *ProcedureHistoryUpdate {
 	_u.mutation.SetInternalNotes(v)
@@ -991,6 +1031,18 @@ func (_u *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (_node int, err e
 	}
 	if _u.mutation.FileIDCleared() {
 		_spec.ClearField(procedurehistory.FieldFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalFileID(); ok {
+		_spec.SetField(procedurehistory.FieldExternalFileID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalFileIDCleared() {
+		_spec.ClearField(procedurehistory.FieldExternalFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalContents(); ok {
+		_spec.SetField(procedurehistory.FieldExternalContents, field.TypeString, value)
+	}
+	if _u.mutation.ExternalContentsCleared() {
+		_spec.ClearField(procedurehistory.FieldExternalContents, field.TypeString)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(procedurehistory.FieldSystemOwned, field.TypeBool)
@@ -1563,6 +1615,46 @@ func (_u *ProcedureHistoryUpdateOne) ClearFileID() *ProcedureHistoryUpdateOne {
 	return _u
 }
 
+// SetExternalFileID sets the "external_file_id" field.
+func (_u *ProcedureHistoryUpdateOne) SetExternalFileID(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetExternalFileID(v)
+	return _u
+}
+
+// SetNillableExternalFileID sets the "external_file_id" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdateOne) SetNillableExternalFileID(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetExternalFileID(*v)
+	}
+	return _u
+}
+
+// ClearExternalFileID clears the value of the "external_file_id" field.
+func (_u *ProcedureHistoryUpdateOne) ClearExternalFileID() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearExternalFileID()
+	return _u
+}
+
+// SetExternalContents sets the "external_contents" field.
+func (_u *ProcedureHistoryUpdateOne) SetExternalContents(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetExternalContents(v)
+	return _u
+}
+
+// SetNillableExternalContents sets the "external_contents" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdateOne) SetNillableExternalContents(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetExternalContents(*v)
+	}
+	return _u
+}
+
+// ClearExternalContents clears the value of the "external_contents" field.
+func (_u *ProcedureHistoryUpdateOne) ClearExternalContents() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearExternalContents()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *ProcedureHistoryUpdateOne) SetInternalNotes(v string) *ProcedureHistoryUpdateOne {
 	_u.mutation.SetInternalNotes(v)
@@ -2059,6 +2151,18 @@ func (_u *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proced
 	}
 	if _u.mutation.FileIDCleared() {
 		_spec.ClearField(procedurehistory.FieldFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalFileID(); ok {
+		_spec.SetField(procedurehistory.FieldExternalFileID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalFileIDCleared() {
+		_spec.ClearField(procedurehistory.FieldExternalFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalContents(); ok {
+		_spec.SetField(procedurehistory.FieldExternalContents, field.TypeString, value)
+	}
+	if _u.mutation.ExternalContentsCleared() {
+		_spec.ClearField(procedurehistory.FieldExternalContents, field.TypeString)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(procedurehistory.FieldSystemOwned, field.TypeBool)

@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
@@ -583,6 +584,46 @@ func (_u *InternalPolicyUpdate) ClearFileID() *InternalPolicyUpdate {
 	return _u
 }
 
+// SetExternalFileID sets the "external_file_id" field.
+func (_u *InternalPolicyUpdate) SetExternalFileID(v string) *InternalPolicyUpdate {
+	_u.mutation.SetExternalFileID(v)
+	return _u
+}
+
+// SetNillableExternalFileID sets the "external_file_id" field if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableExternalFileID(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetExternalFileID(*v)
+	}
+	return _u
+}
+
+// ClearExternalFileID clears the value of the "external_file_id" field.
+func (_u *InternalPolicyUpdate) ClearExternalFileID() *InternalPolicyUpdate {
+	_u.mutation.ClearExternalFileID()
+	return _u
+}
+
+// SetExternalContents sets the "external_contents" field.
+func (_u *InternalPolicyUpdate) SetExternalContents(v string) *InternalPolicyUpdate {
+	_u.mutation.SetExternalContents(v)
+	return _u
+}
+
+// SetNillableExternalContents sets the "external_contents" field if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableExternalContents(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetExternalContents(*v)
+	}
+	return _u
+}
+
+// ClearExternalContents clears the value of the "external_contents" field.
+func (_u *InternalPolicyUpdate) ClearExternalContents() *InternalPolicyUpdate {
+	_u.mutation.ClearExternalContents()
+	return _u
+}
+
 // SetInternalPolicyKindName sets the "internal_policy_kind_name" field.
 func (_u *InternalPolicyUpdate) SetInternalPolicyKindName(v string) *InternalPolicyUpdate {
 	_u.mutation.SetInternalPolicyKindName(v)
@@ -1048,6 +1089,21 @@ func (_u *InternalPolicyUpdate) AddReviews(v ...*Review) *InternalPolicyUpdate {
 	return _u.AddReviewIDs(ids...)
 }
 
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
+func (_u *InternalPolicyUpdate) AddIntegrationIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.AddIntegrationIDs(ids...)
+	return _u
+}
+
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (_u *InternalPolicyUpdate) AddIntegrations(v ...*Integration) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationIDs(ids...)
+}
+
 // Mutation returns the InternalPolicyMutation object of the builder.
 func (_u *InternalPolicyUpdate) Mutation() *InternalPolicyMutation {
 	return _u.mutation
@@ -1473,6 +1529,27 @@ func (_u *InternalPolicyUpdate) RemoveReviews(v ...*Review) *InternalPolicyUpdat
 	return _u.RemoveReviewIDs(ids...)
 }
 
+// ClearIntegrations clears all "integrations" edges to the Integration entity.
+func (_u *InternalPolicyUpdate) ClearIntegrations() *InternalPolicyUpdate {
+	_u.mutation.ClearIntegrations()
+	return _u
+}
+
+// RemoveIntegrationIDs removes the "integrations" edge to Integration entities by IDs.
+func (_u *InternalPolicyUpdate) RemoveIntegrationIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.RemoveIntegrationIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrations removes "integrations" edges to Integration entities.
+func (_u *InternalPolicyUpdate) RemoveIntegrations(v ...*Integration) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *InternalPolicyUpdate) Save(ctx context.Context) (int, error) {
 	if err := _u.defaults(); err != nil {
@@ -1757,6 +1834,18 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.URLCleared() {
 		_spec.ClearField(internalpolicy.FieldURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalFileID(); ok {
+		_spec.SetField(internalpolicy.FieldExternalFileID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalFileIDCleared() {
+		_spec.ClearField(internalpolicy.FieldExternalFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalContents(); ok {
+		_spec.SetField(internalpolicy.FieldExternalContents, field.TypeString, value)
+	}
+	if _u.mutation.ExternalContentsCleared() {
+		_spec.ClearField(internalpolicy.FieldExternalContents, field.TypeString)
 	}
 	if value, ok := _u.mutation.InternalPolicyKindName(); ok {
 		_spec.SetField(internalpolicy.FieldInternalPolicyKindName, field.TypeString, value)
@@ -2864,6 +2953,54 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 			},
 		}
 		edge.Schema = _u.schemaConfig.ReviewInternalPolicies
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.IntegrationsTable,
+			Columns: internalpolicy.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationInternalPolicies
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.IntegrationsTable,
+			Columns: internalpolicy.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationInternalPolicies
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.IntegrationsTable,
+			Columns: internalpolicy.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3423,6 +3560,46 @@ func (_u *InternalPolicyUpdateOne) ClearFileID() *InternalPolicyUpdateOne {
 	return _u
 }
 
+// SetExternalFileID sets the "external_file_id" field.
+func (_u *InternalPolicyUpdateOne) SetExternalFileID(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetExternalFileID(v)
+	return _u
+}
+
+// SetNillableExternalFileID sets the "external_file_id" field if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableExternalFileID(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetExternalFileID(*v)
+	}
+	return _u
+}
+
+// ClearExternalFileID clears the value of the "external_file_id" field.
+func (_u *InternalPolicyUpdateOne) ClearExternalFileID() *InternalPolicyUpdateOne {
+	_u.mutation.ClearExternalFileID()
+	return _u
+}
+
+// SetExternalContents sets the "external_contents" field.
+func (_u *InternalPolicyUpdateOne) SetExternalContents(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetExternalContents(v)
+	return _u
+}
+
+// SetNillableExternalContents sets the "external_contents" field if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableExternalContents(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetExternalContents(*v)
+	}
+	return _u
+}
+
+// ClearExternalContents clears the value of the "external_contents" field.
+func (_u *InternalPolicyUpdateOne) ClearExternalContents() *InternalPolicyUpdateOne {
+	_u.mutation.ClearExternalContents()
+	return _u
+}
+
 // SetInternalPolicyKindName sets the "internal_policy_kind_name" field.
 func (_u *InternalPolicyUpdateOne) SetInternalPolicyKindName(v string) *InternalPolicyUpdateOne {
 	_u.mutation.SetInternalPolicyKindName(v)
@@ -3888,6 +4065,21 @@ func (_u *InternalPolicyUpdateOne) AddReviews(v ...*Review) *InternalPolicyUpdat
 	return _u.AddReviewIDs(ids...)
 }
 
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
+func (_u *InternalPolicyUpdateOne) AddIntegrationIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.AddIntegrationIDs(ids...)
+	return _u
+}
+
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (_u *InternalPolicyUpdateOne) AddIntegrations(v ...*Integration) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationIDs(ids...)
+}
+
 // Mutation returns the InternalPolicyMutation object of the builder.
 func (_u *InternalPolicyUpdateOne) Mutation() *InternalPolicyMutation {
 	return _u.mutation
@@ -4313,6 +4505,27 @@ func (_u *InternalPolicyUpdateOne) RemoveReviews(v ...*Review) *InternalPolicyUp
 	return _u.RemoveReviewIDs(ids...)
 }
 
+// ClearIntegrations clears all "integrations" edges to the Integration entity.
+func (_u *InternalPolicyUpdateOne) ClearIntegrations() *InternalPolicyUpdateOne {
+	_u.mutation.ClearIntegrations()
+	return _u
+}
+
+// RemoveIntegrationIDs removes the "integrations" edge to Integration entities by IDs.
+func (_u *InternalPolicyUpdateOne) RemoveIntegrationIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.RemoveIntegrationIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrations removes "integrations" edges to Integration entities.
+func (_u *InternalPolicyUpdateOne) RemoveIntegrations(v ...*Integration) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationIDs(ids...)
+}
+
 // Where appends a list predicates to the InternalPolicyUpdate builder.
 func (_u *InternalPolicyUpdateOne) Where(ps ...predicate.InternalPolicy) *InternalPolicyUpdateOne {
 	_u.mutation.Where(ps...)
@@ -4627,6 +4840,18 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 	}
 	if _u.mutation.URLCleared() {
 		_spec.ClearField(internalpolicy.FieldURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalFileID(); ok {
+		_spec.SetField(internalpolicy.FieldExternalFileID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalFileIDCleared() {
+		_spec.ClearField(internalpolicy.FieldExternalFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalContents(); ok {
+		_spec.SetField(internalpolicy.FieldExternalContents, field.TypeString, value)
+	}
+	if _u.mutation.ExternalContentsCleared() {
+		_spec.ClearField(internalpolicy.FieldExternalContents, field.TypeString)
 	}
 	if value, ok := _u.mutation.InternalPolicyKindName(); ok {
 		_spec.SetField(internalpolicy.FieldInternalPolicyKindName, field.TypeString, value)
@@ -5734,6 +5959,54 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 			},
 		}
 		edge.Schema = _u.schemaConfig.ReviewInternalPolicies
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.IntegrationsTable,
+			Columns: internalpolicy.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationInternalPolicies
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.IntegrationsTable,
+			Columns: internalpolicy.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationInternalPolicies
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.IntegrationsTable,
+			Columns: internalpolicy.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

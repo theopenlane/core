@@ -16,6 +16,8 @@ var (
 	// DocumentManagementModeExternalReference indicates the document is uploaded as a viewable
 	// reference while being managed in an external editor (such as Microsoft Word).
 	DocumentManagementModeExternalReference DocumentManagementMode = "EXTERNAL_REFERENCE"
+	// DocumentManagementModeIntegration is used when the document is managed by an external system integrated with Openlane.
+	DocumentManagementModeIntegration DocumentManagementMode = "INTEGRATION"
 	// DocumentManagementModeInvalid is used when an unknown or unsupported value is provided.
 	DocumentManagementModeInvalid DocumentManagementMode = "DOCUMENT_MANAGEMENT_MODE_INVALID"
 )
@@ -23,6 +25,7 @@ var (
 var documentManagementModeValues = []DocumentManagementMode{
 	DocumentManagementModeOpenlaneManaged,
 	DocumentManagementModeExternalReference,
+	DocumentManagementModeIntegration,
 }
 
 // Values returns a slice of strings representing all valid DocumentManagementMode values.

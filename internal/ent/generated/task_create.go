@@ -361,6 +361,20 @@ func (_c *TaskCreate) SetNillableSystemGenerated(v *bool) *TaskCreate {
 	return _c
 }
 
+// SetIsTemplate sets the "is_template" field.
+func (_c *TaskCreate) SetIsTemplate(v bool) *TaskCreate {
+	_c.mutation.SetIsTemplate(v)
+	return _c
+}
+
+// SetNillableIsTemplate sets the "is_template" field if the given value is not nil.
+func (_c *TaskCreate) SetNillableIsTemplate(v *bool) *TaskCreate {
+	if v != nil {
+		_c.SetIsTemplate(*v)
+	}
+	return _c
+}
+
 // SetIdempotencyKey sets the "idempotency_key" field.
 func (_c *TaskCreate) SetIdempotencyKey(v string) *TaskCreate {
 	_c.mutation.SetIdempotencyKey(v)
@@ -806,6 +820,10 @@ func (_c *TaskCreate) defaults() error {
 		v := task.DefaultSystemGenerated
 		_c.mutation.SetSystemGenerated(v)
 	}
+	if _, ok := _c.mutation.IsTemplate(); !ok {
+		v := task.DefaultIsTemplate
+		_c.mutation.SetIsTemplate(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if task.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized task.DefaultID (forgotten import generated/runtime?)")
@@ -849,6 +867,9 @@ func (_c *TaskCreate) check() error {
 	}
 	if _, ok := _c.mutation.SystemGenerated(); !ok {
 		return &ValidationError{Name: "system_generated", err: errors.New(`generated: missing required field "Task.system_generated"`)}
+	}
+	if _, ok := _c.mutation.IsTemplate(); !ok {
+		return &ValidationError{Name: "is_template", err: errors.New(`generated: missing required field "Task.is_template"`)}
 	}
 	if v, ok := _c.mutation.ExternalReferenceURL(); ok {
 		if err := task.ExternalReferenceURLValidator(v); err != nil {
@@ -966,6 +987,10 @@ func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.SystemGenerated(); ok {
 		_spec.SetField(task.FieldSystemGenerated, field.TypeBool, value)
 		_node.SystemGenerated = value
+	}
+	if value, ok := _c.mutation.IsTemplate(); ok {
+		_spec.SetField(task.FieldIsTemplate, field.TypeBool, value)
+		_node.IsTemplate = value
 	}
 	if value, ok := _c.mutation.IdempotencyKey(); ok {
 		_spec.SetField(task.FieldIdempotencyKey, field.TypeString, value)

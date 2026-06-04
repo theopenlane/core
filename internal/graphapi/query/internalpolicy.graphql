@@ -15,6 +15,8 @@ mutation CreateBulkCSVInternalPolicy ($input: Upload!) {
 			displayID
 			environmentID
 			environmentName
+			externalContents
+			externalFileID
 			externalUUID
 			fileID
 			id
@@ -68,6 +70,8 @@ mutation CreateBulkInternalPolicy ($input: [CreateInternalPolicyInput!]) {
 			displayID
 			environmentID
 			environmentName
+			externalContents
+			externalFileID
 			externalUUID
 			fileID
 			id
@@ -121,6 +125,8 @@ mutation CreateInternalPolicy ($input: CreateInternalPolicyInput!) {
 			displayID
 			environmentID
 			environmentName
+			externalContents
+			externalFileID
 			externalUUID
 			fileID
 			id
@@ -265,6 +271,8 @@ query GetAllInternalPolicies ($first: Int, $last: Int, $after: Cursor, $before: 
 				displayID
 				environmentID
 				environmentName
+				externalContents
+				externalFileID
 				externalUUID
 				fileID
 				id
@@ -343,6 +351,8 @@ query GetInternalPolicies ($first: Int, $last: Int, $after: Cursor, $before: Cur
 				displayID
 				environmentID
 				environmentName
+				externalContents
+				externalFileID
 				externalUUID
 				fileID
 				id
@@ -412,6 +422,8 @@ query GetInternalPolicyByID ($internalPolicyId: ID!) {
 		displayID
 		environmentID
 		environmentName
+		externalContents
+		externalFileID
 		externalUUID
 		fileID
 		id
@@ -480,6 +492,8 @@ mutation UpdateBulkInternalPolicy ($ids: [ID!]!, $input: UpdateInternalPolicyInp
 			displayID
 			environmentID
 			environmentName
+			externalContents
+			externalFileID
 			externalUUID
 			fileID
 			id
@@ -534,6 +548,8 @@ mutation UpdateInternalPolicy ($updateInternalPolicyId: ID!, $input: UpdateInter
 			displayID
 			environmentID
 			environmentName
+			externalContents
+			externalFileID
 			externalUUID
 			fileID
 			id

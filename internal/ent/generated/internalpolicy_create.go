@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
@@ -405,6 +406,34 @@ func (_c *InternalPolicyCreate) SetFileID(v string) *InternalPolicyCreate {
 func (_c *InternalPolicyCreate) SetNillableFileID(v *string) *InternalPolicyCreate {
 	if v != nil {
 		_c.SetFileID(*v)
+	}
+	return _c
+}
+
+// SetExternalFileID sets the "external_file_id" field.
+func (_c *InternalPolicyCreate) SetExternalFileID(v string) *InternalPolicyCreate {
+	_c.mutation.SetExternalFileID(v)
+	return _c
+}
+
+// SetNillableExternalFileID sets the "external_file_id" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableExternalFileID(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetExternalFileID(*v)
+	}
+	return _c
+}
+
+// SetExternalContents sets the "external_contents" field.
+func (_c *InternalPolicyCreate) SetExternalContents(v string) *InternalPolicyCreate {
+	_c.mutation.SetExternalContents(v)
+	return _c
+}
+
+// SetNillableExternalContents sets the "external_contents" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableExternalContents(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetExternalContents(*v)
 	}
 	return _c
 }
@@ -840,6 +869,21 @@ func (_c *InternalPolicyCreate) AddReviews(v ...*Review) *InternalPolicyCreate {
 	return _c.AddReviewIDs(ids...)
 }
 
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
+func (_c *InternalPolicyCreate) AddIntegrationIDs(ids ...string) *InternalPolicyCreate {
+	_c.mutation.AddIntegrationIDs(ids...)
+	return _c
+}
+
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (_c *InternalPolicyCreate) AddIntegrations(v ...*Integration) *InternalPolicyCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationIDs(ids...)
+}
+
 // Mutation returns the InternalPolicyMutation object of the builder.
 func (_c *InternalPolicyCreate) Mutation() *InternalPolicyMutation {
 	return _c.mutation
@@ -1151,6 +1195,14 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 	if value, ok := _c.mutation.URL(); ok {
 		_spec.SetField(internalpolicy.FieldURL, field.TypeString, value)
 		_node.URL = &value
+	}
+	if value, ok := _c.mutation.ExternalFileID(); ok {
+		_spec.SetField(internalpolicy.FieldExternalFileID, field.TypeString, value)
+		_node.ExternalFileID = &value
+	}
+	if value, ok := _c.mutation.ExternalContents(); ok {
+		_spec.SetField(internalpolicy.FieldExternalContents, field.TypeString, value)
+		_node.ExternalContents = &value
 	}
 	if value, ok := _c.mutation.InternalPolicyKindName(); ok {
 		_spec.SetField(internalpolicy.FieldInternalPolicyKindName, field.TypeString, value)
@@ -1599,6 +1651,23 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 			},
 		}
 		edge.Schema = _c.schemaConfig.ReviewInternalPolicies
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IntegrationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.IntegrationsTable,
+			Columns: internalpolicy.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.IntegrationInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

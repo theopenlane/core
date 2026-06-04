@@ -384,6 +384,34 @@ func (_c *ProcedureHistoryCreate) SetNillableFileID(v *string) *ProcedureHistory
 	return _c
 }
 
+// SetExternalFileID sets the "external_file_id" field.
+func (_c *ProcedureHistoryCreate) SetExternalFileID(v string) *ProcedureHistoryCreate {
+	_c.mutation.SetExternalFileID(v)
+	return _c
+}
+
+// SetNillableExternalFileID sets the "external_file_id" field if the given value is not nil.
+func (_c *ProcedureHistoryCreate) SetNillableExternalFileID(v *string) *ProcedureHistoryCreate {
+	if v != nil {
+		_c.SetExternalFileID(*v)
+	}
+	return _c
+}
+
+// SetExternalContents sets the "external_contents" field.
+func (_c *ProcedureHistoryCreate) SetExternalContents(v string) *ProcedureHistoryCreate {
+	_c.mutation.SetExternalContents(v)
+	return _c
+}
+
+// SetNillableExternalContents sets the "external_contents" field if the given value is not nil.
+func (_c *ProcedureHistoryCreate) SetNillableExternalContents(v *string) *ProcedureHistoryCreate {
+	if v != nil {
+		_c.SetExternalContents(*v)
+	}
+	return _c
+}
+
 // SetSystemOwned sets the "system_owned" field.
 func (_c *ProcedureHistoryCreate) SetSystemOwned(v bool) *ProcedureHistoryCreate {
 	_c.mutation.SetSystemOwned(v)
@@ -863,6 +891,14 @@ func (_c *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cre
 	if value, ok := _c.mutation.FileID(); ok {
 		_spec.SetField(procedurehistory.FieldFileID, field.TypeString, value)
 		_node.FileID = &value
+	}
+	if value, ok := _c.mutation.ExternalFileID(); ok {
+		_spec.SetField(procedurehistory.FieldExternalFileID, field.TypeString, value)
+		_node.ExternalFileID = &value
+	}
+	if value, ok := _c.mutation.ExternalContents(); ok {
+		_spec.SetField(procedurehistory.FieldExternalContents, field.TypeString, value)
+		_node.ExternalContents = &value
 	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(procedurehistory.FieldSystemOwned, field.TypeBool, value)

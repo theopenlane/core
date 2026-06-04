@@ -342,6 +342,34 @@ func (_c *ActionPlanCreate) SetNillableFileID(v *string) *ActionPlanCreate {
 	return _c
 }
 
+// SetExternalFileID sets the "external_file_id" field.
+func (_c *ActionPlanCreate) SetExternalFileID(v string) *ActionPlanCreate {
+	_c.mutation.SetExternalFileID(v)
+	return _c
+}
+
+// SetNillableExternalFileID sets the "external_file_id" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableExternalFileID(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetExternalFileID(*v)
+	}
+	return _c
+}
+
+// SetExternalContents sets the "external_contents" field.
+func (_c *ActionPlanCreate) SetExternalContents(v string) *ActionPlanCreate {
+	_c.mutation.SetExternalContents(v)
+	return _c
+}
+
+// SetNillableExternalContents sets the "external_contents" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableExternalContents(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetExternalContents(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *ActionPlanCreate) SetOwnerID(v string) *ActionPlanCreate {
 	_c.mutation.SetOwnerID(v)
@@ -1138,6 +1166,14 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.URL(); ok {
 		_spec.SetField(actionplan.FieldURL, field.TypeString, value)
 		_node.URL = &value
+	}
+	if value, ok := _c.mutation.ExternalFileID(); ok {
+		_spec.SetField(actionplan.FieldExternalFileID, field.TypeString, value)
+		_node.ExternalFileID = &value
+	}
+	if value, ok := _c.mutation.ExternalContents(); ok {
+		_spec.SetField(actionplan.FieldExternalContents, field.TypeString, value)
+		_node.ExternalContents = &value
 	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(actionplan.FieldSystemOwned, field.TypeBool, value)

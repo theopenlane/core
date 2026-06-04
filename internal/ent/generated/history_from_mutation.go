@@ -154,6 +154,14 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetNillableFileID(&fileID)
 	}
 
+	if externalFileID, exists := m.ExternalFileID(); exists {
+		create = create.SetNillableExternalFileID(&externalFileID)
+	}
+
+	if externalContents, exists := m.ExternalContents(); exists {
+		create = create.SetNillableExternalContents(&externalContents)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -419,6 +427,18 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetNillableFileID(actionplan.FileID)
 		}
 
+		if externalFileID, exists := m.ExternalFileID(); exists {
+			create = create.SetNillableExternalFileID(&externalFileID)
+		} else {
+			create = create.SetNillableExternalFileID(actionplan.ExternalFileID)
+		}
+
+		if externalContents, exists := m.ExternalContents(); exists {
+			create = create.SetNillableExternalContents(&externalContents)
+		} else {
+			create = create.SetNillableExternalContents(actionplan.ExternalContents)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -589,6 +609,8 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetDismissedImprovementSuggestions(actionplan.DismissedImprovementSuggestions).
 			SetNillableURL(actionplan.URL).
 			SetNillableFileID(actionplan.FileID).
+			SetNillableExternalFileID(actionplan.ExternalFileID).
+			SetNillableExternalContents(actionplan.ExternalContents).
 			SetOwnerID(actionplan.OwnerID).
 			SetSystemOwned(actionplan.SystemOwned).
 			SetNillableInternalNotes(actionplan.InternalNotes).
@@ -12334,6 +12356,14 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetNillableFileID(&fileID)
 	}
 
+	if externalFileID, exists := m.ExternalFileID(); exists {
+		create = create.SetNillableExternalFileID(&externalFileID)
+	}
+
+	if externalContents, exists := m.ExternalContents(); exists {
+		create = create.SetNillableExternalContents(&externalContents)
+	}
+
 	if internalPolicyKindName, exists := m.InternalPolicyKindName(); exists {
 		create = create.SetInternalPolicyKindName(internalPolicyKindName)
 	}
@@ -12589,6 +12619,18 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetNillableFileID(internalpolicy.FileID)
 		}
 
+		if externalFileID, exists := m.ExternalFileID(); exists {
+			create = create.SetNillableExternalFileID(&externalFileID)
+		} else {
+			create = create.SetNillableExternalFileID(internalpolicy.ExternalFileID)
+		}
+
+		if externalContents, exists := m.ExternalContents(); exists {
+			create = create.SetNillableExternalContents(&externalContents)
+		} else {
+			create = create.SetNillableExternalContents(internalpolicy.ExternalContents)
+		}
+
 		if internalPolicyKindName, exists := m.InternalPolicyKindName(); exists {
 			create = create.SetInternalPolicyKindName(internalPolicyKindName)
 		} else {
@@ -12704,6 +12746,8 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetDismissedImprovementSuggestions(internalpolicy.DismissedImprovementSuggestions).
 			SetNillableURL(internalpolicy.URL).
 			SetNillableFileID(internalpolicy.FileID).
+			SetNillableExternalFileID(internalpolicy.ExternalFileID).
+			SetNillableExternalContents(internalpolicy.ExternalContents).
 			SetInternalPolicyKindName(internalpolicy.InternalPolicyKindName).
 			SetInternalPolicyKindID(internalpolicy.InternalPolicyKindID).
 			SetEnvironmentName(internalpolicy.EnvironmentName).
@@ -16816,6 +16860,14 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetNillableFileID(&fileID)
 	}
 
+	if externalFileID, exists := m.ExternalFileID(); exists {
+		create = create.SetNillableExternalFileID(&externalFileID)
+	}
+
+	if externalContents, exists := m.ExternalContents(); exists {
+		create = create.SetNillableExternalContents(&externalContents)
+	}
+
 	if systemOwned, exists := m.SystemOwned(); exists {
 		create = create.SetSystemOwned(systemOwned)
 	}
@@ -17061,6 +17113,18 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetNillableFileID(procedure.FileID)
 		}
 
+		if externalFileID, exists := m.ExternalFileID(); exists {
+			create = create.SetNillableExternalFileID(&externalFileID)
+		} else {
+			create = create.SetNillableExternalFileID(procedure.ExternalFileID)
+		}
+
+		if externalContents, exists := m.ExternalContents(); exists {
+			create = create.SetNillableExternalContents(&externalContents)
+		} else {
+			create = create.SetNillableExternalContents(procedure.ExternalContents)
+		}
+
 		if systemOwned, exists := m.SystemOwned(); exists {
 			create = create.SetSystemOwned(systemOwned)
 		} else {
@@ -17185,6 +17249,8 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDismissedImprovementSuggestions(procedure.DismissedImprovementSuggestions).
 			SetNillableURL(procedure.URL).
 			SetNillableFileID(procedure.FileID).
+			SetNillableExternalFileID(procedure.ExternalFileID).
+			SetNillableExternalContents(procedure.ExternalContents).
 			SetSystemOwned(procedure.SystemOwned).
 			SetNillableInternalNotes(procedure.InternalNotes).
 			SetNillableSystemInternalID(procedure.SystemInternalID).
@@ -21767,6 +21833,10 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetSystemGenerated(systemGenerated)
 	}
 
+	if isTemplate, exists := m.IsTemplate(); exists {
+		create = create.SetIsTemplate(isTemplate)
+	}
+
 	if idempotencyKey, exists := m.IdempotencyKey(); exists {
 		create = create.SetIdempotencyKey(idempotencyKey)
 	}
@@ -21960,6 +22030,12 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetSystemGenerated(task.SystemGenerated)
 		}
 
+		if isTemplate, exists := m.IsTemplate(); exists {
+			create = create.SetIsTemplate(isTemplate)
+		} else {
+			create = create.SetIsTemplate(task.IsTemplate)
+		}
+
 		if idempotencyKey, exists := m.IdempotencyKey(); exists {
 			create = create.SetIdempotencyKey(idempotencyKey)
 		} else {
@@ -22038,6 +22114,7 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetAssigneeID(task.AssigneeID).
 			SetAssignerID(task.AssignerID).
 			SetSystemGenerated(task.SystemGenerated).
+			SetIsTemplate(task.IsTemplate).
 			SetIdempotencyKey(task.IdempotencyKey).
 			SetExternalReferenceURL(task.ExternalReferenceURL).
 			SetNillableParentTaskID(task.ParentTaskID).

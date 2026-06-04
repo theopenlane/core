@@ -15086,6 +15086,25 @@ func (c *IntegrationClient) QueryVulnerabilities(_m *Integration) *Vulnerability
 	return query
 }
 
+// QueryInternalPolicies queries the internal_policies edge of a Integration.
+func (c *IntegrationClient) QueryInternalPolicies(_m *Integration) *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, integration.InternalPoliciesTable, integration.InternalPoliciesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.IntegrationInternalPolicies
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryReviews queries the reviews edge of a Integration.
 func (c *IntegrationClient) QueryReviews(_m *Integration) *ReviewQuery {
 	query := (&ReviewClient{config: c.config}).Query()
@@ -16416,6 +16435,25 @@ func (c *InternalPolicyClient) QueryReviews(_m *InternalPolicy) *ReviewQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Review
 		step.Edge.Schema = schemaConfig.ReviewInternalPolicies
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegrations queries the integrations edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryIntegrations(_m *InternalPolicy) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, internalpolicy.IntegrationsTable, internalpolicy.IntegrationsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.IntegrationInternalPolicies
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

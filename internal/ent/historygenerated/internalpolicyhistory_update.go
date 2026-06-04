@@ -565,6 +565,46 @@ func (_u *InternalPolicyHistoryUpdate) ClearFileID() *InternalPolicyHistoryUpdat
 	return _u
 }
 
+// SetExternalFileID sets the "external_file_id" field.
+func (_u *InternalPolicyHistoryUpdate) SetExternalFileID(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetExternalFileID(v)
+	return _u
+}
+
+// SetNillableExternalFileID sets the "external_file_id" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdate) SetNillableExternalFileID(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetExternalFileID(*v)
+	}
+	return _u
+}
+
+// ClearExternalFileID clears the value of the "external_file_id" field.
+func (_u *InternalPolicyHistoryUpdate) ClearExternalFileID() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearExternalFileID()
+	return _u
+}
+
+// SetExternalContents sets the "external_contents" field.
+func (_u *InternalPolicyHistoryUpdate) SetExternalContents(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetExternalContents(v)
+	return _u
+}
+
+// SetNillableExternalContents sets the "external_contents" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdate) SetNillableExternalContents(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetExternalContents(*v)
+	}
+	return _u
+}
+
+// ClearExternalContents clears the value of the "external_contents" field.
+func (_u *InternalPolicyHistoryUpdate) ClearExternalContents() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearExternalContents()
+	return _u
+}
+
 // SetInternalPolicyKindName sets the "internal_policy_kind_name" field.
 func (_u *InternalPolicyHistoryUpdate) SetInternalPolicyKindName(v string) *InternalPolicyHistoryUpdate {
 	_u.mutation.SetInternalPolicyKindName(v)
@@ -1026,6 +1066,18 @@ func (_u *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if _u.mutation.FileIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalFileID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldExternalFileID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalFileIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldExternalFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalContents(); ok {
+		_spec.SetField(internalpolicyhistory.FieldExternalContents, field.TypeString, value)
+	}
+	if _u.mutation.ExternalContentsCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldExternalContents, field.TypeString)
 	}
 	if value, ok := _u.mutation.InternalPolicyKindName(); ok {
 		_spec.SetField(internalpolicyhistory.FieldInternalPolicyKindName, field.TypeString, value)
@@ -1629,6 +1681,46 @@ func (_u *InternalPolicyHistoryUpdateOne) ClearFileID() *InternalPolicyHistoryUp
 	return _u
 }
 
+// SetExternalFileID sets the "external_file_id" field.
+func (_u *InternalPolicyHistoryUpdateOne) SetExternalFileID(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetExternalFileID(v)
+	return _u
+}
+
+// SetNillableExternalFileID sets the "external_file_id" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableExternalFileID(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetExternalFileID(*v)
+	}
+	return _u
+}
+
+// ClearExternalFileID clears the value of the "external_file_id" field.
+func (_u *InternalPolicyHistoryUpdateOne) ClearExternalFileID() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearExternalFileID()
+	return _u
+}
+
+// SetExternalContents sets the "external_contents" field.
+func (_u *InternalPolicyHistoryUpdateOne) SetExternalContents(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetExternalContents(v)
+	return _u
+}
+
+// SetNillableExternalContents sets the "external_contents" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableExternalContents(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetExternalContents(*v)
+	}
+	return _u
+}
+
+// ClearExternalContents clears the value of the "external_contents" field.
+func (_u *InternalPolicyHistoryUpdateOne) ClearExternalContents() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearExternalContents()
+	return _u
+}
+
 // SetInternalPolicyKindName sets the "internal_policy_kind_name" field.
 func (_u *InternalPolicyHistoryUpdateOne) SetInternalPolicyKindName(v string) *InternalPolicyHistoryUpdateOne {
 	_u.mutation.SetInternalPolicyKindName(v)
@@ -2120,6 +2212,18 @@ func (_u *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node *I
 	}
 	if _u.mutation.FileIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalFileID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldExternalFileID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalFileIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldExternalFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalContents(); ok {
+		_spec.SetField(internalpolicyhistory.FieldExternalContents, field.TypeString, value)
+	}
+	if _u.mutation.ExternalContentsCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldExternalContents, field.TypeString)
 	}
 	if value, ok := _u.mutation.InternalPolicyKindName(); ok {
 		_spec.SetField(internalpolicyhistory.FieldInternalPolicyKindName, field.TypeString, value)

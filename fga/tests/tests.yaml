@@ -1799,38 +1799,53 @@ tests:
         object: assessment_response:response-1
         assertions:
           can_view: true
+          can_edit: true
           can_delete: false
       - user: user:ulid-of-owner
         object: assessment_response:response-1
         assertions:
           can_view: true
+          can_edit: true
           can_delete: true
       - user: user:ulid-of-admin
         object: assessment_response:response-1
         assertions:
           can_view: true
+          can_edit: true
           can_delete: true
       - user: user:ulid-of-member
         object: assessment_response:response-1
         assertions:
           can_view: true
+          can_edit: false
           can_delete: false
       - user: user:ulid-of-owner-foobar
         object: assessment_response:response-1
         assertions:
           can_view: false
+          can_edit: false
           can_delete: false
+      - user: user:ulid-of-owner
+        object: assessment_response:response-entity
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
     list_objects:
       - user: user:ulid-response-owner
         type: assessment_response
+        context:
+          email_domain: "example.com"
         assertions:
           can_view:
             - assessment_response:response-1
+            - assessment_response:response-entity
       - user: user:ulid-of-owner
         type: assessment_response
         assertions:
           can_delete:
             - assessment_response:response-1
+            - assessment_response:response-entity
   - name: campaigns
     description: test campaign and campaign_target relationships with various parent types
     tuple_file: tuples/campaigns.yaml

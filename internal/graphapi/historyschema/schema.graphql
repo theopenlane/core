@@ -117,6 +117,14 @@ type ActionPlanHistory implements Node {
 	"""
 	fileID: String
 	"""
+	Documents managed externally may have IDs we need to reference, this holds them
+	"""
+	externalFileID: String
+	"""
+	The contents of externally managed files, if available
+	"""
+	externalContents: String
+	"""
 	the ID of the organization owner of the object
 	"""
 	ownerID: String
@@ -212,6 +220,7 @@ ActionPlanHistoryDocumentManagementMode is enum for the field management_mode
 enum ActionPlanHistoryDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
 	OPENLANE_MANAGED
 	EXTERNAL_REFERENCE
+	INTEGRATION
 }
 """
 ActionPlanHistoryDocumentStatus is enum for the field status
@@ -587,6 +596,42 @@ input ActionPlanHistoryWhereInput {
 	fileIDNotNil: Boolean
 	fileIDEqualFold: String
 	fileIDContainsFold: String
+	"""
+	external_file_id field predicates
+	"""
+	externalFileID: String
+	externalFileIDNEQ: String
+	externalFileIDIn: [String!]
+	externalFileIDNotIn: [String!]
+	externalFileIDGT: String
+	externalFileIDGTE: String
+	externalFileIDLT: String
+	externalFileIDLTE: String
+	externalFileIDContains: String
+	externalFileIDHasPrefix: String
+	externalFileIDHasSuffix: String
+	externalFileIDIsNil: Boolean
+	externalFileIDNotNil: Boolean
+	externalFileIDEqualFold: String
+	externalFileIDContainsFold: String
+	"""
+	external_contents field predicates
+	"""
+	externalContents: String
+	externalContentsNEQ: String
+	externalContentsIn: [String!]
+	externalContentsNotIn: [String!]
+	externalContentsGT: String
+	externalContentsGTE: String
+	externalContentsLT: String
+	externalContentsLTE: String
+	externalContentsContains: String
+	externalContentsHasPrefix: String
+	externalContentsHasSuffix: String
+	externalContentsIsNil: Boolean
+	externalContentsNotNil: Boolean
+	externalContentsEqualFold: String
+	externalContentsContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -18035,6 +18080,14 @@ type InternalPolicyHistory implements Node {
 	"""
 	fileID: String
 	"""
+	Documents managed externally may have IDs we need to reference, this holds them
+	"""
+	externalFileID: String
+	"""
+	The contents of externally managed files, if available
+	"""
+	externalContents: String
+	"""
 	the kind of the internal_policy
 	"""
 	internalPolicyKindName: String
@@ -18090,6 +18143,7 @@ InternalPolicyHistoryDocumentManagementMode is enum for the field management_mod
 enum InternalPolicyHistoryDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
 	OPENLANE_MANAGED
 	EXTERNAL_REFERENCE
+	INTEGRATION
 }
 """
 InternalPolicyHistoryDocumentStatus is enum for the field status
@@ -18529,6 +18583,42 @@ input InternalPolicyHistoryWhereInput {
 	fileIDNotNil: Boolean
 	fileIDEqualFold: String
 	fileIDContainsFold: String
+	"""
+	external_file_id field predicates
+	"""
+	externalFileID: String
+	externalFileIDNEQ: String
+	externalFileIDIn: [String!]
+	externalFileIDNotIn: [String!]
+	externalFileIDGT: String
+	externalFileIDGTE: String
+	externalFileIDLT: String
+	externalFileIDLTE: String
+	externalFileIDContains: String
+	externalFileIDHasPrefix: String
+	externalFileIDHasSuffix: String
+	externalFileIDIsNil: Boolean
+	externalFileIDNotNil: Boolean
+	externalFileIDEqualFold: String
+	externalFileIDContainsFold: String
+	"""
+	external_contents field predicates
+	"""
+	externalContents: String
+	externalContentsNEQ: String
+	externalContentsIn: [String!]
+	externalContentsNotIn: [String!]
+	externalContentsGT: String
+	externalContentsGTE: String
+	externalContentsLT: String
+	externalContentsLTE: String
+	externalContentsContains: String
+	externalContentsHasPrefix: String
+	externalContentsHasSuffix: String
+	externalContentsIsNil: Boolean
+	externalContentsNotNil: Boolean
+	externalContentsEqualFold: String
+	externalContentsContainsFold: String
 	"""
 	internal_policy_kind_name field predicates
 	"""
@@ -24400,6 +24490,14 @@ type ProcedureHistory implements Node {
 	"""
 	fileID: String
 	"""
+	Documents managed externally may have IDs we need to reference, this holds them
+	"""
+	externalFileID: String
+	"""
+	The contents of externally managed files, if available
+	"""
+	externalContents: String
+	"""
 	indicates if the record is owned by the the openlane system and not by an organization
 	"""
 	systemOwned: Boolean
@@ -24463,6 +24561,7 @@ ProcedureHistoryDocumentManagementMode is enum for the field management_mode
 enum ProcedureHistoryDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
 	OPENLANE_MANAGED
 	EXTERNAL_REFERENCE
+	INTEGRATION
 }
 """
 ProcedureHistoryDocumentStatus is enum for the field status
@@ -24859,6 +24958,42 @@ input ProcedureHistoryWhereInput {
 	fileIDNotNil: Boolean
 	fileIDEqualFold: String
 	fileIDContainsFold: String
+	"""
+	external_file_id field predicates
+	"""
+	externalFileID: String
+	externalFileIDNEQ: String
+	externalFileIDIn: [String!]
+	externalFileIDNotIn: [String!]
+	externalFileIDGT: String
+	externalFileIDGTE: String
+	externalFileIDLT: String
+	externalFileIDLTE: String
+	externalFileIDContains: String
+	externalFileIDHasPrefix: String
+	externalFileIDHasSuffix: String
+	externalFileIDIsNil: Boolean
+	externalFileIDNotNil: Boolean
+	externalFileIDEqualFold: String
+	externalFileIDContainsFold: String
+	"""
+	external_contents field predicates
+	"""
+	externalContents: String
+	externalContentsNEQ: String
+	externalContentsIn: [String!]
+	externalContentsNotIn: [String!]
+	externalContentsGT: String
+	externalContentsGTE: String
+	externalContentsLT: String
+	externalContentsLTE: String
+	externalContentsContains: String
+	externalContentsHasPrefix: String
+	externalContentsHasSuffix: String
+	externalContentsIsNil: Boolean
+	externalContentsNotNil: Boolean
+	externalContentsEqualFold: String
+	externalContentsContainsFold: String
 	"""
 	system_owned field predicates
 	"""
@@ -34143,6 +34278,10 @@ type TaskHistory implements Node {
 	"""
 	systemGenerated: Boolean! @externalSource(source: FRAMEWORK)
 	"""
+	indicates if the task is intended to be used as a template
+	"""
+	isTemplate: Boolean!
+	"""
 	key to prevent duplicates for auto-generated task based on rules
 	"""
 	idempotencyKey: String
@@ -34217,6 +34356,7 @@ enum TaskHistoryOrderField {
 	STATUS
 	due
 	completed
+	is_template
 }
 """
 TaskHistoryTaskStatus is enum for the field status
@@ -34615,6 +34755,11 @@ input TaskHistoryWhereInput {
 	"""
 	systemGenerated: Boolean
 	systemGeneratedNEQ: Boolean
+	"""
+	is_template field predicates
+	"""
+	isTemplate: Boolean
+	isTemplateNEQ: Boolean
 	"""
 	idempotency_key field predicates
 	"""

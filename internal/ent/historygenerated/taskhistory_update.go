@@ -426,6 +426,20 @@ func (_u *TaskHistoryUpdate) SetNillableSystemGenerated(v *bool) *TaskHistoryUpd
 	return _u
 }
 
+// SetIsTemplate sets the "is_template" field.
+func (_u *TaskHistoryUpdate) SetIsTemplate(v bool) *TaskHistoryUpdate {
+	_u.mutation.SetIsTemplate(v)
+	return _u
+}
+
+// SetNillableIsTemplate sets the "is_template" field if the given value is not nil.
+func (_u *TaskHistoryUpdate) SetNillableIsTemplate(v *bool) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetIsTemplate(*v)
+	}
+	return _u
+}
+
 // SetIdempotencyKey sets the "idempotency_key" field.
 func (_u *TaskHistoryUpdate) SetIdempotencyKey(v string) *TaskHistoryUpdate {
 	_u.mutation.SetIdempotencyKey(v)
@@ -697,6 +711,9 @@ func (_u *TaskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if value, ok := _u.mutation.SystemGenerated(); ok {
 		_spec.SetField(taskhistory.FieldSystemGenerated, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IsTemplate(); ok {
+		_spec.SetField(taskhistory.FieldIsTemplate, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.IdempotencyKey(); ok {
 		_spec.SetField(taskhistory.FieldIdempotencyKey, field.TypeString, value)
@@ -1135,6 +1152,20 @@ func (_u *TaskHistoryUpdateOne) SetNillableSystemGenerated(v *bool) *TaskHistory
 	return _u
 }
 
+// SetIsTemplate sets the "is_template" field.
+func (_u *TaskHistoryUpdateOne) SetIsTemplate(v bool) *TaskHistoryUpdateOne {
+	_u.mutation.SetIsTemplate(v)
+	return _u
+}
+
+// SetNillableIsTemplate sets the "is_template" field if the given value is not nil.
+func (_u *TaskHistoryUpdateOne) SetNillableIsTemplate(v *bool) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetIsTemplate(*v)
+	}
+	return _u
+}
+
 // SetIdempotencyKey sets the "idempotency_key" field.
 func (_u *TaskHistoryUpdateOne) SetIdempotencyKey(v string) *TaskHistoryUpdateOne {
 	_u.mutation.SetIdempotencyKey(v)
@@ -1436,6 +1467,9 @@ func (_u *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHistory
 	}
 	if value, ok := _u.mutation.SystemGenerated(); ok {
 		_spec.SetField(taskhistory.FieldSystemGenerated, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IsTemplate(); ok {
+		_spec.SetField(taskhistory.FieldIsTemplate, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.IdempotencyKey(); ok {
 		_spec.SetField(taskhistory.FieldIdempotencyKey, field.TypeString, value)

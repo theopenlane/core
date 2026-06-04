@@ -1,6 +1,8 @@
 package cloudflare
 
 import (
+	"time"
+
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
@@ -109,6 +111,28 @@ func Builder() registry.Builder {
 					},
 					IngestHandle:        FindingsCollect{}.IngestHandle(),
 					RequiredPermissions: []string{"Account Security Center Insights Read"},
+				},
+				{
+					Name:           assetSyncOperation.Name(),
+					Description:    "Collect Cloudflare domain registrations as assets",
+					Topic:          definitionID.OperationTopic(assetSyncOperation.Name()),
+					ClientRef:      cloudflareClient.ID(),
+					ConfigSchema:   assetSyncSchema,
+					Policy:         types.ExecutionPolicy{Reconcile: true},
+					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.AssetSync.Disable }),
+					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) AssetSync { return u.AssetSync }),
+					Ingest: []types.IngestContract{
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaAsset,
+						},
+					},
+					IngestHandle:        AssetCollect{}.IngestHandle(),
+					SkipDefaultLookback: true,
+					RequiredPermissions: []string{"Registrar Domains Read"},
+					ReconcileSchedule: gala.NewFullFetchSchedule(
+						gala.WithMinInterval(assetSyncMinIntervalHours*time.Hour),
+						gala.WithMaxInterval(assetSyncMaxIntervalDays*assetSyncMinIntervalHours*time.Hour),
+					),
 				},
 			},
 			Mappings: cloudflareMappings(),

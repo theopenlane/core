@@ -173,6 +173,16 @@ func FileID(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldFileID, v))
 }
 
+// ExternalFileID applies equality check predicate on the "external_file_id" field. It's identical to ExternalFileIDEQ.
+func ExternalFileID(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldExternalFileID, v))
+}
+
+// ExternalContents applies equality check predicate on the "external_contents" field. It's identical to ExternalContentsEQ.
+func ExternalContents(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldExternalContents, v))
+}
+
 // InternalPolicyKindName applies equality check predicate on the "internal_policy_kind_name" field. It's identical to InternalPolicyKindNameEQ.
 func InternalPolicyKindName(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldInternalPolicyKindName, v))
@@ -1758,6 +1768,156 @@ func FileIDContainsFold(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldContainsFold(FieldFileID, v))
 }
 
+// ExternalFileIDEQ applies the EQ predicate on the "external_file_id" field.
+func ExternalFileIDEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldExternalFileID, v))
+}
+
+// ExternalFileIDNEQ applies the NEQ predicate on the "external_file_id" field.
+func ExternalFileIDNEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNEQ(FieldExternalFileID, v))
+}
+
+// ExternalFileIDIn applies the In predicate on the "external_file_id" field.
+func ExternalFileIDIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIn(FieldExternalFileID, vs...))
+}
+
+// ExternalFileIDNotIn applies the NotIn predicate on the "external_file_id" field.
+func ExternalFileIDNotIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotIn(FieldExternalFileID, vs...))
+}
+
+// ExternalFileIDGT applies the GT predicate on the "external_file_id" field.
+func ExternalFileIDGT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGT(FieldExternalFileID, v))
+}
+
+// ExternalFileIDGTE applies the GTE predicate on the "external_file_id" field.
+func ExternalFileIDGTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGTE(FieldExternalFileID, v))
+}
+
+// ExternalFileIDLT applies the LT predicate on the "external_file_id" field.
+func ExternalFileIDLT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLT(FieldExternalFileID, v))
+}
+
+// ExternalFileIDLTE applies the LTE predicate on the "external_file_id" field.
+func ExternalFileIDLTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLTE(FieldExternalFileID, v))
+}
+
+// ExternalFileIDContains applies the Contains predicate on the "external_file_id" field.
+func ExternalFileIDContains(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContains(FieldExternalFileID, v))
+}
+
+// ExternalFileIDHasPrefix applies the HasPrefix predicate on the "external_file_id" field.
+func ExternalFileIDHasPrefix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasPrefix(FieldExternalFileID, v))
+}
+
+// ExternalFileIDHasSuffix applies the HasSuffix predicate on the "external_file_id" field.
+func ExternalFileIDHasSuffix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldExternalFileID, v))
+}
+
+// ExternalFileIDIsNil applies the IsNil predicate on the "external_file_id" field.
+func ExternalFileIDIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldExternalFileID))
+}
+
+// ExternalFileIDNotNil applies the NotNil predicate on the "external_file_id" field.
+func ExternalFileIDNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldExternalFileID))
+}
+
+// ExternalFileIDEqualFold applies the EqualFold predicate on the "external_file_id" field.
+func ExternalFileIDEqualFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEqualFold(FieldExternalFileID, v))
+}
+
+// ExternalFileIDContainsFold applies the ContainsFold predicate on the "external_file_id" field.
+func ExternalFileIDContainsFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContainsFold(FieldExternalFileID, v))
+}
+
+// ExternalContentsEQ applies the EQ predicate on the "external_contents" field.
+func ExternalContentsEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldExternalContents, v))
+}
+
+// ExternalContentsNEQ applies the NEQ predicate on the "external_contents" field.
+func ExternalContentsNEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNEQ(FieldExternalContents, v))
+}
+
+// ExternalContentsIn applies the In predicate on the "external_contents" field.
+func ExternalContentsIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIn(FieldExternalContents, vs...))
+}
+
+// ExternalContentsNotIn applies the NotIn predicate on the "external_contents" field.
+func ExternalContentsNotIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotIn(FieldExternalContents, vs...))
+}
+
+// ExternalContentsGT applies the GT predicate on the "external_contents" field.
+func ExternalContentsGT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGT(FieldExternalContents, v))
+}
+
+// ExternalContentsGTE applies the GTE predicate on the "external_contents" field.
+func ExternalContentsGTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGTE(FieldExternalContents, v))
+}
+
+// ExternalContentsLT applies the LT predicate on the "external_contents" field.
+func ExternalContentsLT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLT(FieldExternalContents, v))
+}
+
+// ExternalContentsLTE applies the LTE predicate on the "external_contents" field.
+func ExternalContentsLTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLTE(FieldExternalContents, v))
+}
+
+// ExternalContentsContains applies the Contains predicate on the "external_contents" field.
+func ExternalContentsContains(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContains(FieldExternalContents, v))
+}
+
+// ExternalContentsHasPrefix applies the HasPrefix predicate on the "external_contents" field.
+func ExternalContentsHasPrefix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasPrefix(FieldExternalContents, v))
+}
+
+// ExternalContentsHasSuffix applies the HasSuffix predicate on the "external_contents" field.
+func ExternalContentsHasSuffix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldExternalContents, v))
+}
+
+// ExternalContentsIsNil applies the IsNil predicate on the "external_contents" field.
+func ExternalContentsIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldExternalContents))
+}
+
+// ExternalContentsNotNil applies the NotNil predicate on the "external_contents" field.
+func ExternalContentsNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldExternalContents))
+}
+
+// ExternalContentsEqualFold applies the EqualFold predicate on the "external_contents" field.
+func ExternalContentsEqualFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEqualFold(FieldExternalContents, v))
+}
+
+// ExternalContentsContainsFold applies the ContainsFold predicate on the "external_contents" field.
+func ExternalContentsContainsFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContainsFold(FieldExternalContents, v))
+}
+
 // InternalPolicyKindNameEQ applies the EQ predicate on the "internal_policy_kind_name" field.
 func InternalPolicyKindNameEQ(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldInternalPolicyKindName, v))
@@ -3020,6 +3180,35 @@ func HasReviewsWith(preds ...predicate.Review) predicate.InternalPolicy {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Review
 		step.Edge.Schema = schemaConfig.ReviewInternalPolicies
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasIntegrations applies the HasEdge predicate on the "integrations" edge.
+func HasIntegrations() predicate.InternalPolicy {
+	return predicate.InternalPolicy(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, IntegrationsTable, IntegrationsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.IntegrationInternalPolicies
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIntegrationsWith applies the HasEdge predicate on the "integrations" edge with a given conditions (other predicates).
+func HasIntegrationsWith(preds ...predicate.Integration) predicate.InternalPolicy {
+	return predicate.InternalPolicy(func(s *sql.Selector) {
+		step := newIntegrationsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.IntegrationInternalPolicies
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

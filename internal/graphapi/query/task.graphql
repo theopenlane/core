@@ -16,6 +16,7 @@ mutation CreateBulkCSVTask ($input: Upload!) {
 			externalUUID
 			id
 			idempotencyKey
+			isTemplate
 			ownerID
 			parentTaskID
 			scopeID
@@ -72,6 +73,7 @@ mutation CreateBulkTask ($input: [CreateTaskInput!]) {
 			externalUUID
 			id
 			idempotencyKey
+			isTemplate
 			ownerID
 			parentTaskID
 			scopeID
@@ -128,6 +130,7 @@ mutation CreateTask ($input: CreateTaskInput!) {
 			externalUUID
 			id
 			idempotencyKey
+			isTemplate
 			ownerID
 			parentTaskID
 			scopeID
@@ -197,6 +200,7 @@ query GetAllTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				externalUUID
 				id
 				idempotencyKey
+				isTemplate
 				ownerID
 				parentTaskID
 				scopeID
@@ -267,6 +271,7 @@ query GetTaskByID ($taskId: ID!) {
 		externalUUID
 		id
 		idempotencyKey
+		isTemplate
 		ownerID
 		parentTaskID
 		scopeID
@@ -344,6 +349,7 @@ query GetTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				externalUUID
 				id
 				idempotencyKey
+				isTemplate
 				ownerID
 				parentTaskID
 				scopeID
@@ -411,6 +417,7 @@ mutation UpdateBulkTask ($ids: [ID!]!, $input: UpdateTaskInput!) {
 			externalUUID
 			id
 			idempotencyKey
+			isTemplate
 			ownerID
 			parentTaskID
 			scopeID
@@ -468,6 +475,7 @@ mutation UpdateTask ($updateTaskId: ID!, $input: UpdateTaskInput!) {
 			externalUUID
 			id
 			idempotencyKey
+			isTemplate
 			ownerID
 			parentTaskID
 			scopeID

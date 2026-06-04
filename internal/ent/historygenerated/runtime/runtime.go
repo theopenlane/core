@@ -166,19 +166,19 @@ func init() {
 	// actionplanhistory.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
 	actionplanhistory.DefaultDismissedImprovementSuggestions = actionplanhistoryDescDismissedImprovementSuggestions.Default.([]string)
 	// actionplanhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	actionplanhistoryDescSystemOwned := actionplanhistoryFields[32].Descriptor()
+	actionplanhistoryDescSystemOwned := actionplanhistoryFields[34].Descriptor()
 	// actionplanhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	actionplanhistory.DefaultSystemOwned = actionplanhistoryDescSystemOwned.Default.(bool)
 	// actionplanhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	actionplanhistoryDescWorkflowEligibleMarker := actionplanhistoryFields[37].Descriptor()
+	actionplanhistoryDescWorkflowEligibleMarker := actionplanhistoryFields[39].Descriptor()
 	// actionplanhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	actionplanhistory.DefaultWorkflowEligibleMarker = actionplanhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// actionplanhistoryDescRequiresApproval is the schema descriptor for requires_approval field.
-	actionplanhistoryDescRequiresApproval := actionplanhistoryFields[43].Descriptor()
+	actionplanhistoryDescRequiresApproval := actionplanhistoryFields[45].Descriptor()
 	// actionplanhistory.DefaultRequiresApproval holds the default value on creation for the requires_approval field.
 	actionplanhistory.DefaultRequiresApproval = actionplanhistoryDescRequiresApproval.Default.(bool)
 	// actionplanhistoryDescBlocked is the schema descriptor for blocked field.
-	actionplanhistoryDescBlocked := actionplanhistoryFields[44].Descriptor()
+	actionplanhistoryDescBlocked := actionplanhistoryFields[46].Descriptor()
 	// actionplanhistory.DefaultBlocked holds the default value on creation for the blocked field.
 	actionplanhistory.DefaultBlocked = actionplanhistoryDescBlocked.Default.(bool)
 	// actionplanhistoryDescID is the schema descriptor for id field.
@@ -1571,7 +1571,7 @@ func init() {
 	// internalpolicyhistory.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
 	internalpolicyhistory.DefaultDismissedImprovementSuggestions = internalpolicyhistoryDescDismissedImprovementSuggestions.Default.([]string)
 	// internalpolicyhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	internalpolicyhistoryDescWorkflowEligibleMarker := internalpolicyhistoryFields[42].Descriptor()
+	internalpolicyhistoryDescWorkflowEligibleMarker := internalpolicyhistoryFields[44].Descriptor()
 	// internalpolicyhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	internalpolicyhistory.DefaultWorkflowEligibleMarker = internalpolicyhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// internalpolicyhistoryDescID is the schema descriptor for id field.
@@ -2135,11 +2135,11 @@ func init() {
 	// procedurehistory.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
 	procedurehistory.DefaultDismissedImprovementSuggestions = procedurehistoryDescDismissedImprovementSuggestions.Default.([]string)
 	// procedurehistoryDescSystemOwned is the schema descriptor for system_owned field.
-	procedurehistoryDescSystemOwned := procedurehistoryFields[33].Descriptor()
+	procedurehistoryDescSystemOwned := procedurehistoryFields[35].Descriptor()
 	// procedurehistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	procedurehistory.DefaultSystemOwned = procedurehistoryDescSystemOwned.Default.(bool)
 	// procedurehistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	procedurehistoryDescWorkflowEligibleMarker := procedurehistoryFields[42].Descriptor()
+	procedurehistoryDescWorkflowEligibleMarker := procedurehistoryFields[44].Descriptor()
 	// procedurehistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	procedurehistory.DefaultWorkflowEligibleMarker = procedurehistoryDescWorkflowEligibleMarker.Default.(bool)
 	// procedurehistoryDescID is the schema descriptor for id field.
@@ -2657,6 +2657,10 @@ func init() {
 	taskhistoryDescSystemGenerated := taskhistoryFields[28].Descriptor()
 	// taskhistory.DefaultSystemGenerated holds the default value on creation for the system_generated field.
 	taskhistory.DefaultSystemGenerated = taskhistoryDescSystemGenerated.Default.(bool)
+	// taskhistoryDescIsTemplate is the schema descriptor for is_template field.
+	taskhistoryDescIsTemplate := taskhistoryFields[29].Descriptor()
+	// taskhistory.DefaultIsTemplate holds the default value on creation for the is_template field.
+	taskhistory.DefaultIsTemplate = taskhistoryDescIsTemplate.Default.(bool)
 	// taskhistoryDescID is the schema descriptor for id field.
 	taskhistoryDescID := taskhistoryFields[9].Descriptor()
 	// taskhistory.DefaultID holds the default value on creation for the id field.
