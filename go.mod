@@ -27,7 +27,7 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.41.7
 	github.com/aws/aws-sdk-go-v2/config v1.32.18
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.17
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.19
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.20
 	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.2.0
 	github.com/aws/aws-sdk-go-v2/service/configservice v1.62.3
 	github.com/aws/aws-sdk-go-v2/service/iam v1.53.10
@@ -98,11 +98,11 @@ require (
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
 	github.com/stripe/stripe-go/v84 v84.4.1
-	github.com/theopenlane/core/common v1.0.23
+	github.com/theopenlane/core/common v1.0.24
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.29.0
-	github.com/theopenlane/go-client v0.11.0
+	github.com/theopenlane/go-client v0.11.1
 	github.com/theopenlane/gqlgen-plugins v0.14.7
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.32.0
@@ -191,7 +191,7 @@ require (
 )
 
 require (
-	ariga.io/atlas v1.2.0
+	ariga.io/atlas v1.2.1
 	cel.dev/expr v0.25.2 // indirect
 	cloud.google.com/go v0.123.0 // indirect
 	cloud.google.com/go/auth v0.20.0 // indirect

@@ -19,7 +19,7 @@ require (
 	github.com/spf13/cobra v1.10.2
 	github.com/theopenlane/core v1.22.0
 	github.com/theopenlane/core/common v1.0.24
-	github.com/theopenlane/go-client v0.11.0
+	github.com/theopenlane/go-client v0.11.1
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.32.0
 	github.com/theopenlane/utils v0.7.1
