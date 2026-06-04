@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent"
 
 	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/slateparser"
@@ -25,7 +26,7 @@ func CheckIfCommentOnly() privacy.MutationRuleFunc {
 		addedFields := m.AddedFields() // get numeric fields
 
 		ignoreFields := []string{"updated_at", "updated_by", "owner_id"}
-		allowedEdges := []string{"comments"}
+		allowedEdges := []string{"comments", "notes"}
 
 		// remove ignored fields from the list of fields being set in the mutation
 		fields = lo.Without(fields, ignoreFields...)
