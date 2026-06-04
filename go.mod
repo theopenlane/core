@@ -115,7 +115,7 @@ require (
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/yuin/goldmark v1.8.2
 	github.com/zitadel/oidc/v3 v3.47.5
-	goauthentik.io/api/v3 v3.2026020.16
+	goauthentik.io/api/v3 v3.2026050.2
 	gocloud.dev v0.45.0
 	golang.org/x/crypto v0.52.0
 	golang.org/x/mod v0.36.0
