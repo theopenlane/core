@@ -1,4 +1,4 @@
-go 1.26.3
+go 1.26.4
 
 use (
 	// core is the main module containing the API and business logic, nothing in pkg or internal should be imported by other modules
