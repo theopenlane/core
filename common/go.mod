@@ -11,7 +11,7 @@ require (
 	github.com/rs/zerolog v1.35.1
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
-	github.com/theopenlane/core v1.21.22
+	github.com/theopenlane/core v1.22.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.29.0
 	github.com/theopenlane/utils v0.7.1
@@ -21,7 +21,7 @@ require (
 )
 
 require (
-	ariga.io/atlas v1.2.0 // indirect
+	ariga.io/atlas v1.2.1 // indirect
 	entgo.io/contrib v0.7.0 // indirect
 	github.com/99designs/gqlgen v0.17.90 // indirect
 	github.com/XSAM/otelsql v0.42.0 // indirect
@@ -81,7 +81,6 @@ require (
 	golang.org/x/crypto v0.52.0 // indirect
 	golang.org/x/exp v0.0.0-20260508232706-74f9aab9d74a // indirect
 	golang.org/x/mod v0.36.0 // indirect
-	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/sync v0.20.0 // indirect
 	golang.org/x/sys v0.45.0 // indirect
 	golang.org/x/text v0.37.0 // indirect
