@@ -524,7 +524,7 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
-func TestMutationTrustCenterNDARequestApprovalUsesConfiguredGroup(t *testing.T) {
+func TestMutationTrustCenterNDARequestApprovalEmailsUseConfiguredGroup(t *testing.T) {
 	trustcenterOrg := createFreshOrgWithTrustCenter(t, withNDATemplate(), withAllUserTypes())
 	trustCenter := trustcenterOrg.trustCenter
 
@@ -559,27 +559,12 @@ func TestMutationTrustCenterNDARequestApprovalUsesConfiguredGroup(t *testing.T) 
 	assert.Assert(t, lo.Contains(msgs[0].To, trustcenterOrg.member.UserInfo.Email), "expected approval email to go to configured group member")
 	assert.Assert(t, !lo.Contains(msgs[0].To, trustcenterOrg.owner.UserInfo.Email), "expected owner not to receive approval email when group is configured")
 	assert.Assert(t, !lo.Contains(msgs[0].To, trustcenterOrg.admin.UserInfo.Email), "expected admin not to receive approval email when group is configured")
-
-	err = suite.client.db.TrustCenterNDARequest.UpdateOneID(req.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID).
-		SetStatus(enums.TrustCenterNDARequestStatusApproved).
-		Exec(setContext(trustcenterOrg.admin.UserCtx, suite.client.db))
-	assert.ErrorContains(t, err, "not an NDA approver")
-
-	err = suite.client.db.Job.TruncateRiverTables(trustcenterOrg.member.UserCtx)
-	assert.NilError(t, err)
-	suite.mockEmailSender().Reset()
-
-	resp, err := suite.client.db.TrustCenterNDARequest.UpdateOneID(req.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID).
-		SetStatus(enums.TrustCenterNDARequestStatusApproved).
-		Save(setContext(trustcenterOrg.member.UserCtx, suite.client.db))
-	assert.NilError(t, err)
-	assert.Equal(t, enums.TrustCenterNDARequestStatusApproved, resp.Status)
-	suite.WaitForEvents()
+	assert.Assert(t, !lo.Contains(msgs[0].To, trustcenterOrg.superAdmin.UserInfo.Email), "expected super admin not to receive approval email when group is configured")
 
 	cleanupOrganizationDataWithContext(trustcenterOrg.owner.UserCtx, t)
 }
 
-func TestMutationTrustCenterNDARequestApprovalFallsBackToOwnersAndAdmins(t *testing.T) {
+func TestMutationTrustCenterNDARequestApprovalEmailsFallBackToApproverRoles(t *testing.T) {
 	trustcenterOrg := createFreshOrgWithTrustCenter(t, withNDATemplate(), withAllUserTypes())
 	trustCenter := trustcenterOrg.trustCenter
 
@@ -590,45 +575,26 @@ func TestMutationTrustCenterNDARequestApprovalFallsBackToOwnersAndAdmins(t *test
 	})
 	assert.NilError(t, err)
 
-	createRequestFn := func(email string) string {
-		t.Helper()
-
-		req, err := suite.client.api.CreateTrustCenterNDARequest(trustcenterOrg.owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
-			FirstName:     gofakeit.FirstName(),
-			LastName:      gofakeit.LastName(),
-			Email:         email,
-			TrustCenterID: &trustCenter.ID,
-		})
-		assert.NilError(t, err)
-		assert.Equal(t, enums.TrustCenterNDARequestStatusNeedsApproval, *req.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
-
-		return req.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID
-	}
-
-	ownerApprovedID := createRequestFn(gofakeit.Email())
-	err = suite.client.db.TrustCenterNDARequest.UpdateOneID(ownerApprovedID).
-		SetStatus(enums.TrustCenterNDARequestStatusApproved).
-		Exec(setContext(trustcenterOrg.owner.UserCtx, suite.client.db))
+	err = suite.client.db.Job.TruncateRiverTables(trustcenterOrg.owner.UserCtx)
 	assert.NilError(t, err)
+	suite.mockEmailSender().Reset()
 
-	adminApprovedID := createRequestFn(gofakeit.Email())
-	err = suite.client.db.TrustCenterNDARequest.UpdateOneID(adminApprovedID).
-		SetStatus(enums.TrustCenterNDARequestStatusApproved).
-		Exec(setContext(trustcenterOrg.admin.UserCtx, suite.client.db))
+	req, err := suite.client.api.CreateTrustCenterNDARequest(trustcenterOrg.owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     gofakeit.FirstName(),
+		LastName:      gofakeit.LastName(),
+		Email:         gofakeit.Email(),
+		TrustCenterID: &trustCenter.ID,
+	})
 	assert.NilError(t, err)
-
-	superAdminApprovedID := createRequestFn(gofakeit.Email())
-	err = suite.client.db.TrustCenterNDARequest.UpdateOneID(superAdminApprovedID).
-		SetStatus(enums.TrustCenterNDARequestStatusApproved).
-		Exec(setContext(trustcenterOrg.superAdmin.UserCtx, suite.client.db))
-	assert.NilError(t, err)
-
-	memberDeniedID := createRequestFn(gofakeit.Email())
-	err = suite.client.db.TrustCenterNDARequest.UpdateOneID(memberDeniedID).
-		SetStatus(enums.TrustCenterNDARequestStatusDeclined).
-		Exec(setContext(trustcenterOrg.member.UserCtx, suite.client.db))
-	assert.ErrorContains(t, err, "not an NDA approver")
+	assert.Equal(t, enums.TrustCenterNDARequestStatusNeedsApproval, *req.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
 	suite.WaitForEvents()
+
+	msgs := suite.mockEmailSender().Messages()
+	assert.Assert(t, len(msgs) == 1, "expected 1 email, got multiple ( %d )", len(msgs))
+	assert.Assert(t, lo.Contains(msgs[0].To, trustcenterOrg.owner.UserInfo.Email), "expected approval email to go to owner when no group is configured")
+	assert.Assert(t, lo.Contains(msgs[0].To, trustcenterOrg.admin.UserInfo.Email), "expected approval email to go to admin when no group is configured")
+	assert.Assert(t, lo.Contains(msgs[0].To, trustcenterOrg.superAdmin.UserInfo.Email), "expected approval email to go to super admin when no group is configured")
+	assert.Assert(t, !lo.Contains(msgs[0].To, trustcenterOrg.member.UserInfo.Email), "expected member not to receive approval email when no group is configured")
 
 	cleanupOrganizationDataWithContext(trustcenterOrg.owner.UserCtx, t)
 }

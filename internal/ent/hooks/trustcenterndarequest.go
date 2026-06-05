@@ -222,14 +222,8 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 				}
 			}
 
-			if !ok || (status != enums.TrustCenterNDARequestStatusApproved && status != enums.TrustCenterNDARequestStatusSigned && status != enums.TrustCenterNDARequestStatusDeclined) {
+			if !ok || (status != enums.TrustCenterNDARequestStatusApproved && status != enums.TrustCenterNDARequestStatusSigned) {
 				return next.Mutate(ctx, m)
-			}
-
-			if status == enums.TrustCenterNDARequestStatusApproved || status == enums.TrustCenterNDARequestStatusDeclined {
-				if err := checkNDAApprover(ctx, m); err != nil {
-					return nil, err
-				}
 			}
 
 			// if approved or signed, set the timestamp in the ISO8601 format
@@ -247,10 +241,6 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 				}
 
 				return retVal, nil
-			}
-
-			if status == enums.TrustCenterNDARequestStatusDeclined {
-				return next.Mutate(ctx, m)
 			}
 
 			m.SetApprovedAt(*now)
@@ -276,54 +266,6 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 			return v, nil
 		})
 	}, ent.OpUpdateOne|ent.OpUpdate|ent.OpDeleteOne)
-}
-
-func checkNDAApprover(ctx context.Context, m *generated.TrustCenterNDARequestMutation) error {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.IsAnonymous() {
-		return privacy.Denyf("NDA approval requires an authenticated user")
-	}
-
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	ids, err := m.IDs(allowCtx)
-	if err != nil {
-		return err
-	}
-
-	requests, err := m.Client().TrustCenterNDARequest.Query().
-		Where(trustcenterndarequest.IDIn(ids...)).
-		Select(trustcenterndarequest.FieldTrustCenterID).
-		All(allowCtx)
-	if err != nil {
-		return err
-	}
-
-	trustCenterIDs := make(map[string]struct{}, len(requests))
-	for _, request := range requests {
-		trustCenterIDs[request.TrustCenterID] = struct{}{}
-	}
-
-	for id := range trustCenterIDs {
-		tc, err := m.Client().TrustCenter.Query().
-			Where(trustcenter.IDEQ(id)).
-			WithSetting().
-			Only(allowCtx)
-		if err != nil {
-			return err
-		}
-
-		approverIDs, err := getNDAApproverUserIDs(ctx, m.Client(), tc.OwnerID, tc.Edges.Setting)
-		if err != nil {
-			return err
-		}
-
-		if !lo.Contains(approverIDs, caller.SubjectID) {
-			return privacy.Denyf("request denied because user is not an NDA approver")
-		}
-	}
-
-	return nil
 }
 
 func handleNDARequestDelete(ctx context.Context, m *generated.TrustCenterNDARequestMutation) error {
@@ -395,7 +337,7 @@ func createNDARequestNotification(ctx context.Context, ndaRequest *generated.Tru
 	return err
 }
 
-// ndaApproverRoles are the organization roles permitted to review and approve trust center NDA requests
+// ndaApproverRoles are the fallback organization roles notified when no NDA approver group is configured.
 var ndaApproverRoles = []enums.Role{enums.RoleOwner, enums.RoleSuperAdmin, enums.RoleAdmin}
 
 func sendNDAApprovalRequestEmails(ctx context.Context, client *generated.Client, ndaRequest *generated.TrustCenterNDARequest, tc *generated.TrustCenter) error {
