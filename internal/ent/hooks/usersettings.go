@@ -84,10 +84,11 @@ func allowDefaultOrgUpdate(ctx context.Context, m *generated.UserSettingMutation
 		SubjectID:   owner.ID,
 		SubjectType: auth.UserSubjectType,
 		ObjectID:    orgID,
+		Relation:    "can_view_org",
 		Context:     utils.NewOrganizationContextKey(usCaller.SubjectEmail),
 	}
 
-	allow, err := m.Authz.CheckOrgReadAccess(ctx, req)
+	allow, err := m.Authz.CheckOrgAccess(ctx, req)
 	if err != nil {
 		return false
 	}
