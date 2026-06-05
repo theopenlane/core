@@ -3,6 +3,7 @@ package operations
 
 import (
 	"context"
+	"slices"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -12,6 +13,10 @@ import (
 func persistInternalPolicyInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateInternalPolicyInput) error {
 	if createInput.ExternalFileID == nil || *createInput.ExternalFileID == "" {
 		return ErrIngestUpsertKeyMissing
+	}
+
+	if integration.ID != "" && !slices.Contains(createInput.IntegrationIDs, integration.ID) {
+		createInput.IntegrationIDs = append(createInput.IntegrationIDs, integration.ID)
 	}
 
 	return persistRoundTripUpsert(
