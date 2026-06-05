@@ -112,7 +112,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	})
 
 	auditorUser := suite.userBuilderWithInput(ctx, &userInput{
-		email:         gofakeit.Username() + "@examples.com",
+		email:         "auditor+" + strings.ToLower(ulids.New().String()) + "@examples.com",
 		password:      validPassword,
 		confirmedUser: true,
 		tfaEnabled:    tfaTrue,
@@ -129,6 +129,10 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
 	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
 
+	auditorOrgCtx := auth.NewTestContextWithOrgID(validConfirmedUserRestrictedOrg.ID, org.ID)
+	auditorOrgCtx = privacy.DecisionContext(auditorOrgCtx, privacy.Allow)
+	auditorOrgCtx = ent.NewContext(auditorOrgCtx, suite.db)
+
 	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: createdssoOrg.ID,
 		UserID:         ssoMember.UserInfo.ID,
@@ -141,7 +145,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		OrganizationID: org.ID,
 		UserID:         auditorUser.UserInfo.ID,
 		Role:           &enums.RoleAuditor,
-	}).ExecX(testUserCtx)
+	}).ExecX(auditorOrgCtx)
 
 	suite.db.UserSetting.UpdateOneID(auditorUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(allowCtx)
 
