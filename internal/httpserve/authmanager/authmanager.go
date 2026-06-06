@@ -262,15 +262,16 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 		orgID = caller.OrganizationID
 	}
 
-	// ensure user is already a member of the destination organization
+	// ensure user can access the destination organization
 	req := fgax.AccessCheck{
 		SubjectID:   caller.SubjectID,
 		SubjectType: auth.UserSubjectType,
 		ObjectID:    orgID,
+		Relation:    "can_view_org",
 		Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	allow, err := a.db.Authz.CheckOrgReadAccess(ctx, req)
+	allow, err := a.db.Authz.CheckOrgAccess(ctx, req)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("user_id", caller.SubjectID).Str("org_id", orgID).Msg("unable to check org read access")
 

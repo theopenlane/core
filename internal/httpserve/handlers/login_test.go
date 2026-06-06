@@ -110,6 +110,14 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		confirmedUser: true,
 		tfaEnabled:    tfaTrue,
 	})
+
+	auditorUser := suite.userBuilderWithInput(ctx, &userInput{
+		email:         "auditor+" + strings.ToLower(ulids.New().String()) + "@examples.com",
+		password:      validPassword,
+		confirmedUser: true,
+		tfaEnabled:    tfaTrue,
+	})
+
 	// setup allow context with the client in the context which is required for hooks that run
 	allowCtx := privacy.DecisionContext(validConfirmedUserRestrictedOrg.UserCtx, privacy.Allow)
 	allowCtx = ent.NewContext(allowCtx, suite.db)
@@ -121,6 +129,10 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
 	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
 
+	auditorOrgCtx := auth.NewTestContextWithOrgID(validConfirmedUserRestrictedOrg.ID, org.ID)
+	auditorOrgCtx = privacy.DecisionContext(auditorOrgCtx, privacy.Allow)
+	auditorOrgCtx = ent.NewContext(auditorOrgCtx, suite.db)
+
 	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: createdssoOrg.ID,
 		UserID:         ssoMember.UserInfo.ID,
@@ -128,6 +140,14 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	}).ExecX(testUserCtx)
 
 	suite.db.UserSetting.UpdateOneID(ssoMember.UserInfo.Edges.Setting.ID).SetDefaultOrgID(createdssoOrg.ID).ExecX(allowCtx)
+
+	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+		OrganizationID: org.ID,
+		UserID:         auditorUser.UserInfo.ID,
+		Role:           &enums.RoleAuditor,
+	}).ExecX(auditorOrgCtx)
+
+	suite.db.UserSetting.UpdateOneID(auditorUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(allowCtx)
 
 	// update the user settings to have the default org set that is the domain restricted org
 	suite.db.UserSetting.UpdateOneID(validConfirmedUserRestrictedOrg.UserInfo.Edges.Setting.ID).
@@ -167,6 +187,18 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		{
 			name:           "happy path, domain restricted org, but owner so domains can be mismatched",
 			username:       validConfirmedUserRestrictedOrg.UserInfo.Email,
+			password:       validPassword,
+			expectedStatus: http.StatusOK,
+			expectedOrgID:  org.ID,
+			expectedModules: []interface{}{
+				models.CatalogBaseModule.String(),
+				models.CatalogComplianceModule.String(),
+				models.CatalogTrustCenterModule.String(),
+			},
+		},
+		{
+			name:           "happy path, auditor default org",
+			username:       auditorUser.UserInfo.Email,
 			password:       validPassword,
 			expectedStatus: http.StatusOK,
 			expectedOrgID:  org.ID,
