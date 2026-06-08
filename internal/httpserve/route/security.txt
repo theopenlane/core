@@ -2,7 +2,7 @@
 Hash: SHA256
 
 Contact: mailto:security@theopenlane.io
-Expires: 2026-01-09T12:34:00.000Z
+Expires: 2028-09-09T13:08:00.000Z
 Encryption: https://keys.openpgp.org/vks/v1/by-fingerprint/9C30C088846DA8BFEB25FBC3CFEAD31A033EDC54
 Preferred-Languages: en
 Canonical: https://api.theopenlane.io/.well-known/security.txt
