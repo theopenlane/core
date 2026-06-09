@@ -34059,6 +34059,25 @@ func (c *TrustCenterSettingClient) QueryHeroImageFile(_m *TrustCenterSetting) *F
 	return query
 }
 
+// QueryNdaApproverGroup queries the nda_approver_group edge of a TrustCenterSetting.
+func (c *TrustCenterSettingClient) QueryNdaApproverGroup(_m *TrustCenterSetting) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcentersetting.NdaApproverGroupTable, trustcentersetting.NdaApproverGroupColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *TrustCenterSettingClient) Hooks() []Hook {
 	hooks := c.hooks.TrustCenterSetting

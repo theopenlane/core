@@ -84,6 +84,8 @@ const (
 	FieldSecurityContact = "security_contact"
 	// FieldNdaApprovalRequired holds the string denoting the nda_approval_required field in the database.
 	FieldNdaApprovalRequired = "nda_approval_required"
+	// FieldNdaApproverGroupID holds the string denoting the nda_approver_group_id field in the database.
+	FieldNdaApproverGroupID = "nda_approver_group_id"
 	// FieldStatusPageURL holds the string denoting the status_page_url field in the database.
 	FieldStatusPageURL = "status_page_url"
 	// Table holds the table name of the trustcentersettinghistory in the database.
@@ -125,6 +127,7 @@ var Columns = []string{
 	FieldCompanyDomain,
 	FieldSecurityContact,
 	FieldNdaApprovalRequired,
+	FieldNdaApproverGroupID,
 	FieldStatusPageURL,
 }
 
@@ -363,6 +366,11 @@ func BySecurityContact(opts ...sql.OrderTermOption) OrderOption {
 // ByNdaApprovalRequired orders the results by the nda_approval_required field.
 func ByNdaApprovalRequired(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNdaApprovalRequired, opts...).ToFunc()
+}
+
+// ByNdaApproverGroupID orders the results by the nda_approver_group_id field.
+func ByNdaApproverGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNdaApproverGroupID, opts...).ToFunc()
 }
 
 // ByStatusPageURL orders the results by the status_page_url field.
