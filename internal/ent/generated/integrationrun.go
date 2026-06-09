@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
@@ -63,6 +64,8 @@ type IntegrationRun struct {
 	ResponseFileID string `json:"response_file_id,omitempty"`
 	// event reference for this run
 	EventID string `json:"event_id,omitempty"`
+	// assessment response that triggered this run
+	AssessmentResponseID string `json:"assessment_response_id,omitempty"`
 	// summary of the run outcome
 	Summary string `json:"summary,omitempty"`
 	// error details for failed runs
@@ -87,11 +90,13 @@ type IntegrationRunEdges struct {
 	ResponseFile *File `json:"response_file,omitempty"`
 	// Event holds the value of the event edge.
 	Event *Event `json:"event,omitempty"`
+	// AssessmentResponse holds the value of the assessment_response edge.
+	AssessmentResponse *AssessmentResponse `json:"assessment_response,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [6]map[string]int
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -149,6 +154,17 @@ func (e IntegrationRunEdges) EventOrErr() (*Event, error) {
 	return nil, &NotLoadedError{edge: "event"}
 }
 
+// AssessmentResponseOrErr returns the AssessmentResponse value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e IntegrationRunEdges) AssessmentResponseOrErr() (*AssessmentResponse, error) {
+	if e.AssessmentResponse != nil {
+		return e.AssessmentResponse, nil
+	} else if e.loadedTypes[5] {
+		return nil, &NotFoundError{label: assessmentresponse.Label}
+	}
+	return nil, &NotLoadedError{edge: "assessment_response"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*IntegrationRun) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -158,7 +174,7 @@ func (*IntegrationRun) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case integrationrun.FieldDurationMs:
 			values[i] = new(sql.NullInt64)
-		case integrationrun.FieldID, integrationrun.FieldCreatedBy, integrationrun.FieldUpdatedBy, integrationrun.FieldDeletedBy, integrationrun.FieldOwnerID, integrationrun.FieldIntegrationID, integrationrun.FieldOperationName, integrationrun.FieldOperationKind, integrationrun.FieldRunType, integrationrun.FieldMappingVersion, integrationrun.FieldStatus, integrationrun.FieldRequestFileID, integrationrun.FieldResponseFileID, integrationrun.FieldEventID, integrationrun.FieldSummary, integrationrun.FieldError:
+		case integrationrun.FieldID, integrationrun.FieldCreatedBy, integrationrun.FieldUpdatedBy, integrationrun.FieldDeletedBy, integrationrun.FieldOwnerID, integrationrun.FieldIntegrationID, integrationrun.FieldOperationName, integrationrun.FieldOperationKind, integrationrun.FieldRunType, integrationrun.FieldMappingVersion, integrationrun.FieldStatus, integrationrun.FieldRequestFileID, integrationrun.FieldResponseFileID, integrationrun.FieldEventID, integrationrun.FieldAssessmentResponseID, integrationrun.FieldSummary, integrationrun.FieldError:
 			values[i] = new(sql.NullString)
 		case integrationrun.FieldCreatedAt, integrationrun.FieldUpdatedAt, integrationrun.FieldDeletedAt, integrationrun.FieldStartedAt, integrationrun.FieldFinishedAt:
 			values[i] = new(sql.NullTime)
@@ -306,6 +322,12 @@ func (_m *IntegrationRun) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.EventID = value.String
 			}
+		case integrationrun.FieldAssessmentResponseID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assessment_response_id", values[i])
+			} else if value.Valid {
+				_m.AssessmentResponseID = value.String
+			}
 		case integrationrun.FieldSummary:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field summary", values[i])
@@ -362,6 +384,11 @@ func (_m *IntegrationRun) QueryResponseFile() *FileQuery {
 // QueryEvent queries the "event" edge of the IntegrationRun entity.
 func (_m *IntegrationRun) QueryEvent() *EventQuery {
 	return NewIntegrationRunClient(_m.config).QueryEvent(_m)
+}
+
+// QueryAssessmentResponse queries the "assessment_response" edge of the IntegrationRun entity.
+func (_m *IntegrationRun) QueryAssessmentResponse() *AssessmentResponseQuery {
+	return NewIntegrationRunClient(_m.config).QueryAssessmentResponse(_m)
 }
 
 // Update returns a builder for updating this IntegrationRun.
@@ -448,6 +475,9 @@ func (_m *IntegrationRun) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("event_id=")
 	builder.WriteString(_m.EventID)
+	builder.WriteString(", ")
+	builder.WriteString("assessment_response_id=")
+	builder.WriteString(_m.AssessmentResponseID)
 	builder.WriteString(", ")
 	builder.WriteString("summary=")
 	builder.WriteString(_m.Summary)

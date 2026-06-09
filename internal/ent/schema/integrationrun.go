@@ -117,6 +117,9 @@ func (IntegrationRun) Fields() []ent.Field {
 		field.String("event_id").
 			Comment("event reference for this run").
 			Optional(),
+		field.String("assessment_response_id").
+			Comment("assessment response that triggered this run").
+			Optional(),
 		field.String("summary").
 			Comment("summary of the run outcome").
 			Optional(),
@@ -137,6 +140,11 @@ func (IntegrationRun) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("integration_id", "started_at").
 			Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields("assessment_response_id", "started_at").
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields("assessment_response_id", "operation_name").
+			Unique().
+			Annotations(entsql.IndexWhere("deleted_at is NULL AND assessment_response_id IS NOT NULL")),
 	}
 }
 
@@ -167,6 +175,12 @@ func (r IntegrationRun) Edges() []ent.Edge {
 			fromSchema: r,
 			edgeSchema: Event{},
 			field:      "event_id",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: r,
+			name:       "assessment_response",
+			t:          AssessmentResponse.Type,
+			field:      "assessment_response_id",
 		}),
 	}
 }

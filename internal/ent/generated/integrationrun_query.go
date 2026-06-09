@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
@@ -26,17 +27,18 @@ import (
 // IntegrationRunQuery is the builder for querying IntegrationRun entities.
 type IntegrationRunQuery struct {
 	config
-	ctx              *QueryContext
-	order            []integrationrun.OrderOption
-	inters           []Interceptor
-	predicates       []predicate.IntegrationRun
-	withOwner        *OrganizationQuery
-	withIntegration  *IntegrationQuery
-	withRequestFile  *FileQuery
-	withResponseFile *FileQuery
-	withEvent        *EventQuery
-	loadTotal        []func(context.Context, []*IntegrationRun) error
-	modifiers        []func(*sql.Selector)
+	ctx                    *QueryContext
+	order                  []integrationrun.OrderOption
+	inters                 []Interceptor
+	predicates             []predicate.IntegrationRun
+	withOwner              *OrganizationQuery
+	withIntegration        *IntegrationQuery
+	withRequestFile        *FileQuery
+	withResponseFile       *FileQuery
+	withEvent              *EventQuery
+	withAssessmentResponse *AssessmentResponseQuery
+	loadTotal              []func(context.Context, []*IntegrationRun) error
+	modifiers              []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -191,6 +193,31 @@ func (_q *IntegrationRunQuery) QueryEvent() *EventQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.IntegrationRun
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssessmentResponse chains the current query on the "assessment_response" edge.
+func (_q *IntegrationRunQuery) QueryAssessmentResponse() *AssessmentResponseQuery {
+	query := (&AssessmentResponseClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, selector),
+			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, integrationrun.AssessmentResponseTable, integrationrun.AssessmentResponseColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.AssessmentResponse
 		step.Edge.Schema = schemaConfig.IntegrationRun
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -385,16 +412,17 @@ func (_q *IntegrationRunQuery) Clone() *IntegrationRunQuery {
 		return nil
 	}
 	return &IntegrationRunQuery{
-		config:           _q.config,
-		ctx:              _q.ctx.Clone(),
-		order:            append([]integrationrun.OrderOption{}, _q.order...),
-		inters:           append([]Interceptor{}, _q.inters...),
-		predicates:       append([]predicate.IntegrationRun{}, _q.predicates...),
-		withOwner:        _q.withOwner.Clone(),
-		withIntegration:  _q.withIntegration.Clone(),
-		withRequestFile:  _q.withRequestFile.Clone(),
-		withResponseFile: _q.withResponseFile.Clone(),
-		withEvent:        _q.withEvent.Clone(),
+		config:                 _q.config,
+		ctx:                    _q.ctx.Clone(),
+		order:                  append([]integrationrun.OrderOption{}, _q.order...),
+		inters:                 append([]Interceptor{}, _q.inters...),
+		predicates:             append([]predicate.IntegrationRun{}, _q.predicates...),
+		withOwner:              _q.withOwner.Clone(),
+		withIntegration:        _q.withIntegration.Clone(),
+		withRequestFile:        _q.withRequestFile.Clone(),
+		withResponseFile:       _q.withResponseFile.Clone(),
+		withEvent:              _q.withEvent.Clone(),
+		withAssessmentResponse: _q.withAssessmentResponse.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -454,6 +482,17 @@ func (_q *IntegrationRunQuery) WithEvent(opts ...func(*EventQuery)) *Integration
 		opt(query)
 	}
 	_q.withEvent = query
+	return _q
+}
+
+// WithAssessmentResponse tells the query-builder to eager-load the nodes that are connected to
+// the "assessment_response" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithAssessmentResponse(opts ...func(*AssessmentResponseQuery)) *IntegrationRunQuery {
+	query := (&AssessmentResponseClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssessmentResponse = query
 	return _q
 }
 
@@ -541,12 +580,13 @@ func (_q *IntegrationRunQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*IntegrationRun{}
 		_spec       = _q.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [6]bool{
 			_q.withOwner != nil,
 			_q.withIntegration != nil,
 			_q.withRequestFile != nil,
 			_q.withResponseFile != nil,
 			_q.withEvent != nil,
+			_q.withAssessmentResponse != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -599,6 +639,12 @@ func (_q *IntegrationRunQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if query := _q.withEvent; query != nil {
 		if err := _q.loadEvent(ctx, query, nodes, nil,
 			func(n *IntegrationRun, e *Event) { n.Edges.Event = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssessmentResponse; query != nil {
+		if err := _q.loadAssessmentResponse(ctx, query, nodes, nil,
+			func(n *IntegrationRun, e *AssessmentResponse) { n.Edges.AssessmentResponse = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -755,6 +801,35 @@ func (_q *IntegrationRunQuery) loadEvent(ctx context.Context, query *EventQuery,
 	}
 	return nil
 }
+func (_q *IntegrationRunQuery) loadAssessmentResponse(ctx context.Context, query *AssessmentResponseQuery, nodes []*IntegrationRun, init func(*IntegrationRun), assign func(*IntegrationRun, *AssessmentResponse)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*IntegrationRun)
+	for i := range nodes {
+		fk := nodes[i].AssessmentResponseID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(assessmentresponse.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "assessment_response_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (_q *IntegrationRunQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -800,6 +875,9 @@ func (_q *IntegrationRunQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withEvent != nil {
 			_spec.Node.AddColumnOnce(integrationrun.FieldEventID)
+		}
+		if _q.withAssessmentResponse != nil {
+			_spec.Node.AddColumnOnce(integrationrun.FieldAssessmentResponseID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
