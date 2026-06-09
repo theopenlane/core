@@ -488,9 +488,11 @@ func init() {
 	assessmentresponse.Hooks[6] = assessmentresponseHooks[1]
 	assessmentresponseMixinInters1 := assessmentresponseMixin[1].Interceptors()
 	assessmentresponseMixinInters4 := assessmentresponseMixin[4].Interceptors()
+	assessmentresponseInters := schema.AssessmentResponse{}.Interceptors()
 	assessmentresponse.Interceptors[0] = assessmentresponseMixinInters1[0]
 	assessmentresponse.Interceptors[1] = assessmentresponseMixinInters4[0]
 	assessmentresponse.Interceptors[2] = assessmentresponseMixinInters4[1]
+	assessmentresponse.Interceptors[3] = assessmentresponseInters[0]
 	assessmentresponseMixinFields0 := assessmentresponseMixin[0].Fields()
 	_ = assessmentresponseMixinFields0
 	assessmentresponseMixinFields2 := assessmentresponseMixin[2].Fields()

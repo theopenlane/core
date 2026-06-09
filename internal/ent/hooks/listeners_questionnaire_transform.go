@@ -43,7 +43,7 @@ func RegisterGalaQuestionnaireTransformListeners(registry *gala.Registry) ([]gal
 	return gala.RegisterListeners(registry,
 		gala.Definition[eventqueue.MutationGalaPayload]{
 			Topic:      eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeAssessmentResponse),
-			Name:       questionnaireTransformOperationName,
+			Name:       operations.QuestionnaireTransformOperationName,
 			Operations: []string{ent.OpCreate.String(), ent.OpUpdate.String(), ent.OpUpdateOne.String()},
 			Handle:     handleAssessmentResponse,
 		},
@@ -194,7 +194,7 @@ func createQuestionnaireTransformRun(ctx context.Context, client *entgen.Client,
 
 	run, err := client.IntegrationRun.Create().
 		SetOwnerID(req.OrganizationID).
-		SetOperationName(questionnaireTransformOperationName).
+		SetOperationName(operations.QuestionnaireTransformOperationName).
 		SetRunType(enums.IntegrationRunTypeEvent).
 		SetStatus(enums.IntegrationRunStatusRunning).
 		SetStartedAt(currTime).
@@ -248,7 +248,6 @@ func questionnaireTransformFieldChanged(payload eventqueue.MutationGalaPayload) 
 const transformMetadataKey = "questionnaire_transform"
 const entityTransformFieldNotes = "notes"
 const entityTransformFieldEntityTypeID = "entityTypeID"
-const questionnaireTransformOperationName = "questionnaire.transform.assessment"
 const questionnaireTransformDefinitionID = "questionnaire_transform"
 
 type questionnaireValidationError struct {

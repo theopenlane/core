@@ -58,4 +58,4 @@ type integration_run
 
     # parent permissions derived based on `crud` permissions or parents
     define parent_viewer: can_view from parent
-    define parent: [integration]
+    define parent: [integration, assessment_response]

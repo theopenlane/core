@@ -194,7 +194,7 @@ func (r IntegrationRun) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.IntegrationRun](r,
 				withOrganizationOwnerServiceOnly(),
 				withSkipForSystemAdmin(),
-				withParents(Integration{}),
+				withParents(Integration{}, AssessmentResponse{}),
 			),
 		},
 	}.getMixins(r)
