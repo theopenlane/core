@@ -104,7 +104,7 @@ func (h *Handler) AccountRolesMeHandler(ctx echo.Context, openapi *OpenAPIContex
 	}, openapi)
 }
 
-func (h *Handler) handleRoleMutation(ctx echo.Context, openapi *OpenAPIContext, delete bool) error {
+func (h *Handler) handleRoleMutation(ctx echo.Context, openapi *OpenAPIContext, isDeleteOp bool) error {
 	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleOrganizationRolesRequest, models.ExampleOrganizationRolesReply, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
@@ -161,7 +161,7 @@ func (h *Handler) handleRoleMutation(ctx echo.Context, openapi *OpenAPIContext, 
 	tuples := convertOrgRolesToTuples(orgID, in.Role, in.UserIDs, in.GroupIDs)
 	writes := tuples
 	var deletes []fgax.TupleKey
-	if delete {
+	if isDeleteOp {
 		writes = nil
 		deletes = tuples
 	}
