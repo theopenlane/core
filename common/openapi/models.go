@@ -2578,7 +2578,7 @@ var ExampleRolesReply = RolesReply{
 	},
 }
 
-// OrganizationRolesRequest contains roles that can be assigned to users or groups.
+// OrganizationRolesRequest contains functional roles that can be assigned to users or groups in addition to their base level org role such as member, admin, etc. 
 type OrganizationRolesRequest struct {
 	OrganizationID string   `json:"organization_id,omitempty" description:"The ID of the organization to assign roles in. Defaults to the authenticated organization." example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 	Role           string   `json:"role" description:"The organization responsibility role to assign" example:"policy_manager"`
