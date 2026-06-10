@@ -150,7 +150,7 @@ require (
 	github.com/microsoftgraph/msgraph-sdk-go-core v1.4.1 // indirect
 	github.com/moby/moby/api v1.54.2 // indirect
 	github.com/moby/moby/client v0.4.1 // indirect
-	github.com/patrickmn/go-cache v0.0.0-20180815053127-5633e0862627 // indirect
+	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/pb33f/ordered-map/v2 v2.3.1 // indirect
 	github.com/philhofer/fwd v1.2.0 // indirect
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c // indirect
@@ -164,6 +164,7 @@ require (
 	github.com/valyala/fastjson v1.6.10 // indirect
 	github.com/vanng822/css v1.0.1 // indirect
 	github.com/vanng822/go-premailer v1.33.0 // indirect
+	github.com/zitadel/zitadel-go/v3 v3.29.0 // indirect
 	go.yaml.in/yaml/v4 v4.0.0-rc.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
