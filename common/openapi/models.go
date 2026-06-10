@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/storagetypes"
+	fgamodel "github.com/theopenlane/core/fga/model"
 
 	"github.com/theopenlane/utils/passwd"
 )
@@ -2578,7 +2579,7 @@ var ExampleRolesReply = RolesReply{
 	},
 }
 
-// OrganizationRolesRequest contains functional roles that can be assigned to users or groups in addition to their base level org role such as member, admin, etc. 
+// OrganizationRolesRequest contains functional roles that can be assigned to users or groups in addition to their base level org role such as member, admin, etc.
 type OrganizationRolesRequest struct {
 	OrganizationID string   `json:"organization_id,omitempty" description:"The ID of the organization to assign roles in. Defaults to the authenticated organization." example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 	Role           string   `json:"role" description:"The organization responsibility role to assign" example:"policy_manager"`
@@ -2606,6 +2607,15 @@ type AccountRolesMeReply struct {
 func (r *OrganizationRolesRequest) Validate() error {
 	if r.Role == "" {
 		return rout.NewMissingRequiredFieldError("role")
+	}
+
+	ok, err := fgamodel.IsOrganizationRole(r.Role)
+	if err != nil {
+		return err
+	}
+
+	if !ok {
+		return rout.InvalidField("role")
 	}
 
 	if len(r.UserIDs) == 0 && len(r.GroupIDs) == 0 {

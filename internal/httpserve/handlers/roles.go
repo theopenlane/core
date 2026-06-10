@@ -122,16 +122,6 @@ func (h *Handler) handleRoleMutation(ctx echo.Context, openapi *OpenAPIContext, 
 		return h.InternalServerError(ctx, auth.ErrNoAuthUser, openapi)
 	}
 
-	ok, err = fgamodel.IsOrganizationRole(in.Role)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving organization roles")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
-	}
-
-	if !ok {
-		return h.BadRequest(ctx, ErrInvalidInput, openapi)
-	}
-
 	orgID, err := h.getOrganizationID(in.OrganizationID, caller)
 	if err != nil {
 		return h.BadRequest(ctx, err, openapi)
