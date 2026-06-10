@@ -1,4 +1,4 @@
-h1:u1UWnpsja5rWWfqMlY7XEv2b3dq+GZ0QKTS+rHnH6mA=
+h1:EP2iLBh7jvUpKS2TC1yTeYmZ2/tNBUuIk69MDIC0LXg=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -142,3 +142,4 @@ h1:u1UWnpsja5rWWfqMlY7XEv2b3dq+GZ0QKTS+rHnH6mA=
 20260601213351_task_is_template_history.sql h1:TYzI5AUpoeEJF7O8oOGQLuKMqIa/HopRxzPaI+E5LBQ=
 20260604190547_trustcenter_group_approval.sql h1:iMIykyriLSj5H6jUKZjJ1hzW+Ovtk37D24KDCpyNuhY=
 20260604190559_trustcenter_group_approval_history.sql h1:eH338TXyrvcL8nz//PJrXfczjw/2YzyYMNKLYE29IBo=
+20260609205325_integration_run_assessment_response.sql h1:a8PbktzAcUl1o3ohT7+p8WalKsxlYM6I0WaFmZZ/YQw=

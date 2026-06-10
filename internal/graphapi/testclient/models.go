@@ -1146,14 +1146,15 @@ type AssessmentResponse struct {
 	// the document containing the user's response data
 	DocumentDataID *string `json:"documentDataID,omitempty"`
 	// is this a draft response? can the user resume from where they left?
-	IsDraft          bool                       `json:"isDraft"`
-	Owner            *Organization              `json:"owner,omitempty"`
-	Assessment       *Assessment                `json:"assessment"`
-	Campaign         *Campaign                  `json:"campaign,omitempty"`
-	IdentityHolder   *IdentityHolder            `json:"identityHolder,omitempty"`
-	Entity           *Entity                    `json:"entity,omitempty"`
-	Document         *DocumentData              `json:"document,omitempty"`
-	VendorRiskScores *VendorRiskScoreConnection `json:"vendorRiskScores"`
+	IsDraft                     bool                       `json:"isDraft"`
+	Owner                       *Organization              `json:"owner,omitempty"`
+	Assessment                  *Assessment                `json:"assessment"`
+	Campaign                    *Campaign                  `json:"campaign,omitempty"`
+	IdentityHolder              *IdentityHolder            `json:"identityHolder,omitempty"`
+	Entity                      *Entity                    `json:"entity,omitempty"`
+	Document                    *DocumentData              `json:"document,omitempty"`
+	VendorRiskScores            *VendorRiskScoreConnection `json:"vendorRiskScores"`
+	QuestionnaireTransformError *string                    `json:"questionnaireTransformError,omitempty"`
 }
 
 func (AssessmentResponse) IsNode() {}

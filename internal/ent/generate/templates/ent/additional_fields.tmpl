@@ -3,6 +3,10 @@
 		// AccessURL is the anonymous questionnaire access URL for system-owned assessments
 		AccessURL string `json:"accessURL,omitempty"`
 	{{- end }}
+	{{- if eq $.Name "AssessmentResponse" }}
+		// QuestionnaireTransformError is the error from the latest questionnaire transform run
+		QuestionnaireTransformError string `json:"questionnaireTransformError,omitempty"`
+	{{- end }}
 	{{- if eq $.Name "OrgSubscription" }}
 		// ManagePaymentMethods is the URL to manage payment methods for the subscription
 		ManagePaymentMethods string `json:"managePaymentMethods,omitempty"`

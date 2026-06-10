@@ -4331,6 +4331,7 @@ var (
 		{Name: "request_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "response_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "event_id", Type: field.TypeString, Nullable: true},
+		{Name: "assessment_response_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// IntegrationRunsTable holds the schema information for the "integration_runs" table.
@@ -4364,8 +4365,14 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "integration_runs_organizations_integration_runs",
+				Symbol:     "integration_runs_assessment_responses_assessment_response",
 				Columns:    []*schema.Column{IntegrationRunsColumns[23]},
+				RefColumns: []*schema.Column{AssessmentResponsesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "integration_runs_organizations_integration_runs",
+				Columns:    []*schema.Column{IntegrationRunsColumns[24]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4374,7 +4381,7 @@ var (
 			{
 				Name:    "integrationrun_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{IntegrationRunsColumns[23]},
+				Columns: []*schema.Column{IntegrationRunsColumns[24]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4385,6 +4392,22 @@ var (
 				Columns: []*schema.Column{IntegrationRunsColumns[19], IntegrationRunsColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "integrationrun_assessment_response_id_started_at",
+				Unique:  false,
+				Columns: []*schema.Column{IntegrationRunsColumns[23], IntegrationRunsColumns[13]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "integrationrun_assessment_response_id_operation_name",
+				Unique:  true,
+				Columns: []*schema.Column{IntegrationRunsColumns[23], IntegrationRunsColumns[7]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL AND assessment_response_id IS NOT NULL",
 				},
 			},
 		},
@@ -14767,7 +14790,8 @@ func init() {
 	IntegrationRunsTable.ForeignKeys[1].RefTable = FilesTable
 	IntegrationRunsTable.ForeignKeys[2].RefTable = FilesTable
 	IntegrationRunsTable.ForeignKeys[3].RefTable = EventsTable
-	IntegrationRunsTable.ForeignKeys[4].RefTable = OrganizationsTable
+	IntegrationRunsTable.ForeignKeys[4].RefTable = AssessmentResponsesTable
+	IntegrationRunsTable.ForeignKeys[5].RefTable = OrganizationsTable
 	IntegrationWebhooksTable.ForeignKeys[0].RefTable = IntegrationsTable
 	IntegrationWebhooksTable.ForeignKeys[1].RefTable = OrganizationsTable
 	InternalPoliciesTable.ForeignKeys[0].RefTable = CustomTypeEnumsTable

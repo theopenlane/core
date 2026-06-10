@@ -43,7 +43,7 @@ func RegisterGalaQuestionnaireTransformListeners(registry *gala.Registry) ([]gal
 	return gala.RegisterListeners(registry,
 		gala.Definition[eventqueue.MutationGalaPayload]{
 			Topic:      eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeAssessmentResponse),
-			Name:       "questionnaire.transform.assessment",
+			Name:       operations.QuestionnaireTransformOperationName,
 			Operations: []string{ent.OpCreate.String(), ent.OpUpdate.String(), ent.OpUpdateOne.String()},
 			Handle:     handleAssessmentResponse,
 		},
@@ -105,7 +105,7 @@ func handleAssessmentResponse(ctx gala.HandlerContext, payload eventqueue.Mutati
 		organizationID = assessment.OwnerID
 	}
 
-	err = transformQuestionnaire(allowCtx, client, questionnaireTransformRequest{
+	req := questionnaireTransformRequest{
 		OrganizationID:       organizationID,
 		TemplateID:           assessment.TemplateID,
 		TemplateKind:         assessment.Edges.Template.Kind,
@@ -115,7 +115,46 @@ func handleAssessmentResponse(ctx gala.HandlerContext, payload eventqueue.Mutati
 		Email:                response.Email,
 		Data:                 document.Data,
 		Config:               config,
-	})
+	}
+
+	integrationRun, startedAt, created, err := createQuestionnaireTransformRun(allowCtx, client, req)
+	if err != nil {
+		return err
+	}
+
+	if !created {
+		logx.FromContext(ctx.Context).Debug().
+			Str("assessment_response_id", response.ID).
+			Msg("questionnaire transform run already exists")
+
+		return nil
+	}
+
+	req.IntegrationRunID = integrationRun.ID
+
+	err = transformQuestionnaire(allowCtx, client, req)
+
+	runResult := operations.RunResult{
+		Status:  enums.IntegrationRunStatusSuccess,
+		Summary: "questionnaire transform completed",
+	}
+
+	if err != nil {
+		runResult = operations.RunResult{
+			Status:  enums.IntegrationRunStatusFailed,
+			Summary: "questionnaire transformation failed",
+			Error:   err.Error(),
+		}
+	}
+
+	errFromRun := operations.CompleteRun(allowCtx, client, integrationRun.ID, startedAt, runResult)
+	if errFromRun != nil {
+		if err == nil {
+			return errFromRun
+		}
+
+		err = errors.Join(err, errFromRun)
+	}
 	if err == nil {
 		return nil
 	}
@@ -130,12 +169,46 @@ func handleAssessmentResponse(ctx gala.HandlerContext, payload eventqueue.Mutati
 	if isQuestionnaireValidationError(err) {
 		logger.Msg("questionnaire transform skipped due to invalid transform data")
 
+		if errFromRun != nil {
+			return err
+		}
+
 		return nil
 	}
 
 	logger.Msg("questionnaire transform failed")
 
+	if errors.Is(err, operations.ErrIngestUpsertConflict) {
+		if errFromRun != nil {
+			return err
+		}
+
+		return nil
+	}
+
 	return err
+}
+
+func createQuestionnaireTransformRun(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest) (*entgen.IntegrationRun, time.Time, bool, error) {
+	currTime := time.Now()
+
+	run, err := client.IntegrationRun.Create().
+		SetOwnerID(req.OrganizationID).
+		SetOperationName(operations.QuestionnaireTransformOperationName).
+		SetRunType(enums.IntegrationRunTypeEvent).
+		SetStatus(enums.IntegrationRunStatusRunning).
+		SetStartedAt(currTime).
+		SetAssessmentResponseID(req.AssessmentResponseID).
+		Save(ctx)
+	if err != nil {
+		if entgen.IsConstraintError(err) {
+			return nil, time.Time{}, false, nil
+		}
+
+		return nil, time.Time{}, false, fmt.Errorf("questionnaire transform integration run: %w", err)
+	}
+
+	return run, currTime, true, nil
 }
 
 func validateQuestionnaire(response *entgen.AssessmentResponse) (*entgen.Assessment, *entgen.DocumentData, models.TemplateProjectionConfig, bool) {
@@ -194,6 +267,7 @@ type questionnaireTransformRequest struct {
 	TemplateKind         enums.TemplateKind
 	AssessmentID         string
 	AssessmentResponseID string
+	IntegrationRunID     string
 	DocumentDataID       string
 	Email                string
 	Data                 map[string]any
@@ -582,6 +656,7 @@ func persistTransformPayload(ctx context.Context, client *entgen.Client, req que
 		{Schema: schema},
 	}, sets, operations.IngestOptions{
 		Source: integrationgenerated.IntegrationIngestSourceDirect,
+		RunID:  req.IntegrationRunID,
 	}); err != nil {
 		return nil, fmt.Errorf("persist transformed input: %w", err)
 	}

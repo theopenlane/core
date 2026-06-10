@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
@@ -287,7 +288,9 @@ func (AssessmentResponse) Annotations() []schema.Annotation {
 
 // Interceptors of the AssessmentResponse
 func (AssessmentResponse) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
+	return []ent.Interceptor{
+		interceptors.InterceptorAssessmentResponseError(),
+	}
 }
 
 // Indexes of the AssessmentResponse

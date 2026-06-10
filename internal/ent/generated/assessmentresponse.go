@@ -87,6 +87,9 @@ type AssessmentResponse struct {
 	// The values are being populated by the AssessmentResponseQuery when eager-loading is set.
 	Edges        AssessmentResponseEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// QuestionnaireTransformError is the error from the latest questionnaire transform run
+	QuestionnaireTransformError string `json:"questionnaireTransformError,omitempty"`
 }
 
 // AssessmentResponseEdges holds the relations/edges for other nodes in the graph.
