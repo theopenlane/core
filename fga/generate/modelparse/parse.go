@@ -72,6 +72,7 @@ func ParseRoleAnnotationsData(data []byte) (*RoleInfo, error) {
 			pendingCreate = strings.FieldsFunc(annotationValue, isSeparator)
 		}
 
+		// roles are defined as "# @role: Group Manager | Manage organization groups"
 		if annotationValue, ok := strings.CutPrefix(line, roleAnnotation); ok {
 			parts := strings.SplitN(strings.TrimSpace(annotationValue), "|", 2) //nolint:mnd
 			pendingRoleName = strings.TrimSpace(parts[0])
