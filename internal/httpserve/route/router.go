@@ -638,6 +638,7 @@ func RegisterRoutes(router *Router) error {
 		registerLoginHandler,
 		registerAccountAccessHandler,
 		registerAccountRolesHandler,
+		registerAccountRolesMeHandler,
 		registerAccountRolesOrganizationHandler,
 		registerAccountFeaturesHandler,
 		register2faHandler,
@@ -662,6 +663,7 @@ func RegisterRoutes(router *Router) error {
 		registerSCIMRoutes,
 		registerEmailTestSendHandler,
 		registerScopesHandler,
+		registerOrganizationRolesHandler,
 		registerRolesHandler,
 
 		// JOB Runners

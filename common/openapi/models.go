@@ -21,10 +21,6 @@ import (
 	"github.com/theopenlane/utils/passwd"
 )
 
-const (
-	exampleFindingsCount = 5
-)
-
 // ExampleProvider interface allows response models to provide their own examples
 // This eliminates the need for separate Example* variables and static switch statements
 type ExampleProvider interface {
@@ -2534,6 +2530,13 @@ var ExampleScopesReply = ScopesReply{
 // Roles
 // =========
 
+// OrganizationRole contains certain metadata for a role that can be assigned to users.
+type OrganizationRole struct {
+	ID          string `json:"id" description:"The role relation ID" example:"policy_manager"`
+	Name        string `json:"name" description:"The display name for the role" example:"Policy Manager"`
+	Description string `json:"description" description:"The role description" example:"Manage all policies and procedures"`
+}
+
 // RolesRequest contains roles that can be assigned to users on top of org roles
 type RolesRequest struct{}
 
@@ -2541,17 +2544,17 @@ type RolesRequest struct{}
 type RolesReply struct {
 	// Reply is the reply value.
 	rout.Reply
-	// Scopes is a list of roles that can be assigned
-	Roles []string `json:"roles,omitempty" description:"A map of object types to operations that can be set for an API Token"`
+	// Roles is a list of organization responsibility roles that can be assigned.
+	Roles []OrganizationRole `json:"roles,omitempty" description:"Organization roles and responsibilities that can be assigned"`
 }
 
-// ExampleResponse returns an example ScopesReply for OpenAPI documentation
+// ExampleResponse returns an example RolesReply for OpenAPI documentation
 func (r *RolesReply) ExampleResponse() any {
-	return ExampleScopesReply
+	return ExampleRolesReply
 }
 
 // Validate ensures the required fields are set on the RolesRequest
-func (r *ScopesReply) Validate() error {
+func (r *RolesRequest) Validate() error {
 	return nil
 }
 
@@ -2561,9 +2564,92 @@ var ExampleRolesRequest = RolesRequest{}
 // ExampleRolesReply is an example of a successful `/roles` response for OpenAPI documentation
 var ExampleRolesReply = RolesReply{
 	Reply: rout.Reply{Success: true},
-	Roles: []string{
-		"compliance_manager",
-		"risk_manager",
-		"policy_manager",
+	Roles: []OrganizationRole{
+		{
+			ID:          "policy_manager",
+			Name:        "Policy Manager",
+			Description: "Can manage all policies and procedures",
+		},
+		{
+			ID:          "risk_manager",
+			Name:        "Risk Manager",
+			Description: "Can manage risks, vulnerabilities, and findings",
+		},
 	},
+}
+
+// OrganizationRolesRequest contains roles that can be assigned to users or groups.
+type OrganizationRolesRequest struct {
+	OrganizationID string   `json:"organization_id,omitempty" description:"The ID of the organization to assign roles in. Defaults to the authenticated organization." example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+	Role           string   `json:"role" description:"The organization responsibility role to assign" example:"policy_manager"`
+	UserIDs        []string `json:"user_ids,omitempty" description:"User IDs to assign the role to"`
+	GroupIDs       []string `json:"group_ids,omitempty" description:"Group IDs to assign the role to"`
+}
+
+// OrganizationRolesReply contains the newly assigned/removed role.
+type OrganizationRolesReply struct {
+	rout.Reply
+	OrganizationID string `json:"organization_id" description:"The ID of the organization the role was applied to" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+	Role           string `json:"role" description:"The organization responsibility role" example:"policy_manager"`
+}
+
+// AccountRolesMeRequest contains no input; it uses the authenticated caller.
+type AccountRolesMeRequest struct{}
+
+// AccountRolesMeReply holds the organization responsibility roles assigned to the authenticated caller.
+type AccountRolesMeReply struct {
+	rout.Reply
+	Roles          []OrganizationRole `json:"roles" description:"Organization responsibility roles assigned to the authenticated caller"`
+	OrganizationID string             `json:"organization_id" description:"The ID of the organization the roles apply to" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+}
+
+func (r *OrganizationRolesRequest) Validate() error {
+	if r.Role == "" {
+		return rout.NewMissingRequiredFieldError("role")
+	}
+
+	if len(r.UserIDs) == 0 && len(r.GroupIDs) == 0 {
+		return rout.NewMissingRequiredFieldError("user_ids or group_ids")
+	}
+
+	return nil
+}
+
+func (r *AccountRolesMeRequest) Validate() error {
+	return nil
+}
+
+func (r *OrganizationRolesReply) ExampleResponse() any {
+	return ExampleOrganizationRolesReply
+}
+
+func (r *AccountRolesMeReply) ExampleResponse() any {
+	return ExampleAccountRolesMeReply
+}
+
+var ExampleOrganizationRolesRequest = OrganizationRolesRequest{
+	OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+	Role:           "policy_manager",
+	UserIDs:        []string{"01J4EXD5MM60CX4YNYN0DEE3Y1"},
+	GroupIDs:       []string{"01J4EXD5MM60CX4YNYN0DEE3Y2"},
+}
+
+var ExampleOrganizationRolesReply = OrganizationRolesReply{
+	Reply:          rout.Reply{Success: true},
+	OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+	Role:           "policy_manager",
+}
+
+var ExampleAccountRolesMeRequest = AccountRolesMeRequest{}
+
+var ExampleAccountRolesMeReply = AccountRolesMeReply{
+	Reply: rout.Reply{Success: true},
+	Roles: []OrganizationRole{
+		{
+			ID:          "policy_manager",
+			Name:        "Policy Manager",
+			Description: "Can manage all policies and procedures",
+		},
+	},
+	OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
 }
