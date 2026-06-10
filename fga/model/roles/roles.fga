@@ -20,33 +20,41 @@ extend type organization
     # @inherit: can_manage_compliance, can_manage_policies, can_manage_registry, can_manage_risk
     # @crud: control, subcontrol, program, evidence, narrative, standard, control_objective, control_implementation, mapped_control
     define can_manage_compliance: compliance_manager or full_access
+    # @role: Compliance Manager | Manage compliance programs, controls, evidence, and mapped controls
     define compliance_manager: [service, user, group#member]
 
     # @crud: risk, vulnerability, scan, finding, action_plan, remediation, review
     define can_manage_risk: risk_manager or full_access
+    # @role: Risk Manager | Manage risks, vulnerabilities, findings, and remediation
     define risk_manager: [service, user, group#member]
 
     # @crud: internal_policy, procedure
     define can_manage_policies: policy_manager or full_access
+    # @role: Policy Manager | Manage all policies and procedures
     define policy_manager: [service, user, group#member]
 
     # @crud: asset, entity, contact, identity_holder, platform, system_detail
     define can_manage_registry: registry_manager or admin
+    # @role: Registry Manager | Manage assets, entities, contacts, platforms, and system details
     define registry_manager: [service, user, group#member]
 
     # @crud: group
     define can_manage_group: group_manager or full_access
+    # @role: Group Manager | Manage organization groups
     define group_manager: [service, user, group#member]
 
     # @crud: trust_center, trust_center_doc, trust_center_faq, trust_center_subprocessor, trust_center_compliance, trust_center_entity, trust_center_nda_request, trust_center_faq, trust_center_watermark_config
     define can_manage_trust_center: trust_center_manager or full_access
+    # @role: Trust Center Manager | Manage trust center content, documents, entities, and requests
     define trust_center_manager: [service, user, group#member]
 
     # @crud: workflow_definition, scheduled_job, job_runner, job_template, integration, integration_webhook
     define can_manage_workflows: workflow_manager or full_access
+    # @role: Workflow Manager | Manage workflows, jobs, integrations, and webhook configuration
     define workflow_manager: [service, user, group#member]
 
     # @crud: campaign, assessment, template, email_template, email_branding, notification_template
     # @view: document_data, assessment_response
     define can_manage_campaigns: campaign_manager or admin
+    # @role: Campaign Manager | Manage campaigns, assessments, templates, and email configuration
     define campaign_manager: [service, user, group#member]

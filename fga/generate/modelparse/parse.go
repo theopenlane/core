@@ -8,10 +8,17 @@ import (
 )
 
 type RoleInfo struct {
-	ViewRoles    map[string][]string
-	CrudRoles    map[string][]string
-	InheritRoles map[string][]string
-	CreateRoles  map[string][]string
+	ViewRoles         map[string][]string
+	CrudRoles         map[string][]string
+	InheritRoles      map[string][]string
+	CreateRoles       map[string][]string
+	OrganizationRoles []OrganizationRole
+}
+
+type OrganizationRole struct {
+	ID          string
+	Name        string
+	Description string
 }
 
 const (
@@ -19,6 +26,7 @@ const (
 	viewAnnotation    = "# @view:"
 	inheritAnnotation = "# @inherit:"
 	createAnnotation  = "# @create:"
+	roleAnnotation    = "# @role:"
 )
 
 // ParseRoleAnnotations parses relevant annotations and role line from roles/roles.fga to determine which objects to add the roles to
@@ -28,34 +36,51 @@ func ParseRoleAnnotations(rolesFile string) (*RoleInfo, error) {
 		return nil, err
 	}
 
+	return ParseRoleAnnotationsData(data)
+}
+
+func ParseRoleAnnotationsData(data []byte) (*RoleInfo, error) {
 	lines := strings.Split(string(data), "\n")
 
 	crudMap := make(map[string][]string)
 	viewMap := make(map[string][]string)
 	inheritMap := make(map[string][]string)
 	createMap := make(map[string][]string)
+	organizationRoles := []OrganizationRole{}
 
 	var pendingCrud, pendingView, pendingInherit, pendingCreate []string
+	var pendingRoleName, pendingRoleDescription string
 
 	isSeparator := func(c rune) bool {
 		return c == ',' || c == ';' || c == ' '
 	}
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
-		if strings.HasPrefix(line, crudAnnotation) {
-			pendingCrud = strings.FieldsFunc(strings.TrimPrefix(line, crudAnnotation), isSeparator)
+		if annotationValue, ok := strings.CutPrefix(line, crudAnnotation); ok {
+			pendingCrud = strings.FieldsFunc(annotationValue, isSeparator)
 		}
 
-		if strings.HasPrefix(line, viewAnnotation) {
-			pendingView = strings.FieldsFunc(strings.TrimPrefix(line, viewAnnotation), isSeparator)
+		if annotationValue, ok := strings.CutPrefix(line, viewAnnotation); ok {
+			pendingView = strings.FieldsFunc(annotationValue, isSeparator)
 		}
 
-		if strings.HasPrefix(line, inheritAnnotation) {
-			pendingInherit = strings.FieldsFunc(strings.TrimPrefix(line, inheritAnnotation), isSeparator)
+		if annotationValue, ok := strings.CutPrefix(line, inheritAnnotation); ok {
+			pendingInherit = strings.FieldsFunc(annotationValue, isSeparator)
 		}
 
-		if strings.HasPrefix(line, createAnnotation) {
-			pendingCreate = strings.FieldsFunc(strings.TrimPrefix(line, createAnnotation), isSeparator)
+		if annotationValue, ok := strings.CutPrefix(line, createAnnotation); ok {
+			pendingCreate = strings.FieldsFunc(annotationValue, isSeparator)
+		}
+
+		// roles are defined as "# @role: Group Manager | Manage organization groups"
+		if annotationValue, ok := strings.CutPrefix(line, roleAnnotation); ok {
+			parts := strings.SplitN(strings.TrimSpace(annotationValue), "|", 2) //nolint:mnd
+			pendingRoleName = strings.TrimSpace(parts[0])
+			pendingRoleDescription = ""
+
+			if len(parts) == 2 { //nolint:mnd
+				pendingRoleDescription = strings.TrimSpace(parts[1])
+			}
 		}
 
 		if strings.HasPrefix(line, "define ") {
@@ -77,6 +102,14 @@ func ParseRoleAnnotations(rolesFile string) (*RoleInfo, error) {
 				}
 
 				inheritMap[role] = append(inheritMap[role], pendingInherit...)
+
+				if pendingRoleName != "" {
+					organizationRoles = append(organizationRoles, OrganizationRole{
+						ID:          role,
+						Name:        pendingRoleName,
+						Description: pendingRoleDescription,
+					})
+				}
 			}
 
 			// reset pending annotations after processing a role definition
@@ -84,14 +117,17 @@ func ParseRoleAnnotations(rolesFile string) (*RoleInfo, error) {
 			pendingView = nil
 			pendingInherit = nil
 			pendingCreate = nil
+			pendingRoleName = ""
+			pendingRoleDescription = ""
 		}
 	}
 
 	return &RoleInfo{
-		CrudRoles:    crudMap,
-		ViewRoles:    viewMap,
-		InheritRoles: inheritMap,
-		CreateRoles:  createMap,
+		CrudRoles:         crudMap,
+		ViewRoles:         viewMap,
+		InheritRoles:      inheritMap,
+		CreateRoles:       createMap,
+		OrganizationRoles: organizationRoles,
 	}, nil
 }
 
