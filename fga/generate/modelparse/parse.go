@@ -73,11 +73,11 @@ func ParseRoleAnnotationsData(data []byte) (*RoleInfo, error) {
 		}
 
 		if annotationValue, ok := strings.CutPrefix(line, roleAnnotation); ok {
-			parts := strings.SplitN(strings.TrimSpace(annotationValue), "|", 2)
+			parts := strings.SplitN(strings.TrimSpace(annotationValue), "|", 2) //nolint:mnd
 			pendingRoleName = strings.TrimSpace(parts[0])
 			pendingRoleDescription = ""
 
-			if len(parts) == 2 {
+			if len(parts) == 2 { //nolint:mnd
 				pendingRoleDescription = strings.TrimSpace(parts[1])
 			}
 		}

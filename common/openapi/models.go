@@ -2388,20 +2388,20 @@ var ExampleProductCatalogReply = ProductCatalogReply{
 		Version: "v0.0.1",
 		SHA:     "12a4a1212888e9316a16826ba074b37230b4b7ba903cd8d7e627e4a8d03a6211",
 		Modules: map[string]models.Feature{
-			string(models.CatalogComplianceModule): models.Feature{
+			string(models.CatalogComplianceModule): {
 				Audience: "public",
-				Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
+				Billing: models.Billing{Prices: []models.ItemPrice{{
 					Interval:   "month",
 					LookupKey:  "price_compliance_monthly",
 					Nickname:   "price_compliance_monthly",
 					PriceID:    "price_1S3qX6JIzM4Pa2ZcRtuinRdG",
-					UnitAmount: int64(45000),
-				}, models.ItemPrice{
+					UnitAmount: int64(45000), //nolint:mnd
+				}, {
 					Interval:   "year",
 					LookupKey:  "price_compliance_annually",
 					Nickname:   "price_compliance_annually",
 					PriceID:    "price_1S3qX7JIzM4Pa2ZchMVxiS1l",
-					UnitAmount: int64(500000),
+					UnitAmount: int64(500000), //nolint:mnd
 				}}},
 				Description:          "Core Compliance Automation and Standards Library",
 				DisplayName:          "Core Compliance Module",
@@ -2409,7 +2409,7 @@ var ExampleProductCatalogReply = ProductCatalogReply{
 				LookupKey:            "compliance_module",
 				MarketingDescription: "Automate evidence collection and task tracking to simplify SOC 2, ISO 27001, and other certification workflows",
 				ProductID:            "prod_SzqDyAvxP2D7fA",
-				Usage:                &models.Usage{EvidenceStorageGB: int64(25000)},
+				Usage:                &models.Usage{EvidenceStorageGB: int64(25000)}, //nolint:mnd
 			},
 		}},
 }
@@ -2520,9 +2520,9 @@ var ExampleScopesRequest = ScopesRequest{}
 var ExampleScopesReply = ScopesReply{
 	Reply: rout.Reply{Success: true},
 	Scopes: map[string][]string{
-		"internal_policy": []string{"read", "write", "delete"},
-		"procedure":       []string{"read", "write", "delete"},
-		"control":         []string{"read", "write", "delete"},
+		"internal_policy": {"read", "write", "delete"},
+		"procedure":       {"read", "write", "delete"},
+		"control":         {"read", "write", "delete"},
 	},
 }
 
