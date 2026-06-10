@@ -2370,6 +2370,7 @@ type AssessmentResponse implements Node {
 		"""
 		where: VendorRiskScoreWhereInput
 	): VendorRiskScoreConnection!
+	questionnaireTransformError: String
 }
 """
 AssessmentResponseAssessmentResponseStatus is enum for the field status
