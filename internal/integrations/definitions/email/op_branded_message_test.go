@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 const brandedMessageKey = "BrandedMessageRequest"
@@ -21,7 +20,7 @@ func TestBrandedMessageButtonRendered(t *testing.T) {
 		ButtonText: "Go",
 		ButtonLink: "https://example.com",
 	})
-	require.Len(t, withButton.Actions, 1)
+	assert.Len(t, withButton.Actions, 1)
 	assert.Equal(t, "Go", withButton.Actions[0].Button.Text)
 	assert.Equal(t, "https://example.com", withButton.Actions[0].Button.Link)
 
@@ -64,7 +63,7 @@ func TestBrandedMessageConfigAppliesRequestBranding(t *testing.T) {
 	assert.Equal(t, "https://acme.com/unsub", out.UnsubscribeURL)
 	assert.Equal(t, "https://acme.com/logo.png", out.LogoURL)
 	assert.Equal(t, "https://acme.com/icon.png", out.HeaderLogoURL)
-	require.Len(t, out.Social, 1)
+	assert.Len(t, out.Social, 1)
 	assert.Equal(t, "X", out.Social[0].Platform)
 }
 
@@ -93,10 +92,10 @@ func TestBrandedMessageConfigStripsInheritedBranding(t *testing.T) {
 // TestBrandedMessageCustomerSelectable verifies the entry is exposed via the customer-facing catalog
 func TestBrandedMessageCustomerSelectable(t *testing.T) {
 	d, ok := DispatcherByKey(brandedMessageKey)
-	require.True(t, ok)
+	assert.True(t, ok)
 
 	cs := d.Registration().CustomerSelectable
-	require.NotNil(t, cs)
+	assert.NotNil(t, cs)
 	assert.True(t, *cs)
 }
 
@@ -104,13 +103,13 @@ func TestBrandedMessageCustomerSelectable(t *testing.T) {
 // fields needed to render a meaningful preview
 func TestBrandedMessageExamplePayloadValid(t *testing.T) {
 	d, ok := DispatcherByKey(brandedMessageKey)
-	require.True(t, ok)
+	assert.True(t, ok)
 
 	raw := d.ExamplePayload()
-	require.NotEmpty(t, raw)
+	assert.NotEmpty(t, raw)
 
 	var req BrandedMessageRequest
-	require.NoError(t, json.Unmarshal(raw, &req))
+	assert.NoError(t, json.Unmarshal(raw, &req))
 
 	assert.NotEmpty(t, req.Email)
 	assert.NotEmpty(t, req.Subject)
@@ -122,13 +121,13 @@ func TestBrandedMessageExamplePayloadValid(t *testing.T) {
 // authoring order used by the form
 func TestBrandedMessageUISchemaValid(t *testing.T) {
 	d, ok := DispatcherByKey(brandedMessageKey)
-	require.True(t, ok)
+	assert.True(t, ok)
 
 	raw := d.BuilderUISchema()
-	require.NotEmpty(t, raw)
+	assert.NotEmpty(t, raw)
 
 	var ui map[string]any
-	require.NoError(t, json.Unmarshal(raw, &ui))
+	assert.NoError(t, json.Unmarshal(raw, &ui))
 	// only the irreducible multi-line hint remains; field types/widgets come from the reflected schema
 	assert.Contains(t, ui, "intros")
 }
@@ -137,19 +136,19 @@ func TestBrandedMessageUISchemaValid(t *testing.T) {
 // fields and carries the format hints that replace the hand-written UI schema
 func TestBrandedMessageConfigSchemaScoping(t *testing.T) {
 	d, ok := DispatcherByKey(brandedMessageKey)
-	require.True(t, ok)
+	assert.True(t, ok)
 
 	var schema map[string]any
-	require.NoError(t, json.Unmarshal(d.Registration().ConfigSchema, &schema))
+	assert.NoError(t, json.Unmarshal(d.Registration().ConfigSchema, &schema))
 
 	defs, ok := schema["$defs"].(map[string]any)
-	require.True(t, ok, "schema should have $defs")
+	assert.True(t, ok, "schema should have $defs")
 
 	entry, ok := defs["BrandedMessageRequest"].(map[string]any)
-	require.True(t, ok, "schema should define BrandedMessageRequest")
+	assert.True(t, ok, "schema should define BrandedMessageRequest")
 
 	props, ok := entry["properties"].(map[string]any)
-	require.True(t, ok, "BrandedMessageRequest should have properties")
+	assert.True(t, ok, "BrandedMessageRequest should have properties")
 
 	// per-send fields promoted from RecipientInfo / CampaignContext are excluded from authoring
 	for _, perSend := range []string{"email", "recipients", "firstName", "lastName", "tags", "campaignId", "campaignName"} {
@@ -173,7 +172,7 @@ func assertSchemaFormat(t *testing.T, props map[string]any, field, want string) 
 	t.Helper()
 
 	p, ok := props[field].(map[string]any)
-	require.True(t, ok, "field %q missing from schema", field)
+	assert.True(t, ok, "field %q missing from schema", field)
 	assert.Equal(t, want, p["format"], "field %q format", field)
 }
 
@@ -182,13 +181,13 @@ func assertSchemaFormat(t *testing.T, props map[string]any, field, want string) 
 // inbound config's branding
 func TestRenderCatalogPreviewExample(t *testing.T) {
 	d, ok := DispatcherByKey(brandedMessageKey)
-	require.True(t, ok)
+	assert.True(t, ok)
 
 	client := &Client{Config: *MockRuntimeConfig()}
 
 	html, err := RenderCatalogPreview(context.Background(), client, d, nil)
-	require.NoError(t, err)
-	require.NotEmpty(t, html)
+	assert.NoError(t, err)
+	assert.NotEmpty(t, html)
 
 	assert.Contains(t, html, "Hi Jordan, welcome aboard")
 	assert.Contains(t, html, "View Onboarding")
@@ -199,7 +198,7 @@ func TestRenderCatalogPreviewExample(t *testing.T) {
 // example so the live preview reflects what the author has typed
 func TestRenderCatalogPreviewDraftOverridesExample(t *testing.T) {
 	d, ok := DispatcherByKey(brandedMessageKey)
-	require.True(t, ok)
+	assert.True(t, ok)
 
 	client := &Client{Config: *MockRuntimeConfig()}
 
@@ -209,7 +208,7 @@ func TestRenderCatalogPreviewDraftOverridesExample(t *testing.T) {
 	}
 
 	html, err := RenderCatalogPreview(context.Background(), client, d, draft)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	assert.Contains(t, html, "Quarterly Update")
 	assert.Contains(t, html, "Read More")
