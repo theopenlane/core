@@ -117,7 +117,7 @@ require (
 	github.com/yuin/goldmark v1.8.2
 	github.com/zitadel/oidc/v3 v3.47.5
 	goauthentik.io/api/v3 v3.2026020.16
-	gocloud.dev v0.45.0
+	gocloud.dev v0.46.0
 	golang.org/x/crypto v0.52.0
 	golang.org/x/mod v0.36.0
 	golang.org/x/oauth2 v0.36.0
