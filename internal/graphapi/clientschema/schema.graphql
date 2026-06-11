@@ -70574,6 +70574,98 @@ input ReassignWorkflowAssignmentInput {
 The `Reference` represents are links to external sources that can be used to gain more information about the control
 """
 scalar Reference
+"""
+A connection to a list of items.
+"""
+type RelatedControlConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [RelatedControlEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type RelatedControlEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: Control!
+}
+"""
+Ordering options for RelatedControl connections
+"""
+input RelatedControlOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order RelatedControl.
+	"""
+	field: RelatedControlOrderField!
+}
+"""
+Properties by which RelatedControl connections can be ordered.
+"""
+enum RelatedControlOrderField {
+	referenceFramework
+	systemOwned
+}
+"""
+A connection to a list of items.
+"""
+type RelatedSubcontrolConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [RelatedSubcontrolEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type RelatedSubcontrolEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: Subcontrol!
+}
+"""
+Ordering options for RelatedSubcontrol connections
+"""
+input RelatedSubcontrolOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order RelatedSubcontrol.
+	"""
+	field: RelatedSubcontrolOrderField!
+}
+"""
+Properties by which RelatedSubcontrol connections can be ordered.
+"""
+enum RelatedSubcontrolOrderField {
+	referenceFramework
+	systemOwned
+}
 type Remediation implements Node {
 	id: ID!
 	createdAt: Time

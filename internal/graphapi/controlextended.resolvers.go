@@ -448,3 +448,71 @@ func (r *queryResolver) ControlsGroupByCategory(ctx context.Context, after *entg
 
 	return result, nil
 }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+/*
+	func (r *queryResolver) RelatedControls(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.MappedControlWhereInput) (*model.RelatedControlConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ControlOrder{
+			{
+				Field:     generated.ControlOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).MappedControl.Query().Where(
+		mappedcontrol.HasFromControlsWith(
+			control.ID(""),
+		)).WithFromControls().WithToControls().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "relatedcontrol"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+	// generated.WithRelatedControlOrder(orderBy),
+	// generated.WithRelatedControlFilter(where.Filter)
+	)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "relatedcontrol"})
+	}
+
+	// get unique controls
+	controlIDs := []string{}
+	for _, r := range res.Edges {
+		controlIDs = append(controlIDs, r.Node.ID)
+	}
+
+	uniqueControlIDs := lo.Uniq(controlIDs)
+
+	relatedControls, err := withTransactionalMutation(ctx).Control.Query().Where(
+		control.IDIn(uniqueControlIDs...),
+	).All(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "relatedcontrol"})
+	}
+
+	edgeResult := []*model.RelatedControlEdge{}
+	for _, c := range relatedControls {
+		edgeResult = append(edgeResult, &model.RelatedControlEdge{Node: c})
+	}
+
+	return &model.RelatedControlConnection{}, err
+}
+func (r *queryResolver) RelatedSubcontrols(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.MappedControlWhereInput) (*model.RelatedControlConnection, error) {
+	return nil, nil
+}
+*/
