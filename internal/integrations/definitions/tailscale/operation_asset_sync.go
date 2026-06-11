@@ -17,7 +17,7 @@ const deviceAssetVariant = "DEVICE"
 
 // IngestHandle adapts Tailscale asset sync to the ingest operation registration boundary
 func (a AssetSync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(tailscaleClient, func(ctx context.Context, request types.OperationRequest, client *tsclient.Client) ([]types.IngestPayloadSet, error) {
+	return providerkit.WithClientRequest(tailscaleClient, func(ctx context.Context, _ types.OperationRequest, client *tsclient.Client) ([]types.IngestPayloadSet, error) {
 		return a.Run(ctx, client)
 	})
 }
