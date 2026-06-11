@@ -10,6 +10,8 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/rs/zerolog/log"
@@ -427,6 +429,7 @@ func filenameToTitle(filename string) string {
 	filename = strings.ReplaceAll(filename, "-", " ")
 
 	// capitalize first letter of each word
+	caser := cases.Title(language.AmericanEnglish)
 	return caser.String(filename)
 }
 
