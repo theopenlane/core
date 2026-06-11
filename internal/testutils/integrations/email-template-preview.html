@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Template Builder — Preview</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      crossorigin="anonymous"
+    />
+    <style>
+      :root {
+        --ol-bg: #f4f5f7;
+        --ol-border: #e2e8f0;
+        --ol-ink: #14171e;
+        --ol-muted: #64748b;
+      }
+      body {
+        background: var(--ol-bg);
+        color: var(--ol-ink);
+      }
+      .app-header {
+        background: #fff;
+        border-bottom: 1px solid var(--ol-border);
+      }
+      .editor-grid {
+        display: grid;
+        grid-template-columns: minmax(420px, 1fr) minmax(420px, 1fr);
+        gap: 1.25rem;
+        align-items: start;
+      }
+      @media (max-width: 1100px) {
+        .editor-grid { grid-template-columns: 1fr; }
+      }
+      .panel {
+        background: #fff;
+        border: 1px solid var(--ol-border);
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+      }
+      .panel-head {
+        padding: 0.85rem 1.1rem;
+        border-bottom: 1px solid var(--ol-border);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+      }
+      .panel-body { padding: 1.1rem; }
+      .preview-panel { position: sticky; top: 1rem; }
+      .preview-frame {
+        width: 100%;
+        height: 760px;
+        border: 0;
+        border-radius: 0 0 12px 12px;
+        background: #fff;
+      }
+      .field-label { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.15rem; }
+      .field-desc { color: var(--ol-muted); font-size: 0.78rem; margin-bottom: 0.35rem; }
+      .field-block { margin-bottom: 1rem; }
+      .field-required::after { content: " *"; color: #dc2626; }
+      .group-title {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--ol-muted);
+        font-weight: 700;
+        margin: 1.25rem 0 0.5rem;
+        border-top: 1px solid var(--ol-border);
+        padding-top: 0.85rem;
+      }
+      .group-title:first-of-type { border-top: 0; margin-top: 0; }
+      .color-row { display: flex; gap: 0.5rem; align-items: center; }
+      .color-row input[type="color"] { width: 46px; height: 38px; padding: 2px; }
+      .repeat-row { display: flex; gap: 0.5rem; margin-bottom: 0.4rem; align-items: start; }
+      .repeat-row .form-control { flex: 1; }
+      .var-chip {
+        cursor: pointer;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.74rem;
+      }
+      .var-chip:hover { background: #0d6efd; color: #fff; }
+      .obj-group {
+        border: 1px dashed var(--ol-border);
+        border-radius: 8px;
+        padding: 0.6rem 0.75rem;
+        margin-bottom: 0.5rem;
+        background: #f8fafc;
+      }
+      pre.inspector {
+        background: #0b1020;
+        color: #d6e2ff;
+        border-radius: 8px;
+        padding: 0.75rem;
+        font-size: 0.72rem;
+        max-height: 320px;
+        overflow: auto;
+      }
+      .log-line { font-family: ui-monospace, monospace; font-size: 0.74rem; color: var(--ol-muted); }
+    </style>
+  </head>
+  <body>
+    <header class="app-header py-3 mb-4">
+      <div class="container-fluid px-4 d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div>
+          <h1 class="h5 mb-0">Email Template Builder</h1>
+          <div class="text-muted small">Representative preview of the customer-facing configurable email template editor</div>
+        </div>
+        <div id="authStatus" class="alert alert-secondary py-1 px-3 mb-0 small">Connecting…</div>
+      </div>
+    </header>
+
+    <main class="container-fluid px-4 pb-5">
+      <div class="panel mb-4">
+        <div class="panel-head">
+          <span>Template</span>
+          <select id="templateSelect" class="form-select form-select-sm" style="max-width: 360px"></select>
+        </div>
+        <div class="panel-body py-2">
+          <div id="templateDescription" class="text-muted small mb-0"></div>
+        </div>
+      </div>
+
+      <div class="editor-grid">
+        <!-- LEFT: schema-driven form -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Configure</span>
+            <span class="text-muted small fw-normal">fields come from <code>configSchema</code></span>
+          </div>
+          <div class="panel-body">
+            <div class="mb-3">
+              <div class="field-label">Insert a variable</div>
+              <div class="field-desc">
+                Click to insert into the last-focused text field. These are runtime substitutions from
+                <code>variables</code> — not form fields.
+              </div>
+              <div id="variablePicker" class="d-flex flex-wrap gap-1"></div>
+            </div>
+            <form id="templateForm" autocomplete="off"></form>
+          </div>
+        </div>
+
+        <!-- RIGHT: live preview -->
+        <div class="panel preview-panel">
+          <div class="panel-head">
+            <span>Live preview</span>
+            <span id="previewStatus" class="text-muted small fw-normal">—</span>
+          </div>
+          <iframe id="previewFrame" class="preview-frame" sandbox="allow-same-origin"></iframe>
+        </div>
+      </div>
+
+      <!-- Inspector: what the API actually returns -->
+      <div class="panel mt-4">
+        <div class="panel-head">
+          <span>API inspector</span>
+          <span class="text-muted small fw-normal">what drives the UI above</span>
+        </div>
+        <div class="panel-body">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-config" type="button">configSchema</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-ui" type="button">uiSchema</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-vars" type="button">variables</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-defaults" type="button">submitted defaults</button></li>
+          </ul>
+          <div class="tab-content pt-3">
+            <div class="tab-pane fade show active" id="tab-config"><pre class="inspector" id="inspectConfig"></pre></div>
+            <div class="tab-pane fade" id="tab-ui"><pre class="inspector" id="inspectUi"></pre></div>
+            <div class="tab-pane fade" id="tab-vars"><pre class="inspector" id="inspectVars"></pre></div>
+            <div class="tab-pane fade" id="tab-defaults"><pre class="inspector" id="inspectDefaults"></pre></div>
+          </div>
+          <div class="mt-2 log-line" id="log"></div>
+        </div>
+      </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script>
+      // ---------------------------------------------------------------------
+      // API harness — mirrors index.html (seed login, Bearer + CSRF, /query)
+      // ---------------------------------------------------------------------
+      const apiBase = "http://localhost:17608";
+      let authToken = null;
+
+      const log = (m) => { document.getElementById("log").textContent = m; };
+      const titleCase = (s = "") =>
+        s.replace(/([A-Z])/g, " $1").replace(/[_-]+/g, " ").replace(/\s+/g, " ").trim()
+         .replace(/\b\w/g, (c) => c.toUpperCase());
+
+      function getCSRF() {
+        return document.cookie.split(";").map((c) => c.trim().split("="))
+          .find(([n]) => n === "ol.csrf-token")?.[1] || null;
+      }
+
+      async function login() {
+        const res = await fetch(`${apiBase}/v1/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ username: "mitb@theopenlane.io", password: "mattisthebest1234" }),
+        });
+        if (!res.ok) throw new Error(`login failed: ${res.status}`);
+        const data = await res.json();
+        if (!data.success || !data.access_token) throw new Error("unexpected login response");
+        authToken = data.access_token;
+      }
+
+      async function gql(query, variables) {
+        const headers = { "Content-Type": "application/json" };
+        if (authToken) headers["Authorization"] = `Bearer ${authToken}`;
+        const csrf = getCSRF();
+        if (csrf) headers["X-CSRF-Token"] = csrf;
+        const res = await fetch(`${apiBase}/query`, {
+          method: "POST",
+          headers,
+          credentials: "include",
+          body: JSON.stringify({ query, variables }),
+        });
+        const body = await res.json();
+        if (body.errors) throw new Error(body.errors.map((e) => e.message).join("; "));
+        return body.data;
+      }
+
+      // ---------------------------------------------------------------------
+      // JSON Schema helpers
+      // ---------------------------------------------------------------------
+      // Resolve the root object type of a reflected schema (root is usually a $ref into $defs)
+      function rootType(schema) {
+        if (schema.$ref) {
+          const key = schema.$ref.replace("#/$defs/", "");
+          return { type: schema.$defs[key], defs: schema.$defs };
+        }
+        return { type: schema, defs: schema.$defs || {} };
+      }
+      function resolve(defs, node) {
+        if (node && node.$ref) return defs[node.$ref.replace("#/$defs/", "")];
+        return node;
+      }
+
+      // ---------------------------------------------------------------------
+      // Form rendering — driven entirely by configSchema + format + uiSchema
+      // ---------------------------------------------------------------------
+      let lastFocused = null;
+      let currentEntry = null;
+
+      function trackFocus(el) {
+        el.addEventListener("focus", () => { lastFocused = el; });
+        return el;
+      }
+
+      function input(value, cls = "form-control form-control-sm") {
+        const el = document.createElement("input");
+        el.className = cls;
+        if (value != null) el.value = value;
+        return el;
+      }
+
+      // build a single scalar control honoring format/uiSchema hints
+      function scalarControl(prop, uiHint, value) {
+        if (prop.format === "color") {
+          const wrap = document.createElement("div");
+          wrap.className = "color-row";
+          const color = input(value || "#000000");
+          color.type = "color";
+          const hex = trackFocus(input(value || ""));
+          hex.placeholder = "#rrggbb";
+          color.addEventListener("input", () => { hex.value = color.value; emit(); });
+          hex.addEventListener("input", () => { if (/^#[0-9a-f]{6}$/i.test(hex.value)) color.value = hex.value; emit(); });
+          wrap.append(color, hex);
+          wrap._read = () => hex.value.trim();
+          return wrap;
+        }
+        if ((uiHint && uiHint["ui:widget"] === "textarea")) {
+          const ta = trackFocus(document.createElement("textarea"));
+          ta.className = "form-control form-control-sm";
+          ta.rows = 2;
+          if (value != null) ta.value = value;
+          ta.addEventListener("input", emit);
+          ta._read = () => ta.value.trim();
+          return ta;
+        }
+        const el = trackFocus(input(value));
+        el.type = prop.format === "uri" ? "url" : "text";
+        el.addEventListener("input", emit);
+        el._read = () => el.value.trim();
+        return el;
+      }
+
+      // repeatable list of scalars or objects
+      function arrayControl(prop, defs, uiHint) {
+        const itemSchema = resolve(defs, prop.items);
+        const list = document.createElement("div");
+        const rows = document.createElement("div");
+        const itemUi = uiHint && uiHint.items;
+        const addRow = (val) => {
+          const row = document.createElement("div");
+          row.className = "repeat-row";
+          let ctrl;
+          if (itemSchema.type === "object") {
+            ctrl = objectControl(itemSchema, defs, itemUi || {}, val || {});
+          } else {
+            ctrl = scalarControl(itemSchema, itemUi, val);
+          }
+          const rm = document.createElement("button");
+          rm.type = "button";
+          rm.className = "btn btn-sm btn-outline-secondary";
+          rm.textContent = "✕";
+          rm.onclick = () => { row.remove(); emit(); };
+          row.append(ctrl, rm);
+          row._read = ctrl._read;
+          rows.appendChild(row);
+        };
+        const add = document.createElement("button");
+        add.type = "button";
+        add.className = "btn btn-sm btn-outline-primary mt-1";
+        add.textContent = "+ Add";
+        add.onclick = () => { addRow(); emit(); };
+        list.append(rows, add);
+        list._read = () =>
+          [...rows.children].map((r) => r._read()).filter((v) => v != null && v !== "" && !(typeof v === "object" && !Object.keys(v).length));
+        return list;
+      }
+
+      // object group (e.g. a social link with platform/iconURL/url)
+      function objectControl(schema, defs, uiHint, value) {
+        const group = document.createElement("div");
+        group.className = "obj-group";
+        const controls = {};
+        for (const [name, raw] of Object.entries(schema.properties || {})) {
+          const prop = resolve(defs, raw);
+          const lbl = document.createElement("div");
+          lbl.className = "field-desc mb-1";
+          lbl.textContent = prop.title || titleCase(name);
+          const ctrl = scalarControl(prop, uiHint && uiHint[name], value[name]);
+          controls[name] = ctrl;
+          group.append(lbl, ctrl);
+        }
+        group._read = () => {
+          const out = {};
+          for (const [name, ctrl] of Object.entries(controls)) {
+            const v = ctrl._read();
+            if (v != null && v !== "") out[name] = v;
+          }
+          return out;
+        };
+        return group;
+      }
+
+      function fieldControl(name, prop, defs, uiHint, value) {
+        if (prop.type === "array") return arrayControl(prop, defs, uiHint);
+        if (prop.type === "object" || prop.$ref) return objectControl(resolve(defs, prop), defs, uiHint, value || {});
+        return scalarControl(prop, uiHint, value);
+      }
+
+      const controls = {};
+
+      function buildForm(entry) {
+        currentEntry = entry;
+        const form = document.getElementById("templateForm");
+        form.innerHTML = "";
+        Object.keys(controls).forEach((k) => delete controls[k]);
+
+        const schema = entry.configSchema;
+        const { type, defs } = rootType(schema);
+        const props = type.properties || {};
+        const required = new Set(type.required || []);
+        const ui = entry.uiSchema || {};
+        const example = entry.exampleDefaults || {};
+
+        for (const [name, raw] of Object.entries(props)) {
+          const prop = resolve(defs, raw);
+          const block = document.createElement("div");
+          block.className = "field-block";
+
+          const label = document.createElement("div");
+          label.className = "field-label" + (required.has(name) ? " field-required" : "");
+          label.textContent = prop.title || titleCase(name);
+          block.appendChild(label);
+
+          if (prop.description) {
+            const d = document.createElement("div");
+            d.className = "field-desc";
+            d.textContent = prop.description;
+            block.appendChild(d);
+          }
+
+          const ctrl = fieldControl(name, prop, defs, ui[name], example[name]);
+          controls[name] = ctrl;
+          block.appendChild(ctrl);
+          form.appendChild(block);
+        }
+
+        // variable picker
+        const picker = document.getElementById("variablePicker");
+        picker.innerHTML = "";
+        (entry.variables || []).forEach((v) => {
+          const chip = document.createElement("span");
+          chip.className = "badge rounded-pill text-bg-light border var-chip";
+          chip.textContent = `{{ .${v.name} }}`;
+          chip.title = v.description || "";
+          chip.onclick = () => insertVariable(`{{ .${v.name} }}`);
+          picker.appendChild(chip);
+        });
+
+        // inspector tabs
+        document.getElementById("inspectConfig").textContent = JSON.stringify(schema, null, 2);
+        document.getElementById("inspectUi").textContent = JSON.stringify(ui, null, 2);
+        document.getElementById("inspectVars").textContent = JSON.stringify(entry.variables, null, 2);
+
+        emit();
+      }
+
+      function insertVariable(token) {
+        const el = lastFocused;
+        if (!el) { log("Focus a text field first, then click a variable."); return; }
+        const start = el.selectionStart ?? el.value.length;
+        const end = el.selectionEnd ?? el.value.length;
+        el.value = el.value.slice(0, start) + token + el.value.slice(end);
+        el.focus();
+        el.selectionStart = el.selectionEnd = start + token.length;
+        el.dispatchEvent(new Event("input"));
+      }
+
+      // collect the non-empty form values = the `defaults` payload
+      function collectDefaults() {
+        const out = {};
+        for (const [name, ctrl] of Object.entries(controls)) {
+          const v = ctrl._read();
+          if (v == null) continue;
+          if (typeof v === "string" && v === "") continue;
+          if (Array.isArray(v) && v.length === 0) continue;
+          if (typeof v === "object" && !Array.isArray(v) && !Object.keys(v).length) continue;
+          out[name] = v;
+        }
+        return out;
+      }
+
+      // ---------------------------------------------------------------------
+      // Live preview (debounced) via previewEmailTemplate(key, defaults)
+      // ---------------------------------------------------------------------
+      let previewTimer = null;
+      function emit() {
+        const defaults = collectDefaults();
+        document.getElementById("inspectDefaults").textContent = JSON.stringify(defaults, null, 2);
+        clearTimeout(previewTimer);
+        previewTimer = setTimeout(() => renderPreview(defaults), 350);
+      }
+
+      const PREVIEW_QUERY = `query Preview($key: String!, $defaults: Map!) { previewEmailTemplate(key: $key, defaults: $defaults) }`;
+      async function renderPreview(defaults) {
+        if (!currentEntry) return;
+        document.getElementById("previewStatus").textContent = "rendering…";
+        try {
+          const data = await gql(PREVIEW_QUERY, { key: currentEntry.key, defaults });
+          document.getElementById("previewFrame").srcdoc = data.previewEmailTemplate || "";
+          document.getElementById("previewStatus").textContent = "updated " + new Date().toLocaleTimeString();
+        } catch (err) {
+          document.getElementById("previewStatus").textContent = "error";
+          log("Preview error: " + err.message);
+        }
+      }
+
+      // ---------------------------------------------------------------------
+      // Bootstrap
+      // ---------------------------------------------------------------------
+      const CATALOG_QUERY = `query Catalog {
+        emailTemplateCatalog {
+          entries { key description configSchema uiSchema variables { name description } exampleValues htmlPreview }
+        }
+      }`;
+
+      let entries = [];
+      async function init() {
+        const status = document.getElementById("authStatus");
+        try {
+          await login();
+          status.className = "alert alert-success py-1 px-3 mb-0 small";
+          status.textContent = "Authenticated (seed user)";
+        } catch (err) {
+          status.className = "alert alert-danger py-1 px-3 mb-0 small";
+          status.textContent = "Auth failed — is the dev server running on :17608? " + err.message;
+          return;
+        }
+
+        try {
+          const data = await gql(CATALOG_QUERY, {});
+          entries = data.emailTemplateCatalog.entries || [];
+        } catch (err) {
+          log("Failed to load catalog: " + err.message);
+          return;
+        }
+        if (!entries.length) { log("Catalog is empty."); return; }
+
+        // seed each entry's form with the example values the server used for its htmlPreview,
+        // so the form opens pre-filled the same way the default preview renders
+        for (const e of entries) {
+          try {
+            const d = await gql(`query($k:String!){ previewEmailTemplate(key:$k, defaults:{}) }`, { k: e.key });
+            e._defaultPreview = d.previewEmailTemplate;
+          } catch (_) {}
+        }
+
+        const select = document.getElementById("templateSelect");
+        select.innerHTML = "";
+        entries.forEach((e, i) => {
+          const opt = document.createElement("option");
+          opt.value = String(i);
+          opt.textContent = e.key;
+          select.appendChild(opt);
+        });
+        select.onchange = () => selectEntry(entries[Number(select.value)]);
+        selectEntry(entries[0]);
+      }
+
+      function selectEntry(entry) {
+        document.getElementById("templateDescription").textContent = entry.description || "";
+        // show the server's default example render immediately, then the form drives live updates
+        if (entry._defaultPreview) document.getElementById("previewFrame").srcdoc = entry._defaultPreview;
+        // pre-fill the form with the same example values the default preview renders, so the
+        // author sees exactly what each field currently contributes to the email
+        entry.exampleDefaults = entry.exampleValues || {};
+        buildForm(entry);
+      }
+
+      init();
+    </script>
+  </body>
+</html>

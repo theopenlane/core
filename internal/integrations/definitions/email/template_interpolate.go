@@ -40,15 +40,20 @@ func interpolatePayload(client *Client, payload json.RawMessage) (json.RawMessag
 	return result, nil
 }
 
-// buildTemplateVars constructs the template variable map
+// buildTemplateVars constructs the template variable map. Only allowlisted config fields are
+// included, so operational and secret config (apikey, resendsecret, provider, URLs, …) is never
+// interpolatable into rendered output regardless of which client's config backs the render
 func buildTemplateVars(cfg RuntimeEmailConfig, payloadVars map[string]any) (map[string]any, error) {
-	var vars map[string]any
-	if err := jsonx.RoundTrip(cfg, &vars); err != nil {
+	var cfgVars map[string]any
+	if err := jsonx.RoundTrip(cfg, &cfgVars); err != nil {
 		return nil, err
 	}
 
-	for name := range nonTemplateConfigFields {
-		delete(vars, name)
+	vars := make(map[string]any, len(customerTemplateConfigFields)+len(payloadVariables)+1)
+	for name := range customerTemplateConfigFields {
+		if value, ok := cfgVars[name]; ok {
+			vars[name] = value
+		}
 	}
 
 	vars["year"] = strconv.Itoa(time.Now().Year())

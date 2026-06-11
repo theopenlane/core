@@ -23823,6 +23823,24 @@ type EmailTemplateCatalogEntry {
 	"""
 	configSchema: Map!
 	"""
+	RJSF-style UI schema describing how the configurable fields should be
+	rendered as a form: authoring order, color widgets for hex fields,
+	repeatable lists for body paragraphs, and hidden per-send fields.
+	"""
+	uiSchema: Map!
+	"""
+	System-provided template variables available for interpolation in this
+	template's string fields (e.g. {{ .firstName }}), with descriptions for
+	the UI variable picker.
+	"""
+	variables: [TemplateVariable!]!
+	"""
+	Example/default field values used to render the preview, keyed by the same
+	field names as configSchema. The UI pre-fills the editor form with these so
+	the author starts from — and can see — what the default preview renders.
+	"""
+	exampleValues: Map
+	"""
 	Rendered HTML preview of the template with default/example values.
 	"""
 	htmlPreview: String!
@@ -68522,6 +68540,23 @@ type Query {
 	rendered HTML preview of the template with default values.
 	"""
 	emailTemplateCatalog: EmailTemplateCatalog!
+	"""
+	Renders a customer-selectable email template to HTML for live preview. The
+	catalog example is the base layer and the supplied draft values override it,
+	so fields the author has not yet filled in still render with representative
+	demo content.
+	"""
+	previewEmailTemplate(
+		"""
+		Catalog key identifying the template to preview.
+		"""
+		key: String!
+
+		"""
+		In-progress form values overlaid on the example payload.
+		"""
+		defaults: Map!
+	): String!
 	"""
 	Look up entity by ID
 	"""

@@ -22,10 +22,29 @@ func TestTemplateVariables_ContainsBaseVars(t *testing.T) {
 	}
 
 	for _, expected := range []string{
-		"companyName", "fromemail", "producturl", "year",
+		"companyName", "corporation", "supportemail", "year",
 		"email", "firstName", "lastName",
 	} {
 		assert.Contains(t, names, expected, "missing base variable: %s", expected)
+	}
+}
+
+// TestTemplateVariables_ExcludesOperationalAndSecretFields verifies operational, secret, and
+// presentational config fields are never advertised as customer-usable template variables
+func TestTemplateVariables_ExcludesOperationalAndSecretFields(t *testing.T) {
+	vars := TemplateVariables()
+
+	names := make(map[string]struct{}, len(vars))
+	for _, v := range vars {
+		names[v.Name] = struct{}{}
+	}
+
+	for _, excluded := range []string{
+		"apikey", "resendsecret", "testdir", "provider",
+		"rooturl", "producturl", "docsurl", "fromemail",
+		"logoURL", "buttonColor", "cardStyle",
+	} {
+		assert.NotContains(t, names, excluded, "operational/secret field leaked into template variables: %s", excluded)
 	}
 }
 
