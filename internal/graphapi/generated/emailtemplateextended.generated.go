@@ -129,6 +129,84 @@ func (ec *executionContext) fieldContext_EmailTemplateCatalogEntry_configSchema(
 	return graphql.NewScalarFieldContext("EmailTemplateCatalogEntry", field, false, false, errors.New("field of type Map does not have child fields"))
 }
 
+func (ec *executionContext) _EmailTemplateCatalogEntry_uiSchema(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplateCatalogEntry) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailTemplateCatalogEntry_uiSchema(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UISchema, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v map[string]any) graphql.Marshaler {
+			return ec.marshalNMap2map(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EmailTemplateCatalogEntry_uiSchema(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EmailTemplateCatalogEntry", field, false, false, errors.New("field of type Map does not have child fields"))
+}
+
+func (ec *executionContext) _EmailTemplateCatalogEntry_variables(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplateCatalogEntry) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailTemplateCatalogEntry_variables(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Variables, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*model.TemplateVariable) graphql.Marshaler {
+			return ec.marshalNTemplateVariable2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateVariableᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EmailTemplateCatalogEntry_variables(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmailTemplateCatalogEntry",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_TemplateVariable(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmailTemplateCatalogEntry_exampleValues(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplateCatalogEntry) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailTemplateCatalogEntry_exampleValues(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ExampleValues, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v map[string]any) graphql.Marshaler {
+			return ec.marshalOMap2map(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_EmailTemplateCatalogEntry_exampleValues(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EmailTemplateCatalogEntry", field, false, false, errors.New("field of type Map does not have child fields"))
+}
+
 func (ec *executionContext) _EmailTemplateCatalogEntry_htmlPreview(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplateCatalogEntry) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -229,6 +307,18 @@ func (ec *executionContext) _EmailTemplateCatalogEntry(ctx context.Context, sel 
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "uiSchema":
+			out.Values[i] = ec._EmailTemplateCatalogEntry_uiSchema(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "variables":
+			out.Values[i] = ec._EmailTemplateCatalogEntry_variables(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "exampleValues":
+			out.Values[i] = ec._EmailTemplateCatalogEntry_exampleValues(ctx, field, obj)
 		case "htmlPreview":
 			out.Values[i] = ec._EmailTemplateCatalogEntry_htmlPreview(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
