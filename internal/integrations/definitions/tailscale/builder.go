@@ -91,7 +91,7 @@ func Builder() registry.Builder {
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
 					SkipDefaultLookback: true,
-					RequiredPermissions: []string{"users:read"},
+					RequiredPermissions: []string{"users:read", "policy_file:read"},
 					ReconcileSchedule:   gala.NewFullFetchSchedule(),
 				},
 				{
