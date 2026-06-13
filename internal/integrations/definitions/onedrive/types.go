@@ -44,8 +44,7 @@ type DriveClient struct {
 	Graph *msgraphsdk.GraphServiceClient
 	// TS is the OAuth2 token source used to obtain access tokens for plain HTTP requests
 	TS oauth2.TokenSource
-	// Cfg is the operator-level configuration, carried so export operations can access
-	// optional services like Azure Document Intelligence
+	// Cfg is the operator-level configuration, carried so export operations can access content mode settings
 	Cfg Config
 }
 

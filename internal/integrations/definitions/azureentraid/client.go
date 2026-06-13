@@ -43,7 +43,7 @@ type GraphClient struct {
 }
 
 // Build constructs the Microsoft Graph service client for one installation
-func (c GraphClient) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
+func (c GraphClient) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
 	meta, err := credentialFromRequest(req)
 	if err != nil {
 		return nil, err

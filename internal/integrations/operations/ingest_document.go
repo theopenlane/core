@@ -19,8 +19,10 @@ type DocClient interface {
 type DocumentExport struct {
 	// FileID is the external file identifier to export
 	FileID string `json:"fileId"`
-	// HTML is the exported document content (populated in the response)
+	// HTML is the exported document content as an embeddable iframe string (populated in the response)
 	HTML string `json:"html,omitempty"`
+	// PDF is the exported document content as raw PDF bytes (populated in the response)
+	PDF []byte `json:"pdf,omitempty"`
 	// MimeType is the content type of the downloaded file
 	MimeType string `json:"mimeType,omitempty"`
 	// Name is the file name without extension

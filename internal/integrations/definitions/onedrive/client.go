@@ -46,8 +46,7 @@ func (c Client) Build(_ context.Context, req types.ClientBuildRequest) (any, err
 		tok.Expiry = *cred.Expiry
 	}
 
-	tenant := oauthTenant(c.cfg)
-	base := fmt.Sprintf(microsoftAuthBaseURL, tenant)
+	base := fmt.Sprintf(microsoftAuthBaseURL, "common")
 
 	oauthCfg := &oauth2.Config{
 		ClientID:     c.cfg.ClientID,

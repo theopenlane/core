@@ -1716,9 +1716,6 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**clientid**|`string`|||
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
-|**defaulttenant**|`string`|||
-|**documentintelligenceendpoint**|`string`|||
-|**documentintelligencekey**|`string`|||
 |**contentmode**|`string`|||
 
 **Additional Properties:** not allowed  

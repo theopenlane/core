@@ -1042,12 +1042,6 @@ data:
         {{- if .Values.openlane.coreConfiguration.integrations.onedrive.redirecturl }}
         redirecturl: {{ .Values.openlane.coreConfiguration.integrations.onedrive.redirecturl | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.onedrive.defaulttenant }}
-        defaulttenant: {{ .Values.openlane.coreConfiguration.integrations.onedrive.defaulttenant | quote }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.onedrive.documentintelligenceendpoint }}
-        documentintelligenceendpoint: {{ .Values.openlane.coreConfiguration.integrations.onedrive.documentintelligenceendpoint | quote }}
-        {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.onedrive.contentmode }}
         contentmode: {{ .Values.openlane.coreConfiguration.integrations.onedrive.contentmode | quote }}
         {{- end }}

@@ -13,16 +13,6 @@ import (
 
 const microsoftAuthBaseURL = "https://login.microsoftonline.com/%s/oauth2/v2.0"
 
-// oauthTenant returns the tenant segment to use in Microsoft OAuth URLs.
-// When DefaultTenant is configured it is used directly; otherwise "common" is returned.
-func oauthTenant(cfg Config) string {
-	if cfg.DefaultTenant != "" {
-		return cfg.DefaultTenant
-	}
-
-	return "common"
-}
-
 // Builder returns the OneDrive definition builder with the supplied operator config applied
 func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
@@ -65,8 +55,8 @@ func Builder(cfg Config) registry.Builder {
 						Config: auth.OAuthConfig{ //nolint:gosec
 							ClientID:     cfg.ClientID,
 							ClientSecret: cfg.ClientSecret,
-							AuthURL:      fmt.Sprintf(microsoftAuthBaseURL, oauthTenant(cfg)) + "/authorize",
-							TokenURL:     fmt.Sprintf(microsoftAuthBaseURL, oauthTenant(cfg)) + "/token",
+							AuthURL:      fmt.Sprintf(microsoftAuthBaseURL, "common") + "/authorize",
+							TokenURL:     fmt.Sprintf(microsoftAuthBaseURL, "common") + "/token",
 							RedirectURL:  cfg.RedirectURL,
 							Scopes: []string{
 								"https://graph.microsoft.com/Files.Read",
