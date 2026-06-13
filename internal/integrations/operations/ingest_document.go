@@ -9,8 +9,6 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-const exportMIMEType = "text/html"
-
 type DocClient interface {
 	Export(ctx context.Context, cfg *DocumentExport) error
 }
