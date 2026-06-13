@@ -6,6 +6,7 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -786,6 +787,67 @@ func TestMutationDeleteInternalPolicy(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteInternalPolicy.DeletedID))
+		})
+	}
+}
+
+func TestMutationRoleChangesCanAccessPolicy(t *testing.T) {
+	cases := []struct {
+		name string
+		role string
+	}{
+		{
+			name: "policy manager",
+			role: "policy_manager",
+		},
+		{
+			name: "compliance manager",
+			role: "compliance_manager",
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+
+			localTestOrg := suite.seedFreshMinimalOrgUsers(t, false)
+			defer cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
+
+			policyToUpdate := (&InternalPolicyBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
+			policyToDelete := (&InternalPolicyBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
+
+			_, err := suite.client.api.UpdateInternalPolicy(localTestOrg.member.UserCtx, policyToUpdate.ID, testclient.UpdateInternalPolicyInput{
+				Name: lo.ToPtr("member cannot edit or delete without policy role"),
+			})
+			assert.ErrorContains(t, err, notAuthorizedErrorMsg)
+
+			_, err = suite.client.api.DeleteInternalPolicy(localTestOrg.member.UserCtx, policyToDelete.ID)
+			assert.ErrorContains(t, err, notAuthorizedErrorMsg)
+
+			// manually add the tuple that the api does
+			tuple := fgax.GetTupleKey(fgax.TupleRequest{
+				SubjectID:   localTestOrg.member.ID,
+				SubjectType: "user",
+				ObjectID:    localTestOrg.owner.OrganizationID,
+				ObjectType:  "organization",
+				Relation:    tc.role,
+			})
+
+			_, err = suite.client.db.Authz.WriteTupleKeys(localTestOrg.owner.UserCtx, []fgax.TupleKey{tuple}, nil)
+			assert.NilError(t, err)
+
+			updatedName := tc.role + " can edit or delete any policy"
+
+			updateResp, err := suite.client.api.UpdateInternalPolicy(localTestOrg.member.UserCtx, policyToUpdate.ID, testclient.UpdateInternalPolicyInput{
+				Name: lo.ToPtr(updatedName),
+			})
+			assert.NilError(t, err)
+			assert.Assert(t, updateResp != nil)
+			assert.Check(t, is.Equal(updatedName, updateResp.UpdateInternalPolicy.InternalPolicy.Name))
+
+			deleteResp, err := suite.client.api.DeleteInternalPolicy(localTestOrg.member.UserCtx, policyToDelete.ID)
+			assert.NilError(t, err)
+			assert.Assert(t, deleteResp != nil)
+			assert.Check(t, is.Equal(policyToDelete.ID, deleteResp.DeleteInternalPolicy.DeletedID))
 		})
 	}
 }

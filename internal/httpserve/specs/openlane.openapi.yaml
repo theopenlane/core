@@ -267,6 +267,43 @@ components:
                 unverified:
                     type: boolean
             type: object
+        AccountRolesMeReply:
+            properties:
+                error:
+                    description: The error message if the request was unsuccessful
+                    type: string
+                error_code:
+                    description: The error code if the request was unsuccessful
+                    type: string
+                organization_id:
+                    description: The ID of the organization the roles apply to
+                    example: 01J4HMNDSZCCQBTY93BF9CBF5D
+                    type: string
+                roles:
+                    description: Organization responsibility roles assigned to the authenticated caller
+                    items:
+                        description: Organization responsibility roles assigned to the authenticated caller
+                        properties:
+                            description:
+                                description: The role description
+                                example: Manage all policies and procedures
+                                type: string
+                            id:
+                                description: The role relation ID
+                                example: policy_manager
+                                type: string
+                            name:
+                                description: The display name for the role
+                                example: Policy Manager
+                                type: string
+                        type: object
+                    type: array
+                success:
+                    description: Whether or not the request was successful or not
+                    type: boolean
+                unverified:
+                    type: boolean
+            type: object
         AccountRolesOrganizationReply:
             properties:
                 error:
@@ -689,6 +726,51 @@ components:
                     description: the organization id for the sso connection
                     type: string
             type: object
+        OrganizationRolesReply:
+            properties:
+                error:
+                    description: The error message if the request was unsuccessful
+                    type: string
+                error_code:
+                    description: The error code if the request was unsuccessful
+                    type: string
+                organization_id:
+                    description: The ID of the organization the role was applied to
+                    example: 01J4HMNDSZCCQBTY93BF9CBF5D
+                    type: string
+                role:
+                    description: The organization responsibility role
+                    example: policy_manager
+                    type: string
+                success:
+                    description: Whether or not the request was successful or not
+                    type: boolean
+                unverified:
+                    type: boolean
+            type: object
+        OrganizationRolesRequest:
+            properties:
+                group_ids:
+                    description: Group IDs to assign the role to
+                    items:
+                        description: Group IDs to assign the role to
+                        type: string
+                    type: array
+                organization_id:
+                    description: The ID of the organization to assign roles in. Defaults to the authenticated organization.
+                    example: 01J4HMNDSZCCQBTY93BF9CBF5D
+                    type: string
+                role:
+                    description: The organization responsibility role to assign
+                    example: policy_manager
+                    type: string
+                user_ids:
+                    description: User IDs to assign the role to
+                    items:
+                        description: User IDs to assign the role to
+                        type: string
+                    type: array
+            type: object
         PatchRequest:
             description: SCIM PATCH operation as defined in RFC 7644 Section 3.5.2
             properties:
@@ -1095,10 +1177,23 @@ components:
                     description: The error code if the request was unsuccessful
                     type: string
                 roles:
-                    description: A map of object types to operations that can be set for an API Token
+                    description: Organization roles and responsibilities that can be assigned
                     items:
-                        description: A map of object types to operations that can be set for an API Token
-                        type: string
+                        description: Organization roles and responsibilities that can be assigned
+                        properties:
+                            description:
+                                description: The role description
+                                example: Manage all policies and procedures
+                                type: string
+                            id:
+                                description: The role relation ID
+                                example: policy_manager
+                                type: string
+                            name:
+                                description: The display name for the role
+                                example: Policy Manager
+                                type: string
+                        type: object
                     type: array
                 success:
                     description: Whether or not the request was successful or not
@@ -3351,6 +3446,123 @@ paths:
             summary: AccountFeaturesByID
             tags:
                 - account
+    /v1/account/organization-roles:
+        delete:
+            description: Remove an organization responsibility role from users or groups
+            operationId: DeleteOrganizationRoles
+            requestBody:
+                content:
+                    application/json:
+                        examples:
+                            success:
+                                value:
+                                    group_ids:
+                                        - 01J4EXD5MM60CX4YNYN0DEE3Y2
+                                    organization_id: 01J4HMNDSZCCQBTY93BF9CBF5D
+                                    role: policy_manager
+                                    user_ids:
+                                        - 01J4EXD5MM60CX4YNYN0DEE3Y1
+                        schema:
+                            $ref: '#/components/schemas/OrganizationRolesRequest'
+                description: Request body
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            examples:
+                                success:
+                                    value:
+                                        organization_id: 01J4HMNDSZCCQBTY93BF9CBF5D
+                                        role: policy_manager
+                                        success: true
+                            schema:
+                                $ref: '#/components/schemas/OrganizationRolesReply'
+                    description: Success
+                "400":
+                    description: Bad Request
+                "401":
+                    description: Unauthorized
+                "500":
+                    description: Internal Server Error
+            security:
+                - bearer: []
+            summary: DeleteOrganizationRoles
+            tags:
+                - account
+        get:
+            description: Retrieve a list of organization responsibility roles that can be assigned
+            operationId: OrganizationRoles
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            examples:
+                                success:
+                                    value:
+                                        roles:
+                                            - description: Can manage all policies and procedures
+                                              id: policy_manager
+                                              name: Policy Manager
+                                            - description: Can manage risks, vulnerabilities, and findings
+                                              id: risk_manager
+                                              name: Risk Manager
+                                        success: true
+                            schema:
+                                $ref: '#/components/schemas/RolesReply'
+                    description: Success
+                "400":
+                    description: Bad Request
+                "401":
+                    description: Unauthorized
+                "500":
+                    description: Internal Server Error
+            security:
+                - bearer: []
+            summary: OrganizationRoles
+            tags:
+                - account
+        post:
+            description: Assign an organization responsibility role to users or groups
+            operationId: AssignOrganizationRoles
+            requestBody:
+                content:
+                    application/json:
+                        examples:
+                            success:
+                                value:
+                                    group_ids:
+                                        - 01J4EXD5MM60CX4YNYN0DEE3Y2
+                                    organization_id: 01J4HMNDSZCCQBTY93BF9CBF5D
+                                    role: policy_manager
+                                    user_ids:
+                                        - 01J4EXD5MM60CX4YNYN0DEE3Y1
+                        schema:
+                            $ref: '#/components/schemas/OrganizationRolesRequest'
+                description: Request body
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            examples:
+                                success:
+                                    value:
+                                        organization_id: 01J4HMNDSZCCQBTY93BF9CBF5D
+                                        role: policy_manager
+                                        success: true
+                            schema:
+                                $ref: '#/components/schemas/OrganizationRolesReply'
+                    description: Success
+                "400":
+                    description: Bad Request
+                "401":
+                    description: Unauthorized
+                "500":
+                    description: Internal Server Error
+            security:
+                - bearer: []
+            summary: AssignOrganizationRoles
+            tags:
+                - account
     /v1/account/roles:
         post:
             description: Retrieve a list of roles of the subject in the organization
@@ -3389,6 +3601,37 @@ paths:
             security:
                 - bearer: []
             summary: AccountRoles
+            tags:
+                - account
+    /v1/account/roles/me:
+        get:
+            description: Retrieve organization responsibility roles assigned to the authenticated user
+            operationId: AccountRolesMe
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            examples:
+                                success:
+                                    value:
+                                        organization_id: 01J4HMNDSZCCQBTY93BF9CBF5D
+                                        roles:
+                                            - description: Can manage all policies and procedures
+                                              id: policy_manager
+                                              name: Policy Manager
+                                        success: true
+                            schema:
+                                $ref: '#/components/schemas/AccountRolesMeReply'
+                    description: Success
+                "400":
+                    description: Bad Request
+                "401":
+                    description: Unauthorized
+                "500":
+                    description: Internal Server Error
+            security:
+                - bearer: []
+            summary: AccountRolesMe
             tags:
                 - account
     /v1/account/roles/organization:
@@ -4002,19 +4245,13 @@ paths:
                             examples:
                                 success:
                                     value:
-                                        scopes:
-                                            control:
-                                                - read
-                                                - write
-                                                - delete
-                                            internal_policy:
-                                                - read
-                                                - write
-                                                - delete
-                                            procedure:
-                                                - read
-                                                - write
-                                                - delete
+                                        roles:
+                                            - description: Can manage all policies and procedures
+                                              id: policy_manager
+                                              name: Policy Manager
+                                            - description: Can manage risks, vulnerabilities, and findings
+                                              id: risk_manager
+                                              name: Risk Manager
                                         success: true
                             schema:
                                 $ref: '#/components/schemas/RolesReply'

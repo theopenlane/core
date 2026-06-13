@@ -1030,6 +1030,18 @@ type EmailTemplateCatalogEntry struct {
 	// The UI uses this to render a dynamic form; the submitted values become
 	// the EmailTemplate defaults field.
 	ConfigSchema map[string]any `json:"configSchema"`
+	// RJSF-style UI schema describing how the configurable fields should be
+	// rendered as a form: authoring order, color widgets for hex fields,
+	// repeatable lists for body paragraphs, and hidden per-send fields.
+	UISchema map[string]any `json:"uiSchema"`
+	// System-provided template variables available for interpolation in this
+	// template's string fields (e.g. {{ .firstName }}), with descriptions for
+	// the UI variable picker.
+	Variables []*TemplateVariable `json:"variables"`
+	// Example/default field values used to render the preview, keyed by the same
+	// field names as configSchema. The UI pre-fills the editor form with these so
+	// the author starts from — and can see — what the default preview renders.
+	ExampleValues map[string]any `json:"exampleValues,omitempty"`
 	// Rendered HTML preview of the template with default/example values.
 	HTMLPreview string `json:"htmlPreview"`
 }

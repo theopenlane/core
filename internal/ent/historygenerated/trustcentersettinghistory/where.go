@@ -213,6 +213,11 @@ func NdaApprovalRequired(v bool) predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldNdaApprovalRequired, v))
 }
 
+// NdaApproverGroupID applies equality check predicate on the "nda_approver_group_id" field. It's identical to NdaApproverGroupIDEQ.
+func NdaApproverGroupID(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldNdaApproverGroupID, v))
+}
+
 // StatusPageURL applies equality check predicate on the "status_page_url" field. It's identical to StatusPageURLEQ.
 func StatusPageURL(v string) predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldStatusPageURL, v))
@@ -2271,6 +2276,81 @@ func NdaApprovalRequiredIsNil() predicate.TrustCenterSettingHistory {
 // NdaApprovalRequiredNotNil applies the NotNil predicate on the "nda_approval_required" field.
 func NdaApprovalRequiredNotNil() predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldNotNull(FieldNdaApprovalRequired))
+}
+
+// NdaApproverGroupIDEQ applies the EQ predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDEQ(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDNEQ applies the NEQ predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDNEQ(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNEQ(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDIn applies the In predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDIn(vs ...string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldIn(FieldNdaApproverGroupID, vs...))
+}
+
+// NdaApproverGroupIDNotIn applies the NotIn predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDNotIn(vs ...string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNotIn(FieldNdaApproverGroupID, vs...))
+}
+
+// NdaApproverGroupIDGT applies the GT predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDGT(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldGT(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDGTE applies the GTE predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDGTE(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldGTE(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDLT applies the LT predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDLT(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldLT(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDLTE applies the LTE predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDLTE(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldLTE(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDContains applies the Contains predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDContains(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldContains(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDHasPrefix applies the HasPrefix predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDHasPrefix(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldHasPrefix(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDHasSuffix applies the HasSuffix predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDHasSuffix(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldHasSuffix(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDIsNil applies the IsNil predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDIsNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldIsNull(FieldNdaApproverGroupID))
+}
+
+// NdaApproverGroupIDNotNil applies the NotNil predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDNotNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNotNull(FieldNdaApproverGroupID))
+}
+
+// NdaApproverGroupIDEqualFold applies the EqualFold predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDEqualFold(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEqualFold(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDContainsFold applies the ContainsFold predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDContainsFold(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldContainsFold(FieldNdaApproverGroupID, v))
 }
 
 // StatusPageURLEQ applies the EQ predicate on the "status_page_url" field.

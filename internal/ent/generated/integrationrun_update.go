@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
@@ -354,6 +355,26 @@ func (_u *IntegrationRunUpdate) ClearEventID() *IntegrationRunUpdate {
 	return _u
 }
 
+// SetAssessmentResponseID sets the "assessment_response_id" field.
+func (_u *IntegrationRunUpdate) SetAssessmentResponseID(v string) *IntegrationRunUpdate {
+	_u.mutation.SetAssessmentResponseID(v)
+	return _u
+}
+
+// SetNillableAssessmentResponseID sets the "assessment_response_id" field if the given value is not nil.
+func (_u *IntegrationRunUpdate) SetNillableAssessmentResponseID(v *string) *IntegrationRunUpdate {
+	if v != nil {
+		_u.SetAssessmentResponseID(*v)
+	}
+	return _u
+}
+
+// ClearAssessmentResponseID clears the value of the "assessment_response_id" field.
+func (_u *IntegrationRunUpdate) ClearAssessmentResponseID() *IntegrationRunUpdate {
+	_u.mutation.ClearAssessmentResponseID()
+	return _u
+}
+
 // SetSummary sets the "summary" field.
 func (_u *IntegrationRunUpdate) SetSummary(v string) *IntegrationRunUpdate {
 	_u.mutation.SetSummary(v)
@@ -426,6 +447,11 @@ func (_u *IntegrationRunUpdate) SetEvent(v *Event) *IntegrationRunUpdate {
 	return _u.SetEventID(v.ID)
 }
 
+// SetAssessmentResponse sets the "assessment_response" edge to the AssessmentResponse entity.
+func (_u *IntegrationRunUpdate) SetAssessmentResponse(v *AssessmentResponse) *IntegrationRunUpdate {
+	return _u.SetAssessmentResponseID(v.ID)
+}
+
 // Mutation returns the IntegrationRunMutation object of the builder.
 func (_u *IntegrationRunUpdate) Mutation() *IntegrationRunMutation {
 	return _u.mutation
@@ -452,6 +478,12 @@ func (_u *IntegrationRunUpdate) ClearResponseFile() *IntegrationRunUpdate {
 // ClearEvent clears the "event" edge to the Event entity.
 func (_u *IntegrationRunUpdate) ClearEvent() *IntegrationRunUpdate {
 	_u.mutation.ClearEvent()
+	return _u
+}
+
+// ClearAssessmentResponse clears the "assessment_response" edge to the AssessmentResponse entity.
+func (_u *IntegrationRunUpdate) ClearAssessmentResponse() *IntegrationRunUpdate {
+	_u.mutation.ClearAssessmentResponse()
 	return _u
 }
 
@@ -750,6 +782,37 @@ func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssessmentResponseCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integrationrun.AssessmentResponseTable,
+			Columns: []string{integrationrun.AssessmentResponseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationRun
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssessmentResponseIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integrationrun.AssessmentResponseTable,
+			Columns: []string{integrationrun.AssessmentResponseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.IntegrationRun
@@ -1101,6 +1164,26 @@ func (_u *IntegrationRunUpdateOne) ClearEventID() *IntegrationRunUpdateOne {
 	return _u
 }
 
+// SetAssessmentResponseID sets the "assessment_response_id" field.
+func (_u *IntegrationRunUpdateOne) SetAssessmentResponseID(v string) *IntegrationRunUpdateOne {
+	_u.mutation.SetAssessmentResponseID(v)
+	return _u
+}
+
+// SetNillableAssessmentResponseID sets the "assessment_response_id" field if the given value is not nil.
+func (_u *IntegrationRunUpdateOne) SetNillableAssessmentResponseID(v *string) *IntegrationRunUpdateOne {
+	if v != nil {
+		_u.SetAssessmentResponseID(*v)
+	}
+	return _u
+}
+
+// ClearAssessmentResponseID clears the value of the "assessment_response_id" field.
+func (_u *IntegrationRunUpdateOne) ClearAssessmentResponseID() *IntegrationRunUpdateOne {
+	_u.mutation.ClearAssessmentResponseID()
+	return _u
+}
+
 // SetSummary sets the "summary" field.
 func (_u *IntegrationRunUpdateOne) SetSummary(v string) *IntegrationRunUpdateOne {
 	_u.mutation.SetSummary(v)
@@ -1173,6 +1256,11 @@ func (_u *IntegrationRunUpdateOne) SetEvent(v *Event) *IntegrationRunUpdateOne {
 	return _u.SetEventID(v.ID)
 }
 
+// SetAssessmentResponse sets the "assessment_response" edge to the AssessmentResponse entity.
+func (_u *IntegrationRunUpdateOne) SetAssessmentResponse(v *AssessmentResponse) *IntegrationRunUpdateOne {
+	return _u.SetAssessmentResponseID(v.ID)
+}
+
 // Mutation returns the IntegrationRunMutation object of the builder.
 func (_u *IntegrationRunUpdateOne) Mutation() *IntegrationRunMutation {
 	return _u.mutation
@@ -1199,6 +1287,12 @@ func (_u *IntegrationRunUpdateOne) ClearResponseFile() *IntegrationRunUpdateOne 
 // ClearEvent clears the "event" edge to the Event entity.
 func (_u *IntegrationRunUpdateOne) ClearEvent() *IntegrationRunUpdateOne {
 	_u.mutation.ClearEvent()
+	return _u
+}
+
+// ClearAssessmentResponse clears the "assessment_response" edge to the AssessmentResponse entity.
+func (_u *IntegrationRunUpdateOne) ClearAssessmentResponse() *IntegrationRunUpdateOne {
+	_u.mutation.ClearAssessmentResponse()
 	return _u
 }
 
@@ -1527,6 +1621,37 @@ func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *Integrat
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssessmentResponseCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integrationrun.AssessmentResponseTable,
+			Columns: []string{integrationrun.AssessmentResponseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationRun
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssessmentResponseIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integrationrun.AssessmentResponseTable,
+			Columns: []string{integrationrun.AssessmentResponseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.IntegrationRun

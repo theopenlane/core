@@ -24084,6 +24084,10 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetNdaApprovalRequired(ndaApprovalRequired)
 	}
 
+	if ndaApproverGroupID, exists := m.NdaApproverGroupID(); exists {
+		create = create.SetNillableNdaApproverGroupID(&ndaApproverGroupID)
+	}
+
 	if statusPageURL, exists := m.StatusPageURL(); exists {
 		create = create.SetNillableStatusPageURL(&statusPageURL)
 	}
@@ -24293,6 +24297,12 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetNdaApprovalRequired(trustcentersetting.NdaApprovalRequired)
 		}
 
+		if ndaApproverGroupID, exists := m.NdaApproverGroupID(); exists {
+			create = create.SetNillableNdaApproverGroupID(&ndaApproverGroupID)
+		} else {
+			create = create.SetNillableNdaApproverGroupID(trustcentersetting.NdaApproverGroupID)
+		}
+
 		if statusPageURL, exists := m.StatusPageURL(); exists {
 			create = create.SetNillableStatusPageURL(&statusPageURL)
 		} else {
@@ -24363,6 +24373,7 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetNillableCompanyDomain(trustcentersetting.CompanyDomain).
 			SetNillableSecurityContact(trustcentersetting.SecurityContact).
 			SetNdaApprovalRequired(trustcentersetting.NdaApprovalRequired).
+			SetNillableNdaApproverGroupID(trustcentersetting.NdaApproverGroupID).
 			SetNillableStatusPageURL(trustcentersetting.StatusPageURL).
 			Save(ctx)
 		if err != nil {

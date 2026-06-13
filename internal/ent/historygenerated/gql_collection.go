@@ -14231,6 +14231,11 @@ func (_q *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneN
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldNdaApprovalRequired)
 				fieldSeen[trustcentersettinghistory.FieldNdaApprovalRequired] = struct{}{}
 			}
+		case "ndaApproverGroupID":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldNdaApproverGroupID]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldNdaApproverGroupID)
+				fieldSeen[trustcentersettinghistory.FieldNdaApproverGroupID] = struct{}{}
+			}
 		case "statusPageURL":
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldStatusPageURL]; !ok {
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldStatusPageURL)

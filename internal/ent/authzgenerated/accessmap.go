@@ -2411,6 +2411,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
+}, "assessment_response": {
+	ObjectType:          "assessment_response",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
 },
 }, "integration_webhook": {"owner": {
 	ObjectType:          "owner",
@@ -5458,6 +5463,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
+}, "nda_approver_group": {
+	ObjectType:          "group",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 },
 }, "trust_center_subprocessor": {"trust_center_subprocessor_kind": {
 	ObjectType:          "trust_center_subprocessor_kind",

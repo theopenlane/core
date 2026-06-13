@@ -695,6 +695,14 @@ func TestMutationUpdateEvidence(t *testing.T) {
 			ctx:    sharedViewOnlyUser.UserCtx,
 		},
 		{
+			name: "auditor allowed to updated",
+			request: testclient.UpdateEvidenceInput{
+				Status: &enums.EvidenceStatusAuditorApproved,
+			},
+			client: suite.client.api,
+			ctx:    sharedAuditorUser.UserCtx,
+		},
+		{
 			name: "update not allowed, no permissions to update but can view due to program membership",
 			request: testclient.UpdateEvidenceInput{
 				Description: lo.ToPtr("This is an updated description of evidence"),

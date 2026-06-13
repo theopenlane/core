@@ -464,6 +464,20 @@ func (_c *TrustCenterSettingHistoryCreate) SetNillableNdaApprovalRequired(v *boo
 	return _c
 }
 
+// SetNdaApproverGroupID sets the "nda_approver_group_id" field.
+func (_c *TrustCenterSettingHistoryCreate) SetNdaApproverGroupID(v string) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetNdaApproverGroupID(v)
+	return _c
+}
+
+// SetNillableNdaApproverGroupID sets the "nda_approver_group_id" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableNdaApproverGroupID(v *string) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetNdaApproverGroupID(*v)
+	}
+	return _c
+}
+
 // SetStatusPageURL sets the "status_page_url" field.
 func (_c *TrustCenterSettingHistoryCreate) SetStatusPageURL(v string) *TrustCenterSettingHistoryCreate {
 	_c.mutation.SetStatusPageURL(v)
@@ -762,6 +776,10 @@ func (_c *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingHist
 	if value, ok := _c.mutation.NdaApprovalRequired(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool, value)
 		_node.NdaApprovalRequired = value
+	}
+	if value, ok := _c.mutation.NdaApproverGroupID(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldNdaApproverGroupID, field.TypeString, value)
+		_node.NdaApproverGroupID = &value
 	}
 	if value, ok := _c.mutation.StatusPageURL(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldStatusPageURL, field.TypeString, value)

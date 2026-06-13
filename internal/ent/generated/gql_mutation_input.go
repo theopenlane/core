@@ -27946,6 +27946,7 @@ type CreateTrustCenterSettingInput struct {
 	LogoFileID               *string
 	FaviconFileID            *string
 	HeroImageFileID          *string
+	NdaApproverGroupID       *string
 }
 
 // Mutate applies the CreateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -28025,6 +28026,9 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.HeroImageFileID; v != nil {
 		m.SetHeroImageFileID(*v)
 	}
+	if v := i.NdaApproverGroupID; v != nil {
+		m.SetNdaApproverGroupID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateTrustCenterSettingInput on the TrustCenterSettingCreate builder.
@@ -28085,6 +28089,8 @@ type UpdateTrustCenterSettingInput struct {
 	FaviconFileID                 *string
 	ClearHeroImageFile            bool
 	HeroImageFileID               *string
+	ClearNdaApproverGroup         bool
+	NdaApproverGroupID            *string
 }
 
 // Mutate applies the UpdateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -28238,6 +28244,12 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.HeroImageFileID; v != nil {
 		m.SetHeroImageFileID(*v)
+	}
+	if i.ClearNdaApproverGroup {
+		m.ClearNdaApproverGroup()
+	}
+	if v := i.NdaApproverGroupID; v != nil {
+		m.SetNdaApproverGroupID(*v)
 	}
 }
 

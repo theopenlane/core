@@ -37352,6 +37352,10 @@ type TrustCenterSettingHistory implements Node {
   """
   ndaApprovalRequired: Boolean
   """
+  group whose members approve trust center NDA requests
+  """
+  ndaApproverGroupID: String
+  """
   URL to the company's status page
   """
   statusPageURL: String
@@ -37922,6 +37926,24 @@ input TrustCenterSettingHistoryWhereInput {
   ndaApprovalRequiredNEQ: Boolean
   ndaApprovalRequiredIsNil: Boolean
   ndaApprovalRequiredNotNil: Boolean
+  """
+  nda_approver_group_id field predicates
+  """
+  ndaApproverGroupID: String
+  ndaApproverGroupIDNEQ: String
+  ndaApproverGroupIDIn: [String!]
+  ndaApproverGroupIDNotIn: [String!]
+  ndaApproverGroupIDGT: String
+  ndaApproverGroupIDGTE: String
+  ndaApproverGroupIDLT: String
+  ndaApproverGroupIDLTE: String
+  ndaApproverGroupIDContains: String
+  ndaApproverGroupIDHasPrefix: String
+  ndaApproverGroupIDHasSuffix: String
+  ndaApproverGroupIDIsNil: Boolean
+  ndaApproverGroupIDNotNil: Boolean
+  ndaApproverGroupIDEqualFold: String
+  ndaApproverGroupIDContainsFold: String
   """
   status_page_url field predicates
   """

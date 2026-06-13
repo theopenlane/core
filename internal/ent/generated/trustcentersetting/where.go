@@ -203,6 +203,11 @@ func NdaApprovalRequired(v bool) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldNdaApprovalRequired, v))
 }
 
+// NdaApproverGroupID applies equality check predicate on the "nda_approver_group_id" field. It's identical to NdaApproverGroupIDEQ.
+func NdaApproverGroupID(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldNdaApproverGroupID, v))
+}
+
 // StatusPageURL applies equality check predicate on the "status_page_url" field. It's identical to StatusPageURLEQ.
 func StatusPageURL(v string) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldStatusPageURL, v))
@@ -2128,6 +2133,81 @@ func NdaApprovalRequiredNotNil() predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldNdaApprovalRequired))
 }
 
+// NdaApproverGroupIDEQ applies the EQ predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDNEQ applies the NEQ predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDNEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDIn applies the In predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIn(FieldNdaApproverGroupID, vs...))
+}
+
+// NdaApproverGroupIDNotIn applies the NotIn predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDNotIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotIn(FieldNdaApproverGroupID, vs...))
+}
+
+// NdaApproverGroupIDGT applies the GT predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDGT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGT(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDGTE applies the GTE predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDGTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGTE(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDLT applies the LT predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDLT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLT(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDLTE applies the LTE predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDLTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLTE(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDContains applies the Contains predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDContains(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContains(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDHasPrefix applies the HasPrefix predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDHasPrefix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasPrefix(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDHasSuffix applies the HasSuffix predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDHasSuffix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasSuffix(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDIsNil applies the IsNil predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldNdaApproverGroupID))
+}
+
+// NdaApproverGroupIDNotNil applies the NotNil predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldNdaApproverGroupID))
+}
+
+// NdaApproverGroupIDEqualFold applies the EqualFold predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDEqualFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEqualFold(FieldNdaApproverGroupID, v))
+}
+
+// NdaApproverGroupIDContainsFold applies the ContainsFold predicate on the "nda_approver_group_id" field.
+func NdaApproverGroupIDContainsFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContainsFold(FieldNdaApproverGroupID, v))
+}
+
 // StatusPageURLEQ applies the EQ predicate on the "status_page_url" field.
 func StatusPageURLEQ(v string) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldStatusPageURL, v))
@@ -2339,6 +2419,35 @@ func HasHeroImageFileWith(preds ...predicate.File) predicate.TrustCenterSetting 
 		step := newHeroImageFileStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasNdaApproverGroup applies the HasEdge predicate on the "nda_approver_group" edge.
+func HasNdaApproverGroup() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, NdaApproverGroupTable, NdaApproverGroupColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasNdaApproverGroupWith applies the HasEdge predicate on the "nda_approver_group" edge with a given conditions (other predicates).
+func HasNdaApproverGroupWith(preds ...predicate.Group) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(func(s *sql.Selector) {
+		step := newNdaApproverGroupStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.TrustCenterSetting
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

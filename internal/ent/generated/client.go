@@ -15658,6 +15658,25 @@ func (c *IntegrationRunClient) QueryEvent(_m *IntegrationRun) *EventQuery {
 	return query
 }
 
+// QueryAssessmentResponse queries the assessment_response edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryAssessmentResponse(_m *IntegrationRun) *AssessmentResponseQuery {
+	query := (&AssessmentResponseClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
+			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, integrationrun.AssessmentResponseTable, integrationrun.AssessmentResponseColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.AssessmentResponse
+		step.Edge.Schema = schemaConfig.IntegrationRun
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *IntegrationRunClient) Hooks() []Hook {
 	hooks := c.hooks.IntegrationRun
@@ -34052,6 +34071,25 @@ func (c *TrustCenterSettingClient) QueryHeroImageFile(_m *TrustCenterSetting) *F
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNdaApproverGroup queries the nda_approver_group edge of a TrustCenterSetting.
+func (c *TrustCenterSettingClient) QueryNdaApproverGroup(_m *TrustCenterSetting) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcentersetting.NdaApproverGroupTable, trustcentersetting.NdaApproverGroupColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.TrustCenterSetting
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil

@@ -2822,6 +2822,7 @@ type ComplexityRoot struct {
 		LogoLocalFileID          func(childComplexity int) int
 		LogoRemoteURL            func(childComplexity int) int
 		NdaApprovalRequired      func(childComplexity int) int
+		NdaApproverGroupID       func(childComplexity int) int
 		Operation                func(childComplexity int) int
 		Overview                 func(childComplexity int) int
 		PrimaryColor             func(childComplexity int) int
@@ -19127,6 +19128,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.NdaApprovalRequired(childComplexity), true
+
+	case "TrustCenterSettingHistory.ndaApproverGroupID":
+		if e.ComplexityRoot.TrustCenterSettingHistory.NdaApproverGroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSettingHistory.NdaApproverGroupID(childComplexity), true
 
 	case "TrustCenterSettingHistory.operation":
 		if e.ComplexityRoot.TrustCenterSettingHistory.Operation == nil {
@@ -59636,6 +59644,10 @@ type TrustCenterSettingHistory implements Node {
   """
   ndaApprovalRequired: Boolean
   """
+  group whose members approve trust center NDA requests
+  """
+  ndaApproverGroupID: String
+  """
   URL to the company's status page
   """
   statusPageURL: String
@@ -60206,6 +60218,24 @@ input TrustCenterSettingHistoryWhereInput {
   ndaApprovalRequiredNEQ: Boolean
   ndaApprovalRequiredIsNil: Boolean
   ndaApprovalRequiredNotNil: Boolean
+  """
+  nda_approver_group_id field predicates
+  """
+  ndaApproverGroupID: String
+  ndaApproverGroupIDNEQ: String
+  ndaApproverGroupIDIn: [String!]
+  ndaApproverGroupIDNotIn: [String!]
+  ndaApproverGroupIDGT: String
+  ndaApproverGroupIDGTE: String
+  ndaApproverGroupIDLT: String
+  ndaApproverGroupIDLTE: String
+  ndaApproverGroupIDContains: String
+  ndaApproverGroupIDHasPrefix: String
+  ndaApproverGroupIDHasSuffix: String
+  ndaApproverGroupIDIsNil: Boolean
+  ndaApproverGroupIDNotNil: Boolean
+  ndaApproverGroupIDEqualFold: String
+  ndaApproverGroupIDContainsFold: String
   """
   status_page_url field predicates
   """
@@ -71815,6 +71845,8 @@ func (ec *executionContext) childFields_TrustCenterSettingHistory(ctx context.Co
 		return ec.fieldContext_TrustCenterSettingHistory_securityContact(ctx, field)
 	case "ndaApprovalRequired":
 		return ec.fieldContext_TrustCenterSettingHistory_ndaApprovalRequired(ctx, field)
+	case "ndaApproverGroupID":
+		return ec.fieldContext_TrustCenterSettingHistory_ndaApproverGroupID(ctx, field)
 	case "statusPageURL":
 		return ec.fieldContext_TrustCenterSettingHistory_statusPageURL(ctx, field)
 	}

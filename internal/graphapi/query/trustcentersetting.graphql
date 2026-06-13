@@ -116,6 +116,7 @@ query GetTrustCenterSettingByID ($trustCenterSettingId: ID!) {
 		logoLocalFileID
 		logoRemoteURL
 		ndaApprovalRequired
+		ndaApproverGroupID
 		overview
 		primaryColor
 		removeBranding

@@ -34,6 +34,7 @@ type TrustCenterSettingQuery struct {
 	withLogoFile           *FileQuery
 	withFaviconFile        *FileQuery
 	withHeroImageFile      *FileQuery
+	withNdaApproverGroup   *GroupQuery
 	loadTotal              []func(context.Context, []*TrustCenterSetting) error
 	modifiers              []func(*sql.Selector)
 	withNamedBlockedGroups map[string]*GroupQuery
@@ -192,6 +193,31 @@ func (_q *TrustCenterSettingQuery) QueryHeroImageFile() *FileQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryNdaApproverGroup chains the current query on the "nda_approver_group" edge.
+func (_q *TrustCenterSettingQuery) QueryNdaApproverGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcentersetting.NdaApproverGroupTable, trustcentersetting.NdaApproverGroupColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.TrustCenterSetting
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -386,16 +412,17 @@ func (_q *TrustCenterSettingQuery) Clone() *TrustCenterSettingQuery {
 		return nil
 	}
 	return &TrustCenterSettingQuery{
-		config:            _q.config,
-		ctx:               _q.ctx.Clone(),
-		order:             append([]trustcentersetting.OrderOption{}, _q.order...),
-		inters:            append([]Interceptor{}, _q.inters...),
-		predicates:        append([]predicate.TrustCenterSetting{}, _q.predicates...),
-		withBlockedGroups: _q.withBlockedGroups.Clone(),
-		withEditors:       _q.withEditors.Clone(),
-		withLogoFile:      _q.withLogoFile.Clone(),
-		withFaviconFile:   _q.withFaviconFile.Clone(),
-		withHeroImageFile: _q.withHeroImageFile.Clone(),
+		config:               _q.config,
+		ctx:                  _q.ctx.Clone(),
+		order:                append([]trustcentersetting.OrderOption{}, _q.order...),
+		inters:               append([]Interceptor{}, _q.inters...),
+		predicates:           append([]predicate.TrustCenterSetting{}, _q.predicates...),
+		withBlockedGroups:    _q.withBlockedGroups.Clone(),
+		withEditors:          _q.withEditors.Clone(),
+		withLogoFile:         _q.withLogoFile.Clone(),
+		withFaviconFile:      _q.withFaviconFile.Clone(),
+		withHeroImageFile:    _q.withHeroImageFile.Clone(),
+		withNdaApproverGroup: _q.withNdaApproverGroup.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -455,6 +482,17 @@ func (_q *TrustCenterSettingQuery) WithHeroImageFile(opts ...func(*FileQuery)) *
 		opt(query)
 	}
 	_q.withHeroImageFile = query
+	return _q
+}
+
+// WithNdaApproverGroup tells the query-builder to eager-load the nodes that are connected to
+// the "nda_approver_group" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterSettingQuery) WithNdaApproverGroup(opts ...func(*GroupQuery)) *TrustCenterSettingQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withNdaApproverGroup = query
 	return _q
 }
 
@@ -542,12 +580,13 @@ func (_q *TrustCenterSettingQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	var (
 		nodes       = []*TrustCenterSetting{}
 		_spec       = _q.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [6]bool{
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withLogoFile != nil,
 			_q.withFaviconFile != nil,
 			_q.withHeroImageFile != nil,
+			_q.withNdaApproverGroup != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -602,6 +641,12 @@ func (_q *TrustCenterSettingQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	if query := _q.withHeroImageFile; query != nil {
 		if err := _q.loadHeroImageFile(ctx, query, nodes, nil,
 			func(n *TrustCenterSetting, e *File) { n.Edges.HeroImageFile = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withNdaApproverGroup; query != nil {
+		if err := _q.loadNdaApproverGroup(ctx, query, nodes, nil,
+			func(n *TrustCenterSetting, e *Group) { n.Edges.NdaApproverGroup = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -785,6 +830,38 @@ func (_q *TrustCenterSettingQuery) loadHeroImageFile(ctx context.Context, query 
 	}
 	return nil
 }
+func (_q *TrustCenterSettingQuery) loadNdaApproverGroup(ctx context.Context, query *GroupQuery, nodes []*TrustCenterSetting, init func(*TrustCenterSetting), assign func(*TrustCenterSetting, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TrustCenterSetting)
+	for i := range nodes {
+		if nodes[i].NdaApproverGroupID == nil {
+			continue
+		}
+		fk := *nodes[i].NdaApproverGroupID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "nda_approver_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (_q *TrustCenterSettingQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -824,6 +901,9 @@ func (_q *TrustCenterSettingQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withHeroImageFile != nil {
 			_spec.Node.AddColumnOnce(trustcentersetting.FieldHeroImageLocalFileID)
+		}
+		if _q.withNdaApproverGroup != nil {
+			_spec.Node.AddColumnOnce(trustcentersetting.FieldNdaApproverGroupID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

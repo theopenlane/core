@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
@@ -297,6 +298,20 @@ func (_c *IntegrationRunCreate) SetNillableEventID(v *string) *IntegrationRunCre
 	return _c
 }
 
+// SetAssessmentResponseID sets the "assessment_response_id" field.
+func (_c *IntegrationRunCreate) SetAssessmentResponseID(v string) *IntegrationRunCreate {
+	_c.mutation.SetAssessmentResponseID(v)
+	return _c
+}
+
+// SetNillableAssessmentResponseID sets the "assessment_response_id" field if the given value is not nil.
+func (_c *IntegrationRunCreate) SetNillableAssessmentResponseID(v *string) *IntegrationRunCreate {
+	if v != nil {
+		_c.SetAssessmentResponseID(*v)
+	}
+	return _c
+}
+
 // SetSummary sets the "summary" field.
 func (_c *IntegrationRunCreate) SetSummary(v string) *IntegrationRunCreate {
 	_c.mutation.SetSummary(v)
@@ -368,6 +383,11 @@ func (_c *IntegrationRunCreate) SetResponseFile(v *File) *IntegrationRunCreate {
 // SetEvent sets the "event" edge to the Event entity.
 func (_c *IntegrationRunCreate) SetEvent(v *Event) *IntegrationRunCreate {
 	return _c.SetEventID(v.ID)
+}
+
+// SetAssessmentResponse sets the "assessment_response" edge to the AssessmentResponse entity.
+func (_c *IntegrationRunCreate) SetAssessmentResponse(v *AssessmentResponse) *IntegrationRunCreate {
+	return _c.SetAssessmentResponseID(v.ID)
 }
 
 // Mutation returns the IntegrationRunMutation object of the builder.
@@ -666,6 +686,24 @@ func (_c *IntegrationRunCreate) createSpec() (*IntegrationRun, *sqlgraph.CreateS
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.EventID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssessmentResponseIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integrationrun.AssessmentResponseTable,
+			Columns: []string{integrationrun.AssessmentResponseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.IntegrationRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.AssessmentResponseID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

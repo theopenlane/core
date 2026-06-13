@@ -1612,29 +1612,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "IntegrationRun",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			integrationrun.FieldCreatedAt:       {Type: field.TypeTime, Column: integrationrun.FieldCreatedAt},
-			integrationrun.FieldUpdatedAt:       {Type: field.TypeTime, Column: integrationrun.FieldUpdatedAt},
-			integrationrun.FieldCreatedBy:       {Type: field.TypeString, Column: integrationrun.FieldCreatedBy},
-			integrationrun.FieldUpdatedBy:       {Type: field.TypeString, Column: integrationrun.FieldUpdatedBy},
-			integrationrun.FieldDeletedAt:       {Type: field.TypeTime, Column: integrationrun.FieldDeletedAt},
-			integrationrun.FieldDeletedBy:       {Type: field.TypeString, Column: integrationrun.FieldDeletedBy},
-			integrationrun.FieldOwnerID:         {Type: field.TypeString, Column: integrationrun.FieldOwnerID},
-			integrationrun.FieldIntegrationID:   {Type: field.TypeString, Column: integrationrun.FieldIntegrationID},
-			integrationrun.FieldOperationName:   {Type: field.TypeString, Column: integrationrun.FieldOperationName},
-			integrationrun.FieldOperationKind:   {Type: field.TypeEnum, Column: integrationrun.FieldOperationKind},
-			integrationrun.FieldRunType:         {Type: field.TypeEnum, Column: integrationrun.FieldRunType},
-			integrationrun.FieldOperationConfig: {Type: field.TypeJSON, Column: integrationrun.FieldOperationConfig},
-			integrationrun.FieldMappingVersion:  {Type: field.TypeString, Column: integrationrun.FieldMappingVersion},
-			integrationrun.FieldStatus:          {Type: field.TypeEnum, Column: integrationrun.FieldStatus},
-			integrationrun.FieldStartedAt:       {Type: field.TypeTime, Column: integrationrun.FieldStartedAt},
-			integrationrun.FieldFinishedAt:      {Type: field.TypeTime, Column: integrationrun.FieldFinishedAt},
-			integrationrun.FieldDurationMs:      {Type: field.TypeInt, Column: integrationrun.FieldDurationMs},
-			integrationrun.FieldRequestFileID:   {Type: field.TypeString, Column: integrationrun.FieldRequestFileID},
-			integrationrun.FieldResponseFileID:  {Type: field.TypeString, Column: integrationrun.FieldResponseFileID},
-			integrationrun.FieldEventID:         {Type: field.TypeString, Column: integrationrun.FieldEventID},
-			integrationrun.FieldSummary:         {Type: field.TypeString, Column: integrationrun.FieldSummary},
-			integrationrun.FieldError:           {Type: field.TypeString, Column: integrationrun.FieldError},
-			integrationrun.FieldMetrics:         {Type: field.TypeJSON, Column: integrationrun.FieldMetrics},
+			integrationrun.FieldCreatedAt:            {Type: field.TypeTime, Column: integrationrun.FieldCreatedAt},
+			integrationrun.FieldUpdatedAt:            {Type: field.TypeTime, Column: integrationrun.FieldUpdatedAt},
+			integrationrun.FieldCreatedBy:            {Type: field.TypeString, Column: integrationrun.FieldCreatedBy},
+			integrationrun.FieldUpdatedBy:            {Type: field.TypeString, Column: integrationrun.FieldUpdatedBy},
+			integrationrun.FieldDeletedAt:            {Type: field.TypeTime, Column: integrationrun.FieldDeletedAt},
+			integrationrun.FieldDeletedBy:            {Type: field.TypeString, Column: integrationrun.FieldDeletedBy},
+			integrationrun.FieldOwnerID:              {Type: field.TypeString, Column: integrationrun.FieldOwnerID},
+			integrationrun.FieldIntegrationID:        {Type: field.TypeString, Column: integrationrun.FieldIntegrationID},
+			integrationrun.FieldOperationName:        {Type: field.TypeString, Column: integrationrun.FieldOperationName},
+			integrationrun.FieldOperationKind:        {Type: field.TypeEnum, Column: integrationrun.FieldOperationKind},
+			integrationrun.FieldRunType:              {Type: field.TypeEnum, Column: integrationrun.FieldRunType},
+			integrationrun.FieldOperationConfig:      {Type: field.TypeJSON, Column: integrationrun.FieldOperationConfig},
+			integrationrun.FieldMappingVersion:       {Type: field.TypeString, Column: integrationrun.FieldMappingVersion},
+			integrationrun.FieldStatus:               {Type: field.TypeEnum, Column: integrationrun.FieldStatus},
+			integrationrun.FieldStartedAt:            {Type: field.TypeTime, Column: integrationrun.FieldStartedAt},
+			integrationrun.FieldFinishedAt:           {Type: field.TypeTime, Column: integrationrun.FieldFinishedAt},
+			integrationrun.FieldDurationMs:           {Type: field.TypeInt, Column: integrationrun.FieldDurationMs},
+			integrationrun.FieldRequestFileID:        {Type: field.TypeString, Column: integrationrun.FieldRequestFileID},
+			integrationrun.FieldResponseFileID:       {Type: field.TypeString, Column: integrationrun.FieldResponseFileID},
+			integrationrun.FieldEventID:              {Type: field.TypeString, Column: integrationrun.FieldEventID},
+			integrationrun.FieldAssessmentResponseID: {Type: field.TypeString, Column: integrationrun.FieldAssessmentResponseID},
+			integrationrun.FieldSummary:              {Type: field.TypeString, Column: integrationrun.FieldSummary},
+			integrationrun.FieldError:                {Type: field.TypeString, Column: integrationrun.FieldError},
+			integrationrun.FieldMetrics:              {Type: field.TypeJSON, Column: integrationrun.FieldMetrics},
 		},
 	}
 	graph.Nodes[40] = &sqlgraph.Node{
@@ -3380,6 +3381,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersetting.FieldCompanyDomain:            {Type: field.TypeString, Column: trustcentersetting.FieldCompanyDomain},
 			trustcentersetting.FieldSecurityContact:          {Type: field.TypeString, Column: trustcentersetting.FieldSecurityContact},
 			trustcentersetting.FieldNdaApprovalRequired:      {Type: field.TypeBool, Column: trustcentersetting.FieldNdaApprovalRequired},
+			trustcentersetting.FieldNdaApproverGroupID:       {Type: field.TypeString, Column: trustcentersetting.FieldNdaApproverGroupID},
 			trustcentersetting.FieldStatusPageURL:            {Type: field.TypeString, Column: trustcentersetting.FieldStatusPageURL},
 		},
 	}
@@ -9563,6 +9565,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"IntegrationRun",
 		"Event",
+	)
+	graph.MustAddE(
+		"assessment_response",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   integrationrun.AssessmentResponseTable,
+			Columns: []string{integrationrun.AssessmentResponseColumn},
+			Bidi:    false,
+		},
+		"IntegrationRun",
+		"AssessmentResponse",
 	)
 	graph.MustAddE(
 		"owner",
@@ -16751,6 +16765,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenterSetting",
 		"File",
+	)
+	graph.MustAddE(
+		"nda_approver_group",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.NdaApproverGroupTable,
+			Columns: []string{trustcentersetting.NdaApproverGroupColumn},
+			Bidi:    false,
+		},
+		"TrustCenterSetting",
+		"Group",
 	)
 	graph.MustAddE(
 		"trust_center_subprocessor_kind",
@@ -31388,6 +31414,11 @@ func (f *IntegrationRunFilter) WhereEventID(p entql.StringP) {
 	f.Where(p.Field(integrationrun.FieldEventID))
 }
 
+// WhereAssessmentResponseID applies the entql string predicate on the assessment_response_id field.
+func (f *IntegrationRunFilter) WhereAssessmentResponseID(p entql.StringP) {
+	f.Where(p.Field(integrationrun.FieldAssessmentResponseID))
+}
+
 // WhereSummary applies the entql string predicate on the summary field.
 func (f *IntegrationRunFilter) WhereSummary(p entql.StringP) {
 	f.Where(p.Field(integrationrun.FieldSummary))
@@ -31467,6 +31498,20 @@ func (f *IntegrationRunFilter) WhereHasEvent() {
 // WhereHasEventWith applies a predicate to check if query has an edge event with a given conditions (other predicates).
 func (f *IntegrationRunFilter) WhereHasEventWith(preds ...predicate.Event) {
 	f.Where(entql.HasEdgeWith("event", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssessmentResponse applies a predicate to check if query has an edge assessment_response.
+func (f *IntegrationRunFilter) WhereHasAssessmentResponse() {
+	f.Where(entql.HasEdge("assessment_response"))
+}
+
+// WhereHasAssessmentResponseWith applies a predicate to check if query has an edge assessment_response with a given conditions (other predicates).
+func (f *IntegrationRunFilter) WhereHasAssessmentResponseWith(preds ...predicate.AssessmentResponse) {
+	f.Where(entql.HasEdgeWith("assessment_response", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -47214,6 +47259,11 @@ func (f *TrustCenterSettingFilter) WhereNdaApprovalRequired(p entql.BoolP) {
 	f.Where(p.Field(trustcentersetting.FieldNdaApprovalRequired))
 }
 
+// WhereNdaApproverGroupID applies the entql string predicate on the nda_approver_group_id field.
+func (f *TrustCenterSettingFilter) WhereNdaApproverGroupID(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldNdaApproverGroupID))
+}
+
 // WhereStatusPageURL applies the entql string predicate on the status_page_url field.
 func (f *TrustCenterSettingFilter) WhereStatusPageURL(p entql.StringP) {
 	f.Where(p.Field(trustcentersetting.FieldStatusPageURL))
@@ -47283,6 +47333,20 @@ func (f *TrustCenterSettingFilter) WhereHasHeroImageFile() {
 // WhereHasHeroImageFileWith applies a predicate to check if query has an edge hero_image_file with a given conditions (other predicates).
 func (f *TrustCenterSettingFilter) WhereHasHeroImageFileWith(preds ...predicate.File) {
 	f.Where(entql.HasEdgeWith("hero_image_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasNdaApproverGroup applies a predicate to check if query has an edge nda_approver_group.
+func (f *TrustCenterSettingFilter) WhereHasNdaApproverGroup() {
+	f.Where(entql.HasEdge("nda_approver_group"))
+}
+
+// WhereHasNdaApproverGroupWith applies a predicate to check if query has an edge nda_approver_group with a given conditions (other predicates).
+func (f *TrustCenterSettingFilter) WhereHasNdaApproverGroupWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("nda_approver_group", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

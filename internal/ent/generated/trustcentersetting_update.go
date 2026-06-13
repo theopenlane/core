@@ -546,6 +546,26 @@ func (_u *TrustCenterSettingUpdate) ClearNdaApprovalRequired() *TrustCenterSetti
 	return _u
 }
 
+// SetNdaApproverGroupID sets the "nda_approver_group_id" field.
+func (_u *TrustCenterSettingUpdate) SetNdaApproverGroupID(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetNdaApproverGroupID(v)
+	return _u
+}
+
+// SetNillableNdaApproverGroupID sets the "nda_approver_group_id" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableNdaApproverGroupID(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetNdaApproverGroupID(*v)
+	}
+	return _u
+}
+
+// ClearNdaApproverGroupID clears the value of the "nda_approver_group_id" field.
+func (_u *TrustCenterSettingUpdate) ClearNdaApproverGroupID() *TrustCenterSettingUpdate {
+	_u.mutation.ClearNdaApproverGroupID()
+	return _u
+}
+
 // SetStatusPageURL sets the "status_page_url" field.
 func (_u *TrustCenterSettingUpdate) SetStatusPageURL(v string) *TrustCenterSettingUpdate {
 	_u.mutation.SetStatusPageURL(v)
@@ -653,6 +673,11 @@ func (_u *TrustCenterSettingUpdate) SetHeroImageFile(v *File) *TrustCenterSettin
 	return _u.SetHeroImageFileID(v.ID)
 }
 
+// SetNdaApproverGroup sets the "nda_approver_group" edge to the Group entity.
+func (_u *TrustCenterSettingUpdate) SetNdaApproverGroup(v *Group) *TrustCenterSettingUpdate {
+	return _u.SetNdaApproverGroupID(v.ID)
+}
+
 // Mutation returns the TrustCenterSettingMutation object of the builder.
 func (_u *TrustCenterSettingUpdate) Mutation() *TrustCenterSettingMutation {
 	return _u.mutation
@@ -715,6 +740,12 @@ func (_u *TrustCenterSettingUpdate) ClearFaviconFile() *TrustCenterSettingUpdate
 // ClearHeroImageFile clears the "hero_image_file" edge to the File entity.
 func (_u *TrustCenterSettingUpdate) ClearHeroImageFile() *TrustCenterSettingUpdate {
 	_u.mutation.ClearHeroImageFile()
+	return _u
+}
+
+// ClearNdaApproverGroup clears the "nda_approver_group" edge to the Group entity.
+func (_u *TrustCenterSettingUpdate) ClearNdaApproverGroup() *TrustCenterSettingUpdate {
+	_u.mutation.ClearNdaApproverGroup()
 	return _u
 }
 
@@ -1197,6 +1228,37 @@ func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.NdaApproverGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.NdaApproverGroupTable,
+			Columns: []string{trustcentersetting.NdaApproverGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.NdaApproverGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.NdaApproverGroupTable,
+			Columns: []string{trustcentersetting.NdaApproverGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterSetting
@@ -1741,6 +1803,26 @@ func (_u *TrustCenterSettingUpdateOne) ClearNdaApprovalRequired() *TrustCenterSe
 	return _u
 }
 
+// SetNdaApproverGroupID sets the "nda_approver_group_id" field.
+func (_u *TrustCenterSettingUpdateOne) SetNdaApproverGroupID(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetNdaApproverGroupID(v)
+	return _u
+}
+
+// SetNillableNdaApproverGroupID sets the "nda_approver_group_id" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableNdaApproverGroupID(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetNdaApproverGroupID(*v)
+	}
+	return _u
+}
+
+// ClearNdaApproverGroupID clears the value of the "nda_approver_group_id" field.
+func (_u *TrustCenterSettingUpdateOne) ClearNdaApproverGroupID() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearNdaApproverGroupID()
+	return _u
+}
+
 // SetStatusPageURL sets the "status_page_url" field.
 func (_u *TrustCenterSettingUpdateOne) SetStatusPageURL(v string) *TrustCenterSettingUpdateOne {
 	_u.mutation.SetStatusPageURL(v)
@@ -1848,6 +1930,11 @@ func (_u *TrustCenterSettingUpdateOne) SetHeroImageFile(v *File) *TrustCenterSet
 	return _u.SetHeroImageFileID(v.ID)
 }
 
+// SetNdaApproverGroup sets the "nda_approver_group" edge to the Group entity.
+func (_u *TrustCenterSettingUpdateOne) SetNdaApproverGroup(v *Group) *TrustCenterSettingUpdateOne {
+	return _u.SetNdaApproverGroupID(v.ID)
+}
+
 // Mutation returns the TrustCenterSettingMutation object of the builder.
 func (_u *TrustCenterSettingUpdateOne) Mutation() *TrustCenterSettingMutation {
 	return _u.mutation
@@ -1910,6 +1997,12 @@ func (_u *TrustCenterSettingUpdateOne) ClearFaviconFile() *TrustCenterSettingUpd
 // ClearHeroImageFile clears the "hero_image_file" edge to the File entity.
 func (_u *TrustCenterSettingUpdateOne) ClearHeroImageFile() *TrustCenterSettingUpdateOne {
 	_u.mutation.ClearHeroImageFile()
+	return _u
+}
+
+// ClearNdaApproverGroup clears the "nda_approver_group" edge to the Group entity.
+func (_u *TrustCenterSettingUpdateOne) ClearNdaApproverGroup() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearNdaApproverGroup()
 	return _u
 }
 
@@ -2422,6 +2515,37 @@ func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.NdaApproverGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.NdaApproverGroupTable,
+			Columns: []string{trustcentersetting.NdaApproverGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.NdaApproverGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.NdaApproverGroupTable,
+			Columns: []string{trustcentersetting.NdaApproverGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterSetting

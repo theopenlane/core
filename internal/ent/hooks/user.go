@@ -30,11 +30,6 @@ const (
 	personalOrgPrefix = "Personal Organization"
 )
 
-var (
-	// caser is used to capitalize the first letter of words
-	caser = cases.Title(language.AmericanEnglish)
-)
-
 // HookUser runs on user mutations validate and hash the password and set default values that are not provided
 func HookUser() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
@@ -260,6 +255,8 @@ func HookDeleteUser() ent.Hook {
 // getPersonalOrgInput generates the input for a new personal organization
 // personal orgs are assigned to all new users when registering
 func getPersonalOrgInput(user *generated.User) generated.CreateOrganizationInput {
+	caser := cases.Title(language.AmericanEnglish)
+
 	// generate random name for personal orgs
 	randomName := caser.String(gofakeit.PetName())
 	name := fmt.Sprintf("%s-%s", randomName, ulids.New().String())
@@ -277,6 +274,8 @@ func getPersonalOrgInput(user *generated.User) generated.CreateOrganizationInput
 // personalOrgDescription generates a description for a personal org based on the
 // user's first and last name
 func personalOrgDescription(user *generated.User) *string {
+	caser := cases.Title(language.AmericanEnglish)
+
 	desc := personalOrgPrefix
 
 	if user.FirstName == "" && user.LastName == "" {

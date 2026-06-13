@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"encoding/json"
 	"maps"
+	"slices"
 	"sort"
 	"strings"
 	"sync"
@@ -12,6 +13,8 @@ import (
 	language "github.com/openfga/language/pkg/go/transformer"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/encoding/protojson"
+
+	"github.com/theopenlane/core/fga/generate/modelparse"
 )
 
 const (
@@ -59,6 +62,10 @@ var (
 	rolesOnce  sync.Once
 	rolesModel *openfga.AuthorizationModel
 	rolesErr   error
+
+	organizationRolesOnce     sync.Once
+	organizationRoles         []modelparse.OrganizationRole
+	organizationRolesParseErr error
 )
 
 func parseAuthorizationModel(embeddedModel []byte) (*openfga.AuthorizationModel, error) {
@@ -77,7 +84,7 @@ func parseAuthorizationModel(embeddedModel []byte) (*openfga.AuthorizationModel,
 	return &model, nil
 }
 
-// GetAuthorizationModel returns the parsed embedded authorization model
+// GetCrudAuthorizationModel returns the parsed embedded authorization model
 func GetCrudAuthorizationModel() (*openfga.AuthorizationModel, error) {
 	crudOnce.Do(func() {
 		crudModel, crudErr = parseAuthorizationModel(embeddedCrudModel)
@@ -301,4 +308,57 @@ func RoleOptions() ([]string, error) {
 	}
 
 	return getRelationsOptionsForObject(rels)
+}
+
+// OrganizationRoles returns the roles parsed from fga
+func OrganizationRoles() ([]modelparse.OrganizationRole, error) {
+	organizationRolesOnce.Do(func() {
+		if _, err := GetRolesAuthorizationModel(); err != nil {
+			organizationRolesParseErr = err
+			return
+		}
+
+		roleInfo, err := modelparse.ParseRoleAnnotationsData(embeddedRolesModel)
+		if err != nil {
+			organizationRolesParseErr = err
+			return
+		}
+
+		organizationRoles = roleInfo.OrganizationRoles
+		sort.Slice(organizationRoles, func(i, j int) bool {
+			return organizationRoles[i].ID < organizationRoles[j].ID
+		})
+	})
+
+	if organizationRolesParseErr != nil {
+		return nil, organizationRolesParseErr
+	}
+
+	roles := make([]modelparse.OrganizationRole, len(organizationRoles))
+	copy(roles, organizationRoles)
+	return roles, nil
+}
+
+func getRoleIDs() ([]string, error) {
+	roles, err := OrganizationRoles()
+	if err != nil {
+		return nil, err
+	}
+
+	ids := make([]string, 0, len(roles))
+	for _, role := range roles {
+		ids = append(ids, role.ID)
+	}
+
+	return ids, nil
+}
+
+// IsOrganizationRole checks if a role is valid before it can be assigned or removed from a subject
+func IsOrganizationRole(roleID string) (bool, error) {
+	ids, err := getRoleIDs()
+	if err != nil {
+		return false, err
+	}
+
+	return slices.Contains(ids, roleID), nil
 }
