@@ -1021,6 +1021,9 @@ data:
         {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.redirecturl }}
         redirecturl: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.redirecturl | quote }}
         {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.defaulttenant }}
+        defaulttenant: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.defaulttenant | quote }}
+        {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams }}
       microsoftteams:
@@ -1029,6 +1032,15 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams.redirecturl }}
         redirecturl: {{ .Values.openlane.coreConfiguration.integrations.microsoftteams.redirecturl | quote }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.onedrive }}
+      onedrive:
+        {{- if .Values.openlane.coreConfiguration.integrations.onedrive.clientid }}
+        clientid: {{ .Values.openlane.coreConfiguration.integrations.onedrive.clientid | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.onedrive.redirecturl }}
+        redirecturl: {{ .Values.openlane.coreConfiguration.integrations.onedrive.redirecturl | quote }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.oidclocal }}

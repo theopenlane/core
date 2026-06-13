@@ -91,6 +91,15 @@ func HookImportDocument() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
+			// Integration-managed documents set url as an external reference link, not a document to import
+			if mode, ok := m.(interface {
+				ManagementMode() (enums.DocumentManagementMode, bool)
+			}); ok {
+				if v, exists := mode.ManagementMode(); exists && v == enums.DocumentManagementModeIntegration {
+					return next.Mutate(ctx, m)
+				}
+			}
+
 			_, exists := mut.URL()
 			switch exists {
 			case true:

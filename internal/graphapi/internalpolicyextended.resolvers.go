@@ -13,6 +13,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/definitions/googledrive"
+	"github.com/theopenlane/core/internal/integrations/definitions/onedrive"
+	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -32,36 +34,57 @@ func (r *internalPolicyResolver) LiveExternalContents(ctx context.Context, obj *
 
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
-	integ, err := r.findPrimaryDriveIntegration(ctx, obj.OwnerID)
-	if err != nil || integ == nil {
+	found, err := r.findPrimaryDriveIntegration(ctx, obj.OwnerID)
+	if err != nil || found == nil {
 		return nil, nil
 	}
 
-	op, err := r.integrationsRuntime.Registry().Operation(googledrive.DefinitionID(), googledrive.ExportOperationName())
+	var (
+		definitionID  string
+		operationName string
+		configBytes   []byte
+	)
+
+	switch found.DefinitionID {
+	case onedrive.DefinitionID():
+		definitionID = onedrive.DefinitionID()
+		operationName = onedrive.ExportOperationName()
+	default:
+		definitionID = googledrive.DefinitionID()
+		operationName = googledrive.ExportOperationName()
+	}
+
+	cfg, err := json.Marshal(operations.DocumentExport{FileID: *obj.ExternalFileID})
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("google drive export operation not found in registry")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to marshal onedrive export config")
 		return nil, nil
 	}
 
-	cfg, err := json.Marshal(googledrive.DocumentExport{FileID: *obj.ExternalFileID})
+	configBytes = cfg
+
+	op, err := r.integrationsRuntime.Registry().Operation(definitionID, operationName)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to marshal export config")
+		logx.FromContext(ctx).Error().Err(err).Str("definition_id", definitionID).Msg("export operation not found in registry")
 		return nil, nil
 	}
 
-	result, err := r.integrationsRuntime.ExecuteOperation(ctx, integ, op, nil, cfg)
+	result, err := r.integrationsRuntime.ExecuteOperation(ctx, found.Integration, op, nil, configBytes)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("integration_id", integ.ID).Msg("drive export operation failed")
+		logx.FromContext(ctx).Error().Err(err).Str("integration_id", found.Integration.ID).Msg("export operation failed")
 		return nil, nil
 	}
 
-	var export googledrive.DocumentExport
+	var html string
+
+	var export operations.DocumentExport
 	if err := json.Unmarshal(result, &export); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal export result")
 		return nil, nil
 	}
 
-	obj.ExternalContents = &export.HTML
+	html = export.HTML
 
-	return &export.HTML, nil
+	obj.ExternalContents = &html
+
+	return &html, nil
 }
