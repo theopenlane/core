@@ -544,6 +544,9 @@ coreConfiguration:
     onedrive:
       clientid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
+      defaulttenant: ""  # @schema type:string
+      documentintelligenceendpoint: ""  # @schema type:string
+      contentmode: "html"  # @schema type:string; default:html
     oidclocal:
       enabled: false  # @schema type:boolean; default:false
       clientid: "local-core-oidc"  # @schema type:string; default:local-core-oidc
@@ -990,6 +993,14 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_ONEDRIVE_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-onedrive-clientsecret"  # @schema type:string
+    # -- core-integrations-onedrive-documentintelligencekey secret configuration
+    core-integrations-onedrive-documentintelligencekey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.onedrive.documentintelligencekey
+      secretKey: "CORE_INTEGRATIONS_ONEDRIVE_DOCUMENTINTELLIGENCEKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-onedrive-documentintelligencekey"  # @schema type:string
     # -- core-integrations-oidclocal-clientsecret secret configuration
     core-integrations-oidclocal-clientsecret:
       # -- Enable this external secret

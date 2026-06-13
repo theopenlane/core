@@ -187,6 +187,10 @@ integrations:
     onedrive:
         clientid: ""
         clientsecret: ""
+        contentmode: html
+        defaulttenant: ""
+        documentintelligenceendpoint: ""
+        documentintelligencekey: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     paymentreminder:
         deletiondays: 0

@@ -1109,6 +1109,18 @@
         },
         "redirecturl": {
           "type": "string"
+        },
+        "defaulttenant": {
+          "type": "string"
+        },
+        "documentintelligenceendpoint": {
+          "type": "string"
+        },
+        "documentintelligencekey": {
+          "type": "string"
+        },
+        "contentmode": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
