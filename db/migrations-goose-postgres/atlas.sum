@@ -1,4 +1,4 @@
-h1:h2z+Vq/GsSQo69PVCum+HFVWbyFzLVMcdeVyoiu1HBw=
+h1:fYH3aEoXshst1yplQKtLv6h7/xmYlTJgwinJUUWqrLA=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -140,3 +140,6 @@ h1:h2z+Vq/GsSQo69PVCum+HFVWbyFzLVMcdeVyoiu1HBw=
 20260529171329_googledriveintegration_history.sql h1:Ij8rZgP/CoZRjFXVR5YTR24MwuyroRHVFuuODhYiL/g=
 20260601213403_task_is_template.sql h1:3bhGX/4BLwcE/wnr8RofKAkdyGENm4tLF1JJDA77Rac=
 20260601213412_task_is_template_history.sql h1:Acqiozh04KQ2lQ+A34L36qkJT9rDHp3+qe+3pHg8BT4=
+20260604190613_trustcenter_group_approval.sql h1:aeVaVBSLF5tiJ3CzW9aCDpKubkIlXc9bBO0rZ7QigSM=
+20260604190623_trustcenter_group_approval_history.sql h1:Sk9o0z0qXw8mbLmJ4NiRHhOh1kA77UzjHqteA/O0vyQ=
+20260609205347_integration_run_assessment_response.sql h1:jlA3zVSSccugIp/r8LRvlPaB/uUgu7AwuIvbHoD6mGE=

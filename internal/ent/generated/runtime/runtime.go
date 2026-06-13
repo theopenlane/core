@@ -488,9 +488,11 @@ func init() {
 	assessmentresponse.Hooks[6] = assessmentresponseHooks[1]
 	assessmentresponseMixinInters1 := assessmentresponseMixin[1].Interceptors()
 	assessmentresponseMixinInters4 := assessmentresponseMixin[4].Interceptors()
+	assessmentresponseInters := schema.AssessmentResponse{}.Interceptors()
 	assessmentresponse.Interceptors[0] = assessmentresponseMixinInters1[0]
 	assessmentresponse.Interceptors[1] = assessmentresponseMixinInters4[0]
 	assessmentresponse.Interceptors[2] = assessmentresponseMixinInters4[1]
+	assessmentresponse.Interceptors[3] = assessmentresponseInters[0]
 	assessmentresponseMixinFields0 := assessmentresponseMixin[0].Fields()
 	_ = assessmentresponseMixinFields0
 	assessmentresponseMixinFields2 := assessmentresponseMixin[2].Fields()
@@ -8197,7 +8199,7 @@ func init() {
 	// trustcentersetting.DefaultNdaApprovalRequired holds the default value on creation for the nda_approval_required field.
 	trustcentersetting.DefaultNdaApprovalRequired = trustcentersettingDescNdaApprovalRequired.Default.(bool)
 	// trustcentersettingDescStatusPageURL is the schema descriptor for status_page_url field.
-	trustcentersettingDescStatusPageURL := trustcentersettingFields[23].Descriptor()
+	trustcentersettingDescStatusPageURL := trustcentersettingFields[24].Descriptor()
 	// trustcentersetting.StatusPageURLValidator is a validator for the "status_page_url" field. It is called by the builders before save.
 	trustcentersetting.StatusPageURLValidator = func() func(string) error {
 		validators := trustcentersettingDescStatusPageURL.Validators

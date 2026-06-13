@@ -10,7 +10,9 @@ import (
 	"github.com/theopenlane/newman/render"
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/templatekit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -34,12 +36,18 @@ type Dispatcher interface {
 	SendByKey(ctx context.Context, req types.OperationRequest, client *Client, payload json.RawMessage, extraOpts ...newman.MessageOption) error
 	// RenderMessage decodes the payload and renders the email into a newman message without sending it, for use in batch send paths
 	RenderMessage(ctx context.Context, client *Client, payload json.RawMessage, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error)
+	// ExamplePayload returns a representative example payload used to render catalog previews and to seed the form preview with demo values
+	ExamplePayload() json.RawMessage
+	// BuilderUISchema returns the RJSF-style UI schema describing how the configurable fields render as a form, or nil when none is defined
+	BuilderUISchema() json.RawMessage
 }
 
 // RecipientInfo holds recipient addressing fields embedded in every email operation input
 type RecipientInfo struct {
-	// Email is the recipient email address
+	// Email is the recipient email address; it is the primary recipient used for personalization and footer links
 	Email string `json:"email" jsonschema:"required,description=Recipient email address"`
+	// Recipients optionally addresses the message to multiple recipients in a single send; when set it replaces Email as the To list
+	Recipients []string `json:"recipients,omitempty" jsonschema:"description=Recipient email addresses for a single multi-recipient message; replaces the single recipient when set"`
 	// FirstName is the recipient first name
 	FirstName string `json:"firstName,omitempty" jsonschema:"description=Recipient first name"`
 	// LastName is the recipient last name
@@ -91,6 +99,11 @@ type Operation[T Recipient] struct {
 	Description string
 	// CustomerSelectable gates whether the entry is exposed via the customer-facing catalog query
 	CustomerSelectable *bool
+	// Example is a representative input used to render catalog previews and to seed the
+	// form preview with demo values for fields the author has not yet filled in
+	Example T
+	// UISchema is the RJSF-style UI schema describing how the configurable fields render as a form
+	UISchema json.RawMessage
 	// Subject returns the rendered subject line for the email
 	Subject func(cfg RuntimeEmailConfig, input T) string
 	// Theme is the newman render theme applied to this email
@@ -108,6 +121,21 @@ type Operation[T Recipient] struct {
 // Name returns the catalog key for the operation, satisfying the Dispatcher interface
 func (e Operation[T]) Name() string {
 	return e.Op.Name()
+}
+
+// ExamplePayload returns the marshaled example input, satisfying the Dispatcher interface
+func (e Operation[T]) ExamplePayload() json.RawMessage {
+	data, err := json.Marshal(e.Example)
+	if err != nil {
+		return nil
+	}
+
+	return data
+}
+
+// BuilderUISchema returns the UI schema for the operation, satisfying the Dispatcher interface
+func (e Operation[T]) BuilderUISchema() json.RawMessage {
+	return e.UISchema
 }
 
 // decodePayload interpolates template expressions in the raw JSON and unmarshals into T
@@ -224,6 +252,39 @@ func (e Operation[T]) handler() types.OperationHandler {
 	)
 }
 
+// RenderCatalogPreview renders a customer-selectable catalog entry to HTML for UI preview.
+// The dispatcher example is the base layer and draft holds the in-progress form values that
+// override it, so fields the author has not yet filled in still render with demo content
+func RenderCatalogPreview(ctx context.Context, client *Client, d Dispatcher, draft map[string]any) (string, error) {
+	var example map[string]any
+	if err := jsonx.RoundTrip(d.ExamplePayload(), &example); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("key", d.Name()).Msg("failed decoding catalog example payload")
+
+		return "", fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
+	}
+
+	overlays := make([]any, 0, 1)
+	if len(draft) > 0 {
+		overlays = append(overlays, draft)
+	}
+
+	payload, err := templatekit.BuildDispatchPayload(example, overlays...)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("key", d.Name()).Msg("failed building catalog preview payload")
+
+		return "", err
+	}
+
+	msg, err := d.RenderMessage(ctx, client, payload)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("key", d.Name()).Msg("failed rendering catalog preview")
+
+		return "", err
+	}
+
+	return msg.GetHTML(), nil
+}
+
 // renderMessage renders an email into a newman message without sending it
 func renderMessage(client *Client, theme *render.Theme, recipient RecipientInfo, subject string, content render.EmailContent, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error) {
 	r := render.NewRenderer(render.WithTheme(theme))
@@ -238,9 +299,14 @@ func renderMessage(client *Client, theme *render.Theme, recipient RecipientInfo,
 		return nil, fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
 	}
 
+	to := recipient.Recipients
+	if len(to) == 0 {
+		to = []string{recipient.Email}
+	}
+
 	opts := []newman.MessageOption{
 		newman.WithFrom(client.Config.FromEmail),
-		newman.WithTo([]string{recipient.Email}),
+		newman.WithTo(to),
 		newman.WithSubject(subject),
 		newman.WithHTML(htmlBody),
 		newman.WithText(textBody),

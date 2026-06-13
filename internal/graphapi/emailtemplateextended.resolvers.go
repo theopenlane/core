@@ -7,53 +7,87 @@ package graphapi
 
 import (
 	"context"
-	"encoding/json"
 
+	"github.com/samber/lo"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // EmailTemplateCatalog is the resolver for the emailTemplateCatalog field.
 func (r *queryResolver) EmailTemplateCatalog(ctx context.Context) (*model.EmailTemplateCatalog, error) {
-	client, ok := r.integrationsRuntime.Registry().RuntimeClient(email.DefinitionID.ID())
-	if !ok {
-		return nil, ErrEmailClientNotAvailable
-	}
+	emailClient, err := r.emailRuntimeClient()
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed resolving email runtime client for template catalog")
 
-	emailClient, ok := client.(*email.Client)
-	if !ok {
-		return nil, ErrEmailClientNotAvailable
+		return nil, err
 	}
 
 	dispatchers := email.CustomerSelectableDispatchers()
+
+	variables := lo.Map(email.TemplateVariables(), func(v models.TemplateVariable, _ int) *model.TemplateVariable {
+		return &model.TemplateVariable{Name: v.Name, Description: v.Description}
+	})
 
 	entries := make([]*model.EmailTemplateCatalogEntry, 0, len(dispatchers))
 	for _, d := range dispatchers {
 		reg := d.Registration()
 
-		var schema map[string]any
-		if len(reg.ConfigSchema) > 0 {
-			if err := json.Unmarshal(reg.ConfigSchema, &schema); err != nil {
-				return nil, err
-			}
+		schema, err := jsonx.ToMap(reg.ConfigSchema)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("key", reg.Name).Msg("failed converting catalog config schema")
+
+			return nil, err
 		}
 
-		var htmlPreview string
+		uiSchema, err := jsonx.ToMap(d.BuilderUISchema())
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("key", reg.Name).Msg("failed converting catalog ui schema")
 
-		msg, err := d.RenderMessage(ctx, emailClient, json.RawMessage(`{}`))
-		if err == nil && msg != nil {
-			htmlPreview = msg.GetHTML()
+			return nil, err
 		}
+
+		exampleValues, err := jsonx.ToMap(d.ExamplePayload())
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("key", reg.Name).Msg("failed converting catalog example values")
+
+			return nil, err
+		}
+
+		// preview failures must not break the catalog listing; an empty preview is acceptable
+		htmlPreview, _ := email.RenderCatalogPreview(ctx, emailClient, d, nil)
 
 		entries = append(entries, &model.EmailTemplateCatalogEntry{
-			Key:          reg.Name,
-			Description:  reg.Description,
-			ConfigSchema: schema,
-			HTMLPreview:  htmlPreview,
+			Key:           reg.Name,
+			Description:   reg.Description,
+			ConfigSchema:  schema,
+			UISchema:      uiSchema,
+			Variables:     variables,
+			ExampleValues: exampleValues,
+			HTMLPreview:   htmlPreview,
 		})
 	}
 
 	return &model.EmailTemplateCatalog{
 		Entries: entries,
 	}, nil
+}
+
+// PreviewEmailTemplate is the resolver for the previewEmailTemplate field.
+func (r *queryResolver) PreviewEmailTemplate(ctx context.Context, key string, defaults map[string]any) (string, error) {
+	emailClient, err := r.emailRuntimeClient()
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("key", key).Msg("failed resolving email runtime client for template preview")
+
+		return "", err
+	}
+
+	d, ok := email.DispatcherByKey(key)
+	if !ok || !lo.FromPtr(d.Registration().CustomerSelectable) {
+		return "", ErrEmailTemplateNotInCatalog
+	}
+
+	return email.RenderCatalogPreview(ctx, emailClient, d, defaults)
 }

@@ -76,6 +76,8 @@ const (
 	FieldSecurityContact = "security_contact"
 	// FieldNdaApprovalRequired holds the string denoting the nda_approval_required field in the database.
 	FieldNdaApprovalRequired = "nda_approval_required"
+	// FieldNdaApproverGroupID holds the string denoting the nda_approver_group_id field in the database.
+	FieldNdaApproverGroupID = "nda_approver_group_id"
 	// FieldStatusPageURL holds the string denoting the status_page_url field in the database.
 	FieldStatusPageURL = "status_page_url"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -88,6 +90,8 @@ const (
 	EdgeFaviconFile = "favicon_file"
 	// EdgeHeroImageFile holds the string denoting the hero_image_file edge name in mutations.
 	EdgeHeroImageFile = "hero_image_file"
+	// EdgeNdaApproverGroup holds the string denoting the nda_approver_group edge name in mutations.
+	EdgeNdaApproverGroup = "nda_approver_group"
 	// Table holds the table name of the trustcentersetting in the database.
 	Table = "trust_center_settings"
 	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge.
@@ -125,6 +129,13 @@ const (
 	HeroImageFileInverseTable = "files"
 	// HeroImageFileColumn is the table column denoting the hero_image_file relation/edge.
 	HeroImageFileColumn = "hero_image_local_file_id"
+	// NdaApproverGroupTable is the table that holds the nda_approver_group relation/edge.
+	NdaApproverGroupTable = "trust_center_settings"
+	// NdaApproverGroupInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	NdaApproverGroupInverseTable = "groups"
+	// NdaApproverGroupColumn is the table column denoting the nda_approver_group relation/edge.
+	NdaApproverGroupColumn = "nda_approver_group_id"
 )
 
 // Columns holds all SQL columns for trustcentersetting fields.
@@ -159,6 +170,7 @@ var Columns = []string{
 	FieldCompanyDomain,
 	FieldSecurityContact,
 	FieldNdaApprovalRequired,
+	FieldNdaApproverGroupID,
 	FieldStatusPageURL,
 }
 
@@ -402,6 +414,11 @@ func ByNdaApprovalRequired(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNdaApprovalRequired, opts...).ToFunc()
 }
 
+// ByNdaApproverGroupID orders the results by the nda_approver_group_id field.
+func ByNdaApproverGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNdaApproverGroupID, opts...).ToFunc()
+}
+
 // ByStatusPageURL orders the results by the status_page_url field.
 func ByStatusPageURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatusPageURL, opts...).ToFunc()
@@ -455,6 +472,13 @@ func ByHeroImageFileField(field string, opts ...sql.OrderTermOption) OrderOption
 		sqlgraph.OrderByNeighborTerms(s, newHeroImageFileStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByNdaApproverGroupField orders the results by nda_approver_group field.
+func ByNdaApproverGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newNdaApproverGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newBlockedGroupsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -488,6 +512,13 @@ func newHeroImageFileStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(HeroImageFileInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, HeroImageFileTable, HeroImageFileColumn),
+	)
+}
+func newNdaApproverGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(NdaApproverGroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, NdaApproverGroupTable, NdaApproverGroupColumn),
 	)
 }
 

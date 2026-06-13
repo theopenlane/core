@@ -58,6 +58,8 @@ const (
 	FieldResponseFileID = "response_file_id"
 	// FieldEventID holds the string denoting the event_id field in the database.
 	FieldEventID = "event_id"
+	// FieldAssessmentResponseID holds the string denoting the assessment_response_id field in the database.
+	FieldAssessmentResponseID = "assessment_response_id"
 	// FieldSummary holds the string denoting the summary field in the database.
 	FieldSummary = "summary"
 	// FieldError holds the string denoting the error field in the database.
@@ -74,6 +76,8 @@ const (
 	EdgeResponseFile = "response_file"
 	// EdgeEvent holds the string denoting the event edge name in mutations.
 	EdgeEvent = "event"
+	// EdgeAssessmentResponse holds the string denoting the assessment_response edge name in mutations.
+	EdgeAssessmentResponse = "assessment_response"
 	// Table holds the table name of the integrationrun in the database.
 	Table = "integration_runs"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -111,6 +115,13 @@ const (
 	EventInverseTable = "events"
 	// EventColumn is the table column denoting the event relation/edge.
 	EventColumn = "event_id"
+	// AssessmentResponseTable is the table that holds the assessment_response relation/edge.
+	AssessmentResponseTable = "integration_runs"
+	// AssessmentResponseInverseTable is the table name for the AssessmentResponse entity.
+	// It exists in this package in order to avoid circular dependency with the "assessmentresponse" package.
+	AssessmentResponseInverseTable = "assessment_responses"
+	// AssessmentResponseColumn is the table column denoting the assessment_response relation/edge.
+	AssessmentResponseColumn = "assessment_response_id"
 )
 
 // Columns holds all SQL columns for integrationrun fields.
@@ -136,6 +147,7 @@ var Columns = []string{
 	FieldRequestFileID,
 	FieldResponseFileID,
 	FieldEventID,
+	FieldAssessmentResponseID,
 	FieldSummary,
 	FieldError,
 	FieldMetrics,
@@ -309,6 +321,11 @@ func ByEventID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEventID, opts...).ToFunc()
 }
 
+// ByAssessmentResponseID orders the results by the assessment_response_id field.
+func ByAssessmentResponseID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssessmentResponseID, opts...).ToFunc()
+}
+
 // BySummary orders the results by the summary field.
 func BySummary(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSummary, opts...).ToFunc()
@@ -353,6 +370,13 @@ func ByEventField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newEventStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByAssessmentResponseField orders the results by assessment_response field.
+func ByAssessmentResponseField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssessmentResponseStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -386,6 +410,13 @@ func newEventStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EventInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, EventTable, EventColumn),
+	)
+}
+func newAssessmentResponseStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssessmentResponseInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, AssessmentResponseTable, AssessmentResponseColumn),
 	)
 }
 

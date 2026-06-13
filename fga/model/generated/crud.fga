@@ -123,9 +123,9 @@ extend type organization
     define can_delete_entity_type: [service, user] or full_access
     define can_create_entity_type: can_edit or can_edit_entity_type
 
-    define can_view_evidence: [service, user] or auditor or can_edit_evidence or can_manage_compliance or full_access
-    define can_edit_evidence: [service, user] or can_delete_evidence or can_manage_compliance or full_access
-    define can_delete_evidence: [service, user] or can_manage_compliance or full_access
+    define can_view_evidence: [service, user] or auditor or auditor or can_edit_evidence or can_manage_compliance or full_access
+    define can_edit_evidence: [service, user] or auditor or can_delete_evidence or can_manage_compliance or full_access
+    define can_delete_evidence: [service, user] or auditor or can_manage_compliance or full_access
     define can_create_evidence: can_edit or can_edit_evidence or auditor or can_manage_compliance
 
     define can_view_file: [service, user] or can_edit_file or full_access
@@ -270,9 +270,9 @@ extend type organization
     define remediation_creator: [group#member]
     define can_create_remediation: can_edit or can_edit_remediation or remediation_creator or can_manage_risk or can_manage_compliance
 
-    define can_view_review: [service, user, group#member] or auditor or can_edit_review or can_manage_compliance or can_manage_risk or full_access
-    define can_edit_review: [service, user, group#member] or can_delete_review or can_manage_compliance or can_manage_risk or full_access
-    define can_delete_review: [service, user, group#member] or can_manage_compliance or can_manage_risk or full_access
+    define can_view_review: [service, user, group#member] or auditor or auditor or can_edit_review or can_manage_compliance or can_manage_risk or full_access
+    define can_edit_review: [service, user, group#member] or auditor or can_delete_review or can_manage_compliance or can_manage_risk or full_access
+    define can_delete_review: [service, user, group#member] or auditor or can_manage_compliance or can_manage_risk or full_access
     define review_creator: [group#member]
     define can_create_review: can_edit or can_edit_review or review_creator or auditor or can_manage_risk or can_manage_compliance
 

@@ -185,7 +185,7 @@ func TestInviteEmailURLConstruction(t *testing.T) {
 	}
 
 	req := InviteRequest{
-		RecipientInfo: RecipientInfo{FirstName: "Bob"},
+		RecipientInfo: RecipientInfo{FirstName: "Bob", Email: "bob@example.com"},
 		InviterName:   "Alice",
 		OrgName:       "Engineering",
 		Role:          "admin",
@@ -195,7 +195,7 @@ func TestInviteEmailURLConstruction(t *testing.T) {
 	body := testDispatcher[InviteRequest](t, "InviteRequest").Build(cfg, req)
 
 	require.Len(t, body.Actions, 1)
-	assert.Equal(t, "https://app.testco.com/invite?token=inv-tok-456", body.Actions[0].Button.Link)
+	assert.Equal(t, "https://app.testco.com/invite?token=inv-tok-456&email=bob%40example.com", body.Actions[0].Button.Link)
 	assert.Equal(t, "Accept Invite", body.Actions[0].Button.Text)
 }
 

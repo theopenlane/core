@@ -4331,6 +4331,7 @@ var (
 		{Name: "request_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "response_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "event_id", Type: field.TypeString, Nullable: true},
+		{Name: "assessment_response_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// IntegrationRunsTable holds the schema information for the "integration_runs" table.
@@ -4364,8 +4365,14 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "integration_runs_organizations_integration_runs",
+				Symbol:     "integration_runs_assessment_responses_assessment_response",
 				Columns:    []*schema.Column{IntegrationRunsColumns[23]},
+				RefColumns: []*schema.Column{AssessmentResponsesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "integration_runs_organizations_integration_runs",
+				Columns:    []*schema.Column{IntegrationRunsColumns[24]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4374,7 +4381,7 @@ var (
 			{
 				Name:    "integrationrun_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{IntegrationRunsColumns[23]},
+				Columns: []*schema.Column{IntegrationRunsColumns[24]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4385,6 +4392,22 @@ var (
 				Columns: []*schema.Column{IntegrationRunsColumns[19], IntegrationRunsColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "integrationrun_assessment_response_id_started_at",
+				Unique:  false,
+				Columns: []*schema.Column{IntegrationRunsColumns[23], IntegrationRunsColumns[13]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "integrationrun_assessment_response_id_operation_name",
+				Unique:  true,
+				Columns: []*schema.Column{IntegrationRunsColumns[23], IntegrationRunsColumns[7]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL AND assessment_response_id IS NOT NULL",
 				},
 			},
 		},
@@ -8113,6 +8136,7 @@ var (
 		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "favicon_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "hero_image_local_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "nda_approver_group_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterSettingsTable holds the schema information for the "trust_center_settings" table.
 	TrustCenterSettingsTable = &schema.Table{
@@ -8136,6 +8160,12 @@ var (
 				Symbol:     "trust_center_settings_files_hero_image_file",
 				Columns:    []*schema.Column{TrustCenterSettingsColumns[30]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_settings_groups_nda_approver_group",
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[31]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -14760,7 +14790,8 @@ func init() {
 	IntegrationRunsTable.ForeignKeys[1].RefTable = FilesTable
 	IntegrationRunsTable.ForeignKeys[2].RefTable = FilesTable
 	IntegrationRunsTable.ForeignKeys[3].RefTable = EventsTable
-	IntegrationRunsTable.ForeignKeys[4].RefTable = OrganizationsTable
+	IntegrationRunsTable.ForeignKeys[4].RefTable = AssessmentResponsesTable
+	IntegrationRunsTable.ForeignKeys[5].RefTable = OrganizationsTable
 	IntegrationWebhooksTable.ForeignKeys[0].RefTable = IntegrationsTable
 	IntegrationWebhooksTable.ForeignKeys[1].RefTable = OrganizationsTable
 	InternalPoliciesTable.ForeignKeys[0].RefTable = CustomTypeEnumsTable
@@ -14976,6 +15007,7 @@ func init() {
 	TrustCenterSettingsTable.ForeignKeys[0].RefTable = FilesTable
 	TrustCenterSettingsTable.ForeignKeys[1].RefTable = FilesTable
 	TrustCenterSettingsTable.ForeignKeys[2].RefTable = FilesTable
+	TrustCenterSettingsTable.ForeignKeys[3].RefTable = GroupsTable
 	TrustCenterSubprocessorsTable.ForeignKeys[0].RefTable = SubprocessorsTable
 	TrustCenterSubprocessorsTable.ForeignKeys[1].RefTable = TrustCentersTable
 	TrustCenterSubprocessorsTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable

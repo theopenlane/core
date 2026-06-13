@@ -148,6 +148,11 @@ func EventID(v string) predicate.IntegrationRun {
 	return predicate.IntegrationRun(sql.FieldEQ(FieldEventID, v))
 }
 
+// AssessmentResponseID applies equality check predicate on the "assessment_response_id" field. It's identical to AssessmentResponseIDEQ.
+func AssessmentResponseID(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldEQ(FieldAssessmentResponseID, v))
+}
+
 // Summary applies equality check predicate on the "summary" field. It's identical to SummaryEQ.
 func Summary(v string) predicate.IntegrationRun {
 	return predicate.IntegrationRun(sql.FieldEQ(FieldSummary, v))
@@ -1318,6 +1323,81 @@ func EventIDContainsFold(v string) predicate.IntegrationRun {
 	return predicate.IntegrationRun(sql.FieldContainsFold(FieldEventID, v))
 }
 
+// AssessmentResponseIDEQ applies the EQ predicate on the "assessment_response_id" field.
+func AssessmentResponseIDEQ(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldEQ(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDNEQ applies the NEQ predicate on the "assessment_response_id" field.
+func AssessmentResponseIDNEQ(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldNEQ(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDIn applies the In predicate on the "assessment_response_id" field.
+func AssessmentResponseIDIn(vs ...string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldIn(FieldAssessmentResponseID, vs...))
+}
+
+// AssessmentResponseIDNotIn applies the NotIn predicate on the "assessment_response_id" field.
+func AssessmentResponseIDNotIn(vs ...string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldNotIn(FieldAssessmentResponseID, vs...))
+}
+
+// AssessmentResponseIDGT applies the GT predicate on the "assessment_response_id" field.
+func AssessmentResponseIDGT(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldGT(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDGTE applies the GTE predicate on the "assessment_response_id" field.
+func AssessmentResponseIDGTE(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldGTE(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDLT applies the LT predicate on the "assessment_response_id" field.
+func AssessmentResponseIDLT(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldLT(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDLTE applies the LTE predicate on the "assessment_response_id" field.
+func AssessmentResponseIDLTE(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldLTE(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDContains applies the Contains predicate on the "assessment_response_id" field.
+func AssessmentResponseIDContains(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldContains(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDHasPrefix applies the HasPrefix predicate on the "assessment_response_id" field.
+func AssessmentResponseIDHasPrefix(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldHasPrefix(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDHasSuffix applies the HasSuffix predicate on the "assessment_response_id" field.
+func AssessmentResponseIDHasSuffix(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldHasSuffix(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDIsNil applies the IsNil predicate on the "assessment_response_id" field.
+func AssessmentResponseIDIsNil() predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldIsNull(FieldAssessmentResponseID))
+}
+
+// AssessmentResponseIDNotNil applies the NotNil predicate on the "assessment_response_id" field.
+func AssessmentResponseIDNotNil() predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldNotNull(FieldAssessmentResponseID))
+}
+
+// AssessmentResponseIDEqualFold applies the EqualFold predicate on the "assessment_response_id" field.
+func AssessmentResponseIDEqualFold(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldEqualFold(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDContainsFold applies the ContainsFold predicate on the "assessment_response_id" field.
+func AssessmentResponseIDContainsFold(v string) predicate.IntegrationRun {
+	return predicate.IntegrationRun(sql.FieldContainsFold(FieldAssessmentResponseID, v))
+}
+
 // SummaryEQ applies the EQ predicate on the "summary" field.
 func SummaryEQ(v string) predicate.IntegrationRun {
 	return predicate.IntegrationRun(sql.FieldEQ(FieldSummary, v))
@@ -1614,6 +1694,35 @@ func HasEventWith(preds ...predicate.Event) predicate.IntegrationRun {
 		step := newEventStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.IntegrationRun
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAssessmentResponse applies the HasEdge predicate on the "assessment_response" edge.
+func HasAssessmentResponse() predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, AssessmentResponseTable, AssessmentResponseColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.AssessmentResponse
+		step.Edge.Schema = schemaConfig.IntegrationRun
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAssessmentResponseWith applies the HasEdge predicate on the "assessment_response" edge with a given conditions (other predicates).
+func HasAssessmentResponseWith(preds ...predicate.AssessmentResponse) predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := newAssessmentResponseStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.AssessmentResponse
 		step.Edge.Schema = schemaConfig.IntegrationRun
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

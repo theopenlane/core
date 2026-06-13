@@ -121,6 +121,12 @@ func TestFixture(name, toEmail string) json.RawMessage {
 			OrgName:       "SecureCorp",
 			AuthURL:       "https://trustcenter.example.com/securecorp/auth?token=test",
 		},
+		"TrustCenterNDAApprovalRequestEmail": TrustCenterNDAApprovalRequestEmail{
+			RecipientInfo:  RecipientInfo{Email: toEmail, Recipients: []string{toEmail}, FirstName: r.FirstName, LastName: r.LastName},
+			OrgName:        "SecureCorp",
+			RequesterName:  "Dolores Abernathy",
+			RequesterEmail: "dolores.abernathy@example.com",
+		},
 		"QuestionnaireAuthEmail": QuestionnaireAuthEmail{
 			RecipientInfo:  r,
 			OrgName:        "Acme Corp",

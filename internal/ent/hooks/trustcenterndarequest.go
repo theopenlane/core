@@ -6,17 +6,22 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/pkg/logx"
@@ -93,6 +98,11 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 				if err := createNDARequestNotification(ctx, request, tc.OwnerID); err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to create NDA request notification")
 				}
+
+				if err := sendNDAApprovalRequestEmails(ctx, m.Client(), request, tc); err != nil {
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to send NDA approval request emails")
+				}
+
 				return v, nil
 			}
 
@@ -142,6 +152,10 @@ func handleExistingNDARequest(ctx, queryCtx context.Context, client *generated.C
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to create NDA request notification")
 		}
 
+		if err := sendNDAApprovalRequestEmails(ctx, client, existing, tc); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to send NDA approval request emails")
+		}
+
 		return existing, nil
 	case enums.TrustCenterNDARequestStatusDeclined:
 		// if previously declined, set to needs approval again to restart the process
@@ -160,6 +174,10 @@ func handleExistingNDARequest(ctx, queryCtx context.Context, client *generated.C
 		if err := createNDARequestNotification(ctx, existing, tc.OwnerID); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to create NDA request notification")
 		}
+
+		if err := sendNDAApprovalRequestEmails(ctx, client, existing, tc); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to send NDA approval request emails")
+		}
 	}
 
 	// otherwise do nothing invalid
@@ -170,6 +188,7 @@ func handleExistingNDARequest(ctx, queryCtx context.Context, client *generated.C
 func getTrustCenter(ctx context.Context, trustCenterID string) (*generated.TrustCenter, error) {
 	tc, err := transactionFromContext(ctx).TrustCenter.Query().
 		Where(trustcenter.IDEQ(trustCenterID)).
+		WithSetting().
 		Only(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", trustCenterID).Msg("failed to get trust center for existing NDA request")
@@ -316,4 +335,99 @@ func createNDARequestNotification(ctx context.Context, ndaRequest *generated.Tru
 	_, err := transactionFromContext(ctx).Notification.Create().SetInput(input).Save(allowCtx)
 
 	return err
+}
+
+// ndaApproverRoles are the fallback organization roles notified when no NDA approver group is configured.
+var ndaApproverRoles = []enums.Role{enums.RoleOwner, enums.RoleSuperAdmin, enums.RoleAdmin}
+
+func sendNDAApprovalRequestEmails(ctx context.Context, client *generated.Client, ndaRequest *generated.TrustCenterNDARequest, tc *generated.TrustCenter) error {
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	org, err := client.Organization.Query().
+		Where(organization.IDEQ(tc.OwnerID)).
+		Select(organization.FieldDisplayName).
+		Only(allowCtx)
+	if err != nil {
+		return err
+	}
+
+	emails, err := getNDAApproverEmails(ctx, client, tc.OwnerID, tc.Edges.Setting)
+	if err != nil {
+		return err
+	}
+	if len(emails) == 0 {
+		return nil
+	}
+
+	requesterName := fmt.Sprintf("%s %s", ndaRequest.FirstName, ndaRequest.LastName)
+	if requesterName == " " {
+		requesterName = ""
+	}
+
+	return sendSystemEmail(ctx, client, emaildef.TCNDAApprovalRequestOp.Name(), emaildef.TrustCenterNDAApprovalRequestEmail{
+		RecipientInfo:  emaildef.RecipientInfo{Email: emails[0], Recipients: emails},
+		OrgName:        org.DisplayName,
+		RequesterName:  requesterName,
+		RequesterEmail: ndaRequest.Email,
+	})
+}
+
+func getNDAApproverEmails(ctx context.Context, client *generated.Client, ownerID string, setting *generated.TrustCenterSetting) ([]string, error) {
+	ids, err := getNDAApproverUserIDs(ctx, client, ownerID, setting)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(ids) == 0 {
+		return nil, nil
+	}
+
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	var emails []string
+
+	err = client.User.Query().
+		Where(user.IDIn(ids...)).
+		Select(user.FieldEmail).
+		Scan(allowCtx, &emails)
+	if err != nil {
+		return nil, err
+	}
+
+	return lo.Uniq(lo.Filter(emails, func(email string, _ int) bool {
+		return email != ""
+	})), nil
+}
+
+func getNDAApproverUserIDs(ctx context.Context, client *generated.Client, ownerID string, setting *generated.TrustCenterSetting) ([]string, error) {
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	if setting != nil && setting.NdaApproverGroupID != nil && *setting.NdaApproverGroupID != "" {
+		var ids []string
+
+		err := client.GroupMembership.Query().
+			Where(groupmembership.GroupID(*setting.NdaApproverGroupID)).
+			Select(groupmembership.FieldUserID).
+			Scan(allowCtx, &ids)
+		if err != nil {
+			return nil, err
+		}
+
+		return lo.Uniq(ids), nil
+	}
+
+	var ids []string
+
+	err := client.OrgMembership.Query().
+		Where(
+			orgmembership.OrganizationID(ownerID),
+			orgmembership.RoleIn(ndaApproverRoles...),
+		).
+		Select(orgmembership.FieldUserID).
+		Scan(allowCtx, &ids)
+	if err != nil {
+		return nil, err
+	}
+
+	return lo.Uniq(ids), nil
 }

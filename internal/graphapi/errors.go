@@ -18,6 +18,10 @@ import (
 // ErrEmailClientNotAvailable is returned when the runtime email client cannot be resolved
 var ErrEmailClientNotAvailable = errors.New("runtime email client is not available")
 
+// ErrEmailTemplateNotInCatalog is returned when a preview is requested for a key that is
+// not a customer-selectable catalog entry
+var ErrEmailTemplateNotInCatalog = errors.New("email template key is not a customer-selectable catalog entry")
+
 // parseRequestError logs and parses the error and returns the appropriate error type for the client
 func parseRequestError(ctx context.Context, err error, a common.Action) error {
 	// log the error for debugging, these can be user errors so we want to log at info level instead of error level to avoid alert fatigue, but we still want to log the error for debugging purposes

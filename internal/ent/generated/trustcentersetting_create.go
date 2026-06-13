@@ -428,6 +428,20 @@ func (_c *TrustCenterSettingCreate) SetNillableNdaApprovalRequired(v *bool) *Tru
 	return _c
 }
 
+// SetNdaApproverGroupID sets the "nda_approver_group_id" field.
+func (_c *TrustCenterSettingCreate) SetNdaApproverGroupID(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetNdaApproverGroupID(v)
+	return _c
+}
+
+// SetNillableNdaApproverGroupID sets the "nda_approver_group_id" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableNdaApproverGroupID(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetNdaApproverGroupID(*v)
+	}
+	return _c
+}
+
 // SetStatusPageURL sets the "status_page_url" field.
 func (_c *TrustCenterSettingCreate) SetStatusPageURL(v string) *TrustCenterSettingCreate {
 	_c.mutation.SetStatusPageURL(v)
@@ -541,6 +555,11 @@ func (_c *TrustCenterSettingCreate) SetNillableHeroImageFileID(id *string) *Trus
 // SetHeroImageFile sets the "hero_image_file" edge to the File entity.
 func (_c *TrustCenterSettingCreate) SetHeroImageFile(v *File) *TrustCenterSettingCreate {
 	return _c.SetHeroImageFileID(v.ID)
+}
+
+// SetNdaApproverGroup sets the "nda_approver_group" edge to the Group entity.
+func (_c *TrustCenterSettingCreate) SetNdaApproverGroup(v *Group) *TrustCenterSettingCreate {
+	return _c.SetNdaApproverGroupID(v.ID)
 }
 
 // Mutation returns the TrustCenterSettingMutation object of the builder.
@@ -937,6 +956,24 @@ func (_c *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.HeroImageLocalFileID = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.NdaApproverGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.NdaApproverGroupTable,
+			Columns: []string{trustcentersetting.NdaApproverGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenterSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.NdaApproverGroupID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

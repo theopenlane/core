@@ -15990,6 +15990,7 @@ input CreateTrustCenterSettingInput {
   logoFileID: ID
   faviconFileID: ID
   heroImageFileID: ID
+  ndaApproverGroupID: ID
 }
 """
 CreateTrustCenterSubprocessorInput is used for create TrustCenterSubprocessor object.
@@ -72396,6 +72397,10 @@ type TrustCenterSetting implements Node {
   """
   ndaApprovalRequired: Boolean
   """
+  group whose members approve trust center NDA requests
+  """
+  ndaApproverGroupID: ID
+  """
   URL to the company's status page
   """
   statusPageURL: String
@@ -72464,6 +72469,7 @@ type TrustCenterSetting implements Node {
   logoFile: File
   faviconFile: File
   heroImageFile: File
+  ndaApproverGroup: Group
 }
 """
 A connection to a list of items.
@@ -72987,6 +72993,24 @@ input TrustCenterSettingWhereInput {
   ndaApprovalRequiredIsNil: Boolean
   ndaApprovalRequiredNotNil: Boolean
   """
+  nda_approver_group_id field predicates
+  """
+  ndaApproverGroupID: ID
+  ndaApproverGroupIDNEQ: ID
+  ndaApproverGroupIDIn: [ID!]
+  ndaApproverGroupIDNotIn: [ID!]
+  ndaApproverGroupIDGT: ID
+  ndaApproverGroupIDGTE: ID
+  ndaApproverGroupIDLT: ID
+  ndaApproverGroupIDLTE: ID
+  ndaApproverGroupIDContains: ID
+  ndaApproverGroupIDHasPrefix: ID
+  ndaApproverGroupIDHasSuffix: ID
+  ndaApproverGroupIDIsNil: Boolean
+  ndaApproverGroupIDNotNil: Boolean
+  ndaApproverGroupIDEqualFold: ID
+  ndaApproverGroupIDContainsFold: ID
+  """
   status_page_url field predicates
   """
   statusPageURL: String
@@ -73029,6 +73053,11 @@ input TrustCenterSettingWhereInput {
   """
   hasHeroImageFile: Boolean
   hasHeroImageFileWith: [FileWhereInput!]
+  """
+  nda_approver_group edge predicates
+  """
+  hasNdaApproverGroup: Boolean
+  hasNdaApproverGroupWith: [GroupWhereInput!]
 }
 type TrustCenterSubprocessor implements Node {
   id: ID!
@@ -81883,6 +81912,8 @@ input UpdateTrustCenterSettingInput {
   clearFaviconFile: Boolean
   heroImageFileID: ID
   clearHeroImageFile: Boolean
+  ndaApproverGroupID: ID
+  clearNdaApproverGroup: Boolean
 }
 """
 UpdateTrustCenterSubprocessorInput is used for update TrustCenterSubprocessor object.
