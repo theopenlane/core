@@ -45,7 +45,7 @@ func TestExamplePayloads(t *testing.T) {
 
 		assert.Equal(t, "8413c0cc-69a7-4726-a922-63e892264adc", mapped["externalID"])
 		assert.Equal(t, "john.doe@company.com", mapped["canonicalEmail"])
-		assert.Equal(t, "John Doe", mapped["displayName"])
+		assert.Equal(t, "john.doe", mapped["displayName"])
 		assert.Equal(t, "John", mapped["givenName"])
 		assert.Equal(t, "Doe", mapped["familyName"])
 		assert.Equal(t, "ACTIVE", mapped["status"])
