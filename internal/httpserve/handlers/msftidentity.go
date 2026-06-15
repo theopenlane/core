@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"net/http"
-
 	"github.com/google/uuid"
 	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
@@ -65,7 +63,7 @@ func (h *Handler) MSFTIdentityWellKnownHandler(ctx echo.Context) error {
 	// ensure we do not have duplicate application ids
 	applications = lo.Uniq(applications)
 
-	return ctx.JSON(http.StatusOK, msftAssociatedApplications{
+	return h.Success(ctx, msftAssociatedApplications{
 		AssociatedApplications: applications,
 	})
 }

@@ -80,7 +80,7 @@ func (r *Router) handleSpecialResponses(operationID string, openAPIContext *hand
 	// Non-JSON responses only - these don't use h.Success() so need explicit registration
 	case "AcmeSolver":
 		r.addPlainTextResponse(openAPIContext, "ACME challenge response")
-	case "AppleMerchant", "SecurityTxt", "WebAuthnWellKnown", "Robots", "Favicon":
+	case "AppleMerchant", "SecurityTxt", "WebAuthnWellKnown", "Robots", "Favicon", "MSFTIdentityWellKnown":
 		r.addFileResponse(openAPIContext, "Static file content")
 	case "JWKS":
 		r.addJSONResponse(openAPIContext, "JSON Web Key Set", "application/json")
