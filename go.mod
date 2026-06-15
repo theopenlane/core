@@ -48,7 +48,7 @@ require (
 	github.com/go-jose/go-jose/v4 v4.1.4
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/go-webauthn/webauthn v0.17.4
-	github.com/gocarina/gocsv v0.0.0-20260523204920-c264028e67ea
+	github.com/gocarina/gocsv v0.0.0-20260607070740-0735908c6461
 	github.com/goccy/go-yaml v1.19.2
 	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/google/go-github/v84 v84.0.0
