@@ -8,4 +8,7 @@ type Config struct {
 	ClientSecret string `json:"clientsecret" koanf:"clientsecret" sensitive:"true"`
 	// RedirectURL is the OAuth callback URL registered with the Azure application
 	RedirectURL string `json:"redirecturl" koanf:"redirecturl" default:"https://api.theopenlane.io/v1/integrations/auth/callback"`
+	// DefaultTenant pins the admin consent flow to a specific tenant ID or domain (e.g. for local dev/testing)
+	// when empty the generic /organizations endpoint is used
+	DefaultTenant string `json:"defaulttenant" koanf:"defaulttenant"`
 }
