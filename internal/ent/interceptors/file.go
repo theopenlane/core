@@ -8,6 +8,7 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
 
@@ -16,6 +17,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	dbprovider "github.com/theopenlane/core/pkg/objects/storage/providers/database"
@@ -44,6 +47,23 @@ func InterceptorFile() ent.Interceptor {
 
 		if len(orgs) == 0 {
 			return nil
+		}
+
+		// if this is a request for avatar file, add all org ids the user is a part of
+		// to the filter; allow the request to process since the JWT Will only have the current
+		// organization
+		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+		if graphutils.CheckForRequestedField(ctx, "avatarFile") &&
+			caller.AuthenticationType == auth.JWTAuthentication {
+			client := generated.FromContext(ctx)
+			if client != nil {
+				orgIDs, err := client.OrgMembership.Query().Where(
+					orgmembership.UserID(caller.SubjectID),
+				).Select(orgmembership.FieldOrganizationID).Strings(allowCtx)
+				if err == nil {
+					orgs = lo.Uniq(orgIDs)
+				}
+			}
 		}
 
 		// filter on the organization id or empty organization id
