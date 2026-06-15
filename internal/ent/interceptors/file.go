@@ -52,18 +52,9 @@ func InterceptorFile() ent.Interceptor {
 		// if this is a request for avatar file, add all org ids the user is a part of
 		// to the filter; allow the request to process since the JWT Will only have the current
 		// organization
-		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-		if graphutils.CheckForRequestedField(ctx, "avatarFile") &&
-			caller.AuthenticationType == auth.JWTAuthentication {
-			client := generated.FromContext(ctx)
-			if client != nil {
-				orgIDs, err := client.OrgMembership.Query().Where(
-					orgmembership.UserID(caller.SubjectID),
-				).Select(orgmembership.FieldOrganizationID).Strings(allowCtx)
-				if err == nil {
-					orgs = lo.Uniq(orgIDs)
-				}
-			}
+		allOrgIDs, shouldUse := getAllOrgsForFileInterceptor(ctx)
+		if shouldUse && len(allOrgIDs) > 0 {
+			orgs = allOrgIDs
 		}
 
 		// filter on the organization id or empty organization id
@@ -255,4 +246,39 @@ func setBase64(ctx context.Context, file *generated.File, q *generated.FileQuery
 
 func isFileNotFound(err error) bool {
 	return errors.Is(err, dbprovider.ErrFileNotFound)
+}
+
+// getAllOrgsForFileInterceptor returns all orgs the user is a member of when
+// requesting avatarFile using JWT authentication. This allows the UI to show
+// org avatars across the current authentication organization
+// it returns the list of org ids and well if that list should be used
+func getAllOrgsForFileInterceptor(ctx context.Context) ([]string, bool) {
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	if !graphutils.CheckForRequestedField(ctx, "avatarFile") {
+		return nil, false
+	}
+
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return nil, false
+	}
+
+	if caller.AuthenticationType != auth.JWTAuthentication {
+		return nil, false
+	}
+
+	client := generated.FromContext(ctx)
+	if client == nil {
+		return nil, false
+	}
+
+	orgIDs, err := client.OrgMembership.Query().Where(
+		orgmembership.UserID(caller.SubjectID),
+	).Select(orgmembership.FieldOrganizationID).Strings(allowCtx)
+	if err != nil {
+		return nil, false
+	}
+
+	return lo.Uniq(orgIDs), true
 }
