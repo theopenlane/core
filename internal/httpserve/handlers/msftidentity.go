@@ -8,10 +8,12 @@ import (
 	echo "github.com/theopenlane/echox"
 )
 
+// msftAssociatedApplications contains the associated azure applications with the domain
 type msftAssociatedApplications struct {
 	AssociatedApplications []application `json:"associatedApplications"`
 }
 
+// application contains the application id of a registered application
 type application struct {
 	// ApplicationID is the application of the registered application in Azure
 	ApplicationID string `json:"applicationId"`
