@@ -19,7 +19,7 @@ func Builder() registry.Builder {
 				Category:    "identity",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/okta/overview",
 				Tags:        []string{"directory"},
-				Active:      true,
+				Active:      false,
 				Visible:     true,
 			},
 			UserInput: &types.UserInputRegistration{
