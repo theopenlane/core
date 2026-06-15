@@ -280,6 +280,7 @@ func normalizeFramework(framework *string) string {
 	return customFramework
 }
 
+// getControlMappings returns the controls and subcontrols mapped to a control based on the ref code and framework
 func getControlMappings(ctx context.Context, refCode string, framework *string, parentControlID *string) ([]*generated.MappedControl, error) {
 	fullWhere, err := prepMappedControlQuery(ctx, refCode, framework, parentControlID)
 	if err != nil {
@@ -299,6 +300,7 @@ func getControlMappings(ctx context.Context, refCode string, framework *string, 
 	return res, nil
 }
 
+// getSubcontrolMappings returns the controls and subcontrols mapped to a subcontrol based on the ref code and framework
 func getSubcontrolMappings(ctx context.Context, refCode string, framework *string, parentControlID *string) ([]*generated.MappedControl, error) {
 	fullWhere, err := prepMappedControlQuery(ctx, refCode, framework, parentControlID)
 	if err != nil {
@@ -318,6 +320,7 @@ func getSubcontrolMappings(ctx context.Context, refCode string, framework *strin
 	return res, nil
 }
 
+// prepMappedControlQuery gets the predicate for the mapped control query
 func prepMappedControlQuery(ctx context.Context, refCode string, framework *string, parentControlID *string) ([]predicate.MappedControl, error) {
 	// get orgs to filter, this will allow us to skip expensive authz checks
 	orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
@@ -539,6 +542,7 @@ func findOrganizationSubcontrolForMapping(ctx context.Context, c *generated.Subc
 	return mappedFromSystem, true
 }
 
+// isSameControl determines if the ref code is the same as the mapped control being checked
 func isSameControl(refCode string, framework *string, mappedControl *generated.Control) bool {
 	if refCode != mappedControl.RefCode {
 		return false
@@ -555,6 +559,7 @@ func isSameControl(refCode string, framework *string, mappedControl *generated.C
 	return currentFramework == mappedFramework
 }
 
+// isSameSubcontrold etermines if the ref code is the same as the mapped subcontrol being checked
 func isSameSubcontrol(refCode string, framework *string, mappedControl *generated.Subcontrol) bool {
 	if refCode != mappedControl.RefCode {
 		return false

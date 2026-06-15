@@ -200,11 +200,11 @@ func TestGenerateMapControlKey(t *testing.T) {
 
 func TestIsSameControl(t *testing.T) {
 	tests := []struct {
-		name         string
-		refCode      string
-		framework    *string
-		mappedCtrl   *generated.Control
-		expected     bool
+		name       string
+		refCode    string
+		framework  *string
+		mappedCtrl *generated.Control
+		expected   bool
 	}{
 		{
 			name:       "different ref codes returns false",
@@ -453,12 +453,12 @@ func TestPrepMappedControlQuery(t *testing.T) {
 		wantPredicates  int
 	}{
 		{
-			name:           "no auth context returns error",
-			ctx:            context.Background(),
-			refCode:        "CC1.1",
-			framework:      strPtr("SOC2"),
+			name:            "no auth context returns error",
+			ctx:             context.Background(),
+			refCode:         "CC1.1",
+			framework:       strPtr("SOC2"),
 			parentControlID: nil,
-			wantErr:        true,
+			wantErr:         true,
 		},
 		{
 			name:            "control query with nil framework adds nil framework predicate",
