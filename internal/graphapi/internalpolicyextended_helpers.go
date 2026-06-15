@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/integrations/definitions/googledrive"
 	"github.com/theopenlane/core/internal/integrations/definitions/onedrive"
+	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -49,22 +50,10 @@ func (r *internalPolicyResolver) findPrimaryDriveIntegration(ctx context.Context
 
 // isPrimaryDriveInstallation reports whether the installation's client config has Primary set to true
 func isPrimaryDriveInstallation(integ *generated.Integration) bool {
-	switch integ.DefinitionID {
-	case googledrive.DefinitionID():
-		var input googledrive.UserInput
-		if err := jsonx.UnmarshalIfPresent(integ.Config.ClientConfig, &input); err != nil {
-			return false
-		}
-
-		return input.Primary
-	case onedrive.DefinitionID():
-		var input onedrive.UserInput
-		if err := jsonx.UnmarshalIfPresent(integ.Config.ClientConfig, &input); err != nil {
-			return false
-		}
-
-		return input.Primary
+	var input operations.UserInput
+	if err := jsonx.UnmarshalIfPresent(integ.Config.ClientConfig, &input); err != nil {
+		return false
 	}
 
-	return false
+	return input.Primary
 }

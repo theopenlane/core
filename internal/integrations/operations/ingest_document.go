@@ -9,6 +9,13 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
+// UserInput holds installation-specific configuration collected from the user
+type UserInput struct {
+	// Primary marks this installation as the authoritative source for live document exports
+	Primary bool `json:"primary,omitempty" jsonschema:"title=Primary"`
+}
+
+// DocClient is the interface all document integrations must satisfy
 type DocClient interface {
 	Export(ctx context.Context, cfg *DocumentExport) error
 }

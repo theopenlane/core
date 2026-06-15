@@ -12,6 +12,7 @@ import (
 	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // graphScope is the default scope used for Microsoft Graph client requests
@@ -26,9 +27,10 @@ type Client struct {
 // Build constructs a DriveClient from the installation OAuth credential.
 // It wraps an oauth2.TokenSource so that expired access tokens are automatically
 // refreshed using the stored refresh token, matching the behavior of the Google Drive client.
-func (c Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
+func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
 	cred, _, err := oneDriveCredential.Resolve(req.Credentials)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error decoding onedrive credentials")
 		return nil, ErrCredentialDecode
 	}
 
@@ -62,7 +64,7 @@ func (c Client) Build(_ context.Context, req types.ClientBuildRequest) (any, err
 		},
 	}
 
-	// context.Background is intentional: the token source outlives any single request context
+	// context background used intentionally in this slot
 	ts := oauthCfg.TokenSource(context.Background(), tok)
 
 	tokenCred := &oauthTokenCredential{ts: ts}
@@ -74,6 +76,7 @@ func (c Client) Build(_ context.Context, req types.ClientBuildRequest) (any, err
 
 	adapter, err := msgraphsdk.NewGraphRequestAdapter(authProvider)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error building onedrive client")
 		return nil, ErrClientBuildFailed
 	}
 

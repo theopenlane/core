@@ -2,16 +2,21 @@ package onedrive
 
 import (
 	"context"
+	"net/mail"
+	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
 
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // resolveInstallationMetadata derives OneDrive installation metadata from the persisted access token
-func resolveInstallationMetadata(_ context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
+func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
 	cred, _, err := oneDriveCredential.Resolve(req.Credentials)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("onedrive: error decoding credentials")
+
 		return InstallationMetadata{}, false, ErrCredentialDecode
 	}
 
@@ -21,6 +26,8 @@ func resolveInstallationMetadata(_ context.Context, req types.InstallationReques
 
 	token, _, err := new(jwt.Parser).ParseUnverified(cred.AccessToken, jwt.MapClaims{})
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("onedrive: error parsing JWT")
+
 		return InstallationMetadata{}, false, nil
 	}
 
@@ -29,13 +36,13 @@ func resolveInstallationMetadata(_ context.Context, req types.InstallationReques
 		return InstallationMetadata{}, false, nil
 	}
 
-	tenantID, _ := claims["tid"].(string)
-	if tenantID == "" {
+	tenantID, ok := claims["tid"].(string)
+	if !ok || tenantID == "" {
 		return InstallationMetadata{}, false, nil
 	}
 
-	upn, _ := claims["upn"].(string)
-	if upn == "" {
+	upn, ok := claims["upn"].(string)
+	if !ok || upn == "" {
 		upn, _ = claims["preferred_username"].(string)
 	}
 
@@ -47,11 +54,19 @@ func resolveInstallationMetadata(_ context.Context, req types.InstallationReques
 
 // domainFromEmail extracts the domain portion from an email address
 func domainFromEmail(email string) string {
-	for i := len(email) - 1; i >= 0; i-- {
-		if email[i] == '@' {
-			return email[i+1:]
-		}
+	if email == "" {
+		return ""
 	}
 
-	return email
+	addr, err := mail.ParseAddress(email)
+	if err != nil {
+		return ""
+	}
+
+	_, domain, ok := strings.Cut(addr.Address, "@")
+	if !ok || domain == "" {
+		return ""
+	}
+
+	return domain
 }

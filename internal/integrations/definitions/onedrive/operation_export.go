@@ -53,13 +53,11 @@ func (c DriveClient) Export(ctx context.Context, cfg *operations.DocumentExport)
 		}
 
 		cfg.PDF = pdfBytes
-		log.Info().Int("pdf_len", len(cfg.PDF)).Msg("onedrive: pdf export result")
 
 		return nil
 	}
 
 	cfg.HTML = fetchIframeEmbed(ctx, c.TS, cfg.FileID)
-	log.Info().Bool("has_html", cfg.HTML != "").Msg("onedrive: iframe export result")
 
 	return nil
 }
@@ -79,6 +77,7 @@ func fetchIframeEmbed(ctx context.Context, ts oauth2.TokenSource, itemID string)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, u, strings.NewReader("{}"))
 	if err != nil {
+		log.Warn().Err(err).Msg("onedrive: failed to get token for iframe embed")
 		return ""
 	}
 
