@@ -148,6 +148,7 @@ integrations:
     azureentraid:
         clientid: ""
         clientsecret: ""
+        defaulttenant: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     email:
         apikey: ""
@@ -183,6 +184,11 @@ integrations:
         discoveryurl: http://localhost:5557/dex
         enabled: false
         redirecturl: http://localhost:17608/v1/integrations/auth/callback
+    onedrive:
+        clientid: ""
+        clientsecret: ""
+        contentmode: iframe
+        redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     paymentreminder:
         deletiondays: 0
         dryrun: false

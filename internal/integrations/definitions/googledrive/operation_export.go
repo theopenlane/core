@@ -2,42 +2,27 @@ package googledrive
 
 import (
 	"context"
-	"encoding/json"
 	"io"
 
-	"google.golang.org/api/drive/v3"
-
-	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
 const exportMIMEType = "text/html"
 
-// DocumentExport holds the configuration and result for a Google Drive document export
-type DocumentExport struct {
-	// FileID is the Google Drive file identifier to export
-	FileID string `json:"fileId"`
-	// HTML is the exported document content (populated in the response)
-	HTML string `json:"html,omitempty"`
-}
-
 // Handle adapts the document export to the generic operation registration boundary
-func (d DocumentExport) Handle() types.OperationHandler {
-	return providerkit.WithClientConfig(driveClient, documentExportOperation, ErrExportFailed, d.Run)
+func Handle() types.OperationHandler {
+	return operations.Handle(driveClient, documentExportOperation)
 }
 
-// Run executes the HTML export using the Google Drive API files.export endpoint
-func (DocumentExport) Run(ctx context.Context, svc *drive.Service, cfg DocumentExport) (json.RawMessage, error) {
-	if cfg.FileID == "" {
-		return nil, ErrExportFailed
-	}
-
-	resp, err := svc.Files.Export(cfg.FileID, exportMIMEType).Context(ctx).Download()
+// Export fetches OneDrive item metadata and returns either an iframe embed or PDF bytes
+func (c DriveClient) Export(ctx context.Context, cfg *operations.DocumentExport) error {
+	resp, err := c.Svc.Files.Export(cfg.FileID, exportMIMEType).Context(ctx).Download()
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("Failed to create HTML export of drive file")
 
-		return nil, ErrExportFailed
+		return err
 	}
 
 	defer resp.Body.Close()
@@ -46,11 +31,10 @@ func (DocumentExport) Run(ctx context.Context, svc *drive.Service, cfg DocumentE
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("Failed to parse exported drive file contents")
 
-		return nil, ErrExportFailed
+		return err
 	}
 
-	return providerkit.EncodeResult(DocumentExport{
-		FileID: cfg.FileID,
-		HTML:   string(body),
-	}, ErrResultEncode)
+	cfg.HTML = string(body)
+
+	return nil
 }

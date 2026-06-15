@@ -39,4 +39,8 @@ var (
 	ErrIngestPersistFailed = errors.New("integrations/operations: ingest persistence failed")
 	// ErrOperationDisabled indicates the operation is disabled for this installation and the reconcile cycle should stop
 	ErrOperationDisabled = errors.New("integrations/operations: operation disabled")
+	// ErrExportFailed indicates the Drive file export request failed
+	ErrExportFailed = errors.New("integrations/operations: file export failed")
+	// ErrResultEncode indicates an operation result could not be serialized
+	ErrResultEncode = errors.New("integrations/operations: result encode failed")
 )

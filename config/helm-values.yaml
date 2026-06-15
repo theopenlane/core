@@ -537,9 +537,14 @@ coreConfiguration:
     azureentraid:
       clientid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
+      defaulttenant: ""  # @schema type:string
     microsoftteams:
       clientid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
+    onedrive:
+      clientid: ""  # @schema type:string
+      redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
+      contentmode: "iframe"  # @schema type:string; default:iframe
     oidclocal:
       enabled: false  # @schema type:boolean; default:false
       clientid: "local-core-oidc"  # @schema type:string; default:local-core-oidc
@@ -978,6 +983,14 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_MICROSOFTTEAMS_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-microsoftteams-clientsecret"  # @schema type:string
+    # -- core-integrations-onedrive-clientsecret secret configuration
+    core-integrations-onedrive-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.onedrive.clientsecret
+      secretKey: "CORE_INTEGRATIONS_ONEDRIVE_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-onedrive-clientsecret"  # @schema type:string
     # -- core-integrations-oidclocal-clientsecret secret configuration
     core-integrations-oidclocal-clientsecret:
       # -- Enable this external secret

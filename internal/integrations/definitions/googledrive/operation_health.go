@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"google.golang.org/api/drive/v3"
-
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
@@ -26,8 +24,8 @@ func (h HealthCheck) Handle() types.OperationHandler {
 }
 
 // Run executes the health check by listing files accessible via the Drive API
-func (HealthCheck) Run(ctx context.Context, svc *drive.Service) (json.RawMessage, error) {
-	resp, err := svc.Files.List().
+func (HealthCheck) Run(ctx context.Context, c DriveClient) (json.RawMessage, error) {
+	resp, err := c.Svc.Files.List().
 		PageSize(healthCheckMaxResults).
 		Fields("files(id)").
 		Context(ctx).
