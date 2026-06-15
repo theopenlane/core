@@ -146,6 +146,7 @@ integrations:
         arn: ""
         secretaccesskey: ""
     azureentraid:
+        applicationid: ""
         clientid: ""
         clientsecret: ""
         defaulttenant: ""
@@ -175,6 +176,7 @@ integrations:
         clientsecret: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     microsoftteams:
+        applicationid: ""
         clientid: ""
         clientsecret: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
@@ -185,6 +187,7 @@ integrations:
         enabled: false
         redirecturl: http://localhost:17608/v1/integrations/auth/callback
     onedrive:
+        applicationid: ""
         clientid: ""
         clientsecret: ""
         contentmode: iframe

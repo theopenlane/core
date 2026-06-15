@@ -538,13 +538,16 @@ coreConfiguration:
       clientid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
       defaulttenant: ""  # @schema type:string
+      applicationid: ""  # @schema type:string
     microsoftteams:
       clientid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
+      applicationid: ""  # @schema type:string
     onedrive:
       clientid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
       contentmode: "iframe"  # @schema type:string; default:iframe
+      applicationid: ""  # @schema type:string
     oidclocal:
       enabled: false  # @schema type:boolean; default:false
       clientid: "local-core-oidc"  # @schema type:string; default:local-core-oidc

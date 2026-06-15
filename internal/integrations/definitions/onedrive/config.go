@@ -11,4 +11,6 @@ type Config struct {
 	// ContentMode controls how document content is returned for live external content queries.
 	// Valid values: "iframe" (default, returns an embeddable preview iframe) and "pdf" (exports the document as PDF bytes).
 	ContentMode string `json:"contentmode" koanf:"contentmode" default:"iframe"`
+	// ApplicationID is the application ID registered in azure, used in the well-known configuration for domain validation
+	ApplicationID string `json:"applicationid" koanf:"applicationid"`
 }
