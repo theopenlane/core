@@ -328,8 +328,6 @@ func prepMappedControlQuery(ctx context.Context, refCode string, framework *stri
 		return nil, err
 	}
 
-	fullWhere := []predicate.MappedControl{}
-
 	// controls have no parent control, whereas subcontrols do
 	if parentControlID == nil {
 		controlWhere := []predicate.Control{
@@ -346,7 +344,7 @@ func prepMappedControlQuery(ctx context.Context, refCode string, framework *stri
 			controlWhere = append(controlWhere, control.ReferenceFramework(*framework))
 		}
 
-		fullWhere = []predicate.MappedControl{
+		return []predicate.MappedControl{
 			mappedcontrol.Or(
 				mappedcontrol.HasToControlsWith(
 					controlWhere...,
@@ -355,29 +353,28 @@ func prepMappedControlQuery(ctx context.Context, refCode string, framework *stri
 					controlWhere...,
 				),
 			),
-		}
-	} else {
-		subControlWhere := []predicate.Subcontrol{
-			subcontrol.RefCode(refCode),
-			subcontrol.ControlID(*parentControlID),
-			subcontrol.Or(
-				subcontrol.SystemOwned(true),
-				subcontrol.OwnerIDIn(orgIDs...),
-			),
-		}
-		fullWhere = []predicate.MappedControl{
-			mappedcontrol.Or(
-				mappedcontrol.HasToSubcontrolsWith(
-					subControlWhere...,
-				),
-				mappedcontrol.HasToSubcontrolsWith(
-					subControlWhere...,
-				),
-			),
-		}
+		}, nil
 	}
 
-	return fullWhere, nil
+	subControlWhere := []predicate.Subcontrol{
+		subcontrol.RefCode(refCode),
+		subcontrol.ControlID(*parentControlID),
+		subcontrol.Or(
+			subcontrol.SystemOwned(true),
+			subcontrol.OwnerIDIn(orgIDs...),
+		),
+	}
+
+	return []predicate.MappedControl{
+		mappedcontrol.Or(
+			mappedcontrol.HasToSubcontrolsWith(
+				subControlWhere...,
+			),
+			mappedcontrol.HasToSubcontrolsWith(
+				subControlWhere...,
+			),
+		),
+	}, nil
 }
 
 // getMappedControlInfo returns all the control information for controls mapped to a ref code, it returns a map
