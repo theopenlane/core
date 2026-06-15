@@ -191,6 +191,28 @@ type ControlDiffPayload {
     changes: [ControlChange!]!
 }
 
+extend type Control {
+    """
+    relatedControls show the controls and frameworks mapped to this control
+    """
+    relatedControls: RelatedControlConnection!
+    """
+    relatedSubcontrols show the subcontrols and frameworks mapped to this control
+    """
+    relatedSubcontrols: RelatedSubcontrolConnection!
+}
+
+extend type Subcontrol {
+    """
+    relatedControls show the controls and frameworks mapped to this control
+    """
+    relatedControls: RelatedControlConnection!
+    """
+    relatedSubcontrols show the subcontrols and frameworks mapped to this control
+    """
+    relatedSubcontrols: RelatedSubcontrolConnection!
+}
+
 extend type Query {
     """
     Compare a system-owned control between two framework revisions to see which fields changed
@@ -349,10 +371,6 @@ type RelatedControlConnection {
   """
   edges: [RelatedControlEdge]
   """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
@@ -366,26 +384,6 @@ type RelatedControlEdge {
   """
   node: Control!
 }
-"""
-Ordering options for RelatedControl connections
-"""
-input RelatedControlOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order RelatedControl.
-  """
-  field: RelatedControlOrderField!
-}
-"""
-Properties by which RelatedControl connections can be ordered.
-"""
-enum RelatedControlOrderField {
-  referenceFramework
-  systemOwned
-}
 
 """
 A connection to a list of items.
@@ -395,10 +393,6 @@ type RelatedSubcontrolConnection {
   A list of edges.
   """
   edges: [RelatedSubcontrolEdge]
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
   """
   Identifies the total count of items in the connection.
   """
@@ -412,24 +406,4 @@ type RelatedSubcontrolEdge {
   The item at the end of the edge.
   """
   node: Subcontrol!
-}
-"""
-Ordering options for RelatedSubcontrol connections
-"""
-input RelatedSubcontrolOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order RelatedSubcontrol.
-  """
-  field: RelatedSubcontrolOrderField!
-}
-"""
-Properties by which RelatedSubcontrol connections can be ordered.
-"""
-enum RelatedSubcontrolOrderField {
-  referenceFramework
-  systemOwned
 }

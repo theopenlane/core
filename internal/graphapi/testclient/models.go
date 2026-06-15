@@ -4520,6 +4520,10 @@ type Control struct {
 	ActiveWorkflowInstances []*WorkflowInstance `json:"activeWorkflowInstances"`
 	// Returns the workflow event timeline for this control across all workflow instances
 	WorkflowTimeline *WorkflowEventConnection `json:"workflowTimeline"`
+	// relatedControls show the controls and frameworks mapped to this control
+	RelatedControls *RelatedControlConnection `json:"relatedControls"`
+	// relatedSubcontrols show the subcontrols and frameworks mapped to this control
+	RelatedSubcontrols *RelatedSubcontrolConnection `json:"relatedSubcontrols"`
 }
 
 func (Control) IsNode() {}
@@ -29635,8 +29639,6 @@ type ReassignWorkflowAssignmentInput struct {
 type RelatedControlConnection struct {
 	// A list of edges.
 	Edges []*RelatedControlEdge `json:"edges,omitempty"`
-	// Information to aid in pagination.
-	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
 	TotalCount int64 `json:"totalCount"`
 }
@@ -29647,20 +29649,10 @@ type RelatedControlEdge struct {
 	Node *Control `json:"node"`
 }
 
-// Ordering options for RelatedControl connections
-type RelatedControlOrder struct {
-	// The ordering direction.
-	Direction OrderDirection `json:"direction"`
-	// The field by which to order RelatedControl.
-	Field RelatedControlOrderField `json:"field"`
-}
-
 // A connection to a list of items.
 type RelatedSubcontrolConnection struct {
 	// A list of edges.
 	Edges []*RelatedSubcontrolEdge `json:"edges,omitempty"`
-	// Information to aid in pagination.
-	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
 	TotalCount int64 `json:"totalCount"`
 }
@@ -29669,14 +29661,6 @@ type RelatedSubcontrolConnection struct {
 type RelatedSubcontrolEdge struct {
 	// The item at the end of the edge.
 	Node *Subcontrol `json:"node"`
-}
-
-// Ordering options for RelatedSubcontrol connections
-type RelatedSubcontrolOrder struct {
-	// The ordering direction.
-	Direction OrderDirection `json:"direction"`
-	// The field by which to order RelatedSubcontrol.
-	Field RelatedSubcontrolOrderField `json:"field"`
 }
 
 type Remediation struct {
@@ -33725,6 +33709,10 @@ type Subcontrol struct {
 	Assets                 *AssetConnection                 `json:"assets"`
 	Entities               *EntityConnection                `json:"entities"`
 	IdentityHolders        *IdentityHolderConnection        `json:"identityHolders"`
+	// relatedControls show the controls and frameworks mapped to this control
+	RelatedControls *RelatedControlConnection `json:"relatedControls"`
+	// relatedSubcontrols show the subcontrols and frameworks mapped to this control
+	RelatedSubcontrols *RelatedSubcontrolConnection `json:"relatedSubcontrols"`
 	// Indicates if this subcontrol has pending changes awaiting workflow approval
 	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
 	// Indicates if this subcontrol has any workflow history (completed or failed instances)
@@ -54698,118 +54686,6 @@ func (e *ProgramOrderField) UnmarshalJSON(b []byte) error {
 }
 
 func (e ProgramOrderField) MarshalJSON() ([]byte, error) {
-	var buf bytes.Buffer
-	e.MarshalGQL(&buf)
-	return buf.Bytes(), nil
-}
-
-// Properties by which RelatedControl connections can be ordered.
-type RelatedControlOrderField string
-
-const (
-	RelatedControlOrderFieldReferenceFramework RelatedControlOrderField = "referenceFramework"
-	RelatedControlOrderFieldSystemOwned        RelatedControlOrderField = "systemOwned"
-)
-
-var AllRelatedControlOrderField = []RelatedControlOrderField{
-	RelatedControlOrderFieldReferenceFramework,
-	RelatedControlOrderFieldSystemOwned,
-}
-
-func (e RelatedControlOrderField) IsValid() bool {
-	switch e {
-	case RelatedControlOrderFieldReferenceFramework, RelatedControlOrderFieldSystemOwned:
-		return true
-	}
-	return false
-}
-
-func (e RelatedControlOrderField) String() string {
-	return string(e)
-}
-
-func (e *RelatedControlOrderField) UnmarshalGQL(v any) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = RelatedControlOrderField(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid RelatedControlOrderField", str)
-	}
-	return nil
-}
-
-func (e RelatedControlOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-func (e *RelatedControlOrderField) UnmarshalJSON(b []byte) error {
-	s, err := strconv.Unquote(string(b))
-	if err != nil {
-		return err
-	}
-	return e.UnmarshalGQL(s)
-}
-
-func (e RelatedControlOrderField) MarshalJSON() ([]byte, error) {
-	var buf bytes.Buffer
-	e.MarshalGQL(&buf)
-	return buf.Bytes(), nil
-}
-
-// Properties by which RelatedSubcontrol connections can be ordered.
-type RelatedSubcontrolOrderField string
-
-const (
-	RelatedSubcontrolOrderFieldReferenceFramework RelatedSubcontrolOrderField = "referenceFramework"
-	RelatedSubcontrolOrderFieldSystemOwned        RelatedSubcontrolOrderField = "systemOwned"
-)
-
-var AllRelatedSubcontrolOrderField = []RelatedSubcontrolOrderField{
-	RelatedSubcontrolOrderFieldReferenceFramework,
-	RelatedSubcontrolOrderFieldSystemOwned,
-}
-
-func (e RelatedSubcontrolOrderField) IsValid() bool {
-	switch e {
-	case RelatedSubcontrolOrderFieldReferenceFramework, RelatedSubcontrolOrderFieldSystemOwned:
-		return true
-	}
-	return false
-}
-
-func (e RelatedSubcontrolOrderField) String() string {
-	return string(e)
-}
-
-func (e *RelatedSubcontrolOrderField) UnmarshalGQL(v any) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = RelatedSubcontrolOrderField(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid RelatedSubcontrolOrderField", str)
-	}
-	return nil
-}
-
-func (e RelatedSubcontrolOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-func (e *RelatedSubcontrolOrderField) UnmarshalJSON(b []byte) error {
-	s, err := strconv.Unquote(string(b))
-	if err != nil {
-		return err
-	}
-	return e.UnmarshalGQL(s)
-}
-
-func (e RelatedSubcontrolOrderField) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
 	e.MarshalGQL(&buf)
 	return buf.Bytes(), nil

@@ -649,38 +649,6 @@ func (ec *executionContext) fieldContext_RelatedControlConnection_edges(_ contex
 	return fc, nil
 }
 
-func (ec *executionContext) _RelatedControlConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.RelatedControlConnection) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_RelatedControlConnection_pageInfo(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.PageInfo, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *entgql.PageInfo[string]) graphql.Marshaler {
-			return ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_RelatedControlConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "RelatedControlConnection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_PageInfo(ctx, field)
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _RelatedControlConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.RelatedControlConnection) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -763,38 +731,6 @@ func (ec *executionContext) fieldContext_RelatedSubcontrolConnection_edges(_ con
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return ec.childFields_RelatedSubcontrolEdge(ctx, field)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _RelatedSubcontrolConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.RelatedSubcontrolConnection) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_RelatedSubcontrolConnection_pageInfo(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.PageInfo, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *entgql.PageInfo[string]) graphql.Marshaler {
-			return ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_RelatedSubcontrolConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "RelatedSubcontrolConnection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_PageInfo(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1125,88 +1061,6 @@ func (ec *executionContext) unmarshalInputControlDiffInput(ctx context.Context, 
 				return it, err
 			}
 			it.NewRevision = data
-		}
-	}
-	return it, nil
-}
-
-func (ec *executionContext) unmarshalInputRelatedControlOrder(ctx context.Context, obj any) (model.RelatedControlOrder, error) {
-	var it model.RelatedControlOrder
-	if obj == nil {
-		return it, nil
-	}
-
-	asMap := map[string]any{}
-	for k, v := range obj.(map[string]any) {
-		asMap[k] = v
-	}
-
-	if _, present := asMap["direction"]; !present {
-		asMap["direction"] = "ASC"
-	}
-
-	fieldsInOrder := [...]string{"direction", "field"}
-	for _, k := range fieldsInOrder {
-		v, ok := asMap[k]
-		if !ok {
-			continue
-		}
-		switch k {
-		case "direction":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("direction"))
-			data, err := ec.unmarshalNOrderDirection2entgoᚗioᚋcontribᚋentgqlᚐOrderDirection(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Direction = data
-		case "field":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
-			data, err := ec.unmarshalNRelatedControlOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedControlOrderField(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Field = data
-		}
-	}
-	return it, nil
-}
-
-func (ec *executionContext) unmarshalInputRelatedSubcontrolOrder(ctx context.Context, obj any) (model.RelatedSubcontrolOrder, error) {
-	var it model.RelatedSubcontrolOrder
-	if obj == nil {
-		return it, nil
-	}
-
-	asMap := map[string]any{}
-	for k, v := range obj.(map[string]any) {
-		asMap[k] = v
-	}
-
-	if _, present := asMap["direction"]; !present {
-		asMap["direction"] = "ASC"
-	}
-
-	fieldsInOrder := [...]string{"direction", "field"}
-	for _, k := range fieldsInOrder {
-		v, ok := asMap[k]
-		if !ok {
-			continue
-		}
-		switch k {
-		case "direction":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("direction"))
-			data, err := ec.unmarshalNOrderDirection2entgoᚗioᚋcontribᚋentgqlᚐOrderDirection(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Direction = data
-		case "field":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
-			data, err := ec.unmarshalNRelatedSubcontrolOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedSubcontrolOrderField(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Field = data
 		}
 	}
 	return it, nil
@@ -1634,11 +1488,6 @@ func (ec *executionContext) _RelatedControlConnection(ctx context.Context, sel a
 			out.Values[i] = graphql.MarshalString("RelatedControlConnection")
 		case "edges":
 			out.Values[i] = ec._RelatedControlConnection_edges(ctx, field, obj)
-		case "pageInfo":
-			out.Values[i] = ec._RelatedControlConnection_pageInfo(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		case "totalCount":
 			out.Values[i] = ec._RelatedControlConnection_totalCount(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -1719,11 +1568,6 @@ func (ec *executionContext) _RelatedSubcontrolConnection(ctx context.Context, se
 			out.Values[i] = graphql.MarshalString("RelatedSubcontrolConnection")
 		case "edges":
 			out.Values[i] = ec._RelatedSubcontrolConnection_edges(ctx, field, obj)
-		case "pageInfo":
-			out.Values[i] = ec._RelatedSubcontrolConnection_pageInfo(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		case "totalCount":
 			out.Values[i] = ec._RelatedSubcontrolConnection_totalCount(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -1951,24 +1795,32 @@ func (ec *executionContext) marshalNControlGroupEdge2ᚖgithubᚗcomᚋtheopenla
 	return ec._ControlGroupEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNRelatedControlOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedControlOrderField(ctx context.Context, v any) (model.RelatedControlOrderField, error) {
-	var res model.RelatedControlOrderField
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
+func (ec *executionContext) marshalNRelatedControlConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedControlConnection(ctx context.Context, sel ast.SelectionSet, v model.RelatedControlConnection) graphql.Marshaler {
+	return ec._RelatedControlConnection(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNRelatedControlOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedControlOrderField(ctx context.Context, sel ast.SelectionSet, v model.RelatedControlOrderField) graphql.Marshaler {
-	return v
+func (ec *executionContext) marshalNRelatedControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedControlConnection(ctx context.Context, sel ast.SelectionSet, v *model.RelatedControlConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._RelatedControlConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNRelatedSubcontrolOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedSubcontrolOrderField(ctx context.Context, v any) (model.RelatedSubcontrolOrderField, error) {
-	var res model.RelatedSubcontrolOrderField
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
+func (ec *executionContext) marshalNRelatedSubcontrolConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedSubcontrolConnection(ctx context.Context, sel ast.SelectionSet, v model.RelatedSubcontrolConnection) graphql.Marshaler {
+	return ec._RelatedSubcontrolConnection(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNRelatedSubcontrolOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedSubcontrolOrderField(ctx context.Context, sel ast.SelectionSet, v model.RelatedSubcontrolOrderField) graphql.Marshaler {
-	return v
+func (ec *executionContext) marshalNRelatedSubcontrolConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedSubcontrolConnection(ctx context.Context, sel ast.SelectionSet, v *model.RelatedSubcontrolConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._RelatedSubcontrolConnection(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOCloneControlInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCloneControlInput(ctx context.Context, v any) (*model.CloneControlInput, error) {

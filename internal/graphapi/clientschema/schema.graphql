@@ -8899,6 +8899,14 @@ type Control implements Node {
 	Returns the workflow event timeline for this control across all workflow instances
 	"""
 	workflowTimeline(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [WorkflowEventOrder!], where: WorkflowEventWhereInput, includeEmitFailures: Boolean): WorkflowEventConnection!
+	"""
+	relatedControls show the controls and frameworks mapped to this control
+	"""
+	relatedControls: RelatedControlConnection!
+	"""
+	relatedSubcontrols show the subcontrols and frameworks mapped to this control
+	"""
+	relatedSubcontrols: RelatedSubcontrolConnection!
 }
 """
 Return response for createBulkControl mutation
@@ -70583,10 +70591,6 @@ type RelatedControlConnection {
 	"""
 	edges: [RelatedControlEdge]
 	"""
-	Information to aid in pagination.
-	"""
-	pageInfo: PageInfo!
-	"""
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
@@ -70601,26 +70605,6 @@ type RelatedControlEdge {
 	node: Control!
 }
 """
-Ordering options for RelatedControl connections
-"""
-input RelatedControlOrder {
-	"""
-	The ordering direction.
-	"""
-	direction: OrderDirection! = ASC
-	"""
-	The field by which to order RelatedControl.
-	"""
-	field: RelatedControlOrderField!
-}
-"""
-Properties by which RelatedControl connections can be ordered.
-"""
-enum RelatedControlOrderField {
-	referenceFramework
-	systemOwned
-}
-"""
 A connection to a list of items.
 """
 type RelatedSubcontrolConnection {
@@ -70628,10 +70612,6 @@ type RelatedSubcontrolConnection {
 	A list of edges.
 	"""
 	edges: [RelatedSubcontrolEdge]
-	"""
-	Information to aid in pagination.
-	"""
-	pageInfo: PageInfo!
 	"""
 	Identifies the total count of items in the connection.
 	"""
@@ -70645,26 +70625,6 @@ type RelatedSubcontrolEdge {
 	The item at the end of the edge.
 	"""
 	node: Subcontrol!
-}
-"""
-Ordering options for RelatedSubcontrol connections
-"""
-input RelatedSubcontrolOrder {
-	"""
-	The ordering direction.
-	"""
-	direction: OrderDirection! = ASC
-	"""
-	The field by which to order RelatedSubcontrol.
-	"""
-	field: RelatedSubcontrolOrderField!
-}
-"""
-Properties by which RelatedSubcontrol connections can be ordered.
-"""
-enum RelatedSubcontrolOrderField {
-	referenceFramework
-	systemOwned
 }
 type Remediation implements Node {
 	id: ID!
@@ -79134,6 +79094,14 @@ type Subcontrol implements Node {
 		"""
 		where: IdentityHolderWhereInput
 	): IdentityHolderConnection!
+	"""
+	relatedControls show the controls and frameworks mapped to this control
+	"""
+	relatedControls: RelatedControlConnection!
+	"""
+	relatedSubcontrols show the subcontrols and frameworks mapped to this control
+	"""
+	relatedSubcontrols: RelatedSubcontrolConnection!
 	"""
 	Indicates if this subcontrol has pending changes awaiting workflow approval
 	"""

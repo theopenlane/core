@@ -2416,8 +2416,6 @@ type ReassignWorkflowAssignmentInput struct {
 type RelatedControlConnection struct {
 	// A list of edges.
 	Edges []*RelatedControlEdge `json:"edges,omitempty"`
-	// Information to aid in pagination.
-	PageInfo *entgql.PageInfo[string] `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
 	TotalCount int `json:"totalCount"`
 }
@@ -2428,20 +2426,10 @@ type RelatedControlEdge struct {
 	Node *generated.Control `json:"node"`
 }
 
-// Ordering options for RelatedControl connections
-type RelatedControlOrder struct {
-	// The ordering direction.
-	Direction entgql.OrderDirection `json:"direction"`
-	// The field by which to order RelatedControl.
-	Field RelatedControlOrderField `json:"field"`
-}
-
 // A connection to a list of items.
 type RelatedSubcontrolConnection struct {
 	// A list of edges.
 	Edges []*RelatedSubcontrolEdge `json:"edges,omitempty"`
-	// Information to aid in pagination.
-	PageInfo *entgql.PageInfo[string] `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
 	TotalCount int `json:"totalCount"`
 }
@@ -2450,14 +2438,6 @@ type RelatedSubcontrolConnection struct {
 type RelatedSubcontrolEdge struct {
 	// The item at the end of the edge.
 	Node *generated.Subcontrol `json:"node"`
-}
-
-// Ordering options for RelatedSubcontrol connections
-type RelatedSubcontrolOrder struct {
-	// The ordering direction.
-	Direction entgql.OrderDirection `json:"direction"`
-	// The field by which to order RelatedSubcontrol.
-	Field RelatedSubcontrolOrderField `json:"field"`
 }
 
 // Return response for createBulkRemediation mutation
@@ -3947,118 +3927,6 @@ func (e *GroupPermissionOrderField) UnmarshalJSON(b []byte) error {
 }
 
 func (e GroupPermissionOrderField) MarshalJSON() ([]byte, error) {
-	var buf bytes.Buffer
-	e.MarshalGQL(&buf)
-	return buf.Bytes(), nil
-}
-
-// Properties by which RelatedControl connections can be ordered.
-type RelatedControlOrderField string
-
-const (
-	RelatedControlOrderFieldReferenceFramework RelatedControlOrderField = "referenceFramework"
-	RelatedControlOrderFieldSystemOwned        RelatedControlOrderField = "systemOwned"
-)
-
-var AllRelatedControlOrderField = []RelatedControlOrderField{
-	RelatedControlOrderFieldReferenceFramework,
-	RelatedControlOrderFieldSystemOwned,
-}
-
-func (e RelatedControlOrderField) IsValid() bool {
-	switch e {
-	case RelatedControlOrderFieldReferenceFramework, RelatedControlOrderFieldSystemOwned:
-		return true
-	}
-	return false
-}
-
-func (e RelatedControlOrderField) String() string {
-	return string(e)
-}
-
-func (e *RelatedControlOrderField) UnmarshalGQL(v any) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = RelatedControlOrderField(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid RelatedControlOrderField", str)
-	}
-	return nil
-}
-
-func (e RelatedControlOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-func (e *RelatedControlOrderField) UnmarshalJSON(b []byte) error {
-	s, err := strconv.Unquote(string(b))
-	if err != nil {
-		return err
-	}
-	return e.UnmarshalGQL(s)
-}
-
-func (e RelatedControlOrderField) MarshalJSON() ([]byte, error) {
-	var buf bytes.Buffer
-	e.MarshalGQL(&buf)
-	return buf.Bytes(), nil
-}
-
-// Properties by which RelatedSubcontrol connections can be ordered.
-type RelatedSubcontrolOrderField string
-
-const (
-	RelatedSubcontrolOrderFieldReferenceFramework RelatedSubcontrolOrderField = "referenceFramework"
-	RelatedSubcontrolOrderFieldSystemOwned        RelatedSubcontrolOrderField = "systemOwned"
-)
-
-var AllRelatedSubcontrolOrderField = []RelatedSubcontrolOrderField{
-	RelatedSubcontrolOrderFieldReferenceFramework,
-	RelatedSubcontrolOrderFieldSystemOwned,
-}
-
-func (e RelatedSubcontrolOrderField) IsValid() bool {
-	switch e {
-	case RelatedSubcontrolOrderFieldReferenceFramework, RelatedSubcontrolOrderFieldSystemOwned:
-		return true
-	}
-	return false
-}
-
-func (e RelatedSubcontrolOrderField) String() string {
-	return string(e)
-}
-
-func (e *RelatedSubcontrolOrderField) UnmarshalGQL(v any) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = RelatedSubcontrolOrderField(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid RelatedSubcontrolOrderField", str)
-	}
-	return nil
-}
-
-func (e RelatedSubcontrolOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-func (e *RelatedSubcontrolOrderField) UnmarshalJSON(b []byte) error {
-	s, err := strconv.Unquote(string(b))
-	if err != nil {
-		return err
-	}
-	return e.UnmarshalGQL(s)
-}
-
-func (e RelatedSubcontrolOrderField) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
 	e.MarshalGQL(&buf)
 	return buf.Bytes(), nil

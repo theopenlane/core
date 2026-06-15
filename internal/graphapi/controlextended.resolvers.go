@@ -8,6 +8,7 @@ package graphapi
 import (
 	"context"
 	"fmt"
+	"maps"
 	"slices"
 
 	"entgo.io/contrib/entgql"
@@ -24,6 +25,172 @@ import (
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
+
+// RelatedControls is the resolver for the relatedControls field.
+func (r *controlResolver) RelatedControls(ctx context.Context, obj *generated.Control) (*model.RelatedControlConnection, error) {
+	emptyResult := &model.RelatedControlConnection{
+		Edges:      []*model.RelatedControlEdge{},
+		TotalCount: 0,
+	}
+
+	res, err := getControlMappings(ctx, obj.RefCode, obj.ReferenceFramework, nil)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting mapped controls")
+
+		return emptyResult, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "relatedcontrol"})
+	}
+
+	if len(res) == 0 {
+		return emptyResult, nil
+	}
+
+	allMappedControls := map[string]*generated.Control{}
+	allInOrgControlMappings := map[string]*generated.Control{}
+
+	frameworksInOrg, err := getStandardsInOrg(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting standards used in org")
+
+		return emptyResult, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "relatedcontrol"})
+	}
+
+	// get all controls first, and remove duplicates, skip controls where org does not have the framework
+	for _, r := range res {
+		for _, c := range r.Edges.FromControls {
+			// if the framework is not empty, and the framework is not used in the org, continue
+			if c.ReferenceFramework != nil && !slices.Contains(frameworksInOrg, *c.ReferenceFramework) {
+				continue
+			}
+
+			key := generateMapControlKey(c.RefCode, c.ReferenceFramework)
+			maps.Insert(allMappedControls, maps.All(map[string]*generated.Control{
+				key: c,
+			}))
+		}
+
+		for _, c := range r.Edges.ToControls {
+			// if the framework is not empty, and the framework is not used in the org, continue
+			if c.ReferenceFramework != nil && !slices.Contains(frameworksInOrg, *c.ReferenceFramework) {
+				continue
+			}
+
+			key := generateMapControlKey(c.RefCode, c.ReferenceFramework)
+			maps.Insert(allMappedControls, maps.All(map[string]*generated.Control{
+				key: c,
+			}))
+		}
+	}
+
+	for _, c := range allMappedControls {
+		includeSystemControlsInMapping := false
+
+		mapControl := getMappedControlInfo(ctx, c, obj.RefCode, obj.ReferenceFramework, includeSystemControlsInMapping)
+		if mapControl != nil {
+			maps.Insert(allInOrgControlMappings, maps.All(mapControl))
+		}
+	}
+
+	if len(allInOrgControlMappings) == 0 {
+		return emptyResult, nil
+	}
+
+	edgeResult := []*model.RelatedControlEdge{}
+	for _, c := range allInOrgControlMappings {
+		if c == nil {
+			continue
+		}
+
+		edgeResult = append(edgeResult, &model.RelatedControlEdge{Node: c})
+	}
+
+	return &model.RelatedControlConnection{
+		Edges:      edgeResult,
+		TotalCount: len(edgeResult),
+	}, err
+}
+
+// RelatedSubcontrols is the resolver for the relatedSubcontrols field.
+func (r *controlResolver) RelatedSubcontrols(ctx context.Context, obj *generated.Control) (*model.RelatedSubcontrolConnection, error) {
+	emptyResult := &model.RelatedSubcontrolConnection{
+		Edges:      []*model.RelatedSubcontrolEdge{},
+		TotalCount: 0,
+	}
+
+	res, err := getSubcontrolMappings(ctx, obj.RefCode, obj.ReferenceFramework, nil)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting mapped subcontrols")
+
+		return emptyResult, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "relatedsubcontrol"})
+	}
+
+	if len(res) == 0 {
+		return emptyResult, nil
+	}
+
+	allMappedSubcontrols := map[string]*generated.Subcontrol{}
+	allInOrgSubcontrolMappings := map[string]*generated.Subcontrol{}
+
+	frameworksInOrg, err := getStandardsInOrg(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting standards used in org")
+
+		return emptyResult, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "relatedsubcontrol"})
+	}
+
+	// get all controls first, and remove duplicates, skip subcontrols where org does not have the framework
+	for _, r := range res {
+		for _, c := range r.Edges.FromSubcontrols {
+			// if the framework is not empty, and the framework is not used in the org, continue
+			if c.ReferenceFramework != nil && !slices.Contains(frameworksInOrg, *c.ReferenceFramework) {
+				continue
+			}
+
+			key := generateMapControlKey(c.RefCode, c.ReferenceFramework)
+			maps.Insert(allMappedSubcontrols, maps.All(map[string]*generated.Subcontrol{
+				key: c,
+			}))
+		}
+
+		for _, c := range r.Edges.ToSubcontrols {
+			// if the framework is not empty, and the framework is not used in the org, continue
+			if c.ReferenceFramework != nil && !slices.Contains(frameworksInOrg, *c.ReferenceFramework) {
+				continue
+			}
+
+			key := generateMapControlKey(c.RefCode, c.ReferenceFramework)
+			maps.Insert(allMappedSubcontrols, maps.All(map[string]*generated.Subcontrol{
+				key: c,
+			}))
+		}
+	}
+
+	for _, c := range allMappedSubcontrols {
+		includeSystemControlsInMapping := false
+
+		mapControl := getMappedSubcontrolInfo(ctx, c, obj.RefCode, obj.ReferenceFramework, includeSystemControlsInMapping)
+		if mapControl != nil {
+			maps.Insert(allInOrgSubcontrolMappings, maps.All(mapControl))
+		}
+	}
+
+	if len(allInOrgSubcontrolMappings) == 0 {
+		return emptyResult, nil
+	}
+
+	edgeResult := []*model.RelatedSubcontrolEdge{}
+	for _, c := range allInOrgSubcontrolMappings {
+		if c == nil {
+			continue
+		}
+
+		edgeResult = append(edgeResult, &model.RelatedSubcontrolEdge{Node: c})
+	}
+
+	return &model.RelatedSubcontrolConnection{
+		Edges:      edgeResult,
+		TotalCount: len(edgeResult),
+	}, err
+}
 
 // CreateControlsByClone is the resolver for the createControlsByClone field.
 func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *model.CloneControlInput) (*model.ControlBulkCreatePayload, error) {
@@ -449,70 +616,12 @@ func (r *queryResolver) ControlsGroupByCategory(ctx context.Context, after *entg
 	return result, nil
 }
 
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//    it when you're done.
-//  - You have helper methods in this file. Move them out to keep these resolver files clean.
-/*
-	func (r *queryResolver) RelatedControls(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.MappedControlWhereInput) (*model.RelatedControlConnection, error) {
-	// set page limit if nothing was set
-	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
-
-	if orderBy == nil {
-		orderBy = []*generated.ControlOrder{
-			{
-				Field:     generated.ControlOrderFieldCreatedAt,
-				Direction: entgql.OrderDirectionDesc,
-			},
-		}
-	}
-
-	query, err := withTransactionalMutation(ctx).MappedControl.Query().Where(
-		mappedcontrol.HasFromControlsWith(
-			control.ID(""),
-		)).WithFromControls().WithToControls().CollectFields(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "relatedcontrol"})
-	}
-
-	res, err := query.Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-	// generated.WithRelatedControlOrder(orderBy),
-	// generated.WithRelatedControlFilter(where.Filter)
-	)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "relatedcontrol"})
-	}
-
-	// get unique controls
-	controlIDs := []string{}
-	for _, r := range res.Edges {
-		controlIDs = append(controlIDs, r.Node.ID)
-	}
-
-	uniqueControlIDs := lo.Uniq(controlIDs)
-
-	relatedControls, err := withTransactionalMutation(ctx).Control.Query().Where(
-		control.IDIn(uniqueControlIDs...),
-	).All(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "relatedcontrol"})
-	}
-
-	edgeResult := []*model.RelatedControlEdge{}
-	for _, c := range relatedControls {
-		edgeResult = append(edgeResult, &model.RelatedControlEdge{Node: c})
-	}
-
-	return &model.RelatedControlConnection{}, err
+// RelatedControls is the resolver for the relatedControls field.
+func (r *subcontrolResolver) RelatedControls(ctx context.Context, obj *generated.Subcontrol) (*model.RelatedControlConnection, error) {
+	panic(fmt.Errorf("not implemented: RelatedControls - relatedControls"))
 }
-func (r *queryResolver) RelatedSubcontrols(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.MappedControlWhereInput) (*model.RelatedControlConnection, error) {
-	return nil, nil
+
+// RelatedSubcontrols is the resolver for the relatedSubcontrols field.
+func (r *subcontrolResolver) RelatedSubcontrols(ctx context.Context, obj *generated.Subcontrol) (*model.RelatedSubcontrolConnection, error) {
+	panic(fmt.Errorf("not implemented: RelatedSubcontrols - relatedSubcontrols"))
 }
-*/
