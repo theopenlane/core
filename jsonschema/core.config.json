@@ -70,6 +70,9 @@
         },
         "defaulttenant": {
           "type": "string"
+        },
+        "applicationid": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
@@ -1054,6 +1057,9 @@
         },
         "redirecturl": {
           "type": "string"
+        },
+        "applicationid": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
@@ -1111,6 +1117,9 @@
           "type": "string"
         },
         "contentmode": {
+          "type": "string"
+        },
+        "applicationid": {
           "type": "string"
         }
       },

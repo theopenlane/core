@@ -11,4 +11,6 @@ type Config struct {
 	// DefaultTenant pins the admin consent flow to a specific tenant ID or domain (e.g. for local dev/testing)
 	// when empty the generic /organizations endpoint is used
 	DefaultTenant string `json:"defaulttenant" koanf:"defaulttenant"`
+	// ApplicationID is the application ID registered in azure, used in the well-known configuration for domain validation
+	ApplicationID string `json:"applicationid" koanf:"applicationid"`
 }

@@ -1692,6 +1692,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
 |**defaulttenant**|`string`|||
+|**applicationid**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="integrationsmicrosoftteams"></a>
@@ -1704,6 +1705,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**clientid**|`string`|||
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
+|**applicationid**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="integrationsonedrive"></a>
@@ -1717,6 +1719,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
 |**contentmode**|`string`|||
+|**applicationid**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="integrationsoidclocal"></a>
