@@ -29,7 +29,7 @@ type application struct {
 //	    }
 //	  ]
 //	}
-func (h *Handler) MSFTIdentityWellKnownHandler(ctx echo.Context, openapi *OpenAPIContext) error {
+func (h *Handler) MSFTIdentityWellKnownHandler(ctx echo.Context) error {
 	entraAppID := h.IntegrationsConfig.AzureEntraID.ApplicationID
 	oneDriveAppID := h.IntegrationsConfig.OneDrive.ApplicationID
 	teamsAppID := h.IntegrationsConfig.MicrosoftTeams.ApplicationID

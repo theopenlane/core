@@ -11,15 +11,15 @@ import (
 // https://<domain>/.well-known/microsoft-identity-association.json
 func registerMSFTIdentityWellKnownHandler(router *Router) (err error) {
 	config := Config{
-		Path:        "/.well-known/microsoft-identity-association.json",
-		Method:      http.MethodGet,
-		Name:        "MSFTIdentityWellKnown",
-		Description: "Microsoft Identity Association well-known configuration file",
-		Tags:        []string{"well-known", "msft", "azure"},
-		OperationID: "MSFTIdentityWellKnown",
-		Security:    handlers.PublicSecurity,
-		Middlewares: *publicEndpoint,
-		Handler:     router.Handler.MSFTIdentityWellKnownHandler,
+		Path:          "/.well-known/microsoft-identity-association.json",
+		Method:        http.MethodGet,
+		Name:          "MSFTIdentityWellKnown",
+		Description:   "Microsoft Identity Association well-known configuration file",
+		Tags:          []string{"well-known", "msft", "azure"},
+		OperationID:   "MSFTIdentityWellKnown",
+		Security:      handlers.PublicSecurity,
+		Middlewares:   *publicEndpoint,
+		SimpleHandler: router.Handler.MSFTIdentityWellKnownHandler,
 	}
 
 	return router.AddUnversionedHandlerRoute(config)
