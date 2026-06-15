@@ -18,4 +18,4 @@ type entity
     define parent_editor: can_edit from parent_context or can_edit_entity from parent_context or can_edit from parent
     define parent_viewer: can_view from parent_context or can_view_entity from parent_context or can_view from parent
     define parent_context: [organization]
-    define parent: [user, service, organization, trust_center_entity]
+    define parent: [user, service, trust_center_entity]
