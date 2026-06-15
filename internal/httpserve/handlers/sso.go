@@ -149,6 +149,17 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
+	// OIDC has already verified the user's email. Marking it confirmed before
+	// session generation triggers the existing matching-domain auto-join hook.
+	if !entUser.Edges.Setting.EmailConfirmed {
+		if err := h.setEmailConfirmed(ctxWithToken, entUser); err != nil {
+			metrics.RecordLogin(false)
+			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to set SSO email as verified")
+
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		}
+	}
+
 	// set the context for the authenticated user
 	userCtx := setAuthenticatedContext(ctxWithToken, entUser)
 
