@@ -335,6 +335,9 @@ func (suite *HandlerTestSuite) SetupTest() {
 	err = db.Job.TruncateRiverTables(ctx)
 	require.NoError(t, err)
 
+	// reset mock email sender so messages don't bleed across tests
+	suite.mockEmailSender().Reset()
+
 	// add db to test client and wire integration runtime so email dispatch works
 	db.IntegrationsRuntime = suite.sharedIntegrationsRT
 	suite.db = db
