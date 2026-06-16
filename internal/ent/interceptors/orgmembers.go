@@ -5,12 +5,16 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 
+	fgamodel "github.com/theopenlane/core/fga/model"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -74,9 +78,66 @@ func InterceptorOrgMember() ent.Interceptor {
 				return v, nil
 			}
 
-			return dedupeOrgMembers(ctx, members)
+			res, err := dedupeOrgMembers(ctx, members)
+			if err != nil {
+				return nil, err
+			}
+
+			if !graphutils.CheckForRequestedField(ctx, "additionalRoles") {
+				return res, nil
+			}
+
+			// get additional roles per result
+			for i, r := range res {
+				res[i].AdditionalRoles, err = getFunctionalRoles(ctx, r.UserID)
+				if err != nil {
+					return nil, err
+				}
+			}
+
+			return res, nil
 		})
 	})
+}
+
+func getFunctionalRoles(ctx context.Context, userID string) ([]string, error) {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return []string{}, nil
+	}
+
+	roles, err := fgamodel.OrganizationRoles()
+	if err != nil {
+		return []string{}, err
+	}
+
+	ids := make([]string, 0, len(roles))
+	for _, role := range roles {
+		ids = append(ids, role.ID)
+	}
+
+	req := fgax.ListAccess{
+		SubjectType: auth.UserSubjectType,
+		SubjectID:   userID,
+		ObjectID:    caller.OrganizationID,
+		ObjectType:  fgax.Kind(generated.TypeOrganization),
+		Relations:   ids,
+		Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
+	}
+
+	client := utils.AuthzClientFromContext(ctx)
+	if client == nil {
+		return []string{}, nil
+	}
+
+	assignedRoles, err := client.ListRelations(ctx, req)
+	if err != nil {
+		return []string{}, err
+	}
+
+	functionRoles := fgamodel.GetOrganizationRoleStrings(roles, assignedRoles)
+
+	return functionRoles, nil
 }
 
 // dedupeOrgMembers removes duplicate org members from the list

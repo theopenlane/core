@@ -339,6 +339,28 @@ func OrganizationRoles() ([]modelparse.OrganizationRole, error) {
 	return roles, nil
 }
 
+func FilterOrganizationRoles(roles []modelparse.OrganizationRole, assigned []string) []modelparse.OrganizationRole {
+	filtered := make([]modelparse.OrganizationRole, 0, len(assigned))
+	for _, role := range roles {
+		if slices.Contains(assigned, role.ID) {
+			filtered = append(filtered, role)
+		}
+	}
+
+	return filtered
+}
+
+func GetOrganizationRoleStrings(roles []modelparse.OrganizationRole, assigned []string) []string {
+	filtered := make([]string, 0, len(assigned))
+	for _, role := range roles {
+		if slices.Contains(assigned, role.ID) {
+			filtered = append(filtered, role.Name)
+		}
+	}
+
+	return filtered
+}
+
 func getRoleIDs() ([]string, error) {
 	roles, err := OrganizationRoles()
 	if err != nil {

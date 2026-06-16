@@ -52503,6 +52503,7 @@ type OrgMembership implements Node {
 		"""
 		where: EventWhereInput
 	): EventConnection!
+	additionalRoles: [String!]
 }
 """
 Return response for createBulkOrgMembership mutation

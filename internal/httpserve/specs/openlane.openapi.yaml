@@ -2274,6 +2274,23 @@ paths:
             tags:
                 - well-known
                 - authentication
+    /.well-known/microsoft-identity-association.json:
+        get:
+            description: Microsoft Identity Association well-known configuration file
+            operationId: MSFTIdentityWellKnown
+            responses:
+                "200":
+                    content:
+                        application/octet-stream:
+                            schema:
+                                type: string
+                    description: Static file content
+            security: []
+            summary: MSFTIdentityWellKnown
+            tags:
+                - well-known
+                - msft
+                - azure
     /.well-known/security.txt:
         get:
             description: Security contact information and vulnerability disclosure policy
@@ -4655,6 +4672,8 @@ tags:
       name: audit logs
     - description: JWKS
       name: authentication
+    - description: MSFTIdentityWellKnown
+      name: azure
     - description: ProductCatalog
       name: catalog
     - description: AcmeSolver
@@ -4681,6 +4700,8 @@ tags:
       name: history
     - description: EndImpersonation
       name: impersonation
+    - description: MSFTIdentityWellKnown
+      name: msft
     - description: GitHubCallback
       name: oauth
     - description: OrganizationInviteAccept

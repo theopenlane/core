@@ -38,6 +38,10 @@ type OrgMembership struct {
 	// The values are being populated by the OrgMembershipQuery when eager-loading is set.
 	Edges        OrgMembershipEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// AdditionalRoles are the additional functional roles the user is assigned on top of their
+	// base organization role
+	AdditionalRoles []string `json:"additionalRoles,omitempty"`
 }
 
 // OrgMembershipEdges holds the relations/edges for other nodes in the graph.
