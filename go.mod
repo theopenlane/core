@@ -372,7 +372,7 @@ require (
 	github.com/riverqueue/river/rivershared v0.38.0 // indirect
 	github.com/riverqueue/rivercontrib/otelriver v0.8.0 // indirect
 	github.com/sagikazarmark/locafero v0.12.0 // indirect
-	github.com/samber/mo v1.16.0
+	github.com/samber/mo v1.17.0
 	github.com/segmentio/asm v1.2.1 // indirect
 	github.com/sethvargo/go-retry v0.3.0 // indirect
 	github.com/sirupsen/logrus v1.9.4 // indirect
