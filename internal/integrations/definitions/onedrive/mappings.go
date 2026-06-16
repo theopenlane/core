@@ -10,7 +10,7 @@ import (
 var mapExprInternalPolicy = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingInternalPolicyName, Expr: `'name' in payload && payload.name != "" ? payload.name : "Untitled Policy"`},
 	{Key: integrationgenerated.IntegrationMappingInternalPolicyExternalFileID, Expr: `'id' in payload ? payload.id : ""`},
-	{Key: integrationgenerated.IntegrationMappingInternalPolicyURL, Expr: `'webUrl' in payload ? payload.webUrl : ""`},
+	{Key: integrationgenerated.IntegrationMappingInternalPolicyURL, Expr: `'webUrl' in payload ? payload.webUrl : null`},
 	{Key: integrationgenerated.IntegrationMappingInternalPolicyManagementMode, Expr: `"INTEGRATION"`},
 	{Key: integrationgenerated.IntegrationMappingInternalPolicyStatus, Expr: `"DRAFT"`},
 })

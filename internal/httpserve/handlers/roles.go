@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"slices"
 
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
@@ -99,7 +98,7 @@ func (h *Handler) AccountRolesMeHandler(ctx echo.Context, openapi *OpenAPIContex
 
 	return h.Success(ctx, models.AccountRolesMeReply{
 		Reply:          rout.Reply{Success: true},
-		Roles:          convertOrgRolesToOpenAPI(filterOrganizationRoles(roles, assignedRoles)),
+		Roles:          convertOrgRolesToOpenAPI(fgamodel.FilterOrganizationRoles(roles, assignedRoles)),
 		OrganizationID: orgID,
 	}, openapi)
 }
@@ -179,17 +178,6 @@ func convertOrgRolesToOpenAPI(roles []modelparse.OrganizationRole) []models.Orga
 	}
 
 	return resp
-}
-
-func filterOrganizationRoles(roles []modelparse.OrganizationRole, assigned []string) []modelparse.OrganizationRole {
-	filtered := make([]modelparse.OrganizationRole, 0, len(assigned))
-	for _, role := range roles {
-		if slices.Contains(assigned, role.ID) {
-			filtered = append(filtered, role)
-		}
-	}
-
-	return filtered
 }
 
 func convertOrgRolesToTuples(orgID, role string, userIDs, groupIDs []string) []fgax.TupleKey {
