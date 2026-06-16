@@ -5,6 +5,7 @@ import (
 
 	"google.golang.org/api/drive/v3"
 
+	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -17,14 +18,20 @@ var (
 	// driveCredential is the credential slot for Google Drive OAuth credentials
 	_, driveCredential = providerkit.CredentialSchema[googleDriveCred]()
 	// driveClient is the client ref for the Google Drive SDK
-	driveClient = types.NewClientRef[*drive.Service]()
+	driveClient = types.NewClientRef[DriveClient]()
 	// healthCheckSchema is the operation ref for the health check operation
 	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// documentExportSchema is the operation ref for the document export operation
-	documentExportSchema, documentExportOperation = providerkit.OperationSchema[DocumentExport]()
+	documentExportSchema, documentExportOperation = providerkit.OperationSchema[operations.DocumentExport]()
 	// folderSyncSchema is the operation ref for the folder sync operation
 	folderSyncSchema, folderSyncOperation = providerkit.OperationSchema[FolderSync]()
 )
+
+// DriveClient wraps the client for Google operations
+type DriveClient struct {
+	// Svc is the authenticated Google Drive service client
+	Svc *drive.Service
+}
 
 // googleDriveCred holds the provider-owned credential material for a Google Drive installation
 type googleDriveCred struct {

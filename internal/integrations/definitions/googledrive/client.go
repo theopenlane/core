@@ -55,5 +55,5 @@ func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, e
 		return nil, ErrDriveServiceBuildFailed
 	}
 
-	return svc, nil
+	return DriveClient{Svc: svc}, nil
 }

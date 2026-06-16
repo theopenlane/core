@@ -27,4 +27,12 @@ var (
 	ErrCredentialEncode = errors.New("azureentraid: credential encode failed")
 	// ErrCredentialDecode indicates the credential could not be deserialized
 	ErrCredentialDecode = errors.New("azureentraid: credential decode failed")
+	// ErrConsentStateGeneration indicates the CSRF state could not be generated for the admin consent flow
+	ErrConsentStateGeneration = errors.New("azureentraid: admin consent state generation failed")
+	// ErrConsentStateInvalid indicates the stored admin consent start state could not be decoded
+	ErrConsentStateInvalid = errors.New("azureentraid: admin consent state invalid")
+	// ErrConsentStateMismatch indicates the callback state does not match the stored CSRF state
+	ErrConsentStateMismatch = errors.New("azureentraid: admin consent state mismatch")
+	// ErrConsentDenied indicates the admin denied or cancelled the consent request
+	ErrConsentDenied = errors.New("azureentraid: admin consent denied")
 )

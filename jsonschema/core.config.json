@@ -67,6 +67,12 @@
         },
         "redirecturl": {
           "type": "string"
+        },
+        "defaulttenant": {
+          "type": "string"
+        },
+        "applicationid": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
@@ -160,6 +166,9 @@
         },
         "microsoftteams": {
           "$ref": "#/$defs/microsoftteams.Config"
+        },
+        "onedrive": {
+          "$ref": "#/$defs/onedrive.Config"
         },
         "oidclocal": {
           "$ref": "#/$defs/oidclocal.Config"
@@ -1048,6 +1057,9 @@
         },
         "redirecturl": {
           "type": "string"
+        },
+        "applicationid": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
@@ -1087,6 +1099,27 @@
           "type": "string"
         },
         "redirecturl": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "onedrive.Config": {
+      "properties": {
+        "clientid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "redirecturl": {
+          "type": "string"
+        },
+        "contentmode": {
+          "type": "string"
+        },
+        "applicationid": {
           "type": "string"
         }
       },
