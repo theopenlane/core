@@ -106,6 +106,18 @@ func getFunctionalRoles(ctx context.Context, userID string) ([]string, error) {
 		return []string{}, nil
 	}
 
+	return GetFunctionalRolesForSubject(ctx, auth.UserSubjectType, userID, caller.OrganizationID)
+}
+
+// GetFunctionalRolesForSubject returns the display names of the functional/organization roles
+// assigned to the given subject on the organization. The subject is a user or a group tupleset
+// (e.g. subjectType "group" with subjectID "<groupID>#member"), matching how the roles were assigned.
+func GetFunctionalRolesForSubject(ctx context.Context, subjectType, subjectID, orgID string) ([]string, error) {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return []string{}, nil
+	}
+
 	roles, err := fgamodel.OrganizationRoles()
 	if err != nil {
 		return []string{}, err
@@ -117,9 +129,9 @@ func getFunctionalRoles(ctx context.Context, userID string) ([]string, error) {
 	}
 
 	req := fgax.ListAccess{
-		SubjectType: auth.UserSubjectType,
-		SubjectID:   userID,
-		ObjectID:    caller.OrganizationID,
+		SubjectType: subjectType,
+		SubjectID:   subjectID,
+		ObjectID:    orgID,
 		ObjectType:  fgax.Kind(generated.TypeOrganization),
 		Relations:   ids,
 		Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),

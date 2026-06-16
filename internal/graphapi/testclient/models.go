@@ -18251,6 +18251,8 @@ type Group struct {
 	Members                            *GroupMembershipConnection       `json:"members"`
 	// permissions the group provides
 	Permissions *GroupPermissionConnection `json:"permissions"`
+	// additionalRoles are the functional/organization roles assigned to the group on top of object permissions
+	AdditionalRoles []string `json:"additionalRoles,omitempty"`
 }
 
 func (Group) IsNode() {}
