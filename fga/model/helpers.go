@@ -339,6 +339,8 @@ func OrganizationRoles() ([]modelparse.OrganizationRole, error) {
 	return roles, nil
 }
 
+// FilterOrganizationRoles ensures the assigned role is an organizational role and returns
+// a filtered list of OrganizationRoles
 func FilterOrganizationRoles(roles []modelparse.OrganizationRole, assigned []string) []modelparse.OrganizationRole {
 	filtered := make([]modelparse.OrganizationRole, 0, len(assigned))
 	for _, role := range roles {
@@ -350,6 +352,7 @@ func FilterOrganizationRoles(roles []modelparse.OrganizationRole, assigned []str
 	return filtered
 }
 
+// GetOrganizationRoleStrings takes assigned roles and filters non organization roles and returns a string list of role names
 func GetOrganizationRoleStrings(roles []modelparse.OrganizationRole, assigned []string) []string {
 	filtered := make([]string, 0, len(assigned))
 	for _, role := range roles {

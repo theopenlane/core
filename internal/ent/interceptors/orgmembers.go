@@ -135,9 +135,7 @@ func getFunctionalRoles(ctx context.Context, userID string) ([]string, error) {
 		return []string{}, err
 	}
 
-	functionRoles := fgamodel.GetOrganizationRoleStrings(roles, assignedRoles)
-
-	return functionRoles, nil
+	return fgamodel.GetOrganizationRoleStrings(roles, assignedRoles), nil
 }
 
 // dedupeOrgMembers removes duplicate org members from the list
