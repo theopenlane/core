@@ -182,5 +182,9 @@ func driveItemToPayload(item models.DriveItemable) driveItemPayload {
 		p.CreatedDateTime = *item.GetCreatedDateTime()
 	}
 
+	if item.GetWebUrl() != nil {
+		p.WebURL = *item.GetWebUrl()
+	}
+
 	return p
 }
