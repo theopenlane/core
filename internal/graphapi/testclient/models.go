@@ -18251,6 +18251,8 @@ type Group struct {
 	Members                            *GroupMembershipConnection       `json:"members"`
 	// permissions the group provides
 	Permissions *GroupPermissionConnection `json:"permissions"`
+	// additionalRoles are the functional/organization roles assigned to the group on top of object permissions
+	AdditionalRoles []string `json:"additionalRoles,omitempty"`
 }
 
 func (Group) IsNode() {}
@@ -25144,17 +25146,18 @@ type OrgMembersInput struct {
 }
 
 type OrgMembership struct {
-	ID             string           `json:"id"`
-	CreatedAt      *time.Time       `json:"createdAt,omitempty"`
-	UpdatedAt      *time.Time       `json:"updatedAt,omitempty"`
-	CreatedBy      *string          `json:"createdBy,omitempty"`
-	UpdatedBy      *string          `json:"updatedBy,omitempty"`
-	Role           enums.Role       `json:"role"`
-	OrganizationID string           `json:"organizationID"`
-	UserID         string           `json:"userID"`
-	Organization   *Organization    `json:"organization"`
-	User           *User            `json:"user"`
-	Events         *EventConnection `json:"events"`
+	ID              string           `json:"id"`
+	CreatedAt       *time.Time       `json:"createdAt,omitempty"`
+	UpdatedAt       *time.Time       `json:"updatedAt,omitempty"`
+	CreatedBy       *string          `json:"createdBy,omitempty"`
+	UpdatedBy       *string          `json:"updatedBy,omitempty"`
+	Role            enums.Role       `json:"role"`
+	OrganizationID  string           `json:"organizationID"`
+	UserID          string           `json:"userID"`
+	Organization    *Organization    `json:"organization"`
+	User            *User            `json:"user"`
+	Events          *EventConnection `json:"events"`
+	AdditionalRoles []string         `json:"additionalRoles,omitempty"`
 }
 
 func (OrgMembership) IsNode() {}

@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // HealthCheck holds the result of an Azure Entra ID health check
@@ -28,6 +29,7 @@ func (HealthCheck) Run(ctx context.Context, cred azcore.TokenCredential) (json.R
 		Scopes: []string{graphScope},
 	})
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("azure token acquisition failed")
 		return nil, ErrTokenAcquireFailed
 	}
 

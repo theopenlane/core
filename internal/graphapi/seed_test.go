@@ -5,6 +5,7 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"gotest.tools/v3/assert"
@@ -12,6 +13,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	fgamodel "github.com/theopenlane/core/fga/model"
+	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	coreutils "github.com/theopenlane/core/internal/testutils"
@@ -323,4 +325,31 @@ func (suite *GraphTestSuite) seedFreshOrgUsers(t *testing.T) *testOrgUsers {
 		adminApiClient: apiTokenClient,
 		adminPatClient: adminPersonalAccessTokenClient,
 	}
+}
+
+// addFunctionalRoleForUser adds the relations for the user in the organization by
+// adding the tuples to FGA
+func (suite *GraphTestSuite) addFunctionalRoleForUser(ctx context.Context, t *testing.T, userID, orgID string, relations []string) {
+	t.Helper()
+
+	tuples := []fgax.TupleKey{}
+
+	for _, rel := range relations {
+		tuple := fgax.TupleKey{
+			Subject: fgax.Entity{
+				Kind:       fgax.Kind(generated.TypeUser),
+				Identifier: userID,
+			},
+			Object: fgax.Entity{
+				Kind:       fgax.Kind(generated.TypeOrganization),
+				Identifier: orgID,
+			},
+			Relation: fgax.Relation(rel),
+		}
+
+		tuples = append(tuples, tuple)
+	}
+
+	_, err := suite.client.db.Authz.WriteTupleKeys(ctx, tuples, nil)
+	require.NoError(t, err)
 }
