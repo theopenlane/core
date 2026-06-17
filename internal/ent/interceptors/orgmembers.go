@@ -142,7 +142,7 @@ func GetFunctionalRolesForSubject(ctx context.Context, subjectType, subjectID, o
 		return []string{}, nil
 	}
 
-	assignedRoles, err := client.ListRelations(ctx, req)
+	assignedRoles, err := client.ListRelations(ctx, req, fgax.WithHighConsistency())
 	if err != nil {
 		return []string{}, err
 	}
