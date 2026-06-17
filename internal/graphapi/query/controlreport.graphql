@@ -1,0 +1,205 @@
+query GetAllControlReports {
+  controlReports {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        id
+        refCode
+        status
+        referenceFramework
+        category
+        subcategory
+        relatedControls {
+          id
+          refCode
+          referenceFramework
+          isSubcontrol
+        }
+        evidenceStatus {
+          totalCount
+          worstStatus
+          approvedCount
+          countByStatus {
+            status
+            totalCount
+          }
+        }
+        linkedPolicies {
+          totalCount
+          internalPolicies {
+            id
+            name
+            status
+          }
+        }
+        subcontrols {
+          id
+          refCode
+          status
+          referenceFramework
+          relatedControls {
+            id
+            refCode
+            referenceFramework
+            isSubcontrol
+          }
+          evidenceStatus {
+            totalCount
+            worstStatus
+          }
+          linkedPolicies {
+            totalCount
+            internalPolicies {
+              id
+              name
+              status
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query GetControlReports($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [ControlReportOrder!], $where: ControlWhereInput) {
+  controlReports(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+    where: $where
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        id
+        refCode
+        status
+        referenceFramework
+        category
+        subcategory
+        relatedControls {
+          id
+          refCode
+          referenceFramework
+          isSubcontrol
+        }
+        evidenceStatus {
+          totalCount
+          worstStatus
+          approvedCount
+          countByStatus {
+            status
+            totalCount
+          }
+        }
+        linkedPolicies {
+          totalCount
+          internalPolicies {
+            id
+            name
+            status
+          }
+        }
+        subcontrols {
+          id
+          refCode
+          status
+          referenceFramework
+          relatedControls {
+            id
+            refCode
+            referenceFramework
+            isSubcontrol
+          }
+          evidenceStatus {
+            totalCount
+            worstStatus
+          }
+          linkedPolicies {
+            totalCount
+            internalPolicies {
+              id
+              name
+              status
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query GetControlReportsByCategory($where: ControlWhereInput) {
+  controlReportsByCategory(where: $where) {
+    category
+    totalCount
+    controls {
+      id
+      refCode
+      status
+      referenceFramework
+      category
+      relatedControls {
+        id
+        refCode
+        referenceFramework
+        isSubcontrol
+      }
+      evidenceStatus {
+        totalCount
+        worstStatus
+      }
+      linkedPolicies {
+        totalCount
+        internalPolicies {
+          id
+          name
+          status
+        }
+      }
+      subcontrols {
+        id
+        refCode
+        status
+        referenceFramework
+        relatedControls {
+          id
+          refCode
+          referenceFramework
+          isSubcontrol
+        }
+        evidenceStatus {
+          totalCount
+          worstStatus
+          approvedCount
+          countByStatus {
+            status
+            totalCount
+          }
+        }
+        linkedPolicies {
+          totalCount
+          internalPolicies {
+            id
+            name
+            status
+          }
+        }
+      }
+    }
+  }
+}

@@ -228,6 +228,13 @@ type ControlEvidence {
   the most severe evidence status among all linked evidence items
   """
   worstStatus: EvidenceEvidenceStatus
+  approvedCount: Int!
+  countByStatus: [EvidenceCountByStatus!]
+}
+
+type EvidenceCountByStatus {
+  status: EvidenceEvidenceStatus!
+  totalCount: Int!
 }
 
 """

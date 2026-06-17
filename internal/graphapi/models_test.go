@@ -298,6 +298,7 @@ type ControlBuilder struct {
 	AllFields   bool
 	Category    string
 	Subcategory string
+	SystemOwned *bool
 }
 
 type SubcontrolBuilder struct {
@@ -334,6 +335,7 @@ type EvidenceBuilder struct {
 	ProgramID   string
 	ControlID   string
 	IncludeFile bool
+	Status      *enums.EvidenceStatus
 }
 
 type StandardBuilder struct {
@@ -1361,7 +1363,7 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 	}
 
 	mutation := c.client.db.Control.Create().
-		SetRefCode(c.RefCode).SetTitle(c.Title)
+		SetRefCode(c.RefCode).SetTitle(c.Title).SetNillableSystemOwned(c.SystemOwned)
 
 	if c.ProgramID != "" {
 		mutation.AddProgramIDs(c.ProgramID)
@@ -1489,7 +1491,8 @@ func (e *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Eviden
 
 	mutation := e.client.db.Evidence.Create().
 		SetCreationDate(models.DateTime(time.Now().Add(-time.Minute))).
-		SetName(e.Name)
+		SetName(e.Name).
+		SetNillableStatus(e.Status)
 
 	if e.ProgramID != "" {
 		mutation.AddProgramIDs(e.ProgramID)

@@ -511,7 +511,9 @@ type ControlEvidence struct {
 	// total number of evidence items linked to the control
 	TotalCount int `json:"totalCount"`
 	// the most severe evidence status among all linked evidence items
-	WorstStatus *enums.EvidenceStatus `json:"worstStatus,omitempty"`
+	WorstStatus   *enums.EvidenceStatus    `json:"worstStatus,omitempty"`
+	ApprovedCount int                      `json:"approvedCount"`
+	CountByStatus []*EvidenceCountByStatus `json:"countByStatus,omitempty"`
 }
 
 // ControlFieldDiff describes a single field that differs between two control revisions
@@ -1321,6 +1323,11 @@ type EvidenceBulkUpdatePayload struct {
 	Evidences []*generated.Evidence `json:"evidences,omitempty"`
 	// IDs of the updated evidence
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+type EvidenceCountByStatus struct {
+	Status     enums.EvidenceStatus `json:"status"`
+	TotalCount int                  `json:"totalCount"`
 }
 
 // Return response for createEvidence mutation

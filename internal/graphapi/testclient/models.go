@@ -4646,7 +4646,9 @@ type ControlEvidence struct {
 	// total number of evidence items linked to the control
 	TotalCount int64 `json:"totalCount"`
 	// the most severe evidence status among all linked evidence items
-	WorstStatus *enums.EvidenceStatus `json:"worstStatus,omitempty"`
+	WorstStatus   *enums.EvidenceStatus    `json:"worstStatus,omitempty"`
+	ApprovedCount int64                    `json:"approvedCount"`
+	CountByStatus []*EvidenceCountByStatus `json:"countByStatus,omitempty"`
 }
 
 // ControlFieldDiff describes a single field that differs between two control revisions
@@ -15842,6 +15844,11 @@ type EvidenceConnection struct {
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
 	TotalCount int64 `json:"totalCount"`
+}
+
+type EvidenceCountByStatus struct {
+	Status     enums.EvidenceStatus `json:"status"`
+	TotalCount int64                `json:"totalCount"`
 }
 
 // Return response for createEvidence mutation

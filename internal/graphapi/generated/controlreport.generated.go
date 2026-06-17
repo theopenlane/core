@@ -77,6 +77,61 @@ func (ec *executionContext) fieldContext_ControlEvidence_worstStatus(_ context.C
 	return graphql.NewScalarFieldContext("ControlEvidence", field, false, false, errors.New("field of type EvidenceEvidenceStatus does not have child fields"))
 }
 
+func (ec *executionContext) _ControlEvidence_approvedCount(ctx context.Context, field graphql.CollectedField, obj *model.ControlEvidence) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlEvidence_approvedCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ApprovedCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ControlEvidence_approvedCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlEvidence", field, false, false, errors.New("field of type Int does not have child fields"))
+}
+
+func (ec *executionContext) _ControlEvidence_countByStatus(ctx context.Context, field graphql.CollectedField, obj *model.ControlEvidence) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlEvidence_countByStatus(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CountByStatus, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*model.EvidenceCountByStatus) graphql.Marshaler {
+			return ec.marshalOEvidenceCountByStatus2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceCountByStatusᚄ(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlEvidence_countByStatus(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ControlEvidence",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_EvidenceCountByStatus(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ControlInfo_id(ctx context.Context, field graphql.CollectedField, obj *model.ControlInfo) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1043,6 +1098,52 @@ func (ec *executionContext) fieldContext_ControlReportEdge_cursor(_ context.Cont
 	return graphql.NewScalarFieldContext("ControlReportEdge", field, false, false, errors.New("field of type Cursor does not have child fields"))
 }
 
+func (ec *executionContext) _EvidenceCountByStatus_status(ctx context.Context, field graphql.CollectedField, obj *model.EvidenceCountByStatus) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EvidenceCountByStatus_status(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Status, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v enums.EvidenceStatus) graphql.Marshaler {
+			return ec.marshalNEvidenceEvidenceStatus2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐEvidenceStatus(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EvidenceCountByStatus_status(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EvidenceCountByStatus", field, false, false, errors.New("field of type EvidenceEvidenceStatus does not have child fields"))
+}
+
+func (ec *executionContext) _EvidenceCountByStatus_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.EvidenceCountByStatus) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EvidenceCountByStatus_totalCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EvidenceCountByStatus_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EvidenceCountByStatus", field, false, false, errors.New("field of type Int does not have child fields"))
+}
+
 func (ec *executionContext) _PolicySummary_id(ctx context.Context, field graphql.CollectedField, obj *model.PolicySummary) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1183,6 +1284,13 @@ func (ec *executionContext) _ControlEvidence(ctx context.Context, sel ast.Select
 			}
 		case "worstStatus":
 			out.Values[i] = ec._ControlEvidence_worstStatus(ctx, field, obj)
+		case "approvedCount":
+			out.Values[i] = ec._ControlEvidence_approvedCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "countByStatus":
+			out.Values[i] = ec._ControlEvidence_countByStatus(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -1512,6 +1620,50 @@ func (ec *executionContext) _ControlReportEdge(ctx context.Context, sel ast.Sele
 	return out
 }
 
+var evidenceCountByStatusImplementors = []string{"EvidenceCountByStatus"}
+
+func (ec *executionContext) _EvidenceCountByStatus(ctx context.Context, sel ast.SelectionSet, obj *model.EvidenceCountByStatus) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, evidenceCountByStatusImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("EvidenceCountByStatus")
+		case "status":
+			out.Values[i] = ec._EvidenceCountByStatus_status(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._EvidenceCountByStatus_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
+
+	for label, dfs := range deferred {
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var policySummaryImplementors = []string{"PolicySummary", "Node"}
 
 func (ec *executionContext) _PolicySummary(ctx context.Context, sel ast.SelectionSet, obj *model.PolicySummary) graphql.Marshaler {
@@ -1656,6 +1808,16 @@ func (ec *executionContext) marshalNControlReportOrderField2githubᚗcomᚋtheop
 	return v
 }
 
+func (ec *executionContext) marshalNEvidenceCountByStatus2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceCountByStatus(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceCountByStatus) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._EvidenceCountByStatus(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNPolicySummary2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPolicySummary(ctx context.Context, sel ast.SelectionSet, v *model.PolicySummary) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -1761,6 +1923,25 @@ func (ec *executionContext) unmarshalOControlReportOrder2ᚕᚖgithubᚗcomᚋth
 		}
 	}
 	return res, nil
+}
+
+func (ec *executionContext) marshalOEvidenceCountByStatus2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceCountByStatusᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.EvidenceCountByStatus) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNEvidenceCountByStatus2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceCountByStatus(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) marshalOPolicySummary2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPolicySummaryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.PolicySummary) graphql.Marshaler {

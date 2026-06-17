@@ -220,113 +220,221 @@ func processMappedControlResults(ctx context.Context, result []*generated.Mapped
 	return allControls, nil
 }
 
-func getEvidenceStatus(ctx context.Context, c *model.ControlReport, isSubcontrol bool) error {
-	orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
-	if err != nil {
-		return err
+// collectAllEntityIDs returns deduplicated control and subcontrol IDs referenced by
+// the reports, including IDs drawn from each report's RelatedControls.
+func collectAllEntityIDs(reports []*model.ControlReport) (controlIDs, subcontrolIDs []string) {
+	seenC := map[string]struct{}{}
+	seenSC := map[string]struct{}{}
+
+	addControl := func(id string) {
+		if _, ok := seenC[id]; !ok {
+			seenC[id] = struct{}{}
+			controlIDs = append(controlIDs, id)
+		}
 	}
-
-	controlIDs := []string{}
-	subcontrolIDs := []string{}
-
-	if isSubcontrol {
-		subcontrolIDs = append(subcontrolIDs, c.ID)
-	} else {
-		controlIDs = append(controlIDs, c.ID)
-	}
-
-	for _, rc := range c.RelatedControls {
-		if rc.IsSubcontrol {
-			subcontrolIDs = append(subcontrolIDs, rc.ID)
-		} else {
-			controlIDs = append(controlIDs, rc.ID)
+	addSubcontrol := func(id string) {
+		if _, ok := seenSC[id]; !ok {
+			seenSC[id] = struct{}{}
+			subcontrolIDs = append(subcontrolIDs, id)
 		}
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	for _, r := range reports {
+		addControl(r.ID)
+		for _, rc := range r.RelatedControls {
+			if rc.IsSubcontrol {
+				addSubcontrol(rc.ID)
+			} else {
+				addControl(rc.ID)
+			}
+		}
+		for _, sc := range r.Subcontrols {
+			addSubcontrol(sc.ID)
+			for _, rc := range sc.RelatedControls {
+				if rc.IsSubcontrol {
+					addSubcontrol(rc.ID)
+				} else {
+					addControl(rc.ID)
+				}
+			}
+		}
+	}
+	return
+}
 
-	edgePredicates := []predicate.Evidence{}
+// buildEvidenceMap fetches all evidence linked to the given entity IDs in one query
+// and returns a map of entity ID to the evidence records linked to that entity.
+func buildEvidenceMap(ctx context.Context, controlIDs, subcontrolIDs []string) (map[string][]*generated.Evidence, error) {
+	if len(controlIDs) == 0 && len(subcontrolIDs) == 0 {
+		return map[string][]*generated.Evidence{}, nil
+	}
+
+	orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	// crate evidence edges for controls and subcontrols
+	edgePredicates := make([]predicate.Evidence, 0, 2) //nolint:mnd
 	if len(controlIDs) > 0 {
 		edgePredicates = append(edgePredicates, evidence.HasControlsWith(control.IDIn(controlIDs...)))
 	}
-
 	if len(subcontrolIDs) > 0 {
 		edgePredicates = append(edgePredicates, evidence.HasSubcontrolsWith(subcontrol.IDIn(subcontrolIDs...)))
 	}
 
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
 	evidenceList, err := withTransactionalMutation(ctx).Evidence.Query().Where(
 		evidence.OwnerIDIn(orgIDs...),
 		evidence.Or(edgePredicates...),
-	).All(allowCtx)
+	).WithControls(func(q *generated.ControlQuery) {
+		q.Select(control.FieldID)
+	}).WithSubcontrols(func(q *generated.SubcontrolQuery) {
+		q.Select(subcontrol.FieldID)
+	}).All(allowCtx)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	c.EvidenceStatus = &model.ControlEvidence{
-		TotalCount:  len(evidenceList),
-		WorstStatus: worstEvidenceStatus(evidenceList),
-	}
-
-	return nil
-}
-
-func getLinkedPolicies(ctx context.Context, c *model.ControlReport, isSubcontrol bool) error {
-	orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
-	if err != nil {
-		return err
-	}
-
-	controlIDs := []string{}
-	subcontrolIDs := []string{}
-
-	if isSubcontrol {
-		subcontrolIDs = append(subcontrolIDs, c.ID)
-	} else {
-		controlIDs = append(controlIDs, c.ID)
-	}
-
-	for _, rc := range c.RelatedControls {
-		if rc.IsSubcontrol {
-			subcontrolIDs = append(subcontrolIDs, rc.ID)
-		} else {
-			controlIDs = append(controlIDs, rc.ID)
+	m := map[string][]*generated.Evidence{}
+	for _, e := range evidenceList {
+		for _, c := range e.Edges.Controls {
+			m[c.ID] = append(m[c.ID], e)
+		}
+		for _, sc := range e.Edges.Subcontrols {
+			m[sc.ID] = append(m[sc.ID], e)
 		}
 	}
+	return m, nil
+}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+// buildPoliciesMap fetches all internal policies linked to the given entity IDs in one query
+// and returns a map of entity ID to the policy records linked to that entity.
+func buildPoliciesMap(ctx context.Context, controlIDs, subcontrolIDs []string) (map[string][]*generated.InternalPolicy, error) {
+	if len(controlIDs) == 0 && len(subcontrolIDs) == 0 {
+		return map[string][]*generated.InternalPolicy{}, nil
+	}
 
-	edgePredicates := []predicate.InternalPolicy{}
+	orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	// create edges for controls and subcontrols
+	edgePredicates := make([]predicate.InternalPolicy, 0, 2) //nolint:mnd
 	if len(controlIDs) > 0 {
 		edgePredicates = append(edgePredicates, internalpolicy.HasControlsWith(control.IDIn(controlIDs...)))
 	}
-
 	if len(subcontrolIDs) > 0 {
 		edgePredicates = append(edgePredicates, internalpolicy.HasSubcontrolsWith(subcontrol.IDIn(subcontrolIDs...)))
 	}
 
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
 	policies, err := withTransactionalMutation(ctx).InternalPolicy.Query().Where(
 		internalpolicy.OwnerIDIn(orgIDs...),
 		internalpolicy.Or(edgePredicates...),
-	).Select("id", "name", "status").All(allowCtx)
+	).WithControls(func(q *generated.ControlQuery) {
+		q.Select(control.FieldID)
+	}).WithSubcontrols(func(q *generated.SubcontrolQuery) {
+		q.Select(subcontrol.FieldID)
+	}).Select("id", "name", "status").All(allowCtx)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	policySummaries := []*model.PolicySummary{}
+	m := map[string][]*generated.InternalPolicy{}
 	for _, p := range policies {
-		policySummaries = append(policySummaries, &model.PolicySummary{
-			ID:     p.ID,
-			Name:   p.Name,
-			Status: p.Status,
+		for _, c := range p.Edges.Controls {
+			m[c.ID] = append(m[c.ID], p)
+		}
+		for _, sc := range p.Edges.Subcontrols {
+			m[sc.ID] = append(m[sc.ID], p)
+		}
+	}
+	return m, nil
+}
+
+// computeEvidenceStatus aggregates evidence for a single entity from the pre-fetched map,
+// including evidence from related controls, deduplicating by evidence ID.
+func computeEvidenceStatus(evidenceMap map[string][]*generated.Evidence, id string, relatedControls []*model.ControlInfo) *model.ControlEvidence {
+	seen := map[string]struct{}{}
+	var all []*generated.Evidence
+
+	for _, e := range evidenceMap[id] {
+		if _, ok := seen[e.ID]; !ok {
+			seen[e.ID] = struct{}{}
+			all = append(all, e)
+		}
+	}
+	for _, rc := range relatedControls {
+		for _, e := range evidenceMap[rc.ID] {
+			if _, ok := seen[e.ID]; !ok {
+				seen[e.ID] = struct{}{}
+				all = append(all, e)
+			}
+		}
+	}
+
+	approvedCount := 0
+	statusCounts := map[enums.EvidenceStatus]int{}
+	for _, e := range all {
+		statusCounts[e.Status]++
+		if e.Status == enums.EvidenceStatusAuditorApproved {
+			approvedCount++
+		}
+	}
+
+	countByStatus := make([]*model.EvidenceCountByStatus, 0, len(statusCounts))
+	for status, count := range statusCounts {
+		countByStatus = append(countByStatus, &model.EvidenceCountByStatus{
+			Status:     status,
+			TotalCount: count,
 		})
 	}
+	slices.SortFunc(countByStatus, func(a, b *model.EvidenceCountByStatus) int {
+		return evidenceStatusRank(a.Status) - evidenceStatusRank(b.Status)
+	})
 
-	c.LinkedPolicies = &model.ControlPolicies{
-		TotalCount:       len(policies),
-		InternalPolicies: policySummaries,
+	return &model.ControlEvidence{
+		TotalCount:    len(all),
+		WorstStatus:   worstEvidenceStatus(all),
+		ApprovedCount: approvedCount,
+		CountByStatus: countByStatus,
+	}
+}
+
+// computeLinkedPolicies aggregates policies for a single entity from the pre-fetched map,
+// including policies from related controls, deduplicating by policy ID.
+func computeLinkedPolicies(policiesMap map[string][]*generated.InternalPolicy, id string, relatedControls []*model.ControlInfo) *model.ControlPolicies {
+	seen := map[string]struct{}{}
+	var summaries []*model.PolicySummary
+
+	collect := func(p *generated.InternalPolicy) {
+		if _, ok := seen[p.ID]; !ok {
+			seen[p.ID] = struct{}{}
+			summaries = append(summaries, &model.PolicySummary{
+				ID:     p.ID,
+				Name:   p.Name,
+				Status: p.Status,
+			})
+		}
 	}
 
-	return nil
+	for _, p := range policiesMap[id] {
+		collect(p)
+	}
+	for _, rc := range relatedControls {
+		for _, p := range policiesMap[rc.ID] {
+			collect(p)
+		}
+	}
+
+	return &model.ControlPolicies{
+		TotalCount:       len(summaries),
+		InternalPolicies: summaries,
+	}
 }
 
 func convertControlToControlReportEdge(controls *generated.ControlConnection) *model.ControlReportConnection {
@@ -551,22 +659,11 @@ func enrichControlReports(ctx context.Context, reports []*model.ControlReport) e
 		}
 	}
 
+	// Pass 1: populate related controls (per-entity, must come first so IDs are available for pass 2)
 	for i, c := range reports {
 		if needsRelated {
 			reports[i].RelatedControls, err = getRelatedControlInfoFromReport(ctx, c, frameworksInOrg)
 			if err != nil {
-				return err
-			}
-		}
-
-		if wantsEvidence {
-			if err := getEvidenceStatus(ctx, reports[i], false); err != nil {
-				return err
-			}
-		}
-
-		if wantsPolicies {
-			if err := getLinkedPolicies(ctx, reports[i], false); err != nil {
 				return err
 			}
 		}
@@ -578,16 +675,43 @@ func enrichControlReports(ctx context.Context, reports []*model.ControlReport) e
 					return err
 				}
 			}
+		}
+	}
 
-			if wantsScEvidence {
-				if err := getEvidenceStatus(ctx, reports[i].Subcontrols[j], true); err != nil {
-					return err
+	// Pass 2: batch evidence and policies across all entities in two queries total
+	if wantsEvidence || wantsScEvidence || wantsPolicies || wantsScPolicies {
+		controlIDs, subcontrolIDs := collectAllEntityIDs(reports)
+
+		if wantsEvidence || wantsScEvidence {
+			evidenceMap, err := buildEvidenceMap(ctx, controlIDs, subcontrolIDs)
+			if err != nil {
+				return err
+			}
+			for i, c := range reports {
+				if wantsEvidence {
+					reports[i].EvidenceStatus = computeEvidenceStatus(evidenceMap, c.ID, c.RelatedControls)
+				}
+				for j, sc := range reports[i].Subcontrols {
+					if wantsScEvidence {
+						reports[i].Subcontrols[j].EvidenceStatus = computeEvidenceStatus(evidenceMap, sc.ID, sc.RelatedControls)
+					}
 				}
 			}
+		}
 
-			if wantsScPolicies {
-				if err := getLinkedPolicies(ctx, reports[i].Subcontrols[j], true); err != nil {
-					return err
+		if wantsPolicies || wantsScPolicies {
+			policiesMap, err := buildPoliciesMap(ctx, controlIDs, subcontrolIDs)
+			if err != nil {
+				return err
+			}
+			for i, c := range reports {
+				if wantsPolicies {
+					reports[i].LinkedPolicies = computeLinkedPolicies(policiesMap, c.ID, c.RelatedControls)
+				}
+				for j, sc := range reports[i].Subcontrols {
+					if wantsScPolicies {
+						reports[i].Subcontrols[j].LinkedPolicies = computeLinkedPolicies(policiesMap, sc.ID, sc.RelatedControls)
+					}
 				}
 			}
 		}

@@ -9139,6 +9139,8 @@ type ControlEvidence {
 	the most severe evidence status among all linked evidence items
 	"""
 	worstStatus: EvidenceEvidenceStatus
+	approvedCount: Int!
+	countByStatus: [EvidenceCountByStatus!]
 }
 """
 ControlFieldDiff describes a single field that differs between two control revisions
@@ -28360,6 +28362,10 @@ type EvidenceConnection {
 	"""
 	Identifies the total count of items in the connection.
 	"""
+	totalCount: Int!
+}
+type EvidenceCountByStatus {
+	status: EvidenceEvidenceStatus!
 	totalCount: Int!
 }
 """

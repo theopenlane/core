@@ -403,4 +403,3 @@ func TestConstructWherePredicatesFromStandardRefCodes(t *testing.T) {
 		})
 	}
 }
-

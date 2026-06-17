@@ -302,6 +302,193 @@ func TestConvertControlToControlReportEdge(t *testing.T) {
 	assert.Assert(t, result.Edges[0].Node.RelatedControls != nil)
 }
 
+func TestCollectAllEntityIDs(t *testing.T) {
+	tests := []struct {
+		name              string
+		reports           []*model.ControlReport
+		wantControlIDs    []string
+		wantSubcontrolIDs []string
+	}{
+		{
+			name:              "empty reports",
+			reports:           []*model.ControlReport{},
+			wantControlIDs:    nil,
+			wantSubcontrolIDs: nil,
+		},
+		{
+			name: "control with no subcontrols or related",
+			reports: []*model.ControlReport{
+				{ID: "ctrl-1"},
+			},
+			wantControlIDs:    []string{"ctrl-1"},
+			wantSubcontrolIDs: nil,
+		},
+		{
+			name: "control with subcontrols",
+			reports: []*model.ControlReport{
+				{
+					ID: "ctrl-1",
+					Subcontrols: []*model.ControlReport{
+						{ID: "sc-1"},
+						{ID: "sc-2"},
+					},
+				},
+			},
+			wantControlIDs:    []string{"ctrl-1"},
+			wantSubcontrolIDs: []string{"sc-1", "sc-2"},
+		},
+		{
+			name: "control related controls included",
+			reports: []*model.ControlReport{
+				{
+					ID: "ctrl-1",
+					RelatedControls: []*model.ControlInfo{
+						{ID: "ctrl-2", IsSubcontrol: false},
+						{ID: "sc-rel-1", IsSubcontrol: true},
+					},
+				},
+			},
+			wantControlIDs:    []string{"ctrl-1", "ctrl-2"},
+			wantSubcontrolIDs: []string{"sc-rel-1"},
+		},
+		{
+			name: "duplicate IDs across reports deduplicated",
+			reports: []*model.ControlReport{
+				{ID: "ctrl-1"},
+				{ID: "ctrl-1"},
+				{ID: "ctrl-2"},
+			},
+			wantControlIDs:    []string{"ctrl-1", "ctrl-2"},
+			wantSubcontrolIDs: nil,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotControls, gotSubcontrols := collectAllEntityIDs(tt.reports)
+			assert.Equal(t, len(tt.wantControlIDs), len(gotControls))
+			assert.Equal(t, len(tt.wantSubcontrolIDs), len(gotSubcontrols))
+		})
+	}
+}
+
+func TestComputeEvidenceStatus(t *testing.T) {
+	e1 := &generated.Evidence{ID: "e1", Status: enums.EvidenceStatusAuditorApproved}
+	e2 := &generated.Evidence{ID: "e2", Status: enums.EvidenceStatusRejected}
+	e3 := &generated.Evidence{ID: "e3", Status: enums.EvidenceStatusSubmitted}
+
+	tests := []struct {
+		name            string
+		evidenceMap     map[string][]*generated.Evidence
+		id              string
+		relatedControls []*model.ControlInfo
+		wantCount       int
+		wantWorst       *enums.EvidenceStatus
+	}{
+		{
+			name:        "no evidence",
+			evidenceMap: map[string][]*generated.Evidence{},
+			id:          "ctrl-1",
+			wantCount:   0,
+			wantWorst:   nil,
+		},
+		{
+			name:        "evidence directly on entity",
+			evidenceMap: map[string][]*generated.Evidence{"ctrl-1": {e1, e3}},
+			id:          "ctrl-1",
+			wantCount:   2,
+			wantWorst:   func() *enums.EvidenceStatus { s := enums.EvidenceStatusSubmitted; return &s }(),
+		},
+		{
+			name:        "evidence from related control included",
+			evidenceMap: map[string][]*generated.Evidence{"ctrl-1": {e1}, "ctrl-rel": {e2}},
+			id:          "ctrl-1",
+			relatedControls: []*model.ControlInfo{
+				{ID: "ctrl-rel", IsSubcontrol: false},
+			},
+			wantCount: 2,
+			wantWorst: func() *enums.EvidenceStatus { s := enums.EvidenceStatusRejected; return &s }(),
+		},
+		{
+			name:        "duplicate evidence across entity and related control deduplicated",
+			evidenceMap: map[string][]*generated.Evidence{"ctrl-1": {e1, e2}, "ctrl-rel": {e2, e3}},
+			id:          "ctrl-1",
+			relatedControls: []*model.ControlInfo{
+				{ID: "ctrl-rel", IsSubcontrol: false},
+			},
+			wantCount: 3, // e1, e2, e3 — e2 counted once
+			wantWorst: func() *enums.EvidenceStatus { s := enums.EvidenceStatusRejected; return &s }(),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := computeEvidenceStatus(tt.evidenceMap, tt.id, tt.relatedControls)
+			assert.Assert(t, result != nil)
+			assert.Equal(t, tt.wantCount, result.TotalCount)
+			if tt.wantWorst == nil {
+				assert.Check(t, result.WorstStatus == nil)
+			} else {
+				assert.Assert(t, result.WorstStatus != nil)
+				assert.Equal(t, *tt.wantWorst, *result.WorstStatus)
+			}
+		})
+	}
+}
+
+func TestComputeLinkedPolicies(t *testing.T) {
+	p1 := &generated.InternalPolicy{ID: "p1", Name: "Policy A", Status: enums.DocumentPublished}
+	p2 := &generated.InternalPolicy{ID: "p2", Name: "Policy B", Status: enums.DocumentDraft}
+
+	tests := []struct {
+		name            string
+		policiesMap     map[string][]*generated.InternalPolicy
+		id              string
+		relatedControls []*model.ControlInfo
+		wantCount       int
+	}{
+		{
+			name:        "no policies",
+			policiesMap: map[string][]*generated.InternalPolicy{},
+			id:          "ctrl-1",
+			wantCount:   0,
+		},
+		{
+			name:        "policies directly on entity",
+			policiesMap: map[string][]*generated.InternalPolicy{"ctrl-1": {p1, p2}},
+			id:          "ctrl-1",
+			wantCount:   2,
+		},
+		{
+			name:        "policies from related control included",
+			policiesMap: map[string][]*generated.InternalPolicy{"ctrl-1": {p1}, "ctrl-rel": {p2}},
+			id:          "ctrl-1",
+			relatedControls: []*model.ControlInfo{
+				{ID: "ctrl-rel", IsSubcontrol: false},
+			},
+			wantCount: 2,
+		},
+		{
+			name:        "duplicate policy across entity and related control deduplicated",
+			policiesMap: map[string][]*generated.InternalPolicy{"ctrl-1": {p1, p2}, "ctrl-rel": {p2}},
+			id:          "ctrl-1",
+			relatedControls: []*model.ControlInfo{
+				{ID: "ctrl-rel", IsSubcontrol: false},
+			},
+			wantCount: 2, // p1 and p2, p2 counted once
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := computeLinkedPolicies(tt.policiesMap, tt.id, tt.relatedControls)
+			assert.Assert(t, result != nil)
+			assert.Equal(t, tt.wantCount, result.TotalCount)
+			assert.Equal(t, tt.wantCount, len(result.InternalPolicies))
+		})
+	}
+}
+
 func TestConvertReportOrderToControlOrderBy(t *testing.T) {
 	tests := []struct {
 		name      string
