@@ -462,6 +462,7 @@ func convertControlToControlReportEdge(controls *generated.ControlConnection) *m
 
 	return &model.ControlReportConnection{
 		Edges:      edges,
+		PageInfo:   &controls.PageInfo,
 		TotalCount: controls.TotalCount,
 	}
 }

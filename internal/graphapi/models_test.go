@@ -298,7 +298,6 @@ type ControlBuilder struct {
 	AllFields   bool
 	Category    string
 	Subcategory string
-	SystemOwned *bool
 }
 
 type SubcontrolBuilder struct {
@@ -1363,7 +1362,7 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 	}
 
 	mutation := c.client.db.Control.Create().
-		SetRefCode(c.RefCode).SetTitle(c.Title).SetNillableSystemOwned(c.SystemOwned)
+		SetRefCode(c.RefCode).SetTitle(c.Title)
 
 	if c.ProgramID != "" {
 		mutation.AddProgramIDs(c.ProgramID)

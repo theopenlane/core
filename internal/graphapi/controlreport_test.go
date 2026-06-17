@@ -99,7 +99,6 @@ func TestQueryControlReports(t *testing.T) {
 	orgUser := suite.seedOrgOwner(t)
 
 	orgOwnedCount := int64(11)
-	systemOwnedCount := int64(3)
 	controlIDs := []string{}
 
 	for range orgOwnedCount {
@@ -107,9 +106,10 @@ func TestQueryControlReports(t *testing.T) {
 		controlIDs = append(controlIDs, control.ID)
 	}
 
-	// system-owned controls must not appear in controlReports results
-	for range systemOwnedCount {
-		(&ControlBuilder{client: suite.client, SystemOwned: lo.ToPtr(true)}).MustNew(localTestOrg.owner.UserCtx, t)
+	// system-owned controls must not appear in controlReports results (resolver filters SystemOwned: false);
+	// the hook sets system_owned = true automatically when it sees a system admin caller
+	for range int64(3) {
+		(&ControlBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
 	}
 
 	// enrich the first three org-owned controls with associated data so enrichment paths are exercised
@@ -234,9 +234,10 @@ func TestQueryControlReportsByCategory(t *testing.T) {
 	control3 := (&ControlBuilder{client: suite.client, Category: cat2}).MustNew(localTestOrg.owner.UserCtx, t)
 	(&ControlBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
 
-	// system-owned controls must not appear in results regardless of category
-	(&ControlBuilder{client: suite.client, Category: cat1, SystemOwned: lo.ToPtr(true)}).MustNew(localTestOrg.owner.UserCtx, t)
-	(&ControlBuilder{client: suite.client, Category: cat2, SystemOwned: lo.ToPtr(true)}).MustNew(localTestOrg.owner.UserCtx, t)
+	// system-owned controls must not appear in results regardless of category;
+	// the hook sets system_owned = true automatically when it sees a system admin caller
+	(&ControlBuilder{client: suite.client, Category: cat1}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	(&ControlBuilder{client: suite.client, Category: cat2}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	// enrich control1 with associated data so enrichment paths are exercised;
 	// control3 is used as the tertiary to confirm a second unique related control
