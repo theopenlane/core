@@ -18,6 +18,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountAddedAt, Expr: `'createdTimestamp' in payload ? timestamp(int(payload.createdTimestamp) / 1000) : null`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountMetadata, Expr: `'attributes' in payload ? payload.attributes : {}`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountProfile, Expr: "payload"},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountLastSeenAt, Expr: `'lastLogin' in payload && payload.lastLogin != null ? timestamp(int(payload.lastLogin) / 1000) : null`},
 })
 
 // mapExprDirectoryGroup is the CEL mapping expression for Keycloak group payloads mapped to DirectoryGroup

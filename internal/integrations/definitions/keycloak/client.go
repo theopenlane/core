@@ -14,6 +14,8 @@ const (
 	keycloakRequestTimeout = 30 * time.Second
 	// keycloakDefaultPageSize is the number of records requested per Keycloak API page
 	keycloakDefaultPageSize = 100
+	// keycloakMaxLoginEvents is the maximum number of LOGIN events fetched when resolving last login times
+	keycloakMaxLoginEvents = 1000
 )
 
 // Client builds Keycloak API clients for one installation
@@ -62,11 +64,8 @@ func resolveCredential(bindings types.CredentialBindings) (CredentialSchema, err
 	return cred, nil
 }
 
-// derefString safely dereferences a string pointer returning empty string if nil
-func derefString(s *string) string {
-	if s == nil {
-		return ""
-	}
-
-	return *s
+// enrichedUser wraps a Keycloak user with additional data not on the user object
+type enrichedUser struct {
+	*gocloak.User
+	LastLogin *int64 `json:"lastLogin,omitempty"`
 }

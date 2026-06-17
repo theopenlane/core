@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 
 	gocloak "github.com/Nerzal/gocloak/v13"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -45,8 +46,8 @@ func (HealthCheck) Run(ctx context.Context, gc *gocloak.GoCloak, req types.Opera
 	}
 
 	return providerkit.EncodeResult(HealthCheck{
-		Realm:           derefString(realm.Realm),
-		RealmID:         derefString(realm.ID),
-		KeycloakVersion: derefString(realm.KeycloakVersion),
+		Realm:           lo.FromPtr(realm.Realm),
+		RealmID:         lo.FromPtr(realm.ID),
+		KeycloakVersion: lo.FromPtr(realm.KeycloakVersion),
 	}, ErrResultEncode)
 }

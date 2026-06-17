@@ -58,13 +58,14 @@ func Builder() registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:         healthCheckOperation.Name(),
-					Description:  "Call Keycloak realm API to verify client credentials and realm connectivity",
-					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
-					ClientRef:    keycloakClient.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: healthCheckSchema,
-					Handle:       HealthCheck{}.Handle(),
+					Name:                healthCheckOperation.Name(),
+					Description:         "Call Keycloak realm API to verify client credentials and realm connectivity",
+					Topic:               definitionID.OperationTopic(healthCheckOperation.Name()),
+					ClientRef:           keycloakClient.ID(),
+					Policy:              types.ExecutionPolicy{Inline: true},
+					ConfigSchema:        healthCheckSchema,
+					Handle:              HealthCheck{}.Handle(),
+					RequiredPermissions: []string{"view-realm"},
 				},
 				{
 					Name:                directorySyncOperation.Name(),
@@ -74,6 +75,7 @@ func Builder() registry.Builder {
 					ConfigSchema:        directorySyncSchema,
 					Policy:              types.ExecutionPolicy{Reconcile: true},
 					SkipDefaultLookback: true,
+					RequiredPermissions: []string{"view-users", "query-groups", "view-events"},
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,

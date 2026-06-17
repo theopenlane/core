@@ -4,11 +4,12 @@ import (
 	"context"
 
 	gocloak "github.com/Nerzal/gocloak/v13"
-
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // DirectorySync collects Keycloak directory users, groups, and memberships for ingest
@@ -29,6 +30,8 @@ func (d DirectorySync) IngestHandle() types.IngestHandler {
 
 		token, err := gc.LoginClient(ctx, cred.ClientID, cred.ClientSecret, cred.Realm)
 		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error acquiring keycloak token")
+
 			return nil, ErrTokenAcquireFailed
 		}
 
@@ -46,14 +49,23 @@ func (DirectorySync) Run(ctx context.Context, gc *gocloak.GoCloak, token, realm 
 	accountEnvelopes := make([]types.MappingEnvelope, 0, len(users))
 	includedUsers := make(map[string]struct{}, len(users))
 
+	// fetch last login times from events
+	lastLoginTimes, err := fetchLastLoginTimes(ctx, gc, token, realm)
+	if err != nil {
+		return nil, err
+	}
+
 	for _, user := range users {
 		if user.ID == nil {
 			continue
 		}
 
-		resourceID := derefString(user.ID)
-
-		envelope, err := providerkit.MarshalEnvelope(resourceID, user, ErrPayloadEncode)
+		resourceID := lo.FromPtr(user.ID)
+		eu := &enrichedUser{User: user}
+		if t, ok := lastLoginTimes[resourceID]; ok {
+			eu.LastLogin = &t
+		}
+		envelope, err := providerkit.MarshalEnvelope(resourceID, eu, ErrPayloadEncode)
 		if err != nil {
 			return nil, err
 		}
@@ -86,7 +98,7 @@ func (DirectorySync) Run(ctx context.Context, gc *gocloak.GoCloak, token, realm 
 			continue
 		}
 
-		groupID := derefString(group.ID)
+		groupID := lo.FromPtr(group.ID)
 
 		envelope, err := providerkit.MarshalEnvelope(groupID, group, ErrPayloadEncode)
 		if err != nil {
@@ -105,7 +117,7 @@ func (DirectorySync) Run(ctx context.Context, gc *gocloak.GoCloak, token, realm 
 				continue
 			}
 
-			memberID := derefString(member.ID)
+			memberID := lo.FromPtr(member.ID)
 
 			if _, ok := includedUsers[memberID]; !ok {
 				continue
@@ -223,4 +235,33 @@ func listGroupMembers(ctx context.Context, gc *gocloak.GoCloak, token, realm, gr
 	}
 
 	return members, nil
+}
+
+// fetchLastLoginTimes returns a map of userID -> last login timestamp in milliseconds
+func fetchLastLoginTimes(ctx context.Context, gc *gocloak.GoCloak, token, realm string) (map[string]int64, error) {
+	events, err := gc.GetEvents(ctx, token, realm, gocloak.GetEventsParams{
+		Type: []string{"LOGIN"},
+		Max:  gocloak.Int32P(keycloakMaxLoginEvents),
+	})
+	if err != nil {
+		// non-fatal — return empty map, sync continues without lastLogin
+		return map[string]int64{}, nil
+	}
+
+	lastLogin := make(map[string]int64)
+
+	for _, event := range events {
+		if event.UserID == nil {
+			continue
+		}
+
+		userID := *event.UserID
+
+		// keep the most recent login (events are ordered newest first)
+		if _, exists := lastLogin[userID]; !exists {
+			lastLogin[userID] = event.Time
+		}
+	}
+
+	return lastLogin, nil
 }
