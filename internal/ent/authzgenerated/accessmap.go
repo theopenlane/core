@@ -1500,8 +1500,8 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: true,
 }, "programs": {
 	ObjectType:          "program",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
 }, "tasks": {
 	ObjectType:          "task",
