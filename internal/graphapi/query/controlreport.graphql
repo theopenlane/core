@@ -162,6 +162,11 @@ query GetControlReportsByCategory($where: ControlWhereInput) {
       evidenceStatus {
         totalCount
         worstStatus
+        approvedCount
+        countByStatus {
+          status
+          totalCount
+        }
       }
       linkedPolicies {
         totalCount

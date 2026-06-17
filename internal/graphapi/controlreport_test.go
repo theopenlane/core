@@ -80,15 +80,15 @@ func seedControlReportTestData(ctx context.Context, t *testing.T, primaryControl
 	}).MustNew(ctx, t)
 
 	return &controlReportTestData{
-		primaryControlID:  primaryControlID,
+		primaryControlID:   primaryControlID,
 		secondaryControlID: secondaryControlID,
-		tertiaryControlID: tertiaryControlID,
-		subcontrolID:      sc.ID,
-		evidenceID:        ev.ID,
-		policyID:          policy.ID,
-		forwardMappingID:  forward.ID,
-		reverseMappingID:  reverse.ID,
-		tertiaryMappingID: tertiary.ID,
+		tertiaryControlID:  tertiaryControlID,
+		subcontrolID:       sc.ID,
+		evidenceID:         ev.ID,
+		policyID:           policy.ID,
+		forwardMappingID:   forward.ID,
+		reverseMappingID:   reverse.ID,
+		tertiaryMappingID:  tertiary.ID,
 	}
 }
 
