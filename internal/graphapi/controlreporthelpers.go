@@ -420,40 +420,23 @@ func convertReportOrderToControlOrderBy(orderBy []*model.ControlReportOrder) []*
 	orderByOut := make([]*generated.ControlOrder, 0, len(orderBy))
 
 	for _, ob := range orderBy {
-		switch ob.Field.String() {
-		case generated.ControlOrderFieldCreatedAt.String():
-			orderByOut = append(orderByOut, &generated.ControlOrder{
-
-				Field:     generated.ControlOrderFieldCreatedAt,
-				Direction: ob.Direction,
-			})
-		case generated.ControlOrderFieldUpdatedAt.String():
-			orderByOut = append(orderByOut, &generated.ControlOrder{
-
-				Field:     generated.ControlOrderFieldUpdatedAt,
-				Direction: ob.Direction,
-			})
-		case generated.ControlOrderFieldRefCode.String():
-			orderByOut = append(orderByOut, &generated.ControlOrder{
-
-				Field:     generated.ControlOrderFieldRefCode,
-				Direction: ob.Direction,
-			})
-		case generated.ControlOrderFieldTitle.String():
-			orderByOut = append(orderByOut, &generated.ControlOrder{
-
-				Field:     generated.ControlOrderFieldTitle,
-				Direction: ob.Direction,
-			})
-		case generated.ControlOrderFieldReferenceFramework.String():
-			orderByOut = append(orderByOut, &generated.ControlOrder{
-
-				Field:     generated.ControlOrderFieldReferenceFramework,
-				Direction: ob.Direction,
-			})
-
+		var field *generated.ControlOrderField
+		switch ob.Field {
+		case model.ControlReportOrderFieldCreatedAt:
+			field = generated.ControlOrderFieldCreatedAt
+		case model.ControlReportOrderFieldUpdatedAt:
+			field = generated.ControlOrderFieldUpdatedAt
+		case model.ControlReportOrderFieldRefCode:
+			field = generated.ControlOrderFieldRefCode
+		case model.ControlReportOrderFieldTitle:
+			field = generated.ControlOrderFieldTitle
+		case model.ControlReportOrderFieldReferenceFramework:
+			field = generated.ControlOrderFieldReferenceFramework
 		}
 
+		if field != nil {
+			orderByOut = append(orderByOut, &generated.ControlOrder{Field: field, Direction: ob.Direction})
+		}
 	}
 
 	return orderByOut
