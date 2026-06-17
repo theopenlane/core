@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/testutils"
+	"github.com/theopenlane/utils/ulids"
 )
 
 // controlReportTestData holds entity IDs seeded by seedControlReportTestData
@@ -29,18 +30,32 @@ type controlReportTestData struct {
 	reverseMappingID string
 	// tertiaryMappingID maps primary → tertiary, adding one more unique related control
 	tertiaryMappingID string
+
+	// system mapping fields: system-owned controls are mapped together; org controls with
+	// matching refCode+framework confirm that system mappings surface in relatedControls
+	sysMapOrgSourceID string // org control matching sysControlA (the one to query)
+	sysMapOrgTargetID string // org control matching sysControlB (expected in relatedControls)
+	sysMapID          string // the system-owned MappedControl
 }
 
 // seedControlReportTestData enriches primaryControlID with a subcontrol, linked evidence,
-// an internal policy, and three mapped controls to exercise deduplication.
-// All three controls must already exist in the context's org.
+// an internal policy, and three org-owned mapped controls to exercise deduplication.
+// It also creates a system-owned mapping between two new system controls and matching
+// org controls to verify that system mappings surface in relatedControls.
+// All three input controls must already exist in the context's org.
 //
-// Mappings created:
+// Org mappings on primary:
 //   - forward:  primary → secondary
 //   - reverse:  secondary → primary  (secondary appears twice, deduped to one relatedControl)
 //   - tertiary: primary → tertiary   (unique second related control)
 //
+// System mapping:
+//   - sysControlA and sysControlB are system-owned with unique refCode+"SOC2" framework
+//   - sysMapOrgSource/sysMapOrgTarget are org-owned with the same refCode+framework
+//   - querying sysMapOrgSource's relatedControls should return sysMapOrgTarget via the system mapping
+//
 // Expected relatedControls for primary: [secondary, tertiary] (2 unique entries).
+// Expected relatedControls for sysMapOrgSource: [sysMapOrgTarget] (1 entry via system mapping).
 func seedControlReportTestData(ctx context.Context, t *testing.T, primaryControlID, secondaryControlID, tertiaryControlID string) *controlReportTestData {
 	t.Helper()
 
@@ -79,6 +94,44 @@ func seedControlReportTestData(ctx context.Context, t *testing.T, primaryControl
 		ToControlIDs:   []string{tertiaryControlID},
 	}).MustNew(ctx, t)
 
+	// system mapping scenario: unique refCodes per call prevent cross-test interference
+	sysRefA := ulids.New().String()
+	sysRefB := ulids.New().String()
+	sysFramework := lo.ToPtr("SOC 2")
+
+	sysControlA := (&ControlBuilder{
+		client:             suite.client,
+		RefCode:            sysRefA,
+		ReferenceFramework: sysFramework,
+	}).MustNew(sharedSystemAdminUser.UserCtx, t)
+
+	sysControlB := (&ControlBuilder{
+		client:             suite.client,
+		RefCode:            sysRefB,
+		ReferenceFramework: sysFramework,
+	}).MustNew(sharedSystemAdminUser.UserCtx, t)
+
+	// system-owned mapped control linking sysControlA → sysControlB
+	sysMap := (&MappedControlBuilder{
+		client:         suite.client,
+		FromControlIDs: []string{sysControlA.ID},
+		ToControlIDs:   []string{sysControlB.ID},
+	}).MustNew(sharedSystemAdminUser.UserCtx, t)
+
+	// org-owned controls that mirror the system controls by refCode+framework;
+	// getOrgMappedControlsInfo resolves sysControlB's refCode to orgTgt
+	orgSrc := (&ControlBuilder{
+		client:             suite.client,
+		RefCode:            sysRefA,
+		ReferenceFramework: sysFramework,
+	}).MustNew(ctx, t)
+
+	orgTgt := (&ControlBuilder{
+		client:             suite.client,
+		RefCode:            sysRefB,
+		ReferenceFramework: sysFramework,
+	}).MustNew(ctx, t)
+
 	return &controlReportTestData{
 		primaryControlID:   primaryControlID,
 		secondaryControlID: secondaryControlID,
@@ -89,6 +142,9 @@ func seedControlReportTestData(ctx context.Context, t *testing.T, primaryControl
 		forwardMappingID:   forward.ID,
 		reverseMappingID:   reverse.ID,
 		tertiaryMappingID:  tertiary.ID,
+		sysMapOrgSourceID:  orgSrc.ID,
+		sysMapOrgTargetID:  orgTgt.ID,
+		sysMapID:           sysMap.ID,
 	}
 }
 
@@ -98,22 +154,26 @@ func TestQueryControlReports(t *testing.T) {
 	localTestOrg := suite.seedOrgOwner(t)
 	orgUser := suite.seedOrgOwner(t)
 
-	orgOwnedCount := int64(11)
-	controlIDs := []string{}
-
-	for range orgOwnedCount {
-		control := (&ControlBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
-		controlIDs = append(controlIDs, control.ID)
+	// create 8 filler controls first (oldest) so that the enriched controls and the
+	// system-mapping controls created inside the seed fall in the first page (CreatedAt DESC)
+	for range 8 {
+		(&ControlBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
 	}
 
 	// system-owned controls must not appear in controlReports results (resolver filters SystemOwned: false);
 	// the hook sets system_owned = true automatically when it sees a system admin caller
-	for range int64(3) {
+	for range 3 {
 		(&ControlBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
 	}
 
-	// enrich the first three org-owned controls with associated data so enrichment paths are exercised
-	richData := seedControlReportTestData(localTestOrg.owner.UserCtx, t, controlIDs[0], controlIDs[1], controlIDs[2])
+	// create primary/secondary/tertiary after the fillers so they appear in the first page
+	primary := (&ControlBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
+	secondary := (&ControlBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
+	tertiary := (&ControlBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
+
+	// seed adds 2 more org controls (sysMapOrgSource, sysMapOrgTarget) → 8+3+2 = 13 total
+	orgOwnedCount := int64(13)
+	richData := seedControlReportTestData(localTestOrg.owner.UserCtx, t, primary.ID, secondary.ID, tertiary.ID)
 
 	testCases := []struct {
 		name            string
@@ -207,6 +267,11 @@ func TestQueryControlReports(t *testing.T) {
 						// secondary appears in both the forward and reverse MappedControl records;
 						// deduplication collapses it to one entry, plus tertiary = 2 total
 						assert.Check(t, is.Len(edge.Node.RelatedControls, 2))
+					}
+
+					// org control matching sysControlA should surface sysMapOrgTarget via system mapping
+					if edge.Node.ID == richData.sysMapOrgSourceID {
+						assert.Check(t, is.Len(edge.Node.RelatedControls, 1))
 					}
 				}
 			} else {
@@ -305,16 +370,23 @@ func TestQueryControlReportsByCategory(t *testing.T) {
 							// deduplication collapses it to one entry, plus tertiary = 2 total
 							assert.Check(t, is.Len(c.RelatedControls, 2))
 						}
+
+						// org control matching sysControlA should surface sysMapOrgTarget via system mapping
+						if c.ID == richData.sysMapOrgSourceID {
+							assert.Check(t, is.Len(c.RelatedControls, 1))
+						}
 					}
 
 					catCounts[cat.Category] = len(cat.Controls)
 					totalControls += len(cat.Controls)
 				}
 
-				assert.Check(t, is.Equal(4, totalControls))
+				// seed adds orgSrc and orgTgt (no category) on top of the 4 directly created controls:
+				// 2 (cat1) + 1 (cat2) + 1 (no cat) + orgSrc + orgTgt = 6
+				assert.Check(t, is.Equal(6, totalControls))
 				assert.Check(t, is.Equal(2, catCounts[cat1]))
 				assert.Check(t, is.Equal(1, catCounts[cat2]))
-				assert.Check(t, is.Equal(1, catCounts[""]))
+				assert.Check(t, is.Equal(3, catCounts[""]))
 			}
 
 			if tc.where != nil && tc.where.Category != nil {

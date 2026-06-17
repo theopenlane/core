@@ -295,9 +295,10 @@ type ControlBuilder struct {
 	ControlEditorGroupID    string
 	ControlImplementationID string
 	// AllFields will set all direct fields on the control with random data
-	AllFields   bool
-	Category    string
-	Subcategory string
+	AllFields          bool
+	Category           string
+	Subcategory        string
+	ReferenceFramework *string
 }
 
 type SubcontrolBuilder struct {
@@ -1362,7 +1363,7 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 	}
 
 	mutation := c.client.db.Control.Create().
-		SetRefCode(c.RefCode).SetTitle(c.Title)
+		SetRefCode(c.RefCode).SetTitle(c.Title).SetNillableReferenceFramework(c.ReferenceFramework)
 
 	if c.ProgramID != "" {
 		mutation.AddProgramIDs(c.ProgramID)
