@@ -13618,6 +13618,18 @@ type EmailTemplateCatalogEntry struct {
 	// The UI uses this to render a dynamic form; the submitted values become
 	// the EmailTemplate defaults field.
 	ConfigSchema map[string]any `json:"configSchema"`
+	// RJSF-style UI schema describing how the configurable fields should be
+	// rendered as a form: authoring order, color widgets for hex fields,
+	// repeatable lists for body paragraphs, and hidden per-send fields.
+	UISchema map[string]any `json:"uiSchema"`
+	// System-provided template variables available for interpolation in this
+	// template's string fields (e.g. {{ .firstName }}), with descriptions for
+	// the UI variable picker.
+	Variables []*TemplateVariable `json:"variables"`
+	// Example/default field values used to render the preview, keyed by the same
+	// field names as configSchema. The UI pre-fills the editor form with these so
+	// the author starts from — and can see — what the default preview renders.
+	ExampleValues map[string]any `json:"exampleValues,omitempty"`
 	// Rendered HTML preview of the template with default/example values.
 	HTMLPreview string `json:"htmlPreview"`
 }
@@ -18239,6 +18251,8 @@ type Group struct {
 	Members                            *GroupMembershipConnection       `json:"members"`
 	// permissions the group provides
 	Permissions *GroupPermissionConnection `json:"permissions"`
+	// additionalRoles are the functional/organization roles assigned to the group on top of object permissions
+	AdditionalRoles []string `json:"additionalRoles,omitempty"`
 }
 
 func (Group) IsNode() {}
@@ -25132,17 +25146,18 @@ type OrgMembersInput struct {
 }
 
 type OrgMembership struct {
-	ID             string           `json:"id"`
-	CreatedAt      *time.Time       `json:"createdAt,omitempty"`
-	UpdatedAt      *time.Time       `json:"updatedAt,omitempty"`
-	CreatedBy      *string          `json:"createdBy,omitempty"`
-	UpdatedBy      *string          `json:"updatedBy,omitempty"`
-	Role           enums.Role       `json:"role"`
-	OrganizationID string           `json:"organizationID"`
-	UserID         string           `json:"userID"`
-	Organization   *Organization    `json:"organization"`
-	User           *User            `json:"user"`
-	Events         *EventConnection `json:"events"`
+	ID              string           `json:"id"`
+	CreatedAt       *time.Time       `json:"createdAt,omitempty"`
+	UpdatedAt       *time.Time       `json:"updatedAt,omitempty"`
+	CreatedBy       *string          `json:"createdBy,omitempty"`
+	UpdatedBy       *string          `json:"updatedBy,omitempty"`
+	Role            enums.Role       `json:"role"`
+	OrganizationID  string           `json:"organizationID"`
+	UserID          string           `json:"userID"`
+	Organization    *Organization    `json:"organization"`
+	User            *User            `json:"user"`
+	Events          *EventConnection `json:"events"`
+	AdditionalRoles []string         `json:"additionalRoles,omitempty"`
 }
 
 func (OrgMembership) IsNode() {}

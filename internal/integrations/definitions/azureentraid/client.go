@@ -8,6 +8,7 @@ import (
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // graphScope is the default scope used for Microsoft Graph client credentials requests
@@ -20,7 +21,7 @@ type CredentialClient struct {
 }
 
 // Build constructs the Azure client credentials token credential for one installation
-func (c CredentialClient) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
+func (c CredentialClient) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
 	meta, err := credentialFromRequest(req)
 	if err != nil {
 		return nil, err
@@ -28,6 +29,7 @@ func (c CredentialClient) Build(_ context.Context, req types.ClientBuildRequest)
 
 	cred, err := azidentity.NewClientSecretCredential(meta.TenantID, c.cfg.ClientID, c.cfg.ClientSecret, nil)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("tenant_id", meta.TenantID).Msg("failed to create client secret credential")
 		return nil, ErrTokenAcquireFailed
 	}
 

@@ -15,6 +15,10 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountFamilyName, Expr: `'surname' in payload ? payload.surname : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDepartment, Expr: `'department' in payload ? payload.department : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountJobTitle, Expr: `'jobTitle' in payload ? payload.jobTitle : ""`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountEmailAliases, Expr: `'otherMails' in payload && payload.otherMails != null ? payload.otherMails : []`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountPhoneNumber, Expr: `'phone' in payload ? payload.phone : ""`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountAddedAt, Expr: `'employeeHireDate' in payload && payload.employeeHireDate != null ? payload.employeeHireDate : null`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountRemovedAt, Expr: `'employeeLeaveDateTime' in payload && payload.employeeLeaveDateTime != null ? payload.employeeLeaveDateTime : null`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountStatus, Expr: `dyn('accountEnabled' in payload && payload.accountEnabled ? "ACTIVE" : "INACTIVE")`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountProfile, Expr: "payload"},
 })

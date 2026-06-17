@@ -5,12 +5,16 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 
+	fgamodel "github.com/theopenlane/core/fga/model"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -74,9 +78,76 @@ func InterceptorOrgMember() ent.Interceptor {
 				return v, nil
 			}
 
-			return dedupeOrgMembers(ctx, members)
+			res, err := dedupeOrgMembers(ctx, members)
+			if err != nil {
+				return nil, err
+			}
+
+			if !graphutils.CheckForRequestedField(ctx, "additionalRoles") {
+				return res, nil
+			}
+
+			// get additional roles per result
+			for i, r := range res {
+				res[i].AdditionalRoles, err = getFunctionalRoles(ctx, r.UserID)
+				if err != nil {
+					return nil, err
+				}
+			}
+
+			return res, nil
 		})
 	})
+}
+
+func getFunctionalRoles(ctx context.Context, userID string) ([]string, error) {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return []string{}, nil
+	}
+
+	return GetFunctionalRolesForSubject(ctx, auth.UserSubjectType, userID, caller.OrganizationID)
+}
+
+// GetFunctionalRolesForSubject returns the display names of the functional/organization roles
+// assigned to the given subject on the organization. The subject is a user or a group tupleset
+// (e.g. subjectType "group" with subjectID "<groupID>#member"), matching how the roles were assigned.
+func GetFunctionalRolesForSubject(ctx context.Context, subjectType, subjectID, orgID string) ([]string, error) {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return []string{}, nil
+	}
+
+	roles, err := fgamodel.OrganizationRoles()
+	if err != nil {
+		return []string{}, err
+	}
+
+	ids := make([]string, 0, len(roles))
+	for _, role := range roles {
+		ids = append(ids, role.ID)
+	}
+
+	req := fgax.ListAccess{
+		SubjectType: subjectType,
+		SubjectID:   subjectID,
+		ObjectID:    orgID,
+		ObjectType:  fgax.Kind(generated.TypeOrganization),
+		Relations:   ids,
+		Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
+	}
+
+	client := utils.AuthzClientFromContext(ctx)
+	if client == nil {
+		return []string{}, nil
+	}
+
+	assignedRoles, err := client.ListRelations(ctx, req, fgax.WithHighConsistency())
+	if err != nil {
+		return []string{}, err
+	}
+
+	return fgamodel.GetOrganizationRoleStrings(roles, assignedRoles), nil
 }
 
 // dedupeOrgMembers removes duplicate org members from the list

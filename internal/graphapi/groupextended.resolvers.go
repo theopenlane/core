@@ -13,10 +13,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -117,6 +119,12 @@ func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group, a
 		},
 		TotalCount: res.TotalCount,
 	}, nil
+}
+
+// AdditionalRoles is the resolver for the additionalRoles field.
+func (r *groupResolver) AdditionalRoles(ctx context.Context, obj *generated.Group) ([]string, error) {
+	// roles are assigned to the group via its #member tupleset, so read them back with that subject
+	return interceptors.GetFunctionalRolesForSubject(ctx, fgax.Kind(generated.TypeGroup).String(), obj.ID+"#member", obj.OwnerID)
 }
 
 // CreateGroupWithMembers is the resolver for the createGroupWithMembers field.

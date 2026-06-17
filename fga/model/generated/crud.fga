@@ -123,9 +123,9 @@ extend type organization
     define can_delete_entity_type: [service, user] or full_access
     define can_create_entity_type: can_edit or can_edit_entity_type
 
-    define can_view_evidence: [service, user] or auditor or can_edit_evidence or can_manage_compliance or full_access
-    define can_edit_evidence: [service, user] or can_delete_evidence or can_manage_compliance or full_access
-    define can_delete_evidence: [service, user] or can_manage_compliance or full_access
+    define can_view_evidence: [service, user] or auditor or auditor or can_edit_evidence or can_manage_compliance or full_access
+    define can_edit_evidence: [service, user] or auditor or can_delete_evidence or can_manage_compliance or full_access
+    define can_delete_evidence: [service, user] or auditor or can_manage_compliance or full_access
     define can_create_evidence: can_edit or can_edit_evidence or auditor or can_manage_compliance
 
     define can_view_file: [service, user] or can_edit_file or full_access

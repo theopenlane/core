@@ -81,3 +81,6 @@ junit*.xml
 dist/
 .objects-examples.yaml
 internal/integrations/cli/config/.integrations.yaml
+
+# claude
+.claude

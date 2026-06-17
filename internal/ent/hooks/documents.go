@@ -10,6 +10,8 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/rs/zerolog/log"
@@ -87,6 +89,15 @@ func HookImportDocument() ent.Hook {
 				logx.FromContext(ctx).Info().Msg("import document hook used on unsupported mutation type")
 
 				return next.Mutate(ctx, m)
+			}
+
+			// Integration-managed documents set url as an external reference link, not a document to import
+			if mode, ok := m.(interface {
+				ManagementMode() (enums.DocumentManagementMode, bool)
+			}); ok {
+				if v, exists := mode.ManagementMode(); exists && v == enums.DocumentManagementModeIntegration {
+					return next.Mutate(ctx, m)
+				}
 			}
 
 			_, exists := mut.URL()
@@ -427,6 +438,7 @@ func filenameToTitle(filename string) string {
 	filename = strings.ReplaceAll(filename, "-", " ")
 
 	// capitalize first letter of each word
+	caser := cases.Title(language.AmericanEnglish)
 	return caser.String(filename)
 }
 

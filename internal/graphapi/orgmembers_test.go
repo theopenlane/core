@@ -186,6 +186,78 @@ func TestQueryOrgMembers(t *testing.T) {
 
 			assert.Assert(t, resp != nil)
 			assert.Check(t, is.Len(resp.OrgMemberships.Edges, tc.expectedLen))
+
+			// no org role set, so should return empty array
+			assert.Check(t, is.Len(resp.OrgMemberships.Edges[0].Node.AdditionalRoles, 0))
+		})
+	}
+
+	// delete created org
+	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
+}
+
+func TestQueryOrgMembersWithAdditionalRoles(t *testing.T) {
+	t.Parallel()
+
+	localTestOrg := suite.seedFreshOrgUsers(t)
+	org1Member := localTestOrg.member
+
+	// add policy manager and trust center manager role
+	suite.addFunctionalRoleForUser(localTestOrg.owner.UserCtx, t, org1Member.ID, localTestOrg.owner.OrganizationID, []string{"policy_manager", "trust_center_manager"})
+	testCases := []struct {
+		name                  string
+		whereInput            *testclient.OrgMembershipWhereInput
+		client                *testclient.TestClient
+		ctx                   context.Context
+		expectErr             bool
+		expectAdditionalRoles bool
+	}{
+		{
+			name: "happy path, get org member with additional roles",
+			whereInput: &testclient.OrgMembershipWhereInput{
+				UserID: &org1Member.ID,
+			},
+			client:                suite.client.api,
+			ctx:                   localTestOrg.owner.UserCtx,
+			expectAdditionalRoles: true,
+		},
+		{
+			name: "happy path, get org auditor has no additional roles",
+			whereInput: &testclient.OrgMembershipWhereInput{
+				UserID: &localTestOrg.auditor.ID,
+			},
+			client:                suite.client.api,
+			ctx:                   localTestOrg.owner.UserCtx,
+			expectAdditionalRoles: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Get "+tc.name, func(t *testing.T) {
+			if tc.whereInput == nil {
+				tc.whereInput = &testclient.OrgMembershipWhereInput{}
+			}
+
+			resp, err := tc.client.GetOrgMembersByOrgID(tc.ctx, tc.whereInput)
+
+			if tc.expectErr {
+				assert.Assert(t, err != nil)
+				assert.Assert(t, is.Nil(resp))
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Assert(t, is.Len(resp.OrgMemberships.Edges, 1))
+
+			if tc.expectAdditionalRoles {
+				assert.Check(t, is.Len(resp.OrgMemberships.Edges[0].Node.AdditionalRoles, 2))
+				assert.Check(t, is.Contains(resp.OrgMemberships.Edges[0].Node.AdditionalRoles, "Policy Manager"))
+				assert.Check(t, is.Contains(resp.OrgMemberships.Edges[0].Node.AdditionalRoles, "Trust Center Manager"))
+			} else {
+				assert.Check(t, is.Len(resp.OrgMemberships.Edges[0].Node.AdditionalRoles, 0))
+			}
 		})
 	}
 

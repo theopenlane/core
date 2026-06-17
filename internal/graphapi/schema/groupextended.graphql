@@ -138,6 +138,10 @@ extend type Group {
 		"""
 		last: Int
 	): GroupPermissionConnection!
+  """
+  additionalRoles are the functional/organization roles assigned to the group on top of object permissions
+  """
+  additionalRoles: [String!]
 }
 
 """

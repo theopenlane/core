@@ -2,7 +2,6 @@ package azureentraid
 
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -10,6 +9,8 @@ import (
 
 // Builder returns the Azure EntraID definition builder with the supplied operator config applied
 func Builder(cfg Config) registry.Builder {
+	installation := types.NewInstallationRef(resolveInstallationMetadata)
+
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
@@ -20,7 +21,7 @@ func Builder(cfg Config) registry.Builder {
 				Category:    "identity",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/azure_entra_id/overview",
 				Tags:        []string{"directory"},
-				Active:      false,
+				Active:      true,
 				Visible:     true,
 			},
 			OperatorConfig: &types.OperatorConfigRegistration{
@@ -34,63 +35,21 @@ func Builder(cfg Config) registry.Builder {
 					Ref:         entraTenantCredential.ID(),
 					Name:        "Azure Entra ID Credential",
 					Description: "OAuth credential used to access Microsoft Graph for Entra ID directory data.",
-					Schema:      entraTenantSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
 				{
 					CredentialRef:       entraTenantCredential.ID(),
-					Name:                "Azure Entra ID OAuth",
+					Name:                "Azure Entra ID Admin Consent",
 					Description:         "Connect your Azure Entra ID tenant using admin consent.",
 					CredentialRefs:      []types.CredentialSlotID{entraTenantCredential.ID()},
 					ClientRefs:          []types.ClientID{entraCredential.ID(), entraClient.ID()},
 					ValidationOperation: healthCheckOperation.Name(),
 					Integration:         installation.Registration(),
-					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[entraIDCred]{
-						CredentialRef: entraTenantCredential,
-						Config: auth.OAuthConfig{ //nolint:gosec
-							ClientID:     cfg.ClientID,
-							ClientSecret: cfg.ClientSecret,
-							AuthURL:      "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
-							TokenURL:     "https://login.microsoftonline.com/common/oauth2/v2.0/token",
-							RedirectURL:  cfg.RedirectURL,
-							Scopes: []string{
-								"openid",
-								"profile",
-								"offline_access",
-								graphScope,
-							},
-							AuthParams: map[string]string{
-								"prompt": "admin_consent",
-							},
-						},
-						Material: func(material auth.OAuthMaterial) (entraIDCred, error) {
-							if material.Claims == nil {
-								return entraIDCred{}, ErrTenantIDNotFound
-							}
-
-							value, ok := material.Claims["tid"]
-							if !ok {
-								return entraIDCred{}, ErrTenantIDNotFound
-							}
-
-							tenantID, ok := value.(string)
-							if !ok || tenantID == "" {
-								return entraIDCred{}, ErrTenantIDNotFound
-							}
-
-							return entraIDCred{
-								AccessToken:  material.AccessToken,
-								RefreshToken: material.RefreshToken,
-								Expiry:       material.Expiry,
-								TenantID:     tenantID,
-							}, nil
-						},
-						EncodeCredentialError: ErrCredentialEncode,
-					}),
+					Auth:                adminConsentRegistration(cfg),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: entraTenantCredential.ID(),
-						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.",
+						Description:   "Removes the stored credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.",
 					},
 				},
 			},
@@ -138,6 +97,7 @@ func Builder(cfg Config) registry.Builder {
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
 					SkipDefaultLookback: true,
+					RequiredPermissions: []string{"User.Read.All", "Group.Read.All", "GroupMember.Read.All", "Directory.Read.All"},
 				},
 			},
 			Mappings: entraIDMappings(),

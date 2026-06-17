@@ -137,32 +137,71 @@ func TestQueryOrganizations(t *testing.T) {
 	orgUser := suite.seedOrgOwner(t)
 
 	org1ID := orgUser.owner.OrganizationID
-	org2 := (&OrganizationBuilder{client: suite.client}).MustNew(orgUser.owner.UserCtx, t)
+	avatarFile1 := uploadFile(t, logoFilePath)
+
+	input := testclient.CreateOrganizationInput{
+		Name: "test-org-" + ulids.New().String(),
+	}
+	// mock expect upload
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*avatarFile1})
+	resp, err := suite.client.api.CreateOrganization(orgUser.owner.UserCtx, input, avatarFile1, nil)
+	requireNoError(t, err)
+	org2ID := resp.CreateOrganization.Organization.ID
+	assert.Assert(t, resp.CreateOrganization.Organization.AvatarFile != nil)
+	avatarFileIDOrg2 := resp.CreateOrganization.Organization.AvatarFile.ID
+
+	avatarFile2 := uploadFile(t, logoFilePath)
+	input2 := testclient.CreateOrganizationInput{
+		Name: "test-org-" + ulids.New().String(),
+	}
+	// mock expect upload
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*avatarFile2})
+	resp2, err := suite.client.api.CreateOrganization(orgUser.owner.UserCtx, input2, avatarFile2, nil)
+	requireNoError(t, err)
+	org3ID := resp2.CreateOrganization.Organization.ID
+	assert.Assert(t, resp2.CreateOrganization.Organization.AvatarFile != nil)
+	avatarFileIDOrg3 := resp2.CreateOrganization.Organization.AvatarFile.ID
+
+	// ensure context only has one organization id set, this will mimic JWT authorization
+	testContext := auth.NewTestContextWithOrgID(orgUser.owner.ID, org1ID)
 
 	t.Run("Get Organizations", func(t *testing.T) {
-		resp, err := suite.client.api.GetAllOrganizations(orgUser.owner.UserCtx)
+		resp, err := suite.client.api.GetAllOrganizations(testContext)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 		assert.Assert(t, resp.Organizations.Edges != nil)
 
-		// make sure 3 organizations are returned, the two created and
+		// make sure 4 organizations are returned, the two created and
 		// the personal org
-		assert.Check(t, is.Equal(3, len(resp.Organizations.Edges)))
+		assert.Check(t, is.Equal(4, len(resp.Organizations.Edges)))
 
 		org1Found := false
 		org2Found := false
+		org3Found := false
 
 		for _, o := range resp.Organizations.Edges {
 			if o.Node.ID == org1ID {
 				org1Found = true
-			} else if o.Node.ID == org2.ID {
+				// no avatar set
+				assert.Check(t, o.Node.AvatarRemoteURL != nil)
+				assert.Check(t, o.Node.AvatarFile == nil)
+			} else if o.Node.ID == org2ID {
 				org2Found = true
+				assert.Assert(t, o.Node.AvatarFile != nil)
+				assert.Check(t, is.Equal(o.Node.AvatarFile.ID, avatarFileIDOrg2))
+				assert.Check(t, o.Node.AvatarFile.PresignedURL != nil)
+			} else if o.Node.ID == org3ID {
+				org3Found = true
+				assert.Assert(t, o.Node.AvatarFile != nil)
+				assert.Check(t, is.Equal(o.Node.AvatarFile.ID, avatarFileIDOrg3))
+				assert.Check(t, o.Node.AvatarFile.PresignedURL != nil)
 			}
 		}
 
 		assert.Check(t, org1Found)
 		assert.Check(t, org2Found)
+		assert.Check(t, org3Found)
 	})
 
 	// cleanup orgs

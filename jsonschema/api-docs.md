@@ -134,6 +134,7 @@ Config contains the configuration for the core server
         "googleworkspace": {},
         "azureentraid": {},
         "microsoftteams": {},
+        "onedrive": {},
         "oidclocal": {},
         "email": {},
         "paymentreminder": {
@@ -1578,6 +1579,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |[**googleworkspace**](#integrationsgoogleworkspace)|`object`|||
 |[**azureentraid**](#integrationsazureentraid)|`object`|||
 |[**microsoftteams**](#integrationsmicrosoftteams)|`object`|||
+|[**onedrive**](#integrationsonedrive)|`object`|||
 |[**oidclocal**](#integrationsoidclocal)|`object`|||
 |[**email**](#integrationsemail)|`object`||yes|
 |[**paymentreminder**](#integrationspaymentreminder)|`object`|||
@@ -1595,6 +1597,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
     "googleworkspace": {},
     "azureentraid": {},
     "microsoftteams": {},
+    "onedrive": {},
     "oidclocal": {},
     "email": {},
     "paymentreminder": {
@@ -1688,6 +1691,8 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**clientid**|`string`|||
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
+|**defaulttenant**|`string`|||
+|**applicationid**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="integrationsmicrosoftteams"></a>
@@ -1700,6 +1705,21 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**clientid**|`string`|||
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
+|**applicationid**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="integrationsonedrive"></a>
+### integrations\.onedrive: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**clientid**|`string`|||
+|**clientsecret**|`string`|||
+|**redirecturl**|`string`|||
+|**contentmode**|`string`|||
+|**applicationid**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="integrationsoidclocal"></a>
