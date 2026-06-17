@@ -195,22 +195,14 @@ extend type Control {
     """
     relatedControls show the controls and frameworks mapped to this control
     """
-    relatedControls: RelatedControlConnection!
-    """
-    relatedSubcontrols show the subcontrols and frameworks mapped to this control
-    """
-    relatedSubcontrols: RelatedSubcontrolConnection!
+    relatedControls: [ControlInfo!]
 }
 
 extend type Subcontrol {
     """
     relatedControls show the controls and frameworks mapped to this control
     """
-    relatedControls: RelatedControlConnection!
-    """
-    relatedSubcontrols show the subcontrols and frameworks mapped to this control
-    """
-    relatedSubcontrols: RelatedSubcontrolConnection!
+    relatedControls: [ControlInfo!]
 }
 
 extend type Query {

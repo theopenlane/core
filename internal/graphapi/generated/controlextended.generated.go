@@ -1795,34 +1795,6 @@ func (ec *executionContext) marshalNControlGroupEdge2ᚖgithubᚗcomᚋtheopenla
 	return ec._ControlGroupEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNRelatedControlConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedControlConnection(ctx context.Context, sel ast.SelectionSet, v model.RelatedControlConnection) graphql.Marshaler {
-	return ec._RelatedControlConnection(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNRelatedControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedControlConnection(ctx context.Context, sel ast.SelectionSet, v *model.RelatedControlConnection) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._RelatedControlConnection(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNRelatedSubcontrolConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedSubcontrolConnection(ctx context.Context, sel ast.SelectionSet, v model.RelatedSubcontrolConnection) graphql.Marshaler {
-	return ec._RelatedSubcontrolConnection(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNRelatedSubcontrolConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedSubcontrolConnection(ctx context.Context, sel ast.SelectionSet, v *model.RelatedSubcontrolConnection) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._RelatedSubcontrolConnection(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalOCloneControlInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCloneControlInput(ctx context.Context, v any) (*model.CloneControlInput, error) {
 	if v == nil {
 		return nil, nil

@@ -506,6 +506,14 @@ type ControlDiffPayload struct {
 	Changes []*ControlChange `json:"changes"`
 }
 
+// ControlEvidence summarizes the evidence status across all evidence linked to a control
+type ControlEvidence struct {
+	// total number of evidence items linked to the control
+	TotalCount int `json:"totalCount"`
+	// the most severe evidence status among all linked evidence items
+	WorstStatus *enums.EvidenceStatus `json:"worstStatus,omitempty"`
+}
+
 // ControlFieldDiff describes a single field that differs between two control revisions
 type ControlFieldDiff struct {
 	// Field name (snake_case)
@@ -574,6 +582,30 @@ type ControlImplementationUpdatePayload struct {
 	ControlImplementation *generated.ControlImplementation `json:"controlImplementation"`
 }
 
+// ControlInfo provides a lightweight summary of a control or subcontrol, used when referencing related controls
+type ControlInfo struct {
+	// unique identifier of the control
+	ID string `json:"id"`
+	// the unique reference code for the control
+	RefCode string `json:"refCode"`
+	// description of what the control is supposed to accomplish
+	Description *string `json:"description,omitempty"`
+	// human readable title of the control for quick identification
+	Title *string `json:"title,omitempty"`
+	// status of the control
+	Status *enums.ControlStatus `json:"status,omitempty"`
+	// the group of users who are responsible for the control, will be assigned tasks, approval, etc.
+	ControlOwner *generated.Group `json:"controlOwner,omitempty"`
+	// the reference framework this control belongs to, e.g. SOC2, ISO27001
+	ReferenceFramework *string `json:"referenceFramework,omitempty"`
+	// category of the control
+	Category *string `json:"category,omitempty"`
+	// subcategory of the control
+	Subcategory *string `json:"subcategory,omitempty"`
+	// whether this entry is a subcontrol rather than a top-level control
+	IsSubcontrol bool `json:"isSubcontrol"`
+}
+
 // Return response for createBulkControlObjective mutation
 type ControlObjectiveBulkCreatePayload struct {
 	// Created controlObjectives
@@ -614,6 +646,83 @@ type ControlObjectiveDeletePayload struct {
 type ControlObjectiveUpdatePayload struct {
 	// Updated controlObjective
 	ControlObjective *generated.ControlObjective `json:"controlObjective"`
+}
+
+// ControlPolicies summarizes the internal policies linked to a control
+type ControlPolicies struct {
+	// total number of policies linked to the control
+	TotalCount int `json:"totalCount"`
+	// the policies linked to the control
+	InternalPolicies []*PolicySummary `json:"internalPolicies,omitempty"`
+}
+
+// ControlReport is a custom resolver that is used to show detailed, but selective information about
+// an organizations controls vs. the standards
+type ControlReport struct {
+	// unique identifier of the control
+	ID string `json:"id"`
+	// the unique reference code for the control
+	RefCode string `json:"refCode"`
+	// description of what the control is supposed to accomplish
+	Description *string `json:"description,omitempty"`
+	// human readable title of the control for quick identification
+	Title *string `json:"title,omitempty"`
+	// status of the control
+	Status *enums.ControlStatus `json:"status,omitempty"`
+	// the group of users who are responsible for the control, will be assigned tasks, approval, etc.
+	ControlOwner *generated.Group `json:"controlOwner,omitempty"`
+	// the reference framework this control belongs to, e.g. SOC2, ISO27001
+	ReferenceFramework *string `json:"referenceFramework,omitempty"`
+	// category of the control
+	Category *string `json:"category,omitempty"`
+	// subcategory of the control
+	Subcategory *string `json:"subcategory,omitempty"`
+	// controls from other frameworks that map to this control
+	RelatedControls []*ControlInfo `json:"relatedControls,omitempty"`
+	// aggregated evidence status across all evidence linked to this control
+	EvidenceStatus *ControlEvidence `json:"evidenceStatus,omitempty"`
+	// internal policies linked to this control
+	LinkedPolicies *ControlPolicies `json:"linkedPolicies,omitempty"`
+	// child subcontrols nested under this control
+	Subcontrols []*ControlReport `json:"subcontrols,omitempty"`
+}
+
+func (ControlReport) IsNode() {}
+
+// ControlReportCategory groups control reports by their category
+type ControlReportCategory struct {
+	// the category name; empty string when controls have no category assigned
+	Category string `json:"category"`
+	// total number of controls in this category
+	TotalCount int `json:"totalCount"`
+	// controls belonging to this category
+	Controls []*ControlReport `json:"controls"`
+}
+
+// A connection to a list of items.
+type ControlReportConnection struct {
+	// A list of edges.
+	Edges []*ControlReportEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *entgql.PageInfo[string] `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int `json:"totalCount"`
+}
+
+// An edge in a connection.
+type ControlReportEdge struct {
+	// The item at the end of the edge.
+	Node *ControlReport `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor entgql.Cursor[string] `json:"cursor"`
+}
+
+// Ordering options for ControlReport connections
+type ControlReportOrder struct {
+	// The ordering direction.
+	Direction entgql.OrderDirection `json:"direction"`
+	// The field by which to order ControlReport.
+	Field ControlReportOrderField `json:"field"`
 }
 
 // Return response for updateControl mutation
@@ -2278,6 +2387,18 @@ type PlatformUpdatePayload struct {
 	Platform *generated.Platform `json:"platform"`
 }
 
+// PolicySummary provides a lightweight summary of an internal policy
+type PolicySummary struct {
+	// unique identifier of the policy
+	ID string `json:"id"`
+	// the name of the policy
+	Name string `json:"name"`
+	// status of the policy, e.g. draft, published, archived, etc.
+	Status enums.DocumentStatus `json:"status"`
+}
+
+func (PolicySummary) IsNode() {}
+
 // Return response for createBulkProcedure mutation
 type ProcedureBulkCreatePayload struct {
 	// Created procedures
@@ -3869,6 +3990,73 @@ func (e *ControlCategoryOrderField) UnmarshalJSON(b []byte) error {
 }
 
 func (e ControlCategoryOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which ControlReport connections can be ordered.
+type ControlReportOrderField string
+
+const (
+	// Order by creation time
+	ControlReportOrderFieldCreatedAt ControlReportOrderField = "created_at"
+	// Order by last update time
+	ControlReportOrderFieldUpdatedAt ControlReportOrderField = "updated_at"
+	// Order by reference code
+	ControlReportOrderFieldRefCode ControlReportOrderField = "refCode"
+	// Order by title
+	ControlReportOrderFieldTitle ControlReportOrderField = "title"
+	// Order by reference framework
+	ControlReportOrderFieldReferenceFramework ControlReportOrderField = "referenceFramework"
+)
+
+var AllControlReportOrderField = []ControlReportOrderField{
+	ControlReportOrderFieldCreatedAt,
+	ControlReportOrderFieldUpdatedAt,
+	ControlReportOrderFieldRefCode,
+	ControlReportOrderFieldTitle,
+	ControlReportOrderFieldReferenceFramework,
+}
+
+func (e ControlReportOrderField) IsValid() bool {
+	switch e {
+	case ControlReportOrderFieldCreatedAt, ControlReportOrderFieldUpdatedAt, ControlReportOrderFieldRefCode, ControlReportOrderFieldTitle, ControlReportOrderFieldReferenceFramework:
+		return true
+	}
+	return false
+}
+
+func (e ControlReportOrderField) String() string {
+	return string(e)
+}
+
+func (e *ControlReportOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ControlReportOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ControlReportOrderField", str)
+	}
+	return nil
+}
+
+func (e ControlReportOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *ControlReportOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e ControlReportOrderField) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
 	e.MarshalGQL(&buf)
 	return buf.Bytes(), nil
