@@ -11,6 +11,8 @@ import (
 func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
 	cred, err := resolveCredential(req.Credentials)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error resolving credentials")
+		
 		return InstallationMetadata{}, false, ErrCredentialDecode
 	}
 
