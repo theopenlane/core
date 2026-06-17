@@ -4,7 +4,7 @@
 //
 // # Overview
 //
-// This integration connects a Keycloak instance to OpenLane using OAuth2
+// This integration connects a Keycloak instance to Openlane using OAuth2
 // client credentials authentication, enabling directory sync of users, groups,
 // and group memberships for identity posture and access governance workflows.
 //
