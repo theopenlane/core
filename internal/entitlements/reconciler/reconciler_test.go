@@ -121,6 +121,15 @@ func TestIsSubscriptionActive(t *testing.T) {
 			},
 			want: false,
 		},
+		{
+			name: "subscription is in trial",
+			sub: &ent.OrgSubscription{
+				// active is false when trialing
+				Active:                   false,
+				StripeSubscriptionStatus: string(stripe.SubscriptionStatusTrialing),
+			},
+			want: true,
+		},
 	}
 
 	for _, tt := range tests {

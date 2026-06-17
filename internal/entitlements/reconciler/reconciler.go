@@ -266,7 +266,8 @@ func isSubscriptionActive(sub *ent.OrgSubscription) bool {
 		return false
 	}
 
-	return sub.Active && sub.StripeSubscriptionStatus != string(stripe.SubscriptionStatusCanceled)
+	return sub.StripeSubscriptionStatus == string(stripe.SubscriptionStatusTrialing) ||
+		sub.Active && sub.StripeSubscriptionStatus != string(stripe.SubscriptionStatusCanceled)
 }
 
 func (r *Reconciler) disableIntegrations(ctx context.Context, orgID string) error {

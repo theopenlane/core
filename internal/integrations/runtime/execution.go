@@ -543,7 +543,10 @@ func (r *Runtime) isOrgSubscriptionActive(ctx context.Context, orgID string) (bo
 	return r.DB().OrgSubscription.Query().
 		Where(
 			orgsubscription.OwnerIDEQ(orgID),
-			orgsubscription.ActiveEQ(true),
+			orgsubscription.Or(
+				orgsubscription.ActiveEQ(true),
+				orgsubscription.StripeSubscriptionStatusEQ(string(stripe.SubscriptionStatusTrialing)),
+			),
 			orgsubscription.StripeSubscriptionStatusNEQ(string(stripe.SubscriptionStatusCanceled)),
 		).
 		Exist(privacy.DecisionContext(ctx, privacy.Allow))
