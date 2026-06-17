@@ -37,6 +37,8 @@ type OrgMembershipHistory struct {
 	UpdatedBy string `json:"updated_by,omitempty"`
 	// Role holds the value of the "role" field.
 	Role enums.Role `json:"role,omitempty"`
+	// allow this org member to bypass SSO enforcement
+	SSOExempt bool `json:"sso_exempt,omitempty"`
 	// OrganizationID holds the value of the "organization_id" field.
 	OrganizationID string `json:"organization_id,omitempty"`
 	// UserID holds the value of the "user_id" field.
@@ -51,6 +53,8 @@ func (*OrgMembershipHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case orgmembershiphistory.FieldOperation:
 			values[i] = new(history.OpType)
+		case orgmembershiphistory.FieldSSOExempt:
+			values[i] = new(sql.NullBool)
 		case orgmembershiphistory.FieldID, orgmembershiphistory.FieldRef, orgmembershiphistory.FieldCreatedBy, orgmembershiphistory.FieldUpdatedBy, orgmembershiphistory.FieldRole, orgmembershiphistory.FieldOrganizationID, orgmembershiphistory.FieldUserID:
 			values[i] = new(sql.NullString)
 		case orgmembershiphistory.FieldHistoryTime, orgmembershiphistory.FieldCreatedAt, orgmembershiphistory.FieldUpdatedAt:
@@ -124,6 +128,12 @@ func (_m *OrgMembershipHistory) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				_m.Role = enums.Role(value.String)
 			}
+		case orgmembershiphistory.FieldSSOExempt:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field sso_exempt", values[i])
+			} else if value.Valid {
+				_m.SSOExempt = value.Bool
+			}
 		case orgmembershiphistory.FieldOrganizationID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_id", values[i])
@@ -195,6 +205,9 @@ func (_m *OrgMembershipHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("role=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Role))
+	builder.WriteString(", ")
+	builder.WriteString("sso_exempt=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SSOExempt))
 	builder.WriteString(", ")
 	builder.WriteString("organization_id=")
 	builder.WriteString(_m.OrganizationID)

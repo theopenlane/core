@@ -96,6 +96,8 @@ type Handler struct {
 	Summarizer *summarizer.Client
 	// DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
 	DefaultTrustCenterDomain string
+	// SupportDomains is the list of email domains that bypass SSO enforcement globally across all organizations
+	SupportDomains []string
 	// ObjectStore handles file storage operations
 	ObjectStore *objects.Service
 	// IntegrationsRuntime holds the integration runtime components.

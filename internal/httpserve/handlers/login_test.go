@@ -415,6 +415,240 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOwnerBypass() {
 	assert.True(t, out.Success)
 }
 
+func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedAuditorBypass() {
+	t := suite.T()
+
+	suite.registerTestHandler("POST", "login", suite.createImpersonationOperation("LoginHandler", "Test login"), suite.h.LoginHandler)
+
+	ctx := echocontext.NewTestEchoContext().Request().Context()
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	ownerUser := suite.userBuilderWithInput(ctx, &userInput{
+		password:      "0wn3rP@ssw0rd",
+		confirmedUser: true,
+	})
+	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
+	ownerCtx = ent.NewContext(ownerCtx, suite.db)
+
+	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+		IdentityProviderLoginEnforced: func(b bool) *bool { return &b }(true),
+	}).SaveX(ownerCtx)
+
+	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+		Name:      ulids.New().String(),
+		SettingID: &setting.ID,
+	}).SaveX(ownerCtx)
+
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).ExecX(ownerCtx)
+
+	auditorUser := suite.userBuilderWithInput(ctx, &userInput{
+		password:      "Aud1t0rP@ss!",
+		confirmedUser: true,
+	})
+
+	ctxTargetOrg := auth.NewTestContextWithOrgID(auditorUser.ID, org.ID)
+	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	auditorCtx := ent.NewContext(ctxTargetOrg, suite.db)
+
+	auditorRole := enums.RoleAuditor
+	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+		OrganizationID: org.ID,
+		UserID:         auditorUser.UserInfo.ID,
+		Role:           &auditorRole,
+	}).ExecX(auditorCtx)
+
+	suite.db.UserSetting.UpdateOneID(auditorUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(auditorCtx)
+
+	body, _ := json.Marshal(apimodels.LoginRequest{Username: auditorUser.UserInfo.Email, Password: "Aud1t0rP@ss!"})
+	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(body)))
+	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req)
+
+	require.Equal(t, http.StatusOK, rec.Code)
+	var out apimodels.LoginReply
+	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.True(t, out.Success)
+}
+
+func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedMemberExemptBypass() {
+	t := suite.T()
+
+	suite.registerTestHandler("POST", "login", suite.createImpersonationOperation("LoginHandler", "Test login"), suite.h.LoginHandler)
+
+	ctx := echocontext.NewTestEchoContext().Request().Context()
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	ownerUser := suite.userBuilderWithInput(ctx, &userInput{
+		password:      "0wn3rP@ssw0rd",
+		confirmedUser: true,
+	})
+	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
+	ownerCtx = ent.NewContext(ownerCtx, suite.db)
+
+	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+		IdentityProviderLoginEnforced: func(b bool) *bool { return &b }(true),
+	}).SaveX(ownerCtx)
+
+	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+		Name:      ulids.New().String(),
+		SettingID: &setting.ID,
+	}).SaveX(ownerCtx)
+
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).ExecX(ownerCtx)
+
+	exemptUser := suite.userBuilderWithInput(ctx, &userInput{
+		password:      "3x3mptP@ss!",
+		confirmedUser: true,
+	})
+
+	ctxTargetOrg := auth.NewTestContextWithOrgID(exemptUser.ID, org.ID)
+	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	exemptCtx := ent.NewContext(ctxTargetOrg, suite.db)
+
+	memberRole := enums.RoleMember
+	ssoExempt := true
+	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+		OrganizationID: org.ID,
+		UserID:         exemptUser.UserInfo.ID,
+		Role:           &memberRole,
+		SSOExempt:      &ssoExempt,
+	}).ExecX(exemptCtx)
+
+	suite.db.UserSetting.UpdateOneID(exemptUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(exemptCtx)
+
+	body, _ := json.Marshal(apimodels.LoginRequest{Username: exemptUser.UserInfo.Email, Password: "3x3mptP@ss!"})
+	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(body)))
+	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req)
+
+	require.Equal(t, http.StatusOK, rec.Code)
+	var out apimodels.LoginReply
+	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.True(t, out.Success)
+}
+
+func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOrgExemptDomainBypass() {
+	t := suite.T()
+
+	suite.registerTestHandler("POST", "login", suite.createImpersonationOperation("LoginHandler", "Test login"), suite.h.LoginHandler)
+
+	ctx := echocontext.NewTestEchoContext().Request().Context()
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	ownerUser := suite.userBuilderWithInput(ctx, &userInput{
+		password:      "0wn3rP@ssw0rd",
+		confirmedUser: true,
+	})
+	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
+	ownerCtx = ent.NewContext(ownerCtx, suite.db)
+
+	exemptDomain := "exemptdomain.com"
+	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+		IdentityProviderLoginEnforced: func(b bool) *bool { return &b }(true),
+		IdentityProviderExemptDomains: []string{exemptDomain},
+	}).SaveX(ownerCtx)
+
+	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+		Name:      ulids.New().String(),
+		SettingID: &setting.ID,
+	}).SaveX(ownerCtx)
+
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).ExecX(ownerCtx)
+
+	domainUser := suite.userBuilderWithInput(ctx, &userInput{
+		email:         strings.ToLower(ulids.New().String()) + "@" + exemptDomain,
+		password:      "D0m@1nP@ss!",
+		confirmedUser: true,
+	})
+
+	ctxTargetOrg := auth.NewTestContextWithOrgID(domainUser.ID, org.ID)
+	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	domainCtx := ent.NewContext(ctxTargetOrg, suite.db)
+
+	memberRole := enums.RoleMember
+	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+		OrganizationID: org.ID,
+		UserID:         domainUser.UserInfo.ID,
+		Role:           &memberRole,
+	}).ExecX(domainCtx)
+
+	suite.db.UserSetting.UpdateOneID(domainUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(domainCtx)
+
+	body, _ := json.Marshal(apimodels.LoginRequest{Username: domainUser.UserInfo.Email, Password: "D0m@1nP@ss!"})
+	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(body)))
+	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req)
+
+	require.Equal(t, http.StatusOK, rec.Code)
+	var out apimodels.LoginReply
+	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.True(t, out.Success)
+}
+
+func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedSupportDomainBypass() {
+	t := suite.T()
+
+	suite.registerTestHandler("POST", "login", suite.createImpersonationOperation("LoginHandler", "Test login"), suite.h.LoginHandler)
+
+	supportDomain := "supportdomain.example"
+	suite.h.SupportDomains = []string{supportDomain}
+	t.Cleanup(func() { suite.h.SupportDomains = nil })
+
+	ctx := echocontext.NewTestEchoContext().Request().Context()
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	ownerUser := suite.userBuilderWithInput(ctx, &userInput{
+		password:      "0wn3rP@ssw0rd",
+		confirmedUser: true,
+	})
+	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
+	ownerCtx = ent.NewContext(ownerCtx, suite.db)
+
+	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+		IdentityProviderLoginEnforced: func(b bool) *bool { return &b }(true),
+	}).SaveX(ownerCtx)
+
+	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+		Name:      ulids.New().String(),
+		SettingID: &setting.ID,
+	}).SaveX(ownerCtx)
+
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).ExecX(ownerCtx)
+
+	supportUser := suite.userBuilderWithInput(ctx, &userInput{
+		email:         strings.ToLower(ulids.New().String()) + "@" + supportDomain,
+		password:      "Supp0rtP@ss!",
+		confirmedUser: true,
+	})
+
+	ctxTargetOrg := auth.NewTestContextWithOrgID(supportUser.ID, org.ID)
+	ctxTargetOrg = privacy.DecisionContext(ctxTargetOrg, privacy.Allow)
+	supportCtx := ent.NewContext(ctxTargetOrg, suite.db)
+
+	memberRole := enums.RoleMember
+	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+		OrganizationID: org.ID,
+		UserID:         supportUser.UserInfo.ID,
+		Role:           &memberRole,
+	}).ExecX(supportCtx)
+
+	suite.db.UserSetting.UpdateOneID(supportUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(supportCtx)
+
+	body, _ := json.Marshal(apimodels.LoginRequest{Username: supportUser.UserInfo.Email, Password: "Supp0rtP@ss!"})
+	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(body)))
+	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req)
+
+	require.Equal(t, http.StatusOK, rec.Code)
+	var out apimodels.LoginReply
+	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.True(t, out.Success)
+}
+
 func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforced() {
 	t := suite.T()
 

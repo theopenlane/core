@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/permissioncache"
@@ -522,16 +523,12 @@ func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) 
 			if userID != "" {
 				enforced, dbErr := isSSOEnforcedFunc(reqCtx, conf.DBClient, orgID)
 
-				if dbErr == nil && enforced {
-					role, mErr := orgRoleFunc(reqCtx, conf.DBClient, userID, orgID)
-
-					if mErr == nil && role != enums.RoleOwner {
-						if redirErr := c.Redirect(http.StatusFound, sso.SSOLogin(c.Echo(), orgID)); redirErr != nil {
-							return redirErr
-						}
-
-						return nil
+				if dbErr == nil && enforced && !isSSOBypassedFunc(reqCtx, conf.DBClient, userID, orgID, conf.SupportDomains) {
+					if redirErr := c.Redirect(http.StatusFound, sso.SSOLogin(c.Echo(), orgID)); redirErr != nil {
+						return redirErr
 					}
+
+					return nil
 				}
 			}
 		}
@@ -589,6 +586,53 @@ func isSSOEnforced(ctx context.Context, db *ent.Client, orgID string) (bool, err
 	}
 
 	return setting.IdentityProviderLoginEnforced, nil
+}
+
+// isSSOBypassed returns true if the user should bypass SSO enforcement for the given org.
+// Bypass conditions (evaluated in order):
+//  1. user's email domain is in the global support domains config
+//  2. user's org role is Owner or Auditor
+//  3. user's org membership has sso_exempt set to true
+//  4. user's email domain is in the org's identity_provider_exempt_domains
+func isSSOBypassed(ctx context.Context, db *ent.Client, userID, orgID string, supportDomains []string) bool {
+	if len(supportDomains) > 0 {
+		u, uErr := db.User.Query().Where(user.ID(userID)).Select("email").Only(ctx)
+		if uErr == nil && slices.Contains(supportDomains, emailDomain(u.Email)) {
+			return true
+		}
+	}
+
+	member, err := db.OrgMembership.Query().
+		Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
+		Only(ctx)
+	if err != nil {
+		return false
+	}
+
+	if member.Role == enums.RoleOwner || member.Role == enums.RoleAuditor || member.SSOExempt {
+		return true
+	}
+
+	u, uErr := db.User.Query().Where(user.ID(userID)).Select("email").Only(ctx)
+	if uErr != nil {
+		return false
+	}
+
+	setting, sErr := db.OrganizationSetting.Query().
+		Where(organizationsetting.OrganizationID(orgID)).
+		Only(ctx)
+
+	return sErr == nil && slices.Contains(setting.IdentityProviderExemptDomains, emailDomain(u.Email))
+}
+
+// emailDomain returns the domain portion of an email address (e.g. "theopenlane.io" from "user@theopenlane.io")
+func emailDomain(email string) string {
+	at := strings.LastIndex(email, "@")
+	if at < 0 {
+		return ""
+	}
+
+	return email[at+1:]
 }
 
 // userIDFromToken extracts the user ID from the token in the request context
@@ -674,8 +718,9 @@ func getRole(ctx context.Context, db *ent.Client, userID, orgID string) (enums.R
 
 // function variables allow tests to override SSO checks without a database
 var (
-	isSSOEnforcedFunc = isSSOEnforced
-	orgRoleFunc       = func(ctx context.Context, db *ent.Client, userID, orgID string) (enums.Role, error) {
+	isSSOEnforcedFunc  = isSSOEnforced
+	isSSOBypassedFunc  = isSSOBypassed
+	orgRoleFunc        = func(ctx context.Context, db *ent.Client, userID, orgID string) (enums.Role, error) {
 		member, err := db.OrgMembership.Query().
 			Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
 			Only(privacy.DecisionContext(ctx, privacy.Allow))

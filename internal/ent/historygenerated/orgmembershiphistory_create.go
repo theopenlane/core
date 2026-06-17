@@ -128,6 +128,20 @@ func (_c *OrgMembershipHistoryCreate) SetNillableRole(v *enums.Role) *OrgMembers
 	return _c
 }
 
+// SetSSOExempt sets the "sso_exempt" field.
+func (_c *OrgMembershipHistoryCreate) SetSSOExempt(v bool) *OrgMembershipHistoryCreate {
+	_c.mutation.SetSSOExempt(v)
+	return _c
+}
+
+// SetNillableSSOExempt sets the "sso_exempt" field if the given value is not nil.
+func (_c *OrgMembershipHistoryCreate) SetNillableSSOExempt(v *bool) *OrgMembershipHistoryCreate {
+	if v != nil {
+		_c.SetSSOExempt(*v)
+	}
+	return _c
+}
+
 // SetOrganizationID sets the "organization_id" field.
 func (_c *OrgMembershipHistoryCreate) SetOrganizationID(v string) *OrgMembershipHistoryCreate {
 	_c.mutation.SetOrganizationID(v)
@@ -215,6 +229,10 @@ func (_c *OrgMembershipHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.Role(); !ok {
 		v := orgmembershiphistory.DefaultRole
 		_c.mutation.SetRole(v)
+	}
+	if _, ok := _c.mutation.SSOExempt(); !ok {
+		v := orgmembershiphistory.DefaultSSOExempt
+		_c.mutation.SetSSOExempt(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if orgmembershiphistory.DefaultID == nil {
@@ -320,6 +338,10 @@ func (_c *OrgMembershipHistoryCreate) createSpec() (*OrgMembershipHistory, *sqlg
 	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(orgmembershiphistory.FieldRole, field.TypeEnum, value)
 		_node.Role = value
+	}
+	if value, ok := _c.mutation.SSOExempt(); ok {
+		_spec.SetField(orgmembershiphistory.FieldSSOExempt, field.TypeBool, value)
+		_node.SSOExempt = value
 	}
 	if value, ok := _c.mutation.OrganizationID(); ok {
 		_spec.SetField(orgmembershiphistory.FieldOrganizationID, field.TypeString, value)

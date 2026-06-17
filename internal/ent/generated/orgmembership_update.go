@@ -79,6 +79,26 @@ func (_u *OrgMembershipUpdate) SetNillableRole(v *enums.Role) *OrgMembershipUpda
 	return _u
 }
 
+// SetSSOExempt sets the "sso_exempt" field.
+func (_u *OrgMembershipUpdate) SetSSOExempt(v bool) *OrgMembershipUpdate {
+	_u.mutation.SetSSOExempt(v)
+	return _u
+}
+
+// SetNillableSSOExempt sets the "sso_exempt" field if the given value is not nil.
+func (_u *OrgMembershipUpdate) SetNillableSSOExempt(v *bool) *OrgMembershipUpdate {
+	if v != nil {
+		_u.SetSSOExempt(*v)
+	}
+	return _u
+}
+
+// ClearSSOExempt clears the value of the "sso_exempt" field.
+func (_u *OrgMembershipUpdate) ClearSSOExempt() *OrgMembershipUpdate {
+	_u.mutation.ClearSSOExempt()
+	return _u
+}
+
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
 func (_u *OrgMembershipUpdate) AddEventIDs(ids ...string) *OrgMembershipUpdate {
 	_u.mutation.AddEventIDs(ids...)
@@ -217,6 +237,12 @@ func (_u *OrgMembershipUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(orgmembership.FieldRole, field.TypeEnum, value)
 	}
+	if value, ok := _u.mutation.SSOExempt(); ok {
+		_spec.SetField(orgmembership.FieldSSOExempt, field.TypeBool, value)
+	}
+	if _u.mutation.SSOExemptCleared() {
+		_spec.ClearField(orgmembership.FieldSSOExempt, field.TypeBool)
+	}
 	if _u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -332,6 +358,26 @@ func (_u *OrgMembershipUpdateOne) SetNillableRole(v *enums.Role) *OrgMembershipU
 	if v != nil {
 		_u.SetRole(*v)
 	}
+	return _u
+}
+
+// SetSSOExempt sets the "sso_exempt" field.
+func (_u *OrgMembershipUpdateOne) SetSSOExempt(v bool) *OrgMembershipUpdateOne {
+	_u.mutation.SetSSOExempt(v)
+	return _u
+}
+
+// SetNillableSSOExempt sets the "sso_exempt" field if the given value is not nil.
+func (_u *OrgMembershipUpdateOne) SetNillableSSOExempt(v *bool) *OrgMembershipUpdateOne {
+	if v != nil {
+		_u.SetSSOExempt(*v)
+	}
+	return _u
+}
+
+// ClearSSOExempt clears the value of the "sso_exempt" field.
+func (_u *OrgMembershipUpdateOne) ClearSSOExempt() *OrgMembershipUpdateOne {
+	_u.mutation.ClearSSOExempt()
 	return _u
 }
 
@@ -502,6 +548,12 @@ func (_u *OrgMembershipUpdateOne) sqlSave(ctx context.Context) (_node *OrgMember
 	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(orgmembership.FieldRole, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.SSOExempt(); ok {
+		_spec.SetField(orgmembership.FieldSSOExempt, field.TypeBool, value)
+	}
+	if _u.mutation.SSOExemptCleared() {
+		_spec.ClearField(orgmembership.FieldSSOExempt, field.TypeBool)
 	}
 	if _u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{

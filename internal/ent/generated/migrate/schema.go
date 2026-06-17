@@ -5456,6 +5456,7 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER", "OWNER", "SUPER_ADMIN", "AUDITOR"}, Default: "MEMBER"},
+		{Name: "sso_exempt", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "organization_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
 	}
@@ -5467,13 +5468,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "org_memberships_organizations_organization",
-				Columns:    []*schema.Column{OrgMembershipsColumns[6]},
+				Columns:    []*schema.Column{OrgMembershipsColumns[7]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "org_memberships_users_user",
-				Columns:    []*schema.Column{OrgMembershipsColumns[7]},
+				Columns:    []*schema.Column{OrgMembershipsColumns[8]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -5482,7 +5483,7 @@ var (
 			{
 				Name:    "orgmembership_user_id_organization_id",
 				Unique:  true,
-				Columns: []*schema.Column{OrgMembershipsColumns[7], OrgMembershipsColumns[6]},
+				Columns: []*schema.Column{OrgMembershipsColumns[8], OrgMembershipsColumns[7]},
 			},
 		},
 	}
@@ -5770,6 +5771,7 @@ var (
 		{Name: "saml_issuer", Type: field.TypeString, Nullable: true},
 		{Name: "saml_cert", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "identity_provider_login_enforced", Type: field.TypeBool, Default: false},
+		{Name: "identity_provider_exempt_domains", Type: field.TypeJSON, Nullable: true},
 		{Name: "multifactor_auth_enforced", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "compliance_webhook_token", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "payment_method_added", Type: field.TypeBool, Default: false},
@@ -5784,7 +5786,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organization_settings_organizations_setting",
-				Columns:    []*schema.Column{OrganizationSettingsColumns[33]},
+				Columns:    []*schema.Column{OrganizationSettingsColumns[34]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

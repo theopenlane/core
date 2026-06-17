@@ -94,6 +94,20 @@ func (_c *OrgMembershipCreate) SetNillableRole(v *enums.Role) *OrgMembershipCrea
 	return _c
 }
 
+// SetSSOExempt sets the "sso_exempt" field.
+func (_c *OrgMembershipCreate) SetSSOExempt(v bool) *OrgMembershipCreate {
+	_c.mutation.SetSSOExempt(v)
+	return _c
+}
+
+// SetNillableSSOExempt sets the "sso_exempt" field if the given value is not nil.
+func (_c *OrgMembershipCreate) SetNillableSSOExempt(v *bool) *OrgMembershipCreate {
+	if v != nil {
+		_c.SetSSOExempt(*v)
+	}
+	return _c
+}
+
 // SetOrganizationID sets the "organization_id" field.
 func (_c *OrgMembershipCreate) SetOrganizationID(v string) *OrgMembershipCreate {
 	_c.mutation.SetOrganizationID(v)
@@ -200,6 +214,10 @@ func (_c *OrgMembershipCreate) defaults() error {
 		v := orgmembership.DefaultRole
 		_c.mutation.SetRole(v)
 	}
+	if _, ok := _c.mutation.SSOExempt(); !ok {
+		v := orgmembership.DefaultSSOExempt
+		_c.mutation.SetSSOExempt(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if orgmembership.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized orgmembership.DefaultID (forgotten import generated/runtime?)")
@@ -287,6 +305,10 @@ func (_c *OrgMembershipCreate) createSpec() (*OrgMembership, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(orgmembership.FieldRole, field.TypeEnum, value)
 		_node.Role = value
+	}
+	if value, ok := _c.mutation.SSOExempt(); ok {
+		_spec.SetField(orgmembership.FieldSSOExempt, field.TypeBool, value)
+		_node.SSOExempt = value
 	}
 	if nodes := _c.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

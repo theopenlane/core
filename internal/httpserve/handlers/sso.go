@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"errors"
+	"slices"
 	"strings"
 	"time"
 
@@ -19,6 +20,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	apimodels "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
@@ -360,17 +362,52 @@ func (h *Handler) orgEnforcementsForUser(ctx context.Context, email string) *api
 		return nil
 	}
 
-	// For SSO, check if user is an owner (owners bypass SSO)
-	if status.Enforced {
-		member, mErr := transaction.FromContext(allowCtx).OrgMembership.Query().
-			Where(orgmembership.UserID(user.ID), orgmembership.OrganizationID(orgID)).Only(allowCtx)
-		if mErr == nil && member.Role == enums.RoleOwner {
-			// Owner bypasses SSO requirement
-			status.Enforced = false
-		}
+	if status.Enforced && h.ssoExemptForMember(allowCtx, user.Email, user.ID, orgID) {
+		status.Enforced = false
 	}
 
 	return &status
+}
+
+// ssoExemptForMember returns true if the user should bypass SSO enforcement for the given org.
+// Bypass conditions (evaluated in order):
+//  1. user's email domain is in the global SupportDomains config
+//  2. user's org role is Owner or Auditor
+//  3. user's org membership has sso_exempt set to true
+//  4. user's email domain is in the org's identity_provider_exempt_domains
+func (h *Handler) ssoExemptForMember(ctx context.Context, userEmail, userID, orgID string) bool {
+	if len(h.SupportDomains) > 0 {
+		if slices.Contains(h.SupportDomains, emailDomain(userEmail)) {
+			return true
+		}
+	}
+
+	member, err := transaction.FromContext(ctx).OrgMembership.Query().
+		Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
+		Only(ctx)
+	if err != nil {
+		return false
+	}
+
+	if member.Role == enums.RoleOwner || member.Role == enums.RoleAuditor || member.SSOExempt {
+		return true
+	}
+
+	setting, sErr := transaction.FromContext(ctx).OrganizationSetting.Query().
+		Where(organizationsetting.OrganizationID(orgID)).
+		Only(ctx)
+
+	return sErr == nil && slices.Contains(setting.IdentityProviderExemptDomains, emailDomain(userEmail))
+}
+
+// emailDomain returns the domain portion of an email address (e.g. "theopenlane.io" from "user@theopenlane.io")
+func emailDomain(email string) string {
+	at := strings.LastIndex(email, "@")
+	if at < 0 {
+		return ""
+	}
+
+	return email[at+1:]
 }
 
 // authorizeTokenSSO updates the SSO authorization timestamp for a token type (API or Personal Access Token)

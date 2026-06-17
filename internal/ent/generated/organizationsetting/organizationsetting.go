@@ -76,6 +76,8 @@ const (
 	FieldSamlCert = "saml_cert"
 	// FieldIdentityProviderLoginEnforced holds the string denoting the identity_provider_login_enforced field in the database.
 	FieldIdentityProviderLoginEnforced = "identity_provider_login_enforced"
+	// FieldIdentityProviderExemptDomains holds the string denoting the identity_provider_exempt_domains field in the database.
+	FieldIdentityProviderExemptDomains = "identity_provider_exempt_domains"
 	// FieldMultifactorAuthEnforced holds the string denoting the multifactor_auth_enforced field in the database.
 	FieldMultifactorAuthEnforced = "multifactor_auth_enforced"
 	// FieldComplianceWebhookToken holds the string denoting the compliance_webhook_token field in the database.
@@ -136,6 +138,7 @@ var Columns = []string{
 	FieldSamlIssuer,
 	FieldSamlCert,
 	FieldIdentityProviderLoginEnforced,
+	FieldIdentityProviderExemptDomains,
 	FieldMultifactorAuthEnforced,
 	FieldComplianceWebhookToken,
 	FieldPaymentMethodAdded,
@@ -193,6 +196,8 @@ var (
 	SamlSigninURLValidator func(string) error
 	// DefaultIdentityProviderLoginEnforced holds the default value on creation for the "identity_provider_login_enforced" field.
 	DefaultIdentityProviderLoginEnforced bool
+	// IdentityProviderExemptDomainsValidator is a validator for the "identity_provider_exempt_domains" field. It is called by the builders before save.
+	IdentityProviderExemptDomainsValidator func([]string) error
 	// DefaultMultifactorAuthEnforced holds the default value on creation for the "multifactor_auth_enforced" field.
 	DefaultMultifactorAuthEnforced bool
 	// DefaultComplianceWebhookToken holds the default value on creation for the "compliance_webhook_token" field.

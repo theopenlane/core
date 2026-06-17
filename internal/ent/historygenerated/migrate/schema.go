@@ -1829,6 +1829,7 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER", "OWNER", "SUPER_ADMIN", "AUDITOR"}, Default: "MEMBER"},
+		{Name: "sso_exempt", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "organization_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
 	}
@@ -1950,6 +1951,7 @@ var (
 		{Name: "saml_issuer", Type: field.TypeString, Nullable: true},
 		{Name: "saml_cert", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "identity_provider_login_enforced", Type: field.TypeBool, Default: false},
+		{Name: "identity_provider_exempt_domains", Type: field.TypeJSON, Nullable: true},
 		{Name: "multifactor_auth_enforced", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "compliance_webhook_token", Type: field.TypeString, Nullable: true},
 		{Name: "payment_method_added", Type: field.TypeBool, Default: false},

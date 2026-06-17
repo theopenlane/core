@@ -36,6 +36,8 @@ const (
 	FieldUpdatedBy = "updated_by"
 	// FieldRole holds the string denoting the role field in the database.
 	FieldRole = "role"
+	// FieldSSOExempt holds the string denoting the sso_exempt field in the database.
+	FieldSSOExempt = "sso_exempt"
 	// FieldOrganizationID holds the string denoting the organization_id field in the database.
 	FieldOrganizationID = "organization_id"
 	// FieldUserID holds the string denoting the user_id field in the database.
@@ -55,6 +57,7 @@ var Columns = []string{
 	FieldCreatedBy,
 	FieldUpdatedBy,
 	FieldRole,
+	FieldSSOExempt,
 	FieldOrganizationID,
 	FieldUserID,
 }
@@ -86,6 +89,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultSSOExempt holds the default value on creation for the "sso_exempt" field.
+	DefaultSSOExempt bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -158,6 +163,11 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByRole orders the results by the role field.
 func ByRole(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRole, opts...).ToFunc()
+}
+
+// BySSOExempt orders the results by the sso_exempt field.
+func BySSOExempt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSSOExempt, opts...).ToFunc()
 }
 
 // ByOrganizationID orders the results by the organization_id field.

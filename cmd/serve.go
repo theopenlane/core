@@ -278,6 +278,8 @@ func serve(ctx context.Context) error {
 	// add auth and integration options
 	so.AddServerOptions(
 		serveropts.WithAuth(),
+		// support domains are used to bypass SSO for support with configured domains
+		serveropts.WithSupportDomains(),
 		serveropts.WithIntegrationsRuntime(dbClient),
 	)
 

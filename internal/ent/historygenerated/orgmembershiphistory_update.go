@@ -80,6 +80,26 @@ func (_u *OrgMembershipHistoryUpdate) SetNillableRole(v *enums.Role) *OrgMembers
 	return _u
 }
 
+// SetSSOExempt sets the "sso_exempt" field.
+func (_u *OrgMembershipHistoryUpdate) SetSSOExempt(v bool) *OrgMembershipHistoryUpdate {
+	_u.mutation.SetSSOExempt(v)
+	return _u
+}
+
+// SetNillableSSOExempt sets the "sso_exempt" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdate) SetNillableSSOExempt(v *bool) *OrgMembershipHistoryUpdate {
+	if v != nil {
+		_u.SetSSOExempt(*v)
+	}
+	return _u
+}
+
+// ClearSSOExempt clears the value of the "sso_exempt" field.
+func (_u *OrgMembershipHistoryUpdate) ClearSSOExempt() *OrgMembershipHistoryUpdate {
+	_u.mutation.ClearSSOExempt()
+	return _u
+}
+
 // Mutation returns the OrgMembershipHistoryMutation object of the builder.
 func (_u *OrgMembershipHistoryUpdate) Mutation() *OrgMembershipHistoryMutation {
 	return _u.mutation
@@ -179,6 +199,12 @@ func (_u *OrgMembershipHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(orgmembershiphistory.FieldRole, field.TypeEnum, value)
 	}
+	if value, ok := _u.mutation.SSOExempt(); ok {
+		_spec.SetField(orgmembershiphistory.FieldSSOExempt, field.TypeBool, value)
+	}
+	if _u.mutation.SSOExemptCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldSSOExempt, field.TypeBool)
+	}
 	_spec.Node.Schema = _u.schemaConfig.OrgMembershipHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -246,6 +272,26 @@ func (_u *OrgMembershipHistoryUpdateOne) SetNillableRole(v *enums.Role) *OrgMemb
 	if v != nil {
 		_u.SetRole(*v)
 	}
+	return _u
+}
+
+// SetSSOExempt sets the "sso_exempt" field.
+func (_u *OrgMembershipHistoryUpdateOne) SetSSOExempt(v bool) *OrgMembershipHistoryUpdateOne {
+	_u.mutation.SetSSOExempt(v)
+	return _u
+}
+
+// SetNillableSSOExempt sets the "sso_exempt" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdateOne) SetNillableSSOExempt(v *bool) *OrgMembershipHistoryUpdateOne {
+	if v != nil {
+		_u.SetSSOExempt(*v)
+	}
+	return _u
+}
+
+// ClearSSOExempt clears the value of the "sso_exempt" field.
+func (_u *OrgMembershipHistoryUpdateOne) ClearSSOExempt() *OrgMembershipHistoryUpdateOne {
+	_u.mutation.ClearSSOExempt()
 	return _u
 }
 
@@ -377,6 +423,12 @@ func (_u *OrgMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Or
 	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(orgmembershiphistory.FieldRole, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.SSOExempt(); ok {
+		_spec.SetField(orgmembershiphistory.FieldSSOExempt, field.TypeBool, value)
+	}
+	if _u.mutation.SSOExemptCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldSSOExempt, field.TypeBool)
 	}
 	_spec.Node.Schema = _u.schemaConfig.OrgMembershipHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

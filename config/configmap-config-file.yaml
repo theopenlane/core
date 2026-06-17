@@ -199,6 +199,11 @@ data:
       {{- if .Values.openlane.coreConfiguration.server.notificationlookbackdays }}
       notificationlookbackdays: {{ .Values.openlane.coreConfiguration.server.notificationlookbackdays }}
       {{- end }}
+      {{- $sliceValue := (.Values.openlane.coreConfiguration.server.supportdomains | default (list)) }}
+      {{- if gt (len $sliceValue) 0 }}
+      supportdomains:
+      {{- toYaml $sliceValue | nindent 8 }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.entconfig }}
     entconfig:

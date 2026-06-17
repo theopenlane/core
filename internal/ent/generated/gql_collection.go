@@ -44473,6 +44473,11 @@ func (_q *OrgMembershipQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, orgmembership.FieldRole)
 				fieldSeen[orgmembership.FieldRole] = struct{}{}
 			}
+		case "ssoExempt":
+			if _, ok := fieldSeen[orgmembership.FieldSSOExempt]; !ok {
+				selectedFields = append(selectedFields, orgmembership.FieldSSOExempt)
+				fieldSeen[orgmembership.FieldSSOExempt] = struct{}{}
+			}
 		case "organizationID":
 			if _, ok := fieldSeen[orgmembership.FieldOrganizationID]; !ok {
 				selectedFields = append(selectedFields, orgmembership.FieldOrganizationID)
@@ -59354,6 +59359,11 @@ func (_q *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[organizationsetting.FieldIdentityProviderLoginEnforced]; !ok {
 				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProviderLoginEnforced)
 				fieldSeen[organizationsetting.FieldIdentityProviderLoginEnforced] = struct{}{}
+			}
+		case "identityProviderExemptDomains":
+			if _, ok := fieldSeen[organizationsetting.FieldIdentityProviderExemptDomains]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProviderExemptDomains)
+				fieldSeen[organizationsetting.FieldIdentityProviderExemptDomains] = struct{}{}
 			}
 		case "multifactorAuthEnforced":
 			if _, ok := fieldSeen[organizationsetting.FieldMultifactorAuthEnforced]; !ok {

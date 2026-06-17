@@ -441,6 +441,12 @@ func (_c *OrganizationSettingHistoryCreate) SetNillableIdentityProviderLoginEnfo
 	return _c
 }
 
+// SetIdentityProviderExemptDomains sets the "identity_provider_exempt_domains" field.
+func (_c *OrganizationSettingHistoryCreate) SetIdentityProviderExemptDomains(v []string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetIdentityProviderExemptDomains(v)
+	return _c
+}
+
 // SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
 func (_c *OrganizationSettingHistoryCreate) SetMultifactorAuthEnforced(v bool) *OrganizationSettingHistoryCreate {
 	_c.mutation.SetMultifactorAuthEnforced(v)
@@ -820,6 +826,10 @@ func (_c *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSettingHi
 	if value, ok := _c.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
 		_node.IdentityProviderLoginEnforced = value
+	}
+	if value, ok := _c.mutation.IdentityProviderExemptDomains(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderExemptDomains, field.TypeJSON, value)
+		_node.IdentityProviderExemptDomains = value
 	}
 	if value, ok := _c.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool, value)

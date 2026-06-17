@@ -84,6 +84,8 @@ const (
 	FieldSamlCert = "saml_cert"
 	// FieldIdentityProviderLoginEnforced holds the string denoting the identity_provider_login_enforced field in the database.
 	FieldIdentityProviderLoginEnforced = "identity_provider_login_enforced"
+	// FieldIdentityProviderExemptDomains holds the string denoting the identity_provider_exempt_domains field in the database.
+	FieldIdentityProviderExemptDomains = "identity_provider_exempt_domains"
 	// FieldMultifactorAuthEnforced holds the string denoting the multifactor_auth_enforced field in the database.
 	FieldMultifactorAuthEnforced = "multifactor_auth_enforced"
 	// FieldComplianceWebhookToken holds the string denoting the compliance_webhook_token field in the database.
@@ -131,6 +133,7 @@ var Columns = []string{
 	FieldSamlIssuer,
 	FieldSamlCert,
 	FieldIdentityProviderLoginEnforced,
+	FieldIdentityProviderExemptDomains,
 	FieldMultifactorAuthEnforced,
 	FieldComplianceWebhookToken,
 	FieldPaymentMethodAdded,

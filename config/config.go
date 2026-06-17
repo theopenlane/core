@@ -143,6 +143,8 @@ type Server struct {
 	// NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription
 	// Unread notifications are always pulled regardless of this setting
 	NotificationLookbackDays int `json:"notificationlookbackdays" koanf:"notificationlookbackdays" default:"30"`
+	// SupportDomains is the list of email domains that bypass SSO enforcement globally across all organizations
+	SupportDomains []string `json:"supportdomains" koanf:"supportdomains"`
 }
 
 // KeyWatcher contains settings for the key watcher that manages JWT signing keys

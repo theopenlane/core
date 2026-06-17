@@ -1692,6 +1692,7 @@ type ComplexityRoot struct {
 		OrganizationID func(childComplexity int) int
 		Ref            func(childComplexity int) int
 		Role           func(childComplexity int) int
+		SSOExempt      func(childComplexity int) int
 		UpdatedAt      func(childComplexity int) int
 		UpdatedBy      func(childComplexity int) int
 		UserID         func(childComplexity int) int
@@ -1789,6 +1790,7 @@ type ComplexityRoot struct {
 		IdentityProviderClientID         func(childComplexity int) int
 		IdentityProviderClientSecret     func(childComplexity int) int
 		IdentityProviderEntityID         func(childComplexity int) int
+		IdentityProviderExemptDomains    func(childComplexity int) int
 		IdentityProviderLoginEnforced    func(childComplexity int) int
 		IdentityProviderMetadataEndpoint func(childComplexity int) int
 		MultifactorAuthEnforced          func(childComplexity int) int
@@ -12494,6 +12496,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.OrgMembershipHistory.Role(childComplexity), true
 
+	case "OrgMembershipHistory.ssoExempt":
+		if e.ComplexityRoot.OrgMembershipHistory.SSOExempt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrgMembershipHistory.SSOExempt(childComplexity), true
+
 	case "OrgMembershipHistory.updatedAt":
 		if e.ComplexityRoot.OrgMembershipHistory.UpdatedAt == nil {
 			break
@@ -12983,6 +12992,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderEntityID(childComplexity), true
+
+	case "OrganizationSettingHistory.identityProviderExemptDomains":
+		if e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderExemptDomains == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderExemptDomains(childComplexity), true
 
 	case "OrganizationSettingHistory.identityProviderLoginEnforced":
 		if e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderLoginEnforced == nil {
@@ -43854,6 +43870,10 @@ type OrgMembershipHistory implements Node {
   createdBy: String
   updatedBy: String
   role: OrgMembershipHistoryRole!
+  """
+  allow this org member to bypass SSO enforcement
+  """
+  ssoExempt: Boolean
   organizationID: String!
   userID: String!
 }
@@ -44053,6 +44073,13 @@ input OrgMembershipHistoryWhereInput {
   roleNEQ: OrgMembershipHistoryRole
   roleIn: [OrgMembershipHistoryRole!]
   roleNotIn: [OrgMembershipHistoryRole!]
+  """
+  sso_exempt field predicates
+  """
+  ssoExempt: Boolean
+  ssoExemptNEQ: Boolean
+  ssoExemptIsNil: Boolean
+  ssoExemptNotNil: Boolean
   """
   organization_id field predicates
   """
@@ -44833,6 +44860,10 @@ type OrganizationSettingHistory implements Node {
   enforce SSO authentication for organization members
   """
   identityProviderLoginEnforced: Boolean!
+  """
+  email domains that bypass SSO enforcement for this organization
+  """
+  identityProviderExemptDomains: [String!]
   """
   enforce 2fa / multifactor authentication for organization members
   """
@@ -69729,6 +69760,8 @@ func (ec *executionContext) childFields_OrgMembershipHistory(ctx context.Context
 		return ec.fieldContext_OrgMembershipHistory_updatedBy(ctx, field)
 	case "role":
 		return ec.fieldContext_OrgMembershipHistory_role(ctx, field)
+	case "ssoExempt":
+		return ec.fieldContext_OrgMembershipHistory_ssoExempt(ctx, field)
 	case "organizationID":
 		return ec.fieldContext_OrgMembershipHistory_organizationID(ctx, field)
 	case "userID":
@@ -69945,6 +69978,8 @@ func (ec *executionContext) childFields_OrganizationSettingHistory(ctx context.C
 		return ec.fieldContext_OrganizationSettingHistory_samlCert(ctx, field)
 	case "identityProviderLoginEnforced":
 		return ec.fieldContext_OrganizationSettingHistory_identityProviderLoginEnforced(ctx, field)
+	case "identityProviderExemptDomains":
+		return ec.fieldContext_OrganizationSettingHistory_identityProviderExemptDomains(ctx, field)
 	case "multifactorAuthEnforced":
 		return ec.fieldContext_OrganizationSettingHistory_multifactorAuthEnforced(ctx, field)
 	case "complianceWebhookToken":

@@ -50,6 +50,8 @@ type Options struct {
 	DBClient *ent.Client
 	// RedisClient is used to set the permission cache in the context
 	RedisClient *redis.Client
+	// SupportDomains are the email domains that bypass SSO enforcement globally across all organizations
+	SupportDomains []string
 }
 
 // Reauthenticator generates new access and refresh pair given a valid refresh token.
@@ -262,5 +264,12 @@ func WithCookieConfig(cookieConfig *sessions.CookieConfig) Option {
 func WithRedisClient(redisClient *redis.Client) Option {
 	return func(opts *Options) {
 		opts.RedisClient = redisClient
+	}
+}
+
+// WithSupportDomains allows the user to specify email domains that bypass SSO enforcement globally.
+func WithSupportDomains(domains []string) Option {
+	return func(opts *Options) {
+		opts.SupportDomains = domains
 	}
 }

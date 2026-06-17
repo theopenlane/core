@@ -53,6 +53,10 @@ func (OrgMembership) Fields() []ent.Field {
 				entgql.OrderField("ROLE"),
 			).
 			Default(enums.RoleMember.String()),
+		field.Bool("sso_exempt").
+			Comment("allow this org member to bypass SSO enforcement").
+			Default(false).
+			Optional(),
 		field.String("organization_id").Immutable(),
 		field.String("user_id").Immutable(),
 	}

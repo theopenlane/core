@@ -30,6 +30,8 @@ type OrgMembership struct {
 	UpdatedBy string `json:"updated_by,omitempty"`
 	// Role holds the value of the "role" field.
 	Role enums.Role `json:"role,omitempty"`
+	// allow this org member to bypass SSO enforcement
+	SSOExempt bool `json:"sso_exempt,omitempty"`
 	// OrganizationID holds the value of the "organization_id" field.
 	OrganizationID string `json:"organization_id,omitempty"`
 	// UserID holds the value of the "user_id" field.
@@ -97,6 +99,8 @@ func (*OrgMembership) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case orgmembership.FieldSSOExempt:
+			values[i] = new(sql.NullBool)
 		case orgmembership.FieldID, orgmembership.FieldCreatedBy, orgmembership.FieldUpdatedBy, orgmembership.FieldRole, orgmembership.FieldOrganizationID, orgmembership.FieldUserID:
 			values[i] = new(sql.NullString)
 		case orgmembership.FieldCreatedAt, orgmembership.FieldUpdatedAt:
@@ -151,6 +155,12 @@ func (_m *OrgMembership) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field role", values[i])
 			} else if value.Valid {
 				_m.Role = enums.Role(value.String)
+			}
+		case orgmembership.FieldSSOExempt:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field sso_exempt", values[i])
+			} else if value.Valid {
+				_m.SSOExempt = value.Bool
 			}
 		case orgmembership.FieldOrganizationID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -229,6 +239,9 @@ func (_m *OrgMembership) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("role=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Role))
+	builder.WriteString(", ")
+	builder.WriteString("sso_exempt=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SSOExempt))
 	builder.WriteString(", ")
 	builder.WriteString("organization_id=")
 	builder.WriteString(_m.OrganizationID)

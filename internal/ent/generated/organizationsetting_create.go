@@ -406,6 +406,12 @@ func (_c *OrganizationSettingCreate) SetNillableIdentityProviderLoginEnforced(v 
 	return _c
 }
 
+// SetIdentityProviderExemptDomains sets the "identity_provider_exempt_domains" field.
+func (_c *OrganizationSettingCreate) SetIdentityProviderExemptDomains(v []string) *OrganizationSettingCreate {
+	_c.mutation.SetIdentityProviderExemptDomains(v)
+	return _c
+}
+
 // SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
 func (_c *OrganizationSettingCreate) SetMultifactorAuthEnforced(v bool) *OrganizationSettingCreate {
 	_c.mutation.SetMultifactorAuthEnforced(v)
@@ -646,6 +652,11 @@ func (_c *OrganizationSettingCreate) check() error {
 	if _, ok := _c.mutation.IdentityProviderLoginEnforced(); !ok {
 		return &ValidationError{Name: "identity_provider_login_enforced", err: errors.New(`generated: missing required field "OrganizationSetting.identity_provider_login_enforced"`)}
 	}
+	if v, ok := _c.mutation.IdentityProviderExemptDomains(); ok {
+		if err := organizationsetting.IdentityProviderExemptDomainsValidator(v); err != nil {
+			return &ValidationError{Name: "identity_provider_exempt_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.identity_provider_exempt_domains": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.PaymentMethodAdded(); !ok {
 		return &ValidationError{Name: "payment_method_added", err: errors.New(`generated: missing required field "OrganizationSetting.payment_method_added"`)}
 	}
@@ -796,6 +807,10 @@ func (_c *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgra
 	if value, ok := _c.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
 		_node.IdentityProviderLoginEnforced = value
+	}
+	if value, ok := _c.mutation.IdentityProviderExemptDomains(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderExemptDomains, field.TypeJSON, value)
+		_node.IdentityProviderExemptDomains = value
 	}
 	if value, ok := _c.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsetting.FieldMultifactorAuthEnforced, field.TypeBool, value)

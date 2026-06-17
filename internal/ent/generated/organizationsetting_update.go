@@ -544,6 +544,24 @@ func (_u *OrganizationSettingUpdate) SetNillableIdentityProviderLoginEnforced(v 
 	return _u
 }
 
+// SetIdentityProviderExemptDomains sets the "identity_provider_exempt_domains" field.
+func (_u *OrganizationSettingUpdate) SetIdentityProviderExemptDomains(v []string) *OrganizationSettingUpdate {
+	_u.mutation.SetIdentityProviderExemptDomains(v)
+	return _u
+}
+
+// AppendIdentityProviderExemptDomains appends value to the "identity_provider_exempt_domains" field.
+func (_u *OrganizationSettingUpdate) AppendIdentityProviderExemptDomains(v []string) *OrganizationSettingUpdate {
+	_u.mutation.AppendIdentityProviderExemptDomains(v)
+	return _u
+}
+
+// ClearIdentityProviderExemptDomains clears the value of the "identity_provider_exempt_domains" field.
+func (_u *OrganizationSettingUpdate) ClearIdentityProviderExemptDomains() *OrganizationSettingUpdate {
+	_u.mutation.ClearIdentityProviderExemptDomains()
+	return _u
+}
+
 // SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
 func (_u *OrganizationSettingUpdate) SetMultifactorAuthEnforced(v bool) *OrganizationSettingUpdate {
 	_u.mutation.SetMultifactorAuthEnforced(v)
@@ -749,6 +767,11 @@ func (_u *OrganizationSettingUpdate) check() error {
 			return &ValidationError{Name: "saml_signin_url", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.saml_signin_url": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.IdentityProviderExemptDomains(); ok {
+		if err := organizationsetting.IdentityProviderExemptDomainsValidator(v); err != nil {
+			return &ValidationError{Name: "identity_provider_exempt_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.identity_provider_exempt_domains": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -937,6 +960,17 @@ func (_u *OrganizationSettingUpdate) sqlSave(ctx context.Context) (_node int, er
 	}
 	if value, ok := _u.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IdentityProviderExemptDomains(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderExemptDomains, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedIdentityProviderExemptDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsetting.FieldIdentityProviderExemptDomains, value)
+		})
+	}
+	if _u.mutation.IdentityProviderExemptDomainsCleared() {
+		_spec.ClearField(organizationsetting.FieldIdentityProviderExemptDomains, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsetting.FieldMultifactorAuthEnforced, field.TypeBool, value)
@@ -1570,6 +1604,24 @@ func (_u *OrganizationSettingUpdateOne) SetNillableIdentityProviderLoginEnforced
 	return _u
 }
 
+// SetIdentityProviderExemptDomains sets the "identity_provider_exempt_domains" field.
+func (_u *OrganizationSettingUpdateOne) SetIdentityProviderExemptDomains(v []string) *OrganizationSettingUpdateOne {
+	_u.mutation.SetIdentityProviderExemptDomains(v)
+	return _u
+}
+
+// AppendIdentityProviderExemptDomains appends value to the "identity_provider_exempt_domains" field.
+func (_u *OrganizationSettingUpdateOne) AppendIdentityProviderExemptDomains(v []string) *OrganizationSettingUpdateOne {
+	_u.mutation.AppendIdentityProviderExemptDomains(v)
+	return _u
+}
+
+// ClearIdentityProviderExemptDomains clears the value of the "identity_provider_exempt_domains" field.
+func (_u *OrganizationSettingUpdateOne) ClearIdentityProviderExemptDomains() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearIdentityProviderExemptDomains()
+	return _u
+}
+
 // SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
 func (_u *OrganizationSettingUpdateOne) SetMultifactorAuthEnforced(v bool) *OrganizationSettingUpdateOne {
 	_u.mutation.SetMultifactorAuthEnforced(v)
@@ -1788,6 +1840,11 @@ func (_u *OrganizationSettingUpdateOne) check() error {
 			return &ValidationError{Name: "saml_signin_url", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.saml_signin_url": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.IdentityProviderExemptDomains(); ok {
+		if err := organizationsetting.IdentityProviderExemptDomainsValidator(v); err != nil {
+			return &ValidationError{Name: "identity_provider_exempt_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.identity_provider_exempt_domains": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1993,6 +2050,17 @@ func (_u *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *Org
 	}
 	if value, ok := _u.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IdentityProviderExemptDomains(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderExemptDomains, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedIdentityProviderExemptDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsetting.FieldIdentityProviderExemptDomains, value)
+		})
+	}
+	if _u.mutation.IdentityProviderExemptDomainsCleared() {
+		_spec.ClearField(organizationsetting.FieldIdentityProviderExemptDomains, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsetting.FieldMultifactorAuthEnforced, field.TypeBool, value)

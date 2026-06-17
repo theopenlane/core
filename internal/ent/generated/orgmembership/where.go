@@ -88,6 +88,11 @@ func UpdatedBy(v string) predicate.OrgMembership {
 	return predicate.OrgMembership(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
+// SSOExempt applies equality check predicate on the "sso_exempt" field. It's identical to SSOExemptEQ.
+func SSOExempt(v bool) predicate.OrgMembership {
+	return predicate.OrgMembership(sql.FieldEQ(FieldSSOExempt, v))
+}
+
 // OrganizationID applies equality check predicate on the "organization_id" field. It's identical to OrganizationIDEQ.
 func OrganizationID(v string) predicate.OrgMembership {
 	return predicate.OrgMembership(sql.FieldEQ(FieldOrganizationID, v))
@@ -376,6 +381,26 @@ func RoleNotIn(vs ...enums.Role) predicate.OrgMembership {
 		v[i] = vs[i]
 	}
 	return predicate.OrgMembership(sql.FieldNotIn(FieldRole, v...))
+}
+
+// SSOExemptEQ applies the EQ predicate on the "sso_exempt" field.
+func SSOExemptEQ(v bool) predicate.OrgMembership {
+	return predicate.OrgMembership(sql.FieldEQ(FieldSSOExempt, v))
+}
+
+// SSOExemptNEQ applies the NEQ predicate on the "sso_exempt" field.
+func SSOExemptNEQ(v bool) predicate.OrgMembership {
+	return predicate.OrgMembership(sql.FieldNEQ(FieldSSOExempt, v))
+}
+
+// SSOExemptIsNil applies the IsNil predicate on the "sso_exempt" field.
+func SSOExemptIsNil() predicate.OrgMembership {
+	return predicate.OrgMembership(sql.FieldIsNull(FieldSSOExempt))
+}
+
+// SSOExemptNotNil applies the NotNil predicate on the "sso_exempt" field.
+func SSOExemptNotNil() predicate.OrgMembership {
+	return predicate.OrgMembership(sql.FieldNotNull(FieldSSOExempt))
 }
 
 // OrganizationIDEQ applies the EQ predicate on the "organization_id" field.

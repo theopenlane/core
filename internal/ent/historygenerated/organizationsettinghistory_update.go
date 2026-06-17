@@ -544,6 +544,24 @@ func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderLoginEnfo
 	return _u
 }
 
+// SetIdentityProviderExemptDomains sets the "identity_provider_exempt_domains" field.
+func (_u *OrganizationSettingHistoryUpdate) SetIdentityProviderExemptDomains(v []string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetIdentityProviderExemptDomains(v)
+	return _u
+}
+
+// AppendIdentityProviderExemptDomains appends value to the "identity_provider_exempt_domains" field.
+func (_u *OrganizationSettingHistoryUpdate) AppendIdentityProviderExemptDomains(v []string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.AppendIdentityProviderExemptDomains(v)
+	return _u
+}
+
+// ClearIdentityProviderExemptDomains clears the value of the "identity_provider_exempt_domains" field.
+func (_u *OrganizationSettingHistoryUpdate) ClearIdentityProviderExemptDomains() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearIdentityProviderExemptDomains()
+	return _u
+}
+
 // SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
 func (_u *OrganizationSettingHistoryUpdate) SetMultifactorAuthEnforced(v bool) *OrganizationSettingHistoryUpdate {
 	_u.mutation.SetMultifactorAuthEnforced(v)
@@ -874,6 +892,17 @@ func (_u *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	}
 	if value, ok := _u.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IdentityProviderExemptDomains(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderExemptDomains, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedIdentityProviderExemptDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsettinghistory.FieldIdentityProviderExemptDomains, value)
+		})
+	}
+	if _u.mutation.IdentityProviderExemptDomainsCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderExemptDomains, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool, value)
@@ -1428,6 +1457,24 @@ func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderLoginE
 	return _u
 }
 
+// SetIdentityProviderExemptDomains sets the "identity_provider_exempt_domains" field.
+func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProviderExemptDomains(v []string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetIdentityProviderExemptDomains(v)
+	return _u
+}
+
+// AppendIdentityProviderExemptDomains appends value to the "identity_provider_exempt_domains" field.
+func (_u *OrganizationSettingHistoryUpdateOne) AppendIdentityProviderExemptDomains(v []string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.AppendIdentityProviderExemptDomains(v)
+	return _u
+}
+
+// ClearIdentityProviderExemptDomains clears the value of the "identity_provider_exempt_domains" field.
+func (_u *OrganizationSettingHistoryUpdateOne) ClearIdentityProviderExemptDomains() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearIdentityProviderExemptDomains()
+	return _u
+}
+
 // SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
 func (_u *OrganizationSettingHistoryUpdateOne) SetMultifactorAuthEnforced(v bool) *OrganizationSettingHistoryUpdateOne {
 	_u.mutation.SetMultifactorAuthEnforced(v)
@@ -1788,6 +1835,17 @@ func (_u *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if value, ok := _u.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IdentityProviderExemptDomains(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderExemptDomains, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedIdentityProviderExemptDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsettinghistory.FieldIdentityProviderExemptDomains, value)
+		})
+	}
+	if _u.mutation.IdentityProviderExemptDomainsCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderExemptDomains, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool, value)

@@ -1882,6 +1882,10 @@ func init() {
 	orgmembershiphistory.DefaultUpdatedAt = orgmembershiphistoryDescUpdatedAt.Default.(func() time.Time)
 	// orgmembershiphistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	orgmembershiphistory.UpdateDefaultUpdatedAt = orgmembershiphistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// orgmembershiphistoryDescSSOExempt is the schema descriptor for sso_exempt field.
+	orgmembershiphistoryDescSSOExempt := orgmembershiphistoryFields[9].Descriptor()
+	// orgmembershiphistory.DefaultSSOExempt holds the default value on creation for the sso_exempt field.
+	orgmembershiphistory.DefaultSSOExempt = orgmembershiphistoryDescSSOExempt.Default.(bool)
 	// orgmembershiphistoryDescID is the schema descriptor for id field.
 	orgmembershiphistoryDescID := orgmembershiphistoryFields[7].Descriptor()
 	// orgmembershiphistory.DefaultID holds the default value on creation for the id field.
@@ -2009,15 +2013,15 @@ func init() {
 	// organizationsettinghistory.DefaultIdentityProviderLoginEnforced holds the default value on creation for the identity_provider_login_enforced field.
 	organizationsettinghistory.DefaultIdentityProviderLoginEnforced = organizationsettinghistoryDescIdentityProviderLoginEnforced.Default.(bool)
 	// organizationsettinghistoryDescMultifactorAuthEnforced is the schema descriptor for multifactor_auth_enforced field.
-	organizationsettinghistoryDescMultifactorAuthEnforced := organizationsettinghistoryFields[33].Descriptor()
+	organizationsettinghistoryDescMultifactorAuthEnforced := organizationsettinghistoryFields[34].Descriptor()
 	// organizationsettinghistory.DefaultMultifactorAuthEnforced holds the default value on creation for the multifactor_auth_enforced field.
 	organizationsettinghistory.DefaultMultifactorAuthEnforced = organizationsettinghistoryDescMultifactorAuthEnforced.Default.(bool)
 	// organizationsettinghistoryDescComplianceWebhookToken is the schema descriptor for compliance_webhook_token field.
-	organizationsettinghistoryDescComplianceWebhookToken := organizationsettinghistoryFields[34].Descriptor()
+	organizationsettinghistoryDescComplianceWebhookToken := organizationsettinghistoryFields[35].Descriptor()
 	// organizationsettinghistory.DefaultComplianceWebhookToken holds the default value on creation for the compliance_webhook_token field.
 	organizationsettinghistory.DefaultComplianceWebhookToken = organizationsettinghistoryDescComplianceWebhookToken.Default.(func() string)
 	// organizationsettinghistoryDescPaymentMethodAdded is the schema descriptor for payment_method_added field.
-	organizationsettinghistoryDescPaymentMethodAdded := organizationsettinghistoryFields[35].Descriptor()
+	organizationsettinghistoryDescPaymentMethodAdded := organizationsettinghistoryFields[36].Descriptor()
 	// organizationsettinghistory.DefaultPaymentMethodAdded holds the default value on creation for the payment_method_added field.
 	organizationsettinghistory.DefaultPaymentMethodAdded = organizationsettinghistoryDescPaymentMethodAdded.Default.(bool)
 	// organizationsettinghistoryDescID is the schema descriptor for id field.

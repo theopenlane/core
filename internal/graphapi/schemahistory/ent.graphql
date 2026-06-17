@@ -21562,6 +21562,10 @@ type OrgMembershipHistory implements Node {
   createdBy: String
   updatedBy: String
   role: OrgMembershipHistoryRole!
+  """
+  allow this org member to bypass SSO enforcement
+  """
+  ssoExempt: Boolean
   organizationID: String!
   userID: String!
 }
@@ -21761,6 +21765,13 @@ input OrgMembershipHistoryWhereInput {
   roleNEQ: OrgMembershipHistoryRole
   roleIn: [OrgMembershipHistoryRole!]
   roleNotIn: [OrgMembershipHistoryRole!]
+  """
+  sso_exempt field predicates
+  """
+  ssoExempt: Boolean
+  ssoExemptNEQ: Boolean
+  ssoExemptIsNil: Boolean
+  ssoExemptNotNil: Boolean
   """
   organization_id field predicates
   """
@@ -22541,6 +22552,10 @@ type OrganizationSettingHistory implements Node {
   enforce SSO authentication for organization members
   """
   identityProviderLoginEnforced: Boolean!
+  """
+  email domains that bypass SSO enforcement for this organization
+  """
+  identityProviderExemptDomains: [String!]
   """
   enforce 2fa / multifactor authentication for organization members
   """

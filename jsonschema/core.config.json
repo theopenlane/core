@@ -332,6 +332,10 @@
         "notificationlookbackdays": {
           "type": "integer",
           "description": "NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription\nUnread notifications are always pulled regardless of this setting"
+        },
+        "supportdomains": {
+          "$ref": "#/$defs/[]string",
+          "description": "SupportDomains is the list of email domains that bypass SSO enforcement globally across all organizations"
         }
       },
       "additionalProperties": false,

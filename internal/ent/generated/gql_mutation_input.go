@@ -15962,6 +15962,7 @@ func (c *OnboardingCreate) SetInput(i CreateOnboardingInput) *OnboardingCreate {
 // CreateOrgMembershipInput represents a mutation input for creating orgmemberships.
 type CreateOrgMembershipInput struct {
 	Role           *enums.Role
+	SSOExempt      *bool
 	OrganizationID string
 	UserID         string
 	EventIDs       []string
@@ -15971,6 +15972,9 @@ type CreateOrgMembershipInput struct {
 func (i *CreateOrgMembershipInput) Mutate(m *OrgMembershipMutation) {
 	if v := i.Role; v != nil {
 		m.SetRole(*v)
+	}
+	if v := i.SSOExempt; v != nil {
+		m.SetSSOExempt(*v)
 	}
 	m.SetOrganizationID(i.OrganizationID)
 	m.SetUserID(i.UserID)
@@ -15988,6 +15992,8 @@ func (c *OrgMembershipCreate) SetInput(i CreateOrgMembershipInput) *OrgMembershi
 // UpdateOrgMembershipInput represents a mutation input for updating orgmemberships.
 type UpdateOrgMembershipInput struct {
 	Role           *enums.Role
+	ClearSSOExempt bool
+	SSOExempt      *bool
 	ClearEvents    bool
 	AddEventIDs    []string
 	RemoveEventIDs []string
@@ -15997,6 +16003,12 @@ type UpdateOrgMembershipInput struct {
 func (i *UpdateOrgMembershipInput) Mutate(m *OrgMembershipMutation) {
 	if v := i.Role; v != nil {
 		m.SetRole(*v)
+	}
+	if i.ClearSSOExempt {
+		m.ClearSSOExempt()
+	}
+	if v := i.SSOExempt; v != nil {
+		m.SetSSOExempt(*v)
 	}
 	if i.ClearEvents {
 		m.ClearEvents()
@@ -18668,6 +18680,7 @@ type CreateOrganizationSettingInput struct {
 	SamlIssuer                       *string
 	SamlCert                         *string
 	IdentityProviderLoginEnforced    *bool
+	IdentityProviderExemptDomains    []string
 	MultifactorAuthEnforced          *bool
 	ComplianceWebhookToken           *string
 	OrganizationID                   *string
@@ -18739,6 +18752,9 @@ func (i *CreateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	if v := i.IdentityProviderLoginEnforced; v != nil {
 		m.SetIdentityProviderLoginEnforced(*v)
 	}
+	if v := i.IdentityProviderExemptDomains; v != nil {
+		m.SetIdentityProviderExemptDomains(v)
+	}
 	if v := i.MultifactorAuthEnforced; v != nil {
 		m.SetMultifactorAuthEnforced(*v)
 	}
@@ -18804,6 +18820,9 @@ type UpdateOrganizationSettingInput struct {
 	ClearSamlCert                         bool
 	SamlCert                              *string
 	IdentityProviderLoginEnforced         *bool
+	ClearIdentityProviderExemptDomains    bool
+	IdentityProviderExemptDomains         []string
+	AppendIdentityProviderExemptDomains   []string
 	ClearMultifactorAuthEnforced          bool
 	MultifactorAuthEnforced               *bool
 	ClearComplianceWebhookToken           bool
@@ -18947,6 +18966,15 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if v := i.IdentityProviderLoginEnforced; v != nil {
 		m.SetIdentityProviderLoginEnforced(*v)
+	}
+	if i.ClearIdentityProviderExemptDomains {
+		m.ClearIdentityProviderExemptDomains()
+	}
+	if v := i.IdentityProviderExemptDomains; v != nil {
+		m.SetIdentityProviderExemptDomains(v)
+	}
+	if i.AppendIdentityProviderExemptDomains != nil {
+		m.AppendIdentityProviderExemptDomains(i.IdentityProviderExemptDomains)
 	}
 	if i.ClearMultifactorAuthEnforced {
 		m.ClearMultifactorAuthEnforced()

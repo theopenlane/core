@@ -223,6 +223,7 @@ func getAuthOptions(s *ServerOptions) []authmw.Option {
 		authmw.WithCookieConfig(s.Config.SessionConfig.CookieConfig),
 		authmw.WithAllowAnonymous(true),
 		authmw.WithSkipperFunc(skipperFunc),
+		authmw.WithSupportDomains(s.Config.Settings.Server.SupportDomains),
 	}
 
 	if s.Config.Handler.RedisClient != nil {
@@ -334,6 +335,13 @@ func WithMiddleware() ServerOption {
 func WithDefaultTrustCenterDomain() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		s.Config.Handler.DefaultTrustCenterDomain = s.Config.Settings.Server.DefaultTrustCenterDomain
+	})
+}
+
+// WithSupportDomains sets the support domains that bypass SSO enforcement globally for the server
+func WithSupportDomains() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		s.Config.Handler.SupportDomains = s.Config.Settings.Server.SupportDomains
 	})
 }
 

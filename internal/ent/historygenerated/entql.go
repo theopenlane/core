@@ -1764,6 +1764,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgmembershiphistory.FieldCreatedBy:      {Type: field.TypeString, Column: orgmembershiphistory.FieldCreatedBy},
 			orgmembershiphistory.FieldUpdatedBy:      {Type: field.TypeString, Column: orgmembershiphistory.FieldUpdatedBy},
 			orgmembershiphistory.FieldRole:           {Type: field.TypeEnum, Column: orgmembershiphistory.FieldRole},
+			orgmembershiphistory.FieldSSOExempt:      {Type: field.TypeBool, Column: orgmembershiphistory.FieldSSOExempt},
 			orgmembershiphistory.FieldOrganizationID: {Type: field.TypeString, Column: orgmembershiphistory.FieldOrganizationID},
 			orgmembershiphistory.FieldUserID:         {Type: field.TypeString, Column: orgmembershiphistory.FieldUserID},
 		},
@@ -1873,6 +1874,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsettinghistory.FieldSamlIssuer:                       {Type: field.TypeString, Column: organizationsettinghistory.FieldSamlIssuer},
 			organizationsettinghistory.FieldSamlCert:                         {Type: field.TypeString, Column: organizationsettinghistory.FieldSamlCert},
 			organizationsettinghistory.FieldIdentityProviderLoginEnforced:    {Type: field.TypeBool, Column: organizationsettinghistory.FieldIdentityProviderLoginEnforced},
+			organizationsettinghistory.FieldIdentityProviderExemptDomains:    {Type: field.TypeJSON, Column: organizationsettinghistory.FieldIdentityProviderExemptDomains},
 			organizationsettinghistory.FieldMultifactorAuthEnforced:          {Type: field.TypeBool, Column: organizationsettinghistory.FieldMultifactorAuthEnforced},
 			organizationsettinghistory.FieldComplianceWebhookToken:           {Type: field.TypeString, Column: organizationsettinghistory.FieldComplianceWebhookToken},
 			organizationsettinghistory.FieldPaymentMethodAdded:               {Type: field.TypeBool, Column: organizationsettinghistory.FieldPaymentMethodAdded},
@@ -10686,6 +10688,11 @@ func (f *OrgMembershipHistoryFilter) WhereRole(p entql.StringP) {
 	f.Where(p.Field(orgmembershiphistory.FieldRole))
 }
 
+// WhereSSOExempt applies the entql bool predicate on the sso_exempt field.
+func (f *OrgMembershipHistoryFilter) WhereSSOExempt(p entql.BoolP) {
+	f.Where(p.Field(orgmembershiphistory.FieldSSOExempt))
+}
+
 // WhereOrganizationID applies the entql string predicate on the organization_id field.
 func (f *OrgMembershipHistoryFilter) WhereOrganizationID(p entql.StringP) {
 	f.Where(p.Field(orgmembershiphistory.FieldOrganizationID))
@@ -11154,6 +11161,11 @@ func (f *OrganizationSettingHistoryFilter) WhereSamlCert(p entql.StringP) {
 // WhereIdentityProviderLoginEnforced applies the entql bool predicate on the identity_provider_login_enforced field.
 func (f *OrganizationSettingHistoryFilter) WhereIdentityProviderLoginEnforced(p entql.BoolP) {
 	f.Where(p.Field(organizationsettinghistory.FieldIdentityProviderLoginEnforced))
+}
+
+// WhereIdentityProviderExemptDomains applies the entql json.RawMessage predicate on the identity_provider_exempt_domains field.
+func (f *OrganizationSettingHistoryFilter) WhereIdentityProviderExemptDomains(p entql.BytesP) {
+	f.Where(p.Field(organizationsettinghistory.FieldIdentityProviderExemptDomains))
 }
 
 // WhereMultifactorAuthEnforced applies the entql bool predicate on the multifactor_auth_enforced field.

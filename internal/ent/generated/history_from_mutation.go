@@ -14912,6 +14912,10 @@ func (m *OrgMembershipMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetRole(role)
 	}
 
+	if ssoExempt, exists := m.SSOExempt(); exists {
+		create = create.SetSSOExempt(ssoExempt)
+	}
+
 	if organizationID, exists := m.OrganizationID(); exists {
 		create = create.SetOrganizationID(organizationID)
 	}
@@ -14981,6 +14985,12 @@ func (m *OrgMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetRole(orgmembership.Role)
 		}
 
+		if ssoExempt, exists := m.SSOExempt(); exists {
+			create = create.SetSSOExempt(ssoExempt)
+		} else {
+			create = create.SetSSOExempt(orgmembership.SSOExempt)
+		}
+
 		if organizationID, exists := m.OrganizationID(); exists {
 			create = create.SetOrganizationID(organizationID)
 		} else {
@@ -15033,6 +15043,7 @@ func (m *OrgMembershipMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetCreatedBy(orgmembership.CreatedBy).
 			SetUpdatedBy(orgmembership.UpdatedBy).
 			SetRole(orgmembership.Role).
+			SetSSOExempt(orgmembership.SSOExempt).
 			SetOrganizationID(orgmembership.OrganizationID).
 			SetUserID(orgmembership.UserID).
 			Save(ctx)
@@ -15688,6 +15699,10 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetIdentityProviderLoginEnforced(identityProviderLoginEnforced)
 	}
 
+	if identityProviderExemptDomains, exists := m.IdentityProviderExemptDomains(); exists {
+		create = create.SetIdentityProviderExemptDomains(identityProviderExemptDomains)
+	}
+
 	if multifactorAuthEnforced, exists := m.MultifactorAuthEnforced(); exists {
 		create = create.SetMultifactorAuthEnforced(multifactorAuthEnforced)
 	}
@@ -15909,6 +15924,12 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetIdentityProviderLoginEnforced(organizationsetting.IdentityProviderLoginEnforced)
 		}
 
+		if identityProviderExemptDomains, exists := m.IdentityProviderExemptDomains(); exists {
+			create = create.SetIdentityProviderExemptDomains(identityProviderExemptDomains)
+		} else {
+			create = create.SetIdentityProviderExemptDomains(organizationsetting.IdentityProviderExemptDomains)
+		}
+
 		if multifactorAuthEnforced, exists := m.MultifactorAuthEnforced(); exists {
 			create = create.SetMultifactorAuthEnforced(multifactorAuthEnforced)
 		} else {
@@ -15997,6 +16018,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetSamlIssuer(organizationsetting.SamlIssuer).
 			SetSamlCert(organizationsetting.SamlCert).
 			SetIdentityProviderLoginEnforced(organizationsetting.IdentityProviderLoginEnforced).
+			SetIdentityProviderExemptDomains(organizationsetting.IdentityProviderExemptDomains).
 			SetMultifactorAuthEnforced(organizationsetting.MultifactorAuthEnforced).
 			SetComplianceWebhookToken(organizationsetting.ComplianceWebhookToken).
 			SetPaymentMethodAdded(organizationsetting.PaymentMethodAdded).

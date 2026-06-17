@@ -139,6 +139,10 @@ func (OrganizationSetting) Fields() []ent.Field {
 		field.Bool("identity_provider_login_enforced").
 			Comment("enforce SSO authentication for organization members").
 			Default(false),
+		field.Strings("identity_provider_exempt_domains").
+			Comment("email domains that bypass SSO enforcement for this organization").
+			Validate(validator.ValidateDomains()).
+			Optional(),
 		field.Bool("multifactor_auth_enforced").
 			Comment("enforce 2fa / multifactor authentication for organization members").
 			Optional().

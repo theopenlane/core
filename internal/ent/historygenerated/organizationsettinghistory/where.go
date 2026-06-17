@@ -1869,6 +1869,16 @@ func IdentityProviderLoginEnforcedNEQ(v bool) predicate.OrganizationSettingHisto
 	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldIdentityProviderLoginEnforced, v))
 }
 
+// IdentityProviderExemptDomainsIsNil applies the IsNil predicate on the "identity_provider_exempt_domains" field.
+func IdentityProviderExemptDomainsIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldIdentityProviderExemptDomains))
+}
+
+// IdentityProviderExemptDomainsNotNil applies the NotNil predicate on the "identity_provider_exempt_domains" field.
+func IdentityProviderExemptDomainsNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldIdentityProviderExemptDomains))
+}
+
 // MultifactorAuthEnforcedEQ applies the EQ predicate on the "multifactor_auth_enforced" field.
 func MultifactorAuthEnforcedEQ(v bool) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldMultifactorAuthEnforced, v))

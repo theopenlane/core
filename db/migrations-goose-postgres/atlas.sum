@@ -1,4 +1,4 @@
-h1:fYH3aEoXshst1yplQKtLv6h7/xmYlTJgwinJUUWqrLA=
+h1:JsymkOXB+6PiTXctjMZX261EzrQjYxWwKceXomux9po=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -143,3 +143,5 @@ h1:fYH3aEoXshst1yplQKtLv6h7/xmYlTJgwinJUUWqrLA=
 20260604190613_trustcenter_group_approval.sql h1:aeVaVBSLF5tiJ3CzW9aCDpKubkIlXc9bBO0rZ7QigSM=
 20260604190623_trustcenter_group_approval_history.sql h1:Sk9o0z0qXw8mbLmJ4NiRHhOh1kA77UzjHqteA/O0vyQ=
 20260609205347_integration_run_assessment_response.sql h1:jlA3zVSSccugIp/r8LRvlPaB/uUgu7AwuIvbHoD6mGE=
+20260617223641_sso_settings.sql h1:d0+WwNBMB71nJgSzi+20lhuWF9m3a/kRc/iSrGzMilo=
+20260617223645_sso_settings_history.sql h1:4lRsGpMAUEyoLoodhWo4b3ZYiyuqKnb0J40wFysVP5E=

@@ -185,6 +185,7 @@ Server settings for the echo server
 |**trustcentercnametarget**|`string`|TrustCenterCnameTarget is the cname target for the trust center<br/>Used for mapping the vanity domains to the trust centers<br/>|no|
 |**trustcenterpreviewzoneid**|`string`|TrustCenterPreviewZoneID is the cloudflare zone id for the trust center preview domain<br/>|no|
 |**notificationlookbackdays**|`integer`|NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription<br/>Unread notifications are always pulled regardless of this setting<br/>|no|
+|[**supportdomains**](#serversupportdomains)|`string[]`||no|
 
 **Additional Properties:** not allowed  
 **Example**
@@ -373,6 +374,12 @@ Config defines configuration for the CSRF middleware wrapper.
 |**cookiepath**|`string`|CookiePath specifies the path for the CSRF cookie, default to "/"<br/>||
 
 **Additional Properties:** not allowed  
+<a name="serversupportdomains"></a>
+### server\.supportdomains: array
+
+**Items**
+
+**Item Type:** `string`  
 <a name="entconfig"></a>
 ## entconfig: object
 

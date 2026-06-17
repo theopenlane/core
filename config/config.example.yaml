@@ -395,6 +395,7 @@ server:
         xframeoptions: SAMEORIGIN
         xssprotection: 1; mode=block
     shutdowngraceperiod: 10000000000
+    supportdomains: []
     tls:
         autocert: false
         certfile: server.crt

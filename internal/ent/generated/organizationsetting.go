@@ -79,6 +79,8 @@ type OrganizationSetting struct {
 	SamlCert string `json:"saml_cert,omitempty"`
 	// enforce SSO authentication for organization members
 	IdentityProviderLoginEnforced bool `json:"identity_provider_login_enforced,omitempty"`
+	// email domains that bypass SSO enforcement for this organization
+	IdentityProviderExemptDomains []string `json:"identity_provider_exempt_domains,omitempty"`
 	// enforce 2fa / multifactor authentication for organization members
 	MultifactorAuthEnforced bool `json:"multifactor_auth_enforced,omitempty"`
 	// unique token used to receive compliance webhook events
@@ -135,7 +137,7 @@ func (*OrganizationSetting) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case organizationsetting.FieldPendingDeletionAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
-		case organizationsetting.FieldTags, organizationsetting.FieldDomains, organizationsetting.FieldBillingAddress, organizationsetting.FieldAllowedEmailDomains:
+		case organizationsetting.FieldTags, organizationsetting.FieldDomains, organizationsetting.FieldBillingAddress, organizationsetting.FieldAllowedEmailDomains, organizationsetting.FieldIdentityProviderExemptDomains:
 			values[i] = new([]byte)
 		case organizationsetting.FieldBillingNotificationsEnabled, organizationsetting.FieldAllowMatchingDomainsAutojoin, organizationsetting.FieldIdentityProviderAuthTested, organizationsetting.FieldIdentityProviderLoginEnforced, organizationsetting.FieldMultifactorAuthEnforced, organizationsetting.FieldPaymentMethodAdded:
 			values[i] = new(sql.NullBool)
@@ -348,6 +350,14 @@ func (_m *OrganizationSetting) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				_m.IdentityProviderLoginEnforced = value.Bool
 			}
+		case organizationsetting.FieldIdentityProviderExemptDomains:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_provider_exempt_domains", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.IdentityProviderExemptDomains); err != nil {
+					return fmt.Errorf("unmarshal field identity_provider_exempt_domains: %w", err)
+				}
+			}
 		case organizationsetting.FieldMultifactorAuthEnforced:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field multifactor_auth_enforced", values[i])
@@ -509,6 +519,9 @@ func (_m *OrganizationSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("identity_provider_login_enforced=")
 	builder.WriteString(fmt.Sprintf("%v", _m.IdentityProviderLoginEnforced))
+	builder.WriteString(", ")
+	builder.WriteString("identity_provider_exempt_domains=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IdentityProviderExemptDomains))
 	builder.WriteString(", ")
 	builder.WriteString("multifactor_auth_enforced=")
 	builder.WriteString(fmt.Sprintf("%v", _m.MultifactorAuthEnforced))

@@ -2159,6 +2159,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgmembership.FieldCreatedBy:      {Type: field.TypeString, Column: orgmembership.FieldCreatedBy},
 			orgmembership.FieldUpdatedBy:      {Type: field.TypeString, Column: orgmembership.FieldUpdatedBy},
 			orgmembership.FieldRole:           {Type: field.TypeEnum, Column: orgmembership.FieldRole},
+			orgmembership.FieldSSOExempt:      {Type: field.TypeBool, Column: orgmembership.FieldSSOExempt},
 			orgmembership.FieldOrganizationID: {Type: field.TypeString, Column: orgmembership.FieldOrganizationID},
 			orgmembership.FieldUserID:         {Type: field.TypeString, Column: orgmembership.FieldUserID},
 		},
@@ -2343,6 +2344,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsetting.FieldSamlIssuer:                       {Type: field.TypeString, Column: organizationsetting.FieldSamlIssuer},
 			organizationsetting.FieldSamlCert:                         {Type: field.TypeString, Column: organizationsetting.FieldSamlCert},
 			organizationsetting.FieldIdentityProviderLoginEnforced:    {Type: field.TypeBool, Column: organizationsetting.FieldIdentityProviderLoginEnforced},
+			organizationsetting.FieldIdentityProviderExemptDomains:    {Type: field.TypeJSON, Column: organizationsetting.FieldIdentityProviderExemptDomains},
 			organizationsetting.FieldMultifactorAuthEnforced:          {Type: field.TypeBool, Column: organizationsetting.FieldMultifactorAuthEnforced},
 			organizationsetting.FieldComplianceWebhookToken:           {Type: field.TypeString, Column: organizationsetting.FieldComplianceWebhookToken},
 			organizationsetting.FieldPaymentMethodAdded:               {Type: field.TypeBool, Column: organizationsetting.FieldPaymentMethodAdded},
@@ -34856,6 +34858,11 @@ func (f *OrgMembershipFilter) WhereRole(p entql.StringP) {
 	f.Where(p.Field(orgmembership.FieldRole))
 }
 
+// WhereSSOExempt applies the entql bool predicate on the sso_exempt field.
+func (f *OrgMembershipFilter) WhereSSOExempt(p entql.BoolP) {
+	f.Where(p.Field(orgmembership.FieldSSOExempt))
+}
+
 // WhereOrganizationID applies the entql string predicate on the organization_id field.
 func (f *OrgMembershipFilter) WhereOrganizationID(p entql.StringP) {
 	f.Where(p.Field(orgmembership.FieldOrganizationID))
@@ -38284,6 +38291,11 @@ func (f *OrganizationSettingFilter) WhereSamlCert(p entql.StringP) {
 // WhereIdentityProviderLoginEnforced applies the entql bool predicate on the identity_provider_login_enforced field.
 func (f *OrganizationSettingFilter) WhereIdentityProviderLoginEnforced(p entql.BoolP) {
 	f.Where(p.Field(organizationsetting.FieldIdentityProviderLoginEnforced))
+}
+
+// WhereIdentityProviderExemptDomains applies the entql json.RawMessage predicate on the identity_provider_exempt_domains field.
+func (f *OrganizationSettingFilter) WhereIdentityProviderExemptDomains(p entql.BytesP) {
+	f.Where(p.Field(organizationsetting.FieldIdentityProviderExemptDomains))
 }
 
 // WhereMultifactorAuthEnforced applies the entql bool predicate on the multifactor_auth_enforced field.
