@@ -79,7 +79,7 @@ require (
 	github.com/oklog/ulid/v2 v2.1.1
 	github.com/okta/okta-sdk-golang/v6 v6.1.6
 	github.com/openfga/go-sdk v0.8.2
-	github.com/pdfcpu/pdfcpu v0.12.1
+	github.com/pdfcpu/pdfcpu v0.13.0
 	github.com/pkg/errors v0.9.1
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
 	github.com/pquerna/otp v1.5.0
@@ -341,7 +341,7 @@ require (
 	github.com/magiconair/properties v1.8.10 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.22 // indirect
-	github.com/mattn/go-runewidth v0.0.23 // indirect
+	github.com/mattn/go-runewidth v0.0.24 // indirect
 	github.com/mfridman/interpolate v0.0.2 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
