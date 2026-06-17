@@ -295,6 +295,7 @@ func (r Review) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
+			policy.CheckOrgWriteAccess(),
 			entfga.CheckEditAccess[*generated.ReviewMutation](),
 		),
 	)
