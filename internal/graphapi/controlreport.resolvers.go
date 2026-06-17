@@ -109,10 +109,7 @@ func (r *queryResolver) ControlReports(ctx context.Context, after *entgql.Cursor
 
 	out := convertControlToControlReportEdge(res)
 
-	nodes := make([]*model.ControlReport, len(out.Edges))
-	for i, e := range out.Edges {
-		nodes[i] = e.Node
-	}
+	nodes := lo.Map(out.Edges, func(e *model.ControlReportEdge, _ int) *model.ControlReport { return e.Node })
 
 	if err := enrichControlReports(ctx, nodes); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error enriching control reports")

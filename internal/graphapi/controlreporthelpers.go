@@ -31,51 +31,42 @@ var nonColumnControlReportFields = map[string]struct{}{
 	"controlOwner":    {},
 }
 
-func getControlFields(ctx context.Context) []string {
+// collectControlReportEntFields walks the GraphQL selection set along path, then collects
+// the ent column name for each selectable leaf field, skipping non-column fields.
+func collectControlReportEntFields(ctx context.Context, path []string) []string {
 	opCtx := graphql.GetOperationContext(ctx)
-	fieldCtx := graphql.GetFieldContext(ctx)
+	selections := graphql.GetFieldContext(ctx).Field.Selections
 
-	for _, f := range graphql.CollectFields(opCtx, fieldCtx.Field.Selections, nil) {
-		if f.Name != "edges" {
-			continue
+	for _, segment := range path {
+		found := false
+		for _, f := range graphql.CollectFields(opCtx, selections, nil) {
+			if f.Name == segment {
+				selections = f.Selections
+				found = true
+				break
+			}
 		}
-		for _, ef := range graphql.CollectFields(opCtx, f.Selections, nil) {
-			if ef.Name != "node" {
-				continue
-			}
-			var entFields []string
-			for _, nf := range graphql.CollectFields(opCtx, ef.Selections, nil) {
-				if _, skip := nonColumnControlReportFields[nf.Name]; skip {
-					continue
-				}
-				entFields = append(entFields, strcase.SnakeCase(nf.Name))
-			}
-			return entFields
+		if !found {
+			return []string{}
 		}
 	}
 
-	return []string{}
+	var entFields []string
+	for _, f := range graphql.CollectFields(opCtx, selections, nil) {
+		if _, skip := nonColumnControlReportFields[f.Name]; skip {
+			continue
+		}
+		entFields = append(entFields, strcase.SnakeCase(f.Name))
+	}
+	return entFields
+}
+
+func getControlFields(ctx context.Context) []string {
+	return collectControlReportEntFields(ctx, []string{"edges", "node"})
 }
 
 func getControlFieldsForCategory(ctx context.Context) []string {
-	opCtx := graphql.GetOperationContext(ctx)
-	fieldCtx := graphql.GetFieldContext(ctx)
-
-	for _, f := range graphql.CollectFields(opCtx, fieldCtx.Field.Selections, nil) {
-		if f.Name != "controls" {
-			continue
-		}
-		var entFields []string
-		for _, cf := range graphql.CollectFields(opCtx, f.Selections, nil) {
-			if _, skip := nonColumnControlReportFields[cf.Name]; skip {
-				continue
-			}
-			entFields = append(entFields, strcase.SnakeCase(cf.Name))
-		}
-		return entFields
-	}
-
-	return []string{}
+	return collectControlReportEntFields(ctx, []string{"controls"})
 }
 
 // controlReportPathPrefixes are the known path prefixes for ControlReport fields,
@@ -106,10 +97,6 @@ func hasSubcontrolsField(ctx context.Context) bool {
 	return controlReportFieldRequested(ctx, "subcontrols")
 }
 
-func hasAdditionalFields(ctx context.Context) bool {
-	return controlReportFieldRequested(ctx, "evidenceStatus", "linkedPolicies", "subcontrols", "relatedControls")
-}
-
 func hasSubcontrolRelatedControlsField(ctx context.Context) bool {
 	return controlReportFieldRequested(ctx, "subcontrols.relatedControls")
 }
@@ -125,7 +112,6 @@ func hasSubcontrolLinkedPoliciesField(ctx context.Context) bool {
 func hasAnySubcontrolAdditionalField(ctx context.Context) bool {
 	return controlReportFieldRequested(ctx, "subcontrols.relatedControls", "subcontrols.evidenceStatus", "subcontrols.linkedPolicies")
 }
-
 
 func getSubcontrolRelatedControlInfo(ctx context.Context, sc *model.ControlReport, frameworksInOrg []string) ([]*model.ControlInfo, error) {
 	result, err := getMappedControlsBySubcontrolID(ctx, sc.ID)
@@ -160,9 +146,9 @@ func processMappedControlResults(ctx context.Context, result []*generated.Mapped
 			key := generateMapControlKey(c.RefCode, c.ReferenceFramework)
 			logx.FromContext(ctx).Warn().Str("key", key).Msg("adding control found in from controls")
 			if c.SystemOwned {
-				maps.Insert(systemOwnedMappedControls, maps.All(map[string]*model.ControlInfo{key: controlInfo}))
+				systemOwnedMappedControls[key] = controlInfo
 			} else {
-				maps.Insert(allInOrgControlMappings, maps.All(map[string]*model.ControlInfo{key: controlInfo}))
+				allInOrgControlMappings[key] = controlInfo
 			}
 		}
 
@@ -177,9 +163,9 @@ func processMappedControlResults(ctx context.Context, result []*generated.Mapped
 			key := generateMapControlKey(c.RefCode, c.ReferenceFramework)
 			logx.FromContext(ctx).Warn().Str("key", key).Msg("adding control found in to controls")
 			if c.SystemOwned {
-				maps.Insert(systemOwnedMappedControls, maps.All(map[string]*model.ControlInfo{key: controlInfo}))
+				systemOwnedMappedControls[key] = controlInfo
 			} else {
-				maps.Insert(allInOrgControlMappings, maps.All(map[string]*model.ControlInfo{key: controlInfo}))
+				allInOrgControlMappings[key] = controlInfo
 			}
 		}
 
@@ -194,9 +180,9 @@ func processMappedControlResults(ctx context.Context, result []*generated.Mapped
 			key := generateMapControlKey(c.RefCode, c.ReferenceFramework)
 			logx.FromContext(ctx).Warn().Str("key", key).Msg("adding control found in from subcontrols")
 			if c.SystemOwned {
-				maps.Insert(systemOwnedMappedControls, maps.All(map[string]*model.ControlInfo{key: controlInfo}))
+				systemOwnedMappedControls[key] = controlInfo
 			} else {
-				maps.Insert(allInOrgControlMappings, maps.All(map[string]*model.ControlInfo{key: controlInfo}))
+				allInOrgControlMappings[key] = controlInfo
 			}
 		}
 
@@ -211,9 +197,9 @@ func processMappedControlResults(ctx context.Context, result []*generated.Mapped
 			key := generateMapControlKey(c.RefCode, c.ReferenceFramework)
 			logx.FromContext(ctx).Warn().Str("key", key).Msg("adding control found in to subcontrols")
 			if c.SystemOwned {
-				maps.Insert(systemOwnedMappedControls, maps.All(map[string]*model.ControlInfo{key: controlInfo}))
+				systemOwnedMappedControls[key] = controlInfo
 			} else {
-				maps.Insert(allInOrgControlMappings, maps.All(map[string]*model.ControlInfo{key: controlInfo}))
+				allInOrgControlMappings[key] = controlInfo
 			}
 		}
 
@@ -431,7 +417,7 @@ func convertReportOrderToControlOrderBy(orderBy []*model.ControlReportOrder) []*
 		}
 	}
 
-	orderByOut := make([]*generated.ControlOrder, len(orderBy))
+	orderByOut := make([]*generated.ControlOrder, 0, len(orderBy))
 
 	for _, ob := range orderBy {
 		switch ob.Field.String() {
@@ -564,11 +550,18 @@ func needsRelatedControls(ctx context.Context) bool {
 
 func enrichControlReports(ctx context.Context, reports []*model.ControlReport) error {
 	var (
-		err            error
+		err             error
 		frameworksInOrg []string
 	)
 
-	if needsRelatedControls(ctx) {
+	needsRelated := needsRelatedControls(ctx)
+	wantsEvidence := hasEvidenceField(ctx)
+	wantsPolicies := hasLinkedPoliciesField(ctx)
+	wantsScRelated := hasSubcontrolRelatedControlsField(ctx)
+	wantsScEvidence := hasSubcontrolEvidenceField(ctx)
+	wantsScPolicies := hasSubcontrolLinkedPoliciesField(ctx)
+
+	if needsRelated {
 		frameworksInOrg, err = getStandardsInOrg(ctx)
 		if err != nil {
 			return err
@@ -576,40 +569,40 @@ func enrichControlReports(ctx context.Context, reports []*model.ControlReport) e
 	}
 
 	for i, c := range reports {
-		if needsRelatedControls(ctx) {
+		if needsRelated {
 			reports[i].RelatedControls, err = getRelatedControlInfoFromReport(ctx, c, frameworksInOrg)
 			if err != nil {
 				return err
 			}
 		}
 
-		if hasEvidenceField(ctx) {
+		if wantsEvidence {
 			if err := getEvidenceStatus(ctx, reports[i], false); err != nil {
 				return err
 			}
 		}
 
-		if hasLinkedPoliciesField(ctx) {
+		if wantsPolicies {
 			if err := getLinkedPolicies(ctx, reports[i], false); err != nil {
 				return err
 			}
 		}
 
 		for j, sc := range reports[i].Subcontrols {
-			if hasSubcontrolRelatedControlsField(ctx) {
+			if wantsScRelated {
 				reports[i].Subcontrols[j].RelatedControls, err = getSubcontrolRelatedControlInfo(ctx, sc, frameworksInOrg)
 				if err != nil {
 					return err
 				}
 			}
 
-			if hasSubcontrolEvidenceField(ctx) {
+			if wantsScEvidence {
 				if err := getEvidenceStatus(ctx, reports[i].Subcontrols[j], true); err != nil {
 					return err
 				}
 			}
 
-			if hasSubcontrolLinkedPoliciesField(ctx) {
+			if wantsScPolicies {
 				if err := getLinkedPolicies(ctx, reports[i].Subcontrols[j], true); err != nil {
 					return err
 				}
@@ -631,7 +624,6 @@ func getRelatedControlInfoFromReport(ctx context.Context, c *model.ControlReport
 
 func groupControlReportsByCategory(controls []*model.ControlReport) []*model.ControlReportCategory {
 	categoryMap := map[string]*model.ControlReportCategory{}
-	var categoryOrder []string
 
 	for _, c := range controls {
 		key := ""
@@ -643,15 +635,12 @@ func groupControlReportsByCategory(controls []*model.ControlReport) []*model.Con
 				Category: key,
 				Controls: []*model.ControlReport{},
 			}
-			categoryOrder = append(categoryOrder, key)
 		}
 		categoryMap[key].Controls = append(categoryMap[key].Controls, c)
 	}
 
-	slices.Sort(categoryOrder)
-
 	out := make([]*model.ControlReportCategory, 0, len(categoryMap))
-	for _, k := range categoryOrder {
+	for _, k := range slices.Sorted(maps.Keys(categoryMap)) {
 		cat := categoryMap[k]
 		cat.TotalCount = len(cat.Controls)
 		out = append(out, cat)
