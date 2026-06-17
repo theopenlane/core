@@ -322,6 +322,15 @@ func TestMutationCreateEvidence(t *testing.T) {
 			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
+			name: "happy path, auditor can associate evidence to a program they can view",
+			request: testclient.CreateEvidenceInput{
+				Name:       "Test Evidence",
+				ProgramIDs: []string{program.ID},
+			},
+			client: suite.client.api,
+			ctx:    sharedAuditorUser.UserCtx,
+		},
+		{
 			name: "attempt to link system owned control",
 			request: testclient.CreateEvidenceInput{
 				Name:       "Test Evidence",

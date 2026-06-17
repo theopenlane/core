@@ -189,6 +189,14 @@ func TestCreateReview(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
+			name: "happy path, auditor",
+			reviewInput: testclient.CreateReviewInput{
+				Title: "Auditor Review",
+			},
+			client: suite.client.api,
+			ctx:    sharedAuditorUser.UserCtx,
+		},
+		{
 			name: "not authorized to create review",
 			reviewInput: testclient.CreateReviewInput{
 				Title: "Unauthorized Review",
@@ -416,6 +424,25 @@ func TestUpdateReview(t *testing.T) {
 		updatedReview := resp.GetUpdateReview().GetReview()
 		assert.Check(t, is.Equal("Updated Title", updatedReview.Title))
 		assert.Check(t, is.Equal("Updated summary", *updatedReview.Summary))
+	})
+
+	t.Run("auditor can update review", func(t *testing.T) {
+		createResp, err := suite.client.api.CreateReview(sharedAuditorUser.UserCtx, testclient.CreateReviewInput{
+			Title: "Auditor Review",
+		})
+		assert.NilError(t, err)
+
+		auditorReviewID := createResp.GetCreateReview().GetReview().ID
+
+		resp, err := suite.client.api.UpdateReview(sharedAuditorUser.UserCtx, auditorReviewID, testclient.UpdateReviewInput{
+			Title: lo.ToPtr("Auditor Updated Review"),
+		}, nil)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+		assert.Check(t, is.Equal("Auditor Updated Review", resp.GetUpdateReview().GetReview().Title))
+
+		_, err = suite.client.api.DeleteReview(sharedTestUser1.UserCtx, auditorReviewID)
+		assert.NilError(t, err)
 	})
 
 	t.Run("update review not found", func(t *testing.T) {

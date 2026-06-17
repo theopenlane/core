@@ -294,7 +294,6 @@ func (Review) Annotations() []schema.Annotation {
 func (r Review) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			policy.CheckOrgWriteAccess(),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ReviewMutation](),
 		),
