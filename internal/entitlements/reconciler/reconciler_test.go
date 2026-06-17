@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/stripe/stripe-go/v84"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/entitlements"
 )
@@ -82,5 +84,50 @@ func TestReconcileResult(t *testing.T) {
 
 	if result.Actions[0].Action != "create stripe customer" {
 		t.Fatalf("expected first action to be 'create stripe customer', got %s", result.Actions[0].Action)
+	}
+}
+
+func TestIsSubscriptionActive(t *testing.T) {
+	tests := []struct {
+		name string
+		sub  *ent.OrgSubscription
+		want bool
+	}{
+		{
+			name: "subscription is nil",
+			want: false,
+		},
+		{
+			name: "subscription is active",
+			sub: &ent.OrgSubscription{
+				Active:                   true,
+				StripeSubscriptionStatus: string(stripe.SubscriptionStatusActive),
+			},
+			want: true,
+		},
+		{
+			name: "subscription is inactive",
+			sub: &ent.OrgSubscription{
+				Active:                   false,
+				StripeSubscriptionStatus: string(stripe.SubscriptionStatusActive),
+			},
+			want: false,
+		},
+		{
+			name: "subscription is canceled",
+			sub: &ent.OrgSubscription{
+				Active:                   true,
+				StripeSubscriptionStatus: string(stripe.SubscriptionStatusCanceled),
+			},
+			want: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := isSubscriptionActive(tt.sub); got != tt.want {
+				t.Fatalf("got %v, want %v", got, tt.want)
+			}
+		})
 	}
 }
