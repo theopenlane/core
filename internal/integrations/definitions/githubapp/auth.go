@@ -15,7 +15,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	gh "github.com/google/go-github/v84/github"
+	gh "github.com/google/go-github/v88/github"
 	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -291,24 +291,28 @@ func installationToken(ctx context.Context, cfg Config, integrationID int64, jwt
 func installationTokenClient(ctx context.Context, cfg Config, jwtToken string) *gh.Client {
 	source := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: jwtToken})
 	httpClient := oauth2.NewClient(ctx, source)
-	client := gh.NewClient(httpClient)
-
 	if cfg.APIURL == "" {
-		return client
+		return nil
 	}
 
 	apiURL, err := url.Parse(strings.TrimRight(cfg.APIURL, "/") + "/api/v3/")
 	if err != nil {
-		return client
+		return nil
 	}
 
 	uploadURL, err := url.Parse(strings.TrimRight(cfg.APIURL, "/") + "/api/uploads/")
 	if err != nil {
-		return client
+		return nil
 	}
 
-	client.BaseURL = apiURL
-	client.UploadURL = uploadURL
+	baseURLStr := apiURL.String()
+	uploadURLStr := uploadURL.String()
+
+	client, err := gh.NewClient(gh.WithHTTPClient(httpClient), gh.WithURLs(&baseURLStr, &uploadURLStr))
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating github client")
+		return nil
+	}
 
 	return client
 }
