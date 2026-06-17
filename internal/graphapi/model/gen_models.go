@@ -511,8 +511,10 @@ type ControlEvidence struct {
 	// total number of evidence items linked to the control
 	TotalCount int `json:"totalCount"`
 	// the most severe evidence status among all linked evidence items
-	WorstStatus   *enums.EvidenceStatus    `json:"worstStatus,omitempty"`
-	ApprovedCount int                      `json:"approvedCount"`
+	WorstStatus *enums.EvidenceStatus `json:"worstStatus,omitempty"`
+	// number of evidence items with auditor-approved status
+	ApprovedCount int `json:"approvedCount"`
+	// breakdown of evidence item counts by status
 	CountByStatus []*EvidenceCountByStatus `json:"countByStatus,omitempty"`
 }
 
@@ -1325,9 +1327,12 @@ type EvidenceBulkUpdatePayload struct {
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
+// EvidenceCountByStatus pairs an evidence status with the number of evidence items in that state
 type EvidenceCountByStatus struct {
-	Status     enums.EvidenceStatus `json:"status"`
-	TotalCount int                  `json:"totalCount"`
+	// the evidence status value
+	Status enums.EvidenceStatus `json:"status"`
+	// number of evidence items with this status
+	TotalCount int `json:"totalCount"`
 }
 
 // Return response for createEvidence mutation

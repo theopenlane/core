@@ -46,11 +46,13 @@ func (r *queryResolver) ControlReportsByCategory(ctx context.Context, where *gen
 
 	q, err := where.Filter(q)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error filtering control report by category")
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "controlreport"})
 	}
 
 	controls, err := q.Select(controlFields...).All(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting control report by category")
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "controlreport"})
 	}
 
@@ -104,6 +106,7 @@ func (r *queryResolver) ControlReports(ctx context.Context, after *entgql.Cursor
 		generated.WithControlOrder(controlOrderBy),
 	)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting paginated results for control report")
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "controlreport"})
 	}
 

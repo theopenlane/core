@@ -281,6 +281,8 @@ func normalizeFramework(framework *string) string {
 }
 
 // getMappedControlsBySubcontrolID returns mapped control records that include the given subcontrol ID on either side
+// it passes in the owner id so that it can bypass authorization requests since all users in an organization have
+// read access to (sub)controls and mappings
 func getMappedControlsBySubcontrolID(ctx context.Context, subcontrolID string) ([]*generated.MappedControl, error) {
 	orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
 	if err != nil {
@@ -292,8 +294,8 @@ func getMappedControlsBySubcontrolID(ctx context.Context, subcontrolID string) (
 		subcontrol.OwnerIDIn(orgIDs...),
 	)
 
+	// skip filters, this is already filtered on organization
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
 	return withTransactionalMutation(ctx).MappedControl.Query().
 		Where(
 			mappedcontrol.Or(
@@ -306,6 +308,8 @@ func getMappedControlsBySubcontrolID(ctx context.Context, subcontrolID string) (
 }
 
 // getControlMappings returns the controls and subcontrols mapped to a control based on the ref code and framework
+// it passes in the owner id so that it can bypass authorization requests since all users in an organization have
+// read access to (sub)controls and mappings
 func getControlMappings(ctx context.Context, refCode string, framework *string, parentControlID *string) ([]*generated.MappedControl, error) {
 	fullWhere, err := prepMappedControlQuery(ctx, refCode, framework, parentControlID)
 	if err != nil {
@@ -382,6 +386,10 @@ func prepMappedControlQuery(ctx context.Context, refCode string, framework *stri
 	}, nil
 }
 
+// getOrgMappedControlsInfo returns the organization control data for the mapped controls. If the control
+// is the same as the one being looked up, it is skipped. If the mapping came from the organization and is already
+// returning controls in the organization, it is added directly. If the mapping came from the system mappings, it looks
+// up the corresponding organization control if it exists
 func getOrgMappedControlsInfo(ctx context.Context, controls map[string]*model.ControlInfo, refCode string, framework *string) []*model.ControlInfo {
 	if len(controls) == 0 {
 		return nil
@@ -408,7 +416,8 @@ func getOrgMappedControlsInfo(ctx context.Context, controls map[string]*model.Co
 
 }
 
-// findOrganizationControlInfoForMappings
+// findOrganizationControlInfoForMappings returns the organization controls for the system control based on the framework
+// and refCode
 func findOrganizationControlInfoForMappings(ctx context.Context, controls map[string]*model.ControlInfo) ([]*model.ControlInfo, bool) {
 	// get orgs to filter, this will allow us to skip expensive authz checks
 	orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
@@ -423,8 +432,6 @@ func findOrganizationControlInfoForMappings(ctx context.Context, controls map[st
 
 	for _, c := range controls {
 		if c.ReferenceFramework == nil {
-			logx.FromContext(ctx).Warn().Str("id", c.ID).Str("ref_code", c.RefCode).Msg("found system control without a reference framework")
-
 			continue
 		}
 
@@ -437,6 +444,7 @@ func findOrganizationControlInfoForMappings(ctx context.Context, controls map[st
 
 	}
 
+	// use allowContext because this is filtered on authorized organizations already
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	if len(subcontrolRefCodes) > 0 {
 		orClauses := make([]predicate.Subcontrol, 0, len(subcontrolRefCodes))
@@ -496,6 +504,8 @@ func findOrganizationControlInfoForMappings(ctx context.Context, controls map[st
 	return results, len(results) > 0
 }
 
+// isSameControlInfo checks if the refCode and framework combination match, if so they are considered the
+// same control and returns false
 func isSameControlInfo(refCode string, framework *string, mappedControl *model.ControlInfo) bool {
 	if refCode != mappedControl.RefCode {
 		return false
@@ -512,6 +522,7 @@ func isSameControlInfo(refCode string, framework *string, mappedControl *model.C
 	return currentFramework == mappedFramework
 }
 
+// generateMapControlKey creates a key for a map based on the ref code and framework
 func generateMapControlKey(refCode string, framework *string) string {
 	f := normalizeFramework(framework)
 

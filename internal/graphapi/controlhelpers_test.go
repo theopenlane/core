@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -14,8 +15,6 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
-
-func strPtr(s string) *string { return &s }
 
 func TestGetStandardRefCodes(t *testing.T) {
 	tests := []struct {
@@ -111,17 +110,17 @@ func TestNormalizeFramework(t *testing.T) {
 		},
 		{
 			name:      "non-nil framework returns its value",
-			framework: strPtr("ISO27001"),
+			framework: lo.ToPtr("ISO27001"),
 			expected:  "ISO27001",
 		},
 		{
 			name:      "empty string framework returns empty string",
-			framework: strPtr(""),
+			framework: lo.ToPtr(""),
 			expected:  "",
 		},
 		{
 			name:      "SOC2 framework",
-			framework: strPtr("SOC2"),
+			framework: lo.ToPtr("SOC2"),
 			expected:  "SOC2",
 		},
 	}
@@ -129,7 +128,7 @@ func TestNormalizeFramework(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := normalizeFramework(tt.framework)
-			assert.Equal(t, tt.expected, result)
+			assert.Check(t, is.Equal(tt.expected, result))
 		})
 	}
 }
@@ -147,12 +146,12 @@ func TestGetFrameworkName(t *testing.T) {
 		},
 		{
 			name:     "non-nil reference framework returns its value",
-			control:  &generated.Control{ReferenceFramework: strPtr("NIST800-53")},
+			control:  &generated.Control{ReferenceFramework: lo.ToPtr("NIST800-53")},
 			expected: "NIST800-53",
 		},
 		{
 			name:     "SOC2 reference framework",
-			control:  &generated.Control{ReferenceFramework: strPtr("SOC2")},
+			control:  &generated.Control{ReferenceFramework: lo.ToPtr("SOC2")},
 			expected: "SOC2",
 		},
 	}
@@ -160,7 +159,7 @@ func TestGetFrameworkName(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := getFrameworkName(tt.control)
-			assert.Equal(t, tt.expected, result)
+			assert.Check(t, is.Equal(tt.expected, result))
 		})
 	}
 }
@@ -181,13 +180,13 @@ func TestGenerateMapControlKey(t *testing.T) {
 		{
 			name:      "non-nil framework uses framework value",
 			refCode:   "CC1.1",
-			framework: strPtr("SOC2"),
+			framework: lo.ToPtr("SOC2"),
 			expected:  "CC1.1::SOC2",
 		},
 		{
 			name:      "empty ref code",
 			refCode:   "",
-			framework: strPtr("ISO27001"),
+			framework: lo.ToPtr("ISO27001"),
 			expected:  "::ISO27001",
 		},
 	}
@@ -221,7 +220,7 @@ func TestPrepMappedControlQuery(t *testing.T) {
 			name:            "no auth context returns error",
 			ctx:             context.Background(),
 			refCode:         "CC1.1",
-			framework:       strPtr("SOC2"),
+			framework:       lo.ToPtr("SOC2"),
 			parentControlID: nil,
 			wantErr:         true,
 		},
@@ -238,7 +237,7 @@ func TestPrepMappedControlQuery(t *testing.T) {
 			name:            "control query with non-nil framework",
 			ctx:             authedCtx,
 			refCode:         "CC1.1",
-			framework:       strPtr("SOC2"),
+			framework:       lo.ToPtr("SOC2"),
 			parentControlID: nil,
 			wantErr:         false,
 			wantPredicates:  1,
@@ -247,7 +246,7 @@ func TestPrepMappedControlQuery(t *testing.T) {
 			name:            "subcontrol query with parent control ID",
 			ctx:             authedCtx,
 			refCode:         "SC-1",
-			framework:       strPtr("NIST800-53"),
+			framework:       lo.ToPtr("NIST800-53"),
 			parentControlID: &parentID,
 			wantErr:         false,
 			wantPredicates:  1,
@@ -264,7 +263,7 @@ func TestPrepMappedControlQuery(t *testing.T) {
 			}
 
 			assert.NilError(t, err)
-			assert.Equal(t, tt.wantPredicates, len(result))
+			assert.Check(t, is.Equal(tt.wantPredicates, len(result)))
 		})
 	}
 }
@@ -283,7 +282,7 @@ func TestIsSameControlInfo(t *testing.T) {
 		{
 			name:          "different ref codes",
 			refCode:       "CC1.1",
-			framework:     strPtr("SOC2"),
+			framework:     lo.ToPtr("SOC2"),
 			mappedControl: &model.ControlInfo{RefCode: "CC2.1", ReferenceFramework: &soc2},
 			expected:      false,
 		},
@@ -344,7 +343,7 @@ func TestGetControlWherePredicate(t *testing.T) {
 		},
 		{
 			name:    "input with filter returns non-nil predicate",
-			where:   &generated.ControlWhereInput{RefCode: strPtr("CC1.1")},
+			where:   &generated.ControlWhereInput{RefCode: lo.ToPtr("CC1.1")},
 			wantNil: false,
 		},
 	}
@@ -399,7 +398,7 @@ func TestConstructWherePredicatesFromStandardRefCodes(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := constructWherePredicatesFromStandardRefCodes[predicate.Control](context.Background(), tt.input)
-			assert.Equal(t, tt.wantLen, len(result))
+			assert.Check(t, is.Equal(tt.wantLen, len(result)))
 		})
 	}
 }

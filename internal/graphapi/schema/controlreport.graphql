@@ -228,12 +228,27 @@ type ControlEvidence {
   the most severe evidence status among all linked evidence items
   """
   worstStatus: EvidenceEvidenceStatus
+  """
+  number of evidence items with auditor-approved status
+  """
   approvedCount: Int!
+  """
+  breakdown of evidence item counts by status
+  """
   countByStatus: [EvidenceCountByStatus!]
 }
 
+"""
+EvidenceCountByStatus pairs an evidence status with the number of evidence items in that state
+"""
 type EvidenceCountByStatus {
+  """
+  the evidence status value
+  """
   status: EvidenceEvidenceStatus!
+  """
+  number of evidence items with this status
+  """
   totalCount: Int!
 }
 

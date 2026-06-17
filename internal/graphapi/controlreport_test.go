@@ -151,7 +151,7 @@ func seedControlReportTestData(ctx context.Context, t *testing.T, primaryControl
 func TestQueryControlReports(t *testing.T) {
 	t.Parallel()
 
-	localTestOrg := suite.seedOrgOwner(t)
+	localTestOrg := suite.seedFreshOrgUsers(t)
 	orgUser := suite.seedOrgOwner(t)
 
 	// create 8 filler controls first (oldest) so that the enriched controls and the
@@ -194,21 +194,21 @@ func TestQueryControlReports(t *testing.T) {
 			expectedResults: 5,
 		},
 		{
-			name:            "happy path, with last set",
+			name:            "happy path, with last set by admin",
 			last:            lo.ToPtr(int64(3)),
-			ctx:             localTestOrg.owner.UserCtx,
+			ctx:             localTestOrg.admin.UserCtx,
 			expectedResults: 3,
 		},
 		{
-			name:            "first set over max (10 in test)",
+			name:            "first set over max (10 in test) by member",
 			first:           &orgOwnedCount,
-			ctx:             localTestOrg.owner.UserCtx,
+			ctx:             localTestOrg.member.UserCtx,
 			expectedResults: testutils.MaxResultLimit,
 		},
 		{
-			name:            "last set over max (10 in test)",
+			name:            "last set over max (10 in test) by auditor",
 			last:            &orgOwnedCount,
-			ctx:             localTestOrg.owner.UserCtx,
+			ctx:             localTestOrg.auditor.UserCtx,
 			expectedResults: testutils.MaxResultLimit,
 		},
 		{

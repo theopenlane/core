@@ -17,18 +17,38 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
+)
+
+// GraphQL field name constants for ControlReport are used in field-presence checks and
+// the non-column skip map to avoid scattering identical string literals.
+const (
+	fieldEdges           = "edges"
+	fieldNode            = "node"
+	fieldControls        = "controls"
+	fieldEvidenceStatus  = "evidenceStatus"
+	fieldLinkedPolicies  = "linkedPolicies"
+	fieldSubcontrols     = "subcontrols"
+	fieldRelatedControls = "relatedControls"
+	fieldControlOwner    = "controlOwner"
+
+	fieldSubcontrolRelated        = fieldSubcontrols + "." + fieldRelatedControls
+	fieldSubcontrolEvidenceStatus = fieldSubcontrols + "." + fieldEvidenceStatus
+	fieldSubcontrolLinkedPolicies = fieldSubcontrols + "." + fieldLinkedPolicies
+
+	// path prefixes that scope field names to their position in each query shape
+	pathPrefixPaginated = fieldEdges + "." + fieldNode + "."
+	pathPrefixCategory  = fieldControls + "."
 )
 
 // nonColumnControlReportFields are ControlReport GraphQL fields that do not correspond to
 // selectable ent columns — edges and fields computed after the initial query.
 var nonColumnControlReportFields = map[string]struct{}{
-	"evidenceStatus":  {},
-	"linkedPolicies":  {},
-	"subcontrols":     {},
-	"relatedControls": {},
-	"controlOwner":    {},
+	fieldEvidenceStatus:  {},
+	fieldLinkedPolicies:  {},
+	fieldSubcontrols:     {},
+	fieldRelatedControls: {},
+	fieldControlOwner:    {},
 }
 
 // collectControlReportEntFields walks the GraphQL selection set along path, then collects
@@ -61,17 +81,19 @@ func collectControlReportEntFields(ctx context.Context, path []string) []string 
 	return entFields
 }
 
+// getControlFields returns selectable ent column names for the paginated query shape (edges → node path)
 func getControlFields(ctx context.Context) []string {
-	return collectControlReportEntFields(ctx, []string{"edges", "node"})
+	return collectControlReportEntFields(ctx, []string{fieldEdges, fieldNode})
 }
 
+// getControlFieldsForCategory returns selectable ent column names for the by-category query shape (controls path)
 func getControlFieldsForCategory(ctx context.Context) []string {
-	return collectControlReportEntFields(ctx, []string{"controls"})
+	return collectControlReportEntFields(ctx, []string{fieldControls})
 }
 
 // controlReportPathPrefixes are the known path prefixes for ControlReport fields,
 // covering both the paginated and by-category query shapes.
-var controlReportPathPrefixes = []string{"edges.node.", "controls."}
+var controlReportPathPrefixes = []string{pathPrefixPaginated, pathPrefixCategory}
 
 // controlReportFieldRequested returns true if any of the given field paths (relative to a
 // ControlReport node) are requested in the current operation, under any known path prefix.
@@ -85,34 +107,42 @@ func controlReportFieldRequested(ctx context.Context, fields ...string) bool {
 	return graphql.AnyFieldRequested(ctx, paths...)
 }
 
+// hasEvidenceField reports whether evidenceStatus is requested in the current operation
 func hasEvidenceField(ctx context.Context) bool {
-	return controlReportFieldRequested(ctx, "evidenceStatus")
+	return controlReportFieldRequested(ctx, fieldEvidenceStatus)
 }
 
+// hasLinkedPoliciesField reports whether linkedPolicies is requested in the current operation
 func hasLinkedPoliciesField(ctx context.Context) bool {
-	return controlReportFieldRequested(ctx, "linkedPolicies")
+	return controlReportFieldRequested(ctx, fieldLinkedPolicies)
 }
 
+// hasSubcontrolsField reports whether subcontrols is requested in the current operation
 func hasSubcontrolsField(ctx context.Context) bool {
-	return controlReportFieldRequested(ctx, "subcontrols")
+	return controlReportFieldRequested(ctx, fieldSubcontrols)
 }
 
+// hasSubcontrolRelatedControlsField reports whether subcontrols.relatedControls is requested in the current operation
 func hasSubcontrolRelatedControlsField(ctx context.Context) bool {
-	return controlReportFieldRequested(ctx, "subcontrols.relatedControls")
+	return controlReportFieldRequested(ctx, fieldSubcontrolRelated)
 }
 
+// hasSubcontrolEvidenceField reports whether subcontrols.evidenceStatus is requested in the current operation
 func hasSubcontrolEvidenceField(ctx context.Context) bool {
-	return controlReportFieldRequested(ctx, "subcontrols.evidenceStatus")
+	return controlReportFieldRequested(ctx, fieldSubcontrolEvidenceStatus)
 }
 
+// hasSubcontrolLinkedPoliciesField reports whether subcontrols.linkedPolicies is requested in the current operation
 func hasSubcontrolLinkedPoliciesField(ctx context.Context) bool {
-	return controlReportFieldRequested(ctx, "subcontrols.linkedPolicies")
+	return controlReportFieldRequested(ctx, fieldSubcontrolLinkedPolicies)
 }
 
+// hasAnySubcontrolAdditionalField reports whether any enrichment field under subcontrols is requested
 func hasAnySubcontrolAdditionalField(ctx context.Context) bool {
-	return controlReportFieldRequested(ctx, "subcontrols.relatedControls", "subcontrols.evidenceStatus", "subcontrols.linkedPolicies")
+	return controlReportFieldRequested(ctx, fieldSubcontrolRelated, fieldSubcontrolEvidenceStatus, fieldSubcontrolLinkedPolicies)
 }
 
+// getSubcontrolRelatedControlInfo fetches MappedControl records for a subcontrol and returns deduplicated related ControlInfo entries
 func getSubcontrolRelatedControlInfo(ctx context.Context, sc *model.ControlReport, frameworksInOrg []string) ([]*model.ControlInfo, error) {
 	result, err := getMappedControlsBySubcontrolID(ctx, sc.ID)
 	if err != nil {
@@ -120,6 +150,21 @@ func getSubcontrolRelatedControlInfo(ctx context.Context, sc *model.ControlRepor
 	}
 
 	return processMappedControlResults(ctx, result, sc.ID, sc.RefCode, sc.ReferenceFramework, frameworksInOrg)
+}
+
+// classifyMappedControl routes a single ControlInfo into the system-owned or org-owned map,
+// skipping the control that owns the mapping (selfID) and controls from frameworks not in the org.
+func classifyMappedControl(info *model.ControlInfo, systemOwned bool, selfID string, frameworksInOrg []string, systemMap, orgMap map[string]*model.ControlInfo) {
+	if info.ID == selfID || !shouldCheckForControl(info, frameworksInOrg) {
+		return
+	}
+
+	key := generateMapControlKey(info.RefCode, info.ReferenceFramework)
+	if systemOwned {
+		systemMap[key] = info
+	} else {
+		orgMap[key] = info
+	}
 }
 
 // processMappedControlResults converts a slice of MappedControl records into ControlInfo entries,
@@ -136,74 +181,17 @@ func processMappedControlResults(ctx context.Context, result []*generated.Mapped
 
 	for _, r := range result {
 		for _, c := range r.Edges.FromControls {
-			if c.ID == selfID {
-				continue
-			}
-			controlInfo := controlEdgeToControlInfo(c)
-			if !shouldCheckForControl(controlInfo, frameworksInOrg) {
-				continue
-			}
-			key := generateMapControlKey(c.RefCode, c.ReferenceFramework)
-			logx.FromContext(ctx).Warn().Str("key", key).Msg("adding control found in from controls")
-			if c.SystemOwned {
-				systemOwnedMappedControls[key] = controlInfo
-			} else {
-				allInOrgControlMappings[key] = controlInfo
-			}
+			classifyMappedControl(controlEdgeToControlInfo(c), c.SystemOwned, selfID, frameworksInOrg, systemOwnedMappedControls, allInOrgControlMappings)
 		}
-
 		for _, c := range r.Edges.ToControls {
-			if c.ID == selfID {
-				continue
-			}
-			controlInfo := controlEdgeToControlInfo(c)
-			if !shouldCheckForControl(controlInfo, frameworksInOrg) {
-				continue
-			}
-			key := generateMapControlKey(c.RefCode, c.ReferenceFramework)
-			logx.FromContext(ctx).Warn().Str("key", key).Msg("adding control found in to controls")
-			if c.SystemOwned {
-				systemOwnedMappedControls[key] = controlInfo
-			} else {
-				allInOrgControlMappings[key] = controlInfo
-			}
+			classifyMappedControl(controlEdgeToControlInfo(c), c.SystemOwned, selfID, frameworksInOrg, systemOwnedMappedControls, allInOrgControlMappings)
 		}
-
 		for _, c := range r.Edges.FromSubcontrols {
-			if c.ID == selfID {
-				continue
-			}
-			controlInfo := subcontrolEdgeToControlInfo(c)
-			if !shouldCheckForControl(controlInfo, frameworksInOrg) {
-				continue
-			}
-			key := generateMapControlKey(c.RefCode, c.ReferenceFramework)
-			logx.FromContext(ctx).Warn().Str("key", key).Msg("adding control found in from subcontrols")
-			if c.SystemOwned {
-				systemOwnedMappedControls[key] = controlInfo
-			} else {
-				allInOrgControlMappings[key] = controlInfo
-			}
+			classifyMappedControl(subcontrolEdgeToControlInfo(c), c.SystemOwned, selfID, frameworksInOrg, systemOwnedMappedControls, allInOrgControlMappings)
 		}
-
 		for _, c := range r.Edges.ToSubcontrols {
-			if c.ID == selfID {
-				continue
-			}
-			controlInfo := subcontrolEdgeToControlInfo(c)
-			if !shouldCheckForControl(controlInfo, frameworksInOrg) {
-				continue
-			}
-			key := generateMapControlKey(c.RefCode, c.ReferenceFramework)
-			logx.FromContext(ctx).Warn().Str("key", key).Msg("adding control found in to subcontrols")
-			if c.SystemOwned {
-				systemOwnedMappedControls[key] = controlInfo
-			} else {
-				allInOrgControlMappings[key] = controlInfo
-			}
+			classifyMappedControl(subcontrolEdgeToControlInfo(c), c.SystemOwned, selfID, frameworksInOrg, systemOwnedMappedControls, allInOrgControlMappings)
 		}
-
-		logx.FromContext(ctx).Warn().Int("count_system_owned", len(systemOwnedMappedControls)).Int("count_org_owned", len(allInOrgControlMappings)).Msg("found mapped controls, getting org info")
 	}
 
 	additional := getOrgMappedControlsInfo(ctx, systemOwnedMappedControls, selfRefCode, selfFramework)
@@ -425,6 +413,7 @@ func computeLinkedPolicies(policiesMap map[string][]*generated.InternalPolicy, i
 	for _, p := range policiesMap[id] {
 		collect(p)
 	}
+
 	for _, rc := range relatedControls {
 		for _, p := range policiesMap[rc.ID] {
 			collect(p)
@@ -437,29 +426,49 @@ func computeLinkedPolicies(policiesMap map[string][]*generated.InternalPolicy, i
 	}
 }
 
+// controlToReport maps a Control ent to a ControlReport model with empty enrichment fields populated later
+func controlToReport(c *generated.Control) *model.ControlReport {
+	return &model.ControlReport{
+		ID:                 c.ID,
+		RefCode:            c.RefCode,
+		Description:        &c.Description,
+		Title:              &c.Title,
+		Status:             &c.Status,
+		ControlOwner:       c.Edges.ControlOwner,
+		ReferenceFramework: c.ReferenceFramework,
+		Category:           &c.Category,
+		Subcategory:        &c.Subcategory,
+		RelatedControls:    []*model.ControlInfo{},
+		EvidenceStatus:     &model.ControlEvidence{},
+		LinkedPolicies:     &model.ControlPolicies{},
+		Subcontrols:        convertSubcontrolToControlReportEdge(c.Edges.Subcontrols),
+	}
+}
+
+// subcontrolToReport maps a Subcontrol ent to a ControlReport model with empty enrichment fields populated later
+func subcontrolToReport(c *generated.Subcontrol) *model.ControlReport {
+	return &model.ControlReport{
+		ID:                 c.ID,
+		RefCode:            c.RefCode,
+		Description:        &c.Description,
+		Title:              &c.Title,
+		Status:             &c.Status,
+		ControlOwner:       c.Edges.ControlOwner,
+		ReferenceFramework: c.ReferenceFramework,
+		Category:           &c.Category,
+		Subcategory:        &c.Subcategory,
+		RelatedControls:    []*model.ControlInfo{},
+		EvidenceStatus:     &model.ControlEvidence{},
+		LinkedPolicies:     &model.ControlPolicies{},
+	}
+}
+
+// convertControlToControlReportEdge wraps a ControlConnection into a ControlReportConnection, preserving page info and total count
 func convertControlToControlReportEdge(controls *generated.ControlConnection) *model.ControlReportConnection {
 	edges := make([]*model.ControlReportEdge, len(controls.Edges))
-
 	for i, c := range controls.Edges {
-		edges[i] = &model.ControlReportEdge{
-			Node: &model.ControlReport{
-				ID:                 c.Node.ID,
-				RefCode:            c.Node.RefCode,
-				Description:        &c.Node.Description,
-				Title:              &c.Node.Title,
-				Status:             &c.Node.Status,
-				ControlOwner:       c.Node.Edges.ControlOwner,
-				ReferenceFramework: c.Node.ReferenceFramework,
-				Category:           &c.Node.Category,
-				Subcategory:        &c.Node.Subcategory,
-				RelatedControls:    []*model.ControlInfo{},
-				EvidenceStatus:     &model.ControlEvidence{},
-				LinkedPolicies:     &model.ControlPolicies{},
-				Subcontrols:        convertSubcontrolToControlReportEdge(c.Node.Edges.Subcontrols),
-			},
-		}
+		edges[i] = &model.ControlReportEdge{Node: controlToReport(c.Node)}
 	}
-
 	return &model.ControlReportConnection{
 		Edges:      edges,
 		PageInfo:   &controls.PageInfo,
@@ -467,29 +476,16 @@ func convertControlToControlReportEdge(controls *generated.ControlConnection) *m
 	}
 }
 
+// convertSubcontrolToControlReportEdge converts a slice of Subcontrol records to ControlReport models
 func convertSubcontrolToControlReportEdge(controls []*generated.Subcontrol) []*model.ControlReport {
 	edges := make([]*model.ControlReport, len(controls))
-
 	for i, c := range controls {
-		edges[i] = &model.ControlReport{
-			ID:                 c.ID,
-			RefCode:            c.RefCode,
-			Description:        &c.Description,
-			Title:              &c.Title,
-			Status:             &c.Status,
-			ControlOwner:       c.Edges.ControlOwner,
-			ReferenceFramework: c.ReferenceFramework,
-			Category:           &c.Category,
-			Subcategory:        &c.Subcategory,
-			RelatedControls:    []*model.ControlInfo{},
-			EvidenceStatus:     &model.ControlEvidence{},
-			LinkedPolicies:     &model.ControlPolicies{},
-		}
+		edges[i] = subcontrolToReport(c)
 	}
-
 	return edges
 }
 
+// controlEdgeToControlInfo maps a Control record to ControlInfo with IsSubcontrol set to false
 func controlEdgeToControlInfo(c *generated.Control) *model.ControlInfo {
 	return &model.ControlInfo{
 		ID:                 c.ID,
@@ -503,6 +499,7 @@ func controlEdgeToControlInfo(c *generated.Control) *model.ControlInfo {
 	}
 }
 
+// subcontrolEdgeToControlInfo maps a Subcontrol record to ControlInfo with IsSubcontrol set to true
 func subcontrolEdgeToControlInfo(c *generated.Subcontrol) *model.ControlInfo {
 	return &model.ControlInfo{
 		ID:                 c.ID,
@@ -516,6 +513,7 @@ func subcontrolEdgeToControlInfo(c *generated.Subcontrol) *model.ControlInfo {
 	}
 }
 
+// convertReportOrderToControlOrderBy translates GraphQL ControlReportOrder inputs to ent ControlOrder; defaults to created_at DESC when orderBy is nil
 func convertReportOrderToControlOrderBy(orderBy []*model.ControlReportOrder) []*generated.ControlOrder {
 	if orderBy == nil {
 		return []*generated.ControlOrder{
@@ -564,6 +562,7 @@ var evidenceStatusSeverity = []enums.EvidenceStatus{
 	enums.EvidenceStatusAuditorApproved,
 }
 
+// evidenceStatusRank returns the severity index of s; unknown statuses rank beyond all known values
 func evidenceStatusRank(s enums.EvidenceStatus) int {
 	for i, v := range evidenceStatusSeverity {
 		if v == s {
@@ -604,6 +603,7 @@ func shouldCheckForControl(c *model.ControlInfo, frameworksInOrg []string) bool 
 	return slices.Contains(frameworksInOrg, *c.ReferenceFramework)
 }
 
+// convertControlListToControlReports converts a flat Control slice to ControlReport models with empty enrichment fields
 func convertControlListToControlReports(controls []*generated.Control) []*model.ControlReport {
 	out := make([]*model.ControlReport, len(controls))
 	for i, c := range controls {
@@ -631,15 +631,17 @@ func convertControlListToControlReports(controls []*generated.Control) []*model.
 // linkedPolicies both expand their ID sets using the related controls list.
 func needsRelatedControls(ctx context.Context) bool {
 	return controlReportFieldRequested(ctx,
-		"relatedControls",
-		"evidenceStatus",
-		"linkedPolicies",
-		"subcontrols.relatedControls",
-		"subcontrols.evidenceStatus",
-		"subcontrols.linkedPolicies",
+		fieldRelatedControls,
+		fieldEvidenceStatus,
+		fieldLinkedPolicies,
+		fieldSubcontrolRelated,
+		fieldSubcontrolEvidenceStatus,
+		fieldSubcontrolLinkedPolicies,
 	)
 }
 
+// enrichControlReports populates computed fields on reports in two passes: related controls first,
+// then evidence and policies in batched queries across all entities
 func enrichControlReports(ctx context.Context, reports []*model.ControlReport) error {
 	var (
 		err             error
@@ -660,7 +662,7 @@ func enrichControlReports(ctx context.Context, reports []*model.ControlReport) e
 		}
 	}
 
-	// Pass 1: populate related controls (per-entity, must come first so IDs are available for pass 2)
+	// first pass: populate related controls (per-entity, must come first so IDs are available for pass 2)
 	for i, c := range reports {
 		if needsRelated {
 			reports[i].RelatedControls, err = getRelatedControlInfoFromReport(ctx, c, frameworksInOrg)
@@ -679,7 +681,7 @@ func enrichControlReports(ctx context.Context, reports []*model.ControlReport) e
 		}
 	}
 
-	// Pass 2: batch evidence and policies across all entities in two queries total
+	// second pass: batch evidence and policies across all entities in two queries total
 	if wantsEvidence || wantsScEvidence || wantsPolicies || wantsScPolicies {
 		controlIDs, subcontrolIDs := collectAllEntityIDs(reports)
 
@@ -721,6 +723,7 @@ func enrichControlReports(ctx context.Context, reports []*model.ControlReport) e
 	return nil
 }
 
+// getRelatedControlInfoFromReport fetches all MappedControl records for a control and returns deduplicated related ControlInfo entries
 func getRelatedControlInfoFromReport(ctx context.Context, c *model.ControlReport, frameworksInOrg []string) ([]*model.ControlInfo, error) {
 	result, err := getControlMappings(ctx, c.RefCode, c.ReferenceFramework, nil)
 	if err != nil {
@@ -730,6 +733,7 @@ func getRelatedControlInfoFromReport(ctx context.Context, c *model.ControlReport
 	return processMappedControlResults(ctx, result, c.ID, c.RefCode, c.ReferenceFramework, frameworksInOrg)
 }
 
+// groupControlReportsByCategory groups a flat ControlReport slice into category buckets sorted by name; controls with no category use an empty string key
 func groupControlReportsByCategory(controls []*model.ControlReport) []*model.ControlReportCategory {
 	categoryMap := map[string]*model.ControlReportCategory{}
 
