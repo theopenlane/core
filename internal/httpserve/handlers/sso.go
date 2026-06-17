@@ -384,6 +384,7 @@ func (h *Handler) ssoExemptForMember(ctx context.Context, userEmail, userID, org
 
 	member, err := transaction.FromContext(ctx).OrgMembership.Query().
 		Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
+		Select(orgmembership.FieldRole, orgmembership.FieldSSOExempt).
 		Only(ctx)
 	if err != nil {
 		return false
