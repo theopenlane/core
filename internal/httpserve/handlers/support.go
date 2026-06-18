@@ -24,11 +24,11 @@ import (
 
 // support access cookie names carry first factor state into the second factor identity provider step
 const (
-	supportPendingCookie  = "support_pending"
-	supportStateCookie    = "support_state"
-	supportNonceCookie    = "support_nonce"
-	supportOrgCookie      = "support_org"
-	supportReasonCookie   = "support_reason"
+	supportPendingCookie = "support_pending"
+	supportStateCookie   = "support_state"
+	supportNonceCookie   = "support_nonce"
+	supportOrgCookie     = "support_org"
+	supportReasonCookie  = "support_reason"
 )
 
 // supportSessionDefaultHours is the default support access session length when none is requested
@@ -274,11 +274,11 @@ func (h *Handler) generateSupportAuthURL(ctx echo.Context, orgID, reason string)
 	}
 
 	sessions.SetCookies(ctx.Response().Writer, cookieCfg, map[string]string{
-		supportPendingCookie:  authenticatedUserSSOCookieValue,
-		supportOrgCookie:      orgID,
-		supportReasonCookie:   reason,
-		supportStateCookie:    state,
-		supportNonceCookie:    nonceVal,
+		supportPendingCookie: authenticatedUserSSOCookieValue,
+		supportOrgCookie:     orgID,
+		supportReasonCookie:  reason,
+		supportStateCookie:   state,
+		supportNonceCookie:   nonceVal,
 	})
 
 	return rpCfg.OAuthConfig().AuthCodeURL(state, oauth2.SetAuthURLParam("nonce", nonceVal)), nil
