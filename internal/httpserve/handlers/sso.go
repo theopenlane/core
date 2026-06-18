@@ -28,6 +28,7 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
+	ssoutils "github.com/theopenlane/core/pkg/ssoutils"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -379,7 +380,7 @@ func (h *Handler) ssoExemptForMember(ctx context.Context, userEmail, userID, org
 	logger := logx.FromContext(ctx)
 
 	if len(h.SupportDomains) > 0 {
-		if slices.Contains(h.SupportDomains, emailDomain(userEmail)) {
+		if slices.Contains(h.SupportDomains, ssoutils.EmailDomain(userEmail)) {
 			logger.Debug().Str("user_id", userID).Str("org_id", orgID).Msg("sso bypassed: global support domain")
 			return true
 		}
@@ -406,25 +407,14 @@ func (h *Handler) ssoExemptForMember(ctx context.Context, userEmail, userID, org
 		return false
 	}
 
-	if slices.Contains(setting.IdentityProviderExemptDomains, emailDomain(userEmail)) {
-		logger.Debug().Str("user_id", userID).Str("org_id", orgID).Msg("SSO bypassed: org exempt domain")
+	if slices.Contains(setting.IdentityProviderExemptDomains, ssoutils.EmailDomain(userEmail)) {
+		logger.Debug().Str("user_id", userID).Str("org_id", orgID).Msg("sso bypassed: org exempt domain")
 		return true
 	}
-
-	logger.Debug().Str("user_id", userID).Str("org_id", orgID).Str("role", member.Role.String()).Msg("SSO not bypassed")
 
 	return false
 }
 
-// emailDomain returns the domain portion of an email address (e.g. "theopenlane.io" from "user@theopenlane.io")
-func emailDomain(email string) string {
-	at := strings.LastIndex(email, "@")
-	if at < 0 {
-		return ""
-	}
-
-	return email[at+1:]
-}
 
 // authorizeTokenSSO updates the SSO authorization timestamp for a token type (API or Personal Access Token)
 func (h *Handler) authorizeTokenSSO(ctx context.Context, tokenType, tokenID, orgID string) error {

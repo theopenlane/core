@@ -91,8 +91,6 @@ type nonce string
 // when userID is provided, bypass conditions (role, sso_exempt, exempt domains) are evaluated and Enforced
 // is set to false if any bypass applies
 func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (models.SSOStatusReply, error) {
-	logger := logx.FromContext(ctx)
-
 	setting, err := h.getOrganizationSettingByOrgID(ctx, orgID)
 	if err != nil {
 		return models.SSOStatusReply{}, err
@@ -123,8 +121,6 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (mod
 			var userEmail string
 			if u, uErr := h.DBClient.User.Query().Where(user.ID(userID)).Select("email").Only(allowCtx); uErr == nil {
 				userEmail = u.Email
-			} else {
-				logger.Debug().Err(uErr).Str("user_id", userID).Msg("webfinger: could not fetch user email for SSO bypass check")
 			}
 
 			if h.ssoExemptForMember(allowCtx, userEmail, userID, orgID) {

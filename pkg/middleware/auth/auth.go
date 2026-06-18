@@ -597,7 +597,7 @@ func isSSOEnforced(ctx context.Context, db *ent.Client, orgID string) (bool, err
 func isSSOBypassed(ctx context.Context, db *ent.Client, userID, orgID string, supportDomains []string) bool {
 	if len(supportDomains) > 0 {
 		u, uErr := db.User.Query().Where(user.ID(userID)).Select("email").Only(ctx)
-		if uErr == nil && slices.Contains(supportDomains, emailDomain(u.Email)) {
+		if uErr == nil && slices.Contains(supportDomains, sso.EmailDomain(u.Email)) {
 			return true
 		}
 	}
@@ -622,17 +622,7 @@ func isSSOBypassed(ctx context.Context, db *ent.Client, userID, orgID string, su
 		Where(organizationsetting.OrganizationID(orgID)).
 		Only(ctx)
 
-	return sErr == nil && slices.Contains(setting.IdentityProviderExemptDomains, emailDomain(u.Email))
-}
-
-// emailDomain returns the domain portion of an email address (e.g. "theopenlane.io" from "user@theopenlane.io")
-func emailDomain(email string) string {
-	at := strings.LastIndex(email, "@")
-	if at < 0 {
-		return ""
-	}
-
-	return email[at+1:]
+	return sErr == nil && slices.Contains(setting.IdentityProviderExemptDomains, sso.EmailDomain(u.Email))
 }
 
 // userIDFromToken extracts the user ID from the token in the request context
