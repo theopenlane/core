@@ -24,8 +24,6 @@ const (
 type EnforcementInput struct {
 	// SSOEnforced reports whether the organization has SSO login enforcement enabled
 	SSOEnforced bool
-	// IDPAuthTested reports whether the SSO connection has been verified; SSO is only effective when tested
-	IDPAuthTested bool
 	// TFAEnforced reports whether the organization enforces multifactor authentication
 	TFAEnforced bool
 	// ExemptDomains is the set of email domains whose existing members skip the SSO redirect
@@ -61,10 +59,8 @@ type Decision struct {
 // affects whether the subject is routed through the directory; multifactor enforcement applies
 // regardless of exemption
 func Evaluate(in EnforcementInput) Decision {
-	ssoEnforced := in.SSOEnforced && in.IDPAuthTested
-
 	d := Decision{
-		SSOEnforced: ssoEnforced,
+		SSOEnforced: in.SSOEnforced,
 		TFARequired: in.TFAEnforced,
 	}
 
@@ -83,7 +79,7 @@ func Evaluate(in EnforcementInput) Decision {
 		d.ExemptReason = ExemptReasonSupport
 	}
 
-	d.MustSSO = ssoEnforced && !d.Exempt
+	d.MustSSO = in.SSOEnforced && !d.Exempt
 
 	return d
 }

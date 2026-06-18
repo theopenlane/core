@@ -75,7 +75,8 @@ Config contains the configuration for the core server
             "github": {},
             "google": {},
             "webauthn": {}
-        }
+        },
+        "supportaccess": {}
     },
     "authz": {
         "credentials": {},
@@ -630,6 +631,7 @@ Auth settings including oauth2 providers and token configuration
 |[**token**](#authtoken)|`object`||yes|
 |[**supportedproviders**](#authsupportedproviders)|`string[]`||no|
 |[**providers**](#authproviders)|`object`|OauthProviderConfig represents the configuration for OAuth providers such as Github and Google<br/>|no|
+|[**supportaccess**](#authsupportaccess)|`object`|SupportAccessConfig contains configuration for the Openlane support access flow.<br/>|no|
 
 **Additional Properties:** not allowed  
 **Example**
@@ -649,7 +651,8 @@ Auth settings including oauth2 providers and token configuration
         "github": {},
         "google": {},
         "webauthn": {}
-    }
+    },
+    "supportaccess": {}
 }
 ```
 
@@ -880,6 +883,29 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 **Items**
 
 **Item Type:** `string`  
+<a name="authsupportaccess"></a>
+### auth\.supportaccess: object
+
+SupportAccessConfig contains configuration for the Openlane support access flow.
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled toggles the support access endpoints<br/>||
+|**email**|`string`|Email is the email of the virtual support identity, used as the first factor username<br/>||
+|**displayname**|`string`|DisplayName is the display name of the virtual support identity, used for record attribution<br/>||
+|**subjectid**|`string`|SubjectID is the stable subject id of the virtual support identity used for created_by/updated_by<br/>attribution. It must be a valid ULID and is consistent without a backing user row<br/>||
+|**password**|`string`|Password is the shared password for the virtual support identity, validated against this value<br/>||
+|**clientid**|`string`|ClientID is the client ID for the second factor identity provider<br/>||
+|**clientsecret**|`string`|ClientSecret is the client secret for the second factor identity provider<br/>||
+|**issuerurl**|`string`|IssuerURL is the issuer URL of the second factor identity provider<br/>||
+|**discoveryendpoint**|`string`|DiscoveryEndpoint is the optional OIDC discovery endpoint of the second factor identity provider<br/>||
+|**redirecturl**|`string`|RedirectURL is the callback URL registered with the second factor identity provider<br/>||
+|**alloweddomain**|`string`|AllowedDomain restricts which email domain may complete the second factor (e.g. theopenlane.io)<br/>||
+
+**Additional Properties:** not allowed  
 <a name="authz"></a>
 ## authz: object
 

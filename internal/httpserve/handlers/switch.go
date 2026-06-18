@@ -47,28 +47,30 @@ func (h *Handler) SwitchHandler(ctx echo.Context, openapi *OpenAPIContext) error
 		return h.BadRequest(ctx, err, openapi)
 	}
 
-	// check if SSO is enforced for the target organization. fetchSSOStatus resolves enforcement
-	// through ssoutils.Evaluate, so owner, per-user, and per-domain exemptions are already applied.
-	// If the user must SSO, redirect them through the SSO login flow.
+	// check if SSO is enforced for the target organization, then apply owner, per-user, and per-domain
+	// exemptions to decide whether this user must be redirected through the SSO login flow.
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 	status, err := h.fetchSSOStatus(allowCtx, in.TargetOrganizationID, user.ID)
 
 	if err == nil && status.Enforced {
-		authURL, err := h.generateSSOAuthURL(ctx, in.TargetOrganizationID)
-		if err != nil {
-			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to generate SSO auth URL")
-			return h.BadRequest(ctx, err, openapi)
+		mustSSO, ssoErr := h.userMustSSO(allowCtx, in.TargetOrganizationID, user.ID, user.Email)
+		if ssoErr == nil && mustSSO {
+			authURL, err := h.generateSSOAuthURL(ctx, in.TargetOrganizationID)
+			if err != nil {
+				logx.FromContext(reqCtx).Error().Err(err).Msg("unable to generate SSO auth URL")
+				return h.BadRequest(ctx, err, openapi)
+			}
+
+			sessions.SetCookie(ctx.Response().Writer, authenticatedUserSSOCookieValue, authenticatedUserSSOCookieName, *h.SessionConfig.CookieConfig)
+
+			out := &models.SwitchOrganizationReply{
+				Reply:       rout.Reply{Success: true},
+				NeedsSSO:    true,
+				RedirectURI: authURL,
+			}
+
+			return h.Success(ctx, out, openapi)
 		}
-
-		sessions.SetCookie(ctx.Response().Writer, authenticatedUserSSOCookieValue, authenticatedUserSSOCookieName, *h.SessionConfig.CookieConfig)
-
-		out := &models.SwitchOrganizationReply{
-			Reply:       rout.Reply{Success: true},
-			NeedsSSO:    true,
-			RedirectURI: authURL,
-		}
-
-		return h.Success(ctx, out, openapi)
 	}
 
 	// check if TFA is enforced for the target organization and user doesn't have TFA enabled

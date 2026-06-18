@@ -613,7 +613,6 @@ func userMustSSO(ctx context.Context, db *ent.Client, orgID, userID string) (boo
 
 	in := sso.EnforcementInput{
 		SSOEnforced:   setting.IdentityProviderLoginEnforced,
-		IDPAuthTested: setting.IdentityProviderAuthTested,
 		TFAEnforced:   setting.MultifactorAuthEnforced,
 		ExemptDomains: setting.SSOExemptDomains,
 	}
