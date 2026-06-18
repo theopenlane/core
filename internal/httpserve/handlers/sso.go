@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	apimodels "github.com/theopenlane/core/common/openapi"
-	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -370,15 +369,6 @@ func (h *Handler) orgEnforcementsForUser(ctx context.Context, email string) *api
 	return &status
 }
 
-// clientFromContext returns the ent client from the context transaction, or h.DBClient if no transaction is active
-func (h *Handler) clientFromContext(ctx context.Context) *ent.Client {
-	if tx := transaction.FromContext(ctx); tx != nil {
-		return tx.Client()
-	}
-
-	return h.DBClient
-}
-
 // ssoExemptForMember returns true if the user should bypass SSO enforcement for the given org.
 // Bypass conditions (evaluated in order):
 //  1. user's email domain is in the global SupportDomains config
@@ -395,9 +385,7 @@ func (h *Handler) ssoExemptForMember(ctx context.Context, userEmail, userID, org
 		}
 	}
 
-	db := h.clientFromContext(ctx)
-
-	member, err := db.OrgMembership.Query().
+	member, err := transaction.FromContext(ctx).OrgMembership.Query().
 		Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
 		Select(orgmembership.FieldRole, orgmembership.FieldSSOExempt).
 		Only(ctx)
@@ -411,7 +399,7 @@ func (h *Handler) ssoExemptForMember(ctx context.Context, userEmail, userID, org
 		return true
 	}
 
-	setting, sErr := db.OrganizationSetting.Query().
+	setting, sErr := transaction.FromContext(ctx).OrganizationSetting.Query().
 		Where(organizationsetting.OrganizationID(orgID)).
 		Only(ctx)
 	if sErr != nil {
