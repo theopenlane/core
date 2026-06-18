@@ -3,7 +3,7 @@ module github.com/theopenlane/core/cli
 go 1.26.4
 
 require (
-	github.com/99designs/gqlgen v0.17.90
+	github.com/99designs/gqlgen v0.17.91
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/goccy/go-yaml v1.19.2
@@ -17,9 +17,9 @@ require (
 	github.com/rs/zerolog v1.35.1
 	github.com/samber/lo v1.53.0
 	github.com/spf13/cobra v1.10.2
-	github.com/theopenlane/core v1.23.4
+	github.com/theopenlane/core v1.23.6
 	github.com/theopenlane/core/common v1.0.24
-	github.com/theopenlane/go-client v0.12.1
+	github.com/theopenlane/go-client v0.12.2
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.33.0
 	github.com/theopenlane/utils v0.7.1
@@ -32,6 +32,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/clipperhouse/displaywidth v0.10.0 // indirect
 	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
+	github.com/coder/websocket v1.8.14 // indirect
 	github.com/danieljoos/wincred v1.2.3 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.1 // indirect
 	github.com/envoyproxy/protoc-gen-validate v1.3.3 // indirect

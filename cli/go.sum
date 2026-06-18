@@ -1,5 +1,5 @@
-github.com/99designs/gqlgen v0.17.90 h1:wSv6blm/PoplU6QoNw83EcQpNtC0HX3/+44vITJOzpk=
-github.com/99designs/gqlgen v0.17.90/go.mod h1:GqYrEwYsqCG8VaOsq2kJUCUKwAE1T+u2i+Nj7NtXiVI=
+github.com/99designs/gqlgen v0.17.91 h1:/mIvXnN0lAorqszP3Vukw10SVRfLVUYtBTQFwmYRMmI=
+github.com/99designs/gqlgen v0.17.91/go.mod h1:N7+yJF6zbGIEqohF+ZtEUp/eq2dTnn0bDizLUIYPUCU=
 github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2 h1:ZBbLwSJqkHBuFDA6DUhhse0IGJ7T5bemHyNILUjvOq4=
 github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2/go.mod h1:VSw57q4QFiWDbRnjdX8Cb3Ow0SFncRw+bA/ofY6Q83w=
 github.com/agnivade/levenshtein v1.2.1 h1:EHBY3UOn1gwdy/VbFwgo4cxecRznFk7fKWN1KOX7eoM=
@@ -18,6 +18,8 @@ github.com/clipperhouse/displaywidth v0.10.0 h1:GhBG8WuerxjFQQYeuZAeVTuyxuX+Urai
 github.com/clipperhouse/displaywidth v0.10.0/go.mod h1:XqJajYsaiEwkxOj4bowCTMcT1SgvHo9flfF3jQasdbs=
 github.com/clipperhouse/uax29/v2 v2.7.0 h1:+gs4oBZ2gPfVrKPthwbMzWZDaAFPGYK72F0NJv2v7Vk=
 github.com/clipperhouse/uax29/v2 v2.7.0/go.mod h1:EFJ2TJMRUaplDxHKj1qAEhCtQPW2tJSwu5BF98AuoVM=
+github.com/coder/websocket v1.8.14 h1:9L0p0iKiNOibykf283eHkKUHHrpG7f65OE3BhhO7v9g=
+github.com/coder/websocket v1.8.14/go.mod h1:NX3SzP+inril6yawo5CQXx8+fk145lPDC6pumgx0mVg=
 github.com/cpuguy83/go-md2man/v2 v2.0.6/go.mod h1:oOW0eioCTA6cOiMLiUPZOpcVxMig6NIQQ7OS05n1F4g=
 github.com/danieljoos/wincred v1.2.3 h1:v7dZC2x32Ut3nEfRH+vhoZGvN72+dQ/snVXo/vMFLdQ=
 github.com/danieljoos/wincred v1.2.3/go.mod h1:6qqX0WNrS4RzPZ1tnroDzq9kY3fu1KwE7MRLQK4X0bs=
@@ -200,14 +202,14 @@ github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO
 github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
-github.com/theopenlane/core v1.23.4 h1:vuYuT/MFy/CBQcyCiRg/yu/LLUtretAtb0JNNZ757bI=
-github.com/theopenlane/core v1.23.4/go.mod h1:79dY7M/wGZ0XVYLB4Q7Mp/OMd0pD8R9JpN8kb2iU8rs=
+github.com/theopenlane/core v1.23.6 h1:jfTwlJVbnmY3ELrEi/myHnQHd+Cmkol1xmQEWpQP7+M=
+github.com/theopenlane/core v1.23.6/go.mod h1:Yxf+eeL3seRvOA8FFXaX6Ah6j96Giee9gM0FDQtQ7bg=
 github.com/theopenlane/core/common v1.0.24 h1:MIRjz6vnOwCHFSbC1oWjsuPCUCr8Xr9Z29+uLkMf694=
 github.com/theopenlane/core/common v1.0.24/go.mod h1:c3Jykrf6ENOf7bR7Wod4GpvCnspv9EAX49dgiWLY7DU=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
 github.com/theopenlane/echox v0.3.0/go.mod h1:yTrXnj7s3VNIg0FCvB7Dut2Elr+LqJKU/nruxx1E1cM=
-github.com/theopenlane/go-client v0.12.1 h1:+LASPm0BJucYm6uZp/oVh14YwIQ2UuVbJ1nSJe4immY=
-github.com/theopenlane/go-client v0.12.1/go.mod h1:F+s557MiWmXv9MJB8f7mwuSyxhvDMMV1ZqEhvgKcVBc=
+github.com/theopenlane/go-client v0.12.2 h1:6D7vp8hmA7RJsdWG0xlipjkySypOm1mLO36Ld7Mtcco=
+github.com/theopenlane/go-client v0.12.2/go.mod h1:F+s557MiWmXv9MJB8f7mwuSyxhvDMMV1ZqEhvgKcVBc=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
 github.com/theopenlane/iam v0.33.0 h1:dAQiefJ2e0vygN2dFCcy60Qj0PRBvehd055vcQIqU2s=
