@@ -130,20 +130,7 @@ func (h *Handler) handleRoleMutation(ctx echo.Context, openapi *OpenAPIContext, 
 		return h.BadRequest(ctx, ErrInvalidInput, openapi)
 	}
 
-	allowed, err := h.DBClient.Authz.CheckAccess(reqCtx, fgax.AccessCheck{
-		SubjectType: caller.SubjectType(),
-		SubjectID:   caller.SubjectID,
-		Relation:    fgax.CanEdit,
-		ObjectID:    orgID,
-		ObjectType:  fgax.Kind(generated.TypeOrganization),
-		Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
-	})
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Str("organization_id", orgID).Msg("error checking organization role management access")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
-	}
-
-	if !allowed {
+	if !isCallerAdmin(caller) {
 		return h.BadRequest(ctx, ErrInvalidInput, openapi)
 	}
 
@@ -165,6 +152,19 @@ func (h *Handler) handleRoleMutation(ctx echo.Context, openapi *OpenAPIContext, 
 		OrganizationID: orgID,
 		Role:           in.Role,
 	}, openapi)
+}
+
+func isCallerAdmin(caller *auth.Caller) bool {
+	if caller.HasInLineage(auth.CapSystemAdmin) {
+		return true
+	}
+
+	switch caller.OrganizationRole {
+	case auth.OwnerRole, auth.SuperAdminRole, auth.AdminRole:
+		return true
+	}
+
+	return false
 }
 
 func convertOrgRolesToOpenAPI(roles []modelparse.OrganizationRole) []models.OrganizationRole {
