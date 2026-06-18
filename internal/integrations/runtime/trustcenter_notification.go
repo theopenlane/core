@@ -34,15 +34,18 @@ const (
 )
 
 // SeedTrustCenterNotifications starts the durable trust center notification polling loop after runtime
-// listeners have been registered. It is a no-op when an active job already exists
+// listeners have been registered
 func (r *Runtime) SeedTrustCenterNotifications(ctx context.Context) error {
 	active, err := r.Gala().HasActiveJobForTopic(ctx, operations.TrustCenterNotificationTopic)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed checking for active trust center notification poller")
+
 		return err
 	}
 
 	if active {
 		logx.FromContext(ctx).Debug().Msg("trust center notification poller already active, skipping seed")
+
 		return nil
 	}
 
@@ -63,7 +66,7 @@ func (r *Runtime) HandleTrustCenterNotifications(ctx context.Context, _ operatio
 		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
 	})
 
-	return r.dispatchDuePosts(systemCtx, cutoff, now) + r.dispatchDueSubprocessorChanges(systemCtx, cutoff, now), nil
+	return r.dispatchDuePosts(systemCtx, cutoff, now) + r.dispatchDueSubprocessorChanges(systemCtx, cutoff), nil
 }
 
 // dispatchDuePosts notifies subscribers about published posts flagged for notification that have been
@@ -79,6 +82,7 @@ func (r *Runtime) dispatchDuePosts(ctx context.Context, cutoff, now time.Time) i
 		All(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed querying due trust center posts")
+
 		return 0
 	}
 
@@ -88,6 +92,7 @@ func (r *Runtime) dispatchDuePosts(ctx context.Context, cutoff, now time.Time) i
 		tc, customDomain, err := r.loadTrustCenter(ctx, post.TrustCenterID)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("note_id", post.ID).Msg("failed loading trust center for post notification")
+
 			continue
 		}
 
@@ -101,6 +106,7 @@ func (r *Runtime) dispatchDuePosts(ctx context.Context, cutoff, now time.Time) i
 
 		if err := r.createAndDispatchTrustCenterCampaign(ctx, tc.OwnerID, post.TrustCenterID, title, content); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("note_id", post.ID).Msg("failed dispatching post notification")
+
 			continue
 		}
 
@@ -116,7 +122,7 @@ func (r *Runtime) dispatchDuePosts(ctx context.Context, cutoff, now time.Time) i
 
 // dispatchDueSubprocessorChanges notifies subscribers about subprocessor changes for trust centers
 // that opted in, coalescing all changes since the last notification into one send per trust center
-func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff, now time.Time) int {
+func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff time.Time) int {
 	settings, err := r.DB().TrustCenterSetting.Query().
 		Where(
 			trustcentersetting.NotifySubscribersOnSubprocessorChange(true),
@@ -143,6 +149,7 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff, no
 			All(entx.SkipSoftDelete(ctx))
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", setting.TrustCenterID).Msg("failed querying changed subprocessors")
+
 			continue
 		}
 
@@ -164,6 +171,7 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff, no
 		tc, customDomain, err := r.loadTrustCenter(ctx, setting.TrustCenterID)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", setting.TrustCenterID).Msg("failed loading trust center for subprocessor notification")
+
 			continue
 		}
 
@@ -178,6 +186,7 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff, no
 
 		if err := r.createAndDispatchTrustCenterCampaign(ctx, tc.OwnerID, setting.TrustCenterID, "Subprocessor update", content); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", setting.TrustCenterID).Msg("failed dispatching subprocessor notification")
+
 			continue
 		}
 
@@ -199,6 +208,8 @@ func (r *Runtime) loadTrustCenter(ctx context.Context, trustCenterID string) (*e
 		WithCustomDomain().
 		Only(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", trustCenterID).Msg("failed loading trust center")
+
 		return nil, "", err
 	}
 
@@ -236,6 +247,8 @@ func trustCenterNotificationContent(subject, title string, intros []string, cust
 func (r *Runtime) createAndDispatchTrustCenterCampaign(ctx context.Context, ownerID, trustCenterID, name string, content map[string]any) error {
 	templateID, err := r.ensureTrustCenterUpdateTemplate(ctx, ownerID, trustCenterID)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("owner_id", ownerID).Str("trust_center_id", trustCenterID).Msg("failed ensuring trust center update template")
+
 		return err
 	}
 
@@ -248,6 +261,8 @@ func (r *Runtime) createAndDispatchTrustCenterCampaign(ctx context.Context, owne
 		SetMetadata(content).
 		Save(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", trustCenterID).Msg("failed creating campaign for trust center notification")
+
 		return err
 	}
 
@@ -255,6 +270,8 @@ func (r *Runtime) createAndDispatchTrustCenterCampaign(ctx context.Context, owne
 		CampaignDispatchInput: emaildef.CampaignDispatchInput{CampaignID: camp.ID},
 	})
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", camp.ID).Msg("failed marshaling campaign dispatch config")
+
 		return err
 	}
 
@@ -262,6 +279,8 @@ func (r *Runtime) createAndDispatchTrustCenterCampaign(ctx context.Context, owne
 		return inst.CampaignEmail
 	})
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("owner_id", ownerID).Msg("failed resolving integration for trust center notification")
+
 		return err
 	}
 
@@ -293,6 +312,8 @@ func (r *Runtime) ensureTrustCenterUpdateTemplate(ctx context.Context, ownerID, 
 	}
 
 	if !ent.IsNotFound(err) {
+		logx.FromContext(ctx).Error().Err(err).Str("owner_id", ownerID).Str("trust_center_id", trustCenterID).Msg("failed querying for existing trust center update template")
+
 		return "", err
 	}
 
@@ -304,6 +325,8 @@ func (r *Runtime) ensureTrustCenterUpdateTemplate(ctx context.Context, ownerID, 
 		SetTemplateContext(enums.TemplateContextCampaignRecipient).
 		Save(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("owner_id", ownerID).Str("trust_center_id", trustCenterID).Msg("failed creating trust center update template")
+
 		return "", err
 	}
 
