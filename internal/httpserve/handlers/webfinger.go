@@ -81,29 +81,34 @@ func (h *Handler) WebfingerHandler(ctx echo.Context, openapi *OpenAPIContext) er
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
+	// for an account lookup, reflect the resolved user's owner, per-user, and per-domain exemptions so
+	// the client does not route an exempt user through the SSO flow. The org level lookup is unaffected
+	if userID != "" && out.Enforced {
+		if mustSSO, ssoErr := h.userMustSSO(reqCtx, orgID, userID, ""); ssoErr == nil {
+			out.Enforced = mustSSO
+		}
+	}
+
 	return h.Success(ctx, out, openapi)
 }
 
 type nonce string
 
-// fetchSSOStatus returns the SSO enforcement status for a given organization
-// it checks the organization's settings and returns whether SSO is enforced, the provider, and discovery URL
+// fetchSSOStatus returns the organization level SSO enforcement status for a given organization. It
+// reports the organization's raw enforcement and TFA settings, the provider, and the discovery URL.
+// Per-user exemptions (owner, per-user, per-domain) are intentionally not applied here; that decision
+// is resolved separately by userMustSSO at the login, switch, and middleware redirect points
 func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (models.SSOStatusReply, error) {
 	setting, err := h.getOrganizationSettingByOrgID(ctx, orgID)
 	if err != nil {
 		return models.SSOStatusReply{}, err
 	}
 
-	in := sso.EnforcementInput{
-		SSOEnforced:   setting.IdentityProviderLoginEnforced,
-		IDPAuthTested: setting.IdentityProviderAuthTested,
-		TFAEnforced:   setting.MultifactorAuthEnforced,
-		ExemptDomains: setting.SSOExemptDomains,
-	}
-
 	out := models.SSOStatusReply{
 		Reply:          rout.Reply{Success: true},
+		Enforced:       setting.IdentityProviderLoginEnforced,
 		OrganizationID: orgID,
+		OrgTFAEnforced: setting.MultifactorAuthEnforced,
 	}
 
 	if userID != "" {
@@ -113,25 +118,13 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (mod
 			Query().Where(
 			orgmembership.OrganizationID(orgID),
 			orgmembership.UserID(userID),
-		).WithUser().Only(allowCtx)
+		).Only(allowCtx)
 		if err != nil {
 			return models.SSOStatusReply{}, err
 		}
 
-		in.IsMember = true
-		in.IsOwner = member.Role == enums.RoleOwner
-		in.MemberExempt = member.SSOExempt
-
-		if member.Edges.User != nil {
-			in.Email = member.Edges.User.Email
-		}
-
-		out.IsOrgOwner = in.IsOwner
+		out.IsOrgOwner = member.Role == enums.RoleOwner
 	}
-
-	decision := sso.Evaluate(in)
-	out.Enforced = decision.MustSSO
-	out.OrgTFAEnforced = decision.TFARequired
 
 	if setting.IdentityProvider != enums.SSOProvider("") {
 		out.Provider = setting.IdentityProvider
@@ -142,4 +135,41 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (mod
 	}
 
 	return out, nil
+}
+
+// userMustSSO resolves whether the subject must be routed through the SSO login flow for the
+// organization, applying owner, per-user, and per-domain exemptions. SSO enforcement status itself is
+// reported separately by fetchSSOStatus, which intentionally returns the organization level value
+func (h *Handler) userMustSSO(ctx context.Context, orgID, userID, email string) (bool, error) {
+	setting, err := h.getOrganizationSettingByOrgID(ctx, orgID)
+	if err != nil {
+		return false, err
+	}
+
+	in := sso.EnforcementInput{
+		SSOEnforced:   setting.IdentityProviderLoginEnforced,
+		ExemptDomains: setting.SSOExemptDomains,
+		Email:         email,
+	}
+
+	if userID != "" {
+		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+		member, mErr := h.DBClient.OrgMembership.
+			Query().Where(
+			orgmembership.OrganizationID(orgID),
+			orgmembership.UserID(userID),
+		).WithUser().Only(allowCtx)
+		if mErr == nil {
+			in.IsMember = true
+			in.IsOwner = member.Role == enums.RoleOwner
+			in.MemberExempt = member.SSOExempt
+
+			if in.Email == "" && member.Edges.User != nil {
+				in.Email = member.Edges.User.Email
+			}
+		}
+	}
+
+	return sso.Evaluate(in).MustSSO, nil
 }

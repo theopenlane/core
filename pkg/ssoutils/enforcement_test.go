@@ -22,28 +22,21 @@ func TestEvaluate(t *testing.T) {
 	}{
 		{
 			name:         "sso not enforced",
-			in:           EnforcementInput{SSOEnforced: false, IDPAuthTested: true, IsMember: true, Email: "user@corp.com"},
-			wantMustSSO:  false,
-			wantExempt:   false,
-			wantEnforced: false,
-		},
-		{
-			name:         "enforced but connection not tested is inert",
-			in:           EnforcementInput{SSOEnforced: true, IDPAuthTested: false, IsMember: true, Email: "user@corp.com"},
+			in:           EnforcementInput{SSOEnforced: false, IsMember: true, Email: "user@corp.com"},
 			wantMustSSO:  false,
 			wantExempt:   false,
 			wantEnforced: false,
 		},
 		{
 			name:         "enforced member must sso",
-			in:           EnforcementInput{SSOEnforced: true, IDPAuthTested: true, IsMember: true, Email: "user@corp.com"},
+			in:           EnforcementInput{SSOEnforced: true, IsMember: true, Email: "user@corp.com"},
 			wantMustSSO:  true,
 			wantExempt:   false,
 			wantEnforced: true,
 		},
 		{
 			name:         "owner is exempt",
-			in:           EnforcementInput{SSOEnforced: true, IDPAuthTested: true, IsMember: true, IsOwner: true, Email: "owner@corp.com"},
+			in:           EnforcementInput{SSOEnforced: true, IsMember: true, IsOwner: true, Email: "owner@corp.com"},
 			wantMustSSO:  false,
 			wantExempt:   true,
 			wantReason:   ExemptReasonOwner,
@@ -51,7 +44,7 @@ func TestEvaluate(t *testing.T) {
 		},
 		{
 			name:         "member with explicit exemption",
-			in:           EnforcementInput{SSOEnforced: true, IDPAuthTested: true, IsMember: true, MemberExempt: true, Email: "auditor@corp.com"},
+			in:           EnforcementInput{SSOEnforced: true, IsMember: true, MemberExempt: true, Email: "auditor@corp.com"},
 			wantMustSSO:  false,
 			wantExempt:   true,
 			wantReason:   ExemptReasonUser,
@@ -59,7 +52,7 @@ func TestEvaluate(t *testing.T) {
 		},
 		{
 			name:         "member whose domain is exempt case insensitive",
-			in:           EnforcementInput{SSOEnforced: true, IDPAuthTested: true, IsMember: true, ExemptDomains: exemptDomains, Email: "auditor@auditfirm.com"},
+			in:           EnforcementInput{SSOEnforced: true, IsMember: true, ExemptDomains: exemptDomains, Email: "auditor@auditfirm.com"},
 			wantMustSSO:  false,
 			wantExempt:   true,
 			wantReason:   ExemptReasonDomain,
@@ -67,21 +60,21 @@ func TestEvaluate(t *testing.T) {
 		},
 		{
 			name:         "non member with exempt domain is not exempt",
-			in:           EnforcementInput{SSOEnforced: true, IDPAuthTested: true, IsMember: false, ExemptDomains: exemptDomains, Email: "auditor@auditfirm.com"},
+			in:           EnforcementInput{SSOEnforced: true, IsMember: false, ExemptDomains: exemptDomains, Email: "auditor@auditfirm.com"},
 			wantMustSSO:  true,
 			wantExempt:   false,
 			wantEnforced: true,
 		},
 		{
 			name:         "non exempt domain member must sso",
-			in:           EnforcementInput{SSOEnforced: true, IDPAuthTested: true, IsMember: true, ExemptDomains: exemptDomains, Email: "user@corp.com"},
+			in:           EnforcementInput{SSOEnforced: true, IsMember: true, ExemptDomains: exemptDomains, Email: "user@corp.com"},
 			wantMustSSO:  true,
 			wantExempt:   false,
 			wantEnforced: true,
 		},
 		{
 			name:         "support session is exempt",
-			in:           EnforcementInput{SSOEnforced: true, IDPAuthTested: true, SupportSession: true, Email: "support@system.theopenlane.io"},
+			in:           EnforcementInput{SSOEnforced: true, SupportSession: true, Email: "support@system.theopenlane.io"},
 			wantMustSSO:  false,
 			wantExempt:   true,
 			wantReason:   ExemptReasonSupport,
@@ -89,7 +82,7 @@ func TestEvaluate(t *testing.T) {
 		},
 		{
 			name:         "tfa required regardless of exemption",
-			in:           EnforcementInput{SSOEnforced: true, IDPAuthTested: true, TFAEnforced: true, IsMember: true, IsOwner: true, Email: "owner@corp.com"},
+			in:           EnforcementInput{SSOEnforced: true, TFAEnforced: true, IsMember: true, IsOwner: true, Email: "owner@corp.com"},
 			wantMustSSO:  false,
 			wantExempt:   true,
 			wantReason:   ExemptReasonOwner,
