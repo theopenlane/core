@@ -354,18 +354,12 @@ func (h *Handler) orgEnforcementsForUser(ctx context.Context, email string) *api
 		return nil
 	}
 
+	// fetchSSOStatus applies the user's owner/per-user/per-domain exemption when a userID is provided,
+	// so status.Enforced already reflects whether this user must be redirected through SSO
 	status, err := h.fetchSSOStatus(allowCtx, orgID, user.ID)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to resolve sso enforcement for user")
 		return nil
-	}
-
-	// apply owner, per-user, and per-domain exemptions to the redirect decision; the organization level
-	// enforcement reported by fetchSSOStatus is left unchanged
-	if status.Enforced {
-		mustSSO, ssoErr := h.userMustSSO(allowCtx, orgID, user.ID, user.Email)
-		if ssoErr == nil {
-			status.Enforced = mustSSO
-		}
 	}
 
 	return &status

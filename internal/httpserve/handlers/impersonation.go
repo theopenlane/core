@@ -16,6 +16,11 @@ import (
 	"github.com/theopenlane/utils/rout"
 )
 
+// impersonationBlacklistTTL is how long a revoked impersonation session is kept on the token blacklist.
+// It must exceed the maximum impersonation token lifetime so a revoked session can never be replayed
+// after the blacklist entry expires
+const impersonationBlacklistTTL = 24 * time.Hour
+
 // StartImpersonation handles requests to start user impersonation
 func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) error {
 	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleStartImpersonationRequest, &models.StartImpersonationReply{}, openapi.Registry)
@@ -183,6 +188,12 @@ func (h *Handler) EndImpersonation(ctx echo.Context, openapi *OpenAPIContext) er
 		Scopes:            caller.Impersonation.Scopes,
 	}); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to log impersonation end event")
+	}
+
+	// revoke the session so the impersonation token cannot be reused before it would have expired; this is
+	// a no-op unless a redis backed token blacklist is configured (auth.token.redis.enabled)
+	if err := h.TokenManager.RevokeImpersonationToken(reqCtx, req.SessionID, impersonationBlacklistTTL); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to revoke impersonation session")
 	}
 
 	response := models.EndImpersonationReply{

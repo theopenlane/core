@@ -2,6 +2,8 @@ package hooks
 
 import (
 	"context"
+	"slices"
+	"strings"
 
 	"entgo.io/ent"
 
@@ -11,27 +13,78 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 )
 
-// HookValidateIdentityProviderConfig ensures identity provider configuration is present when SSO login is enforced
-// and resets enforced/tested status when SSO configuration fields change
+// HookValidateIdentityProviderConfig ensures identity provider configuration is present when SSO login is
+// enforced, resets enforced/tested status when SSO configuration fields change, and ensures the SSO exempt
+// domains and allowed email domains lists never overlap
 func HookValidateIdentityProviderConfig() ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return hook.OrganizationSettingFunc(func(ctx context.Context, m *generated.OrganizationSettingMutation) (generated.Value, error) {
-			if err := disableEnforcementIfConfigChanged(ctx, m); err != nil {
+			if err := validateExemptDomainsDisjoint(ctx, m); err != nil {
 				return nil, err
 			}
 
-			if err := ValidateIdentityProviderConfig(ctx, m); err != nil {
-				return nil, err
+			if hasIdentityProviderConfigFields(m) {
+				if err := disableEnforcementIfConfigChanged(ctx, m); err != nil {
+					return nil, err
+				}
+
+				if err := ValidateIdentityProviderConfig(ctx, m); err != nil {
+					return nil, err
+				}
 			}
 
 			return next.Mutate(ctx, m)
 		})
 	}, hook.And(
-		hook.HasFields("identity_provider", "identity_provider_client_id",
-			"identity_provider_client_secret", "oidc_discovery_endpoint",
-			"identity_provider_login_enforced"),
+		hook.Or(
+			hook.HasFields("identity_provider", "identity_provider_client_id",
+				"identity_provider_client_secret", "oidc_discovery_endpoint",
+				"identity_provider_login_enforced"),
+			hook.HasFields("allowed_email_domains"),
+			hook.HasFields("sso_exempt_domains"),
+		),
 		hook.HasOp(ent.OpCreate|ent.OpUpdateOne),
 	))
+}
+
+// hasIdentityProviderConfigFields reports whether all identity provider configuration fields are part of
+// the mutation, matching the original trigger so the enforcement reset and validation only run for IdP changes
+func hasIdentityProviderConfigFields(m *generated.OrganizationSettingMutation) bool {
+	_, provider := m.IdentityProvider()
+	_, clientID := m.IdentityProviderClientID()
+	_, clientSecret := m.IdentityProviderClientSecret()
+	_, discovery := m.OidcDiscoveryEndpoint()
+	_, enforced := m.IdentityProviderLoginEnforced()
+
+	return provider && clientID && clientSecret && discovery && enforced
+}
+
+// validateExemptDomainsDisjoint ensures a domain is never both in allowed_email_domains and
+// sso_exempt_domains; a domain cannot be allowed for access and excluded from SSO enforcement at once
+func validateExemptDomainsDisjoint(ctx context.Context, m *generated.OrganizationSettingMutation) error {
+	exempt := resolvedDomains(ctx, m.SSOExemptDomains, m.OldSSOExemptDomains)
+	allowed := resolvedDomains(ctx, m.AllowedEmailDomains, m.OldAllowedEmailDomains)
+
+	for _, d := range exempt {
+		if slices.Contains(allowed, d) {
+			return ErrExemptDomainAllowedConflict
+		}
+	}
+
+	return nil
+}
+
+// resolvedDomains returns the lowercased effective domain list for a field: the mutation value when set,
+// otherwise the existing value
+func resolvedDomains(ctx context.Context, set func() ([]string, bool), old func(context.Context) ([]string, error)) []string {
+	domains, ok := set()
+	if !ok {
+		if existing, err := old(ctx); err == nil {
+			domains = existing
+		}
+	}
+
+	return lo.Map(domains, func(d string, _ int) string { return strings.ToLower(d) })
 }
 
 // ValidateIdentityProviderConfig checks if the identity provider configuration is valid

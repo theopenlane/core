@@ -1,0 +1,346 @@
+package handlers_test
+
+import (
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
+	"strings"
+	"time"
+
+	"github.com/samber/lo"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
+	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/iam/auth"
+
+	"github.com/theopenlane/core/common/enums"
+	models "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/internal/ent/generated"
+	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/utils/ulids"
+)
+
+// ssoEnforcedOrg creates an SSO-enforced organization owned by a fresh user and returns it. The
+// setting only sets the enforcement flag so the identity provider validation hook does not run
+func (suite *HandlerTestSuite) ssoEnforcedOrg() *ent.Organization {
+	ctx := echocontext.NewTestEchoContext().Request().Context()
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	owner := suite.userBuilderWithInput(ctx, &userInput{password: "0wn3rP@ssw0rd!", confirmedUser: true})
+	ownerCtx := privacy.DecisionContext(owner.UserCtx, privacy.Allow)
+	ownerCtx = ent.NewContext(ownerCtx, suite.db)
+
+	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+		IdentityProviderLoginEnforced: lo.ToPtr(true),
+	}).SaveX(ownerCtx)
+
+	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+		Name:      ulids.New().String(),
+		SettingID: &setting.ID,
+	}).SaveX(ownerCtx)
+
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).ExecX(ownerCtx)
+
+	return org
+}
+
+func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptMember() {
+	t := suite.T()
+
+	suite.registerTestHandler("POST", "login", suite.createImpersonationOperation("LoginHandler", "Test login"), suite.h.LoginHandler)
+
+	org := suite.ssoEnforcedOrg()
+
+	ctx := echocontext.NewTestEchoContext().Request().Context()
+	member := suite.userBuilderWithInput(ctx, &userInput{password: "$uper$ecretP@ssword", confirmedUser: true})
+
+	memberCtx := auth.NewTestContextWithOrgID(member.ID, org.ID)
+	memberCtx = privacy.DecisionContext(memberCtx, privacy.Allow)
+	memberCtx = ent.NewContext(memberCtx, suite.db)
+
+	// member is explicitly exempt from SSO for this organization
+	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+		OrganizationID: org.ID,
+		UserID:         member.UserInfo.ID,
+		Role:           &enums.RoleMember,
+		SSOExempt:      lo.ToPtr(true),
+	}).ExecX(memberCtx)
+
+	suite.db.UserSetting.UpdateOneID(member.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(memberCtx)
+
+	body, _ := json.Marshal(models.LoginRequest{Username: member.UserInfo.Email, Password: "$uper$ecretP@ssword"})
+	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(body)))
+	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req)
+
+	// the exempt member is not redirected to SSO; password login succeeds
+	require.Equal(t, http.StatusOK, rec.Code)
+	var out models.LoginReply
+	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.True(t, out.Success)
+}
+
+func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptDomain() {
+	t := suite.T()
+
+	suite.registerTestHandler("POST", "login", suite.createImpersonationOperation("LoginHandler", "Test login"), suite.h.LoginHandler)
+
+	org := suite.ssoEnforcedOrg()
+
+	ctx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	ctx = ent.NewContext(ctx, suite.db)
+
+	exemptDomain := strings.ToLower(ulids.New().String()) + ".example.com"
+	suite.db.OrganizationSetting.Update().
+		Where(organizationsetting.OrganizationID(org.ID)).
+		SetSSOExemptDomains([]string{exemptDomain}).
+		ExecX(ctx)
+
+	memberEmail := "auditor" + strings.ToLower(ulids.New().String()) + "@" + exemptDomain
+	member := suite.userBuilderWithInput(ctx, &userInput{email: memberEmail, password: "$uper$ecretP@ssword", confirmedUser: true})
+
+	memberCtx := auth.NewTestContextWithOrgID(member.ID, org.ID)
+	memberCtx = privacy.DecisionContext(memberCtx, privacy.Allow)
+	memberCtx = ent.NewContext(memberCtx, suite.db)
+
+	// member relies on the per-domain exemption, not a per-user flag
+	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+		OrganizationID: org.ID,
+		UserID:         member.UserInfo.ID,
+		Role:           &enums.RoleMember,
+	}).ExecX(memberCtx)
+
+	suite.db.UserSetting.UpdateOneID(member.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(memberCtx)
+
+	body, _ := json.Marshal(models.LoginRequest{Username: member.UserInfo.Email, Password: "$uper$ecretP@ssword"})
+	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(body)))
+	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req)
+
+	require.Equal(t, http.StatusOK, rec.Code)
+	var out models.LoginReply
+	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.True(t, out.Success)
+}
+
+func (suite *HandlerTestSuite) TestWebfingerHandlerExemptMember() {
+	t := suite.T()
+
+	webfingerOp := suite.createImpersonationOperation("WebfingerHandler", "Webfinger handler")
+	suite.registerTestHandler("GET", ".well-known/webfinger", webfingerOp, suite.h.WebfingerHandler)
+
+	org := suite.ssoEnforcedOrg()
+
+	ctx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	member := suite.userBuilderWithInput(ctx, &userInput{confirmedUser: true})
+
+	memberCtx := auth.NewTestContextWithOrgID(member.ID, org.ID)
+	memberCtx = privacy.DecisionContext(memberCtx, privacy.Allow)
+	memberCtx = ent.NewContext(memberCtx, suite.db)
+
+	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+		OrganizationID: org.ID,
+		UserID:         member.UserInfo.ID,
+		Role:           &enums.RoleMember,
+		SSOExempt:      lo.ToPtr(true),
+	}).ExecX(memberCtx)
+
+	suite.db.UserSetting.Update().Where(usersetting.UserID(member.ID)).SetDefaultOrgID(org.ID).ExecX(memberCtx)
+
+	// the org level lookup still reports enforcement
+	orgReq := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=org:"+org.ID, nil)
+	orgRec := httptest.NewRecorder()
+	suite.e.ServeHTTP(orgRec, orgReq)
+	require.Equal(t, http.StatusOK, orgRec.Code)
+	var orgOut models.SSOStatusReply
+	require.NoError(t, json.NewDecoder(orgRec.Body).Decode(&orgOut))
+	assert.True(t, orgOut.Enforced, "org level lookup reports enforcement")
+
+	// the account lookup reflects the member's exemption
+	acctReq := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=acct:"+member.UserInfo.Email, nil)
+	acctRec := httptest.NewRecorder()
+	suite.e.ServeHTTP(acctRec, acctReq)
+	require.Equal(t, http.StatusOK, acctRec.Code)
+	var acctOut models.SSOStatusReply
+	require.NoError(t, json.NewDecoder(acctRec.Body).Decode(&acctOut))
+	assert.False(t, acctOut.Enforced, "exempt member is not required to use SSO")
+}
+
+func (suite *HandlerTestSuite) TestOrgOwnerSeededSSOExempt() {
+	t := suite.T()
+
+	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx = ent.NewContext(ctx, suite.db)
+
+	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+		Name: ulids.New().String(),
+	}).SaveX(ctx)
+
+	member := suite.db.OrgMembership.Query().
+		Where(orgmembership.OrganizationID(org.ID), orgmembership.UserID(testUser1.ID)).
+		OnlyX(ctx)
+
+	assert.Equal(t, enums.RoleOwner, member.Role)
+	assert.True(t, member.SSOExempt, "organization owner is auto-seeded as SSO exempt")
+	require.NotNil(t, member.SSOExemptReason)
+	assert.Equal(t, "organization owner", *member.SSOExemptReason)
+}
+
+func (suite *HandlerTestSuite) TestSwitchHandlerSSOExemptMember() {
+	t := suite.T()
+
+	operation := suite.createImpersonationOperation("SwitchHandler", "Switch organization context")
+	suite.registerTestHandler("POST", "switch", operation, suite.h.SwitchHandler)
+
+	org := suite.ssoEnforcedOrg()
+
+	ctx := echocontext.NewTestEchoContext().Request().Context()
+	member := suite.userBuilderWithInput(ctx, &userInput{password: "0p3nl@n3rocks!", confirmedUser: true})
+
+	memberCtx := auth.NewTestContextWithOrgID(member.ID, org.ID)
+	memberCtx = privacy.DecisionContext(memberCtx, privacy.Allow)
+	memberCtx = ent.NewContext(memberCtx, suite.db)
+
+	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+		OrganizationID: org.ID,
+		UserID:         member.UserInfo.ID,
+		Role:           &enums.RoleMember,
+		SSOExempt:      lo.ToPtr(true),
+	}).ExecX(memberCtx)
+
+	body, _ := json.Marshal(models.SwitchOrganizationRequest{TargetOrganizationID: org.ID})
+	req := httptest.NewRequest(http.MethodPost, "/switch", strings.NewReader(string(body)))
+	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(member.UserCtx))
+
+	// the exempt member switches into the SSO-enforced org without being redirected through SSO
+	require.Equal(t, http.StatusOK, rec.Code)
+	var out models.SwitchOrganizationReply
+	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.False(t, out.NeedsSSO, "exempt member is not required to use SSO when switching")
+}
+
+func (suite *HandlerTestSuite) TestInviteGrantsSSOExempt() {
+	t := suite.T()
+
+	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx = ent.NewContext(ctx, suite.db)
+
+	orgID := testUser1.OrganizationID
+
+	recipientEmail := "auditor" + strings.ToLower(ulids.New().String()) + "@partner.example.com"
+	recipient := suite.db.User.Create().
+		SetEmail(recipientEmail).
+		SetFirstName("Audit").
+		SetLastName("Or").
+		SetAuthProvider(enums.AuthProviderCredentials).
+		SetLastLoginProvider(enums.AuthProviderCredentials).
+		SetLastSeen(time.Now()).
+		SaveX(ctx)
+
+	// an invitation that grants an SSO exemption on acceptance
+	role := enums.RoleMember
+	inv := suite.db.Invite.Create().
+		SetRecipient(recipientEmail).
+		SetRole(role).
+		SetSSOExempt(true).
+		SaveX(ctx)
+
+	// accepting the invite as the recipient triggers the accepted hook, which creates the membership
+	recipientCtx := auth.NewTestContextWithOrgID(recipient.ID, orgID)
+	recipientCtx = privacy.DecisionContext(recipientCtx, privacy.Allow)
+	recipientCtx = ent.NewContext(recipientCtx, suite.db)
+
+	suite.db.Invite.UpdateOneID(inv.ID).SetStatus(enums.InvitationAccepted).ExecX(recipientCtx)
+
+	member := suite.db.OrgMembership.Query().
+		Where(orgmembership.OrganizationID(orgID), orgmembership.UserID(recipient.ID)).
+		OnlyX(ctx)
+
+	assert.True(t, member.SSOExempt, "invite-granted exemption sets the membership exemption")
+	require.NotNil(t, member.SSOExemptReason)
+	assert.Equal(t, "granted via invitation", *member.SSOExemptReason)
+}
+
+// TestImpersonatorAttributionStamped verifies that records mutated during an impersonation session
+// record the acting individual in updated_by_impersonator, while the standard audit fields continue to
+// reflect the impersonated identity
+func (suite *HandlerTestSuite) TestImpersonatorAttributionStamped() {
+	t := suite.T()
+
+	base := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+
+	caller := &auth.Caller{
+		SubjectID:       testUser1.ID,
+		SubjectEmail:    testUser1.UserInfo.Email,
+		OrganizationID:  testUser1.OrganizationID,
+		OrganizationIDs: []string{testUser1.OrganizationID},
+		Impersonation: &auth.ImpersonationContext{
+			Type:              auth.SupportImpersonation,
+			ImpersonatorID:    "engineer@theopenlane.io",
+			ImpersonatorEmail: "engineer@theopenlane.io",
+		},
+	}
+
+	impCtx := auth.WithCaller(base, caller)
+	impCtx = privacy.DecisionContext(impCtx, privacy.Allow)
+	impCtx = ent.NewContext(impCtx, suite.db)
+
+	group := suite.db.Group.Create().
+		SetName("Support Touched " + ulids.New().String()).
+		SetOwnerID(testUser1.OrganizationID).
+		SaveX(impCtx)
+
+	require.NotNil(t, group.UpdatedByImpersonator)
+	assert.Equal(t, "engineer@theopenlane.io", *group.UpdatedByImpersonator)
+}
+
+// TestExemptDomainAllowedDomainConflict verifies the organization setting hook rejects a domain that
+// appears in both the sso exempt domains and the allowed email domains lists, in either direction and
+// case-insensitively, while still permitting disjoint lists
+func (suite *HandlerTestSuite) TestExemptDomainAllowedDomainConflict() {
+	t := suite.T()
+
+	ctx := echocontext.NewTestEchoContext().Request().Context()
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = ent.NewContext(ctx, suite.db)
+
+	setting := suite.db.OrganizationSetting.Create().
+		SetAllowedEmailDomains([]string{"audit.com"}).
+		SaveX(ctx)
+
+	// adding an exempt domain already in the allowed list must fail
+	_, err := suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+		SetSSOExemptDomains([]string{"audit.com"}).
+		Save(ctx)
+	require.Error(t, err)
+	assert.ErrorContains(t, err, "cannot be in both")
+
+	// the conflict is case-insensitive
+	_, err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+		SetSSOExemptDomains([]string{"AUDIT.com"}).
+		Save(ctx)
+	require.Error(t, err)
+
+	// a disjoint exempt domain is accepted
+	updated := suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+		SetSSOExemptDomains([]string{"contractor.com"}).
+		SaveX(ctx)
+	assert.Equal(t, []string{"contractor.com"}, updated.SSOExemptDomains)
+
+	// the reverse direction is also rejected: an allowed domain already in the exempt list
+	_, err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+		SetAllowedEmailDomains([]string{"contractor.com"}).
+		Save(ctx)
+	require.Error(t, err)
+	assert.ErrorContains(t, err, "cannot be in both")
+}
