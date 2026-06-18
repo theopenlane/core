@@ -58,12 +58,12 @@ func TestPATTokenSSOAuthorization(t *testing.T) {
 	}
 
 	origPAT := fetchPATFunc
-	origSSO := isSSOEnforcedFunc
+	origMustSSO := userMustSSOFunc
 	origAuth := isPATSSOAuthorizedFunc
 	origGetOrgRole := getOrgRoleFunc
 	defer func() {
 		fetchPATFunc = origPAT
-		isSSOEnforcedFunc = origSSO
+		userMustSSOFunc = origMustSSO
 		isPATSSOAuthorizedFunc = origAuth
 		getOrgRoleFunc = origGetOrgRole
 	}()
@@ -72,7 +72,8 @@ func TestPATTokenSSOAuthorization(t *testing.T) {
 		return pat, nil
 	}
 
-	isSSOEnforcedFunc = func(context.Context, *generated.Client, string) (bool, error) { return true, nil }
+	// the owner must SSO (enforced and not exempt), so the token must be SSO-authorized
+	userMustSSOFunc = func(context.Context, *generated.Client, string, string) (bool, error) { return true, nil }
 
 	isPATSSOAuthorizedFunc = func(context.Context, *generated.Client, string, string) (bool, error) {
 		if pat.SSOAuthorizations == nil {
@@ -107,4 +108,56 @@ func TestPATTokenSSOAuthorization(t *testing.T) {
 	au, id, err = isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, userDefaultOrg)
 	assert.NoError(t, err)
 	assert.Equal(t, org.ID, au.OrganizationID)
+}
+
+// TestPATTokenSSOExemptOwner verifies that when the token owner is SSO-exempt for the organization
+// (userMustSSO resolves false even though the org enforces SSO), the personal access token does not
+// require SSO authorization
+func TestPATTokenSSOExemptOwner(t *testing.T) {
+	user := &generated.User{ID: "u1", Email: "u@example.com", DisplayName: "u"}
+	org := &generated.Organization{ID: "org", Name: "org"}
+	pat := &generated.PersonalAccessToken{
+		ID:      "p1",
+		OwnerID: user.ID,
+		Token:   "tolp_token",
+		Edges: generated.PersonalAccessTokenEdges{
+			Owner:         user,
+			Organizations: []*generated.Organization{org},
+		},
+	}
+
+	origPAT := fetchPATFunc
+	origMustSSO := userMustSSOFunc
+	origAuth := isPATSSOAuthorizedFunc
+	origGetOrgRole := getOrgRoleFunc
+	defer func() {
+		fetchPATFunc = origPAT
+		userMustSSOFunc = origMustSSO
+		isPATSSOAuthorizedFunc = origAuth
+		getOrgRoleFunc = origGetOrgRole
+	}()
+
+	fetchPATFunc = func(context.Context, *generated.Client, string) (*generated.PersonalAccessToken, error) {
+		return pat, nil
+	}
+
+	// owner is exempt, so SSO authorization must not be required
+	userMustSSOFunc = func(context.Context, *generated.Client, string, string) (bool, error) { return false, nil }
+
+	isPATSSOAuthorizedFunc = func(context.Context, *generated.Client, string, string) (bool, error) {
+		t.Fatal("SSO authorization must not be checked for an exempt owner")
+		return false, nil
+	}
+	isSystemAdminFunc = func(context.Context, *generated.Client, string, string) (bool, error) {
+		return false, nil
+	}
+	getOrgRoleFunc = func(ctx context.Context, db *ent.Client, userID, orgID string) *auth.OrganizationRoleType {
+		return nil
+	}
+
+	au, id, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, "")
+	assert.NoError(t, err)
+	assert.Equal(t, pat.ID, id)
+	assert.Equal(t, user.ID, au.SubjectID)
+	assert.Equal(t, []string{org.ID}, au.OrganizationIDs)
 }

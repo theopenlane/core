@@ -3,7 +3,6 @@ package handlers
 import (
 	"context"
 	"crypto/subtle"
-	"strconv"
 	"strings"
 	"time"
 
@@ -20,6 +19,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
+	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
 
 // support access cookie names carry first factor state into the second factor identity provider step
@@ -29,7 +29,6 @@ const (
 	supportNonceCookie    = "support_nonce"
 	supportOrgCookie      = "support_org"
 	supportReasonCookie   = "support_reason"
-	supportDurationCookie = "support_duration"
 )
 
 // supportSessionDefaultHours is the default support access session length when none is requested
@@ -72,12 +71,7 @@ func (h *Handler) supportFirstFactor(ctx echo.Context, openapi *OpenAPIContext, 
 		return h.Forbidden(ctx, ErrSupportAccessNotConsented, openapi)
 	}
 
-	durationHours := supportSessionDefaultHours
-	if req.DurationHours != nil && *req.DurationHours > 0 {
-		durationHours = *req.DurationHours
-	}
-
-	authURL, err := h.generateSupportAuthURL(ctx, req.TargetOrganizationID, req.Reason, durationHours)
+	authURL, err := h.generateSupportAuthURL(ctx, req.TargetOrganizationID, req.Reason)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to generate support second factor auth URL")
 
@@ -166,11 +160,6 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context, openapi *OpenAPIConte
 	}
 
 	duration := time.Duration(supportSessionDefaultHours) * time.Hour
-	if c, cErr := sessions.GetCookie(ctx.Request(), supportDurationCookie); cErr == nil {
-		if hrs, pErr := strconv.Atoi(c.Value); pErr == nil && hrs > 0 {
-			duration = time.Duration(hrs) * time.Hour
-		}
-	}
 
 	if h.TokenManager == nil {
 		logx.FromContext(reqCtx).Error().Msg("token manager not configured")
@@ -223,7 +212,7 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context, openapi *OpenAPIConte
 	}
 
 	sessions.RemoveCookies(ctx.Response().Writer, sessions.CookieConfig{Path: "/"},
-		supportPendingCookie, supportStateCookie, supportNonceCookie, supportOrgCookie, supportReasonCookie, supportDurationCookie)
+		supportPendingCookie, supportStateCookie, supportNonceCookie, supportOrgCookie, supportReasonCookie)
 
 	return h.Success(ctx, apimodels.SupportAccessReply{
 		Reply:          rout.Reply{Success: true},
@@ -266,7 +255,7 @@ func (h *Handler) supportOIDCConfig(ctx context.Context) (rp.RelyingParty, error
 
 // generateSupportAuthURL stores the first factor state in cookies and returns the second factor
 // identity provider authorization URL
-func (h *Handler) generateSupportAuthURL(ctx echo.Context, orgID, reason string, durationHours int) (string, error) {
+func (h *Handler) generateSupportAuthURL(ctx echo.Context, orgID, reason string) (string, error) {
 	rpCfg, err := h.supportOIDCConfig(ctx.Request().Context())
 	if err != nil {
 		return "", err
@@ -290,7 +279,6 @@ func (h *Handler) generateSupportAuthURL(ctx echo.Context, orgID, reason string,
 		supportReasonCookie:   reason,
 		supportStateCookie:    state,
 		supportNonceCookie:    nonceVal,
-		supportDurationCookie: strconv.Itoa(durationHours),
 	})
 
 	return rpCfg.OAuthConfig().AuthCodeURL(state, oauth2.SetAuthURLParam("nonce", nonceVal)), nil
@@ -302,10 +290,7 @@ func emailInDomain(email, domain string) bool {
 		return false
 	}
 
-	at := strings.LastIndex(email, "@")
-	if at < 0 || at == len(email)-1 {
-		return false
-	}
+	d := sso.EmailDomain(email)
 
-	return strings.EqualFold(email[at+1:], domain)
+	return d != "" && strings.EqualFold(d, domain)
 }

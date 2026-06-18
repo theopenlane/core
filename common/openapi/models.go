@@ -102,8 +102,6 @@ type LoginRequest struct {
 	TargetOrganizationID string `json:"target_organization_id,omitempty" description:"For Openlane support login only: the organization to access"`
 	// Reason is only used for the Openlane support login path to record why support is accessing the org
 	Reason string `json:"reason,omitempty" description:"For Openlane support login only: the reason for accessing the organization"`
-	// DurationHours is only used for the Openlane support login path to set the session length
-	DurationHours *int `json:"duration_hours,omitempty" description:"For Openlane support login only: session length in hours"`
 }
 
 // LoginReply contains authentication tokens and user information after successful login

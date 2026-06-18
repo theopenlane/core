@@ -7,7 +7,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
@@ -81,25 +80,17 @@ func (h *Handler) WebfingerHandler(ctx echo.Context, openapi *OpenAPIContext) er
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	// for an account lookup, reflect the resolved user's owner, per-user, and per-domain exemptions so
-	// the client does not route an exempt user through the SSO flow. The org level lookup is unaffected
-	if userID != "" && out.Enforced {
-		if mustSSO, ssoErr := h.userMustSSO(reqCtx, orgID, userID, ""); ssoErr == nil {
-			out.Enforced = mustSSO
-		}
-	}
-
 	return h.Success(ctx, out, openapi)
 }
 
 type nonce string
 
-// fetchSSOStatus returns the organization level SSO enforcement status for a given organization. It
-// reports the organization's raw enforcement and TFA settings, the provider, and the discovery URL.
-// Per-user exemptions (owner, per-user, per-domain) are intentionally not applied here; that decision
-// is resolved separately by userMustSSO at the login, switch, and middleware redirect points
+// fetchSSOStatus returns the SSO status for an organization. For the org level lookup (no userID) it
+// reports the raw organization enforcement; when a userID is provided it additionally applies that
+// user's owner, per-user, and per-domain exemptions, so callers and the webfinger acct lookup do not
+// route an exempt user through SSO. Provider, discovery URL, and TFA enforcement are always reported
 func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (models.SSOStatusReply, error) {
-	setting, err := h.getOrganizationSettingByOrgID(ctx, orgID)
+	in, setting, err := sso.LoadEnforcement(ctx, h.DBClient, orgID, userID, "")
 	if err != nil {
 		return models.SSOStatusReply{}, err
 	}
@@ -109,21 +100,11 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (mod
 		Enforced:       setting.IdentityProviderLoginEnforced,
 		OrganizationID: orgID,
 		OrgTFAEnforced: setting.MultifactorAuthEnforced,
+		IsOrgOwner:     in.IsOwner,
 	}
 
-	if userID != "" {
-		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-		member, err := h.DBClient.OrgMembership.
-			Query().Where(
-			orgmembership.OrganizationID(orgID),
-			orgmembership.UserID(userID),
-		).Only(allowCtx)
-		if err != nil {
-			return models.SSOStatusReply{}, err
-		}
-
-		out.IsOrgOwner = member.Role == enums.RoleOwner
+	if userID != "" && out.Enforced {
+		out.Enforced = sso.Evaluate(in).MustSSO
 	}
 
 	if setting.IdentityProvider != enums.SSOProvider("") {
@@ -135,41 +116,4 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (mod
 	}
 
 	return out, nil
-}
-
-// userMustSSO resolves whether the subject must be routed through the SSO login flow for the
-// organization, applying owner, per-user, and per-domain exemptions. SSO enforcement status itself is
-// reported separately by fetchSSOStatus, which intentionally returns the organization level value
-func (h *Handler) userMustSSO(ctx context.Context, orgID, userID, email string) (bool, error) {
-	setting, err := h.getOrganizationSettingByOrgID(ctx, orgID)
-	if err != nil {
-		return false, err
-	}
-
-	in := sso.EnforcementInput{
-		SSOEnforced:   setting.IdentityProviderLoginEnforced,
-		ExemptDomains: setting.SSOExemptDomains,
-		Email:         email,
-	}
-
-	if userID != "" {
-		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-		member, mErr := h.DBClient.OrgMembership.
-			Query().Where(
-			orgmembership.OrganizationID(orgID),
-			orgmembership.UserID(userID),
-		).WithUser().Only(allowCtx)
-		if mErr == nil {
-			in.IsMember = true
-			in.IsOwner = member.Role == enums.RoleOwner
-			in.MemberExempt = member.SSOExempt
-
-			if in.Email == "" && member.Edges.User != nil {
-				in.Email = member.Edges.User.Email
-			}
-		}
-	}
-
-	return sso.Evaluate(in).MustSSO, nil
 }

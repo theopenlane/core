@@ -509,12 +509,6 @@ func checkAllowedEmailDomain(email string, orgSetting *generated.OrganizationSet
 		return nil
 	}
 
-	// when SSO is enforced the directory controls which identities may access the organization,
-	// so the allowed email domains list is mutually exclusive with enforcement and is not referenced
-	if orgSetting.IdentityProviderLoginEnforced && orgSetting.IdentityProviderAuthTested {
-		return nil
-	}
-
 	// allow all domains if none are set
 	if orgSetting.AllowedEmailDomains == nil {
 		return nil

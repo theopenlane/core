@@ -51,30 +51,33 @@ func (h *Handler) SwitchHandler(ctx echo.Context, openapi *OpenAPIContext) error
 	// exemptions to decide whether this user must be redirected through the SSO login flow.
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 	status, err := h.fetchSSOStatus(allowCtx, in.TargetOrganizationID, user.ID)
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to resolve sso enforcement for organization switch")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+	}
 
-	if err == nil && status.Enforced {
-		mustSSO, ssoErr := h.userMustSSO(allowCtx, in.TargetOrganizationID, user.ID, user.Email)
-		if ssoErr == nil && mustSSO {
-			authURL, err := h.generateSSOAuthURL(ctx, in.TargetOrganizationID)
-			if err != nil {
-				logx.FromContext(reqCtx).Error().Err(err).Msg("unable to generate SSO auth URL")
-				return h.BadRequest(ctx, err, openapi)
-			}
-
-			sessions.SetCookie(ctx.Response().Writer, authenticatedUserSSOCookieValue, authenticatedUserSSOCookieName, *h.SessionConfig.CookieConfig)
-
-			out := &models.SwitchOrganizationReply{
-				Reply:       rout.Reply{Success: true},
-				NeedsSSO:    true,
-				RedirectURI: authURL,
-			}
-
-			return h.Success(ctx, out, openapi)
+	// fetchSSOStatus already applied this user's exemption, so status.Enforced reflects whether they
+	// must be redirected through SSO for the target organization
+	if status.Enforced {
+		authURL, err := h.generateSSOAuthURL(ctx, in.TargetOrganizationID)
+		if err != nil {
+			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to generate SSO auth URL")
+			return h.BadRequest(ctx, err, openapi)
 		}
+
+		sessions.SetCookie(ctx.Response().Writer, authenticatedUserSSOCookieValue, authenticatedUserSSOCookieName, *h.SessionConfig.CookieConfig)
+
+		out := &models.SwitchOrganizationReply{
+			Reply:       rout.Reply{Success: true},
+			NeedsSSO:    true,
+			RedirectURI: authURL,
+		}
+
+		return h.Success(ctx, out, openapi)
 	}
 
 	// check if TFA is enforced for the target organization and user doesn't have TFA enabled
-	if err == nil && status.OrgTFAEnforced {
+	if status.OrgTFAEnforced {
 		// Check if user has TFA enabled
 		if user.Edges.Setting == nil || !user.Edges.Setting.IsTfaEnabled {
 			out := &models.SwitchOrganizationReply{

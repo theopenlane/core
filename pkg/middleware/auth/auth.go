@@ -387,12 +387,15 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
 	}
 
 	for _, org := range orgs {
-		enforced, err := isSSOEnforcedFunc(ctx, dbClient, org.ID)
+		// honor the owner's SSO exemption: an exempt owner (owner role, per-user, or per-domain) is not
+		// required to SSO-authorize their personal access token for the organization, mirroring how the
+		// same owner skips the SSO redirect in the browser login flows
+		mustSSO, err := userMustSSOFunc(ctx, dbClient, org.ID, pat.OwnerID)
 		if err != nil {
 			return nil, "", err
 		}
 
-		if enforced {
+		if mustSSO {
 			authorized, err := isPATSSOAuthorizedFunc(ctx, dbClient, pat.ID, org.ID)
 			if err != nil {
 				return nil, "", err
@@ -528,6 +531,9 @@ func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) 
 			userID := userIDFromToken(c, v)
 			if userID != "" {
 				mustSSO, dbErr := userMustSSOFunc(reqCtx, conf.DBClient, orgID, userID)
+				if dbErr != nil {
+					logger.Error().Err(dbErr).Msg("unable to evaluate sso enforcement for unauthorized request")
+				}
 
 				if dbErr == nil && mustSSO {
 					if redirErr := c.Redirect(http.StatusFound, sso.SSOLogin(c.Echo(), orgID)); redirErr != nil {
@@ -598,42 +604,12 @@ func isSSOEnforced(ctx context.Context, db *ent.Client, orgID string) (bool, err
 // flow, taking owner, per-user, and per-domain exemptions into account. TFA enforcement is
 // evaluated separately and is not affected by SSO exemption
 func userMustSSO(ctx context.Context, db *ent.Client, orgID, userID string) (bool, error) {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	setting, err := db.OrganizationSetting.Query().
-		Where(organizationsetting.OrganizationID(orgID)).
-		Only(allowCtx)
+	in, _, err := sso.LoadEnforcement(ctx, db, orgID, userID, "")
 	if err != nil {
 		if ent.IsNotFound(err) {
 			return false, nil
 		}
 
-		return false, err
-	}
-
-	in := sso.EnforcementInput{
-		SSOEnforced:   setting.IdentityProviderLoginEnforced,
-		TFAEnforced:   setting.MultifactorAuthEnforced,
-		ExemptDomains: setting.SSOExemptDomains,
-	}
-
-	member, err := db.OrgMembership.Query().
-		Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
-		WithUser().
-		Only(allowCtx)
-
-	switch {
-	case err == nil:
-		in.IsMember = true
-		in.IsOwner = member.Role == enums.RoleOwner
-		in.MemberExempt = member.SSOExempt
-
-		if member.Edges.User != nil {
-			in.Email = member.Edges.User.Email
-		}
-	case ent.IsNotFound(err):
-		// not a member of the org; evaluate raw enforcement only
-	default:
 		return false, err
 	}
 
