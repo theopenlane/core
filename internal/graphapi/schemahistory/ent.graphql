@@ -10,6 +10,10 @@ type ActionPlanHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -399,6 +403,24 @@ input ActionPlanHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   revision field predicates
   """
@@ -836,6 +858,10 @@ type AssessmentHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -1066,6 +1092,24 @@ input AssessmentHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -1190,6 +1234,10 @@ type AssessmentResponseHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   the ID of the organization owner of the object
   """
@@ -1487,6 +1535,24 @@ input AssessmentResponseHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -1774,6 +1840,10 @@ type AssetHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -2154,6 +2224,24 @@ input AssetHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   owner_id field predicates
   """
@@ -2824,6 +2912,10 @@ type CampaignHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -3194,6 +3286,24 @@ input CampaignHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -3654,6 +3764,10 @@ type CampaignTargetHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -3900,6 +4014,24 @@ input CampaignTargetHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -4089,6 +4221,10 @@ type CheckResultHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -4312,6 +4448,24 @@ input CheckResultHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   status field predicates
   """
   status: CheckResultHistoryCheckStatus
@@ -4429,6 +4583,10 @@ type ContactHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -4675,6 +4833,24 @@ input ContactHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -4866,6 +5042,10 @@ type ControlHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -5278,6 +5458,24 @@ input ControlHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -5846,6 +6044,10 @@ type ControlImplementationHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -6084,6 +6286,24 @@ input ControlImplementationHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -6214,6 +6434,10 @@ type ControlObjectiveHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -6478,6 +6702,24 @@ input ControlObjectiveHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -6693,6 +6935,10 @@ type CustomDomainHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -6922,6 +7168,24 @@ input CustomDomainHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -7067,6 +7331,10 @@ type DNSVerificationHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -7338,6 +7606,24 @@ input DNSVerificationHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -7499,6 +7785,10 @@ type DirectoryAccountHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -7882,6 +8172,24 @@ input DirectoryAccountHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -8490,6 +8798,10 @@ type DirectoryGroupHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -8810,6 +9122,24 @@ input DirectoryGroupHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -9196,6 +9526,10 @@ type DirectoryMembershipHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -9471,6 +9805,24 @@ input DirectoryMembershipHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -9814,6 +10166,10 @@ type DiscussionHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -10005,6 +10361,24 @@ input DiscussionHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -10055,6 +10429,10 @@ type DocumentDataHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -10267,6 +10645,24 @@ input DocumentDataHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -10384,6 +10780,10 @@ type EmailTemplateHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
   """
@@ -10664,6 +11064,24 @@ input EmailTemplateHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   revision field predicates
   """
@@ -10997,6 +11415,10 @@ type EntityHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -11473,6 +11895,24 @@ input EntityHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   owner_id field predicates
   """
@@ -12261,6 +12701,10 @@ type EntityTypeHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -12465,6 +12909,24 @@ input EntityTypeHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -12551,6 +13013,10 @@ type EvidenceHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -12838,6 +13304,24 @@ input EvidenceHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -13115,6 +13599,10 @@ type FileHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -13401,6 +13889,24 @@ input FileHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   system_owned field predicates
   """
@@ -13848,6 +14354,10 @@ type FindingControlHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   the id of the finding associated with the control
   """
   findingID: String!
@@ -14063,6 +14573,24 @@ input FindingControlHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   finding_id field predicates
   """
   findingID: String
@@ -14207,6 +14735,10 @@ type FindingHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -14599,6 +15131,24 @@ input FindingHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -15231,6 +15781,10 @@ type GroupHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -15480,6 +16034,24 @@ input GroupHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -15677,6 +16249,10 @@ type GroupMembershipHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   role: GroupMembershipHistoryRole!
   groupID: String!
   userID: String!
@@ -15868,6 +16444,24 @@ input GroupMembershipHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   role field predicates
   """
   role: GroupMembershipHistoryRole
@@ -15916,6 +16510,10 @@ type GroupSettingHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   whether the group is visible to it's members / owners only or if it's searchable by anyone within the organization
   """
@@ -16132,6 +16730,24 @@ input GroupSettingHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   visibility field predicates
   """
   visibility: GroupSettingHistoryVisibility
@@ -16187,6 +16803,10 @@ type HushHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   the organization id that owns the object
   """
@@ -16416,6 +17036,24 @@ input HushHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -16564,6 +17202,10 @@ type IdentityHolderHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -16909,6 +17551,24 @@ input IdentityHolderHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -17369,6 +18029,10 @@ type IntegrationHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -17657,6 +18321,24 @@ input IntegrationHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   owner_id field predicates
   """
@@ -17959,6 +18641,10 @@ type InternalPolicyHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -18316,6 +19002,24 @@ input InternalPolicyHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -18744,6 +19448,10 @@ type JobTemplateHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -18980,6 +19688,24 @@ input JobTemplateHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -19111,6 +19837,10 @@ type MappableDomainHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -19304,6 +20034,24 @@ input MappableDomainHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -19345,6 +20093,10 @@ type MappedControlHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -19581,6 +20333,24 @@ input MappedControlHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   system_owned field predicates
   """
   systemOwned: Boolean
@@ -19698,6 +20468,10 @@ type NarrativeHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -19915,6 +20689,24 @@ input NarrativeHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -20063,6 +20855,10 @@ type NoteHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -20287,6 +21083,24 @@ input NoteHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -20443,6 +21257,10 @@ type NotificationPreferenceHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   the organization id that owns the object
   """
@@ -20752,6 +21570,24 @@ input NotificationPreferenceHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -21000,6 +21836,10 @@ type NotificationTemplateHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
   """
@@ -21323,6 +22163,24 @@ input NotificationTemplateHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   revision field predicates
   """
@@ -21656,9 +22514,29 @@ type OrgMembershipHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   role: OrgMembershipHistoryRole!
   organizationID: String!
   userID: String!
+  """
+  member is exempt from the SSO login redirect for this organization; TFA enforcement still applies. Who may set this is gated by the org membership mutation policy
+  """
+  ssoExempt: Boolean
+  """
+  reason the member was granted an SSO exemption
+  """
+  ssoExemptReason: String
+  """
+  id of the user that granted the SSO exemption; stamped server-side, not settable via the API
+  """
+  ssoExemptGrantedBy: String
+  """
+  when the SSO exemption was granted; stamped server-side, not settable via the API
+  """
+  ssoExemptGrantedAt: DateTime
 }
 """
 A connection to a list of items.
@@ -21850,6 +22728,24 @@ input OrgMembershipHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   role field predicates
   """
   role: OrgMembershipHistoryRole
@@ -21888,6 +22784,62 @@ input OrgMembershipHistoryWhereInput {
   userIDHasSuffix: String
   userIDEqualFold: String
   userIDContainsFold: String
+  """
+  sso_exempt field predicates
+  """
+  ssoExempt: Boolean
+  ssoExemptNEQ: Boolean
+  ssoExemptIsNil: Boolean
+  ssoExemptNotNil: Boolean
+  """
+  sso_exempt_reason field predicates
+  """
+  ssoExemptReason: String
+  ssoExemptReasonNEQ: String
+  ssoExemptReasonIn: [String!]
+  ssoExemptReasonNotIn: [String!]
+  ssoExemptReasonGT: String
+  ssoExemptReasonGTE: String
+  ssoExemptReasonLT: String
+  ssoExemptReasonLTE: String
+  ssoExemptReasonContains: String
+  ssoExemptReasonHasPrefix: String
+  ssoExemptReasonHasSuffix: String
+  ssoExemptReasonIsNil: Boolean
+  ssoExemptReasonNotNil: Boolean
+  ssoExemptReasonEqualFold: String
+  ssoExemptReasonContainsFold: String
+  """
+  sso_exempt_granted_by field predicates
+  """
+  ssoExemptGrantedBy: String
+  ssoExemptGrantedByNEQ: String
+  ssoExemptGrantedByIn: [String!]
+  ssoExemptGrantedByNotIn: [String!]
+  ssoExemptGrantedByGT: String
+  ssoExemptGrantedByGTE: String
+  ssoExemptGrantedByLT: String
+  ssoExemptGrantedByLTE: String
+  ssoExemptGrantedByContains: String
+  ssoExemptGrantedByHasPrefix: String
+  ssoExemptGrantedByHasSuffix: String
+  ssoExemptGrantedByIsNil: Boolean
+  ssoExemptGrantedByNotNil: Boolean
+  ssoExemptGrantedByEqualFold: String
+  ssoExemptGrantedByContainsFold: String
+  """
+  sso_exempt_granted_at field predicates
+  """
+  ssoExemptGrantedAt: DateTime
+  ssoExemptGrantedAtNEQ: DateTime
+  ssoExemptGrantedAtIn: [DateTime!]
+  ssoExemptGrantedAtNotIn: [DateTime!]
+  ssoExemptGrantedAtGT: DateTime
+  ssoExemptGrantedAtGTE: DateTime
+  ssoExemptGrantedAtLT: DateTime
+  ssoExemptGrantedAtLTE: DateTime
+  ssoExemptGrantedAtIsNil: Boolean
+  ssoExemptGrantedAtNotNil: Boolean
 }
 type OrgSubscriptionHistory implements Node {
   id: ID!
@@ -21898,6 +22850,10 @@ type OrgSubscriptionHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -22115,6 +23071,24 @@ input OrgSubscriptionHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -22227,6 +23201,10 @@ type OrganizationHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -22445,6 +23423,24 @@ input OrganizationHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_name field predicates
   """
   displayName: String
@@ -22545,6 +23541,10 @@ type OrganizationSettingHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -22640,6 +23640,14 @@ type OrganizationSettingHistory implements Node {
   enforce 2fa / multifactor authentication for organization members
   """
   multifactorAuthEnforced: Boolean
+  """
+  email domains whose existing members skip the SSO redirect even when SSO is enforced; TFA enforcement still applies
+  """
+  ssoExemptDomains: [String!]
+  """
+  allow Openlane support to access this organization without a directory account
+  """
+  allowSupportAccess: Boolean
   """
   unique token used to receive compliance webhook events
   """
@@ -22852,6 +23860,24 @@ input OrganizationSettingHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   billing_contact field predicates
   """
@@ -23134,6 +24160,13 @@ input OrganizationSettingHistoryWhereInput {
   multifactorAuthEnforcedIsNil: Boolean
   multifactorAuthEnforcedNotNil: Boolean
   """
+  allow_support_access field predicates
+  """
+  allowSupportAccess: Boolean
+  allowSupportAccessNEQ: Boolean
+  allowSupportAccessIsNil: Boolean
+  allowSupportAccessNotNil: Boolean
+  """
   compliance_webhook_token field predicates
   """
   complianceWebhookToken: String
@@ -23201,6 +24234,10 @@ type PlatformHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -23617,6 +24654,24 @@ input PlatformHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -24398,6 +25453,10 @@ type ProcedureHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -24750,6 +25809,24 @@ input ProcedureHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -25160,6 +26237,10 @@ type ProgramHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -25431,6 +26512,24 @@ input ProgramHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -25700,6 +26799,10 @@ type ProgramMembershipHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   role: ProgramMembershipHistoryRole!
   programID: String!
   userID: String!
@@ -25891,6 +26994,24 @@ input ProgramMembershipHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   role field predicates
   """
@@ -28410,6 +29531,10 @@ type RemediationHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -28723,6 +29848,24 @@ input RemediationHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -29201,6 +30344,10 @@ type ReviewHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -29505,6 +30652,24 @@ input ReviewHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   owner_id field predicates
   """
@@ -29918,6 +31083,10 @@ type RiskHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -30306,6 +31475,24 @@ input RiskHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -30798,6 +31985,10 @@ type SLADefinitionHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -31009,6 +32200,24 @@ input SLADefinitionHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -31070,6 +32279,10 @@ type ScanHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -31367,6 +32580,24 @@ input ScanHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   owner_id field predicates
   """
@@ -31704,6 +32935,10 @@ type ScheduledJobHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -31911,6 +33146,24 @@ input ScheduledJobHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -31993,6 +33246,10 @@ type StandardHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -32267,6 +33524,24 @@ input StandardHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   revision field predicates
   """
@@ -32557,6 +33832,10 @@ type SubcontrolHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -32938,6 +34217,24 @@ input SubcontrolHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -33416,6 +34713,10 @@ type SubprocessorHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -33632,6 +34933,24 @@ input SubprocessorHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -33772,6 +35091,10 @@ type SystemDetailHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -34014,6 +35337,24 @@ input SystemDetailHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -34185,6 +35526,10 @@ type TaskHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -34471,6 +35816,24 @@ input TaskHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -34791,6 +36154,10 @@ type TemplateHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -35056,6 +36423,24 @@ input TemplateHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -35271,6 +36656,10 @@ type TrustCenterComplianceHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -35462,6 +36851,24 @@ input TrustCenterComplianceHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   standard_id field predicates
   """
   standardID: String
@@ -35505,6 +36912,10 @@ type TrustCenterDocHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -35747,6 +37158,24 @@ input TrustCenterDocHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   trust_center_doc_kind_name field predicates
   """
   trustCenterDocKindName: String
@@ -35905,6 +37334,10 @@ type TrustCenterEntityHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   The local logo file id
   """
@@ -36106,6 +37539,24 @@ input TrustCenterEntityHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   logo_file_id field predicates
   """
   logoFileID: String
@@ -36185,6 +37636,10 @@ type TrustCenterFAQHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   the kind of the trust_center_faq
   """
@@ -36390,6 +37845,24 @@ input TrustCenterFAQHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   trust_center_faq_kind_name field predicates
   """
   trustCenterFaqKindName: String
@@ -36500,6 +37973,10 @@ type TrustCenterHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -36730,6 +38207,24 @@ input TrustCenterHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -36892,6 +38387,10 @@ type TrustCenterNDARequestHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -37145,6 +38644,24 @@ input TrustCenterNDARequestHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   trust_center_id field predicates
   """
   trustCenterID: String
@@ -37354,6 +38871,10 @@ type TrustCenterSettingHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   the ID of the trust center the settings belong to
   """
@@ -37655,6 +39176,24 @@ input TrustCenterSettingHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   trust_center_id field predicates
   """
@@ -38096,6 +39635,10 @@ type TrustCenterSubprocessorHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   the kind of the trust_center_subprocessor
   """
   trustCenterSubprocessorKindName: String
@@ -38295,6 +39838,24 @@ input TrustCenterSubprocessorHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   trust_center_subprocessor_kind_name field predicates
   """
   trustCenterSubprocessorKindName: String
@@ -38374,6 +39935,10 @@ type TrustCenterWatermarkConfigHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   the ID of the organization owner of the object
   """
@@ -38611,6 +40176,24 @@ input TrustCenterWatermarkConfigHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   owner_id field predicates
   """
@@ -39312,6 +40895,10 @@ type UserSettingHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -39547,6 +41134,24 @@ input UserSettingHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   user_id field predicates
   """
   userID: String
@@ -39668,6 +41273,10 @@ type VendorRiskScoreHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -39956,6 +41565,24 @@ input VendorRiskScoreHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -40160,6 +41787,10 @@ type VendorScoringConfigHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -40369,6 +42000,24 @@ input VendorScoringConfigHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -40403,6 +42052,10 @@ type VulnerabilityHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -40814,6 +42467,24 @@ input VulnerabilityHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -41549,6 +43220,10 @@ type WorkflowAssignmentHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -41800,6 +43475,24 @@ input WorkflowAssignmentHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -42010,6 +43703,10 @@ type WorkflowAssignmentTargetHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -42222,6 +43919,24 @@ input WorkflowAssignmentTargetHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -42352,6 +44067,10 @@ type WorkflowDefinitionHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -42604,6 +44323,24 @@ input WorkflowDefinitionHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -42805,6 +44542,10 @@ type WorkflowEventHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -43009,6 +44750,24 @@ input WorkflowEventHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -43098,6 +44857,10 @@ type WorkflowInstanceHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -43357,6 +45120,24 @@ input WorkflowInstanceHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -43656,6 +45437,10 @@ type WorkflowObjectRefHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -43906,6 +45691,24 @@ input WorkflowObjectRefHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """

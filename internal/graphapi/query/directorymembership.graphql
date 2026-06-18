@@ -28,6 +28,7 @@ mutation CreateBulkCSVDirectoryMembership ($input: Upload!) {
 			source
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -61,6 +62,7 @@ mutation CreateBulkDirectoryMembership ($input: [CreateDirectoryMembershipInput!
 			source
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -94,6 +96,7 @@ mutation CreateDirectoryMembership ($input: CreateDirectoryMembershipInput!) {
 			source
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -164,6 +167,7 @@ query GetDirectoryMembershipByID ($directoryMembershipId: ID!) {
 		source
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 	}
 }
 query GetDirectoryMemberships ($first: Int, $last: Int, $where: DirectoryMembershipWhereInput) {
@@ -229,6 +233,7 @@ mutation UpdateDirectoryMembership ($updateDirectoryMembershipId: ID!, $input: U
 			source
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }

@@ -66,6 +66,26 @@ func (_u *JobRunnerRegistrationTokenUpdate) ClearUpdatedBy() *JobRunnerRegistrat
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *JobRunnerRegistrationTokenUpdate) SetUpdatedByImpersonator(v string) *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *JobRunnerRegistrationTokenUpdate) SetNillableUpdatedByImpersonator(v *string) *JobRunnerRegistrationTokenUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *JobRunnerRegistrationTokenUpdate) ClearUpdatedByImpersonator() *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *JobRunnerRegistrationTokenUpdate) SetDeletedAt(v time.Time) *JobRunnerRegistrationTokenUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -299,6 +319,12 @@ func (_u *JobRunnerRegistrationTokenUpdate) sqlSave(ctx context.Context) (_node 
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(jobrunnerregistrationtoken.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(jobrunnerregistrationtoken.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(jobrunnerregistrationtoken.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -443,6 +469,26 @@ func (_u *JobRunnerRegistrationTokenUpdateOne) SetNillableUpdatedBy(v *string) *
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *JobRunnerRegistrationTokenUpdateOne) ClearUpdatedBy() *JobRunnerRegistrationTokenUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *JobRunnerRegistrationTokenUpdateOne) SetUpdatedByImpersonator(v string) *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *JobRunnerRegistrationTokenUpdateOne) SetNillableUpdatedByImpersonator(v *string) *JobRunnerRegistrationTokenUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *JobRunnerRegistrationTokenUpdateOne) ClearUpdatedByImpersonator() *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -708,6 +754,12 @@ func (_u *JobRunnerRegistrationTokenUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(jobrunnerregistrationtoken.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(jobrunnerregistrationtoken.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(jobrunnerregistrationtoken.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldDeletedAt, field.TypeTime, value)

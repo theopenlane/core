@@ -113,6 +113,20 @@ func (_c *DiscussionHistoryCreate) SetNillableUpdatedBy(v *string) *DiscussionHi
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *DiscussionHistoryCreate) SetUpdatedByImpersonator(v string) *DiscussionHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *DiscussionHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *DiscussionHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *DiscussionHistoryCreate) SetDeletedAt(v time.Time) *DiscussionHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -348,6 +362,10 @@ func (_c *DiscussionHistoryCreate) createSpec() (*DiscussionHistory, *sqlgraph.C
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(discussionhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(discussionhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(discussionhistory.FieldDeletedAt, field.TypeTime, value)

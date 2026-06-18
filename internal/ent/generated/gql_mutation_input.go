@@ -13825,6 +13825,7 @@ type CreateInviteInput struct {
 	Role              *enums.Role
 	SendAttempts      *int
 	OwnershipTransfer *bool
+	SSOExempt         *bool
 	OwnerID           *string
 	EventIDs          []string
 	GroupIDs          []string
@@ -13847,6 +13848,9 @@ func (i *CreateInviteInput) Mutate(m *InviteMutation) {
 	}
 	if v := i.OwnershipTransfer; v != nil {
 		m.SetOwnershipTransfer(*v)
+	}
+	if v := i.SSOExempt; v != nil {
+		m.SetSSOExempt(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -13874,6 +13878,8 @@ type UpdateInviteInput struct {
 	SendAttempts           *int
 	ClearOwnershipTransfer bool
 	OwnershipTransfer      *bool
+	ClearSSOExempt         bool
+	SSOExempt              *bool
 	ClearOwner             bool
 	OwnerID                *string
 	ClearEvents            bool
@@ -13906,6 +13912,12 @@ func (i *UpdateInviteInput) Mutate(m *InviteMutation) {
 	}
 	if v := i.OwnershipTransfer; v != nil {
 		m.SetOwnershipTransfer(*v)
+	}
+	if i.ClearSSOExempt {
+		m.ClearSSOExempt()
+	}
+	if v := i.SSOExempt; v != nil {
+		m.SetSSOExempt(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -16049,16 +16061,24 @@ func (c *OnboardingCreate) SetInput(i CreateOnboardingInput) *OnboardingCreate {
 
 // CreateOrgMembershipInput represents a mutation input for creating orgmemberships.
 type CreateOrgMembershipInput struct {
-	Role           *enums.Role
-	OrganizationID string
-	UserID         string
-	EventIDs       []string
+	Role            *enums.Role
+	SSOExempt       *bool
+	SSOExemptReason *string
+	OrganizationID  string
+	UserID          string
+	EventIDs        []string
 }
 
 // Mutate applies the CreateOrgMembershipInput on the OrgMembershipMutation builder.
 func (i *CreateOrgMembershipInput) Mutate(m *OrgMembershipMutation) {
 	if v := i.Role; v != nil {
 		m.SetRole(*v)
+	}
+	if v := i.SSOExempt; v != nil {
+		m.SetSSOExempt(*v)
+	}
+	if v := i.SSOExemptReason; v != nil {
+		m.SetSSOExemptReason(*v)
 	}
 	m.SetOrganizationID(i.OrganizationID)
 	m.SetUserID(i.UserID)
@@ -16075,16 +16095,32 @@ func (c *OrgMembershipCreate) SetInput(i CreateOrgMembershipInput) *OrgMembershi
 
 // UpdateOrgMembershipInput represents a mutation input for updating orgmemberships.
 type UpdateOrgMembershipInput struct {
-	Role           *enums.Role
-	ClearEvents    bool
-	AddEventIDs    []string
-	RemoveEventIDs []string
+	Role                 *enums.Role
+	ClearSSOExempt       bool
+	SSOExempt            *bool
+	ClearSSOExemptReason bool
+	SSOExemptReason      *string
+	ClearEvents          bool
+	AddEventIDs          []string
+	RemoveEventIDs       []string
 }
 
 // Mutate applies the UpdateOrgMembershipInput on the OrgMembershipMutation builder.
 func (i *UpdateOrgMembershipInput) Mutate(m *OrgMembershipMutation) {
 	if v := i.Role; v != nil {
 		m.SetRole(*v)
+	}
+	if i.ClearSSOExempt {
+		m.ClearSSOExempt()
+	}
+	if v := i.SSOExempt; v != nil {
+		m.SetSSOExempt(*v)
+	}
+	if i.ClearSSOExemptReason {
+		m.ClearSSOExemptReason()
+	}
+	if v := i.SSOExemptReason; v != nil {
+		m.SetSSOExemptReason(*v)
 	}
 	if i.ClearEvents {
 		m.ClearEvents()
@@ -18757,6 +18793,8 @@ type CreateOrganizationSettingInput struct {
 	SamlCert                         *string
 	IdentityProviderLoginEnforced    *bool
 	MultifactorAuthEnforced          *bool
+	SSOExemptDomains                 []string
+	AllowSupportAccess               *bool
 	ComplianceWebhookToken           *string
 	OrganizationID                   *string
 	FileIDs                          []string
@@ -18830,6 +18868,12 @@ func (i *CreateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	if v := i.MultifactorAuthEnforced; v != nil {
 		m.SetMultifactorAuthEnforced(*v)
 	}
+	if v := i.SSOExemptDomains; v != nil {
+		m.SetSSOExemptDomains(v)
+	}
+	if v := i.AllowSupportAccess; v != nil {
+		m.SetAllowSupportAccess(*v)
+	}
 	if v := i.ComplianceWebhookToken; v != nil {
 		m.SetComplianceWebhookToken(*v)
 	}
@@ -18894,6 +18938,11 @@ type UpdateOrganizationSettingInput struct {
 	IdentityProviderLoginEnforced         *bool
 	ClearMultifactorAuthEnforced          bool
 	MultifactorAuthEnforced               *bool
+	ClearSSOExemptDomains                 bool
+	SSOExemptDomains                      []string
+	AppendSSOExemptDomains                []string
+	ClearAllowSupportAccess               bool
+	AllowSupportAccess                    *bool
 	ClearComplianceWebhookToken           bool
 	ComplianceWebhookToken                *string
 	ClearPendingDeletionAt                bool
@@ -19041,6 +19090,21 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if v := i.MultifactorAuthEnforced; v != nil {
 		m.SetMultifactorAuthEnforced(*v)
+	}
+	if i.ClearSSOExemptDomains {
+		m.ClearSSOExemptDomains()
+	}
+	if v := i.SSOExemptDomains; v != nil {
+		m.SetSSOExemptDomains(v)
+	}
+	if i.AppendSSOExemptDomains != nil {
+		m.AppendSSOExemptDomains(i.SSOExemptDomains)
+	}
+	if i.ClearAllowSupportAccess {
+		m.ClearAllowSupportAccess()
+	}
+	if v := i.AllowSupportAccess; v != nil {
+		m.SetAllowSupportAccess(*v)
 	}
 	if i.ClearComplianceWebhookToken {
 		m.ClearComplianceWebhookToken()

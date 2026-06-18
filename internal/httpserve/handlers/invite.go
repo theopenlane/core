@@ -98,8 +98,10 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context, openapi *OpenAPICon
 		AuthData:    *auth,
 	}
 
+	// resolve enforcement for the accepting user; a member granted an SSO exemption via the
+	// invitation will not be flagged as needing SSO
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-	status, err := h.fetchSSOStatus(allowCtx, invitedUser.OwnerID, "")
+	status, err := h.fetchSSOStatus(allowCtx, invitedUser.OwnerID, user.ID)
 
 	if err == nil && status.Enforced {
 		out.NeedsSSO = true

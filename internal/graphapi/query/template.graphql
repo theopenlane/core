@@ -23,6 +23,7 @@ mutation CreateBulkCSVTemplate ($input: Upload!) {
 			uischema
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -51,6 +52,7 @@ mutation CreateBulkTemplate ($input: [CreateTemplateInput!]) {
 			uischema
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }

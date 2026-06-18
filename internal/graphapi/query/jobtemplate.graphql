@@ -18,6 +18,7 @@ mutation CreateBulkCSVJobTemplate ($input: Upload!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -41,6 +42,7 @@ mutation CreateBulkJobTemplate ($input: [CreateJobTemplateInput!]) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -64,6 +66,7 @@ mutation CreateJobTemplate ($input: CreateJobTemplateInput!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -120,6 +123,7 @@ query GetJobTemplateByID ($jobTemplateId: ID!) {
 		title
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 	}
 }
 query GetJobTemplates ($first: Int, $last: Int, $where: JobTemplateWhereInput) {
@@ -171,6 +175,7 @@ mutation UpdateJobTemplate ($updateJobTemplateId: ID!, $input: UpdateJobTemplate
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }

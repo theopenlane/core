@@ -91,6 +91,7 @@ query GetTrustCenterDocByID ($trustCenterDocId: ID!) {
 		trustCenterID
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		visibility
 		watermarkStatus
 		watermarkingEnabled

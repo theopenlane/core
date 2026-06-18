@@ -25,6 +25,7 @@ query GetAllCheckResultHistories ($first: Int, $last: Int, $after: Cursor, $befo
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 			}
 		}
 	}
@@ -56,6 +57,7 @@ query GetCheckResultHistories ($first: Int, $last: Int, $after: Cursor, $before:
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 			}
 		}
 	}

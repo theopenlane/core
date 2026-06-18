@@ -68,6 +68,26 @@ func (_u *WorkflowProposalUpdate) ClearUpdatedBy() *WorkflowProposalUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *WorkflowProposalUpdate) SetUpdatedByImpersonator(v string) *WorkflowProposalUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *WorkflowProposalUpdate) SetNillableUpdatedByImpersonator(v *string) *WorkflowProposalUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *WorkflowProposalUpdate) ClearUpdatedByImpersonator() *WorkflowProposalUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetTags sets the "tags" field.
 func (_u *WorkflowProposalUpdate) SetTags(v []string) *WorkflowProposalUpdate {
 	_u.mutation.SetTags(v)
@@ -419,6 +439,12 @@ func (_u *WorkflowProposalUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowproposal.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(workflowproposal.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(workflowproposal.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(workflowproposal.FieldTags, field.TypeJSON, value)
 	}
@@ -629,6 +655,26 @@ func (_u *WorkflowProposalUpdateOne) SetNillableUpdatedBy(v *string) *WorkflowPr
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *WorkflowProposalUpdateOne) ClearUpdatedBy() *WorkflowProposalUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *WorkflowProposalUpdateOne) SetUpdatedByImpersonator(v string) *WorkflowProposalUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *WorkflowProposalUpdateOne) SetNillableUpdatedByImpersonator(v *string) *WorkflowProposalUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *WorkflowProposalUpdateOne) ClearUpdatedByImpersonator() *WorkflowProposalUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -1012,6 +1058,12 @@ func (_u *WorkflowProposalUpdateOne) sqlSave(ctx context.Context) (_node *Workfl
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowproposal.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(workflowproposal.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(workflowproposal.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(workflowproposal.FieldTags, field.TypeJSON, value)

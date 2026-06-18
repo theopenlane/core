@@ -79,6 +79,20 @@ func (_c *IntegrationWebhookCreate) SetNillableUpdatedBy(v *string) *Integration
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *IntegrationWebhookCreate) SetUpdatedByImpersonator(v string) *IntegrationWebhookCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *IntegrationWebhookCreate) SetNillableUpdatedByImpersonator(v *string) *IntegrationWebhookCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *IntegrationWebhookCreate) SetDeletedAt(v time.Time) *IntegrationWebhookCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -463,6 +477,10 @@ func (_c *IntegrationWebhookCreate) createSpec() (*IntegrationWebhook, *sqlgraph
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(integrationwebhook.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(integrationwebhook.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(integrationwebhook.FieldDeletedAt, field.TypeTime, value)

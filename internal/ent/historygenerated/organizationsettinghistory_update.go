@@ -68,6 +68,26 @@ func (_u *OrganizationSettingHistoryUpdate) ClearUpdatedBy() *OrganizationSettin
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *OrganizationSettingHistoryUpdate) SetUpdatedByImpersonator(v string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *OrganizationSettingHistoryUpdate) ClearUpdatedByImpersonator() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *OrganizationSettingHistoryUpdate) SetDeletedAt(v time.Time) *OrganizationSettingHistoryUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -564,6 +584,44 @@ func (_u *OrganizationSettingHistoryUpdate) ClearMultifactorAuthEnforced() *Orga
 	return _u
 }
 
+// SetSSOExemptDomains sets the "sso_exempt_domains" field.
+func (_u *OrganizationSettingHistoryUpdate) SetSSOExemptDomains(v []string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetSSOExemptDomains(v)
+	return _u
+}
+
+// AppendSSOExemptDomains appends value to the "sso_exempt_domains" field.
+func (_u *OrganizationSettingHistoryUpdate) AppendSSOExemptDomains(v []string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.AppendSSOExemptDomains(v)
+	return _u
+}
+
+// ClearSSOExemptDomains clears the value of the "sso_exempt_domains" field.
+func (_u *OrganizationSettingHistoryUpdate) ClearSSOExemptDomains() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearSSOExemptDomains()
+	return _u
+}
+
+// SetAllowSupportAccess sets the "allow_support_access" field.
+func (_u *OrganizationSettingHistoryUpdate) SetAllowSupportAccess(v bool) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetAllowSupportAccess(v)
+	return _u
+}
+
+// SetNillableAllowSupportAccess sets the "allow_support_access" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdate) SetNillableAllowSupportAccess(v *bool) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetAllowSupportAccess(*v)
+	}
+	return _u
+}
+
+// ClearAllowSupportAccess clears the value of the "allow_support_access" field.
+func (_u *OrganizationSettingHistoryUpdate) ClearAllowSupportAccess() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearAllowSupportAccess()
+	return _u
+}
+
 // SetComplianceWebhookToken sets the "compliance_webhook_token" field.
 func (_u *OrganizationSettingHistoryUpdate) SetComplianceWebhookToken(v string) *OrganizationSettingHistoryUpdate {
 	_u.mutation.SetComplianceWebhookToken(v)
@@ -718,6 +776,12 @@ func (_u *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(organizationsettinghistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationsettinghistory.FieldDeletedAt, field.TypeTime, value)
@@ -881,6 +945,23 @@ func (_u *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	if _u.mutation.MultifactorAuthEnforcedCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool)
 	}
+	if value, ok := _u.mutation.SSOExemptDomains(); ok {
+		_spec.SetField(organizationsettinghistory.FieldSSOExemptDomains, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedSSOExemptDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsettinghistory.FieldSSOExemptDomains, value)
+		})
+	}
+	if _u.mutation.SSOExemptDomainsCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldSSOExemptDomains, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.AllowSupportAccess(); ok {
+		_spec.SetField(organizationsettinghistory.FieldAllowSupportAccess, field.TypeBool, value)
+	}
+	if _u.mutation.AllowSupportAccessCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldAllowSupportAccess, field.TypeBool)
+	}
 	if value, ok := _u.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString, value)
 	}
@@ -949,6 +1030,26 @@ func (_u *OrganizationSettingHistoryUpdateOne) SetNillableUpdatedBy(v *string) *
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *OrganizationSettingHistoryUpdateOne) ClearUpdatedBy() *OrganizationSettingHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *OrganizationSettingHistoryUpdateOne) SetUpdatedByImpersonator(v string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *OrganizationSettingHistoryUpdateOne) ClearUpdatedByImpersonator() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -1448,6 +1549,44 @@ func (_u *OrganizationSettingHistoryUpdateOne) ClearMultifactorAuthEnforced() *O
 	return _u
 }
 
+// SetSSOExemptDomains sets the "sso_exempt_domains" field.
+func (_u *OrganizationSettingHistoryUpdateOne) SetSSOExemptDomains(v []string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetSSOExemptDomains(v)
+	return _u
+}
+
+// AppendSSOExemptDomains appends value to the "sso_exempt_domains" field.
+func (_u *OrganizationSettingHistoryUpdateOne) AppendSSOExemptDomains(v []string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.AppendSSOExemptDomains(v)
+	return _u
+}
+
+// ClearSSOExemptDomains clears the value of the "sso_exempt_domains" field.
+func (_u *OrganizationSettingHistoryUpdateOne) ClearSSOExemptDomains() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearSSOExemptDomains()
+	return _u
+}
+
+// SetAllowSupportAccess sets the "allow_support_access" field.
+func (_u *OrganizationSettingHistoryUpdateOne) SetAllowSupportAccess(v bool) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetAllowSupportAccess(v)
+	return _u
+}
+
+// SetNillableAllowSupportAccess sets the "allow_support_access" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableAllowSupportAccess(v *bool) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetAllowSupportAccess(*v)
+	}
+	return _u
+}
+
+// ClearAllowSupportAccess clears the value of the "allow_support_access" field.
+func (_u *OrganizationSettingHistoryUpdateOne) ClearAllowSupportAccess() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearAllowSupportAccess()
+	return _u
+}
+
 // SetComplianceWebhookToken sets the "compliance_webhook_token" field.
 func (_u *OrganizationSettingHistoryUpdateOne) SetComplianceWebhookToken(v string) *OrganizationSettingHistoryUpdateOne {
 	_u.mutation.SetComplianceWebhookToken(v)
@@ -1633,6 +1772,12 @@ func (_u *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(organizationsettinghistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationsettinghistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -1794,6 +1939,23 @@ func (_u *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if _u.mutation.MultifactorAuthEnforcedCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool)
+	}
+	if value, ok := _u.mutation.SSOExemptDomains(); ok {
+		_spec.SetField(organizationsettinghistory.FieldSSOExemptDomains, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedSSOExemptDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsettinghistory.FieldSSOExemptDomains, value)
+		})
+	}
+	if _u.mutation.SSOExemptDomainsCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldSSOExemptDomains, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.AllowSupportAccess(); ok {
+		_spec.SetField(organizationsettinghistory.FieldAllowSupportAccess, field.TypeBool, value)
+	}
+	if _u.mutation.AllowSupportAccessCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldAllowSupportAccess, field.TypeBool)
 	}
 	if value, ok := _u.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString, value)

@@ -51,6 +51,7 @@ query GetAllCampaignHistories ($first: Int, $last: Int, $after: Cursor, $before:
 				trustCenterID
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				workflowEligibleMarker
 			}
 		}
@@ -109,6 +110,7 @@ query GetCampaignHistories ($first: Int, $last: Int, $after: Cursor, $before: Cu
 				trustCenterID
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				workflowEligibleMarker
 			}
 		}

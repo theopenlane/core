@@ -8,12 +8,9 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
 
-	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
 )
 
 // SwitchHandler is responsible for handling requests to the `/switch` endpoint, and changing the user's logged in organization context
@@ -50,33 +47,28 @@ func (h *Handler) SwitchHandler(ctx echo.Context, openapi *OpenAPIContext) error
 		return h.BadRequest(ctx, err, openapi)
 	}
 
-	// check if SSO is enforced for the target organization. If so, redirect
-	// the user through the SSO login flow unless they are an owner.
+	// check if SSO is enforced for the target organization. fetchSSOStatus resolves enforcement
+	// through ssoutils.Evaluate, so owner, per-user, and per-domain exemptions are already applied.
+	// If the user must SSO, redirect them through the SSO login flow.
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 	status, err := h.fetchSSOStatus(allowCtx, in.TargetOrganizationID, user.ID)
 
 	if err == nil && status.Enforced {
-		member, mErr := transaction.FromContext(allowCtx).OrgMembership.Query().Where(
-			orgmembership.UserID(user.ID),
-			orgmembership.OrganizationID(in.TargetOrganizationID),
-		).Only(allowCtx)
-		if mErr == nil && member.Role != enums.RoleOwner {
-			authURL, err := h.generateSSOAuthURL(ctx, in.TargetOrganizationID)
-			if err != nil {
-				logx.FromContext(reqCtx).Error().Err(err).Msg("unable to generate SSO auth URL")
-				return h.BadRequest(ctx, err, openapi)
-			}
-
-			sessions.SetCookie(ctx.Response().Writer, authenticatedUserSSOCookieValue, authenticatedUserSSOCookieName, *h.SessionConfig.CookieConfig)
-
-			out := &models.SwitchOrganizationReply{
-				Reply:       rout.Reply{Success: true},
-				NeedsSSO:    true,
-				RedirectURI: authURL,
-			}
-
-			return h.Success(ctx, out, openapi)
+		authURL, err := h.generateSSOAuthURL(ctx, in.TargetOrganizationID)
+		if err != nil {
+			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to generate SSO auth URL")
+			return h.BadRequest(ctx, err, openapi)
 		}
+
+		sessions.SetCookie(ctx.Response().Writer, authenticatedUserSSOCookieValue, authenticatedUserSSOCookieName, *h.SessionConfig.CookieConfig)
+
+		out := &models.SwitchOrganizationReply{
+			Reply:       rout.Reply{Success: true},
+			NeedsSSO:    true,
+			RedirectURI: authURL,
+		}
+
+		return h.Success(ctx, out, openapi)
 	}
 
 	// check if TFA is enforced for the target organization and user doesn't have TFA enabled

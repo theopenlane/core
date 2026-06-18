@@ -77,6 +77,20 @@ func (_c *TFASettingCreate) SetNillableUpdatedBy(v *string) *TFASettingCreate {
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *TFASettingCreate) SetUpdatedByImpersonator(v string) *TFASettingCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *TFASettingCreate) SetNillableUpdatedByImpersonator(v *string) *TFASettingCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *TFASettingCreate) SetDeletedAt(v time.Time) *TFASettingCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -347,6 +361,10 @@ func (_c *TFASettingCreate) createSpec() (*TFASetting, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(tfasetting.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(tfasetting.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(tfasetting.FieldDeletedAt, field.TypeTime, value)

@@ -115,6 +115,20 @@ func (_c *OrganizationSettingHistoryCreate) SetNillableUpdatedBy(v *string) *Org
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *OrganizationSettingHistoryCreate) SetUpdatedByImpersonator(v string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *OrganizationSettingHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *OrganizationSettingHistoryCreate) SetDeletedAt(v time.Time) *OrganizationSettingHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -455,6 +469,26 @@ func (_c *OrganizationSettingHistoryCreate) SetNillableMultifactorAuthEnforced(v
 	return _c
 }
 
+// SetSSOExemptDomains sets the "sso_exempt_domains" field.
+func (_c *OrganizationSettingHistoryCreate) SetSSOExemptDomains(v []string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetSSOExemptDomains(v)
+	return _c
+}
+
+// SetAllowSupportAccess sets the "allow_support_access" field.
+func (_c *OrganizationSettingHistoryCreate) SetAllowSupportAccess(v bool) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetAllowSupportAccess(v)
+	return _c
+}
+
+// SetNillableAllowSupportAccess sets the "allow_support_access" field if the given value is not nil.
+func (_c *OrganizationSettingHistoryCreate) SetNillableAllowSupportAccess(v *bool) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetAllowSupportAccess(*v)
+	}
+	return _c
+}
+
 // SetComplianceWebhookToken sets the "compliance_webhook_token" field.
 func (_c *OrganizationSettingHistoryCreate) SetComplianceWebhookToken(v string) *OrganizationSettingHistoryCreate {
 	_c.mutation.SetComplianceWebhookToken(v)
@@ -601,6 +635,10 @@ func (_c *OrganizationSettingHistoryCreate) defaults() error {
 		v := organizationsettinghistory.DefaultMultifactorAuthEnforced
 		_c.mutation.SetMultifactorAuthEnforced(v)
 	}
+	if _, ok := _c.mutation.AllowSupportAccess(); !ok {
+		v := organizationsettinghistory.DefaultAllowSupportAccess
+		_c.mutation.SetAllowSupportAccess(v)
+	}
 	if _, ok := _c.mutation.ComplianceWebhookToken(); !ok {
 		if organizationsettinghistory.DefaultComplianceWebhookToken == nil {
 			return fmt.Errorf("historygenerated: uninitialized organizationsettinghistory.DefaultComplianceWebhookToken (forgotten import historygenerated/runtime?)")
@@ -721,6 +759,10 @@ func (_c *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSettingHi
 		_spec.SetField(organizationsettinghistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(organizationsettinghistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
+	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationsettinghistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -824,6 +866,14 @@ func (_c *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSettingHi
 	if value, ok := _c.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool, value)
 		_node.MultifactorAuthEnforced = value
+	}
+	if value, ok := _c.mutation.SSOExemptDomains(); ok {
+		_spec.SetField(organizationsettinghistory.FieldSSOExemptDomains, field.TypeJSON, value)
+		_node.SSOExemptDomains = value
+	}
+	if value, ok := _c.mutation.AllowSupportAccess(); ok {
+		_spec.SetField(organizationsettinghistory.FieldAllowSupportAccess, field.TypeBool, value)
+		_node.AllowSupportAccess = value
 	}
 	if value, ok := _c.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString, value)

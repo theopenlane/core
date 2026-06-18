@@ -143,6 +143,14 @@ func (OrganizationSetting) Fields() []ent.Field {
 			Comment("enforce 2fa / multifactor authentication for organization members").
 			Optional().
 			Default(false),
+		field.Strings("sso_exempt_domains").
+			Comment("email domains whose existing members skip the SSO redirect even when SSO is enforced; TFA enforcement still applies").
+			Validate(validator.ValidateDomains()).
+			Optional(),
+		field.Bool("allow_support_access").
+			Comment("allow Openlane support to access this organization without a directory account").
+			Default(false).
+			Optional(),
 		field.String("compliance_webhook_token").
 			Comment("unique token used to receive compliance webhook events").
 			Unique().

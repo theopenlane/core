@@ -80,6 +80,20 @@ func (_c *SubprocessorCreate) SetNillableUpdatedBy(v *string) *SubprocessorCreat
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *SubprocessorCreate) SetUpdatedByImpersonator(v string) *SubprocessorCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *SubprocessorCreate) SetNillableUpdatedByImpersonator(v *string) *SubprocessorCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *SubprocessorCreate) SetDeletedAt(v time.Time) *SubprocessorCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -412,6 +426,10 @@ func (_c *SubprocessorCreate) createSpec() (*Subprocessor, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(subprocessor.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(subprocessor.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(subprocessor.FieldDeletedAt, field.TypeTime, value)

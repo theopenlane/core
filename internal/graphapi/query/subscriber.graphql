@@ -16,6 +16,7 @@ mutation CreateBulkCSVSubscriber ($input: Upload!) {
 			updatedAt
 			updatedBy
 			userID
+			updatedByImpersonator
 			verifiedEmail
 			verifiedPhone
 		}
@@ -39,6 +40,7 @@ mutation CreateBulkSubscriber ($input: [CreateSubscriberInput!]) {
 			updatedAt
 			updatedBy
 			userID
+			updatedByImpersonator
 			verifiedEmail
 			verifiedPhone
 		}
@@ -62,6 +64,7 @@ mutation CreateSubscriber ($input: CreateSubscriberInput!) {
 			updatedAt
 			updatedBy
 			userID
+			updatedByImpersonator
 			verifiedEmail
 			verifiedPhone
 		}
@@ -98,6 +101,7 @@ query GetAllSubscribers ($first: Int, $last: Int, $after: Cursor, $before: Curso
 				updatedAt
 				updatedBy
 				userID
+				updatedByImpersonator
 				verifiedEmail
 				verifiedPhone
 			}
@@ -141,6 +145,7 @@ query GetSubscribers ($first: Int, $last: Int, $after: Cursor, $before: Cursor, 
 				updatedAt
 				updatedBy
 				userID
+				updatedByImpersonator
 				verifiedEmail
 				verifiedPhone
 			}

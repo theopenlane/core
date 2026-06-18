@@ -18,6 +18,7 @@ mutation CreateBulkCSVSystemDetail ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 		}
 	}
@@ -42,6 +43,7 @@ mutation CreateBulkSystemDetail ($input: [CreateSystemDetailInput!]) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 		}
 	}
@@ -66,6 +68,7 @@ mutation CreateSystemDetail ($input: CreateSystemDetailInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 		}
 	}
@@ -108,6 +111,7 @@ query GetAllSystemDetails ($first: Int, $last: Int, $after: Cursor, $before: Cur
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				version
 			}
 		}
@@ -132,6 +136,7 @@ query GetSystemDetailByID ($systemDetailId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		version
 	}
 }
@@ -163,6 +168,7 @@ query GetSystemDetails ($first: Int, $last: Int, $after: Cursor, $before: Cursor
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				version
 			}
 		}
@@ -188,6 +194,7 @@ mutation UpdateBulkCSVSystemDetail ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 		}
 		updatedIDs
@@ -213,6 +220,7 @@ mutation UpdateBulkSystemDetail ($ids: [ID!]!, $input: UpdateSystemDetailInput!)
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 		}
 		updatedIDs
@@ -238,6 +246,7 @@ mutation UpdateSystemDetail ($updateSystemDetailId: ID!, $input: UpdateSystemDet
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 		}
 	}

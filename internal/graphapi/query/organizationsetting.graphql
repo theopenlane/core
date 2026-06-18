@@ -36,6 +36,7 @@ query GetAllOrganizationSettings {
 query GetOrganizationSettingByID ($organizationSettingId: ID!) {
 	organizationSetting(id: $organizationSettingId) {
 		allowMatchingDomainsAutojoin
+		allowSupportAccess
 		allowedEmailDomains
 		billingAddress
 		billingContact
@@ -63,10 +64,12 @@ query GetOrganizationSettingByID ($organizationSettingId: ID!) {
 		samlCert
 		samlIssuer
 		samlSigninURL
+		ssoExemptDomains
 		tags
 		taxIdentifier
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		organization {
 			id
 			displayName
@@ -112,6 +115,7 @@ mutation UpdateOrganizationSetting ($updateOrganizationSettingId: ID!, $input: U
 	updateOrganizationSetting(id: $updateOrganizationSettingId, input: $input) {
 		organizationSetting {
 			allowMatchingDomainsAutojoin
+			allowSupportAccess
 			allowedEmailDomains
 			billingAddress
 			billingContact
@@ -139,10 +143,12 @@ mutation UpdateOrganizationSetting ($updateOrganizationSettingId: ID!, $input: U
 			samlCert
 			samlIssuer
 			samlSigninURL
+			ssoExemptDomains
 			tags
 			taxIdentifier
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			organization {
 				id
 				displayName

@@ -114,6 +114,20 @@ func (_c *ProgramMembershipHistoryCreate) SetNillableUpdatedBy(v *string) *Progr
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *ProgramMembershipHistoryCreate) SetUpdatedByImpersonator(v string) *ProgramMembershipHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *ProgramMembershipHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *ProgramMembershipHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetRole sets the "role" field.
 func (_c *ProgramMembershipHistoryCreate) SetRole(v enums.Role) *ProgramMembershipHistoryCreate {
 	_c.mutation.SetRole(v)
@@ -316,6 +330,10 @@ func (_c *ProgramMembershipHistoryCreate) createSpec() (*ProgramMembershipHistor
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(programmembershiphistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(programmembershiphistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(programmembershiphistory.FieldRole, field.TypeEnum, value)

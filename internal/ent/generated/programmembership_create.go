@@ -80,6 +80,20 @@ func (_c *ProgramMembershipCreate) SetNillableUpdatedBy(v *string) *ProgramMembe
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *ProgramMembershipCreate) SetUpdatedByImpersonator(v string) *ProgramMembershipCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *ProgramMembershipCreate) SetNillableUpdatedByImpersonator(v *string) *ProgramMembershipCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetRole sets the "role" field.
 func (_c *ProgramMembershipCreate) SetRole(v enums.Role) *ProgramMembershipCreate {
 	_c.mutation.SetRole(v)
@@ -287,6 +301,10 @@ func (_c *ProgramMembershipCreate) createSpec() (*ProgramMembership, *sqlgraph.C
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(programmembership.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(programmembership.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(programmembership.FieldRole, field.TypeEnum, value)

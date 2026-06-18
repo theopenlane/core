@@ -30,6 +30,8 @@ type FindingControl struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// the id of the finding associated with the control
 	FindingID string `json:"finding_id,omitempty"`
 	// the id of the control mapped to the finding when it exists in the catalog
@@ -111,7 +113,7 @@ func (*FindingControl) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case findingcontrol.FieldMetadata:
 			values[i] = new([]byte)
-		case findingcontrol.FieldID, findingcontrol.FieldCreatedBy, findingcontrol.FieldUpdatedBy, findingcontrol.FieldFindingID, findingcontrol.FieldControlID, findingcontrol.FieldStandardID, findingcontrol.FieldExternalStandard, findingcontrol.FieldExternalStandardVersion, findingcontrol.FieldExternalControlID, findingcontrol.FieldSource:
+		case findingcontrol.FieldID, findingcontrol.FieldCreatedBy, findingcontrol.FieldUpdatedBy, findingcontrol.FieldUpdatedByImpersonator, findingcontrol.FieldFindingID, findingcontrol.FieldControlID, findingcontrol.FieldStandardID, findingcontrol.FieldExternalStandard, findingcontrol.FieldExternalStandardVersion, findingcontrol.FieldExternalControlID, findingcontrol.FieldSource:
 			values[i] = new(sql.NullString)
 		case findingcontrol.FieldCreatedAt, findingcontrol.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -159,6 +161,13 @@ func (_m *FindingControl) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case findingcontrol.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case findingcontrol.FieldFindingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -279,6 +288,11 @@ func (_m *FindingControl) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("finding_id=")
 	builder.WriteString(_m.FindingID)

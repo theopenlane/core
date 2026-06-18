@@ -113,6 +113,20 @@ func (_c *MappableDomainHistoryCreate) SetNillableUpdatedBy(v *string) *Mappable
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *MappableDomainHistoryCreate) SetUpdatedByImpersonator(v string) *MappableDomainHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *MappableDomainHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *MappableDomainHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *MappableDomainHistoryCreate) SetDeletedAt(v time.Time) *MappableDomainHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -327,6 +341,10 @@ func (_c *MappableDomainHistoryCreate) createSpec() (*MappableDomainHistory, *sq
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(mappabledomainhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(mappabledomainhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(mappabledomainhistory.FieldDeletedAt, field.TypeTime, value)

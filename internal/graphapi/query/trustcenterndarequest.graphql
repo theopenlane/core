@@ -20,6 +20,7 @@ mutation CreateBulkCSVTrustCenterNDARequest ($input: Upload!) {
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -45,6 +46,7 @@ mutation CreateBulkTrustCenterNDARequest ($input: [CreateTrustCenterNDARequestIn
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -70,6 +72,7 @@ mutation CreateTrustCenterNDARequest ($input: CreateTrustCenterNDARequestInput!)
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -113,6 +116,7 @@ query GetAllTrustCenterNDARequests ($first: Int, $last: Int, $after: Cursor, $be
 				trustCenterID
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 			}
 		}
 	}
@@ -138,6 +142,7 @@ query GetTrustCenterNDARequestByID ($trustCenterNDARequestId: ID!) {
 		trustCenterID
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 	}
 }
 query GetTrustCenterNDARequests ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [TrustCenterNDARequestOrder!], $where: TrustCenterNDARequestWhereInput) {
@@ -170,6 +175,7 @@ query GetTrustCenterNDARequests ($first: Int, $last: Int, $after: Cursor, $befor
 				trustCenterID
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 			}
 		}
 	}
@@ -201,6 +207,7 @@ mutation UpdateTrustCenterNDARequest ($updateTrustCenterNDARequestId: ID!, $inpu
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }

@@ -8,6 +8,7 @@ mutation CreateBulkCSVMappableDomain ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			zoneID
 		}
 	}
@@ -22,6 +23,7 @@ mutation CreateBulkMappableDomain ($input: [CreateMappableDomainInput!]) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			zoneID
 		}
 	}
@@ -36,6 +38,7 @@ mutation CreateMappableDomain ($input: CreateMappableDomainInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			zoneID
 		}
 	}
@@ -77,6 +80,7 @@ query GetMappableDomainByID ($mappableDomainId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		zoneID
 	}
 }
@@ -113,6 +117,7 @@ mutation UpdateMappableDomain ($updateMappableDomainId: ID!, $input: UpdateMappa
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			zoneID
 		}
 	}

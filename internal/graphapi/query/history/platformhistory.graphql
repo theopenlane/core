@@ -67,6 +67,7 @@ query GetAllPlatformHistories ($first: Int, $last: Int, $after: Cursor, $before:
 				trustBoundaryDescription
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				workflowEligibleMarker
 			}
 		}
@@ -141,6 +142,7 @@ query GetPlatformHistories ($first: Int, $last: Int, $after: Cursor, $before: Cu
 				trustBoundaryDescription
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				workflowEligibleMarker
 			}
 		}

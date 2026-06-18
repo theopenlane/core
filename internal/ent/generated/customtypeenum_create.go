@@ -86,6 +86,20 @@ func (_c *CustomTypeEnumCreate) SetNillableUpdatedBy(v *string) *CustomTypeEnumC
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *CustomTypeEnumCreate) SetUpdatedByImpersonator(v string) *CustomTypeEnumCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *CustomTypeEnumCreate) SetNillableUpdatedByImpersonator(v *string) *CustomTypeEnumCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *CustomTypeEnumCreate) SetDeletedAt(v time.Time) *CustomTypeEnumCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -555,6 +569,10 @@ func (_c *CustomTypeEnumCreate) createSpec() (*CustomTypeEnum, *sqlgraph.CreateS
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(customtypeenum.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(customtypeenum.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(customtypeenum.FieldDeletedAt, field.TypeTime, value)

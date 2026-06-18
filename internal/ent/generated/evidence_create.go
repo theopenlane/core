@@ -91,6 +91,20 @@ func (_c *EvidenceCreate) SetNillableUpdatedBy(v *string) *EvidenceCreate {
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *EvidenceCreate) SetUpdatedByImpersonator(v string) *EvidenceCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *EvidenceCreate) SetNillableUpdatedByImpersonator(v *string) *EvidenceCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *EvidenceCreate) SetDeletedAt(v time.Time) *EvidenceCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -738,6 +752,10 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(evidence.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(evidence.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(evidence.FieldDeletedAt, field.TypeTime, value)

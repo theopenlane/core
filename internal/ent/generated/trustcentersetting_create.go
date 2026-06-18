@@ -78,6 +78,20 @@ func (_c *TrustCenterSettingCreate) SetNillableUpdatedBy(v *string) *TrustCenter
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *TrustCenterSettingCreate) SetUpdatedByImpersonator(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableUpdatedByImpersonator(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *TrustCenterSettingCreate) SetDeletedAt(v time.Time) *TrustCenterSettingCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -809,6 +823,10 @@ func (_c *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(trustcentersetting.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(trustcentersetting.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(trustcentersetting.FieldDeletedAt, field.TypeTime, value)

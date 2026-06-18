@@ -88,6 +88,20 @@ func (_c *DirectoryAccountCreate) SetNillableUpdatedBy(v *string) *DirectoryAcco
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *DirectoryAccountCreate) SetUpdatedByImpersonator(v string) *DirectoryAccountCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillableUpdatedByImpersonator(v *string) *DirectoryAccountCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDisplayID sets the "display_id" field.
 func (_c *DirectoryAccountCreate) SetDisplayID(v string) *DirectoryAccountCreate {
 	_c.mutation.SetDisplayID(v)
@@ -1007,6 +1021,10 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(directoryaccount.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(directoryaccount.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(directoryaccount.FieldDisplayID, field.TypeString, value)

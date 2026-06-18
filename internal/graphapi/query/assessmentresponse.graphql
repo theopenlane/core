@@ -29,6 +29,7 @@ mutation CreateAssessmentResponse ($input: CreateAssessmentResponseInput!) {
 			status
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -97,6 +98,7 @@ query GetAssessmentResponseByID ($assessmentResponseId: ID!) {
 		status
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 	}
 }
 query GetAssessmentResponses ($first: Int, $last: Int, $where: AssessmentResponseWhereInput) {

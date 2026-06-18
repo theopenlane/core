@@ -95,6 +95,20 @@ func (_c *WorkflowInstanceCreate) SetNillableUpdatedBy(v *string) *WorkflowInsta
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *WorkflowInstanceCreate) SetUpdatedByImpersonator(v string) *WorkflowInstanceCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *WorkflowInstanceCreate) SetNillableUpdatedByImpersonator(v *string) *WorkflowInstanceCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *WorkflowInstanceCreate) SetDeletedAt(v time.Time) *WorkflowInstanceCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -684,6 +698,10 @@ func (_c *WorkflowInstanceCreate) createSpec() (*WorkflowInstance, *sqlgraph.Cre
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(workflowinstance.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(workflowinstance.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(workflowinstance.FieldDeletedAt, field.TypeTime, value)

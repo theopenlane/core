@@ -67,6 +67,7 @@ query GetWorkflowAssignmentByID ($workflowAssignmentId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		workflowInstanceID
 		workflowAssignmentTargets {
 			edges {

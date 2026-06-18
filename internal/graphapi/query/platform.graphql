@@ -56,6 +56,7 @@ mutation CreateBulkCSVPlatform ($input: Upload!) {
 			trustBoundaryDescription
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			workflowEligibleMarker
 		}
 	}
@@ -118,6 +119,7 @@ mutation CreateBulkPlatform ($input: [CreatePlatformInput!]) {
 			trustBoundaryDescription
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			workflowEligibleMarker
 			architectureDiagrams {
 				edges {
@@ -347,6 +349,7 @@ query GetAllPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor,
 				trustBoundaryDescription
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				workflowEligibleMarker
 				identityHolders {
 					edges {
@@ -449,6 +452,7 @@ query GetPlatformByID ($platformId: ID!) {
 		trustBoundaryDescription
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		workflowEligibleMarker
 		architectureDiagrams {
 			edges {
@@ -548,6 +552,7 @@ query GetPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $o
 				trustBoundaryDescription
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				workflowEligibleMarker
 			}
 		}

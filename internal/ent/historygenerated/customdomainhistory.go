@@ -36,6 +36,8 @@ type CustomDomainHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -74,7 +76,7 @@ func (*CustomDomainHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case customdomainhistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case customdomainhistory.FieldID, customdomainhistory.FieldRef, customdomainhistory.FieldCreatedBy, customdomainhistory.FieldUpdatedBy, customdomainhistory.FieldDeletedBy, customdomainhistory.FieldOwnerID, customdomainhistory.FieldInternalNotes, customdomainhistory.FieldSystemInternalID, customdomainhistory.FieldCnameRecord, customdomainhistory.FieldMappableDomainID, customdomainhistory.FieldDNSVerificationID, customdomainhistory.FieldTrustCenterID, customdomainhistory.FieldDomainType:
+		case customdomainhistory.FieldID, customdomainhistory.FieldRef, customdomainhistory.FieldCreatedBy, customdomainhistory.FieldUpdatedBy, customdomainhistory.FieldUpdatedByImpersonator, customdomainhistory.FieldDeletedBy, customdomainhistory.FieldOwnerID, customdomainhistory.FieldInternalNotes, customdomainhistory.FieldSystemInternalID, customdomainhistory.FieldCnameRecord, customdomainhistory.FieldMappableDomainID, customdomainhistory.FieldDNSVerificationID, customdomainhistory.FieldTrustCenterID, customdomainhistory.FieldDomainType:
 			values[i] = new(sql.NullString)
 		case customdomainhistory.FieldHistoryTime, customdomainhistory.FieldCreatedAt, customdomainhistory.FieldUpdatedAt, customdomainhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -140,6 +142,13 @@ func (_m *CustomDomainHistory) assignValues(columns []string, values []any) erro
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case customdomainhistory.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case customdomainhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -273,6 +282,11 @@ func (_m *CustomDomainHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
