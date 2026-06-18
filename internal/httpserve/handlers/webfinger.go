@@ -9,6 +9,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/logx"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/utils/rout"
@@ -87,7 +88,11 @@ type nonce string
 
 // fetchSSOStatus returns the SSO enforcement status for a given organization
 // it checks the organization's settings and returns whether SSO is enforced, the provider, and discovery URL
+// when userID is provided, bypass conditions (role, sso_exempt, exempt domains) are evaluated and Enforced
+// is set to false if any bypass applies
 func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (models.SSOStatusReply, error) {
+	logger := logx.FromContext(ctx)
+
 	setting, err := h.getOrganizationSettingByOrgID(ctx, orgID)
 	if err != nil {
 		return models.SSOStatusReply{}, err
@@ -113,6 +118,19 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (mod
 		}
 
 		out.IsOrgOwner = member.Role == enums.RoleOwner
+
+		if out.Enforced {
+			var userEmail string
+			if u, uErr := h.DBClient.User.Query().Where(user.ID(userID)).Select("email").Only(allowCtx); uErr == nil {
+				userEmail = u.Email
+			} else {
+				logger.Debug().Err(uErr).Str("user_id", userID).Msg("webfinger: could not fetch user email for SSO bypass check")
+			}
+
+			if h.ssoExemptForMember(allowCtx, userEmail, userID, orgID) {
+				out.Enforced = false
+			}
+		}
 	}
 
 	if setting.IdentityProvider != enums.SSOProvider("") {

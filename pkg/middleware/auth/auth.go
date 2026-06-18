@@ -718,18 +718,8 @@ func getRole(ctx context.Context, db *ent.Client, userID, orgID string) (enums.R
 
 // function variables allow tests to override SSO checks without a database
 var (
-	isSSOEnforcedFunc  = isSSOEnforced
-	isSSOBypassedFunc  = isSSOBypassed
-	orgRoleFunc        = func(ctx context.Context, db *ent.Client, userID, orgID string) (enums.Role, error) {
-		member, err := db.OrgMembership.Query().
-			Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
-			Only(privacy.DecisionContext(ctx, privacy.Allow))
-		if err != nil {
-			return "", err
-		}
-
-		return member.Role, nil
-	}
+	isSSOEnforcedFunc = isSSOEnforced
+	isSSOBypassedFunc = isSSOBypassed
 
 	fetchPATFunc = func(ctx context.Context, db *ent.Client, token string) (*ent.PersonalAccessToken, error) {
 		return db.PersonalAccessToken.Query().Where(personalaccesstoken.Token(token)).

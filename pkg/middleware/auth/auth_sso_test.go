@@ -13,36 +13,33 @@ import (
 	iamauth "github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
-	"github.com/theopenlane/core/common/enums"
 	generated "github.com/theopenlane/core/internal/ent/generated"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
 
 // withOverrides allows us to inject custom functions for testing
-// isSSOEnforcedFunc and orgRoleFunc, which are used to determine SSO enforcement
-// and the user's role in the organization, respectively - seemed easier than
+// isSSOEnforcedFunc and isSSOBypassedFunc, which are used to determine SSO enforcement
+// and whether a user is exempt, respectively - seemed easier than
 // spinning up a database + seeding information every time just to verify the
 // behavior if a org setting is enforced or not, so creating some "mocking"
 // functions for this purpose
-func withOverrides(ssoFn func(context.Context, *generated.Client, string) (bool, error), roleFn func(context.Context, *generated.Client, string, string) (enums.Role, error)) func() {
+func withOverrides(ssoFn func(context.Context, *generated.Client, string) (bool, error), bypassFn func(context.Context, *generated.Client, string, string, []string) bool) func() {
 	origSSO := isSSOEnforcedFunc
-	origRole := orgRoleFunc
+	origBypass := isSSOBypassedFunc
 	isSSOEnforcedFunc = ssoFn
-	orgRoleFunc = roleFn
-	return func() { isSSOEnforcedFunc = origSSO; orgRoleFunc = origRole }
+	isSSOBypassedFunc = bypassFn
+	return func() { isSSOEnforcedFunc = origSSO; isSSOBypassedFunc = origBypass }
 }
 
 func TestUnauthorizedRedirectToSSO(t *testing.T) {
 	restore := withOverrides(
 		func(context.Context, *generated.Client, string) (bool, error) { return true, nil },
-		func(context.Context, *generated.Client, string, string) (enums.Role, error) {
-			return enums.RoleMember, nil
-		},
+		func(context.Context, *generated.Client, string, string, []string) bool { return false },
 	)
 
-	// the test temporarily overrides the isSSOEnforcedFunc and orgRoleFunc
+	// the test temporarily overrides the isSSOEnforcedFunc and isSSOBypassedFunc
 	// functions to simulate the behavior of SSO being enforced and the user
-	// being a member of the organization, so we can test the redirect logic
+	// not being exempt, so we can test the redirect logic
 	// without needing a real database or organization setup
 	// this restore function will reset the overrides after the test is done
 	defer restore()
@@ -75,9 +72,7 @@ func TestUnauthorizedRedirectToSSO(t *testing.T) {
 func TestUnauthorizedNoSSORedirect(t *testing.T) {
 	restore := withOverrides(
 		func(context.Context, *generated.Client, string) (bool, error) { return false, nil },
-		func(context.Context, *generated.Client, string, string) (enums.Role, error) {
-			return enums.RoleMember, nil
-		},
+		func(context.Context, *generated.Client, string, string, []string) bool { return false },
 	)
 
 	defer restore()
@@ -105,9 +100,7 @@ func TestUnauthorizedNoSSORedirect(t *testing.T) {
 func TestUnauthorizedOwnerBypass(t *testing.T) {
 	restore := withOverrides(
 		func(context.Context, *generated.Client, string) (bool, error) { return true, nil },
-		func(context.Context, *generated.Client, string, string) (enums.Role, error) {
-			return enums.RoleOwner, nil
-		},
+		func(context.Context, *generated.Client, string, string, []string) bool { return true },
 	)
 
 	defer restore()

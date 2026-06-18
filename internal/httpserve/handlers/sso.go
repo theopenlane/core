@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	apimodels "github.com/theopenlane/core/common/openapi"
+	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -369,6 +370,15 @@ func (h *Handler) orgEnforcementsForUser(ctx context.Context, email string) *api
 	return &status
 }
 
+// clientFromContext returns the ent client from the context transaction, or h.DBClient if no transaction is active
+func (h *Handler) clientFromContext(ctx context.Context) *ent.Client {
+	if tx := transaction.FromContext(ctx); tx != nil {
+		return tx.Client()
+	}
+
+	return h.DBClient
+}
+
 // ssoExemptForMember returns true if the user should bypass SSO enforcement for the given org.
 // Bypass conditions (evaluated in order):
 //  1. user's email domain is in the global SupportDomains config
@@ -376,29 +386,46 @@ func (h *Handler) orgEnforcementsForUser(ctx context.Context, email string) *api
 //  3. user's org membership has sso_exempt set to true
 //  4. user's email domain is in the org's identity_provider_exempt_domains
 func (h *Handler) ssoExemptForMember(ctx context.Context, userEmail, userID, orgID string) bool {
+	logger := logx.FromContext(ctx)
+
 	if len(h.SupportDomains) > 0 {
 		if slices.Contains(h.SupportDomains, emailDomain(userEmail)) {
+			logger.Debug().Str("user_id", userID).Str("org_id", orgID).Msg("sso bypassed: global support domain")
 			return true
 		}
 	}
 
-	member, err := transaction.FromContext(ctx).OrgMembership.Query().
+	db := h.clientFromContext(ctx)
+
+	member, err := db.OrgMembership.Query().
 		Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
 		Select(orgmembership.FieldRole, orgmembership.FieldSSOExempt).
 		Only(ctx)
 	if err != nil {
+		logger.Debug().Err(err).Str("user_id", userID).Str("org_id", orgID).Msg("sso bypass check: could not fetch org membership")
 		return false
 	}
 
 	if member.Role == enums.RoleOwner || member.Role == enums.RoleAuditor || member.SSOExempt {
+		logger.Debug().Str("user_id", userID).Str("org_id", orgID).Str("role", member.Role.String()).Bool("sso_exempt", member.SSOExempt).Msg("sso bypassed: role or exempt flag")
 		return true
 	}
 
-	setting, sErr := transaction.FromContext(ctx).OrganizationSetting.Query().
+	setting, sErr := db.OrganizationSetting.Query().
 		Where(organizationsetting.OrganizationID(orgID)).
 		Only(ctx)
+	if sErr != nil {
+		return false
+	}
 
-	return sErr == nil && slices.Contains(setting.IdentityProviderExemptDomains, emailDomain(userEmail))
+	if slices.Contains(setting.IdentityProviderExemptDomains, emailDomain(userEmail)) {
+		logger.Debug().Str("user_id", userID).Str("org_id", orgID).Msg("SSO bypassed: org exempt domain")
+		return true
+	}
+
+	logger.Debug().Str("user_id", userID).Str("org_id", orgID).Str("role", member.Role.String()).Msg("SSO not bypassed")
+
+	return false
 }
 
 // emailDomain returns the domain portion of an email address (e.g. "theopenlane.io" from "user@theopenlane.io")
