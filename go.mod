@@ -17,7 +17,7 @@ require (
 	cloud.google.com/go/securitycenter v1.44.0
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.6
-	github.com/99designs/gqlgen v0.17.90
+	github.com/99designs/gqlgen v0.17.91
 	github.com/AfterShip/email-verifier v1.4.1
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.22.0
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.13.1
@@ -34,7 +34,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.103.3
 	github.com/brianvoe/gofakeit/v7 v7.15.0
 	github.com/cenkalti/backoff/v5 v5.0.3
-	github.com/cloudflare/cloudflare-go/v7 v7.4.0
+	github.com/cloudflare/cloudflare-go/v7 v7.5.0
 	github.com/didasy/tldr v0.7.0
 	github.com/elimity-com/scim v0.0.0-20260506142751-830e1caafcc3
 	github.com/fatih/camelcase v1.0.0
@@ -84,7 +84,7 @@ require (
 	github.com/pquerna/otp v1.5.0
 	github.com/pressly/goose/v3 v3.27.1
 	github.com/prometheus/client_golang v1.23.2
-	github.com/redis/go-redis/v9 v9.20.0
+	github.com/redis/go-redis/v9 v9.20.1
 	github.com/riverqueue/river v0.39.0
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.39.0
 	github.com/riverqueue/river/rivertype v0.39.0
@@ -102,12 +102,12 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.29.0
-	github.com/theopenlane/go-client v0.12.1
+	github.com/theopenlane/go-client v0.12.2
 	github.com/theopenlane/gqlgen-plugins v0.14.7
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.33.0
 	github.com/theopenlane/newman v0.4.1
-	github.com/theopenlane/riverboat v0.9.16
+	github.com/theopenlane/riverboat v0.9.18
 	github.com/theopenlane/utils v0.7.1
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.9.1
@@ -135,6 +135,7 @@ require (
 	github.com/Masterminds/sprig/v3 v3.3.0 // indirect
 	github.com/PuerkitoBio/goquery v1.12.0 // indirect
 	github.com/andybalholm/cascadia v1.3.3 // indirect
+	github.com/coder/websocket v1.8.14 // indirect
 	github.com/google/go-github/v87 v87.0.0 // indirect
 	github.com/hhrutter/lzw v1.0.0 // indirect
 	github.com/hhrutter/pkcs7 v0.2.2 // indirect
