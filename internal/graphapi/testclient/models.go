@@ -7825,7 +7825,7 @@ type CreateInviteInput struct {
 	Role   *enums.Role         `json:"role,omitempty"`
 	// the number of attempts made to perform email send of the invitation, maximum of 5
 	SendAttempts *int64 `json:"sendAttempts,omitempty"`
-	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes super admin and invitee becomes owner
 	OwnershipTransfer *bool    `json:"ownershipTransfer,omitempty"`
 	OwnerID           *string  `json:"ownerID,omitempty"`
 	EventIDs          []string `json:"eventIDs,omitempty"`
@@ -21467,7 +21467,7 @@ type Invite struct {
 	Role   enums.Role         `json:"role"`
 	// the number of attempts made to perform email send of the invitation, maximum of 5
 	SendAttempts int64 `json:"sendAttempts"`
-	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes super admin and invitee becomes owner
 	OwnershipTransfer *bool            `json:"ownershipTransfer,omitempty"`
 	Owner             *Organization    `json:"owner,omitempty"`
 	Events            *EventConnection `json:"events"`
@@ -42395,7 +42395,7 @@ type UpdateInviteInput struct {
 	Role   *enums.Role         `json:"role,omitempty"`
 	// the number of attempts made to perform email send of the invitation, maximum of 5
 	SendAttempts *int64 `json:"sendAttempts,omitempty"`
-	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes super admin and invitee becomes owner
 	OwnershipTransfer      *bool    `json:"ownershipTransfer,omitempty"`
 	ClearOwnershipTransfer *bool    `json:"clearOwnershipTransfer,omitempty"`
 	OwnerID                *string  `json:"ownerID,omitempty"`

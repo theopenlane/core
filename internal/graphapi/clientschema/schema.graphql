@@ -14465,7 +14465,7 @@ input CreateInviteInput {
 	"""
 	sendAttempts: Int
 	"""
-	indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+	indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes super admin and invitee becomes owner
 	"""
 	ownershipTransfer: Boolean
 	ownerID: ID
@@ -40229,7 +40229,7 @@ type Invite implements Node {
 	"""
 	sendAttempts: Int!
 	"""
-	indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+	indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes super admin and invitee becomes owner
 	"""
 	ownershipTransfer: Boolean
 	owner: Organization
@@ -92503,7 +92503,7 @@ input UpdateInviteInput {
 	"""
 	sendAttempts: Int
 	"""
-	indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+	indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes super admin and invitee becomes owner
 	"""
 	ownershipTransfer: Boolean
 	clearOwnershipTransfer: Boolean
