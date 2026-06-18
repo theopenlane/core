@@ -200,6 +200,10 @@
         "providers": {
           "$ref": "#/$defs/handlers.OauthProviderConfig",
           "description": "Providers contains supported oauth2 providers configuration"
+        },
+        "supportaccess": {
+          "$ref": "#/$defs/handlers.SupportAccessConfig",
+          "description": "SupportAccess contains the configuration for the Openlane support access flow"
         }
       },
       "additionalProperties": false,
@@ -1019,6 +1023,57 @@
       "additionalProperties": false,
       "type": "object",
       "description": "OauthProviderConfig represents the configuration for OAuth providers such as Github and Google"
+    },
+    "handlers.SupportAccessConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled toggles the support access endpoints"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email is the email of the virtual support identity, used as the first factor username"
+        },
+        "displayname": {
+          "type": "string",
+          "description": "DisplayName is the display name of the virtual support identity, used for record attribution"
+        },
+        "subjectid": {
+          "type": "string",
+          "description": "SubjectID is the stable subject id of the virtual support identity used for created_by/updated_by\nattribution. It must be a valid ULID and is consistent without a backing user row"
+        },
+        "password": {
+          "type": "string",
+          "description": "Password is the shared password for the virtual support identity, validated against this value"
+        },
+        "clientid": {
+          "type": "string",
+          "description": "ClientID is the client ID for the second factor identity provider"
+        },
+        "clientsecret": {
+          "type": "string",
+          "description": "ClientSecret is the client secret for the second factor identity provider"
+        },
+        "issuerurl": {
+          "type": "string",
+          "description": "IssuerURL is the issuer URL of the second factor identity provider"
+        },
+        "discoveryendpoint": {
+          "type": "string",
+          "description": "DiscoveryEndpoint is the optional OIDC discovery endpoint of the second factor identity provider"
+        },
+        "redirecturl": {
+          "type": "string",
+          "description": "RedirectURL is the callback URL registered with the second factor identity provider"
+        },
+        "alloweddomain": {
+          "type": "string",
+          "description": "AllowedDomain restricts which email domain may complete the second factor (e.g. theopenlane.io)"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "SupportAccessConfig contains configuration for the Openlane support access flow."
     },
     "map[string][]string": {
       "additionalProperties": {

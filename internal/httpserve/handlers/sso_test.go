@@ -76,8 +76,11 @@ func (suite *HandlerTestSuite) TestWebfingerHandler() {
 	assert.Equal(t, http.StatusOK, emailRec.Code)
 	var emailOut models.SSOStatusReply
 	assert.NoError(t, json.NewDecoder(emailRec.Body).Decode(&emailOut))
-	assert.True(t, emailOut.Enforced)
+	// testUser1 is the organization owner, so the per-account lookup reflects the owner SSO exemption;
+	// the org level lookup above still reports enforcement. TFA enforcement is independent of exemption
+	assert.False(t, emailOut.Enforced)
 	assert.True(t, emailOut.OrgTFAEnforced)
+	assert.True(t, emailOut.IsOrgOwner)
 	assert.Equal(t, org.ID, emailOut.OrganizationID)
 }
 

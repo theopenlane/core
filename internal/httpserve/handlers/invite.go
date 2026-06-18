@@ -104,7 +104,8 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context, openapi *OpenAPICon
 	status, err := h.fetchSSOStatus(allowCtx, invitedUser.OwnerID, user.ID)
 
 	if err == nil && status.Enforced {
-		out.NeedsSSO = true
+		mustSSO, ssoErr := h.userMustSSO(allowCtx, invitedUser.OwnerID, user.ID, user.Email)
+		out.NeedsSSO = ssoErr == nil && mustSSO
 	}
 
 	return h.Created(ctx, out)
