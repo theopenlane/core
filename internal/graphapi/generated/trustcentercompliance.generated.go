@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _TrustCenterComplianceBulkCreatePayload_trustCenterCompliances(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterComplianceBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _TrustCenterComplianceBulkCreatePayload(ctx context.
 			out.Values[i] = graphql.MarshalString("TrustCenterComplianceBulkCreatePayload")
 		case "trustCenterCompliances":
 			out.Values[i] = ec._TrustCenterComplianceBulkCreatePayload_trustCenterCompliances(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _TrustCenterComplianceBulkDeletePayload(ctx context.
 			}
 		case "error":
 			out.Values[i] = ec._TrustCenterComplianceBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _TrustCenterComplianceBulkUpdatePayload(ctx context.
 			out.Values[i] = graphql.MarshalString("TrustCenterComplianceBulkUpdatePayload")
 		case "trustCenterCompliances":
 			out.Values[i] = ec._TrustCenterComplianceBulkUpdatePayload_trustCenterCompliances(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._TrustCenterComplianceBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

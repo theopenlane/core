@@ -24,10 +24,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _WorkflowFieldDiff_field(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowFieldDiff) (ret graphql.Marshaler) {
@@ -391,14 +387,29 @@ func (ec *executionContext) _WorkflowFieldDiff(ctx context.Context, sel ast.Sele
 			}
 		case "label":
 			out.Values[i] = ec._WorkflowFieldDiff_label(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "type":
 			out.Values[i] = ec._WorkflowFieldDiff_type(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "currentValue":
 			out.Values[i] = ec._WorkflowFieldDiff_currentValue(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "proposedValue":
 			out.Values[i] = ec._WorkflowFieldDiff_proposedValue(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "diff":
 			out.Values[i] = ec._WorkflowFieldDiff_diff(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -450,12 +461,24 @@ func (ec *executionContext) _WorkflowProposalPreview(ctx context.Context, sel as
 			}
 		case "submittedAt":
 			out.Values[i] = ec._WorkflowProposalPreview_submittedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "submittedByUserID":
 			out.Values[i] = ec._WorkflowProposalPreview_submittedByUserID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "proposedChanges":
 			out.Values[i] = ec._WorkflowProposalPreview_proposedChanges(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "currentValues":
 			out.Values[i] = ec._WorkflowProposalPreview_currentValues(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "diffs":
 			out.Values[i] = ec._WorkflowProposalPreview_diffs(ctx, field, obj)
 			if out.Values[i] == graphql.Null {

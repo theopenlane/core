@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _JobRunnerRegistrationTokenBulkCreatePayload_jobRunnerRegistrationTokens(ctx context.Context, field graphql.CollectedField, obj *model.JobRunnerRegistrationTokenBulkCreatePayload) (ret graphql.Marshaler) {
@@ -141,6 +137,9 @@ func (ec *executionContext) _JobRunnerRegistrationTokenBulkCreatePayload(ctx con
 			out.Values[i] = graphql.MarshalString("JobRunnerRegistrationTokenBulkCreatePayload")
 		case "jobRunnerRegistrationTokens":
 			out.Values[i] = ec._JobRunnerRegistrationTokenBulkCreatePayload_jobRunnerRegistrationTokens(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

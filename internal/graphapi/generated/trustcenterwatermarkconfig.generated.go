@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _TrustCenterWatermarkConfigBulkCreatePayload_trustCenterWatermarkConfigs(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterWatermarkConfigBulkCreatePayload) (ret graphql.Marshaler) {
@@ -173,6 +169,9 @@ func (ec *executionContext) _TrustCenterWatermarkConfigBulkCreatePayload(ctx con
 			out.Values[i] = graphql.MarshalString("TrustCenterWatermarkConfigBulkCreatePayload")
 		case "trustCenterWatermarkConfigs":
 			out.Values[i] = ec._TrustCenterWatermarkConfigBulkCreatePayload_trustCenterWatermarkConfigs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

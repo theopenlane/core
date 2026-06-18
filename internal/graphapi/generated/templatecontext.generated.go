@@ -30,10 +30,6 @@ type TemplateContextEntryResolver interface {
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _TemplateContextEntry_context(ctx context.Context, field graphql.CollectedField, obj *models.TemplateContextEntry) (ret graphql.Marshaler) {

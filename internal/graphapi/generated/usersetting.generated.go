@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _UserSettingBulkCreatePayload_userSettings(ctx context.Context, field graphql.CollectedField, obj *model.UserSettingBulkCreatePayload) (ret graphql.Marshaler) {
@@ -274,6 +270,9 @@ func (ec *executionContext) _UserSettingBulkCreatePayload(ctx context.Context, s
 			out.Values[i] = graphql.MarshalString("UserSettingBulkCreatePayload")
 		case "userSettings":
 			out.Values[i] = ec._UserSettingBulkCreatePayload_userSettings(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -320,6 +319,9 @@ func (ec *executionContext) _UserSettingBulkDeletePayload(ctx context.Context, s
 			}
 		case "error":
 			out.Values[i] = ec._UserSettingBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -356,8 +358,14 @@ func (ec *executionContext) _UserSettingBulkUpdatePayload(ctx context.Context, s
 			out.Values[i] = graphql.MarshalString("UserSettingBulkUpdatePayload")
 		case "userSettings":
 			out.Values[i] = ec._UserSettingBulkUpdatePayload_userSettings(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._UserSettingBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

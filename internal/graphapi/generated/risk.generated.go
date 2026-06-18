@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _RiskBulkCreatePayload_risks(ctx context.Context, field graphql.CollectedField, obj *model.RiskBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _RiskBulkCreatePayload(ctx context.Context, sel ast.
 			out.Values[i] = graphql.MarshalString("RiskBulkCreatePayload")
 		case "risks":
 			out.Values[i] = ec._RiskBulkCreatePayload_risks(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _RiskBulkDeletePayload(ctx context.Context, sel ast.
 			}
 		case "error":
 			out.Values[i] = ec._RiskBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _RiskBulkUpdatePayload(ctx context.Context, sel ast.
 			out.Values[i] = graphql.MarshalString("RiskBulkUpdatePayload")
 		case "risks":
 			out.Values[i] = ec._RiskBulkUpdatePayload_risks(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._RiskBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

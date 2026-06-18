@@ -25,10 +25,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _ControlEvidence_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.ControlEvidence) (ret graphql.Marshaler) {
@@ -1284,6 +1280,9 @@ func (ec *executionContext) _ControlEvidence(ctx context.Context, sel ast.Select
 			}
 		case "worstStatus":
 			out.Values[i] = ec._ControlEvidence_worstStatus(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "approvedCount":
 			out.Values[i] = ec._ControlEvidence_approvedCount(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -1291,6 +1290,9 @@ func (ec *executionContext) _ControlEvidence(ctx context.Context, sel ast.Select
 			}
 		case "countByStatus":
 			out.Values[i] = ec._ControlEvidence_countByStatus(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -1337,18 +1339,39 @@ func (ec *executionContext) _ControlInfo(ctx context.Context, sel ast.SelectionS
 			}
 		case "description":
 			out.Values[i] = ec._ControlInfo_description(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "title":
 			out.Values[i] = ec._ControlInfo_title(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "status":
 			out.Values[i] = ec._ControlInfo_status(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "controlOwner":
 			out.Values[i] = ec._ControlInfo_controlOwner(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "referenceFramework":
 			out.Values[i] = ec._ControlInfo_referenceFramework(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "category":
 			out.Values[i] = ec._ControlInfo_category(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "subcategory":
 			out.Values[i] = ec._ControlInfo_subcategory(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "isSubcontrol":
 			out.Values[i] = ec._ControlInfo_isSubcontrol(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -1395,6 +1418,9 @@ func (ec *executionContext) _ControlPolicies(ctx context.Context, sel ast.Select
 			}
 		case "internalPolicies":
 			out.Values[i] = ec._ControlPolicies_internalPolicies(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -1441,26 +1467,59 @@ func (ec *executionContext) _ControlReport(ctx context.Context, sel ast.Selectio
 			}
 		case "description":
 			out.Values[i] = ec._ControlReport_description(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "title":
 			out.Values[i] = ec._ControlReport_title(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "status":
 			out.Values[i] = ec._ControlReport_status(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "controlOwner":
 			out.Values[i] = ec._ControlReport_controlOwner(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "referenceFramework":
 			out.Values[i] = ec._ControlReport_referenceFramework(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "category":
 			out.Values[i] = ec._ControlReport_category(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "subcategory":
 			out.Values[i] = ec._ControlReport_subcategory(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "relatedControls":
 			out.Values[i] = ec._ControlReport_relatedControls(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "evidenceStatus":
 			out.Values[i] = ec._ControlReport_evidenceStatus(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "linkedPolicies":
 			out.Values[i] = ec._ControlReport_linkedPolicies(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "subcontrols":
 			out.Values[i] = ec._ControlReport_subcontrols(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -1546,6 +1605,9 @@ func (ec *executionContext) _ControlReportConnection(ctx context.Context, sel as
 			out.Values[i] = graphql.MarshalString("ControlReportConnection")
 		case "edges":
 			out.Values[i] = ec._ControlReportConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "pageInfo":
 			out.Values[i] = ec._ControlReportConnection_pageInfo(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -1592,6 +1654,9 @@ func (ec *executionContext) _ControlReportEdge(ctx context.Context, sel ast.Sele
 			out.Values[i] = graphql.MarshalString("ControlReportEdge")
 		case "node":
 			out.Values[i] = ec._ControlReportEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "cursor":
 			out.Values[i] = ec._ControlReportEdge_cursor(ctx, field, obj)
 			if out.Values[i] == graphql.Null {

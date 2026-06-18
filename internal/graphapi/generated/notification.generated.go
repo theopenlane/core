@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _ActionNotificationsReadPayload_readIDs(ctx context.Context, field graphql.CollectedField, obj *model.ActionNotificationsReadPayload) (ret graphql.Marshaler) {

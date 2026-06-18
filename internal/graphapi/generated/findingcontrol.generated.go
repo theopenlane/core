@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _FindingControlBulkCreatePayload_findingControls(ctx context.Context, field graphql.CollectedField, obj *model.FindingControlBulkCreatePayload) (ret graphql.Marshaler) {
@@ -173,6 +169,9 @@ func (ec *executionContext) _FindingControlBulkCreatePayload(ctx context.Context
 			out.Values[i] = graphql.MarshalString("FindingControlBulkCreatePayload")
 		case "findingControls":
 			out.Values[i] = ec._FindingControlBulkCreatePayload_findingControls(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

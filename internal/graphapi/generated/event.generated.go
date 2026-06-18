@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _EventBulkCreatePayload_events(ctx context.Context, field graphql.CollectedField, obj *model.EventBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _EventBulkCreatePayload(ctx context.Context, sel ast
 			out.Values[i] = graphql.MarshalString("EventBulkCreatePayload")
 		case "events":
 			out.Values[i] = ec._EventBulkCreatePayload_events(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _EventBulkDeletePayload(ctx context.Context, sel ast
 			}
 		case "error":
 			out.Values[i] = ec._EventBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _EventBulkUpdatePayload(ctx context.Context, sel ast
 			out.Values[i] = graphql.MarshalString("EventBulkUpdatePayload")
 		case "events":
 			out.Values[i] = ec._EventBulkUpdatePayload_events(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._EventBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

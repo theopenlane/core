@@ -24,10 +24,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _ControlCategory_name(ctx context.Context, field graphql.CollectedField, obj *model.ControlCategory) (ret graphql.Marshaler) {
@@ -1092,6 +1088,9 @@ func (ec *executionContext) _ControlCategory(ctx context.Context, sel ast.Select
 			}
 		case "referenceFramework":
 			out.Values[i] = ec._ControlCategory_referenceFramework(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -1128,6 +1127,9 @@ func (ec *executionContext) _ControlCategoryConnection(ctx context.Context, sel 
 			out.Values[i] = graphql.MarshalString("ControlCategoryConnection")
 		case "edges":
 			out.Values[i] = ec._ControlCategoryConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "pageInfo":
 			out.Values[i] = ec._ControlCategoryConnection_pageInfo(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -1321,10 +1323,19 @@ func (ec *executionContext) _ControlFieldDiff(ctx context.Context, sel ast.Selec
 			}
 		case "oldValue":
 			out.Values[i] = ec._ControlFieldDiff_oldValue(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "newValue":
 			out.Values[i] = ec._ControlFieldDiff_newValue(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "diff":
 			out.Values[i] = ec._ControlFieldDiff_diff(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -1488,6 +1499,9 @@ func (ec *executionContext) _RelatedControlConnection(ctx context.Context, sel a
 			out.Values[i] = graphql.MarshalString("RelatedControlConnection")
 		case "edges":
 			out.Values[i] = ec._RelatedControlConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "totalCount":
 			out.Values[i] = ec._RelatedControlConnection_totalCount(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -1568,6 +1582,9 @@ func (ec *executionContext) _RelatedSubcontrolConnection(ctx context.Context, se
 			out.Values[i] = graphql.MarshalString("RelatedSubcontrolConnection")
 		case "edges":
 			out.Values[i] = ec._RelatedSubcontrolConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "totalCount":
 			out.Values[i] = ec._RelatedSubcontrolConnection_totalCount(ctx, field, obj)
 			if out.Values[i] == graphql.Null {

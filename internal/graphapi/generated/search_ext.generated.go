@@ -22,10 +22,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _SearchContext_entityID(ctx context.Context, field graphql.CollectedField, obj *models.SearchContext) (ret graphql.Marshaler) {
@@ -215,6 +211,9 @@ func (ec *executionContext) _SearchContext(ctx context.Context, sel ast.Selectio
 			}
 		case "snippets":
 			out.Values[i] = ec._SearchContext_snippets(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

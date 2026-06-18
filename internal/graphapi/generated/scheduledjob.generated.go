@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _ScheduledJobBulkCreatePayload_scheduledJobs(ctx context.Context, field graphql.CollectedField, obj *model.ScheduledJobBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _ScheduledJobBulkCreatePayload(ctx context.Context, 
 			out.Values[i] = graphql.MarshalString("ScheduledJobBulkCreatePayload")
 		case "scheduledJobs":
 			out.Values[i] = ec._ScheduledJobBulkCreatePayload_scheduledJobs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _ScheduledJobBulkDeletePayload(ctx context.Context, 
 			}
 		case "error":
 			out.Values[i] = ec._ScheduledJobBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _ScheduledJobBulkUpdatePayload(ctx context.Context, 
 			out.Values[i] = graphql.MarshalString("ScheduledJobBulkUpdatePayload")
 		case "scheduledJobs":
 			out.Values[i] = ec._ScheduledJobBulkUpdatePayload_scheduledJobs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._ScheduledJobBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

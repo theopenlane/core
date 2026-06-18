@@ -22,10 +22,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _WebauthnDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.WebauthnDeletePayload) (ret graphql.Marshaler) {

@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _JobRunnerCreatePayload_jobRunner(ctx context.Context, field graphql.CollectedField, obj *model.JobRunnerCreatePayload) (ret graphql.Marshaler) {

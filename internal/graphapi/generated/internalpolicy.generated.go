@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _InternalPolicyBulkCreatePayload_internalPolicies(ctx context.Context, field graphql.CollectedField, obj *model.InternalPolicyBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _InternalPolicyBulkCreatePayload(ctx context.Context
 			out.Values[i] = graphql.MarshalString("InternalPolicyBulkCreatePayload")
 		case "internalPolicies":
 			out.Values[i] = ec._InternalPolicyBulkCreatePayload_internalPolicies(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _InternalPolicyBulkDeletePayload(ctx context.Context
 			}
 		case "error":
 			out.Values[i] = ec._InternalPolicyBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _InternalPolicyBulkUpdatePayload(ctx context.Context
 			out.Values[i] = graphql.MarshalString("InternalPolicyBulkUpdatePayload")
 		case "internalPolicies":
 			out.Values[i] = ec._InternalPolicyBulkUpdatePayload_internalPolicies(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._InternalPolicyBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

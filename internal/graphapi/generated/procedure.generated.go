@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _ProcedureBulkCreatePayload_procedures(ctx context.Context, field graphql.CollectedField, obj *model.ProcedureBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _ProcedureBulkCreatePayload(ctx context.Context, sel
 			out.Values[i] = graphql.MarshalString("ProcedureBulkCreatePayload")
 		case "procedures":
 			out.Values[i] = ec._ProcedureBulkCreatePayload_procedures(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _ProcedureBulkDeletePayload(ctx context.Context, sel
 			}
 		case "error":
 			out.Values[i] = ec._ProcedureBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _ProcedureBulkUpdatePayload(ctx context.Context, sel
 			out.Values[i] = graphql.MarshalString("ProcedureBulkUpdatePayload")
 		case "procedures":
 			out.Values[i] = ec._ProcedureBulkUpdatePayload_procedures(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._ProcedureBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

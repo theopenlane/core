@@ -22,10 +22,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _NoteDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.NoteDeletePayload) (ret graphql.Marshaler) {
