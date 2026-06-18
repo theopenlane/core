@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _NarrativeBulkCreatePayload_narratives(ctx context.Context, field graphql.CollectedField, obj *model.NarrativeBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _NarrativeBulkCreatePayload(ctx context.Context, sel
 			out.Values[i] = graphql.MarshalString("NarrativeBulkCreatePayload")
 		case "narratives":
 			out.Values[i] = ec._NarrativeBulkCreatePayload_narratives(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _NarrativeBulkDeletePayload(ctx context.Context, sel
 			}
 		case "error":
 			out.Values[i] = ec._NarrativeBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _NarrativeBulkUpdatePayload(ctx context.Context, sel
 			out.Values[i] = graphql.MarshalString("NarrativeBulkUpdatePayload")
 		case "narratives":
 			out.Values[i] = ec._NarrativeBulkUpdatePayload_narratives(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._NarrativeBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

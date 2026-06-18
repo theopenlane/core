@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _DirectorySyncRunBulkCreatePayload_directorySyncRuns(ctx context.Context, field graphql.CollectedField, obj *model.DirectorySyncRunBulkCreatePayload) (ret graphql.Marshaler) {
@@ -173,6 +169,9 @@ func (ec *executionContext) _DirectorySyncRunBulkCreatePayload(ctx context.Conte
 			out.Values[i] = graphql.MarshalString("DirectorySyncRunBulkCreatePayload")
 		case "directorySyncRuns":
 			out.Values[i] = ec._DirectorySyncRunBulkCreatePayload_directorySyncRuns(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

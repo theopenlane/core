@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _APITokenBulkCreatePayload_apiTokens(ctx context.Context, field graphql.CollectedField, obj *model.APITokenBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _APITokenBulkCreatePayload(ctx context.Context, sel 
 			out.Values[i] = graphql.MarshalString("APITokenBulkCreatePayload")
 		case "apiTokens":
 			out.Values[i] = ec._APITokenBulkCreatePayload_apiTokens(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _APITokenBulkDeletePayload(ctx context.Context, sel 
 			}
 		case "error":
 			out.Values[i] = ec._APITokenBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _APITokenBulkUpdatePayload(ctx context.Context, sel 
 			out.Values[i] = graphql.MarshalString("APITokenBulkUpdatePayload")
 		case "apiTokens":
 			out.Values[i] = ec._APITokenBulkUpdatePayload_apiTokens(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._APITokenBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

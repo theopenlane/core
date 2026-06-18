@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _TaskBulkCreatePayload_tasks(ctx context.Context, field graphql.CollectedField, obj *model.TaskBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _TaskBulkCreatePayload(ctx context.Context, sel ast.
 			out.Values[i] = graphql.MarshalString("TaskBulkCreatePayload")
 		case "tasks":
 			out.Values[i] = ec._TaskBulkCreatePayload_tasks(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _TaskBulkDeletePayload(ctx context.Context, sel ast.
 			}
 		case "error":
 			out.Values[i] = ec._TaskBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _TaskBulkUpdatePayload(ctx context.Context, sel ast.
 			out.Values[i] = graphql.MarshalString("TaskBulkUpdatePayload")
 		case "tasks":
 			out.Values[i] = ec._TaskBulkUpdatePayload_tasks(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._TaskBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

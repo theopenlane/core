@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _ControlObjectiveBulkCreatePayload_controlObjectives(ctx context.Context, field graphql.CollectedField, obj *model.ControlObjectiveBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _ControlObjectiveBulkCreatePayload(ctx context.Conte
 			out.Values[i] = graphql.MarshalString("ControlObjectiveBulkCreatePayload")
 		case "controlObjectives":
 			out.Values[i] = ec._ControlObjectiveBulkCreatePayload_controlObjectives(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _ControlObjectiveBulkDeletePayload(ctx context.Conte
 			}
 		case "error":
 			out.Values[i] = ec._ControlObjectiveBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _ControlObjectiveBulkUpdatePayload(ctx context.Conte
 			out.Values[i] = graphql.MarshalString("ControlObjectiveBulkUpdatePayload")
 		case "controlObjectives":
 			out.Values[i] = ec._ControlObjectiveBulkUpdatePayload_controlObjectives(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._ControlObjectiveBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

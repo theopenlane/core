@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _TrustCenterSubprocessorBulkCreatePayload_trustCenterSubprocessors(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSubprocessorBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkCreatePayload(ctx contex
 			out.Values[i] = graphql.MarshalString("TrustCenterSubprocessorBulkCreatePayload")
 		case "trustCenterSubprocessors":
 			out.Values[i] = ec._TrustCenterSubprocessorBulkCreatePayload_trustCenterSubprocessors(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkDeletePayload(ctx contex
 			}
 		case "error":
 			out.Values[i] = ec._TrustCenterSubprocessorBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkUpdatePayload(ctx contex
 			out.Values[i] = graphql.MarshalString("TrustCenterSubprocessorBulkUpdatePayload")
 		case "trustCenterSubprocessors":
 			out.Values[i] = ec._TrustCenterSubprocessorBulkUpdatePayload_trustCenterSubprocessors(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._TrustCenterSubprocessorBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

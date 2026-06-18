@@ -882,7 +882,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			request: testclient.CloneControlInput{
 				ControlIDs: []string{orgOwnedControl.ID},
 			},
-			expectedStandard: lo.ToPtr("Custom"),
+			expectedStandard: lo.ToPtr("CUSTOM"),
 			expectedControls: []*generated.Control{orgOwnedControl},
 			client:           suite.client.api,
 			ctx:              sharedTestUser2.UserCtx,
@@ -891,7 +891,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		{
 			name:             "clone control under org, empty request",
 			request:          testclient.CloneControlInput{},
-			expectedStandard: lo.ToPtr("Custom"),
+			expectedStandard: lo.ToPtr("CUSTOM"),
 			expectedControls: []*generated.Control{orgOwnedControl},
 			client:           suite.client.api,
 			ctx:              sharedTestUser2.UserCtx,
@@ -2295,7 +2295,7 @@ func TestQueryControlSubcategories(t *testing.T) {
 // never try to run this in parallel with other tests that create controls
 // or standards, or that have controls linked to them
 func TestQueryControlCategoriesByFramework(t *testing.T) {
-	customFramework := "Custom"
+	customFramework := "CUSTOM"
 
 	newUser := suite.userBuilder(context.Background(), t)
 	newUser2 := suite.userBuilder(context.Background(), t)
@@ -2440,7 +2440,7 @@ func TestQueryControlCategoriesByFramework(t *testing.T) {
 }
 
 func TestQueryControlSubcategoriesByFramework(t *testing.T) {
-	customFramework := "Custom"
+	customFramework := "CUSTOM"
 
 	testUser := suite.userBuilder(context.Background(), t)
 	testUserAnother := suite.userBuilder(context.Background(), t)

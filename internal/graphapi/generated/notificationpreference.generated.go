@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _NotificationPreferenceBulkCreatePayload_notificationPreferences(ctx context.Context, field graphql.CollectedField, obj *model.NotificationPreferenceBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _NotificationPreferenceBulkCreatePayload(ctx context
 			out.Values[i] = graphql.MarshalString("NotificationPreferenceBulkCreatePayload")
 		case "notificationPreferences":
 			out.Values[i] = ec._NotificationPreferenceBulkCreatePayload_notificationPreferences(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _NotificationPreferenceBulkDeletePayload(ctx context
 			}
 		case "error":
 			out.Values[i] = ec._NotificationPreferenceBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _NotificationPreferenceBulkUpdatePayload(ctx context
 			out.Values[i] = graphql.MarshalString("NotificationPreferenceBulkUpdatePayload")
 		case "notificationPreferences":
 			out.Values[i] = ec._NotificationPreferenceBulkUpdatePayload_notificationPreferences(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._NotificationPreferenceBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

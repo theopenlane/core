@@ -8899,6 +8899,10 @@ type Control implements Node {
 	Returns the workflow event timeline for this control across all workflow instances
 	"""
 	workflowTimeline(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [WorkflowEventOrder!], where: WorkflowEventWhereInput, includeEmitFailures: Boolean): WorkflowEventConnection!
+	"""
+	relatedControls show the controls and frameworks mapped to this control
+	"""
+	relatedControls: [ControlInfo!]
 }
 """
 Return response for createBulkControl mutation
@@ -9122,6 +9126,27 @@ type ControlEdge {
 	A cursor for use in pagination.
 	"""
 	cursor: Cursor!
+}
+"""
+ControlEvidence summarizes the evidence status across all evidence linked to a control
+"""
+type ControlEvidence {
+	"""
+	total number of evidence items linked to the control
+	"""
+	totalCount: Int!
+	"""
+	the most severe evidence status among all linked evidence items
+	"""
+	worstStatus: EvidenceEvidenceStatus
+	"""
+	number of evidence items with auditor-approved status
+	"""
+	approvedCount: Int!
+	"""
+	breakdown of evidence item counts by status
+	"""
+	countByStatus: [EvidenceCountByStatus!]
 }
 """
 ControlFieldDiff describes a single field that differs between two control revisions
@@ -9767,6 +9792,51 @@ input ControlImplementationWhereInput {
 	Filter for tagsHas to contain a specific value
 	"""
 	tagsHas: String
+}
+"""
+ControlInfo provides a lightweight summary of a control or subcontrol, used when referencing related controls
+"""
+type ControlInfo {
+	"""
+	unique identifier of the control
+	"""
+	id: ID!
+	"""
+	the unique reference code for the control
+	"""
+	refCode: String! @externalSource(source: FRAMEWORK)
+	"""
+	description of what the control is supposed to accomplish
+	"""
+	description: String @externalSource(source: FRAMEWORK)
+	"""
+	human readable title of the control for quick identification
+	"""
+	title: String @externalSource(source: FRAMEWORK)
+	"""
+	status of the control
+	"""
+	status: ControlControlStatus
+	"""
+	the group of users who are responsible for the control, will be assigned tasks, approval, etc.
+	"""
+	controlOwner: Group
+	"""
+	the reference framework this control belongs to, e.g. SOC2, ISO27001
+	"""
+	referenceFramework: String
+	"""
+	category of the control
+	"""
+	category: String
+	"""
+	subcategory of the control
+	"""
+	subcategory: String
+	"""
+	whether this entry is a subcontrol rather than a top-level control
+	"""
+	isSubcontrol: Boolean!
 }
 type ControlObjective implements Node {
 	id: ID!
@@ -10731,6 +10801,162 @@ enum ControlOrderField {
 	CONTROL_OWNER_name
 	DELEGATE_name
 	RESPONSIBLE_PARTY_name
+}
+"""
+ControlPolicies summarizes the internal policies linked to a control
+"""
+type ControlPolicies {
+	"""
+	total number of policies linked to the control
+	"""
+	totalCount: Int!
+	"""
+	the policies linked to the control
+	"""
+	internalPolicies: [PolicySummary!]
+}
+"""
+ControlReport is a custom resolver that is used to show detailed, but selective information about
+an organizations controls vs. the standards
+"""
+type ControlReport implements Node {
+	"""
+	unique identifier of the control
+	"""
+	id: ID!
+	"""
+	the unique reference code for the control
+	"""
+	refCode: String! @externalSource(source: FRAMEWORK)
+	"""
+	description of what the control is supposed to accomplish
+	"""
+	description: String @externalSource(source: FRAMEWORK)
+	"""
+	human readable title of the control for quick identification
+	"""
+	title: String @externalSource(source: FRAMEWORK)
+	"""
+	status of the control
+	"""
+	status: ControlControlStatus
+	"""
+	the group of users who are responsible for the control, will be assigned tasks, approval, etc.
+	"""
+	controlOwner: Group
+	"""
+	the reference framework this control belongs to, e.g. SOC2, ISO27001
+	"""
+	referenceFramework: String
+	"""
+	category of the control
+	"""
+	category: String
+	"""
+	subcategory of the control
+	"""
+	subcategory: String
+	"""
+	controls from other frameworks that map to this control
+	"""
+	relatedControls: [ControlInfo!]
+	"""
+	aggregated evidence status across all evidence linked to this control
+	"""
+	evidenceStatus: ControlEvidence
+	"""
+	internal policies linked to this control
+	"""
+	linkedPolicies: ControlPolicies
+	"""
+	child subcontrols nested under this control
+	"""
+	subcontrols: [ControlReport!]
+}
+"""
+ControlReportCategory groups control reports by their category
+"""
+type ControlReportCategory {
+	"""
+	the category name; empty string when controls have no category assigned
+	"""
+	category: String!
+	"""
+	total number of controls in this category
+	"""
+	totalCount: Int!
+	"""
+	controls belonging to this category
+	"""
+	controls: [ControlReport!]!
+}
+"""
+A connection to a list of items.
+"""
+type ControlReportConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [ControlReportEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ControlReportEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: ControlReport
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+"""
+Ordering options for ControlReport connections
+"""
+input ControlReportOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order ControlReport.
+	"""
+	field: ControlReportOrderField!
+}
+"""
+Properties by which ControlReport connections can be ordered.
+"""
+enum ControlReportOrderField {
+	"""
+	Order by creation time
+	"""
+	created_at
+	"""
+	Order by last update time
+	"""
+	updated_at
+	"""
+	Order by reference code
+	"""
+	refCode
+	"""
+	Order by title
+	"""
+	title
+	"""
+	Order by reference framework
+	"""
+	referenceFramework
 }
 """
 ControlTrustCenterControlVisibility is enum for the field trust_center_visibility
@@ -28141,6 +28367,19 @@ type EvidenceConnection {
 	pageInfo: PageInfo!
 	"""
 	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+EvidenceCountByStatus pairs an evidence status with the number of evidence items in that state
+"""
+type EvidenceCountByStatus {
+	"""
+	the evidence status value
+	"""
+	status: EvidenceEvidenceStatus!
+	"""
+	number of evidence items with this status
 	"""
 	totalCount: Int!
 }
@@ -62561,6 +62800,23 @@ input PlatformWhereInput {
 	tagsHas: String
 }
 """
+PolicySummary provides a lightweight summary of an internal policy
+"""
+type PolicySummary implements Node {
+	"""
+	unique identifier of the policy
+	"""
+	id: ID!
+	"""
+	the name of the policy
+	"""
+	name: String!
+	"""
+	status of the policy, e.g. draft, published, archived, etc.
+	"""
+	status: InternalPolicyDocumentStatus!
+}
+"""
 The `Price` scalar type represents a monetary value for a subscription, including the numerical amount, the interval of recurrence and the currency to be charged in (e.g. USD)
 """
 scalar Price
@@ -68449,6 +68705,49 @@ type Query {
 		id: ID!
 	): ControlObjective!
 	"""
+	Returns control reports grouped by category for the organization
+	"""
+	controlReportsByCategory(
+		"""
+		Filtering options for ControlReport returned from the connection.
+		"""
+		where: ControlWhereInput
+	): [ControlReportCategory!]!
+	"""
+	Returns a paginated list of control reports for the organization, showing control compliance status against standards
+	"""
+	controlReports(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ControlReport returned from the connection.
+		"""
+		orderBy: [ControlReportOrder!]
+
+		"""
+		Filtering options for ControlReport returned from the connection.
+		"""
+		where: ControlWhereInput
+	): ControlReportConnection!
+	"""
 	Look up customDomain by ID
 	"""
 	customDomain(
@@ -70574,6 +70873,50 @@ input ReassignWorkflowAssignmentInput {
 The `Reference` represents are links to external sources that can be used to gain more information about the control
 """
 scalar Reference
+"""
+A connection to a list of items.
+"""
+type RelatedControlConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [RelatedControlEdge]
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type RelatedControlEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: Control!
+}
+"""
+A connection to a list of items.
+"""
+type RelatedSubcontrolConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [RelatedSubcontrolEdge]
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type RelatedSubcontrolEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: Subcontrol!
+}
 type Remediation implements Node {
 	id: ID!
 	createdAt: Time
@@ -79042,6 +79385,10 @@ type Subcontrol implements Node {
 		"""
 		where: IdentityHolderWhereInput
 	): IdentityHolderConnection!
+	"""
+	relatedControls show the controls and frameworks mapped to this control
+	"""
+	relatedControls: [ControlInfo!]
 	"""
 	Indicates if this subcontrol has pending changes awaiting workflow approval
 	"""

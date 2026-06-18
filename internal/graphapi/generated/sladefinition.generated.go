@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _SLADefinitionBulkCreatePayload_slaDefinitions(ctx context.Context, field graphql.CollectedField, obj *model.SLADefinitionBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _SLADefinitionBulkCreatePayload(ctx context.Context,
 			out.Values[i] = graphql.MarshalString("SLADefinitionBulkCreatePayload")
 		case "slaDefinitions":
 			out.Values[i] = ec._SLADefinitionBulkCreatePayload_slaDefinitions(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _SLADefinitionBulkDeletePayload(ctx context.Context,
 			}
 		case "error":
 			out.Values[i] = ec._SLADefinitionBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _SLADefinitionBulkUpdatePayload(ctx context.Context,
 			out.Values[i] = graphql.MarshalString("SLADefinitionBulkUpdatePayload")
 		case "slaDefinitions":
 			out.Values[i] = ec._SLADefinitionBulkUpdatePayload_slaDefinitions(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._SLADefinitionBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

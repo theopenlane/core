@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _TrustCenterDocBulkCreatePayload_trustCenterDocs(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterDocBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _TrustCenterDocBulkCreatePayload(ctx context.Context
 			out.Values[i] = graphql.MarshalString("TrustCenterDocBulkCreatePayload")
 		case "trustCenterDocs":
 			out.Values[i] = ec._TrustCenterDocBulkCreatePayload_trustCenterDocs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _TrustCenterDocBulkDeletePayload(ctx context.Context
 			}
 		case "error":
 			out.Values[i] = ec._TrustCenterDocBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _TrustCenterDocBulkUpdatePayload(ctx context.Context
 			out.Values[i] = graphql.MarshalString("TrustCenterDocBulkUpdatePayload")
 		case "trustCenterDocs":
 			out.Values[i] = ec._TrustCenterDocBulkUpdatePayload_trustCenterDocs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._TrustCenterDocBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

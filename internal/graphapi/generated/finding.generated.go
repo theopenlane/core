@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _FindingBulkCreatePayload_findings(ctx context.Context, field graphql.CollectedField, obj *model.FindingBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _FindingBulkCreatePayload(ctx context.Context, sel a
 			out.Values[i] = graphql.MarshalString("FindingBulkCreatePayload")
 		case "findings":
 			out.Values[i] = ec._FindingBulkCreatePayload_findings(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _FindingBulkDeletePayload(ctx context.Context, sel a
 			}
 		case "error":
 			out.Values[i] = ec._FindingBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _FindingBulkUpdatePayload(ctx context.Context, sel a
 			out.Values[i] = graphql.MarshalString("FindingBulkUpdatePayload")
 		case "findings":
 			out.Values[i] = ec._FindingBulkUpdatePayload_findings(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._FindingBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

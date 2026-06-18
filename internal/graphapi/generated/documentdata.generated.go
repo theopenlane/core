@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _DocumentDataBulkCreatePayload_documentData(ctx context.Context, field graphql.CollectedField, obj *model.DocumentDataBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _DocumentDataBulkCreatePayload(ctx context.Context, 
 			out.Values[i] = graphql.MarshalString("DocumentDataBulkCreatePayload")
 		case "documentData":
 			out.Values[i] = ec._DocumentDataBulkCreatePayload_documentData(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _DocumentDataBulkDeletePayload(ctx context.Context, 
 			}
 		case "error":
 			out.Values[i] = ec._DocumentDataBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _DocumentDataBulkUpdatePayload(ctx context.Context, 
 			out.Values[i] = graphql.MarshalString("DocumentDataBulkUpdatePayload")
 		case "documentData":
 			out.Values[i] = ec._DocumentDataBulkUpdatePayload_documentData(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._DocumentDataBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

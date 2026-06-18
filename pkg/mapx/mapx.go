@@ -113,6 +113,29 @@ func DeepMergeMapAny(base, override map[string]any) map[string]any {
 	return merged
 }
 
+// GetOrInit returns m[key] if it is non-nil, otherwise calls init, stores the
+// result under key, and returns it
+func GetOrInit[K comparable, V any](m map[K]*V, key K, init func() *V) *V {
+	if m[key] == nil {
+		m[key] = init()
+	}
+
+	return m[key]
+}
+
+// AppendOnce appends value to m[key] only if key has not been seen yet,
+// preventing duplicate entries for the same key across multiple sources
+func AppendOnce[K comparable, V any](key K, value V, m map[K][]V, seen map[K]struct{}) {
+	if m == nil {
+		panic("mapx.AppendOnce: m must not be nil")
+	}
+
+	if _, ok := seen[key]; !ok {
+		seen[key] = struct{}{}
+		m[key] = append(m[key], value)
+	}
+}
+
 // MapSetFromSlice converts a slice into a set represented as map[T]struct{}
 func MapSetFromSlice[T comparable](items []T) map[T]struct{} {
 	set := make(map[T]struct{}, len(items))

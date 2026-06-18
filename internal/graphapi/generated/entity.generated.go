@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _EntityBulkCreatePayload_entities(ctx context.Context, field graphql.CollectedField, obj *model.EntityBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _EntityBulkCreatePayload(ctx context.Context, sel as
 			out.Values[i] = graphql.MarshalString("EntityBulkCreatePayload")
 		case "entities":
 			out.Values[i] = ec._EntityBulkCreatePayload_entities(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _EntityBulkDeletePayload(ctx context.Context, sel as
 			}
 		case "error":
 			out.Values[i] = ec._EntityBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _EntityBulkUpdatePayload(ctx context.Context, sel as
 			out.Values[i] = graphql.MarshalString("EntityBulkUpdatePayload")
 		case "entities":
 			out.Values[i] = ec._EntityBulkUpdatePayload_entities(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._EntityBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _HushBulkCreatePayload_hushes(ctx context.Context, field graphql.CollectedField, obj *model.HushBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _HushBulkCreatePayload(ctx context.Context, sel ast.
 			out.Values[i] = graphql.MarshalString("HushBulkCreatePayload")
 		case "hushes":
 			out.Values[i] = ec._HushBulkCreatePayload_hushes(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _HushBulkDeletePayload(ctx context.Context, sel ast.
 			}
 		case "error":
 			out.Values[i] = ec._HushBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _HushBulkUpdatePayload(ctx context.Context, sel ast.
 			out.Values[i] = graphql.MarshalString("HushBulkUpdatePayload")
 		case "hushes":
 			out.Values[i] = ec._HushBulkUpdatePayload_hushes(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._HushBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

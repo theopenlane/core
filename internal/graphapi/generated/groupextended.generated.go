@@ -24,10 +24,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _GroupPermission_objectType(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermission) (ret graphql.Marshaler) {
@@ -750,8 +746,14 @@ func (ec *executionContext) _GroupPermission(ctx context.Context, sel ast.Select
 			}
 		case "displayID":
 			out.Values[i] = ec._GroupPermission_displayID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "name":
 			out.Values[i] = ec._GroupPermission_name(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -788,6 +790,9 @@ func (ec *executionContext) _GroupPermissionConnection(ctx context.Context, sel 
 			out.Values[i] = graphql.MarshalString("GroupPermissionConnection")
 		case "edges":
 			out.Values[i] = ec._GroupPermissionConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "pageInfo":
 			out.Values[i] = ec._GroupPermissionConnection_pageInfo(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -834,6 +839,9 @@ func (ec *executionContext) _GroupPermissionEdge(ctx context.Context, sel ast.Se
 			out.Values[i] = graphql.MarshalString("GroupPermissionEdge")
 		case "node":
 			out.Values[i] = ec._GroupPermissionEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "cursor":
 			out.Values[i] = ec._GroupPermissionEdge_cursor(ctx, field, obj)
 			if out.Values[i] == graphql.Null {

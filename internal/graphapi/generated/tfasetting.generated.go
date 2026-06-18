@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _TFASettingCreatePayload_tfaSetting(ctx context.Context, field graphql.CollectedField, obj *model.TFASettingCreatePayload) (ret graphql.Marshaler) {
@@ -238,8 +234,14 @@ func (ec *executionContext) _TFASettingCreatePayload(ctx context.Context, sel as
 			}
 		case "tfaSecret":
 			out.Values[i] = ec._TFASettingCreatePayload_tfaSecret(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "qrCode":
 			out.Values[i] = ec._TFASettingCreatePayload_qrCode(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -281,10 +283,19 @@ func (ec *executionContext) _TFASettingUpdatePayload(ctx context.Context, sel as
 			}
 		case "tfaSecret":
 			out.Values[i] = ec._TFASettingUpdatePayload_tfaSecret(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "qrCode":
 			out.Values[i] = ec._TFASettingUpdatePayload_qrCode(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "recoveryCodes":
 			out.Values[i] = ec._TFASettingUpdatePayload_recoveryCodes(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

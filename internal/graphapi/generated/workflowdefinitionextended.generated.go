@@ -22,10 +22,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _WorkflowFieldMetadata_name(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowFieldMetadata) (ret graphql.Marshaler) {

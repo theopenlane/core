@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _CustomDomainBulkCreatePayload_customDomains(ctx context.Context, field graphql.CollectedField, obj *model.CustomDomainBulkCreatePayload) (ret graphql.Marshaler) {
@@ -329,6 +325,9 @@ func (ec *executionContext) _CustomDomainBulkCreatePayload(ctx context.Context, 
 			out.Values[i] = graphql.MarshalString("CustomDomainBulkCreatePayload")
 		case "customDomains":
 			out.Values[i] = ec._CustomDomainBulkCreatePayload_customDomains(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -375,6 +374,9 @@ func (ec *executionContext) _CustomDomainBulkDeletePayload(ctx context.Context, 
 			}
 		case "error":
 			out.Values[i] = ec._CustomDomainBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -411,8 +413,14 @@ func (ec *executionContext) _CustomDomainBulkUpdatePayload(ctx context.Context, 
 			out.Values[i] = graphql.MarshalString("CustomDomainBulkUpdatePayload")
 		case "customDomains":
 			out.Values[i] = ec._CustomDomainBulkUpdatePayload_customDomains(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._CustomDomainBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

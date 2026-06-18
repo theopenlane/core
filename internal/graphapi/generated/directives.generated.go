@@ -59,10 +59,6 @@ func (ec *executionContext) dir_hidden_args(ctx context.Context, rawArgs map[str
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 // endregion **************************** field.gotpl *****************************

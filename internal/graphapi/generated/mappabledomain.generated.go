@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _MappableDomainBulkCreatePayload_mappableDomains(ctx context.Context, field graphql.CollectedField, obj *model.MappableDomainBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _MappableDomainBulkCreatePayload(ctx context.Context
 			out.Values[i] = graphql.MarshalString("MappableDomainBulkCreatePayload")
 		case "mappableDomains":
 			out.Values[i] = ec._MappableDomainBulkCreatePayload_mappableDomains(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _MappableDomainBulkDeletePayload(ctx context.Context
 			}
 		case "error":
 			out.Values[i] = ec._MappableDomainBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _MappableDomainBulkUpdatePayload(ctx context.Context
 			out.Values[i] = graphql.MarshalString("MappableDomainBulkUpdatePayload")
 		case "mappableDomains":
 			out.Values[i] = ec._MappableDomainBulkUpdatePayload_mappableDomains(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._MappableDomainBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _SystemDetailBulkCreatePayload_systemDetails(ctx context.Context, field graphql.CollectedField, obj *model.SystemDetailBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _SystemDetailBulkCreatePayload(ctx context.Context, 
 			out.Values[i] = graphql.MarshalString("SystemDetailBulkCreatePayload")
 		case "systemDetails":
 			out.Values[i] = ec._SystemDetailBulkCreatePayload_systemDetails(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _SystemDetailBulkDeletePayload(ctx context.Context, 
 			}
 		case "error":
 			out.Values[i] = ec._SystemDetailBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _SystemDetailBulkUpdatePayload(ctx context.Context, 
 			out.Values[i] = graphql.MarshalString("SystemDetailBulkUpdatePayload")
 		case "systemDetails":
 			out.Values[i] = ec._SystemDetailBulkUpdatePayload_systemDetails(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._SystemDetailBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

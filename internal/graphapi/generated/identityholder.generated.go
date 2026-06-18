@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _IdentityHolderBulkCreatePayload_identityHolders(ctx context.Context, field graphql.CollectedField, obj *model.IdentityHolderBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _IdentityHolderBulkCreatePayload(ctx context.Context
 			out.Values[i] = graphql.MarshalString("IdentityHolderBulkCreatePayload")
 		case "identityHolders":
 			out.Values[i] = ec._IdentityHolderBulkCreatePayload_identityHolders(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _IdentityHolderBulkDeletePayload(ctx context.Context
 			}
 		case "error":
 			out.Values[i] = ec._IdentityHolderBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _IdentityHolderBulkUpdatePayload(ctx context.Context
 			out.Values[i] = graphql.MarshalString("IdentityHolderBulkUpdatePayload")
 		case "identityHolders":
 			out.Values[i] = ec._IdentityHolderBulkUpdatePayload_identityHolders(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._IdentityHolderBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
