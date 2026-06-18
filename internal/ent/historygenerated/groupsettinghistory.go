@@ -35,6 +35,8 @@ type GroupSettingHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -61,7 +63,7 @@ func (*GroupSettingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case groupsettinghistory.FieldSyncToSlack, groupsettinghistory.FieldSyncToGithub:
 			values[i] = new(sql.NullBool)
-		case groupsettinghistory.FieldID, groupsettinghistory.FieldRef, groupsettinghistory.FieldCreatedBy, groupsettinghistory.FieldUpdatedBy, groupsettinghistory.FieldDeletedBy, groupsettinghistory.FieldVisibility, groupsettinghistory.FieldJoinPolicy, groupsettinghistory.FieldGroupID:
+		case groupsettinghistory.FieldID, groupsettinghistory.FieldRef, groupsettinghistory.FieldCreatedBy, groupsettinghistory.FieldUpdatedBy, groupsettinghistory.FieldUpdatedByImpersonator, groupsettinghistory.FieldDeletedBy, groupsettinghistory.FieldVisibility, groupsettinghistory.FieldJoinPolicy, groupsettinghistory.FieldGroupID:
 			values[i] = new(sql.NullString)
 		case groupsettinghistory.FieldHistoryTime, groupsettinghistory.FieldCreatedAt, groupsettinghistory.FieldUpdatedAt, groupsettinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -127,6 +129,13 @@ func (_m *GroupSettingHistory) assignValues(columns []string, values []any) erro
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case groupsettinghistory.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case groupsettinghistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -226,6 +235,11 @@ func (_m *GroupSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))

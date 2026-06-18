@@ -67,6 +67,26 @@ func (_u *UserSettingUpdate) ClearUpdatedBy() *UserSettingUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *UserSettingUpdate) SetUpdatedByImpersonator(v string) *UserSettingUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *UserSettingUpdate) SetNillableUpdatedByImpersonator(v *string) *UserSettingUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *UserSettingUpdate) ClearUpdatedByImpersonator() *UserSettingUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *UserSettingUpdate) SetDeletedAt(v time.Time) *UserSettingUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -476,6 +496,12 @@ func (_u *UserSettingUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(usersetting.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(usersetting.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(usersetting.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(usersetting.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -671,6 +697,26 @@ func (_u *UserSettingUpdateOne) SetNillableUpdatedBy(v *string) *UserSettingUpda
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *UserSettingUpdateOne) ClearUpdatedBy() *UserSettingUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *UserSettingUpdateOne) SetUpdatedByImpersonator(v string) *UserSettingUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *UserSettingUpdateOne) SetNillableUpdatedByImpersonator(v *string) *UserSettingUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *UserSettingUpdateOne) ClearUpdatedByImpersonator() *UserSettingUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -1112,6 +1158,12 @@ func (_u *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetting
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(usersetting.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(usersetting.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(usersetting.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(usersetting.FieldDeletedAt, field.TypeTime, value)

@@ -61,6 +61,8 @@ type mixinConfig struct {
 var baseDefaultMixins = []ent.Mixin{
 	// audit mixin includes created_at, updated_at, and created_by
 	emixin.AuditMixin{},
+	// impersonator mixin records the real actor behind an impersonation session on each record
+	mixin.ImpersonatorMixin{},
 }
 
 // getMixins returns the mixins based on the configuration provided

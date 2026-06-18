@@ -37,6 +37,8 @@ type ControlHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -149,7 +151,7 @@ func (*ControlHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case controlhistory.FieldSystemOwned, controlhistory.FieldWorkflowEligibleMarker, controlhistory.FieldIsTrustCenterControl:
 			values[i] = new(sql.NullBool)
-		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldExternalUUID, controlhistory.FieldTitle, controlhistory.FieldDescription, controlhistory.FieldReferenceID, controlhistory.FieldAuditorReferenceID, controlhistory.FieldResponsiblePartyID, controlhistory.FieldStatus, controlhistory.FieldImplementationStatus, controlhistory.FieldImplementationDescription, controlhistory.FieldPublicRepresentation, controlhistory.FieldSource, controlhistory.FieldSourceName, controlhistory.FieldReferenceFramework, controlhistory.FieldReferenceFrameworkRevision, controlhistory.FieldCategory, controlhistory.FieldCategoryID, controlhistory.FieldSubcategory, controlhistory.FieldControlOwnerID, controlhistory.FieldDelegateID, controlhistory.FieldOwnerID, controlhistory.FieldInternalNotes, controlhistory.FieldSystemInternalID, controlhistory.FieldControlKindName, controlhistory.FieldControlKindID, controlhistory.FieldEnvironmentName, controlhistory.FieldEnvironmentID, controlhistory.FieldScopeName, controlhistory.FieldScopeID, controlhistory.FieldRefCode, controlhistory.FieldStandardID, controlhistory.FieldTrustCenterVisibility:
+		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldUpdatedByImpersonator, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldExternalUUID, controlhistory.FieldTitle, controlhistory.FieldDescription, controlhistory.FieldReferenceID, controlhistory.FieldAuditorReferenceID, controlhistory.FieldResponsiblePartyID, controlhistory.FieldStatus, controlhistory.FieldImplementationStatus, controlhistory.FieldImplementationDescription, controlhistory.FieldPublicRepresentation, controlhistory.FieldSource, controlhistory.FieldSourceName, controlhistory.FieldReferenceFramework, controlhistory.FieldReferenceFrameworkRevision, controlhistory.FieldCategory, controlhistory.FieldCategoryID, controlhistory.FieldSubcategory, controlhistory.FieldControlOwnerID, controlhistory.FieldDelegateID, controlhistory.FieldOwnerID, controlhistory.FieldInternalNotes, controlhistory.FieldSystemInternalID, controlhistory.FieldControlKindName, controlhistory.FieldControlKindID, controlhistory.FieldEnvironmentName, controlhistory.FieldEnvironmentID, controlhistory.FieldScopeName, controlhistory.FieldScopeID, controlhistory.FieldRefCode, controlhistory.FieldStandardID, controlhistory.FieldTrustCenterVisibility:
 			values[i] = new(sql.NullString)
 		case controlhistory.FieldHistoryTime, controlhistory.FieldCreatedAt, controlhistory.FieldUpdatedAt, controlhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -215,6 +217,13 @@ func (_m *ControlHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case controlhistory.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case controlhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -597,6 +606,11 @@ func (_m *ControlHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))

@@ -67,6 +67,26 @@ func (_u *DNSVerificationHistoryUpdate) ClearUpdatedBy() *DNSVerificationHistory
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *DNSVerificationHistoryUpdate) SetUpdatedByImpersonator(v string) *DNSVerificationHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *DNSVerificationHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *DNSVerificationHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *DNSVerificationHistoryUpdate) ClearUpdatedByImpersonator() *DNSVerificationHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *DNSVerificationHistoryUpdate) SetDeletedAt(v time.Time) *DNSVerificationHistoryUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -382,6 +402,12 @@ func (_u *DNSVerificationHistoryUpdate) sqlSave(ctx context.Context) (_node int,
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(dnsverificationhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(dnsverificationhistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -500,6 +526,26 @@ func (_u *DNSVerificationHistoryUpdateOne) SetNillableUpdatedBy(v *string) *DNSV
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *DNSVerificationHistoryUpdateOne) ClearUpdatedBy() *DNSVerificationHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *DNSVerificationHistoryUpdateOne) SetUpdatedByImpersonator(v string) *DNSVerificationHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *DNSVerificationHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *DNSVerificationHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *DNSVerificationHistoryUpdateOne) ClearUpdatedByImpersonator() *DNSVerificationHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -847,6 +893,12 @@ func (_u *DNSVerificationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(dnsverificationhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(dnsverificationhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDeletedAt, field.TypeTime, value)

@@ -1,2 +1,2 @@
-Role,OrganizationId,UserId,EventIDs
-example_role,example_organizationid,example_userid,example_eventids
+Role,SsoExempt,SsoExemptReason,OrganizationId,UserId,EventIDs
+example_role,example_ssoexempt,example_ssoexemptreason,example_organizationid,example_userid,example_eventids

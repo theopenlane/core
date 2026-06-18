@@ -4,6 +4,7 @@ import (
 	"context"
 	"slices"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 
@@ -14,6 +15,7 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
@@ -190,12 +192,13 @@ func HookInviteAccepted() ent.Hook {
 			role, roleOK := m.Role()
 			recipient, recipientOK := m.Recipient()
 			ownershipTransfer, ownershipTransferOK := m.OwnershipTransfer()
+			ssoExempt, ssoExemptOK := m.SSOExempt()
 			groupIDs := m.GroupsIDs()
 
 			// if we are missing any, get them from the db
 			// this should happen on an update mutation
 			id, _ := m.ID()
-			if !ownerOK || !roleOK || !recipientOK || !ownershipTransferOK {
+			if !ownerOK || !roleOK || !recipientOK || !ownershipTransferOK || !ssoExemptOK {
 				// bypass interceptors that filters results
 				invite, err := m.Client().Invite.Query().Where(invite.ID(id)).Only(ctx)
 				if err != nil {
@@ -208,6 +211,7 @@ func HookInviteAccepted() ent.Hook {
 				role = invite.Role
 				recipient = invite.Recipient
 				ownershipTransfer = invite.OwnershipTransfer
+				ssoExempt = invite.SSOExempt
 			}
 
 			// add the org to the authenticated context for querying
@@ -245,8 +249,19 @@ func HookInviteAccepted() ent.Hook {
 				Role:           &role,
 			}
 
+			memberCreate := m.Client().OrgMembership.Create().SetInput(input)
+
+			// grant the SSO exemption requested by the invitation, attributing it to the inviter
+			// rather than the accepting user
+			if ssoExempt {
+				memberCreate.SetSSOExempt(true).
+					SetSSOExemptReason("granted via invitation").
+					SetSSOExemptGrantedBy(inviteResp.RequestorID).
+					SetSSOExemptGrantedAt(models.DateTime(time.Now()))
+			}
+
 			// add user to the inviting org, allow the context to bypass privacy checks
-			if err := m.Client().OrgMembership.Create().SetInput(input).Exec(allowCtx); err != nil {
+			if err := memberCreate.Exec(allowCtx); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("unable to add user to organization")
 
 				return nil, err
@@ -491,6 +506,12 @@ func getInvite(ctx context.Context, m *generated.InviteMutation) (*generated.Inv
 // checkAllowedEmailDomain checks if the email domain is allowed for the organization
 func checkAllowedEmailDomain(email string, orgSetting *generated.OrganizationSetting) error {
 	if orgSetting == nil || email == "" {
+		return nil
+	}
+
+	// when SSO is enforced the directory controls which identities may access the organization,
+	// so the allowed email domains list is mutually exclusive with enforcement and is not referenced
+	if orgSetting.IdentityProviderLoginEnforced && orgSetting.IdentityProviderAuthTested {
 		return nil
 	}
 

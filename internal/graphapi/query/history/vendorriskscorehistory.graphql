@@ -31,6 +31,7 @@ query GetAllVendorRiskScoreHistories ($first: Int, $last: Int, $after: Cursor, $
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				vendorScoringConfigID
 			}
 		}
@@ -69,6 +70,7 @@ query GetVendorRiskScoreHistories ($first: Int, $last: Int, $after: Cursor, $bef
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				vendorScoringConfigID
 			}
 		}

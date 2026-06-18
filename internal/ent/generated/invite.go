@@ -27,6 +27,8 @@ type Invite struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -51,6 +53,8 @@ type Invite struct {
 	Secret *[]byte `json:"-"`
 	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes super admin and invitee becomes owner
 	OwnershipTransfer bool `json:"ownership_transfer,omitempty"`
+	// when accepted, grants the member an SSO exemption so they are not redirected through the organization's SSO login flow
+	SSOExempt bool `json:"sso_exempt,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the InviteQuery when eager-loading is set.
 	Edges        InviteEdges `json:"edges"`
@@ -111,11 +115,11 @@ func (*Invite) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case invite.FieldSecret:
 			values[i] = new([]byte)
-		case invite.FieldOwnershipTransfer:
+		case invite.FieldOwnershipTransfer, invite.FieldSSOExempt:
 			values[i] = new(sql.NullBool)
 		case invite.FieldSendAttempts:
 			values[i] = new(sql.NullInt64)
-		case invite.FieldID, invite.FieldCreatedBy, invite.FieldUpdatedBy, invite.FieldDeletedBy, invite.FieldRequestorID, invite.FieldOwnerID, invite.FieldToken, invite.FieldRecipient, invite.FieldStatus, invite.FieldRole:
+		case invite.FieldID, invite.FieldCreatedBy, invite.FieldUpdatedBy, invite.FieldUpdatedByImpersonator, invite.FieldDeletedBy, invite.FieldRequestorID, invite.FieldOwnerID, invite.FieldToken, invite.FieldRecipient, invite.FieldStatus, invite.FieldRole:
 			values[i] = new(sql.NullString)
 		case invite.FieldCreatedAt, invite.FieldUpdatedAt, invite.FieldDeletedAt, invite.FieldExpires:
 			values[i] = new(sql.NullTime)
@@ -163,6 +167,13 @@ func (_m *Invite) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case invite.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case invite.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -236,6 +247,12 @@ func (_m *Invite) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.OwnershipTransfer = value.Bool
 			}
+		case invite.FieldSSOExempt:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field sso_exempt", values[i])
+			} else if value.Valid {
+				_m.SSOExempt = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -299,6 +316,11 @@ func (_m *Invite) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
@@ -332,6 +354,9 @@ func (_m *Invite) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("ownership_transfer=")
 	builder.WriteString(fmt.Sprintf("%v", _m.OwnershipTransfer))
+	builder.WriteString(", ")
+	builder.WriteString("sso_exempt=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SSOExempt))
 	builder.WriteByte(')')
 	return builder.String()
 }

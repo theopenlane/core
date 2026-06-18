@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
+	sso "github.com/theopenlane/core/pkg/ssoutils"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/utils/rout"
 )
@@ -93,11 +94,16 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (mod
 		return models.SSOStatusReply{}, err
 	}
 
+	in := sso.EnforcementInput{
+		SSOEnforced:   setting.IdentityProviderLoginEnforced,
+		IDPAuthTested: setting.IdentityProviderAuthTested,
+		TFAEnforced:   setting.MultifactorAuthEnforced,
+		ExemptDomains: setting.SSOExemptDomains,
+	}
+
 	out := models.SSOStatusReply{
 		Reply:          rout.Reply{Success: true},
-		Enforced:       setting.IdentityProviderLoginEnforced,
 		OrganizationID: orgID,
-		OrgTFAEnforced: setting.MultifactorAuthEnforced,
 	}
 
 	if userID != "" {
@@ -107,13 +113,25 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (mod
 			Query().Where(
 			orgmembership.OrganizationID(orgID),
 			orgmembership.UserID(userID),
-		).Only(allowCtx)
+		).WithUser().Only(allowCtx)
 		if err != nil {
 			return models.SSOStatusReply{}, err
 		}
 
-		out.IsOrgOwner = member.Role == enums.RoleOwner
+		in.IsMember = true
+		in.IsOwner = member.Role == enums.RoleOwner
+		in.MemberExempt = member.SSOExempt
+
+		if member.Edges.User != nil {
+			in.Email = member.Edges.User.Email
+		}
+
+		out.IsOrgOwner = in.IsOwner
 	}
+
+	decision := sso.Evaluate(in)
+	out.Enforced = decision.MustSSO
+	out.OrgTFAEnforced = decision.TFARequired
 
 	if setting.IdentityProvider != enums.SSOProvider("") {
 		out.Provider = setting.IdentityProvider

@@ -114,6 +114,20 @@ func (_c *HushHistoryCreate) SetNillableUpdatedBy(v *string) *HushHistoryCreate 
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *HushHistoryCreate) SetUpdatedByImpersonator(v string) *HushHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *HushHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *HushHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *HushHistoryCreate) SetDeletedAt(v time.Time) *HushHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -473,6 +487,10 @@ func (_c *HushHistoryCreate) createSpec() (*HushHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(hushhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(hushhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(hushhistory.FieldDeletedAt, field.TypeTime, value)

@@ -24,6 +24,7 @@ mutation CreateBulkCSVDirectorySyncRun ($input: Upload!) {
 			status
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -53,6 +54,7 @@ mutation CreateBulkDirectorySyncRun ($input: [CreateDirectorySyncRunInput!]) {
 			status
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -82,6 +84,7 @@ mutation CreateDirectorySyncRun ($input: CreateDirectorySyncRunInput!) {
 			status
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -147,6 +150,7 @@ query GetDirectorySyncRunByID ($directorySyncRunId: ID!) {
 		status
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 	}
 }
 query GetDirectorySyncRuns ($first: Int, $last: Int, $where: DirectorySyncRunWhereInput) {
@@ -207,6 +211,7 @@ mutation UpdateDirectorySyncRun ($updateDirectorySyncRunId: ID!, $input: UpdateD
 			status
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }

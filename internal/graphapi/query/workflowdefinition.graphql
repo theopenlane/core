@@ -23,6 +23,7 @@ mutation CreateBulkCSVWorkflowDefinition ($input: Upload!) {
 			trackedFields
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			workflowKind
 		}
 	}
@@ -52,6 +53,7 @@ mutation CreateBulkWorkflowDefinition ($input: [CreateWorkflowDefinitionInput!])
 			trackedFields
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			workflowKind
 		}
 	}
@@ -81,6 +83,7 @@ mutation CreateWorkflowDefinition ($input: CreateWorkflowDefinitionInput!) {
 			trackedFields
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			workflowKind
 		}
 	}
@@ -152,6 +155,7 @@ query GetWorkflowDefinitionByID ($workflowDefinitionId: ID!) {
 		trackedFields
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		workflowKind
 	}
 }
@@ -218,6 +222,7 @@ mutation UpdateWorkflowDefinition ($updateWorkflowDefinitionId: ID!, $input: Upd
 			trackedFields
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			workflowKind
 		}
 	}

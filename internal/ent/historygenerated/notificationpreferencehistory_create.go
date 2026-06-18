@@ -114,6 +114,20 @@ func (_c *NotificationPreferenceHistoryCreate) SetNillableUpdatedBy(v *string) *
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *NotificationPreferenceHistoryCreate) SetUpdatedByImpersonator(v string) *NotificationPreferenceHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *NotificationPreferenceHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *NotificationPreferenceHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *NotificationPreferenceHistoryCreate) SetDeletedAt(v time.Time) *NotificationPreferenceHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -614,6 +628,10 @@ func (_c *NotificationPreferenceHistoryCreate) createSpec() (*NotificationPrefer
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(notificationpreferencehistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(notificationpreferencehistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(notificationpreferencehistory.FieldDeletedAt, field.TypeTime, value)

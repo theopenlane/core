@@ -35,6 +35,8 @@ type FileHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -113,7 +115,7 @@ func (*FileHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case filehistory.FieldProvidedFileSize, filehistory.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case filehistory.FieldID, filehistory.FieldRef, filehistory.FieldCreatedBy, filehistory.FieldUpdatedBy, filehistory.FieldDeletedBy, filehistory.FieldInternalNotes, filehistory.FieldSystemInternalID, filehistory.FieldEnvironmentName, filehistory.FieldEnvironmentID, filehistory.FieldScopeName, filehistory.FieldScopeID, filehistory.FieldCategoryName, filehistory.FieldCategoryID, filehistory.FieldName, filehistory.FieldProvidedFileName, filehistory.FieldProvidedFileExtension, filehistory.FieldDetectedMimeType, filehistory.FieldMd5Hash, filehistory.FieldDetectedContentType, filehistory.FieldStoreKey, filehistory.FieldCategoryType, filehistory.FieldURI, filehistory.FieldStorageScheme, filehistory.FieldStorageVolume, filehistory.FieldStoragePath, filehistory.FieldStorageRegion, filehistory.FieldStorageProvider:
+		case filehistory.FieldID, filehistory.FieldRef, filehistory.FieldCreatedBy, filehistory.FieldUpdatedBy, filehistory.FieldUpdatedByImpersonator, filehistory.FieldDeletedBy, filehistory.FieldInternalNotes, filehistory.FieldSystemInternalID, filehistory.FieldEnvironmentName, filehistory.FieldEnvironmentID, filehistory.FieldScopeName, filehistory.FieldScopeID, filehistory.FieldCategoryName, filehistory.FieldCategoryID, filehistory.FieldName, filehistory.FieldProvidedFileName, filehistory.FieldProvidedFileExtension, filehistory.FieldDetectedMimeType, filehistory.FieldMd5Hash, filehistory.FieldDetectedContentType, filehistory.FieldStoreKey, filehistory.FieldCategoryType, filehistory.FieldURI, filehistory.FieldStorageScheme, filehistory.FieldStorageVolume, filehistory.FieldStoragePath, filehistory.FieldStorageRegion, filehistory.FieldStorageProvider:
 			values[i] = new(sql.NullString)
 		case filehistory.FieldHistoryTime, filehistory.FieldCreatedAt, filehistory.FieldUpdatedAt, filehistory.FieldDeletedAt, filehistory.FieldLastAccessedAt:
 			values[i] = new(sql.NullTime)
@@ -179,6 +181,13 @@ func (_m *FileHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case filehistory.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case filehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -429,6 +438,11 @@ func (_m *FileHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))

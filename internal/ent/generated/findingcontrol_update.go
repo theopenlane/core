@@ -64,6 +64,26 @@ func (_u *FindingControlUpdate) ClearUpdatedBy() *FindingControlUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *FindingControlUpdate) SetUpdatedByImpersonator(v string) *FindingControlUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *FindingControlUpdate) SetNillableUpdatedByImpersonator(v *string) *FindingControlUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *FindingControlUpdate) ClearUpdatedByImpersonator() *FindingControlUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetExternalStandard sets the "external_standard" field.
 func (_u *FindingControlUpdate) SetExternalStandard(v string) *FindingControlUpdate {
 	_u.mutation.SetExternalStandard(v)
@@ -270,6 +290,12 @@ func (_u *FindingControlUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(findingcontrol.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(findingcontrol.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(findingcontrol.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalStandard(); ok {
 		_spec.SetField(findingcontrol.FieldExternalStandard, field.TypeString, value)
 	}
@@ -359,6 +385,26 @@ func (_u *FindingControlUpdateOne) SetNillableUpdatedBy(v *string) *FindingContr
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *FindingControlUpdateOne) ClearUpdatedBy() *FindingControlUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *FindingControlUpdateOne) SetUpdatedByImpersonator(v string) *FindingControlUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *FindingControlUpdateOne) SetNillableUpdatedByImpersonator(v *string) *FindingControlUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *FindingControlUpdateOne) ClearUpdatedByImpersonator() *FindingControlUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -597,6 +643,12 @@ func (_u *FindingControlUpdateOne) sqlSave(ctx context.Context) (_node *FindingC
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(findingcontrol.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(findingcontrol.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(findingcontrol.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalStandard(); ok {
 		_spec.SetField(findingcontrol.FieldExternalStandard, field.TypeString, value)

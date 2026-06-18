@@ -97,6 +97,20 @@ func (_c *IdentityHolderCreate) SetNillableUpdatedBy(v *string) *IdentityHolderC
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *IdentityHolderCreate) SetUpdatedByImpersonator(v string) *IdentityHolderCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *IdentityHolderCreate) SetNillableUpdatedByImpersonator(v *string) *IdentityHolderCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *IdentityHolderCreate) SetDeletedAt(v time.Time) *IdentityHolderCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -1083,6 +1097,10 @@ func (_c *IdentityHolderCreate) createSpec() (*IdentityHolder, *sqlgraph.CreateS
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(identityholder.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(identityholder.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(identityholder.FieldDeletedAt, field.TypeTime, value)

@@ -36,6 +36,8 @@ type DirectoryMembershipHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
 	// the organization id that owns the object
@@ -92,7 +94,7 @@ func (*DirectoryMembershipHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case directorymembershiphistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case directorymembershiphistory.FieldID, directorymembershiphistory.FieldRef, directorymembershiphistory.FieldCreatedBy, directorymembershiphistory.FieldUpdatedBy, directorymembershiphistory.FieldDisplayID, directorymembershiphistory.FieldOwnerID, directorymembershiphistory.FieldEnvironmentName, directorymembershiphistory.FieldEnvironmentID, directorymembershiphistory.FieldScopeName, directorymembershiphistory.FieldScopeID, directorymembershiphistory.FieldIntegrationID, directorymembershiphistory.FieldPlatformID, directorymembershiphistory.FieldDirectoryInstanceID, directorymembershiphistory.FieldDirectorySyncRunID, directorymembershiphistory.FieldDirectoryAccountID, directorymembershiphistory.FieldDirectoryGroupID, directorymembershiphistory.FieldRole, directorymembershiphistory.FieldSource, directorymembershiphistory.FieldDirectoryName, directorymembershiphistory.FieldLastConfirmedRunID:
+		case directorymembershiphistory.FieldID, directorymembershiphistory.FieldRef, directorymembershiphistory.FieldCreatedBy, directorymembershiphistory.FieldUpdatedBy, directorymembershiphistory.FieldUpdatedByImpersonator, directorymembershiphistory.FieldDisplayID, directorymembershiphistory.FieldOwnerID, directorymembershiphistory.FieldEnvironmentName, directorymembershiphistory.FieldEnvironmentID, directorymembershiphistory.FieldScopeName, directorymembershiphistory.FieldScopeID, directorymembershiphistory.FieldIntegrationID, directorymembershiphistory.FieldPlatformID, directorymembershiphistory.FieldDirectoryInstanceID, directorymembershiphistory.FieldDirectorySyncRunID, directorymembershiphistory.FieldDirectoryAccountID, directorymembershiphistory.FieldDirectoryGroupID, directorymembershiphistory.FieldRole, directorymembershiphistory.FieldSource, directorymembershiphistory.FieldDirectoryName, directorymembershiphistory.FieldLastConfirmedRunID:
 			values[i] = new(sql.NullString)
 		case directorymembershiphistory.FieldHistoryTime, directorymembershiphistory.FieldCreatedAt, directorymembershiphistory.FieldUpdatedAt, directorymembershiphistory.FieldFirstSeenAt, directorymembershiphistory.FieldLastSeenAt, directorymembershiphistory.FieldAddedAt, directorymembershiphistory.FieldRemovedAt, directorymembershiphistory.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -158,6 +160,13 @@ func (_m *DirectoryMembershipHistory) assignValues(columns []string, values []an
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case directorymembershiphistory.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case directorymembershiphistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -357,6 +366,11 @@ func (_m *DirectoryMembershipHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
 	builder.WriteString(_m.DisplayID)

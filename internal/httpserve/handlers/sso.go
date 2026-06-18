@@ -19,7 +19,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	apimodels "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	entval "github.com/theopenlane/core/internal/ent/validator"
@@ -355,19 +354,11 @@ func (h *Handler) orgEnforcementsForUser(ctx context.Context, email string) *api
 		return nil
 	}
 
-	status, err := h.fetchSSOStatus(allowCtx, orgID, "")
+	// fetchSSOStatus resolves enforcement through ssoutils.Evaluate, which accounts for owner,
+	// per-user, and per-domain SSO exemptions when the user id is provided
+	status, err := h.fetchSSOStatus(allowCtx, orgID, user.ID)
 	if err != nil {
 		return nil
-	}
-
-	// For SSO, check if user is an owner (owners bypass SSO)
-	if status.Enforced {
-		member, mErr := transaction.FromContext(allowCtx).OrgMembership.Query().
-			Where(orgmembership.UserID(user.ID), orgmembership.OrganizationID(orgID)).Only(allowCtx)
-		if mErr == nil && member.Role == enums.RoleOwner {
-			// Owner bypasses SSO requirement
-			status.Enforced = false
-		}
 	}
 
 	return &status

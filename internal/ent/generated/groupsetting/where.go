@@ -88,6 +88,11 @@ func UpdatedBy(v string) predicate.GroupSetting {
 	return predicate.GroupSetting(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
+// UpdatedByImpersonator applies equality check predicate on the "updated_by_impersonator" field. It's identical to UpdatedByImpersonatorEQ.
+func UpdatedByImpersonator(v string) predicate.GroupSetting {
+	return predicate.GroupSetting(sql.FieldEQ(FieldUpdatedByImpersonator, v))
+}
+
 // DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
 func DeletedAt(v time.Time) predicate.GroupSetting {
 	return predicate.GroupSetting(sql.FieldEQ(FieldDeletedAt, v))
@@ -361,6 +366,81 @@ func UpdatedByEqualFold(v string) predicate.GroupSetting {
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
 func UpdatedByContainsFold(v string) predicate.GroupSetting {
 	return predicate.GroupSetting(sql.FieldContainsFold(FieldUpdatedBy, v))
+}
+
+// UpdatedByImpersonatorEQ applies the EQ predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorEQ(v string) predicate.GroupSetting {
+	return predicate.GroupSetting(sql.FieldEQ(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorNEQ applies the NEQ predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNEQ(v string) predicate.GroupSetting {
+	return predicate.GroupSetting(sql.FieldNEQ(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorIn applies the In predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorIn(vs ...string) predicate.GroupSetting {
+	return predicate.GroupSetting(sql.FieldIn(FieldUpdatedByImpersonator, vs...))
+}
+
+// UpdatedByImpersonatorNotIn applies the NotIn predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNotIn(vs ...string) predicate.GroupSetting {
+	return predicate.GroupSetting(sql.FieldNotIn(FieldUpdatedByImpersonator, vs...))
+}
+
+// UpdatedByImpersonatorGT applies the GT predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorGT(v string) predicate.GroupSetting {
+	return predicate.GroupSetting(sql.FieldGT(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorGTE applies the GTE predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorGTE(v string) predicate.GroupSetting {
+	return predicate.GroupSetting(sql.FieldGTE(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorLT applies the LT predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorLT(v string) predicate.GroupSetting {
+	return predicate.GroupSetting(sql.FieldLT(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorLTE applies the LTE predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorLTE(v string) predicate.GroupSetting {
+	return predicate.GroupSetting(sql.FieldLTE(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorContains applies the Contains predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorContains(v string) predicate.GroupSetting {
+	return predicate.GroupSetting(sql.FieldContains(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorHasPrefix applies the HasPrefix predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorHasPrefix(v string) predicate.GroupSetting {
+	return predicate.GroupSetting(sql.FieldHasPrefix(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorHasSuffix applies the HasSuffix predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorHasSuffix(v string) predicate.GroupSetting {
+	return predicate.GroupSetting(sql.FieldHasSuffix(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorIsNil applies the IsNil predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorIsNil() predicate.GroupSetting {
+	return predicate.GroupSetting(sql.FieldIsNull(FieldUpdatedByImpersonator))
+}
+
+// UpdatedByImpersonatorNotNil applies the NotNil predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNotNil() predicate.GroupSetting {
+	return predicate.GroupSetting(sql.FieldNotNull(FieldUpdatedByImpersonator))
+}
+
+// UpdatedByImpersonatorEqualFold applies the EqualFold predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorEqualFold(v string) predicate.GroupSetting {
+	return predicate.GroupSetting(sql.FieldEqualFold(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorContainsFold applies the ContainsFold predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorContainsFold(v string) predicate.GroupSetting {
+	return predicate.GroupSetting(sql.FieldContainsFold(FieldUpdatedByImpersonator, v))
 }
 
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.

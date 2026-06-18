@@ -150,6 +150,26 @@ func (_u *OrganizationUpdate) ClearUpdatedBy() *OrganizationUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *OrganizationUpdate) SetUpdatedByImpersonator(v string) *OrganizationUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *OrganizationUpdate) SetNillableUpdatedByImpersonator(v *string) *OrganizationUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *OrganizationUpdate) ClearUpdatedByImpersonator() *OrganizationUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *OrganizationUpdate) SetDeletedAt(v time.Time) *OrganizationUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -6481,6 +6501,12 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organization.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(organization.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(organization.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(organization.FieldDeletedAt, field.TypeTime, value)
@@ -14690,6 +14716,26 @@ func (_u *OrganizationUpdateOne) ClearUpdatedBy() *OrganizationUpdateOne {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *OrganizationUpdateOne) SetUpdatedByImpersonator(v string) *OrganizationUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *OrganizationUpdateOne) SetNillableUpdatedByImpersonator(v *string) *OrganizationUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *OrganizationUpdateOne) ClearUpdatedByImpersonator() *OrganizationUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *OrganizationUpdateOne) SetDeletedAt(v time.Time) *OrganizationUpdateOne {
 	_u.mutation.SetDeletedAt(v)
@@ -21051,6 +21097,12 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organization.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(organization.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(organization.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(organization.FieldDeletedAt, field.TypeTime, value)

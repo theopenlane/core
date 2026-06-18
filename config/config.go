@@ -165,6 +165,8 @@ type Auth struct {
 	SupportedProviders []string `json:"supportedproviders" koanf:"supportedproviders"`
 	// Providers contains supported oauth2 providers configuration
 	Providers handlers.OauthProviderConfig `json:"providers" koanf:"providers"`
+	// SupportAccess contains the configuration for the Openlane support access flow
+	SupportAccess handlers.SupportAccessConfig `json:"supportaccess" koanf:"supportaccess"`
 }
 
 // TLS settings for the server for secure connections

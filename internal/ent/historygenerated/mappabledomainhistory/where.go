@@ -97,6 +97,11 @@ func UpdatedBy(v string) predicate.MappableDomainHistory {
 	return predicate.MappableDomainHistory(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
+// UpdatedByImpersonator applies equality check predicate on the "updated_by_impersonator" field. It's identical to UpdatedByImpersonatorEQ.
+func UpdatedByImpersonator(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldEQ(FieldUpdatedByImpersonator, v))
+}
+
 // DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
 func DeletedAt(v time.Time) predicate.MappableDomainHistory {
 	return predicate.MappableDomainHistory(sql.FieldEQ(FieldDeletedAt, v))
@@ -500,6 +505,81 @@ func UpdatedByEqualFold(v string) predicate.MappableDomainHistory {
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
 func UpdatedByContainsFold(v string) predicate.MappableDomainHistory {
 	return predicate.MappableDomainHistory(sql.FieldContainsFold(FieldUpdatedBy, v))
+}
+
+// UpdatedByImpersonatorEQ applies the EQ predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorEQ(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldEQ(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorNEQ applies the NEQ predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNEQ(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldNEQ(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorIn applies the In predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorIn(vs ...string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldIn(FieldUpdatedByImpersonator, vs...))
+}
+
+// UpdatedByImpersonatorNotIn applies the NotIn predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNotIn(vs ...string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldNotIn(FieldUpdatedByImpersonator, vs...))
+}
+
+// UpdatedByImpersonatorGT applies the GT predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorGT(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldGT(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorGTE applies the GTE predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorGTE(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldGTE(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorLT applies the LT predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorLT(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldLT(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorLTE applies the LTE predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorLTE(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldLTE(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorContains applies the Contains predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorContains(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldContains(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorHasPrefix applies the HasPrefix predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorHasPrefix(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldHasPrefix(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorHasSuffix applies the HasSuffix predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorHasSuffix(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldHasSuffix(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorIsNil applies the IsNil predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorIsNil() predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldIsNull(FieldUpdatedByImpersonator))
+}
+
+// UpdatedByImpersonatorNotNil applies the NotNil predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNotNil() predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldNotNull(FieldUpdatedByImpersonator))
+}
+
+// UpdatedByImpersonatorEqualFold applies the EqualFold predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorEqualFold(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldEqualFold(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorContainsFold applies the ContainsFold predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorContainsFold(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldContainsFold(FieldUpdatedByImpersonator, v))
 }
 
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.

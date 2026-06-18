@@ -13,6 +13,7 @@ mutation CreateBulkCSVScheduledJob ($input: Upload!) {
 			ownerID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -31,6 +32,7 @@ mutation CreateBulkScheduledJob ($input: [CreateScheduledJobInput!]) {
 			ownerID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -49,6 +51,7 @@ mutation CreateScheduledJob ($input: CreateScheduledJobInput!) {
 			ownerID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			controls {
 				edges {
 					node {
@@ -111,6 +114,7 @@ query GetScheduledJobByID ($scheduledJobId: ID!) {
 		ownerID
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		controls {
 			edges {
 				node {
@@ -182,6 +186,7 @@ mutation UpdateScheduledJob ($updateScheduledJobId: ID!, $input: UpdateScheduled
 			ownerID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			controls {
 				edges {
 					node {

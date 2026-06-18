@@ -64,6 +64,26 @@ func (_u *WorkflowObjectRefUpdate) ClearUpdatedBy() *WorkflowObjectRefUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *WorkflowObjectRefUpdate) SetUpdatedByImpersonator(v string) *WorkflowObjectRefUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *WorkflowObjectRefUpdate) SetNillableUpdatedByImpersonator(v *string) *WorkflowObjectRefUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *WorkflowObjectRefUpdate) ClearUpdatedByImpersonator() *WorkflowObjectRefUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // AddWorkflowProposalIDs adds the "workflow_proposals" edge to the WorkflowProposal entity by IDs.
 func (_u *WorkflowObjectRefUpdate) AddWorkflowProposalIDs(ids ...string) *WorkflowObjectRefUpdate {
 	_u.mutation.AddWorkflowProposalIDs(ids...)
@@ -191,6 +211,12 @@ func (_u *WorkflowObjectRefUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowobjectref.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(workflowobjectref.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(workflowobjectref.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if _u.mutation.WorkflowProposalsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -292,6 +318,26 @@ func (_u *WorkflowObjectRefUpdateOne) SetNillableUpdatedBy(v *string) *WorkflowO
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *WorkflowObjectRefUpdateOne) ClearUpdatedBy() *WorkflowObjectRefUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *WorkflowObjectRefUpdateOne) SetUpdatedByImpersonator(v string) *WorkflowObjectRefUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *WorkflowObjectRefUpdateOne) SetNillableUpdatedByImpersonator(v *string) *WorkflowObjectRefUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *WorkflowObjectRefUpdateOne) ClearUpdatedByImpersonator() *WorkflowObjectRefUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -451,6 +497,12 @@ func (_u *WorkflowObjectRefUpdateOne) sqlSave(ctx context.Context) (_node *Workf
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowobjectref.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(workflowobjectref.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(workflowobjectref.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if _u.mutation.WorkflowProposalsCleared() {
 		edge := &sqlgraph.EdgeSpec{

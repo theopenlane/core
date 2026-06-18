@@ -80,6 +80,20 @@ func (_c *OrganizationSettingCreate) SetNillableUpdatedBy(v *string) *Organizati
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *OrganizationSettingCreate) SetUpdatedByImpersonator(v string) *OrganizationSettingCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *OrganizationSettingCreate) SetNillableUpdatedByImpersonator(v *string) *OrganizationSettingCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *OrganizationSettingCreate) SetDeletedAt(v time.Time) *OrganizationSettingCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -420,6 +434,26 @@ func (_c *OrganizationSettingCreate) SetNillableMultifactorAuthEnforced(v *bool)
 	return _c
 }
 
+// SetSSOExemptDomains sets the "sso_exempt_domains" field.
+func (_c *OrganizationSettingCreate) SetSSOExemptDomains(v []string) *OrganizationSettingCreate {
+	_c.mutation.SetSSOExemptDomains(v)
+	return _c
+}
+
+// SetAllowSupportAccess sets the "allow_support_access" field.
+func (_c *OrganizationSettingCreate) SetAllowSupportAccess(v bool) *OrganizationSettingCreate {
+	_c.mutation.SetAllowSupportAccess(v)
+	return _c
+}
+
+// SetNillableAllowSupportAccess sets the "allow_support_access" field if the given value is not nil.
+func (_c *OrganizationSettingCreate) SetNillableAllowSupportAccess(v *bool) *OrganizationSettingCreate {
+	if v != nil {
+		_c.SetAllowSupportAccess(*v)
+	}
+	return _c
+}
+
 // SetComplianceWebhookToken sets the "compliance_webhook_token" field.
 func (_c *OrganizationSettingCreate) SetComplianceWebhookToken(v string) *OrganizationSettingCreate {
 	_c.mutation.SetComplianceWebhookToken(v)
@@ -579,6 +613,10 @@ func (_c *OrganizationSettingCreate) defaults() error {
 		v := organizationsetting.DefaultMultifactorAuthEnforced
 		_c.mutation.SetMultifactorAuthEnforced(v)
 	}
+	if _, ok := _c.mutation.AllowSupportAccess(); !ok {
+		v := organizationsetting.DefaultAllowSupportAccess
+		_c.mutation.SetAllowSupportAccess(v)
+	}
 	if _, ok := _c.mutation.ComplianceWebhookToken(); !ok {
 		if organizationsetting.DefaultComplianceWebhookToken == nil {
 			return fmt.Errorf("generated: uninitialized organizationsetting.DefaultComplianceWebhookToken (forgotten import generated/runtime?)")
@@ -646,6 +684,11 @@ func (_c *OrganizationSettingCreate) check() error {
 	if _, ok := _c.mutation.IdentityProviderLoginEnforced(); !ok {
 		return &ValidationError{Name: "identity_provider_login_enforced", err: errors.New(`generated: missing required field "OrganizationSetting.identity_provider_login_enforced"`)}
 	}
+	if v, ok := _c.mutation.SSOExemptDomains(); ok {
+		if err := organizationsetting.SSOExemptDomainsValidator(v); err != nil {
+			return &ValidationError{Name: "sso_exempt_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.sso_exempt_domains": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.PaymentMethodAdded(); !ok {
 		return &ValidationError{Name: "payment_method_added", err: errors.New(`generated: missing required field "OrganizationSetting.payment_method_added"`)}
 	}
@@ -700,6 +743,10 @@ func (_c *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgra
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(organizationsetting.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(organizationsetting.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationsetting.FieldDeletedAt, field.TypeTime, value)
@@ -800,6 +847,14 @@ func (_c *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgra
 	if value, ok := _c.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsetting.FieldMultifactorAuthEnforced, field.TypeBool, value)
 		_node.MultifactorAuthEnforced = value
+	}
+	if value, ok := _c.mutation.SSOExemptDomains(); ok {
+		_spec.SetField(organizationsetting.FieldSSOExemptDomains, field.TypeJSON, value)
+		_node.SSOExemptDomains = value
+	}
+	if value, ok := _c.mutation.AllowSupportAccess(); ok {
+		_spec.SetField(organizationsetting.FieldAllowSupportAccess, field.TypeBool, value)
+		_node.AllowSupportAccess = value
 	}
 	if value, ok := _c.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsetting.FieldComplianceWebhookToken, field.TypeString, value)

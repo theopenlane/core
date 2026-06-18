@@ -36,6 +36,7 @@ query GetWorkflowEventByID ($workflowEventId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		workflowInstanceID
 	}
 }

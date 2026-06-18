@@ -146,6 +146,20 @@ var (
 	ErrTokenManagerNotConfigured = errors.New("token manager not configured")
 	// ErrFailedToExtractSessionID indicates that the session ID could not be extracted from the token
 	ErrFailedToExtractSessionID = errors.New("failed to extract session ID from token")
+	// ErrSupportAccessNotConsented indicates that the organization has not consented to Openlane support access
+	ErrSupportAccessNotConsented = errors.New("organization has not granted Openlane support access")
+	// ErrSupportAccessNotEnabled indicates that the Openlane support access flow is not enabled in configuration
+	ErrSupportAccessNotEnabled = errors.New("support access is not enabled")
+	// ErrSupportInvalidCredentials indicates that the support identity email or password did not match configuration
+	ErrSupportInvalidCredentials = errors.New("invalid support credentials")
+	// ErrSupportFirstFactorRequired indicates that the support password factor was not completed before the callback
+	ErrSupportFirstFactorRequired = errors.New("support first factor authentication required")
+	// ErrSupportDomainNotAllowed indicates that the second factor individual email is not within the configured domain
+	ErrSupportDomainNotAllowed = errors.New("support second factor email domain not allowed")
+	// ErrSupportIDPNotConfigured indicates that the support second factor identity provider is not configured
+	ErrSupportIDPNotConfigured = errors.New("support identity provider not configured")
+	// ErrSupportLoginRequiresOrgAndReason indicates the support login is missing the target organization or reason
+	ErrSupportLoginRequiresOrgAndReason = errors.New("support login requires a target organization and a reason")
 	// ErrObjectStoreUnavailable indicates that the object store is not configured
 	ErrObjectStoreUnavailable = errors.New("object store unavailable")
 	// ErrDownloadTokenMissingFile indicates that the download token does not have an associated file

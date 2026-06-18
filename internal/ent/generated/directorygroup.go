@@ -32,6 +32,8 @@ type DirectoryGroup struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
@@ -233,7 +235,7 @@ func (*DirectoryGroup) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case directorygroup.FieldMemberCount:
 			values[i] = new(sql.NullInt64)
-		case directorygroup.FieldID, directorygroup.FieldCreatedBy, directorygroup.FieldUpdatedBy, directorygroup.FieldDisplayID, directorygroup.FieldOwnerID, directorygroup.FieldEnvironmentName, directorygroup.FieldEnvironmentID, directorygroup.FieldScopeName, directorygroup.FieldScopeID, directorygroup.FieldIntegrationID, directorygroup.FieldPlatformID, directorygroup.FieldDirectoryInstanceID, directorygroup.FieldDirectorySyncRunID, directorygroup.FieldExternalID, directorygroup.FieldEmail, directorygroup.FieldDisplayName, directorygroup.FieldDescription, directorygroup.FieldClassification, directorygroup.FieldStatus, directorygroup.FieldProfileHash, directorygroup.FieldRawProfileFileID, directorygroup.FieldSourceVersion, directorygroup.FieldDirectoryName:
+		case directorygroup.FieldID, directorygroup.FieldCreatedBy, directorygroup.FieldUpdatedBy, directorygroup.FieldUpdatedByImpersonator, directorygroup.FieldDisplayID, directorygroup.FieldOwnerID, directorygroup.FieldEnvironmentName, directorygroup.FieldEnvironmentID, directorygroup.FieldScopeName, directorygroup.FieldScopeID, directorygroup.FieldIntegrationID, directorygroup.FieldPlatformID, directorygroup.FieldDirectoryInstanceID, directorygroup.FieldDirectorySyncRunID, directorygroup.FieldExternalID, directorygroup.FieldEmail, directorygroup.FieldDisplayName, directorygroup.FieldDescription, directorygroup.FieldClassification, directorygroup.FieldStatus, directorygroup.FieldProfileHash, directorygroup.FieldRawProfileFileID, directorygroup.FieldSourceVersion, directorygroup.FieldDirectoryName:
 			values[i] = new(sql.NullString)
 		case directorygroup.FieldCreatedAt, directorygroup.FieldUpdatedAt, directorygroup.FieldFirstSeenAt, directorygroup.FieldLastSeenAt, directorygroup.FieldAddedAt, directorygroup.FieldRemovedAt, directorygroup.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -281,6 +283,13 @@ func (_m *DirectoryGroup) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case directorygroup.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case directorygroup.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -570,6 +579,11 @@ func (_m *DirectoryGroup) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
 	builder.WriteString(_m.DisplayID)

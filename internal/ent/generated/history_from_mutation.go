@@ -62,6 +62,10 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+	}
+
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
@@ -287,6 +291,12 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(actionplan.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(actionplan.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -586,6 +596,7 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetUpdatedAt(actionplan.UpdatedAt).
 			SetCreatedBy(actionplan.CreatedBy).
 			SetUpdatedBy(actionplan.UpdatedBy).
+			SetNillableUpdatedByImpersonator(actionplan.UpdatedByImpersonator).
 			SetDeletedAt(actionplan.DeletedAt).
 			SetDeletedBy(actionplan.DeletedBy).
 			SetTags(actionplan.Tags).
@@ -668,6 +679,10 @@ func (m *AssessmentMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -775,6 +790,12 @@ func (m *AssessmentMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(assessment.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(assessment.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -894,6 +915,7 @@ func (m *AssessmentMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetUpdatedAt(assessment.UpdatedAt).
 			SetCreatedBy(assessment.CreatedBy).
 			SetUpdatedBy(assessment.UpdatedBy).
+			SetNillableUpdatedByImpersonator(assessment.UpdatedByImpersonator).
 			SetDeletedAt(assessment.DeletedAt).
 			SetDeletedBy(assessment.DeletedBy).
 			SetTags(assessment.Tags).
@@ -946,6 +968,10 @@ func (m *AssessmentResponseMutation) CreateHistoryFromCreate(ctx context.Context
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -1101,6 +1127,12 @@ func (m *AssessmentResponseMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(assessmentresponse.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(assessmentresponse.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -1292,6 +1324,7 @@ func (m *AssessmentResponseMutation) CreateHistoryFromDelete(ctx context.Context
 			SetUpdatedAt(assessmentresponse.UpdatedAt).
 			SetCreatedBy(assessmentresponse.CreatedBy).
 			SetUpdatedBy(assessmentresponse.UpdatedBy).
+			SetNillableUpdatedByImpersonator(assessmentresponse.UpdatedByImpersonator).
 			SetDeletedAt(assessmentresponse.DeletedAt).
 			SetDeletedBy(assessmentresponse.DeletedBy).
 			SetOwnerID(assessmentresponse.OwnerID).
@@ -1356,6 +1389,10 @@ func (m *AssetMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -1591,6 +1628,12 @@ func (m *AssetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(asset.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(asset.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -1902,6 +1945,7 @@ func (m *AssetMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(asset.UpdatedAt).
 			SetCreatedBy(asset.CreatedBy).
 			SetUpdatedBy(asset.UpdatedBy).
+			SetNillableUpdatedByImpersonator(asset.UpdatedByImpersonator).
 			SetDeletedAt(asset.DeletedAt).
 			SetDeletedBy(asset.DeletedBy).
 			SetTags(asset.Tags).
@@ -1986,6 +2030,10 @@ func (m *CampaignMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -2189,6 +2237,12 @@ func (m *CampaignMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(campaign.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(campaign.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -2452,6 +2506,7 @@ func (m *CampaignMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(campaign.UpdatedAt).
 			SetCreatedBy(campaign.CreatedBy).
 			SetUpdatedBy(campaign.UpdatedBy).
+			SetNillableUpdatedByImpersonator(campaign.UpdatedByImpersonator).
 			SetDeletedAt(campaign.DeletedAt).
 			SetDeletedBy(campaign.DeletedBy).
 			SetDisplayID(campaign.DisplayID).
@@ -2528,6 +2583,10 @@ func (m *CampaignTargetMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -2643,6 +2702,12 @@ func (m *CampaignTargetMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(campaigntarget.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(campaigntarget.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -2774,6 +2839,7 @@ func (m *CampaignTargetMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetUpdatedAt(campaigntarget.UpdatedAt).
 			SetCreatedBy(campaigntarget.CreatedBy).
 			SetUpdatedBy(campaigntarget.UpdatedBy).
+			SetNillableUpdatedByImpersonator(campaigntarget.UpdatedByImpersonator).
 			SetDeletedAt(campaigntarget.DeletedAt).
 			SetDeletedBy(campaigntarget.DeletedBy).
 			SetOwnerID(campaigntarget.OwnerID).
@@ -2828,6 +2894,10 @@ func (m *CheckResultMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -2923,6 +2993,12 @@ func (m *CheckResultMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(checkresult.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(checkresult.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -3024,6 +3100,7 @@ func (m *CheckResultMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetUpdatedAt(checkresult.UpdatedAt).
 			SetCreatedBy(checkresult.CreatedBy).
 			SetUpdatedBy(checkresult.UpdatedBy).
+			SetNillableUpdatedByImpersonator(checkresult.UpdatedByImpersonator).
 			SetDeletedAt(checkresult.DeletedAt).
 			SetDeletedBy(checkresult.DeletedBy).
 			SetTags(checkresult.Tags).
@@ -3073,6 +3150,10 @@ func (m *ContactMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -3184,6 +3265,12 @@ func (m *ContactMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(contact.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(contact.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -3309,6 +3396,7 @@ func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(contact.UpdatedAt).
 			SetCreatedBy(contact.CreatedBy).
 			SetUpdatedBy(contact.UpdatedBy).
+			SetNillableUpdatedByImpersonator(contact.UpdatedByImpersonator).
 			SetDeletedAt(contact.DeletedAt).
 			SetDeletedBy(contact.DeletedBy).
 			SetTags(contact.Tags).
@@ -3362,6 +3450,10 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -3613,6 +3705,12 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(control.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(control.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -3948,6 +4046,7 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(control.UpdatedAt).
 			SetCreatedBy(control.CreatedBy).
 			SetUpdatedBy(control.UpdatedBy).
+			SetNillableUpdatedByImpersonator(control.UpdatedByImpersonator).
 			SetDeletedAt(control.DeletedAt).
 			SetDeletedBy(control.DeletedBy).
 			SetDisplayID(control.DisplayID).
@@ -4036,6 +4135,10 @@ func (m *ControlImplementationMutation) CreateHistoryFromCreate(ctx context.Cont
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -4143,6 +4246,12 @@ func (m *ControlImplementationMutation) CreateHistoryFromUpdate(ctx context.Cont
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(controlimplementation.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(controlimplementation.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -4262,6 +4371,7 @@ func (m *ControlImplementationMutation) CreateHistoryFromDelete(ctx context.Cont
 			SetUpdatedAt(controlimplementation.UpdatedAt).
 			SetCreatedBy(controlimplementation.CreatedBy).
 			SetUpdatedBy(controlimplementation.UpdatedBy).
+			SetNillableUpdatedByImpersonator(controlimplementation.UpdatedByImpersonator).
 			SetDeletedAt(controlimplementation.DeletedAt).
 			SetDeletedBy(controlimplementation.DeletedBy).
 			SetTags(controlimplementation.Tags).
@@ -4314,6 +4424,10 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -4437,6 +4551,12 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(controlobjective.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(controlobjective.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -4580,6 +4700,7 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetUpdatedAt(controlobjective.UpdatedAt).
 			SetCreatedBy(controlobjective.CreatedBy).
 			SetUpdatedBy(controlobjective.UpdatedBy).
+			SetNillableUpdatedByImpersonator(controlobjective.UpdatedByImpersonator).
 			SetDeletedAt(controlobjective.DeletedAt).
 			SetDeletedBy(controlobjective.DeletedBy).
 			SetDisplayID(controlobjective.DisplayID).
@@ -4636,6 +4757,10 @@ func (m *CustomDomainMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -4739,6 +4864,12 @@ func (m *CustomDomainMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(customdomain.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(customdomain.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -4852,6 +4983,7 @@ func (m *CustomDomainMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetUpdatedAt(customdomain.UpdatedAt).
 			SetCreatedBy(customdomain.CreatedBy).
 			SetUpdatedBy(customdomain.UpdatedBy).
+			SetNillableUpdatedByImpersonator(customdomain.UpdatedByImpersonator).
 			SetDeletedAt(customdomain.DeletedAt).
 			SetDeletedBy(customdomain.DeletedBy).
 			SetTags(customdomain.Tags).
@@ -4903,6 +5035,10 @@ func (m *DNSVerificationMutation) CreateHistoryFromCreate(ctx context.Context) e
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -5010,6 +5146,12 @@ func (m *DNSVerificationMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(dnsverification.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(dnsverification.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -5129,6 +5271,7 @@ func (m *DNSVerificationMutation) CreateHistoryFromDelete(ctx context.Context) e
 			SetUpdatedAt(dnsverification.UpdatedAt).
 			SetCreatedBy(dnsverification.CreatedBy).
 			SetUpdatedBy(dnsverification.UpdatedBy).
+			SetNillableUpdatedByImpersonator(dnsverification.UpdatedByImpersonator).
 			SetDeletedAt(dnsverification.DeletedAt).
 			SetDeletedBy(dnsverification.DeletedBy).
 			SetTags(dnsverification.Tags).
@@ -5181,6 +5324,10 @@ func (m *DirectoryAccountMutation) CreateHistoryFromCreate(ctx context.Context) 
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if displayID, exists := m.DisplayID(); exists {
@@ -5408,6 +5555,12 @@ func (m *DirectoryAccountMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(directoryaccount.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(directoryaccount.UpdatedByImpersonator)
 		}
 
 		if displayID, exists := m.DisplayID(); exists {
@@ -5707,6 +5860,7 @@ func (m *DirectoryAccountMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetUpdatedAt(directoryaccount.UpdatedAt).
 			SetCreatedBy(directoryaccount.CreatedBy).
 			SetUpdatedBy(directoryaccount.UpdatedBy).
+			SetNillableUpdatedByImpersonator(directoryaccount.UpdatedByImpersonator).
 			SetDisplayID(directoryaccount.DisplayID).
 			SetTags(directoryaccount.Tags).
 			SetOwnerID(directoryaccount.OwnerID).
@@ -5789,6 +5943,10 @@ func (m *DirectoryGroupMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if displayID, exists := m.DisplayID(); exists {
@@ -5964,6 +6122,12 @@ func (m *DirectoryGroupMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(directorygroup.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(directorygroup.UpdatedByImpersonator)
 		}
 
 		if displayID, exists := m.DisplayID(); exists {
@@ -6185,6 +6349,7 @@ func (m *DirectoryGroupMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetUpdatedAt(directorygroup.UpdatedAt).
 			SetCreatedBy(directorygroup.CreatedBy).
 			SetUpdatedBy(directorygroup.UpdatedBy).
+			SetNillableUpdatedByImpersonator(directorygroup.UpdatedByImpersonator).
 			SetDisplayID(directorygroup.DisplayID).
 			SetTags(directorygroup.Tags).
 			SetOwnerID(directorygroup.OwnerID).
@@ -6254,6 +6419,10 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromCreate(ctx context.Contex
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if displayID, exists := m.DisplayID(); exists {
@@ -6397,6 +6566,12 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(directorymembership.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(directorymembership.UpdatedByImpersonator)
 		}
 
 		if displayID, exists := m.DisplayID(); exists {
@@ -6570,6 +6745,7 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetUpdatedAt(directorymembership.UpdatedAt).
 			SetCreatedBy(directorymembership.CreatedBy).
 			SetUpdatedBy(directorymembership.UpdatedBy).
+			SetNillableUpdatedByImpersonator(directorymembership.UpdatedByImpersonator).
 			SetDisplayID(directorymembership.DisplayID).
 			SetOwnerID(directorymembership.OwnerID).
 			SetEnvironmentName(directorymembership.EnvironmentName).
@@ -6631,6 +6807,10 @@ func (m *DiscussionMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -6708,6 +6888,12 @@ func (m *DiscussionMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetUpdatedBy(discussion.UpdatedBy)
 		}
 
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(discussion.UpdatedByImpersonator)
+		}
+
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -6777,6 +6963,7 @@ func (m *DiscussionMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetUpdatedAt(discussion.UpdatedAt).
 			SetCreatedBy(discussion.CreatedBy).
 			SetUpdatedBy(discussion.UpdatedBy).
+			SetNillableUpdatedByImpersonator(discussion.UpdatedByImpersonator).
 			SetDeletedAt(discussion.DeletedAt).
 			SetDeletedBy(discussion.DeletedBy).
 			SetOwnerID(discussion.OwnerID).
@@ -6821,6 +7008,10 @@ func (m *DocumentDataMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -6916,6 +7107,12 @@ func (m *DocumentDataMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(documentdata.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(documentdata.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -7017,6 +7214,7 @@ func (m *DocumentDataMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetUpdatedAt(documentdata.UpdatedAt).
 			SetCreatedBy(documentdata.CreatedBy).
 			SetUpdatedBy(documentdata.UpdatedBy).
+			SetNillableUpdatedByImpersonator(documentdata.UpdatedByImpersonator).
 			SetDeletedAt(documentdata.DeletedAt).
 			SetDeletedBy(documentdata.DeletedBy).
 			SetTags(documentdata.Tags).
@@ -7066,6 +7264,10 @@ func (m *EmailTemplateMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -7229,6 +7431,12 @@ func (m *EmailTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(emailtemplate.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(emailtemplate.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -7432,6 +7640,7 @@ func (m *EmailTemplateMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetUpdatedAt(emailtemplate.UpdatedAt).
 			SetCreatedBy(emailtemplate.CreatedBy).
 			SetUpdatedBy(emailtemplate.UpdatedBy).
+			SetNillableUpdatedByImpersonator(emailtemplate.UpdatedByImpersonator).
 			SetDeletedAt(emailtemplate.DeletedAt).
 			SetDeletedBy(emailtemplate.DeletedBy).
 			SetRevision(emailtemplate.Revision).
@@ -7498,6 +7707,10 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -7793,6 +8006,12 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(entity.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(entity.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -8194,6 +8413,7 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(entity.UpdatedAt).
 			SetCreatedBy(entity.CreatedBy).
 			SetUpdatedBy(entity.UpdatedBy).
+			SetNillableUpdatedByImpersonator(entity.UpdatedByImpersonator).
 			SetDeletedAt(entity.DeletedAt).
 			SetDeletedBy(entity.DeletedBy).
 			SetTags(entity.Tags).
@@ -8295,6 +8515,10 @@ func (m *EntityTypeMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+	}
+
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
@@ -8380,6 +8604,12 @@ func (m *EntityTypeMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(entitytype.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(entitytype.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -8469,6 +8699,7 @@ func (m *EntityTypeMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetUpdatedAt(entitytype.UpdatedAt).
 			SetCreatedBy(entitytype.CreatedBy).
 			SetUpdatedBy(entitytype.UpdatedBy).
+			SetNillableUpdatedByImpersonator(entitytype.UpdatedByImpersonator).
 			SetDeletedAt(entitytype.DeletedAt).
 			SetDeletedBy(entitytype.DeletedBy).
 			SetTags(entitytype.Tags).
@@ -8516,6 +8747,10 @@ func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -8655,6 +8890,12 @@ func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(evidence.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(evidence.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -8822,6 +9063,7 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(evidence.UpdatedAt).
 			SetCreatedBy(evidence.CreatedBy).
 			SetUpdatedBy(evidence.UpdatedBy).
+			SetNillableUpdatedByImpersonator(evidence.UpdatedByImpersonator).
 			SetDeletedAt(evidence.DeletedAt).
 			SetDeletedBy(evidence.DeletedBy).
 			SetDisplayID(evidence.DisplayID).
@@ -8882,6 +9124,10 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -9061,6 +9307,12 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(file.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(file.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -9288,6 +9540,7 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(file.UpdatedAt).
 			SetCreatedBy(file.CreatedBy).
 			SetUpdatedBy(file.UpdatedBy).
+			SetNillableUpdatedByImpersonator(file.UpdatedByImpersonator).
 			SetDeletedAt(file.DeletedAt).
 			SetDeletedBy(file.DeletedBy).
 			SetTags(file.Tags).
@@ -9358,6 +9611,10 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -9617,6 +9874,12 @@ func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(finding.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(finding.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -9964,6 +10227,7 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(finding.UpdatedAt).
 			SetCreatedBy(finding.CreatedBy).
 			SetUpdatedBy(finding.UpdatedBy).
+			SetNillableUpdatedByImpersonator(finding.UpdatedByImpersonator).
 			SetDeletedAt(finding.DeletedAt).
 			SetDeletedBy(finding.DeletedBy).
 			SetDisplayID(finding.DisplayID).
@@ -10056,6 +10320,10 @@ func (m *FindingControlMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+	}
+
 	if findingID, exists := m.FindingID(); exists {
 		create = create.SetFindingID(findingID)
 	}
@@ -10145,6 +10413,12 @@ func (m *FindingControlMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(findingcontrol.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(findingcontrol.UpdatedByImpersonator)
 		}
 
 		if findingID, exists := m.FindingID(); exists {
@@ -10240,6 +10514,7 @@ func (m *FindingControlMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetUpdatedAt(findingcontrol.UpdatedAt).
 			SetCreatedBy(findingcontrol.CreatedBy).
 			SetUpdatedBy(findingcontrol.UpdatedBy).
+			SetNillableUpdatedByImpersonator(findingcontrol.UpdatedByImpersonator).
 			SetFindingID(findingcontrol.FindingID).
 			SetControlID(findingcontrol.ControlID).
 			SetStandardID(findingcontrol.StandardID).
@@ -10288,6 +10563,10 @@ func (m *GroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -10419,6 +10698,12 @@ func (m *GroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(group.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(group.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -10574,6 +10859,7 @@ func (m *GroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(group.UpdatedAt).
 			SetCreatedBy(group.CreatedBy).
 			SetUpdatedBy(group.UpdatedBy).
+			SetNillableUpdatedByImpersonator(group.UpdatedByImpersonator).
 			SetDeletedAt(group.DeletedAt).
 			SetDeletedBy(group.DeletedBy).
 			SetDisplayID(group.DisplayID).
@@ -10632,6 +10918,10 @@ func (m *GroupMembershipMutation) CreateHistoryFromCreate(ctx context.Context) e
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if role, exists := m.Role(); exists {
@@ -10701,6 +10991,12 @@ func (m *GroupMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetUpdatedBy(groupmembership.UpdatedBy)
 		}
 
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(groupmembership.UpdatedByImpersonator)
+		}
+
 		if role, exists := m.Role(); exists {
 			create = create.SetRole(role)
 		} else {
@@ -10758,6 +11054,7 @@ func (m *GroupMembershipMutation) CreateHistoryFromDelete(ctx context.Context) e
 			SetUpdatedAt(groupmembership.UpdatedAt).
 			SetCreatedBy(groupmembership.CreatedBy).
 			SetUpdatedBy(groupmembership.UpdatedBy).
+			SetNillableUpdatedByImpersonator(groupmembership.UpdatedByImpersonator).
 			SetRole(groupmembership.Role).
 			SetGroupID(groupmembership.GroupID).
 			SetUserID(groupmembership.UserID).
@@ -10800,6 +11097,10 @@ func (m *GroupSettingMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -10885,6 +11186,12 @@ func (m *GroupSettingMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetUpdatedBy(groupsetting.UpdatedBy)
 		}
 
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(groupsetting.UpdatedByImpersonator)
+		}
+
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -10966,6 +11273,7 @@ func (m *GroupSettingMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetUpdatedAt(groupsetting.UpdatedAt).
 			SetCreatedBy(groupsetting.CreatedBy).
 			SetUpdatedBy(groupsetting.UpdatedBy).
+			SetNillableUpdatedByImpersonator(groupsetting.UpdatedByImpersonator).
 			SetDeletedAt(groupsetting.DeletedAt).
 			SetDeletedBy(groupsetting.DeletedBy).
 			SetVisibility(groupsetting.Visibility).
@@ -11012,6 +11320,10 @@ func (m *HushMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -11127,6 +11439,12 @@ func (m *HushMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(hush.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(hush.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -11258,6 +11576,7 @@ func (m *HushMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(hush.UpdatedAt).
 			SetCreatedBy(hush.CreatedBy).
 			SetUpdatedBy(hush.UpdatedBy).
+			SetNillableUpdatedByImpersonator(hush.UpdatedByImpersonator).
 			SetDeletedAt(hush.DeletedAt).
 			SetDeletedBy(hush.DeletedBy).
 			SetOwnerID(hush.OwnerID).
@@ -11312,6 +11631,10 @@ func (m *IdentityHolderMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -11503,6 +11826,12 @@ func (m *IdentityHolderMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(identityholder.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(identityholder.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -11748,6 +12077,7 @@ func (m *IdentityHolderMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetUpdatedAt(identityholder.UpdatedAt).
 			SetCreatedBy(identityholder.CreatedBy).
 			SetUpdatedBy(identityholder.UpdatedBy).
+			SetNillableUpdatedByImpersonator(identityholder.UpdatedByImpersonator).
 			SetDeletedAt(identityholder.DeletedAt).
 			SetDeletedBy(identityholder.DeletedBy).
 			SetDisplayID(identityholder.DisplayID).
@@ -11821,6 +12151,10 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -11992,6 +12326,12 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(integration.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(integration.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -12207,6 +12547,7 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetUpdatedAt(integration.UpdatedAt).
 			SetCreatedBy(integration.CreatedBy).
 			SetUpdatedBy(integration.UpdatedBy).
+			SetNillableUpdatedByImpersonator(integration.UpdatedByImpersonator).
 			SetDeletedAt(integration.DeletedAt).
 			SetDeletedBy(integration.DeletedBy).
 			SetTags(integration.Tags).
@@ -12275,6 +12616,10 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -12482,6 +12827,12 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(internalpolicy.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(internalpolicy.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -12751,6 +13102,7 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetUpdatedAt(internalpolicy.UpdatedAt).
 			SetCreatedBy(internalpolicy.CreatedBy).
 			SetUpdatedBy(internalpolicy.UpdatedBy).
+			SetNillableUpdatedByImpersonator(internalpolicy.UpdatedByImpersonator).
 			SetDeletedAt(internalpolicy.DeletedAt).
 			SetDeletedBy(internalpolicy.DeletedBy).
 			SetDisplayID(internalpolicy.DisplayID).
@@ -12828,6 +13180,10 @@ func (m *JobTemplateMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -12943,6 +13299,12 @@ func (m *JobTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(jobtemplate.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(jobtemplate.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -13074,6 +13436,7 @@ func (m *JobTemplateMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetUpdatedAt(jobtemplate.UpdatedAt).
 			SetCreatedBy(jobtemplate.CreatedBy).
 			SetUpdatedBy(jobtemplate.UpdatedBy).
+			SetNillableUpdatedByImpersonator(jobtemplate.UpdatedByImpersonator).
 			SetDeletedAt(jobtemplate.DeletedAt).
 			SetDeletedBy(jobtemplate.DeletedBy).
 			SetDisplayID(jobtemplate.DisplayID).
@@ -13128,6 +13491,10 @@ func (m *MappableDomainMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -13205,6 +13572,12 @@ func (m *MappableDomainMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetUpdatedBy(mappabledomain.UpdatedBy)
 		}
 
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(mappabledomain.UpdatedByImpersonator)
+		}
+
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -13274,6 +13647,7 @@ func (m *MappableDomainMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetUpdatedAt(mappabledomain.UpdatedAt).
 			SetCreatedBy(mappabledomain.CreatedBy).
 			SetUpdatedBy(mappabledomain.UpdatedBy).
+			SetNillableUpdatedByImpersonator(mappabledomain.UpdatedByImpersonator).
 			SetDeletedAt(mappabledomain.DeletedAt).
 			SetDeletedBy(mappabledomain.DeletedBy).
 			SetTags(mappabledomain.Tags).
@@ -13318,6 +13692,10 @@ func (m *MappedControlMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -13417,6 +13795,12 @@ func (m *MappedControlMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(mappedcontrol.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(mappedcontrol.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -13524,6 +13908,7 @@ func (m *MappedControlMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetUpdatedAt(mappedcontrol.UpdatedAt).
 			SetCreatedBy(mappedcontrol.CreatedBy).
 			SetUpdatedBy(mappedcontrol.UpdatedBy).
+			SetNillableUpdatedByImpersonator(mappedcontrol.UpdatedByImpersonator).
 			SetDeletedAt(mappedcontrol.DeletedAt).
 			SetDeletedBy(mappedcontrol.DeletedBy).
 			SetTags(mappedcontrol.Tags).
@@ -13574,6 +13959,10 @@ func (m *NarrativeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -13673,6 +14062,12 @@ func (m *NarrativeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(narrative.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(narrative.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -13780,6 +14175,7 @@ func (m *NarrativeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(narrative.UpdatedAt).
 			SetCreatedBy(narrative.CreatedBy).
 			SetUpdatedBy(narrative.UpdatedBy).
+			SetNillableUpdatedByImpersonator(narrative.UpdatedByImpersonator).
 			SetDeletedAt(narrative.DeletedAt).
 			SetDeletedBy(narrative.DeletedBy).
 			SetDisplayID(narrative.DisplayID).
@@ -13830,6 +14226,10 @@ func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -13937,6 +14337,12 @@ func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(note.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(note.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -14056,6 +14462,7 @@ func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(note.UpdatedAt).
 			SetCreatedBy(note.CreatedBy).
 			SetUpdatedBy(note.UpdatedBy).
+			SetNillableUpdatedByImpersonator(note.UpdatedByImpersonator).
 			SetDeletedAt(note.DeletedAt).
 			SetDeletedBy(note.DeletedBy).
 			SetDisplayID(note.DisplayID).
@@ -14108,6 +14515,10 @@ func (m *NotificationPreferenceMutation) CreateHistoryFromCreate(ctx context.Con
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -14259,6 +14670,12 @@ func (m *NotificationPreferenceMutation) CreateHistoryFromUpdate(ctx context.Con
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(notificationpreference.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(notificationpreference.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -14444,6 +14861,7 @@ func (m *NotificationPreferenceMutation) CreateHistoryFromDelete(ctx context.Con
 			SetUpdatedAt(notificationpreference.UpdatedAt).
 			SetCreatedBy(notificationpreference.CreatedBy).
 			SetUpdatedBy(notificationpreference.UpdatedBy).
+			SetNillableUpdatedByImpersonator(notificationpreference.UpdatedByImpersonator).
 			SetDeletedAt(notificationpreference.DeletedAt).
 			SetDeletedBy(notificationpreference.DeletedBy).
 			SetOwnerID(notificationpreference.OwnerID).
@@ -14507,6 +14925,10 @@ func (m *NotificationTemplateMutation) CreateHistoryFromCreate(ctx context.Conte
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -14678,6 +15100,12 @@ func (m *NotificationTemplateMutation) CreateHistoryFromUpdate(ctx context.Conte
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(notificationtemplate.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(notificationtemplate.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -14893,6 +15321,7 @@ func (m *NotificationTemplateMutation) CreateHistoryFromDelete(ctx context.Conte
 			SetUpdatedAt(notificationtemplate.UpdatedAt).
 			SetCreatedBy(notificationtemplate.CreatedBy).
 			SetUpdatedBy(notificationtemplate.UpdatedBy).
+			SetNillableUpdatedByImpersonator(notificationtemplate.UpdatedByImpersonator).
 			SetDeletedAt(notificationtemplate.DeletedAt).
 			SetDeletedBy(notificationtemplate.DeletedBy).
 			SetRevision(notificationtemplate.Revision).
@@ -14963,6 +15392,10 @@ func (m *OrgMembershipMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+	}
+
 	if role, exists := m.Role(); exists {
 		create = create.SetRole(role)
 	}
@@ -14973,6 +15406,22 @@ func (m *OrgMembershipMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 	if userID, exists := m.UserID(); exists {
 		create = create.SetUserID(userID)
+	}
+
+	if ssoExempt, exists := m.SSOExempt(); exists {
+		create = create.SetSSOExempt(ssoExempt)
+	}
+
+	if ssoExemptReason, exists := m.SSOExemptReason(); exists {
+		create = create.SetNillableSSOExemptReason(&ssoExemptReason)
+	}
+
+	if ssoExemptGrantedBy, exists := m.SSOExemptGrantedBy(); exists {
+		create = create.SetNillableSSOExemptGrantedBy(&ssoExemptGrantedBy)
+	}
+
+	if ssoExemptGrantedAt, exists := m.SSOExemptGrantedAt(); exists {
+		create = create.SetNillableSSOExemptGrantedAt(&ssoExemptGrantedAt)
 	}
 
 	_, err := create.Save(ctx)
@@ -15030,6 +15479,12 @@ func (m *OrgMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetUpdatedBy(orgmembership.UpdatedBy)
 		}
 
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(orgmembership.UpdatedByImpersonator)
+		}
+
 		if role, exists := m.Role(); exists {
 			create = create.SetRole(role)
 		} else {
@@ -15046,6 +15501,30 @@ func (m *OrgMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetUserID(userID)
 		} else {
 			create = create.SetUserID(orgmembership.UserID)
+		}
+
+		if ssoExempt, exists := m.SSOExempt(); exists {
+			create = create.SetSSOExempt(ssoExempt)
+		} else {
+			create = create.SetSSOExempt(orgmembership.SSOExempt)
+		}
+
+		if ssoExemptReason, exists := m.SSOExemptReason(); exists {
+			create = create.SetNillableSSOExemptReason(&ssoExemptReason)
+		} else {
+			create = create.SetNillableSSOExemptReason(orgmembership.SSOExemptReason)
+		}
+
+		if ssoExemptGrantedBy, exists := m.SSOExemptGrantedBy(); exists {
+			create = create.SetNillableSSOExemptGrantedBy(&ssoExemptGrantedBy)
+		} else {
+			create = create.SetNillableSSOExemptGrantedBy(orgmembership.SSOExemptGrantedBy)
+		}
+
+		if ssoExemptGrantedAt, exists := m.SSOExemptGrantedAt(); exists {
+			create = create.SetNillableSSOExemptGrantedAt(&ssoExemptGrantedAt)
+		} else {
+			create = create.SetNillableSSOExemptGrantedAt(orgmembership.SSOExemptGrantedAt)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -15087,9 +15566,14 @@ func (m *OrgMembershipMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetUpdatedAt(orgmembership.UpdatedAt).
 			SetCreatedBy(orgmembership.CreatedBy).
 			SetUpdatedBy(orgmembership.UpdatedBy).
+			SetNillableUpdatedByImpersonator(orgmembership.UpdatedByImpersonator).
 			SetRole(orgmembership.Role).
 			SetOrganizationID(orgmembership.OrganizationID).
 			SetUserID(orgmembership.UserID).
+			SetSSOExempt(orgmembership.SSOExempt).
+			SetNillableSSOExemptReason(orgmembership.SSOExemptReason).
+			SetNillableSSOExemptGrantedBy(orgmembership.SSOExemptGrantedBy).
+			SetNillableSSOExemptGrantedAt(orgmembership.SSOExemptGrantedAt).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -15129,6 +15613,10 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) e
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -15224,6 +15712,12 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(orgsubscription.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(orgsubscription.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -15325,6 +15819,7 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromDelete(ctx context.Context) e
 			SetUpdatedAt(orgsubscription.UpdatedAt).
 			SetCreatedBy(orgsubscription.CreatedBy).
 			SetUpdatedBy(orgsubscription.UpdatedBy).
+			SetNillableUpdatedByImpersonator(orgsubscription.UpdatedByImpersonator).
 			SetDeletedAt(orgsubscription.DeletedAt).
 			SetDeletedBy(orgsubscription.DeletedBy).
 			SetTags(orgsubscription.Tags).
@@ -15374,6 +15869,10 @@ func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -15477,6 +15976,12 @@ func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(organization.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(organization.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -15590,6 +16095,7 @@ func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetUpdatedAt(organization.UpdatedAt).
 			SetCreatedBy(organization.CreatedBy).
 			SetUpdatedBy(organization.UpdatedBy).
+			SetNillableUpdatedByImpersonator(organization.UpdatedByImpersonator).
 			SetDeletedAt(organization.DeletedAt).
 			SetDeletedBy(organization.DeletedBy).
 			SetTags(organization.Tags).
@@ -15641,6 +16147,10 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -15747,6 +16257,14 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetMultifactorAuthEnforced(multifactorAuthEnforced)
 	}
 
+	if ssoExemptDomains, exists := m.SSOExemptDomains(); exists {
+		create = create.SetSSOExemptDomains(ssoExemptDomains)
+	}
+
+	if allowSupportAccess, exists := m.AllowSupportAccess(); exists {
+		create = create.SetAllowSupportAccess(allowSupportAccess)
+	}
+
 	if complianceWebhookToken, exists := m.ComplianceWebhookToken(); exists {
 		create = create.SetComplianceWebhookToken(complianceWebhookToken)
 	}
@@ -15812,6 +16330,12 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(organizationsetting.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(organizationsetting.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -15970,6 +16494,18 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetMultifactorAuthEnforced(organizationsetting.MultifactorAuthEnforced)
 		}
 
+		if ssoExemptDomains, exists := m.SSOExemptDomains(); exists {
+			create = create.SetSSOExemptDomains(ssoExemptDomains)
+		} else {
+			create = create.SetSSOExemptDomains(organizationsetting.SSOExemptDomains)
+		}
+
+		if allowSupportAccess, exists := m.AllowSupportAccess(); exists {
+			create = create.SetAllowSupportAccess(allowSupportAccess)
+		} else {
+			create = create.SetAllowSupportAccess(organizationsetting.AllowSupportAccess)
+		}
+
 		if complianceWebhookToken, exists := m.ComplianceWebhookToken(); exists {
 			create = create.SetComplianceWebhookToken(complianceWebhookToken)
 		} else {
@@ -16027,6 +16563,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetUpdatedAt(organizationsetting.UpdatedAt).
 			SetCreatedBy(organizationsetting.CreatedBy).
 			SetUpdatedBy(organizationsetting.UpdatedBy).
+			SetNillableUpdatedByImpersonator(organizationsetting.UpdatedByImpersonator).
 			SetDeletedAt(organizationsetting.DeletedAt).
 			SetDeletedBy(organizationsetting.DeletedBy).
 			SetTags(organizationsetting.Tags).
@@ -16053,6 +16590,8 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetSamlCert(organizationsetting.SamlCert).
 			SetIdentityProviderLoginEnforced(organizationsetting.IdentityProviderLoginEnforced).
 			SetMultifactorAuthEnforced(organizationsetting.MultifactorAuthEnforced).
+			SetSSOExemptDomains(organizationsetting.SSOExemptDomains).
+			SetAllowSupportAccess(organizationsetting.AllowSupportAccess).
 			SetComplianceWebhookToken(organizationsetting.ComplianceWebhookToken).
 			SetPaymentMethodAdded(organizationsetting.PaymentMethodAdded).
 			SetNillablePendingDeletionAt(organizationsetting.PendingDeletionAt).
@@ -16095,6 +16634,10 @@ func (m *PlatformMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -16362,6 +16905,12 @@ func (m *PlatformMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(platform.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(platform.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -16721,6 +17270,7 @@ func (m *PlatformMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(platform.UpdatedAt).
 			SetCreatedBy(platform.CreatedBy).
 			SetUpdatedBy(platform.UpdatedBy).
+			SetNillableUpdatedByImpersonator(platform.UpdatedByImpersonator).
 			SetDeletedAt(platform.DeletedAt).
 			SetDeletedBy(platform.DeletedBy).
 			SetDisplayID(platform.DisplayID).
@@ -16813,6 +17363,10 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -17016,6 +17570,12 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(procedure.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(procedure.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -17279,6 +17839,7 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(procedure.UpdatedAt).
 			SetCreatedBy(procedure.CreatedBy).
 			SetUpdatedBy(procedure.UpdatedBy).
+			SetNillableUpdatedByImpersonator(procedure.UpdatedByImpersonator).
 			SetDeletedAt(procedure.DeletedAt).
 			SetDeletedBy(procedure.DeletedBy).
 			SetDisplayID(procedure.DisplayID).
@@ -17355,6 +17916,10 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -17494,6 +18059,12 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(program.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(program.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -17661,6 +18232,7 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(program.UpdatedAt).
 			SetCreatedBy(program.CreatedBy).
 			SetUpdatedBy(program.UpdatedBy).
+			SetNillableUpdatedByImpersonator(program.UpdatedByImpersonator).
 			SetDeletedAt(program.DeletedAt).
 			SetDeletedBy(program.DeletedBy).
 			SetDisplayID(program.DisplayID).
@@ -17721,6 +18293,10 @@ func (m *ProgramMembershipMutation) CreateHistoryFromCreate(ctx context.Context)
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if role, exists := m.Role(); exists {
@@ -17790,6 +18366,12 @@ func (m *ProgramMembershipMutation) CreateHistoryFromUpdate(ctx context.Context)
 			create = create.SetUpdatedBy(programmembership.UpdatedBy)
 		}
 
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(programmembership.UpdatedByImpersonator)
+		}
+
 		if role, exists := m.Role(); exists {
 			create = create.SetRole(role)
 		} else {
@@ -17847,6 +18429,7 @@ func (m *ProgramMembershipMutation) CreateHistoryFromDelete(ctx context.Context)
 			SetUpdatedAt(programmembership.UpdatedAt).
 			SetCreatedBy(programmembership.CreatedBy).
 			SetUpdatedBy(programmembership.UpdatedBy).
+			SetNillableUpdatedByImpersonator(programmembership.UpdatedByImpersonator).
 			SetRole(programmembership.Role).
 			SetProgramID(programmembership.ProgramID).
 			SetUserID(programmembership.UserID).
@@ -17889,6 +18472,10 @@ func (m *RemediationMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -18072,6 +18659,12 @@ func (m *RemediationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(remediation.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(remediation.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -18305,6 +18898,7 @@ func (m *RemediationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetUpdatedAt(remediation.UpdatedAt).
 			SetCreatedBy(remediation.CreatedBy).
 			SetUpdatedBy(remediation.UpdatedBy).
+			SetNillableUpdatedByImpersonator(remediation.UpdatedByImpersonator).
 			SetDeletedAt(remediation.DeletedAt).
 			SetDeletedBy(remediation.DeletedBy).
 			SetDisplayID(remediation.DisplayID).
@@ -18376,6 +18970,10 @@ func (m *ReviewMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -18551,6 +19149,12 @@ func (m *ReviewMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(review.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(review.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -18772,6 +19376,7 @@ func (m *ReviewMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(review.UpdatedAt).
 			SetCreatedBy(review.CreatedBy).
 			SetUpdatedBy(review.UpdatedBy).
+			SetNillableUpdatedByImpersonator(review.UpdatedByImpersonator).
 			SetDeletedAt(review.DeletedAt).
 			SetDeletedBy(review.DeletedBy).
 			SetTags(review.Tags).
@@ -18841,6 +19446,10 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -19048,6 +19657,12 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(risk.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(risk.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -19317,6 +19932,7 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(risk.UpdatedAt).
 			SetCreatedBy(risk.CreatedBy).
 			SetUpdatedBy(risk.UpdatedBy).
+			SetNillableUpdatedByImpersonator(risk.UpdatedByImpersonator).
 			SetDeletedAt(risk.DeletedAt).
 			SetDeletedBy(risk.DeletedBy).
 			SetDisplayID(risk.DisplayID).
@@ -19394,6 +20010,10 @@ func (m *SLADefinitionMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -19479,6 +20099,12 @@ func (m *SLADefinitionMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetUpdatedBy(sladefinition.UpdatedBy)
 		}
 
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(sladefinition.UpdatedByImpersonator)
+		}
+
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -19560,6 +20186,7 @@ func (m *SLADefinitionMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetUpdatedAt(sladefinition.UpdatedAt).
 			SetCreatedBy(sladefinition.CreatedBy).
 			SetUpdatedBy(sladefinition.UpdatedBy).
+			SetNillableUpdatedByImpersonator(sladefinition.UpdatedByImpersonator).
 			SetDeletedAt(sladefinition.DeletedAt).
 			SetDeletedBy(sladefinition.DeletedBy).
 			SetDisplayID(sladefinition.DisplayID).
@@ -19606,6 +20233,10 @@ func (m *ScanMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -19765,6 +20396,12 @@ func (m *ScanMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(scan.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(scan.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -19962,6 +20599,7 @@ func (m *ScanMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(scan.UpdatedAt).
 			SetCreatedBy(scan.CreatedBy).
 			SetUpdatedBy(scan.UpdatedBy).
+			SetNillableUpdatedByImpersonator(scan.UpdatedByImpersonator).
 			SetDeletedAt(scan.DeletedAt).
 			SetDeletedBy(scan.DeletedBy).
 			SetTags(scan.Tags).
@@ -20027,6 +20665,10 @@ func (m *ScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -20118,6 +20760,12 @@ func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(scheduledjob.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(scheduledjob.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -20213,6 +20861,7 @@ func (m *ScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetUpdatedAt(scheduledjob.UpdatedAt).
 			SetCreatedBy(scheduledjob.CreatedBy).
 			SetUpdatedBy(scheduledjob.UpdatedBy).
+			SetNillableUpdatedByImpersonator(scheduledjob.UpdatedByImpersonator).
 			SetDeletedAt(scheduledjob.DeletedAt).
 			SetDeletedBy(scheduledjob.DeletedBy).
 			SetDisplayID(scheduledjob.DisplayID).
@@ -20261,6 +20910,10 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -20404,6 +21057,12 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(standard.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(standard.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -20577,6 +21236,7 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(standard.UpdatedAt).
 			SetCreatedBy(standard.CreatedBy).
 			SetUpdatedBy(standard.UpdatedBy).
+			SetNillableUpdatedByImpersonator(standard.UpdatedByImpersonator).
 			SetDeletedAt(standard.DeletedAt).
 			SetDeletedBy(standard.DeletedBy).
 			SetTags(standard.Tags).
@@ -20638,6 +21298,10 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -20865,6 +21529,12 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(subcontrol.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(subcontrol.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -21164,6 +21834,7 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetUpdatedAt(subcontrol.UpdatedAt).
 			SetCreatedBy(subcontrol.CreatedBy).
 			SetUpdatedBy(subcontrol.UpdatedBy).
+			SetNillableUpdatedByImpersonator(subcontrol.UpdatedByImpersonator).
 			SetDeletedAt(subcontrol.DeletedAt).
 			SetDeletedBy(subcontrol.DeletedBy).
 			SetDisplayID(subcontrol.DisplayID).
@@ -21246,6 +21917,10 @@ func (m *SubprocessorMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -21345,6 +22020,12 @@ func (m *SubprocessorMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(subprocessor.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(subprocessor.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -21452,6 +22133,7 @@ func (m *SubprocessorMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetUpdatedAt(subprocessor.UpdatedAt).
 			SetCreatedBy(subprocessor.CreatedBy).
 			SetUpdatedBy(subprocessor.UpdatedBy).
+			SetNillableUpdatedByImpersonator(subprocessor.UpdatedByImpersonator).
 			SetDeletedAt(subprocessor.DeletedAt).
 			SetDeletedBy(subprocessor.DeletedBy).
 			SetTags(subprocessor.Tags).
@@ -21502,6 +22184,10 @@ func (m *SystemDetailMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -21617,6 +22303,12 @@ func (m *SystemDetailMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(systemdetail.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(systemdetail.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -21748,6 +22440,7 @@ func (m *SystemDetailMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetUpdatedAt(systemdetail.UpdatedAt).
 			SetCreatedBy(systemdetail.CreatedBy).
 			SetUpdatedBy(systemdetail.UpdatedBy).
+			SetNillableUpdatedByImpersonator(systemdetail.UpdatedByImpersonator).
 			SetDeletedAt(systemdetail.DeletedAt).
 			SetDeletedBy(systemdetail.DeletedBy).
 			SetDisplayID(systemdetail.DisplayID).
@@ -21802,6 +22495,10 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -21957,6 +22654,12 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(task.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(task.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -22148,6 +22851,7 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(task.UpdatedAt).
 			SetCreatedBy(task.CreatedBy).
 			SetUpdatedBy(task.UpdatedBy).
+			SetNillableUpdatedByImpersonator(task.UpdatedByImpersonator).
 			SetDeletedAt(task.DeletedAt).
 			SetDeletedBy(task.DeletedBy).
 			SetDisplayID(task.DisplayID).
@@ -22212,6 +22916,10 @@ func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -22343,6 +23051,12 @@ func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(template.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(template.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -22498,6 +23212,7 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetUpdatedAt(template.UpdatedAt).
 			SetCreatedBy(template.CreatedBy).
 			SetUpdatedBy(template.UpdatedBy).
+			SetNillableUpdatedByImpersonator(template.UpdatedByImpersonator).
 			SetDeletedAt(template.DeletedAt).
 			SetDeletedBy(template.DeletedBy).
 			SetTags(template.Tags).
@@ -22556,6 +23271,10 @@ func (m *TrustCenterMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -22659,6 +23378,12 @@ func (m *TrustCenterMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(trustcenter.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(trustcenter.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -22772,6 +23497,7 @@ func (m *TrustCenterMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetUpdatedAt(trustcenter.UpdatedAt).
 			SetCreatedBy(trustcenter.CreatedBy).
 			SetUpdatedBy(trustcenter.UpdatedBy).
+			SetNillableUpdatedByImpersonator(trustcenter.UpdatedByImpersonator).
 			SetDeletedAt(trustcenter.DeletedAt).
 			SetDeletedBy(trustcenter.DeletedBy).
 			SetTags(trustcenter.Tags).
@@ -22823,6 +23549,10 @@ func (m *TrustCenterComplianceMutation) CreateHistoryFromCreate(ctx context.Cont
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -22900,6 +23630,12 @@ func (m *TrustCenterComplianceMutation) CreateHistoryFromUpdate(ctx context.Cont
 			create = create.SetUpdatedBy(trustcentercompliance.UpdatedBy)
 		}
 
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(trustcentercompliance.UpdatedByImpersonator)
+		}
+
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -22969,6 +23705,7 @@ func (m *TrustCenterComplianceMutation) CreateHistoryFromDelete(ctx context.Cont
 			SetUpdatedAt(trustcentercompliance.UpdatedAt).
 			SetCreatedBy(trustcentercompliance.CreatedBy).
 			SetUpdatedBy(trustcentercompliance.UpdatedBy).
+			SetNillableUpdatedByImpersonator(trustcentercompliance.UpdatedByImpersonator).
 			SetDeletedAt(trustcentercompliance.DeletedAt).
 			SetDeletedBy(trustcentercompliance.DeletedBy).
 			SetTags(trustcentercompliance.Tags).
@@ -23013,6 +23750,10 @@ func (m *TrustCenterDocMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -23120,6 +23861,12 @@ func (m *TrustCenterDocMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(trustcenterdoc.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(trustcenterdoc.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -23239,6 +23986,7 @@ func (m *TrustCenterDocMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetUpdatedAt(trustcenterdoc.UpdatedAt).
 			SetCreatedBy(trustcenterdoc.CreatedBy).
 			SetUpdatedBy(trustcenterdoc.UpdatedBy).
+			SetNillableUpdatedByImpersonator(trustcenterdoc.UpdatedByImpersonator).
 			SetDeletedAt(trustcenterdoc.DeletedAt).
 			SetDeletedBy(trustcenterdoc.DeletedBy).
 			SetTags(trustcenterdoc.Tags).
@@ -23291,6 +24039,10 @@ func (m *TrustCenterEntityMutation) CreateHistoryFromCreate(ctx context.Context)
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -23376,6 +24128,12 @@ func (m *TrustCenterEntityMutation) CreateHistoryFromUpdate(ctx context.Context)
 			create = create.SetUpdatedBy(trustcenterentity.UpdatedBy)
 		}
 
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(trustcenterentity.UpdatedByImpersonator)
+		}
+
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -23457,6 +24215,7 @@ func (m *TrustCenterEntityMutation) CreateHistoryFromDelete(ctx context.Context)
 			SetUpdatedAt(trustcenterentity.UpdatedAt).
 			SetCreatedBy(trustcenterentity.CreatedBy).
 			SetUpdatedBy(trustcenterentity.UpdatedBy).
+			SetNillableUpdatedByImpersonator(trustcenterentity.UpdatedByImpersonator).
 			SetDeletedAt(trustcenterentity.DeletedAt).
 			SetDeletedBy(trustcenterentity.DeletedBy).
 			SetNillableLogoFileID(trustcenterentity.LogoFileID).
@@ -23503,6 +24262,10 @@ func (m *TrustCenterFAQMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -23592,6 +24355,12 @@ func (m *TrustCenterFAQMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetUpdatedBy(trustcenterfaq.UpdatedBy)
 		}
 
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(trustcenterfaq.UpdatedByImpersonator)
+		}
+
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -23679,6 +24448,7 @@ func (m *TrustCenterFAQMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetUpdatedAt(trustcenterfaq.UpdatedAt).
 			SetCreatedBy(trustcenterfaq.CreatedBy).
 			SetUpdatedBy(trustcenterfaq.UpdatedBy).
+			SetNillableUpdatedByImpersonator(trustcenterfaq.UpdatedByImpersonator).
 			SetDeletedAt(trustcenterfaq.DeletedAt).
 			SetDeletedBy(trustcenterfaq.DeletedBy).
 			SetTrustCenterFaqKindName(trustcenterfaq.TrustCenterFaqKindName).
@@ -23726,6 +24496,10 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromCreate(ctx context.Cont
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -23845,6 +24619,12 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromUpdate(ctx context.Cont
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(trustcenterndarequest.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(trustcenterndarequest.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -23982,6 +24762,7 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromDelete(ctx context.Cont
 			SetUpdatedAt(trustcenterndarequest.UpdatedAt).
 			SetCreatedBy(trustcenterndarequest.CreatedBy).
 			SetUpdatedBy(trustcenterndarequest.UpdatedBy).
+			SetNillableUpdatedByImpersonator(trustcenterndarequest.UpdatedByImpersonator).
 			SetDeletedAt(trustcenterndarequest.DeletedAt).
 			SetDeletedBy(trustcenterndarequest.DeletedBy).
 			SetTags(trustcenterndarequest.Tags).
@@ -24037,6 +24818,10 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -24208,6 +24993,12 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(trustcentersetting.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(trustcentersetting.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -24423,6 +25214,7 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetUpdatedAt(trustcentersetting.UpdatedAt).
 			SetCreatedBy(trustcentersetting.CreatedBy).
 			SetUpdatedBy(trustcentersetting.UpdatedBy).
+			SetNillableUpdatedByImpersonator(trustcentersetting.UpdatedByImpersonator).
 			SetDeletedAt(trustcentersetting.DeletedAt).
 			SetDeletedBy(trustcentersetting.DeletedBy).
 			SetTrustCenterID(trustcentersetting.TrustCenterID).
@@ -24491,6 +25283,10 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromCreate(ctx context.Co
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -24576,6 +25372,12 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromUpdate(ctx context.Co
 			create = create.SetUpdatedBy(trustcentersubprocessor.UpdatedBy)
 		}
 
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(trustcentersubprocessor.UpdatedByImpersonator)
+		}
+
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -24657,6 +25459,7 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromDelete(ctx context.Co
 			SetUpdatedAt(trustcentersubprocessor.UpdatedAt).
 			SetCreatedBy(trustcentersubprocessor.CreatedBy).
 			SetUpdatedBy(trustcentersubprocessor.UpdatedBy).
+			SetNillableUpdatedByImpersonator(trustcentersubprocessor.UpdatedByImpersonator).
 			SetDeletedAt(trustcentersubprocessor.DeletedAt).
 			SetDeletedBy(trustcentersubprocessor.DeletedBy).
 			SetTrustCenterSubprocessorKindName(trustcentersubprocessor.TrustCenterSubprocessorKindName).
@@ -24703,6 +25506,10 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromCreate(ctx context
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -24806,6 +25613,12 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromUpdate(ctx context
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(trustcenterwatermarkconfig.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(trustcenterwatermarkconfig.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -24919,6 +25732,7 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromDelete(ctx context
 			SetUpdatedAt(trustcenterwatermarkconfig.UpdatedAt).
 			SetCreatedBy(trustcenterwatermarkconfig.CreatedBy).
 			SetUpdatedBy(trustcenterwatermarkconfig.UpdatedBy).
+			SetNillableUpdatedByImpersonator(trustcenterwatermarkconfig.UpdatedByImpersonator).
 			SetDeletedAt(trustcenterwatermarkconfig.DeletedAt).
 			SetDeletedBy(trustcenterwatermarkconfig.DeletedBy).
 			SetOwnerID(trustcenterwatermarkconfig.OwnerID).
@@ -25349,6 +26163,10 @@ func (m *UserSettingMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+	}
+
 	if deletedAt, exists := m.DeletedAt(); exists {
 		create = create.SetDeletedAt(deletedAt)
 	}
@@ -25462,6 +26280,12 @@ func (m *UserSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(usersetting.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(usersetting.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -25593,6 +26417,7 @@ func (m *UserSettingMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetUpdatedAt(usersetting.UpdatedAt).
 			SetCreatedBy(usersetting.CreatedBy).
 			SetUpdatedBy(usersetting.UpdatedBy).
+			SetNillableUpdatedByImpersonator(usersetting.UpdatedByImpersonator).
 			SetDeletedAt(usersetting.DeletedAt).
 			SetDeletedBy(usersetting.DeletedBy).
 			SetTags(usersetting.Tags).
@@ -25647,6 +26472,10 @@ func (m *VendorRiskScoreMutation) CreateHistoryFromCreate(ctx context.Context) e
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -25770,6 +26599,12 @@ func (m *VendorRiskScoreMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(vendorriskscore.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(vendorriskscore.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -25913,6 +26748,7 @@ func (m *VendorRiskScoreMutation) CreateHistoryFromDelete(ctx context.Context) e
 			SetUpdatedAt(vendorriskscore.UpdatedAt).
 			SetCreatedBy(vendorriskscore.CreatedBy).
 			SetUpdatedBy(vendorriskscore.UpdatedBy).
+			SetNillableUpdatedByImpersonator(vendorriskscore.UpdatedByImpersonator).
 			SetDeletedAt(vendorriskscore.DeletedAt).
 			SetDeletedBy(vendorriskscore.DeletedBy).
 			SetTags(vendorriskscore.Tags).
@@ -25969,6 +26805,10 @@ func (m *VendorScoringConfigMutation) CreateHistoryFromCreate(ctx context.Contex
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -26054,6 +26894,12 @@ func (m *VendorScoringConfigMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetUpdatedBy(vendorscoringconfig.UpdatedBy)
 		}
 
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(vendorscoringconfig.UpdatedByImpersonator)
+		}
+
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -26135,6 +26981,7 @@ func (m *VendorScoringConfigMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetUpdatedAt(vendorscoringconfig.UpdatedAt).
 			SetCreatedBy(vendorscoringconfig.CreatedBy).
 			SetUpdatedBy(vendorscoringconfig.UpdatedBy).
+			SetNillableUpdatedByImpersonator(vendorscoringconfig.UpdatedByImpersonator).
 			SetDeletedAt(vendorscoringconfig.DeletedAt).
 			SetDeletedBy(vendorscoringconfig.DeletedBy).
 			SetTags(vendorscoringconfig.Tags).
@@ -26181,6 +27028,10 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -26460,6 +27311,12 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(vulnerability.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(vulnerability.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -26837,6 +27694,7 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetUpdatedAt(vulnerability.UpdatedAt).
 			SetCreatedBy(vulnerability.CreatedBy).
 			SetUpdatedBy(vulnerability.UpdatedBy).
+			SetNillableUpdatedByImpersonator(vulnerability.UpdatedByImpersonator).
 			SetDeletedAt(vulnerability.DeletedAt).
 			SetDeletedBy(vulnerability.DeletedBy).
 			SetDisplayID(vulnerability.DisplayID).
@@ -26932,6 +27790,10 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromCreate(ctx context.Context
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -27067,6 +27929,12 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(workflowassignment.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(workflowassignment.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -27228,6 +28096,7 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromDelete(ctx context.Context
 			SetUpdatedAt(workflowassignment.UpdatedAt).
 			SetCreatedBy(workflowassignment.CreatedBy).
 			SetUpdatedBy(workflowassignment.UpdatedBy).
+			SetNillableUpdatedByImpersonator(workflowassignment.UpdatedByImpersonator).
 			SetDeletedAt(workflowassignment.DeletedAt).
 			SetDeletedBy(workflowassignment.DeletedBy).
 			SetDisplayID(workflowassignment.DisplayID).
@@ -27287,6 +28156,10 @@ func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromCreate(ctx context.C
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -27382,6 +28255,12 @@ func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromUpdate(ctx context.C
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(workflowassignmenttarget.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(workflowassignmenttarget.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -27483,6 +28362,7 @@ func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromDelete(ctx context.C
 			SetUpdatedAt(workflowassignmenttarget.UpdatedAt).
 			SetCreatedBy(workflowassignmenttarget.CreatedBy).
 			SetUpdatedBy(workflowassignmenttarget.UpdatedBy).
+			SetNillableUpdatedByImpersonator(workflowassignmenttarget.UpdatedByImpersonator).
 			SetDeletedAt(workflowassignmenttarget.DeletedAt).
 			SetDeletedBy(workflowassignmenttarget.DeletedBy).
 			SetDisplayID(workflowassignmenttarget.DisplayID).
@@ -27532,6 +28412,10 @@ func (m *WorkflowDefinitionMutation) CreateHistoryFromCreate(ctx context.Context
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -27687,6 +28571,12 @@ func (m *WorkflowDefinitionMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(workflowdefinition.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(workflowdefinition.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -27878,6 +28768,7 @@ func (m *WorkflowDefinitionMutation) CreateHistoryFromDelete(ctx context.Context
 			SetUpdatedAt(workflowdefinition.UpdatedAt).
 			SetCreatedBy(workflowdefinition.CreatedBy).
 			SetUpdatedBy(workflowdefinition.UpdatedBy).
+			SetNillableUpdatedByImpersonator(workflowdefinition.UpdatedByImpersonator).
 			SetDeletedAt(workflowdefinition.DeletedAt).
 			SetDeletedBy(workflowdefinition.DeletedBy).
 			SetDisplayID(workflowdefinition.DisplayID).
@@ -27942,6 +28833,10 @@ func (m *WorkflowEventMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -28031,6 +28926,12 @@ func (m *WorkflowEventMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetUpdatedBy(workflowevent.UpdatedBy)
 		}
 
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(workflowevent.UpdatedByImpersonator)
+		}
+
 		if deletedAt, exists := m.DeletedAt(); exists {
 			create = create.SetDeletedAt(deletedAt)
 		} else {
@@ -28118,6 +29019,7 @@ func (m *WorkflowEventMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetUpdatedAt(workflowevent.UpdatedAt).
 			SetCreatedBy(workflowevent.CreatedBy).
 			SetUpdatedBy(workflowevent.UpdatedBy).
+			SetNillableUpdatedByImpersonator(workflowevent.UpdatedByImpersonator).
 			SetDeletedAt(workflowevent.DeletedAt).
 			SetDeletedBy(workflowevent.DeletedBy).
 			SetDisplayID(workflowevent.DisplayID).
@@ -28165,6 +29067,10 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromCreate(ctx context.Context) 
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if deletedAt, exists := m.DeletedAt(); exists {
@@ -28308,6 +29214,12 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(workflowinstance.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(workflowinstance.UpdatedByImpersonator)
 		}
 
 		if deletedAt, exists := m.DeletedAt(); exists {
@@ -28481,6 +29393,7 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetUpdatedAt(workflowinstance.UpdatedAt).
 			SetCreatedBy(workflowinstance.CreatedBy).
 			SetUpdatedBy(workflowinstance.UpdatedBy).
+			SetNillableUpdatedByImpersonator(workflowinstance.UpdatedByImpersonator).
 			SetDeletedAt(workflowinstance.DeletedAt).
 			SetDeletedBy(workflowinstance.DeletedBy).
 			SetDisplayID(workflowinstance.DisplayID).
@@ -28542,6 +29455,10 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromCreate(ctx context.Context)
 
 	if updatedBy, exists := m.UpdatedBy(); exists {
 		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
 	if displayID, exists := m.DisplayID(); exists {
@@ -28669,6 +29586,12 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromUpdate(ctx context.Context)
 			create = create.SetUpdatedBy(updatedBy)
 		} else {
 			create = create.SetUpdatedBy(workflowobjectref.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(workflowobjectref.UpdatedByImpersonator)
 		}
 
 		if displayID, exists := m.DisplayID(); exists {
@@ -28818,6 +29741,7 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromDelete(ctx context.Context)
 			SetUpdatedAt(workflowobjectref.UpdatedAt).
 			SetCreatedBy(workflowobjectref.CreatedBy).
 			SetUpdatedBy(workflowobjectref.UpdatedBy).
+			SetNillableUpdatedByImpersonator(workflowobjectref.UpdatedByImpersonator).
 			SetDisplayID(workflowobjectref.DisplayID).
 			SetOwnerID(workflowobjectref.OwnerID).
 			SetWorkflowInstanceID(workflowobjectref.WorkflowInstanceID).

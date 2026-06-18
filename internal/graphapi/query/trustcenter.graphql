@@ -16,6 +16,7 @@ mutation CreateTrustCenter ($input: CreateTrustCenterInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			customDomain {
 				cnameRecord
 				dnsVerificationID
@@ -183,6 +184,7 @@ query GetTrustCenterByID ($trustCenterId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		customDomain {
 			cnameRecord
 			dnsVerificationID
@@ -482,6 +484,7 @@ mutation UpdateTrustCenter ($updateTrustCenterId: ID!, $input: UpdateTrustCenter
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			customDomain {
 				cnameRecord
 				dnsVerificationID

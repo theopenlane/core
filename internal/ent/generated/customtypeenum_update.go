@@ -73,6 +73,26 @@ func (_u *CustomTypeEnumUpdate) ClearUpdatedBy() *CustomTypeEnumUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *CustomTypeEnumUpdate) SetUpdatedByImpersonator(v string) *CustomTypeEnumUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *CustomTypeEnumUpdate) SetNillableUpdatedByImpersonator(v *string) *CustomTypeEnumUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *CustomTypeEnumUpdate) ClearUpdatedByImpersonator() *CustomTypeEnumUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *CustomTypeEnumUpdate) SetDeletedAt(v time.Time) *CustomTypeEnumUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -697,6 +717,12 @@ func (_u *CustomTypeEnumUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(customtypeenum.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(customtypeenum.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(customtypeenum.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(customtypeenum.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -1306,6 +1332,26 @@ func (_u *CustomTypeEnumUpdateOne) SetNillableUpdatedBy(v *string) *CustomTypeEn
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *CustomTypeEnumUpdateOne) ClearUpdatedBy() *CustomTypeEnumUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *CustomTypeEnumUpdateOne) SetUpdatedByImpersonator(v string) *CustomTypeEnumUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *CustomTypeEnumUpdateOne) SetNillableUpdatedByImpersonator(v *string) *CustomTypeEnumUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *CustomTypeEnumUpdateOne) ClearUpdatedByImpersonator() *CustomTypeEnumUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -1962,6 +2008,12 @@ func (_u *CustomTypeEnumUpdateOne) sqlSave(ctx context.Context) (_node *CustomTy
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(customtypeenum.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(customtypeenum.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(customtypeenum.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(customtypeenum.FieldDeletedAt, field.TypeTime, value)

@@ -23,6 +23,8 @@ const (
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
+	// FieldUpdatedByImpersonator holds the string denoting the updated_by_impersonator field in the database.
+	FieldUpdatedByImpersonator = "updated_by_impersonator"
 	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
@@ -257,6 +259,7 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldCreatedBy,
 	FieldUpdatedBy,
+	FieldUpdatedByImpersonator,
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
@@ -372,7 +375,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [9]ent.Hook
+	Hooks        [10]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -419,6 +422,11 @@ func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedBy orders the results by the updated_by field.
 func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
+}
+
+// ByUpdatedByImpersonator orders the results by the updated_by_impersonator field.
+func ByUpdatedByImpersonator(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedByImpersonator, opts...).ToFunc()
 }
 
 // ByDeletedAt orders the results by the deleted_at field.

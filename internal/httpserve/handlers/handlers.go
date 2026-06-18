@@ -110,6 +110,38 @@ type Handler struct {
 	CloudflareConfig CloudflareConfig
 	// ShortlinksClient provides URL shortening functionality
 	ShortlinksClient *shortlinks.Client
+	// SupportAccessConfig contains the configuration for the Openlane support access flow
+	SupportAccessConfig SupportAccessConfig
+}
+
+// SupportAccessConfig contains configuration for the Openlane support access flow. The support
+// identity is virtual and authenticated entirely from these values, never from the database. This is
+// the single place that holds the support identity, its shared password, and the second factor
+// identity provider configuration, since both authentications must occur together
+type SupportAccessConfig struct {
+	// Enabled toggles the support access endpoints
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+	// Email is the email of the virtual support identity, used as the first factor username
+	Email string `json:"email" koanf:"email" default:"support@theopenlane.io"`
+	// DisplayName is the display name of the virtual support identity, used for record attribution
+	DisplayName string `json:"displayname" koanf:"displayname" default:"Openlane Support"`
+	// SubjectID is the stable subject id of the virtual support identity used for created_by/updated_by
+	// attribution. It must be a valid ULID and is consistent without a backing user row
+	SubjectID string `json:"subjectid" koanf:"subjectid" default:"01JSPPRT000000000000000000"`
+	// Password is the shared password for the virtual support identity, validated against this value
+	Password string `json:"password" koanf:"password" default:"" sensitive:"true"`
+	// ClientID is the client ID for the second factor identity provider
+	ClientID string `json:"clientid" koanf:"clientid" default:"" sensitive:"true"`
+	// ClientSecret is the client secret for the second factor identity provider
+	ClientSecret string `json:"clientsecret" koanf:"clientsecret" default:"" sensitive:"true"`
+	// IssuerURL is the issuer URL of the second factor identity provider
+	IssuerURL string `json:"issuerurl" koanf:"issuerurl" default:""`
+	// DiscoveryEndpoint is the optional OIDC discovery endpoint of the second factor identity provider
+	DiscoveryEndpoint string `json:"discoveryendpoint" koanf:"discoveryendpoint" default:""`
+	// RedirectURL is the callback URL registered with the second factor identity provider
+	RedirectURL string `json:"redirecturl" koanf:"redirecturl" default:""`
+	// AllowedDomain restricts which email domain may complete the second factor (e.g. theopenlane.io)
+	AllowedDomain string `json:"alloweddomain" koanf:"alloweddomain" default:""`
 }
 
 // CloudflareConfig contains configuration for Cloudflare integration.

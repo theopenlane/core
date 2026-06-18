@@ -29,6 +29,8 @@ type CheckResult struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -147,7 +149,7 @@ func (*CheckResult) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case checkresult.FieldTags:
 			values[i] = new([]byte)
-		case checkresult.FieldID, checkresult.FieldCreatedBy, checkresult.FieldUpdatedBy, checkresult.FieldDeletedBy, checkresult.FieldStatus, checkresult.FieldSource, checkresult.FieldExternalURI, checkresult.FieldDetails, checkresult.FieldParentExternalID, checkresult.FieldIntegrationID:
+		case checkresult.FieldID, checkresult.FieldCreatedBy, checkresult.FieldUpdatedBy, checkresult.FieldUpdatedByImpersonator, checkresult.FieldDeletedBy, checkresult.FieldStatus, checkresult.FieldSource, checkresult.FieldExternalURI, checkresult.FieldDetails, checkresult.FieldParentExternalID, checkresult.FieldIntegrationID:
 			values[i] = new(sql.NullString)
 		case checkresult.FieldCreatedAt, checkresult.FieldUpdatedAt, checkresult.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -195,6 +197,13 @@ func (_m *CheckResult) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case checkresult.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case checkresult.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -337,6 +346,11 @@ func (_m *CheckResult) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))

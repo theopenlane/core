@@ -43,7 +43,7 @@ func setupTestTokenManager(t *testing.T) *tokens.TokenManager {
 
 func TestNew(t *testing.T) {
 	tokenManager := setupTestTokenManager(t)
-	middleware := New(tokenManager)
+	middleware := New(tokenManager, "", "")
 
 	assert.NotNil(t, middleware)
 	assert.Equal(t, tokenManager, middleware.tokenManager)
@@ -52,7 +52,7 @@ func TestNew(t *testing.T) {
 func TestMiddlewareProcessNoToken(t *testing.T) {
 	e := echo.New()
 	tokenManager := setupTestTokenManager(t)
-	middleware := New(tokenManager)
+	middleware := New(tokenManager, "", "")
 
 	req := httptest.NewRequest(http.MethodGet, "/test", nil)
 	rec := httptest.NewRecorder()
@@ -75,7 +75,7 @@ func TestMiddlewareProcessNoToken(t *testing.T) {
 func TestMiddlewareProcessInvalidToken(t *testing.T) {
 	e := echo.New()
 	tokenManager := setupTestTokenManager(t)
-	middleware := New(tokenManager)
+	middleware := New(tokenManager, "", "")
 
 	req := httptest.NewRequest(http.MethodGet, "/test", nil)
 	req.Header.Set("Authorization", "Impersonation eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.invalid.token")
@@ -118,7 +118,7 @@ func TestMiddlewareProcessValidToken(t *testing.T) {
 	token, err := tokenManager.CreateImpersonationToken(ctx, opts)
 	assert.NoError(t, err)
 
-	middleware := New(tokenManager)
+	middleware := New(tokenManager, "", "")
 
 	req := httptest.NewRequest(http.MethodGet, "/test", nil)
 	req.Header.Set("Authorization", "Impersonation "+token)

@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -35,13 +36,23 @@ type OrgMembershipHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// Role holds the value of the "role" field.
 	Role enums.Role `json:"role,omitempty"`
 	// OrganizationID holds the value of the "organization_id" field.
 	OrganizationID string `json:"organization_id,omitempty"`
 	// UserID holds the value of the "user_id" field.
-	UserID       string `json:"user_id,omitempty"`
-	selectValues sql.SelectValues
+	UserID string `json:"user_id,omitempty"`
+	// member is exempt from the SSO login redirect for this organization; TFA enforcement still applies. Who may set this is gated by the org membership mutation policy
+	SSOExempt bool `json:"sso_exempt,omitempty"`
+	// reason the member was granted an SSO exemption
+	SSOExemptReason *string `json:"sso_exempt_reason,omitempty"`
+	// id of the user that granted the SSO exemption; stamped server-side, not settable via the API
+	SSOExemptGrantedBy *string `json:"sso_exempt_granted_by,omitempty"`
+	// when the SSO exemption was granted; stamped server-side, not settable via the API
+	SSOExemptGrantedAt *models.DateTime `json:"sso_exempt_granted_at,omitempty"`
+	selectValues       sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -49,9 +60,13 @@ func (*OrgMembershipHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case orgmembershiphistory.FieldSSOExemptGrantedAt:
+			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case orgmembershiphistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case orgmembershiphistory.FieldID, orgmembershiphistory.FieldRef, orgmembershiphistory.FieldCreatedBy, orgmembershiphistory.FieldUpdatedBy, orgmembershiphistory.FieldRole, orgmembershiphistory.FieldOrganizationID, orgmembershiphistory.FieldUserID:
+		case orgmembershiphistory.FieldSSOExempt:
+			values[i] = new(sql.NullBool)
+		case orgmembershiphistory.FieldID, orgmembershiphistory.FieldRef, orgmembershiphistory.FieldCreatedBy, orgmembershiphistory.FieldUpdatedBy, orgmembershiphistory.FieldUpdatedByImpersonator, orgmembershiphistory.FieldRole, orgmembershiphistory.FieldOrganizationID, orgmembershiphistory.FieldUserID, orgmembershiphistory.FieldSSOExemptReason, orgmembershiphistory.FieldSSOExemptGrantedBy:
 			values[i] = new(sql.NullString)
 		case orgmembershiphistory.FieldHistoryTime, orgmembershiphistory.FieldCreatedAt, orgmembershiphistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -118,6 +133,13 @@ func (_m *OrgMembershipHistory) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
 			}
+		case orgmembershiphistory.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
+			}
 		case orgmembershiphistory.FieldRole:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field role", values[i])
@@ -135,6 +157,33 @@ func (_m *OrgMembershipHistory) assignValues(columns []string, values []any) err
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
 				_m.UserID = value.String
+			}
+		case orgmembershiphistory.FieldSSOExempt:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field sso_exempt", values[i])
+			} else if value.Valid {
+				_m.SSOExempt = value.Bool
+			}
+		case orgmembershiphistory.FieldSSOExemptReason:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field sso_exempt_reason", values[i])
+			} else if value.Valid {
+				_m.SSOExemptReason = new(string)
+				*_m.SSOExemptReason = value.String
+			}
+		case orgmembershiphistory.FieldSSOExemptGrantedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field sso_exempt_granted_by", values[i])
+			} else if value.Valid {
+				_m.SSOExemptGrantedBy = new(string)
+				*_m.SSOExemptGrantedBy = value.String
+			}
+		case orgmembershiphistory.FieldSSOExemptGrantedAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field sso_exempt_granted_at", values[i])
+			} else if value.Valid {
+				_m.SSOExemptGrantedAt = new(models.DateTime)
+				*_m.SSOExemptGrantedAt = *value.S.(*models.DateTime)
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -193,6 +242,11 @@ func (_m *OrgMembershipHistory) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("role=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Role))
 	builder.WriteString(", ")
@@ -201,6 +255,24 @@ func (_m *OrgMembershipHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
 	builder.WriteString(_m.UserID)
+	builder.WriteString(", ")
+	builder.WriteString("sso_exempt=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SSOExempt))
+	builder.WriteString(", ")
+	if v := _m.SSOExemptReason; v != nil {
+		builder.WriteString("sso_exempt_reason=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SSOExemptGrantedBy; v != nil {
+		builder.WriteString("sso_exempt_granted_by=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SSOExemptGrantedAt; v != nil {
+		builder.WriteString("sso_exempt_granted_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

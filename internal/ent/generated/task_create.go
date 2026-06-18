@@ -99,6 +99,20 @@ func (_c *TaskCreate) SetNillableUpdatedBy(v *string) *TaskCreate {
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *TaskCreate) SetUpdatedByImpersonator(v string) *TaskCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *TaskCreate) SetNillableUpdatedByImpersonator(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *TaskCreate) SetDeletedAt(v time.Time) *TaskCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -927,6 +941,10 @@ func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(task.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(task.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(task.FieldDeletedAt, field.TypeTime, value)

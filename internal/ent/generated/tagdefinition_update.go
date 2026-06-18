@@ -65,6 +65,26 @@ func (_u *TagDefinitionUpdate) ClearUpdatedBy() *TagDefinitionUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *TagDefinitionUpdate) SetUpdatedByImpersonator(v string) *TagDefinitionUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *TagDefinitionUpdate) SetNillableUpdatedByImpersonator(v *string) *TagDefinitionUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *TagDefinitionUpdate) ClearUpdatedByImpersonator() *TagDefinitionUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *TagDefinitionUpdate) SetDeletedAt(v time.Time) *TagDefinitionUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -352,6 +372,12 @@ func (_u *TagDefinitionUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(tagdefinition.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(tagdefinition.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(tagdefinition.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(tagdefinition.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -492,6 +518,26 @@ func (_u *TagDefinitionUpdateOne) SetNillableUpdatedBy(v *string) *TagDefinition
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *TagDefinitionUpdateOne) ClearUpdatedBy() *TagDefinitionUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *TagDefinitionUpdateOne) SetUpdatedByImpersonator(v string) *TagDefinitionUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *TagDefinitionUpdateOne) SetNillableUpdatedByImpersonator(v *string) *TagDefinitionUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *TagDefinitionUpdateOne) ClearUpdatedByImpersonator() *TagDefinitionUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -811,6 +857,12 @@ func (_u *TagDefinitionUpdateOne) sqlSave(ctx context.Context) (_node *TagDefini
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(tagdefinition.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(tagdefinition.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(tagdefinition.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(tagdefinition.FieldDeletedAt, field.TypeTime, value)

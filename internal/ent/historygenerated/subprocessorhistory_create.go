@@ -113,6 +113,20 @@ func (_c *SubprocessorHistoryCreate) SetNillableUpdatedBy(v *string) *Subprocess
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *SubprocessorHistoryCreate) SetUpdatedByImpersonator(v string) *SubprocessorHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *SubprocessorHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *SubprocessorHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *SubprocessorHistoryCreate) SetDeletedAt(v time.Time) *SubprocessorHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -420,6 +434,10 @@ func (_c *SubprocessorHistoryCreate) createSpec() (*SubprocessorHistory, *sqlgra
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(subprocessorhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(subprocessorhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(subprocessorhistory.FieldDeletedAt, field.TypeTime, value)
