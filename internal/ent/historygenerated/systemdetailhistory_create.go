@@ -115,6 +115,20 @@ func (_c *SystemDetailHistoryCreate) SetNillableUpdatedBy(v *string) *SystemDeta
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *SystemDetailHistoryCreate) SetUpdatedByImpersonator(v string) *SystemDetailHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *SystemDetailHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *SystemDetailHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *SystemDetailHistoryCreate) SetDeletedAt(v time.Time) *SystemDetailHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -462,6 +476,10 @@ func (_c *SystemDetailHistoryCreate) createSpec() (*SystemDetailHistory, *sqlgra
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(systemdetailhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(systemdetailhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(systemdetailhistory.FieldDeletedAt, field.TypeTime, value)

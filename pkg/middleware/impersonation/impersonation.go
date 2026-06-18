@@ -11,32 +11,61 @@ import (
 	"github.com/theopenlane/iam/tokens"
 )
 
+// supportCapabilities are granted to the virtual Openlane support identity during a support session.
+// They allow owner-level work (FGA, feature, and subscription checks bypassed) while remaining scoped
+// to the consented organization, since the org filter is intentionally not bypassed
+const supportCapabilities = auth.CapBypassFGA | auth.CapBypassFeatureCheck | auth.CapBypassSubscriptionCheck
+
 // Middleware handles detection and processing of impersonation tokens
 type Middleware struct {
 	tokenManager *tokens.TokenManager
+	// supportSubjectID is the configured subject id of the virtual support identity; sessions targeting
+	// it are granted the support capabilities
+	supportSubjectID string
+	// supportName is the configured display name of the virtual support identity
+	supportName string
 }
 
-// New creates a new impersonation middleware
-func New(tokenManager *tokens.TokenManager) *Middleware {
+// New creates a new impersonation middleware. supportSubjectID and supportName come from the support
+// access configuration so support sessions can be recognized and attributed without hardcoded values
+func New(tokenManager *tokens.TokenManager, supportSubjectID, supportName string) *Middleware {
 	return &Middleware{
-		tokenManager: tokenManager,
+		tokenManager:     tokenManager,
+		supportSubjectID: supportSubjectID,
+		supportName:      supportName,
 	}
 }
 
-// Process is the middleware function that processes impersonation tokens
+// Process is the middleware function that processes impersonation tokens. An impersonation token may
+// be presented either with the dedicated Impersonation authorization scheme or, for clients that only
+// send Bearer (such as the web UI), as a Bearer token. A normal access token fails impersonation
+// validation because it lacks the required impersonation claims, so the request falls through to the
+// normal authentication middleware in that case
 func (m *Middleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 
-		// Check for impersonation token in Authorization header
+		// prefer the dedicated Impersonation scheme; fall back to a Bearer token for UI clients
+		viaBearer := false
+
 		tokenString, err := auth.GetImpersonationToken(c)
 		if err != nil {
-			return next(c)
+			tokenString, err = auth.GetBearerToken(c)
+			if err != nil || tokenString == "" {
+				return next(c)
+			}
+
+			viaBearer = true
 		}
 
 		// Validate the impersonation token
 		claims, err := m.tokenManager.ValidateImpersonationToken(ctx, tokenString)
 		if err != nil {
+			if viaBearer {
+				// the Bearer token is not an impersonation token; let normal authentication handle it
+				return next(c)
+			}
+
 			logx.FromContext(ctx).Warn().Err(err).Str("ip", c.RealIP()).Msg("invalid impersonation token")
 
 			return echo.NewHTTPError(http.StatusUnauthorized, "invalid impersonation token")
@@ -67,7 +96,15 @@ func (m *Middleware) createImpersonatedCaller(claims *tokens.ImpersonationClaims
 		SubjectID:          claims.UserID,
 		SubjectEmail:       claims.TargetUserEmail,
 		OrganizationID:     claims.OrgID,
+		OrganizationIDs:    []string{claims.OrgID},
 		AuthenticationType: auth.JWTAuthentication,
+	}
+
+	// the virtual Openlane support identity is granted owner-level, org-scoped capabilities so support
+	// staff can perform tasks such as ownership transfer or organization deletion within the consented org
+	if m.supportSubjectID != "" && claims.UserID == m.supportSubjectID {
+		caller.SubjectName = m.supportName
+		caller.Capabilities = supportCapabilities
 	}
 
 	// Create the impersonation context

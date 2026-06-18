@@ -115,6 +115,20 @@ func (_c *WorkflowEventHistoryCreate) SetNillableUpdatedBy(v *string) *WorkflowE
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *WorkflowEventHistoryCreate) SetUpdatedByImpersonator(v string) *WorkflowEventHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *WorkflowEventHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *WorkflowEventHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *WorkflowEventHistoryCreate) SetDeletedAt(v time.Time) *WorkflowEventHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -371,6 +385,10 @@ func (_c *WorkflowEventHistoryCreate) createSpec() (*WorkflowEventHistory, *sqlg
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(workfloweventhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(workfloweventhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(workfloweventhistory.FieldDeletedAt, field.TypeTime, value)

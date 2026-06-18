@@ -36,6 +36,8 @@ type NotificationTemplateHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -110,7 +112,7 @@ func (*NotificationTemplateHistory) scanValues(columns []string) ([]any, error) 
 			values[i] = new(sql.NullBool)
 		case notificationtemplatehistory.FieldVersion:
 			values[i] = new(sql.NullInt64)
-		case notificationtemplatehistory.FieldID, notificationtemplatehistory.FieldRef, notificationtemplatehistory.FieldCreatedBy, notificationtemplatehistory.FieldUpdatedBy, notificationtemplatehistory.FieldDeletedBy, notificationtemplatehistory.FieldRevision, notificationtemplatehistory.FieldOwnerID, notificationtemplatehistory.FieldInternalNotes, notificationtemplatehistory.FieldSystemInternalID, notificationtemplatehistory.FieldKey, notificationtemplatehistory.FieldName, notificationtemplatehistory.FieldDescription, notificationtemplatehistory.FieldChannel, notificationtemplatehistory.FieldFormat, notificationtemplatehistory.FieldLocale, notificationtemplatehistory.FieldTopicPattern, notificationtemplatehistory.FieldIntegrationID, notificationtemplatehistory.FieldWorkflowDefinitionID, notificationtemplatehistory.FieldEmailTemplateID, notificationtemplatehistory.FieldTitleTemplate, notificationtemplatehistory.FieldSubjectTemplate, notificationtemplatehistory.FieldBodyTemplate, notificationtemplatehistory.FieldTemplateContext:
+		case notificationtemplatehistory.FieldID, notificationtemplatehistory.FieldRef, notificationtemplatehistory.FieldCreatedBy, notificationtemplatehistory.FieldUpdatedBy, notificationtemplatehistory.FieldUpdatedByImpersonator, notificationtemplatehistory.FieldDeletedBy, notificationtemplatehistory.FieldRevision, notificationtemplatehistory.FieldOwnerID, notificationtemplatehistory.FieldInternalNotes, notificationtemplatehistory.FieldSystemInternalID, notificationtemplatehistory.FieldKey, notificationtemplatehistory.FieldName, notificationtemplatehistory.FieldDescription, notificationtemplatehistory.FieldChannel, notificationtemplatehistory.FieldFormat, notificationtemplatehistory.FieldLocale, notificationtemplatehistory.FieldTopicPattern, notificationtemplatehistory.FieldIntegrationID, notificationtemplatehistory.FieldWorkflowDefinitionID, notificationtemplatehistory.FieldEmailTemplateID, notificationtemplatehistory.FieldTitleTemplate, notificationtemplatehistory.FieldSubjectTemplate, notificationtemplatehistory.FieldBodyTemplate, notificationtemplatehistory.FieldTemplateContext:
 			values[i] = new(sql.NullString)
 		case notificationtemplatehistory.FieldHistoryTime, notificationtemplatehistory.FieldCreatedAt, notificationtemplatehistory.FieldUpdatedAt, notificationtemplatehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -176,6 +178,13 @@ func (_m *NotificationTemplateHistory) assignValues(columns []string, values []a
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case notificationtemplatehistory.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case notificationtemplatehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -421,6 +430,11 @@ func (_m *NotificationTemplateHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))

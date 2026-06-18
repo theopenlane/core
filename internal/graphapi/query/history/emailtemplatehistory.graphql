@@ -33,6 +33,7 @@ query GetAllEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $be
 				trustCenterID
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				version
 				workflowDefinitionID
 				workflowInstanceID
@@ -75,6 +76,7 @@ query GetEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $befor
 				trustCenterID
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				version
 				workflowDefinitionID
 				workflowInstanceID

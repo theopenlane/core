@@ -37,6 +37,8 @@ type IdentityHolderHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -121,7 +123,7 @@ func (*IdentityHolderHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case identityholderhistory.FieldWorkflowEligibleMarker, identityholderhistory.FieldIsOpenlaneUser, identityholderhistory.FieldIsActive:
 			values[i] = new(sql.NullBool)
-		case identityholderhistory.FieldID, identityholderhistory.FieldRef, identityholderhistory.FieldCreatedBy, identityholderhistory.FieldUpdatedBy, identityholderhistory.FieldDeletedBy, identityholderhistory.FieldDisplayID, identityholderhistory.FieldOwnerID, identityholderhistory.FieldInternalOwner, identityholderhistory.FieldInternalOwnerUserID, identityholderhistory.FieldInternalOwnerGroupID, identityholderhistory.FieldEnvironmentName, identityholderhistory.FieldEnvironmentID, identityholderhistory.FieldScopeName, identityholderhistory.FieldScopeID, identityholderhistory.FieldFullName, identityholderhistory.FieldEmail, identityholderhistory.FieldAlternateEmail, identityholderhistory.FieldPhoneNumber, identityholderhistory.FieldUserID, identityholderhistory.FieldIdentityHolderType, identityholderhistory.FieldStatus, identityholderhistory.FieldTitle, identityholderhistory.FieldDepartment, identityholderhistory.FieldTeam, identityholderhistory.FieldLocation, identityholderhistory.FieldEmployerEntityID, identityholderhistory.FieldExternalUserID, identityholderhistory.FieldExternalReferenceID, identityholderhistory.FieldAvatarRemoteURL:
+		case identityholderhistory.FieldID, identityholderhistory.FieldRef, identityholderhistory.FieldCreatedBy, identityholderhistory.FieldUpdatedBy, identityholderhistory.FieldUpdatedByImpersonator, identityholderhistory.FieldDeletedBy, identityholderhistory.FieldDisplayID, identityholderhistory.FieldOwnerID, identityholderhistory.FieldInternalOwner, identityholderhistory.FieldInternalOwnerUserID, identityholderhistory.FieldInternalOwnerGroupID, identityholderhistory.FieldEnvironmentName, identityholderhistory.FieldEnvironmentID, identityholderhistory.FieldScopeName, identityholderhistory.FieldScopeID, identityholderhistory.FieldFullName, identityholderhistory.FieldEmail, identityholderhistory.FieldAlternateEmail, identityholderhistory.FieldPhoneNumber, identityholderhistory.FieldUserID, identityholderhistory.FieldIdentityHolderType, identityholderhistory.FieldStatus, identityholderhistory.FieldTitle, identityholderhistory.FieldDepartment, identityholderhistory.FieldTeam, identityholderhistory.FieldLocation, identityholderhistory.FieldEmployerEntityID, identityholderhistory.FieldExternalUserID, identityholderhistory.FieldExternalReferenceID, identityholderhistory.FieldAvatarRemoteURL:
 			values[i] = new(sql.NullString)
 		case identityholderhistory.FieldHistoryTime, identityholderhistory.FieldCreatedAt, identityholderhistory.FieldUpdatedAt, identityholderhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -187,6 +189,13 @@ func (_m *IdentityHolderHistory) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case identityholderhistory.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case identityholderhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -457,6 +466,11 @@ func (_m *IdentityHolderHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))

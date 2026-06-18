@@ -55,6 +55,29 @@ func (OrgMembership) Fields() []ent.Field {
 			Default(enums.RoleMember.String()),
 		field.String("organization_id").Immutable(),
 		field.String("user_id").Immutable(),
+		field.Bool("sso_exempt").
+			Comment("member is exempt from the SSO login redirect for this organization; TFA enforcement still applies. Who may set this is gated by the org membership mutation policy").
+			Default(false).
+			Optional(),
+		field.String("sso_exempt_reason").
+			Comment("reason the member was granted an SSO exemption").
+			Optional().
+			Nillable(),
+		field.String("sso_exempt_granted_by").
+			Comment("id of the user that granted the SSO exemption; stamped server-side, not settable via the API").
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput),
+			).
+			Optional().
+			Nillable(),
+		field.Time("sso_exempt_granted_at").
+			Comment("when the SSO exemption was granted; stamped server-side, not settable via the API").
+			GoType(models.DateTime{}).
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput),
+			).
+			Optional().
+			Nillable(),
 	}
 }
 
@@ -126,6 +149,7 @@ func (OrgMembership) Hooks() []ent.Hook {
 		hooks.HookOrgMembers(),
 		hooks.HookMembershipSelf("org_memberships"),
 		hooks.HookOrgMembersDelete(),
+		hooks.HookSSOExemptionAttribution(),
 	}
 }
 

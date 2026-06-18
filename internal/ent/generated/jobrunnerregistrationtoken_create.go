@@ -78,6 +78,20 @@ func (_c *JobRunnerRegistrationTokenCreate) SetNillableUpdatedBy(v *string) *Job
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *JobRunnerRegistrationTokenCreate) SetUpdatedByImpersonator(v string) *JobRunnerRegistrationTokenCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *JobRunnerRegistrationTokenCreate) SetNillableUpdatedByImpersonator(v *string) *JobRunnerRegistrationTokenCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *JobRunnerRegistrationTokenCreate) SetDeletedAt(v time.Time) *JobRunnerRegistrationTokenCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -346,6 +360,10 @@ func (_c *JobRunnerRegistrationTokenCreate) createSpec() (*JobRunnerRegistration
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(jobrunnerregistrationtoken.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldDeletedAt, field.TypeTime, value)

@@ -675,6 +675,7 @@ func RegisterRoutes(router *Router) error {
 		registerResendQuestionnaireHandler,
 		registerStartImpersonationHandler,
 		registerEndImpersonationHandler,
+		registerSupportCallbackHandler,
 		registerProductCatalogHandler,
 		registerFileDownloadHandler,
 		registerIntegrationWebhookHandler,
@@ -753,7 +754,7 @@ func authMiddleware(router *Router) []echo.MiddlewareFunc {
 // authenticated routes. it identifies impersonated requests and the user impersonating
 // and checks access
 func impersonationMiddleware(router *Router) echo.MiddlewareFunc {
-	mw := impersonation.New(router.Handler.TokenManager)
+	mw := impersonation.New(router.Handler.TokenManager, router.Handler.SupportAccessConfig.SubjectID, router.Handler.SupportAccessConfig.DisplayName)
 	return mw.Process
 }
 

@@ -66,6 +66,26 @@ func (_u *MappableDomainHistoryUpdate) ClearUpdatedBy() *MappableDomainHistoryUp
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *MappableDomainHistoryUpdate) SetUpdatedByImpersonator(v string) *MappableDomainHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *MappableDomainHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *MappableDomainHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *MappableDomainHistoryUpdate) ClearUpdatedByImpersonator() *MappableDomainHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *MappableDomainHistoryUpdate) SetDeletedAt(v time.Time) *MappableDomainHistoryUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -207,6 +227,12 @@ func (_u *MappableDomainHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(mappabledomainhistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(mappabledomainhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(mappabledomainhistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(mappabledomainhistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -283,6 +309,26 @@ func (_u *MappableDomainHistoryUpdateOne) SetNillableUpdatedBy(v *string) *Mappa
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *MappableDomainHistoryUpdateOne) ClearUpdatedBy() *MappableDomainHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *MappableDomainHistoryUpdateOne) SetUpdatedByImpersonator(v string) *MappableDomainHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *MappableDomainHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *MappableDomainHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *MappableDomainHistoryUpdateOne) ClearUpdatedByImpersonator() *MappableDomainHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -456,6 +502,12 @@ func (_u *MappableDomainHistoryUpdateOne) sqlSave(ctx context.Context) (_node *M
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(mappabledomainhistory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(mappabledomainhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(mappabledomainhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(mappabledomainhistory.FieldDeletedAt, field.TypeTime, value)

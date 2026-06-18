@@ -10,6 +10,7 @@ mutation CreateBulkCSVTrustCenterEntity ($input: Upload!) {
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			url
 		}
 	}
@@ -26,6 +27,7 @@ mutation CreateBulkTrustCenterEntity ($input: [CreateTrustCenterEntityInput!]) {
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			url
 		}
 	}
@@ -126,6 +128,7 @@ query GetTrustCenterEntityByID ($trustCenterEntityId: ID!) {
 		trustCenterID
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		url
 		logoFile {
 			id

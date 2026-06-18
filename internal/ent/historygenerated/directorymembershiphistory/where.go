@@ -98,6 +98,11 @@ func UpdatedBy(v string) predicate.DirectoryMembershipHistory {
 	return predicate.DirectoryMembershipHistory(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
+// UpdatedByImpersonator applies equality check predicate on the "updated_by_impersonator" field. It's identical to UpdatedByImpersonatorEQ.
+func UpdatedByImpersonator(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldEQ(FieldUpdatedByImpersonator, v))
+}
+
 // DisplayID applies equality check predicate on the "display_id" field. It's identical to DisplayIDEQ.
 func DisplayID(v string) predicate.DirectoryMembershipHistory {
 	return predicate.DirectoryMembershipHistory(sql.FieldEQ(FieldDisplayID, v))
@@ -581,6 +586,81 @@ func UpdatedByEqualFold(v string) predicate.DirectoryMembershipHistory {
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
 func UpdatedByContainsFold(v string) predicate.DirectoryMembershipHistory {
 	return predicate.DirectoryMembershipHistory(sql.FieldContainsFold(FieldUpdatedBy, v))
+}
+
+// UpdatedByImpersonatorEQ applies the EQ predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorEQ(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldEQ(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorNEQ applies the NEQ predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNEQ(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldNEQ(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorIn applies the In predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorIn(vs ...string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldIn(FieldUpdatedByImpersonator, vs...))
+}
+
+// UpdatedByImpersonatorNotIn applies the NotIn predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNotIn(vs ...string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldNotIn(FieldUpdatedByImpersonator, vs...))
+}
+
+// UpdatedByImpersonatorGT applies the GT predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorGT(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldGT(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorGTE applies the GTE predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorGTE(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldGTE(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorLT applies the LT predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorLT(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldLT(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorLTE applies the LTE predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorLTE(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldLTE(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorContains applies the Contains predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorContains(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldContains(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorHasPrefix applies the HasPrefix predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorHasPrefix(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldHasPrefix(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorHasSuffix applies the HasSuffix predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorHasSuffix(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldHasSuffix(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorIsNil applies the IsNil predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorIsNil() predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldIsNull(FieldUpdatedByImpersonator))
+}
+
+// UpdatedByImpersonatorNotNil applies the NotNil predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNotNil() predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldNotNull(FieldUpdatedByImpersonator))
+}
+
+// UpdatedByImpersonatorEqualFold applies the EqualFold predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorEqualFold(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldEqualFold(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorContainsFold applies the ContainsFold predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorContainsFold(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldContainsFold(FieldUpdatedByImpersonator, v))
 }
 
 // DisplayIDEQ applies the EQ predicate on the "display_id" field.

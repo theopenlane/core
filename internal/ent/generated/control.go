@@ -33,6 +33,8 @@ type Control struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -622,7 +624,7 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case control.FieldSystemOwned, control.FieldWorkflowEligibleMarker, control.FieldIsTrustCenterControl:
 			values[i] = new(sql.NullBool)
-		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldExternalUUID, control.FieldTitle, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldResponsiblePartyID, control.FieldStatus, control.FieldImplementationStatus, control.FieldImplementationDescription, control.FieldPublicRepresentation, control.FieldSource, control.FieldSourceName, control.FieldReferenceFramework, control.FieldReferenceFrameworkRevision, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldOwnerID, control.FieldInternalNotes, control.FieldSystemInternalID, control.FieldControlKindName, control.FieldControlKindID, control.FieldEnvironmentName, control.FieldEnvironmentID, control.FieldScopeName, control.FieldScopeID, control.FieldRefCode, control.FieldStandardID, control.FieldTrustCenterVisibility:
+		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldUpdatedByImpersonator, control.FieldDeletedBy, control.FieldDisplayID, control.FieldExternalUUID, control.FieldTitle, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldResponsiblePartyID, control.FieldStatus, control.FieldImplementationStatus, control.FieldImplementationDescription, control.FieldPublicRepresentation, control.FieldSource, control.FieldSourceName, control.FieldReferenceFramework, control.FieldReferenceFrameworkRevision, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldOwnerID, control.FieldInternalNotes, control.FieldSystemInternalID, control.FieldControlKindName, control.FieldControlKindID, control.FieldEnvironmentName, control.FieldEnvironmentID, control.FieldScopeName, control.FieldScopeID, control.FieldRefCode, control.FieldStandardID, control.FieldTrustCenterVisibility:
 			values[i] = new(sql.NullString)
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -674,6 +676,13 @@ func (_m *Control) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case control.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case control.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -1251,6 +1260,11 @@ func (_m *Control) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))

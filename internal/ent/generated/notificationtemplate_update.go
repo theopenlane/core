@@ -69,6 +69,26 @@ func (_u *NotificationTemplateUpdate) ClearUpdatedBy() *NotificationTemplateUpda
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *NotificationTemplateUpdate) SetUpdatedByImpersonator(v string) *NotificationTemplateUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *NotificationTemplateUpdate) SetNillableUpdatedByImpersonator(v *string) *NotificationTemplateUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *NotificationTemplateUpdate) ClearUpdatedByImpersonator() *NotificationTemplateUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *NotificationTemplateUpdate) SetDeletedAt(v time.Time) *NotificationTemplateUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -724,6 +744,12 @@ func (_u *NotificationTemplateUpdate) sqlSave(ctx context.Context) (_node int, e
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(notificationtemplate.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(notificationtemplate.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(notificationtemplate.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(notificationtemplate.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -1052,6 +1078,26 @@ func (_u *NotificationTemplateUpdateOne) SetNillableUpdatedBy(v *string) *Notifi
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *NotificationTemplateUpdateOne) ClearUpdatedBy() *NotificationTemplateUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *NotificationTemplateUpdateOne) SetUpdatedByImpersonator(v string) *NotificationTemplateUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *NotificationTemplateUpdateOne) SetNillableUpdatedByImpersonator(v *string) *NotificationTemplateUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *NotificationTemplateUpdateOne) ClearUpdatedByImpersonator() *NotificationTemplateUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -1739,6 +1785,12 @@ func (_u *NotificationTemplateUpdateOne) sqlSave(ctx context.Context) (_node *No
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(notificationtemplate.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(notificationtemplate.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(notificationtemplate.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(notificationtemplate.FieldDeletedAt, field.TypeTime, value)

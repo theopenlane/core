@@ -40,6 +40,7 @@ mutation CreateBulkCampaign($input: [CreateCampaignInput!]) {
       trustCenterID
       updatedAt
       updatedBy
+      updatedByImpersonator
       workflowEligibleMarker
     }
   }
@@ -87,6 +88,7 @@ mutation CreateBulkCSVCampaign($input: Upload!) {
       trustCenterID
       updatedAt
       updatedBy
+      updatedByImpersonator
       workflowEligibleMarker
     }
   }
@@ -134,6 +136,7 @@ mutation CreateCampaign($input: CreateCampaignInput!) {
       trustCenterID
       updatedAt
       updatedBy
+      updatedByImpersonator
       workflowEligibleMarker
     }
   }
@@ -201,6 +204,7 @@ query GetAllCampaigns($first: Int, $last: Int, $after: Cursor, $before: Cursor, 
         trustCenterID
         updatedAt
         updatedBy
+        updatedByImpersonator
         workflowEligibleMarker
         campaignTargets {
           edges {
@@ -261,6 +265,7 @@ query GetCampaignByID($campaignId: ID!) {
     trustCenterID
     updatedAt
     updatedBy
+    updatedByImpersonator
     workflowEligibleMarker
     campaignTargets {
       edges {
@@ -335,6 +340,7 @@ query GetCampaigns($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
         trustCenterID
         updatedAt
         updatedBy
+        updatedByImpersonator
         workflowEligibleMarker
         campaignTargets {
           edges {
@@ -396,6 +402,7 @@ mutation UpdateCampaign($updateCampaignId: ID!, $input: UpdateCampaignInput!) {
       trustCenterID
       updatedAt
       updatedBy
+      updatedByImpersonator
       workflowEligibleMarker
     }
   }

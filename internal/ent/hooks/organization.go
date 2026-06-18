@@ -611,12 +611,18 @@ func createOrgMemberOwner(ctx context.Context, oID string, m *generated.Organiza
 		return err
 	}
 
-	// Add User as owner of organization
+	// Add User as owner of organization. Owners are exempt from the SSO login redirect; this seeds
+	// the per-user exemption so the bypass is recorded data rather than a hardcoded role check. The
+	// attribution hook stamps sso_exempt_granted_by/_at from the creating user's context
 	owner := enums.RoleOwner
+	exempt := true
+	exemptReason := "organization owner"
 	input := generated.CreateOrgMembershipInput{
-		UserID:         userID,
-		OrganizationID: oID,
-		Role:           &owner,
+		UserID:          userID,
+		OrganizationID:  oID,
+		Role:            &owner,
+		SSOExempt:       &exempt,
+		SSOExemptReason: &exemptReason,
 	}
 
 	if err := m.Client().OrgMembership.Create().SetInput(input).Exec(ctx); err != nil {

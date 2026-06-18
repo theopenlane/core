@@ -626,6 +626,13 @@ func WithCloudflareConfig() ServerOption {
 	})
 }
 
+// WithSupportAccessConfig sets up the Openlane support access configuration for the server
+func WithSupportAccessConfig() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		s.Config.Handler.SupportAccessConfig = s.Config.Settings.Auth.SupportAccess
+	})
+}
+
 // WithShortlinks sets up the shortlinks client for URL shortening
 func WithShortlinks() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {

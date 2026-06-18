@@ -68,6 +68,26 @@ func (_u *RiskHistoryUpdate) ClearUpdatedBy() *RiskHistoryUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *RiskHistoryUpdate) SetUpdatedByImpersonator(v string) *RiskHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *RiskHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *RiskHistoryUpdate) ClearUpdatedByImpersonator() *RiskHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *RiskHistoryUpdate) SetDeletedAt(v time.Time) *RiskHistoryUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -904,6 +924,12 @@ func (_u *RiskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(riskhistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(riskhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(riskhistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(riskhistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -1199,6 +1225,26 @@ func (_u *RiskHistoryUpdateOne) SetNillableUpdatedBy(v *string) *RiskHistoryUpda
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *RiskHistoryUpdateOne) ClearUpdatedBy() *RiskHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *RiskHistoryUpdateOne) SetUpdatedByImpersonator(v string) *RiskHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *RiskHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *RiskHistoryUpdateOne) ClearUpdatedByImpersonator() *RiskHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -2067,6 +2113,12 @@ func (_u *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHistory
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(riskhistory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(riskhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(riskhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(riskhistory.FieldDeletedAt, field.TypeTime, value)

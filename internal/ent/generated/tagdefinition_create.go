@@ -77,6 +77,20 @@ func (_c *TagDefinitionCreate) SetNillableUpdatedBy(v *string) *TagDefinitionCre
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *TagDefinitionCreate) SetUpdatedByImpersonator(v string) *TagDefinitionCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *TagDefinitionCreate) SetNillableUpdatedByImpersonator(v *string) *TagDefinitionCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *TagDefinitionCreate) SetDeletedAt(v time.Time) *TagDefinitionCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -377,6 +391,10 @@ func (_c *TagDefinitionCreate) createSpec() (*TagDefinition, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(tagdefinition.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(tagdefinition.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(tagdefinition.FieldDeletedAt, field.TypeTime, value)

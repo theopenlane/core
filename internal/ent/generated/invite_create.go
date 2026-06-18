@@ -80,6 +80,20 @@ func (_c *InviteCreate) SetNillableUpdatedBy(v *string) *InviteCreate {
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *InviteCreate) SetUpdatedByImpersonator(v string) *InviteCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *InviteCreate) SetNillableUpdatedByImpersonator(v *string) *InviteCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *InviteCreate) SetDeletedAt(v time.Time) *InviteCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -224,6 +238,20 @@ func (_c *InviteCreate) SetNillableOwnershipTransfer(v *bool) *InviteCreate {
 	return _c
 }
 
+// SetSSOExempt sets the "sso_exempt" field.
+func (_c *InviteCreate) SetSSOExempt(v bool) *InviteCreate {
+	_c.mutation.SetSSOExempt(v)
+	return _c
+}
+
+// SetNillableSSOExempt sets the "sso_exempt" field if the given value is not nil.
+func (_c *InviteCreate) SetNillableSSOExempt(v *bool) *InviteCreate {
+	if v != nil {
+		_c.SetSSOExempt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *InviteCreate) SetID(v string) *InviteCreate {
 	_c.mutation.SetID(v)
@@ -347,6 +375,10 @@ func (_c *InviteCreate) defaults() error {
 		v := invite.DefaultOwnershipTransfer
 		_c.mutation.SetOwnershipTransfer(v)
 	}
+	if _, ok := _c.mutation.SSOExempt(); !ok {
+		v := invite.DefaultSSOExempt
+		_c.mutation.SetSSOExempt(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if invite.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized invite.DefaultID (forgotten import generated/runtime?)")
@@ -464,6 +496,10 @@ func (_c *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 		_spec.SetField(invite.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(invite.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
+	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(invite.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -507,6 +543,10 @@ func (_c *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.OwnershipTransfer(); ok {
 		_spec.SetField(invite.FieldOwnershipTransfer, field.TypeBool, value)
 		_node.OwnershipTransfer = value
+	}
+	if value, ok := _c.mutation.SSOExempt(); ok {
+		_spec.SetField(invite.FieldSSOExempt, field.TypeBool, value)
+		_node.SSOExempt = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

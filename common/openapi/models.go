@@ -98,6 +98,12 @@ type LoginRequest struct {
 	Username string `json:"username" description:"The email address associated with the existing account" example:"jsnow@example.com"`
 	// Password is the password value.
 	Password string `json:"password" description:"The password associated with the account" example:"Wint3rIsC0ming123!"`
+	// TargetOrganizationID is only used for the Openlane support login path to scope the support session
+	TargetOrganizationID string `json:"target_organization_id,omitempty" description:"For Openlane support login only: the organization to access"`
+	// Reason is only used for the Openlane support login path to record why support is accessing the org
+	Reason string `json:"reason,omitempty" description:"For Openlane support login only: the reason for accessing the organization"`
+	// DurationHours is only used for the Openlane support login path to set the session length
+	DurationHours *int `json:"duration_hours,omitempty" description:"For Openlane support login only: session length in hours"`
 }
 
 // LoginReply contains authentication tokens and user information after successful login
@@ -110,6 +116,8 @@ type LoginReply struct {
 	TFAEnabled bool `json:"tfa_enabled,omitempty"`
 	// TFASetupRequired is the tfa_required value.
 	TFASetupRequired bool `json:"tfa_required,omitempty"`
+	// RedirectURI directs the caller to a second factor identity provider; set for the Openlane support login path
+	RedirectURI string `json:"redirect_uri,omitempty"`
 	// Message is the message value.
 	Message string `json:"message"`
 }
@@ -2169,6 +2177,58 @@ func (r *EndImpersonationRequest) Validate() error {
 	}
 
 	return nil
+}
+
+// SupportCallbackRequest carries the second factor identity provider authorization code and state
+type SupportCallbackRequest struct {
+	// Code is the authorization code returned by the identity provider
+	Code string `json:"code" query:"code" description:"authorization code"`
+	// State is the state value returned by the identity provider
+	State string `json:"state" query:"state" description:"state value"`
+}
+
+// ExampleSupportCallbackRequest is an example request for OpenAPI documentation
+var ExampleSupportCallbackRequest = SupportCallbackRequest{
+	Code:  "authcode123",
+	State: "state123",
+}
+
+// SupportAccessReply represents the support session token returned after the second factor completes
+type SupportAccessReply struct {
+	// Reply is the reply value
+	rout.Reply
+	// Token is the support session token to use as the Impersonation Authorization scheme
+	Token string `json:"token" description:"The support access token"`
+	// ExpiresAt is when the support token expires
+	ExpiresAt time.Time `json:"expires_at" description:"When the support access token expires"`
+	// SessionID is the support access session id
+	SessionID string `json:"session_id" description:"The support access session ID"`
+	// OrganizationID is the organization the support session is scoped to, for the impersonation banner
+	OrganizationID string `json:"organization_id" description:"The organization the support session is scoped to"`
+	// Impersonator is the individual who completed the second factor, for the impersonation banner and audit
+	Impersonator string `json:"impersonator" description:"The individual acting in the support session"`
+	// Message is a human readable success message
+	Message string `json:"message" description:"Success message"`
+}
+
+// ExampleResponse returns an example SupportAccessReply for OpenAPI documentation
+func (r *SupportAccessReply) ExampleResponse() any {
+	return SupportAccessReply{
+		Reply:     rout.Reply{Success: true},
+		Token:     "imp_" + exampleULID("token"),
+		ExpiresAt: exampleTime(time.Hour),
+		SessionID: exampleULID("session"),
+		Message:   "Support access session started successfully",
+	}
+}
+
+// ExampleSupportAccessReply is an example response for OpenAPI documentation
+var ExampleSupportAccessReply = SupportAccessReply{
+	Reply:     rout.Reply{Success: true},
+	Token:     "imp_" + exampleULID("token"),
+	ExpiresAt: exampleTime(time.Hour),
+	SessionID: exampleULID("session"),
+	Message:   "Support access session started successfully",
 }
 
 // =========

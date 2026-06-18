@@ -17,6 +17,7 @@ mutation CreateBulkCSVDNSVerification ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -39,6 +40,7 @@ mutation CreateBulkDNSVerification ($input: [CreateDNSVerificationInput!]) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -61,6 +63,7 @@ mutation CreateDNSVerification ($input: CreateDNSVerificationInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -118,6 +121,7 @@ query GetDNSVerificationByID ($dnsVerificationId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 	}
 }
 query GetDNSVerifications ($first: Int, $last: Int, $where: DNSVerificationWhereInput) {
@@ -170,6 +174,7 @@ mutation UpdateDNSVerification ($updateDNSVerificationId: ID!, $input: UpdateDNS
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }

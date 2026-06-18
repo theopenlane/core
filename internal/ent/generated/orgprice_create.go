@@ -81,6 +81,20 @@ func (_c *OrgPriceCreate) SetNillableUpdatedBy(v *string) *OrgPriceCreate {
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *OrgPriceCreate) SetUpdatedByImpersonator(v string) *OrgPriceCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *OrgPriceCreate) SetNillableUpdatedByImpersonator(v *string) *OrgPriceCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *OrgPriceCreate) SetDeletedAt(v time.Time) *OrgPriceCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -411,6 +425,10 @@ func (_c *OrgPriceCreate) createSpec() (*OrgPrice, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgprice.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(orgprice.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(orgprice.FieldDeletedAt, field.TypeTime, value)

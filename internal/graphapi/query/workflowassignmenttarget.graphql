@@ -40,6 +40,7 @@ query GetWorkflowAssignmentTargetByID ($workflowAssignmentTargetId: ID!) {
 		targetUserID
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		workflowAssignmentID
 	}
 }

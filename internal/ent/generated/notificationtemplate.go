@@ -31,6 +31,8 @@ type NotificationTemplate struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -180,7 +182,7 @@ func (*NotificationTemplate) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case notificationtemplate.FieldVersion:
 			values[i] = new(sql.NullInt64)
-		case notificationtemplate.FieldID, notificationtemplate.FieldCreatedBy, notificationtemplate.FieldUpdatedBy, notificationtemplate.FieldDeletedBy, notificationtemplate.FieldRevision, notificationtemplate.FieldOwnerID, notificationtemplate.FieldInternalNotes, notificationtemplate.FieldSystemInternalID, notificationtemplate.FieldKey, notificationtemplate.FieldName, notificationtemplate.FieldDescription, notificationtemplate.FieldChannel, notificationtemplate.FieldFormat, notificationtemplate.FieldLocale, notificationtemplate.FieldTopicPattern, notificationtemplate.FieldIntegrationID, notificationtemplate.FieldWorkflowDefinitionID, notificationtemplate.FieldEmailTemplateID, notificationtemplate.FieldTitleTemplate, notificationtemplate.FieldSubjectTemplate, notificationtemplate.FieldBodyTemplate, notificationtemplate.FieldTemplateContext:
+		case notificationtemplate.FieldID, notificationtemplate.FieldCreatedBy, notificationtemplate.FieldUpdatedBy, notificationtemplate.FieldUpdatedByImpersonator, notificationtemplate.FieldDeletedBy, notificationtemplate.FieldRevision, notificationtemplate.FieldOwnerID, notificationtemplate.FieldInternalNotes, notificationtemplate.FieldSystemInternalID, notificationtemplate.FieldKey, notificationtemplate.FieldName, notificationtemplate.FieldDescription, notificationtemplate.FieldChannel, notificationtemplate.FieldFormat, notificationtemplate.FieldLocale, notificationtemplate.FieldTopicPattern, notificationtemplate.FieldIntegrationID, notificationtemplate.FieldWorkflowDefinitionID, notificationtemplate.FieldEmailTemplateID, notificationtemplate.FieldTitleTemplate, notificationtemplate.FieldSubjectTemplate, notificationtemplate.FieldBodyTemplate, notificationtemplate.FieldTemplateContext:
 			values[i] = new(sql.NullString)
 		case notificationtemplate.FieldCreatedAt, notificationtemplate.FieldUpdatedAt, notificationtemplate.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -228,6 +230,13 @@ func (_m *NotificationTemplate) assignValues(columns []string, values []any) err
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case notificationtemplate.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case notificationtemplate.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -489,6 +498,11 @@ func (_m *NotificationTemplate) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))

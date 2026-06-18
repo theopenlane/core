@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 
@@ -66,6 +67,26 @@ func (_u *OrgMembershipHistoryUpdate) ClearUpdatedBy() *OrgMembershipHistoryUpda
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *OrgMembershipHistoryUpdate) SetUpdatedByImpersonator(v string) *OrgMembershipHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *OrgMembershipHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *OrgMembershipHistoryUpdate) ClearUpdatedByImpersonator() *OrgMembershipHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetRole sets the "role" field.
 func (_u *OrgMembershipHistoryUpdate) SetRole(v enums.Role) *OrgMembershipHistoryUpdate {
 	_u.mutation.SetRole(v)
@@ -77,6 +98,86 @@ func (_u *OrgMembershipHistoryUpdate) SetNillableRole(v *enums.Role) *OrgMembers
 	if v != nil {
 		_u.SetRole(*v)
 	}
+	return _u
+}
+
+// SetSSOExempt sets the "sso_exempt" field.
+func (_u *OrgMembershipHistoryUpdate) SetSSOExempt(v bool) *OrgMembershipHistoryUpdate {
+	_u.mutation.SetSSOExempt(v)
+	return _u
+}
+
+// SetNillableSSOExempt sets the "sso_exempt" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdate) SetNillableSSOExempt(v *bool) *OrgMembershipHistoryUpdate {
+	if v != nil {
+		_u.SetSSOExempt(*v)
+	}
+	return _u
+}
+
+// ClearSSOExempt clears the value of the "sso_exempt" field.
+func (_u *OrgMembershipHistoryUpdate) ClearSSOExempt() *OrgMembershipHistoryUpdate {
+	_u.mutation.ClearSSOExempt()
+	return _u
+}
+
+// SetSSOExemptReason sets the "sso_exempt_reason" field.
+func (_u *OrgMembershipHistoryUpdate) SetSSOExemptReason(v string) *OrgMembershipHistoryUpdate {
+	_u.mutation.SetSSOExemptReason(v)
+	return _u
+}
+
+// SetNillableSSOExemptReason sets the "sso_exempt_reason" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdate) SetNillableSSOExemptReason(v *string) *OrgMembershipHistoryUpdate {
+	if v != nil {
+		_u.SetSSOExemptReason(*v)
+	}
+	return _u
+}
+
+// ClearSSOExemptReason clears the value of the "sso_exempt_reason" field.
+func (_u *OrgMembershipHistoryUpdate) ClearSSOExemptReason() *OrgMembershipHistoryUpdate {
+	_u.mutation.ClearSSOExemptReason()
+	return _u
+}
+
+// SetSSOExemptGrantedBy sets the "sso_exempt_granted_by" field.
+func (_u *OrgMembershipHistoryUpdate) SetSSOExemptGrantedBy(v string) *OrgMembershipHistoryUpdate {
+	_u.mutation.SetSSOExemptGrantedBy(v)
+	return _u
+}
+
+// SetNillableSSOExemptGrantedBy sets the "sso_exempt_granted_by" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdate) SetNillableSSOExemptGrantedBy(v *string) *OrgMembershipHistoryUpdate {
+	if v != nil {
+		_u.SetSSOExemptGrantedBy(*v)
+	}
+	return _u
+}
+
+// ClearSSOExemptGrantedBy clears the value of the "sso_exempt_granted_by" field.
+func (_u *OrgMembershipHistoryUpdate) ClearSSOExemptGrantedBy() *OrgMembershipHistoryUpdate {
+	_u.mutation.ClearSSOExemptGrantedBy()
+	return _u
+}
+
+// SetSSOExemptGrantedAt sets the "sso_exempt_granted_at" field.
+func (_u *OrgMembershipHistoryUpdate) SetSSOExemptGrantedAt(v models.DateTime) *OrgMembershipHistoryUpdate {
+	_u.mutation.SetSSOExemptGrantedAt(v)
+	return _u
+}
+
+// SetNillableSSOExemptGrantedAt sets the "sso_exempt_granted_at" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdate) SetNillableSSOExemptGrantedAt(v *models.DateTime) *OrgMembershipHistoryUpdate {
+	if v != nil {
+		_u.SetSSOExemptGrantedAt(*v)
+	}
+	return _u
+}
+
+// ClearSSOExemptGrantedAt clears the value of the "sso_exempt_granted_at" field.
+func (_u *OrgMembershipHistoryUpdate) ClearSSOExemptGrantedAt() *OrgMembershipHistoryUpdate {
+	_u.mutation.ClearSSOExemptGrantedAt()
 	return _u
 }
 
@@ -176,8 +277,38 @@ func (_u *OrgMembershipHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(orgmembershiphistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(orgmembershiphistory.FieldRole, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.SSOExempt(); ok {
+		_spec.SetField(orgmembershiphistory.FieldSSOExempt, field.TypeBool, value)
+	}
+	if _u.mutation.SSOExemptCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldSSOExempt, field.TypeBool)
+	}
+	if value, ok := _u.mutation.SSOExemptReason(); ok {
+		_spec.SetField(orgmembershiphistory.FieldSSOExemptReason, field.TypeString, value)
+	}
+	if _u.mutation.SSOExemptReasonCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldSSOExemptReason, field.TypeString)
+	}
+	if value, ok := _u.mutation.SSOExemptGrantedBy(); ok {
+		_spec.SetField(orgmembershiphistory.FieldSSOExemptGrantedBy, field.TypeString, value)
+	}
+	if _u.mutation.SSOExemptGrantedByCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldSSOExemptGrantedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.SSOExemptGrantedAt(); ok {
+		_spec.SetField(orgmembershiphistory.FieldSSOExemptGrantedAt, field.TypeTime, value)
+	}
+	if _u.mutation.SSOExemptGrantedAtCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldSSOExemptGrantedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.OrgMembershipHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -235,6 +366,26 @@ func (_u *OrgMembershipHistoryUpdateOne) ClearUpdatedBy() *OrgMembershipHistoryU
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *OrgMembershipHistoryUpdateOne) SetUpdatedByImpersonator(v string) *OrgMembershipHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *OrgMembershipHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *OrgMembershipHistoryUpdateOne) ClearUpdatedByImpersonator() *OrgMembershipHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetRole sets the "role" field.
 func (_u *OrgMembershipHistoryUpdateOne) SetRole(v enums.Role) *OrgMembershipHistoryUpdateOne {
 	_u.mutation.SetRole(v)
@@ -246,6 +397,86 @@ func (_u *OrgMembershipHistoryUpdateOne) SetNillableRole(v *enums.Role) *OrgMemb
 	if v != nil {
 		_u.SetRole(*v)
 	}
+	return _u
+}
+
+// SetSSOExempt sets the "sso_exempt" field.
+func (_u *OrgMembershipHistoryUpdateOne) SetSSOExempt(v bool) *OrgMembershipHistoryUpdateOne {
+	_u.mutation.SetSSOExempt(v)
+	return _u
+}
+
+// SetNillableSSOExempt sets the "sso_exempt" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdateOne) SetNillableSSOExempt(v *bool) *OrgMembershipHistoryUpdateOne {
+	if v != nil {
+		_u.SetSSOExempt(*v)
+	}
+	return _u
+}
+
+// ClearSSOExempt clears the value of the "sso_exempt" field.
+func (_u *OrgMembershipHistoryUpdateOne) ClearSSOExempt() *OrgMembershipHistoryUpdateOne {
+	_u.mutation.ClearSSOExempt()
+	return _u
+}
+
+// SetSSOExemptReason sets the "sso_exempt_reason" field.
+func (_u *OrgMembershipHistoryUpdateOne) SetSSOExemptReason(v string) *OrgMembershipHistoryUpdateOne {
+	_u.mutation.SetSSOExemptReason(v)
+	return _u
+}
+
+// SetNillableSSOExemptReason sets the "sso_exempt_reason" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdateOne) SetNillableSSOExemptReason(v *string) *OrgMembershipHistoryUpdateOne {
+	if v != nil {
+		_u.SetSSOExemptReason(*v)
+	}
+	return _u
+}
+
+// ClearSSOExemptReason clears the value of the "sso_exempt_reason" field.
+func (_u *OrgMembershipHistoryUpdateOne) ClearSSOExemptReason() *OrgMembershipHistoryUpdateOne {
+	_u.mutation.ClearSSOExemptReason()
+	return _u
+}
+
+// SetSSOExemptGrantedBy sets the "sso_exempt_granted_by" field.
+func (_u *OrgMembershipHistoryUpdateOne) SetSSOExemptGrantedBy(v string) *OrgMembershipHistoryUpdateOne {
+	_u.mutation.SetSSOExemptGrantedBy(v)
+	return _u
+}
+
+// SetNillableSSOExemptGrantedBy sets the "sso_exempt_granted_by" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdateOne) SetNillableSSOExemptGrantedBy(v *string) *OrgMembershipHistoryUpdateOne {
+	if v != nil {
+		_u.SetSSOExemptGrantedBy(*v)
+	}
+	return _u
+}
+
+// ClearSSOExemptGrantedBy clears the value of the "sso_exempt_granted_by" field.
+func (_u *OrgMembershipHistoryUpdateOne) ClearSSOExemptGrantedBy() *OrgMembershipHistoryUpdateOne {
+	_u.mutation.ClearSSOExemptGrantedBy()
+	return _u
+}
+
+// SetSSOExemptGrantedAt sets the "sso_exempt_granted_at" field.
+func (_u *OrgMembershipHistoryUpdateOne) SetSSOExemptGrantedAt(v models.DateTime) *OrgMembershipHistoryUpdateOne {
+	_u.mutation.SetSSOExemptGrantedAt(v)
+	return _u
+}
+
+// SetNillableSSOExemptGrantedAt sets the "sso_exempt_granted_at" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdateOne) SetNillableSSOExemptGrantedAt(v *models.DateTime) *OrgMembershipHistoryUpdateOne {
+	if v != nil {
+		_u.SetSSOExemptGrantedAt(*v)
+	}
+	return _u
+}
+
+// ClearSSOExemptGrantedAt clears the value of the "sso_exempt_granted_at" field.
+func (_u *OrgMembershipHistoryUpdateOne) ClearSSOExemptGrantedAt() *OrgMembershipHistoryUpdateOne {
+	_u.mutation.ClearSSOExemptGrantedAt()
 	return _u
 }
 
@@ -375,8 +606,38 @@ func (_u *OrgMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Or
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(orgmembershiphistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(orgmembershiphistory.FieldRole, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.SSOExempt(); ok {
+		_spec.SetField(orgmembershiphistory.FieldSSOExempt, field.TypeBool, value)
+	}
+	if _u.mutation.SSOExemptCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldSSOExempt, field.TypeBool)
+	}
+	if value, ok := _u.mutation.SSOExemptReason(); ok {
+		_spec.SetField(orgmembershiphistory.FieldSSOExemptReason, field.TypeString, value)
+	}
+	if _u.mutation.SSOExemptReasonCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldSSOExemptReason, field.TypeString)
+	}
+	if value, ok := _u.mutation.SSOExemptGrantedBy(); ok {
+		_spec.SetField(orgmembershiphistory.FieldSSOExemptGrantedBy, field.TypeString, value)
+	}
+	if _u.mutation.SSOExemptGrantedByCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldSSOExemptGrantedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.SSOExemptGrantedAt(); ok {
+		_spec.SetField(orgmembershiphistory.FieldSSOExemptGrantedAt, field.TypeTime, value)
+	}
+	if _u.mutation.SSOExemptGrantedAtCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldSSOExemptGrantedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.OrgMembershipHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

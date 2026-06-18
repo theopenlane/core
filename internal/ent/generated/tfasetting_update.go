@@ -65,6 +65,26 @@ func (_u *TFASettingUpdate) ClearUpdatedBy() *TFASettingUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *TFASettingUpdate) SetUpdatedByImpersonator(v string) *TFASettingUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *TFASettingUpdate) SetNillableUpdatedByImpersonator(v *string) *TFASettingUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *TFASettingUpdate) ClearUpdatedByImpersonator() *TFASettingUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *TFASettingUpdate) SetDeletedAt(v time.Time) *TFASettingUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -328,6 +348,12 @@ func (_u *TFASettingUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(tfasetting.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(tfasetting.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(tfasetting.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(tfasetting.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -462,6 +488,26 @@ func (_u *TFASettingUpdateOne) SetNillableUpdatedBy(v *string) *TFASettingUpdate
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *TFASettingUpdateOne) ClearUpdatedBy() *TFASettingUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *TFASettingUpdateOne) SetUpdatedByImpersonator(v string) *TFASettingUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *TFASettingUpdateOne) SetNillableUpdatedByImpersonator(v *string) *TFASettingUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *TFASettingUpdateOne) ClearUpdatedByImpersonator() *TFASettingUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -757,6 +803,12 @@ func (_u *TFASettingUpdateOne) sqlSave(ctx context.Context) (_node *TFASetting, 
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(tfasetting.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(tfasetting.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(tfasetting.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(tfasetting.FieldDeletedAt, field.TypeTime, value)

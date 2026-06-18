@@ -72,6 +72,26 @@ func (_u *ContactUpdate) ClearUpdatedBy() *ContactUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *ContactUpdate) SetUpdatedByImpersonator(v string) *ContactUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *ContactUpdate) SetNillableUpdatedByImpersonator(v *string) *ContactUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *ContactUpdate) ClearUpdatedByImpersonator() *ContactUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *ContactUpdate) SetDeletedAt(v time.Time) *ContactUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -648,6 +668,12 @@ func (_u *ContactUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(contact.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(contact.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(contact.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(contact.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -1052,6 +1078,26 @@ func (_u *ContactUpdateOne) SetNillableUpdatedBy(v *string) *ContactUpdateOne {
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *ContactUpdateOne) ClearUpdatedBy() *ContactUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *ContactUpdateOne) SetUpdatedByImpersonator(v string) *ContactUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *ContactUpdateOne) SetNillableUpdatedByImpersonator(v *string) *ContactUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *ContactUpdateOne) ClearUpdatedByImpersonator() *ContactUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -1660,6 +1706,12 @@ func (_u *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err er
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(contact.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(contact.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(contact.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(contact.FieldDeletedAt, field.TypeTime, value)

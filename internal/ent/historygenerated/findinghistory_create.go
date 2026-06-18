@@ -115,6 +115,20 @@ func (_c *FindingHistoryCreate) SetNillableUpdatedBy(v *string) *FindingHistoryC
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *FindingHistoryCreate) SetUpdatedByImpersonator(v string) *FindingHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *FindingHistoryCreate) SetDeletedAt(v time.Time) *FindingHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -955,6 +969,10 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(findinghistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(findinghistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(findinghistory.FieldDeletedAt, field.TypeTime, value)

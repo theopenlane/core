@@ -19,6 +19,7 @@ mutation CreateAPIToken ($input: CreateAPITokenInput!) {
 			token
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -47,6 +48,7 @@ query GetAPITokenByID ($apiTokenId: ID!) {
 		token
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		owner {
 			id
 			displayName
@@ -124,6 +126,7 @@ mutation UpdateAPIToken ($updateAPITokenId: ID!, $input: UpdateAPITokenInput!) {
 			token
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }

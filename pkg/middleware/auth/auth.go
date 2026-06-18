@@ -527,18 +527,14 @@ func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) 
 		if orgID != "" {
 			userID := userIDFromToken(c, v)
 			if userID != "" {
-				enforced, dbErr := isSSOEnforcedFunc(reqCtx, conf.DBClient, orgID)
+				mustSSO, dbErr := userMustSSOFunc(reqCtx, conf.DBClient, orgID, userID)
 
-				if dbErr == nil && enforced {
-					role, mErr := orgRoleFunc(reqCtx, conf.DBClient, userID, orgID)
-
-					if mErr == nil && role != enums.RoleOwner {
-						if redirErr := c.Redirect(http.StatusFound, sso.SSOLogin(c.Echo(), orgID)); redirErr != nil {
-							return redirErr
-						}
-
-						return nil
+				if dbErr == nil && mustSSO {
+					if redirErr := c.Redirect(http.StatusFound, sso.SSOLogin(c.Echo(), orgID)); redirErr != nil {
+						return redirErr
 					}
+
+					return nil
 				}
 			}
 		}
@@ -596,6 +592,53 @@ func isSSOEnforced(ctx context.Context, db *ent.Client, orgID string) (bool, err
 	}
 
 	return setting.IdentityProviderLoginEnforced, nil
+}
+
+// userMustSSO reports whether the user must be redirected through the organization's SSO login
+// flow, taking owner, per-user, and per-domain exemptions into account. TFA enforcement is
+// evaluated separately and is not affected by SSO exemption
+func userMustSSO(ctx context.Context, db *ent.Client, orgID, userID string) (bool, error) {
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	setting, err := db.OrganizationSetting.Query().
+		Where(organizationsetting.OrganizationID(orgID)).
+		Only(allowCtx)
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return false, nil
+		}
+
+		return false, err
+	}
+
+	in := sso.EnforcementInput{
+		SSOEnforced:   setting.IdentityProviderLoginEnforced,
+		IDPAuthTested: setting.IdentityProviderAuthTested,
+		TFAEnforced:   setting.MultifactorAuthEnforced,
+		ExemptDomains: setting.SSOExemptDomains,
+	}
+
+	member, err := db.OrgMembership.Query().
+		Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
+		WithUser().
+		Only(allowCtx)
+
+	switch {
+	case err == nil:
+		in.IsMember = true
+		in.IsOwner = member.Role == enums.RoleOwner
+		in.MemberExempt = member.SSOExempt
+
+		if member.Edges.User != nil {
+			in.Email = member.Edges.User.Email
+		}
+	case ent.IsNotFound(err):
+		// not a member of the org; evaluate raw enforcement only
+	default:
+		return false, err
+	}
+
+	return sso.Evaluate(in).MustSSO, nil
 }
 
 // userIDFromToken extracts the user ID from the token in the request context
@@ -682,16 +725,7 @@ func getRole(ctx context.Context, db *ent.Client, userID, orgID string) (enums.R
 // function variables allow tests to override SSO checks without a database
 var (
 	isSSOEnforcedFunc = isSSOEnforced
-	orgRoleFunc       = func(ctx context.Context, db *ent.Client, userID, orgID string) (enums.Role, error) {
-		member, err := db.OrgMembership.Query().
-			Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
-			Only(privacy.DecisionContext(ctx, privacy.Allow))
-		if err != nil {
-			return "", err
-		}
-
-		return member.Role, nil
-	}
+	userMustSSOFunc   = userMustSSO
 
 	fetchPATFunc = func(ctx context.Context, db *ent.Client, token string) (*ent.PersonalAccessToken, error) {
 		return db.PersonalAccessToken.Query().Where(personalaccesstoken.Token(token)).

@@ -68,6 +68,26 @@ func (_u *ReviewHistoryUpdate) ClearUpdatedBy() *ReviewHistoryUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *ReviewHistoryUpdate) SetUpdatedByImpersonator(v string) *ReviewHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *ReviewHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *ReviewHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *ReviewHistoryUpdate) ClearUpdatedByImpersonator() *ReviewHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *ReviewHistoryUpdate) SetDeletedAt(v time.Time) *ReviewHistoryUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -700,6 +720,12 @@ func (_u *ReviewHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(reviewhistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(reviewhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(reviewhistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(reviewhistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -929,6 +955,26 @@ func (_u *ReviewHistoryUpdateOne) SetNillableUpdatedBy(v *string) *ReviewHistory
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *ReviewHistoryUpdateOne) ClearUpdatedBy() *ReviewHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *ReviewHistoryUpdateOne) SetUpdatedByImpersonator(v string) *ReviewHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *ReviewHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *ReviewHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *ReviewHistoryUpdateOne) ClearUpdatedByImpersonator() *ReviewHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -1593,6 +1639,12 @@ func (_u *ReviewHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ReviewHis
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(reviewhistory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(reviewhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(reviewhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(reviewhistory.FieldDeletedAt, field.TypeTime, value)

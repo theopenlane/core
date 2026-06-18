@@ -81,6 +81,20 @@ func (_c *WorkflowProposalCreate) SetNillableUpdatedBy(v *string) *WorkflowPropo
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *WorkflowProposalCreate) SetUpdatedByImpersonator(v string) *WorkflowProposalCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *WorkflowProposalCreate) SetNillableUpdatedByImpersonator(v *string) *WorkflowProposalCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetTags sets the "tags" field.
 func (_c *WorkflowProposalCreate) SetTags(v []string) *WorkflowProposalCreate {
 	_c.mutation.SetTags(v)
@@ -422,6 +436,10 @@ func (_c *WorkflowProposalCreate) createSpec() (*WorkflowProposal, *sqlgraph.Cre
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(workflowproposal.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(workflowproposal.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(workflowproposal.FieldTags, field.TypeJSON, value)

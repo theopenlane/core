@@ -68,6 +68,26 @@ func (_u *PersonalAccessTokenUpdate) ClearUpdatedBy() *PersonalAccessTokenUpdate
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *PersonalAccessTokenUpdate) SetUpdatedByImpersonator(v string) *PersonalAccessTokenUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *PersonalAccessTokenUpdate) SetNillableUpdatedByImpersonator(v *string) *PersonalAccessTokenUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *PersonalAccessTokenUpdate) ClearUpdatedByImpersonator() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *PersonalAccessTokenUpdate) SetDeletedAt(v time.Time) *PersonalAccessTokenUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -503,6 +523,12 @@ func (_u *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(personalaccesstoken.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(personalaccesstoken.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(personalaccesstoken.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -768,6 +794,26 @@ func (_u *PersonalAccessTokenUpdateOne) SetNillableUpdatedBy(v *string) *Persona
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *PersonalAccessTokenUpdateOne) ClearUpdatedBy() *PersonalAccessTokenUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *PersonalAccessTokenUpdateOne) SetUpdatedByImpersonator(v string) *PersonalAccessTokenUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *PersonalAccessTokenUpdateOne) SetNillableUpdatedByImpersonator(v *string) *PersonalAccessTokenUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *PersonalAccessTokenUpdateOne) ClearUpdatedByImpersonator() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -1235,6 +1281,12 @@ func (_u *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *Per
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(personalaccesstoken.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(personalaccesstoken.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(personalaccesstoken.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldDeletedAt, field.TypeTime, value)

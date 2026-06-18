@@ -29,6 +29,7 @@ mutation CreateBulkCSVTask ($input: Upload!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			assignee {
 				id
 				firstName
@@ -86,6 +87,7 @@ mutation CreateBulkTask ($input: [CreateTaskInput!]) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			assignee {
 				id
 				firstName
@@ -143,6 +145,7 @@ mutation CreateTask ($input: CreateTaskInput!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			assignee {
 				id
 				firstName
@@ -213,6 +216,7 @@ query GetAllTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				title
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				assignee {
 					id
 					firstName
@@ -284,6 +288,7 @@ query GetTaskByID ($taskId: ID!) {
 		title
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		assignee {
 			id
 			firstName
@@ -362,6 +367,7 @@ query GetTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				title
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				assignee {
 					id
 					firstName
@@ -430,6 +436,7 @@ mutation UpdateBulkTask ($ids: [ID!]!, $input: UpdateTaskInput!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			assignee {
 				id
 				firstName
@@ -488,6 +495,7 @@ mutation UpdateTask ($updateTaskId: ID!, $input: UpdateTaskInput!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			assignee {
 				id
 				firstName

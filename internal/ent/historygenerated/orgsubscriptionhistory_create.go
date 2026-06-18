@@ -113,6 +113,20 @@ func (_c *OrgSubscriptionHistoryCreate) SetNillableUpdatedBy(v *string) *OrgSubs
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *OrgSubscriptionHistoryCreate) SetUpdatedByImpersonator(v string) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *OrgSubscriptionHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *OrgSubscriptionHistoryCreate) SetDeletedAt(v time.Time) *OrgSubscriptionHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -399,6 +413,10 @@ func (_c *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory, *
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(orgsubscriptionhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldDeletedAt, field.TypeTime, value)

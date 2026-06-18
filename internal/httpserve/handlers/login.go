@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	echo "github.com/theopenlane/echox"
 
@@ -34,6 +35,13 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 	}
 
 	reqCtx := ctx.Request().Context()
+
+	// the Openlane support identity is virtual and authenticated entirely from configuration; detect it
+	// before any database lookup so this email can never authenticate against a database user, and route
+	// it to the configuration backed support login (password factor plus second factor identity provider)
+	if h.SupportAccessConfig.Enabled && strings.EqualFold(req.Username, h.SupportAccessConfig.Email) {
+		return h.supportFirstFactor(ctx, openapi, req)
+	}
 
 	// check user in the database, username == email and ensure only one record is returned
 	user, err := h.getUserByEmail(reqCtx, req.Username)

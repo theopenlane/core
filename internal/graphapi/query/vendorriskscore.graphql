@@ -20,6 +20,7 @@ mutation CreateBulkCSVVendorRiskScore ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			vendorScoringConfigID
 		}
 	}
@@ -46,6 +47,7 @@ mutation CreateBulkVendorRiskScore ($input: [CreateVendorRiskScoreInput!]) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			vendorScoringConfigID
 		}
 	}
@@ -72,6 +74,7 @@ mutation CreateVendorRiskScore ($input: CreateVendorRiskScoreInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			vendorScoringConfigID
 		}
 	}
@@ -116,6 +119,7 @@ query GetAllVendorRiskScores ($first: Int, $last: Int, $after: Cursor, $before: 
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				vendorScoringConfigID
 			}
 		}
@@ -142,6 +146,7 @@ query GetVendorRiskScoreByID ($vendorRiskScoreId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		vendorScoringConfigID
 	}
 }
@@ -175,6 +180,7 @@ query GetVendorRiskScores ($first: Int, $last: Int, $after: Cursor, $before: Cur
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				vendorScoringConfigID
 			}
 		}
@@ -202,6 +208,7 @@ mutation UpdateBulkCSVVendorRiskScore ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			vendorScoringConfigID
 		}
 		updatedIDs
@@ -229,6 +236,7 @@ mutation UpdateBulkVendorRiskScore ($ids: [ID!]!, $input: UpdateVendorRiskScoreI
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			vendorScoringConfigID
 		}
 		updatedIDs
@@ -256,6 +264,7 @@ mutation UpdateVendorRiskScore ($updateVendorRiskScoreId: ID!, $input: UpdateVen
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			vendorScoringConfigID
 		}
 	}

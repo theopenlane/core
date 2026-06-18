@@ -53,6 +53,7 @@ mutation CreateBulkCSVFinding ($input: Upload!) {
 			targets
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			validated
 			vector
 		}
@@ -113,6 +114,7 @@ mutation CreateBulkFinding ($input: [CreateFindingInput!]) {
 			targets
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			validated
 			vector
 		}
@@ -173,6 +175,7 @@ mutation CreateFinding ($input: CreateFindingInput!) {
 			targets
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			validated
 			vector
 		}
@@ -320,6 +323,7 @@ query GetFindingByID ($findingId: ID!) {
 		targets
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		validated
 		vector
 		remediations {
@@ -477,6 +481,7 @@ mutation UpdateBulkCSVFinding ($input: Upload!) {
 			targets
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			validated
 			vector
 		}
@@ -538,6 +543,7 @@ mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
 			targets
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			validated
 			vector
 		}
@@ -599,6 +605,7 @@ mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {
 			targets
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			validated
 			vector
 		}

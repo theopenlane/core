@@ -66,6 +66,26 @@ func (_u *FindingControlHistoryUpdate) ClearUpdatedBy() *FindingControlHistoryUp
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *FindingControlHistoryUpdate) SetUpdatedByImpersonator(v string) *FindingControlHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *FindingControlHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *FindingControlHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *FindingControlHistoryUpdate) ClearUpdatedByImpersonator() *FindingControlHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetExternalStandard sets the "external_standard" field.
 func (_u *FindingControlHistoryUpdate) SetExternalStandard(v string) *FindingControlHistoryUpdate {
 	_u.mutation.SetExternalStandard(v)
@@ -261,6 +281,12 @@ func (_u *FindingControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(findingcontrolhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(findingcontrolhistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if _u.mutation.StandardIDCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldStandardID, field.TypeString)
 	}
@@ -353,6 +379,26 @@ func (_u *FindingControlHistoryUpdateOne) SetNillableUpdatedBy(v *string) *Findi
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *FindingControlHistoryUpdateOne) ClearUpdatedBy() *FindingControlHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *FindingControlHistoryUpdateOne) SetUpdatedByImpersonator(v string) *FindingControlHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *FindingControlHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *FindingControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *FindingControlHistoryUpdateOne) ClearUpdatedByImpersonator() *FindingControlHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -580,6 +626,12 @@ func (_u *FindingControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *F
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(findingcontrolhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(findingcontrolhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if _u.mutation.StandardIDCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldStandardID, field.TypeString)

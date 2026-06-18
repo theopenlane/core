@@ -29,6 +29,8 @@ type OrganizationSetting struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -81,6 +83,10 @@ type OrganizationSetting struct {
 	IdentityProviderLoginEnforced bool `json:"identity_provider_login_enforced,omitempty"`
 	// enforce 2fa / multifactor authentication for organization members
 	MultifactorAuthEnforced bool `json:"multifactor_auth_enforced,omitempty"`
+	// email domains whose existing members skip the SSO redirect even when SSO is enforced; TFA enforcement still applies
+	SSOExemptDomains []string `json:"sso_exempt_domains,omitempty"`
+	// allow Openlane support to access this organization without a directory account
+	AllowSupportAccess bool `json:"allow_support_access,omitempty"`
 	// unique token used to receive compliance webhook events
 	ComplianceWebhookToken string `json:"compliance_webhook_token,omitempty"`
 	// whether or not a payment method has been added to the account
@@ -135,11 +141,11 @@ func (*OrganizationSetting) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case organizationsetting.FieldPendingDeletionAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
-		case organizationsetting.FieldTags, organizationsetting.FieldDomains, organizationsetting.FieldBillingAddress, organizationsetting.FieldAllowedEmailDomains:
+		case organizationsetting.FieldTags, organizationsetting.FieldDomains, organizationsetting.FieldBillingAddress, organizationsetting.FieldAllowedEmailDomains, organizationsetting.FieldSSOExemptDomains:
 			values[i] = new([]byte)
-		case organizationsetting.FieldBillingNotificationsEnabled, organizationsetting.FieldAllowMatchingDomainsAutojoin, organizationsetting.FieldIdentityProviderAuthTested, organizationsetting.FieldIdentityProviderLoginEnforced, organizationsetting.FieldMultifactorAuthEnforced, organizationsetting.FieldPaymentMethodAdded:
+		case organizationsetting.FieldBillingNotificationsEnabled, organizationsetting.FieldAllowMatchingDomainsAutojoin, organizationsetting.FieldIdentityProviderAuthTested, organizationsetting.FieldIdentityProviderLoginEnforced, organizationsetting.FieldMultifactorAuthEnforced, organizationsetting.FieldAllowSupportAccess, organizationsetting.FieldPaymentMethodAdded:
 			values[i] = new(sql.NullBool)
-		case organizationsetting.FieldID, organizationsetting.FieldCreatedBy, organizationsetting.FieldUpdatedBy, organizationsetting.FieldDeletedBy, organizationsetting.FieldBillingContact, organizationsetting.FieldBillingEmail, organizationsetting.FieldBillingPhone, organizationsetting.FieldTaxIdentifier, organizationsetting.FieldGeoLocation, organizationsetting.FieldOrganizationID, organizationsetting.FieldIdentityProvider, organizationsetting.FieldIdentityProviderClientID, organizationsetting.FieldIdentityProviderClientSecret, organizationsetting.FieldIdentityProviderMetadataEndpoint, organizationsetting.FieldIdentityProviderEntityID, organizationsetting.FieldOidcDiscoveryEndpoint, organizationsetting.FieldSamlSigninURL, organizationsetting.FieldSamlIssuer, organizationsetting.FieldSamlCert, organizationsetting.FieldComplianceWebhookToken:
+		case organizationsetting.FieldID, organizationsetting.FieldCreatedBy, organizationsetting.FieldUpdatedBy, organizationsetting.FieldUpdatedByImpersonator, organizationsetting.FieldDeletedBy, organizationsetting.FieldBillingContact, organizationsetting.FieldBillingEmail, organizationsetting.FieldBillingPhone, organizationsetting.FieldTaxIdentifier, organizationsetting.FieldGeoLocation, organizationsetting.FieldOrganizationID, organizationsetting.FieldIdentityProvider, organizationsetting.FieldIdentityProviderClientID, organizationsetting.FieldIdentityProviderClientSecret, organizationsetting.FieldIdentityProviderMetadataEndpoint, organizationsetting.FieldIdentityProviderEntityID, organizationsetting.FieldOidcDiscoveryEndpoint, organizationsetting.FieldSamlSigninURL, organizationsetting.FieldSamlIssuer, organizationsetting.FieldSamlCert, organizationsetting.FieldComplianceWebhookToken:
 			values[i] = new(sql.NullString)
 		case organizationsetting.FieldCreatedAt, organizationsetting.FieldUpdatedAt, organizationsetting.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -187,6 +193,13 @@ func (_m *OrganizationSetting) assignValues(columns []string, values []any) erro
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case organizationsetting.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case organizationsetting.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -354,6 +367,20 @@ func (_m *OrganizationSetting) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				_m.MultifactorAuthEnforced = value.Bool
 			}
+		case organizationsetting.FieldSSOExemptDomains:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field sso_exempt_domains", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.SSOExemptDomains); err != nil {
+					return fmt.Errorf("unmarshal field sso_exempt_domains: %w", err)
+				}
+			}
+		case organizationsetting.FieldAllowSupportAccess:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field allow_support_access", values[i])
+			} else if value.Valid {
+				_m.AllowSupportAccess = value.Bool
+			}
 		case organizationsetting.FieldComplianceWebhookToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field compliance_webhook_token", values[i])
@@ -430,6 +457,11 @@ func (_m *OrganizationSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
@@ -512,6 +544,12 @@ func (_m *OrganizationSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("multifactor_auth_enforced=")
 	builder.WriteString(fmt.Sprintf("%v", _m.MultifactorAuthEnforced))
+	builder.WriteString(", ")
+	builder.WriteString("sso_exempt_domains=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SSOExemptDomains))
+	builder.WriteString(", ")
+	builder.WriteString("allow_support_access=")
+	builder.WriteString(fmt.Sprintf("%v", _m.AllowSupportAccess))
 	builder.WriteString(", ")
 	builder.WriteString("compliance_webhook_token=")
 	builder.WriteString(_m.ComplianceWebhookToken)

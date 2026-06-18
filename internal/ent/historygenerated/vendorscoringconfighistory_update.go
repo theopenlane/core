@@ -68,6 +68,26 @@ func (_u *VendorScoringConfigHistoryUpdate) ClearUpdatedBy() *VendorScoringConfi
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *VendorScoringConfigHistoryUpdate) SetUpdatedByImpersonator(v string) *VendorScoringConfigHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *VendorScoringConfigHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *VendorScoringConfigHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *VendorScoringConfigHistoryUpdate) ClearUpdatedByImpersonator() *VendorScoringConfigHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *VendorScoringConfigHistoryUpdate) SetDeletedAt(v time.Time) *VendorScoringConfigHistoryUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -284,6 +304,12 @@ func (_u *VendorScoringConfigHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(vendorscoringconfighistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(vendorscoringconfighistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(vendorscoringconfighistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -375,6 +401,26 @@ func (_u *VendorScoringConfigHistoryUpdateOne) SetNillableUpdatedBy(v *string) *
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *VendorScoringConfigHistoryUpdateOne) ClearUpdatedBy() *VendorScoringConfigHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *VendorScoringConfigHistoryUpdateOne) SetUpdatedByImpersonator(v string) *VendorScoringConfigHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *VendorScoringConfigHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *VendorScoringConfigHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *VendorScoringConfigHistoryUpdateOne) ClearUpdatedByImpersonator() *VendorScoringConfigHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -623,6 +669,12 @@ func (_u *VendorScoringConfigHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(vendorscoringconfighistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(vendorscoringconfighistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(vendorscoringconfighistory.FieldDeletedAt, field.TypeTime, value)
