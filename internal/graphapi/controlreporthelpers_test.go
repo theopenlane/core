@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestWorstEvidenceStatus(t *testing.T) {
@@ -65,8 +66,9 @@ func TestWorstEvidenceStatus(t *testing.T) {
 				assert.Check(t, result == nil)
 				return
 			}
+
 			assert.Assert(t, result != nil)
-			assert.Equal(t, *tt.expected, *result)
+			assert.Check(t, is.Equal(*tt.expected, *result))
 		})
 	}
 }
@@ -113,7 +115,7 @@ func TestShouldCheckForControl(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := shouldCheckForControl(tt.control, tt.frameworksInOrg)
-			assert.Equal(t, tt.expected, result)
+			assert.Check(t, is.Equal(tt.expected, result))
 		})
 	}
 }
@@ -165,11 +167,11 @@ func TestGroupControlReportsByCategory(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := groupControlReportsByCategory(tt.controls)
-			assert.Equal(t, len(tt.wantCategories), len(result))
+			assert.Check(t, is.Equal(len(tt.wantCategories), len(result)))
 			for i, cat := range result {
-				assert.Equal(t, tt.wantCategories[i], cat.Category)
-				assert.Equal(t, tt.wantControlCount[i], cat.TotalCount)
-				assert.Equal(t, tt.wantControlCount[i], len(cat.Controls))
+				assert.Check(t, is.Equal(tt.wantCategories[i], cat.Category))
+				assert.Check(t, is.Equal(tt.wantControlCount[i], cat.TotalCount))
+				assert.Check(t, is.Equal(tt.wantControlCount[i], len(cat.Controls)))
 			}
 		})
 	}
@@ -185,10 +187,10 @@ func TestControlEdgeToControlInfo(t *testing.T) {
 
 	result := controlEdgeToControlInfo(ctrl)
 
-	assert.Equal(t, "ctrl-1", result.ID)
-	assert.Equal(t, "CC1.1", result.RefCode)
-	assert.Equal(t, &fw, result.ReferenceFramework)
-	assert.Equal(t, false, result.IsSubcontrol)
+	assert.Check(t, is.Equal("ctrl-1", result.ID))
+	assert.Check(t, is.Equal("CC1.1", result.RefCode))
+	assert.Check(t, is.Equal(&fw, result.ReferenceFramework))
+	assert.Check(t, is.Equal(false, result.IsSubcontrol))
 }
 
 func TestSubcontrolEdgeToControlInfo(t *testing.T) {
@@ -201,10 +203,10 @@ func TestSubcontrolEdgeToControlInfo(t *testing.T) {
 
 	result := subcontrolEdgeToControlInfo(sc)
 
-	assert.Equal(t, "sc-1", result.ID)
-	assert.Equal(t, "A.5.1.1", result.RefCode)
-	assert.Equal(t, &fw, result.ReferenceFramework)
-	assert.Equal(t, true, result.IsSubcontrol)
+	assert.Check(t, is.Equal("sc-1", result.ID))
+	assert.Check(t, is.Equal("A.5.1.1", result.RefCode))
+	assert.Check(t, is.Equal(&fw, result.ReferenceFramework))
+	assert.Check(t, is.Equal(true, result.IsSubcontrol))
 }
 
 func TestConvertSubcontrolToControlReportEdge(t *testing.T) {
@@ -231,13 +233,13 @@ func TestConvertSubcontrolToControlReportEdge(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := convertSubcontrolToControlReportEdge(tt.controls)
-			assert.Equal(t, tt.wantLen, len(result))
+			assert.Check(t, is.Equal(tt.wantLen, len(result)))
 			for i, r := range result {
-				assert.Equal(t, tt.controls[i].ID, r.ID)
-				assert.Equal(t, tt.controls[i].RefCode, r.RefCode)
-				assert.Assert(t, r.RelatedControls != nil)
-				assert.Assert(t, r.EvidenceStatus != nil)
-				assert.Assert(t, r.LinkedPolicies != nil)
+				assert.Check(t, is.Equal(tt.controls[i].ID, r.ID))
+				assert.Check(t, is.Equal(tt.controls[i].RefCode, r.RefCode))
+				assert.Check(t, r.RelatedControls != nil)
+				assert.Check(t, r.EvidenceStatus != nil)
+				assert.Check(t, r.LinkedPolicies != nil)
 			}
 		})
 	}
@@ -269,11 +271,11 @@ func TestConvertControlListToControlReports(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := convertControlListToControlReports(tt.controls)
-			assert.Equal(t, tt.wantLen, len(result))
+			assert.Check(t, is.Equal(tt.wantLen, len(result)))
 			for i, r := range result {
-				assert.Equal(t, tt.controls[i].ID, r.ID)
-				assert.Equal(t, tt.controls[i].RefCode, r.RefCode)
-				assert.Equal(t, tt.controls[i].ReferenceFramework, r.ReferenceFramework)
+				assert.Check(t, is.Equal(tt.controls[i].ID, r.ID))
+				assert.Check(t, is.Equal(tt.controls[i].RefCode, r.RefCode))
+				assert.Check(t, is.Equal(tt.controls[i].ReferenceFramework, r.ReferenceFramework))
 				assert.Assert(t, r.RelatedControls != nil)
 				assert.Assert(t, r.EvidenceStatus != nil)
 				assert.Assert(t, r.LinkedPolicies != nil)
@@ -295,11 +297,11 @@ func TestConvertControlToControlReportEdge(t *testing.T) {
 
 	result := convertControlToControlReportEdge(conn)
 
-	assert.Equal(t, 2, result.TotalCount)
-	assert.Equal(t, 2, len(result.Edges))
-	assert.Equal(t, "ctrl-1", result.Edges[0].Node.ID)
-	assert.Equal(t, "CC1.1", result.Edges[0].Node.RefCode)
-	assert.Equal(t, "ctrl-2", result.Edges[1].Node.ID)
+	assert.Check(t, is.Equal(2, result.TotalCount))
+	assert.Check(t, is.Equal(2, len(result.Edges)))
+	assert.Check(t, is.Equal("ctrl-1", result.Edges[0].Node.ID))
+	assert.Check(t, is.Equal("CC1.1", result.Edges[0].Node.RefCode))
+	assert.Check(t, is.Equal("ctrl-2", result.Edges[1].Node.ID))
 	assert.Assert(t, result.Edges[0].Node.RelatedControls != nil)
 }
 
@@ -367,8 +369,8 @@ func TestCollectAllEntityIDs(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			gotControls, gotSubcontrols := collectAllEntityIDs(tt.reports)
-			assert.Equal(t, len(tt.wantControlIDs), len(gotControls))
-			assert.Equal(t, len(tt.wantSubcontrolIDs), len(gotSubcontrols))
+			assert.Check(t, is.Equal(len(tt.wantControlIDs), len(gotControls)))
+			assert.Check(t, is.Equal(len(tt.wantSubcontrolIDs), len(gotSubcontrols)))
 		})
 	}
 }
@@ -420,18 +422,41 @@ func TestComputeEvidenceStatus(t *testing.T) {
 			wantCount: 3, // e1, e2, e3 — e2 counted once
 			wantWorst: func() *enums.EvidenceStatus { s := enums.EvidenceStatusRejected; return &s }(),
 		},
+		{
+			// buildEvidenceMap scopes WithControls to controlIDs so out-of-scope controls
+			// never get entries in the map; this test asserts that the lookup honours that boundary
+			name:        "evidence on out-of-scope related control does not bleed through",
+			evidenceMap: map[string][]*generated.Evidence{"ctrl-1": {e1}},
+			id:          "ctrl-1",
+			relatedControls: []*model.ControlInfo{
+				{ID: "ctrl-oos", IsSubcontrol: false}, // ctrl-oos has e2 but is not in the map
+			},
+			wantCount: 1,
+			wantWorst: func() *enums.EvidenceStatus { s := enums.EvidenceStatusAuditorApproved; return &s }(),
+		},
+		{
+			// a control with no direct evidence but related to one that has evidence gets it
+			name:        "control with no direct evidence inherits from related control in map",
+			evidenceMap: map[string][]*generated.Evidence{"ctrl-rel": {e1, e3}},
+			id:          "ctrl-1",
+			relatedControls: []*model.ControlInfo{
+				{ID: "ctrl-rel", IsSubcontrol: false},
+			},
+			wantCount: 2,
+			wantWorst: func() *enums.EvidenceStatus { s := enums.EvidenceStatusSubmitted; return &s }(),
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := computeEvidenceStatus(tt.evidenceMap, tt.id, tt.relatedControls)
 			assert.Assert(t, result != nil)
-			assert.Equal(t, tt.wantCount, result.TotalCount)
+			assert.Check(t, is.Equal(tt.wantCount, result.TotalCount))
 			if tt.wantWorst == nil {
 				assert.Check(t, result.WorstStatus == nil)
 			} else {
 				assert.Assert(t, result.WorstStatus != nil)
-				assert.Equal(t, *tt.wantWorst, *result.WorstStatus)
+				assert.Check(t, is.Equal(*tt.wantWorst, *result.WorstStatus))
 			}
 		})
 	}
@@ -478,14 +503,130 @@ func TestComputeLinkedPolicies(t *testing.T) {
 			},
 			wantCount: 2, // p1 and p2, p2 counted once
 		},
+		{
+			// buildPoliciesMap scopes WithControls to controlIDs so out-of-scope controls
+			// never get entries in the map; this test asserts that the lookup honours that boundary
+			name:        "policy on out-of-scope related control does not bleed through",
+			policiesMap: map[string][]*generated.InternalPolicy{"ctrl-1": {p1}},
+			id:          "ctrl-1",
+			relatedControls: []*model.ControlInfo{
+				{ID: "ctrl-oos", IsSubcontrol: false}, // ctrl-oos has p2 but is not in the map
+			},
+			wantCount: 1, // only p1, not p2
+		},
+		{
+			// a control with no direct policies but related to one that has policies gets them
+			name:        "control with no direct policy inherits from related control in map",
+			policiesMap: map[string][]*generated.InternalPolicy{"ctrl-rel": {p1, p2}},
+			id:          "ctrl-1",
+			relatedControls: []*model.ControlInfo{
+				{ID: "ctrl-rel", IsSubcontrol: false},
+			},
+			wantCount: 2,
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := computeLinkedPolicies(tt.policiesMap, tt.id, tt.relatedControls)
 			assert.Assert(t, result != nil)
-			assert.Equal(t, tt.wantCount, result.TotalCount)
-			assert.Equal(t, tt.wantCount, len(result.InternalPolicies))
+			assert.Check(t, is.Equal(tt.wantCount, result.TotalCount))
+			assert.Check(t, is.Equal(tt.wantCount, len(result.InternalPolicies)))
+		})
+	}
+}
+
+func TestResolveRawRelated(t *testing.T) {
+	fw := "SOC2"
+	orgA := &model.ControlInfo{ID: "org-a", RefCode: "CC1.1", ReferenceFramework: &fw}
+	orgB := &model.ControlInfo{ID: "org-b", RefCode: "CC1.2", ReferenceFramework: &fw}
+	sysA := &model.ControlInfo{ID: "sys-a", RefCode: "CC1.1", ReferenceFramework: &fw}
+
+	keyA := generateMapControlKey(orgA.RefCode, orgA.ReferenceFramework)
+	keyB := generateMapControlKey(orgB.RefCode, orgB.ReferenceFramework)
+
+	tests := []struct {
+		name        string
+		raw         map[string]map[string]*model.ControlInfo
+		sysControls map[string]*model.ControlInfo
+		orgLookup   map[string]*model.ControlInfo
+		wantKeys    []string
+		wantIDs     map[string][]string
+	}{
+		{
+			name:        "empty raw returns empty map",
+			raw:         map[string]map[string]*model.ControlInfo{},
+			sysControls: map[string]*model.ControlInfo{},
+			orgLookup:   map[string]*model.ControlInfo{},
+			wantKeys:    []string{},
+			wantIDs:     map[string][]string{},
+		},
+		{
+			name:        "org-owned entry passes through unchanged",
+			raw:         map[string]map[string]*model.ControlInfo{"outer": {keyB: orgB}},
+			sysControls: map[string]*model.ControlInfo{},
+			orgLookup:   map[string]*model.ControlInfo{},
+			wantKeys:    []string{"outer"},
+			wantIDs:     map[string][]string{"outer": {orgB.ID}},
+		},
+		{
+			name:        "system-owned entry replaced by org counterpart",
+			raw:         map[string]map[string]*model.ControlInfo{"outer": {keyA: sysA}},
+			sysControls: map[string]*model.ControlInfo{keyA: sysA},
+			orgLookup:   map[string]*model.ControlInfo{keyA: orgA},
+			wantKeys:    []string{"outer"},
+			wantIDs:     map[string][]string{"outer": {orgA.ID}},
+		},
+		{
+			name:        "system-owned entry with no org counterpart is excluded",
+			raw:         map[string]map[string]*model.ControlInfo{"outer": {keyA: sysA}},
+			sysControls: map[string]*model.ControlInfo{keyA: sysA},
+			orgLookup:   map[string]*model.ControlInfo{},
+			wantKeys:    []string{},
+			wantIDs:     map[string][]string{},
+		},
+		{
+			name: "outer key with only excluded system entries is omitted from result",
+			raw: map[string]map[string]*model.ControlInfo{
+				"outer-with-sys": {keyA: sysA},
+				"outer-with-org": {keyB: orgB},
+			},
+			sysControls: map[string]*model.ControlInfo{keyA: sysA},
+			orgLookup:   map[string]*model.ControlInfo{},
+			wantKeys:    []string{"outer-with-org"},
+			wantIDs:     map[string][]string{"outer-with-org": {orgB.ID}},
+		},
+		{
+			name: "mixed system and org in same inner map",
+			raw: map[string]map[string]*model.ControlInfo{
+				"outer": {keyA: sysA, keyB: orgB},
+			},
+			sysControls: map[string]*model.ControlInfo{keyA: sysA},
+			orgLookup:   map[string]*model.ControlInfo{keyA: orgA},
+			wantKeys:    []string{"outer"},
+			wantIDs:     map[string][]string{"outer": {orgA.ID, orgB.ID}},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := resolveRawRelated(tt.raw, tt.sysControls, tt.orgLookup)
+			assert.Check(t, is.Equal(len(tt.wantKeys), len(result)))
+
+			for outerKey, wantIDs := range tt.wantIDs {
+				got, ok := result[outerKey]
+				assert.Assert(t, ok, "expected key %q in result", outerKey)
+				assert.Check(t, is.Equal(len(wantIDs), len(got)))
+
+				gotIDs := map[string]struct{}{}
+				for _, info := range got {
+					gotIDs[info.ID] = struct{}{}
+				}
+				for _, id := range wantIDs {
+					_, found := gotIDs[id]
+					assert.Assert(t, found, "expected ID %q in result[%q]", id, outerKey)
+				}
+			}
 		})
 	}
 }
@@ -555,9 +696,9 @@ func TestConvertReportOrderToControlOrderBy(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := convertReportOrderToControlOrderBy(tt.orderBy)
-			assert.Equal(t, tt.wantLen, len(result))
-			assert.Equal(t, tt.wantField, result[0].Field)
-			assert.Equal(t, tt.wantDir, result[0].Direction)
+			assert.Check(t, is.Equal(tt.wantLen, len(result)))
+			assert.Check(t, is.Equal(tt.wantField, result[0].Field))
+			assert.Check(t, is.Equal(tt.wantDir, result[0].Direction))
 		})
 	}
 }

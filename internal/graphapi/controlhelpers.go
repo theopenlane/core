@@ -149,10 +149,6 @@ func getStandardRefCodes(data []string) (map[string][]string, error) {
 		controlRefCode := parts[1]
 
 		// add the mapping to the result
-		if _, ok := result[standardShortName]; !ok {
-			result[standardShortName] = []string{}
-		}
-
 		result[standardShortName] = append(result[standardShortName], controlRefCode)
 	}
 
@@ -475,7 +471,7 @@ func findOrganizationControlInfoForMappings(ctx context.Context, controls map[st
 	}
 
 	if len(controlRefCodes) > 0 {
-		orClauses := make([]predicate.Control, 0, len(subcontrolRefCodes))
+		orClauses := make([]predicate.Control, 0, len(controlRefCodes))
 		for fw, refCodes := range controlRefCodes {
 			orClauses = append(orClauses, control.And(
 				control.ReferenceFrameworkEQ(fw),

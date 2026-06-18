@@ -8,6 +8,7 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
 const (
@@ -31,16 +32,14 @@ func (t *searchCtxTracker) addMatch(entityID, entityType string, fieldMatches []
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
-	if _, ok := t.contexts[entityID]; !ok {
-		t.contexts[entityID] = &models.SearchContext{
+	entry := mapx.GetOrInit(t.contexts, entityID, func() *models.SearchContext {
+		return &models.SearchContext{
 			EntityID:      entityID,
 			EntityType:    entityType,
 			MatchedFields: fieldMatches,
-			Snippets:      make([]*models.SearchSnippet, 0),
 		}
-	}
-
-	t.contexts[entityID].Snippets = append(t.contexts[entityID].Snippets, t.extractSnippets(entity, fieldMatches)...)
+	})
+	entry.Snippets = append(entry.Snippets, t.extractSnippets(entity, fieldMatches)...)
 }
 
 func (t *searchCtxTracker) extractSnippets(entity any, matchedFields []string) []*models.SearchSnippet {

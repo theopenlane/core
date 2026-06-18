@@ -37,6 +37,10 @@ type controlReportTestData struct {
 	sysMapOrgSourceID string // org control matching sysControlA (the one to query)
 	sysMapOrgTargetID string // org control matching sysControlB (expected in relatedControls)
 	sysMapID          string // the system-owned MappedControl
+
+	// ctrlToSubcontrolRelatedID is a subcontrol mapped directly to primaryControlID;
+	// it must appear in primary's relatedControls with IsSubcontrol: true
+	ctrlToSubcontrolRelatedID string
 }
 
 // seedControlReportTestData enriches primaryControlID with a subcontrol, linked evidence,
@@ -95,6 +99,14 @@ func seedControlReportTestData(ctx context.Context, t *testing.T, primaryControl
 		ToControlIDs:   []string{tertiaryControlID},
 	}).MustNew(ctx, t)
 
+	// control → subcontrol mapping: a subcontrol of tertiary is mapped directly to primary
+	scOfTertiary := (&SubcontrolBuilder{client: suite.client, ControlID: tertiaryControlID}).MustNew(ctx, t)
+	(&MappedControlBuilder{
+		client:          suite.client,
+		FromControlIDs:  []string{primaryControlID},
+		ToSubcontrolIDs: []string{scOfTertiary.ID},
+	}).MustNew(ctx, t)
+
 	// system mapping scenario: unique refCodes per call prevent cross-test interference
 	sysRefA := ulids.New().String()
 	sysRefB := ulids.New().String()
@@ -134,19 +146,20 @@ func seedControlReportTestData(ctx context.Context, t *testing.T, primaryControl
 	}).MustNew(ctx, t)
 
 	return &controlReportTestData{
-		primaryControlID:   primaryControlID,
-		secondaryControlID: secondaryControlID,
-		tertiaryControlID:  tertiaryControlID,
-		subcontrolID:       sc.ID,
-		evidenceID:         ev.ID,
-		policyID:           policy.ID,
-		controlOwnerID:     controlOwnerGroupID,
-		forwardMappingID:   forward.ID,
-		reverseMappingID:   reverse.ID,
-		tertiaryMappingID:  tertiary.ID,
-		sysMapOrgSourceID:  orgSrc.ID,
-		sysMapOrgTargetID:  orgTgt.ID,
-		sysMapID:           sysMap.ID,
+		primaryControlID:          primaryControlID,
+		secondaryControlID:        secondaryControlID,
+		tertiaryControlID:         tertiaryControlID,
+		subcontrolID:              sc.ID,
+		evidenceID:                ev.ID,
+		policyID:                  policy.ID,
+		controlOwnerID:            controlOwnerGroupID,
+		forwardMappingID:          forward.ID,
+		reverseMappingID:          reverse.ID,
+		tertiaryMappingID:         tertiary.ID,
+		sysMapOrgSourceID:         orgSrc.ID,
+		sysMapOrgTargetID:         orgTgt.ID,
+		sysMapID:                  sysMap.ID,
+		ctrlToSubcontrolRelatedID: scOfTertiary.ID,
 	}
 }
 
@@ -268,10 +281,21 @@ func TestQueryControlReports(t *testing.T) {
 						assert.Check(t, is.Len(edge.Node.EvidenceStatus.CountByStatus, 2))
 						assert.Check(t, is.Equal(int64(1), edge.Node.LinkedPolicies.TotalCount))
 						// secondary appears in both the forward and reverse MappedControl records;
-						// deduplication collapses it to one entry, plus tertiary = 2 total
-						assert.Check(t, is.Len(edge.Node.RelatedControls, 2))
+						// deduplication collapses it to one entry; tertiary and the
+						// directly-mapped subcontrol each add one more = 3 total
+						assert.Check(t, is.Len(edge.Node.RelatedControls, 3))
 						assert.Check(t, edge.Node.ControlOwner != nil)
 						assert.Check(t, is.Equal(richData.controlOwnerID, edge.Node.ControlOwner.ID))
+
+						// the subcontrol mapped directly to primary must appear with IsSubcontrol: true
+						var foundSubcontrolRelated bool
+						for _, rc := range edge.Node.RelatedControls {
+							if rc.ID == richData.ctrlToSubcontrolRelatedID {
+								foundSubcontrolRelated = true
+								assert.Check(t, rc.IsSubcontrol)
+							}
+						}
+						assert.Check(t, foundSubcontrolRelated)
 					}
 
 					// org control matching sysControlA should surface sysMapOrgTarget via system mapping
@@ -373,10 +397,21 @@ func TestQueryControlReportsByCategory(t *testing.T) {
 							assert.Check(t, is.Len(c.EvidenceStatus.CountByStatus, 2))
 							assert.Check(t, is.Equal(int64(1), c.LinkedPolicies.TotalCount))
 							// secondary appears in both the forward and reverse MappedControl records;
-							// deduplication collapses it to one entry, plus tertiary = 2 total
-							assert.Check(t, is.Len(c.RelatedControls, 2))
+							// deduplication collapses it to one entry; tertiary and the
+							// directly-mapped subcontrol each add one more = 3 total
+							assert.Check(t, is.Len(c.RelatedControls, 3))
 							assert.Check(t, c.ControlOwner != nil)
 							assert.Check(t, is.Equal(richData.controlOwnerID, c.ControlOwner.ID))
+
+							// the subcontrol mapped directly to primary must appear with IsSubcontrol: true
+							var foundSubcontrolRelated bool
+							for _, rc := range c.RelatedControls {
+								if rc.ID == richData.ctrlToSubcontrolRelatedID {
+									foundSubcontrolRelated = true
+									assert.Check(t, rc.IsSubcontrol)
+								}
+							}
+							assert.Check(t, foundSubcontrolRelated)
 						}
 
 						// org control matching sysControlA should surface sysMapOrgTarget via system mapping

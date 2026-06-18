@@ -13,10 +13,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/mapx"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -127,11 +129,6 @@ func hasSubcontrolsField(ctx context.Context) bool {
 	return controlReportFieldRequested(ctx, fieldSubcontrols)
 }
 
-// hasSubcontrolRelatedControlsField reports whether subcontrols.relatedControls is requested in the current operation
-func hasSubcontrolRelatedControlsField(ctx context.Context) bool {
-	return controlReportFieldRequested(ctx, fieldSubcontrolRelated)
-}
-
 // hasSubcontrolEvidenceField reports whether subcontrols.evidenceStatus is requested in the current operation
 func hasSubcontrolEvidenceField(ctx context.Context) bool {
 	return controlReportFieldRequested(ctx, fieldSubcontrolEvidenceStatus)
@@ -145,16 +142,6 @@ func hasSubcontrolLinkedPoliciesField(ctx context.Context) bool {
 // hasAnySubcontrolAdditionalField reports whether any enrichment field under subcontrols is requested
 func hasAnySubcontrolAdditionalField(ctx context.Context) bool {
 	return controlReportFieldRequested(ctx, fieldSubcontrolRelated, fieldSubcontrolEvidenceStatus, fieldSubcontrolLinkedPolicies)
-}
-
-// getSubcontrolRelatedControlInfo fetches MappedControl records for a subcontrol and returns deduplicated related ControlInfo entries
-func getSubcontrolRelatedControlInfo(ctx context.Context, sc *model.ControlReport, frameworksInOrg []string) ([]*model.ControlInfo, error) {
-	result, err := getMappedControlsBySubcontrolID(ctx, sc.ID)
-	if err != nil {
-		return nil, err
-	}
-
-	return processMappedControlResults(ctx, result, sc.ID, sc.RefCode, sc.ReferenceFramework, frameworksInOrg)
 }
 
 // classifyMappedControl routes a single ControlInfo into the system-owned or org-owned map,
@@ -201,14 +188,22 @@ func processMappedControlResults(ctx context.Context, result []*generated.Mapped
 
 	additional := getOrgMappedControlsInfo(ctx, systemOwnedMappedControls, selfRefCode, selfFramework)
 
+	seenIDs := map[string]struct{}{}
+
 	for _, c := range allInOrgControlMappings {
 		if isSameControlInfo(selfRefCode, selfFramework, c) {
 			continue
 		}
+
+		seenIDs[c.ID] = struct{}{}
 		allControls = append(allControls, c)
 	}
 
-	allControls = append(allControls, additional...)
+	for _, c := range additional {
+		if _, ok := seenIDs[c.ID]; !ok {
+			allControls = append(allControls, c)
+		}
+	}
 
 	return allControls, nil
 }
@@ -282,9 +277,9 @@ func buildEvidenceMap(ctx context.Context, controlIDs, subcontrolIDs []string) (
 		evidence.OwnerIDIn(orgIDs...),
 		evidence.Or(edgePredicates...),
 	).WithControls(func(q *generated.ControlQuery) {
-		q.Select(control.FieldID)
+		q.Where(control.IDIn(controlIDs...)).Select(control.FieldID)
 	}).WithSubcontrols(func(q *generated.SubcontrolQuery) {
-		q.Select(subcontrol.FieldID)
+		q.Where(subcontrol.IDIn(subcontrolIDs...)).Select(subcontrol.FieldID)
 	}).All(allowCtx)
 	if err != nil {
 		return nil, err
@@ -329,9 +324,9 @@ func buildPoliciesMap(ctx context.Context, controlIDs, subcontrolIDs []string) (
 		internalpolicy.OwnerIDIn(orgIDs...),
 		internalpolicy.Or(edgePredicates...),
 	).WithControls(func(q *generated.ControlQuery) {
-		q.Select(control.FieldID)
+		q.Where(control.IDIn(controlIDs...)).Select(control.FieldID)
 	}).WithSubcontrols(func(q *generated.SubcontrolQuery) {
-		q.Select(subcontrol.FieldID)
+		q.Where(subcontrol.IDIn(subcontrolIDs...)).Select(subcontrol.FieldID)
 	}).Select("id", "name", "status").All(allowCtx)
 	if err != nil {
 		return nil, err
@@ -612,33 +607,288 @@ func shouldCheckForControl(c *model.ControlInfo, frameworksInOrg []string) bool 
 func convertControlListToControlReports(controls []*generated.Control) []*model.ControlReport {
 	out := make([]*model.ControlReport, len(controls))
 	for i, c := range controls {
-		out[i] = &model.ControlReport{
-			ID:                 c.ID,
-			RefCode:            c.RefCode,
-			Description:        &c.Description,
-			Title:              &c.Title,
-			Status:             &c.Status,
-			ControlOwner:       c.Edges.ControlOwner,
-			ReferenceFramework: c.ReferenceFramework,
-			Category:           &c.Category,
-			Subcategory:        &c.Subcategory,
-			RelatedControls:    []*model.ControlInfo{},
-			EvidenceStatus:     &model.ControlEvidence{},
-			LinkedPolicies:     &model.ControlPolicies{},
-			Subcontrols:        convertSubcontrolToControlReportEdge(c.Edges.Subcontrols),
-		}
+		out[i] = controlToReport(c)
 	}
 	return out
 }
 
-// needsRelatedControls returns true when any field that depends on the related-control
-// mapping lookup is requested. relatedControls itself, plus evidenceStatus and
-// linkedPolicies both expand their ID sets using the related controls list.
-func needsRelatedControls(ctx context.Context) bool {
+// buildControlPredicates builds a deduplicated slice of control predicates for the given
+// reports, scoped to system-owned or org-owned controls
+func buildControlPredicates(controls []*model.ControlReport, orgIDs []string) []predicate.Control {
+	seen := map[string]struct{}{}
+	predicates := make([]predicate.Control, 0, len(controls))
+
+	for _, c := range controls {
+		key := generateMapControlKey(c.RefCode, c.ReferenceFramework)
+		if _, ok := seen[key]; ok {
+			continue
+		}
+
+		seen[key] = struct{}{}
+
+		p := []predicate.Control{
+			control.RefCode(c.RefCode),
+			control.Or(control.SystemOwned(true), control.OwnerIDIn(orgIDs...)),
+		}
+
+		if c.ReferenceFramework == nil {
+			p = append(p, control.ReferenceFrameworkIsNil())
+		} else {
+			p = append(p, control.ReferenceFramework(*c.ReferenceFramework))
+		}
+
+		predicates = append(predicates, control.And(p...))
+	}
+
+	return predicates
+}
+
+// mcPart holds a single participant (control or subcontrol) collected from a MappedControl edge
+type mcPart struct {
+	key  string
+	info *model.ControlInfo
+}
+
+// collectControlPart converts a Control edge into an mapped control part, records system-owned controls in sysControls
+// it returns false if there are no results returned
+func collectControlPart(c *generated.Control, frameworksInOrg []string, sysControls map[string]*model.ControlInfo) (mcPart, bool) {
+	info := controlEdgeToControlInfo(c)
+	if !shouldCheckForControl(info, frameworksInOrg) {
+		return mcPart{}, false
+	}
+
+	key := generateMapControlKey(c.RefCode, c.ReferenceFramework)
+	if c.SystemOwned {
+		sysControls[key] = info
+	}
+
+	return mcPart{key, info}, true
+}
+
+// collectSubcontrolPart converts a Subcontrol edge into an mcPart, records system-owned controls
+// in sysControls and returns the result. It will return false if the subcontrol's framework
+// is not present in the org
+func collectSubcontrolPart(sc *generated.Subcontrol, frameworksInOrg []string, sysControls map[string]*model.ControlInfo) (mcPart, bool) {
+	info := subcontrolEdgeToControlInfo(sc)
+	if !shouldCheckForControl(info, frameworksInOrg) {
+		return mcPart{}, false
+	}
+
+	key := generateMapControlKey(sc.RefCode, sc.ReferenceFramework)
+	if sc.SystemOwned {
+		sysControls[key] = info
+	}
+
+	return mcPart{key, info}, true
+}
+
+// indexRelated adds all parts whose key differs from selfKey into raw[outerKey],
+// deduplicating by refCode::framework via the inner map
+func indexRelated(raw map[string]map[string]*model.ControlInfo, outerKey, selfKey string, parts []mcPart) {
+	if raw[outerKey] == nil {
+		raw[outerKey] = map[string]*model.ControlInfo{}
+	}
+
+	for _, p := range parts {
+		if p.key != selfKey {
+			raw[outerKey][p.key] = p.info
+		}
+	}
+}
+
+// indexEntry holds a single (outerKey, selfKey) pair produced by an outerKeys function
+// outerKey is the map key to index under; selfKey is excluded from that key's related list
+type indexEntry struct {
+	outerKey string
+	selfKey  string
+}
+
+// controlIndexKeys returns indexEntry values for control (non-subcontrol) parts,
+// keyed and self-excluded by refCode::framework
+func controlIndexKeys(parts []mcPart) []indexEntry {
+	var entries []indexEntry
+
+	for _, p := range parts {
+		if !p.info.IsSubcontrol {
+			entries = append(entries, indexEntry{p.key, p.key})
+		}
+	}
+
+	return entries
+}
+
+// subcontrolIndexKeys returns indexEntry values for subcontrol parts,
+// keyed by subcontrol ID with self-exclusion by refCode::framework
+func subcontrolIndexKeys(parts []mcPart) []indexEntry {
+	var entries []indexEntry
+	for _, p := range parts {
+		if p.info.IsSubcontrol {
+			entries = append(entries, indexEntry{p.info.ID, p.key})
+		}
+	}
+	return entries
+}
+
+// allIndexKeys returns indexEntry values for all parts — controls keyed by refCode::framework,
+// subcontrols keyed by ID. Used when a single query serves both lookup types.
+func allIndexKeys(parts []mcPart) []indexEntry {
+	return append(controlIndexKeys(parts), subcontrolIndexKeys(parts)...)
+}
+
+// resolveRawRelated converts a raw related map (whose values may contain system-owned
+// ControlInfos) to a final map where system-owned entries are replaced by their
+// org-owned counterparts from orgLookup. sysControls identifies which keys are system-owned.
+func resolveRawRelated(raw map[string]map[string]*model.ControlInfo, sysControls, orgLookup map[string]*model.ControlInfo) map[string][]*model.ControlInfo {
+	m := make(map[string][]*model.ControlInfo, len(raw))
+
+	for outerKey, inner := range raw {
+		slice := make([]*model.ControlInfo, 0, len(inner))
+
+		for refKey, info := range inner {
+			if _, isSys := sysControls[refKey]; isSys {
+				if orgInfo, ok := orgLookup[refKey]; ok {
+					slice = append(slice, orgInfo)
+				}
+			} else {
+				slice = append(slice, info)
+			}
+		}
+
+		if len(slice) > 0 {
+			m[outerKey] = slice
+		}
+	}
+
+	return m
+}
+
+// buildRelatedFromMappedControls processes a pre-fetched MappedControl slice into a resolved related-control map
+func buildRelatedFromMappedControls(ctx context.Context, mcs []*generated.MappedControl, frameworksInOrg []string, outerKeys func([]mcPart) []indexEntry) (map[string][]*model.ControlInfo, error) {
+	sysControls := map[string]*model.ControlInfo{}
+	raw := map[string]map[string]*model.ControlInfo{}
+
+	for _, mc := range mcs {
+		var parts []mcPart
+
+		for _, c := range mc.Edges.FromControls {
+			if p, ok := collectControlPart(c, frameworksInOrg, sysControls); ok {
+				parts = append(parts, p)
+			}
+		}
+
+		for _, c := range mc.Edges.ToControls {
+			if p, ok := collectControlPart(c, frameworksInOrg, sysControls); ok {
+				parts = append(parts, p)
+			}
+		}
+
+		for _, sc := range mc.Edges.FromSubcontrols {
+			if p, ok := collectSubcontrolPart(sc, frameworksInOrg, sysControls); ok {
+				parts = append(parts, p)
+			}
+		}
+
+		for _, sc := range mc.Edges.ToSubcontrols {
+			if p, ok := collectSubcontrolPart(sc, frameworksInOrg, sysControls); ok {
+				parts = append(parts, p)
+			}
+		}
+
+		for _, e := range outerKeys(parts) {
+			indexRelated(raw, e.outerKey, e.selfKey, parts)
+		}
+	}
+
+	orgLookup, err := buildOrgControlLookupMap(ctx, sysControls)
+	if err != nil {
+		return nil, err
+	}
+
+	return resolveRawRelated(raw, sysControls, orgLookup), nil
+}
+
+// buildMappingsMap fetches MappedControl records in a single query for the given controls and/or
+// subcontrol IDs and returns a unified map. Controls are keyed by refCode::framework; subcontrols
+// by ID. Pass nil controls or empty scIDs to skip that half of the query.
+func buildMappingsMap(ctx context.Context, controls []*model.ControlReport, scIDs []string, frameworksInOrg []string) (map[string][]*model.ControlInfo, error) {
+	orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var where []predicate.MappedControl
+
+	if len(controls) > 0 {
+		ctrlPreds := buildControlPredicates(controls, orgIDs)
+		where = append(where,
+			mappedcontrol.HasFromControlsWith(control.Or(ctrlPreds...)),
+			mappedcontrol.HasToControlsWith(control.Or(ctrlPreds...)),
+		)
+	}
+
+	if len(scIDs) > 0 {
+		ownership := subcontrol.Or(subcontrol.SystemOwned(true), subcontrol.OwnerIDIn(orgIDs...))
+		where = append(where,
+			mappedcontrol.HasFromSubcontrolsWith(subcontrol.IDIn(scIDs...), ownership),
+			mappedcontrol.HasToSubcontrolsWith(subcontrol.IDIn(scIDs...), ownership),
+		)
+	}
+
+	if len(where) == 0 {
+		return map[string][]*model.ControlInfo{}, nil
+	}
+
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	mcs, err := withTransactionalMutation(ctx).MappedControl.Query().Where(
+		mappedcontrol.Or(where...),
+	).WithFromControls().WithToControls().WithFromSubcontrols().WithToSubcontrols().All(allowCtx)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(mcs) == 0 {
+		return map[string][]*model.ControlInfo{}, nil
+	}
+
+	return buildRelatedFromMappedControls(ctx, mcs, frameworksInOrg, allIndexKeys)
+}
+
+// buildOrgControlLookupMap collects all system-owned controls referenced across the
+// pre-fetched MappedControl maps and resolves them to their org-owned counterparts in
+// a single query, returning a map keyed by refCode::framework
+func buildOrgControlLookupMap(ctx context.Context, sysControls map[string]*model.ControlInfo) (map[string]*model.ControlInfo, error) {
+	if len(sysControls) == 0 {
+		return map[string]*model.ControlInfo{}, nil
+	}
+
+	orgInfos, ok := findOrganizationControlInfoForMappings(ctx, sysControls)
+	if !ok {
+		return map[string]*model.ControlInfo{}, nil
+	}
+
+	lookup := make(map[string]*model.ControlInfo, len(orgInfos))
+
+	for _, info := range orgInfos {
+		lookup[generateMapControlKey(info.RefCode, info.ReferenceFramework)] = info
+	}
+
+	return lookup, nil
+}
+
+// needsControlMappings returns true when any control-level field requires the mapped
+// control lookup
+func needsControlMappings(ctx context.Context) bool {
 	return controlReportFieldRequested(ctx,
 		fieldRelatedControls,
 		fieldEvidenceStatus,
 		fieldLinkedPolicies,
+	)
+}
+
+// needsSubcontrolMappings returns true when any subcontrol-level field requires the
+// mapped control lookup for subcontrols.
+func needsSubcontrolMappings(ctx context.Context) bool {
+	return controlReportFieldRequested(ctx,
 		fieldSubcontrolRelated,
 		fieldSubcontrolEvidenceStatus,
 		fieldSubcontrolLinkedPolicies,
@@ -646,42 +896,62 @@ func needsRelatedControls(ctx context.Context) bool {
 }
 
 // enrichControlReports populates computed fields on reports in two passes: related controls first,
-// then evidence and policies in batched queries across all entities
+// then evidence and policies in batched queries across all entities.
+// The first pass fetches all mapped controls in two queries (one for controls, one for
+// subcontrols) and resolves system→org control pairs in one more query
 func enrichControlReports(ctx context.Context, reports []*model.ControlReport) error {
 	var (
 		err             error
 		frameworksInOrg []string
 	)
 
-	needsRelated := needsRelatedControls(ctx)
+	needsCtrlMappings := needsControlMappings(ctx)
+	needsScMappings := needsSubcontrolMappings(ctx)
 	wantsEvidence := hasEvidenceField(ctx)
 	wantsPolicies := hasLinkedPoliciesField(ctx)
-	wantsScRelated := hasSubcontrolRelatedControlsField(ctx)
 	wantsScEvidence := hasSubcontrolEvidenceField(ctx)
 	wantsScPolicies := hasSubcontrolLinkedPoliciesField(ctx)
 
-	if needsRelated {
+	if needsCtrlMappings || needsScMappings {
 		frameworksInOrg, err = getStandardsInOrg(ctx)
 		if err != nil {
 			return err
 		}
 	}
 
-	// first pass: populate related controls (per-entity, must come first so IDs are available for pass 2)
-	for i, c := range reports {
-		if needsRelated {
-			reports[i].RelatedControls, err = getRelatedControlInfoFromReport(ctx, c, frameworksInOrg)
-			if err != nil {
-				return err
+	var mappingsMap map[string][]*model.ControlInfo
+
+	if needsCtrlMappings || needsScMappings {
+		var scIDs []string
+		if needsScMappings {
+			for _, r := range reports {
+				for _, sc := range r.Subcontrols {
+					scIDs = append(scIDs, sc.ID)
+				}
 			}
 		}
 
+		var ctrlReports []*model.ControlReport
+		if needsCtrlMappings {
+			ctrlReports = reports
+		}
+
+		mappingsMap, err = buildMappingsMap(ctx, ctrlReports, scIDs, frameworksInOrg)
+		if err != nil {
+			return err
+		}
+	}
+
+	// first pass: populate related controls from pre-fetched map
+	for i, c := range reports {
+		key := generateMapControlKey(c.RefCode, c.ReferenceFramework)
+		if rc := mappingsMap[key]; rc != nil {
+			reports[i].RelatedControls = rc
+		}
+
 		for j, sc := range reports[i].Subcontrols {
-			if wantsScRelated {
-				reports[i].Subcontrols[j].RelatedControls, err = getSubcontrolRelatedControlInfo(ctx, sc, frameworksInOrg)
-				if err != nil {
-					return err
-				}
+			if rc := mappingsMap[sc.ID]; rc != nil {
+				reports[i].Subcontrols[j].RelatedControls = rc
 			}
 		}
 	}
@@ -695,14 +965,12 @@ func enrichControlReports(ctx context.Context, reports []*model.ControlReport) e
 			if err != nil {
 				return err
 			}
+
 			for i, c := range reports {
-				if wantsEvidence {
-					reports[i].EvidenceStatus = computeEvidenceStatus(evidenceMap, c.ID, c.RelatedControls)
-				}
+				reports[i].EvidenceStatus = computeEvidenceStatus(evidenceMap, c.ID, c.RelatedControls)
+
 				for j, sc := range reports[i].Subcontrols {
-					if wantsScEvidence {
-						reports[i].Subcontrols[j].EvidenceStatus = computeEvidenceStatus(evidenceMap, sc.ID, sc.RelatedControls)
-					}
+					reports[i].Subcontrols[j].EvidenceStatus = computeEvidenceStatus(evidenceMap, sc.ID, sc.RelatedControls)
 				}
 			}
 		}
@@ -712,30 +980,18 @@ func enrichControlReports(ctx context.Context, reports []*model.ControlReport) e
 			if err != nil {
 				return err
 			}
+
 			for i, c := range reports {
-				if wantsPolicies {
-					reports[i].LinkedPolicies = computeLinkedPolicies(policiesMap, c.ID, c.RelatedControls)
-				}
+				reports[i].LinkedPolicies = computeLinkedPolicies(policiesMap, c.ID, c.RelatedControls)
+
 				for j, sc := range reports[i].Subcontrols {
-					if wantsScPolicies {
-						reports[i].Subcontrols[j].LinkedPolicies = computeLinkedPolicies(policiesMap, sc.ID, sc.RelatedControls)
-					}
+					reports[i].Subcontrols[j].LinkedPolicies = computeLinkedPolicies(policiesMap, sc.ID, sc.RelatedControls)
 				}
 			}
 		}
 	}
 
 	return nil
-}
-
-// getRelatedControlInfoFromReport fetches all MappedControl records for a control and returns deduplicated related ControlInfo entries
-func getRelatedControlInfoFromReport(ctx context.Context, c *model.ControlReport, frameworksInOrg []string) ([]*model.ControlInfo, error) {
-	result, err := getControlMappings(ctx, c.RefCode, c.ReferenceFramework, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return processMappedControlResults(ctx, result, c.ID, c.RefCode, c.ReferenceFramework, frameworksInOrg)
 }
 
 // groupControlReportsByCategory groups a flat ControlReport slice into category buckets sorted by name; controls with no category use an empty string key
@@ -747,16 +1003,16 @@ func groupControlReportsByCategory(controls []*model.ControlReport) []*model.Con
 		if c.Category != nil {
 			key = *c.Category
 		}
-		if _, ok := categoryMap[key]; !ok {
-			categoryMap[key] = &model.ControlReportCategory{
-				Category: key,
-				Controls: []*model.ControlReport{},
-			}
-		}
-		categoryMap[key].Controls = append(categoryMap[key].Controls, c)
+
+		entry := mapx.GetOrInit(categoryMap, key, func() *model.ControlReportCategory {
+			return &model.ControlReportCategory{Category: key}
+		})
+
+		entry.Controls = append(entry.Controls, c)
 	}
 
 	out := make([]*model.ControlReportCategory, 0, len(categoryMap))
+
 	for _, k := range slices.Sorted(maps.Keys(categoryMap)) {
 		cat := categoryMap[k]
 		cat.TotalCount = len(cat.Controls)
