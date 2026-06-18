@@ -10,6 +10,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
@@ -17,6 +18,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	apimodels "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 )
@@ -249,4 +251,67 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_ExistingMemberNoReInvi
 
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), hooks.ErrUserAlreadyOrgMember.Error())
+}
+
+func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_OwnerRoleBecomesSuperAdmin() {
+	t := suite.T()
+
+	operation := suite.createImpersonationOperation("OrganizationInviteAccept", "Accept organization invite")
+	suite.registerTestHandler(http.MethodGet, "invite", operation, suite.h.OrganizationInviteAccept)
+
+	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+
+	email := "newowner@theopenlane.io"
+
+	recipient, err := suite.db.User.Create().
+		SetEmail(email).
+		SetFirstName(gofakeit.FirstName()).
+		SetLastName(gofakeit.LastName()).
+		SetAuthProvider(enums.AuthProviderCredentials).
+		SetLastLoginProvider(enums.AuthProviderCredentials).
+		SetLastSeen(time.Now()).
+		Save(allowCtx)
+	require.NoError(t, err)
+
+	setting, err := recipient.Setting(allowCtx)
+	require.NoError(t, err)
+
+	ctx := auth.NewTestContextWithOrgID(recipient.ID, setting.Edges.DefaultOrg.ID)
+
+	suite.enableModules(recipient.ID, setting.Edges.DefaultOrg.ID,
+		[]models.OrgModule{models.CatalogBaseModule})
+
+	invite, err := suite.db.Invite.Create().
+		SetRecipient(email).
+		SetRole(enums.RoleOwner).
+		SetOwnershipTransfer(true).
+		Save(allowCtx)
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/invite?token=%s", invite.Token), nil)
+	recorder := httptest.NewRecorder()
+
+	suite.e.ServeHTTP(recorder, req.WithContext(ctx))
+	res := recorder.Result()
+	defer res.Body.Close()
+
+	require.Equal(t, http.StatusCreated, recorder.Code)
+
+	membership, err := suite.db.OrgMembership.Query().
+		Where(
+			orgmembership.OrganizationID(testUser1.OrganizationID),
+			orgmembership.UserID(testUser1.ID),
+		).
+		Only(allowCtx)
+	require.NoError(t, err)
+	assert.Equal(t, enums.RoleSuperAdmin, membership.Role)
+
+	newOwner, err := suite.db.OrgMembership.Query().
+		Where(
+			orgmembership.OrganizationID(testUser1.OrganizationID),
+			orgmembership.UserID(recipient.ID),
+		).
+		Only(allowCtx)
+	require.NoError(t, err)
+	assert.Equal(t, enums.RoleOwner, newOwner.Role)
 }
