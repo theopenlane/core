@@ -43,6 +43,7 @@ query GetOrgMembersByOrgID ($where: OrgMembershipWhereInput) {
 					displayName
 					email
 				}
+				additionalRoles
 			}
 		}
 	}

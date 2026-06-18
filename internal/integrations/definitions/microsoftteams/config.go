@@ -8,4 +8,6 @@ type Config struct {
 	ClientSecret string `json:"clientsecret" koanf:"clientsecret" sensitive:"true"`
 	// RedirectURL is the OAuth callback URL registered with the Azure application
 	RedirectURL string `json:"redirecturl" koanf:"redirecturl" default:"https://api.theopenlane.io/v1/integrations/auth/callback"`
+	// ApplicationID is the application ID registered in azure, used in the well-known configuration for domain validation
+	ApplicationID string `json:"applicationid" koanf:"applicationid"`
 }

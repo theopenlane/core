@@ -11,9 +11,13 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/stripe/stripe-go/v84"
 
+	"github.com/theopenlane/iam/auth"
+
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/consts"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -22,7 +26,6 @@ import (
 	"github.com/theopenlane/core/pkg/catalog/gencatalog"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/iam/auth"
 )
 
 // Reconciler reconciles organization subscriptions with Stripe
@@ -172,6 +175,14 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 		}
 	}
 
+	if sub != nil && !isSubscriptionActive(sub) {
+		if err := r.disableIntegrations(ctx, org.ID); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
 	cust := &entitlements.OrganizationCustomer{
 		OrganizationID:             org.ID,
 		OrganizationSettingsID:     org.Edges.Setting.ID,
@@ -245,6 +256,31 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 		if err := r.updateSubscription(ctx, cust); err != nil {
 			return err
 		}
+	}
+
+	return nil
+}
+
+func isSubscriptionActive(sub *ent.OrgSubscription) bool {
+	if sub == nil {
+		return false
+	}
+
+	return sub.StripeSubscriptionStatus == string(stripe.SubscriptionStatusTrialing) ||
+		sub.Active && sub.StripeSubscriptionStatus != string(stripe.SubscriptionStatusCanceled)
+}
+
+func (r *Reconciler) disableIntegrations(ctx context.Context, orgID string) error {
+	err := r.db.Integration.Update().
+		Where(
+			integration.OwnerID(orgID),
+			integration.DeletedAtIsNil(),
+			integration.StatusNotIn(enums.IntegrationStatusDisabled, enums.IntegrationStatusDeleted),
+		).
+		SetStatus(enums.IntegrationStatusDisabled).
+		Exec(rule.WithInternalContext(ctx))
+	if err != nil {
+		return fmt.Errorf("error disabling integrations: %w", err)
 	}
 
 	return nil
@@ -347,6 +383,25 @@ func (r *Reconciler) analyzeOrg(ctx context.Context, org *ent.Organization) (str
 	var sub *ent.OrgSubscription
 	if len(org.Edges.OrgSubscriptions) > 0 {
 		sub = org.Edges.OrgSubscriptions[0]
+	}
+
+	if sub != nil && !isSubscriptionActive(sub) {
+		count, err := r.db.Integration.Query().
+			Where(
+				integration.OwnerID(org.ID),
+				integration.DeletedAtIsNil(),
+				integration.StatusNotIn(enums.IntegrationStatusDisabled, enums.IntegrationStatusDeleted),
+			).
+			Count(rule.WithInternalContext(ctx))
+		if err != nil {
+			return "", fmt.Errorf("query integrations: %w", err)
+		}
+
+		if count > 0 {
+			return fmt.Sprintf("disabled %d integrations because of the canceled subscription", count), nil
+		}
+
+		return "", nil
 	}
 
 	customerMissing := sub == nil

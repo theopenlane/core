@@ -100,7 +100,7 @@ func Builder(cfg Config) registry.Builder {
 					ClientRef:    driveClient.ID(),
 					Policy:       types.ExecutionPolicy{Inline: true},
 					ConfigSchema: documentExportSchema,
-					Handle:       DocumentExport{}.Handle(),
+					Handle:       Handle(),
 				},
 				{
 					Name:        folderSyncOperation.Name(),

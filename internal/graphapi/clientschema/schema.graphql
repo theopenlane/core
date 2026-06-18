@@ -33874,6 +33874,10 @@ type Group implements Node {
 		"""
 		last: Int
 	): GroupPermissionConnection!
+	"""
+	additionalRoles are the functional/organization roles assigned to the group on top of object permissions
+	"""
+	additionalRoles: [String!]
 }
 """
 Return response for createBulkGroup mutation
@@ -52503,6 +52507,7 @@ type OrgMembership implements Node {
 		"""
 		where: EventWhereInput
 	): EventConnection!
+	additionalRoles: [String!]
 }
 """
 Return response for createBulkOrgMembership mutation

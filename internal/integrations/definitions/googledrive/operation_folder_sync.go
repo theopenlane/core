@@ -24,7 +24,7 @@ type FolderSync struct{}
 
 // IngestHandle adapts folder sync to the ingest operation registration boundary
 func (f FolderSync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(driveClient, func(ctx context.Context, request types.OperationRequest, svc *drive.Service) ([]types.IngestPayloadSet, error) {
+	return providerkit.WithClientRequest(driveClient, func(ctx context.Context, request types.OperationRequest, svc DriveClient) ([]types.IngestPayloadSet, error) {
 		var input UserInput
 
 		if request.Integration != nil {
@@ -41,7 +41,7 @@ func (f FolderSync) IngestHandle() types.IngestHandler {
 }
 
 // Run lists all Google Docs in the given folder and returns ingest payload sets
-func (FolderSync) Run(ctx context.Context, svc *drive.Service, folderID string) ([]types.IngestPayloadSet, error) {
+func (FolderSync) Run(ctx context.Context, svc DriveClient, folderID string) ([]types.IngestPayloadSet, error) {
 	files, err := listFolderDocs(ctx, svc, folderID)
 	if err != nil {
 		return nil, err
@@ -67,7 +67,7 @@ func (FolderSync) Run(ctx context.Context, svc *drive.Service, folderID string) 
 }
 
 // listFolderDocs pages through all Google Docs in the specified folder
-func listFolderDocs(ctx context.Context, svc *drive.Service, folderID string) ([]*drive.File, error) {
+func listFolderDocs(ctx context.Context, c DriveClient, folderID string) ([]*drive.File, error) {
 	var files []*drive.File
 
 	pageToken := ""
@@ -78,7 +78,7 @@ func listFolderDocs(ctx context.Context, svc *drive.Service, folderID string) ([
 			return nil, err
 		}
 
-		call := svc.Files.List().
+		call := c.Svc.Files.List().
 			Q(query).
 			PageSize(folderSyncPageSize).
 			Fields("nextPageToken,files(id,name,modifiedTime,createdTime)").

@@ -157,6 +157,14 @@ query GetAllOrganizations {
 					active
 					id
 				}
+				avatarRemoteURL
+				avatarLocalFileID
+				avatarFile {
+					id
+					name
+					metadata
+					presignedURL
+				}
 				createdAt
 				updatedAt
 			}

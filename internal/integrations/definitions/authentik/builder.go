@@ -19,8 +19,8 @@ func Builder() registry.Builder {
 				Category:    "identity",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/authentik/overview",
 				Tags:        []string{"directory"},
-				Active:      false,
-				Visible:     false,
+				Active:      true,
+				Visible:     true,
 			},
 			UserInput: &types.UserInputRegistration{
 				Schema: jsonx.SchemaFrom[UserInput](),

@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"github.com/cloudflare/cloudflare-go/v6"
-	"github.com/cloudflare/cloudflare-go/v6/browser_rendering"
-	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v7"
+	"github.com/cloudflare/cloudflare-go/v7/browser_rendering"
+	"github.com/cloudflare/cloudflare-go/v7/option"
 
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/pkg/logx"

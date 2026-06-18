@@ -3,15 +3,18 @@ package azureentraid
 import (
 	"context"
 	"strings"
+	"time"
 
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 	"github.com/microsoftgraph/msgraph-sdk-go/models"
+	"github.com/microsoftgraph/msgraph-sdk-go/users"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // mapCapacityFactor is the multiplier applied to the expected entry count when pre-sizing maps for deduplication
@@ -27,6 +30,8 @@ type directoryUserPayload struct {
 	Mail string `json:"mail,omitempty"`
 	// UserPrincipalName is the UPN, used as email fallback
 	UserPrincipalName string `json:"userPrincipalName,omitempty"`
+	// OtherMails is the list of additional email addresses
+	OtherMails []string `json:"otherMails,omitempty"`
 	// AccountEnabled indicates whether the account is enabled
 	AccountEnabled bool `json:"accountEnabled"`
 	// UserType is "Member" or "Guest"
@@ -39,6 +44,18 @@ type directoryUserPayload struct {
 	Surname string `json:"surname,omitempty"`
 	// JobTitle is the user's job title
 	JobTitle string `json:"jobTitle,omitempty"`
+	// Phone is the primary business phone, falling back to mobile phone
+	Phone string `json:"phone,omitempty"`
+	// OfficeLocation is the user's office location
+	OfficeLocation string `json:"officeLocation,omitempty"`
+	// EmployeeType is the employment classification (e.g. Employee, Contractor)
+	EmployeeType string `json:"employeeType,omitempty"`
+	// ManagerID is the object ID of the user's manager
+	ManagerID string `json:"managerId,omitempty"`
+	// EmployeeHireDate is the user's hire/start date
+	EmployeeHireDate *time.Time `json:"employeeHireDate,omitempty"`
+	// EmployeeLeaveDateTime is the user's expected departure/end date
+	EmployeeLeaveDateTime *time.Time `json:"employeeLeaveDateTime,omitempty"`
 }
 
 // directoryGroupPayload is the JSON-serializable representation of one Entra ID group
@@ -128,7 +145,7 @@ func (DirectorySync) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient, 
 		},
 	}
 
-	if !cfg.EnableGroupSync {
+	if cfg.DisableGroupSync {
 		return payloadSets, nil
 	}
 
@@ -231,17 +248,55 @@ func paginateOData[T any, P odataPage[T]](ctx context.Context, fetchFirst func()
 	return items, nil
 }
 
+// userSelectFields are the Graph API fields explicitly requested for user listings;
+// accountEnabled is not returned by default and must be $selected
+var userSelectFields = []string{
+	"id", "displayName", "mail", "userPrincipalName", "otherMails",
+	"accountEnabled", "userType", "department", "givenName", "surname", "jobTitle",
+	"businessPhones", "mobilePhone", "officeLocation",
+	"employeeType", "employeeHireDate", "employeeLeaveDateTime",
+}
+
 // listEntraUsers pages through all Azure Entra ID users
 func listEntraUsers(ctx context.Context, c *msgraphsdk.GraphServiceClient) ([]models.Userable, error) {
-	return paginateOData(ctx, func() (models.UserCollectionResponseable, error) { return c.Users().Get(ctx, nil) }, func(nextLink string) (models.UserCollectionResponseable, error) {
-		return c.Users().WithUrl(nextLink).Get(ctx, nil)
-	}, ErrUsersFetchFailed)
+	reqConfig := &users.UsersRequestBuilderGetRequestConfiguration{
+		QueryParameters: &users.UsersRequestBuilderGetQueryParameters{
+			Select: userSelectFields,
+			Expand: []string{"manager($select=id)"},
+		},
+	}
+
+	return paginateOData(ctx, func() (models.UserCollectionResponseable, error) {
+		result, err := c.Users().Get(ctx, reqConfig)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error getting users")
+			return nil, err
+		}
+
+		return result, nil
+	},
+		func(nextLink string) (models.UserCollectionResponseable, error) {
+			nextUsers, err := c.Users().WithUrl(nextLink).Get(ctx, nil)
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("error getting users")
+				return nil, err
+			}
+
+			return nextUsers, nil
+		}, ErrUsersFetchFailed)
 }
 
 // listEntraGroups pages through all Azure Entra ID groups
 func listEntraGroups(ctx context.Context, c *msgraphsdk.GraphServiceClient) ([]models.Groupable, error) {
 	return paginateOData(ctx, func() (models.GroupCollectionResponseable, error) { return c.Groups().Get(ctx, nil) }, func(nextLink string) (models.GroupCollectionResponseable, error) {
-		return c.Groups().WithUrl(nextLink).Get(ctx, nil)
+		groups, err := c.Groups().WithUrl(nextLink).Get(ctx, nil)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error getting groups")
+
+			return nil, err
+		}
+
+		return groups, nil
 	}, ErrGroupsFetchFailed)
 }
 
@@ -251,9 +306,21 @@ func listEntraGroupUserMembers(ctx context.Context, c *msgraphsdk.GraphServiceCl
 		return nil, nil
 	}
 	return paginateOData(ctx, func() (models.UserCollectionResponseable, error) {
-		return c.Groups().ByGroupId(groupID).Members().GraphUser().Get(ctx, nil)
+		members, err := c.Groups().ByGroupId(groupID).Members().GraphUser().Get(ctx, nil)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error getting group members")
+			return nil, err
+		}
+
+		return members, nil
 	}, func(nextLink string) (models.UserCollectionResponseable, error) {
-		return c.Groups().ByGroupId(groupID).Members().GraphUser().WithUrl(nextLink).Get(ctx, nil)
+		nextMembers, err := c.Groups().ByGroupId(groupID).Members().GraphUser().WithUrl(nextLink).Get(ctx, nil)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error getting next group members")
+			return nil, err
+		}
+
+		return nextMembers, nil
 	}, ErrMembersFetchFailed)
 }
 
@@ -288,18 +355,35 @@ func isIncludedMember(ref directoryEntityRef, includedUsers map[string]struct{})
 
 // userToPayload maps a Userable SDK model to a JSON-serializable payload struct
 func userToPayload(user models.Userable) directoryUserPayload {
-	return directoryUserPayload{
-		ID:                lo.FromPtr(user.GetId()),
-		DisplayName:       lo.FromPtr(user.GetDisplayName()),
-		Mail:              lo.FromPtr(user.GetMail()),
-		UserPrincipalName: lo.FromPtr(user.GetUserPrincipalName()),
-		AccountEnabled:    lo.FromPtr(user.GetAccountEnabled()),
-		UserType:          lo.FromPtr(user.GetUserType()),
-		Department:        lo.FromPtr(user.GetDepartment()),
-		GivenName:         lo.FromPtr(user.GetGivenName()),
-		Surname:           lo.FromPtr(user.GetSurname()),
-		JobTitle:          lo.FromPtr(user.GetJobTitle()),
+	p := directoryUserPayload{
+		ID:                    lo.FromPtr(user.GetId()),
+		DisplayName:           lo.FromPtr(user.GetDisplayName()),
+		Mail:                  lo.FromPtr(user.GetMail()),
+		UserPrincipalName:     lo.FromPtr(user.GetUserPrincipalName()),
+		OtherMails:            user.GetOtherMails(),
+		AccountEnabled:        lo.FromPtr(user.GetAccountEnabled()),
+		UserType:              lo.FromPtr(user.GetUserType()),
+		Department:            lo.FromPtr(user.GetDepartment()),
+		GivenName:             lo.FromPtr(user.GetGivenName()),
+		Surname:               lo.FromPtr(user.GetSurname()),
+		JobTitle:              lo.FromPtr(user.GetJobTitle()),
+		OfficeLocation:        lo.FromPtr(user.GetOfficeLocation()),
+		EmployeeType:          lo.FromPtr(user.GetEmployeeType()),
+		EmployeeHireDate:      user.GetEmployeeHireDate(),
+		EmployeeLeaveDateTime: user.GetEmployeeLeaveDateTime(),
 	}
+
+	if phones := user.GetBusinessPhones(); len(phones) > 0 {
+		p.Phone = phones[0]
+	} else {
+		p.Phone = lo.FromPtr(user.GetMobilePhone())
+	}
+
+	if manager := user.GetManager(); manager != nil {
+		p.ManagerID = lo.FromPtr(manager.GetId())
+	}
+
+	return p
 }
 
 // groupToPayload maps a Groupable SDK model to a JSON-serializable payload struct
