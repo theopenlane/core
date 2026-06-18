@@ -23,6 +23,7 @@ type controlReportTestData struct {
 	subcontrolID       string
 	evidenceID         string
 	policyID           string
+	controlOwnerID     string // group assigned as owner of the primary control
 	// forwardMappingID maps primary → secondary
 	forwardMappingID string
 	// reverseMappingID maps secondary → primary, creating a duplicate reference to secondary
@@ -56,7 +57,7 @@ type controlReportTestData struct {
 //
 // Expected relatedControls for primary: [secondary, tertiary] (2 unique entries).
 // Expected relatedControls for sysMapOrgSource: [sysMapOrgTarget] (1 entry via system mapping).
-func seedControlReportTestData(ctx context.Context, t *testing.T, primaryControlID, secondaryControlID, tertiaryControlID string) *controlReportTestData {
+func seedControlReportTestData(ctx context.Context, t *testing.T, primaryControlID, secondaryControlID, tertiaryControlID, controlOwnerGroupID string) *controlReportTestData {
 	t.Helper()
 
 	sc := (&SubcontrolBuilder{client: suite.client, ControlID: primaryControlID}).MustNew(ctx, t)
@@ -139,6 +140,7 @@ func seedControlReportTestData(ctx context.Context, t *testing.T, primaryControl
 		subcontrolID:       sc.ID,
 		evidenceID:         ev.ID,
 		policyID:           policy.ID,
+		controlOwnerID:     controlOwnerGroupID,
 		forwardMappingID:   forward.ID,
 		reverseMappingID:   reverse.ID,
 		tertiaryMappingID:  tertiary.ID,
@@ -167,13 +169,14 @@ func TestQueryControlReports(t *testing.T) {
 	}
 
 	// create primary/secondary/tertiary after the fillers so they appear in the first page
-	primary := (&ControlBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
+	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
+	primary := (&ControlBuilder{client: suite.client, ControlOwnerID: ownerGroup.ID}).MustNew(localTestOrg.owner.UserCtx, t)
 	secondary := (&ControlBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
 	tertiary := (&ControlBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
 
 	// seed adds 2 more org controls (sysMapOrgSource, sysMapOrgTarget) → 8+3+2 = 13 total
 	orgOwnedCount := int64(13)
-	richData := seedControlReportTestData(localTestOrg.owner.UserCtx, t, primary.ID, secondary.ID, tertiary.ID)
+	richData := seedControlReportTestData(localTestOrg.owner.UserCtx, t, primary.ID, secondary.ID, tertiary.ID, ownerGroup.ID)
 
 	testCases := []struct {
 		name            string
@@ -267,6 +270,8 @@ func TestQueryControlReports(t *testing.T) {
 						// secondary appears in both the forward and reverse MappedControl records;
 						// deduplication collapses it to one entry, plus tertiary = 2 total
 						assert.Check(t, is.Len(edge.Node.RelatedControls, 2))
+						assert.Check(t, edge.Node.ControlOwner != nil)
+						assert.Check(t, is.Equal(richData.controlOwnerID, edge.Node.ControlOwner.ID))
 					}
 
 					// org control matching sysControlA should surface sysMapOrgTarget via system mapping
@@ -294,7 +299,8 @@ func TestQueryControlReportsByCategory(t *testing.T) {
 	cat1 := "Access Control"
 	cat2 := "Availability"
 
-	control1 := (&ControlBuilder{client: suite.client, Category: cat1}).MustNew(localTestOrg.owner.UserCtx, t)
+	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
+	control1 := (&ControlBuilder{client: suite.client, Category: cat1, ControlOwnerID: ownerGroup.ID}).MustNew(localTestOrg.owner.UserCtx, t)
 	control2 := (&ControlBuilder{client: suite.client, Category: cat1}).MustNew(localTestOrg.owner.UserCtx, t)
 	control3 := (&ControlBuilder{client: suite.client, Category: cat2}).MustNew(localTestOrg.owner.UserCtx, t)
 	(&ControlBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
@@ -306,7 +312,7 @@ func TestQueryControlReportsByCategory(t *testing.T) {
 
 	// enrich control1 with associated data so enrichment paths are exercised;
 	// control3 is used as the tertiary to confirm a second unique related control
-	richData := seedControlReportTestData(localTestOrg.owner.UserCtx, t, control1.ID, control2.ID, control3.ID)
+	richData := seedControlReportTestData(localTestOrg.owner.UserCtx, t, control1.ID, control2.ID, control3.ID, ownerGroup.ID)
 
 	testCases := []struct {
 		name               string
@@ -369,6 +375,8 @@ func TestQueryControlReportsByCategory(t *testing.T) {
 							// secondary appears in both the forward and reverse MappedControl records;
 							// deduplication collapses it to one entry, plus tertiary = 2 total
 							assert.Check(t, is.Len(c.RelatedControls, 2))
+							assert.Check(t, c.ControlOwner != nil)
+							assert.Check(t, is.Equal(richData.controlOwnerID, c.ControlOwner.ID))
 						}
 
 						// org control matching sysControlA should surface sysMapOrgTarget via system mapping

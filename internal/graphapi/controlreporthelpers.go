@@ -112,6 +112,11 @@ func hasEvidenceField(ctx context.Context) bool {
 	return controlReportFieldRequested(ctx, fieldEvidenceStatus)
 }
 
+// hasControlOwnerField reports whether controlOwner is requested in the current operation
+func hasControlOwnerField(ctx context.Context) bool {
+	return controlReportFieldRequested(ctx, fieldControlOwner)
+}
+
 // hasLinkedPoliciesField reports whether linkedPolicies is requested in the current operation
 func hasLinkedPoliciesField(ctx context.Context) bool {
 	return controlReportFieldRequested(ctx, fieldLinkedPolicies)

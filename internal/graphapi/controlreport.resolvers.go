@@ -44,6 +44,10 @@ func (r *queryResolver) ControlReportsByCategory(ctx context.Context, where *gen
 		q.WithSubcontrols()
 	}
 
+	if hasControlOwnerField(ctx) {
+		q.WithControlOwner()
+	}
+
 	q, err := where.Filter(q)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error filtering control report by category")
@@ -94,6 +98,10 @@ func (r *queryResolver) ControlReports(ctx context.Context, after *entgql.Cursor
 
 	if hasSubcontrolsField(ctx) || hasAnySubcontrolAdditionalField(ctx) {
 		req.WithSubcontrols()
+	}
+
+	if hasControlOwnerField(ctx) {
+		req.WithControlOwner()
 	}
 
 	res, err := req.Paginate(

@@ -15,6 +15,9 @@ query GetAllControlReports {
         referenceFramework
         category
         subcategory
+        controlOwner {
+          id
+        }
         relatedControls {
           id
           refCode
@@ -91,6 +94,9 @@ query GetControlReports($first: Int, $last: Int, $after: Cursor, $before: Cursor
         referenceFramework
         category
         subcategory
+        controlOwner {
+          id
+        }
         relatedControls {
           id
           refCode
@@ -153,6 +159,9 @@ query GetControlReportsByCategory($where: ControlWhereInput) {
       status
       referenceFramework
       category
+      controlOwner {
+        id
+      }
       relatedControls {
         id
         refCode
