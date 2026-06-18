@@ -254,7 +254,7 @@ var (
 		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "campaign_type", Type: field.TypeEnum, Enums: []string{"QUESTIONNAIRE", "TRAINING", "POLICY_ATTESTATION", "VENDOR_ASSESSMENT", "CUSTOM"}, Default: "QUESTIONNAIRE"},
+		{Name: "campaign_type", Type: field.TypeEnum, Enums: []string{"QUESTIONNAIRE", "TRAINING", "POLICY_ATTESTATION", "VENDOR_ASSESSMENT", "CUSTOM", "TRUST_CENTER_UPDATE"}, Default: "QUESTIONNAIRE"},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"DRAFT", "SCHEDULED", "ACTIVE", "COMPLETED", "CANCELED"}, Default: "DRAFT"},
 		{Name: "is_active", Type: field.TypeBool, Default: false},
 		{Name: "scheduled_at", Type: field.TypeTime, Nullable: true},
@@ -279,6 +279,7 @@ var (
 		{Name: "email_template_id", Type: field.TypeString, Nullable: true},
 		{Name: "integration_id", Type: field.TypeString, Nullable: true},
 		{Name: "email_branding_id", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 	}
 	// CampaignHistoryTable holds the schema information for the "campaign_history" table.
 	CampaignHistoryTable = &schema.Table{
@@ -311,6 +312,7 @@ var (
 		{Name: "contact_id", Type: field.TypeString, Nullable: true},
 		{Name: "user_id", Type: field.TypeString, Nullable: true},
 		{Name: "group_id", Type: field.TypeString, Nullable: true},
+		{Name: "subscriber_id", Type: field.TypeString, Nullable: true},
 		{Name: "email", Type: field.TypeString},
 		{Name: "full_name", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "SENT", "COMPLETED", "OVERDUE", "DRAFT"}, Default: "NOT_STARTED"},
@@ -893,6 +895,7 @@ var (
 		{Name: "integration_id", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_definition_id", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_instance_id", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 	}
 	// EmailTemplateHistoryTable holds the schema information for the "email_template_history" table.
 	EmailTemplateHistoryTable = &schema.Table{
@@ -1703,6 +1706,8 @@ var (
 		{Name: "discussion_id", Type: field.TypeString, Nullable: true},
 		{Name: "is_edited", Type: field.TypeBool, Default: false},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "notify_subscribers", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "notified_at", Type: field.TypeTime, Nullable: true},
 	}
 	// NoteHistoryTable holds the schema information for the "note_history" table.
 	NoteHistoryTable = &schema.Table{
@@ -2983,6 +2988,8 @@ var (
 		{Name: "company_domain", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "security_contact", Type: field.TypeString, Nullable: true},
 		{Name: "nda_approval_required", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "notify_subscribers_on_subprocessor_change", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "subprocessors_notified_at", Type: field.TypeTime, Nullable: true},
 		{Name: "nda_approver_group_id", Type: field.TypeString, Nullable: true},
 		{Name: "status_page_url", Type: field.TypeString, Nullable: true, Size: 2048},
 	}

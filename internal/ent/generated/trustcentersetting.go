@@ -78,6 +78,10 @@ type TrustCenterSetting struct {
 	SecurityContact *string `json:"security_contact,omitempty"`
 	// whether NDA requests require approval before being processed
 	NdaApprovalRequired bool `json:"nda_approval_required,omitempty"`
+	// whether to email trust center subscribers when subprocessors are added, updated, or removed
+	NotifySubscribersOnSubprocessorChange bool `json:"notify_subscribers_on_subprocessor_change,omitempty"`
+	// watermark of the most recent subprocessor change subscribers have been notified about
+	SubprocessorsNotifiedAt *time.Time `json:"subprocessors_notified_at,omitempty"`
 	// group whose members approve trust center NDA requests
 	NdaApproverGroupID *string `json:"nda_approver_group_id,omitempty"`
 	// URL to the company's status page
@@ -179,11 +183,11 @@ func (*TrustCenterSetting) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case trustcentersetting.FieldRemoveBranding, trustcentersetting.FieldNdaApprovalRequired:
+		case trustcentersetting.FieldRemoveBranding, trustcentersetting.FieldNdaApprovalRequired, trustcentersetting.FieldNotifySubscribersOnSubprocessorChange:
 			values[i] = new(sql.NullBool)
 		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldCompanyName, trustcentersetting.FieldCompanyDescription, trustcentersetting.FieldOverview, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID, trustcentersetting.FieldHeroImageLocalFileID, trustcentersetting.FieldThemeMode, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldFont, trustcentersetting.FieldForegroundColor, trustcentersetting.FieldBackgroundColor, trustcentersetting.FieldAccentColor, trustcentersetting.FieldSecondaryBackgroundColor, trustcentersetting.FieldSecondaryForegroundColor, trustcentersetting.FieldEnvironment, trustcentersetting.FieldCompanyDomain, trustcentersetting.FieldSecurityContact, trustcentersetting.FieldNdaApproverGroupID, trustcentersetting.FieldStatusPageURL:
 			values[i] = new(sql.NullString)
-		case trustcentersetting.FieldCreatedAt, trustcentersetting.FieldUpdatedAt, trustcentersetting.FieldDeletedAt:
+		case trustcentersetting.FieldCreatedAt, trustcentersetting.FieldUpdatedAt, trustcentersetting.FieldDeletedAt, trustcentersetting.FieldSubprocessorsNotifiedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -387,6 +391,19 @@ func (_m *TrustCenterSetting) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.NdaApprovalRequired = value.Bool
 			}
+		case trustcentersetting.FieldNotifySubscribersOnSubprocessorChange:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field notify_subscribers_on_subprocessor_change", values[i])
+			} else if value.Valid {
+				_m.NotifySubscribersOnSubprocessorChange = value.Bool
+			}
+		case trustcentersetting.FieldSubprocessorsNotifiedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field subprocessors_notified_at", values[i])
+			} else if value.Valid {
+				_m.SubprocessorsNotifiedAt = new(time.Time)
+				*_m.SubprocessorsNotifiedAt = value.Time
+			}
 		case trustcentersetting.FieldNdaApproverGroupID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field nda_approver_group_id", values[i])
@@ -567,6 +584,14 @@ func (_m *TrustCenterSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("nda_approval_required=")
 	builder.WriteString(fmt.Sprintf("%v", _m.NdaApprovalRequired))
+	builder.WriteString(", ")
+	builder.WriteString("notify_subscribers_on_subprocessor_change=")
+	builder.WriteString(fmt.Sprintf("%v", _m.NotifySubscribersOnSubprocessorChange))
+	builder.WriteString(", ")
+	if v := _m.SubprocessorsNotifiedAt; v != nil {
+		builder.WriteString("subprocessors_notified_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
 	if v := _m.NdaApproverGroupID; v != nil {
 		builder.WriteString("nda_approver_group_id=")

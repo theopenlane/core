@@ -430,6 +430,20 @@ func (_c *EmailTemplateHistoryCreate) SetNillableWorkflowInstanceID(v *string) *
 	return _c
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_c *EmailTemplateHistoryCreate) SetTrustCenterID(v string) *EmailTemplateHistoryCreate {
+	_c.mutation.SetTrustCenterID(v)
+	return _c
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_c *EmailTemplateHistoryCreate) SetNillableTrustCenterID(v *string) *EmailTemplateHistoryCreate {
+	if v != nil {
+		_c.SetTrustCenterID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *EmailTemplateHistoryCreate) SetID(v string) *EmailTemplateHistoryCreate {
 	_c.mutation.SetID(v)
@@ -741,6 +755,10 @@ func (_c *EmailTemplateHistoryCreate) createSpec() (*EmailTemplateHistory, *sqlg
 	if value, ok := _c.mutation.WorkflowInstanceID(); ok {
 		_spec.SetField(emailtemplatehistory.FieldWorkflowInstanceID, field.TypeString, value)
 		_node.WorkflowInstanceID = value
+	}
+	if value, ok := _c.mutation.TrustCenterID(); ok {
+		_spec.SetField(emailtemplatehistory.FieldTrustCenterID, field.TypeString, value)
+		_node.TrustCenterID = value
 	}
 	return _node, _spec
 }

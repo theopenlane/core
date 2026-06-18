@@ -587,6 +587,20 @@ func (_c *CampaignHistoryCreate) SetNillableEmailBrandingID(v *string) *Campaign
 	return _c
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_c *CampaignHistoryCreate) SetTrustCenterID(v string) *CampaignHistoryCreate {
+	_c.mutation.SetTrustCenterID(v)
+	return _c
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_c *CampaignHistoryCreate) SetNillableTrustCenterID(v *string) *CampaignHistoryCreate {
+	if v != nil {
+		_c.SetTrustCenterID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *CampaignHistoryCreate) SetID(v string) *CampaignHistoryCreate {
 	_c.mutation.SetID(v)
@@ -967,6 +981,10 @@ func (_c *CampaignHistoryCreate) createSpec() (*CampaignHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.EmailBrandingID(); ok {
 		_spec.SetField(campaignhistory.FieldEmailBrandingID, field.TypeString, value)
 		_node.EmailBrandingID = value
+	}
+	if value, ok := _c.mutation.TrustCenterID(); ok {
+		_spec.SetField(campaignhistory.FieldTrustCenterID, field.TypeString, value)
+		_node.TrustCenterID = value
 	}
 	return _node, _spec
 }

@@ -1,2 +1,2 @@
-Tags,Email,PhoneNumber,OwnerId,EventIDs
-example_tags,example_email,example_phonenumber,example_ownerid,example_eventids
+Tags,Email,PhoneNumber,OwnerId,EventIDs,TrustCenterId,CampaignTargetIDs,ContactId,UserId
+example_tags,example_email,example_phonenumber,example_ownerid,example_eventids,example_trustcenterid,example_campaigntargetids,example_contactid,example_userid

@@ -109,7 +109,9 @@ type CampaignHistory struct {
 	IntegrationID string `json:"integration_id,omitempty"`
 	// the email branding associated with the campaign
 	EmailBrandingID string `json:"email_branding_id,omitempty"`
-	selectValues    sql.SelectValues
+	// the trust center this campaign sends updates for, if any
+	TrustCenterID string `json:"trust_center_id,omitempty"`
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -129,7 +131,7 @@ func (*CampaignHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case campaignhistory.FieldRecurrenceInterval, campaignhistory.FieldRecipientCount, campaignhistory.FieldResendCount:
 			values[i] = new(sql.NullInt64)
-		case campaignhistory.FieldID, campaignhistory.FieldRef, campaignhistory.FieldCreatedBy, campaignhistory.FieldUpdatedBy, campaignhistory.FieldDeletedBy, campaignhistory.FieldDisplayID, campaignhistory.FieldOwnerID, campaignhistory.FieldInternalOwner, campaignhistory.FieldInternalOwnerUserID, campaignhistory.FieldInternalOwnerGroupID, campaignhistory.FieldName, campaignhistory.FieldDescription, campaignhistory.FieldCampaignType, campaignhistory.FieldStatus, campaignhistory.FieldRecurrenceFrequency, campaignhistory.FieldRecurrenceTimezone, campaignhistory.FieldEntityID, campaignhistory.FieldTemplateID, campaignhistory.FieldAssessmentID, campaignhistory.FieldEmailTemplateID, campaignhistory.FieldIntegrationID, campaignhistory.FieldEmailBrandingID:
+		case campaignhistory.FieldID, campaignhistory.FieldRef, campaignhistory.FieldCreatedBy, campaignhistory.FieldUpdatedBy, campaignhistory.FieldDeletedBy, campaignhistory.FieldDisplayID, campaignhistory.FieldOwnerID, campaignhistory.FieldInternalOwner, campaignhistory.FieldInternalOwnerUserID, campaignhistory.FieldInternalOwnerGroupID, campaignhistory.FieldName, campaignhistory.FieldDescription, campaignhistory.FieldCampaignType, campaignhistory.FieldStatus, campaignhistory.FieldRecurrenceFrequency, campaignhistory.FieldRecurrenceTimezone, campaignhistory.FieldEntityID, campaignhistory.FieldTemplateID, campaignhistory.FieldAssessmentID, campaignhistory.FieldEmailTemplateID, campaignhistory.FieldIntegrationID, campaignhistory.FieldEmailBrandingID, campaignhistory.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case campaignhistory.FieldHistoryTime, campaignhistory.FieldCreatedAt, campaignhistory.FieldUpdatedAt, campaignhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -425,6 +427,12 @@ func (_m *CampaignHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.EmailBrandingID = value.String
 			}
+		case campaignhistory.FieldTrustCenterID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
+			} else if value.Valid {
+				_m.TrustCenterID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -607,6 +615,9 @@ func (_m *CampaignHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("email_branding_id=")
 	builder.WriteString(_m.EmailBrandingID)
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_id=")
+	builder.WriteString(_m.TrustCenterID)
 	builder.WriteByte(')')
 	return builder.String()
 }

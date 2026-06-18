@@ -90,6 +90,21 @@ func (h *Handler) updateSubscriberVerificationToken(ctx context.Context, subscri
 	return nil
 }
 
+// setSubscriberUnsubscribed marks the subscriber as unsubscribed; the HookSubscriberUpdated
+// hook clears the active flag and resets send attempts
+func (h *Handler) setSubscriberUnsubscribed(ctx context.Context, id string) error {
+	err := transaction.FromContext(ctx).Subscriber.UpdateOneID(id).
+		SetUnsubscribed(true).
+		Exec(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error unsubscribing subscriber")
+
+		return err
+	}
+
+	return nil
+}
+
 // createEmailVerificationToken creates a new email verification for the user
 func (h *Handler) createEmailVerificationToken(ctx context.Context, user *User) (*ent.EmailVerificationToken, error) {
 	ttl, err := time.Parse(time.RFC3339Nano, user.EmailVerificationExpires.String)

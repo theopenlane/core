@@ -491,6 +491,26 @@ func (_u *EmailTemplateHistoryUpdate) ClearWorkflowInstanceID() *EmailTemplateHi
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *EmailTemplateHistoryUpdate) SetTrustCenterID(v string) *EmailTemplateHistoryUpdate {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *EmailTemplateHistoryUpdate) SetNillableTrustCenterID(v *string) *EmailTemplateHistoryUpdate {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *EmailTemplateHistoryUpdate) ClearTrustCenterID() *EmailTemplateHistoryUpdate {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
 // Mutation returns the EmailTemplateHistoryMutation object of the builder.
 func (_u *EmailTemplateHistoryUpdate) Mutation() *EmailTemplateHistoryMutation {
 	return _u.mutation
@@ -729,6 +749,12 @@ func (_u *EmailTemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	}
 	if _u.mutation.WorkflowInstanceIDCleared() {
 		_spec.ClearField(emailtemplatehistory.FieldWorkflowInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(emailtemplatehistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.EmailTemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1211,6 +1237,26 @@ func (_u *EmailTemplateHistoryUpdateOne) ClearWorkflowInstanceID() *EmailTemplat
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *EmailTemplateHistoryUpdateOne) SetTrustCenterID(v string) *EmailTemplateHistoryUpdateOne {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *EmailTemplateHistoryUpdateOne) SetNillableTrustCenterID(v *string) *EmailTemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *EmailTemplateHistoryUpdateOne) ClearTrustCenterID() *EmailTemplateHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
 // Mutation returns the EmailTemplateHistoryMutation object of the builder.
 func (_u *EmailTemplateHistoryUpdateOne) Mutation() *EmailTemplateHistoryMutation {
 	return _u.mutation
@@ -1479,6 +1525,12 @@ func (_u *EmailTemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Em
 	}
 	if _u.mutation.WorkflowInstanceIDCleared() {
 		_spec.ClearField(emailtemplatehistory.FieldWorkflowInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(emailtemplatehistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.EmailTemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

@@ -244,6 +244,11 @@ func EmailBrandingID(v string) predicate.Campaign {
 	return predicate.Campaign(sql.FieldEQ(FieldEmailBrandingID, v))
 }
 
+// TrustCenterID applies equality check predicate on the "trust_center_id" field. It's identical to TrustCenterIDEQ.
+func TrustCenterID(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEQ(FieldTrustCenterID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Campaign {
 	return predicate.Campaign(sql.FieldEQ(FieldCreatedAt, v))
@@ -2439,6 +2444,81 @@ func EmailBrandingIDContainsFold(v string) predicate.Campaign {
 	return predicate.Campaign(sql.FieldContainsFold(FieldEmailBrandingID, v))
 }
 
+// TrustCenterIDEQ applies the EQ predicate on the "trust_center_id" field.
+func TrustCenterIDEQ(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDNEQ applies the NEQ predicate on the "trust_center_id" field.
+func TrustCenterIDNEQ(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldNEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIn applies the In predicate on the "trust_center_id" field.
+func TrustCenterIDIn(vs ...string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDNotIn applies the NotIn predicate on the "trust_center_id" field.
+func TrustCenterIDNotIn(vs ...string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldNotIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDGT applies the GT predicate on the "trust_center_id" field.
+func TrustCenterIDGT(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldGT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDGTE applies the GTE predicate on the "trust_center_id" field.
+func TrustCenterIDGTE(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldGTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLT applies the LT predicate on the "trust_center_id" field.
+func TrustCenterIDLT(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldLT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLTE applies the LTE predicate on the "trust_center_id" field.
+func TrustCenterIDLTE(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldLTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContains applies the Contains predicate on the "trust_center_id" field.
+func TrustCenterIDContains(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldContains(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasPrefix applies the HasPrefix predicate on the "trust_center_id" field.
+func TrustCenterIDHasPrefix(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldHasPrefix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasSuffix applies the HasSuffix predicate on the "trust_center_id" field.
+func TrustCenterIDHasSuffix(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldHasSuffix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIsNil applies the IsNil predicate on the "trust_center_id" field.
+func TrustCenterIDIsNil() predicate.Campaign {
+	return predicate.Campaign(sql.FieldIsNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDNotNil applies the NotNil predicate on the "trust_center_id" field.
+func TrustCenterIDNotNil() predicate.Campaign {
+	return predicate.Campaign(sql.FieldNotNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDEqualFold applies the EqualFold predicate on the "trust_center_id" field.
+func TrustCenterIDEqualFold(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEqualFold(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContainsFold applies the ContainsFold predicate on the "trust_center_id" field.
+func TrustCenterIDContainsFold(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldContainsFold(FieldTrustCenterID, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
@@ -2749,6 +2829,35 @@ func HasEntityWith(preds ...predicate.Entity) predicate.Campaign {
 		step := newEntityStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.Campaign
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTrustCenter applies the HasEdge predicate on the "trust_center" edge.
+func HasTrustCenter() predicate.Campaign {
+	return predicate.Campaign(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, TrustCenterTable, TrustCenterColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.Campaign
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustCenterWith applies the HasEdge predicate on the "trust_center" edge with a given conditions (other predicates).
+func HasTrustCenterWith(preds ...predicate.TrustCenter) predicate.Campaign {
+	return predicate.Campaign(func(s *sql.Selector) {
+		step := newTrustCenterStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenter
 		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

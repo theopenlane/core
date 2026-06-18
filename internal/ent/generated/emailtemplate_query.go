@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 
@@ -42,6 +43,7 @@ type EmailTemplateQuery struct {
 	withIntegration                *IntegrationQuery
 	withWorkflowDefinition         *WorkflowDefinitionQuery
 	withWorkflowInstance           *WorkflowInstanceQuery
+	withTrustCenter                *TrustCenterQuery
 	withCampaigns                  *CampaignQuery
 	withNotificationTemplates      *NotificationTemplateQuery
 	withFiles                      *FileQuery
@@ -257,6 +259,31 @@ func (_q *EmailTemplateQuery) QueryWorkflowInstance() *WorkflowInstanceQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.WorkflowInstance
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTrustCenter chains the current query on the "trust_center" edge.
+func (_q *EmailTemplateQuery) QueryTrustCenter() *TrustCenterQuery {
+	query := (&TrustCenterClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailtemplate.Table, emailtemplate.FieldID, selector),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, emailtemplate.TrustCenterTable, emailtemplate.TrustCenterColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
 		step.Edge.Schema = schemaConfig.EmailTemplate
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -538,6 +565,7 @@ func (_q *EmailTemplateQuery) Clone() *EmailTemplateQuery {
 		withIntegration:           _q.withIntegration.Clone(),
 		withWorkflowDefinition:    _q.withWorkflowDefinition.Clone(),
 		withWorkflowInstance:      _q.withWorkflowInstance.Clone(),
+		withTrustCenter:           _q.withTrustCenter.Clone(),
 		withCampaigns:             _q.withCampaigns.Clone(),
 		withNotificationTemplates: _q.withNotificationTemplates.Clone(),
 		withFiles:                 _q.withFiles.Clone(),
@@ -622,6 +650,17 @@ func (_q *EmailTemplateQuery) WithWorkflowInstance(opts ...func(*WorkflowInstanc
 		opt(query)
 	}
 	_q.withWorkflowInstance = query
+	return _q
+}
+
+// WithTrustCenter tells the query-builder to eager-load the nodes that are connected to
+// the "trust_center" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EmailTemplateQuery) WithTrustCenter(opts ...func(*TrustCenterQuery)) *EmailTemplateQuery {
+	query := (&TrustCenterClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTrustCenter = query
 	return _q
 }
 
@@ -742,7 +781,7 @@ func (_q *EmailTemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	var (
 		nodes       = []*EmailTemplate{}
 		_spec       = _q.querySpec()
-		loadedTypes = [10]bool{
+		loadedTypes = [11]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -750,6 +789,7 @@ func (_q *EmailTemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 			_q.withIntegration != nil,
 			_q.withWorkflowDefinition != nil,
 			_q.withWorkflowInstance != nil,
+			_q.withTrustCenter != nil,
 			_q.withCampaigns != nil,
 			_q.withNotificationTemplates != nil,
 			_q.withFiles != nil,
@@ -820,6 +860,12 @@ func (_q *EmailTemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	if query := _q.withWorkflowInstance; query != nil {
 		if err := _q.loadWorkflowInstance(ctx, query, nodes, nil,
 			func(n *EmailTemplate, e *WorkflowInstance) { n.Edges.WorkflowInstance = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withTrustCenter; query != nil {
+		if err := _q.loadTrustCenter(ctx, query, nodes, nil,
+			func(n *EmailTemplate, e *TrustCenter) { n.Edges.TrustCenter = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1105,6 +1151,35 @@ func (_q *EmailTemplateQuery) loadWorkflowInstance(ctx context.Context, query *W
 	}
 	return nil
 }
+func (_q *EmailTemplateQuery) loadTrustCenter(ctx context.Context, query *TrustCenterQuery, nodes []*EmailTemplate, init func(*EmailTemplate), assign func(*EmailTemplate, *TrustCenter)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*EmailTemplate)
+	for i := range nodes {
+		fk := nodes[i].TrustCenterID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(trustcenter.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "trust_center_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *EmailTemplateQuery) loadCampaigns(ctx context.Context, query *CampaignQuery, nodes []*EmailTemplate, init func(*EmailTemplate), assign func(*EmailTemplate, *Campaign)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*EmailTemplate)
@@ -1238,6 +1313,9 @@ func (_q *EmailTemplateQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withWorkflowInstance != nil {
 			_spec.Node.AddColumnOnce(emailtemplate.FieldWorkflowInstanceID)
+		}
+		if _q.withTrustCenter != nil {
+			_spec.Node.AddColumnOnce(emailtemplate.FieldTrustCenterID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

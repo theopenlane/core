@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
@@ -52,6 +53,7 @@ type CampaignQuery struct {
 	withIntegration              *IntegrationQuery
 	withEmailTemplate            *EmailTemplateQuery
 	withEntity                   *EntityQuery
+	withTrustCenter              *TrustCenterQuery
 	withCampaignTargets          *CampaignTargetQuery
 	withAssessmentResponses      *AssessmentResponseQuery
 	withContacts                 *ContactQuery
@@ -377,6 +379,31 @@ func (_q *CampaignQuery) QueryEntity() *EntityQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.Campaign
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTrustCenter chains the current query on the "trust_center" edge.
+func (_q *CampaignQuery) QueryTrustCenter() *TrustCenterQuery {
+	query := (&TrustCenterClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, selector),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, campaign.TrustCenterTable, campaign.TrustCenterColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
 		step.Edge.Schema = schemaConfig.Campaign
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -787,6 +814,7 @@ func (_q *CampaignQuery) Clone() *CampaignQuery {
 		withIntegration:         _q.withIntegration.Clone(),
 		withEmailTemplate:       _q.withEmailTemplate.Clone(),
 		withEntity:              _q.withEntity.Clone(),
+		withTrustCenter:         _q.withTrustCenter.Clone(),
 		withCampaignTargets:     _q.withCampaignTargets.Clone(),
 		withAssessmentResponses: _q.withAssessmentResponses.Clone(),
 		withContacts:            _q.withContacts.Clone(),
@@ -920,6 +948,17 @@ func (_q *CampaignQuery) WithEntity(opts ...func(*EntityQuery)) *CampaignQuery {
 		opt(query)
 	}
 	_q.withEntity = query
+	return _q
+}
+
+// WithTrustCenter tells the query-builder to eager-load the nodes that are connected to
+// the "trust_center" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *CampaignQuery) WithTrustCenter(opts ...func(*TrustCenterQuery)) *CampaignQuery {
+	query := (&TrustCenterClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTrustCenter = query
 	return _q
 }
 
@@ -1095,7 +1134,7 @@ func (_q *CampaignQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cam
 	var (
 		nodes       = []*Campaign{}
 		_spec       = _q.querySpec()
-		loadedTypes = [19]bool{
+		loadedTypes = [20]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1107,6 +1146,7 @@ func (_q *CampaignQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cam
 			_q.withIntegration != nil,
 			_q.withEmailTemplate != nil,
 			_q.withEntity != nil,
+			_q.withTrustCenter != nil,
 			_q.withCampaignTargets != nil,
 			_q.withAssessmentResponses != nil,
 			_q.withContacts != nil,
@@ -1206,6 +1246,12 @@ func (_q *CampaignQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cam
 	if query := _q.withEntity; query != nil {
 		if err := _q.loadEntity(ctx, query, nodes, nil,
 			func(n *Campaign, e *Entity) { n.Edges.Entity = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withTrustCenter; query != nil {
+		if err := _q.loadTrustCenter(ctx, query, nodes, nil,
+			func(n *Campaign, e *TrustCenter) { n.Edges.TrustCenter = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1772,6 +1818,35 @@ func (_q *CampaignQuery) loadEntity(ctx context.Context, query *EntityQuery, nod
 	}
 	return nil
 }
+func (_q *CampaignQuery) loadTrustCenter(ctx context.Context, query *TrustCenterQuery, nodes []*Campaign, init func(*Campaign), assign func(*Campaign, *TrustCenter)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Campaign)
+	for i := range nodes {
+		fk := nodes[i].TrustCenterID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(trustcenter.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "trust_center_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *CampaignQuery) loadCampaignTargets(ctx context.Context, query *CampaignTargetQuery, nodes []*Campaign, init func(*Campaign), assign func(*Campaign, *CampaignTarget)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Campaign)
@@ -2227,6 +2302,9 @@ func (_q *CampaignQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withEntity != nil {
 			_spec.Node.AddColumnOnce(campaign.FieldEntityID)
+		}
+		if _q.withTrustCenter != nil {
+			_spec.Node.AddColumnOnce(campaign.FieldTrustCenterID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

@@ -428,6 +428,34 @@ func (_c *TrustCenterSettingCreate) SetNillableNdaApprovalRequired(v *bool) *Tru
 	return _c
 }
 
+// SetNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field.
+func (_c *TrustCenterSettingCreate) SetNotifySubscribersOnSubprocessorChange(v bool) *TrustCenterSettingCreate {
+	_c.mutation.SetNotifySubscribersOnSubprocessorChange(v)
+	return _c
+}
+
+// SetNillableNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableNotifySubscribersOnSubprocessorChange(v *bool) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetNotifySubscribersOnSubprocessorChange(*v)
+	}
+	return _c
+}
+
+// SetSubprocessorsNotifiedAt sets the "subprocessors_notified_at" field.
+func (_c *TrustCenterSettingCreate) SetSubprocessorsNotifiedAt(v time.Time) *TrustCenterSettingCreate {
+	_c.mutation.SetSubprocessorsNotifiedAt(v)
+	return _c
+}
+
+// SetNillableSubprocessorsNotifiedAt sets the "subprocessors_notified_at" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableSubprocessorsNotifiedAt(v *time.Time) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetSubprocessorsNotifiedAt(*v)
+	}
+	return _c
+}
+
 // SetNdaApproverGroupID sets the "nda_approver_group_id" field.
 func (_c *TrustCenterSettingCreate) SetNdaApproverGroupID(v string) *TrustCenterSettingCreate {
 	_c.mutation.SetNdaApproverGroupID(v)
@@ -628,6 +656,10 @@ func (_c *TrustCenterSettingCreate) defaults() error {
 	if _, ok := _c.mutation.NdaApprovalRequired(); !ok {
 		v := trustcentersetting.DefaultNdaApprovalRequired
 		_c.mutation.SetNdaApprovalRequired(v)
+	}
+	if _, ok := _c.mutation.NotifySubscribersOnSubprocessorChange(); !ok {
+		v := trustcentersetting.DefaultNotifySubscribersOnSubprocessorChange
+		_c.mutation.SetNotifySubscribersOnSubprocessorChange(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcentersetting.DefaultID == nil {
@@ -865,6 +897,14 @@ func (_c *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph
 	if value, ok := _c.mutation.NdaApprovalRequired(); ok {
 		_spec.SetField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool, value)
 		_node.NdaApprovalRequired = value
+	}
+	if value, ok := _c.mutation.NotifySubscribersOnSubprocessorChange(); ok {
+		_spec.SetField(trustcentersetting.FieldNotifySubscribersOnSubprocessorChange, field.TypeBool, value)
+		_node.NotifySubscribersOnSubprocessorChange = value
+	}
+	if value, ok := _c.mutation.SubprocessorsNotifiedAt(); ok {
+		_spec.SetField(trustcentersetting.FieldSubprocessorsNotifiedAt, field.TypeTime, value)
+		_node.SubprocessorsNotifiedAt = &value
 	}
 	if value, ok := _c.mutation.StatusPageURL(); ok {
 		_spec.SetField(trustcentersetting.FieldStatusPageURL, field.TypeString, value)

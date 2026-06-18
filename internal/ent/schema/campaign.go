@@ -245,6 +245,9 @@ func (Campaign) Fields() []ent.Field {
 		field.String("email_branding_id").
 			Comment("the email branding associated with the campaign").
 			Optional(),
+		field.String("trust_center_id").
+			Comment("the trust center this campaign sends updates for, if any").
+			Optional(),
 	}
 }
 
@@ -307,6 +310,14 @@ func (c Campaign) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Entity{}.Name()),
 			},
 		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: TrustCenter{},
+			field:      "trust_center_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(TrustCenter{}.Name()),
+			},
+		}),
 		defaultEdgeToWithPagination(c, CampaignTarget{}),
 		defaultEdgeToWithPagination(c, AssessmentResponse{}),
 		defaultEdgeToWithPagination(c, Contact{}),
@@ -336,6 +347,7 @@ func (Campaign) Indexes() []ent.Index {
 func (Campaign) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
+		models.CatalogTrustCenterModule,
 	}
 }
 

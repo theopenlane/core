@@ -10,10 +10,13 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
@@ -485,6 +488,51 @@ func (_c *TrustCenterCreate) AddTrustCenterFaqs(v ...*TrustCenterFAQ) *TrustCent
 	return _c.AddTrustCenterFaqIDs(ids...)
 }
 
+// AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
+func (_c *TrustCenterCreate) AddSubscriberIDs(ids ...string) *TrustCenterCreate {
+	_c.mutation.AddSubscriberIDs(ids...)
+	return _c
+}
+
+// AddSubscribers adds the "subscribers" edges to the Subscriber entity.
+func (_c *TrustCenterCreate) AddSubscribers(v ...*Subscriber) *TrustCenterCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddSubscriberIDs(ids...)
+}
+
+// AddEmailTemplateIDs adds the "email_templates" edge to the EmailTemplate entity by IDs.
+func (_c *TrustCenterCreate) AddEmailTemplateIDs(ids ...string) *TrustCenterCreate {
+	_c.mutation.AddEmailTemplateIDs(ids...)
+	return _c
+}
+
+// AddEmailTemplates adds the "email_templates" edges to the EmailTemplate entity.
+func (_c *TrustCenterCreate) AddEmailTemplates(v ...*EmailTemplate) *TrustCenterCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEmailTemplateIDs(ids...)
+}
+
+// AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
+func (_c *TrustCenterCreate) AddCampaignIDs(ids ...string) *TrustCenterCreate {
+	_c.mutation.AddCampaignIDs(ids...)
+	return _c
+}
+
+// AddCampaigns adds the "campaigns" edges to the Campaign entity.
+func (_c *TrustCenterCreate) AddCampaigns(v ...*Campaign) *TrustCenterCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCampaignIDs(ids...)
+}
+
 // Mutation returns the TrustCenterMutation object of the builder.
 func (_c *TrustCenterCreate) Mutation() *TrustCenterMutation {
 	return _c.mutation
@@ -937,6 +985,57 @@ func (_c *TrustCenterCreate) createSpec() (*TrustCenter, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.TrustCenterFAQ
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SubscribersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.SubscribersTable,
+			Columns: []string{trustcenter.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Subscriber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EmailTemplatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.EmailTemplatesTable,
+			Columns: []string{trustcenter.EmailTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.EmailTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CampaignsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.CampaignsTable,
+			Columns: []string{trustcenter.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

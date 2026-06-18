@@ -1912,6 +1912,35 @@ func HasPasswordResetTokensWith(preds ...predicate.PasswordResetToken) predicate
 	})
 }
 
+// HasSubscribers applies the HasEdge predicate on the "subscribers" edge.
+func HasSubscribers() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, SubscribersTable, SubscribersColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subscriber
+		step.Edge.Schema = schemaConfig.Subscriber
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSubscribersWith applies the HasEdge predicate on the "subscribers" edge with a given conditions (other predicates).
+func HasSubscribersWith(preds ...predicate.Subscriber) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newSubscribersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subscriber
+		step.Edge.Schema = schemaConfig.Subscriber
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasGroups applies the HasEdge predicate on the "groups" edge.
 func HasGroups() predicate.User {
 	return predicate.User(func(s *sql.Selector) {

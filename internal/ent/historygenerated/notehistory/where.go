@@ -147,6 +147,16 @@ func TrustCenterID(v string) predicate.NoteHistory {
 	return predicate.NoteHistory(sql.FieldEQ(FieldTrustCenterID, v))
 }
 
+// NotifySubscribers applies equality check predicate on the "notify_subscribers" field. It's identical to NotifySubscribersEQ.
+func NotifySubscribers(v bool) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldEQ(FieldNotifySubscribers, v))
+}
+
+// NotifiedAt applies equality check predicate on the "notified_at" field. It's identical to NotifiedAtEQ.
+func NotifiedAt(v time.Time) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldEQ(FieldNotifiedAt, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.NoteHistory {
 	return predicate.NoteHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1180,6 +1190,76 @@ func TrustCenterIDEqualFold(v string) predicate.NoteHistory {
 // TrustCenterIDContainsFold applies the ContainsFold predicate on the "trust_center_id" field.
 func TrustCenterIDContainsFold(v string) predicate.NoteHistory {
 	return predicate.NoteHistory(sql.FieldContainsFold(FieldTrustCenterID, v))
+}
+
+// NotifySubscribersEQ applies the EQ predicate on the "notify_subscribers" field.
+func NotifySubscribersEQ(v bool) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldEQ(FieldNotifySubscribers, v))
+}
+
+// NotifySubscribersNEQ applies the NEQ predicate on the "notify_subscribers" field.
+func NotifySubscribersNEQ(v bool) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldNEQ(FieldNotifySubscribers, v))
+}
+
+// NotifySubscribersIsNil applies the IsNil predicate on the "notify_subscribers" field.
+func NotifySubscribersIsNil() predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldIsNull(FieldNotifySubscribers))
+}
+
+// NotifySubscribersNotNil applies the NotNil predicate on the "notify_subscribers" field.
+func NotifySubscribersNotNil() predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldNotNull(FieldNotifySubscribers))
+}
+
+// NotifiedAtEQ applies the EQ predicate on the "notified_at" field.
+func NotifiedAtEQ(v time.Time) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldEQ(FieldNotifiedAt, v))
+}
+
+// NotifiedAtNEQ applies the NEQ predicate on the "notified_at" field.
+func NotifiedAtNEQ(v time.Time) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldNEQ(FieldNotifiedAt, v))
+}
+
+// NotifiedAtIn applies the In predicate on the "notified_at" field.
+func NotifiedAtIn(vs ...time.Time) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldIn(FieldNotifiedAt, vs...))
+}
+
+// NotifiedAtNotIn applies the NotIn predicate on the "notified_at" field.
+func NotifiedAtNotIn(vs ...time.Time) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldNotIn(FieldNotifiedAt, vs...))
+}
+
+// NotifiedAtGT applies the GT predicate on the "notified_at" field.
+func NotifiedAtGT(v time.Time) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldGT(FieldNotifiedAt, v))
+}
+
+// NotifiedAtGTE applies the GTE predicate on the "notified_at" field.
+func NotifiedAtGTE(v time.Time) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldGTE(FieldNotifiedAt, v))
+}
+
+// NotifiedAtLT applies the LT predicate on the "notified_at" field.
+func NotifiedAtLT(v time.Time) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldLT(FieldNotifiedAt, v))
+}
+
+// NotifiedAtLTE applies the LTE predicate on the "notified_at" field.
+func NotifiedAtLTE(v time.Time) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldLTE(FieldNotifiedAt, v))
+}
+
+// NotifiedAtIsNil applies the IsNil predicate on the "notified_at" field.
+func NotifiedAtIsNil() predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldIsNull(FieldNotifiedAt))
+}
+
+// NotifiedAtNotNil applies the NotNil predicate on the "notified_at" field.
+func NotifiedAtNotNil() predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldNotNull(FieldNotifiedAt))
 }
 
 // And groups predicates with the AND operator between them.

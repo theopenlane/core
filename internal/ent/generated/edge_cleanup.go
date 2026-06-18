@@ -2664,6 +2664,66 @@ func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	{
+		ids, err := FromContext(ctx).Subscriber.Query().Where(subscriber.HasTrustCenterWith(trustcenter.ID(id))).IDs(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error querying subscriber ids for cleanup")
+			return err
+		}
+		for _, edgeID := range ids {
+			if err := SubscriberEdgeCleanup(ctx, edgeID); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up subscriber edges")
+				return err
+			}
+		}
+	}
+	if exists, err := FromContext(ctx).Subscriber.Query().Where((subscriber.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
+		if subscriberCount, err := FromContext(ctx).Subscriber.Delete().Where(subscriber.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", subscriberCount).Msg("error deleting subscriber")
+			return err
+		}
+	}
+
+	{
+		ids, err := FromContext(ctx).EmailTemplate.Query().Where(emailtemplate.HasTrustCenterWith(trustcenter.ID(id))).IDs(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error querying emailtemplate ids for cleanup")
+			return err
+		}
+		for _, edgeID := range ids {
+			if err := EmailTemplateEdgeCleanup(ctx, edgeID); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up emailtemplate edges")
+				return err
+			}
+		}
+	}
+	if exists, err := FromContext(ctx).EmailTemplate.Query().Where((emailtemplate.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
+		if emailtemplateCount, err := FromContext(ctx).EmailTemplate.Delete().Where(emailtemplate.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", emailtemplateCount).Msg("error deleting emailtemplate")
+			return err
+		}
+	}
+
+	{
+		ids, err := FromContext(ctx).Campaign.Query().Where(campaign.HasTrustCenterWith(trustcenter.ID(id))).IDs(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error querying campaign ids for cleanup")
+			return err
+		}
+		for _, edgeID := range ids {
+			if err := CampaignEdgeCleanup(ctx, edgeID); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up campaign edges")
+				return err
+			}
+		}
+	}
+	if exists, err := FromContext(ctx).Campaign.Query().Where((campaign.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
+		if campaignCount, err := FromContext(ctx).Campaign.Delete().Where(campaign.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", campaignCount).Msg("error deleting campaign")
+			return err
+		}
+	}
+
 	return nil
 }
 

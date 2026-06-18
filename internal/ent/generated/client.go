@@ -3489,6 +3489,25 @@ func (c *CampaignClient) QueryEntity(_m *Campaign) *EntityQuery {
 	return query
 }
 
+// QueryTrustCenter queries the trust_center edge of a Campaign.
+func (c *CampaignClient) QueryTrustCenter(_m *Campaign) *TrustCenterQuery {
+	query := (&TrustCenterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, campaign.TrustCenterTable, campaign.TrustCenterColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.Campaign
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryCampaignTargets queries the campaign_targets edge of a Campaign.
 func (c *CampaignClient) QueryCampaignTargets(_m *Campaign) *CampaignTargetQuery {
 	query := (&CampaignTargetClient{config: c.config}).Query()
@@ -3864,6 +3883,25 @@ func (c *CampaignTargetClient) QueryGroup(_m *CampaignTarget) *GroupQuery {
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubscriber queries the subscriber edge of a CampaignTarget.
+func (c *CampaignTargetClient) QuerySubscriber(_m *CampaignTarget) *SubscriberQuery {
+	query := (&SubscriberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaigntarget.Table, campaigntarget.FieldID, id),
+			sqlgraph.To(subscriber.Table, subscriber.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, campaigntarget.SubscriberTable, campaigntarget.SubscriberColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Subscriber
 		step.Edge.Schema = schemaConfig.CampaignTarget
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -4363,6 +4401,25 @@ func (c *ContactClient) QueryFiles(_m *Contact) *FileQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.ContactFiles
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubscribers queries the subscribers edge of a Contact.
+func (c *ContactClient) QuerySubscribers(_m *Contact) *SubscriberQuery {
+	query := (&SubscriberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contact.Table, contact.FieldID, id),
+			sqlgraph.To(subscriber.Table, subscriber.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, contact.SubscribersTable, contact.SubscribersColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Subscriber
+		step.Edge.Schema = schemaConfig.Subscriber
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -8644,6 +8701,25 @@ func (c *EmailTemplateClient) QueryWorkflowInstance(_m *EmailTemplate) *Workflow
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.WorkflowInstance
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTrustCenter queries the trust_center edge of a EmailTemplate.
+func (c *EmailTemplateClient) QueryTrustCenter(_m *EmailTemplate) *TrustCenterQuery {
+	query := (&TrustCenterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailtemplate.Table, emailtemplate.FieldID, id),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, emailtemplate.TrustCenterTable, emailtemplate.TrustCenterColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
 		step.Edge.Schema = schemaConfig.EmailTemplate
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -30786,6 +30862,82 @@ func (c *SubscriberClient) QueryEvents(_m *Subscriber) *EventQuery {
 	return query
 }
 
+// QueryTrustCenter queries the trust_center edge of a Subscriber.
+func (c *SubscriberClient) QueryTrustCenter(_m *Subscriber) *TrustCenterQuery {
+	query := (&TrustCenterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subscriber.Table, subscriber.FieldID, id),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, subscriber.TrustCenterTable, subscriber.TrustCenterColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.Subscriber
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaignTargets queries the campaign_targets edge of a Subscriber.
+func (c *SubscriberClient) QueryCampaignTargets(_m *Subscriber) *CampaignTargetQuery {
+	query := (&CampaignTargetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subscriber.Table, subscriber.FieldID, id),
+			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subscriber.CampaignTargetsTable, subscriber.CampaignTargetsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryContact queries the contact edge of a Subscriber.
+func (c *SubscriberClient) QueryContact(_m *Subscriber) *ContactQuery {
+	query := (&ContactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subscriber.Table, subscriber.FieldID, id),
+			sqlgraph.To(contact.Table, contact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, subscriber.ContactTable, subscriber.ContactColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Contact
+		step.Edge.Schema = schemaConfig.Subscriber
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUser queries the user edge of a Subscriber.
+func (c *SubscriberClient) QueryUser(_m *Subscriber) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subscriber.Table, subscriber.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, subscriber.UserTable, subscriber.UserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Subscriber
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *SubscriberClient) Hooks() []Hook {
 	hooks := c.hooks.Subscriber
@@ -32654,6 +32806,63 @@ func (c *TrustCenterClient) QueryTrustCenterFaqs(_m *TrustCenter) *TrustCenterFA
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenterFAQ
 		step.Edge.Schema = schemaConfig.TrustCenterFAQ
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubscribers queries the subscribers edge of a TrustCenter.
+func (c *TrustCenterClient) QuerySubscribers(_m *TrustCenter) *SubscriberQuery {
+	query := (&SubscriberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, id),
+			sqlgraph.To(subscriber.Table, subscriber.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.SubscribersTable, trustcenter.SubscribersColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Subscriber
+		step.Edge.Schema = schemaConfig.Subscriber
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEmailTemplates queries the email_templates edge of a TrustCenter.
+func (c *TrustCenterClient) QueryEmailTemplates(_m *TrustCenter) *EmailTemplateQuery {
+	query := (&EmailTemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, id),
+			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.EmailTemplatesTable, trustcenter.EmailTemplatesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaigns queries the campaigns edge of a TrustCenter.
+func (c *TrustCenterClient) QueryCampaigns(_m *TrustCenter) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.CampaignsTable, trustcenter.CampaignsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.Campaign
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -34800,6 +35009,25 @@ func (c *UserClient) QueryPasswordResetTokens(_m *User) *PasswordResetTokenQuery
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.PasswordResetToken
 		step.Edge.Schema = schemaConfig.PasswordResetToken
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubscribers queries the subscribers edge of a User.
+func (c *UserClient) QuerySubscribers(_m *User) *SubscriberQuery {
+	query := (&SubscriberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(subscriber.Table, subscriber.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.SubscribersTable, user.SubscribersColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Subscriber
+		step.Edge.Schema = schemaConfig.Subscriber
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

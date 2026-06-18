@@ -137,6 +137,16 @@ func TrustCenterID(v string) predicate.Note {
 	return predicate.Note(sql.FieldEQ(FieldTrustCenterID, v))
 }
 
+// NotifySubscribers applies equality check predicate on the "notify_subscribers" field. It's identical to NotifySubscribersEQ.
+func NotifySubscribers(v bool) predicate.Note {
+	return predicate.Note(sql.FieldEQ(FieldNotifySubscribers, v))
+}
+
+// NotifiedAt applies equality check predicate on the "notified_at" field. It's identical to NotifiedAtEQ.
+func NotifiedAt(v time.Time) predicate.Note {
+	return predicate.Note(sql.FieldEQ(FieldNotifiedAt, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Note {
 	return predicate.Note(sql.FieldEQ(FieldCreatedAt, v))
@@ -1035,6 +1045,76 @@ func TrustCenterIDEqualFold(v string) predicate.Note {
 // TrustCenterIDContainsFold applies the ContainsFold predicate on the "trust_center_id" field.
 func TrustCenterIDContainsFold(v string) predicate.Note {
 	return predicate.Note(sql.FieldContainsFold(FieldTrustCenterID, v))
+}
+
+// NotifySubscribersEQ applies the EQ predicate on the "notify_subscribers" field.
+func NotifySubscribersEQ(v bool) predicate.Note {
+	return predicate.Note(sql.FieldEQ(FieldNotifySubscribers, v))
+}
+
+// NotifySubscribersNEQ applies the NEQ predicate on the "notify_subscribers" field.
+func NotifySubscribersNEQ(v bool) predicate.Note {
+	return predicate.Note(sql.FieldNEQ(FieldNotifySubscribers, v))
+}
+
+// NotifySubscribersIsNil applies the IsNil predicate on the "notify_subscribers" field.
+func NotifySubscribersIsNil() predicate.Note {
+	return predicate.Note(sql.FieldIsNull(FieldNotifySubscribers))
+}
+
+// NotifySubscribersNotNil applies the NotNil predicate on the "notify_subscribers" field.
+func NotifySubscribersNotNil() predicate.Note {
+	return predicate.Note(sql.FieldNotNull(FieldNotifySubscribers))
+}
+
+// NotifiedAtEQ applies the EQ predicate on the "notified_at" field.
+func NotifiedAtEQ(v time.Time) predicate.Note {
+	return predicate.Note(sql.FieldEQ(FieldNotifiedAt, v))
+}
+
+// NotifiedAtNEQ applies the NEQ predicate on the "notified_at" field.
+func NotifiedAtNEQ(v time.Time) predicate.Note {
+	return predicate.Note(sql.FieldNEQ(FieldNotifiedAt, v))
+}
+
+// NotifiedAtIn applies the In predicate on the "notified_at" field.
+func NotifiedAtIn(vs ...time.Time) predicate.Note {
+	return predicate.Note(sql.FieldIn(FieldNotifiedAt, vs...))
+}
+
+// NotifiedAtNotIn applies the NotIn predicate on the "notified_at" field.
+func NotifiedAtNotIn(vs ...time.Time) predicate.Note {
+	return predicate.Note(sql.FieldNotIn(FieldNotifiedAt, vs...))
+}
+
+// NotifiedAtGT applies the GT predicate on the "notified_at" field.
+func NotifiedAtGT(v time.Time) predicate.Note {
+	return predicate.Note(sql.FieldGT(FieldNotifiedAt, v))
+}
+
+// NotifiedAtGTE applies the GTE predicate on the "notified_at" field.
+func NotifiedAtGTE(v time.Time) predicate.Note {
+	return predicate.Note(sql.FieldGTE(FieldNotifiedAt, v))
+}
+
+// NotifiedAtLT applies the LT predicate on the "notified_at" field.
+func NotifiedAtLT(v time.Time) predicate.Note {
+	return predicate.Note(sql.FieldLT(FieldNotifiedAt, v))
+}
+
+// NotifiedAtLTE applies the LTE predicate on the "notified_at" field.
+func NotifiedAtLTE(v time.Time) predicate.Note {
+	return predicate.Note(sql.FieldLTE(FieldNotifiedAt, v))
+}
+
+// NotifiedAtIsNil applies the IsNil predicate on the "notified_at" field.
+func NotifiedAtIsNil() predicate.Note {
+	return predicate.Note(sql.FieldIsNull(FieldNotifiedAt))
+}
+
+// NotifiedAtNotNil applies the NotNil predicate on the "notified_at" field.
+func NotifiedAtNotNil() predicate.Note {
+	return predicate.Note(sql.FieldNotNull(FieldNotifiedAt))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

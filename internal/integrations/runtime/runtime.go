@@ -277,7 +277,23 @@ func New(config Config) (*Runtime, error) {
 		gala.WithMaxInterval(operations.PaymentReminderMaxInterval),
 	)
 
-	if err := operations.RegisterRuntimeListeners(rt.Gala(), rt.Registry(), rt.HandleOperation, rt.HandleWebhookEvent, rt.HandleReconcile, gala.NewSchedule(), rt.HandleRecurringCampaigns, gala.NewSchedule(), rt.HandlePaymentReminders, paymentReminderSchedule); err != nil {
+	if err := operations.RegisterRuntimeListeners(rt.Gala(), rt.Registry(), rt.HandleOperation, rt.HandleWebhookEvent); err != nil {
+		return nil, err
+	}
+
+	if err := operations.RegisterReconcileListener(rt.Gala(), rt.Registry(), rt.HandleReconcile, gala.NewSchedule()); err != nil {
+		return nil, err
+	}
+
+	if err := operations.RegisterRecurringCampaignListener(rt.Gala(), rt.HandleRecurringCampaigns, gala.NewSchedule()); err != nil {
+		return nil, err
+	}
+
+	if err := operations.RegisterPaymentReminderListener(rt.Gala(), rt.HandlePaymentReminders, paymentReminderSchedule); err != nil {
+		return nil, err
+	}
+
+	if err := operations.RegisterTrustCenterNotificationListener(rt.Gala(), rt.HandleTrustCenterNotifications, gala.NewSchedule()); err != nil {
 		return nil, err
 	}
 

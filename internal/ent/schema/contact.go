@@ -141,6 +141,7 @@ func (c Contact) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(c, Campaign{}),
 		defaultEdgeToWithPagination(c, CampaignTarget{}),
 		defaultEdgeToWithPagination(c, File{}),
+		defaultEdgeToWithPagination(c, Subscriber{}),
 	}
 }
 

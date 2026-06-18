@@ -310,6 +310,10 @@ func serve(ctx context.Context) error {
 		if err := rt.SeedPaymentReminders(ctx); err != nil {
 			log.Error().Err(err).Msg("failed to seed payment reminder listener")
 		}
+
+		if err := rt.SeedTrustCenterNotifications(ctx); err != nil {
+			log.Error().Err(err).Msg("failed to seed trust center notification listener")
+		}
 	}
 
 	if err := srv.StartEchoServer(ctx); err != nil && !errors.Is(err, http.ErrServerClosed) {

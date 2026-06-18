@@ -57,7 +57,11 @@ type NoteHistory struct {
 	IsEdited bool `json:"is_edited,omitempty"`
 	// the trust center this note belongs to, if applicable
 	TrustCenterID string `json:"trust_center_id,omitempty"`
-	selectValues  sql.SelectValues
+	// when set on a trust center post, sends the published update to the trust center's subscribers
+	NotifySubscribers bool `json:"notify_subscribers,omitempty"`
+	// when subscribers were notified about this post
+	NotifiedAt   *time.Time `json:"notified_at,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -69,11 +73,11 @@ func (*NoteHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case notehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case notehistory.FieldIsEdited:
+		case notehistory.FieldIsEdited, notehistory.FieldNotifySubscribers:
 			values[i] = new(sql.NullBool)
 		case notehistory.FieldID, notehistory.FieldRef, notehistory.FieldCreatedBy, notehistory.FieldUpdatedBy, notehistory.FieldDeletedBy, notehistory.FieldDisplayID, notehistory.FieldOwnerID, notehistory.FieldTitle, notehistory.FieldText, notehistory.FieldNoteRef, notehistory.FieldDiscussionID, notehistory.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
-		case notehistory.FieldHistoryTime, notehistory.FieldCreatedAt, notehistory.FieldUpdatedAt, notehistory.FieldDeletedAt:
+		case notehistory.FieldHistoryTime, notehistory.FieldCreatedAt, notehistory.FieldUpdatedAt, notehistory.FieldDeletedAt, notehistory.FieldNotifiedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -207,6 +211,19 @@ func (_m *NoteHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.TrustCenterID = value.String
 			}
+		case notehistory.FieldNotifySubscribers:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field notify_subscribers", values[i])
+			} else if value.Valid {
+				_m.NotifySubscribers = value.Bool
+			}
+		case notehistory.FieldNotifiedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field notified_at", values[i])
+			} else if value.Valid {
+				_m.NotifiedAt = new(time.Time)
+				*_m.NotifiedAt = value.Time
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -298,6 +315,14 @@ func (_m *NoteHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("trust_center_id=")
 	builder.WriteString(_m.TrustCenterID)
+	builder.WriteString(", ")
+	builder.WriteString("notify_subscribers=")
+	builder.WriteString(fmt.Sprintf("%v", _m.NotifySubscribers))
+	builder.WriteString(", ")
+	if v := _m.NotifiedAt; v != nil {
+		builder.WriteString("notified_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

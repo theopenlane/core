@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 )
@@ -83,6 +84,8 @@ type EmailTemplate struct {
 	WorkflowDefinitionID string `json:"workflow_definition_id,omitempty"`
 	// workflow instance associated with this template
 	WorkflowInstanceID string `json:"workflow_instance_id,omitempty"`
+	// the trust center this template is associated with, if any
+	TrustCenterID string `json:"trust_center_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the EmailTemplateQuery when eager-loading is set.
 	Edges        EmailTemplateEdges `json:"edges"`
@@ -105,6 +108,8 @@ type EmailTemplateEdges struct {
 	WorkflowDefinition *WorkflowDefinition `json:"workflow_definition,omitempty"`
 	// WorkflowInstance holds the value of the workflow_instance edge.
 	WorkflowInstance *WorkflowInstance `json:"workflow_instance,omitempty"`
+	// TrustCenter holds the value of the trust_center edge.
+	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
 	// Campaigns holds the value of the campaigns edge.
 	Campaigns []*Campaign `json:"campaigns,omitempty"`
 	// NotificationTemplates holds the value of the notification_templates edge.
@@ -113,9 +118,9 @@ type EmailTemplateEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [10]bool
+	loadedTypes [11]bool
 	// totalCount holds the count of the edges above.
-	totalCount [10]map[string]int
+	totalCount [11]map[string]int
 
 	namedBlockedGroups         map[string][]*Group
 	namedEditors               map[string][]*Group
@@ -196,10 +201,21 @@ func (e EmailTemplateEdges) WorkflowInstanceOrErr() (*WorkflowInstance, error) {
 	return nil, &NotLoadedError{edge: "workflow_instance"}
 }
 
+// TrustCenterOrErr returns the TrustCenter value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EmailTemplateEdges) TrustCenterOrErr() (*TrustCenter, error) {
+	if e.TrustCenter != nil {
+		return e.TrustCenter, nil
+	} else if e.loadedTypes[7] {
+		return nil, &NotFoundError{label: trustcenter.Label}
+	}
+	return nil, &NotLoadedError{edge: "trust_center"}
+}
+
 // CampaignsOrErr returns the Campaigns value or an error if the edge
 // was not loaded in eager-loading.
 func (e EmailTemplateEdges) CampaignsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.Campaigns, nil
 	}
 	return nil, &NotLoadedError{edge: "campaigns"}
@@ -208,7 +224,7 @@ func (e EmailTemplateEdges) CampaignsOrErr() ([]*Campaign, error) {
 // NotificationTemplatesOrErr returns the NotificationTemplates value or an error if the edge
 // was not loaded in eager-loading.
 func (e EmailTemplateEdges) NotificationTemplatesOrErr() ([]*NotificationTemplate, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		return e.NotificationTemplates, nil
 	}
 	return nil, &NotLoadedError{edge: "notification_templates"}
@@ -217,7 +233,7 @@ func (e EmailTemplateEdges) NotificationTemplatesOrErr() ([]*NotificationTemplat
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e EmailTemplateEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -234,7 +250,7 @@ func (*EmailTemplate) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case emailtemplate.FieldVersion:
 			values[i] = new(sql.NullInt64)
-		case emailtemplate.FieldID, emailtemplate.FieldCreatedBy, emailtemplate.FieldUpdatedBy, emailtemplate.FieldDeletedBy, emailtemplate.FieldRevision, emailtemplate.FieldOwnerID, emailtemplate.FieldInternalNotes, emailtemplate.FieldSystemInternalID, emailtemplate.FieldKey, emailtemplate.FieldName, emailtemplate.FieldDescription, emailtemplate.FieldFormat, emailtemplate.FieldLocale, emailtemplate.FieldSubjectTemplate, emailtemplate.FieldPreheaderTemplate, emailtemplate.FieldBodyTemplate, emailtemplate.FieldTextTemplate, emailtemplate.FieldTemplateContext, emailtemplate.FieldIntegrationID, emailtemplate.FieldWorkflowDefinitionID, emailtemplate.FieldWorkflowInstanceID:
+		case emailtemplate.FieldID, emailtemplate.FieldCreatedBy, emailtemplate.FieldUpdatedBy, emailtemplate.FieldDeletedBy, emailtemplate.FieldRevision, emailtemplate.FieldOwnerID, emailtemplate.FieldInternalNotes, emailtemplate.FieldSystemInternalID, emailtemplate.FieldKey, emailtemplate.FieldName, emailtemplate.FieldDescription, emailtemplate.FieldFormat, emailtemplate.FieldLocale, emailtemplate.FieldSubjectTemplate, emailtemplate.FieldPreheaderTemplate, emailtemplate.FieldBodyTemplate, emailtemplate.FieldTextTemplate, emailtemplate.FieldTemplateContext, emailtemplate.FieldIntegrationID, emailtemplate.FieldWorkflowDefinitionID, emailtemplate.FieldWorkflowInstanceID, emailtemplate.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case emailtemplate.FieldCreatedAt, emailtemplate.FieldUpdatedAt, emailtemplate.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -449,6 +465,12 @@ func (_m *EmailTemplate) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.WorkflowInstanceID = value.String
 			}
+		case emailtemplate.FieldTrustCenterID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
+			} else if value.Valid {
+				_m.TrustCenterID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -495,6 +517,11 @@ func (_m *EmailTemplate) QueryWorkflowDefinition() *WorkflowDefinitionQuery {
 // QueryWorkflowInstance queries the "workflow_instance" edge of the EmailTemplate entity.
 func (_m *EmailTemplate) QueryWorkflowInstance() *WorkflowInstanceQuery {
 	return NewEmailTemplateClient(_m.config).QueryWorkflowInstance(_m)
+}
+
+// QueryTrustCenter queries the "trust_center" edge of the EmailTemplate entity.
+func (_m *EmailTemplate) QueryTrustCenter() *TrustCenterQuery {
+	return NewEmailTemplateClient(_m.config).QueryTrustCenter(_m)
 }
 
 // QueryCampaigns queries the "campaigns" edge of the EmailTemplate entity.
@@ -628,6 +655,9 @@ func (_m *EmailTemplate) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("workflow_instance_id=")
 	builder.WriteString(_m.WorkflowInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_id=")
+	builder.WriteString(_m.TrustCenterID)
 	builder.WriteByte(')')
 	return builder.String()
 }

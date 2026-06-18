@@ -82,6 +82,8 @@ const (
 	EdgeFileDownloadTokens = "file_download_tokens"
 	// EdgePasswordResetTokens holds the string denoting the password_reset_tokens edge name in mutations.
 	EdgePasswordResetTokens = "password_reset_tokens"
+	// EdgeSubscribers holds the string denoting the subscribers edge name in mutations.
+	EdgeSubscribers = "subscribers"
 	// EdgeGroups holds the string denoting the groups edge name in mutations.
 	EdgeGroups = "groups"
 	// EdgeOrganizations holds the string denoting the organizations edge name in mutations.
@@ -168,6 +170,13 @@ const (
 	PasswordResetTokensInverseTable = "password_reset_tokens"
 	// PasswordResetTokensColumn is the table column denoting the password_reset_tokens relation/edge.
 	PasswordResetTokensColumn = "owner_id"
+	// SubscribersTable is the table that holds the subscribers relation/edge.
+	SubscribersTable = "subscribers"
+	// SubscribersInverseTable is the table name for the Subscriber entity.
+	// It exists in this package in order to avoid circular dependency with the "subscriber" package.
+	SubscribersInverseTable = "subscribers"
+	// SubscribersColumn is the table column denoting the subscribers relation/edge.
+	SubscribersColumn = "user_id"
 	// GroupsTable is the table that holds the groups relation/edge. The primary key declared below.
 	GroupsTable = "group_memberships"
 	// GroupsInverseTable is the table name for the Group entity.
@@ -649,6 +658,20 @@ func ByPasswordResetTokens(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpti
 	}
 }
 
+// BySubscribersCount orders the results by subscribers count.
+func BySubscribersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSubscribersStep(), opts...)
+	}
+}
+
+// BySubscribers orders the results by subscribers terms.
+func BySubscribers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubscribersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByGroupsCount orders the results by groups count.
 func ByGroupsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -975,6 +998,13 @@ func newPasswordResetTokensStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PasswordResetTokensInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, PasswordResetTokensTable, PasswordResetTokensColumn),
+	)
+}
+func newSubscribersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubscribersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, SubscribersTable, SubscribersColumn),
 	)
 }
 func newGroupsStep() *sqlgraph.Step {

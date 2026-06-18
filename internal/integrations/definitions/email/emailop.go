@@ -52,6 +52,9 @@ type RecipientInfo struct {
 	FirstName string `json:"firstName,omitempty" jsonschema:"description=Recipient first name"`
 	// LastName is the recipient last name
 	LastName string `json:"lastName,omitempty" jsonschema:"description=Recipient last name"`
+	// UnsubscribeToken is the per-recipient token used to build an unsubscribe link in templates
+	// via {{ .unsubscribeToken }}; it is populated per send and never authored in the template
+	UnsubscribeToken string `json:"unsubscribeToken,omitempty" jsonschema:"description=Per-recipient unsubscribe token"`
 	// Tags are delivery tracking tags forwarded to the email provider for webhook correlation
 	Tags []newman.Tag `json:"tags,omitempty" jsonschema:"description=Delivery tracking tags"`
 }

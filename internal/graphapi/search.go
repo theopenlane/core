@@ -359,6 +359,7 @@ func adminSearchCampaigns(ctx context.Context, query string, after *entgql.Curso
 				campaign.EmailTemplateIDContainsFold(query), // search by EmailTemplateID
 				campaign.IntegrationIDContainsFold(query),   // search by IntegrationID
 				campaign.EmailBrandingIDContainsFold(query), // search by EmailBrandingID
+				campaign.TrustCenterIDContainsFold(query),   // search by TrustCenterID
 			),
 		)
 
@@ -383,17 +384,18 @@ func adminSearchCampaignTargets(ctx context.Context, query string, after *entgql
 	request := withTransactionalMutation(ctx).CampaignTarget.Query().
 		Where(
 			campaigntarget.Or(
-				campaigntarget.ID(query),                     // search equal to ID
-				campaigntarget.OwnerIDContainsFold(query),    // search by OwnerID
-				campaigntarget.CampaignIDContainsFold(query), // search by CampaignID
-				campaigntarget.ContactIDContainsFold(query),  // search by ContactID
-				campaigntarget.UserIDContainsFold(query),     // search by UserID
-				campaigntarget.GroupIDContainsFold(query),    // search by GroupID
-				campaigntarget.EmailContainsFold(query),      // search by Email
-				campaigntarget.FullNameContainsFold(query),   // search by FullName
+				campaigntarget.ID(query),                       // search equal to ID
+				campaigntarget.OwnerIDContainsFold(query),      // search by OwnerID
+				campaigntarget.CampaignIDContainsFold(query),   // search by CampaignID
+				campaigntarget.ContactIDContainsFold(query),    // search by ContactID
+				campaigntarget.UserIDContainsFold(query),       // search by UserID
+				campaigntarget.GroupIDContainsFold(query),      // search by GroupID
+				campaigntarget.SubscriberIDContainsFold(query), // search by SubscriberID
+				campaigntarget.EmailContainsFold(query),        // search by Email
+				campaigntarget.FullNameContainsFold(query),     // search by FullName
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(metadata)::text LIKE $9", likeQuery)) // search by Metadata
+					s.Where(sql.ExprP("(metadata)::text LIKE $10", likeQuery)) // search by Metadata
 				},
 			),
 		)
@@ -679,6 +681,7 @@ func adminSearchEmailTemplates(ctx context.Context, query string, after *entgql.
 				emailtemplate.IntegrationIDContainsFold(query),        // search by IntegrationID
 				emailtemplate.WorkflowDefinitionIDContainsFold(query), // search by WorkflowDefinitionID
 				emailtemplate.WorkflowInstanceIDContainsFold(query),   // search by WorkflowInstanceID
+				emailtemplate.TrustCenterIDContainsFold(query),        // search by TrustCenterID
 			),
 		)
 
@@ -2084,9 +2087,12 @@ func adminSearchSubscribers(ctx context.Context, query string, after *entgql.Cur
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				subscriber.OwnerIDContainsFold(query),     // search by OwnerID
-				subscriber.EmailContainsFold(query),       // search by Email
-				subscriber.PhoneNumberContainsFold(query), // search by PhoneNumber
+				subscriber.OwnerIDContainsFold(query),       // search by OwnerID
+				subscriber.TrustCenterIDContainsFold(query), // search by TrustCenterID
+				subscriber.EmailContainsFold(query),         // search by Email
+				subscriber.PhoneNumberContainsFold(query),   // search by PhoneNumber
+				subscriber.ContactIDContainsFold(query),     // search by ContactID
+				subscriber.UserIDContainsFold(query),        // search by UserID
 			),
 		)
 

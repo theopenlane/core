@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
@@ -38,6 +39,7 @@ type CampaignTargetQuery struct {
 	withContact                 *ContactQuery
 	withUser                    *UserQuery
 	withGroup                   *GroupQuery
+	withSubscriber              *SubscriberQuery
 	withWorkflowObjectRefs      *WorkflowObjectRefQuery
 	loadTotal                   []func(context.Context, []*CampaignTarget) error
 	modifiers                   []func(*sql.Selector)
@@ -196,6 +198,31 @@ func (_q *CampaignTargetQuery) QueryGroup() *GroupQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySubscriber chains the current query on the "subscriber" edge.
+func (_q *CampaignTargetQuery) QuerySubscriber() *SubscriberQuery {
+	query := (&SubscriberClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaigntarget.Table, campaigntarget.FieldID, selector),
+			sqlgraph.To(subscriber.Table, subscriber.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, campaigntarget.SubscriberTable, campaigntarget.SubscriberColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Subscriber
 		step.Edge.Schema = schemaConfig.CampaignTarget
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -425,6 +452,7 @@ func (_q *CampaignTargetQuery) Clone() *CampaignTargetQuery {
 		withContact:            _q.withContact.Clone(),
 		withUser:               _q.withUser.Clone(),
 		withGroup:              _q.withGroup.Clone(),
+		withSubscriber:         _q.withSubscriber.Clone(),
 		withWorkflowObjectRefs: _q.withWorkflowObjectRefs.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -485,6 +513,17 @@ func (_q *CampaignTargetQuery) WithGroup(opts ...func(*GroupQuery)) *CampaignTar
 		opt(query)
 	}
 	_q.withGroup = query
+	return _q
+}
+
+// WithSubscriber tells the query-builder to eager-load the nodes that are connected to
+// the "subscriber" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *CampaignTargetQuery) WithSubscriber(opts ...func(*SubscriberQuery)) *CampaignTargetQuery {
+	query := (&SubscriberClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSubscriber = query
 	return _q
 }
 
@@ -583,12 +622,13 @@ func (_q *CampaignTargetQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*CampaignTarget{}
 		_spec       = _q.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [7]bool{
 			_q.withOwner != nil,
 			_q.withCampaign != nil,
 			_q.withContact != nil,
 			_q.withUser != nil,
 			_q.withGroup != nil,
+			_q.withSubscriber != nil,
 			_q.withWorkflowObjectRefs != nil,
 		}
 	)
@@ -642,6 +682,12 @@ func (_q *CampaignTargetQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if query := _q.withGroup; query != nil {
 		if err := _q.loadGroup(ctx, query, nodes, nil,
 			func(n *CampaignTarget, e *Group) { n.Edges.Group = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSubscriber; query != nil {
+		if err := _q.loadSubscriber(ctx, query, nodes, nil,
+			func(n *CampaignTarget, e *Subscriber) { n.Edges.Subscriber = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -814,6 +860,35 @@ func (_q *CampaignTargetQuery) loadGroup(ctx context.Context, query *GroupQuery,
 	}
 	return nil
 }
+func (_q *CampaignTargetQuery) loadSubscriber(ctx context.Context, query *SubscriberQuery, nodes []*CampaignTarget, init func(*CampaignTarget), assign func(*CampaignTarget, *Subscriber)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*CampaignTarget)
+	for i := range nodes {
+		fk := nodes[i].SubscriberID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(subscriber.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "subscriber_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *CampaignTargetQuery) loadWorkflowObjectRefs(ctx context.Context, query *WorkflowObjectRefQuery, nodes []*CampaignTarget, init func(*CampaignTarget), assign func(*CampaignTarget, *WorkflowObjectRef)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*CampaignTarget)
@@ -890,6 +965,9 @@ func (_q *CampaignTargetQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withGroup != nil {
 			_spec.Node.AddColumnOnce(campaigntarget.FieldGroupID)
+		}
+		if _q.withSubscriber != nil {
+			_spec.Node.AddColumnOnce(campaigntarget.FieldSubscriberID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

@@ -67,6 +67,21 @@ func (Note) Fields() []ent.Field {
 		field.String("trust_center_id").
 			Comment("the trust center this note belongs to, if applicable").
 			Optional(),
+		field.Bool("notify_subscribers").
+			Comment("when set on a trust center post, sends the published update to the trust center's subscribers").
+			Default(false).
+			Optional().
+			Annotations(
+				// only meaningful at publish time; not an updatable property of the note
+				entgql.Skip(entgql.SkipMutationUpdateInput),
+			),
+		field.Time("notified_at").
+			Comment("when subscribers were notified about this post").
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			),
 	}
 }
 

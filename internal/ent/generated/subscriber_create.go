@@ -10,9 +10,13 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // SubscriberCreate is the builder for creating a Subscriber entity.
@@ -126,6 +130,20 @@ func (_c *SubscriberCreate) SetNillableOwnerID(v *string) *SubscriberCreate {
 	return _c
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_c *SubscriberCreate) SetTrustCenterID(v string) *SubscriberCreate {
+	_c.mutation.SetTrustCenterID(v)
+	return _c
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_c *SubscriberCreate) SetNillableTrustCenterID(v *string) *SubscriberCreate {
+	if v != nil {
+		_c.SetTrustCenterID(*v)
+	}
+	return _c
+}
+
 // SetEmail sets the "email" field.
 func (_c *SubscriberCreate) SetEmail(v string) *SubscriberCreate {
 	_c.mutation.SetEmail(v)
@@ -234,6 +252,34 @@ func (_c *SubscriberCreate) SetNillableSendAttempts(v *int) *SubscriberCreate {
 	return _c
 }
 
+// SetContactID sets the "contact_id" field.
+func (_c *SubscriberCreate) SetContactID(v string) *SubscriberCreate {
+	_c.mutation.SetContactID(v)
+	return _c
+}
+
+// SetNillableContactID sets the "contact_id" field if the given value is not nil.
+func (_c *SubscriberCreate) SetNillableContactID(v *string) *SubscriberCreate {
+	if v != nil {
+		_c.SetContactID(*v)
+	}
+	return _c
+}
+
+// SetUserID sets the "user_id" field.
+func (_c *SubscriberCreate) SetUserID(v string) *SubscriberCreate {
+	_c.mutation.SetUserID(v)
+	return _c
+}
+
+// SetNillableUserID sets the "user_id" field if the given value is not nil.
+func (_c *SubscriberCreate) SetNillableUserID(v *string) *SubscriberCreate {
+	if v != nil {
+		_c.SetUserID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *SubscriberCreate) SetID(v string) *SubscriberCreate {
 	_c.mutation.SetID(v)
@@ -266,6 +312,36 @@ func (_c *SubscriberCreate) AddEvents(v ...*Event) *SubscriberCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddEventIDs(ids...)
+}
+
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (_c *SubscriberCreate) SetTrustCenter(v *TrustCenter) *SubscriberCreate {
+	return _c.SetTrustCenterID(v.ID)
+}
+
+// AddCampaignTargetIDs adds the "campaign_targets" edge to the CampaignTarget entity by IDs.
+func (_c *SubscriberCreate) AddCampaignTargetIDs(ids ...string) *SubscriberCreate {
+	_c.mutation.AddCampaignTargetIDs(ids...)
+	return _c
+}
+
+// AddCampaignTargets adds the "campaign_targets" edges to the CampaignTarget entity.
+func (_c *SubscriberCreate) AddCampaignTargets(v ...*CampaignTarget) *SubscriberCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCampaignTargetIDs(ids...)
+}
+
+// SetContact sets the "contact" edge to the Contact entity.
+func (_c *SubscriberCreate) SetContact(v *Contact) *SubscriberCreate {
+	return _c.SetContactID(v.ID)
+}
+
+// SetUser sets the "user" edge to the User entity.
+func (_c *SubscriberCreate) SetUser(v *User) *SubscriberCreate {
+	return _c.SetUserID(v.ID)
 }
 
 // Mutation returns the SubscriberMutation object of the builder.
@@ -539,6 +615,77 @@ func (_c *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subscriber.TrustCenterTable,
+			Columns: []string{subscriber.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Subscriber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.TrustCenterID = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CampaignTargetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   subscriber.CampaignTargetsTable,
+			Columns: []string{subscriber.CampaignTargetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.CampaignTarget
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ContactIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subscriber.ContactTable,
+			Columns: []string{subscriber.ContactColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Subscriber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ContactID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subscriber.UserTable,
+			Columns: []string{subscriber.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Subscriber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
