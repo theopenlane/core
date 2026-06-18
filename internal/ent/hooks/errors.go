@@ -87,6 +87,8 @@ var (
 	ErrNotSingularUpload = errors.New("multiple uploads not supported")
 	// ErrSSONotEnforceable makes sure the connection has been tested before it can be enforced for an org
 	ErrSSONotEnforceable = errors.New("you cannot enforce sso without testing the connection works correctly")
+	// ErrExemptDomainAllowedConflict is returned when a domain appears in both the sso exempt domains and the allowed email domains lists
+	ErrExemptDomainAllowedConflict = errors.New("a domain cannot be in both the sso exempt domains and allowed email domains lists")
 	// ErrUnableToDetermineEventID is returned when we cannot determine the event ID for an event
 	ErrUnableToDetermineEventID = errors.New("unable to determine event ID")
 	// ErrGalaRuntimeUnavailable is returned when gala dual emit is enabled but runtime is unavailable

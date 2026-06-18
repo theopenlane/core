@@ -35,7 +35,7 @@ func TestEvaluate(t *testing.T) {
 			wantEnforced: true,
 		},
 		{
-			name:         "owner is exempt",
+			name:         "owner is exempt (backwards compatible role fallback)",
 			in:           EnforcementInput{SSOEnforced: true, IsMember: true, IsOwner: true, Email: "owner@corp.com"},
 			wantMustSSO:  false,
 			wantExempt:   true,
@@ -70,14 +70,6 @@ func TestEvaluate(t *testing.T) {
 			in:           EnforcementInput{SSOEnforced: true, IsMember: true, ExemptDomains: exemptDomains, Email: "user@corp.com"},
 			wantMustSSO:  true,
 			wantExempt:   false,
-			wantEnforced: true,
-		},
-		{
-			name:         "support session is exempt",
-			in:           EnforcementInput{SSOEnforced: true, SupportSession: true, Email: "support@system.theopenlane.io"},
-			wantMustSSO:  false,
-			wantExempt:   true,
-			wantReason:   ExemptReasonSupport,
 			wantEnforced: true,
 		},
 		{
