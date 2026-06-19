@@ -78,6 +78,8 @@ const (
 	FieldWorkflowDefinitionID = "workflow_definition_id"
 	// FieldWorkflowInstanceID holds the string denoting the workflow_instance_id field in the database.
 	FieldWorkflowInstanceID = "workflow_instance_id"
+	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
+	FieldTrustCenterID = "trust_center_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -92,6 +94,8 @@ const (
 	EdgeWorkflowDefinition = "workflow_definition"
 	// EdgeWorkflowInstance holds the string denoting the workflow_instance edge name in mutations.
 	EdgeWorkflowInstance = "workflow_instance"
+	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
+	EdgeTrustCenter = "trust_center"
 	// EdgeCampaigns holds the string denoting the campaigns edge name in mutations.
 	EdgeCampaigns = "campaigns"
 	// EdgeNotificationTemplates holds the string denoting the notification_templates edge name in mutations.
@@ -149,6 +153,13 @@ const (
 	WorkflowInstanceInverseTable = "workflow_instances"
 	// WorkflowInstanceColumn is the table column denoting the workflow_instance relation/edge.
 	WorkflowInstanceColumn = "workflow_instance_id"
+	// TrustCenterTable is the table that holds the trust_center relation/edge.
+	TrustCenterTable = "email_templates"
+	// TrustCenterInverseTable is the table name for the TrustCenter entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenter" package.
+	TrustCenterInverseTable = "trust_centers"
+	// TrustCenterColumn is the table column denoting the trust_center relation/edge.
+	TrustCenterColumn = "trust_center_id"
 	// CampaignsTable is the table that holds the campaigns relation/edge.
 	CampaignsTable = "campaigns"
 	// CampaignsInverseTable is the table name for the Campaign entity.
@@ -205,6 +216,7 @@ var Columns = []string{
 	FieldIntegrationID,
 	FieldWorkflowDefinitionID,
 	FieldWorkflowInstanceID,
+	FieldTrustCenterID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -414,6 +426,11 @@ func ByWorkflowInstanceID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWorkflowInstanceID, opts...).ToFunc()
 }
 
+// ByTrustCenterID orders the results by the trust_center_id field.
+func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -481,6 +498,13 @@ func ByWorkflowDefinitionField(field string, opts ...sql.OrderTermOption) OrderO
 func ByWorkflowInstanceField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newWorkflowInstanceStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByTrustCenterField orders the results by trust_center field.
+func ByTrustCenterField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -572,6 +596,13 @@ func newWorkflowInstanceStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(WorkflowInstanceInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, WorkflowInstanceTable, WorkflowInstanceColumn),
+	)
+}
+func newTrustCenterStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, TrustCenterTable, TrustCenterColumn),
 	)
 }
 func newCampaignsStep() *sqlgraph.Step {

@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -408,6 +409,21 @@ func (_u *ContactUpdate) AddFiles(v ...*File) *ContactUpdate {
 	return _u.AddFileIDs(ids...)
 }
 
+// AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
+func (_u *ContactUpdate) AddSubscriberIDs(ids ...string) *ContactUpdate {
+	_u.mutation.AddSubscriberIDs(ids...)
+	return _u
+}
+
+// AddSubscribers adds the "subscribers" edges to the Subscriber entity.
+func (_u *ContactUpdate) AddSubscribers(v ...*Subscriber) *ContactUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSubscriberIDs(ids...)
+}
+
 // Mutation returns the ContactMutation object of the builder.
 func (_u *ContactUpdate) Mutation() *ContactMutation {
 	return _u.mutation
@@ -501,6 +517,27 @@ func (_u *ContactUpdate) RemoveFiles(v ...*File) *ContactUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveFileIDs(ids...)
+}
+
+// ClearSubscribers clears all "subscribers" edges to the Subscriber entity.
+func (_u *ContactUpdate) ClearSubscribers() *ContactUpdate {
+	_u.mutation.ClearSubscribers()
+	return _u
+}
+
+// RemoveSubscriberIDs removes the "subscribers" edge to Subscriber entities by IDs.
+func (_u *ContactUpdate) RemoveSubscriberIDs(ids ...string) *ContactUpdate {
+	_u.mutation.RemoveSubscriberIDs(ids...)
+	return _u
+}
+
+// RemoveSubscribers removes "subscribers" edges to Subscriber entities.
+func (_u *ContactUpdate) RemoveSubscribers(v ...*Subscriber) *ContactUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSubscriberIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -914,6 +951,54 @@ func (_u *ContactUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.SubscribersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contact.SubscribersTable,
+			Columns: []string{contact.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subscriber
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSubscribersIDs(); len(nodes) > 0 && !_u.mutation.SubscribersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contact.SubscribersTable,
+			Columns: []string{contact.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subscriber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubscribersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contact.SubscribersTable,
+			Columns: []string{contact.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subscriber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.Contact
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -1307,6 +1392,21 @@ func (_u *ContactUpdateOne) AddFiles(v ...*File) *ContactUpdateOne {
 	return _u.AddFileIDs(ids...)
 }
 
+// AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
+func (_u *ContactUpdateOne) AddSubscriberIDs(ids ...string) *ContactUpdateOne {
+	_u.mutation.AddSubscriberIDs(ids...)
+	return _u
+}
+
+// AddSubscribers adds the "subscribers" edges to the Subscriber entity.
+func (_u *ContactUpdateOne) AddSubscribers(v ...*Subscriber) *ContactUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSubscriberIDs(ids...)
+}
+
 // Mutation returns the ContactMutation object of the builder.
 func (_u *ContactUpdateOne) Mutation() *ContactMutation {
 	return _u.mutation
@@ -1400,6 +1500,27 @@ func (_u *ContactUpdateOne) RemoveFiles(v ...*File) *ContactUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveFileIDs(ids...)
+}
+
+// ClearSubscribers clears all "subscribers" edges to the Subscriber entity.
+func (_u *ContactUpdateOne) ClearSubscribers() *ContactUpdateOne {
+	_u.mutation.ClearSubscribers()
+	return _u
+}
+
+// RemoveSubscriberIDs removes the "subscribers" edge to Subscriber entities by IDs.
+func (_u *ContactUpdateOne) RemoveSubscriberIDs(ids ...string) *ContactUpdateOne {
+	_u.mutation.RemoveSubscriberIDs(ids...)
+	return _u
+}
+
+// RemoveSubscribers removes "subscribers" edges to Subscriber entities.
+func (_u *ContactUpdateOne) RemoveSubscribers(v ...*Subscriber) *ContactUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSubscriberIDs(ids...)
 }
 
 // Where appends a list predicates to the ContactUpdate builder.
@@ -1838,6 +1959,54 @@ func (_u *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err er
 			},
 		}
 		edge.Schema = _u.schemaConfig.ContactFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubscribersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contact.SubscribersTable,
+			Columns: []string{contact.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subscriber
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSubscribersIDs(); len(nodes) > 0 && !_u.mutation.SubscribersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contact.SubscribersTable,
+			Columns: []string{contact.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subscriber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubscribersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contact.SubscribersTable,
+			Columns: []string{contact.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

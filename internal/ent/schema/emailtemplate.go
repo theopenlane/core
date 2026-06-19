@@ -159,6 +159,9 @@ func (EmailTemplate) Fields() []ent.Field {
 		field.String("workflow_instance_id").
 			Comment("workflow instance associated with this template").
 			Optional(),
+		field.String("trust_center_id").
+			Comment("the trust center this template is associated with, if any").
+			Optional(),
 	}
 }
 
@@ -195,6 +198,14 @@ func (e EmailTemplate) Edges() []ent.Edge {
 			field:      "workflow_instance_id",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(WorkflowInstance{}.Name()),
+			},
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: e,
+			edgeSchema: TrustCenter{},
+			field:      "trust_center_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(TrustCenter{}.Name()),
 			},
 		}),
 		defaultEdgeToWithPagination(e, Campaign{}),

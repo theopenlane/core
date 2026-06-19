@@ -609,6 +609,7 @@ func RegisterRoutes(router *Router) error {
 		registerResendEmailHandler,
 		registerRegisterHandler,
 		registerVerifySubscribeHandler,
+		registerUnsubscribeHandler,
 		registerRefreshHandler,
 		registerJwksWellKnownHandler,
 		registerInviteHandler,

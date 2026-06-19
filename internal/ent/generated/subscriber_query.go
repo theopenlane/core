@@ -13,10 +13,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
@@ -25,15 +29,20 @@ import (
 // SubscriberQuery is the builder for querying Subscriber entities.
 type SubscriberQuery struct {
 	config
-	ctx             *QueryContext
-	order           []subscriber.OrderOption
-	inters          []Interceptor
-	predicates      []predicate.Subscriber
-	withOwner       *OrganizationQuery
-	withEvents      *EventQuery
-	loadTotal       []func(context.Context, []*Subscriber) error
-	modifiers       []func(*sql.Selector)
-	withNamedEvents map[string]*EventQuery
+	ctx                      *QueryContext
+	order                    []subscriber.OrderOption
+	inters                   []Interceptor
+	predicates               []predicate.Subscriber
+	withOwner                *OrganizationQuery
+	withEvents               *EventQuery
+	withTrustCenter          *TrustCenterQuery
+	withCampaignTargets      *CampaignTargetQuery
+	withContact              *ContactQuery
+	withUser                 *UserQuery
+	loadTotal                []func(context.Context, []*Subscriber) error
+	modifiers                []func(*sql.Selector)
+	withNamedEvents          map[string]*EventQuery
+	withNamedCampaignTargets map[string]*CampaignTargetQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -114,6 +123,106 @@ func (_q *SubscriberQuery) QueryEvents() *EventQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Event
 		step.Edge.Schema = schemaConfig.SubscriberEvents
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTrustCenter chains the current query on the "trust_center" edge.
+func (_q *SubscriberQuery) QueryTrustCenter() *TrustCenterQuery {
+	query := (&TrustCenterClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subscriber.Table, subscriber.FieldID, selector),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, subscriber.TrustCenterTable, subscriber.TrustCenterColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.Subscriber
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCampaignTargets chains the current query on the "campaign_targets" edge.
+func (_q *SubscriberQuery) QueryCampaignTargets() *CampaignTargetQuery {
+	query := (&CampaignTargetClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subscriber.Table, subscriber.FieldID, selector),
+			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subscriber.CampaignTargetsTable, subscriber.CampaignTargetsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryContact chains the current query on the "contact" edge.
+func (_q *SubscriberQuery) QueryContact() *ContactQuery {
+	query := (&ContactClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subscriber.Table, subscriber.FieldID, selector),
+			sqlgraph.To(contact.Table, contact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, subscriber.ContactTable, subscriber.ContactColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Contact
+		step.Edge.Schema = schemaConfig.Subscriber
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUser chains the current query on the "user" edge.
+func (_q *SubscriberQuery) QueryUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subscriber.Table, subscriber.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, subscriber.UserTable, subscriber.UserColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Subscriber
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -307,13 +416,17 @@ func (_q *SubscriberQuery) Clone() *SubscriberQuery {
 		return nil
 	}
 	return &SubscriberQuery{
-		config:     _q.config,
-		ctx:        _q.ctx.Clone(),
-		order:      append([]subscriber.OrderOption{}, _q.order...),
-		inters:     append([]Interceptor{}, _q.inters...),
-		predicates: append([]predicate.Subscriber{}, _q.predicates...),
-		withOwner:  _q.withOwner.Clone(),
-		withEvents: _q.withEvents.Clone(),
+		config:              _q.config,
+		ctx:                 _q.ctx.Clone(),
+		order:               append([]subscriber.OrderOption{}, _q.order...),
+		inters:              append([]Interceptor{}, _q.inters...),
+		predicates:          append([]predicate.Subscriber{}, _q.predicates...),
+		withOwner:           _q.withOwner.Clone(),
+		withEvents:          _q.withEvents.Clone(),
+		withTrustCenter:     _q.withTrustCenter.Clone(),
+		withCampaignTargets: _q.withCampaignTargets.Clone(),
+		withContact:         _q.withContact.Clone(),
+		withUser:            _q.withUser.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -340,6 +453,50 @@ func (_q *SubscriberQuery) WithEvents(opts ...func(*EventQuery)) *SubscriberQuer
 		opt(query)
 	}
 	_q.withEvents = query
+	return _q
+}
+
+// WithTrustCenter tells the query-builder to eager-load the nodes that are connected to
+// the "trust_center" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubscriberQuery) WithTrustCenter(opts ...func(*TrustCenterQuery)) *SubscriberQuery {
+	query := (&TrustCenterClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTrustCenter = query
+	return _q
+}
+
+// WithCampaignTargets tells the query-builder to eager-load the nodes that are connected to
+// the "campaign_targets" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubscriberQuery) WithCampaignTargets(opts ...func(*CampaignTargetQuery)) *SubscriberQuery {
+	query := (&CampaignTargetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaignTargets = query
+	return _q
+}
+
+// WithContact tells the query-builder to eager-load the nodes that are connected to
+// the "contact" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubscriberQuery) WithContact(opts ...func(*ContactQuery)) *SubscriberQuery {
+	query := (&ContactClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withContact = query
+	return _q
+}
+
+// WithUser tells the query-builder to eager-load the nodes that are connected to
+// the "user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubscriberQuery) WithUser(opts ...func(*UserQuery)) *SubscriberQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withUser = query
 	return _q
 }
 
@@ -427,9 +584,13 @@ func (_q *SubscriberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	var (
 		nodes       = []*Subscriber{}
 		_spec       = _q.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [6]bool{
 			_q.withOwner != nil,
 			_q.withEvents != nil,
+			_q.withTrustCenter != nil,
+			_q.withCampaignTargets != nil,
+			_q.withContact != nil,
+			_q.withUser != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -468,10 +629,42 @@ func (_q *SubscriberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			return nil, err
 		}
 	}
+	if query := _q.withTrustCenter; query != nil {
+		if err := _q.loadTrustCenter(ctx, query, nodes, nil,
+			func(n *Subscriber, e *TrustCenter) { n.Edges.TrustCenter = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCampaignTargets; query != nil {
+		if err := _q.loadCampaignTargets(ctx, query, nodes,
+			func(n *Subscriber) { n.Edges.CampaignTargets = []*CampaignTarget{} },
+			func(n *Subscriber, e *CampaignTarget) { n.Edges.CampaignTargets = append(n.Edges.CampaignTargets, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withContact; query != nil {
+		if err := _q.loadContact(ctx, query, nodes, nil,
+			func(n *Subscriber, e *Contact) { n.Edges.Contact = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withUser; query != nil {
+		if err := _q.loadUser(ctx, query, nodes, nil,
+			func(n *Subscriber, e *User) { n.Edges.User = e }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedEvents {
 		if err := _q.loadEvents(ctx, query, nodes,
 			func(n *Subscriber) { n.appendNamedEvents(name) },
 			func(n *Subscriber, e *Event) { n.appendNamedEvents(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCampaignTargets {
+		if err := _q.loadCampaignTargets(ctx, query, nodes,
+			func(n *Subscriber) { n.appendNamedCampaignTargets(name) },
+			func(n *Subscriber, e *CampaignTarget) { n.appendNamedCampaignTargets(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -574,6 +767,126 @@ func (_q *SubscriberQuery) loadEvents(ctx context.Context, query *EventQuery, no
 	}
 	return nil
 }
+func (_q *SubscriberQuery) loadTrustCenter(ctx context.Context, query *TrustCenterQuery, nodes []*Subscriber, init func(*Subscriber), assign func(*Subscriber, *TrustCenter)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Subscriber)
+	for i := range nodes {
+		if nodes[i].TrustCenterID == nil {
+			continue
+		}
+		fk := *nodes[i].TrustCenterID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(trustcenter.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "trust_center_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *SubscriberQuery) loadCampaignTargets(ctx context.Context, query *CampaignTargetQuery, nodes []*Subscriber, init func(*Subscriber), assign func(*Subscriber, *CampaignTarget)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Subscriber)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(campaigntarget.FieldSubscriberID)
+	}
+	query.Where(predicate.CampaignTarget(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(subscriber.CampaignTargetsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.SubscriberID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "subscriber_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *SubscriberQuery) loadContact(ctx context.Context, query *ContactQuery, nodes []*Subscriber, init func(*Subscriber), assign func(*Subscriber, *Contact)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Subscriber)
+	for i := range nodes {
+		fk := nodes[i].ContactID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(contact.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "contact_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *SubscriberQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*Subscriber, init func(*Subscriber), assign func(*Subscriber, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Subscriber)
+	for i := range nodes {
+		fk := nodes[i].UserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (_q *SubscriberQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -607,6 +920,15 @@ func (_q *SubscriberQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(subscriber.FieldOwnerID)
+		}
+		if _q.withTrustCenter != nil {
+			_spec.Node.AddColumnOnce(subscriber.FieldTrustCenterID)
+		}
+		if _q.withContact != nil {
+			_spec.Node.AddColumnOnce(subscriber.FieldContactID)
+		}
+		if _q.withUser != nil {
+			_spec.Node.AddColumnOnce(subscriber.FieldUserID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
@@ -687,6 +1009,20 @@ func (_q *SubscriberQuery) WithNamedEvents(name string, opts ...func(*EventQuery
 		_q.withNamedEvents = make(map[string]*EventQuery)
 	}
 	_q.withNamedEvents[name] = query
+	return _q
+}
+
+// WithNamedCampaignTargets tells the query-builder to eager-load the nodes that are connected to the "campaign_targets"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubscriberQuery) WithNamedCampaignTargets(name string, opts ...func(*CampaignTargetQuery)) *SubscriberQuery {
+	query := (&CampaignTargetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCampaignTargets == nil {
+		_q.withNamedCampaignTargets = make(map[string]*CampaignTargetQuery)
+	}
+	_q.withNamedCampaignTargets[name] = query
 	return _q
 }
 

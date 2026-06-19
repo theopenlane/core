@@ -13,11 +13,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
@@ -56,6 +59,9 @@ type TrustCenterQuery struct {
 	withTrustCenterEntities           *TrustCenterEntityQuery
 	withTrustCenterNdaRequests        *TrustCenterNDARequestQuery
 	withTrustCenterFaqs               *TrustCenterFAQQuery
+	withSubscribers                   *SubscriberQuery
+	withEmailTemplates                *EmailTemplateQuery
+	withCampaigns                     *CampaignQuery
 	withFKs                           bool
 	loadTotal                         []func(context.Context, []*TrustCenter) error
 	modifiers                         []func(*sql.Selector)
@@ -69,6 +75,9 @@ type TrustCenterQuery struct {
 	withNamedTrustCenterEntities      map[string]*TrustCenterEntityQuery
 	withNamedTrustCenterNdaRequests   map[string]*TrustCenterNDARequestQuery
 	withNamedTrustCenterFaqs          map[string]*TrustCenterFAQQuery
+	withNamedSubscribers              map[string]*SubscriberQuery
+	withNamedEmailTemplates           map[string]*EmailTemplateQuery
+	withNamedCampaigns                map[string]*CampaignQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -505,6 +514,81 @@ func (_q *TrustCenterQuery) QueryTrustCenterFaqs() *TrustCenterFAQQuery {
 	return query
 }
 
+// QuerySubscribers chains the current query on the "subscribers" edge.
+func (_q *TrustCenterQuery) QuerySubscribers() *SubscriberQuery {
+	query := (&SubscriberClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, selector),
+			sqlgraph.To(subscriber.Table, subscriber.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.SubscribersTable, trustcenter.SubscribersColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Subscriber
+		step.Edge.Schema = schemaConfig.Subscriber
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEmailTemplates chains the current query on the "email_templates" edge.
+func (_q *TrustCenterQuery) QueryEmailTemplates() *EmailTemplateQuery {
+	query := (&EmailTemplateClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, selector),
+			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.EmailTemplatesTable, trustcenter.EmailTemplatesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCampaigns chains the current query on the "campaigns" edge.
+func (_q *TrustCenterQuery) QueryCampaigns() *CampaignQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, selector),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.CampaignsTable, trustcenter.CampaignsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.Campaign
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first TrustCenter entity from the query.
 // Returns a *NotFoundError when no TrustCenter was found.
 func (_q *TrustCenterQuery) First(ctx context.Context) (*TrustCenter, error) {
@@ -713,6 +797,9 @@ func (_q *TrustCenterQuery) Clone() *TrustCenterQuery {
 		withTrustCenterEntities:      _q.withTrustCenterEntities.Clone(),
 		withTrustCenterNdaRequests:   _q.withTrustCenterNdaRequests.Clone(),
 		withTrustCenterFaqs:          _q.withTrustCenterFaqs.Clone(),
+		withSubscribers:              _q.withSubscribers.Clone(),
+		withEmailTemplates:           _q.withEmailTemplates.Clone(),
+		withCampaigns:                _q.withCampaigns.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -896,6 +983,39 @@ func (_q *TrustCenterQuery) WithTrustCenterFaqs(opts ...func(*TrustCenterFAQQuer
 	return _q
 }
 
+// WithSubscribers tells the query-builder to eager-load the nodes that are connected to
+// the "subscribers" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterQuery) WithSubscribers(opts ...func(*SubscriberQuery)) *TrustCenterQuery {
+	query := (&SubscriberClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSubscribers = query
+	return _q
+}
+
+// WithEmailTemplates tells the query-builder to eager-load the nodes that are connected to
+// the "email_templates" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterQuery) WithEmailTemplates(opts ...func(*EmailTemplateQuery)) *TrustCenterQuery {
+	query := (&EmailTemplateClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEmailTemplates = query
+	return _q
+}
+
+// WithCampaigns tells the query-builder to eager-load the nodes that are connected to
+// the "campaigns" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterQuery) WithCampaigns(opts ...func(*CampaignQuery)) *TrustCenterQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaigns = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -981,7 +1101,7 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		nodes       = []*TrustCenter{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [16]bool{
+		loadedTypes = [19]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -998,6 +1118,9 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			_q.withTrustCenterEntities != nil,
 			_q.withTrustCenterNdaRequests != nil,
 			_q.withTrustCenterFaqs != nil,
+			_q.withSubscribers != nil,
+			_q.withEmailTemplates != nil,
+			_q.withCampaigns != nil,
 		}
 	)
 	if _q.withSetting != nil || _q.withPreviewSetting != nil || _q.withWatermarkConfig != nil {
@@ -1143,6 +1266,27 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
+	if query := _q.withSubscribers; query != nil {
+		if err := _q.loadSubscribers(ctx, query, nodes,
+			func(n *TrustCenter) { n.Edges.Subscribers = []*Subscriber{} },
+			func(n *TrustCenter, e *Subscriber) { n.Edges.Subscribers = append(n.Edges.Subscribers, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEmailTemplates; query != nil {
+		if err := _q.loadEmailTemplates(ctx, query, nodes,
+			func(n *TrustCenter) { n.Edges.EmailTemplates = []*EmailTemplate{} },
+			func(n *TrustCenter, e *EmailTemplate) { n.Edges.EmailTemplates = append(n.Edges.EmailTemplates, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCampaigns; query != nil {
+		if err := _q.loadCampaigns(ctx, query, nodes,
+			func(n *TrustCenter) { n.Edges.Campaigns = []*Campaign{} },
+			func(n *TrustCenter, e *Campaign) { n.Edges.Campaigns = append(n.Edges.Campaigns, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedBlockedGroups {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *TrustCenter) { n.appendNamedBlockedGroups(name) },
@@ -1210,6 +1354,27 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := _q.loadTrustCenterFaqs(ctx, query, nodes,
 			func(n *TrustCenter) { n.appendNamedTrustCenterFaqs(name) },
 			func(n *TrustCenter, e *TrustCenterFAQ) { n.appendNamedTrustCenterFaqs(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedSubscribers {
+		if err := _q.loadSubscribers(ctx, query, nodes,
+			func(n *TrustCenter) { n.appendNamedSubscribers(name) },
+			func(n *TrustCenter, e *Subscriber) { n.appendNamedSubscribers(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEmailTemplates {
+		if err := _q.loadEmailTemplates(ctx, query, nodes,
+			func(n *TrustCenter) { n.appendNamedEmailTemplates(name) },
+			func(n *TrustCenter, e *EmailTemplate) { n.appendNamedEmailTemplates(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCampaigns {
+		if err := _q.loadCampaigns(ctx, query, nodes,
+			func(n *TrustCenter) { n.appendNamedCampaigns(name) },
+			func(n *TrustCenter, e *Campaign) { n.appendNamedCampaigns(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1712,6 +1877,99 @@ func (_q *TrustCenterQuery) loadTrustCenterFaqs(ctx context.Context, query *Trus
 	}
 	return nil
 }
+func (_q *TrustCenterQuery) loadSubscribers(ctx context.Context, query *SubscriberQuery, nodes []*TrustCenter, init func(*TrustCenter), assign func(*TrustCenter, *Subscriber)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*TrustCenter)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(subscriber.FieldTrustCenterID)
+	}
+	query.Where(predicate.Subscriber(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(trustcenter.SubscribersColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.TrustCenterID
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "trust_center_id" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_id" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *TrustCenterQuery) loadEmailTemplates(ctx context.Context, query *EmailTemplateQuery, nodes []*TrustCenter, init func(*TrustCenter), assign func(*TrustCenter, *EmailTemplate)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*TrustCenter)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(emailtemplate.FieldTrustCenterID)
+	}
+	query.Where(predicate.EmailTemplate(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(trustcenter.EmailTemplatesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.TrustCenterID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *TrustCenterQuery) loadCampaigns(ctx context.Context, query *CampaignQuery, nodes []*TrustCenter, init func(*TrustCenter), assign func(*TrustCenter, *Campaign)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*TrustCenter)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(campaign.FieldTrustCenterID)
+	}
+	query.Where(predicate.Campaign(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(trustcenter.CampaignsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.TrustCenterID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *TrustCenterQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1957,6 +2215,48 @@ func (_q *TrustCenterQuery) WithNamedTrustCenterFaqs(name string, opts ...func(*
 		_q.withNamedTrustCenterFaqs = make(map[string]*TrustCenterFAQQuery)
 	}
 	_q.withNamedTrustCenterFaqs[name] = query
+	return _q
+}
+
+// WithNamedSubscribers tells the query-builder to eager-load the nodes that are connected to the "subscribers"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterQuery) WithNamedSubscribers(name string, opts ...func(*SubscriberQuery)) *TrustCenterQuery {
+	query := (&SubscriberClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSubscribers == nil {
+		_q.withNamedSubscribers = make(map[string]*SubscriberQuery)
+	}
+	_q.withNamedSubscribers[name] = query
+	return _q
+}
+
+// WithNamedEmailTemplates tells the query-builder to eager-load the nodes that are connected to the "email_templates"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterQuery) WithNamedEmailTemplates(name string, opts ...func(*EmailTemplateQuery)) *TrustCenterQuery {
+	query := (&EmailTemplateClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEmailTemplates == nil {
+		_q.withNamedEmailTemplates = make(map[string]*EmailTemplateQuery)
+	}
+	_q.withNamedEmailTemplates[name] = query
+	return _q
+}
+
+// WithNamedCampaigns tells the query-builder to eager-load the nodes that are connected to the "campaigns"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterQuery) WithNamedCampaigns(name string, opts ...func(*CampaignQuery)) *TrustCenterQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCampaigns == nil {
+		_q.withNamedCampaigns = make(map[string]*CampaignQuery)
+	}
+	_q.withNamedCampaigns[name] = query
 	return _q
 }
 

@@ -2,6 +2,7 @@ mutation CreateBulkCSVSubscriber ($input: Upload!) {
 	createBulkCSVSubscriber(input: $input) {
 		subscribers {
 			active
+			contactID
 			createdAt
 			createdBy
 			email
@@ -10,9 +11,11 @@ mutation CreateBulkCSVSubscriber ($input: Upload!) {
 			phoneNumber
 			sendAttempts
 			tags
+			trustCenterID
 			unsubscribed
 			updatedAt
 			updatedBy
+			userID
 			verifiedEmail
 			verifiedPhone
 		}
@@ -22,6 +25,7 @@ mutation CreateBulkSubscriber ($input: [CreateSubscriberInput!]) {
 	createBulkSubscriber(input: $input) {
 		subscribers {
 			active
+			contactID
 			createdAt
 			createdBy
 			email
@@ -30,9 +34,11 @@ mutation CreateBulkSubscriber ($input: [CreateSubscriberInput!]) {
 			phoneNumber
 			sendAttempts
 			tags
+			trustCenterID
 			unsubscribed
 			updatedAt
 			updatedBy
+			userID
 			verifiedEmail
 			verifiedPhone
 		}
@@ -42,6 +48,7 @@ mutation CreateSubscriber ($input: CreateSubscriberInput!) {
 	createSubscriber(input: $input) {
 		subscriber {
 			active
+			contactID
 			createdAt
 			createdBy
 			email
@@ -50,9 +57,11 @@ mutation CreateSubscriber ($input: CreateSubscriberInput!) {
 			phoneNumber
 			sendAttempts
 			tags
+			trustCenterID
 			unsubscribed
 			updatedAt
 			updatedBy
+			userID
 			verifiedEmail
 			verifiedPhone
 		}
@@ -75,6 +84,7 @@ query GetAllSubscribers ($first: Int, $last: Int, $after: Cursor, $before: Curso
 		edges {
 			node {
 				active
+				contactID
 				createdAt
 				createdBy
 				email
@@ -83,9 +93,11 @@ query GetAllSubscribers ($first: Int, $last: Int, $after: Cursor, $before: Curso
 				phoneNumber
 				sendAttempts
 				tags
+				trustCenterID
 				unsubscribed
 				updatedAt
 				updatedBy
+				userID
 				verifiedEmail
 				verifiedPhone
 			}
@@ -115,6 +127,7 @@ query GetSubscribers ($first: Int, $last: Int, $after: Cursor, $before: Cursor, 
 		edges {
 			node {
 				active
+				contactID
 				createdAt
 				createdBy
 				email
@@ -123,9 +136,11 @@ query GetSubscribers ($first: Int, $last: Int, $after: Cursor, $before: Cursor, 
 				phoneNumber
 				sendAttempts
 				tags
+				trustCenterID
 				unsubscribed
 				updatedAt
 				updatedBy
+				userID
 				verifiedEmail
 				verifiedPhone
 			}

@@ -129,6 +129,11 @@ func GroupID(v string) predicate.CampaignTarget {
 	return predicate.CampaignTarget(sql.FieldEQ(FieldGroupID, v))
 }
 
+// SubscriberID applies equality check predicate on the "subscriber_id" field. It's identical to SubscriberIDEQ.
+func SubscriberID(v string) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldEQ(FieldSubscriberID, v))
+}
+
 // Email applies equality check predicate on the "email" field. It's identical to EmailEQ.
 func Email(v string) predicate.CampaignTarget {
 	return predicate.CampaignTarget(sql.FieldEQ(FieldEmail, v))
@@ -909,6 +914,81 @@ func GroupIDContainsFold(v string) predicate.CampaignTarget {
 	return predicate.CampaignTarget(sql.FieldContainsFold(FieldGroupID, v))
 }
 
+// SubscriberIDEQ applies the EQ predicate on the "subscriber_id" field.
+func SubscriberIDEQ(v string) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldEQ(FieldSubscriberID, v))
+}
+
+// SubscriberIDNEQ applies the NEQ predicate on the "subscriber_id" field.
+func SubscriberIDNEQ(v string) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldNEQ(FieldSubscriberID, v))
+}
+
+// SubscriberIDIn applies the In predicate on the "subscriber_id" field.
+func SubscriberIDIn(vs ...string) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldIn(FieldSubscriberID, vs...))
+}
+
+// SubscriberIDNotIn applies the NotIn predicate on the "subscriber_id" field.
+func SubscriberIDNotIn(vs ...string) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldNotIn(FieldSubscriberID, vs...))
+}
+
+// SubscriberIDGT applies the GT predicate on the "subscriber_id" field.
+func SubscriberIDGT(v string) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldGT(FieldSubscriberID, v))
+}
+
+// SubscriberIDGTE applies the GTE predicate on the "subscriber_id" field.
+func SubscriberIDGTE(v string) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldGTE(FieldSubscriberID, v))
+}
+
+// SubscriberIDLT applies the LT predicate on the "subscriber_id" field.
+func SubscriberIDLT(v string) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldLT(FieldSubscriberID, v))
+}
+
+// SubscriberIDLTE applies the LTE predicate on the "subscriber_id" field.
+func SubscriberIDLTE(v string) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldLTE(FieldSubscriberID, v))
+}
+
+// SubscriberIDContains applies the Contains predicate on the "subscriber_id" field.
+func SubscriberIDContains(v string) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldContains(FieldSubscriberID, v))
+}
+
+// SubscriberIDHasPrefix applies the HasPrefix predicate on the "subscriber_id" field.
+func SubscriberIDHasPrefix(v string) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldHasPrefix(FieldSubscriberID, v))
+}
+
+// SubscriberIDHasSuffix applies the HasSuffix predicate on the "subscriber_id" field.
+func SubscriberIDHasSuffix(v string) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldHasSuffix(FieldSubscriberID, v))
+}
+
+// SubscriberIDIsNil applies the IsNil predicate on the "subscriber_id" field.
+func SubscriberIDIsNil() predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldIsNull(FieldSubscriberID))
+}
+
+// SubscriberIDNotNil applies the NotNil predicate on the "subscriber_id" field.
+func SubscriberIDNotNil() predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldNotNull(FieldSubscriberID))
+}
+
+// SubscriberIDEqualFold applies the EqualFold predicate on the "subscriber_id" field.
+func SubscriberIDEqualFold(v string) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldEqualFold(FieldSubscriberID, v))
+}
+
+// SubscriberIDContainsFold applies the ContainsFold predicate on the "subscriber_id" field.
+func SubscriberIDContainsFold(v string) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldContainsFold(FieldSubscriberID, v))
+}
+
 // EmailEQ applies the EQ predicate on the "email" field.
 func EmailEQ(v string) predicate.CampaignTarget {
 	return predicate.CampaignTarget(sql.FieldEQ(FieldEmail, v))
@@ -1325,6 +1405,35 @@ func HasGroupWith(preds ...predicate.Group) predicate.CampaignTarget {
 		step := newGroupStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSubscriber applies the HasEdge predicate on the "subscriber" edge.
+func HasSubscriber() predicate.CampaignTarget {
+	return predicate.CampaignTarget(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, SubscriberTable, SubscriberColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subscriber
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSubscriberWith applies the HasEdge predicate on the "subscriber" edge with a given conditions (other predicates).
+func HasSubscriberWith(preds ...predicate.Subscriber) predicate.CampaignTarget {
+	return predicate.CampaignTarget(func(s *sql.Selector) {
+		step := newSubscriberStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subscriber
 		step.Edge.Schema = schemaConfig.CampaignTarget
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

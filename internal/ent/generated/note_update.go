@@ -241,6 +241,46 @@ func (_u *NoteUpdate) ClearTrustCenterID() *NoteUpdate {
 	return _u
 }
 
+// SetNotifySubscribers sets the "notify_subscribers" field.
+func (_u *NoteUpdate) SetNotifySubscribers(v bool) *NoteUpdate {
+	_u.mutation.SetNotifySubscribers(v)
+	return _u
+}
+
+// SetNillableNotifySubscribers sets the "notify_subscribers" field if the given value is not nil.
+func (_u *NoteUpdate) SetNillableNotifySubscribers(v *bool) *NoteUpdate {
+	if v != nil {
+		_u.SetNotifySubscribers(*v)
+	}
+	return _u
+}
+
+// ClearNotifySubscribers clears the value of the "notify_subscribers" field.
+func (_u *NoteUpdate) ClearNotifySubscribers() *NoteUpdate {
+	_u.mutation.ClearNotifySubscribers()
+	return _u
+}
+
+// SetNotifiedAt sets the "notified_at" field.
+func (_u *NoteUpdate) SetNotifiedAt(v time.Time) *NoteUpdate {
+	_u.mutation.SetNotifiedAt(v)
+	return _u
+}
+
+// SetNillableNotifiedAt sets the "notified_at" field if the given value is not nil.
+func (_u *NoteUpdate) SetNillableNotifiedAt(v *time.Time) *NoteUpdate {
+	if v != nil {
+		_u.SetNotifiedAt(*v)
+	}
+	return _u
+}
+
+// ClearNotifiedAt clears the value of the "notified_at" field.
+func (_u *NoteUpdate) ClearNotifiedAt() *NoteUpdate {
+	_u.mutation.ClearNotifiedAt()
+	return _u
+}
+
 // SetTaskID sets the "task" edge to the Task entity by ID.
 func (_u *NoteUpdate) SetTaskID(id string) *NoteUpdate {
 	_u.mutation.SetTaskID(id)
@@ -643,6 +683,18 @@ func (_u *NoteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.IsEdited(); ok {
 		_spec.SetField(note.FieldIsEdited, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.NotifySubscribers(); ok {
+		_spec.SetField(note.FieldNotifySubscribers, field.TypeBool, value)
+	}
+	if _u.mutation.NotifySubscribersCleared() {
+		_spec.ClearField(note.FieldNotifySubscribers, field.TypeBool)
+	}
+	if value, ok := _u.mutation.NotifiedAt(); ok {
+		_spec.SetField(note.FieldNotifiedAt, field.TypeTime, value)
+	}
+	if _u.mutation.NotifiedAtCleared() {
+		_spec.ClearField(note.FieldNotifiedAt, field.TypeTime)
 	}
 	if _u.mutation.TaskCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1241,6 +1293,46 @@ func (_u *NoteUpdateOne) ClearTrustCenterID() *NoteUpdateOne {
 	return _u
 }
 
+// SetNotifySubscribers sets the "notify_subscribers" field.
+func (_u *NoteUpdateOne) SetNotifySubscribers(v bool) *NoteUpdateOne {
+	_u.mutation.SetNotifySubscribers(v)
+	return _u
+}
+
+// SetNillableNotifySubscribers sets the "notify_subscribers" field if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableNotifySubscribers(v *bool) *NoteUpdateOne {
+	if v != nil {
+		_u.SetNotifySubscribers(*v)
+	}
+	return _u
+}
+
+// ClearNotifySubscribers clears the value of the "notify_subscribers" field.
+func (_u *NoteUpdateOne) ClearNotifySubscribers() *NoteUpdateOne {
+	_u.mutation.ClearNotifySubscribers()
+	return _u
+}
+
+// SetNotifiedAt sets the "notified_at" field.
+func (_u *NoteUpdateOne) SetNotifiedAt(v time.Time) *NoteUpdateOne {
+	_u.mutation.SetNotifiedAt(v)
+	return _u
+}
+
+// SetNillableNotifiedAt sets the "notified_at" field if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableNotifiedAt(v *time.Time) *NoteUpdateOne {
+	if v != nil {
+		_u.SetNotifiedAt(*v)
+	}
+	return _u
+}
+
+// ClearNotifiedAt clears the value of the "notified_at" field.
+func (_u *NoteUpdateOne) ClearNotifiedAt() *NoteUpdateOne {
+	_u.mutation.ClearNotifiedAt()
+	return _u
+}
+
 // SetTaskID sets the "task" edge to the Task entity by ID.
 func (_u *NoteUpdateOne) SetTaskID(id string) *NoteUpdateOne {
 	_u.mutation.SetTaskID(id)
@@ -1673,6 +1765,18 @@ func (_u *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) {
 	}
 	if value, ok := _u.mutation.IsEdited(); ok {
 		_spec.SetField(note.FieldIsEdited, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.NotifySubscribers(); ok {
+		_spec.SetField(note.FieldNotifySubscribers, field.TypeBool, value)
+	}
+	if _u.mutation.NotifySubscribersCleared() {
+		_spec.ClearField(note.FieldNotifySubscribers, field.TypeBool)
+	}
+	if value, ok := _u.mutation.NotifiedAt(); ok {
+		_spec.SetField(note.FieldNotifiedAt, field.TypeTime, value)
+	}
+	if _u.mutation.NotifiedAtCleared() {
+		_spec.ClearField(note.FieldNotifiedAt, field.TypeTime)
 	}
 	if _u.mutation.TaskCleared() {
 		edge := &sqlgraph.EdgeSpec{

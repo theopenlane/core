@@ -58,6 +58,10 @@ type Note struct {
 	IsEdited bool `json:"is_edited,omitempty"`
 	// the trust center this note belongs to, if applicable
 	TrustCenterID string `json:"trust_center_id,omitempty"`
+	// when set on a trust center post, sends the published update to the trust center's subscribers
+	NotifySubscribers bool `json:"notify_subscribers,omitempty"`
+	// when subscribers were notified about this post
+	NotifiedAt *time.Time `json:"notified_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the NoteQuery when eager-loading is set.
 	Edges                    NoteEdges `json:"edges"`
@@ -248,11 +252,11 @@ func (*Note) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case note.FieldTextJSON:
 			values[i] = new([]byte)
-		case note.FieldIsEdited:
+		case note.FieldIsEdited, note.FieldNotifySubscribers:
 			values[i] = new(sql.NullBool)
 		case note.FieldID, note.FieldCreatedBy, note.FieldUpdatedBy, note.FieldDeletedBy, note.FieldDisplayID, note.FieldOwnerID, note.FieldTitle, note.FieldText, note.FieldNoteRef, note.FieldDiscussionID, note.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
-		case note.FieldCreatedAt, note.FieldUpdatedAt, note.FieldDeletedAt:
+		case note.FieldCreatedAt, note.FieldUpdatedAt, note.FieldDeletedAt, note.FieldNotifiedAt:
 			values[i] = new(sql.NullTime)
 		case note.ForeignKeys[0]: // control_comments
 			values[i] = new(sql.NullString)
@@ -393,6 +397,19 @@ func (_m *Note) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
 			} else if value.Valid {
 				_m.TrustCenterID = value.String
+			}
+		case note.FieldNotifySubscribers:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field notify_subscribers", values[i])
+			} else if value.Valid {
+				_m.NotifySubscribers = value.Bool
+			}
+		case note.FieldNotifiedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field notified_at", values[i])
+			} else if value.Valid {
+				_m.NotifiedAt = new(time.Time)
+				*_m.NotifiedAt = value.Time
 			}
 		case note.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -627,6 +644,14 @@ func (_m *Note) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("trust_center_id=")
 	builder.WriteString(_m.TrustCenterID)
+	builder.WriteString(", ")
+	builder.WriteString("notify_subscribers=")
+	builder.WriteString(fmt.Sprintf("%v", _m.NotifySubscribers))
+	builder.WriteString(", ")
+	if v := _m.NotifiedAt; v != nil {
+		builder.WriteString("notified_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

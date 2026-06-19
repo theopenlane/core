@@ -106,6 +106,8 @@ const (
 	FieldIntegrationID = "integration_id"
 	// FieldEmailBrandingID holds the string denoting the email_branding_id field in the database.
 	FieldEmailBrandingID = "email_branding_id"
+	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
+	FieldTrustCenterID = "trust_center_id"
 	// Table holds the table name of the campaignhistory in the database.
 	Table = "campaign_history"
 )
@@ -156,6 +158,7 @@ var Columns = []string{
 	FieldEmailTemplateID,
 	FieldIntegrationID,
 	FieldEmailBrandingID,
+	FieldTrustCenterID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -218,7 +221,7 @@ const DefaultCampaignType enums.CampaignType = "QUESTIONNAIRE"
 // CampaignTypeValidator is a validator for the "campaign_type" field enum values. It is called by the builders before save.
 func CampaignTypeValidator(ct enums.CampaignType) error {
 	switch ct.String() {
-	case "QUESTIONNAIRE", "TRAINING", "POLICY_ATTESTATION", "VENDOR_ASSESSMENT", "CUSTOM":
+	case "QUESTIONNAIRE", "TRAINING", "POLICY_ATTESTATION", "VENDOR_ASSESSMENT", "CUSTOM", "TRUST_CENTER_UPDATE":
 		return nil
 	default:
 		return fmt.Errorf("campaignhistory: invalid enum value for campaign_type field: %q", ct)
@@ -460,6 +463,11 @@ func ByIntegrationID(opts ...sql.OrderTermOption) OrderOption {
 // ByEmailBrandingID orders the results by the email_branding_id field.
 func ByEmailBrandingID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmailBrandingID, opts...).ToFunc()
+}
+
+// ByTrustCenterID orders the results by the trust_center_id field.
+func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
 }
 
 var (

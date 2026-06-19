@@ -22,4 +22,6 @@ var (
 	ErrCampaignTargetLimitExceeded = errors.New("campaign cannot exceed 500 targets")
 	// ErrCampaignMissingEmailTemplate is returned when a branded campaign has no linked email template.
 	ErrCampaignMissingEmailTemplate = errors.New("campaign requires a linked email template for dispatch")
+	// ErrCampaignMissingTrustCenter is returned when a trust center update campaign has no linked trust center.
+	ErrCampaignMissingTrustCenter = errors.New("campaign requires a linked trust center for dispatch")
 )

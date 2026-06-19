@@ -221,6 +221,7 @@ func (u User) Edges() []ent.Edge {
 				entgql.Skip(entgql.SkipAll),
 			},
 		}),
+		defaultEdgeToWithPagination(u, Subscriber{}),
 
 		edge.To("groups", Group.Type).
 			Annotations(

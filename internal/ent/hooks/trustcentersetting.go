@@ -12,15 +12,25 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/trustcenterurl"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 )
 
 var trustCenterConfig TrustCenterConfig
 
-// SetTrustCenterConfig sets the trust center configuration
+// SetTrustCenterConfig sets the trust center configuration. It also populates the shared
+// trustcenterurl config so the integration runtime can build trust center links without importing
+// this package
 func SetTrustCenterConfig(cfg TrustCenterConfig) {
 	trustCenterConfig = cfg
+
+	trustcenterurl.SetConfig(trustcenterurl.Config{
+		PreviewZoneID:            cfg.PreviewZoneID,
+		CnameTarget:              cfg.CnameTarget,
+		DefaultTrustCenterDomain: cfg.DefaultTrustCenterDomain,
+		CacheRefreshScheme:       cfg.CacheRefreshScheme,
+	})
 }
 
 // TrustCenterConfig holds the trust center configuration

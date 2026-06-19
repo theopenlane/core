@@ -213,6 +213,16 @@ func NdaApprovalRequired(v bool) predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldNdaApprovalRequired, v))
 }
 
+// NotifySubscribersOnSubprocessorChange applies equality check predicate on the "notify_subscribers_on_subprocessor_change" field. It's identical to NotifySubscribersOnSubprocessorChangeEQ.
+func NotifySubscribersOnSubprocessorChange(v bool) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldNotifySubscribersOnSubprocessorChange, v))
+}
+
+// SubprocessorsNotifiedAt applies equality check predicate on the "subprocessors_notified_at" field. It's identical to SubprocessorsNotifiedAtEQ.
+func SubprocessorsNotifiedAt(v time.Time) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldSubprocessorsNotifiedAt, v))
+}
+
 // NdaApproverGroupID applies equality check predicate on the "nda_approver_group_id" field. It's identical to NdaApproverGroupIDEQ.
 func NdaApproverGroupID(v string) predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldNdaApproverGroupID, v))
@@ -2276,6 +2286,76 @@ func NdaApprovalRequiredIsNil() predicate.TrustCenterSettingHistory {
 // NdaApprovalRequiredNotNil applies the NotNil predicate on the "nda_approval_required" field.
 func NdaApprovalRequiredNotNil() predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldNotNull(FieldNdaApprovalRequired))
+}
+
+// NotifySubscribersOnSubprocessorChangeEQ applies the EQ predicate on the "notify_subscribers_on_subprocessor_change" field.
+func NotifySubscribersOnSubprocessorChangeEQ(v bool) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldNotifySubscribersOnSubprocessorChange, v))
+}
+
+// NotifySubscribersOnSubprocessorChangeNEQ applies the NEQ predicate on the "notify_subscribers_on_subprocessor_change" field.
+func NotifySubscribersOnSubprocessorChangeNEQ(v bool) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNEQ(FieldNotifySubscribersOnSubprocessorChange, v))
+}
+
+// NotifySubscribersOnSubprocessorChangeIsNil applies the IsNil predicate on the "notify_subscribers_on_subprocessor_change" field.
+func NotifySubscribersOnSubprocessorChangeIsNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldIsNull(FieldNotifySubscribersOnSubprocessorChange))
+}
+
+// NotifySubscribersOnSubprocessorChangeNotNil applies the NotNil predicate on the "notify_subscribers_on_subprocessor_change" field.
+func NotifySubscribersOnSubprocessorChangeNotNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNotNull(FieldNotifySubscribersOnSubprocessorChange))
+}
+
+// SubprocessorsNotifiedAtEQ applies the EQ predicate on the "subprocessors_notified_at" field.
+func SubprocessorsNotifiedAtEQ(v time.Time) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldSubprocessorsNotifiedAt, v))
+}
+
+// SubprocessorsNotifiedAtNEQ applies the NEQ predicate on the "subprocessors_notified_at" field.
+func SubprocessorsNotifiedAtNEQ(v time.Time) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNEQ(FieldSubprocessorsNotifiedAt, v))
+}
+
+// SubprocessorsNotifiedAtIn applies the In predicate on the "subprocessors_notified_at" field.
+func SubprocessorsNotifiedAtIn(vs ...time.Time) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldIn(FieldSubprocessorsNotifiedAt, vs...))
+}
+
+// SubprocessorsNotifiedAtNotIn applies the NotIn predicate on the "subprocessors_notified_at" field.
+func SubprocessorsNotifiedAtNotIn(vs ...time.Time) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNotIn(FieldSubprocessorsNotifiedAt, vs...))
+}
+
+// SubprocessorsNotifiedAtGT applies the GT predicate on the "subprocessors_notified_at" field.
+func SubprocessorsNotifiedAtGT(v time.Time) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldGT(FieldSubprocessorsNotifiedAt, v))
+}
+
+// SubprocessorsNotifiedAtGTE applies the GTE predicate on the "subprocessors_notified_at" field.
+func SubprocessorsNotifiedAtGTE(v time.Time) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldGTE(FieldSubprocessorsNotifiedAt, v))
+}
+
+// SubprocessorsNotifiedAtLT applies the LT predicate on the "subprocessors_notified_at" field.
+func SubprocessorsNotifiedAtLT(v time.Time) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldLT(FieldSubprocessorsNotifiedAt, v))
+}
+
+// SubprocessorsNotifiedAtLTE applies the LTE predicate on the "subprocessors_notified_at" field.
+func SubprocessorsNotifiedAtLTE(v time.Time) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldLTE(FieldSubprocessorsNotifiedAt, v))
+}
+
+// SubprocessorsNotifiedAtIsNil applies the IsNil predicate on the "subprocessors_notified_at" field.
+func SubprocessorsNotifiedAtIsNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldIsNull(FieldSubprocessorsNotifiedAt))
+}
+
+// SubprocessorsNotifiedAtNotNil applies the NotNil predicate on the "subprocessors_notified_at" field.
+func SubprocessorsNotifiedAtNotNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNotNull(FieldSubprocessorsNotifiedAt))
 }
 
 // NdaApproverGroupIDEQ applies the EQ predicate on the "nda_approver_group_id" field.

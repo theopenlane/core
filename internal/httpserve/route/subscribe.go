@@ -22,3 +22,20 @@ func registerVerifySubscribeHandler(router *Router) error {
 
 	return router.AddV1HandlerRoute(config)
 }
+
+// registerUnsubscribeHandler registers the unsubscribe handler and route
+func registerUnsubscribeHandler(router *Router) error {
+	config := Config{
+		Path:        "/unsubscribe",
+		Method:      http.MethodGet,
+		Name:        "Unsubscribe",
+		Description: "Unsubscribe from communications",
+		Tags:        []string{"subscription"},
+		OperationID: "Unsubscribe",
+		Security:    &openapi3.SecurityRequirements{},
+		Middlewares: *unauthenticatedEndpoint,
+		Handler:     router.Handler.UnsubscribeHandler,
+	}
+
+	return router.AddV1HandlerRoute(config)
+}

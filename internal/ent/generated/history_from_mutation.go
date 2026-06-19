@@ -2132,6 +2132,10 @@ func (m *CampaignMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetEmailBrandingID(emailBrandingID)
 	}
 
+	if trustCenterID, exists := m.TrustCenterID(); exists {
+		create = create.SetTrustCenterID(trustCenterID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -2403,6 +2407,12 @@ func (m *CampaignMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetEmailBrandingID(campaign.EmailBrandingID)
 		}
 
+		if trustCenterID, exists := m.TrustCenterID(); exists {
+			create = create.SetTrustCenterID(trustCenterID)
+		} else {
+			create = create.SetTrustCenterID(campaign.TrustCenterID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -2478,6 +2488,7 @@ func (m *CampaignMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetEmailTemplateID(campaign.EmailTemplateID).
 			SetIntegrationID(campaign.IntegrationID).
 			SetEmailBrandingID(campaign.EmailBrandingID).
+			SetTrustCenterID(campaign.TrustCenterID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -2549,6 +2560,10 @@ func (m *CampaignTargetMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 	if groupID, exists := m.GroupID(); exists {
 		create = create.SetGroupID(groupID)
+	}
+
+	if subscriberID, exists := m.SubscriberID(); exists {
+		create = create.SetSubscriberID(subscriberID)
 	}
 
 	if email, exists := m.Email(); exists {
@@ -2678,6 +2693,12 @@ func (m *CampaignTargetMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetGroupID(campaigntarget.GroupID)
 		}
 
+		if subscriberID, exists := m.SubscriberID(); exists {
+			create = create.SetSubscriberID(subscriberID)
+		} else {
+			create = create.SetSubscriberID(campaigntarget.SubscriberID)
+		}
+
 		if email, exists := m.Email(); exists {
 			create = create.SetEmail(email)
 		} else {
@@ -2761,6 +2782,7 @@ func (m *CampaignTargetMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetContactID(campaigntarget.ContactID).
 			SetUserID(campaigntarget.UserID).
 			SetGroupID(campaigntarget.GroupID).
+			SetSubscriberID(campaigntarget.SubscriberID).
 			SetEmail(campaigntarget.Email).
 			SetFullName(campaigntarget.FullName).
 			SetStatus(campaigntarget.Status).
@@ -7150,6 +7172,10 @@ func (m *EmailTemplateMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetWorkflowInstanceID(workflowInstanceID)
 	}
 
+	if trustCenterID, exists := m.TrustCenterID(); exists {
+		create = create.SetTrustCenterID(trustCenterID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -7361,6 +7387,12 @@ func (m *EmailTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetWorkflowInstanceID(emailtemplate.WorkflowInstanceID)
 		}
 
+		if trustCenterID, exists := m.TrustCenterID(); exists {
+			create = create.SetTrustCenterID(trustCenterID)
+		} else {
+			create = create.SetTrustCenterID(emailtemplate.TrustCenterID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -7426,6 +7458,7 @@ func (m *EmailTemplateMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetIntegrationID(emailtemplate.IntegrationID).
 			SetWorkflowDefinitionID(emailtemplate.WorkflowDefinitionID).
 			SetWorkflowInstanceID(emailtemplate.WorkflowInstanceID).
+			SetTrustCenterID(emailtemplate.TrustCenterID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -13843,6 +13876,14 @@ func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetTrustCenterID(trustCenterID)
 	}
 
+	if notifySubscribers, exists := m.NotifySubscribers(); exists {
+		create = create.SetNotifySubscribers(notifySubscribers)
+	}
+
+	if notifiedAt, exists := m.NotifiedAt(); exists {
+		create = create.SetNillableNotifiedAt(&notifiedAt)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -13964,6 +14005,18 @@ func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTrustCenterID(note.TrustCenterID)
 		}
 
+		if notifySubscribers, exists := m.NotifySubscribers(); exists {
+			create = create.SetNotifySubscribers(notifySubscribers)
+		} else {
+			create = create.SetNotifySubscribers(note.NotifySubscribers)
+		}
+
+		if notifiedAt, exists := m.NotifiedAt(); exists {
+			create = create.SetNillableNotifiedAt(&notifiedAt)
+		} else {
+			create = create.SetNillableNotifiedAt(note.NotifiedAt)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -14014,6 +14067,8 @@ func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDiscussionID(note.DiscussionID).
 			SetIsEdited(note.IsEdited).
 			SetTrustCenterID(note.TrustCenterID).
+			SetNotifySubscribers(note.NotifySubscribers).
+			SetNillableNotifiedAt(note.NotifiedAt).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -24084,6 +24139,14 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetNdaApprovalRequired(ndaApprovalRequired)
 	}
 
+	if notifySubscribersOnSubprocessorChange, exists := m.NotifySubscribersOnSubprocessorChange(); exists {
+		create = create.SetNotifySubscribersOnSubprocessorChange(notifySubscribersOnSubprocessorChange)
+	}
+
+	if subprocessorsNotifiedAt, exists := m.SubprocessorsNotifiedAt(); exists {
+		create = create.SetNillableSubprocessorsNotifiedAt(&subprocessorsNotifiedAt)
+	}
+
 	if ndaApproverGroupID, exists := m.NdaApproverGroupID(); exists {
 		create = create.SetNillableNdaApproverGroupID(&ndaApproverGroupID)
 	}
@@ -24297,6 +24360,18 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetNdaApprovalRequired(trustcentersetting.NdaApprovalRequired)
 		}
 
+		if notifySubscribersOnSubprocessorChange, exists := m.NotifySubscribersOnSubprocessorChange(); exists {
+			create = create.SetNotifySubscribersOnSubprocessorChange(notifySubscribersOnSubprocessorChange)
+		} else {
+			create = create.SetNotifySubscribersOnSubprocessorChange(trustcentersetting.NotifySubscribersOnSubprocessorChange)
+		}
+
+		if subprocessorsNotifiedAt, exists := m.SubprocessorsNotifiedAt(); exists {
+			create = create.SetNillableSubprocessorsNotifiedAt(&subprocessorsNotifiedAt)
+		} else {
+			create = create.SetNillableSubprocessorsNotifiedAt(trustcentersetting.SubprocessorsNotifiedAt)
+		}
+
 		if ndaApproverGroupID, exists := m.NdaApproverGroupID(); exists {
 			create = create.SetNillableNdaApproverGroupID(&ndaApproverGroupID)
 		} else {
@@ -24373,6 +24448,8 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetNillableCompanyDomain(trustcentersetting.CompanyDomain).
 			SetNillableSecurityContact(trustcentersetting.SecurityContact).
 			SetNdaApprovalRequired(trustcentersetting.NdaApprovalRequired).
+			SetNotifySubscribersOnSubprocessorChange(trustcentersetting.NotifySubscribersOnSubprocessorChange).
+			SetNillableSubprocessorsNotifiedAt(trustcentersetting.SubprocessorsNotifiedAt).
 			SetNillableNdaApproverGroupID(trustcentersetting.NdaApproverGroupID).
 			SetNillableStatusPageURL(trustcentersetting.StatusPageURL).
 			Save(ctx)
