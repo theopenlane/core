@@ -255,10 +255,7 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 
 		// this should be blocked via the graphql middleware already
 		if isAnon && !isTrustCenterAnon {
-			if !o.AllowAnonymousTrustCenterAccess {
-				return privacy.Denyf("anonymous access not allowed unless filtered by a trust center")
-			}
-
+			return privacy.Denyf("anonymous access not allowed unless filtered by a trust center")
 		}
 
 		// check for anon access on schemas, if its not allowed
