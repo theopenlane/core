@@ -35,7 +35,7 @@ func (r *mutationResolver) CreateTrustCenterNDARequest(ctx context.Context, inpu
 
 		ctx = auth.WithCaller(
 			privacy.DecisionContext(ctx, privacy.Allow),
-			caller,
+			caller.WithCapabilities(auth.CapBypassOrgFilter),
 		)
 	}
 
@@ -177,13 +177,12 @@ func (r *mutationResolver) RequestNewTrustCenterToken(ctx context.Context, email
 		return nil, rout.ErrPermissionDenied
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	existing, err := withTransactionalMutation(ctx).TrustCenterNDARequest.Query().Where(
 		trustcenterndarequest.And(
 			trustcenterndarequest.Email(email),
 			trustcenterndarequest.TrustCenterIDEQ(tcID),
 		),
-	).Only(allowCtx)
+	).Only(ctx)
 	if err == nil {
 		// do an create to the request to re-trigger any notifications or resend emails, this will follow-the same logic as creating a new request, but will be idempotent for users that have already signed the nda
 		if _, err = r.CreateTrustCenterNDARequest(ctx, generated.CreateTrustCenterNDARequestInput{

@@ -253,8 +253,11 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			return err
 		}
 
-		// this should be blocked via the graphql middleware already
-		if isAnon && !isTrustCenterAnon {
+		isQuestionnaireCaller := isQuestionnaireAnonCaller(ctx)
+
+		// TC anon users without GraphQL key are blocked by BlockNonTrustCenterAnonymous middleware;
+		// questionnaire callers are legitimate REST callers and fall through to the org filter
+		if isAnon && !isTrustCenterAnon && !isQuestionnaireCaller {
 			return privacy.Denyf("anonymous access not allowed unless filtered by a trust center")
 		}
 
@@ -317,6 +320,16 @@ func isAnonTrustCenterCaller(ctx context.Context) (string, bool, error) {
 	return caller.OrganizationID, caller.OrganizationRole == auth.AnonymousRole && (caller.Has(auth.CapTrustCenterAnonymous)), nil
 }
 
+// isQuestionnaireAnonCaller returns true for a questionnaire anonymous caller
+func isQuestionnaireAnonCaller(ctx context.Context) bool {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return false
+	}
+
+	return caller.OrganizationRole == auth.AnonymousRole && caller.Has(auth.CapQuestionnaireAnonymous)
+}
+
 // isAnonCaller returns true for any anonymous caller
 func isAnonCaller(ctx context.Context) (bool, error) {
 	caller, ok := auth.CallerFromContext(ctx)
@@ -331,12 +344,6 @@ func isAnonCaller(ctx context.Context) (bool, error) {
 // and query type. Callers with CapBypassOrgFilter skip the interceptor.
 func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context) bool {
 	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapBypassOrgFilter) {
-		// this shouldn't happen anymore because the cap was removed from anon users, but keeping here to ensure
-		// will remove in future release
-		if caller.OrganizationRole == auth.AnonymousRole {
-			return false
-		}
-
 		return true
 	}
 
