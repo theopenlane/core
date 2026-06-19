@@ -149,7 +149,7 @@ func (OrgMembership) Hooks() []ent.Hook {
 		hooks.HookOrgMembers(),
 		hooks.HookMembershipSelf("org_memberships"),
 		hooks.HookOrgMembersDelete(),
-		hooks.HookSSOExemptionAttribution(),
+		hooks.SSOExemptionAttribution(),
 	}
 }
 
