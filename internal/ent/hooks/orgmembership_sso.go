@@ -13,11 +13,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 )
 
-// HookSSOExemptionAttribution stamps the grantor and timestamp when a membership's SSO exemption is
+// SSOExemptionAttribution stamps the grantor and timestamp when a membership's SSO exemption is
 // set, and clears the attribution and reason when the exemption is removed. The grantor defaults to
 // the acting caller when it is not explicitly provided by the mutation, which lets API driven grants
 // record who performed the change while server driven flows can attribute it to a specific user
-func HookSSOExemptionAttribution() ent.Hook {
+func SSOExemptionAttribution() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.OrgMembershipFunc(func(ctx context.Context, m *generated.OrgMembershipMutation) (generated.Value, error) {
 			exempt, ok := m.SSOExempt()
