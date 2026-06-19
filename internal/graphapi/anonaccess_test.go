@@ -164,17 +164,17 @@ func TestSubscriberAnonymousTrustCenterAccess(t *testing.T) {
 
 	t.Run("anon TC user cannot list subscribers", func(t *testing.T) {
 		_, err := suite.client.api.GetAllSubscribers(anonCtx, nil, nil, nil, nil, nil)
-		assert.Assert(t, err != nil, "anon TC user should be denied from listing subscribers")
+		assert.Check(t, err != nil, "anon TC user should be denied from listing subscribers")
 	})
 
 	t.Run("anon TC user cannot get subscriber by email", func(t *testing.T) {
 		_, err := suite.client.api.GetSubscriberByEmail(anonCtx, subscriberEmail)
-		assert.Assert(t, err != nil, "anon TC user should not be able to read subscriber data")
+		assert.Check(t, err != nil, "anon TC user should not be able to read subscriber data")
 	})
 
 	t.Run("anon TC user cannot get org subscriber by email", func(t *testing.T) {
 		_, err := suite.client.api.GetSubscriberByEmail(anonCtx, orgSubscriber.Email)
-		assert.Assert(t, err != nil, "anon TC user should not be able to read org subscriber data")
+		assert.Check(t, err != nil, "anon TC user should not be able to read org subscriber data")
 	})
 
 	t.Run("org owner can list subscribers", func(t *testing.T) {
@@ -220,22 +220,22 @@ func TestTrustCenterNDARequestAnonymousDataIsolation(t *testing.T) {
 
 	t.Run("anon TC user from org1 cannot retrieve own NDA request by ID", func(t *testing.T) {
 		_, err := suite.client.api.GetTrustCenterNDARequestByID(anonCtxOrg1, ndaID1)
-		assert.Assert(t, err != nil, "anon TC user should not be able to read NDA requests")
+		assert.Check(t, err != nil, "anon TC user should not be able to read NDA requests")
 	})
 
 	t.Run("anon TC user from org1 cannot retrieve org2 NDA request by ID", func(t *testing.T) {
 		_, err := suite.client.api.GetTrustCenterNDARequestByID(anonCtxOrg1, ndaID2)
-		assert.Assert(t, err != nil, "anon TC user should not be able to read other org NDA requests")
+		assert.Check(t, err != nil, "anon TC user should not be able to read other org NDA requests")
 	})
 
 	t.Run("anon TC user cannot list NDA requests", func(t *testing.T) {
 		_, err := suite.client.api.GetAllTrustCenterNDARequests(anonCtxOrg1, nil, nil, nil, nil, nil)
-		assert.Assert(t, err != nil, "anon TC user should be denied from listing NDA requests")
+		assert.Check(t, err != nil, "anon TC user should be denied from listing NDA requests")
 	})
 
 	t.Run("anon TC user from org2 cannot list NDA requests", func(t *testing.T) {
 		_, err := suite.client.api.GetAllTrustCenterNDARequests(anonCtxOrg2, nil, nil, nil, nil, nil)
-		assert.Assert(t, err != nil, "anon TC user should be denied from listing NDA requests")
+		assert.Check(t, err != nil, "anon TC user should be denied from listing NDA requests")
 	})
 
 	t.Run("org1 owner can retrieve org1 NDA request", func(t *testing.T) {
