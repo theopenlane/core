@@ -119,7 +119,6 @@ func (t TrustCenterNDARequest) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.TrustCenterNDARequest](t,
 				withParents(TrustCenter{}),
-				withAllowAnonymousTrustCenterAccess(true),
 			),
 			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
@@ -161,7 +160,7 @@ func (t TrustCenterNDARequest) Edges() []ent.Edge {
 // Interceptors of the TrustCenterNDARequest
 func (TrustCenterNDARequest) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorTrustCenterChild(),
+		interceptors.InterceptorTrustCenterChildDenyAnon(),
 	}
 }
 

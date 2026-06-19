@@ -234,7 +234,7 @@ func (o ObjectOwnedMixin) setOwnerIDField(ctx context.Context, m ent.Mutation) e
 // owned mixin
 var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		if skip := o.orgInterceptorSkipper(ctx, q); skip {
+		if skip := o.orgInterceptorSkipper(ctx); skip {
 			return nil
 		}
 
@@ -243,16 +243,36 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			return nil
 		}
 
-		tcID, hasAnonTCUser := auth.ActiveTrustCenterIDKey.Get(ctx)
+		isAnon, err := isAnonCaller(ctx)
+		if err != nil {
+			return err
+		}
 
-		if o.AllowAnonymousTrustCenterAccess && hasAnonTCUser {
-			caller, callerOk := auth.CallerFromContext(ctx)
-			if callerOk && caller != nil && tcID != "" && caller.OrganizationID != "" {
-				o.PWithField(q, ownerFieldName, []string{caller.OrganizationID})
-				return nil
+		trustCenterOrganization, isTrustCenterAnon, err := isAnonTrustCenterCaller(ctx)
+		if err != nil {
+			return err
+		}
+
+		// this should be blocked via the graphql middleware already
+		if isAnon && !isTrustCenterAnon {
+			if !o.AllowAnonymousTrustCenterAccess {
+				return privacy.Denyf("anonymous access not allowed unless filtered by a trust center")
 			}
-		} else if !o.AllowAnonymousTrustCenterAccess && hasAnonTCUser {
-			return privacy.Denyf("anonymous trust center access not allowed")
+
+		}
+
+		// check for anon access on schemas, if its not allowed
+		// deny the query, otherwise filter on trust center
+		if isTrustCenterAnon {
+			if !o.AllowAnonymousTrustCenterAccess {
+				return privacy.Denyf("anonymous trust center access not allowed")
+			}
+
+			// TC users with an active trust center key: scope results to their specific org
+			// to prevent cross-org data leakage through the org filter fallback below
+			o.PWithField(q, ownerFieldName, []string{trustCenterOrganization})
+
+			return nil
 		}
 
 		// check API Token scope and return error if scope not set on token for object
@@ -279,12 +299,45 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 	})
 }
 
+// isAnonTrustCenterCaller returns true for anon trust center callers
+// with the organization id the trust center is associated with from
+// the caller context
+func isAnonTrustCenterCaller(ctx context.Context) (string, bool, error) {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || caller.OrganizationID == "" {
+		return "", false, auth.ErrNoAuthUser
+	}
+
+	tcID, hasAnonTCUser := auth.ActiveTrustCenterIDKey.Get(ctx)
+	if !hasAnonTCUser || tcID == "" {
+		if caller.Has(auth.CapTrustCenterAnonymous) {
+			return "", false, privacy.Denyf("trust center request without active trust center key")
+		}
+
+		return "", false, nil
+	}
+
+	return caller.OrganizationID, caller.OrganizationRole == auth.AnonymousRole && (caller.Has(auth.CapTrustCenterAnonymous)), nil
+}
+
+// isAnonCaller returns true for any anonymous caller
+func isAnonCaller(ctx context.Context) (bool, error) {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || caller.OrganizationID == "" {
+		return false, auth.ErrNoAuthUser
+	}
+
+	return caller.OrganizationRole == auth.AnonymousRole, nil
+
+}
+
 // orgInterceptorSkipper skips the organization interceptor based on the context
 // and query type. Callers with CapBypassOrgFilter skip the interceptor.
-func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept.Query) bool {
+func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context) bool {
 	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapBypassOrgFilter) {
-		// anonymous callers (trust center, questionnaire) still scope template queries by org
-		if caller.OrganizationRole == auth.AnonymousRole && q.Type() == generated.TypeTemplate {
+		// this shouldn't happen anymore because the cap was removed from anon users, but keeping here to ensure
+		// will remove in future release
+		if caller.OrganizationRole == auth.AnonymousRole {
 			return false
 		}
 
