@@ -32,13 +32,13 @@ func InterceptorTrustCenter() ent.Interceptor {
 	})
 }
 
-// AnonInterceptorTrustCenterChild filters trust center child queries for anon callers only.
+// AnonInterceptorTrustCenterChild filters trust center child queries for anon callers only
 // Use this for org-owned schemas (e.g. templates) where regular users rely on the org interceptor
 func AnonInterceptorTrustCenterChild() ent.Interceptor {
 	return trustCenterInterceptor(false, true)
 }
 
-// InterceptorTrustCenterChild filters trust center child queries for all callers.
+// InterceptorTrustCenterChild filters trust center child queries for all callers
 // Use this for TC-owned schemas (e.g. docs, FAQs) where anon TC users can read
 // and regular users need a fallback org filter
 func InterceptorTrustCenterChild() ent.Interceptor {
@@ -46,15 +46,15 @@ func InterceptorTrustCenterChild() ent.Interceptor {
 }
 
 // InterceptorTrustCenterChildDenyAnon applies the fallback org filter for regular users
-// but denies all anonymous trust center callers, even those with an active TC key.
+// but denies all anonymous trust center callers, even those with an active TC key
 // Use for TC-owned schemas that anon users submit to but must not read back (e.g. NDA requests)
 func InterceptorTrustCenterChildDenyAnon() ent.Interceptor {
 	return trustCenterInterceptor(true, false)
 }
 
-// trustCenterInterceptor builds the shared interceptor body.
+// trustCenterInterceptor builds the shared interceptor body
 // applyToAllRequests: when true, regular (non-anon) users get a fallback SQL filter scoped to
-// trust centers owned by their organizations.
+// trust centers owned by their organizations
 // allowAnonAccess: when true, anon TC callers with an active key get a trust_center_id filter;
 // when false they are denied outright
 func trustCenterInterceptor(applyToAllRequests, allowAnonAccess bool) ent.Interceptor {

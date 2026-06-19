@@ -328,7 +328,6 @@ func isAnonCaller(ctx context.Context) (bool, error) {
 	}
 
 	return caller.OrganizationRole == auth.AnonymousRole, nil
-
 }
 
 // orgInterceptorSkipper skips the organization interceptor based on the context

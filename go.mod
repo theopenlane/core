@@ -12,8 +12,6 @@ tool (
 
 replace github.com/theopenlane/core/common => ./common
 
-replace github.com/theopenlane/iam => ../iam
-
 require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/securitycenter v1.44.0
@@ -107,7 +105,7 @@ require (
 	github.com/theopenlane/go-client v0.12.2
 	github.com/theopenlane/gqlgen-plugins v0.14.7
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.33.0
+	github.com/theopenlane/iam v0.33.1-0.20260619214154-187af1fbffd3
 	github.com/theopenlane/newman v0.4.1
 	github.com/theopenlane/riverboat v0.9.18
 	github.com/theopenlane/utils v0.7.1
