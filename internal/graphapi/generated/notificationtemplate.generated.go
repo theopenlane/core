@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _NotificationTemplateBulkCreatePayload_notificationTemplates(ctx context.Context, field graphql.CollectedField, obj *model.NotificationTemplateBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _NotificationTemplateBulkCreatePayload(ctx context.C
 			out.Values[i] = graphql.MarshalString("NotificationTemplateBulkCreatePayload")
 		case "notificationTemplates":
 			out.Values[i] = ec._NotificationTemplateBulkCreatePayload_notificationTemplates(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _NotificationTemplateBulkDeletePayload(ctx context.C
 			}
 		case "error":
 			out.Values[i] = ec._NotificationTemplateBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _NotificationTemplateBulkUpdatePayload(ctx context.C
 			out.Values[i] = graphql.MarshalString("NotificationTemplateBulkUpdatePayload")
 		case "notificationTemplates":
 			out.Values[i] = ec._NotificationTemplateBulkUpdatePayload_notificationTemplates(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._NotificationTemplateBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

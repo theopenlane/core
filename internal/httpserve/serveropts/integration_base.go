@@ -14,7 +14,7 @@ import (
 // WithIntegrationsRuntime builds the integration runtime from server settings and wires it
 // into the handler. When a workflow engine is present it also injects integration dependencies.
 // Initialization is skipped if the database client or Gala runtime is nil.
-func WithIntegrationsRuntime(dbClient *ent.Client) ServerOption {
+func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		s.Config.Handler.IntegrationsConfig = s.Config.Settings.Integrations
 
@@ -54,7 +54,7 @@ func WithIntegrationsRuntime(dbClient *ent.Client) ServerOption {
 
 		// ensure all connected integrations have a corresponding job
 		go func() {
-			if err := rt.SeedReconcileJobs(context.Background()); err != nil {
+			if err := rt.SeedReconcileJobs(ctx); err != nil {
 				log.Warn().Err(err).Msg("failed to seed one or more missing reconcile jobs at startup")
 			}
 		}()

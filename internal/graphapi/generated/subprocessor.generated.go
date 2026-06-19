@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _SubprocessorBulkCreatePayload_subprocessors(ctx context.Context, field graphql.CollectedField, obj *model.SubprocessorBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _SubprocessorBulkCreatePayload(ctx context.Context, 
 			out.Values[i] = graphql.MarshalString("SubprocessorBulkCreatePayload")
 		case "subprocessors":
 			out.Values[i] = ec._SubprocessorBulkCreatePayload_subprocessors(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _SubprocessorBulkDeletePayload(ctx context.Context, 
 			}
 		case "error":
 			out.Values[i] = ec._SubprocessorBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _SubprocessorBulkUpdatePayload(ctx context.Context, 
 			out.Values[i] = graphql.MarshalString("SubprocessorBulkUpdatePayload")
 		case "subprocessors":
 			out.Values[i] = ec._SubprocessorBulkUpdatePayload_subprocessors(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._SubprocessorBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

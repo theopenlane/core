@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _EmailTemplateBulkCreatePayload_emailTemplates(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplateBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _EmailTemplateBulkCreatePayload(ctx context.Context,
 			out.Values[i] = graphql.MarshalString("EmailTemplateBulkCreatePayload")
 		case "emailTemplates":
 			out.Values[i] = ec._EmailTemplateBulkCreatePayload_emailTemplates(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _EmailTemplateBulkDeletePayload(ctx context.Context,
 			}
 		case "error":
 			out.Values[i] = ec._EmailTemplateBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _EmailTemplateBulkUpdatePayload(ctx context.Context,
 			out.Values[i] = graphql.MarshalString("EmailTemplateBulkUpdatePayload")
 		case "emailTemplates":
 			out.Values[i] = ec._EmailTemplateBulkUpdatePayload_emailTemplates(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._EmailTemplateBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

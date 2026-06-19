@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _BulkUpdateStatusPayload_totalUpdated(ctx context.Context, field graphql.CollectedField, obj *model.BulkUpdateStatusPayload) (ret graphql.Marshaler) {
@@ -366,6 +362,9 @@ func (ec *executionContext) _TrustCenterNDARequestBulkCreatePayload(ctx context.
 			out.Values[i] = graphql.MarshalString("TrustCenterNDARequestBulkCreatePayload")
 		case "trustCenterNDARequests":
 			out.Values[i] = ec._TrustCenterNDARequestBulkCreatePayload_trustCenterNDARequests(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -412,6 +411,9 @@ func (ec *executionContext) _TrustCenterNDARequestBulkDeletePayload(ctx context.
 			}
 		case "error":
 			out.Values[i] = ec._TrustCenterNDARequestBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

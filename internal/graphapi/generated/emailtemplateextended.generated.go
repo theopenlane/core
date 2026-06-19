@@ -22,10 +22,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _EmailTemplateCatalog_entries(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplateCatalog) (ret graphql.Marshaler) {
@@ -319,6 +315,9 @@ func (ec *executionContext) _EmailTemplateCatalogEntry(ctx context.Context, sel 
 			}
 		case "exampleValues":
 			out.Values[i] = ec._EmailTemplateCatalogEntry_exampleValues(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "htmlPreview":
 			out.Values[i] = ec._EmailTemplateCatalogEntry_htmlPreview(ctx, field, obj)
 			if out.Values[i] == graphql.Null {

@@ -25,6 +25,25 @@ import (
 	"github.com/theopenlane/utils/rout"
 )
 
+// RelatedControls is the resolver for the relatedControls field.
+func (r *controlResolver) RelatedControls(ctx context.Context, obj *generated.Control) ([]*model.ControlInfo, error) {
+	res, err := getControlMappings(ctx, obj.RefCode, obj.ReferenceFramework, nil)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting mapped controls")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "relatedcontrol"})
+	}
+
+	frameworksInOrg, err := getStandardsInOrg(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting standards used in org")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "relatedcontrol"})
+	}
+
+	return processMappedControlResults(ctx, res, obj.ID, obj.RefCode, obj.ReferenceFramework, frameworksInOrg)
+}
+
 // CreateControlsByClone is the resolver for the createControlsByClone field.
 func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *model.CloneControlInput) (*model.ControlBulkCreatePayload, error) {
 	logger := logx.FromContext(ctx)
@@ -447,4 +466,23 @@ func (r *queryResolver) ControlsGroupByCategory(ctx context.Context, after *entg
 	}
 
 	return result, nil
+}
+
+// RelatedControls is the resolver for the relatedControls field.
+func (r *subcontrolResolver) RelatedControls(ctx context.Context, obj *generated.Subcontrol) ([]*model.ControlInfo, error) {
+	res, err := getMappedControlsBySubcontrolID(ctx, obj.ID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting mapped subcontrols")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "relatedcontrol"})
+	}
+
+	frameworksInOrg, err := getStandardsInOrg(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting standards used in org")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "relatedcontrol"})
+	}
+
+	return processMappedControlResults(ctx, res, obj.ID, obj.RefCode, obj.ReferenceFramework, frameworksInOrg)
 }

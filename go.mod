@@ -17,7 +17,7 @@ require (
 	cloud.google.com/go/securitycenter v1.44.0
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.6
-	github.com/99designs/gqlgen v0.17.90
+	github.com/99designs/gqlgen v0.17.91
 	github.com/AfterShip/email-verifier v1.4.1
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.22.0
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.13.1
@@ -34,7 +34,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.103.3
 	github.com/brianvoe/gofakeit/v7 v7.15.0
 	github.com/cenkalti/backoff/v5 v5.0.3
-	github.com/cloudflare/cloudflare-go/v7 v7.4.0
+	github.com/cloudflare/cloudflare-go/v7 v7.5.0
 	github.com/didasy/tldr v0.7.0
 	github.com/elimity-com/scim v0.0.0-20260506142751-830e1caafcc3
 	github.com/fatih/camelcase v1.0.0
@@ -84,7 +84,7 @@ require (
 	github.com/pquerna/otp v1.5.0
 	github.com/pressly/goose/v3 v3.27.1
 	github.com/prometheus/client_golang v1.23.2
-	github.com/redis/go-redis/v9 v9.20.0
+	github.com/redis/go-redis/v9 v9.20.1
 	github.com/riverqueue/river v0.39.0
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.39.0
 	github.com/riverqueue/river/rivertype v0.39.0
@@ -102,12 +102,12 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.29.0
-	github.com/theopenlane/go-client v0.12.1
+	github.com/theopenlane/go-client v0.12.2
 	github.com/theopenlane/gqlgen-plugins v0.14.7
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.33.0
 	github.com/theopenlane/newman v0.4.1
-	github.com/theopenlane/riverboat v0.9.16
+	github.com/theopenlane/riverboat v0.9.18
 	github.com/theopenlane/utils v0.7.1
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.9.1
@@ -122,7 +122,7 @@ require (
 	golang.org/x/oauth2 v0.36.0
 	golang.org/x/sync v0.21.0
 	golang.org/x/text v0.38.0
-	golang.org/x/tools v0.45.0
+	golang.org/x/tools v0.46.0
 	google.golang.org/api v0.284.0
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
@@ -135,6 +135,7 @@ require (
 	github.com/Masterminds/sprig/v3 v3.3.0 // indirect
 	github.com/PuerkitoBio/goquery v1.12.0 // indirect
 	github.com/andybalholm/cascadia v1.3.3 // indirect
+	github.com/coder/websocket v1.8.14 // indirect
 	github.com/google/go-github/v87 v87.0.0 // indirect
 	github.com/hhrutter/lzw v1.0.0 // indirect
 	github.com/hhrutter/pkcs7 v0.2.2 // indirect
@@ -286,8 +287,8 @@ require (
 	github.com/zitadel/logging v0.7.0 // indirect
 	github.com/zitadel/schema v1.3.2 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
-	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.68.0 // indirect
-	go.opentelemetry.io/otel/sdk/metric v1.43.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.69.0 // indirect
+	go.opentelemetry.io/otel/sdk/metric v1.44.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	gonum.org/v1/gonum v0.17.0 // indirect
 	google.golang.org/genproto v0.0.0-20260319201613-d00831a3d3e7 // indirect
@@ -355,7 +356,7 @@ require (
 	github.com/opencontainers/runc v1.3.3 // indirect
 	github.com/openfga/api/proto v0.0.0-20260319214821-f153694bfc20 // indirect
 	github.com/openfga/language/pkg/go v0.2.1
-	github.com/openfga/openfga v1.17.0 // indirect
+	github.com/openfga/openfga v1.18.0 // indirect
 	github.com/ory/dockertest v3.3.5+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.3.1 // indirect
 	github.com/prometheus/client_model v0.6.2 // indirect
@@ -389,20 +390,20 @@ require (
 	github.com/x448/float16 v0.8.4 // indirect
 	github.com/yuin/gopher-lua v1.1.1 // indirect
 	github.com/zclconf/go-cty v1.18.1 // indirect
-	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.68.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.69.0 // indirect
 	go.opentelemetry.io/otel v1.44.0 // indirect
 	go.opentelemetry.io/otel/metric v1.44.0 // indirect
-	go.opentelemetry.io/otel/sdk v1.43.0 // indirect
+	go.opentelemetry.io/otel/sdk v1.44.0 // indirect
 	go.opentelemetry.io/otel/trace v1.44.0 // indirect
 	go.uber.org/goleak v1.3.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.4 // indirect
 	golang.org/x/exp v0.0.0-20260508232706-74f9aab9d74a // indirect
-	golang.org/x/net v0.55.0 // indirect
+	golang.org/x/net v0.56.0 // indirect
 	golang.org/x/sys v0.46.0 // indirect
 	golang.org/x/time v0.15.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20260504160031-60b97b32f348 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20260526163538-3dc84a4a5aaa // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect
 	google.golang.org/grpc v1.81.1 // indirect
 	google.golang.org/protobuf v1.36.11

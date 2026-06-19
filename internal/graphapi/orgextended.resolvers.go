@@ -168,12 +168,12 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "org_membership"})
 		}
 
-		// Update current owner to ADMIN role
-		adminRole := enums.RoleAdmin
+		// Update current owner to SUPER_ADMIN role
+		superAdminRole := enums.RoleSuperAdmin
 		if err := c.OrgMembership.UpdateOneID(currentUserMembership.ID).
-			SetRole(adminRole).
+			SetRole(superAdminRole).
 			Exec(allowCtx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("unable to demote current owner to admin")
+			logx.FromContext(ctx).Error().Err(err).Msg("unable to set current owner to super admin")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "org_membership"})
 		}
 

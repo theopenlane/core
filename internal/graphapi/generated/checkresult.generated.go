@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _CheckResultBulkCreatePayload_checkResults(ctx context.Context, field graphql.CollectedField, obj *model.CheckResultBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _CheckResultBulkCreatePayload(ctx context.Context, s
 			out.Values[i] = graphql.MarshalString("CheckResultBulkCreatePayload")
 		case "checkResults":
 			out.Values[i] = ec._CheckResultBulkCreatePayload_checkResults(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -338,8 +337,14 @@ func (ec *executionContext) _CheckResultBulkDeletePayload(ctx context.Context, s
 			}
 		case "error":
 			out.Values[i] = ec._CheckResultBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "notDeletedIDs":
 			out.Values[i] = ec._CheckResultBulkDeletePayload_notDeletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -376,8 +381,14 @@ func (ec *executionContext) _CheckResultBulkUpdatePayload(ctx context.Context, s
 			out.Values[i] = graphql.MarshalString("CheckResultBulkUpdatePayload")
 		case "checkResults":
 			out.Values[i] = ec._CheckResultBulkUpdatePayload_checkResults(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._CheckResultBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

@@ -191,6 +191,20 @@ type ControlDiffPayload {
     changes: [ControlChange!]!
 }
 
+extend type Control {
+    """
+    relatedControls show the controls and frameworks mapped to this control
+    """
+    relatedControls: [ControlInfo!]
+}
+
+extend type Subcontrol {
+    """
+    relatedControls show the controls and frameworks mapped to this control
+    """
+    relatedControls: [ControlInfo!]
+}
+
 extend type Query {
     """
     Compare a system-owned control between two framework revisions to see which fields changed
@@ -338,4 +352,50 @@ Properties by which ControlCategory connections can be ordered.
 enum ControlCategoryOrderField {
   category
   referenceFramework
+}
+
+"""
+A connection to a list of items.
+"""
+type RelatedControlConnection {
+  """
+  A list of edges.
+  """
+  edges: [RelatedControlEdge]
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type RelatedControlEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Control!
+}
+
+"""
+A connection to a list of items.
+"""
+type RelatedSubcontrolConnection {
+  """
+  A list of edges.
+  """
+  edges: [RelatedSubcontrolEdge]
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type RelatedSubcontrolEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Subcontrol!
 }

@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _SubcontrolBulkCreatePayload_subcontrols(ctx context.Context, field graphql.CollectedField, obj *model.SubcontrolBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _SubcontrolBulkCreatePayload(ctx context.Context, se
 			out.Values[i] = graphql.MarshalString("SubcontrolBulkCreatePayload")
 		case "subcontrols":
 			out.Values[i] = ec._SubcontrolBulkCreatePayload_subcontrols(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _SubcontrolBulkDeletePayload(ctx context.Context, se
 			}
 		case "error":
 			out.Values[i] = ec._SubcontrolBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _SubcontrolBulkUpdatePayload(ctx context.Context, se
 			out.Values[i] = graphql.MarshalString("SubcontrolBulkUpdatePayload")
 		case "subcontrols":
 			out.Values[i] = ec._SubcontrolBulkUpdatePayload_subcontrols(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._SubcontrolBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

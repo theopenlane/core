@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _DNSVerificationBulkCreatePayload_dnsVerifications(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _DNSVerificationBulkCreatePayload(ctx context.Contex
 			out.Values[i] = graphql.MarshalString("DNSVerificationBulkCreatePayload")
 		case "dnsVerifications":
 			out.Values[i] = ec._DNSVerificationBulkCreatePayload_dnsVerifications(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _DNSVerificationBulkDeletePayload(ctx context.Contex
 			}
 		case "error":
 			out.Values[i] = ec._DNSVerificationBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _DNSVerificationBulkUpdatePayload(ctx context.Contex
 			out.Values[i] = graphql.MarshalString("DNSVerificationBulkUpdatePayload")
 		case "dnsVerifications":
 			out.Values[i] = ec._DNSVerificationBulkUpdatePayload_dnsVerifications(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._DNSVerificationBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

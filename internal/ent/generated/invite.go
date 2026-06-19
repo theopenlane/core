@@ -49,7 +49,7 @@ type Invite struct {
 	SendAttempts int `json:"send_attempts,omitempty"`
 	// the comparison secret to verify the token's signature
 	Secret *[]byte `json:"-"`
-	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes super admin and invitee becomes owner
 	OwnershipTransfer bool `json:"ownership_transfer,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the InviteQuery when eager-loading is set.

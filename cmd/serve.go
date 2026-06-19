@@ -278,7 +278,7 @@ func serve(ctx context.Context) error {
 	// add auth and integration options
 	so.AddServerOptions(
 		serveropts.WithAuth(),
-		serveropts.WithIntegrationsRuntime(dbClient),
+		serveropts.WithIntegrationsRuntime(ctx, dbClient),
 	)
 
 	// add session manager

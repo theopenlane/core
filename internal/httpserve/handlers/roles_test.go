@@ -1,6 +1,7 @@
 package handlers_test
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -10,8 +11,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -57,6 +60,10 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 	suite.registerRouteOnce("DELETE", "account/organization-roles", operation, suite.h.DeleteOrganizationRolesHandler)
 
 	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ownerCtx := auth.NewTestContextWithOrgID(testUser1.ID, testUser1.OrganizationID, auth.WithOrganizationRole(auth.OwnerRole))
+	ownerCtx = privacy.DecisionContext(ownerCtx, privacy.Allow)
+	ownerCtx = generated.NewContext(ownerCtx, suite.db)
+
 	group, err := suite.db.Group.Create().
 		SetName("Role Test Group " + testUser2.ID).
 		SetDescription("Group for organization role assignment tests").
@@ -64,10 +71,24 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 		Save(ctx)
 	require.NoError(t, err)
 
+	member := suite.userBuilder(ctx)
+	memberRole := enums.RoleMember
+	err = suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+		UserID:         member.ID,
+		OrganizationID: testUser1.OrganizationID,
+		Role:           &memberRole,
+	}).Exec(ctx)
+	require.NoError(t, err)
+
+	memberCtx := auth.NewTestContextWithOrgID(member.ID, testUser1.OrganizationID, auth.WithOrganizationRole(auth.MemberRole))
+	memberCtx = privacy.DecisionContext(memberCtx, privacy.Allow)
+	memberCtx = generated.NewContext(memberCtx, suite.db)
+
 	cases := []struct {
 		name       string
 		method     string
 		request    models.OrganizationRolesRequest
+		ctx        context.Context
 		statusCode int
 		success    bool
 	}{
@@ -79,6 +100,7 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 				Role:           "policy_manager",
 				UserIDs:        []string{testUser2.ID},
 			},
+			ctx:        ownerCtx,
 			statusCode: http.StatusOK,
 			success:    true,
 		},
@@ -90,6 +112,7 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 				Role:           "policy_manager",
 				UserIDs:        []string{testUser2.ID},
 			},
+			ctx:        ownerCtx,
 			statusCode: http.StatusOK,
 			success:    true,
 		},
@@ -101,6 +124,7 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 				Role:           "risk_manager",
 				GroupIDs:       []string{group.ID},
 			},
+			ctx:        ownerCtx,
 			statusCode: http.StatusOK,
 			success:    true,
 		},
@@ -112,6 +136,7 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 				Role:           "risk_manager",
 				GroupIDs:       []string{group.ID},
 			},
+			ctx:        ownerCtx,
 			statusCode: http.StatusOK,
 			success:    true,
 		},
@@ -123,6 +148,7 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 				Role:           "policy_manager",
 				UserIDs:        []string{testUser2.ID},
 			},
+			ctx:        ownerCtx,
 			statusCode: http.StatusOK,
 			success:    true,
 		},
@@ -134,6 +160,7 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 				Role:           "not_a_role",
 				UserIDs:        []string{testUser2.ID},
 			},
+			ctx:        ownerCtx,
 			statusCode: http.StatusBadRequest,
 		},
 		{
@@ -143,6 +170,7 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 				OrganizationID: testUser1.OrganizationID,
 				Role:           "policy_manager",
 			},
+			ctx:        ownerCtx,
 			statusCode: http.StatusBadRequest,
 		},
 		{
@@ -153,6 +181,29 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 				Role:           "policy_manager",
 				UserIDs:        []string{testUser2.ID},
 			},
+			ctx:        ownerCtx,
+			statusCode: http.StatusBadRequest,
+		},
+		{
+			name:   "member cannot assign role to a user",
+			method: http.MethodPost,
+			request: models.OrganizationRolesRequest{
+				OrganizationID: testUser1.OrganizationID,
+				Role:           "policy_manager",
+				UserIDs:        []string{testUser2.ID},
+			},
+			ctx:        memberCtx,
+			statusCode: http.StatusBadRequest,
+		},
+		{
+			name:   "member cannot assign role to a group",
+			method: http.MethodPost,
+			request: models.OrganizationRolesRequest{
+				OrganizationID: testUser1.OrganizationID,
+				Role:           "risk_manager",
+				GroupIDs:       []string{group.ID},
+			},
+			ctx:        memberCtx,
 			statusCode: http.StatusBadRequest,
 		},
 	}
@@ -167,7 +218,7 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 
 			recorder := httptest.NewRecorder()
 
-			suite.e.ServeHTTP(recorder, req.WithContext(testUser1.UserCtx))
+			suite.e.ServeHTTP(recorder, req.WithContext(tc.ctx))
 
 			response := recorder.Result()
 			defer response.Body.Close()

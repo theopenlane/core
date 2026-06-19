@@ -35,7 +35,7 @@ func TestWithIntegrationsRuntime_NilDB(t *testing.T) {
 		},
 	}
 
-	WithIntegrationsRuntime(nil).apply(so)
+	WithIntegrationsRuntime(t.Context(), nil).apply(so)
 
 	if so.Config.Handler.IntegrationsRuntime != nil {
 		t.Fatalf("expected integrations runtime to remain nil when DB is nil")
