@@ -40,24 +40,24 @@ func AnonInterceptorTrustCenterChild() ent.Interceptor {
 }
 
 // InterceptorTrustCenterChild filters trust center child queries for all callers
-// Use this for TC-owned schemas (e.g. docs, FAQs) where anon TC users can read
+// Use this for Trust Center owned schemas (e.g. docs, FAQs) where anon Trust Center  users can read
 // and regular users need a fallback org filter
 func InterceptorTrustCenterChild() ent.Interceptor {
 	return trustCenterInterceptor(true, true)
 }
 
 // InterceptorTrustCenterChildDenyAnon applies the fallback org filter for regular users
-// but denies all anonymous trust center callers, even those with an active TC key
-// Use for TC-owned schemas that anon users submit to but must not read back (e.g. NDA requests)
+// but denies all anonymous trust center callers, even those with an active Trust Center  key
+// Use for Trust Center -owned schemas that anon users submit to but must not read back (e.g. NDA requests)
 func InterceptorTrustCenterChildDenyAnon() ent.Interceptor {
 	return trustCenterInterceptor(true, false)
 }
 
-// trustCenterInterceptor builds the shared interceptor body
+// trustCenterInterceptor builds the shared interceptor body for all filters and should be used with the exported functions
 // applyToAllRequests: when true, regular (non-anon) users get a fallback SQL filter scoped to
 // trust centers owned by their organizations
-// allowAnonAccess: when true, anon TC callers with an active key get a trust_center_id filter;
-// when false they are denied outright
+// allowAnonAccess: when true, anon Trust Center  callers with an active key get a trust_center_id filter;
+// when false they are denied outright from querying data
 func trustCenterInterceptor(applyToAllRequests, allowAnonAccess bool) ent.Interceptor {
 	return ent.InterceptFunc(func(next ent.Querier) ent.Querier {
 		return ent.QuerierFunc(func(ctx context.Context, q ent.Query) (ent.Value, error) {
@@ -119,30 +119,36 @@ func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query, applyT
 		return nil
 	}
 
-	// allow internal bypass
+	// allow internal bypass when strictly allowed or is an internal request
 	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
 		return nil
 	}
 
+	// get the trust center key from the context
 	tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx)
 	if ok && tcID != "" {
 		if !allowAnonAccess {
 			return privacy.Denyf("anonymous trust center access not allowed for this resource")
 		}
 
+		// filter the request by trust center
 		q.WhereP(sql.FieldEQ("trust_center_id", tcID))
 
 		return nil
 	}
 
+	// deny all trust center requests that did not have a trust center key
 	if caller.Has(auth.CapTrustCenterAnonymous) {
 		return privacy.Denyf("trust center request without active trust center key")
 	}
 
+	// if the trust center filter should not be applied to all requests (e.g for schemas that are org owned and not solely trust
+	// center owned, continue with no filter)
 	if !applyToAllRequests {
 		return nil
 	}
 
+	// filter by trust centers owned by the organization in the caller context
 	orgIDs := caller.OrgIDs()
 
 	q.WhereP(func(s *sql.Selector) {

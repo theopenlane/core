@@ -243,32 +243,35 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			return nil
 		}
 
+		// check if the request is for an anon JWT
 		isAnon, err := isAnonCaller(ctx)
 		if err != nil {
 			return err
 		}
 
+		// check for anon trust center JWT
 		trustCenterOrganization, isTrustCenterAnon, err := isAnonTrustCenterCaller(ctx)
 		if err != nil {
 			return err
 		}
 
+		// check for questionnaire callers (these only happen via REST handlers)
 		isQuestionnaireCaller := isQuestionnaireAnonCaller(ctx)
 
-		// TC anon users without GraphQL key are blocked by BlockNonTrustCenterAnonymous middleware;
-		// questionnaire callers are legitimate REST callers and fall through to the org filter
+		// Trust Center anon users without GraphQL key are blocked by BlockNonTrustCenterAnonymous middleware;
+		// questionnaire callers are legitimate REST callers and fall through to the org filter further down
 		if isAnon && !isTrustCenterAnon && !isQuestionnaireCaller {
 			return privacy.Denyf("anonymous access not allowed unless filtered by a trust center")
 		}
 
-		// check for anon access on schemas, if its not allowed
+		// check for trust center anon access on schemas, if its not allowed
 		// deny the query, otherwise filter on trust center
 		if isTrustCenterAnon {
 			if !o.AllowAnonymousTrustCenterAccess {
 				return privacy.Denyf("anonymous trust center access not allowed")
 			}
 
-			// TC users with an active trust center key: scope results to their specific org
+			// Trust Center users with an active trust center key: scope results to their specific org
 			// to prevent cross-org data leakage through the org filter fallback below
 			o.PWithField(q, ownerFieldName, []string{trustCenterOrganization})
 
@@ -282,12 +285,13 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			}
 		}
 
-		// add owner id(s) to the query
+		// add owner id(s) to all remaining query requests
 		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
 		if err != nil {
 			return err
 		}
 
+		// this should not happen, but log when it does - no results get returned if there are no org ids present
 		if len(orgIDs) == 0 {
 			logx.FromContext(ctx).Warn().Msg("no organization ids found in context, but interceptor was not skipped, no results will be returned")
 		}
