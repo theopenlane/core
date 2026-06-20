@@ -11,16 +11,16 @@ var (
 	// definitionID is the stable identifier for the Zitadel integration definition
 	definitionID = types.NewDefinitionRef("def_01K0ZITADEL000000000000001")
 	// integration is the typed installation metadata handle for the Zitadel definition
-	// integration = types.NewInstallationRef(resolveInstallationMetadata)
+	integration = types.NewInstallationRef(resolveInstallationMetadata)
 	// zitadelCredentialSchema is the JSON schema for the Zitadel credential
 	// zitadelCredential is the typed runtime ref for resolving the credential
 	zitadelCredentialSchema, zitadelCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// zitadelClient is the client ref for the Zitadel user service API client
 	zitadelClient = types.NewClientRef[*zitadelUser.Client]()
 	// healthCheckSchema, healthCheckOperation is the operation ref for the health check
-	// healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
+	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// directorySyncSchema, directorySyncOperation is the operation ref for directory sync
-	// directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 )
 
 // CredentialSchema holds the Zitadel instance credentials for one installation
