@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
@@ -204,6 +205,26 @@ func (_u *CampaignTargetUpdate) ClearGroupID() *CampaignTargetUpdate {
 	return _u
 }
 
+// SetSubscriberID sets the "subscriber_id" field.
+func (_u *CampaignTargetUpdate) SetSubscriberID(v string) *CampaignTargetUpdate {
+	_u.mutation.SetSubscriberID(v)
+	return _u
+}
+
+// SetNillableSubscriberID sets the "subscriber_id" field if the given value is not nil.
+func (_u *CampaignTargetUpdate) SetNillableSubscriberID(v *string) *CampaignTargetUpdate {
+	if v != nil {
+		_u.SetSubscriberID(*v)
+	}
+	return _u
+}
+
+// ClearSubscriberID clears the value of the "subscriber_id" field.
+func (_u *CampaignTargetUpdate) ClearSubscriberID() *CampaignTargetUpdate {
+	_u.mutation.ClearSubscriberID()
+	return _u
+}
+
 // SetEmail sets the "email" field.
 func (_u *CampaignTargetUpdate) SetEmail(v string) *CampaignTargetUpdate {
 	_u.mutation.SetEmail(v)
@@ -324,6 +345,11 @@ func (_u *CampaignTargetUpdate) SetGroup(v *Group) *CampaignTargetUpdate {
 	return _u.SetGroupID(v.ID)
 }
 
+// SetSubscriber sets the "subscriber" edge to the Subscriber entity.
+func (_u *CampaignTargetUpdate) SetSubscriber(v *Subscriber) *CampaignTargetUpdate {
+	return _u.SetSubscriberID(v.ID)
+}
+
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
 func (_u *CampaignTargetUpdate) AddWorkflowObjectRefIDs(ids ...string) *CampaignTargetUpdate {
 	_u.mutation.AddWorkflowObjectRefIDs(ids...)
@@ -365,6 +391,12 @@ func (_u *CampaignTargetUpdate) ClearUser() *CampaignTargetUpdate {
 // ClearGroup clears the "group" edge to the Group entity.
 func (_u *CampaignTargetUpdate) ClearGroup() *CampaignTargetUpdate {
 	_u.mutation.ClearGroup()
+	return _u
+}
+
+// ClearSubscriber clears the "subscriber" edge to the Subscriber entity.
+func (_u *CampaignTargetUpdate) ClearSubscriber() *CampaignTargetUpdate {
+	_u.mutation.ClearSubscriber()
 	return _u
 }
 
@@ -662,6 +694,37 @@ func (_u *CampaignTargetUpdate) sqlSave(ctx context.Context) (_node int, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.SubscriberCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaigntarget.SubscriberTable,
+			Columns: []string{campaigntarget.SubscriberColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CampaignTarget
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubscriberIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaigntarget.SubscriberTable,
+			Columns: []string{campaigntarget.SubscriberColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CampaignTarget
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.WorkflowObjectRefsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -900,6 +963,26 @@ func (_u *CampaignTargetUpdateOne) ClearGroupID() *CampaignTargetUpdateOne {
 	return _u
 }
 
+// SetSubscriberID sets the "subscriber_id" field.
+func (_u *CampaignTargetUpdateOne) SetSubscriberID(v string) *CampaignTargetUpdateOne {
+	_u.mutation.SetSubscriberID(v)
+	return _u
+}
+
+// SetNillableSubscriberID sets the "subscriber_id" field if the given value is not nil.
+func (_u *CampaignTargetUpdateOne) SetNillableSubscriberID(v *string) *CampaignTargetUpdateOne {
+	if v != nil {
+		_u.SetSubscriberID(*v)
+	}
+	return _u
+}
+
+// ClearSubscriberID clears the value of the "subscriber_id" field.
+func (_u *CampaignTargetUpdateOne) ClearSubscriberID() *CampaignTargetUpdateOne {
+	_u.mutation.ClearSubscriberID()
+	return _u
+}
+
 // SetEmail sets the "email" field.
 func (_u *CampaignTargetUpdateOne) SetEmail(v string) *CampaignTargetUpdateOne {
 	_u.mutation.SetEmail(v)
@@ -1020,6 +1103,11 @@ func (_u *CampaignTargetUpdateOne) SetGroup(v *Group) *CampaignTargetUpdateOne {
 	return _u.SetGroupID(v.ID)
 }
 
+// SetSubscriber sets the "subscriber" edge to the Subscriber entity.
+func (_u *CampaignTargetUpdateOne) SetSubscriber(v *Subscriber) *CampaignTargetUpdateOne {
+	return _u.SetSubscriberID(v.ID)
+}
+
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
 func (_u *CampaignTargetUpdateOne) AddWorkflowObjectRefIDs(ids ...string) *CampaignTargetUpdateOne {
 	_u.mutation.AddWorkflowObjectRefIDs(ids...)
@@ -1061,6 +1149,12 @@ func (_u *CampaignTargetUpdateOne) ClearUser() *CampaignTargetUpdateOne {
 // ClearGroup clears the "group" edge to the Group entity.
 func (_u *CampaignTargetUpdateOne) ClearGroup() *CampaignTargetUpdateOne {
 	_u.mutation.ClearGroup()
+	return _u
+}
+
+// ClearSubscriber clears the "subscriber" edge to the Subscriber entity.
+func (_u *CampaignTargetUpdateOne) ClearSubscriber() *CampaignTargetUpdateOne {
+	_u.mutation.ClearSubscriber()
 	return _u
 }
 
@@ -1380,6 +1474,37 @@ func (_u *CampaignTargetUpdateOne) sqlSave(ctx context.Context) (_node *Campaign
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CampaignTarget
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubscriberCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaigntarget.SubscriberTable,
+			Columns: []string{campaigntarget.SubscriberColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CampaignTarget
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubscriberIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaigntarget.SubscriberTable,
+			Columns: []string{campaigntarget.SubscriberColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.CampaignTarget

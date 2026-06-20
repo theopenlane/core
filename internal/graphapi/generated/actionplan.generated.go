@@ -11571,10 +11571,6 @@ func (ec *executionContext) field_Mutation_withdrawWorkflowProposal_args(ctx con
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _ActionPlanBulkCreatePayload_actionPlans(ctx context.Context, field graphql.CollectedField, obj *model.ActionPlanBulkCreatePayload) (ret graphql.Marshaler) {
@@ -38673,6 +38669,9 @@ func (ec *executionContext) _ActionPlanBulkCreatePayload(ctx context.Context, se
 			out.Values[i] = graphql.MarshalString("ActionPlanBulkCreatePayload")
 		case "actionPlans":
 			out.Values[i] = ec._ActionPlanBulkCreatePayload_actionPlans(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -38719,6 +38718,9 @@ func (ec *executionContext) _ActionPlanBulkDeletePayload(ctx context.Context, se
 			}
 		case "error":
 			out.Values[i] = ec._ActionPlanBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -38755,8 +38757,14 @@ func (ec *executionContext) _ActionPlanBulkUpdatePayload(ctx context.Context, se
 			out.Values[i] = graphql.MarshalString("ActionPlanBulkUpdatePayload")
 		case "actionPlans":
 			out.Values[i] = ec._ActionPlanBulkUpdatePayload_actionPlans(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._ActionPlanBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

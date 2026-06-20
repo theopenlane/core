@@ -86,6 +86,8 @@ const (
 	FieldWorkflowDefinitionID = "workflow_definition_id"
 	// FieldWorkflowInstanceID holds the string denoting the workflow_instance_id field in the database.
 	FieldWorkflowInstanceID = "workflow_instance_id"
+	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
+	FieldTrustCenterID = "trust_center_id"
 	// Table holds the table name of the emailtemplatehistory in the database.
 	Table = "email_template_history"
 )
@@ -126,6 +128,7 @@ var Columns = []string{
 	FieldIntegrationID,
 	FieldWorkflowDefinitionID,
 	FieldWorkflowInstanceID,
+	FieldTrustCenterID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -352,6 +355,11 @@ func ByWorkflowDefinitionID(opts ...sql.OrderTermOption) OrderOption {
 // ByWorkflowInstanceID orders the results by the workflow_instance_id field.
 func ByWorkflowInstanceID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWorkflowInstanceID, opts...).ToFunc()
+}
+
+// ByTrustCenterID orders the results by the trust_center_id field.
+func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
 }
 
 var (

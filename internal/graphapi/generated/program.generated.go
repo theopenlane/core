@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _ProgramBulkCreatePayload_programs(ctx context.Context, field graphql.CollectedField, obj *model.ProgramBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _ProgramBulkCreatePayload(ctx context.Context, sel a
 			out.Values[i] = graphql.MarshalString("ProgramBulkCreatePayload")
 		case "programs":
 			out.Values[i] = ec._ProgramBulkCreatePayload_programs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _ProgramBulkDeletePayload(ctx context.Context, sel a
 			}
 		case "error":
 			out.Values[i] = ec._ProgramBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _ProgramBulkUpdatePayload(ctx context.Context, sel a
 			out.Values[i] = graphql.MarshalString("ProgramBulkUpdatePayload")
 		case "programs":
 			out.Values[i] = ec._ProgramBulkUpdatePayload_programs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._ProgramBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

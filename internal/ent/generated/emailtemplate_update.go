@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 
@@ -496,6 +497,26 @@ func (_u *EmailTemplateUpdate) ClearWorkflowInstanceID() *EmailTemplateUpdate {
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *EmailTemplateUpdate) SetTrustCenterID(v string) *EmailTemplateUpdate {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *EmailTemplateUpdate) SetNillableTrustCenterID(v *string) *EmailTemplateUpdate {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *EmailTemplateUpdate) ClearTrustCenterID() *EmailTemplateUpdate {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *EmailTemplateUpdate) AddBlockedGroupIDs(ids ...string) *EmailTemplateUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -554,6 +575,11 @@ func (_u *EmailTemplateUpdate) SetWorkflowDefinition(v *WorkflowDefinition) *Ema
 // SetWorkflowInstance sets the "workflow_instance" edge to the WorkflowInstance entity.
 func (_u *EmailTemplateUpdate) SetWorkflowInstance(v *WorkflowInstance) *EmailTemplateUpdate {
 	return _u.SetWorkflowInstanceID(v.ID)
+}
+
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (_u *EmailTemplateUpdate) SetTrustCenter(v *TrustCenter) *EmailTemplateUpdate {
+	return _u.SetTrustCenterID(v.ID)
 }
 
 // AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
@@ -684,6 +710,12 @@ func (_u *EmailTemplateUpdate) ClearWorkflowDefinition() *EmailTemplateUpdate {
 // ClearWorkflowInstance clears the "workflow_instance" edge to the WorkflowInstance entity.
 func (_u *EmailTemplateUpdate) ClearWorkflowInstance() *EmailTemplateUpdate {
 	_u.mutation.ClearWorkflowInstance()
+	return _u
+}
+
+// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
+func (_u *EmailTemplateUpdate) ClearTrustCenter() *EmailTemplateUpdate {
+	_u.mutation.ClearTrustCenter()
 	return _u
 }
 
@@ -1204,6 +1236,37 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   emailtemplate.TrustCenterTable,
+			Columns: []string{emailtemplate.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailTemplate
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   emailtemplate.TrustCenterTable,
+			Columns: []string{emailtemplate.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.EmailTemplate
@@ -1837,6 +1900,26 @@ func (_u *EmailTemplateUpdateOne) ClearWorkflowInstanceID() *EmailTemplateUpdate
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *EmailTemplateUpdateOne) SetTrustCenterID(v string) *EmailTemplateUpdateOne {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *EmailTemplateUpdateOne) SetNillableTrustCenterID(v *string) *EmailTemplateUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *EmailTemplateUpdateOne) ClearTrustCenterID() *EmailTemplateUpdateOne {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *EmailTemplateUpdateOne) AddBlockedGroupIDs(ids ...string) *EmailTemplateUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -1895,6 +1978,11 @@ func (_u *EmailTemplateUpdateOne) SetWorkflowDefinition(v *WorkflowDefinition) *
 // SetWorkflowInstance sets the "workflow_instance" edge to the WorkflowInstance entity.
 func (_u *EmailTemplateUpdateOne) SetWorkflowInstance(v *WorkflowInstance) *EmailTemplateUpdateOne {
 	return _u.SetWorkflowInstanceID(v.ID)
+}
+
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (_u *EmailTemplateUpdateOne) SetTrustCenter(v *TrustCenter) *EmailTemplateUpdateOne {
+	return _u.SetTrustCenterID(v.ID)
 }
 
 // AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
@@ -2025,6 +2113,12 @@ func (_u *EmailTemplateUpdateOne) ClearWorkflowDefinition() *EmailTemplateUpdate
 // ClearWorkflowInstance clears the "workflow_instance" edge to the WorkflowInstance entity.
 func (_u *EmailTemplateUpdateOne) ClearWorkflowInstance() *EmailTemplateUpdateOne {
 	_u.mutation.ClearWorkflowInstance()
+	return _u
+}
+
+// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
+func (_u *EmailTemplateUpdateOne) ClearTrustCenter() *EmailTemplateUpdateOne {
+	_u.mutation.ClearTrustCenter()
 	return _u
 }
 
@@ -2575,6 +2669,37 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   emailtemplate.TrustCenterTable,
+			Columns: []string{emailtemplate.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailTemplate
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   emailtemplate.TrustCenterTable,
+			Columns: []string{emailtemplate.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.EmailTemplate

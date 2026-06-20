@@ -1382,6 +1382,11 @@ func (_q *CampaignHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, campaignhistory.FieldEmailBrandingID)
 				fieldSeen[campaignhistory.FieldEmailBrandingID] = struct{}{}
 			}
+		case "trustCenterID":
+			if _, ok := fieldSeen[campaignhistory.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, campaignhistory.FieldTrustCenterID)
+				fieldSeen[campaignhistory.FieldTrustCenterID] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -1530,6 +1535,11 @@ func (_q *CampaignTargetHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[campaigntargethistory.FieldGroupID]; !ok {
 				selectedFields = append(selectedFields, campaigntargethistory.FieldGroupID)
 				fieldSeen[campaigntargethistory.FieldGroupID] = struct{}{}
+			}
+		case "subscriberID":
+			if _, ok := fieldSeen[campaigntargethistory.FieldSubscriberID]; !ok {
+				selectedFields = append(selectedFields, campaigntargethistory.FieldSubscriberID)
+				fieldSeen[campaigntargethistory.FieldSubscriberID] = struct{}{}
 			}
 		case "email":
 			if _, ok := fieldSeen[campaigntargethistory.FieldEmail]; !ok {
@@ -4297,6 +4307,11 @@ func (_q *EmailTemplateHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[emailtemplatehistory.FieldWorkflowInstanceID]; !ok {
 				selectedFields = append(selectedFields, emailtemplatehistory.FieldWorkflowInstanceID)
 				fieldSeen[emailtemplatehistory.FieldWorkflowInstanceID] = struct{}{}
+			}
+		case "trustCenterID":
+			if _, ok := fieldSeen[emailtemplatehistory.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, emailtemplatehistory.FieldTrustCenterID)
+				fieldSeen[emailtemplatehistory.FieldTrustCenterID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -8134,6 +8149,16 @@ func (_q *NoteHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[notehistory.FieldTrustCenterID]; !ok {
 				selectedFields = append(selectedFields, notehistory.FieldTrustCenterID)
 				fieldSeen[notehistory.FieldTrustCenterID] = struct{}{}
+			}
+		case "notifySubscribers":
+			if _, ok := fieldSeen[notehistory.FieldNotifySubscribers]; !ok {
+				selectedFields = append(selectedFields, notehistory.FieldNotifySubscribers)
+				fieldSeen[notehistory.FieldNotifySubscribers] = struct{}{}
+			}
+		case "notifiedAt":
+			if _, ok := fieldSeen[notehistory.FieldNotifiedAt]; !ok {
+				selectedFields = append(selectedFields, notehistory.FieldNotifiedAt)
+				fieldSeen[notehistory.FieldNotifiedAt] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -14230,6 +14255,16 @@ func (_q *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneN
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldNdaApprovalRequired]; !ok {
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldNdaApprovalRequired)
 				fieldSeen[trustcentersettinghistory.FieldNdaApprovalRequired] = struct{}{}
+			}
+		case "notifySubscribersOnSubprocessorChange":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange)
+				fieldSeen[trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange] = struct{}{}
+			}
+		case "subprocessorsNotifiedAt":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldSubprocessorsNotifiedAt]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldSubprocessorsNotifiedAt)
+				fieldSeen[trustcentersettinghistory.FieldSubprocessorsNotifiedAt] = struct{}{}
 			}
 		case "ndaApproverGroupID":
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldNdaApproverGroupID]; !ok {

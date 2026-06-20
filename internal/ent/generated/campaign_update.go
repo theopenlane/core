@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
@@ -740,6 +741,26 @@ func (_u *CampaignUpdate) ClearEmailBrandingID() *CampaignUpdate {
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *CampaignUpdate) SetTrustCenterID(v string) *CampaignUpdate {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *CampaignUpdate) SetNillableTrustCenterID(v *string) *CampaignUpdate {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *CampaignUpdate) ClearTrustCenterID() *CampaignUpdate {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *CampaignUpdate) AddBlockedGroupIDs(ids ...string) *CampaignUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -818,6 +839,11 @@ func (_u *CampaignUpdate) SetEmailTemplate(v *EmailTemplate) *CampaignUpdate {
 // SetEntity sets the "entity" edge to the Entity entity.
 func (_u *CampaignUpdate) SetEntity(v *Entity) *CampaignUpdate {
 	return _u.SetEntityID(v.ID)
+}
+
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (_u *CampaignUpdate) SetTrustCenter(v *TrustCenter) *CampaignUpdate {
+	return _u.SetTrustCenterID(v.ID)
 }
 
 // AddCampaignTargetIDs adds the "campaign_targets" edge to the CampaignTarget entity by IDs.
@@ -1047,6 +1073,12 @@ func (_u *CampaignUpdate) ClearEmailTemplate() *CampaignUpdate {
 // ClearEntity clears the "entity" edge to the Entity entity.
 func (_u *CampaignUpdate) ClearEntity() *CampaignUpdate {
 	_u.mutation.ClearEntity()
+	return _u
+}
+
+// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
+func (_u *CampaignUpdate) ClearTrustCenter() *CampaignUpdate {
+	_u.mutation.ClearTrustCenter()
 	return _u
 }
 
@@ -1845,6 +1877,37 @@ func (_u *CampaignUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.TrustCenterTable,
+			Columns: []string{campaign.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.TrustCenterTable,
+			Columns: []string{campaign.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Campaign
@@ -2954,6 +3017,26 @@ func (_u *CampaignUpdateOne) ClearEmailBrandingID() *CampaignUpdateOne {
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *CampaignUpdateOne) SetTrustCenterID(v string) *CampaignUpdateOne {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *CampaignUpdateOne) SetNillableTrustCenterID(v *string) *CampaignUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *CampaignUpdateOne) ClearTrustCenterID() *CampaignUpdateOne {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *CampaignUpdateOne) AddBlockedGroupIDs(ids ...string) *CampaignUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -3032,6 +3115,11 @@ func (_u *CampaignUpdateOne) SetEmailTemplate(v *EmailTemplate) *CampaignUpdateO
 // SetEntity sets the "entity" edge to the Entity entity.
 func (_u *CampaignUpdateOne) SetEntity(v *Entity) *CampaignUpdateOne {
 	return _u.SetEntityID(v.ID)
+}
+
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (_u *CampaignUpdateOne) SetTrustCenter(v *TrustCenter) *CampaignUpdateOne {
+	return _u.SetTrustCenterID(v.ID)
 }
 
 // AddCampaignTargetIDs adds the "campaign_targets" edge to the CampaignTarget entity by IDs.
@@ -3261,6 +3349,12 @@ func (_u *CampaignUpdateOne) ClearEmailTemplate() *CampaignUpdateOne {
 // ClearEntity clears the "entity" edge to the Entity entity.
 func (_u *CampaignUpdateOne) ClearEntity() *CampaignUpdateOne {
 	_u.mutation.ClearEntity()
+	return _u
+}
+
+// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
+func (_u *CampaignUpdateOne) ClearTrustCenter() *CampaignUpdateOne {
+	_u.mutation.ClearTrustCenter()
 	return _u
 }
 
@@ -4089,6 +4183,37 @@ func (_u *CampaignUpdateOne) sqlSave(ctx context.Context) (_node *Campaign, err 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.TrustCenterTable,
+			Columns: []string{campaign.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.TrustCenterTable,
+			Columns: []string{campaign.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Campaign

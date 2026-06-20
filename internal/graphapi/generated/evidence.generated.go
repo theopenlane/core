@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _EvidenceBulkCreatePayload_evidences(ctx context.Context, field graphql.CollectedField, obj *model.EvidenceBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _EvidenceBulkCreatePayload(ctx context.Context, sel 
 			out.Values[i] = graphql.MarshalString("EvidenceBulkCreatePayload")
 		case "evidences":
 			out.Values[i] = ec._EvidenceBulkCreatePayload_evidences(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _EvidenceBulkDeletePayload(ctx context.Context, sel 
 			}
 		case "error":
 			out.Values[i] = ec._EvidenceBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _EvidenceBulkUpdatePayload(ctx context.Context, sel 
 			out.Values[i] = graphql.MarshalString("EvidenceBulkUpdatePayload")
 		case "evidences":
 			out.Values[i] = ec._EvidenceBulkUpdatePayload_evidences(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._EvidenceBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

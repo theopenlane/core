@@ -102,6 +102,11 @@ func OwnerID(v string) predicate.Subscriber {
 	return predicate.Subscriber(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// TrustCenterID applies equality check predicate on the "trust_center_id" field. It's identical to TrustCenterIDEQ.
+func TrustCenterID(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldEQ(FieldTrustCenterID, v))
+}
+
 // Email applies equality check predicate on the "email" field. It's identical to EmailEQ.
 func Email(v string) predicate.Subscriber {
 	return predicate.Subscriber(sql.FieldEQ(FieldEmail, v))
@@ -150,6 +155,16 @@ func Unsubscribed(v bool) predicate.Subscriber {
 // SendAttempts applies equality check predicate on the "send_attempts" field. It's identical to SendAttemptsEQ.
 func SendAttempts(v int) predicate.Subscriber {
 	return predicate.Subscriber(sql.FieldEQ(FieldSendAttempts, v))
+}
+
+// ContactID applies equality check predicate on the "contact_id" field. It's identical to ContactIDEQ.
+func ContactID(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldEQ(FieldContactID, v))
+}
+
+// UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
+func UserID(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldEQ(FieldUserID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -612,6 +627,81 @@ func OwnerIDContainsFold(v string) predicate.Subscriber {
 	return predicate.Subscriber(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
+// TrustCenterIDEQ applies the EQ predicate on the "trust_center_id" field.
+func TrustCenterIDEQ(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDNEQ applies the NEQ predicate on the "trust_center_id" field.
+func TrustCenterIDNEQ(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldNEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIn applies the In predicate on the "trust_center_id" field.
+func TrustCenterIDIn(vs ...string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDNotIn applies the NotIn predicate on the "trust_center_id" field.
+func TrustCenterIDNotIn(vs ...string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldNotIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDGT applies the GT predicate on the "trust_center_id" field.
+func TrustCenterIDGT(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldGT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDGTE applies the GTE predicate on the "trust_center_id" field.
+func TrustCenterIDGTE(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldGTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLT applies the LT predicate on the "trust_center_id" field.
+func TrustCenterIDLT(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldLT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLTE applies the LTE predicate on the "trust_center_id" field.
+func TrustCenterIDLTE(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldLTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContains applies the Contains predicate on the "trust_center_id" field.
+func TrustCenterIDContains(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldContains(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasPrefix applies the HasPrefix predicate on the "trust_center_id" field.
+func TrustCenterIDHasPrefix(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldHasPrefix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasSuffix applies the HasSuffix predicate on the "trust_center_id" field.
+func TrustCenterIDHasSuffix(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldHasSuffix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIsNil applies the IsNil predicate on the "trust_center_id" field.
+func TrustCenterIDIsNil() predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldIsNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDNotNil applies the NotNil predicate on the "trust_center_id" field.
+func TrustCenterIDNotNil() predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldNotNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDEqualFold applies the EqualFold predicate on the "trust_center_id" field.
+func TrustCenterIDEqualFold(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldEqualFold(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContainsFold applies the ContainsFold predicate on the "trust_center_id" field.
+func TrustCenterIDContainsFold(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldContainsFold(FieldTrustCenterID, v))
+}
+
 // EmailEQ applies the EQ predicate on the "email" field.
 func EmailEQ(v string) predicate.Subscriber {
 	return predicate.Subscriber(sql.FieldEQ(FieldEmail, v))
@@ -977,6 +1067,156 @@ func SendAttemptsLTE(v int) predicate.Subscriber {
 	return predicate.Subscriber(sql.FieldLTE(FieldSendAttempts, v))
 }
 
+// ContactIDEQ applies the EQ predicate on the "contact_id" field.
+func ContactIDEQ(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldEQ(FieldContactID, v))
+}
+
+// ContactIDNEQ applies the NEQ predicate on the "contact_id" field.
+func ContactIDNEQ(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldNEQ(FieldContactID, v))
+}
+
+// ContactIDIn applies the In predicate on the "contact_id" field.
+func ContactIDIn(vs ...string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldIn(FieldContactID, vs...))
+}
+
+// ContactIDNotIn applies the NotIn predicate on the "contact_id" field.
+func ContactIDNotIn(vs ...string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldNotIn(FieldContactID, vs...))
+}
+
+// ContactIDGT applies the GT predicate on the "contact_id" field.
+func ContactIDGT(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldGT(FieldContactID, v))
+}
+
+// ContactIDGTE applies the GTE predicate on the "contact_id" field.
+func ContactIDGTE(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldGTE(FieldContactID, v))
+}
+
+// ContactIDLT applies the LT predicate on the "contact_id" field.
+func ContactIDLT(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldLT(FieldContactID, v))
+}
+
+// ContactIDLTE applies the LTE predicate on the "contact_id" field.
+func ContactIDLTE(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldLTE(FieldContactID, v))
+}
+
+// ContactIDContains applies the Contains predicate on the "contact_id" field.
+func ContactIDContains(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldContains(FieldContactID, v))
+}
+
+// ContactIDHasPrefix applies the HasPrefix predicate on the "contact_id" field.
+func ContactIDHasPrefix(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldHasPrefix(FieldContactID, v))
+}
+
+// ContactIDHasSuffix applies the HasSuffix predicate on the "contact_id" field.
+func ContactIDHasSuffix(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldHasSuffix(FieldContactID, v))
+}
+
+// ContactIDIsNil applies the IsNil predicate on the "contact_id" field.
+func ContactIDIsNil() predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldIsNull(FieldContactID))
+}
+
+// ContactIDNotNil applies the NotNil predicate on the "contact_id" field.
+func ContactIDNotNil() predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldNotNull(FieldContactID))
+}
+
+// ContactIDEqualFold applies the EqualFold predicate on the "contact_id" field.
+func ContactIDEqualFold(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldEqualFold(FieldContactID, v))
+}
+
+// ContactIDContainsFold applies the ContainsFold predicate on the "contact_id" field.
+func ContactIDContainsFold(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldContainsFold(FieldContactID, v))
+}
+
+// UserIDEQ applies the EQ predicate on the "user_id" field.
+func UserIDEQ(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldEQ(FieldUserID, v))
+}
+
+// UserIDNEQ applies the NEQ predicate on the "user_id" field.
+func UserIDNEQ(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldNEQ(FieldUserID, v))
+}
+
+// UserIDIn applies the In predicate on the "user_id" field.
+func UserIDIn(vs ...string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldIn(FieldUserID, vs...))
+}
+
+// UserIDNotIn applies the NotIn predicate on the "user_id" field.
+func UserIDNotIn(vs ...string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldNotIn(FieldUserID, vs...))
+}
+
+// UserIDGT applies the GT predicate on the "user_id" field.
+func UserIDGT(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldGT(FieldUserID, v))
+}
+
+// UserIDGTE applies the GTE predicate on the "user_id" field.
+func UserIDGTE(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldGTE(FieldUserID, v))
+}
+
+// UserIDLT applies the LT predicate on the "user_id" field.
+func UserIDLT(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldLT(FieldUserID, v))
+}
+
+// UserIDLTE applies the LTE predicate on the "user_id" field.
+func UserIDLTE(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldLTE(FieldUserID, v))
+}
+
+// UserIDContains applies the Contains predicate on the "user_id" field.
+func UserIDContains(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldContains(FieldUserID, v))
+}
+
+// UserIDHasPrefix applies the HasPrefix predicate on the "user_id" field.
+func UserIDHasPrefix(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldHasPrefix(FieldUserID, v))
+}
+
+// UserIDHasSuffix applies the HasSuffix predicate on the "user_id" field.
+func UserIDHasSuffix(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldHasSuffix(FieldUserID, v))
+}
+
+// UserIDIsNil applies the IsNil predicate on the "user_id" field.
+func UserIDIsNil() predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldIsNull(FieldUserID))
+}
+
+// UserIDNotNil applies the NotNil predicate on the "user_id" field.
+func UserIDNotNil() predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldNotNull(FieldUserID))
+}
+
+// UserIDEqualFold applies the EqualFold predicate on the "user_id" field.
+func UserIDEqualFold(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldEqualFold(FieldUserID, v))
+}
+
+// UserIDContainsFold applies the ContainsFold predicate on the "user_id" field.
+func UserIDContainsFold(v string) predicate.Subscriber {
+	return predicate.Subscriber(sql.FieldContainsFold(FieldUserID, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Subscriber {
 	return predicate.Subscriber(func(s *sql.Selector) {
@@ -1027,6 +1267,122 @@ func HasEventsWith(preds ...predicate.Event) predicate.Subscriber {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Event
 		step.Edge.Schema = schemaConfig.SubscriberEvents
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTrustCenter applies the HasEdge predicate on the "trust_center" edge.
+func HasTrustCenter() predicate.Subscriber {
+	return predicate.Subscriber(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, TrustCenterTable, TrustCenterColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.Subscriber
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustCenterWith applies the HasEdge predicate on the "trust_center" edge with a given conditions (other predicates).
+func HasTrustCenterWith(preds ...predicate.TrustCenter) predicate.Subscriber {
+	return predicate.Subscriber(func(s *sql.Selector) {
+		step := newTrustCenterStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.Subscriber
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasCampaignTargets applies the HasEdge predicate on the "campaign_targets" edge.
+func HasCampaignTargets() predicate.Subscriber {
+	return predicate.Subscriber(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, CampaignTargetsTable, CampaignTargetsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCampaignTargetsWith applies the HasEdge predicate on the "campaign_targets" edge with a given conditions (other predicates).
+func HasCampaignTargetsWith(preds ...predicate.CampaignTarget) predicate.Subscriber {
+	return predicate.Subscriber(func(s *sql.Selector) {
+		step := newCampaignTargetsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasContact applies the HasEdge predicate on the "contact" edge.
+func HasContact() predicate.Subscriber {
+	return predicate.Subscriber(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, ContactTable, ContactColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Contact
+		step.Edge.Schema = schemaConfig.Subscriber
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasContactWith applies the HasEdge predicate on the "contact" edge with a given conditions (other predicates).
+func HasContactWith(preds ...predicate.Contact) predicate.Subscriber {
+	return predicate.Subscriber(func(s *sql.Selector) {
+		step := newContactStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Contact
+		step.Edge.Schema = schemaConfig.Subscriber
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasUser applies the HasEdge predicate on the "user" edge.
+func HasUser() predicate.Subscriber {
+	return predicate.Subscriber(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Subscriber
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasUserWith applies the HasEdge predicate on the "user" edge with a given conditions (other predicates).
+func HasUserWith(preds ...predicate.User) predicate.Subscriber {
+	return predicate.Subscriber(func(s *sql.Selector) {
+		step := newUserStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Subscriber
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

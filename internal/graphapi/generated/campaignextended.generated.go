@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _CampaignCreateWithTargetsPayload_campaign(ctx context.Context, field graphql.CollectedField, obj *model.CampaignCreateWithTargetsPayload) (ret graphql.Marshaler) {
@@ -434,6 +430,9 @@ func (ec *executionContext) _CampaignCreateWithTargetsPayload(ctx context.Contex
 			}
 		case "campaignTargets":
 			out.Values[i] = ec._CampaignCreateWithTargetsPayload_campaignTargets(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

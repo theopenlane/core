@@ -82,6 +82,12 @@ const (
 	EdgeTrustCenterNdaRequests = "trust_center_nda_requests"
 	// EdgeTrustCenterFaqs holds the string denoting the trust_center_faqs edge name in mutations.
 	EdgeTrustCenterFaqs = "trust_center_faqs"
+	// EdgeSubscribers holds the string denoting the subscribers edge name in mutations.
+	EdgeSubscribers = "subscribers"
+	// EdgeEmailTemplates holds the string denoting the email_templates edge name in mutations.
+	EdgeEmailTemplates = "email_templates"
+	// EdgeCampaigns holds the string denoting the campaigns edge name in mutations.
+	EdgeCampaigns = "campaigns"
 	// Table holds the table name of the trustcenter in the database.
 	Table = "trust_centers"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -196,6 +202,27 @@ const (
 	TrustCenterFaqsInverseTable = "trust_center_faqs"
 	// TrustCenterFaqsColumn is the table column denoting the trust_center_faqs relation/edge.
 	TrustCenterFaqsColumn = "trust_center_id"
+	// SubscribersTable is the table that holds the subscribers relation/edge.
+	SubscribersTable = "subscribers"
+	// SubscribersInverseTable is the table name for the Subscriber entity.
+	// It exists in this package in order to avoid circular dependency with the "subscriber" package.
+	SubscribersInverseTable = "subscribers"
+	// SubscribersColumn is the table column denoting the subscribers relation/edge.
+	SubscribersColumn = "trust_center_id"
+	// EmailTemplatesTable is the table that holds the email_templates relation/edge.
+	EmailTemplatesTable = "email_templates"
+	// EmailTemplatesInverseTable is the table name for the EmailTemplate entity.
+	// It exists in this package in order to avoid circular dependency with the "emailtemplate" package.
+	EmailTemplatesInverseTable = "email_templates"
+	// EmailTemplatesColumn is the table column denoting the email_templates relation/edge.
+	EmailTemplatesColumn = "trust_center_id"
+	// CampaignsTable is the table that holds the campaigns relation/edge.
+	CampaignsTable = "campaigns"
+	// CampaignsInverseTable is the table name for the Campaign entity.
+	// It exists in this package in order to avoid circular dependency with the "campaign" package.
+	CampaignsInverseTable = "campaigns"
+	// CampaignsColumn is the table column denoting the campaigns relation/edge.
+	CampaignsColumn = "trust_center_id"
 )
 
 // Columns holds all SQL columns for trustcenter fields.
@@ -545,6 +572,48 @@ func ByTrustCenterFaqs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newTrustCenterFaqsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// BySubscribersCount orders the results by subscribers count.
+func BySubscribersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSubscribersStep(), opts...)
+	}
+}
+
+// BySubscribers orders the results by subscribers terms.
+func BySubscribers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubscribersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEmailTemplatesCount orders the results by email_templates count.
+func ByEmailTemplatesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEmailTemplatesStep(), opts...)
+	}
+}
+
+// ByEmailTemplates orders the results by email_templates terms.
+func ByEmailTemplates(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEmailTemplatesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByCampaignsCount orders the results by campaigns count.
+func ByCampaignsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCampaignsStep(), opts...)
+	}
+}
+
+// ByCampaigns orders the results by campaigns terms.
+func ByCampaigns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -655,6 +724,27 @@ func newTrustCenterFaqsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TrustCenterFaqsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterFaqsTable, TrustCenterFaqsColumn),
+	)
+}
+func newSubscribersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubscribersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, SubscribersTable, SubscribersColumn),
+	)
+}
+func newEmailTemplatesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EmailTemplatesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EmailTemplatesTable, EmailTemplatesColumn),
+	)
+}
+func newCampaignsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CampaignsTable, CampaignsColumn),
 	)
 }
 

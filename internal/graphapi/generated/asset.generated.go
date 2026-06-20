@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _AssetBulkCreatePayload_assets(ctx context.Context, field graphql.CollectedField, obj *model.AssetBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _AssetBulkCreatePayload(ctx context.Context, sel ast
 			out.Values[i] = graphql.MarshalString("AssetBulkCreatePayload")
 		case "assets":
 			out.Values[i] = ec._AssetBulkCreatePayload_assets(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _AssetBulkDeletePayload(ctx context.Context, sel ast
 			}
 		case "error":
 			out.Values[i] = ec._AssetBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _AssetBulkUpdatePayload(ctx context.Context, sel ast
 			out.Values[i] = graphql.MarshalString("AssetBulkUpdatePayload")
 		case "assets":
 			out.Values[i] = ec._AssetBulkUpdatePayload_assets(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._AssetBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _VendorScoringConfigBulkCreatePayload_vendorScoringConfigs(ctx context.Context, field graphql.CollectedField, obj *model.VendorScoringConfigBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _VendorScoringConfigBulkCreatePayload(ctx context.Co
 			out.Values[i] = graphql.MarshalString("VendorScoringConfigBulkCreatePayload")
 		case "vendorScoringConfigs":
 			out.Values[i] = ec._VendorScoringConfigBulkCreatePayload_vendorScoringConfigs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _VendorScoringConfigBulkDeletePayload(ctx context.Co
 			}
 		case "error":
 			out.Values[i] = ec._VendorScoringConfigBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _VendorScoringConfigBulkUpdatePayload(ctx context.Co
 			out.Values[i] = graphql.MarshalString("VendorScoringConfigBulkUpdatePayload")
 		case "vendorScoringConfigs":
 			out.Values[i] = ec._VendorScoringConfigBulkUpdatePayload_vendorScoringConfigs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._VendorScoringConfigBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

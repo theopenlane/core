@@ -464,6 +464,34 @@ func (_c *TrustCenterSettingHistoryCreate) SetNillableNdaApprovalRequired(v *boo
 	return _c
 }
 
+// SetNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field.
+func (_c *TrustCenterSettingHistoryCreate) SetNotifySubscribersOnSubprocessorChange(v bool) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetNotifySubscribersOnSubprocessorChange(v)
+	return _c
+}
+
+// SetNillableNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableNotifySubscribersOnSubprocessorChange(v *bool) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetNotifySubscribersOnSubprocessorChange(*v)
+	}
+	return _c
+}
+
+// SetSubprocessorsNotifiedAt sets the "subprocessors_notified_at" field.
+func (_c *TrustCenterSettingHistoryCreate) SetSubprocessorsNotifiedAt(v time.Time) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetSubprocessorsNotifiedAt(v)
+	return _c
+}
+
+// SetNillableSubprocessorsNotifiedAt sets the "subprocessors_notified_at" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableSubprocessorsNotifiedAt(v *time.Time) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetSubprocessorsNotifiedAt(*v)
+	}
+	return _c
+}
+
 // SetNdaApproverGroupID sets the "nda_approver_group_id" field.
 func (_c *TrustCenterSettingHistoryCreate) SetNdaApproverGroupID(v string) *TrustCenterSettingHistoryCreate {
 	_c.mutation.SetNdaApproverGroupID(v)
@@ -579,6 +607,10 @@ func (_c *TrustCenterSettingHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.NdaApprovalRequired(); !ok {
 		v := trustcentersettinghistory.DefaultNdaApprovalRequired
 		_c.mutation.SetNdaApprovalRequired(v)
+	}
+	if _, ok := _c.mutation.NotifySubscribersOnSubprocessorChange(); !ok {
+		v := trustcentersettinghistory.DefaultNotifySubscribersOnSubprocessorChange
+		_c.mutation.SetNotifySubscribersOnSubprocessorChange(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcentersettinghistory.DefaultID == nil {
@@ -776,6 +808,14 @@ func (_c *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingHist
 	if value, ok := _c.mutation.NdaApprovalRequired(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool, value)
 		_node.NdaApprovalRequired = value
+	}
+	if value, ok := _c.mutation.NotifySubscribersOnSubprocessorChange(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange, field.TypeBool, value)
+		_node.NotifySubscribersOnSubprocessorChange = value
+	}
+	if value, ok := _c.mutation.SubprocessorsNotifiedAt(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldSubprocessorsNotifiedAt, field.TypeTime, value)
+		_node.SubprocessorsNotifiedAt = &value
 	}
 	if value, ok := _c.mutation.NdaApproverGroupID(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldNdaApproverGroupID, field.TypeString, value)

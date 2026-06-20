@@ -50,6 +50,8 @@ const (
 	FieldUserID = "user_id"
 	// FieldGroupID holds the string denoting the group_id field in the database.
 	FieldGroupID = "group_id"
+	// FieldSubscriberID holds the string denoting the subscriber_id field in the database.
+	FieldSubscriberID = "subscriber_id"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
 	// FieldFullName holds the string denoting the full_name field in the database.
@@ -84,6 +86,7 @@ var Columns = []string{
 	FieldContactID,
 	FieldUserID,
 	FieldGroupID,
+	FieldSubscriberID,
 	FieldEmail,
 	FieldFullName,
 	FieldStatus,
@@ -228,6 +231,11 @@ func ByUserID(opts ...sql.OrderTermOption) OrderOption {
 // ByGroupID orders the results by the group_id field.
 func ByGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldGroupID, opts...).ToFunc()
+}
+
+// BySubscriberID orders the results by the subscriber_id field.
+func BySubscriberID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubscriberID, opts...).ToFunc()
 }
 
 // ByEmail orders the results by the email field.

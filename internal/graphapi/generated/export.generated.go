@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _ExportBulkCreatePayload_exports(ctx context.Context, field graphql.CollectedField, obj *model.ExportBulkCreatePayload) (ret graphql.Marshaler) {
@@ -242,6 +238,9 @@ func (ec *executionContext) _ExportBulkCreatePayload(ctx context.Context, sel as
 			out.Values[i] = graphql.MarshalString("ExportBulkCreatePayload")
 		case "exports":
 			out.Values[i] = ec._ExportBulkCreatePayload_exports(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -288,6 +287,9 @@ func (ec *executionContext) _ExportBulkDeletePayload(ctx context.Context, sel as
 			}
 		case "error":
 			out.Values[i] = ec._ExportBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

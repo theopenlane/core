@@ -252,7 +252,7 @@ func HookInviteAccepted() ent.Hook {
 				return nil, err
 			}
 
-			// if this is an ownership transfer, demote the current owner to admin
+			// if this is an ownership transfer, set the current owner to super admin
 			if ownershipTransfer {
 				// find the current owner(s) of the organization
 				currentOwners, err := m.Client().OrgMembership.Query().
@@ -267,15 +267,14 @@ func HookInviteAccepted() ent.Hook {
 					return nil, err
 				}
 
-				// demote all current owners to admin
 				for _, currentOwner := range currentOwners {
-					adminRole := enums.RoleAdmin
+					superAdminRole := enums.RoleSuperAdmin
 					if err := m.Client().OrgMembership.UpdateOneID(currentOwner.ID).
-						SetRole(adminRole).
+						SetRole(superAdminRole).
 						Exec(allowCtx); err != nil {
 						logx.FromContext(ctx).Error().Err(err).
 							Str("user_id", currentOwner.UserID).
-							Msg("unable to demote current owner to admin")
+							Msg("unable to set current owner to super admin")
 						return nil, err
 					}
 				}
@@ -283,7 +282,7 @@ func HookInviteAccepted() ent.Hook {
 				logx.FromContext(ctx).Info().
 					Str("organization_id", ownerID).
 					Str("new_owner_id", userID).
-					Int("demoted_owners", len(currentOwners)).
+					Int("updated_owners", len(currentOwners)).
 					Msg("organization ownership transfer completed")
 			}
 

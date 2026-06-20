@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _ContactBulkCreatePayload_contacts(ctx context.Context, field graphql.CollectedField, obj *model.ContactBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _ContactBulkCreatePayload(ctx context.Context, sel a
 			out.Values[i] = graphql.MarshalString("ContactBulkCreatePayload")
 		case "contacts":
 			out.Values[i] = ec._ContactBulkCreatePayload_contacts(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _ContactBulkDeletePayload(ctx context.Context, sel a
 			}
 		case "error":
 			out.Values[i] = ec._ContactBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _ContactBulkUpdatePayload(ctx context.Context, sel a
 			out.Values[i] = graphql.MarshalString("ContactBulkUpdatePayload")
 		case "contacts":
 			out.Values[i] = ec._ContactBulkUpdatePayload_contacts(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._ContactBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _OrgMembershipBulkCreatePayload_orgMemberships(ctx context.Context, field graphql.CollectedField, obj *model.OrgMembershipBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _OrgMembershipBulkCreatePayload(ctx context.Context,
 			out.Values[i] = graphql.MarshalString("OrgMembershipBulkCreatePayload")
 		case "orgMemberships":
 			out.Values[i] = ec._OrgMembershipBulkCreatePayload_orgMemberships(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _OrgMembershipBulkDeletePayload(ctx context.Context,
 			}
 		case "error":
 			out.Values[i] = ec._OrgMembershipBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _OrgMembershipBulkUpdatePayload(ctx context.Context,
 			out.Values[i] = graphql.MarshalString("OrgMembershipBulkUpdatePayload")
 		case "orgMemberships":
 			out.Values[i] = ec._OrgMembershipBulkUpdatePayload_orgMemberships(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._OrgMembershipBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

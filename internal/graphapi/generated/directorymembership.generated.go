@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _DirectoryMembershipBulkCreatePayload_directoryMemberships(ctx context.Context, field graphql.CollectedField, obj *model.DirectoryMembershipBulkCreatePayload) (ret graphql.Marshaler) {
@@ -173,6 +169,9 @@ func (ec *executionContext) _DirectoryMembershipBulkCreatePayload(ctx context.Co
 			out.Values[i] = graphql.MarshalString("DirectoryMembershipBulkCreatePayload")
 		case "directoryMemberships":
 			out.Values[i] = ec._DirectoryMembershipBulkCreatePayload_directoryMemberships(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

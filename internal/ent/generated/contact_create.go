@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 )
 
 // ContactCreate is the builder for creating a Contact entity.
@@ -350,6 +351,21 @@ func (_c *ContactCreate) AddFiles(v ...*File) *ContactCreate {
 	return _c.AddFileIDs(ids...)
 }
 
+// AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
+func (_c *ContactCreate) AddSubscriberIDs(ids ...string) *ContactCreate {
+	_c.mutation.AddSubscriberIDs(ids...)
+	return _c
+}
+
+// AddSubscribers adds the "subscribers" edges to the Subscriber entity.
+func (_c *ContactCreate) AddSubscribers(v ...*Subscriber) *ContactCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddSubscriberIDs(ids...)
+}
+
 // Mutation returns the ContactMutation object of the builder.
 func (_c *ContactCreate) Mutation() *ContactMutation {
 	return _c.mutation
@@ -634,6 +650,23 @@ func (_c *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.ContactFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SubscribersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contact.SubscribersTable,
+			Columns: []string{contact.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

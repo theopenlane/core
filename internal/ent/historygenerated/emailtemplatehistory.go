@@ -88,7 +88,9 @@ type EmailTemplateHistory struct {
 	WorkflowDefinitionID string `json:"workflow_definition_id,omitempty"`
 	// workflow instance associated with this template
 	WorkflowInstanceID string `json:"workflow_instance_id,omitempty"`
-	selectValues       sql.SelectValues
+	// the trust center this template is associated with, if any
+	TrustCenterID string `json:"trust_center_id,omitempty"`
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -104,7 +106,7 @@ func (*EmailTemplateHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case emailtemplatehistory.FieldVersion:
 			values[i] = new(sql.NullInt64)
-		case emailtemplatehistory.FieldID, emailtemplatehistory.FieldRef, emailtemplatehistory.FieldCreatedBy, emailtemplatehistory.FieldUpdatedBy, emailtemplatehistory.FieldDeletedBy, emailtemplatehistory.FieldRevision, emailtemplatehistory.FieldOwnerID, emailtemplatehistory.FieldInternalNotes, emailtemplatehistory.FieldSystemInternalID, emailtemplatehistory.FieldKey, emailtemplatehistory.FieldName, emailtemplatehistory.FieldDescription, emailtemplatehistory.FieldFormat, emailtemplatehistory.FieldLocale, emailtemplatehistory.FieldSubjectTemplate, emailtemplatehistory.FieldPreheaderTemplate, emailtemplatehistory.FieldBodyTemplate, emailtemplatehistory.FieldTextTemplate, emailtemplatehistory.FieldTemplateContext, emailtemplatehistory.FieldIntegrationID, emailtemplatehistory.FieldWorkflowDefinitionID, emailtemplatehistory.FieldWorkflowInstanceID:
+		case emailtemplatehistory.FieldID, emailtemplatehistory.FieldRef, emailtemplatehistory.FieldCreatedBy, emailtemplatehistory.FieldUpdatedBy, emailtemplatehistory.FieldDeletedBy, emailtemplatehistory.FieldRevision, emailtemplatehistory.FieldOwnerID, emailtemplatehistory.FieldInternalNotes, emailtemplatehistory.FieldSystemInternalID, emailtemplatehistory.FieldKey, emailtemplatehistory.FieldName, emailtemplatehistory.FieldDescription, emailtemplatehistory.FieldFormat, emailtemplatehistory.FieldLocale, emailtemplatehistory.FieldSubjectTemplate, emailtemplatehistory.FieldPreheaderTemplate, emailtemplatehistory.FieldBodyTemplate, emailtemplatehistory.FieldTextTemplate, emailtemplatehistory.FieldTemplateContext, emailtemplatehistory.FieldIntegrationID, emailtemplatehistory.FieldWorkflowDefinitionID, emailtemplatehistory.FieldWorkflowInstanceID, emailtemplatehistory.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case emailtemplatehistory.FieldHistoryTime, emailtemplatehistory.FieldCreatedAt, emailtemplatehistory.FieldUpdatedAt, emailtemplatehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -337,6 +339,12 @@ func (_m *EmailTemplateHistory) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				_m.WorkflowInstanceID = value.String
 			}
+		case emailtemplatehistory.FieldTrustCenterID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
+			} else if value.Valid {
+				_m.TrustCenterID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -475,6 +483,9 @@ func (_m *EmailTemplateHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("workflow_instance_id=")
 	builder.WriteString(_m.WorkflowInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_id=")
+	builder.WriteString(_m.TrustCenterID)
 	builder.WriteByte(')')
 	return builder.String()
 }

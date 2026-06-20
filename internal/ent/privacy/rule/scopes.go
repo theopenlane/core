@@ -2,6 +2,7 @@ package rule
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -86,6 +87,14 @@ func AllowIfTokenHasMutationScope() privacy.MutationRuleFunc {
 
 		// strip history suffix for history tables
 		objectType = strings.TrimSuffix(objectType, "History")
+
+		// run payment check for token creation before CheckSubjectScope fast-allows API token auth,
+		// which would otherwise bypass the RequirePaymentMethod rule in the schema policy
+		if m.Op().Is(ent.OpCreate) && objectType == generated.TypeAPIToken {
+			if err := RequirePaymentMethod()(ctx, m); !errors.Is(err, privacy.Skip) {
+				return err
+			}
+		}
 
 		op := m.Op()
 		return CheckSubjectScope(ctx, objectType, "", &op)

@@ -31,6 +31,8 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
+	FieldTrustCenterID = "trust_center_id"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
 	// FieldPhoneNumber holds the string denoting the phone_number field in the database.
@@ -51,10 +53,22 @@ const (
 	FieldUnsubscribed = "unsubscribed"
 	// FieldSendAttempts holds the string denoting the send_attempts field in the database.
 	FieldSendAttempts = "send_attempts"
+	// FieldContactID holds the string denoting the contact_id field in the database.
+	FieldContactID = "contact_id"
+	// FieldUserID holds the string denoting the user_id field in the database.
+	FieldUserID = "user_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
 	EdgeEvents = "events"
+	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
+	EdgeTrustCenter = "trust_center"
+	// EdgeCampaignTargets holds the string denoting the campaign_targets edge name in mutations.
+	EdgeCampaignTargets = "campaign_targets"
+	// EdgeContact holds the string denoting the contact edge name in mutations.
+	EdgeContact = "contact"
+	// EdgeUser holds the string denoting the user edge name in mutations.
+	EdgeUser = "user"
 	// Table holds the table name of the subscriber in the database.
 	Table = "subscribers"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -69,6 +83,34 @@ const (
 	// EventsInverseTable is the table name for the Event entity.
 	// It exists in this package in order to avoid circular dependency with the "event" package.
 	EventsInverseTable = "events"
+	// TrustCenterTable is the table that holds the trust_center relation/edge.
+	TrustCenterTable = "subscribers"
+	// TrustCenterInverseTable is the table name for the TrustCenter entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenter" package.
+	TrustCenterInverseTable = "trust_centers"
+	// TrustCenterColumn is the table column denoting the trust_center relation/edge.
+	TrustCenterColumn = "trust_center_id"
+	// CampaignTargetsTable is the table that holds the campaign_targets relation/edge.
+	CampaignTargetsTable = "campaign_targets"
+	// CampaignTargetsInverseTable is the table name for the CampaignTarget entity.
+	// It exists in this package in order to avoid circular dependency with the "campaigntarget" package.
+	CampaignTargetsInverseTable = "campaign_targets"
+	// CampaignTargetsColumn is the table column denoting the campaign_targets relation/edge.
+	CampaignTargetsColumn = "subscriber_id"
+	// ContactTable is the table that holds the contact relation/edge.
+	ContactTable = "subscribers"
+	// ContactInverseTable is the table name for the Contact entity.
+	// It exists in this package in order to avoid circular dependency with the "contact" package.
+	ContactInverseTable = "contacts"
+	// ContactColumn is the table column denoting the contact relation/edge.
+	ContactColumn = "contact_id"
+	// UserTable is the table that holds the user relation/edge.
+	UserTable = "subscribers"
+	// UserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	UserInverseTable = "users"
+	// UserColumn is the table column denoting the user relation/edge.
+	UserColumn = "user_id"
 )
 
 // Columns holds all SQL columns for subscriber fields.
@@ -82,6 +124,7 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldTags,
 	FieldOwnerID,
+	FieldTrustCenterID,
 	FieldEmail,
 	FieldPhoneNumber,
 	FieldVerifiedEmail,
@@ -92,6 +135,8 @@ var Columns = []string{
 	FieldSecret,
 	FieldUnsubscribed,
 	FieldSendAttempts,
+	FieldContactID,
+	FieldUserID,
 }
 
 var (
@@ -192,6 +237,11 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
+// ByTrustCenterID orders the results by the trust_center_id field.
+func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
+}
+
 // ByEmail orders the results by the email field.
 func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmail, opts...).ToFunc()
@@ -237,6 +287,16 @@ func BySendAttempts(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSendAttempts, opts...).ToFunc()
 }
 
+// ByContactID orders the results by the contact_id field.
+func ByContactID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldContactID, opts...).ToFunc()
+}
+
+// ByUserID orders the results by the user_id field.
+func ByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUserID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -257,6 +317,41 @@ func ByEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newEventsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByTrustCenterField orders the results by trust_center field.
+func ByTrustCenterField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByCampaignTargetsCount orders the results by campaign_targets count.
+func ByCampaignTargetsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCampaignTargetsStep(), opts...)
+	}
+}
+
+// ByCampaignTargets orders the results by campaign_targets terms.
+func ByCampaignTargets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignTargetsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByContactField orders the results by contact field.
+func ByContactField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newContactStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByUserField orders the results by user field.
+func ByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUserStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -269,5 +364,33 @@ func newEventsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EventsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
+	)
+}
+func newTrustCenterStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, TrustCenterTable, TrustCenterColumn),
+	)
+}
+func newCampaignTargetsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignTargetsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CampaignTargetsTable, CampaignTargetsColumn),
+	)
+}
+func newContactStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ContactInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ContactTable, ContactColumn),
+	)
+}
+func newUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(UserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
 	)
 }

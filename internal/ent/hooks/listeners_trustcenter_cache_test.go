@@ -60,10 +60,12 @@ func TestBuildTrustCenterURL(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			oldConfig := trustCenterConfig
-			defer func() { trustCenterConfig = oldConfig }()
+			defer func() { SetTrustCenterConfig(oldConfig) }()
 
-			trustCenterConfig.DefaultTrustCenterDomain = tt.defaultDomain
-			trustCenterConfig.CacheRefreshScheme = tt.scheme
+			SetTrustCenterConfig(TrustCenterConfig{
+				DefaultTrustCenterDomain: tt.defaultDomain,
+				CacheRefreshScheme:       tt.scheme,
+			})
 
 			result := buildTrustCenterURL(tt.customDomain, tt.slug)
 			assert.Equal(t, tt.expected, result)

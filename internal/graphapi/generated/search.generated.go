@@ -25,10 +25,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _SearchResults_page(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
@@ -1465,88 +1461,214 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			}
 		case "actionPlans":
 			out.Values[i] = ec._SearchResults_actionPlans(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "assessments":
 			out.Values[i] = ec._SearchResults_assessments(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "assessmentResponses":
 			out.Values[i] = ec._SearchResults_assessmentResponses(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "assets":
 			out.Values[i] = ec._SearchResults_assets(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "campaigns":
 			out.Values[i] = ec._SearchResults_campaigns(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "campaignTargets":
 			out.Values[i] = ec._SearchResults_campaignTargets(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "contacts":
 			out.Values[i] = ec._SearchResults_contacts(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "controls":
 			out.Values[i] = ec._SearchResults_controls(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "controlObjectives":
 			out.Values[i] = ec._SearchResults_controlObjectives(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "customTypeEnums":
 			out.Values[i] = ec._SearchResults_customTypeEnums(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "emailTemplates":
 			out.Values[i] = ec._SearchResults_emailTemplates(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "entities":
 			out.Values[i] = ec._SearchResults_entities(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "evidences":
 			out.Values[i] = ec._SearchResults_evidences(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "findings":
 			out.Values[i] = ec._SearchResults_findings(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "groups":
 			out.Values[i] = ec._SearchResults_groups(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "identityHolders":
 			out.Values[i] = ec._SearchResults_identityHolders(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "integrations":
 			out.Values[i] = ec._SearchResults_integrations(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "internalPolicies":
 			out.Values[i] = ec._SearchResults_internalPolicies(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "invites":
 			out.Values[i] = ec._SearchResults_invites(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "jobRunners":
 			out.Values[i] = ec._SearchResults_jobRunners(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "jobTemplates":
 			out.Values[i] = ec._SearchResults_jobTemplates(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "narratives":
 			out.Values[i] = ec._SearchResults_narratives(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "notificationTemplates":
 			out.Values[i] = ec._SearchResults_notificationTemplates(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "organizations":
 			out.Values[i] = ec._SearchResults_organizations(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "platforms":
 			out.Values[i] = ec._SearchResults_platforms(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "procedures":
 			out.Values[i] = ec._SearchResults_procedures(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "programs":
 			out.Values[i] = ec._SearchResults_programs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "remediations":
 			out.Values[i] = ec._SearchResults_remediations(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "reviews":
 			out.Values[i] = ec._SearchResults_reviews(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "risks":
 			out.Values[i] = ec._SearchResults_risks(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "scans":
 			out.Values[i] = ec._SearchResults_scans(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "standards":
 			out.Values[i] = ec._SearchResults_standards(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "subcontrols":
 			out.Values[i] = ec._SearchResults_subcontrols(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "subprocessors":
 			out.Values[i] = ec._SearchResults_subprocessors(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "subscribers":
 			out.Values[i] = ec._SearchResults_subscribers(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "systemDetails":
 			out.Values[i] = ec._SearchResults_systemDetails(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "tagDefinitions":
 			out.Values[i] = ec._SearchResults_tagDefinitions(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "tasks":
 			out.Values[i] = ec._SearchResults_tasks(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "templates":
 			out.Values[i] = ec._SearchResults_templates(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "trustCenterEntities":
 			out.Values[i] = ec._SearchResults_trustCenterEntities(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "vulnerabilities":
 			out.Values[i] = ec._SearchResults_vulnerabilities(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "searchContext":
 			out.Values[i] = ec._SearchResults_searchContext(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _UserBulkCreatePayload_users(ctx context.Context, field graphql.CollectedField, obj *model.UserBulkCreatePayload) (ret graphql.Marshaler) {
@@ -173,6 +169,9 @@ func (ec *executionContext) _UserBulkCreatePayload(ctx context.Context, sel ast.
 			out.Values[i] = graphql.MarshalString("UserBulkCreatePayload")
 		case "users":
 			out.Values[i] = ec._UserBulkCreatePayload_users(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

@@ -219,6 +219,20 @@ func (_c *CampaignTargetHistoryCreate) SetNillableGroupID(v *string) *CampaignTa
 	return _c
 }
 
+// SetSubscriberID sets the "subscriber_id" field.
+func (_c *CampaignTargetHistoryCreate) SetSubscriberID(v string) *CampaignTargetHistoryCreate {
+	_c.mutation.SetSubscriberID(v)
+	return _c
+}
+
+// SetNillableSubscriberID sets the "subscriber_id" field if the given value is not nil.
+func (_c *CampaignTargetHistoryCreate) SetNillableSubscriberID(v *string) *CampaignTargetHistoryCreate {
+	if v != nil {
+		_c.SetSubscriberID(*v)
+	}
+	return _c
+}
+
 // SetEmail sets the "email" field.
 func (_c *CampaignTargetHistoryCreate) SetEmail(v string) *CampaignTargetHistoryCreate {
 	_c.mutation.SetEmail(v)
@@ -499,6 +513,10 @@ func (_c *CampaignTargetHistoryCreate) createSpec() (*CampaignTargetHistory, *sq
 	if value, ok := _c.mutation.GroupID(); ok {
 		_spec.SetField(campaigntargethistory.FieldGroupID, field.TypeString, value)
 		_node.GroupID = value
+	}
+	if value, ok := _c.mutation.SubscriberID(); ok {
+		_spec.SetField(campaigntargethistory.FieldSubscriberID, field.TypeString, value)
+		_node.SubscriberID = value
 	}
 	if value, ok := _c.mutation.Email(); ok {
 		_spec.SetField(campaigntargethistory.FieldEmail, field.TypeString, value)

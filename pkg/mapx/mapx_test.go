@@ -162,6 +162,50 @@ func TestMapSetFromSlice(t *testing.T) {
 	}
 }
 
+func TestAppendOnce(t *testing.T) {
+	tests := []struct {
+		name string
+		ops  []struct{ key, val string }
+		want map[string][]string
+	}{
+		{
+			name: "first occurrence is appended",
+			ops:  []struct{ key, val string }{{"a", "x"}},
+			want: map[string][]string{"a": {"x"}},
+		},
+		{
+			name: "duplicate key is skipped",
+			ops:  []struct{ key, val string }{{"a", "x"}, {"a", "y"}},
+			want: map[string][]string{"a": {"x"}},
+		},
+		{
+			name: "distinct keys each appended",
+			ops:  []struct{ key, val string }{{"a", "x"}, {"b", "y"}},
+			want: map[string][]string{"a": {"x"}, "b": {"y"}},
+		},
+		{
+			name: "empty ops produces empty map",
+			ops:  []struct{ key, val string }{},
+			want: map[string][]string{},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			m := map[string][]string{}
+			seen := map[string]struct{}{}
+
+			for _, op := range tt.ops {
+				AppendOnce(op.key, op.val, m, seen)
+			}
+
+			if !reflect.DeepEqual(tt.want, m) {
+				t.Fatalf("expected %v, got %v", tt.want, m)
+			}
+		})
+	}
+}
+
 func TestMapIntersectionUnique(t *testing.T) {
 	tests := []struct {
 		name  string
@@ -184,4 +228,47 @@ func TestMapIntersectionUnique(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestGetOrInit(t *testing.T) {
+	type val struct{ n int }
+
+	t.Run("initializes missing key", func(t *testing.T) {
+		m := map[string]*val{}
+		got := GetOrInit(m, "a", func() *val { return &val{n: 1} })
+		if got == nil {
+			t.Fatal("expected non-nil value")
+		}
+		if got.n != 1 {
+			t.Fatalf("expected n=1, got n=%d", got.n)
+		}
+		if m["a"] != got {
+			t.Fatal("expected map entry to point to returned value")
+		}
+	})
+
+	t.Run("returns existing value without calling init", func(t *testing.T) {
+		existing := &val{n: 42}
+		m := map[string]*val{"a": existing}
+		calls := 0
+		got := GetOrInit(m, "a", func() *val { calls++; return &val{n: 99} })
+		if got != existing {
+			t.Fatalf("expected existing value, got %v", got)
+		}
+		if calls != 0 {
+			t.Fatalf("expected init not to be called, got %d calls", calls)
+		}
+	})
+
+	t.Run("independent keys do not interfere", func(t *testing.T) {
+		m := map[string]*val{}
+		a := GetOrInit(m, "a", func() *val { return &val{n: 1} })
+		b := GetOrInit(m, "b", func() *val { return &val{n: 2} })
+		if a == b {
+			t.Fatal("expected distinct pointers for different keys")
+		}
+		if a.n != 1 || b.n != 2 {
+			t.Fatalf("expected a.n=1 b.n=2, got a.n=%d b.n=%d", a.n, b.n)
+		}
+	})
 }

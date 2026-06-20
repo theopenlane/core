@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _GroupSettingBulkCreatePayload_groupSettings(ctx context.Context, field graphql.CollectedField, obj *model.GroupSettingBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _GroupSettingBulkCreatePayload(ctx context.Context, 
 			out.Values[i] = graphql.MarshalString("GroupSettingBulkCreatePayload")
 		case "groupSettings":
 			out.Values[i] = ec._GroupSettingBulkCreatePayload_groupSettings(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _GroupSettingBulkDeletePayload(ctx context.Context, 
 			}
 		case "error":
 			out.Values[i] = ec._GroupSettingBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _GroupSettingBulkUpdatePayload(ctx context.Context, 
 			out.Values[i] = graphql.MarshalString("GroupSettingBulkUpdatePayload")
 		case "groupSettings":
 			out.Values[i] = ec._GroupSettingBulkUpdatePayload_groupSettings(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._GroupSettingBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

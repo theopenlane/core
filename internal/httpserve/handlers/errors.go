@@ -38,6 +38,8 @@ var (
 	ErrUnverifiedUser = errors.New("user is not verified")
 	// ErrUnableToVerifyEmail is returned when user's email is not able to be verified
 	ErrUnableToVerifyEmail = errors.New("could not verify email")
+	// ErrUnableToUnsubscribe is returned when a subscriber cannot be unsubscribed
+	ErrUnableToUnsubscribe = errors.New("could not unsubscribe")
 	// ErrMaxAttempts is returned when user has requested the max retry attempts to verify their email
 	ErrMaxAttempts = errors.New("max attempts verifying email address")
 	// ErrNoEmailFound is returned when using an oauth provider and the email address cannot be determined

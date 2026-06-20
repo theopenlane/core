@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
@@ -49,6 +50,8 @@ type CampaignTarget struct {
 	UserID string `json:"user_id,omitempty"`
 	// the group associated with the campaign target
 	GroupID string `json:"group_id,omitempty"`
+	// the trust center subscriber this target was generated from, if any
+	SubscriberID string `json:"subscriber_id,omitempty"`
 	// the email address targeted by the campaign
 	Email string `json:"email,omitempty"`
 	// the name of the campaign target, if known
@@ -79,13 +82,15 @@ type CampaignTargetEdges struct {
 	User *User `json:"user,omitempty"`
 	// Group holds the value of the group edge.
 	Group *Group `json:"group,omitempty"`
+	// Subscriber holds the value of the subscriber edge.
+	Subscriber *Subscriber `json:"subscriber,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [7]map[string]int
 
 	namedWorkflowObjectRefs map[string][]*WorkflowObjectRef
 }
@@ -145,10 +150,21 @@ func (e CampaignTargetEdges) GroupOrErr() (*Group, error) {
 	return nil, &NotLoadedError{edge: "group"}
 }
 
+// SubscriberOrErr returns the Subscriber value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e CampaignTargetEdges) SubscriberOrErr() (*Subscriber, error) {
+	if e.Subscriber != nil {
+		return e.Subscriber, nil
+	} else if e.loadedTypes[5] {
+		return nil, &NotFoundError{label: subscriber.Label}
+	}
+	return nil, &NotLoadedError{edge: "subscriber"}
+}
+
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignTargetEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -165,7 +181,7 @@ func (*CampaignTarget) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case campaigntarget.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case campaigntarget.FieldID, campaigntarget.FieldCreatedBy, campaigntarget.FieldUpdatedBy, campaigntarget.FieldDeletedBy, campaigntarget.FieldOwnerID, campaigntarget.FieldCampaignID, campaigntarget.FieldContactID, campaigntarget.FieldUserID, campaigntarget.FieldGroupID, campaigntarget.FieldEmail, campaigntarget.FieldFullName, campaigntarget.FieldStatus:
+		case campaigntarget.FieldID, campaigntarget.FieldCreatedBy, campaigntarget.FieldUpdatedBy, campaigntarget.FieldDeletedBy, campaigntarget.FieldOwnerID, campaigntarget.FieldCampaignID, campaigntarget.FieldContactID, campaigntarget.FieldUserID, campaigntarget.FieldGroupID, campaigntarget.FieldSubscriberID, campaigntarget.FieldEmail, campaigntarget.FieldFullName, campaigntarget.FieldStatus:
 			values[i] = new(sql.NullString)
 		case campaigntarget.FieldCreatedAt, campaigntarget.FieldUpdatedAt, campaigntarget.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -262,6 +278,12 @@ func (_m *CampaignTarget) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.GroupID = value.String
 			}
+		case campaigntarget.FieldSubscriberID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field subscriber_id", values[i])
+			} else if value.Valid {
+				_m.SubscriberID = value.String
+			}
 		case campaigntarget.FieldEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field email", values[i])
@@ -340,6 +362,11 @@ func (_m *CampaignTarget) QueryGroup() *GroupQuery {
 	return NewCampaignTargetClient(_m.config).QueryGroup(_m)
 }
 
+// QuerySubscriber queries the "subscriber" edge of the CampaignTarget entity.
+func (_m *CampaignTarget) QuerySubscriber() *SubscriberQuery {
+	return NewCampaignTargetClient(_m.config).QuerySubscriber(_m)
+}
+
 // QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the CampaignTarget entity.
 func (_m *CampaignTarget) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 	return NewCampaignTargetClient(_m.config).QueryWorkflowObjectRefs(_m)
@@ -403,6 +430,9 @@ func (_m *CampaignTarget) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("group_id=")
 	builder.WriteString(_m.GroupID)
+	builder.WriteString(", ")
+	builder.WriteString("subscriber_id=")
+	builder.WriteString(_m.SubscriberID)
 	builder.WriteString(", ")
 	builder.WriteString("email=")
 	builder.WriteString(_m.Email)

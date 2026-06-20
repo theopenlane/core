@@ -4547,6 +4547,10 @@ type Campaign implements Node {
   the email branding associated with the campaign
   """
   emailBrandingID: String
+  """
+  the trust center this campaign sends updates for, if any
+  """
+  trustCenterID: ID
   owner: Organization
   blockedGroups(
     """
@@ -4648,6 +4652,7 @@ type Campaign implements Node {
   integration: Integration
   emailTemplate: EmailTemplate
   entity: Entity
+  trustCenter: TrustCenter
   campaignTargets(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -4916,6 +4921,7 @@ enum CampaignCampaignType @goModel(model: "github.com/theopenlane/core/common/en
   POLICY_ATTESTATION
   VENDOR_ASSESSMENT
   CUSTOM
+  TRUST_CENTER_UPDATE
 }
 """
 A connection to a list of items.
@@ -5029,6 +5035,10 @@ type CampaignTarget implements Node {
   """
   groupID: ID
   """
+  the trust center subscriber this target was generated from, if any
+  """
+  subscriberID: ID
+  """
   the email address targeted by the campaign
   """
   email: String!
@@ -5057,6 +5067,7 @@ type CampaignTarget implements Node {
   contact: Contact
   user: User
   group: Group
+  subscriber: Subscriber
   workflowObjectRefs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -5333,6 +5344,24 @@ input CampaignTargetWhereInput {
   groupIDEqualFold: ID
   groupIDContainsFold: ID
   """
+  subscriber_id field predicates
+  """
+  subscriberID: ID
+  subscriberIDNEQ: ID
+  subscriberIDIn: [ID!]
+  subscriberIDNotIn: [ID!]
+  subscriberIDGT: ID
+  subscriberIDGTE: ID
+  subscriberIDLT: ID
+  subscriberIDLTE: ID
+  subscriberIDContains: ID
+  subscriberIDHasPrefix: ID
+  subscriberIDHasSuffix: ID
+  subscriberIDIsNil: Boolean
+  subscriberIDNotNil: Boolean
+  subscriberIDEqualFold: ID
+  subscriberIDContainsFold: ID
+  """
   email field predicates
   """
   email: String
@@ -5424,6 +5453,11 @@ input CampaignTargetWhereInput {
   """
   hasGroup: Boolean
   hasGroupWith: [GroupWhereInput!]
+  """
+  subscriber edge predicates
+  """
+  hasSubscriber: Boolean
+  hasSubscriberWith: [SubscriberWhereInput!]
   """
   workflow_object_refs edge predicates
   """
@@ -5945,6 +5979,24 @@ input CampaignWhereInput {
   emailBrandingIDEqualFold: String
   emailBrandingIDContainsFold: String
   """
+  trust_center_id field predicates
+  """
+  trustCenterID: ID
+  trustCenterIDNEQ: ID
+  trustCenterIDIn: [ID!]
+  trustCenterIDNotIn: [ID!]
+  trustCenterIDGT: ID
+  trustCenterIDGTE: ID
+  trustCenterIDLT: ID
+  trustCenterIDLTE: ID
+  trustCenterIDContains: ID
+  trustCenterIDHasPrefix: ID
+  trustCenterIDHasSuffix: ID
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: ID
+  trustCenterIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -5999,6 +6051,11 @@ input CampaignWhereInput {
   """
   hasEntity: Boolean
   hasEntityWith: [EntityWhereInput!]
+  """
+  trust_center edge predicates
+  """
+  hasTrustCenter: Boolean
+  hasTrustCenterWith: [TrustCenterWhereInput!]
   """
   campaign_targets edge predicates
   """
@@ -6708,6 +6765,37 @@ type Contact implements Node {
     """
     where: FileWhereInput
   ): FileConnection!
+  subscribers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subscribers returned from the connection.
+    """
+    orderBy: [SubscriberOrder!]
+
+    """
+    Filtering options for Subscribers returned from the connection.
+    """
+    where: SubscriberWhereInput
+  ): SubscriberConnection!
 }
 """
 A connection to a list of items.
@@ -7067,6 +7155,11 @@ input ContactWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  subscribers edge predicates
+  """
+  hasSubscribers: Boolean
+  hasSubscribersWith: [SubscriberWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -11062,6 +11155,7 @@ input CreateCampaignInput {
   integrationID: ID
   emailTemplateID: ID
   entityID: ID
+  trustCenterID: ID
   campaignTargetIDs: [ID!]
   assessmentResponseIDs: [ID!]
   contactIDs: [ID!]
@@ -11109,6 +11203,7 @@ input CreateCampaignTargetInput {
   contactID: ID
   userID: ID
   groupID: ID
+  subscriberID: ID
   workflowObjectRefIDs: [ID!]
 }
 """
@@ -11205,6 +11300,7 @@ input CreateContactInput {
   campaignIDs: [ID!]
   campaignTargetIDs: [ID!]
   fileIDs: [ID!]
+  subscriberIDs: [ID!]
 }
 """
 CreateControlImplementationInput is used for create ControlImplementation object.
@@ -12149,6 +12245,7 @@ input CreateEmailTemplateInput {
   integrationID: ID
   workflowDefinitionID: ID
   workflowInstanceID: ID
+  trustCenterID: ID
   campaignIDs: [ID!]
   notificationTemplateIDs: [ID!]
   fileIDs: [ID!]
@@ -13353,7 +13450,7 @@ input CreateInviteInput {
   """
   sendAttempts: Int
   """
-  indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+  indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes super admin and invitee becomes owner
   """
   ownershipTransfer: Boolean
   ownerID: ID
@@ -13641,6 +13738,10 @@ input CreateNoteInput {
   whether the note has been edited
   """
   isEdited: Boolean
+  """
+  when set on a trust center post, sends the published update to the trust center's subscribers
+  """
+  notifySubscribers: Boolean
   ownerID: ID
   taskID: ID
   controlID: ID
@@ -15471,6 +15572,10 @@ input CreateSubscriberInput {
   phoneNumber: String
   ownerID: ID
   eventIDs: [ID!]
+  trustCenterID: ID
+  campaignTargetIDs: [ID!]
+  contactID: ID
+  userID: ID
 }
 """
 CreateSystemDetailInput is used for create SystemDetail object.
@@ -15847,6 +15952,9 @@ input CreateTrustCenterInput {
   trustCenterEntityIDs: [ID!]
   trustCenterNdaRequestIDs: [ID!]
   trustCenterFaqIDs: [ID!]
+  subscriberIDs: [ID!]
+  emailTemplateIDs: [ID!]
+  campaignIDs: [ID!]
 }
 """
 CreateTrustCenterNDARequestInput is used for create TrustCenterNDARequest object.
@@ -15981,6 +16089,10 @@ input CreateTrustCenterSettingInput {
   whether NDA requests require approval before being processed
   """
   ndaApprovalRequired: Boolean
+  """
+  whether to email trust center subscribers when subprocessors are added, updated, or removed
+  """
+  notifySubscribersOnSubprocessorChange: Boolean
   """
   URL to the company's status page
   """
@@ -16125,6 +16237,7 @@ input CreateUserInput {
   personalAccessTokenIDs: [ID!]
   tfaSettingIDs: [ID!]
   settingID: ID!
+  subscriberIDs: [ID!]
   groupIDs: [ID!]
   organizationIDs: [ID!]
   webauthnIDs: [ID!]
@@ -21889,6 +22002,10 @@ type EmailTemplate implements Node {
   workflow instance associated with this template
   """
   workflowInstanceID: ID
+  """
+  the trust center this template is associated with, if any
+  """
+  trustCenterID: ID
   owner: Organization
   blockedGroups(
     """
@@ -21986,6 +22103,7 @@ type EmailTemplate implements Node {
   integration: Integration
   workflowDefinition: WorkflowDefinition
   workflowInstance: WorkflowInstance
+  trustCenter: TrustCenter
   campaigns(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -22544,6 +22662,24 @@ input EmailTemplateWhereInput {
   workflowInstanceIDEqualFold: ID
   workflowInstanceIDContainsFold: ID
   """
+  trust_center_id field predicates
+  """
+  trustCenterID: ID
+  trustCenterIDNEQ: ID
+  trustCenterIDIn: [ID!]
+  trustCenterIDNotIn: [ID!]
+  trustCenterIDGT: ID
+  trustCenterIDGTE: ID
+  trustCenterIDLT: ID
+  trustCenterIDLTE: ID
+  trustCenterIDContains: ID
+  trustCenterIDHasPrefix: ID
+  trustCenterIDHasSuffix: ID
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: ID
+  trustCenterIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -22578,6 +22714,11 @@ input EmailTemplateWhereInput {
   """
   hasWorkflowInstance: Boolean
   hasWorkflowInstanceWith: [WorkflowInstanceWhereInput!]
+  """
+  trust_center edge predicates
+  """
+  hasTrustCenter: Boolean
+  hasTrustCenterWith: [TrustCenterWhereInput!]
   """
   campaigns edge predicates
   """
@@ -37344,7 +37485,7 @@ type Invite implements Node {
   """
   sendAttempts: Int!
   """
-  indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+  indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes super admin and invitee becomes owner
   """
   ownershipTransfer: Boolean
   owner: Organization
@@ -40690,6 +40831,14 @@ type Note implements Node {
   the trust center this note belongs to, if applicable
   """
   trustCenterID: ID
+  """
+  when set on a trust center post, sends the published update to the trust center's subscribers
+  """
+  notifySubscribers: Boolean
+  """
+  when subscribers were notified about this post
+  """
+  notifiedAt: Time
   owner: Organization
   task: Task
   control: Control
@@ -41023,6 +41172,26 @@ input NoteWhereInput {
   trustCenterIDNotNil: Boolean
   trustCenterIDEqualFold: ID
   trustCenterIDContainsFold: ID
+  """
+  notify_subscribers field predicates
+  """
+  notifySubscribers: Boolean
+  notifySubscribersNEQ: Boolean
+  notifySubscribersIsNil: Boolean
+  notifySubscribersNotNil: Boolean
+  """
+  notified_at field predicates
+  """
+  notifiedAt: Time
+  notifiedAtNEQ: Time
+  notifiedAtIn: [Time!]
+  notifiedAtNotIn: [Time!]
+  notifiedAtGT: Time
+  notifiedAtGTE: Time
+  notifiedAtLT: Time
+  notifiedAtLTE: Time
+  notifiedAtIsNil: Boolean
+  notifiedAtNotNil: Boolean
   """
   owner edge predicates
   """
@@ -66841,6 +67010,10 @@ type Subscriber implements Node {
   """
   ownerID: ID
   """
+  the trust center the subscriber is subscribed to, null for legacy organization-level subscribers
+  """
+  trustCenterID: ID
+  """
   email address of the subscriber
   """
   email: String!
@@ -66868,6 +67041,14 @@ type Subscriber implements Node {
   the number of attempts made to perform email send of the subscription, maximum of 5
   """
   sendAttempts: Int!
+  """
+  the contact record matched to this subscriber by email, set automatically when a matching contact exists
+  """
+  contactID: ID
+  """
+  the user matched to this subscriber by email, set automatically when a matching user exists
+  """
+  userID: ID
   owner: Organization
   events(
     """
@@ -66900,6 +67081,40 @@ type Subscriber implements Node {
     """
     where: EventWhereInput
   ): EventConnection!
+  trustCenter: TrustCenter
+  campaignTargets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CampaignTargets returned from the connection.
+    """
+    orderBy: [CampaignTargetOrder!]
+
+    """
+    Filtering options for CampaignTargets returned from the connection.
+    """
+    where: CampaignTargetWhereInput
+  ): CampaignTargetConnection!
+  contact: Contact
+  user: User
 }
 """
 A connection to a list of items.
@@ -67057,6 +67272,24 @@ input SubscriberWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  trust_center_id field predicates
+  """
+  trustCenterID: ID
+  trustCenterIDNEQ: ID
+  trustCenterIDIn: [ID!]
+  trustCenterIDNotIn: [ID!]
+  trustCenterIDGT: ID
+  trustCenterIDGTE: ID
+  trustCenterIDLT: ID
+  trustCenterIDLTE: ID
+  trustCenterIDContains: ID
+  trustCenterIDHasPrefix: ID
+  trustCenterIDHasSuffix: ID
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: ID
+  trustCenterIDContainsFold: ID
+  """
   email field predicates
   """
   email: String
@@ -67122,6 +67355,42 @@ input SubscriberWhereInput {
   sendAttemptsLT: Int
   sendAttemptsLTE: Int
   """
+  contact_id field predicates
+  """
+  contactID: ID
+  contactIDNEQ: ID
+  contactIDIn: [ID!]
+  contactIDNotIn: [ID!]
+  contactIDGT: ID
+  contactIDGTE: ID
+  contactIDLT: ID
+  contactIDLTE: ID
+  contactIDContains: ID
+  contactIDHasPrefix: ID
+  contactIDHasSuffix: ID
+  contactIDIsNil: Boolean
+  contactIDNotNil: Boolean
+  contactIDEqualFold: ID
+  contactIDContainsFold: ID
+  """
+  user_id field predicates
+  """
+  userID: ID
+  userIDNEQ: ID
+  userIDIn: [ID!]
+  userIDNotIn: [ID!]
+  userIDGT: ID
+  userIDGTE: ID
+  userIDLT: ID
+  userIDLTE: ID
+  userIDContains: ID
+  userIDHasPrefix: ID
+  userIDHasSuffix: ID
+  userIDIsNil: Boolean
+  userIDNotNil: Boolean
+  userIDEqualFold: ID
+  userIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -67131,6 +67400,26 @@ input SubscriberWhereInput {
   """
   hasEvents: Boolean
   hasEventsWith: [EventWhereInput!]
+  """
+  trust_center edge predicates
+  """
+  hasTrustCenter: Boolean
+  hasTrustCenterWith: [TrustCenterWhereInput!]
+  """
+  campaign_targets edge predicates
+  """
+  hasCampaignTargets: Boolean
+  hasCampaignTargetsWith: [CampaignTargetWhereInput!]
+  """
+  contact edge predicates
+  """
+  hasContact: Boolean
+  hasContactWith: [ContactWhereInput!]
+  """
+  user edge predicates
+  """
+  hasUser: Boolean
+  hasUserWith: [UserWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -70279,6 +70568,99 @@ type TrustCenter implements Node {
     """
     where: TrustCenterFAQWhereInput
   ): TrustCenterFAQConnection!
+  subscribers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subscribers returned from the connection.
+    """
+    orderBy: [SubscriberOrder!]
+
+    """
+    Filtering options for Subscribers returned from the connection.
+    """
+    where: SubscriberWhereInput
+  ): SubscriberConnection!
+  emailTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EmailTemplates returned from the connection.
+    """
+    orderBy: [EmailTemplateOrder!]
+
+    """
+    Filtering options for EmailTemplates returned from the connection.
+    """
+    where: EmailTemplateWhereInput
+  ): EmailTemplateConnection!
+  campaigns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
 }
 type TrustCenterCompliance implements Node {
   id: ID!
@@ -72397,6 +72779,14 @@ type TrustCenterSetting implements Node {
   """
   ndaApprovalRequired: Boolean
   """
+  whether to email trust center subscribers when subprocessors are added, updated, or removed
+  """
+  notifySubscribersOnSubprocessorChange: Boolean
+  """
+  watermark of the most recent subprocessor change subscribers have been notified about
+  """
+  subprocessorsNotifiedAt: Time
+  """
   group whose members approve trust center NDA requests
   """
   ndaApproverGroupID: ID
@@ -72992,6 +73382,26 @@ input TrustCenterSettingWhereInput {
   ndaApprovalRequiredNEQ: Boolean
   ndaApprovalRequiredIsNil: Boolean
   ndaApprovalRequiredNotNil: Boolean
+  """
+  notify_subscribers_on_subprocessor_change field predicates
+  """
+  notifySubscribersOnSubprocessorChange: Boolean
+  notifySubscribersOnSubprocessorChangeNEQ: Boolean
+  notifySubscribersOnSubprocessorChangeIsNil: Boolean
+  notifySubscribersOnSubprocessorChangeNotNil: Boolean
+  """
+  subprocessors_notified_at field predicates
+  """
+  subprocessorsNotifiedAt: Time
+  subprocessorsNotifiedAtNEQ: Time
+  subprocessorsNotifiedAtIn: [Time!]
+  subprocessorsNotifiedAtNotIn: [Time!]
+  subprocessorsNotifiedAtGT: Time
+  subprocessorsNotifiedAtGTE: Time
+  subprocessorsNotifiedAtLT: Time
+  subprocessorsNotifiedAtLTE: Time
+  subprocessorsNotifiedAtIsNil: Boolean
+  subprocessorsNotifiedAtNotNil: Boolean
   """
   nda_approver_group_id field predicates
   """
@@ -74148,6 +74558,21 @@ input TrustCenterWhereInput {
   hasTrustCenterFaqs: Boolean
   hasTrustCenterFaqsWith: [TrustCenterFAQWhereInput!]
   """
+  subscribers edge predicates
+  """
+  hasSubscribers: Boolean
+  hasSubscribersWith: [SubscriberWhereInput!]
+  """
+  email_templates edge predicates
+  """
+  hasEmailTemplates: Boolean
+  hasEmailTemplatesWith: [EmailTemplateWhereInput!]
+  """
+  campaigns edge predicates
+  """
+  hasCampaigns: Boolean
+  hasCampaignsWith: [CampaignWhereInput!]
+  """
   Filter for tagsHas to contain a specific value
   """
   tagsHas: String
@@ -74856,6 +75281,8 @@ input UpdateCampaignInput {
   clearEmailTemplate: Boolean
   entityID: ID
   clearEntity: Boolean
+  trustCenterID: ID
+  clearTrustCenter: Boolean
   addCampaignTargetIDs: [ID!]
   removeCampaignTargetIDs: [ID!]
   clearCampaignTargets: Boolean
@@ -74926,6 +75353,8 @@ input UpdateCampaignTargetInput {
   clearUser: Boolean
   groupID: ID
   clearGroup: Boolean
+  subscriberID: ID
+  clearSubscriber: Boolean
   addWorkflowObjectRefIDs: [ID!]
   removeWorkflowObjectRefIDs: [ID!]
   clearWorkflowObjectRefs: Boolean
@@ -75059,6 +75488,9 @@ input UpdateContactInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  addSubscriberIDs: [ID!]
+  removeSubscriberIDs: [ID!]
+  clearSubscribers: Boolean
 }
 """
 UpdateControlImplementationInput is used for update ControlImplementation object.
@@ -76285,6 +76717,8 @@ input UpdateEmailTemplateInput {
   clearWorkflowDefinition: Boolean
   workflowInstanceID: ID
   clearWorkflowInstance: Boolean
+  trustCenterID: ID
+  clearTrustCenter: Boolean
   addCampaignIDs: [ID!]
   removeCampaignIDs: [ID!]
   clearCampaigns: Boolean
@@ -78073,7 +78507,7 @@ input UpdateInviteInput {
   """
   sendAttempts: Int
   """
-  indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+  indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes super admin and invitee becomes owner
   """
   ownershipTransfer: Boolean
   clearOwnershipTransfer: Boolean
@@ -81197,6 +81631,13 @@ input UpdateSubscriberInput {
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
+  addCampaignTargetIDs: [ID!]
+  removeCampaignTargetIDs: [ID!]
+  clearCampaignTargets: Boolean
+  contactID: ID
+  clearContact: Boolean
+  userID: ID
+  clearUser: Boolean
 }
 """
 UpdateSystemDetailInput is used for update SystemDetail object.
@@ -81727,6 +82168,15 @@ input UpdateTrustCenterInput {
   addTrustCenterFaqIDs: [ID!]
   removeTrustCenterFaqIDs: [ID!]
   clearTrustCenterFaqs: Boolean
+  addSubscriberIDs: [ID!]
+  removeSubscriberIDs: [ID!]
+  clearSubscribers: Boolean
+  addEmailTemplateIDs: [ID!]
+  removeEmailTemplateIDs: [ID!]
+  clearEmailTemplates: Boolean
+  addCampaignIDs: [ID!]
+  removeCampaignIDs: [ID!]
+  clearCampaigns: Boolean
 }
 """
 UpdateTrustCenterNDARequestInput is used for update TrustCenterNDARequest object.
@@ -81895,6 +82345,11 @@ input UpdateTrustCenterSettingInput {
   """
   ndaApprovalRequired: Boolean
   clearNdaApprovalRequired: Boolean
+  """
+  whether to email trust center subscribers when subprocessors are added, updated, or removed
+  """
+  notifySubscribersOnSubprocessorChange: Boolean
+  clearNotifySubscribersOnSubprocessorChange: Boolean
   """
   URL to the company's status page
   """
@@ -82083,6 +82538,9 @@ input UpdateUserInput {
   removeTfaSettingIDs: [ID!]
   clearTfaSettings: Boolean
   settingID: ID
+  addSubscriberIDs: [ID!]
+  removeSubscriberIDs: [ID!]
+  clearSubscribers: Boolean
   addGroupIDs: [ID!]
   removeGroupIDs: [ID!]
   clearGroups: Boolean
@@ -82809,6 +83267,37 @@ type User implements Node {
     where: TFASettingWhereInput
   ): TFASettingConnection!
   setting: UserSetting!
+  subscribers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subscribers returned from the connection.
+    """
+    orderBy: [SubscriberOrder!]
+
+    """
+    Filtering options for Subscribers returned from the connection.
+    """
+    where: SubscriberWhereInput
+  ): SubscriberConnection!
   groups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -84103,6 +84592,11 @@ input UserWhereInput {
   """
   hasSetting: Boolean
   hasSettingWith: [UserSettingWhereInput!]
+  """
+  subscribers edge predicates
+  """
+  hasSubscribers: Boolean
+  hasSubscribersWith: [SubscriberWhereInput!]
   """
   groups edge predicates
   """

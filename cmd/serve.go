@@ -278,7 +278,7 @@ func serve(ctx context.Context) error {
 	// add auth and integration options
 	so.AddServerOptions(
 		serveropts.WithAuth(),
-		serveropts.WithIntegrationsRuntime(dbClient),
+		serveropts.WithIntegrationsRuntime(ctx, dbClient),
 	)
 
 	// add session manager
@@ -309,6 +309,10 @@ func serve(ctx context.Context) error {
 
 		if err := rt.SeedPaymentReminders(ctx); err != nil {
 			log.Error().Err(err).Msg("failed to seed payment reminder listener")
+		}
+
+		if err := rt.SeedTrustCenterNotifications(ctx); err != nil {
+			log.Error().Err(err).Msg("failed to seed trust center notification listener")
 		}
 	}
 

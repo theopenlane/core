@@ -7,7 +7,10 @@ import (
 	"time"
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
+	"github.com/samber/lo"
 	"github.com/theopenlane/newman/providers/mock"
+
+	"github.com/theopenlane/core/internal/ent/generated"
 )
 
 // MockRuntimeConfig returns a RuntimeEmailConfig backed by the mock provider
@@ -51,6 +54,36 @@ func MockSenderFromClient(client any) *mock.EmailSender {
 	}
 
 	return ms
+}
+
+// TrustCenterSettingFixture returns a sample trust center setting with branding populated, used to
+// preview and test what a trust center update email looks like with customer branding applied
+func TrustCenterSettingFixture() *generated.TrustCenterSetting {
+	return &generated.TrustCenterSetting{
+		CompanyName:              "SecureCorp",
+		LogoRemoteURL:            lo.ToPtr("https://securecorp.example.com/logo.png"),
+		PrimaryColor:             "#0f3d3a",
+		AccentColor:              "#3fc2b4",
+		BackgroundColor:          "#e8eaed",
+		SecondaryBackgroundColor: "#ffffff",
+		ForegroundColor:          "#14171e",
+	}
+}
+
+// TrustCenterUpdateTemplateFixture returns a sample email template configured for a trust center
+// update, with branded message content and a tokenized unsubscribe link
+func TrustCenterUpdateTemplateFixture() *generated.EmailTemplate {
+	return &generated.EmailTemplate{
+		Key: "BrandedMessageRequest",
+		Defaults: map[string]any{
+			"subject":        "{{ .companyName }} trust center update",
+			"title":          "Hi {{ .firstName }}, an update from {{ .companyName }}",
+			"intros":         []any{"We've updated our subprocessor list.", "Review the changes in our trust center."},
+			"buttonText":     "View Trust Center",
+			"buttonLink":     "https://securecorp.example.com/trust",
+			"unsubscribeURL": "https://securecorp.example.com/unsubscribe?token={{ .unsubscribeToken }}",
+		},
+	}
 }
 
 // TestRecipient returns a RecipientInfo with the given email and placeholder name fields

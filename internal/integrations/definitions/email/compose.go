@@ -184,6 +184,14 @@ func loadCampaignWithTargets(ctx context.Context, db *generated.Client, input Ca
 		return nil, nil, 0, ErrCampaignNotFound
 	}
 
+	// trust center update campaigns derive their targets from the trust center's active subscribers;
+	// snapshot them at dispatch time so manual launches and automated triggers behave identically
+	if err := snapshotTrustCenterSubscribers(ctx, db, camp); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", input.CampaignID).Msg("failed snapshotting trust center subscribers")
+
+		return nil, nil, 0, err
+	}
+
 	targets, err := db.CampaignTarget.Query().
 		Where(campaigntarget.CampaignIDEQ(input.CampaignID)).
 		All(ctx)

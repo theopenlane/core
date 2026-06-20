@@ -2737,7 +2737,9 @@ type Campaign struct {
 	// the email integration used for campaign dispatch
 	IntegrationID *string `json:"integrationID,omitempty"`
 	// the email branding associated with the campaign
-	EmailBrandingID     *string                       `json:"emailBrandingID,omitempty"`
+	EmailBrandingID *string `json:"emailBrandingID,omitempty"`
+	// the trust center this campaign sends updates for, if any
+	TrustCenterID       *string                       `json:"trustCenterID,omitempty"`
 	Owner               *Organization                 `json:"owner,omitempty"`
 	BlockedGroups       *GroupConnection              `json:"blockedGroups"`
 	Editors             *GroupConnection              `json:"editors"`
@@ -2749,6 +2751,7 @@ type Campaign struct {
 	Integration         *Integration                  `json:"integration,omitempty"`
 	EmailTemplate       *EmailTemplate                `json:"emailTemplate,omitempty"`
 	Entity              *Entity                       `json:"entity,omitempty"`
+	TrustCenter         *TrustCenter                  `json:"trustCenter,omitempty"`
 	CampaignTargets     *CampaignTargetConnection     `json:"campaignTargets"`
 	AssessmentResponses *AssessmentResponseConnection `json:"assessmentResponses"`
 	Contacts            *ContactConnection            `json:"contacts"`
@@ -2849,6 +2852,8 @@ type CampaignTarget struct {
 	UserID *string `json:"userID,omitempty"`
 	// the group associated with the campaign target
 	GroupID *string `json:"groupID,omitempty"`
+	// the trust center subscriber this target was generated from, if any
+	SubscriberID *string `json:"subscriberID,omitempty"`
 	// the email address targeted by the campaign
 	Email string `json:"email"`
 	// the name of the campaign target, if known
@@ -2866,6 +2871,7 @@ type CampaignTarget struct {
 	Contact            *Contact                     `json:"contact,omitempty"`
 	User               *User                        `json:"user,omitempty"`
 	Group              *Group                       `json:"group,omitempty"`
+	Subscriber         *Subscriber                  `json:"subscriber,omitempty"`
 	WorkflowObjectRefs *WorkflowObjectRefConnection `json:"workflowObjectRefs"`
 	// Indicates if this campaignTarget has pending changes awaiting workflow approval
 	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
@@ -3083,6 +3089,22 @@ type CampaignTargetWhereInput struct {
 	GroupIDNotNil       *bool    `json:"groupIDNotNil,omitempty"`
 	GroupIDEqualFold    *string  `json:"groupIDEqualFold,omitempty"`
 	GroupIDContainsFold *string  `json:"groupIDContainsFold,omitempty"`
+	// subscriber_id field predicates
+	SubscriberID             *string  `json:"subscriberID,omitempty"`
+	SubscriberIdneq          *string  `json:"subscriberIDNEQ,omitempty"`
+	SubscriberIDIn           []string `json:"subscriberIDIn,omitempty"`
+	SubscriberIDNotIn        []string `json:"subscriberIDNotIn,omitempty"`
+	SubscriberIdgt           *string  `json:"subscriberIDGT,omitempty"`
+	SubscriberIdgte          *string  `json:"subscriberIDGTE,omitempty"`
+	SubscriberIdlt           *string  `json:"subscriberIDLT,omitempty"`
+	SubscriberIdlte          *string  `json:"subscriberIDLTE,omitempty"`
+	SubscriberIDContains     *string  `json:"subscriberIDContains,omitempty"`
+	SubscriberIDHasPrefix    *string  `json:"subscriberIDHasPrefix,omitempty"`
+	SubscriberIDHasSuffix    *string  `json:"subscriberIDHasSuffix,omitempty"`
+	SubscriberIDIsNil        *bool    `json:"subscriberIDIsNil,omitempty"`
+	SubscriberIDNotNil       *bool    `json:"subscriberIDNotNil,omitempty"`
+	SubscriberIDEqualFold    *string  `json:"subscriberIDEqualFold,omitempty"`
+	SubscriberIDContainsFold *string  `json:"subscriberIDContainsFold,omitempty"`
 	// email field predicates
 	Email             *string  `json:"email,omitempty"`
 	EmailNeq          *string  `json:"emailNEQ,omitempty"`
@@ -3155,6 +3177,9 @@ type CampaignTargetWhereInput struct {
 	// group edge predicates
 	HasGroup     *bool              `json:"hasGroup,omitempty"`
 	HasGroupWith []*GroupWhereInput `json:"hasGroupWith,omitempty"`
+	// subscriber edge predicates
+	HasSubscriber     *bool                   `json:"hasSubscriber,omitempty"`
+	HasSubscriberWith []*SubscriberWhereInput `json:"hasSubscriberWith,omitempty"`
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
@@ -3616,6 +3641,22 @@ type CampaignWhereInput struct {
 	EmailBrandingIDNotNil       *bool    `json:"emailBrandingIDNotNil,omitempty"`
 	EmailBrandingIDEqualFold    *string  `json:"emailBrandingIDEqualFold,omitempty"`
 	EmailBrandingIDContainsFold *string  `json:"emailBrandingIDContainsFold,omitempty"`
+	// trust_center_id field predicates
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIdgt           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIdgte          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIdlt           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIdlte          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        *bool    `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -3649,6 +3690,9 @@ type CampaignWhereInput struct {
 	// entity edge predicates
 	HasEntity     *bool               `json:"hasEntity,omitempty"`
 	HasEntityWith []*EntityWhereInput `json:"hasEntityWith,omitempty"`
+	// trust_center edge predicates
+	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
+	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
 	// campaign_targets edge predicates
 	HasCampaignTargets     *bool                       `json:"hasCampaignTargets,omitempty"`
 	HasCampaignTargetsWith []*CampaignTargetWhereInput `json:"hasCampaignTargetsWith,omitempty"`
@@ -4051,6 +4095,7 @@ type Contact struct {
 	Campaigns       *CampaignConnection       `json:"campaigns"`
 	CampaignTargets *CampaignTargetConnection `json:"campaignTargets"`
 	Files           *FileConnection           `json:"files"`
+	Subscribers     *SubscriberConnection     `json:"subscribers"`
 }
 
 func (Contact) IsNode() {}
@@ -4369,6 +4414,9 @@ type ContactWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// subscribers edge predicates
+	HasSubscribers     *bool                   `json:"hasSubscribers,omitempty"`
+	HasSubscribersWith []*SubscriberWhereInput `json:"hasSubscribersWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -4520,6 +4568,8 @@ type Control struct {
 	ActiveWorkflowInstances []*WorkflowInstance `json:"activeWorkflowInstances"`
 	// Returns the workflow event timeline for this control across all workflow instances
 	WorkflowTimeline *WorkflowEventConnection `json:"workflowTimeline"`
+	// relatedControls show the controls and frameworks mapped to this control
+	RelatedControls []*ControlInfo `json:"relatedControls,omitempty"`
 }
 
 func (Control) IsNode() {}
@@ -4637,6 +4687,18 @@ type ControlEdge struct {
 	Node *Control `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// ControlEvidence summarizes the evidence status across all evidence linked to a control
+type ControlEvidence struct {
+	// total number of evidence items linked to the control
+	TotalCount int64 `json:"totalCount"`
+	// the most severe evidence status among all linked evidence items
+	WorstStatus *enums.EvidenceStatus `json:"worstStatus,omitempty"`
+	// number of evidence items with auditor-approved status
+	ApprovedCount int64 `json:"approvedCount"`
+	// breakdown of evidence item counts by status
+	CountByStatus []*EvidenceCountByStatus `json:"countByStatus,omitempty"`
 }
 
 // ControlFieldDiff describes a single field that differs between two control revisions
@@ -4969,6 +5031,30 @@ type ControlImplementationWhereInput struct {
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
+}
+
+// ControlInfo provides a lightweight summary of a control or subcontrol, used when referencing related controls
+type ControlInfo struct {
+	// unique identifier of the control
+	ID string `json:"id"`
+	// the unique reference code for the control
+	RefCode string `json:"refCode"`
+	// description of what the control is supposed to accomplish
+	Description *string `json:"description,omitempty"`
+	// human readable title of the control for quick identification
+	Title *string `json:"title,omitempty"`
+	// status of the control
+	Status *enums.ControlStatus `json:"status,omitempty"`
+	// the group of users who are responsible for the control, will be assigned tasks, approval, etc.
+	ControlOwner *Group `json:"controlOwner,omitempty"`
+	// the reference framework this control belongs to, e.g. SOC2, ISO27001
+	ReferenceFramework *string `json:"referenceFramework,omitempty"`
+	// category of the control
+	Category *string `json:"category,omitempty"`
+	// subcategory of the control
+	Subcategory *string `json:"subcategory,omitempty"`
+	// whether this entry is a subcontrol rather than a top-level control
+	IsSubcontrol bool `json:"isSubcontrol"`
 }
 
 type ControlObjective struct {
@@ -5387,6 +5473,83 @@ type ControlOrder struct {
 	Direction OrderDirection `json:"direction"`
 	// The field by which to order Controls.
 	Field ControlOrderField `json:"field"`
+}
+
+// ControlPolicies summarizes the internal policies linked to a control
+type ControlPolicies struct {
+	// total number of policies linked to the control
+	TotalCount int64 `json:"totalCount"`
+	// the policies linked to the control
+	InternalPolicies []*PolicySummary `json:"internalPolicies,omitempty"`
+}
+
+// ControlReport is a custom resolver that is used to show detailed, but selective information about
+// an organizations controls vs. the standards
+type ControlReport struct {
+	// unique identifier of the control
+	ID string `json:"id"`
+	// the unique reference code for the control
+	RefCode string `json:"refCode"`
+	// description of what the control is supposed to accomplish
+	Description *string `json:"description,omitempty"`
+	// human readable title of the control for quick identification
+	Title *string `json:"title,omitempty"`
+	// status of the control
+	Status *enums.ControlStatus `json:"status,omitempty"`
+	// the group of users who are responsible for the control, will be assigned tasks, approval, etc.
+	ControlOwner *Group `json:"controlOwner,omitempty"`
+	// the reference framework this control belongs to, e.g. SOC2, ISO27001
+	ReferenceFramework *string `json:"referenceFramework,omitempty"`
+	// category of the control
+	Category *string `json:"category,omitempty"`
+	// subcategory of the control
+	Subcategory *string `json:"subcategory,omitempty"`
+	// controls from other frameworks that map to this control
+	RelatedControls []*ControlInfo `json:"relatedControls,omitempty"`
+	// aggregated evidence status across all evidence linked to this control
+	EvidenceStatus *ControlEvidence `json:"evidenceStatus,omitempty"`
+	// internal policies linked to this control
+	LinkedPolicies *ControlPolicies `json:"linkedPolicies,omitempty"`
+	// child subcontrols nested under this control
+	Subcontrols []*ControlReport `json:"subcontrols,omitempty"`
+}
+
+func (ControlReport) IsNode() {}
+
+// ControlReportCategory groups control reports by their category
+type ControlReportCategory struct {
+	// the category name; empty string when controls have no category assigned
+	Category string `json:"category"`
+	// total number of controls in this category
+	TotalCount int64 `json:"totalCount"`
+	// controls belonging to this category
+	Controls []*ControlReport `json:"controls"`
+}
+
+// A connection to a list of items.
+type ControlReportConnection struct {
+	// A list of edges.
+	Edges []*ControlReportEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// An edge in a connection.
+type ControlReportEdge struct {
+	// The item at the end of the edge.
+	Node *ControlReport `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// Ordering options for ControlReport connections
+type ControlReportOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order ControlReport.
+	Field ControlReportOrderField `json:"field"`
 }
 
 // Return response for updateControl mutation
@@ -6400,6 +6563,7 @@ type CreateCampaignInput struct {
 	IntegrationID         *string  `json:"integrationID,omitempty"`
 	EmailTemplateID       *string  `json:"emailTemplateID,omitempty"`
 	EntityID              *string  `json:"entityID,omitempty"`
+	TrustCenterID         *string  `json:"trustCenterID,omitempty"`
 	CampaignTargetIDs     []string `json:"campaignTargetIDs,omitempty"`
 	AssessmentResponseIDs []string `json:"assessmentResponseIDs,omitempty"`
 	ContactIDs            []string `json:"contactIDs,omitempty"`
@@ -6432,6 +6596,7 @@ type CreateCampaignTargetInput struct {
 	ContactID            *string        `json:"contactID,omitempty"`
 	UserID               *string        `json:"userID,omitempty"`
 	GroupID              *string        `json:"groupID,omitempty"`
+	SubscriberID         *string        `json:"subscriberID,omitempty"`
 	WorkflowObjectRefIDs []string       `json:"workflowObjectRefIDs,omitempty"`
 }
 
@@ -6498,6 +6663,7 @@ type CreateContactInput struct {
 	CampaignIDs       []string         `json:"campaignIDs,omitempty"`
 	CampaignTargetIDs []string         `json:"campaignTargetIDs,omitempty"`
 	FileIDs           []string         `json:"fileIDs,omitempty"`
+	SubscriberIDs     []string         `json:"subscriberIDs,omitempty"`
 }
 
 // CreateControlImplementationInput is used for create ControlImplementation object.
@@ -7065,6 +7231,7 @@ type CreateEmailTemplateInput struct {
 	IntegrationID           *string        `json:"integrationID,omitempty"`
 	WorkflowDefinitionID    *string        `json:"workflowDefinitionID,omitempty"`
 	WorkflowInstanceID      *string        `json:"workflowInstanceID,omitempty"`
+	TrustCenterID           *string        `json:"trustCenterID,omitempty"`
 	CampaignIDs             []string       `json:"campaignIDs,omitempty"`
 	NotificationTemplateIDs []string       `json:"notificationTemplateIDs,omitempty"`
 	FileIDs                 []string       `json:"fileIDs,omitempty"`
@@ -7825,7 +7992,7 @@ type CreateInviteInput struct {
 	Role   *enums.Role         `json:"role,omitempty"`
 	// the number of attempts made to perform email send of the invitation, maximum of 5
 	SendAttempts *int64 `json:"sendAttempts,omitempty"`
-	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes super admin and invitee becomes owner
 	OwnershipTransfer *bool    `json:"ownershipTransfer,omitempty"`
 	OwnerID           *string  `json:"ownerID,omitempty"`
 	EventIDs          []string `json:"eventIDs,omitempty"`
@@ -8015,7 +8182,9 @@ type CreateNoteInput struct {
 	// ref location of the note
 	NoteRef *string `json:"noteRef,omitempty"`
 	// whether the note has been edited
-	IsEdited          *bool    `json:"isEdited,omitempty"`
+	IsEdited *bool `json:"isEdited,omitempty"`
+	// when set on a trust center post, sends the published update to the trust center's subscribers
+	NotifySubscribers *bool    `json:"notifySubscribers,omitempty"`
 	OwnerID           *string  `json:"ownerID,omitempty"`
 	TaskID            *string  `json:"taskID,omitempty"`
 	ControlID         *string  `json:"controlID,omitempty"`
@@ -9202,9 +9371,13 @@ type CreateSubscriberInput struct {
 	// email address of the subscriber
 	Email string `json:"email"`
 	// phone number of the subscriber
-	PhoneNumber *string  `json:"phoneNumber,omitempty"`
-	OwnerID     *string  `json:"ownerID,omitempty"`
-	EventIDs    []string `json:"eventIDs,omitempty"`
+	PhoneNumber       *string  `json:"phoneNumber,omitempty"`
+	OwnerID           *string  `json:"ownerID,omitempty"`
+	EventIDs          []string `json:"eventIDs,omitempty"`
+	TrustCenterID     *string  `json:"trustCenterID,omitempty"`
+	CampaignTargetIDs []string `json:"campaignTargetIDs,omitempty"`
+	ContactID         *string  `json:"contactID,omitempty"`
+	UserID            *string  `json:"userID,omitempty"`
 }
 
 // CreateSystemDetailInput is used for create SystemDetail object.
@@ -9460,6 +9633,9 @@ type CreateTrustCenterInput struct {
 	TrustCenterEntityIDs       []string                       `json:"trustCenterEntityIDs,omitempty"`
 	TrustCenterNdaRequestIDs   []string                       `json:"trustCenterNdaRequestIDs,omitempty"`
 	TrustCenterFaqIDs          []string                       `json:"trustCenterFaqIDs,omitempty"`
+	SubscriberIDs              []string                       `json:"subscriberIDs,omitempty"`
+	EmailTemplateIDs           []string                       `json:"emailTemplateIDs,omitempty"`
+	CampaignIDs                []string                       `json:"campaignIDs,omitempty"`
 	CreateTrustCenterSetting   *CreateTrustCenterSettingInput `json:"createTrustCenterSetting,omitempty"`
 }
 
@@ -9572,6 +9748,8 @@ type CreateTrustCenterSettingInput struct {
 	SecurityContact *string `json:"securityContact,omitempty"`
 	// whether NDA requests require approval before being processed
 	NdaApprovalRequired *bool `json:"ndaApprovalRequired,omitempty"`
+	// whether to email trust center subscribers when subprocessors are added, updated, or removed
+	NotifySubscribersOnSubprocessorChange *bool `json:"notifySubscribersOnSubprocessorChange,omitempty"`
 	// URL to the company's status page
 	StatusPageURL      *string  `json:"statusPageURL,omitempty"`
 	BlockedGroupIDs    []string `json:"blockedGroupIDs,omitempty"`
@@ -9661,6 +9839,7 @@ type CreateUserInput struct {
 	PersonalAccessTokenIDs   []string `json:"personalAccessTokenIDs,omitempty"`
 	TfaSettingIDs            []string `json:"tfaSettingIDs,omitempty"`
 	SettingID                string   `json:"settingID"`
+	SubscriberIDs            []string `json:"subscriberIDs,omitempty"`
 	GroupIDs                 []string `json:"groupIDs,omitempty"`
 	OrganizationIDs          []string `json:"organizationIDs,omitempty"`
 	WebauthnIDs              []string `json:"webauthnIDs,omitempty"`
@@ -13559,7 +13738,9 @@ type EmailTemplate struct {
 	// workflow definition associated with this template
 	WorkflowDefinitionID *string `json:"workflowDefinitionID,omitempty"`
 	// workflow instance associated with this template
-	WorkflowInstanceID    *string                         `json:"workflowInstanceID,omitempty"`
+	WorkflowInstanceID *string `json:"workflowInstanceID,omitempty"`
+	// the trust center this template is associated with, if any
+	TrustCenterID         *string                         `json:"trustCenterID,omitempty"`
 	Owner                 *Organization                   `json:"owner,omitempty"`
 	BlockedGroups         *GroupConnection                `json:"blockedGroups"`
 	Editors               *GroupConnection                `json:"editors"`
@@ -13567,6 +13748,7 @@ type EmailTemplate struct {
 	Integration           *Integration                    `json:"integration,omitempty"`
 	WorkflowDefinition    *WorkflowDefinition             `json:"workflowDefinition,omitempty"`
 	WorkflowInstance      *WorkflowInstance               `json:"workflowInstance,omitempty"`
+	TrustCenter           *TrustCenter                    `json:"trustCenter,omitempty"`
 	Campaigns             *CampaignConnection             `json:"campaigns"`
 	NotificationTemplates *NotificationTemplateConnection `json:"notificationTemplates"`
 	Files                 *FileConnection                 `json:"files"`
@@ -14014,6 +14196,22 @@ type EmailTemplateWhereInput struct {
 	WorkflowInstanceIDNotNil       *bool    `json:"workflowInstanceIDNotNil,omitempty"`
 	WorkflowInstanceIDEqualFold    *string  `json:"workflowInstanceIDEqualFold,omitempty"`
 	WorkflowInstanceIDContainsFold *string  `json:"workflowInstanceIDContainsFold,omitempty"`
+	// trust_center_id field predicates
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIdgt           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIdgte          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIdlt           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIdlte          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        *bool    `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -14035,6 +14233,9 @@ type EmailTemplateWhereInput struct {
 	// workflow_instance edge predicates
 	HasWorkflowInstance     *bool                         `json:"hasWorkflowInstance,omitempty"`
 	HasWorkflowInstanceWith []*WorkflowInstanceWhereInput `json:"hasWorkflowInstanceWith,omitempty"`
+	// trust_center edge predicates
+	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
+	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
 	// campaigns edge predicates
 	HasCampaigns     *bool                 `json:"hasCampaigns,omitempty"`
 	HasCampaignsWith []*CampaignWhereInput `json:"hasCampaignsWith,omitempty"`
@@ -15730,6 +15931,14 @@ type EvidenceConnection struct {
 	// Information to aid in pagination.
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// EvidenceCountByStatus pairs an evidence status with the number of evidence items in that state
+type EvidenceCountByStatus struct {
+	// the evidence status value
+	Status enums.EvidenceStatus `json:"status"`
+	// number of evidence items with this status
 	TotalCount int64 `json:"totalCount"`
 }
 
@@ -21467,7 +21676,7 @@ type Invite struct {
 	Role   enums.Role         `json:"role"`
 	// the number of attempts made to perform email send of the invitation, maximum of 5
 	SendAttempts int64 `json:"sendAttempts"`
-	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes super admin and invitee becomes owner
 	OwnershipTransfer *bool            `json:"ownershipTransfer,omitempty"`
 	Owner             *Organization    `json:"owner,omitempty"`
 	Events            *EventConnection `json:"events"`
@@ -23809,7 +24018,11 @@ type Note struct {
 	// whether the note has been edited
 	IsEdited bool `json:"isEdited"`
 	// the trust center this note belongs to, if applicable
-	TrustCenterID   *string                   `json:"trustCenterID,omitempty"`
+	TrustCenterID *string `json:"trustCenterID,omitempty"`
+	// when set on a trust center post, sends the published update to the trust center's subscribers
+	NotifySubscribers *bool `json:"notifySubscribers,omitempty"`
+	// when subscribers were notified about this post
+	NotifiedAt      *time.Time                `json:"notifiedAt,omitempty"`
 	Owner           *Organization             `json:"owner,omitempty"`
 	Task            *Task                     `json:"task,omitempty"`
 	Control         *Control                  `json:"control,omitempty"`
@@ -24040,6 +24253,22 @@ type NoteWhereInput struct {
 	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
 	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
 	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+	// notify_subscribers field predicates
+	NotifySubscribers       *bool `json:"notifySubscribers,omitempty"`
+	NotifySubscribersNeq    *bool `json:"notifySubscribersNEQ,omitempty"`
+	NotifySubscribersIsNil  *bool `json:"notifySubscribersIsNil,omitempty"`
+	NotifySubscribersNotNil *bool `json:"notifySubscribersNotNil,omitempty"`
+	// notified_at field predicates
+	NotifiedAt       *time.Time   `json:"notifiedAt,omitempty"`
+	NotifiedAtNeq    *time.Time   `json:"notifiedAtNEQ,omitempty"`
+	NotifiedAtIn     []*time.Time `json:"notifiedAtIn,omitempty"`
+	NotifiedAtNotIn  []*time.Time `json:"notifiedAtNotIn,omitempty"`
+	NotifiedAtGt     *time.Time   `json:"notifiedAtGT,omitempty"`
+	NotifiedAtGte    *time.Time   `json:"notifiedAtGTE,omitempty"`
+	NotifiedAtLt     *time.Time   `json:"notifiedAtLT,omitempty"`
+	NotifiedAtLte    *time.Time   `json:"notifiedAtLTE,omitempty"`
+	NotifiedAtIsNil  *bool        `json:"notifiedAtIsNil,omitempty"`
+	NotifiedAtNotNil *bool        `json:"notifiedAtNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -28291,6 +28520,18 @@ type PlatformWhereInput struct {
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
+// PolicySummary provides a lightweight summary of an internal policy
+type PolicySummary struct {
+	// unique identifier of the policy
+	ID string `json:"id"`
+	// the name of the policy
+	Name string `json:"name"`
+	// status of the policy, e.g. draft, published, archived, etc.
+	Status enums.DocumentStatus `json:"status"`
+}
+
+func (PolicySummary) IsNode() {}
+
 type Procedure struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -29629,6 +29870,34 @@ type ReassignWorkflowAssignmentInput struct {
 	ID string `json:"id"`
 	// New targets for the assignment
 	Targets []*WorkflowAssignmentTargetInput `json:"targets"`
+}
+
+// A connection to a list of items.
+type RelatedControlConnection struct {
+	// A list of edges.
+	Edges []*RelatedControlEdge `json:"edges,omitempty"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// An edge in a connection.
+type RelatedControlEdge struct {
+	// The item at the end of the edge.
+	Node *Control `json:"node"`
+}
+
+// A connection to a list of items.
+type RelatedSubcontrolConnection struct {
+	// A list of edges.
+	Edges []*RelatedSubcontrolEdge `json:"edges,omitempty"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// An edge in a connection.
+type RelatedSubcontrolEdge struct {
+	// The item at the end of the edge.
+	Node *Subcontrol `json:"node"`
 }
 
 type Remediation struct {
@@ -33677,6 +33946,8 @@ type Subcontrol struct {
 	Assets                 *AssetConnection                 `json:"assets"`
 	Entities               *EntityConnection                `json:"entities"`
 	IdentityHolders        *IdentityHolderConnection        `json:"identityHolders"`
+	// relatedControls show the controls and frameworks mapped to this control
+	RelatedControls []*ControlInfo `json:"relatedControls,omitempty"`
 	// Indicates if this subcontrol has pending changes awaiting workflow approval
 	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
 	// Indicates if this subcontrol has any workflow history (completed or failed instances)
@@ -34645,6 +34916,8 @@ type Subscriber struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// the trust center the subscriber is subscribed to, null for legacy organization-level subscribers
+	TrustCenterID *string `json:"trustCenterID,omitempty"`
 	// email address of the subscriber
 	Email string `json:"email"`
 	// phone number of the subscriber
@@ -34658,9 +34931,17 @@ type Subscriber struct {
 	// indicates if the subscriber has unsubscribed from communications
 	Unsubscribed bool `json:"unsubscribed"`
 	// the number of attempts made to perform email send of the subscription, maximum of 5
-	SendAttempts int64            `json:"sendAttempts"`
-	Owner        *Organization    `json:"owner,omitempty"`
-	Events       *EventConnection `json:"events"`
+	SendAttempts int64 `json:"sendAttempts"`
+	// the contact record matched to this subscriber by email, set automatically when a matching contact exists
+	ContactID *string `json:"contactID,omitempty"`
+	// the user matched to this subscriber by email, set automatically when a matching user exists
+	UserID          *string                   `json:"userID,omitempty"`
+	Owner           *Organization             `json:"owner,omitempty"`
+	Events          *EventConnection          `json:"events"`
+	TrustCenter     *TrustCenter              `json:"trustCenter,omitempty"`
+	CampaignTargets *CampaignTargetConnection `json:"campaignTargets"`
+	Contact         *Contact                  `json:"contact,omitempty"`
+	User            *User                     `json:"user,omitempty"`
 }
 
 func (Subscriber) IsNode() {}
@@ -34802,6 +35083,22 @@ type SubscriberWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// trust_center_id field predicates
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIdgt           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIdgte          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIdlt           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIdlte          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        *bool    `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
 	// email field predicates
 	Email             *string  `json:"email,omitempty"`
 	EmailNeq          *string  `json:"emailNEQ,omitempty"`
@@ -34853,12 +35150,56 @@ type SubscriberWhereInput struct {
 	SendAttemptsGte   *int64  `json:"sendAttemptsGTE,omitempty"`
 	SendAttemptsLt    *int64  `json:"sendAttemptsLT,omitempty"`
 	SendAttemptsLte   *int64  `json:"sendAttemptsLTE,omitempty"`
+	// contact_id field predicates
+	ContactID             *string  `json:"contactID,omitempty"`
+	ContactIdneq          *string  `json:"contactIDNEQ,omitempty"`
+	ContactIDIn           []string `json:"contactIDIn,omitempty"`
+	ContactIDNotIn        []string `json:"contactIDNotIn,omitempty"`
+	ContactIdgt           *string  `json:"contactIDGT,omitempty"`
+	ContactIdgte          *string  `json:"contactIDGTE,omitempty"`
+	ContactIdlt           *string  `json:"contactIDLT,omitempty"`
+	ContactIdlte          *string  `json:"contactIDLTE,omitempty"`
+	ContactIDContains     *string  `json:"contactIDContains,omitempty"`
+	ContactIDHasPrefix    *string  `json:"contactIDHasPrefix,omitempty"`
+	ContactIDHasSuffix    *string  `json:"contactIDHasSuffix,omitempty"`
+	ContactIDIsNil        *bool    `json:"contactIDIsNil,omitempty"`
+	ContactIDNotNil       *bool    `json:"contactIDNotNil,omitempty"`
+	ContactIDEqualFold    *string  `json:"contactIDEqualFold,omitempty"`
+	ContactIDContainsFold *string  `json:"contactIDContainsFold,omitempty"`
+	// user_id field predicates
+	UserID             *string  `json:"userID,omitempty"`
+	UserIdneq          *string  `json:"userIDNEQ,omitempty"`
+	UserIDIn           []string `json:"userIDIn,omitempty"`
+	UserIDNotIn        []string `json:"userIDNotIn,omitempty"`
+	UserIdgt           *string  `json:"userIDGT,omitempty"`
+	UserIdgte          *string  `json:"userIDGTE,omitempty"`
+	UserIdlt           *string  `json:"userIDLT,omitempty"`
+	UserIdlte          *string  `json:"userIDLTE,omitempty"`
+	UserIDContains     *string  `json:"userIDContains,omitempty"`
+	UserIDHasPrefix    *string  `json:"userIDHasPrefix,omitempty"`
+	UserIDHasSuffix    *string  `json:"userIDHasSuffix,omitempty"`
+	UserIDIsNil        *bool    `json:"userIDIsNil,omitempty"`
+	UserIDNotNil       *bool    `json:"userIDNotNil,omitempty"`
+	UserIDEqualFold    *string  `json:"userIDEqualFold,omitempty"`
+	UserIDContainsFold *string  `json:"userIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 	// events edge predicates
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
+	// trust_center edge predicates
+	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
+	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
+	// campaign_targets edge predicates
+	HasCampaignTargets     *bool                       `json:"hasCampaignTargets,omitempty"`
+	HasCampaignTargetsWith []*CampaignTargetWhereInput `json:"hasCampaignTargetsWith,omitempty"`
+	// contact edge predicates
+	HasContact     *bool                `json:"hasContact,omitempty"`
+	HasContactWith []*ContactWhereInput `json:"hasContactWith,omitempty"`
+	// user edge predicates
+	HasUser     *bool             `json:"hasUser,omitempty"`
+	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -36661,6 +37002,9 @@ type TrustCenter struct {
 	TrustCenterEntities      *TrustCenterEntityConnection       `json:"trustCenterEntities"`
 	TrustCenterNdaRequests   *TrustCenterNDARequestConnection   `json:"trustCenterNdaRequests"`
 	TrustCenterFaqs          *TrustCenterFAQConnection          `json:"trustCenterFaqs"`
+	Subscribers              *SubscriberConnection              `json:"subscribers"`
+	EmailTemplates           *EmailTemplateConnection           `json:"emailTemplates"`
+	Campaigns                *CampaignConnection                `json:"campaigns"`
 }
 
 func (TrustCenter) IsNode() {}
@@ -38188,6 +38532,10 @@ type TrustCenterSetting struct {
 	SecurityContact *string `json:"securityContact,omitempty"`
 	// whether NDA requests require approval before being processed
 	NdaApprovalRequired *bool `json:"ndaApprovalRequired,omitempty"`
+	// whether to email trust center subscribers when subprocessors are added, updated, or removed
+	NotifySubscribersOnSubprocessorChange *bool `json:"notifySubscribersOnSubprocessorChange,omitempty"`
+	// watermark of the most recent subprocessor change subscribers have been notified about
+	SubprocessorsNotifiedAt *time.Time `json:"subprocessorsNotifiedAt,omitempty"`
 	// group whose members approve trust center NDA requests
 	NdaApproverGroupID *string `json:"ndaApproverGroupID,omitempty"`
 	// URL to the company's status page
@@ -38651,6 +38999,22 @@ type TrustCenterSettingWhereInput struct {
 	NdaApprovalRequiredNeq    *bool `json:"ndaApprovalRequiredNEQ,omitempty"`
 	NdaApprovalRequiredIsNil  *bool `json:"ndaApprovalRequiredIsNil,omitempty"`
 	NdaApprovalRequiredNotNil *bool `json:"ndaApprovalRequiredNotNil,omitempty"`
+	// notify_subscribers_on_subprocessor_change field predicates
+	NotifySubscribersOnSubprocessorChange       *bool `json:"notifySubscribersOnSubprocessorChange,omitempty"`
+	NotifySubscribersOnSubprocessorChangeNeq    *bool `json:"notifySubscribersOnSubprocessorChangeNEQ,omitempty"`
+	NotifySubscribersOnSubprocessorChangeIsNil  *bool `json:"notifySubscribersOnSubprocessorChangeIsNil,omitempty"`
+	NotifySubscribersOnSubprocessorChangeNotNil *bool `json:"notifySubscribersOnSubprocessorChangeNotNil,omitempty"`
+	// subprocessors_notified_at field predicates
+	SubprocessorsNotifiedAt       *time.Time   `json:"subprocessorsNotifiedAt,omitempty"`
+	SubprocessorsNotifiedAtNeq    *time.Time   `json:"subprocessorsNotifiedAtNEQ,omitempty"`
+	SubprocessorsNotifiedAtIn     []*time.Time `json:"subprocessorsNotifiedAtIn,omitempty"`
+	SubprocessorsNotifiedAtNotIn  []*time.Time `json:"subprocessorsNotifiedAtNotIn,omitempty"`
+	SubprocessorsNotifiedAtGt     *time.Time   `json:"subprocessorsNotifiedAtGT,omitempty"`
+	SubprocessorsNotifiedAtGte    *time.Time   `json:"subprocessorsNotifiedAtGTE,omitempty"`
+	SubprocessorsNotifiedAtLt     *time.Time   `json:"subprocessorsNotifiedAtLT,omitempty"`
+	SubprocessorsNotifiedAtLte    *time.Time   `json:"subprocessorsNotifiedAtLTE,omitempty"`
+	SubprocessorsNotifiedAtIsNil  *bool        `json:"subprocessorsNotifiedAtIsNil,omitempty"`
+	SubprocessorsNotifiedAtNotNil *bool        `json:"subprocessorsNotifiedAtNotNil,omitempty"`
 	// nda_approver_group_id field predicates
 	NdaApproverGroupID             *string  `json:"ndaApproverGroupID,omitempty"`
 	NdaApproverGroupIdneq          *string  `json:"ndaApproverGroupIDNEQ,omitempty"`
@@ -39507,6 +39871,15 @@ type TrustCenterWhereInput struct {
 	// trust_center_faqs edge predicates
 	HasTrustCenterFaqs     *bool                       `json:"hasTrustCenterFaqs,omitempty"`
 	HasTrustCenterFaqsWith []*TrustCenterFAQWhereInput `json:"hasTrustCenterFaqsWith,omitempty"`
+	// subscribers edge predicates
+	HasSubscribers     *bool                   `json:"hasSubscribers,omitempty"`
+	HasSubscribersWith []*SubscriberWhereInput `json:"hasSubscribersWith,omitempty"`
+	// email_templates edge predicates
+	HasEmailTemplates     *bool                      `json:"hasEmailTemplates,omitempty"`
+	HasEmailTemplatesWith []*EmailTemplateWhereInput `json:"hasEmailTemplatesWith,omitempty"`
+	// campaigns edge predicates
+	HasCampaigns     *bool                 `json:"hasCampaigns,omitempty"`
+	HasCampaignsWith []*CampaignWhereInput `json:"hasCampaignsWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -40006,6 +40379,8 @@ type UpdateCampaignInput struct {
 	ClearEmailTemplate          *bool    `json:"clearEmailTemplate,omitempty"`
 	EntityID                    *string  `json:"entityID,omitempty"`
 	ClearEntity                 *bool    `json:"clearEntity,omitempty"`
+	TrustCenterID               *string  `json:"trustCenterID,omitempty"`
+	ClearTrustCenter            *bool    `json:"clearTrustCenter,omitempty"`
 	AddCampaignTargetIDs        []string `json:"addCampaignTargetIDs,omitempty"`
 	RemoveCampaignTargetIDs     []string `json:"removeCampaignTargetIDs,omitempty"`
 	ClearCampaignTargets        *bool    `json:"clearCampaignTargets,omitempty"`
@@ -40061,6 +40436,8 @@ type UpdateCampaignTargetInput struct {
 	ClearUser                  *bool          `json:"clearUser,omitempty"`
 	GroupID                    *string        `json:"groupID,omitempty"`
 	ClearGroup                 *bool          `json:"clearGroup,omitempty"`
+	SubscriberID               *string        `json:"subscriberID,omitempty"`
+	ClearSubscriber            *bool          `json:"clearSubscriber,omitempty"`
 	AddWorkflowObjectRefIDs    []string       `json:"addWorkflowObjectRefIDs,omitempty"`
 	RemoveWorkflowObjectRefIDs []string       `json:"removeWorkflowObjectRefIDs,omitempty"`
 	ClearWorkflowObjectRefs    *bool          `json:"clearWorkflowObjectRefs,omitempty"`
@@ -40156,6 +40533,9 @@ type UpdateContactInput struct {
 	AddFileIDs              []string         `json:"addFileIDs,omitempty"`
 	RemoveFileIDs           []string         `json:"removeFileIDs,omitempty"`
 	ClearFiles              *bool            `json:"clearFiles,omitempty"`
+	AddSubscriberIDs        []string         `json:"addSubscriberIDs,omitempty"`
+	RemoveSubscriberIDs     []string         `json:"removeSubscriberIDs,omitempty"`
+	ClearSubscribers        *bool            `json:"clearSubscribers,omitempty"`
 }
 
 // UpdateControlImplementationInput is used for update ControlImplementation object.
@@ -41036,6 +41416,8 @@ type UpdateEmailTemplateInput struct {
 	ClearWorkflowDefinition       *bool          `json:"clearWorkflowDefinition,omitempty"`
 	WorkflowInstanceID            *string        `json:"workflowInstanceID,omitempty"`
 	ClearWorkflowInstance         *bool          `json:"clearWorkflowInstance,omitempty"`
+	TrustCenterID                 *string        `json:"trustCenterID,omitempty"`
+	ClearTrustCenter              *bool          `json:"clearTrustCenter,omitempty"`
 	AddCampaignIDs                []string       `json:"addCampaignIDs,omitempty"`
 	RemoveCampaignIDs             []string       `json:"removeCampaignIDs,omitempty"`
 	ClearCampaigns                *bool          `json:"clearCampaigns,omitempty"`
@@ -42395,7 +42777,7 @@ type UpdateInviteInput struct {
 	Role   *enums.Role         `json:"role,omitempty"`
 	// the number of attempts made to perform email send of the invitation, maximum of 5
 	SendAttempts *int64 `json:"sendAttempts,omitempty"`
-	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
+	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes super admin and invitee becomes owner
 	OwnershipTransfer      *bool    `json:"ownershipTransfer,omitempty"`
 	ClearOwnershipTransfer *bool    `json:"clearOwnershipTransfer,omitempty"`
 	OwnerID                *string  `json:"ownerID,omitempty"`
@@ -44811,12 +45193,19 @@ type UpdateSubscriberInput struct {
 	PhoneNumber      *string `json:"phoneNumber,omitempty"`
 	ClearPhoneNumber *bool   `json:"clearPhoneNumber,omitempty"`
 	// indicates if the subscriber has unsubscribed from communications
-	Unsubscribed   *bool    `json:"unsubscribed,omitempty"`
-	OwnerID        *string  `json:"ownerID,omitempty"`
-	ClearOwner     *bool    `json:"clearOwner,omitempty"`
-	AddEventIDs    []string `json:"addEventIDs,omitempty"`
-	RemoveEventIDs []string `json:"removeEventIDs,omitempty"`
-	ClearEvents    *bool    `json:"clearEvents,omitempty"`
+	Unsubscribed            *bool    `json:"unsubscribed,omitempty"`
+	OwnerID                 *string  `json:"ownerID,omitempty"`
+	ClearOwner              *bool    `json:"clearOwner,omitempty"`
+	AddEventIDs             []string `json:"addEventIDs,omitempty"`
+	RemoveEventIDs          []string `json:"removeEventIDs,omitempty"`
+	ClearEvents             *bool    `json:"clearEvents,omitempty"`
+	AddCampaignTargetIDs    []string `json:"addCampaignTargetIDs,omitempty"`
+	RemoveCampaignTargetIDs []string `json:"removeCampaignTargetIDs,omitempty"`
+	ClearCampaignTargets    *bool    `json:"clearCampaignTargets,omitempty"`
+	ContactID               *string  `json:"contactID,omitempty"`
+	ClearContact            *bool    `json:"clearContact,omitempty"`
+	UserID                  *string  `json:"userID,omitempty"`
+	ClearUser               *bool    `json:"clearUser,omitempty"`
 }
 
 // UpdateSystemDetailInput is used for update SystemDetail object.
@@ -45225,6 +45614,15 @@ type UpdateTrustCenterInput struct {
 	AddTrustCenterFaqIDs             []string `json:"addTrustCenterFaqIDs,omitempty"`
 	RemoveTrustCenterFaqIDs          []string `json:"removeTrustCenterFaqIDs,omitempty"`
 	ClearTrustCenterFaqs             *bool    `json:"clearTrustCenterFaqs,omitempty"`
+	AddSubscriberIDs                 []string `json:"addSubscriberIDs,omitempty"`
+	RemoveSubscriberIDs              []string `json:"removeSubscriberIDs,omitempty"`
+	ClearSubscribers                 *bool    `json:"clearSubscribers,omitempty"`
+	AddEmailTemplateIDs              []string `json:"addEmailTemplateIDs,omitempty"`
+	RemoveEmailTemplateIDs           []string `json:"removeEmailTemplateIDs,omitempty"`
+	ClearEmailTemplates              *bool    `json:"clearEmailTemplates,omitempty"`
+	AddCampaignIDs                   []string `json:"addCampaignIDs,omitempty"`
+	RemoveCampaignIDs                []string `json:"removeCampaignIDs,omitempty"`
+	ClearCampaigns                   *bool    `json:"clearCampaigns,omitempty"`
 	// adds a post for the trust center feed
 	AddPost *CreateNoteInput `json:"addPost,omitempty"`
 	// delete a post from the trust center feed
@@ -45338,6 +45736,9 @@ type UpdateTrustCenterSettingInput struct {
 	// whether NDA requests require approval before being processed
 	NdaApprovalRequired      *bool `json:"ndaApprovalRequired,omitempty"`
 	ClearNdaApprovalRequired *bool `json:"clearNdaApprovalRequired,omitempty"`
+	// whether to email trust center subscribers when subprocessors are added, updated, or removed
+	NotifySubscribersOnSubprocessorChange      *bool `json:"notifySubscribersOnSubprocessorChange,omitempty"`
+	ClearNotifySubscribersOnSubprocessorChange *bool `json:"clearNotifySubscribersOnSubprocessorChange,omitempty"`
 	// URL to the company's status page
 	StatusPageURL         *string  `json:"statusPageURL,omitempty"`
 	ClearStatusPageURL    *bool    `json:"clearStatusPageURL,omitempty"`
@@ -45473,6 +45874,9 @@ type UpdateUserInput struct {
 	RemoveTfaSettingIDs            []string `json:"removeTfaSettingIDs,omitempty"`
 	ClearTfaSettings               *bool    `json:"clearTfaSettings,omitempty"`
 	SettingID                      *string  `json:"settingID,omitempty"`
+	AddSubscriberIDs               []string `json:"addSubscriberIDs,omitempty"`
+	RemoveSubscriberIDs            []string `json:"removeSubscriberIDs,omitempty"`
+	ClearSubscribers               *bool    `json:"clearSubscribers,omitempty"`
 	AddGroupIDs                    []string `json:"addGroupIDs,omitempty"`
 	RemoveGroupIDs                 []string `json:"removeGroupIDs,omitempty"`
 	ClearGroups                    *bool    `json:"clearGroups,omitempty"`
@@ -45941,6 +46345,7 @@ type User struct {
 	PersonalAccessTokens   *PersonalAccessTokenConnection `json:"personalAccessTokens"`
 	TfaSettings            *TFASettingConnection          `json:"tfaSettings"`
 	Setting                *UserSetting                   `json:"setting"`
+	Subscribers            *SubscriberConnection          `json:"subscribers"`
 	Groups                 *GroupConnection               `json:"groups"`
 	Organizations          *OrganizationConnection        `json:"organizations"`
 	Webauthns              *WebauthnConnection            `json:"webauthns"`
@@ -46596,6 +47001,9 @@ type UserWhereInput struct {
 	// setting edge predicates
 	HasSetting     *bool                    `json:"hasSetting,omitempty"`
 	HasSettingWith []*UserSettingWhereInput `json:"hasSettingWith,omitempty"`
+	// subscribers edge predicates
+	HasSubscribers     *bool                   `json:"hasSubscribers,omitempty"`
+	HasSubscribersWith []*SubscriberWhereInput `json:"hasSubscribersWith,omitempty"`
 	// groups edge predicates
 	HasGroups     *bool              `json:"hasGroups,omitempty"`
 	HasGroupsWith []*GroupWhereInput `json:"hasGroupsWith,omitempty"`
@@ -51544,6 +51952,73 @@ func (e *ControlOrderField) UnmarshalJSON(b []byte) error {
 }
 
 func (e ControlOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which ControlReport connections can be ordered.
+type ControlReportOrderField string
+
+const (
+	// Order by creation time
+	ControlReportOrderFieldCreatedAt ControlReportOrderField = "created_at"
+	// Order by last update time
+	ControlReportOrderFieldUpdatedAt ControlReportOrderField = "updated_at"
+	// Order by reference code
+	ControlReportOrderFieldRefCode ControlReportOrderField = "refCode"
+	// Order by title
+	ControlReportOrderFieldTitle ControlReportOrderField = "title"
+	// Order by reference framework
+	ControlReportOrderFieldReferenceFramework ControlReportOrderField = "referenceFramework"
+)
+
+var AllControlReportOrderField = []ControlReportOrderField{
+	ControlReportOrderFieldCreatedAt,
+	ControlReportOrderFieldUpdatedAt,
+	ControlReportOrderFieldRefCode,
+	ControlReportOrderFieldTitle,
+	ControlReportOrderFieldReferenceFramework,
+}
+
+func (e ControlReportOrderField) IsValid() bool {
+	switch e {
+	case ControlReportOrderFieldCreatedAt, ControlReportOrderFieldUpdatedAt, ControlReportOrderFieldRefCode, ControlReportOrderFieldTitle, ControlReportOrderFieldReferenceFramework:
+		return true
+	}
+	return false
+}
+
+func (e ControlReportOrderField) String() string {
+	return string(e)
+}
+
+func (e *ControlReportOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ControlReportOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ControlReportOrderField", str)
+	}
+	return nil
+}
+
+func (e ControlReportOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *ControlReportOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e ControlReportOrderField) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
 	e.MarshalGQL(&buf)
 	return buf.Bytes(), nil

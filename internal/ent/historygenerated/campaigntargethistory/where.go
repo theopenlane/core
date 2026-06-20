@@ -139,6 +139,11 @@ func GroupID(v string) predicate.CampaignTargetHistory {
 	return predicate.CampaignTargetHistory(sql.FieldEQ(FieldGroupID, v))
 }
 
+// SubscriberID applies equality check predicate on the "subscriber_id" field. It's identical to SubscriberIDEQ.
+func SubscriberID(v string) predicate.CampaignTargetHistory {
+	return predicate.CampaignTargetHistory(sql.FieldEQ(FieldSubscriberID, v))
+}
+
 // Email applies equality check predicate on the "email" field. It's identical to EmailEQ.
 func Email(v string) predicate.CampaignTargetHistory {
 	return predicate.CampaignTargetHistory(sql.FieldEQ(FieldEmail, v))
@@ -1052,6 +1057,81 @@ func GroupIDEqualFold(v string) predicate.CampaignTargetHistory {
 // GroupIDContainsFold applies the ContainsFold predicate on the "group_id" field.
 func GroupIDContainsFold(v string) predicate.CampaignTargetHistory {
 	return predicate.CampaignTargetHistory(sql.FieldContainsFold(FieldGroupID, v))
+}
+
+// SubscriberIDEQ applies the EQ predicate on the "subscriber_id" field.
+func SubscriberIDEQ(v string) predicate.CampaignTargetHistory {
+	return predicate.CampaignTargetHistory(sql.FieldEQ(FieldSubscriberID, v))
+}
+
+// SubscriberIDNEQ applies the NEQ predicate on the "subscriber_id" field.
+func SubscriberIDNEQ(v string) predicate.CampaignTargetHistory {
+	return predicate.CampaignTargetHistory(sql.FieldNEQ(FieldSubscriberID, v))
+}
+
+// SubscriberIDIn applies the In predicate on the "subscriber_id" field.
+func SubscriberIDIn(vs ...string) predicate.CampaignTargetHistory {
+	return predicate.CampaignTargetHistory(sql.FieldIn(FieldSubscriberID, vs...))
+}
+
+// SubscriberIDNotIn applies the NotIn predicate on the "subscriber_id" field.
+func SubscriberIDNotIn(vs ...string) predicate.CampaignTargetHistory {
+	return predicate.CampaignTargetHistory(sql.FieldNotIn(FieldSubscriberID, vs...))
+}
+
+// SubscriberIDGT applies the GT predicate on the "subscriber_id" field.
+func SubscriberIDGT(v string) predicate.CampaignTargetHistory {
+	return predicate.CampaignTargetHistory(sql.FieldGT(FieldSubscriberID, v))
+}
+
+// SubscriberIDGTE applies the GTE predicate on the "subscriber_id" field.
+func SubscriberIDGTE(v string) predicate.CampaignTargetHistory {
+	return predicate.CampaignTargetHistory(sql.FieldGTE(FieldSubscriberID, v))
+}
+
+// SubscriberIDLT applies the LT predicate on the "subscriber_id" field.
+func SubscriberIDLT(v string) predicate.CampaignTargetHistory {
+	return predicate.CampaignTargetHistory(sql.FieldLT(FieldSubscriberID, v))
+}
+
+// SubscriberIDLTE applies the LTE predicate on the "subscriber_id" field.
+func SubscriberIDLTE(v string) predicate.CampaignTargetHistory {
+	return predicate.CampaignTargetHistory(sql.FieldLTE(FieldSubscriberID, v))
+}
+
+// SubscriberIDContains applies the Contains predicate on the "subscriber_id" field.
+func SubscriberIDContains(v string) predicate.CampaignTargetHistory {
+	return predicate.CampaignTargetHistory(sql.FieldContains(FieldSubscriberID, v))
+}
+
+// SubscriberIDHasPrefix applies the HasPrefix predicate on the "subscriber_id" field.
+func SubscriberIDHasPrefix(v string) predicate.CampaignTargetHistory {
+	return predicate.CampaignTargetHistory(sql.FieldHasPrefix(FieldSubscriberID, v))
+}
+
+// SubscriberIDHasSuffix applies the HasSuffix predicate on the "subscriber_id" field.
+func SubscriberIDHasSuffix(v string) predicate.CampaignTargetHistory {
+	return predicate.CampaignTargetHistory(sql.FieldHasSuffix(FieldSubscriberID, v))
+}
+
+// SubscriberIDIsNil applies the IsNil predicate on the "subscriber_id" field.
+func SubscriberIDIsNil() predicate.CampaignTargetHistory {
+	return predicate.CampaignTargetHistory(sql.FieldIsNull(FieldSubscriberID))
+}
+
+// SubscriberIDNotNil applies the NotNil predicate on the "subscriber_id" field.
+func SubscriberIDNotNil() predicate.CampaignTargetHistory {
+	return predicate.CampaignTargetHistory(sql.FieldNotNull(FieldSubscriberID))
+}
+
+// SubscriberIDEqualFold applies the EqualFold predicate on the "subscriber_id" field.
+func SubscriberIDEqualFold(v string) predicate.CampaignTargetHistory {
+	return predicate.CampaignTargetHistory(sql.FieldEqualFold(FieldSubscriberID, v))
+}
+
+// SubscriberIDContainsFold applies the ContainsFold predicate on the "subscriber_id" field.
+func SubscriberIDContainsFold(v string) predicate.CampaignTargetHistory {
+	return predicate.CampaignTargetHistory(sql.FieldContainsFold(FieldSubscriberID, v))
 }
 
 // EmailEQ applies the EQ predicate on the "email" field.

@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _InviteBulkCreatePayload_invites(ctx context.Context, field graphql.CollectedField, obj *model.InviteBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _InviteBulkCreatePayload(ctx context.Context, sel as
 			out.Values[i] = graphql.MarshalString("InviteBulkCreatePayload")
 		case "invites":
 			out.Values[i] = ec._InviteBulkCreatePayload_invites(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _InviteBulkDeletePayload(ctx context.Context, sel as
 			}
 		case "error":
 			out.Values[i] = ec._InviteBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _InviteBulkUpdatePayload(ctx context.Context, sel as
 			out.Values[i] = graphql.MarshalString("InviteBulkUpdatePayload")
 		case "invites":
 			out.Values[i] = ec._InviteBulkUpdatePayload_invites(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._InviteBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

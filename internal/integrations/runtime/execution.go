@@ -7,10 +7,13 @@ import (
 	"time"
 
 	"github.com/riverqueue/river"
+	"github.com/stripe/stripe-go/v84"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	intobvs "github.com/theopenlane/core/internal/integrations/observability"
@@ -19,7 +22,6 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/iam/auth"
 )
 
 // reconcileOperations emits one reconciliation envelope per reconcilable operation,
@@ -106,6 +108,25 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 	}
 
 	ctx = ensureCallerOrg(ctx, installation.OwnerID)
+
+	if installation.Status != enums.IntegrationStatusConnected {
+		logx.FromContext(ctx).Info().Str("integration_id", installation.ID).
+			Str("status", installation.Status.String()).
+			Msg("integration is not connected, skipping current run")
+
+		return 0, operations.ErrOperationDisabled
+	}
+
+	ok, err := r.isOrgSubscriptionActive(ctx, installation.OwnerID)
+	if err != nil {
+		return 0, err
+	}
+
+	if !ok {
+		logx.FromContext(ctx).Info().Str("integration_id", installation.ID).Str("owner_id", installation.OwnerID).Msg("owner subscription is not active, stopping reconcile cycle")
+
+		return 0, operations.ErrOperationDisabled
+	}
 
 	db := r.DB()
 	startedAt := time.Now()
@@ -440,6 +461,21 @@ func (r *Runtime) SeedReconcileJobsForInstallation(ctx context.Context, inst *en
 // seedReconcileJobsForInstallation is the shared implementation used by both
 // SeedReconcileJobs and SeedReconcileJobsForInstallation
 func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *ent.Integration) error {
+	if inst.Status != enums.IntegrationStatusConnected {
+		return nil
+	}
+
+	active, err := r.isOrgSubscriptionActive(ctx, inst.OwnerID)
+	if err != nil {
+		return err
+	}
+
+	if !active {
+		logx.FromContext(ctx).Info().Str("integration_id", inst.ID).Str("owner_id", inst.OwnerID).Msg("owner subscription is not active, skipping reconcile seed")
+
+		return nil
+	}
+
 	def, ok := r.Registry().Definition(inst.DefinitionID)
 	if !ok {
 		return nil
@@ -497,6 +533,23 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 	}
 
 	return errors.Join(errs...)
+}
+
+func (r *Runtime) isOrgSubscriptionActive(ctx context.Context, orgID string) (bool, error) {
+	if orgID == "" {
+		return false, nil
+	}
+
+	return r.DB().OrgSubscription.Query().
+		Where(
+			orgsubscription.OwnerIDEQ(orgID),
+			orgsubscription.Or(
+				orgsubscription.ActiveEQ(true),
+				orgsubscription.StripeSubscriptionStatusEQ(string(stripe.SubscriptionStatusTrialing)),
+			),
+			orgsubscription.StripeSubscriptionStatusNEQ(string(stripe.SubscriptionStatusCanceled)),
+		).
+		Exist(privacy.DecisionContext(ctx, privacy.Allow))
 }
 
 // ensureCallerOrg sets the organization on the existing caller if not already present

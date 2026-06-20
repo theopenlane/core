@@ -1997,6 +1997,7 @@ type CreateCampaignInput struct {
 	IntegrationID          *string
 	EmailTemplateID        *string
 	EntityID               *string
+	TrustCenterID          *string
 	CampaignTargetIDs      []string
 	AssessmentResponseIDs  []string
 	ContactIDs             []string
@@ -2115,6 +2116,9 @@ func (i *CreateCampaignInput) Mutate(m *CampaignMutation) {
 	if v := i.EntityID; v != nil {
 		m.SetEntityID(*v)
 	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
 	if v := i.CampaignTargetIDs; len(v) > 0 {
 		m.AddCampaignTargetIDs(v...)
 	}
@@ -2218,6 +2222,8 @@ type UpdateCampaignInput struct {
 	EmailTemplateID             *string
 	ClearEntity                 bool
 	EntityID                    *string
+	ClearTrustCenter            bool
+	TrustCenterID               *string
 	ClearCampaignTargets        bool
 	AddCampaignTargetIDs        []string
 	RemoveCampaignTargetIDs     []string
@@ -2453,6 +2459,12 @@ func (i *UpdateCampaignInput) Mutate(m *CampaignMutation) {
 	if v := i.EntityID; v != nil {
 		m.SetEntityID(*v)
 	}
+	if i.ClearTrustCenter {
+		m.ClearTrustCenter()
+	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
 	if i.ClearCampaignTargets {
 		m.ClearCampaignTargets()
 	}
@@ -2553,6 +2565,7 @@ type CreateCampaignTargetInput struct {
 	ContactID              *string
 	UserID                 *string
 	GroupID                *string
+	SubscriberID           *string
 	WorkflowObjectRefIDs   []string
 }
 
@@ -2590,6 +2603,9 @@ func (i *CreateCampaignTargetInput) Mutate(m *CampaignTargetMutation) {
 	if v := i.GroupID; v != nil {
 		m.SetGroupID(*v)
 	}
+	if v := i.SubscriberID; v != nil {
+		m.SetSubscriberID(*v)
+	}
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
 	}
@@ -2622,6 +2638,8 @@ type UpdateCampaignTargetInput struct {
 	UserID                      *string
 	ClearGroup                  bool
 	GroupID                     *string
+	ClearSubscriber             bool
+	SubscriberID                *string
 	ClearWorkflowObjectRefs     bool
 	AddWorkflowObjectRefIDs     []string
 	RemoveWorkflowObjectRefIDs  []string
@@ -2685,6 +2703,12 @@ func (i *UpdateCampaignTargetInput) Mutate(m *CampaignTargetMutation) {
 	}
 	if v := i.GroupID; v != nil {
 		m.SetGroupID(*v)
+	}
+	if i.ClearSubscriber {
+		m.ClearSubscriber()
+	}
+	if v := i.SubscriberID; v != nil {
+		m.SetSubscriberID(*v)
 	}
 	if i.ClearWorkflowObjectRefs {
 		m.ClearWorkflowObjectRefs()
@@ -2923,6 +2947,7 @@ type CreateContactInput struct {
 	CampaignIDs       []string
 	CampaignTargetIDs []string
 	FileIDs           []string
+	SubscriberIDs     []string
 }
 
 // Mutate applies the CreateContactInput on the ContactMutation builder.
@@ -2975,6 +3000,9 @@ func (i *CreateContactInput) Mutate(m *ContactMutation) {
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
+	if v := i.SubscriberIDs; len(v) > 0 {
+		m.AddSubscriberIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateContactInput on the ContactCreate builder.
@@ -3021,6 +3049,9 @@ type UpdateContactInput struct {
 	ClearFiles              bool
 	AddFileIDs              []string
 	RemoveFileIDs           []string
+	ClearSubscribers        bool
+	AddSubscriberIDs        []string
+	RemoveSubscriberIDs     []string
 }
 
 // Mutate applies the UpdateContactInput on the ContactMutation builder.
@@ -3132,6 +3163,15 @@ func (i *UpdateContactInput) Mutate(m *ContactMutation) {
 	}
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
+	}
+	if i.ClearSubscribers {
+		m.ClearSubscribers()
+	}
+	if v := i.AddSubscriberIDs; len(v) > 0 {
+		m.AddSubscriberIDs(v...)
+	}
+	if v := i.RemoveSubscriberIDs; len(v) > 0 {
+		m.RemoveSubscriberIDs(v...)
 	}
 }
 
@@ -6999,6 +7039,7 @@ type CreateEmailTemplateInput struct {
 	IntegrationID           *string
 	WorkflowDefinitionID    *string
 	WorkflowInstanceID      *string
+	TrustCenterID           *string
 	CampaignIDs             []string
 	NotificationTemplateIDs []string
 	FileIDs                 []string
@@ -7080,6 +7121,9 @@ func (i *CreateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	if v := i.WorkflowInstanceID; v != nil {
 		m.SetWorkflowInstanceID(*v)
 	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
 	if v := i.CampaignIDs; len(v) > 0 {
 		m.AddCampaignIDs(v...)
 	}
@@ -7147,6 +7191,8 @@ type UpdateEmailTemplateInput struct {
 	WorkflowDefinitionID          *string
 	ClearWorkflowInstance         bool
 	WorkflowInstanceID            *string
+	ClearTrustCenter              bool
+	TrustCenterID                 *string
 	ClearCampaigns                bool
 	AddCampaignIDs                []string
 	RemoveCampaignIDs             []string
@@ -7303,6 +7349,12 @@ func (i *UpdateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	}
 	if v := i.WorkflowInstanceID; v != nil {
 		m.SetWorkflowInstanceID(*v)
+	}
+	if i.ClearTrustCenter {
+		m.ClearTrustCenter()
+	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
 	}
 	if i.ClearCampaigns {
 		m.ClearCampaigns()
@@ -15006,6 +15058,7 @@ type CreateNoteInput struct {
 	TextJSON          []interface{}
 	NoteRef           *string
 	IsEdited          *bool
+	NotifySubscribers *bool
 	OwnerID           *string
 	TaskID            *string
 	ControlID         *string
@@ -15034,6 +15087,9 @@ func (i *CreateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.IsEdited; v != nil {
 		m.SetIsEdited(*v)
+	}
+	if v := i.NotifySubscribers; v != nil {
+		m.SetNotifySubscribers(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -25557,11 +25613,15 @@ func (c *SubprocessorUpdateOne) SetInput(i UpdateSubprocessorInput) *Subprocesso
 
 // CreateSubscriberInput represents a mutation input for creating subscribers.
 type CreateSubscriberInput struct {
-	Tags        []string
-	Email       string
-	PhoneNumber *string
-	OwnerID     *string
-	EventIDs    []string
+	Tags              []string
+	Email             string
+	PhoneNumber       *string
+	OwnerID           *string
+	EventIDs          []string
+	TrustCenterID     *string
+	CampaignTargetIDs []string
+	ContactID         *string
+	UserID            *string
 }
 
 // Mutate applies the CreateSubscriberInput on the SubscriberMutation builder.
@@ -25579,6 +25639,18 @@ func (i *CreateSubscriberInput) Mutate(m *SubscriberMutation) {
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
 	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
+	if v := i.CampaignTargetIDs; len(v) > 0 {
+		m.AddCampaignTargetIDs(v...)
+	}
+	if v := i.ContactID; v != nil {
+		m.SetContactID(*v)
+	}
+	if v := i.UserID; v != nil {
+		m.SetUserID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateSubscriberInput on the SubscriberCreate builder.
@@ -25589,18 +25661,25 @@ func (c *SubscriberCreate) SetInput(i CreateSubscriberInput) *SubscriberCreate {
 
 // UpdateSubscriberInput represents a mutation input for updating subscribers.
 type UpdateSubscriberInput struct {
-	ClearTags        bool
-	Tags             []string
-	AppendTags       []string
-	Email            *string
-	ClearPhoneNumber bool
-	PhoneNumber      *string
-	Unsubscribed     *bool
-	ClearOwner       bool
-	OwnerID          *string
-	ClearEvents      bool
-	AddEventIDs      []string
-	RemoveEventIDs   []string
+	ClearTags               bool
+	Tags                    []string
+	AppendTags              []string
+	Email                   *string
+	ClearPhoneNumber        bool
+	PhoneNumber             *string
+	Unsubscribed            *bool
+	ClearOwner              bool
+	OwnerID                 *string
+	ClearEvents             bool
+	AddEventIDs             []string
+	RemoveEventIDs          []string
+	ClearCampaignTargets    bool
+	AddCampaignTargetIDs    []string
+	RemoveCampaignTargetIDs []string
+	ClearContact            bool
+	ContactID               *string
+	ClearUser               bool
+	UserID                  *string
 }
 
 // Mutate applies the UpdateSubscriberInput on the SubscriberMutation builder.
@@ -25640,6 +25719,27 @@ func (i *UpdateSubscriberInput) Mutate(m *SubscriberMutation) {
 	}
 	if v := i.RemoveEventIDs; len(v) > 0 {
 		m.RemoveEventIDs(v...)
+	}
+	if i.ClearCampaignTargets {
+		m.ClearCampaignTargets()
+	}
+	if v := i.AddCampaignTargetIDs; len(v) > 0 {
+		m.AddCampaignTargetIDs(v...)
+	}
+	if v := i.RemoveCampaignTargetIDs; len(v) > 0 {
+		m.RemoveCampaignTargetIDs(v...)
+	}
+	if i.ClearContact {
+		m.ClearContact()
+	}
+	if v := i.ContactID; v != nil {
+		m.SetContactID(*v)
+	}
+	if i.ClearUser {
+		m.ClearUser()
+	}
+	if v := i.UserID; v != nil {
+		m.SetUserID(*v)
 	}
 }
 
@@ -26877,6 +26977,9 @@ type CreateTrustCenterInput struct {
 	TrustCenterEntityIDs       []string
 	TrustCenterNdaRequestIDs   []string
 	TrustCenterFaqIDs          []string
+	SubscriberIDs              []string
+	EmailTemplateIDs           []string
+	CampaignIDs                []string
 }
 
 // Mutate applies the CreateTrustCenterInput on the TrustCenterMutation builder.
@@ -26947,6 +27050,15 @@ func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	if v := i.TrustCenterFaqIDs; len(v) > 0 {
 		m.AddTrustCenterFaqIDs(v...)
 	}
+	if v := i.SubscriberIDs; len(v) > 0 {
+		m.AddSubscriberIDs(v...)
+	}
+	if v := i.EmailTemplateIDs; len(v) > 0 {
+		m.AddEmailTemplateIDs(v...)
+	}
+	if v := i.CampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateTrustCenterInput on the TrustCenterCreate builder.
@@ -27012,6 +27124,15 @@ type UpdateTrustCenterInput struct {
 	ClearTrustCenterFaqs             bool
 	AddTrustCenterFaqIDs             []string
 	RemoveTrustCenterFaqIDs          []string
+	ClearSubscribers                 bool
+	AddSubscriberIDs                 []string
+	RemoveSubscriberIDs              []string
+	ClearEmailTemplates              bool
+	AddEmailTemplateIDs              []string
+	RemoveEmailTemplateIDs           []string
+	ClearCampaigns                   bool
+	AddCampaignIDs                   []string
+	RemoveCampaignIDs                []string
 }
 
 // Mutate applies the UpdateTrustCenterInput on the TrustCenterMutation builder.
@@ -27180,6 +27301,33 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.RemoveTrustCenterFaqIDs; len(v) > 0 {
 		m.RemoveTrustCenterFaqIDs(v...)
+	}
+	if i.ClearSubscribers {
+		m.ClearSubscribers()
+	}
+	if v := i.AddSubscriberIDs; len(v) > 0 {
+		m.AddSubscriberIDs(v...)
+	}
+	if v := i.RemoveSubscriberIDs; len(v) > 0 {
+		m.RemoveSubscriberIDs(v...)
+	}
+	if i.ClearEmailTemplates {
+		m.ClearEmailTemplates()
+	}
+	if v := i.AddEmailTemplateIDs; len(v) > 0 {
+		m.AddEmailTemplateIDs(v...)
+	}
+	if v := i.RemoveEmailTemplateIDs; len(v) > 0 {
+		m.RemoveEmailTemplateIDs(v...)
+	}
+	if i.ClearCampaigns {
+		m.ClearCampaigns()
+	}
+	if v := i.AddCampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.RemoveCampaignIDs; len(v) > 0 {
+		m.RemoveCampaignIDs(v...)
 	}
 }
 
@@ -27921,32 +28069,33 @@ func (c *TrustCenterNDARequestUpdateOne) SetInput(i UpdateTrustCenterNDARequestI
 
 // CreateTrustCenterSettingInput represents a mutation input for creating trustcentersettings.
 type CreateTrustCenterSettingInput struct {
-	TrustCenterID            *string
-	Title                    *string
-	CompanyName              *string
-	CompanyDescription       *string
-	Overview                 *string
-	LogoRemoteURL            *string
-	FaviconRemoteURL         *string
-	ThemeMode                *enums.TrustCenterThemeMode
-	PrimaryColor             *string
-	Font                     *string
-	ForegroundColor          *string
-	BackgroundColor          *string
-	AccentColor              *string
-	SecondaryBackgroundColor *string
-	SecondaryForegroundColor *string
-	Environment              *enums.TrustCenterEnvironment
-	CompanyDomain            *string
-	SecurityContact          *string
-	NdaApprovalRequired      *bool
-	StatusPageURL            *string
-	BlockedGroupIDs          []string
-	EditorIDs                []string
-	LogoFileID               *string
-	FaviconFileID            *string
-	HeroImageFileID          *string
-	NdaApproverGroupID       *string
+	TrustCenterID                         *string
+	Title                                 *string
+	CompanyName                           *string
+	CompanyDescription                    *string
+	Overview                              *string
+	LogoRemoteURL                         *string
+	FaviconRemoteURL                      *string
+	ThemeMode                             *enums.TrustCenterThemeMode
+	PrimaryColor                          *string
+	Font                                  *string
+	ForegroundColor                       *string
+	BackgroundColor                       *string
+	AccentColor                           *string
+	SecondaryBackgroundColor              *string
+	SecondaryForegroundColor              *string
+	Environment                           *enums.TrustCenterEnvironment
+	CompanyDomain                         *string
+	SecurityContact                       *string
+	NdaApprovalRequired                   *bool
+	NotifySubscribersOnSubprocessorChange *bool
+	StatusPageURL                         *string
+	BlockedGroupIDs                       []string
+	EditorIDs                             []string
+	LogoFileID                            *string
+	FaviconFileID                         *string
+	HeroImageFileID                       *string
+	NdaApproverGroupID                    *string
 }
 
 // Mutate applies the CreateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -28008,6 +28157,9 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.NdaApprovalRequired; v != nil {
 		m.SetNdaApprovalRequired(*v)
 	}
+	if v := i.NotifySubscribersOnSubprocessorChange; v != nil {
+		m.SetNotifySubscribersOnSubprocessorChange(*v)
+	}
 	if v := i.StatusPageURL; v != nil {
 		m.SetStatusPageURL(*v)
 	}
@@ -28039,58 +28191,60 @@ func (c *TrustCenterSettingCreate) SetInput(i CreateTrustCenterSettingInput) *Tr
 
 // UpdateTrustCenterSettingInput represents a mutation input for updating trustcentersettings.
 type UpdateTrustCenterSettingInput struct {
-	ClearTrustCenterID            bool
-	TrustCenterID                 *string
-	ClearTitle                    bool
-	Title                         *string
-	ClearCompanyName              bool
-	CompanyName                   *string
-	ClearCompanyDescription       bool
-	CompanyDescription            *string
-	ClearOverview                 bool
-	Overview                      *string
-	ClearLogoRemoteURL            bool
-	LogoRemoteURL                 *string
-	ClearFaviconRemoteURL         bool
-	FaviconRemoteURL              *string
-	ClearThemeMode                bool
-	ThemeMode                     *enums.TrustCenterThemeMode
-	ClearPrimaryColor             bool
-	PrimaryColor                  *string
-	ClearFont                     bool
-	Font                          *string
-	ClearForegroundColor          bool
-	ForegroundColor               *string
-	ClearBackgroundColor          bool
-	BackgroundColor               *string
-	ClearAccentColor              bool
-	AccentColor                   *string
-	ClearSecondaryBackgroundColor bool
-	SecondaryBackgroundColor      *string
-	ClearSecondaryForegroundColor bool
-	SecondaryForegroundColor      *string
-	ClearCompanyDomain            bool
-	CompanyDomain                 *string
-	ClearSecurityContact          bool
-	SecurityContact               *string
-	ClearNdaApprovalRequired      bool
-	NdaApprovalRequired           *bool
-	ClearStatusPageURL            bool
-	StatusPageURL                 *string
-	ClearBlockedGroups            bool
-	AddBlockedGroupIDs            []string
-	RemoveBlockedGroupIDs         []string
-	ClearEditors                  bool
-	AddEditorIDs                  []string
-	RemoveEditorIDs               []string
-	ClearLogoFile                 bool
-	LogoFileID                    *string
-	ClearFaviconFile              bool
-	FaviconFileID                 *string
-	ClearHeroImageFile            bool
-	HeroImageFileID               *string
-	ClearNdaApproverGroup         bool
-	NdaApproverGroupID            *string
+	ClearTrustCenterID                         bool
+	TrustCenterID                              *string
+	ClearTitle                                 bool
+	Title                                      *string
+	ClearCompanyName                           bool
+	CompanyName                                *string
+	ClearCompanyDescription                    bool
+	CompanyDescription                         *string
+	ClearOverview                              bool
+	Overview                                   *string
+	ClearLogoRemoteURL                         bool
+	LogoRemoteURL                              *string
+	ClearFaviconRemoteURL                      bool
+	FaviconRemoteURL                           *string
+	ClearThemeMode                             bool
+	ThemeMode                                  *enums.TrustCenterThemeMode
+	ClearPrimaryColor                          bool
+	PrimaryColor                               *string
+	ClearFont                                  bool
+	Font                                       *string
+	ClearForegroundColor                       bool
+	ForegroundColor                            *string
+	ClearBackgroundColor                       bool
+	BackgroundColor                            *string
+	ClearAccentColor                           bool
+	AccentColor                                *string
+	ClearSecondaryBackgroundColor              bool
+	SecondaryBackgroundColor                   *string
+	ClearSecondaryForegroundColor              bool
+	SecondaryForegroundColor                   *string
+	ClearCompanyDomain                         bool
+	CompanyDomain                              *string
+	ClearSecurityContact                       bool
+	SecurityContact                            *string
+	ClearNdaApprovalRequired                   bool
+	NdaApprovalRequired                        *bool
+	ClearNotifySubscribersOnSubprocessorChange bool
+	NotifySubscribersOnSubprocessorChange      *bool
+	ClearStatusPageURL                         bool
+	StatusPageURL                              *string
+	ClearBlockedGroups                         bool
+	AddBlockedGroupIDs                         []string
+	RemoveBlockedGroupIDs                      []string
+	ClearEditors                               bool
+	AddEditorIDs                               []string
+	RemoveEditorIDs                            []string
+	ClearLogoFile                              bool
+	LogoFileID                                 *string
+	ClearFaviconFile                           bool
+	FaviconFileID                              *string
+	ClearHeroImageFile                         bool
+	HeroImageFileID                            *string
+	ClearNdaApproverGroup                      bool
+	NdaApproverGroupID                         *string
 }
 
 // Mutate applies the UpdateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -28202,6 +28356,12 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.NdaApprovalRequired; v != nil {
 		m.SetNdaApprovalRequired(*v)
+	}
+	if i.ClearNotifySubscribersOnSubprocessorChange {
+		m.ClearNotifySubscribersOnSubprocessorChange()
+	}
+	if v := i.NotifySubscribersOnSubprocessorChange; v != nil {
+		m.SetNotifySubscribersOnSubprocessorChange(*v)
 	}
 	if i.ClearStatusPageURL {
 		m.ClearStatusPageURL()
@@ -28586,6 +28746,7 @@ type CreateUserInput struct {
 	PersonalAccessTokenIDs   []string
 	TfaSettingIDs            []string
 	SettingID                string
+	SubscriberIDs            []string
 	GroupIDs                 []string
 	OrganizationIDs          []string
 	WebauthnIDs              []string
@@ -28664,6 +28825,9 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 		m.AddTfaSettingIDs(v...)
 	}
 	m.SetSettingID(i.SettingID)
+	if v := i.SubscriberIDs; len(v) > 0 {
+		m.AddSubscriberIDs(v...)
+	}
 	if v := i.GroupIDs; len(v) > 0 {
 		m.AddGroupIDs(v...)
 	}
@@ -28766,6 +28930,9 @@ type UpdateUserInput struct {
 	AddTfaSettingIDs               []string
 	RemoveTfaSettingIDs            []string
 	SettingID                      *string
+	ClearSubscribers               bool
+	AddSubscriberIDs               []string
+	RemoveSubscriberIDs            []string
 	ClearGroups                    bool
 	AddGroupIDs                    []string
 	RemoveGroupIDs                 []string
@@ -28942,6 +29109,15 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
+	}
+	if i.ClearSubscribers {
+		m.ClearSubscribers()
+	}
+	if v := i.AddSubscriberIDs; len(v) > 0 {
+		m.AddSubscriberIDs(v...)
+	}
+	if v := i.RemoveSubscriberIDs; len(v) > 0 {
+		m.RemoveSubscriberIDs(v...)
 	}
 	if i.ClearGroups {
 		m.ClearGroups()

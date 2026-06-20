@@ -50,6 +50,11 @@ func (Subscriber) PluralName() string {
 // Fields of the Subscriber
 func (Subscriber) Fields() []ent.Field {
 	return []ent.Field{
+		field.String("trust_center_id").
+			Comment("the trust center the subscriber is subscribed to, null for legacy organization-level subscribers").
+			Optional().
+			Nillable().
+			Immutable(),
 		field.String("email").
 			Comment("email address of the subscriber").
 			Annotations(
@@ -106,6 +111,14 @@ func (Subscriber) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipMutationUpdateInput, entgql.SkipMutationCreateInput),
 			).
 			Default(1),
+		field.String("contact_id").
+			Comment("the contact record matched to this subscriber by email, set automatically when a matching contact exists").
+			Optional().
+			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)),
+		field.String("user_id").
+			Comment("the user matched to this subscriber by email, set automatically when a matching user exists").
+			Optional().
+			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)),
 	}
 }
 
@@ -114,7 +127,10 @@ func (s Subscriber) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(s,
-				withSkipTokenTypesObjects(&token.VerifyToken{}, &token.SignUpToken{}), withSkipForSystemAdmin()),
+				withSkipTokenTypesObjects(&token.VerifyToken{}, &token.SignUpToken{}),
+				withSkipForSystemAdmin(),
+				withAllowAnonymousTrustCenterAccess(true),
+			),
 		},
 	}.getMixins(s)
 }
@@ -123,6 +139,23 @@ func (s Subscriber) Mixin() []ent.Mixin {
 func (s Subscriber) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeToWithPagination(s, Event{}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: s,
+			edgeSchema: TrustCenter{},
+			field:      "trust_center_id",
+			immutable:  true,
+		}),
+		defaultEdgeToWithPagination(s, CampaignTarget{}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: s,
+			edgeSchema: Contact{},
+			field:      "contact_id",
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: s,
+			edgeSchema: User{},
+			field:      "user_id",
+		}),
 	}
 }
 
@@ -136,10 +169,18 @@ func (Subscriber) Hooks() []ent.Hook {
 // Indexes of the Subscriber
 func (Subscriber) Indexes() []ent.Index {
 	return []ent.Index{
+		// legacy organization-level subscribers (no trust center) remain unique per org
 		index.Fields("email", ownerFieldName).
 			Unique().
 			Annotations(
-				entsql.IndexWhere("deleted_at is NULL and unsubscribed = false"),
+				entsql.IndexWhere("deleted_at is NULL and unsubscribed = false and trust_center_id IS NULL"),
+			),
+		// trust center subscribers are unique per trust center, allowing the same email to
+		// subscribe to multiple trust centers within the same organization
+		index.Fields("email", "trust_center_id").
+			Unique().
+			Annotations(
+				entsql.IndexWhere("deleted_at is NULL and unsubscribed = false and trust_center_id IS NOT NULL"),
 			),
 	}
 }
@@ -165,6 +206,9 @@ func (Subscriber) Policy() ent.Policy {
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.SignUpToken](),
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.VerifyToken](),
 			policy.CheckCreateAccess(),
+			policy.CanCreateObjectsUnderParents([]string{
+				TrustCenter{}.Name(),
+			}),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

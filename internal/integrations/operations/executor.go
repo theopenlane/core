@@ -10,8 +10,10 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// RegisterRuntimeListeners registers all Gala listeners needed by the integration runtime
-func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, operationHandle func(context.Context, Envelope) error, webhookHandle func(context.Context, WebhookEnvelope) error, reconcileHandle ReconcileHandler, reconcileSchedule gala.Schedule, recurringCampaignHandle RecurringCampaignHandler, recurringCampaignSchedule gala.Schedule, paymentReminderHandle PaymentReminderHandler, paymentReminderSchedule gala.Schedule) error {
+// RegisterRuntimeListeners registers the event, webhook, and definition-provided gala listeners for
+// the integration runtime. Adaptive-scheduled pollers (reconcile, recurring campaign, etc.) register
+// themselves at the call site via their own Register*Listener functions
+func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, operationHandle func(context.Context, Envelope) error, webhookHandle func(context.Context, WebhookEnvelope) error) error {
 	if runtime == nil {
 		return ErrGalaRequired
 	}
@@ -54,18 +56,6 @@ func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, operat
 		}); err != nil {
 			return err
 		}
-	}
-
-	if err := RegisterReconcileListener(runtime, reg, reconcileHandle, reconcileSchedule); err != nil {
-		return err
-	}
-
-	if err := RegisterRecurringCampaignListener(runtime, recurringCampaignHandle, recurringCampaignSchedule); err != nil {
-		return err
-	}
-
-	if err := RegisterPaymentReminderListener(runtime, paymentReminderHandle, paymentReminderSchedule); err != nil {
-		return err
 	}
 
 	for _, listener := range reg.GalaListeners() {

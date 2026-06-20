@@ -53,6 +53,8 @@ type CampaignTargetHistory struct {
 	UserID string `json:"user_id,omitempty"`
 	// the group associated with the campaign target
 	GroupID string `json:"group_id,omitempty"`
+	// the trust center subscriber this target was generated from, if any
+	SubscriberID string `json:"subscriber_id,omitempty"`
 	// the email address targeted by the campaign
 	Email string `json:"email,omitempty"`
 	// the name of the campaign target, if known
@@ -81,7 +83,7 @@ func (*CampaignTargetHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case campaigntargethistory.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case campaigntargethistory.FieldID, campaigntargethistory.FieldRef, campaigntargethistory.FieldCreatedBy, campaigntargethistory.FieldUpdatedBy, campaigntargethistory.FieldDeletedBy, campaigntargethistory.FieldOwnerID, campaigntargethistory.FieldCampaignID, campaigntargethistory.FieldContactID, campaigntargethistory.FieldUserID, campaigntargethistory.FieldGroupID, campaigntargethistory.FieldEmail, campaigntargethistory.FieldFullName, campaigntargethistory.FieldStatus:
+		case campaigntargethistory.FieldID, campaigntargethistory.FieldRef, campaigntargethistory.FieldCreatedBy, campaigntargethistory.FieldUpdatedBy, campaigntargethistory.FieldDeletedBy, campaigntargethistory.FieldOwnerID, campaigntargethistory.FieldCampaignID, campaigntargethistory.FieldContactID, campaigntargethistory.FieldUserID, campaigntargethistory.FieldGroupID, campaigntargethistory.FieldSubscriberID, campaigntargethistory.FieldEmail, campaigntargethistory.FieldFullName, campaigntargethistory.FieldStatus:
 			values[i] = new(sql.NullString)
 		case campaigntargethistory.FieldHistoryTime, campaigntargethistory.FieldCreatedAt, campaigntargethistory.FieldUpdatedAt, campaigntargethistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -195,6 +197,12 @@ func (_m *CampaignTargetHistory) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field group_id", values[i])
 			} else if value.Valid {
 				_m.GroupID = value.String
+			}
+		case campaigntargethistory.FieldSubscriberID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field subscriber_id", values[i])
+			} else if value.Valid {
+				_m.SubscriberID = value.String
 			}
 		case campaigntargethistory.FieldEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -316,6 +324,9 @@ func (_m *CampaignTargetHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("group_id=")
 	builder.WriteString(_m.GroupID)
+	builder.WriteString(", ")
+	builder.WriteString("subscriber_id=")
+	builder.WriteString(_m.SubscriberID)
 	builder.WriteString(", ")
 	builder.WriteString("email=")
 	builder.WriteString(_m.Email)

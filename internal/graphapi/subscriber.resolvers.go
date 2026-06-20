@@ -11,21 +11,41 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateSubscriber is the resolver for the createSubscriber field.
 func (r *mutationResolver) CreateSubscriber(ctx context.Context, input generated.CreateSubscriberInput) (*model.SubscriberCreatePayload, error) {
-	// set the organization in the auth context if its not done for us
-	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+	// anonymous trust center visitors register against the trust center carried in their JWT;
+	// force the trust center from the authenticated context, reject mismatched input, and authorize
+	// the create under privacy allow, mirroring the anonymous trust center NDA request flow
+	if tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok && tcID != "" {
+		if input.TrustCenterID != nil && *input.TrustCenterID != tcID {
+			return nil, rout.ErrPermissionDenied
+		}
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		caller, callerOk := auth.CallerFromContext(ctx)
+		if !callerOk || caller == nil {
+			return nil, rout.ErrPermissionDenied
+		}
+
+		input.TrustCenterID = &tcID
+
+		ctx = auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), caller)
+	} else {
+		// set the organization in the auth context if its not done for us
+		var err error
+		if ctx, err = common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+			return nil, rout.NewMissingRequiredFieldError("owner_id")
+		}
 	}
 
 	res, err := withTransactionalMutation(ctx).Subscriber.Create().SetInput(input).Save(ctx)

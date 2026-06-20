@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _OrganizationTransferOwnershipPayload_organization(ctx context.Context, field graphql.CollectedField, obj *model.OrganizationTransferOwnershipPayload) (ret graphql.Marshaler) {

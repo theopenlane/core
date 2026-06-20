@@ -30,6 +30,7 @@ query GetAllEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $be
 				systemInternalID
 				systemOwned
 				templateContext
+				trustCenterID
 				updatedAt
 				updatedBy
 				version
@@ -71,6 +72,7 @@ query GetEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $befor
 				systemInternalID
 				systemOwned
 				templateContext
+				trustCenterID
 				updatedAt
 				updatedBy
 				version

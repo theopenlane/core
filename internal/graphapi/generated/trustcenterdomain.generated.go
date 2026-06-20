@@ -22,10 +22,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _TrustCenterDomainCreatePayload_customDomain(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterDomainCreatePayload) (ret graphql.Marshaler) {

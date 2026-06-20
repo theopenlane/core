@@ -243,6 +243,34 @@ func (_c *NoteHistoryCreate) SetNillableTrustCenterID(v *string) *NoteHistoryCre
 	return _c
 }
 
+// SetNotifySubscribers sets the "notify_subscribers" field.
+func (_c *NoteHistoryCreate) SetNotifySubscribers(v bool) *NoteHistoryCreate {
+	_c.mutation.SetNotifySubscribers(v)
+	return _c
+}
+
+// SetNillableNotifySubscribers sets the "notify_subscribers" field if the given value is not nil.
+func (_c *NoteHistoryCreate) SetNillableNotifySubscribers(v *bool) *NoteHistoryCreate {
+	if v != nil {
+		_c.SetNotifySubscribers(*v)
+	}
+	return _c
+}
+
+// SetNotifiedAt sets the "notified_at" field.
+func (_c *NoteHistoryCreate) SetNotifiedAt(v time.Time) *NoteHistoryCreate {
+	_c.mutation.SetNotifiedAt(v)
+	return _c
+}
+
+// SetNillableNotifiedAt sets the "notified_at" field if the given value is not nil.
+func (_c *NoteHistoryCreate) SetNillableNotifiedAt(v *time.Time) *NoteHistoryCreate {
+	if v != nil {
+		_c.SetNotifiedAt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *NoteHistoryCreate) SetID(v string) *NoteHistoryCreate {
 	_c.mutation.SetID(v)
@@ -318,6 +346,10 @@ func (_c *NoteHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.IsEdited(); !ok {
 		v := notehistory.DefaultIsEdited
 		_c.mutation.SetIsEdited(v)
+	}
+	if _, ok := _c.mutation.NotifySubscribers(); !ok {
+		v := notehistory.DefaultNotifySubscribers
+		_c.mutation.SetNotifySubscribers(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if notehistory.DefaultID == nil {
@@ -458,6 +490,14 @@ func (_c *NoteHistoryCreate) createSpec() (*NoteHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.TrustCenterID(); ok {
 		_spec.SetField(notehistory.FieldTrustCenterID, field.TypeString, value)
 		_node.TrustCenterID = value
+	}
+	if value, ok := _c.mutation.NotifySubscribers(); ok {
+		_spec.SetField(notehistory.FieldNotifySubscribers, field.TypeBool, value)
+		_node.NotifySubscribers = value
+	}
+	if value, ok := _c.mutation.NotifiedAt(); ok {
+		_spec.SetField(notehistory.FieldNotifiedAt, field.TypeTime, value)
+		_node.NotifiedAt = &value
 	}
 	return _node, _spec
 }

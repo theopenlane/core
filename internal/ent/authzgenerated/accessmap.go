@@ -382,6 +382,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
+}, "trust_center": {
+	ObjectType:          "trust_center",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "campaign_targets": {
 	ObjectType:          "campaign_target",
 	SkipEditCheck:       false,
@@ -448,6 +453,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
+}, "subscriber": {
+	ObjectType:          "subscriber",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
 }, "workflow_object_refs": {
 	ObjectType:          "workflow_object_ref",
 	SkipEditCheck:       false,
@@ -510,6 +520,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
+}, "subscribers": {
+	ObjectType:          "subscriber",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
 },
 }, "control": {"evidence": {
 	ObjectType:          "evidence",
@@ -1188,6 +1203,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
+}, "trust_center": {
+	ObjectType:          "trust_center",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "campaigns": {
 	ObjectType:          "campaign",
 	SkipEditCheck:       false,
@@ -1500,8 +1520,8 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: true,
 }, "programs": {
 	ObjectType:          "program",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
 }, "tasks": {
 	ObjectType:          "task",
@@ -5011,6 +5031,26 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
+}, "trust_center": {
+	ObjectType:          "trust_center",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "campaign_targets": {
+	ObjectType:          "campaign_target",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "contact": {
+	ObjectType:          "contact",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "user": {
+	ObjectType:          "user",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
 },
 }, "system_detail": {"owner": {
 	ObjectType:          "owner",
@@ -5297,6 +5337,21 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
+}, "subscribers": {
+	ObjectType:          "subscriber",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "email_templates": {
+	ObjectType:          "email_template",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
+}, "campaigns": {
+	ObjectType:          "campaign",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
 },
 }, "trust_center_compliance": {"blocked_groups": {
 	ObjectType:          "group",
@@ -5548,6 +5603,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: false,
 }, "password_reset_tokens": {
 	ObjectType:          "password_reset_token",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "subscribers": {
+	ObjectType:          "subscriber",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,

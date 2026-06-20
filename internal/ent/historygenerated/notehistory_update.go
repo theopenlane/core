@@ -232,6 +232,46 @@ func (_u *NoteHistoryUpdate) ClearTrustCenterID() *NoteHistoryUpdate {
 	return _u
 }
 
+// SetNotifySubscribers sets the "notify_subscribers" field.
+func (_u *NoteHistoryUpdate) SetNotifySubscribers(v bool) *NoteHistoryUpdate {
+	_u.mutation.SetNotifySubscribers(v)
+	return _u
+}
+
+// SetNillableNotifySubscribers sets the "notify_subscribers" field if the given value is not nil.
+func (_u *NoteHistoryUpdate) SetNillableNotifySubscribers(v *bool) *NoteHistoryUpdate {
+	if v != nil {
+		_u.SetNotifySubscribers(*v)
+	}
+	return _u
+}
+
+// ClearNotifySubscribers clears the value of the "notify_subscribers" field.
+func (_u *NoteHistoryUpdate) ClearNotifySubscribers() *NoteHistoryUpdate {
+	_u.mutation.ClearNotifySubscribers()
+	return _u
+}
+
+// SetNotifiedAt sets the "notified_at" field.
+func (_u *NoteHistoryUpdate) SetNotifiedAt(v time.Time) *NoteHistoryUpdate {
+	_u.mutation.SetNotifiedAt(v)
+	return _u
+}
+
+// SetNillableNotifiedAt sets the "notified_at" field if the given value is not nil.
+func (_u *NoteHistoryUpdate) SetNillableNotifiedAt(v *time.Time) *NoteHistoryUpdate {
+	if v != nil {
+		_u.SetNotifiedAt(*v)
+	}
+	return _u
+}
+
+// ClearNotifiedAt clears the value of the "notified_at" field.
+func (_u *NoteHistoryUpdate) ClearNotifiedAt() *NoteHistoryUpdate {
+	_u.mutation.ClearNotifiedAt()
+	return _u
+}
+
 // Mutation returns the NoteHistoryMutation object of the builder.
 func (_u *NoteHistoryUpdate) Mutation() *NoteHistoryMutation {
 	return _u.mutation
@@ -370,6 +410,18 @@ func (_u *NoteHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(notehistory.FieldTrustCenterID, field.TypeString)
+	}
+	if value, ok := _u.mutation.NotifySubscribers(); ok {
+		_spec.SetField(notehistory.FieldNotifySubscribers, field.TypeBool, value)
+	}
+	if _u.mutation.NotifySubscribersCleared() {
+		_spec.ClearField(notehistory.FieldNotifySubscribers, field.TypeBool)
+	}
+	if value, ok := _u.mutation.NotifiedAt(); ok {
+		_spec.SetField(notehistory.FieldNotifiedAt, field.TypeTime, value)
+	}
+	if _u.mutation.NotifiedAtCleared() {
+		_spec.ClearField(notehistory.FieldNotifiedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.NoteHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -593,6 +645,46 @@ func (_u *NoteHistoryUpdateOne) ClearTrustCenterID() *NoteHistoryUpdateOne {
 	return _u
 }
 
+// SetNotifySubscribers sets the "notify_subscribers" field.
+func (_u *NoteHistoryUpdateOne) SetNotifySubscribers(v bool) *NoteHistoryUpdateOne {
+	_u.mutation.SetNotifySubscribers(v)
+	return _u
+}
+
+// SetNillableNotifySubscribers sets the "notify_subscribers" field if the given value is not nil.
+func (_u *NoteHistoryUpdateOne) SetNillableNotifySubscribers(v *bool) *NoteHistoryUpdateOne {
+	if v != nil {
+		_u.SetNotifySubscribers(*v)
+	}
+	return _u
+}
+
+// ClearNotifySubscribers clears the value of the "notify_subscribers" field.
+func (_u *NoteHistoryUpdateOne) ClearNotifySubscribers() *NoteHistoryUpdateOne {
+	_u.mutation.ClearNotifySubscribers()
+	return _u
+}
+
+// SetNotifiedAt sets the "notified_at" field.
+func (_u *NoteHistoryUpdateOne) SetNotifiedAt(v time.Time) *NoteHistoryUpdateOne {
+	_u.mutation.SetNotifiedAt(v)
+	return _u
+}
+
+// SetNillableNotifiedAt sets the "notified_at" field if the given value is not nil.
+func (_u *NoteHistoryUpdateOne) SetNillableNotifiedAt(v *time.Time) *NoteHistoryUpdateOne {
+	if v != nil {
+		_u.SetNotifiedAt(*v)
+	}
+	return _u
+}
+
+// ClearNotifiedAt clears the value of the "notified_at" field.
+func (_u *NoteHistoryUpdateOne) ClearNotifiedAt() *NoteHistoryUpdateOne {
+	_u.mutation.ClearNotifiedAt()
+	return _u
+}
+
 // Mutation returns the NoteHistoryMutation object of the builder.
 func (_u *NoteHistoryUpdateOne) Mutation() *NoteHistoryMutation {
 	return _u.mutation
@@ -761,6 +853,18 @@ func (_u *NoteHistoryUpdateOne) sqlSave(ctx context.Context) (_node *NoteHistory
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(notehistory.FieldTrustCenterID, field.TypeString)
+	}
+	if value, ok := _u.mutation.NotifySubscribers(); ok {
+		_spec.SetField(notehistory.FieldNotifySubscribers, field.TypeBool, value)
+	}
+	if _u.mutation.NotifySubscribersCleared() {
+		_spec.ClearField(notehistory.FieldNotifySubscribers, field.TypeBool)
+	}
+	if value, ok := _u.mutation.NotifiedAt(); ok {
+		_spec.SetField(notehistory.FieldNotifiedAt, field.TypeTime, value)
+	}
+	if _u.mutation.NotifiedAtCleared() {
+		_spec.ClearField(notehistory.FieldNotifiedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.NoteHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

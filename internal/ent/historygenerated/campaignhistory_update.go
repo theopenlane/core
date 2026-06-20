@@ -729,6 +729,26 @@ func (_u *CampaignHistoryUpdate) ClearEmailBrandingID() *CampaignHistoryUpdate {
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *CampaignHistoryUpdate) SetTrustCenterID(v string) *CampaignHistoryUpdate {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *CampaignHistoryUpdate) SetNillableTrustCenterID(v *string) *CampaignHistoryUpdate {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *CampaignHistoryUpdate) ClearTrustCenterID() *CampaignHistoryUpdate {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
 // Mutation returns the CampaignHistoryMutation object of the builder.
 func (_u *CampaignHistoryUpdate) Mutation() *CampaignHistoryMutation {
 	return _u.mutation
@@ -1045,6 +1065,12 @@ func (_u *CampaignHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if _u.mutation.EmailBrandingIDCleared() {
 		_spec.ClearField(campaignhistory.FieldEmailBrandingID, field.TypeString)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(campaignhistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(campaignhistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.CampaignHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1763,6 +1789,26 @@ func (_u *CampaignHistoryUpdateOne) ClearEmailBrandingID() *CampaignHistoryUpdat
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *CampaignHistoryUpdateOne) SetTrustCenterID(v string) *CampaignHistoryUpdateOne {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *CampaignHistoryUpdateOne) SetNillableTrustCenterID(v *string) *CampaignHistoryUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *CampaignHistoryUpdateOne) ClearTrustCenterID() *CampaignHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
 // Mutation returns the CampaignHistoryMutation object of the builder.
 func (_u *CampaignHistoryUpdateOne) Mutation() *CampaignHistoryMutation {
 	return _u.mutation
@@ -2109,6 +2155,12 @@ func (_u *CampaignHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Campaig
 	}
 	if _u.mutation.EmailBrandingIDCleared() {
 		_spec.ClearField(campaignhistory.FieldEmailBrandingID, field.TypeString)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(campaignhistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(campaignhistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.CampaignHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

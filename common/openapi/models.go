@@ -1052,6 +1052,44 @@ var ExampleVerifySubscriptionResponse = VerifySubscribeReply{
 }
 
 // =========
+// SUBSCRIBER UNSUBSCRIBE
+// =========
+
+// UnsubscribeRequest contains the token used to unsubscribe from communications
+type UnsubscribeRequest struct {
+	// Token is the token value.
+	Token string `query:"token" description:"The token to be used to unsubscribe, token is sent via email"`
+}
+
+// UnsubscribeReply holds the fields that are sent on a response to the `/unsubscribe` endpoint
+type UnsubscribeReply struct {
+	// Reply is the reply value.
+	rout.Reply
+	// Message is the message value.
+	Message string `json:"message,omitempty"`
+}
+
+// Validate ensures the required fields are set on the UnsubscribeRequest request
+func (r *UnsubscribeRequest) Validate() error {
+	if r.Token == "" {
+		return rout.NewMissingRequiredFieldError("token")
+	}
+
+	return nil
+}
+
+// ExampleUnsubscribeRequest is an example of a successful unsubscribe request for OpenAPI documentation
+var ExampleUnsubscribeRequest = UnsubscribeRequest{
+	Token: "token",
+}
+
+// ExampleUnsubscribeResponse is an example of a successful unsubscribe response for OpenAPI documentation
+var ExampleUnsubscribeResponse = UnsubscribeReply{
+	Reply:   rout.Reply{Success: true},
+	Message: "You have been unsubscribed and will no longer receive updates.",
+}
+
+// =========
 // ORGANIZATION INVITE
 // =========
 

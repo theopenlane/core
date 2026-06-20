@@ -68,6 +68,9 @@ func (CampaignTarget) Fields() []ent.Field {
 			Annotations(
 				entx.CSVRef().FromColumn("CampaignTargetGroupName").MatchOn("name"),
 			),
+		field.String("subscriber_id").
+			Comment("the trust center subscriber this target was generated from, if any").
+			Optional(),
 		field.String("email").
 			Comment("the email address targeted by the campaign").
 			NotEmpty().
@@ -164,6 +167,11 @@ func (c CampaignTarget) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Group{}.Name()),
 			},
 		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: Subscriber{},
+			field:      "subscriber_id",
+		}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: c,
 			edgeSchema: WorkflowObjectRef{},
@@ -181,6 +189,7 @@ func (CampaignTarget) Indexes() []ent.Index {
 		index.Fields("contact_id"),
 		index.Fields("user_id"),
 		index.Fields("group_id"),
+		index.Fields("subscriber_id"),
 	}
 }
 
@@ -188,6 +197,7 @@ func (CampaignTarget) Indexes() []ent.Index {
 func (CampaignTarget) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
+		models.CatalogTrustCenterModule,
 	}
 }
 

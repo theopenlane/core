@@ -207,11 +207,16 @@ func (e Evidence) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Subcontrol{}.Name()),
 			},
 		}),
-		// all other edges require edit access to make the association
 		defaultEdgeToWithPagination(e, ControlObjective{}),
 		defaultEdgeToWithPagination(e, ControlImplementation{}),
 		defaultEdgeToWithPagination(e, File{}),
-		defaultEdgeFromWithPagination(e, Program{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: e,
+			edgeSchema: Program{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Program{}.Name()),
+			},
+		}),
 		defaultEdgeFromWithPagination(e, Task{}),
 		defaultEdgeFromWithPagination(e, Platform{}),
 		defaultEdgeFromWithPagination(e, Scan{}),

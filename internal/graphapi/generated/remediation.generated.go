@@ -23,10 +23,6 @@ import (
 
 // endregion ***************************** args.gotpl *****************************
 
-// region    ************************** directives.gotpl **************************
-
-// endregion ************************** directives.gotpl **************************
-
 // region    **************************** field.gotpl *****************************
 
 func (ec *executionContext) _RemediationBulkCreatePayload_remediations(ctx context.Context, field graphql.CollectedField, obj *model.RemediationBulkCreatePayload) (ret graphql.Marshaler) {
@@ -297,6 +293,9 @@ func (ec *executionContext) _RemediationBulkCreatePayload(ctx context.Context, s
 			out.Values[i] = graphql.MarshalString("RemediationBulkCreatePayload")
 		case "remediations":
 			out.Values[i] = ec._RemediationBulkCreatePayload_remediations(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -343,6 +342,9 @@ func (ec *executionContext) _RemediationBulkDeletePayload(ctx context.Context, s
 			}
 		case "error":
 			out.Values[i] = ec._RemediationBulkDeletePayload_error(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -379,8 +381,14 @@ func (ec *executionContext) _RemediationBulkUpdatePayload(ctx context.Context, s
 			out.Values[i] = graphql.MarshalString("RemediationBulkUpdatePayload")
 		case "remediations":
 			out.Values[i] = ec._RemediationBulkUpdatePayload_remediations(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "updatedIDs":
 			out.Values[i] = ec._RemediationBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

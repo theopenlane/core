@@ -9,6 +9,8 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
@@ -20,6 +22,7 @@ import (
 
 const (
 	noCategoryLabel = "No Category"
+	customFramework = "CUSTOM"
 )
 
 // getAllCategories retrieves all control categories based on the provided field name and where filter
@@ -59,10 +62,7 @@ func (r *queryResolver) getAllCategories(ctx context.Context, fieldName string, 
 
 	tmp := map[string]map[string]bool{}
 	for _, r := range res {
-		refFramework := "Custom"
-		if r.ReferenceFramework != nil {
-			refFramework = *r.ReferenceFramework
-		}
+		refFramework := getFrameworkName(r)
 
 		if _, ok := tmp[refFramework]; !ok {
 			if fieldName == control.FieldCategory && r.Category != "" {
@@ -149,10 +149,6 @@ func getStandardRefCodes(data []string) (map[string][]string, error) {
 		controlRefCode := parts[1]
 
 		// add the mapping to the result
-		if _, ok := result[standardShortName]; !ok {
-			result[standardShortName] = []string{}
-		}
-
 		result[standardShortName] = append(result[standardShortName], controlRefCode)
 	}
 
@@ -172,7 +168,7 @@ func constructWherePredicatesFromStandardRefCodes[T predicate.Control | predicat
 	for standardShortName, refCodes := range standardRefCodes {
 		switch any(*new(T)).(type) {
 		case predicate.Control:
-			if standardShortName == "CUSTOM" {
+			if strings.EqualFold(standardShortName, customFramework) {
 				predicates = append(predicates, any(control.And(
 					control.ReferenceFrameworkIsNil(),
 					control.RefCodeIn(refCodes...),
@@ -185,7 +181,7 @@ func constructWherePredicatesFromStandardRefCodes[T predicate.Control | predicat
 			}
 
 		case predicate.Subcontrol:
-			if standardShortName == "CUSTOM" {
+			if strings.EqualFold(standardShortName, customFramework) {
 				predicates = append(predicates, any(subcontrol.And(
 					subcontrol.ReferenceFrameworkIsNil(),
 					subcontrol.RefCodeIn(refCodes...),
@@ -264,4 +260,285 @@ func getControlIDsFromRefCodes[T predicate.Control | predicate.Subcontrol](ctx c
 	}
 
 	return nil, nil
+}
+
+// getFrameworkName returns the string form of the reference framework
+func getFrameworkName(c *generated.Control) string {
+	return normalizeFramework(c.ReferenceFramework)
+}
+
+// normalizeFramework returns the string form of the reference framework
+func normalizeFramework(framework *string) string {
+	if framework != nil {
+		return *framework
+	}
+
+	return customFramework
+}
+
+// getMappedControlsBySubcontrolID returns mapped control records that include the given subcontrol ID on either side
+// it passes in the owner id so that it can bypass authorization requests since all users in an organization have
+// read access to (sub)controls and mappings
+func getMappedControlsBySubcontrolID(ctx context.Context, subcontrolID string) ([]*generated.MappedControl, error) {
+	orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	ownership := subcontrol.Or(
+		subcontrol.SystemOwned(true),
+		subcontrol.OwnerIDIn(orgIDs...),
+	)
+
+	// skip filters, this is already filtered on organization
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	return withTransactionalMutation(ctx).MappedControl.Query().
+		Where(
+			mappedcontrol.Or(
+				mappedcontrol.HasFromSubcontrolsWith(subcontrol.ID(subcontrolID), ownership),
+				mappedcontrol.HasToSubcontrolsWith(subcontrol.ID(subcontrolID), ownership),
+			),
+		).
+		WithFromControls().WithToControls().WithFromSubcontrols().WithToSubcontrols().
+		All(allowCtx)
+}
+
+// getControlMappings returns the controls and subcontrols mapped to a control based on the ref code and framework
+// it passes in the owner id so that it can bypass authorization requests since all users in an organization have
+// read access to (sub)controls and mappings
+func getControlMappings(ctx context.Context, refCode string, framework *string, parentControlID *string) ([]*generated.MappedControl, error) {
+	fullWhere, err := prepMappedControlQuery(ctx, refCode, framework, parentControlID)
+	if err != nil {
+		return nil, err
+	}
+
+	// skip filters, this is already filtered on organization
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	res, err := withTransactionalMutation(ctx).MappedControl.Query().
+		Where(
+			fullWhere...,
+		).WithFromControls().WithToControls().WithFromSubcontrols().WithToSubcontrols().All(allowCtx)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// prepMappedControlQuery gets the predicate for the mapped control query
+func prepMappedControlQuery(ctx context.Context, refCode string, framework *string, parentControlID *string) ([]predicate.MappedControl, error) {
+	// get orgs to filter, this will allow us to skip expensive authz checks
+	orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	// controls have no parent control, whereas subcontrols do
+	if parentControlID == nil {
+		controlWhere := []predicate.Control{
+			control.RefCode(refCode),
+			control.Or(
+				control.SystemOwned(true),
+				control.OwnerIDIn(orgIDs...),
+			),
+		}
+
+		if framework == nil {
+			controlWhere = append(controlWhere, control.ReferenceFrameworkIsNil())
+		} else {
+			controlWhere = append(controlWhere, control.ReferenceFramework(*framework))
+		}
+
+		return []predicate.MappedControl{
+			mappedcontrol.Or(
+				mappedcontrol.HasToControlsWith(
+					controlWhere...,
+				),
+				mappedcontrol.HasFromControlsWith(
+					controlWhere...,
+				),
+			),
+		}, nil
+	}
+
+	subControlWhere := []predicate.Subcontrol{
+		subcontrol.RefCode(refCode),
+		subcontrol.ControlID(*parentControlID),
+		subcontrol.Or(
+			subcontrol.SystemOwned(true),
+			subcontrol.OwnerIDIn(orgIDs...),
+		),
+	}
+
+	return []predicate.MappedControl{
+		mappedcontrol.Or(
+			mappedcontrol.HasToSubcontrolsWith(
+				subControlWhere...,
+			),
+			mappedcontrol.HasFromSubcontrolsWith(
+				subControlWhere...,
+			),
+		),
+	}, nil
+}
+
+// getOrgMappedControlsInfo returns the organization control data for the mapped controls. If the control
+// is the same as the one being looked up, it is skipped. If the mapping came from the organization and is already
+// returning controls in the organization, it is added directly. If the mapping came from the system mappings, it looks
+// up the corresponding organization control if it exists
+func getOrgMappedControlsInfo(ctx context.Context, controls map[string]*model.ControlInfo, refCode string, framework *string) []*model.ControlInfo {
+	if len(controls) == 0 {
+		return nil
+	}
+
+	filteredControls := make(map[string]*model.ControlInfo, len(controls))
+	for k, c := range controls {
+		if isSameControlInfo(refCode, framework, c) {
+			continue
+		}
+		filteredControls[k] = c
+	}
+
+	if len(filteredControls) == 0 {
+		return nil
+	}
+
+	orgControls, ok := findOrganizationControlInfoForMappings(ctx, filteredControls)
+	if !ok {
+		return nil
+	}
+
+	return orgControls
+
+}
+
+// findOrganizationControlInfoForMappings returns the organization controls for the system control based on the framework
+// and refCode
+func findOrganizationControlInfoForMappings(ctx context.Context, controls map[string]*model.ControlInfo) ([]*model.ControlInfo, bool) {
+	// get orgs to filter, this will allow us to skip expensive authz checks
+	orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
+	if err != nil {
+		return nil, false
+	}
+
+	controlRefCodes := map[string][]string{}
+	subcontrolRefCodes := map[string][]string{}
+
+	results := []*model.ControlInfo{}
+
+	for _, c := range controls {
+		if c.ReferenceFramework == nil {
+			continue
+		}
+
+		fw := normalizeFramework(c.ReferenceFramework)
+		if c.IsSubcontrol {
+			subcontrolRefCodes[fw] = append(subcontrolRefCodes[fw], c.RefCode)
+		} else {
+			controlRefCodes[fw] = append(controlRefCodes[fw], c.RefCode)
+		}
+
+	}
+
+	// use allowContext because this is filtered on authorized organizations already
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	if len(subcontrolRefCodes) > 0 {
+		orClauses := make([]predicate.Subcontrol, 0, len(subcontrolRefCodes))
+		for fw, refCodes := range subcontrolRefCodes {
+			orClauses = append(orClauses, subcontrol.And(
+				subcontrol.ReferenceFrameworkEQ(fw),
+				subcontrol.RefCodeIn(refCodes...),
+			))
+		}
+
+		mappedFromSystem, err := withTransactionalMutation(ctx).Subcontrol.Query().Where(
+			subcontrol.SystemOwned(false),
+			subcontrol.OwnerIDIn(orgIDs...),
+			subcontrol.Or(orClauses...),
+		).All(allowCtx)
+		if err != nil {
+			// only log errors that are not because it does not exist
+			if !generated.IsNotFound(err) {
+				logx.FromContext(ctx).Error().Err(err).Msg("error getting mapped subcontrol")
+			}
+			return nil, false
+		}
+
+		for _, sc := range mappedFromSystem {
+			results = append(results, subcontrolEdgeToControlInfo(sc))
+		}
+
+	}
+
+	if len(controlRefCodes) > 0 {
+		orClauses := make([]predicate.Control, 0, len(controlRefCodes))
+		for fw, refCodes := range controlRefCodes {
+			orClauses = append(orClauses, control.And(
+				control.ReferenceFrameworkEQ(fw),
+				control.RefCodeIn(refCodes...),
+			))
+		}
+
+		mappedFromSystem, err := withTransactionalMutation(ctx).Control.Query().
+			Where(
+				control.SystemOwned(false),
+				control.OwnerIDIn(orgIDs...),
+				control.Or(orClauses...),
+			).All(allowCtx)
+		if err != nil {
+			// only log errors that are not because it does not exist
+			if !generated.IsNotFound(err) {
+				logx.FromContext(ctx).Error().Err(err).Msg("error getting mapped control")
+			}
+			return nil, false
+		}
+		for _, sc := range mappedFromSystem {
+			results = append(results, controlEdgeToControlInfo(sc))
+		}
+	}
+
+	return results, len(results) > 0
+}
+
+// isSameControlInfo checks if the refCode and framework combination match, if so they are considered the
+// same control and returns false
+func isSameControlInfo(refCode string, framework *string, mappedControl *model.ControlInfo) bool {
+	if refCode != mappedControl.RefCode {
+		return false
+	}
+
+	// ref codes match, and both are custom framework, same control
+	if framework == nil && mappedControl.ReferenceFramework == nil {
+		return true
+	}
+
+	mappedFramework := normalizeFramework(mappedControl.ReferenceFramework)
+	currentFramework := normalizeFramework(framework)
+
+	return currentFramework == mappedFramework
+}
+
+// generateMapControlKey creates a key for a map based on the ref code and framework
+func generateMapControlKey(refCode string, framework *string) string {
+	f := normalizeFramework(framework)
+
+	return fmt.Sprintf("%s::%s", refCode, f)
+}
+
+// getStandardsInOrg gets unique frameworks in the organization
+func getStandardsInOrg(ctx context.Context) ([]string, error) {
+	orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	return withTransactionalMutation(ctx).Control.Query().
+		Where(
+			control.SystemOwned(false),
+			control.OwnerIDIn(orgIDs...),
+			control.ReferenceFrameworkNotNil(),
+		).
+		Unique(true).Select(control.FieldReferenceFramework).Strings(allowCtx)
 }
