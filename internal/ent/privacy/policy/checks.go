@@ -18,6 +18,7 @@ import (
 	access "github.com/theopenlane/core/internal/ent/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/anon"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/mapx"
 )
@@ -91,7 +92,7 @@ func CanCreateObjectsUnderParents(edges []string) privacy.MutationRuleFunc {
 // CheckOrgReadAccess checks if the requestor has access to read the organization
 func CheckOrgReadAccess() privacy.QueryRule {
 	return privacy.QueryRuleFunc(func(ctx context.Context, q ent.Query) error {
-		if _, hasAnon := auth.ActiveTrustCenterIDKey.Get(ctx); hasAnon {
+		if anon.IsTrustCenter(ctx) {
 			return privacy.Denyf("anonymous users cannot access organization data")
 		}
 

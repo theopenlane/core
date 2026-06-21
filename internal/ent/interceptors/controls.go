@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/anon"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -32,7 +33,7 @@ func InterceptorTrustCenterControl() ent.Interceptor {
 		// 1. marked as trust center controls (cloned from the trust center standard)
 		// 2. have public visibility
 		// 3. owned by the trust center's organization
-		if _, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok {
+		if anon.IsTrustCenter(ctx) {
 			orgID, err := auth.GetOrganizationIDFromContext(ctx)
 			if err != nil {
 				logx.FromContext(ctx).Err(err).Msg("failed to get organization ID from context for trust center control query")
