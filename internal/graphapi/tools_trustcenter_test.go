@@ -9,7 +9,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
+	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -179,18 +181,27 @@ func cleanupWatermarkConfigs(t *testing.T) {
 	cleanupWatermarkConfigsWithContext(ctx, t)
 }
 
+// newAnonTrustCenterCtxFromCaller wraps an existing trust center caller in a properly initialized echo context
+// so that ActiveTrustCenterIDKey and the caller both survive the HTTP pipeline in tests
+func newAnonTrustCenterCtxFromCaller(caller *auth.Caller, trustCenterID string) context.Context {
+	ec := echocontext.NewTestEchoContext()
+	ctx := auth.WithCaller(ec.Request().Context(), caller)
+	ctx = auth.ActiveTrustCenterIDKey.Set(ctx, trustCenterID)
+	ctx = contextx.With(ctx, ec)
+	ec.SetRequest(ec.Request().WithContext(ctx))
+	return ctx
+}
+
 // createAnonymousTrustCenterContext creates a context for an anonymous trust center user
 func createAnonymousTrustCenterContext(trustCenterID, organizationID string) context.Context {
 	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, ulids.New().String())
-	ctx := auth.WithCaller(context.Background(), auth.NewTrustCenterCaller(organizationID, anonUserID, "Anonymous User", ""))
-	return auth.ActiveTrustCenterIDKey.Set(ctx, trustCenterID)
+	caller := auth.NewTrustCenterCaller(organizationID, anonUserID, "Anonymous User", "")
+	return newAnonTrustCenterCtxFromCaller(caller, trustCenterID)
 }
 
 // createAnonymousTrustCenterContextWithEmail creates a context for an anonymous trust center user with subject email
 func createAnonymousTrustCenterContextWithEmail(trustCenterID, organizationID, email string) (context.Context, *auth.Caller) {
 	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, ulids.New().String())
 	caller := auth.NewTrustCenterCaller(organizationID, anonUserID, "Anonymous User", email)
-	ctx := auth.WithCaller(context.Background(), caller)
-	ctx = auth.ActiveTrustCenterIDKey.Set(ctx, trustCenterID)
-	return ctx, caller
+	return newAnonTrustCenterCtxFromCaller(caller, trustCenterID), caller
 }

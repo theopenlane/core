@@ -41,8 +41,7 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 
 	anonUser := auth.NewTrustCenterCaller(trustCenter.OwnerID, anonUserID, "Anonymous User", email)
 
-	anonCtxForRequest := auth.WithCaller(context.Background(), anonUser)
-	anonCtxForRequest = auth.ActiveTrustCenterIDKey.Set(anonCtxForRequest, trustCenter.ID)
+	anonCtxForRequest := newAnonTrustCenterCtxFromCaller(anonUser, trustCenter.ID)
 	ndaCreateResp, err := suite.client.api.CreateTrustCenterNDARequest(anonCtxForRequest, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     "Test",
 		LastName:      "User",
@@ -74,9 +73,7 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 		},
 	}
 
-	ctx := context.Background()
-	anonCtx := auth.WithCaller(ctx, anonUser)
-	anonCtx = auth.ActiveTrustCenterIDKey.Set(anonCtx, trustCenter.ID)
+	anonCtx := newAnonTrustCenterCtxFromCaller(anonUser, trustCenter.ID)
 
 	// check that the anonymous user can't query the protected doc's files
 	getTrustCenterDocResp, err := suite.client.api.GetTrustCenterDocByID(anonCtx, trustCenterDocProtected.ID)
@@ -272,11 +269,8 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 	anonUser := auth.NewTrustCenterCaller(trustCenter.OwnerID, anonUserID, "Anonymous User", "test@example.com")
 	anonUser2 := auth.NewTrustCenterCaller(trustCenter2.OwnerID, anonUserID2, "Anonymous User", "testother@example.com")
 
-	ctx := context.Background()
-	anonCtx := auth.WithCaller(ctx, anonUser)
-	anonCtx = auth.ActiveTrustCenterIDKey.Set(anonCtx, trustCenter.ID)
-	anonCtx2 := auth.WithCaller(ctx, anonUser2)
-	anonCtx2 = auth.ActiveTrustCenterIDKey.Set(anonCtx2, trustCenter2.ID)
+	anonCtx := newAnonTrustCenterCtxFromCaller(anonUser, trustCenter.ID)
+	anonCtx2 := newAnonTrustCenterCtxFromCaller(anonUser2, trustCenter2.ID)
 
 	_, err = suite.client.api.CreateTrustCenterNDARequest(anonCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     "Test",

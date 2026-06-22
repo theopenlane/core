@@ -15,6 +15,7 @@ import (
 	"github.com/vektah/gqlparser/v2/gqlerror"
 
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/pkg/logx"
@@ -31,9 +32,32 @@ func InterceptorTrustCenter() ent.Interceptor {
 	})
 }
 
-// InterceptorTrustCenterChild is middleware to change the TrustCenterChild query.
-// Should be used by schemas that are owned by a trust center
+// AnonInterceptorTrustCenterChild filters trust center child queries for anon callers only
+// Use this for org-owned schemas (e.g. templates) where regular users rely on the org interceptor
+func AnonInterceptorTrustCenterChild() ent.Interceptor {
+	return trustCenterInterceptor(false, true)
+}
+
+// InterceptorTrustCenterChild filters trust center child queries for all callers
+// Use this for Trust Center owned schemas (e.g. docs, FAQs) where anon Trust Center  users can read
+// and regular users need a fallback org filter
 func InterceptorTrustCenterChild() ent.Interceptor {
+	return trustCenterInterceptor(true, true)
+}
+
+// InterceptorTrustCenterChildDenyAnon applies the fallback org filter for regular users
+// but denies all anonymous trust center callers, even those with an active Trust Center  key
+// Use for Trust Center -owned schemas that anon users submit to but must not read back (e.g. NDA requests)
+func InterceptorTrustCenterChildDenyAnon() ent.Interceptor {
+	return trustCenterInterceptor(true, false)
+}
+
+// trustCenterInterceptor builds the shared interceptor body for all filters and should be used with the exported functions
+// applyToAllRequests: when true, regular (non-anon) users get a fallback SQL filter scoped to
+// trust centers owned by their organizations
+// allowAnonAccess: when true, anon Trust Center  callers with an active key get a trust_center_id filter;
+// when false they are denied outright from querying data
+func trustCenterInterceptor(applyToAllRequests, allowAnonAccess bool) ent.Interceptor {
 	return ent.InterceptFunc(func(next ent.Querier) ent.Querier {
 		return ent.QuerierFunc(func(ctx context.Context, q ent.Query) (ent.Value, error) {
 			query, err := intercept.NewQuery(q)
@@ -41,7 +65,7 @@ func InterceptorTrustCenterChild() ent.Interceptor {
 				return nil, err
 			}
 
-			if err := applyTrustCenterChildFilters(ctx, query); err != nil {
+			if err := applyTrustCenterChildFilters(ctx, query, applyToAllRequests, allowAnonAccess); err != nil {
 				return nil, err
 			}
 
@@ -76,15 +100,13 @@ func InterceptorTrustCenterChild() ent.Interceptor {
 	})
 }
 
-func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query) error {
-	if hasOpCtx := graphql.HasOperationContext(ctx); !hasOpCtx {
-		return nil
-	}
-
-	// skip if we are creating an object, no need to filter
-	opCtx := graphql.GetOperationContext(ctx)
-	if opCtx.Operation.Operation == ast.Mutation {
-		return nil
+func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query, applyToAllRequests, allowAnonAccess bool) error {
+	if hasOpCtx := graphql.HasOperationContext(ctx); hasOpCtx {
+		// skip if we are creating an object, no need to filter
+		opCtx := graphql.GetOperationContext(ctx)
+		if opCtx.Operation.Operation == ast.Mutation {
+			return nil
+		}
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -96,11 +118,31 @@ func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query) error 
 		return nil
 	}
 
-	if tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok && tcID != "" {
+	// get the trust center key from the context
+	tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx)
+	if ok && tcID != "" {
+		if !allowAnonAccess {
+			return privacy.Denyf("anonymous trust center access not allowed for this resource")
+		}
+
+		// filter the request by trust center
 		q.WhereP(sql.FieldEQ("trust_center_id", tcID))
+
 		return nil
 	}
 
+	// deny all trust center requests that did not have a trust center key
+	if caller.Has(auth.CapTrustCenterAnonymous) {
+		return privacy.Denyf("trust center request without active trust center key")
+	}
+
+	// if the trust center filter should not be applied to all requests (e.g for schemas that are org owned and not solely trust
+	// center owned, continue with no filter)
+	if !applyToAllRequests {
+		return nil
+	}
+
+	// filter by trust centers owned by the organization in the caller context
 	orgIDs := caller.OrgIDs()
 
 	q.WhereP(func(s *sql.Selector) {

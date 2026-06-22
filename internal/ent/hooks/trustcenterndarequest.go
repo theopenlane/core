@@ -7,7 +7,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/samber/lo"
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/common/enums"
@@ -24,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/pkg/anon"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -53,7 +53,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 			email, _ := m.Email()
 
 			queryCtx := ctx
-			if _, isAnon := auth.ActiveTrustCenterIDKey.Get(ctx); isAnon {
+			if anon.IsTrustCenter(ctx) {
 				queryCtx = privacy.DecisionContext(ctx, privacy.Allow)
 			}
 

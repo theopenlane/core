@@ -31,8 +31,8 @@ func DenyIfNotInOrganization() privacy.MutationRule {
 		}
 
 		actor, ok := auth.CallerFromContext(ctx)
-		if !ok || actor == nil || actor.IsAnonymous() {
-			logx.FromContext(ctx).Error().Msg("unable to get caller from context")
+		if !ok || actor == nil {
+			logx.FromContext(ctx).Error().Msg("unable to get caller from context on deny if not in organization")
 
 			return auth.ErrNoAuthUser
 		}

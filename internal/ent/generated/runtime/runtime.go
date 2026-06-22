@@ -7532,9 +7532,11 @@ func init() {
 	template.Hooks[12] = templateHooks[2]
 	templateMixinInters1 := templateMixin[1].Interceptors()
 	templateMixinInters5 := templateMixin[5].Interceptors()
+	templateInters := schema.Template{}.Interceptors()
 	template.Interceptors[0] = templateMixinInters1[0]
 	template.Interceptors[1] = templateMixinInters5[0]
 	template.Interceptors[2] = templateMixinInters5[1]
+	template.Interceptors[3] = templateInters[0]
 	templateMixinFields0 := templateMixin[0].Fields()
 	_ = templateMixinFields0
 	templateMixinFields2 := templateMixin[2].Fields()

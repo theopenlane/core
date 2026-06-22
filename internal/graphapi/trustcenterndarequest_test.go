@@ -723,8 +723,8 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 				})
 				assert.NilError(t, err)
 
-				// Fetch the updated request to verify status
-				updatedReq, err := suite.client.api.GetTrustCenterNDARequestByID(tc.ctx, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
+				// Fetch the updated request as org owner to verify status — anon TC users cannot read NDA requests
+				updatedReq, err := suite.client.api.GetTrustCenterNDARequestByID(tcOrg.owner.UserCtx, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
 				assert.NilError(t, err)
 				assert.Equal(t, enums.TrustCenterNDARequestStatusSigned, *updatedReq.TrustCenterNDARequest.Status)
 			}
@@ -1079,8 +1079,7 @@ func TestMutationRevokeNDARequestsRemovesDocAccess(t *testing.T) {
 		subjectID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, id)
 
 		anonCaller := auth.NewTrustCenterCaller(trustCenter.OwnerID, subjectID, "Anonymous User", "")
-		anonCtx := auth.WithCaller(context.Background(), anonCaller)
-		anonCtx = auth.ActiveTrustCenterIDKey.Set(anonCtx, trustCenter.ID)
+		anonCtx := newAnonTrustCenterCtxFromCaller(anonCaller, trustCenter.ID)
 
 		anonCtxs = append(anonCtxs, anonCtx)
 

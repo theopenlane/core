@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"slices"
 
 	"entgo.io/ent"
 	"github.com/stoewer/go-strcase"
@@ -15,9 +16,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	access "github.com/theopenlane/core/internal/ent/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/anon"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/mapx"
 )
@@ -91,7 +94,7 @@ func CanCreateObjectsUnderParents(edges []string) privacy.MutationRuleFunc {
 // CheckOrgReadAccess checks if the requestor has access to read the organization
 func CheckOrgReadAccess() privacy.QueryRule {
 	return privacy.QueryRuleFunc(func(ctx context.Context, q ent.Query) error {
-		if _, hasAnon := auth.ActiveTrustCenterIDKey.Get(ctx); hasAnon {
+		if anon.IsTrustCenter(ctx) {
 			return privacy.Denyf("anonymous users cannot access organization data")
 		}
 
@@ -216,8 +219,19 @@ func CheckEdgesForRemovedAccess(ctx context.Context, m ent.Mutation, edges []str
 // checkEdgesEditAccess takes a list of edges and looks for the permissions edges to confirm the user has edit access
 func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, added bool) error {
 	actor, ok := auth.CallerFromContext(ctx)
-	if !ok || actor == nil || actor.IsAnonymous() {
-		logx.FromContext(ctx).Error().Msg("unable to get caller from context")
+	if !ok || actor == nil {
+		logx.FromContext(ctx).Error().Msg("unable to get caller from context for edge checks")
+
+		return auth.ErrNoAuthUser
+	}
+
+	if actor.IsAnonymous() {
+		// allow for anon creation setting on the trust center edge
+		if allowTrustCenterEdgeForAnon(ctx, edges) {
+			return nil
+		}
+
+		logx.FromContext(ctx).Error().Str("mutation", m.Type()).Strs("edges", edges).Msg("anon request trying to edit edge")
 
 		return auth.ErrNoAuthUser
 	}
@@ -336,4 +350,25 @@ func mapEdgeToObjectType(ctx context.Context, schema string, edge string) authzg
 	}
 
 	return edgeAccess
+}
+
+// allowTrustCenterEdgeForAnon allows returns trust if the request is
+// for an anon trust center request and the only edge to check is for the
+// trust_center edge. This allows the setting of the edge on a trust center child when creating things like an nda request
+func allowTrustCenterEdgeForAnon(ctx context.Context, edges []string) bool {
+	if !anon.IsTrustCenter(ctx) {
+		return false
+	}
+
+	if len(edges) == 0 {
+		return true
+	}
+
+	if len(edges) == 1 {
+		if slices.Contains(edges, trustcenterndarequest.EdgeTrustCenter) {
+			return true
+		}
+	}
+
+	return false
 }

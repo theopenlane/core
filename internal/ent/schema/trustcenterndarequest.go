@@ -119,7 +119,6 @@ func (t TrustCenterNDARequest) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.TrustCenterNDARequest](t,
 				withParents(TrustCenter{}),
-				withAllowAnonymousTrustCenterAccess(true),
 			),
 			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
@@ -161,7 +160,7 @@ func (t TrustCenterNDARequest) Edges() []ent.Edge {
 // Interceptors of the TrustCenterNDARequest
 func (TrustCenterNDARequest) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorTrustCenterChild(),
+		interceptors.InterceptorTrustCenterChildDenyAnon(),
 	}
 }
 
@@ -176,6 +175,11 @@ func (TrustCenterNDARequest) Hooks() []ent.Hook {
 // Policy of the TrustCenterNDARequest
 func (TrustCenterNDARequest) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithOnMutationRules(ent.OpCreate,
+			// allow the creation of trust center nda
+			// with anon trust center JWTs
+			rule.AllowIfTrustCenterAnonRequest(),
+		),
 		policy.WithMutationRules(
 			rule.AllowIfTrustCenterEditor(),
 			policy.CheckCreateAccess(),
