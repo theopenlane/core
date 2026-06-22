@@ -80,9 +80,12 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Assert(t, getTrustCenterDocResp.TrustCenterDoc.OriginalFile == nil)
 
-	// Clear any existing jobs
+	// Clear any existing jobs and emails before submitting
 	err = suite.client.db.Job.TruncateRiverTables(tcOrg.owner.UserCtx)
 	assert.NilError(t, err)
+
+	suite.mockEmailSender().Reset()
+	expectAttestedUpload(t, suite.client.mockProvider)
 
 	resp, err := suite.client.api.SubmitTrustCenterNDAResponse(anonCtx, input)
 
@@ -97,6 +100,16 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	assert.Assert(t, len(ndaRequest.TrustCenterNdaRequests.Edges) == 1)
 	assert.Equal(t, ndaRequest.TrustCenterNdaRequests.Edges[0].Node.Status.String(), enums.TrustCenterNDARequestStatusSigned.String())
 	assert.Check(t, ndaRequest.TrustCenterNdaRequests.Edges[0].Node.SignedAt != nil)
+
+	// wait for the NDA attestation listener to process the document data creation
+	suite.WaitForEvents()
+
+	// verify the signed NDA email was sent with the attested PDF attached
+	msgs := suite.mockEmailSender().Messages()
+	assert.Assert(t, len(msgs) == 1, "expected 1 email after NDA signing, got %d", len(msgs))
+	assert.Assert(t, len(msgs[0].Attachments) == 1, "expected signed PDF attachment")
+	assert.Equal(t, "signed_nda_file.pdf", msgs[0].Attachments[0].Filename)
+	assert.Assert(t, len(msgs[0].Attachments[0].Content) > 0, "expected non-empty PDF content in attachment")
 
 	// now, check that the anonymous user can query the protected doc's files
 	getTrustCenterDocResp, err = suite.client.api.GetTrustCenterDocByID(anonCtx, trustCenterDocProtected.ID)

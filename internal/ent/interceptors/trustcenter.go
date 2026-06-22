@@ -121,8 +121,9 @@ func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query, applyT
 	// get the trust center key from the context
 	tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx)
 	if ok && tcID != "" {
-		if !allowAnonAccess {
-			return privacy.Denyf("anonymous trust center access not allowed for this resource")
+		_, allowRequest := privacy.DecisionFromContext(ctx)
+		if !allowAnonAccess && !allowRequest {
+			return privacy.Denyf("anonymous trust center access not allowed for this resource: %s", q.Type())
 		}
 
 		// filter the request by trust center
