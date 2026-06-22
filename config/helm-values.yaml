@@ -372,7 +372,7 @@ coreConfiguration:
     redis: true  # @schema type:boolean; default:true
     recoverycodecount: 16  # @schema type:integer; default:16
     recoverycodelength: 8  # @schema type:integer; default:8
-  # -- Ratelimit contains the configuration for the rate limiter
+  # -- Ratelimit contains the configuration for the global rate limiter applied to all requests
   ratelimit:
     enabled: false  # @schema type:boolean; default:false
     # -- Options enables configuring multiple concurrent rate windows that must all pass.
@@ -382,9 +382,11 @@ coreConfiguration:
         requests: 500
         window: 1m0s
     # -- Headers determines which headers are inspected to determine the origin IP.
-    # Defaults to X-Forwarded-For, True-Client-IP, RemoteAddr.
+    # Defaults to CF-Connecting-IP, True-Client-IP, RemoteAddr.
     headers:
+        - CF-Connecting-IP
         - True-Client-IP
+        - RemoteAddr
     # -- ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.
     # 0 means the closest client, 1 the proxy behind it, etc.
     forwardedindexfrombehind: 0  # @schema type:integer; default:0
@@ -400,6 +402,38 @@ coreConfiguration:
     denymessage: "Too many requests"  # @schema type:string; default:Too many requests
     # -- SendRetryAfterHeader toggles whether the Retry-After header should be added when available.
     sendretryafterheader: true  # @schema type:boolean; default:true
+    # -- DryRun enables logging rate limit decisions without blocking requests.
+    dryrun: true  # @schema type:boolean; default:true
+  # -- RatelimitUnmatched contains the rate limiter configuration applied only to requests that do not match a registered route
+  ratelimitunmatched:
+    enabled: false  # @schema type:boolean; default:false
+    # -- Options enables configuring multiple concurrent rate windows that must all pass.
+    options:
+      - expiration: 0s
+        flushinterval: 0s
+        requests: 500
+        window: 1m0s
+    # -- Headers determines which headers are inspected to determine the origin IP.
+    # Defaults to CF-Connecting-IP, True-Client-IP, RemoteAddr.
+    headers:
+        - CF-Connecting-IP
+        - True-Client-IP
+        - RemoteAddr
+    # -- ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.
+    # 0 means the closest client, 1 the proxy behind it, etc.
+    forwardedindexfrombehind: 0  # @schema type:integer; default:0
+    # -- IncludePath appends the request path to the limiter key when true.
+    includepath: false  # @schema type:boolean; default:false
+    # -- IncludeMethod appends the request method to the limiter key when true.
+    includemethod: false  # @schema type:boolean; default:false
+    # -- KeyPrefix allows scoping the limiter key space with a static prefix.
+    keyprefix: ""  # @schema type:string
+    # -- DenyStatus overrides the HTTP status code returned when a rate limit is exceeded.
+    denystatus: 429  # @schema type:integer; default:429
+    # -- DenyMessage customises the error payload when a rate limit is exceeded.
+    denymessage: "Too many requests"  # @schema type:string; default:Too many requests
+    # -- SendRetryAfterHeader toggles whether the Retry-After header should be added when available.
+    sendretryafterheader: false  # @schema type:boolean; default:true
     # -- DryRun enables logging rate limit decisions without blocking requests.
     dryrun: true  # @schema type:boolean; default:true
   # -- ObjectStorage contains the configuration for the object storage backend

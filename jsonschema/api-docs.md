@@ -19,6 +19,7 @@ Config contains the configuration for the core server
 |[**sessions**](#sessions)|`object`|||
 |[**totp**](#totp)|`object`|||
 |[**ratelimit**](#ratelimit)|`object`|Config defines the configuration settings for the rate limiter middleware.<br/>||
+|[**ratelimitunmatched**](#ratelimitunmatched)|`object`|Config defines the configuration settings for the rate limiter middleware.<br/>||
 |[**objectstorage**](#objectstorage)|`object`|ProviderConfig contains configuration for object storage providers<br/>||
 |[**subscription**](#subscription)|`object`|||
 |[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
@@ -101,6 +102,11 @@ Config contains the configuration for the core server
     "sessions": {},
     "totp": {},
     "ratelimit": {
+        "options": [
+            {}
+        ]
+    },
+    "ratelimitunmatched": {
         "options": [
             {}
         ]
@@ -1247,6 +1253,58 @@ Config defines the configuration settings for the rate limiter middleware.
 
 <a name="ratelimitheaders"></a>
 ### ratelimit\.headers: array
+
+**Items**
+
+**Item Type:** `string`  
+<a name="ratelimitunmatched"></a>
+## ratelimitunmatched: object
+
+Config defines the configuration settings for the rate limiter middleware.
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|||
+|[**options**](#ratelimitunmatchedoptions)|`array`|||
+|[**headers**](#ratelimitunmatchedheaders)|`string[]`|||
+|**forwardedindexfrombehind**|`integer`|ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.<br/>0 means the closest client, 1 the proxy behind it, etc.<br/>||
+|**includepath**|`boolean`|IncludePath appends the request path to the limiter key when true.<br/>||
+|**includemethod**|`boolean`|IncludeMethod appends the request method to the limiter key when true.<br/>||
+|**keyprefix**|`string`|KeyPrefix allows scoping the limiter key space with a static prefix.<br/>||
+|**denystatus**|`integer`|DenyStatus overrides the HTTP status code returned when a rate limit is exceeded.<br/>||
+|**denymessage**|`string`|DenyMessage customises the error payload when a rate limit is exceeded.<br/>||
+|**sendretryafterheader**|`boolean`|SendRetryAfterHeader toggles whether the Retry-After header should be added when available.<br/>||
+|**dryrun**|`boolean`|DryRun enables logging rate limit decisions without blocking requests.<br/>||
+
+**Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "options": [
+        {}
+    ]
+}
+```
+
+<a name="ratelimitunmatchedoptions"></a>
+### ratelimitunmatched\.options: array
+
+**Items**
+
+**Example**
+
+```json
+[
+    {}
+]
+```
+
+<a name="ratelimitunmatchedheaders"></a>
+### ratelimitunmatched\.headers: array
 
 **Items**
 

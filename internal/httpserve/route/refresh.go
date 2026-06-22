@@ -17,6 +17,7 @@ func registerRefreshHandler(router *Router) error {
 		OperationID: "RefreshHandler",
 		Security:    handlers.AllSecurityRequirements(),
 		Middlewares: *publicEndpoint,
+		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.RefreshHandler,
 	}
 

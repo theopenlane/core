@@ -20,6 +20,7 @@ func registerCSRFHandler(router *Router) (err error) {
 		OperationID: "CSRF",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   publicStaticRateLimit,
 		SimpleHandler: func(ctx echo.Context) error {
 			token := ctx.Get(middleware.DefaultCSRFConfig.ContextKey)
 

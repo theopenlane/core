@@ -17,6 +17,7 @@ func registerVerifyHandler(router *Router) error {
 		OperationID: "VerifyEmail",
 		Security:    &openapi3.SecurityRequirements{},
 		Middlewares: *unauthenticatedEndpoint,
+		RateLimit:   authRateLimit,
 		Handler:     router.Handler.VerifyEmail,
 	}
 

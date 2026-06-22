@@ -17,6 +17,7 @@ func registerVerifySubscribeHandler(router *Router) error {
 		OperationID: "VerifySubscription",
 		Security:    &openapi3.SecurityRequirements{},
 		Middlewares: *unauthenticatedEndpoint,
+		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.VerifySubscriptionHandler,
 	}
 
@@ -34,6 +35,7 @@ func registerUnsubscribeHandler(router *Router) error {
 		OperationID: "Unsubscribe",
 		Security:    &openapi3.SecurityRequirements{},
 		Middlewares: *unauthenticatedEndpoint,
+		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.UnsubscribeHandler,
 	}
 

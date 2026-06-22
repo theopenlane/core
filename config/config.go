@@ -69,8 +69,10 @@ type Config struct {
 	Sessions sessions.Config `json:"sessions" koanf:"sessions"`
 	// TOTP contains the configuration for the TOTP provider
 	TOTP totp.Config `json:"totp" koanf:"totp"`
-	// Ratelimit contains the configuration for the rate limiter
+	// Ratelimit contains the configuration for the global rate limiter applied to all requests
 	Ratelimit ratelimit.Config `json:"ratelimit" koanf:"ratelimit"`
+	// RatelimitUnmatched contains the rate limiter configuration applied only to requests that do not match a registered route
+	RatelimitUnmatched ratelimit.Config `json:"ratelimitunmatched" koanf:"ratelimitunmatched"`
 	// ObjectStorage contains the configuration for the object storage backend
 	ObjectStorage storage.ProviderConfig `json:"objectstorage" koanf:"objectstorage"`
 	// Entitlements contains the configuration for the entitlements service

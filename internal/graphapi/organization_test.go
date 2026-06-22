@@ -997,6 +997,7 @@ func TestMutationOrganizationCascadeDelete(t *testing.T) {
 
 	reqCtx := auth.NewTestContextWithOrgID(orgUser.ID, org.ID)
 	group1 := (&GroupBuilder{client: suite.client}).MustNew(reqCtx, t)
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(reqCtx, t)
 
 	// add child org
 	childOrg := (&OrganizationBuilder{client: suite.client, ParentOrgID: org.ID}).MustNew(reqCtx, t)
@@ -1024,6 +1025,13 @@ func TestMutationOrganizationCascadeDelete(t *testing.T) {
 		_, err := suite.client.api.GetGroupByID(reqCtx, group1.ID)
 		return err != nil && strings.Contains(err.Error(), notFoundErrorMsg)
 	}, "group should be deleted by async edge cleanup")
+
+	waitForCondition(t, func() bool {
+		// make sure the custom domain(s) no longer exists
+		ctx := privacy.DecisionContext(reqCtx, privacy.Allow)
+		_, err := suite.client.db.CustomDomain.Get(ctx, customDomain.ID)
+		return generated.IsNotFound(err)
+	}, "custom domain should be deleted by async edge cleanup")
 
 	// verify the parent org is soft-deleted (not hard-deleted) by querying the db directly
 	ctx := privacy.DecisionContext(reqCtx, privacy.Allow)

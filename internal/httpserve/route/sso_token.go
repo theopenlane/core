@@ -34,6 +34,7 @@ func registerSSOTokenCallbackHandler(router *Router) error {
 		OperationID: "SSOTokenCallback",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.SSOTokenCallbackHandler,
 	}
 

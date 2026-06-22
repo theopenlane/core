@@ -365,8 +365,16 @@ func initializeRateLimitOptions(cfg *config.Config) {
 		return
 	}
 
-	rl := &cfg.Ratelimit
+	populateRateLimitOptions(&cfg.Ratelimit)
 
+	populateRateLimitOptions(&cfg.RatelimitUnmatched)
+	// the unmatched-route limiter never advertises Retry-After (the route does not exist, so retrying cannot
+	// succeed), so reflect that in the generated config rather than advertising a knob the runtime overrides
+	cfg.RatelimitUnmatched.SendRetryAfterHeader = false
+}
+
+// populateRateLimitOptions ensures the rate limiter config exposes at least one option populated with defaults
+func populateRateLimitOptions(rl *ratelimit.Config) {
 	if len(rl.Options) == 0 {
 		opt := ratelimit.RateOption{}
 		defaults.SetDefaults(&opt)

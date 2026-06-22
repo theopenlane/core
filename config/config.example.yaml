@@ -321,7 +321,9 @@ ratelimit:
     enabled: false
     forwardedindexfrombehind: 0
     headers:
+        - CF-Connecting-IP
         - True-Client-IP
+        - RemoteAddr
     includemethod: false
     includepath: false
     keyprefix: ""
@@ -331,6 +333,25 @@ ratelimit:
           requests: 500
           window: 1m0s
     sendretryafterheader: true
+ratelimitunmatched:
+    denymessage: Too many requests
+    denystatus: 429
+    dryrun: true
+    enabled: false
+    forwardedindexfrombehind: 0
+    headers:
+        - CF-Connecting-IP
+        - True-Client-IP
+        - RemoteAddr
+    includemethod: false
+    includepath: false
+    keyprefix: ""
+    options:
+        - expiration: 0s
+          flushinterval: 0s
+          requests: 500
+          window: 1m0s
+    sendretryafterheader: false
 redis:
     address: localhost:6379
     db: 0

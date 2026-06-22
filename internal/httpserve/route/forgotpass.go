@@ -17,6 +17,7 @@ func registerForgotPasswordHandler(router *Router) error {
 		OperationID: "ForgotPassword",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *unauthenticatedEndpoint,
+		RateLimit:   emailRateLimit,
 		Handler:     router.Handler.ForgotPassword,
 	}
 
