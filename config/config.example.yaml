@@ -346,8 +346,12 @@ ratelimitunmatched:
     includemethod: false
     includepath: false
     keyprefix: ""
-    options: []
-    sendretryafterheader: true
+    options:
+        - expiration: 0s
+          flushinterval: 0s
+          requests: 500
+          window: 1m0s
+    sendretryafterheader: false
 redis:
     address: localhost:6379
     db: 0

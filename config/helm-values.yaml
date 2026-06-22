@@ -408,7 +408,11 @@ coreConfiguration:
   ratelimitunmatched:
     enabled: false  # @schema type:boolean; default:false
     # -- Options enables configuring multiple concurrent rate windows that must all pass.
-    options: []
+    options:
+      - expiration: 0s
+        flushinterval: 0s
+        requests: 500
+        window: 1m0s
     # -- Headers determines which headers are inspected to determine the origin IP.
     # Defaults to CF-Connecting-IP, True-Client-IP, RemoteAddr.
     headers:
@@ -429,7 +433,7 @@ coreConfiguration:
     # -- DenyMessage customises the error payload when a rate limit is exceeded.
     denymessage: "Too many requests"  # @schema type:string; default:Too many requests
     # -- SendRetryAfterHeader toggles whether the Retry-After header should be added when available.
-    sendretryafterheader: true  # @schema type:boolean; default:true
+    sendretryafterheader: false  # @schema type:boolean; default:true
     # -- DryRun enables logging rate limit decisions without blocking requests.
     dryrun: true  # @schema type:boolean; default:true
   # -- ObjectStorage contains the configuration for the object storage backend
