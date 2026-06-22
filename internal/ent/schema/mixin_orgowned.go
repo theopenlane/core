@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/anon"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -243,20 +244,18 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			return nil
 		}
 
-		// check if the request is for an anon JWT
-		isAnon, err := isAnonCaller(ctx)
-		if err != nil {
-			return err
-		}
-
-		// check for anon trust center JWT
+		// check for anon trust center JWT; this also returns ErrNoAuthUser when no caller
+		// or organization is present, which guards the classification below
 		trustCenterOrganization, isTrustCenterAnon, err := isAnonTrustCenterCaller(ctx)
 		if err != nil {
 			return err
 		}
 
-		// check for questionnaire callers (these only happen via REST handlers)
-		isQuestionnaireCaller := isQuestionnaireAnonCaller(ctx)
+		// classify the anonymous caller for the access checks below
+		isAnon := anon.IsAnonymous(ctx)
+
+		// questionnaire callers only happen via REST handlers
+		isQuestionnaireCaller := anon.IsQuestionnaire(ctx)
 
 		// Trust Center anon users without GraphQL key are blocked by BlockNonTrustCenterAnonymous middleware;
 		// questionnaire callers are legitimate REST callers and fall through to the org filter further down
@@ -303,45 +302,25 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 	})
 }
 
-// isAnonTrustCenterCaller returns true for anon trust center callers
-// with the organization id the trust center is associated with from
-// the caller context
+// isAnonTrustCenterCaller returns the organization id the trust center is associated with
+// and whether the caller is an anonymous trust center caller. A caller that carries the
+// trust center anonymous capability without an active trust center key is malformed and is
+// denied rather than falling through to the organization filter
 func isAnonTrustCenterCaller(ctx context.Context) (string, bool, error) {
 	caller, ok := auth.CallerFromContext(ctx)
 	if !ok || caller == nil || caller.OrganizationID == "" {
 		return "", false, auth.ErrNoAuthUser
 	}
 
-	tcID, hasAnonTCUser := auth.ActiveTrustCenterIDKey.Get(ctx)
-	if !hasAnonTCUser || tcID == "" {
-		if caller.Has(auth.CapTrustCenterAnonymous) {
-			return "", false, privacy.Denyf("trust center request without active trust center key")
-		}
-
-		return "", false, nil
+	if _, orgID, ok := anon.TrustCenterScope(ctx); ok {
+		return orgID, true, nil
 	}
 
-	return caller.OrganizationID, caller.OrganizationRole == auth.AnonymousRole && (caller.Has(auth.CapTrustCenterAnonymous)), nil
-}
-
-// isQuestionnaireAnonCaller returns true for a questionnaire anonymous caller
-func isQuestionnaireAnonCaller(ctx context.Context) bool {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
-		return false
+	if caller.Has(auth.CapTrustCenterAnonymous) {
+		return "", false, privacy.Denyf("trust center request without active trust center key")
 	}
 
-	return caller.OrganizationRole == auth.AnonymousRole && caller.Has(auth.CapQuestionnaireAnonymous)
-}
-
-// isAnonCaller returns true for any anonymous caller
-func isAnonCaller(ctx context.Context) (bool, error) {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
-		return false, auth.ErrNoAuthUser
-	}
-
-	return caller.OrganizationRole == auth.AnonymousRole, nil
+	return "", false, nil
 }
 
 // orgInterceptorSkipper skips the organization interceptor based on the context

@@ -141,15 +141,22 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 						return unauthorized(c, ErrAnonymousAccessNotAllowed, conf, validator)
 					}
 
-					switch strings.HasPrefix(claims.UserID, "anon_questionnaire") {
-					case true:
+					// derive the anonymous caller type from the scope claim that the token
+					// carries, not from a naming convention on the user id. A valid anonymous
+					// token carries exactly one of a trust center id or an assessment id
+					switch {
+					case claims.TrustCenterID != "" && claims.AssessmentID == "":
+						ctx := auth.WithCaller(c.Request().Context(), auth.NewTrustCenterCaller(claims.OrgID, claims.UserID, "Anonymous User", claims.Email))
+						ctx = auth.ActiveTrustCenterIDKey.Set(ctx, claims.TrustCenterID)
+						c.SetRequest(c.Request().WithContext(ctx))
+					case claims.AssessmentID != "" && claims.TrustCenterID == "":
 						ctx := auth.WithCaller(c.Request().Context(), auth.NewQuestionnaireCaller(claims.OrgID, claims.UserID, "Anonymous User", claims.Email))
 						ctx = auth.ActiveAssessmentIDKey.Set(ctx, claims.AssessmentID)
 						c.SetRequest(c.Request().WithContext(ctx))
 					default:
-						ctx := auth.WithCaller(c.Request().Context(), auth.NewTrustCenterCaller(claims.OrgID, claims.UserID, "Anonymous User", claims.Email))
-						ctx = auth.ActiveTrustCenterIDKey.Set(ctx, claims.TrustCenterID)
-						c.SetRequest(c.Request().WithContext(ctx))
+						// a token with neither or both scope claims is malformed and must not
+						// be granted any anonymous capability
+						return unauthorized(c, ErrAnonymousAccessNotAllowed, conf, validator)
 					}
 
 					// Record anonymous JWT authentication
