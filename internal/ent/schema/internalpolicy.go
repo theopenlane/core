@@ -202,8 +202,9 @@ func (InternalPolicy) Hooks() []ent.Hook {
 // Interceptors of the InternalPolicy
 func (InternalPolicy) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		// policies are org owned, but we need to ensure the groups are filtered as well
-		interceptors.FilterQueryResults[generated.InternalPolicy](nil),
+		// policies are org owned with blocked groups filtered at the SQL level by GroupPermissionsMixin;
+		// skip the FGA batch check on list/IDs queries since org membership implies view access
+		interceptors.FilterQueryResults[generated.InternalPolicy](nil, interceptors.SkipQueryOps(interceptors.SkipAllQuery|interceptors.SkipIDsQuery)),
 	}
 }
 

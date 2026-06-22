@@ -148,7 +148,42 @@ func GetAuthorizedObjectIDs(ctx context.Context, queryType string, relation fgax
 	return objectIDs, nil
 }
 
-type skipperFunc func(ctx context.Context) bool
+// SkipperFunc is a function that determines whether the FGA filter should be skipped for a query
+type SkipperFunc func(ctx context.Context) bool
+
+// SkipQueryOps returns a SkipperFunc that skips the FGA filter for the given query modes.
+// Use this on schemas that cannot use withSkipFilterInterceptor (e.g. those backed by newOrgOwnedMixin)
+// but are safe to skip FGA on list queries because org membership implies view access and blocked
+// groups are already enforced at the SQL level via GroupPermissionsMixin
+func SkipQueryOps(mode SkipMode) SkipperFunc {
+	return func(ctx context.Context) bool {
+		if mode == SkipNone {
+			return false
+		}
+
+		if mode == SkipAll {
+			return true
+		}
+
+		ctxQuery := ent.QueryFromContext(ctx)
+		if ctxQuery == nil {
+			return false
+		}
+
+		switch ctxQuery.Op {
+		case AllOperation:
+			return mode&SkipAllQuery != 0
+		case OnlyOperation:
+			return mode&SkipOnlyQuery != 0
+		case ExistOperation:
+			return mode&SkipExistsQuery != 0
+		case IDsOperation:
+			return mode&SkipIDsQuery != 0
+		default:
+			return false
+		}
+	}
+}
 
 // logObjectIDs logs object IDs with full details at debug level, just counts at info level
 func logObjectIDs(ctx context.Context, objectType string, objectIDs []string, msg string) {
@@ -166,17 +201,17 @@ func logObjectIDs(ctx context.Context, objectType string, objectIDs []string, ms
 // directly if that mixin is used
 // This function is intended to filter results after the query is run using the BatchCheck in FGA
 // which is more performant than the ListObjectsRequest, especially for large lists
-func FilterQueryResults[V any](forceFilter skipperFunc, skipperFunc ...skipperFunc) ent.InterceptFunc {
+func FilterQueryResults[V any](forceFilter SkipperFunc, customSkip ...SkipperFunc) ent.InterceptFunc {
 	return func(next ent.Querier) ent.Querier {
 		return ent.QuerierFunc(func(ctx context.Context, query ent.Query) (ent.Value, error) {
-			return filterQueryResults[V](ctx, query, next, forceFilter, skipperFunc...)
+			return filterQueryResults[V](ctx, query, next, forceFilter, customSkip...)
 		})
 	}
 }
 
 // filterQueryResults filters the results of a query to only include the objects that the user has access to
 // using the BatchCheck in FGA and returns the filtered results as the ent.Value based on the provided type
-func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Querier, forceFilter skipperFunc, skipperFunc ...skipperFunc) (ent.Value, error) {
+func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Querier, forceFilter SkipperFunc, customSkip ...SkipperFunc) (ent.Value, error) {
 	// by pass checks on invite or pre-allowed request
 	// convert the query to an intercept query
 	q, err := intercept.NewQuery(query)
@@ -184,7 +219,7 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 		return nil, err
 	}
 
-	if skipFilter(ctx, q, forceFilter, skipperFunc...) {
+	if skipFilter(ctx, q, forceFilter, customSkip...) {
 		return next.Query(ctx, query)
 	}
 
@@ -233,7 +268,7 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 	}
 }
 
-func skipFilter(ctx context.Context, q intercept.Query, forceFilter skipperFunc, customSkipperFunc ...skipperFunc) bool {
+func skipFilter(ctx context.Context, q intercept.Query, forceFilter SkipperFunc, customSkipperFunc ...SkipperFunc) bool {
 	// by pass checks on invite or pre-allowed request
 	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
 		return true

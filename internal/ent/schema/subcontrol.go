@@ -15,6 +15,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -148,11 +149,12 @@ func (s Subcontrol) Mixin() []ent.Mixin {
 			ControlMixin{
 				SchemaType: s,
 			},
-			// subcontrols can inherit permissions from the parent control
+			// subcontrols inherit view access from the parent control via FGA
 			newObjectOwnedMixin[generated.Subcontrol](s,
 				withParents(Control{}),
 				withOrganizationOwner(),
 				withSkipForSystemAdmin(),
+				withSkipFilterInterceptor(interceptors.SkipAllQuery|interceptors.SkipIDsQuery),
 			),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(s, withWorkflowEnumEdges()),
@@ -186,6 +188,14 @@ func (Subcontrol) Hooks() []ent.Hook {
 	}
 }
 
+// Interceptors of the Subcontrol
+func (Subcontrol) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		// check the parent control's blocked groups so list queries don't require per-object FGA checks
+		parentBlockedGroupsInterceptor(SchemaControl),
+	}
+}
+
 // Policy of the Subcontrol
 func (s Subcontrol) Policy() ent.Policy {
 	return policy.NewPolicy(
@@ -209,6 +219,8 @@ func (Subcontrol) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALAssembly("implemented-requirement-statement"),
 		),
 		entx.FGACrudParent(Control{}.Name()),
+		// list queries use SQL blocked group filtering via newParentBlockedGroupsInterceptor
+		SkipFGAOverfetch{Enabled: true},
 	}
 }
 

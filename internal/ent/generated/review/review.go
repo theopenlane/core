@@ -92,8 +92,6 @@ const (
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
 	EdgeEditors = "editors"
-	// EdgeViewers holds the string denoting the viewers edge name in mutations.
-	EdgeViewers = "viewers"
 	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
 	EdgeEnvironment = "environment"
 	// EdgeScope holds the string denoting the scope edge name in mutations.
@@ -139,27 +137,16 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
-	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge.
-	BlockedGroupsTable = "groups"
+	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge. The primary key declared below.
+	BlockedGroupsTable = "review_blocked_groups"
 	// BlockedGroupsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	BlockedGroupsInverseTable = "groups"
-	// BlockedGroupsColumn is the table column denoting the blocked_groups relation/edge.
-	BlockedGroupsColumn = "review_blocked_groups"
-	// EditorsTable is the table that holds the editors relation/edge.
-	EditorsTable = "groups"
+	// EditorsTable is the table that holds the editors relation/edge. The primary key declared below.
+	EditorsTable = "review_editors"
 	// EditorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	EditorsInverseTable = "groups"
-	// EditorsColumn is the table column denoting the editors relation/edge.
-	EditorsColumn = "review_editors"
-	// ViewersTable is the table that holds the viewers relation/edge.
-	ViewersTable = "groups"
-	// ViewersInverseTable is the table name for the Group entity.
-	// It exists in this package in order to avoid circular dependency with the "group" package.
-	ViewersInverseTable = "groups"
-	// ViewersColumn is the table column denoting the viewers relation/edge.
-	ViewersColumn = "review_viewers"
 	// EnvironmentTable is the table that holds the environment relation/edge.
 	EnvironmentTable = "reviews"
 	// EnvironmentInverseTable is the table name for the CustomTypeEnum entity.
@@ -310,6 +297,12 @@ var Columns = []string{
 }
 
 var (
+	// BlockedGroupsPrimaryKey and BlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the blocked_groups relation (M2M).
+	BlockedGroupsPrimaryKey = []string{"review_id", "group_id"}
+	// EditorsPrimaryKey and EditorsColumn2 are the table columns denoting the
+	// primary key for the editors relation (M2M).
+	EditorsPrimaryKey = []string{"review_id", "group_id"}
 	// IntegrationsPrimaryKey and IntegrationsColumn2 are the table columns denoting the
 	// primary key for the integrations relation (M2M).
 	IntegrationsPrimaryKey = []string{"integration_id", "review_id"}
@@ -355,8 +348,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [14]ent.Hook
-	Interceptors [3]ent.Interceptor
+	Hooks        [13]ent.Hook
+	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -585,20 +578,6 @@ func ByEditorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByViewersCount orders the results by viewers count.
-func ByViewersCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newViewersStep(), opts...)
-	}
-}
-
-// ByViewers orders the results by viewers terms.
-func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -843,21 +822,14 @@ func newBlockedGroupsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(BlockedGroupsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, BlockedGroupsTable, BlockedGroupsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, BlockedGroupsTable, BlockedGroupsPrimaryKey...),
 	)
 }
 func newEditorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EditorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, EditorsTable, EditorsColumn),
-	)
-}
-func newViewersStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ViewersInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ViewersTable, ViewersColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
 	)
 }
 func newEnvironmentStep() *sqlgraph.Step {

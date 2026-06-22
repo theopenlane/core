@@ -70,7 +70,7 @@ type subcontrol
 
     # parent permissions derived based on `crud` permissions or parents
     define parent_editor: can_edit from parent_context or can_edit_subcontrol from parent_context or can_edit from parent
-    define parent_viewer: can_view from parent_context or can_view_subcontrol from parent_context or can_view from parent
+    define parent_viewer: can_view_subcontrol from parent_context or can_view from parent
     define parent_context: [organization]
     define parent: [control]
 

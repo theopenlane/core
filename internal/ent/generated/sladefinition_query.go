@@ -32,12 +32,10 @@ type SLADefinitionQuery struct {
 	withOwner              *OrganizationQuery
 	withBlockedGroups      *GroupQuery
 	withEditors            *GroupQuery
-	withViewers            *GroupQuery
 	loadTotal              []func(context.Context, []*SLADefinition) error
 	modifiers              []func(*sql.Selector)
 	withNamedBlockedGroups map[string]*GroupQuery
 	withNamedEditors       map[string]*GroupQuery
-	withNamedViewers       map[string]*GroupQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -139,31 +137,6 @@ func (_q *SLADefinitionQuery) QueryEditors() *GroupQuery {
 			sqlgraph.From(sladefinition.Table, sladefinition.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, sladefinition.EditorsTable, sladefinition.EditorsColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryViewers chains the current query on the "viewers" edge.
-func (_q *SLADefinitionQuery) QueryViewers() *GroupQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(sladefinition.Table, sladefinition.FieldID, selector),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, sladefinition.ViewersTable, sladefinition.ViewersColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
@@ -369,7 +342,6 @@ func (_q *SLADefinitionQuery) Clone() *SLADefinitionQuery {
 		withOwner:         _q.withOwner.Clone(),
 		withBlockedGroups: _q.withBlockedGroups.Clone(),
 		withEditors:       _q.withEditors.Clone(),
-		withViewers:       _q.withViewers.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -407,17 +379,6 @@ func (_q *SLADefinitionQuery) WithEditors(opts ...func(*GroupQuery)) *SLADefinit
 		opt(query)
 	}
 	_q.withEditors = query
-	return _q
-}
-
-// WithViewers tells the query-builder to eager-load the nodes that are connected to
-// the "viewers" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *SLADefinitionQuery) WithViewers(opts ...func(*GroupQuery)) *SLADefinitionQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withViewers = query
 	return _q
 }
 
@@ -505,11 +466,10 @@ func (_q *SLADefinitionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	var (
 		nodes       = []*SLADefinition{}
 		_spec       = _q.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [3]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
-			_q.withViewers != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -555,13 +515,6 @@ func (_q *SLADefinitionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 			return nil, err
 		}
 	}
-	if query := _q.withViewers; query != nil {
-		if err := _q.loadViewers(ctx, query, nodes,
-			func(n *SLADefinition) { n.Edges.Viewers = []*Group{} },
-			func(n *SLADefinition, e *Group) { n.Edges.Viewers = append(n.Edges.Viewers, e) }); err != nil {
-			return nil, err
-		}
-	}
 	for name, query := range _q.withNamedBlockedGroups {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *SLADefinition) { n.appendNamedBlockedGroups(name) },
@@ -573,13 +526,6 @@ func (_q *SLADefinitionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *SLADefinition) { n.appendNamedEditors(name) },
 			func(n *SLADefinition, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedViewers {
-		if err := _q.loadViewers(ctx, query, nodes,
-			func(n *SLADefinition) { n.appendNamedViewers(name) },
-			func(n *SLADefinition, e *Group) { n.appendNamedViewers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -677,37 +623,6 @@ func (_q *SLADefinitionQuery) loadEditors(ctx context.Context, query *GroupQuery
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "sla_definition_editors" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *SLADefinitionQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes []*SLADefinition, init func(*SLADefinition), assign func(*SLADefinition, *Group)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*SLADefinition)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.Group(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(sladefinition.ViewersColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.sla_definition_viewers
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "sla_definition_viewers" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "sla_definition_viewers" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -840,20 +755,6 @@ func (_q *SLADefinitionQuery) WithNamedEditors(name string, opts ...func(*GroupQ
 		_q.withNamedEditors = make(map[string]*GroupQuery)
 	}
 	_q.withNamedEditors[name] = query
-	return _q
-}
-
-// WithNamedViewers tells the query-builder to eager-load the nodes that are connected to the "viewers"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *SLADefinitionQuery) WithNamedViewers(name string, opts ...func(*GroupQuery)) *SLADefinitionQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedViewers == nil {
-		_q.withNamedViewers = make(map[string]*GroupQuery)
-	}
-	_q.withNamedViewers[name] = query
 	return _q
 }
 

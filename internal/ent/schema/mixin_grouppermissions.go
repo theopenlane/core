@@ -299,6 +299,22 @@ func (g GroupPermissionsMixin) Hooks() (hooks []ent.Hook) {
 	return
 }
 
+// SkipFGAOverfetchAnnotationName is the annotation key used to signal that list queries
+// use SQL-level filtering (blocked groups) instead of per-object FGA BatchCheck,
+// so pagination should not apply the 10x overfetch multiplier
+const SkipFGAOverfetchAnnotationName = "OPENLANE_SKIP_FGA_OVERFETCH"
+
+// SkipFGAOverfetch marks a schema as not needing the FGA overfetch multiplier
+// because SQL-level filtering handles result restriction at query time
+type SkipFGAOverfetch struct {
+	Enabled bool `json:"enabled"`
+}
+
+// Name returns the annotation name
+func (SkipFGAOverfetch) Name() string {
+	return SkipFGAOverfetchAnnotationName
+}
+
 // Annotations of the GroupPermissionsMixin
 func (g GroupPermissionsMixin) Annotations() []schema.Annotation {
 	return []schema.Annotation{

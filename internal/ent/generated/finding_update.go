@@ -1079,21 +1079,6 @@ func (_u *FindingUpdate) AddEditors(v ...*Group) *FindingUpdate {
 	return _u.AddEditorIDs(ids...)
 }
 
-// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (_u *FindingUpdate) AddViewerIDs(ids ...string) *FindingUpdate {
-	_u.mutation.AddViewerIDs(ids...)
-	return _u
-}
-
-// AddViewers adds the "viewers" edges to the Group entity.
-func (_u *FindingUpdate) AddViewers(v ...*Group) *FindingUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddViewerIDs(ids...)
-}
-
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *FindingUpdate) SetEnvironment(v *CustomTypeEnum) *FindingUpdate {
 	return _u.SetEnvironmentID(v.ID)
@@ -1454,27 +1439,6 @@ func (_u *FindingUpdate) RemoveEditors(v ...*Group) *FindingUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEditorIDs(ids...)
-}
-
-// ClearViewers clears all "viewers" edges to the Group entity.
-func (_u *FindingUpdate) ClearViewers() *FindingUpdate {
-	_u.mutation.ClearViewers()
-	return _u
-}
-
-// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (_u *FindingUpdate) RemoveViewerIDs(ids ...string) *FindingUpdate {
-	_u.mutation.RemoveViewerIDs(ids...)
-	return _u
-}
-
-// RemoveViewers removes "viewers" edges to Group entities.
-func (_u *FindingUpdate) RemoveViewers(v ...*Group) *FindingUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveViewerIDs(ids...)
 }
 
 // ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
@@ -2318,30 +2282,30 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.BlockedGroupsTable,
-			Columns: []string{finding.BlockedGroupsColumn},
+			Columns: finding.BlockedGroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.FindingBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.BlockedGroupsTable,
-			Columns: []string{finding.BlockedGroupsColumn},
+			Columns: finding.BlockedGroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.FindingBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2349,16 +2313,16 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.BlockedGroupsTable,
-			Columns: []string{finding.BlockedGroupsColumn},
+			Columns: finding.BlockedGroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.FindingBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2366,30 +2330,30 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.EditorsTable,
-			Columns: []string{finding.EditorsColumn},
+			Columns: finding.EditorsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.FindingEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.EditorsTable,
-			Columns: []string{finding.EditorsColumn},
+			Columns: finding.EditorsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.FindingEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2397,64 +2361,16 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.EditorsTable,
-			Columns: []string{finding.EditorsColumn},
+			Columns: finding.EditorsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   finding.ViewersTable,
-			Columns: []string{finding.ViewersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   finding.ViewersTable,
-			Columns: []string{finding.ViewersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   finding.ViewersTable,
-			Columns: []string{finding.ViewersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.FindingEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4581,21 +4497,6 @@ func (_u *FindingUpdateOne) AddEditors(v ...*Group) *FindingUpdateOne {
 	return _u.AddEditorIDs(ids...)
 }
 
-// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (_u *FindingUpdateOne) AddViewerIDs(ids ...string) *FindingUpdateOne {
-	_u.mutation.AddViewerIDs(ids...)
-	return _u
-}
-
-// AddViewers adds the "viewers" edges to the Group entity.
-func (_u *FindingUpdateOne) AddViewers(v ...*Group) *FindingUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddViewerIDs(ids...)
-}
-
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *FindingUpdateOne) SetEnvironment(v *CustomTypeEnum) *FindingUpdateOne {
 	return _u.SetEnvironmentID(v.ID)
@@ -4956,27 +4857,6 @@ func (_u *FindingUpdateOne) RemoveEditors(v ...*Group) *FindingUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEditorIDs(ids...)
-}
-
-// ClearViewers clears all "viewers" edges to the Group entity.
-func (_u *FindingUpdateOne) ClearViewers() *FindingUpdateOne {
-	_u.mutation.ClearViewers()
-	return _u
-}
-
-// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (_u *FindingUpdateOne) RemoveViewerIDs(ids ...string) *FindingUpdateOne {
-	_u.mutation.RemoveViewerIDs(ids...)
-	return _u
-}
-
-// RemoveViewers removes "viewers" edges to Group entities.
-func (_u *FindingUpdateOne) RemoveViewers(v ...*Group) *FindingUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveViewerIDs(ids...)
 }
 
 // ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
@@ -5850,30 +5730,30 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.BlockedGroupsTable,
-			Columns: []string{finding.BlockedGroupsColumn},
+			Columns: finding.BlockedGroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.FindingBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.BlockedGroupsTable,
-			Columns: []string{finding.BlockedGroupsColumn},
+			Columns: finding.BlockedGroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.FindingBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5881,16 +5761,16 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	}
 	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.BlockedGroupsTable,
-			Columns: []string{finding.BlockedGroupsColumn},
+			Columns: finding.BlockedGroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.FindingBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5898,30 +5778,30 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	}
 	if _u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.EditorsTable,
-			Columns: []string{finding.EditorsColumn},
+			Columns: finding.EditorsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.FindingEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.EditorsTable,
-			Columns: []string{finding.EditorsColumn},
+			Columns: finding.EditorsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.FindingEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5929,64 +5809,16 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	}
 	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.EditorsTable,
-			Columns: []string{finding.EditorsColumn},
+			Columns: finding.EditorsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   finding.ViewersTable,
-			Columns: []string{finding.ViewersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   finding.ViewersTable,
-			Columns: []string{finding.ViewersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   finding.ViewersTable,
-			Columns: []string{finding.ViewersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.FindingEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
