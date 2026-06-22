@@ -18,6 +18,7 @@ func registerLoginHandler(router *Router) error {
 		OperationID: "LoginHandler",
 		Security:    handlers.BasicSecurity(),
 		Middlewares: *unauthenticatedEndpoint, // leaves off the additional middleware (including csrf)
+		RateLimit:   authRateLimit,
 		Handler:     router.Handler.LoginHandler,
 	}
 

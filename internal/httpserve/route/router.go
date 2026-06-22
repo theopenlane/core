@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/middleware/impersonation"
 	"github.com/theopenlane/core/pkg/middleware/mime"
+	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 )
 
@@ -326,6 +327,8 @@ type Config struct {
 	Security *openapi3.SecurityRequirements
 	// Middlewares are applied before the handler.
 	Middlewares []echo.MiddlewareFunc
+	// RateLimit applies a dedicated per-route rate limiter ahead of the route middleware when set and enabled.
+	RateLimit *ratelimit.Config
 	// Handler is the OpenAPI-aware handler function.
 	Handler func(echo.Context, *handlers.OpenAPIContext) error
 	// SimpleHandler is used for routes without OpenAPI context.
@@ -359,6 +362,20 @@ func (rc *registrationContext) Request() *http.Request {
 	req, _ := http.NewRequestWithContext(rc.ctx, rc.method, "/", nil)
 
 	return req
+}
+
+// rateLimitedMiddlewares prepends a dedicated per-route rate limiter to the configured middleware when the route
+// declares one that is enabled or in dry-run mode, so the limiter runs ahead of authentication and handler work
+func rateLimitedMiddlewares(config Config) []echo.MiddlewareFunc {
+	if config.RateLimit == nil {
+		return config.Middlewares
+	}
+
+	if !config.RateLimit.Enabled && !config.RateLimit.DryRun {
+		return config.Middlewares
+	}
+
+	return append([]echo.MiddlewareFunc{ratelimit.RateLimiterWithConfig(config.RateLimit)}, config.Middlewares...)
 }
 
 // AddV1HandlerRoute adds a route with automatic OpenAPI context injection
@@ -426,7 +443,7 @@ func (r *Router) AddV1HandlerRoute(config Config) error {
 		Name:        config.Name,
 		Method:      config.Method,
 		Path:        config.Path,
-		Middlewares: config.Middlewares,
+		Middlewares: rateLimitedMiddlewares(config),
 		Handler:     routeHandler,
 	}
 
@@ -503,7 +520,7 @@ func (r *Router) AddUnversionedHandlerRoute(config Config) error {
 		Name:        config.Name,
 		Method:      config.Method,
 		Path:        config.Path,
-		Middlewares: config.Middlewares,
+		Middlewares: rateLimitedMiddlewares(config),
 		Handler:     routeHandler,
 	}
 

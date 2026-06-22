@@ -21,6 +21,7 @@ func registerOAuthRegisterHandler(router *Router) error {
 		OperationID: "OAuthRegister",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.OauthRegister,
 	}
 
@@ -58,6 +59,7 @@ func registerGithubLoginHandler(router *Router) error {
 		OperationID: "GitHubLogin",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   authFlowRateLimit,
 		SimpleHandler: func(ctx echo.Context) error {
 			return githubLogin(router)(ctx)
 		},
@@ -77,6 +79,7 @@ func registerGithubCallbackHandler(router *Router) error {
 		OperationID: "GitHubCallback",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   authFlowRateLimit,
 		SimpleHandler: func(ctx echo.Context) error {
 			return githubCallback(router)(ctx)
 		},
@@ -96,6 +99,7 @@ func registerGoogleLoginHandler(router *Router) error {
 		OperationID: "GoogleLogin",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   authFlowRateLimit,
 		SimpleHandler: func(ctx echo.Context) error {
 			return googleLogin(router)(ctx)
 		},
@@ -115,6 +119,7 @@ func registerGoogleCallbackHandler(router *Router) error {
 		OperationID: "GoogleCallback",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   authFlowRateLimit,
 		SimpleHandler: func(ctx echo.Context) error {
 			return googleCallback(router)(ctx)
 		},

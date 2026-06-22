@@ -17,6 +17,7 @@ func registerRegisterHandler(router *Router) error {
 		OperationID: "Register",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *unauthenticatedEndpoint,
+		RateLimit:   authRateLimit,
 		Handler:     router.Handler.RegisterHandler,
 	}
 

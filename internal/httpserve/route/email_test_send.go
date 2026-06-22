@@ -22,6 +22,7 @@ func registerEmailTestSendHandler(router *Router) error {
 		OperationID: "EmailTestSend",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *unauthenticatedEndpoint,
+		RateLimit:   emailRateLimit,
 		Handler:     router.Handler.EmailTestSendHandler,
 	}
 

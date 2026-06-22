@@ -17,6 +17,7 @@ func registerResetPasswordHandler(router *Router) error {
 		OperationID: "ResetPassword",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   authRateLimit,
 		Handler:     router.Handler.ResetPassword,
 	}
 

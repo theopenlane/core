@@ -17,6 +17,7 @@ func registerAcmeSolverHandler(router *Router) error {
 		OperationID: "AcmeSolver",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *unauthenticatedEndpoint, // leaves off the additional middleware(including csrf)
+		RateLimit:   publicStaticRateLimit,
 		Handler:     router.Handler.ACMESolverHandler,
 	}
 

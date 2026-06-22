@@ -19,6 +19,7 @@ func registerMSFTIdentityWellKnownHandler(router *Router) (err error) {
 		OperationID:   "MSFTIdentityWellKnown",
 		Security:      handlers.PublicSecurity,
 		Middlewares:   *publicEndpoint,
+		RateLimit:     publicStaticRateLimit,
 		SimpleHandler: router.Handler.MSFTIdentityWellKnownHandler,
 	}
 

@@ -23,6 +23,7 @@ func registerWebAuthnWellKnownHandler(router *Router) (err error) {
 		OperationID: "WebAuthnWellKnown",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   publicStaticRateLimit,
 		SimpleHandler: func(ctx echo.Context) error {
 			return echo.StaticFileHandler("webauthn", webauthn)(ctx)
 		},
@@ -42,6 +43,7 @@ func registerJwksWellKnownHandler(router *Router) (err error) {
 		OperationID: "JWKS",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   publicStaticRateLimit,
 		SimpleHandler: func(ctx echo.Context) error {
 			return ctx.JSON(http.StatusOK, router.Handler.JWTKeys)
 		},
@@ -64,6 +66,7 @@ func registerSecurityTxtHandler(router *Router) (err error) {
 		OperationID: "SecurityTxt",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   publicStaticRateLimit,
 		SimpleHandler: func(ctx echo.Context) error {
 			return echo.StaticFileHandler("security.txt", securityTxt)(ctx)
 		},
