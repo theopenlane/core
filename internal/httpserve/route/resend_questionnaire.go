@@ -17,6 +17,7 @@ func registerResendQuestionnaireHandler(router *Router) error {
 		OperationID: "ResendQuestionnaireEmail",
 		Security:    handlers.BasicSecurity(),
 		Middlewares: *unauthenticatedEndpoint,
+		RateLimit:   emailRateLimit,
 		Handler:     router.Handler.ResendQuestionnaireEmail,
 	}
 

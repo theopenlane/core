@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/redis/go-redis/v9"
 
@@ -448,12 +449,43 @@ func WithOTP() ServerOption {
 	})
 }
 
-// WithRateLimiter sets up the rate limiter for the server
+// WithRateLimiter sets up the global and unmatched-route rate limiters for the server
 func WithRateLimiter() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		if s.Config.Settings.Ratelimit.Enabled || s.Config.Settings.Ratelimit.DryRun {
 			s.Config.DefaultMiddleware = append(s.Config.DefaultMiddleware, ratelimit.RateLimiterWithConfig(&s.Config.Settings.Ratelimit))
 		}
+
+		if s.Config.Settings.RatelimitUnmatched.Enabled || s.Config.Settings.RatelimitUnmatched.DryRun {
+			s.Config.DefaultMiddleware = append(s.Config.DefaultMiddleware, ratelimit.UnmatchedRouteLimiterWithConfig(&s.Config.Settings.RatelimitUnmatched))
+		}
+	})
+}
+
+const (
+	// graphRateLimitRequests caps GraphQL API requests per window; sized generously since a single UI interaction fans out across many queries
+	graphRateLimitRequests = int64(1200)
+	// graphRateLimitWindow is the sliding window applied to the GraphQL rate limiter
+	graphRateLimitWindow = time.Minute
+)
+
+// graphRateLimitConfig builds the dedicated limiter applied to the GraphQL endpoints, keyed on the real client IP
+// (Cloudflare's CF-Connecting-IP, falling back to the socket peer) to match the other per-route limiters
+func graphRateLimitConfig() *ratelimit.Config {
+	return &ratelimit.Config{
+		Enabled:              true,
+		Headers:              ratelimit.DefaultClientIPHeaders,
+		Options:              []ratelimit.RateOption{{Requests: graphRateLimitRequests, Window: graphRateLimitWindow}},
+		SendRetryAfterHeader: true,
+	}
+}
+
+// WithGraphRateLimiter prepends a dedicated rate limiter to the GraphQL middleware chain so the primary API surface is
+// throttled ahead of authentication and resolver work
+func WithGraphRateLimiter() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		limiter := ratelimit.RateLimiterWithConfig(graphRateLimitConfig())
+		s.Config.GraphMiddleware = append([]echo.MiddlewareFunc{limiter}, s.Config.GraphMiddleware...)
 	})
 }
 
