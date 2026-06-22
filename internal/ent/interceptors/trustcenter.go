@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -116,11 +115,6 @@ func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query, applyT
 	}
 
 	if caller.Has(auth.CapSystemAdmin) {
-		return nil
-	}
-
-	// allow internal bypass when strictly allowed or is an internal request
-	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
 		return nil
 	}
 

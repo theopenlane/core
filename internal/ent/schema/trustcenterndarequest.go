@@ -175,6 +175,11 @@ func (TrustCenterNDARequest) Hooks() []ent.Hook {
 // Policy of the TrustCenterNDARequest
 func (TrustCenterNDARequest) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithOnMutationRules(ent.OpCreate,
+			// allow the creation of trust center nda
+			// with anon trust center JWTs
+			rule.AllowIfTrustCenterAnonRequest(),
+		),
 		policy.WithMutationRules(
 			rule.AllowIfTrustCenterEditor(),
 			policy.CheckCreateAccess(),
