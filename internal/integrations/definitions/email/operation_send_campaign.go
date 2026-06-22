@@ -24,6 +24,9 @@ const (
 	// sendRateInterval is the minimum interval between individual sends to stay
 	// within the provider rate limit of 20 messages per second
 	sendRateInterval = 50 * time.Millisecond
+	// MetadataUnsubscribeTokenKey is the campaign target metadata key under which the trust center
+	// subscriber snapshot stores the per-recipient unsubscribe token consumed at render time
+	MetadataUnsubscribeTokenKey = "unsubscribeToken"
 )
 
 // CampaignDispatchInput holds the shared dispatch parameters for campaign operations
@@ -63,6 +66,10 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 					file.FieldFileContents)
 			})
 		})
+		// trust center campaigns brand the email from the trust center setting
+		q.WithTrustCenter(func(tcq *generated.TrustCenterQuery) {
+			tcq.WithSetting()
+		})
 	})
 	if err != nil {
 		return nil, err
@@ -85,7 +92,7 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 		CampaignDueDate:     formatCampaignDueDate(camp.DueDate),
 	}
 
-	messages, targetIDs, renderFailed := renderCampaignMessages(ctx, client, dispatcher, template.Defaults, camp.Metadata, overlay, dispatchable)
+	messages, targetIDs, renderFailed := renderMessagesForCampaign(ctx, client, dispatcher, camp, template, overlay, dispatchable)
 	attachments := staticAttachmentsFromFiles(ctx, template.Edges.Files)
 
 	sentCount, sendFailed := sendCampaignMessages(ctx, req.DB, client, messages, targetIDs, attachments)
@@ -123,7 +130,12 @@ func renderCampaignMessages(ctx context.Context, client *Client, dispatcher Disp
 
 		payload, err := templatekit.BuildDispatchPayload(defaults,
 			campaignData,
-			RecipientInfo{Email: target.Email, FirstName: first, LastName: last},
+			RecipientInfo{
+				Email:            target.Email,
+				FirstName:        first,
+				LastName:         last,
+				UnsubscribeToken: unsubscribeTokenFromMetadata(target.Metadata),
+			},
 			overlay,
 		)
 		if err != nil {
@@ -219,6 +231,14 @@ func sendCampaignIndividual(ctx context.Context, db *generated.Client, client *C
 	}
 
 	return sent, failed
+}
+
+// unsubscribeTokenFromMetadata extracts the per-recipient unsubscribe token stashed on a
+// campaign target's metadata by the trust center subscriber snapshot, returning empty when absent
+func unsubscribeTokenFromMetadata(metadata map[string]any) string {
+	token, _ := metadata[MetadataUnsubscribeTokenKey].(string)
+
+	return token
 }
 
 // formatCampaignDueDate formats a campaign due date for display in email templates

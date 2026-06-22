@@ -201,6 +201,26 @@ func (_u *CampaignTargetHistoryUpdate) ClearGroupID() *CampaignTargetHistoryUpda
 	return _u
 }
 
+// SetSubscriberID sets the "subscriber_id" field.
+func (_u *CampaignTargetHistoryUpdate) SetSubscriberID(v string) *CampaignTargetHistoryUpdate {
+	_u.mutation.SetSubscriberID(v)
+	return _u
+}
+
+// SetNillableSubscriberID sets the "subscriber_id" field if the given value is not nil.
+func (_u *CampaignTargetHistoryUpdate) SetNillableSubscriberID(v *string) *CampaignTargetHistoryUpdate {
+	if v != nil {
+		_u.SetSubscriberID(*v)
+	}
+	return _u
+}
+
+// ClearSubscriberID clears the value of the "subscriber_id" field.
+func (_u *CampaignTargetHistoryUpdate) ClearSubscriberID() *CampaignTargetHistoryUpdate {
+	_u.mutation.ClearSubscriberID()
+	return _u
+}
+
 // SetEmail sets the "email" field.
 func (_u *CampaignTargetHistoryUpdate) SetEmail(v string) *CampaignTargetHistoryUpdate {
 	_u.mutation.SetEmail(v)
@@ -439,6 +459,12 @@ func (_u *CampaignTargetHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.GroupIDCleared() {
 		_spec.ClearField(campaigntargethistory.FieldGroupID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SubscriberID(); ok {
+		_spec.SetField(campaigntargethistory.FieldSubscriberID, field.TypeString, value)
+	}
+	if _u.mutation.SubscriberIDCleared() {
+		_spec.ClearField(campaigntargethistory.FieldSubscriberID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Email(); ok {
 		_spec.SetField(campaigntargethistory.FieldEmail, field.TypeString, value)
 	}
@@ -656,6 +682,26 @@ func (_u *CampaignTargetHistoryUpdateOne) SetNillableGroupID(v *string) *Campaig
 // ClearGroupID clears the value of the "group_id" field.
 func (_u *CampaignTargetHistoryUpdateOne) ClearGroupID() *CampaignTargetHistoryUpdateOne {
 	_u.mutation.ClearGroupID()
+	return _u
+}
+
+// SetSubscriberID sets the "subscriber_id" field.
+func (_u *CampaignTargetHistoryUpdateOne) SetSubscriberID(v string) *CampaignTargetHistoryUpdateOne {
+	_u.mutation.SetSubscriberID(v)
+	return _u
+}
+
+// SetNillableSubscriberID sets the "subscriber_id" field if the given value is not nil.
+func (_u *CampaignTargetHistoryUpdateOne) SetNillableSubscriberID(v *string) *CampaignTargetHistoryUpdateOne {
+	if v != nil {
+		_u.SetSubscriberID(*v)
+	}
+	return _u
+}
+
+// ClearSubscriberID clears the value of the "subscriber_id" field.
+func (_u *CampaignTargetHistoryUpdateOne) ClearSubscriberID() *CampaignTargetHistoryUpdateOne {
+	_u.mutation.ClearSubscriberID()
 	return _u
 }
 
@@ -926,6 +972,12 @@ func (_u *CampaignTargetHistoryUpdateOne) sqlSave(ctx context.Context) (_node *C
 	}
 	if _u.mutation.GroupIDCleared() {
 		_spec.ClearField(campaigntargethistory.FieldGroupID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SubscriberID(); ok {
+		_spec.SetField(campaigntargethistory.FieldSubscriberID, field.TypeString, value)
+	}
+	if _u.mutation.SubscriberIDCleared() {
+		_spec.ClearField(campaigntargethistory.FieldSubscriberID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Email(); ok {
 		_spec.SetField(campaigntargethistory.FieldEmail, field.TypeString, value)

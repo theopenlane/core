@@ -3003,6 +3003,10 @@ type CampaignHistory implements Node {
 	the email branding associated with the campaign
 	"""
 	emailBrandingID: String
+	"""
+	the trust center this campaign sends updates for, if any
+	"""
+	trustCenterID: String
 }
 """
 CampaignHistoryCampaignStatus is enum for the field status
@@ -3023,6 +3027,7 @@ enum CampaignHistoryCampaignType @goModel(model: "github.com/theopenlane/core/co
 	POLICY_ATTESTATION
 	VENDOR_ASSESSMENT
 	CUSTOM
+	TRUST_CENTER_UPDATE
 }
 """
 A connection to a list of items.
@@ -3664,6 +3669,24 @@ input CampaignHistoryWhereInput {
 	emailBrandingIDNotNil: Boolean
 	emailBrandingIDEqualFold: String
 	emailBrandingIDContainsFold: String
+	"""
+	trust_center_id field predicates
+	"""
+	trustCenterID: String
+	trustCenterIDNEQ: String
+	trustCenterIDIn: [String!]
+	trustCenterIDNotIn: [String!]
+	trustCenterIDGT: String
+	trustCenterIDGTE: String
+	trustCenterIDLT: String
+	trustCenterIDLTE: String
+	trustCenterIDContains: String
+	trustCenterIDHasPrefix: String
+	trustCenterIDHasSuffix: String
+	trustCenterIDIsNil: Boolean
+	trustCenterIDNotNil: Boolean
+	trustCenterIDEqualFold: String
+	trustCenterIDContainsFold: String
 }
 type CampaignTargetHistory implements Node {
 	id: ID!
@@ -3698,6 +3721,10 @@ type CampaignTargetHistory implements Node {
 	the group associated with the campaign target
 	"""
 	groupID: String
+	"""
+	the trust center subscriber this target was generated from, if any
+	"""
+	subscriberID: String
 	"""
 	the email address targeted by the campaign
 	"""
@@ -4011,6 +4038,24 @@ input CampaignTargetHistoryWhereInput {
 	groupIDNotNil: Boolean
 	groupIDEqualFold: String
 	groupIDContainsFold: String
+	"""
+	subscriber_id field predicates
+	"""
+	subscriberID: String
+	subscriberIDNEQ: String
+	subscriberIDIn: [String!]
+	subscriberIDNotIn: [String!]
+	subscriberIDGT: String
+	subscriberIDGTE: String
+	subscriberIDLT: String
+	subscriberIDLTE: String
+	subscriberIDContains: String
+	subscriberIDHasPrefix: String
+	subscriberIDHasSuffix: String
+	subscriberIDIsNil: Boolean
+	subscriberIDNotNil: Boolean
+	subscriberIDEqualFold: String
+	subscriberIDContainsFold: String
 	"""
 	email field predicates
 	"""
@@ -10481,6 +10526,10 @@ type EmailTemplateHistory implements Node {
 	workflow instance associated with this template
 	"""
 	workflowInstanceID: String
+	"""
+	the trust center this template is associated with, if any
+	"""
+	trustCenterID: String
 }
 """
 A connection to a list of items.
@@ -10990,6 +11039,24 @@ input EmailTemplateHistoryWhereInput {
 	workflowInstanceIDNotNil: Boolean
 	workflowInstanceIDEqualFold: String
 	workflowInstanceIDContainsFold: String
+	"""
+	trust_center_id field predicates
+	"""
+	trustCenterID: String
+	trustCenterIDNEQ: String
+	trustCenterIDIn: [String!]
+	trustCenterIDNotIn: [String!]
+	trustCenterIDGT: String
+	trustCenterIDGTE: String
+	trustCenterIDLT: String
+	trustCenterIDLTE: String
+	trustCenterIDContains: String
+	trustCenterIDHasPrefix: String
+	trustCenterIDHasSuffix: String
+	trustCenterIDIsNil: Boolean
+	trustCenterIDNotNil: Boolean
+	trustCenterIDEqualFold: String
+	trustCenterIDContainsFold: String
 }
 type EntityHistory implements Node {
 	id: ID!
@@ -20126,6 +20193,14 @@ type NoteHistory implements Node {
 	the trust center this note belongs to, if applicable
 	"""
 	trustCenterID: String
+	"""
+	when set on a trust center post, sends the published update to the trust center's subscribers
+	"""
+	notifySubscribers: Boolean
+	"""
+	when subscribers were notified about this post
+	"""
+	notifiedAt: Time
 }
 """
 A connection to a list of items.
@@ -20432,6 +20507,26 @@ input NoteHistoryWhereInput {
 	trustCenterIDNotNil: Boolean
 	trustCenterIDEqualFold: String
 	trustCenterIDContainsFold: String
+	"""
+	notify_subscribers field predicates
+	"""
+	notifySubscribers: Boolean
+	notifySubscribersNEQ: Boolean
+	notifySubscribersIsNil: Boolean
+	notifySubscribersNotNil: Boolean
+	"""
+	notified_at field predicates
+	"""
+	notifiedAt: Time
+	notifiedAtNEQ: Time
+	notifiedAtIn: [Time!]
+	notifiedAtNotIn: [Time!]
+	notifiedAtGT: Time
+	notifiedAtGTE: Time
+	notifiedAtLT: Time
+	notifiedAtLTE: Time
+	notifiedAtIsNil: Boolean
+	notifiedAtNotNil: Boolean
 }
 type NotificationPreferenceHistory implements Node {
 	id: ID!
@@ -37471,6 +37566,14 @@ type TrustCenterSettingHistory implements Node {
 	"""
 	ndaApprovalRequired: Boolean
 	"""
+	whether to email trust center subscribers when subprocessors are added, updated, or removed
+	"""
+	notifySubscribersOnSubprocessorChange: Boolean
+	"""
+	watermark of the most recent subprocessor change subscribers have been notified about
+	"""
+	subprocessorsNotifiedAt: Time
+	"""
 	group whose members approve trust center NDA requests
 	"""
 	ndaApproverGroupID: String
@@ -38045,6 +38148,26 @@ input TrustCenterSettingHistoryWhereInput {
 	ndaApprovalRequiredNEQ: Boolean
 	ndaApprovalRequiredIsNil: Boolean
 	ndaApprovalRequiredNotNil: Boolean
+	"""
+	notify_subscribers_on_subprocessor_change field predicates
+	"""
+	notifySubscribersOnSubprocessorChange: Boolean
+	notifySubscribersOnSubprocessorChangeNEQ: Boolean
+	notifySubscribersOnSubprocessorChangeIsNil: Boolean
+	notifySubscribersOnSubprocessorChangeNotNil: Boolean
+	"""
+	subprocessors_notified_at field predicates
+	"""
+	subprocessorsNotifiedAt: Time
+	subprocessorsNotifiedAtNEQ: Time
+	subprocessorsNotifiedAtIn: [Time!]
+	subprocessorsNotifiedAtNotIn: [Time!]
+	subprocessorsNotifiedAtGT: Time
+	subprocessorsNotifiedAtGTE: Time
+	subprocessorsNotifiedAtLT: Time
+	subprocessorsNotifiedAtLTE: Time
+	subprocessorsNotifiedAtIsNil: Boolean
+	subprocessorsNotifiedAtNotNil: Boolean
 	"""
 	nda_approver_group_id field predicates
 	"""

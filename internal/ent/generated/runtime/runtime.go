@@ -866,7 +866,7 @@ func init() {
 	// campaigntarget.CampaignIDValidator is a validator for the "campaign_id" field. It is called by the builders before save.
 	campaigntarget.CampaignIDValidator = campaigntargetDescCampaignID.Validators[0].(func(string) error)
 	// campaigntargetDescEmail is the schema descriptor for email field.
-	campaigntargetDescEmail := campaigntargetFields[4].Descriptor()
+	campaigntargetDescEmail := campaigntargetFields[5].Descriptor()
 	// campaigntarget.EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	campaigntarget.EmailValidator = func() func(string) error {
 		validators := campaigntargetDescEmail.Validators
@@ -4690,6 +4690,10 @@ func init() {
 	noteDescIsEdited := noteFields[5].Descriptor()
 	// note.DefaultIsEdited holds the default value on creation for the is_edited field.
 	note.DefaultIsEdited = noteDescIsEdited.Default.(bool)
+	// noteDescNotifySubscribers is the schema descriptor for notify_subscribers field.
+	noteDescNotifySubscribers := noteFields[7].Descriptor()
+	// note.DefaultNotifySubscribers holds the default value on creation for the notify_subscribers field.
+	note.DefaultNotifySubscribers = noteDescNotifySubscribers.Default.(bool)
 	// noteDescID is the schema descriptor for id field.
 	noteDescID := noteMixinFields2[0].Descriptor()
 	// note.DefaultID holds the default value on creation for the id field.
@@ -7140,39 +7144,39 @@ func init() {
 	// subscriber.DefaultTags holds the default value on creation for the tags field.
 	subscriber.DefaultTags = subscriberDescTags.Default.([]string)
 	// subscriberDescEmail is the schema descriptor for email field.
-	subscriberDescEmail := subscriberFields[0].Descriptor()
+	subscriberDescEmail := subscriberFields[1].Descriptor()
 	// subscriber.EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	subscriber.EmailValidator = subscriberDescEmail.Validators[0].(func(string) error)
 	// subscriberDescPhoneNumber is the schema descriptor for phone_number field.
-	subscriberDescPhoneNumber := subscriberFields[1].Descriptor()
+	subscriberDescPhoneNumber := subscriberFields[2].Descriptor()
 	// subscriber.PhoneNumberValidator is a validator for the "phone_number" field. It is called by the builders before save.
 	subscriber.PhoneNumberValidator = subscriberDescPhoneNumber.Validators[0].(func(string) error)
 	// subscriberDescVerifiedEmail is the schema descriptor for verified_email field.
-	subscriberDescVerifiedEmail := subscriberFields[2].Descriptor()
+	subscriberDescVerifiedEmail := subscriberFields[3].Descriptor()
 	// subscriber.DefaultVerifiedEmail holds the default value on creation for the verified_email field.
 	subscriber.DefaultVerifiedEmail = subscriberDescVerifiedEmail.Default.(bool)
 	// subscriberDescVerifiedPhone is the schema descriptor for verified_phone field.
-	subscriberDescVerifiedPhone := subscriberFields[3].Descriptor()
+	subscriberDescVerifiedPhone := subscriberFields[4].Descriptor()
 	// subscriber.DefaultVerifiedPhone holds the default value on creation for the verified_phone field.
 	subscriber.DefaultVerifiedPhone = subscriberDescVerifiedPhone.Default.(bool)
 	// subscriberDescActive is the schema descriptor for active field.
-	subscriberDescActive := subscriberFields[4].Descriptor()
+	subscriberDescActive := subscriberFields[5].Descriptor()
 	// subscriber.DefaultActive holds the default value on creation for the active field.
 	subscriber.DefaultActive = subscriberDescActive.Default.(bool)
 	// subscriberDescToken is the schema descriptor for token field.
-	subscriberDescToken := subscriberFields[5].Descriptor()
+	subscriberDescToken := subscriberFields[6].Descriptor()
 	// subscriber.TokenValidator is a validator for the "token" field. It is called by the builders before save.
 	subscriber.TokenValidator = subscriberDescToken.Validators[0].(func(string) error)
 	// subscriberDescSecret is the schema descriptor for secret field.
-	subscriberDescSecret := subscriberFields[7].Descriptor()
+	subscriberDescSecret := subscriberFields[8].Descriptor()
 	// subscriber.SecretValidator is a validator for the "secret" field. It is called by the builders before save.
 	subscriber.SecretValidator = subscriberDescSecret.Validators[0].(func([]byte) error)
 	// subscriberDescUnsubscribed is the schema descriptor for unsubscribed field.
-	subscriberDescUnsubscribed := subscriberFields[8].Descriptor()
+	subscriberDescUnsubscribed := subscriberFields[9].Descriptor()
 	// subscriber.DefaultUnsubscribed holds the default value on creation for the unsubscribed field.
 	subscriber.DefaultUnsubscribed = subscriberDescUnsubscribed.Default.(bool)
 	// subscriberDescSendAttempts is the schema descriptor for send_attempts field.
-	subscriberDescSendAttempts := subscriberFields[9].Descriptor()
+	subscriberDescSendAttempts := subscriberFields[10].Descriptor()
 	// subscriber.DefaultSendAttempts holds the default value on creation for the send_attempts field.
 	subscriber.DefaultSendAttempts = subscriberDescSendAttempts.Default.(int)
 	// subscriberDescID is the schema descriptor for id field.
@@ -8198,8 +8202,12 @@ func init() {
 	trustcentersettingDescNdaApprovalRequired := trustcentersettingFields[22].Descriptor()
 	// trustcentersetting.DefaultNdaApprovalRequired holds the default value on creation for the nda_approval_required field.
 	trustcentersetting.DefaultNdaApprovalRequired = trustcentersettingDescNdaApprovalRequired.Default.(bool)
+	// trustcentersettingDescNotifySubscribersOnSubprocessorChange is the schema descriptor for notify_subscribers_on_subprocessor_change field.
+	trustcentersettingDescNotifySubscribersOnSubprocessorChange := trustcentersettingFields[23].Descriptor()
+	// trustcentersetting.DefaultNotifySubscribersOnSubprocessorChange holds the default value on creation for the notify_subscribers_on_subprocessor_change field.
+	trustcentersetting.DefaultNotifySubscribersOnSubprocessorChange = trustcentersettingDescNotifySubscribersOnSubprocessorChange.Default.(bool)
 	// trustcentersettingDescStatusPageURL is the schema descriptor for status_page_url field.
-	trustcentersettingDescStatusPageURL := trustcentersettingFields[24].Descriptor()
+	trustcentersettingDescStatusPageURL := trustcentersettingFields[26].Descriptor()
 	// trustcentersetting.StatusPageURLValidator is a validator for the "status_page_url" field. It is called by the builders before save.
 	trustcentersetting.StatusPageURLValidator = func() func(string) error {
 		validators := trustcentersettingDescStatusPageURL.Validators

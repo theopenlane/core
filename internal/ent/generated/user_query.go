@@ -34,6 +34,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -57,6 +58,7 @@ type UserQuery struct {
 	withEmailVerificationTokens      *EmailVerificationTokenQuery
 	withFileDownloadTokens           *FileDownloadTokenQuery
 	withPasswordResetTokens          *PasswordResetTokenQuery
+	withSubscribers                  *SubscriberQuery
 	withGroups                       *GroupQuery
 	withOrganizations                *OrganizationQuery
 	withWebauthns                    *WebauthnQuery
@@ -85,6 +87,7 @@ type UserQuery struct {
 	withNamedEmailVerificationTokens map[string]*EmailVerificationTokenQuery
 	withNamedFileDownloadTokens      map[string]*FileDownloadTokenQuery
 	withNamedPasswordResetTokens     map[string]*PasswordResetTokenQuery
+	withNamedSubscribers             map[string]*SubscriberQuery
 	withNamedGroups                  map[string]*GroupQuery
 	withNamedOrganizations           map[string]*OrganizationQuery
 	withNamedWebauthns               map[string]*WebauthnQuery
@@ -285,6 +288,31 @@ func (_q *UserQuery) QueryPasswordResetTokens() *PasswordResetTokenQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.PasswordResetToken
 		step.Edge.Schema = schemaConfig.PasswordResetToken
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySubscribers chains the current query on the "subscribers" edge.
+func (_q *UserQuery) QuerySubscribers() *SubscriberQuery {
+	query := (&SubscriberClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(subscriber.Table, subscriber.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.SubscribersTable, user.SubscribersColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Subscriber
+		step.Edge.Schema = schemaConfig.Subscriber
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1014,6 +1042,7 @@ func (_q *UserQuery) Clone() *UserQuery {
 		withEmailVerificationTokens: _q.withEmailVerificationTokens.Clone(),
 		withFileDownloadTokens:      _q.withFileDownloadTokens.Clone(),
 		withPasswordResetTokens:     _q.withPasswordResetTokens.Clone(),
+		withSubscribers:             _q.withSubscribers.Clone(),
 		withGroups:                  _q.withGroups.Clone(),
 		withOrganizations:           _q.withOrganizations.Clone(),
 		withWebauthns:               _q.withWebauthns.Clone(),
@@ -1105,6 +1134,17 @@ func (_q *UserQuery) WithPasswordResetTokens(opts ...func(*PasswordResetTokenQue
 		opt(query)
 	}
 	_q.withPasswordResetTokens = query
+	return _q
+}
+
+// WithSubscribers tells the query-builder to eager-load the nodes that are connected to
+// the "subscribers" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithSubscribers(opts ...func(*SubscriberQuery)) *UserQuery {
+	query := (&SubscriberClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSubscribers = query
 	return _q
 }
 
@@ -1423,13 +1463,14 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	var (
 		nodes       = []*User{}
 		_spec       = _q.querySpec()
-		loadedTypes = [27]bool{
+		loadedTypes = [28]bool{
 			_q.withPersonalAccessTokens != nil,
 			_q.withTfaSettings != nil,
 			_q.withSetting != nil,
 			_q.withEmailVerificationTokens != nil,
 			_q.withFileDownloadTokens != nil,
 			_q.withPasswordResetTokens != nil,
+			_q.withSubscribers != nil,
 			_q.withGroups != nil,
 			_q.withOrganizations != nil,
 			_q.withWebauthns != nil,
@@ -1522,6 +1563,13 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			func(n *User, e *PasswordResetToken) {
 				n.Edges.PasswordResetTokens = append(n.Edges.PasswordResetTokens, e)
 			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSubscribers; query != nil {
+		if err := _q.loadSubscribers(ctx, query, nodes,
+			func(n *User) { n.Edges.Subscribers = []*Subscriber{} },
+			func(n *User, e *Subscriber) { n.Edges.Subscribers = append(n.Edges.Subscribers, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1711,6 +1759,13 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := _q.loadPasswordResetTokens(ctx, query, nodes,
 			func(n *User) { n.appendNamedPasswordResetTokens(name) },
 			func(n *User, e *PasswordResetToken) { n.appendNamedPasswordResetTokens(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedSubscribers {
+		if err := _q.loadSubscribers(ctx, query, nodes,
+			func(n *User) { n.appendNamedSubscribers(name) },
+			func(n *User, e *Subscriber) { n.appendNamedSubscribers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2035,6 +2090,36 @@ func (_q *UserQuery) loadPasswordResetTokens(ctx context.Context, query *Passwor
 		node, ok := nodeids[fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *UserQuery) loadSubscribers(ctx context.Context, query *SubscriberQuery, nodes []*User, init func(*User), assign func(*User, *Subscriber)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*User)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(subscriber.FieldUserID)
+	}
+	query.Where(predicate.Subscriber(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(user.SubscribersColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.UserID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "user_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -3009,6 +3094,20 @@ func (_q *UserQuery) WithNamedPasswordResetTokens(name string, opts ...func(*Pas
 		_q.withNamedPasswordResetTokens = make(map[string]*PasswordResetTokenQuery)
 	}
 	_q.withNamedPasswordResetTokens[name] = query
+	return _q
+}
+
+// WithNamedSubscribers tells the query-builder to eager-load the nodes that are connected to the "subscribers"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithNamedSubscribers(name string, opts ...func(*SubscriberQuery)) *UserQuery {
+	query := (&SubscriberClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSubscribers == nil {
+		_q.withNamedSubscribers = make(map[string]*SubscriberQuery)
+	}
+	_q.withNamedSubscribers[name] = query
 	return _q
 }
 

@@ -188,6 +188,11 @@ func WorkflowInstanceID(v string) predicate.EmailTemplate {
 	return predicate.EmailTemplate(sql.FieldEQ(FieldWorkflowInstanceID, v))
 }
 
+// TrustCenterID applies equality check predicate on the "trust_center_id" field. It's identical to TrustCenterIDEQ.
+func TrustCenterID(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldEQ(FieldTrustCenterID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.EmailTemplate {
 	return predicate.EmailTemplate(sql.FieldEQ(FieldCreatedAt, v))
@@ -1848,6 +1853,81 @@ func WorkflowInstanceIDContainsFold(v string) predicate.EmailTemplate {
 	return predicate.EmailTemplate(sql.FieldContainsFold(FieldWorkflowInstanceID, v))
 }
 
+// TrustCenterIDEQ applies the EQ predicate on the "trust_center_id" field.
+func TrustCenterIDEQ(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDNEQ applies the NEQ predicate on the "trust_center_id" field.
+func TrustCenterIDNEQ(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldNEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIn applies the In predicate on the "trust_center_id" field.
+func TrustCenterIDIn(vs ...string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDNotIn applies the NotIn predicate on the "trust_center_id" field.
+func TrustCenterIDNotIn(vs ...string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldNotIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDGT applies the GT predicate on the "trust_center_id" field.
+func TrustCenterIDGT(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldGT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDGTE applies the GTE predicate on the "trust_center_id" field.
+func TrustCenterIDGTE(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldGTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLT applies the LT predicate on the "trust_center_id" field.
+func TrustCenterIDLT(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldLT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLTE applies the LTE predicate on the "trust_center_id" field.
+func TrustCenterIDLTE(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldLTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContains applies the Contains predicate on the "trust_center_id" field.
+func TrustCenterIDContains(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldContains(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasPrefix applies the HasPrefix predicate on the "trust_center_id" field.
+func TrustCenterIDHasPrefix(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldHasPrefix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasSuffix applies the HasSuffix predicate on the "trust_center_id" field.
+func TrustCenterIDHasSuffix(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldHasSuffix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIsNil applies the IsNil predicate on the "trust_center_id" field.
+func TrustCenterIDIsNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldIsNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDNotNil applies the NotNil predicate on the "trust_center_id" field.
+func TrustCenterIDNotNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldNotNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDEqualFold applies the EqualFold predicate on the "trust_center_id" field.
+func TrustCenterIDEqualFold(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldEqualFold(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContainsFold applies the ContainsFold predicate on the "trust_center_id" field.
+func TrustCenterIDContainsFold(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldContainsFold(FieldTrustCenterID, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.EmailTemplate {
 	return predicate.EmailTemplate(func(s *sql.Selector) {
@@ -2042,6 +2122,35 @@ func HasWorkflowInstanceWith(preds ...predicate.WorkflowInstance) predicate.Emai
 		step := newWorkflowInstanceStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.WorkflowInstance
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTrustCenter applies the HasEdge predicate on the "trust_center" edge.
+func HasTrustCenter() predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, TrustCenterTable, TrustCenterColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustCenterWith applies the HasEdge predicate on the "trust_center" edge with a given conditions (other predicates).
+func HasTrustCenterWith(preds ...predicate.TrustCenter) predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		step := newTrustCenterStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenter
 		step.Edge.Schema = schemaConfig.EmailTemplate
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

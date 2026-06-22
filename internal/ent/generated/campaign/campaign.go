@@ -98,6 +98,8 @@ const (
 	FieldIntegrationID = "integration_id"
 	// FieldEmailBrandingID holds the string denoting the email_branding_id field in the database.
 	FieldEmailBrandingID = "email_branding_id"
+	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
+	FieldTrustCenterID = "trust_center_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -120,6 +122,8 @@ const (
 	EdgeEmailTemplate = "email_template"
 	// EdgeEntity holds the string denoting the entity edge name in mutations.
 	EdgeEntity = "entity"
+	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
+	EdgeTrustCenter = "trust_center"
 	// EdgeCampaignTargets holds the string denoting the campaign_targets edge name in mutations.
 	EdgeCampaignTargets = "campaign_targets"
 	// EdgeAssessmentResponses holds the string denoting the assessment_responses edge name in mutations.
@@ -209,6 +213,13 @@ const (
 	EntityInverseTable = "entities"
 	// EntityColumn is the table column denoting the entity relation/edge.
 	EntityColumn = "entity_id"
+	// TrustCenterTable is the table that holds the trust_center relation/edge.
+	TrustCenterTable = "campaigns"
+	// TrustCenterInverseTable is the table name for the TrustCenter entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenter" package.
+	TrustCenterInverseTable = "trust_centers"
+	// TrustCenterColumn is the table column denoting the trust_center relation/edge.
+	TrustCenterColumn = "trust_center_id"
 	// CampaignTargetsTable is the table that holds the campaign_targets relation/edge.
 	CampaignTargetsTable = "campaign_targets"
 	// CampaignTargetsInverseTable is the table name for the CampaignTarget entity.
@@ -300,6 +311,7 @@ var Columns = []string{
 	FieldEmailTemplateID,
 	FieldIntegrationID,
 	FieldEmailBrandingID,
+	FieldTrustCenterID,
 }
 
 var (
@@ -387,7 +399,7 @@ const DefaultCampaignType enums.CampaignType = "QUESTIONNAIRE"
 // CampaignTypeValidator is a validator for the "campaign_type" field enum values. It is called by the builders before save.
 func CampaignTypeValidator(ct enums.CampaignType) error {
 	switch ct.String() {
-	case "QUESTIONNAIRE", "TRAINING", "POLICY_ATTESTATION", "VENDOR_ASSESSMENT", "CUSTOM":
+	case "QUESTIONNAIRE", "TRAINING", "POLICY_ATTESTATION", "VENDOR_ASSESSMENT", "CUSTOM", "TRUST_CENTER_UPDATE":
 		return nil
 	default:
 		return fmt.Errorf("campaign: invalid enum value for campaign_type field: %q", ct)
@@ -616,6 +628,11 @@ func ByEmailBrandingID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmailBrandingID, opts...).ToFunc()
 }
 
+// ByTrustCenterID orders the results by the trust_center_id field.
+func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -711,6 +728,13 @@ func ByEmailTemplateField(field string, opts ...sql.OrderTermOption) OrderOption
 func ByEntityField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newEntityStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByTrustCenterField orders the results by trust_center field.
+func ByTrustCenterField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -900,6 +924,13 @@ func newEntityStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EntityInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, EntityTable, EntityColumn),
+	)
+}
+func newTrustCenterStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, TrustCenterTable, TrustCenterColumn),
 	)
 }
 func newCampaignTargetsStep() *sqlgraph.Step {

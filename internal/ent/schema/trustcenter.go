@@ -213,6 +213,24 @@ func (t TrustCenter) Edges() []ent.Edge {
 			edgeSchema:    TrustCenterFAQ{},
 			cascadeDelete: "TrustCenter",
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:    t,
+			name:          "subscribers",
+			edgeSchema:    Subscriber{},
+			cascadeDelete: "TrustCenter",
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:    t,
+			name:          "email_templates",
+			edgeSchema:    EmailTemplate{},
+			cascadeDelete: "TrustCenter",
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:    t,
+			name:          "campaigns",
+			edgeSchema:    Campaign{},
+			cascadeDelete: "TrustCenter",
+		}),
 	}
 }
 

@@ -75,16 +75,19 @@ type ContactEdges struct {
 	CampaignTargets []*CampaignTarget `json:"campaign_targets,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
+	// Subscribers holds the value of the subscribers edge.
+	Subscribers []*Subscriber `json:"subscribers,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [6]map[string]int
 
 	namedEntities        map[string][]*Entity
 	namedCampaigns       map[string][]*Campaign
 	namedCampaignTargets map[string][]*CampaignTarget
 	namedFiles           map[string][]*File
+	namedSubscribers     map[string][]*Subscriber
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -132,6 +135,15 @@ func (e ContactEdges) FilesOrErr() ([]*File, error) {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
+}
+
+// SubscribersOrErr returns the Subscribers value or an error if the edge
+// was not loaded in eager-loading.
+func (e ContactEdges) SubscribersOrErr() ([]*Subscriber, error) {
+	if e.loadedTypes[5] {
+		return e.Subscribers, nil
+	}
+	return nil, &NotLoadedError{edge: "subscribers"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -317,6 +329,11 @@ func (_m *Contact) QueryFiles() *FileQuery {
 	return NewContactClient(_m.config).QueryFiles(_m)
 }
 
+// QuerySubscribers queries the "subscribers" edge of the Contact entity.
+func (_m *Contact) QuerySubscribers() *SubscriberQuery {
+	return NewContactClient(_m.config).QuerySubscribers(_m)
+}
+
 // Update returns a builder for updating this Contact.
 // Note that you need to call Contact.Unwrap() before calling this method if this Contact
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -492,6 +509,30 @@ func (_m *Contact) appendNamedFiles(name string, edges ...*File) {
 		_m.Edges.namedFiles[name] = []*File{}
 	} else {
 		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
+	}
+}
+
+// NamedSubscribers returns the Subscribers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Contact) NamedSubscribers(name string) ([]*Subscriber, error) {
+	if _m.Edges.namedSubscribers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedSubscribers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Contact) appendNamedSubscribers(name string, edges ...*Subscriber) {
+	if _m.Edges.namedSubscribers == nil {
+		_m.Edges.namedSubscribers = make(map[string][]*Subscriber)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedSubscribers[name] = []*Subscriber{}
+	} else {
+		_m.Edges.namedSubscribers[name] = append(_m.Edges.namedSubscribers[name], edges...)
 	}
 }
 

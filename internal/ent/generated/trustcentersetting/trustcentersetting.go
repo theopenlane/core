@@ -76,6 +76,10 @@ const (
 	FieldSecurityContact = "security_contact"
 	// FieldNdaApprovalRequired holds the string denoting the nda_approval_required field in the database.
 	FieldNdaApprovalRequired = "nda_approval_required"
+	// FieldNotifySubscribersOnSubprocessorChange holds the string denoting the notify_subscribers_on_subprocessor_change field in the database.
+	FieldNotifySubscribersOnSubprocessorChange = "notify_subscribers_on_subprocessor_change"
+	// FieldSubprocessorsNotifiedAt holds the string denoting the subprocessors_notified_at field in the database.
+	FieldSubprocessorsNotifiedAt = "subprocessors_notified_at"
 	// FieldNdaApproverGroupID holds the string denoting the nda_approver_group_id field in the database.
 	FieldNdaApproverGroupID = "nda_approver_group_id"
 	// FieldStatusPageURL holds the string denoting the status_page_url field in the database.
@@ -170,6 +174,8 @@ var Columns = []string{
 	FieldCompanyDomain,
 	FieldSecurityContact,
 	FieldNdaApprovalRequired,
+	FieldNotifySubscribersOnSubprocessorChange,
+	FieldSubprocessorsNotifiedAt,
 	FieldNdaApproverGroupID,
 	FieldStatusPageURL,
 }
@@ -231,6 +237,8 @@ var (
 	SecurityContactValidator func(string) error
 	// DefaultNdaApprovalRequired holds the default value on creation for the "nda_approval_required" field.
 	DefaultNdaApprovalRequired bool
+	// DefaultNotifySubscribersOnSubprocessorChange holds the default value on creation for the "notify_subscribers_on_subprocessor_change" field.
+	DefaultNotifySubscribersOnSubprocessorChange bool
 	// StatusPageURLValidator is a validator for the "status_page_url" field. It is called by the builders before save.
 	StatusPageURLValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
@@ -412,6 +420,16 @@ func BySecurityContact(opts ...sql.OrderTermOption) OrderOption {
 // ByNdaApprovalRequired orders the results by the nda_approval_required field.
 func ByNdaApprovalRequired(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNdaApprovalRequired, opts...).ToFunc()
+}
+
+// ByNotifySubscribersOnSubprocessorChange orders the results by the notify_subscribers_on_subprocessor_change field.
+func ByNotifySubscribersOnSubprocessorChange(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNotifySubscribersOnSubprocessorChange, opts...).ToFunc()
+}
+
+// BySubprocessorsNotifiedAt orders the results by the subprocessors_notified_at field.
+func BySubprocessorsNotifiedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubprocessorsNotifiedAt, opts...).ToFunc()
 }
 
 // ByNdaApproverGroupID orders the results by the nda_approver_group_id field.

@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 )
@@ -401,6 +402,20 @@ func (_c *EmailTemplateCreate) SetNillableWorkflowInstanceID(v *string) *EmailTe
 	return _c
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_c *EmailTemplateCreate) SetTrustCenterID(v string) *EmailTemplateCreate {
+	_c.mutation.SetTrustCenterID(v)
+	return _c
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_c *EmailTemplateCreate) SetNillableTrustCenterID(v *string) *EmailTemplateCreate {
+	if v != nil {
+		_c.SetTrustCenterID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *EmailTemplateCreate) SetID(v string) *EmailTemplateCreate {
 	_c.mutation.SetID(v)
@@ -478,6 +493,11 @@ func (_c *EmailTemplateCreate) SetWorkflowDefinition(v *WorkflowDefinition) *Ema
 // SetWorkflowInstance sets the "workflow_instance" edge to the WorkflowInstance entity.
 func (_c *EmailTemplateCreate) SetWorkflowInstance(v *WorkflowInstance) *EmailTemplateCreate {
 	return _c.SetWorkflowInstanceID(v.ID)
+}
+
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (_c *EmailTemplateCreate) SetTrustCenter(v *TrustCenter) *EmailTemplateCreate {
+	return _c.SetTrustCenterID(v.ID)
 }
 
 // AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
@@ -918,6 +938,24 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.WorkflowInstanceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   emailtemplate.TrustCenterTable,
+			Columns: []string{emailtemplate.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.EmailTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.TrustCenterID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.CampaignsIDs(); len(nodes) > 0 {

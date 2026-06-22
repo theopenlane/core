@@ -546,6 +546,46 @@ func (_u *TrustCenterSettingHistoryUpdate) ClearNdaApprovalRequired() *TrustCent
 	return _u
 }
 
+// SetNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field.
+func (_u *TrustCenterSettingHistoryUpdate) SetNotifySubscribersOnSubprocessorChange(v bool) *TrustCenterSettingHistoryUpdate {
+	_u.mutation.SetNotifySubscribersOnSubprocessorChange(v)
+	return _u
+}
+
+// SetNillableNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdate) SetNillableNotifySubscribersOnSubprocessorChange(v *bool) *TrustCenterSettingHistoryUpdate {
+	if v != nil {
+		_u.SetNotifySubscribersOnSubprocessorChange(*v)
+	}
+	return _u
+}
+
+// ClearNotifySubscribersOnSubprocessorChange clears the value of the "notify_subscribers_on_subprocessor_change" field.
+func (_u *TrustCenterSettingHistoryUpdate) ClearNotifySubscribersOnSubprocessorChange() *TrustCenterSettingHistoryUpdate {
+	_u.mutation.ClearNotifySubscribersOnSubprocessorChange()
+	return _u
+}
+
+// SetSubprocessorsNotifiedAt sets the "subprocessors_notified_at" field.
+func (_u *TrustCenterSettingHistoryUpdate) SetSubprocessorsNotifiedAt(v time.Time) *TrustCenterSettingHistoryUpdate {
+	_u.mutation.SetSubprocessorsNotifiedAt(v)
+	return _u
+}
+
+// SetNillableSubprocessorsNotifiedAt sets the "subprocessors_notified_at" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdate) SetNillableSubprocessorsNotifiedAt(v *time.Time) *TrustCenterSettingHistoryUpdate {
+	if v != nil {
+		_u.SetSubprocessorsNotifiedAt(*v)
+	}
+	return _u
+}
+
+// ClearSubprocessorsNotifiedAt clears the value of the "subprocessors_notified_at" field.
+func (_u *TrustCenterSettingHistoryUpdate) ClearSubprocessorsNotifiedAt() *TrustCenterSettingHistoryUpdate {
+	_u.mutation.ClearSubprocessorsNotifiedAt()
+	return _u
+}
+
 // SetNdaApproverGroupID sets the "nda_approver_group_id" field.
 func (_u *TrustCenterSettingHistoryUpdate) SetNdaApproverGroupID(v string) *TrustCenterSettingHistoryUpdate {
 	_u.mutation.SetNdaApproverGroupID(v)
@@ -828,6 +868,18 @@ func (_u *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	}
 	if _u.mutation.NdaApprovalRequiredCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool)
+	}
+	if value, ok := _u.mutation.NotifySubscribersOnSubprocessorChange(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange, field.TypeBool, value)
+	}
+	if _u.mutation.NotifySubscribersOnSubprocessorChangeCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange, field.TypeBool)
+	}
+	if value, ok := _u.mutation.SubprocessorsNotifiedAt(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldSubprocessorsNotifiedAt, field.TypeTime, value)
+	}
+	if _u.mutation.SubprocessorsNotifiedAtCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldSubprocessorsNotifiedAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.NdaApproverGroupID(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldNdaApproverGroupID, field.TypeString, value)
@@ -1377,6 +1429,46 @@ func (_u *TrustCenterSettingHistoryUpdateOne) ClearNdaApprovalRequired() *TrustC
 	return _u
 }
 
+// SetNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetNotifySubscribersOnSubprocessorChange(v bool) *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.SetNotifySubscribersOnSubprocessorChange(v)
+	return _u
+}
+
+// SetNillableNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableNotifySubscribersOnSubprocessorChange(v *bool) *TrustCenterSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetNotifySubscribersOnSubprocessorChange(*v)
+	}
+	return _u
+}
+
+// ClearNotifySubscribersOnSubprocessorChange clears the value of the "notify_subscribers_on_subprocessor_change" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) ClearNotifySubscribersOnSubprocessorChange() *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.ClearNotifySubscribersOnSubprocessorChange()
+	return _u
+}
+
+// SetSubprocessorsNotifiedAt sets the "subprocessors_notified_at" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetSubprocessorsNotifiedAt(v time.Time) *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.SetSubprocessorsNotifiedAt(v)
+	return _u
+}
+
+// SetNillableSubprocessorsNotifiedAt sets the "subprocessors_notified_at" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableSubprocessorsNotifiedAt(v *time.Time) *TrustCenterSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetSubprocessorsNotifiedAt(*v)
+	}
+	return _u
+}
+
+// ClearSubprocessorsNotifiedAt clears the value of the "subprocessors_notified_at" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) ClearSubprocessorsNotifiedAt() *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.ClearSubprocessorsNotifiedAt()
+	return _u
+}
+
 // SetNdaApproverGroupID sets the "nda_approver_group_id" field.
 func (_u *TrustCenterSettingHistoryUpdateOne) SetNdaApproverGroupID(v string) *TrustCenterSettingHistoryUpdateOne {
 	_u.mutation.SetNdaApproverGroupID(v)
@@ -1689,6 +1781,18 @@ func (_u *TrustCenterSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.NdaApprovalRequiredCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool)
+	}
+	if value, ok := _u.mutation.NotifySubscribersOnSubprocessorChange(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange, field.TypeBool, value)
+	}
+	if _u.mutation.NotifySubscribersOnSubprocessorChangeCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange, field.TypeBool)
+	}
+	if value, ok := _u.mutation.SubprocessorsNotifiedAt(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldSubprocessorsNotifiedAt, field.TypeTime, value)
+	}
+	if _u.mutation.SubprocessorsNotifiedAtCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldSubprocessorsNotifiedAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.NdaApproverGroupID(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldNdaApproverGroupID, field.TypeString, value)

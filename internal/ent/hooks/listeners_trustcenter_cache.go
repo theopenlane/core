@@ -30,6 +30,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/internal/trustcenterurl"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -570,27 +571,10 @@ func getVerifiedDomain(ctx context.Context, client *entgen.Client, domainID stri
 	return cd.CnameRecord, nil
 }
 
-// buildTrustCenterURL constructs the trust center URL from custom domain or slug
+// buildTrustCenterURL constructs the trust center URL from custom domain or slug, delegating to the
+// shared trustcenterurl package
 func buildTrustCenterURL(customDomain, slug string) string {
-	scheme := trustCenterConfig.CacheRefreshScheme
-	if scheme == "" {
-		scheme = "https"
-	}
-
-	// In test mode (http scheme), use DefaultTrustCenterDomain for all requests
-	if scheme == "http" && trustCenterConfig.DefaultTrustCenterDomain != "" {
-		return fmt.Sprintf("%s://%s", scheme, trustCenterConfig.DefaultTrustCenterDomain)
-	}
-
-	if customDomain != "" {
-		return fmt.Sprintf("%s://%s", scheme, customDomain)
-	}
-
-	if slug != "" && trustCenterConfig.DefaultTrustCenterDomain != "" {
-		return fmt.Sprintf("%s://%s/%s", scheme, trustCenterConfig.DefaultTrustCenterDomain, slug)
-	}
-
-	return ""
+	return trustcenterurl.BuildURL(customDomain, slug)
 }
 
 // triggerCacheRefresh makes an HTTP request to the trust center URL with the fresh query parameter

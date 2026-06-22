@@ -55,6 +55,10 @@ const (
 	FieldIsEdited = "is_edited"
 	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
 	FieldTrustCenterID = "trust_center_id"
+	// FieldNotifySubscribers holds the string denoting the notify_subscribers field in the database.
+	FieldNotifySubscribers = "notify_subscribers"
+	// FieldNotifiedAt holds the string denoting the notified_at field in the database.
+	FieldNotifiedAt = "notified_at"
 	// Table holds the table name of the notehistory in the database.
 	Table = "note_history"
 )
@@ -80,6 +84,8 @@ var Columns = []string{
 	FieldDiscussionID,
 	FieldIsEdited,
 	FieldTrustCenterID,
+	FieldNotifySubscribers,
+	FieldNotifiedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -111,6 +117,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultIsEdited holds the default value on creation for the "is_edited" field.
 	DefaultIsEdited bool
+	// DefaultNotifySubscribers holds the default value on creation for the "notify_subscribers" field.
+	DefaultNotifySubscribers bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -216,6 +224,16 @@ func ByIsEdited(opts ...sql.OrderTermOption) OrderOption {
 // ByTrustCenterID orders the results by the trust_center_id field.
 func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
+}
+
+// ByNotifySubscribers orders the results by the notify_subscribers field.
+func ByNotifySubscribers(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNotifySubscribers, opts...).ToFunc()
+}
+
+// ByNotifiedAt orders the results by the notified_at field.
+func ByNotifiedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNotifiedAt, opts...).ToFunc()
 }
 
 var (

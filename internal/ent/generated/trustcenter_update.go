@@ -13,11 +13,14 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
@@ -538,6 +541,51 @@ func (_u *TrustCenterUpdate) AddTrustCenterFaqs(v ...*TrustCenterFAQ) *TrustCent
 	return _u.AddTrustCenterFaqIDs(ids...)
 }
 
+// AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
+func (_u *TrustCenterUpdate) AddSubscriberIDs(ids ...string) *TrustCenterUpdate {
+	_u.mutation.AddSubscriberIDs(ids...)
+	return _u
+}
+
+// AddSubscribers adds the "subscribers" edges to the Subscriber entity.
+func (_u *TrustCenterUpdate) AddSubscribers(v ...*Subscriber) *TrustCenterUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSubscriberIDs(ids...)
+}
+
+// AddEmailTemplateIDs adds the "email_templates" edge to the EmailTemplate entity by IDs.
+func (_u *TrustCenterUpdate) AddEmailTemplateIDs(ids ...string) *TrustCenterUpdate {
+	_u.mutation.AddEmailTemplateIDs(ids...)
+	return _u
+}
+
+// AddEmailTemplates adds the "email_templates" edges to the EmailTemplate entity.
+func (_u *TrustCenterUpdate) AddEmailTemplates(v ...*EmailTemplate) *TrustCenterUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEmailTemplateIDs(ids...)
+}
+
+// AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
+func (_u *TrustCenterUpdate) AddCampaignIDs(ids ...string) *TrustCenterUpdate {
+	_u.mutation.AddCampaignIDs(ids...)
+	return _u
+}
+
+// AddCampaigns adds the "campaigns" edges to the Campaign entity.
+func (_u *TrustCenterUpdate) AddCampaigns(v ...*Campaign) *TrustCenterUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCampaignIDs(ids...)
+}
+
 // Mutation returns the TrustCenterMutation object of the builder.
 func (_u *TrustCenterUpdate) Mutation() *TrustCenterMutation {
 	return _u.mutation
@@ -787,6 +835,69 @@ func (_u *TrustCenterUpdate) RemoveTrustCenterFaqs(v ...*TrustCenterFAQ) *TrustC
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterFaqIDs(ids...)
+}
+
+// ClearSubscribers clears all "subscribers" edges to the Subscriber entity.
+func (_u *TrustCenterUpdate) ClearSubscribers() *TrustCenterUpdate {
+	_u.mutation.ClearSubscribers()
+	return _u
+}
+
+// RemoveSubscriberIDs removes the "subscribers" edge to Subscriber entities by IDs.
+func (_u *TrustCenterUpdate) RemoveSubscriberIDs(ids ...string) *TrustCenterUpdate {
+	_u.mutation.RemoveSubscriberIDs(ids...)
+	return _u
+}
+
+// RemoveSubscribers removes "subscribers" edges to Subscriber entities.
+func (_u *TrustCenterUpdate) RemoveSubscribers(v ...*Subscriber) *TrustCenterUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSubscriberIDs(ids...)
+}
+
+// ClearEmailTemplates clears all "email_templates" edges to the EmailTemplate entity.
+func (_u *TrustCenterUpdate) ClearEmailTemplates() *TrustCenterUpdate {
+	_u.mutation.ClearEmailTemplates()
+	return _u
+}
+
+// RemoveEmailTemplateIDs removes the "email_templates" edge to EmailTemplate entities by IDs.
+func (_u *TrustCenterUpdate) RemoveEmailTemplateIDs(ids ...string) *TrustCenterUpdate {
+	_u.mutation.RemoveEmailTemplateIDs(ids...)
+	return _u
+}
+
+// RemoveEmailTemplates removes "email_templates" edges to EmailTemplate entities.
+func (_u *TrustCenterUpdate) RemoveEmailTemplates(v ...*EmailTemplate) *TrustCenterUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEmailTemplateIDs(ids...)
+}
+
+// ClearCampaigns clears all "campaigns" edges to the Campaign entity.
+func (_u *TrustCenterUpdate) ClearCampaigns() *TrustCenterUpdate {
+	_u.mutation.ClearCampaigns()
+	return _u
+}
+
+// RemoveCampaignIDs removes the "campaigns" edge to Campaign entities by IDs.
+func (_u *TrustCenterUpdate) RemoveCampaignIDs(ids ...string) *TrustCenterUpdate {
+	_u.mutation.RemoveCampaignIDs(ids...)
+	return _u
+}
+
+// RemoveCampaigns removes "campaigns" edges to Campaign entities.
+func (_u *TrustCenterUpdate) RemoveCampaigns(v ...*Campaign) *TrustCenterUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCampaignIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1617,6 +1728,150 @@ func (_u *TrustCenterUpdate) sqlSave(ctx context.Context) (_node int, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.SubscribersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.SubscribersTable,
+			Columns: []string{trustcenter.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subscriber
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSubscribersIDs(); len(nodes) > 0 && !_u.mutation.SubscribersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.SubscribersTable,
+			Columns: []string{trustcenter.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subscriber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubscribersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.SubscribersTable,
+			Columns: []string{trustcenter.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subscriber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EmailTemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.EmailTemplatesTable,
+			Columns: []string{trustcenter.EmailTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailTemplate
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEmailTemplatesIDs(); len(nodes) > 0 && !_u.mutation.EmailTemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.EmailTemplatesTable,
+			Columns: []string{trustcenter.EmailTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EmailTemplatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.EmailTemplatesTable,
+			Columns: []string{trustcenter.EmailTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.CampaignsTable,
+			Columns: []string{trustcenter.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCampaignsIDs(); len(nodes) > 0 && !_u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.CampaignsTable,
+			Columns: []string{trustcenter.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CampaignsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.CampaignsTable,
+			Columns: []string{trustcenter.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenter
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -2133,6 +2388,51 @@ func (_u *TrustCenterUpdateOne) AddTrustCenterFaqs(v ...*TrustCenterFAQ) *TrustC
 	return _u.AddTrustCenterFaqIDs(ids...)
 }
 
+// AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
+func (_u *TrustCenterUpdateOne) AddSubscriberIDs(ids ...string) *TrustCenterUpdateOne {
+	_u.mutation.AddSubscriberIDs(ids...)
+	return _u
+}
+
+// AddSubscribers adds the "subscribers" edges to the Subscriber entity.
+func (_u *TrustCenterUpdateOne) AddSubscribers(v ...*Subscriber) *TrustCenterUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSubscriberIDs(ids...)
+}
+
+// AddEmailTemplateIDs adds the "email_templates" edge to the EmailTemplate entity by IDs.
+func (_u *TrustCenterUpdateOne) AddEmailTemplateIDs(ids ...string) *TrustCenterUpdateOne {
+	_u.mutation.AddEmailTemplateIDs(ids...)
+	return _u
+}
+
+// AddEmailTemplates adds the "email_templates" edges to the EmailTemplate entity.
+func (_u *TrustCenterUpdateOne) AddEmailTemplates(v ...*EmailTemplate) *TrustCenterUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEmailTemplateIDs(ids...)
+}
+
+// AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
+func (_u *TrustCenterUpdateOne) AddCampaignIDs(ids ...string) *TrustCenterUpdateOne {
+	_u.mutation.AddCampaignIDs(ids...)
+	return _u
+}
+
+// AddCampaigns adds the "campaigns" edges to the Campaign entity.
+func (_u *TrustCenterUpdateOne) AddCampaigns(v ...*Campaign) *TrustCenterUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCampaignIDs(ids...)
+}
+
 // Mutation returns the TrustCenterMutation object of the builder.
 func (_u *TrustCenterUpdateOne) Mutation() *TrustCenterMutation {
 	return _u.mutation
@@ -2382,6 +2682,69 @@ func (_u *TrustCenterUpdateOne) RemoveTrustCenterFaqs(v ...*TrustCenterFAQ) *Tru
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterFaqIDs(ids...)
+}
+
+// ClearSubscribers clears all "subscribers" edges to the Subscriber entity.
+func (_u *TrustCenterUpdateOne) ClearSubscribers() *TrustCenterUpdateOne {
+	_u.mutation.ClearSubscribers()
+	return _u
+}
+
+// RemoveSubscriberIDs removes the "subscribers" edge to Subscriber entities by IDs.
+func (_u *TrustCenterUpdateOne) RemoveSubscriberIDs(ids ...string) *TrustCenterUpdateOne {
+	_u.mutation.RemoveSubscriberIDs(ids...)
+	return _u
+}
+
+// RemoveSubscribers removes "subscribers" edges to Subscriber entities.
+func (_u *TrustCenterUpdateOne) RemoveSubscribers(v ...*Subscriber) *TrustCenterUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSubscriberIDs(ids...)
+}
+
+// ClearEmailTemplates clears all "email_templates" edges to the EmailTemplate entity.
+func (_u *TrustCenterUpdateOne) ClearEmailTemplates() *TrustCenterUpdateOne {
+	_u.mutation.ClearEmailTemplates()
+	return _u
+}
+
+// RemoveEmailTemplateIDs removes the "email_templates" edge to EmailTemplate entities by IDs.
+func (_u *TrustCenterUpdateOne) RemoveEmailTemplateIDs(ids ...string) *TrustCenterUpdateOne {
+	_u.mutation.RemoveEmailTemplateIDs(ids...)
+	return _u
+}
+
+// RemoveEmailTemplates removes "email_templates" edges to EmailTemplate entities.
+func (_u *TrustCenterUpdateOne) RemoveEmailTemplates(v ...*EmailTemplate) *TrustCenterUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEmailTemplateIDs(ids...)
+}
+
+// ClearCampaigns clears all "campaigns" edges to the Campaign entity.
+func (_u *TrustCenterUpdateOne) ClearCampaigns() *TrustCenterUpdateOne {
+	_u.mutation.ClearCampaigns()
+	return _u
+}
+
+// RemoveCampaignIDs removes the "campaigns" edge to Campaign entities by IDs.
+func (_u *TrustCenterUpdateOne) RemoveCampaignIDs(ids ...string) *TrustCenterUpdateOne {
+	_u.mutation.RemoveCampaignIDs(ids...)
+	return _u
+}
+
+// RemoveCampaigns removes "campaigns" edges to Campaign entities.
+func (_u *TrustCenterUpdateOne) RemoveCampaigns(v ...*Campaign) *TrustCenterUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCampaignIDs(ids...)
 }
 
 // Where appends a list predicates to the TrustCenterUpdate builder.
@@ -3237,6 +3600,150 @@ func (_u *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenter
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubscribersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.SubscribersTable,
+			Columns: []string{trustcenter.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subscriber
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSubscribersIDs(); len(nodes) > 0 && !_u.mutation.SubscribersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.SubscribersTable,
+			Columns: []string{trustcenter.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subscriber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubscribersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.SubscribersTable,
+			Columns: []string{trustcenter.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subscriber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EmailTemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.EmailTemplatesTable,
+			Columns: []string{trustcenter.EmailTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailTemplate
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEmailTemplatesIDs(); len(nodes) > 0 && !_u.mutation.EmailTemplatesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.EmailTemplatesTable,
+			Columns: []string{trustcenter.EmailTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EmailTemplatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.EmailTemplatesTable,
+			Columns: []string{trustcenter.EmailTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EmailTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.CampaignsTable,
+			Columns: []string{trustcenter.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCampaignsIDs(); len(nodes) > 0 && !_u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.CampaignsTable,
+			Columns: []string{trustcenter.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CampaignsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.CampaignsTable,
+			Columns: []string{trustcenter.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

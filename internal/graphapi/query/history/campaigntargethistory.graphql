@@ -25,6 +25,7 @@ query GetAllCampaignTargetHistories ($first: Int, $last: Int, $after: Cursor, $b
 				ref
 				sentAt
 				status
+				subscriberID
 				updatedAt
 				updatedBy
 				userID
@@ -60,6 +61,7 @@ query GetCampaignTargetHistories ($first: Int, $last: Int, $after: Cursor, $befo
 				ref
 				sentAt
 				status
+				subscriberID
 				updatedAt
 				updatedBy
 				userID

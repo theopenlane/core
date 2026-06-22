@@ -281,6 +281,7 @@ type ComplexityRoot struct {
 		Status                 func(childComplexity int) int
 		Tags                   func(childComplexity int) int
 		TemplateID             func(childComplexity int) int
+		TrustCenterID          func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
 		WorkflowEligibleMarker func(childComplexity int) int
@@ -314,6 +315,7 @@ type ComplexityRoot struct {
 		Ref                    func(childComplexity int) int
 		SentAt                 func(childComplexity int) int
 		Status                 func(childComplexity int) int
+		SubscriberID           func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
 		UserID                 func(childComplexity int) int
@@ -837,6 +839,7 @@ type ComplexityRoot struct {
 		SystemInternalID     func(childComplexity int) int
 		SystemOwned          func(childComplexity int) int
 		TemplateContext      func(childComplexity int) int
+		TrustCenterID        func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
 		Version              func(childComplexity int) int
@@ -1560,23 +1563,25 @@ type ComplexityRoot struct {
 	}
 
 	NoteHistory struct {
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		DiscussionID  func(childComplexity int) int
-		DisplayID     func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		IsEdited      func(childComplexity int) int
-		NoteRef       func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		Text          func(childComplexity int) int
-		TextJSON      func(childComplexity int) int
-		Title         func(childComplexity int) int
-		TrustCenterID func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		CreatedAt         func(childComplexity int) int
+		CreatedBy         func(childComplexity int) int
+		DiscussionID      func(childComplexity int) int
+		DisplayID         func(childComplexity int) int
+		HistoryTime       func(childComplexity int) int
+		ID                func(childComplexity int) int
+		IsEdited          func(childComplexity int) int
+		NoteRef           func(childComplexity int) int
+		NotifiedAt        func(childComplexity int) int
+		NotifySubscribers func(childComplexity int) int
+		Operation         func(childComplexity int) int
+		OwnerID           func(childComplexity int) int
+		Ref               func(childComplexity int) int
+		Text              func(childComplexity int) int
+		TextJSON          func(childComplexity int) int
+		Title             func(childComplexity int) int
+		TrustCenterID     func(childComplexity int) int
+		UpdatedAt         func(childComplexity int) int
+		UpdatedBy         func(childComplexity int) int
 	}
 
 	NoteHistoryConnection struct {
@@ -2804,39 +2809,41 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterSettingHistory struct {
-		AccentColor              func(childComplexity int) int
-		BackgroundColor          func(childComplexity int) int
-		CompanyDescription       func(childComplexity int) int
-		CompanyDomain            func(childComplexity int) int
-		CompanyName              func(childComplexity int) int
-		CreatedAt                func(childComplexity int) int
-		CreatedBy                func(childComplexity int) int
-		Environment              func(childComplexity int) int
-		FaviconLocalFileID       func(childComplexity int) int
-		FaviconRemoteURL         func(childComplexity int) int
-		Font                     func(childComplexity int) int
-		ForegroundColor          func(childComplexity int) int
-		HeroImageLocalFileID     func(childComplexity int) int
-		HistoryTime              func(childComplexity int) int
-		ID                       func(childComplexity int) int
-		LogoLocalFileID          func(childComplexity int) int
-		LogoRemoteURL            func(childComplexity int) int
-		NdaApprovalRequired      func(childComplexity int) int
-		NdaApproverGroupID       func(childComplexity int) int
-		Operation                func(childComplexity int) int
-		Overview                 func(childComplexity int) int
-		PrimaryColor             func(childComplexity int) int
-		Ref                      func(childComplexity int) int
-		RemoveBranding           func(childComplexity int) int
-		SecondaryBackgroundColor func(childComplexity int) int
-		SecondaryForegroundColor func(childComplexity int) int
-		SecurityContact          func(childComplexity int) int
-		StatusPageURL            func(childComplexity int) int
-		ThemeMode                func(childComplexity int) int
-		Title                    func(childComplexity int) int
-		TrustCenterID            func(childComplexity int) int
-		UpdatedAt                func(childComplexity int) int
-		UpdatedBy                func(childComplexity int) int
+		AccentColor                           func(childComplexity int) int
+		BackgroundColor                       func(childComplexity int) int
+		CompanyDescription                    func(childComplexity int) int
+		CompanyDomain                         func(childComplexity int) int
+		CompanyName                           func(childComplexity int) int
+		CreatedAt                             func(childComplexity int) int
+		CreatedBy                             func(childComplexity int) int
+		Environment                           func(childComplexity int) int
+		FaviconLocalFileID                    func(childComplexity int) int
+		FaviconRemoteURL                      func(childComplexity int) int
+		Font                                  func(childComplexity int) int
+		ForegroundColor                       func(childComplexity int) int
+		HeroImageLocalFileID                  func(childComplexity int) int
+		HistoryTime                           func(childComplexity int) int
+		ID                                    func(childComplexity int) int
+		LogoLocalFileID                       func(childComplexity int) int
+		LogoRemoteURL                         func(childComplexity int) int
+		NdaApprovalRequired                   func(childComplexity int) int
+		NdaApproverGroupID                    func(childComplexity int) int
+		NotifySubscribersOnSubprocessorChange func(childComplexity int) int
+		Operation                             func(childComplexity int) int
+		Overview                              func(childComplexity int) int
+		PrimaryColor                          func(childComplexity int) int
+		Ref                                   func(childComplexity int) int
+		RemoveBranding                        func(childComplexity int) int
+		SecondaryBackgroundColor              func(childComplexity int) int
+		SecondaryForegroundColor              func(childComplexity int) int
+		SecurityContact                       func(childComplexity int) int
+		StatusPageURL                         func(childComplexity int) int
+		SubprocessorsNotifiedAt               func(childComplexity int) int
+		ThemeMode                             func(childComplexity int) int
+		Title                                 func(childComplexity int) int
+		TrustCenterID                         func(childComplexity int) int
+		UpdatedAt                             func(childComplexity int) int
+		UpdatedBy                             func(childComplexity int) int
 	}
 
 	TrustCenterSettingHistoryConnection struct {
@@ -4625,6 +4632,14 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CampaignHistory.TemplateID(childComplexity), true
+
+	case "CampaignHistory.trustCenterID":
+		if e.ComplexityRoot.CampaignHistory.TrustCenterID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignHistory.TrustCenterID(childComplexity), true
+
 	case "CampaignHistory.updatedAt":
 		if e.ComplexityRoot.CampaignHistory.UpdatedAt == nil {
 			break
@@ -4772,6 +4787,14 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CampaignTargetHistory.Status(childComplexity), true
+
+	case "CampaignTargetHistory.subscriberID":
+		if e.ComplexityRoot.CampaignTargetHistory.SubscriberID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignTargetHistory.SubscriberID(childComplexity), true
+
 	case "CampaignTargetHistory.updatedAt":
 		if e.ComplexityRoot.CampaignTargetHistory.UpdatedAt == nil {
 			break
@@ -7247,6 +7270,14 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplateHistory.TemplateContext(childComplexity), true
+
+	case "EmailTemplateHistory.trustCenterID":
+		if e.ComplexityRoot.EmailTemplateHistory.TrustCenterID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateHistory.TrustCenterID(childComplexity), true
+
 	case "EmailTemplateHistory.updatedAt":
 		if e.ComplexityRoot.EmailTemplateHistory.UpdatedAt == nil {
 			break
@@ -10715,6 +10746,21 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.NoteHistory.NoteRef(childComplexity), true
+
+	case "NoteHistory.notifiedAt":
+		if e.ComplexityRoot.NoteHistory.NotifiedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NoteHistory.NotifiedAt(childComplexity), true
+
+	case "NoteHistory.notifySubscribers":
+		if e.ComplexityRoot.NoteHistory.NotifySubscribers == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NoteHistory.NotifySubscribers(childComplexity), true
+
 	case "NoteHistory.operation":
 		if e.ComplexityRoot.NoteHistory.Operation == nil {
 			break
@@ -17138,6 +17184,14 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.NdaApproverGroupID(childComplexity), true
+
+	case "TrustCenterSettingHistory.notifySubscribersOnSubprocessorChange":
+		if e.ComplexityRoot.TrustCenterSettingHistory.NotifySubscribersOnSubprocessorChange == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSettingHistory.NotifySubscribersOnSubprocessorChange(childComplexity), true
+
 	case "TrustCenterSettingHistory.operation":
 		if e.ComplexityRoot.TrustCenterSettingHistory.Operation == nil {
 			break
@@ -17192,6 +17246,14 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.StatusPageURL(childComplexity), true
+
+	case "TrustCenterSettingHistory.subprocessorsNotifiedAt":
+		if e.ComplexityRoot.TrustCenterSettingHistory.SubprocessorsNotifiedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSettingHistory.SubprocessorsNotifiedAt(childComplexity), true
+
 	case "TrustCenterSettingHistory.themeMode":
 		if e.ComplexityRoot.TrustCenterSettingHistory.ThemeMode == nil {
 			break
@@ -22899,6 +22961,10 @@ type CampaignHistory implements Node {
   the email branding associated with the campaign
   """
   emailBrandingID: String
+  """
+  the trust center this campaign sends updates for, if any
+  """
+  trustCenterID: String
 }
 """
 CampaignHistoryCampaignStatus is enum for the field status
@@ -22919,6 +22985,7 @@ enum CampaignHistoryCampaignType @goModel(model: "github.com/theopenlane/core/co
   POLICY_ATTESTATION
   VENDOR_ASSESSMENT
   CUSTOM
+  TRUST_CENTER_UPDATE
 }
 """
 A connection to a list of items.
@@ -23560,6 +23627,24 @@ input CampaignHistoryWhereInput {
   emailBrandingIDNotNil: Boolean
   emailBrandingIDEqualFold: String
   emailBrandingIDContainsFold: String
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
 }
 type CampaignTargetHistory implements Node {
   id: ID!
@@ -23594,6 +23679,10 @@ type CampaignTargetHistory implements Node {
   the group associated with the campaign target
   """
   groupID: String
+  """
+  the trust center subscriber this target was generated from, if any
+  """
+  subscriberID: String
   """
   the email address targeted by the campaign
   """
@@ -23907,6 +23996,24 @@ input CampaignTargetHistoryWhereInput {
   groupIDNotNil: Boolean
   groupIDEqualFold: String
   groupIDContainsFold: String
+  """
+  subscriber_id field predicates
+  """
+  subscriberID: String
+  subscriberIDNEQ: String
+  subscriberIDIn: [String!]
+  subscriberIDNotIn: [String!]
+  subscriberIDGT: String
+  subscriberIDGTE: String
+  subscriberIDLT: String
+  subscriberIDLTE: String
+  subscriberIDContains: String
+  subscriberIDHasPrefix: String
+  subscriberIDHasSuffix: String
+  subscriberIDIsNil: Boolean
+  subscriberIDNotNil: Boolean
+  subscriberIDEqualFold: String
+  subscriberIDContainsFold: String
   """
   email field predicates
   """
@@ -30351,6 +30458,10 @@ type EmailTemplateHistory implements Node {
   workflow instance associated with this template
   """
   workflowInstanceID: String
+  """
+  the trust center this template is associated with, if any
+  """
+  trustCenterID: String
 }
 """
 A connection to a list of items.
@@ -30860,6 +30971,24 @@ input EmailTemplateHistoryWhereInput {
   workflowInstanceIDNotNil: Boolean
   workflowInstanceIDEqualFold: String
   workflowInstanceIDContainsFold: String
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
 }
 type EntityHistory implements Node {
   id: ID!
@@ -39972,6 +40101,14 @@ type NoteHistory implements Node {
   the trust center this note belongs to, if applicable
   """
   trustCenterID: String
+  """
+  when set on a trust center post, sends the published update to the trust center's subscribers
+  """
+  notifySubscribers: Boolean
+  """
+  when subscribers were notified about this post
+  """
+  notifiedAt: Time
 }
 """
 A connection to a list of items.
@@ -40278,6 +40415,26 @@ input NoteHistoryWhereInput {
   trustCenterIDNotNil: Boolean
   trustCenterIDEqualFold: String
   trustCenterIDContainsFold: String
+  """
+  notify_subscribers field predicates
+  """
+  notifySubscribers: Boolean
+  notifySubscribersNEQ: Boolean
+  notifySubscribersIsNil: Boolean
+  notifySubscribersNotNil: Boolean
+  """
+  notified_at field predicates
+  """
+  notifiedAt: Time
+  notifiedAtNEQ: Time
+  notifiedAtIn: [Time!]
+  notifiedAtNotIn: [Time!]
+  notifiedAtGT: Time
+  notifiedAtGTE: Time
+  notifiedAtLT: Time
+  notifiedAtLTE: Time
+  notifiedAtIsNil: Boolean
+  notifiedAtNotNil: Boolean
 }
 type NotificationPreferenceHistory implements Node {
   id: ID!
@@ -57292,6 +57449,14 @@ type TrustCenterSettingHistory implements Node {
   """
   ndaApprovalRequired: Boolean
   """
+  whether to email trust center subscribers when subprocessors are added, updated, or removed
+  """
+  notifySubscribersOnSubprocessorChange: Boolean
+  """
+  watermark of the most recent subprocessor change subscribers have been notified about
+  """
+  subprocessorsNotifiedAt: Time
+  """
   group whose members approve trust center NDA requests
   """
   ndaApproverGroupID: String
@@ -57866,6 +58031,26 @@ input TrustCenterSettingHistoryWhereInput {
   ndaApprovalRequiredNEQ: Boolean
   ndaApprovalRequiredIsNil: Boolean
   ndaApprovalRequiredNotNil: Boolean
+  """
+  notify_subscribers_on_subprocessor_change field predicates
+  """
+  notifySubscribersOnSubprocessorChange: Boolean
+  notifySubscribersOnSubprocessorChangeNEQ: Boolean
+  notifySubscribersOnSubprocessorChangeIsNil: Boolean
+  notifySubscribersOnSubprocessorChangeNotNil: Boolean
+  """
+  subprocessors_notified_at field predicates
+  """
+  subprocessorsNotifiedAt: Time
+  subprocessorsNotifiedAtNEQ: Time
+  subprocessorsNotifiedAtIn: [Time!]
+  subprocessorsNotifiedAtNotIn: [Time!]
+  subprocessorsNotifiedAtGT: Time
+  subprocessorsNotifiedAtGTE: Time
+  subprocessorsNotifiedAtLT: Time
+  subprocessorsNotifiedAtLTE: Time
+  subprocessorsNotifiedAtIsNil: Boolean
+  subprocessorsNotifiedAtNotNil: Boolean
   """
   nda_approver_group_id field predicates
   """
@@ -64559,6 +64744,8 @@ func (ec *executionContext) childFields_CampaignHistory(ctx context.Context, fie
 		return ec.fieldContext_CampaignHistory_integrationID(ctx, field)
 	case "emailBrandingID":
 		return ec.fieldContext_CampaignHistory_emailBrandingID(ctx, field)
+	case "trustCenterID":
+		return ec.fieldContext_CampaignHistory_trustCenterID(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type CampaignHistory", field.Name)
 }
@@ -64615,6 +64802,8 @@ func (ec *executionContext) childFields_CampaignTargetHistory(ctx context.Contex
 		return ec.fieldContext_CampaignTargetHistory_userID(ctx, field)
 	case "groupID":
 		return ec.fieldContext_CampaignTargetHistory_groupID(ctx, field)
+	case "subscriberID":
+		return ec.fieldContext_CampaignTargetHistory_subscriberID(ctx, field)
 	case "email":
 		return ec.fieldContext_CampaignTargetHistory_email(ctx, field)
 	case "fullName":
@@ -65675,6 +65864,8 @@ func (ec *executionContext) childFields_EmailTemplateHistory(ctx context.Context
 		return ec.fieldContext_EmailTemplateHistory_workflowDefinitionID(ctx, field)
 	case "workflowInstanceID":
 		return ec.fieldContext_EmailTemplateHistory_workflowInstanceID(ctx, field)
+	case "trustCenterID":
+		return ec.fieldContext_EmailTemplateHistory_trustCenterID(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type EmailTemplateHistory", field.Name)
 }
@@ -67145,6 +67336,10 @@ func (ec *executionContext) childFields_NoteHistory(ctx context.Context, field g
 		return ec.fieldContext_NoteHistory_isEdited(ctx, field)
 	case "trustCenterID":
 		return ec.fieldContext_NoteHistory_trustCenterID(ctx, field)
+	case "notifySubscribers":
+		return ec.fieldContext_NoteHistory_notifySubscribers(ctx, field)
+	case "notifiedAt":
+		return ec.fieldContext_NoteHistory_notifiedAt(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type NoteHistory", field.Name)
 }
@@ -69493,6 +69688,10 @@ func (ec *executionContext) childFields_TrustCenterSettingHistory(ctx context.Co
 		return ec.fieldContext_TrustCenterSettingHistory_securityContact(ctx, field)
 	case "ndaApprovalRequired":
 		return ec.fieldContext_TrustCenterSettingHistory_ndaApprovalRequired(ctx, field)
+	case "notifySubscribersOnSubprocessorChange":
+		return ec.fieldContext_TrustCenterSettingHistory_notifySubscribersOnSubprocessorChange(ctx, field)
+	case "subprocessorsNotifiedAt":
+		return ec.fieldContext_TrustCenterSettingHistory_subprocessorsNotifiedAt(ctx, field)
 	case "ndaApproverGroupID":
 		return ec.fieldContext_TrustCenterSettingHistory_ndaApproverGroupID(ctx, field)
 	case "statusPageURL":

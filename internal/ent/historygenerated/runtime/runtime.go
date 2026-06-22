@@ -1761,6 +1761,10 @@ func init() {
 	notehistoryDescIsEdited := notehistoryFields[17].Descriptor()
 	// notehistory.DefaultIsEdited holds the default value on creation for the is_edited field.
 	notehistory.DefaultIsEdited = notehistoryDescIsEdited.Default.(bool)
+	// notehistoryDescNotifySubscribers is the schema descriptor for notify_subscribers field.
+	notehistoryDescNotifySubscribers := notehistoryFields[19].Descriptor()
+	// notehistory.DefaultNotifySubscribers holds the default value on creation for the notify_subscribers field.
+	notehistory.DefaultNotifySubscribers = notehistoryDescNotifySubscribers.Default.(bool)
 	// notehistoryDescID is the schema descriptor for id field.
 	notehistoryDescID := notehistoryFields[9].Descriptor()
 	// notehistory.DefaultID holds the default value on creation for the id field.
@@ -2945,6 +2949,10 @@ func init() {
 	trustcentersettinghistoryDescNdaApprovalRequired := trustcentersettinghistoryFields[32].Descriptor()
 	// trustcentersettinghistory.DefaultNdaApprovalRequired holds the default value on creation for the nda_approval_required field.
 	trustcentersettinghistory.DefaultNdaApprovalRequired = trustcentersettinghistoryDescNdaApprovalRequired.Default.(bool)
+	// trustcentersettinghistoryDescNotifySubscribersOnSubprocessorChange is the schema descriptor for notify_subscribers_on_subprocessor_change field.
+	trustcentersettinghistoryDescNotifySubscribersOnSubprocessorChange := trustcentersettinghistoryFields[33].Descriptor()
+	// trustcentersettinghistory.DefaultNotifySubscribersOnSubprocessorChange holds the default value on creation for the notify_subscribers_on_subprocessor_change field.
+	trustcentersettinghistory.DefaultNotifySubscribersOnSubprocessorChange = trustcentersettinghistoryDescNotifySubscribersOnSubprocessorChange.Default.(bool)
 	// trustcentersettinghistoryDescID is the schema descriptor for id field.
 	trustcentersettinghistoryDescID := trustcentersettinghistoryFields[9].Descriptor()
 	// trustcentersettinghistory.DefaultID holds the default value on creation for the id field.

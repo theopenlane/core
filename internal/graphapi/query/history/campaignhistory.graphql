@@ -48,6 +48,7 @@ query GetAllCampaignHistories ($first: Int, $last: Int, $after: Cursor, $before:
 				status
 				tags
 				templateID
+				trustCenterID
 				updatedAt
 				updatedBy
 				workflowEligibleMarker
@@ -105,6 +106,7 @@ query GetCampaignHistories ($first: Int, $last: Int, $after: Cursor, $before: Cu
 				status
 				tags
 				templateID
+				trustCenterID
 				updatedAt
 				updatedBy
 				workflowEligibleMarker

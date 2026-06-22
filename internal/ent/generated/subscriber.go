@@ -10,8 +10,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // Subscriber is the model entity for the Subscriber schema.
@@ -35,6 +38,8 @@ type Subscriber struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the trust center the subscriber is subscribed to, null for legacy organization-level subscribers
+	TrustCenterID *string `json:"trust_center_id,omitempty"`
 	// email address of the subscriber
 	Email string `json:"email,omitempty"`
 	// phone number of the subscriber
@@ -55,6 +60,10 @@ type Subscriber struct {
 	Unsubscribed bool `json:"unsubscribed,omitempty"`
 	// the number of attempts made to perform email send of the subscription, maximum of 5
 	SendAttempts int `json:"send_attempts,omitempty"`
+	// the contact record matched to this subscriber by email, set automatically when a matching contact exists
+	ContactID string `json:"contact_id,omitempty"`
+	// the user matched to this subscriber by email, set automatically when a matching user exists
+	UserID string `json:"user_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SubscriberQuery when eager-loading is set.
 	Edges        SubscriberEdges `json:"edges"`
@@ -67,13 +76,22 @@ type SubscriberEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// Events holds the value of the events edge.
 	Events []*Event `json:"events,omitempty"`
+	// TrustCenter holds the value of the trust_center edge.
+	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
+	// CampaignTargets holds the value of the campaign_targets edge.
+	CampaignTargets []*CampaignTarget `json:"campaign_targets,omitempty"`
+	// Contact holds the value of the contact edge.
+	Contact *Contact `json:"contact,omitempty"`
+	// User holds the value of the user edge.
+	User *User `json:"user,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [6]map[string]int
 
-	namedEvents map[string][]*Event
+	namedEvents          map[string][]*Event
+	namedCampaignTargets map[string][]*CampaignTarget
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -96,6 +114,48 @@ func (e SubscriberEdges) EventsOrErr() ([]*Event, error) {
 	return nil, &NotLoadedError{edge: "events"}
 }
 
+// TrustCenterOrErr returns the TrustCenter value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SubscriberEdges) TrustCenterOrErr() (*TrustCenter, error) {
+	if e.TrustCenter != nil {
+		return e.TrustCenter, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: trustcenter.Label}
+	}
+	return nil, &NotLoadedError{edge: "trust_center"}
+}
+
+// CampaignTargetsOrErr returns the CampaignTargets value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubscriberEdges) CampaignTargetsOrErr() ([]*CampaignTarget, error) {
+	if e.loadedTypes[3] {
+		return e.CampaignTargets, nil
+	}
+	return nil, &NotLoadedError{edge: "campaign_targets"}
+}
+
+// ContactOrErr returns the Contact value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SubscriberEdges) ContactOrErr() (*Contact, error) {
+	if e.Contact != nil {
+		return e.Contact, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: contact.Label}
+	}
+	return nil, &NotLoadedError{edge: "contact"}
+}
+
+// UserOrErr returns the User value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SubscriberEdges) UserOrErr() (*User, error) {
+	if e.User != nil {
+		return e.User, nil
+	} else if e.loadedTypes[5] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "user"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Subscriber) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -107,7 +167,7 @@ func (*Subscriber) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case subscriber.FieldSendAttempts:
 			values[i] = new(sql.NullInt64)
-		case subscriber.FieldID, subscriber.FieldCreatedBy, subscriber.FieldUpdatedBy, subscriber.FieldDeletedBy, subscriber.FieldOwnerID, subscriber.FieldEmail, subscriber.FieldPhoneNumber, subscriber.FieldToken:
+		case subscriber.FieldID, subscriber.FieldCreatedBy, subscriber.FieldUpdatedBy, subscriber.FieldDeletedBy, subscriber.FieldOwnerID, subscriber.FieldTrustCenterID, subscriber.FieldEmail, subscriber.FieldPhoneNumber, subscriber.FieldToken, subscriber.FieldContactID, subscriber.FieldUserID:
 			values[i] = new(sql.NullString)
 		case subscriber.FieldCreatedAt, subscriber.FieldUpdatedAt, subscriber.FieldDeletedAt, subscriber.FieldTTL:
 			values[i] = new(sql.NullTime)
@@ -182,6 +242,13 @@ func (_m *Subscriber) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.OwnerID = value.String
 			}
+		case subscriber.FieldTrustCenterID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
+			} else if value.Valid {
+				_m.TrustCenterID = new(string)
+				*_m.TrustCenterID = value.String
+			}
 		case subscriber.FieldEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field email", values[i])
@@ -243,6 +310,18 @@ func (_m *Subscriber) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.SendAttempts = int(value.Int64)
 			}
+		case subscriber.FieldContactID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field contact_id", values[i])
+			} else if value.Valid {
+				_m.ContactID = value.String
+			}
+		case subscriber.FieldUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field user_id", values[i])
+			} else if value.Valid {
+				_m.UserID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -264,6 +343,26 @@ func (_m *Subscriber) QueryOwner() *OrganizationQuery {
 // QueryEvents queries the "events" edge of the Subscriber entity.
 func (_m *Subscriber) QueryEvents() *EventQuery {
 	return NewSubscriberClient(_m.config).QueryEvents(_m)
+}
+
+// QueryTrustCenter queries the "trust_center" edge of the Subscriber entity.
+func (_m *Subscriber) QueryTrustCenter() *TrustCenterQuery {
+	return NewSubscriberClient(_m.config).QueryTrustCenter(_m)
+}
+
+// QueryCampaignTargets queries the "campaign_targets" edge of the Subscriber entity.
+func (_m *Subscriber) QueryCampaignTargets() *CampaignTargetQuery {
+	return NewSubscriberClient(_m.config).QueryCampaignTargets(_m)
+}
+
+// QueryContact queries the "contact" edge of the Subscriber entity.
+func (_m *Subscriber) QueryContact() *ContactQuery {
+	return NewSubscriberClient(_m.config).QueryContact(_m)
+}
+
+// QueryUser queries the "user" edge of the Subscriber entity.
+func (_m *Subscriber) QueryUser() *UserQuery {
+	return NewSubscriberClient(_m.config).QueryUser(_m)
 }
 
 // Update returns a builder for updating this Subscriber.
@@ -313,6 +412,11 @@ func (_m *Subscriber) String() string {
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
+	if v := _m.TrustCenterID; v != nil {
+		builder.WriteString("trust_center_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("email=")
 	builder.WriteString(_m.Email)
 	builder.WriteString(", ")
@@ -346,6 +450,12 @@ func (_m *Subscriber) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("send_attempts=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SendAttempts))
+	builder.WriteString(", ")
+	builder.WriteString("contact_id=")
+	builder.WriteString(_m.ContactID)
+	builder.WriteString(", ")
+	builder.WriteString("user_id=")
+	builder.WriteString(_m.UserID)
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -371,6 +481,30 @@ func (_m *Subscriber) appendNamedEvents(name string, edges ...*Event) {
 		_m.Edges.namedEvents[name] = []*Event{}
 	} else {
 		_m.Edges.namedEvents[name] = append(_m.Edges.namedEvents[name], edges...)
+	}
+}
+
+// NamedCampaignTargets returns the CampaignTargets named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Subscriber) NamedCampaignTargets(name string) ([]*CampaignTarget, error) {
+	if _m.Edges.namedCampaignTargets == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedCampaignTargets[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Subscriber) appendNamedCampaignTargets(name string, edges ...*CampaignTarget) {
+	if _m.Edges.namedCampaignTargets == nil {
+		_m.Edges.namedCampaignTargets = make(map[string][]*CampaignTarget)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedCampaignTargets[name] = []*CampaignTarget{}
+	} else {
+		_m.Edges.namedCampaignTargets[name] = append(_m.Edges.namedCampaignTargets[name], edges...)
 	}
 }
 

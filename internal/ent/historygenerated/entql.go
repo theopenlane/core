@@ -354,6 +354,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			campaignhistory.FieldEmailTemplateID:        {Type: field.TypeString, Column: campaignhistory.FieldEmailTemplateID},
 			campaignhistory.FieldIntegrationID:          {Type: field.TypeString, Column: campaignhistory.FieldIntegrationID},
 			campaignhistory.FieldEmailBrandingID:        {Type: field.TypeString, Column: campaignhistory.FieldEmailBrandingID},
+			campaignhistory.FieldTrustCenterID:          {Type: field.TypeString, Column: campaignhistory.FieldTrustCenterID},
 		},
 	}
 	graph.Nodes[5] = &sqlgraph.Node{
@@ -382,6 +383,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			campaigntargethistory.FieldContactID:              {Type: field.TypeString, Column: campaigntargethistory.FieldContactID},
 			campaigntargethistory.FieldUserID:                 {Type: field.TypeString, Column: campaigntargethistory.FieldUserID},
 			campaigntargethistory.FieldGroupID:                {Type: field.TypeString, Column: campaigntargethistory.FieldGroupID},
+			campaigntargethistory.FieldSubscriberID:           {Type: field.TypeString, Column: campaigntargethistory.FieldSubscriberID},
 			campaigntargethistory.FieldEmail:                  {Type: field.TypeString, Column: campaigntargethistory.FieldEmail},
 			campaigntargethistory.FieldFullName:               {Type: field.TypeString, Column: campaigntargethistory.FieldFullName},
 			campaigntargethistory.FieldStatus:                 {Type: field.TypeEnum, Column: campaigntargethistory.FieldStatus},
@@ -912,6 +914,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			emailtemplatehistory.FieldIntegrationID:        {Type: field.TypeString, Column: emailtemplatehistory.FieldIntegrationID},
 			emailtemplatehistory.FieldWorkflowDefinitionID: {Type: field.TypeString, Column: emailtemplatehistory.FieldWorkflowDefinitionID},
 			emailtemplatehistory.FieldWorkflowInstanceID:   {Type: field.TypeString, Column: emailtemplatehistory.FieldWorkflowInstanceID},
+			emailtemplatehistory.FieldTrustCenterID:        {Type: field.TypeString, Column: emailtemplatehistory.FieldTrustCenterID},
 		},
 	}
 	graph.Nodes[19] = &sqlgraph.Node{
@@ -1632,24 +1635,26 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "NoteHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			notehistory.FieldHistoryTime:   {Type: field.TypeTime, Column: notehistory.FieldHistoryTime},
-			notehistory.FieldRef:           {Type: field.TypeString, Column: notehistory.FieldRef},
-			notehistory.FieldOperation:     {Type: field.TypeEnum, Column: notehistory.FieldOperation},
-			notehistory.FieldCreatedAt:     {Type: field.TypeTime, Column: notehistory.FieldCreatedAt},
-			notehistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: notehistory.FieldUpdatedAt},
-			notehistory.FieldCreatedBy:     {Type: field.TypeString, Column: notehistory.FieldCreatedBy},
-			notehistory.FieldUpdatedBy:     {Type: field.TypeString, Column: notehistory.FieldUpdatedBy},
-			notehistory.FieldDeletedAt:     {Type: field.TypeTime, Column: notehistory.FieldDeletedAt},
-			notehistory.FieldDeletedBy:     {Type: field.TypeString, Column: notehistory.FieldDeletedBy},
-			notehistory.FieldDisplayID:     {Type: field.TypeString, Column: notehistory.FieldDisplayID},
-			notehistory.FieldOwnerID:       {Type: field.TypeString, Column: notehistory.FieldOwnerID},
-			notehistory.FieldTitle:         {Type: field.TypeString, Column: notehistory.FieldTitle},
-			notehistory.FieldText:          {Type: field.TypeString, Column: notehistory.FieldText},
-			notehistory.FieldTextJSON:      {Type: field.TypeJSON, Column: notehistory.FieldTextJSON},
-			notehistory.FieldNoteRef:       {Type: field.TypeString, Column: notehistory.FieldNoteRef},
-			notehistory.FieldDiscussionID:  {Type: field.TypeString, Column: notehistory.FieldDiscussionID},
-			notehistory.FieldIsEdited:      {Type: field.TypeBool, Column: notehistory.FieldIsEdited},
-			notehistory.FieldTrustCenterID: {Type: field.TypeString, Column: notehistory.FieldTrustCenterID},
+			notehistory.FieldHistoryTime:       {Type: field.TypeTime, Column: notehistory.FieldHistoryTime},
+			notehistory.FieldRef:               {Type: field.TypeString, Column: notehistory.FieldRef},
+			notehistory.FieldOperation:         {Type: field.TypeEnum, Column: notehistory.FieldOperation},
+			notehistory.FieldCreatedAt:         {Type: field.TypeTime, Column: notehistory.FieldCreatedAt},
+			notehistory.FieldUpdatedAt:         {Type: field.TypeTime, Column: notehistory.FieldUpdatedAt},
+			notehistory.FieldCreatedBy:         {Type: field.TypeString, Column: notehistory.FieldCreatedBy},
+			notehistory.FieldUpdatedBy:         {Type: field.TypeString, Column: notehistory.FieldUpdatedBy},
+			notehistory.FieldDeletedAt:         {Type: field.TypeTime, Column: notehistory.FieldDeletedAt},
+			notehistory.FieldDeletedBy:         {Type: field.TypeString, Column: notehistory.FieldDeletedBy},
+			notehistory.FieldDisplayID:         {Type: field.TypeString, Column: notehistory.FieldDisplayID},
+			notehistory.FieldOwnerID:           {Type: field.TypeString, Column: notehistory.FieldOwnerID},
+			notehistory.FieldTitle:             {Type: field.TypeString, Column: notehistory.FieldTitle},
+			notehistory.FieldText:              {Type: field.TypeString, Column: notehistory.FieldText},
+			notehistory.FieldTextJSON:          {Type: field.TypeJSON, Column: notehistory.FieldTextJSON},
+			notehistory.FieldNoteRef:           {Type: field.TypeString, Column: notehistory.FieldNoteRef},
+			notehistory.FieldDiscussionID:      {Type: field.TypeString, Column: notehistory.FieldDiscussionID},
+			notehistory.FieldIsEdited:          {Type: field.TypeBool, Column: notehistory.FieldIsEdited},
+			notehistory.FieldTrustCenterID:     {Type: field.TypeString, Column: notehistory.FieldTrustCenterID},
+			notehistory.FieldNotifySubscribers: {Type: field.TypeBool, Column: notehistory.FieldNotifySubscribers},
+			notehistory.FieldNotifiedAt:        {Type: field.TypeTime, Column: notehistory.FieldNotifiedAt},
 		},
 	}
 	graph.Nodes[37] = &sqlgraph.Node{
@@ -2782,40 +2787,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenterSettingHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcentersettinghistory.FieldHistoryTime:              {Type: field.TypeTime, Column: trustcentersettinghistory.FieldHistoryTime},
-			trustcentersettinghistory.FieldRef:                      {Type: field.TypeString, Column: trustcentersettinghistory.FieldRef},
-			trustcentersettinghistory.FieldOperation:                {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldOperation},
-			trustcentersettinghistory.FieldCreatedAt:                {Type: field.TypeTime, Column: trustcentersettinghistory.FieldCreatedAt},
-			trustcentersettinghistory.FieldUpdatedAt:                {Type: field.TypeTime, Column: trustcentersettinghistory.FieldUpdatedAt},
-			trustcentersettinghistory.FieldCreatedBy:                {Type: field.TypeString, Column: trustcentersettinghistory.FieldCreatedBy},
-			trustcentersettinghistory.FieldUpdatedBy:                {Type: field.TypeString, Column: trustcentersettinghistory.FieldUpdatedBy},
-			trustcentersettinghistory.FieldDeletedAt:                {Type: field.TypeTime, Column: trustcentersettinghistory.FieldDeletedAt},
-			trustcentersettinghistory.FieldDeletedBy:                {Type: field.TypeString, Column: trustcentersettinghistory.FieldDeletedBy},
-			trustcentersettinghistory.FieldTrustCenterID:            {Type: field.TypeString, Column: trustcentersettinghistory.FieldTrustCenterID},
-			trustcentersettinghistory.FieldTitle:                    {Type: field.TypeString, Column: trustcentersettinghistory.FieldTitle},
-			trustcentersettinghistory.FieldCompanyName:              {Type: field.TypeString, Column: trustcentersettinghistory.FieldCompanyName},
-			trustcentersettinghistory.FieldCompanyDescription:       {Type: field.TypeString, Column: trustcentersettinghistory.FieldCompanyDescription},
-			trustcentersettinghistory.FieldOverview:                 {Type: field.TypeString, Column: trustcentersettinghistory.FieldOverview},
-			trustcentersettinghistory.FieldLogoRemoteURL:            {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoRemoteURL},
-			trustcentersettinghistory.FieldLogoLocalFileID:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoLocalFileID},
-			trustcentersettinghistory.FieldFaviconRemoteURL:         {Type: field.TypeString, Column: trustcentersettinghistory.FieldFaviconRemoteURL},
-			trustcentersettinghistory.FieldFaviconLocalFileID:       {Type: field.TypeString, Column: trustcentersettinghistory.FieldFaviconLocalFileID},
-			trustcentersettinghistory.FieldHeroImageLocalFileID:     {Type: field.TypeString, Column: trustcentersettinghistory.FieldHeroImageLocalFileID},
-			trustcentersettinghistory.FieldThemeMode:                {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldThemeMode},
-			trustcentersettinghistory.FieldPrimaryColor:             {Type: field.TypeString, Column: trustcentersettinghistory.FieldPrimaryColor},
-			trustcentersettinghistory.FieldFont:                     {Type: field.TypeString, Column: trustcentersettinghistory.FieldFont},
-			trustcentersettinghistory.FieldForegroundColor:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldForegroundColor},
-			trustcentersettinghistory.FieldBackgroundColor:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldBackgroundColor},
-			trustcentersettinghistory.FieldAccentColor:              {Type: field.TypeString, Column: trustcentersettinghistory.FieldAccentColor},
-			trustcentersettinghistory.FieldSecondaryBackgroundColor: {Type: field.TypeString, Column: trustcentersettinghistory.FieldSecondaryBackgroundColor},
-			trustcentersettinghistory.FieldSecondaryForegroundColor: {Type: field.TypeString, Column: trustcentersettinghistory.FieldSecondaryForegroundColor},
-			trustcentersettinghistory.FieldEnvironment:              {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldEnvironment},
-			trustcentersettinghistory.FieldRemoveBranding:           {Type: field.TypeBool, Column: trustcentersettinghistory.FieldRemoveBranding},
-			trustcentersettinghistory.FieldCompanyDomain:            {Type: field.TypeString, Column: trustcentersettinghistory.FieldCompanyDomain},
-			trustcentersettinghistory.FieldSecurityContact:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldSecurityContact},
-			trustcentersettinghistory.FieldNdaApprovalRequired:      {Type: field.TypeBool, Column: trustcentersettinghistory.FieldNdaApprovalRequired},
-			trustcentersettinghistory.FieldNdaApproverGroupID:       {Type: field.TypeString, Column: trustcentersettinghistory.FieldNdaApproverGroupID},
-			trustcentersettinghistory.FieldStatusPageURL:            {Type: field.TypeString, Column: trustcentersettinghistory.FieldStatusPageURL},
+			trustcentersettinghistory.FieldHistoryTime:                           {Type: field.TypeTime, Column: trustcentersettinghistory.FieldHistoryTime},
+			trustcentersettinghistory.FieldRef:                                   {Type: field.TypeString, Column: trustcentersettinghistory.FieldRef},
+			trustcentersettinghistory.FieldOperation:                             {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldOperation},
+			trustcentersettinghistory.FieldCreatedAt:                             {Type: field.TypeTime, Column: trustcentersettinghistory.FieldCreatedAt},
+			trustcentersettinghistory.FieldUpdatedAt:                             {Type: field.TypeTime, Column: trustcentersettinghistory.FieldUpdatedAt},
+			trustcentersettinghistory.FieldCreatedBy:                             {Type: field.TypeString, Column: trustcentersettinghistory.FieldCreatedBy},
+			trustcentersettinghistory.FieldUpdatedBy:                             {Type: field.TypeString, Column: trustcentersettinghistory.FieldUpdatedBy},
+			trustcentersettinghistory.FieldDeletedAt:                             {Type: field.TypeTime, Column: trustcentersettinghistory.FieldDeletedAt},
+			trustcentersettinghistory.FieldDeletedBy:                             {Type: field.TypeString, Column: trustcentersettinghistory.FieldDeletedBy},
+			trustcentersettinghistory.FieldTrustCenterID:                         {Type: field.TypeString, Column: trustcentersettinghistory.FieldTrustCenterID},
+			trustcentersettinghistory.FieldTitle:                                 {Type: field.TypeString, Column: trustcentersettinghistory.FieldTitle},
+			trustcentersettinghistory.FieldCompanyName:                           {Type: field.TypeString, Column: trustcentersettinghistory.FieldCompanyName},
+			trustcentersettinghistory.FieldCompanyDescription:                    {Type: field.TypeString, Column: trustcentersettinghistory.FieldCompanyDescription},
+			trustcentersettinghistory.FieldOverview:                              {Type: field.TypeString, Column: trustcentersettinghistory.FieldOverview},
+			trustcentersettinghistory.FieldLogoRemoteURL:                         {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoRemoteURL},
+			trustcentersettinghistory.FieldLogoLocalFileID:                       {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoLocalFileID},
+			trustcentersettinghistory.FieldFaviconRemoteURL:                      {Type: field.TypeString, Column: trustcentersettinghistory.FieldFaviconRemoteURL},
+			trustcentersettinghistory.FieldFaviconLocalFileID:                    {Type: field.TypeString, Column: trustcentersettinghistory.FieldFaviconLocalFileID},
+			trustcentersettinghistory.FieldHeroImageLocalFileID:                  {Type: field.TypeString, Column: trustcentersettinghistory.FieldHeroImageLocalFileID},
+			trustcentersettinghistory.FieldThemeMode:                             {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldThemeMode},
+			trustcentersettinghistory.FieldPrimaryColor:                          {Type: field.TypeString, Column: trustcentersettinghistory.FieldPrimaryColor},
+			trustcentersettinghistory.FieldFont:                                  {Type: field.TypeString, Column: trustcentersettinghistory.FieldFont},
+			trustcentersettinghistory.FieldForegroundColor:                       {Type: field.TypeString, Column: trustcentersettinghistory.FieldForegroundColor},
+			trustcentersettinghistory.FieldBackgroundColor:                       {Type: field.TypeString, Column: trustcentersettinghistory.FieldBackgroundColor},
+			trustcentersettinghistory.FieldAccentColor:                           {Type: field.TypeString, Column: trustcentersettinghistory.FieldAccentColor},
+			trustcentersettinghistory.FieldSecondaryBackgroundColor:              {Type: field.TypeString, Column: trustcentersettinghistory.FieldSecondaryBackgroundColor},
+			trustcentersettinghistory.FieldSecondaryForegroundColor:              {Type: field.TypeString, Column: trustcentersettinghistory.FieldSecondaryForegroundColor},
+			trustcentersettinghistory.FieldEnvironment:                           {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldEnvironment},
+			trustcentersettinghistory.FieldRemoveBranding:                        {Type: field.TypeBool, Column: trustcentersettinghistory.FieldRemoveBranding},
+			trustcentersettinghistory.FieldCompanyDomain:                         {Type: field.TypeString, Column: trustcentersettinghistory.FieldCompanyDomain},
+			trustcentersettinghistory.FieldSecurityContact:                       {Type: field.TypeString, Column: trustcentersettinghistory.FieldSecurityContact},
+			trustcentersettinghistory.FieldNdaApprovalRequired:                   {Type: field.TypeBool, Column: trustcentersettinghistory.FieldNdaApprovalRequired},
+			trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange: {Type: field.TypeBool, Column: trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange},
+			trustcentersettinghistory.FieldSubprocessorsNotifiedAt:               {Type: field.TypeTime, Column: trustcentersettinghistory.FieldSubprocessorsNotifiedAt},
+			trustcentersettinghistory.FieldNdaApproverGroupID:                    {Type: field.TypeString, Column: trustcentersettinghistory.FieldNdaApproverGroupID},
+			trustcentersettinghistory.FieldStatusPageURL:                         {Type: field.TypeString, Column: trustcentersettinghistory.FieldStatusPageURL},
 		},
 	}
 	graph.Nodes[66] = &sqlgraph.Node{
@@ -4511,6 +4518,11 @@ func (f *CampaignHistoryFilter) WhereEmailBrandingID(p entql.StringP) {
 	f.Where(p.Field(campaignhistory.FieldEmailBrandingID))
 }
 
+// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
+func (f *CampaignHistoryFilter) WhereTrustCenterID(p entql.StringP) {
+	f.Where(p.Field(campaignhistory.FieldTrustCenterID))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *CampaignTargetHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -4624,6 +4636,11 @@ func (f *CampaignTargetHistoryFilter) WhereUserID(p entql.StringP) {
 // WhereGroupID applies the entql string predicate on the group_id field.
 func (f *CampaignTargetHistoryFilter) WhereGroupID(p entql.StringP) {
 	f.Where(p.Field(campaigntargethistory.FieldGroupID))
+}
+
+// WhereSubscriberID applies the entql string predicate on the subscriber_id field.
+func (f *CampaignTargetHistoryFilter) WhereSubscriberID(p entql.StringP) {
+	f.Where(p.Field(campaigntargethistory.FieldSubscriberID))
 }
 
 // WhereEmail applies the entql string predicate on the email field.
@@ -6949,6 +6966,11 @@ func (f *EmailTemplateHistoryFilter) WhereWorkflowDefinitionID(p entql.StringP) 
 // WhereWorkflowInstanceID applies the entql string predicate on the workflow_instance_id field.
 func (f *EmailTemplateHistoryFilter) WhereWorkflowInstanceID(p entql.StringP) {
 	f.Where(p.Field(emailtemplatehistory.FieldWorkflowInstanceID))
+}
+
+// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
+func (f *EmailTemplateHistoryFilter) WhereTrustCenterID(p entql.StringP) {
+	f.Where(p.Field(emailtemplatehistory.FieldTrustCenterID))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -10189,6 +10211,16 @@ func (f *NoteHistoryFilter) WhereIsEdited(p entql.BoolP) {
 // WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
 func (f *NoteHistoryFilter) WhereTrustCenterID(p entql.StringP) {
 	f.Where(p.Field(notehistory.FieldTrustCenterID))
+}
+
+// WhereNotifySubscribers applies the entql bool predicate on the notify_subscribers field.
+func (f *NoteHistoryFilter) WhereNotifySubscribers(p entql.BoolP) {
+	f.Where(p.Field(notehistory.FieldNotifySubscribers))
+}
+
+// WhereNotifiedAt applies the entql time.Time predicate on the notified_at field.
+func (f *NoteHistoryFilter) WhereNotifiedAt(p entql.TimeP) {
+	f.Where(p.Field(notehistory.FieldNotifiedAt))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -15284,6 +15316,16 @@ func (f *TrustCenterSettingHistoryFilter) WhereSecurityContact(p entql.StringP) 
 // WhereNdaApprovalRequired applies the entql bool predicate on the nda_approval_required field.
 func (f *TrustCenterSettingHistoryFilter) WhereNdaApprovalRequired(p entql.BoolP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldNdaApprovalRequired))
+}
+
+// WhereNotifySubscribersOnSubprocessorChange applies the entql bool predicate on the notify_subscribers_on_subprocessor_change field.
+func (f *TrustCenterSettingHistoryFilter) WhereNotifySubscribersOnSubprocessorChange(p entql.BoolP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange))
+}
+
+// WhereSubprocessorsNotifiedAt applies the entql time.Time predicate on the subprocessors_notified_at field.
+func (f *TrustCenterSettingHistoryFilter) WhereSubprocessorsNotifiedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldSubprocessorsNotifiedAt))
 }
 
 // WhereNdaApproverGroupID applies the entql string predicate on the nda_approver_group_id field.

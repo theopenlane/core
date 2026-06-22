@@ -42,6 +42,8 @@ const (
 	FieldUserID = "user_id"
 	// FieldGroupID holds the string denoting the group_id field in the database.
 	FieldGroupID = "group_id"
+	// FieldSubscriberID holds the string denoting the subscriber_id field in the database.
+	FieldSubscriberID = "subscriber_id"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
 	// FieldFullName holds the string denoting the full_name field in the database.
@@ -64,6 +66,8 @@ const (
 	EdgeUser = "user"
 	// EdgeGroup holds the string denoting the group edge name in mutations.
 	EdgeGroup = "group"
+	// EdgeSubscriber holds the string denoting the subscriber edge name in mutations.
+	EdgeSubscriber = "subscriber"
 	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
 	EdgeWorkflowObjectRefs = "workflow_object_refs"
 	// Table holds the table name of the campaigntarget in the database.
@@ -103,6 +107,13 @@ const (
 	GroupInverseTable = "groups"
 	// GroupColumn is the table column denoting the group relation/edge.
 	GroupColumn = "group_id"
+	// SubscriberTable is the table that holds the subscriber relation/edge.
+	SubscriberTable = "campaign_targets"
+	// SubscriberInverseTable is the table name for the Subscriber entity.
+	// It exists in this package in order to avoid circular dependency with the "subscriber" package.
+	SubscriberInverseTable = "subscribers"
+	// SubscriberColumn is the table column denoting the subscriber relation/edge.
+	SubscriberColumn = "subscriber_id"
 	// WorkflowObjectRefsTable is the table that holds the workflow_object_refs relation/edge.
 	WorkflowObjectRefsTable = "workflow_object_refs"
 	// WorkflowObjectRefsInverseTable is the table name for the WorkflowObjectRef entity.
@@ -127,6 +138,7 @@ var Columns = []string{
 	FieldContactID,
 	FieldUserID,
 	FieldGroupID,
+	FieldSubscriberID,
 	FieldEmail,
 	FieldFullName,
 	FieldStatus,
@@ -252,6 +264,11 @@ func ByGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldGroupID, opts...).ToFunc()
 }
 
+// BySubscriberID orders the results by the subscriber_id field.
+func BySubscriberID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubscriberID, opts...).ToFunc()
+}
+
 // ByEmail orders the results by the email field.
 func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmail, opts...).ToFunc()
@@ -312,6 +329,13 @@ func ByGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
+// BySubscriberField orders the results by subscriber field.
+func BySubscriberField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubscriberStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByWorkflowObjectRefsCount orders the results by workflow_object_refs count.
 func ByWorkflowObjectRefsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -358,6 +382,13 @@ func newGroupStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(GroupInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, GroupTable, GroupColumn),
+	)
+}
+func newSubscriberStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubscriberInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, SubscriberTable, SubscriberColumn),
 	)
 }
 func newWorkflowObjectRefsStep() *sqlgraph.Step {

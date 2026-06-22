@@ -34,6 +34,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -567,6 +568,21 @@ func (_u *UserUpdate) AddPasswordResetTokens(v ...*PasswordResetToken) *UserUpda
 	return _u.AddPasswordResetTokenIDs(ids...)
 }
 
+// AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
+func (_u *UserUpdate) AddSubscriberIDs(ids ...string) *UserUpdate {
+	_u.mutation.AddSubscriberIDs(ids...)
+	return _u
+}
+
+// AddSubscribers adds the "subscribers" edges to the Subscriber entity.
+func (_u *UserUpdate) AddSubscribers(v ...*Subscriber) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSubscriberIDs(ids...)
+}
+
 // AddGroupIDs adds the "groups" edge to the Group entity by IDs.
 func (_u *UserUpdate) AddGroupIDs(ids ...string) *UserUpdate {
 	_u.mutation.AddGroupIDs(ids...)
@@ -1000,6 +1016,27 @@ func (_u *UserUpdate) RemovePasswordResetTokens(v ...*PasswordResetToken) *UserU
 		ids[i] = v[i].ID
 	}
 	return _u.RemovePasswordResetTokenIDs(ids...)
+}
+
+// ClearSubscribers clears all "subscribers" edges to the Subscriber entity.
+func (_u *UserUpdate) ClearSubscribers() *UserUpdate {
+	_u.mutation.ClearSubscribers()
+	return _u
+}
+
+// RemoveSubscriberIDs removes the "subscribers" edge to Subscriber entities by IDs.
+func (_u *UserUpdate) RemoveSubscriberIDs(ids ...string) *UserUpdate {
+	_u.mutation.RemoveSubscriberIDs(ids...)
+	return _u
+}
+
+// RemoveSubscribers removes "subscribers" edges to Subscriber entities.
+func (_u *UserUpdate) RemoveSubscribers(v ...*Subscriber) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSubscriberIDs(ids...)
 }
 
 // ClearGroups clears all "groups" edges to the Group entity.
@@ -1943,6 +1980,54 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.PasswordResetToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubscribersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.SubscribersTable,
+			Columns: []string{user.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subscriber
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSubscribersIDs(); len(nodes) > 0 && !_u.mutation.SubscribersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.SubscribersTable,
+			Columns: []string{user.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subscriber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubscribersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.SubscribersTable,
+			Columns: []string{user.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3536,6 +3621,21 @@ func (_u *UserUpdateOne) AddPasswordResetTokens(v ...*PasswordResetToken) *UserU
 	return _u.AddPasswordResetTokenIDs(ids...)
 }
 
+// AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
+func (_u *UserUpdateOne) AddSubscriberIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.AddSubscriberIDs(ids...)
+	return _u
+}
+
+// AddSubscribers adds the "subscribers" edges to the Subscriber entity.
+func (_u *UserUpdateOne) AddSubscribers(v ...*Subscriber) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSubscriberIDs(ids...)
+}
+
 // AddGroupIDs adds the "groups" edge to the Group entity by IDs.
 func (_u *UserUpdateOne) AddGroupIDs(ids ...string) *UserUpdateOne {
 	_u.mutation.AddGroupIDs(ids...)
@@ -3969,6 +4069,27 @@ func (_u *UserUpdateOne) RemovePasswordResetTokens(v ...*PasswordResetToken) *Us
 		ids[i] = v[i].ID
 	}
 	return _u.RemovePasswordResetTokenIDs(ids...)
+}
+
+// ClearSubscribers clears all "subscribers" edges to the Subscriber entity.
+func (_u *UserUpdateOne) ClearSubscribers() *UserUpdateOne {
+	_u.mutation.ClearSubscribers()
+	return _u
+}
+
+// RemoveSubscriberIDs removes the "subscribers" edge to Subscriber entities by IDs.
+func (_u *UserUpdateOne) RemoveSubscriberIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.RemoveSubscriberIDs(ids...)
+	return _u
+}
+
+// RemoveSubscribers removes "subscribers" edges to Subscriber entities.
+func (_u *UserUpdateOne) RemoveSubscribers(v ...*Subscriber) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSubscriberIDs(ids...)
 }
 
 // ClearGroups clears all "groups" edges to the Group entity.
@@ -4942,6 +5063,54 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.PasswordResetToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubscribersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.SubscribersTable,
+			Columns: []string{user.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subscriber
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSubscribersIDs(); len(nodes) > 0 && !_u.mutation.SubscribersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.SubscribersTable,
+			Columns: []string{user.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subscriber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubscribersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.SubscribersTable,
+			Columns: []string{user.SubscribersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

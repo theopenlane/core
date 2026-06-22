@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
@@ -37,12 +38,14 @@ type ContactQuery struct {
 	withCampaigns            *CampaignQuery
 	withCampaignTargets      *CampaignTargetQuery
 	withFiles                *FileQuery
+	withSubscribers          *SubscriberQuery
 	loadTotal                []func(context.Context, []*Contact) error
 	modifiers                []func(*sql.Selector)
 	withNamedEntities        map[string]*EntityQuery
 	withNamedCampaigns       map[string]*CampaignQuery
 	withNamedCampaignTargets map[string]*CampaignTargetQuery
 	withNamedFiles           map[string]*FileQuery
+	withNamedSubscribers     map[string]*SubscriberQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -198,6 +201,31 @@ func (_q *ContactQuery) QueryFiles() *FileQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.ContactFiles
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySubscribers chains the current query on the "subscribers" edge.
+func (_q *ContactQuery) QuerySubscribers() *SubscriberQuery {
+	query := (&SubscriberClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contact.Table, contact.FieldID, selector),
+			sqlgraph.To(subscriber.Table, subscriber.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, contact.SubscribersTable, contact.SubscribersColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Subscriber
+		step.Edge.Schema = schemaConfig.Subscriber
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -401,6 +429,7 @@ func (_q *ContactQuery) Clone() *ContactQuery {
 		withCampaigns:       _q.withCampaigns.Clone(),
 		withCampaignTargets: _q.withCampaignTargets.Clone(),
 		withFiles:           _q.withFiles.Clone(),
+		withSubscribers:     _q.withSubscribers.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -460,6 +489,17 @@ func (_q *ContactQuery) WithFiles(opts ...func(*FileQuery)) *ContactQuery {
 		opt(query)
 	}
 	_q.withFiles = query
+	return _q
+}
+
+// WithSubscribers tells the query-builder to eager-load the nodes that are connected to
+// the "subscribers" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ContactQuery) WithSubscribers(opts ...func(*SubscriberQuery)) *ContactQuery {
+	query := (&SubscriberClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSubscribers = query
 	return _q
 }
 
@@ -547,12 +587,13 @@ func (_q *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	var (
 		nodes       = []*Contact{}
 		_spec       = _q.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [6]bool{
 			_q.withOwner != nil,
 			_q.withEntities != nil,
 			_q.withCampaigns != nil,
 			_q.withCampaignTargets != nil,
 			_q.withFiles != nil,
+			_q.withSubscribers != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -612,6 +653,13 @@ func (_q *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
+	if query := _q.withSubscribers; query != nil {
+		if err := _q.loadSubscribers(ctx, query, nodes,
+			func(n *Contact) { n.Edges.Subscribers = []*Subscriber{} },
+			func(n *Contact, e *Subscriber) { n.Edges.Subscribers = append(n.Edges.Subscribers, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedEntities {
 		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *Contact) { n.appendNamedEntities(name) },
@@ -637,6 +685,13 @@ func (_q *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Contact) { n.appendNamedFiles(name) },
 			func(n *Contact, e *File) { n.appendNamedFiles(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedSubscribers {
+		if err := _q.loadSubscribers(ctx, query, nodes,
+			func(n *Contact) { n.appendNamedSubscribers(name) },
+			func(n *Contact, e *Subscriber) { n.appendNamedSubscribers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -893,6 +948,36 @@ func (_q *ContactQuery) loadFiles(ctx context.Context, query *FileQuery, nodes [
 	}
 	return nil
 }
+func (_q *ContactQuery) loadSubscribers(ctx context.Context, query *SubscriberQuery, nodes []*Contact, init func(*Contact), assign func(*Contact, *Subscriber)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Contact)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(subscriber.FieldContactID)
+	}
+	query.Where(predicate.Subscriber(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(contact.SubscribersColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.ContactID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "contact_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *ContactQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1048,6 +1133,20 @@ func (_q *ContactQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *C
 		_q.withNamedFiles = make(map[string]*FileQuery)
 	}
 	_q.withNamedFiles[name] = query
+	return _q
+}
+
+// WithNamedSubscribers tells the query-builder to eager-load the nodes that are connected to the "subscribers"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ContactQuery) WithNamedSubscribers(name string, opts ...func(*SubscriberQuery)) *ContactQuery {
+	query := (&SubscriberClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSubscribers == nil {
+		_q.withNamedSubscribers = make(map[string]*SubscriberQuery)
+	}
+	_q.withNamedSubscribers[name] = query
 	return _q
 }
 

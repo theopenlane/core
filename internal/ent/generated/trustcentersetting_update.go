@@ -546,6 +546,46 @@ func (_u *TrustCenterSettingUpdate) ClearNdaApprovalRequired() *TrustCenterSetti
 	return _u
 }
 
+// SetNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field.
+func (_u *TrustCenterSettingUpdate) SetNotifySubscribersOnSubprocessorChange(v bool) *TrustCenterSettingUpdate {
+	_u.mutation.SetNotifySubscribersOnSubprocessorChange(v)
+	return _u
+}
+
+// SetNillableNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableNotifySubscribersOnSubprocessorChange(v *bool) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetNotifySubscribersOnSubprocessorChange(*v)
+	}
+	return _u
+}
+
+// ClearNotifySubscribersOnSubprocessorChange clears the value of the "notify_subscribers_on_subprocessor_change" field.
+func (_u *TrustCenterSettingUpdate) ClearNotifySubscribersOnSubprocessorChange() *TrustCenterSettingUpdate {
+	_u.mutation.ClearNotifySubscribersOnSubprocessorChange()
+	return _u
+}
+
+// SetSubprocessorsNotifiedAt sets the "subprocessors_notified_at" field.
+func (_u *TrustCenterSettingUpdate) SetSubprocessorsNotifiedAt(v time.Time) *TrustCenterSettingUpdate {
+	_u.mutation.SetSubprocessorsNotifiedAt(v)
+	return _u
+}
+
+// SetNillableSubprocessorsNotifiedAt sets the "subprocessors_notified_at" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableSubprocessorsNotifiedAt(v *time.Time) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetSubprocessorsNotifiedAt(*v)
+	}
+	return _u
+}
+
+// ClearSubprocessorsNotifiedAt clears the value of the "subprocessors_notified_at" field.
+func (_u *TrustCenterSettingUpdate) ClearSubprocessorsNotifiedAt() *TrustCenterSettingUpdate {
+	_u.mutation.ClearSubprocessorsNotifiedAt()
+	return _u
+}
+
 // SetNdaApproverGroupID sets the "nda_approver_group_id" field.
 func (_u *TrustCenterSettingUpdate) SetNdaApproverGroupID(v string) *TrustCenterSettingUpdate {
 	_u.mutation.SetNdaApproverGroupID(v)
@@ -1040,6 +1080,18 @@ func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.NdaApprovalRequiredCleared() {
 		_spec.ClearField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool)
+	}
+	if value, ok := _u.mutation.NotifySubscribersOnSubprocessorChange(); ok {
+		_spec.SetField(trustcentersetting.FieldNotifySubscribersOnSubprocessorChange, field.TypeBool, value)
+	}
+	if _u.mutation.NotifySubscribersOnSubprocessorChangeCleared() {
+		_spec.ClearField(trustcentersetting.FieldNotifySubscribersOnSubprocessorChange, field.TypeBool)
+	}
+	if value, ok := _u.mutation.SubprocessorsNotifiedAt(); ok {
+		_spec.SetField(trustcentersetting.FieldSubprocessorsNotifiedAt, field.TypeTime, value)
+	}
+	if _u.mutation.SubprocessorsNotifiedAtCleared() {
+		_spec.ClearField(trustcentersetting.FieldSubprocessorsNotifiedAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.StatusPageURL(); ok {
 		_spec.SetField(trustcentersetting.FieldStatusPageURL, field.TypeString, value)
@@ -1803,6 +1855,46 @@ func (_u *TrustCenterSettingUpdateOne) ClearNdaApprovalRequired() *TrustCenterSe
 	return _u
 }
 
+// SetNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field.
+func (_u *TrustCenterSettingUpdateOne) SetNotifySubscribersOnSubprocessorChange(v bool) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetNotifySubscribersOnSubprocessorChange(v)
+	return _u
+}
+
+// SetNillableNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableNotifySubscribersOnSubprocessorChange(v *bool) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetNotifySubscribersOnSubprocessorChange(*v)
+	}
+	return _u
+}
+
+// ClearNotifySubscribersOnSubprocessorChange clears the value of the "notify_subscribers_on_subprocessor_change" field.
+func (_u *TrustCenterSettingUpdateOne) ClearNotifySubscribersOnSubprocessorChange() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearNotifySubscribersOnSubprocessorChange()
+	return _u
+}
+
+// SetSubprocessorsNotifiedAt sets the "subprocessors_notified_at" field.
+func (_u *TrustCenterSettingUpdateOne) SetSubprocessorsNotifiedAt(v time.Time) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetSubprocessorsNotifiedAt(v)
+	return _u
+}
+
+// SetNillableSubprocessorsNotifiedAt sets the "subprocessors_notified_at" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableSubprocessorsNotifiedAt(v *time.Time) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetSubprocessorsNotifiedAt(*v)
+	}
+	return _u
+}
+
+// ClearSubprocessorsNotifiedAt clears the value of the "subprocessors_notified_at" field.
+func (_u *TrustCenterSettingUpdateOne) ClearSubprocessorsNotifiedAt() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearSubprocessorsNotifiedAt()
+	return _u
+}
+
 // SetNdaApproverGroupID sets the "nda_approver_group_id" field.
 func (_u *TrustCenterSettingUpdateOne) SetNdaApproverGroupID(v string) *TrustCenterSettingUpdateOne {
 	_u.mutation.SetNdaApproverGroupID(v)
@@ -2327,6 +2419,18 @@ func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	}
 	if _u.mutation.NdaApprovalRequiredCleared() {
 		_spec.ClearField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool)
+	}
+	if value, ok := _u.mutation.NotifySubscribersOnSubprocessorChange(); ok {
+		_spec.SetField(trustcentersetting.FieldNotifySubscribersOnSubprocessorChange, field.TypeBool, value)
+	}
+	if _u.mutation.NotifySubscribersOnSubprocessorChangeCleared() {
+		_spec.ClearField(trustcentersetting.FieldNotifySubscribersOnSubprocessorChange, field.TypeBool)
+	}
+	if value, ok := _u.mutation.SubprocessorsNotifiedAt(); ok {
+		_spec.SetField(trustcentersetting.FieldSubprocessorsNotifiedAt, field.TypeTime, value)
+	}
+	if _u.mutation.SubprocessorsNotifiedAtCleared() {
+		_spec.ClearField(trustcentersetting.FieldSubprocessorsNotifiedAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.StatusPageURL(); ok {
 		_spec.SetField(trustcentersetting.FieldStatusPageURL, field.TypeString, value)

@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 )
@@ -188,6 +189,20 @@ func (_c *CampaignTargetCreate) SetNillableGroupID(v *string) *CampaignTargetCre
 	return _c
 }
 
+// SetSubscriberID sets the "subscriber_id" field.
+func (_c *CampaignTargetCreate) SetSubscriberID(v string) *CampaignTargetCreate {
+	_c.mutation.SetSubscriberID(v)
+	return _c
+}
+
+// SetNillableSubscriberID sets the "subscriber_id" field if the given value is not nil.
+func (_c *CampaignTargetCreate) SetNillableSubscriberID(v *string) *CampaignTargetCreate {
+	if v != nil {
+		_c.SetSubscriberID(*v)
+	}
+	return _c
+}
+
 // SetEmail sets the "email" field.
 func (_c *CampaignTargetCreate) SetEmail(v string) *CampaignTargetCreate {
 	_c.mutation.SetEmail(v)
@@ -293,6 +308,11 @@ func (_c *CampaignTargetCreate) SetUser(v *User) *CampaignTargetCreate {
 // SetGroup sets the "group" edge to the Group entity.
 func (_c *CampaignTargetCreate) SetGroup(v *Group) *CampaignTargetCreate {
 	return _c.SetGroupID(v.ID)
+}
+
+// SetSubscriber sets the "subscriber" edge to the Subscriber entity.
+func (_c *CampaignTargetCreate) SetSubscriber(v *Subscriber) *CampaignTargetCreate {
+	return _c.SetSubscriberID(v.ID)
 }
 
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
@@ -589,6 +609,24 @@ func (_c *CampaignTargetCreate) createSpec() (*CampaignTarget, *sqlgraph.CreateS
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.GroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SubscriberIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaigntarget.SubscriberTable,
+			Columns: []string{campaigntarget.SubscriberColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.CampaignTarget
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.SubscriberID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {

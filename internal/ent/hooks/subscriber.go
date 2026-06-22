@@ -136,9 +136,20 @@ func getSubscriber(ctx context.Context, m *generated.SubscriberMutation) (*gener
 	email, _ := m.Email()
 	ownerID, _ := m.OwnerID()
 
-	return m.Client().Subscriber.Query().
+	query := m.Client().Subscriber.Query().
 		Where(subscriber.Email(email)).
-		Where(subscriber.OwnerID(ownerID)).Only(ctx)
+		Where(subscriber.OwnerID(ownerID))
+
+	// scope the lookup to the trust center so the same email can subscribe to multiple
+	// trust centers within the same organization; legacy organization-level subscribers
+	// have a null trust center
+	if tcID, ok := m.TrustCenterID(); ok && tcID != "" {
+		query = query.Where(subscriber.TrustCenterID(tcID))
+	} else {
+		query = query.Where(subscriber.TrustCenterIDIsNil())
+	}
+
+	return query.Only(ctx)
 }
 
 func updateSubscriber(ctx context.Context,

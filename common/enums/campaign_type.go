@@ -16,6 +16,8 @@ var (
 	CampaignTypeVendorAssessment CampaignType = "VENDOR_ASSESSMENT"
 	// CampaignTypeCustom indicates a custom campaign
 	CampaignTypeCustom CampaignType = "CUSTOM"
+	// CampaignTypeTrustCenterUpdate indicates a campaign sending trust center updates to subscribers
+	CampaignTypeTrustCenterUpdate CampaignType = "TRUST_CENTER_UPDATE"
 	// CampaignTypeInvalid is used when an unknown or unsupported value is provided
 	CampaignTypeInvalid CampaignType = "INVALID"
 )
@@ -26,10 +28,11 @@ var campaignTypeValues = []CampaignType{
 	CampaignTypePolicyAttestation,
 	CampaignTypeVendorAssessment,
 	CampaignTypeCustom,
+	CampaignTypeTrustCenterUpdate,
 }
 
 // Values returns a slice of strings that represents all the possible values of the CampaignType enum
-// Possible default values are "QUESTIONNAIRE", "TRAINING", "POLICY_ATTESTATION", "VENDOR_ASSESSMENT", and "CUSTOM"
+// Possible default values are "QUESTIONNAIRE", "TRAINING", "POLICY_ATTESTATION", "VENDOR_ASSESSMENT", "CUSTOM", and "TRUST_CENTER_UPDATE"
 func (CampaignType) Values() []string { return stringValues(campaignTypeValues) }
 
 // String returns the CampaignType as a string

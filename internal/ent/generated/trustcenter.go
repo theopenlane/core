@@ -98,11 +98,17 @@ type TrustCenterEdges struct {
 	TrustCenterNdaRequests []*TrustCenterNDARequest `json:"trust_center_nda_requests,omitempty"`
 	// TrustCenterFaqs holds the value of the trust_center_faqs edge.
 	TrustCenterFaqs []*TrustCenterFAQ `json:"trust_center_faqs,omitempty"`
+	// Subscribers holds the value of the subscribers edge.
+	Subscribers []*Subscriber `json:"subscribers,omitempty"`
+	// EmailTemplates holds the value of the email_templates edge.
+	EmailTemplates []*EmailTemplate `json:"email_templates,omitempty"`
+	// Campaigns holds the value of the campaigns edge.
+	Campaigns []*Campaign `json:"campaigns,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [16]bool
+	loadedTypes [19]bool
 	// totalCount holds the count of the edges above.
-	totalCount [16]map[string]int
+	totalCount [19]map[string]int
 
 	namedBlockedGroups            map[string][]*Group
 	namedEditors                  map[string][]*Group
@@ -114,6 +120,9 @@ type TrustCenterEdges struct {
 	namedTrustCenterEntities      map[string][]*TrustCenterEntity
 	namedTrustCenterNdaRequests   map[string][]*TrustCenterNDARequest
 	namedTrustCenterFaqs          map[string][]*TrustCenterFAQ
+	namedSubscribers              map[string][]*Subscriber
+	namedEmailTemplates           map[string][]*EmailTemplate
+	namedCampaigns                map[string][]*Campaign
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -270,6 +279,33 @@ func (e TrustCenterEdges) TrustCenterFaqsOrErr() ([]*TrustCenterFAQ, error) {
 		return e.TrustCenterFaqs, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_faqs"}
+}
+
+// SubscribersOrErr returns the Subscribers value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterEdges) SubscribersOrErr() ([]*Subscriber, error) {
+	if e.loadedTypes[16] {
+		return e.Subscribers, nil
+	}
+	return nil, &NotLoadedError{edge: "subscribers"}
+}
+
+// EmailTemplatesOrErr returns the EmailTemplates value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterEdges) EmailTemplatesOrErr() ([]*EmailTemplate, error) {
+	if e.loadedTypes[17] {
+		return e.EmailTemplates, nil
+	}
+	return nil, &NotLoadedError{edge: "email_templates"}
+}
+
+// CampaignsOrErr returns the Campaigns value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterEdges) CampaignsOrErr() ([]*Campaign, error) {
+	if e.loadedTypes[18] {
+		return e.Campaigns, nil
+	}
+	return nil, &NotLoadedError{edge: "campaigns"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -521,6 +557,21 @@ func (_m *TrustCenter) QueryTrustCenterNdaRequests() *TrustCenterNDARequestQuery
 // QueryTrustCenterFaqs queries the "trust_center_faqs" edge of the TrustCenter entity.
 func (_m *TrustCenter) QueryTrustCenterFaqs() *TrustCenterFAQQuery {
 	return NewTrustCenterClient(_m.config).QueryTrustCenterFaqs(_m)
+}
+
+// QuerySubscribers queries the "subscribers" edge of the TrustCenter entity.
+func (_m *TrustCenter) QuerySubscribers() *SubscriberQuery {
+	return NewTrustCenterClient(_m.config).QuerySubscribers(_m)
+}
+
+// QueryEmailTemplates queries the "email_templates" edge of the TrustCenter entity.
+func (_m *TrustCenter) QueryEmailTemplates() *EmailTemplateQuery {
+	return NewTrustCenterClient(_m.config).QueryEmailTemplates(_m)
+}
+
+// QueryCampaigns queries the "campaigns" edge of the TrustCenter entity.
+func (_m *TrustCenter) QueryCampaigns() *CampaignQuery {
+	return NewTrustCenterClient(_m.config).QueryCampaigns(_m)
 }
 
 // Update returns a builder for updating this TrustCenter.
@@ -836,6 +887,78 @@ func (_m *TrustCenter) appendNamedTrustCenterFaqs(name string, edges ...*TrustCe
 		_m.Edges.namedTrustCenterFaqs[name] = []*TrustCenterFAQ{}
 	} else {
 		_m.Edges.namedTrustCenterFaqs[name] = append(_m.Edges.namedTrustCenterFaqs[name], edges...)
+	}
+}
+
+// NamedSubscribers returns the Subscribers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenter) NamedSubscribers(name string) ([]*Subscriber, error) {
+	if _m.Edges.namedSubscribers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedSubscribers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenter) appendNamedSubscribers(name string, edges ...*Subscriber) {
+	if _m.Edges.namedSubscribers == nil {
+		_m.Edges.namedSubscribers = make(map[string][]*Subscriber)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedSubscribers[name] = []*Subscriber{}
+	} else {
+		_m.Edges.namedSubscribers[name] = append(_m.Edges.namedSubscribers[name], edges...)
+	}
+}
+
+// NamedEmailTemplates returns the EmailTemplates named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenter) NamedEmailTemplates(name string) ([]*EmailTemplate, error) {
+	if _m.Edges.namedEmailTemplates == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEmailTemplates[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenter) appendNamedEmailTemplates(name string, edges ...*EmailTemplate) {
+	if _m.Edges.namedEmailTemplates == nil {
+		_m.Edges.namedEmailTemplates = make(map[string][]*EmailTemplate)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEmailTemplates[name] = []*EmailTemplate{}
+	} else {
+		_m.Edges.namedEmailTemplates[name] = append(_m.Edges.namedEmailTemplates[name], edges...)
+	}
+}
+
+// NamedCampaigns returns the Campaigns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenter) NamedCampaigns(name string) ([]*Campaign, error) {
+	if _m.Edges.namedCampaigns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedCampaigns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenter) appendNamedCampaigns(name string, edges ...*Campaign) {
+	if _m.Edges.namedCampaigns == nil {
+		_m.Edges.namedCampaigns = make(map[string][]*Campaign)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedCampaigns[name] = []*Campaign{}
+	} else {
+		_m.Edges.namedCampaigns[name] = append(_m.Edges.namedCampaigns[name], edges...)
 	}
 }
 

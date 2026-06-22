@@ -167,6 +167,17 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Comment("whether NDA requests require approval before being processed").
 			Default(false).
 			Optional(),
+		field.Bool("notify_subscribers_on_subprocessor_change").
+			Comment("whether to email trust center subscribers when subprocessors are added, updated, or removed").
+			Default(false).
+			Optional(),
+		field.Time("subprocessors_notified_at").
+			Comment("watermark of the most recent subprocessor change subscribers have been notified about").
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			),
 		field.String("nda_approver_group_id").
 			Comment("group whose members approve trust center NDA requests").
 			Optional().

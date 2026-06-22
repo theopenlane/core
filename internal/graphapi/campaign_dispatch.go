@@ -125,6 +125,14 @@ func (r *mutationResolver) validateCampaignDispatch(ctx context.Context, campaig
 		if campaignObj.AssessmentID == "" {
 			return ErrCampaignMissingAssessmentID
 		}
+	case enums.CampaignTypeTrustCenterUpdate:
+		if campaignObj.TrustCenterID == "" {
+			return ErrCampaignMissingTrustCenter
+		}
+
+		if campaignObj.EmailTemplateID == "" {
+			return ErrCampaignMissingEmailTemplate
+		}
 	default:
 		if campaignObj.EmailTemplateID == "" {
 			return ErrCampaignMissingEmailTemplate
@@ -147,7 +155,13 @@ func (r *mutationResolver) processDispatchTargets(ctx context.Context, state *ca
 
 	state.queuedCount = totalCount
 
-	if state.shouldSchedule || totalCount == 0 {
+	if state.shouldSchedule {
+		return nil
+	}
+
+	// trust center update campaigns materialize their targets from the trust center's subscribers
+	// at send time (inside the email operation), so dispatch even when no targets exist yet
+	if totalCount == 0 && state.campaignObj.CampaignType != enums.CampaignTypeTrustCenterUpdate {
 		return nil
 	}
 
