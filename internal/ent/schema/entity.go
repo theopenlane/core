@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -313,8 +314,9 @@ func (e Entity) Mixin() []ent.Mixin {
 				withParents(TrustCenterEntity{}, Platform{}, SystemDetail{}),
 				withOrganizationOwner(),
 				withSkipForSystemAdmin(),
+				withSkipFilterInterceptor(interceptors.SkipAllQuery|interceptors.SkipIDsQuery),
 			),
-			newGroupPermissionsMixin(),
+			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor()),
 			newResponsibilityMixin(e, withInternalOwner(), withReviewedBy(), withLastReviewedAt(), withReviewedByOrderField()),
 			mixin.NewSystemOwnedMixin(),
 			newCustomEnumMixin(e, withEnumFieldName("relationship_state")),

@@ -56,17 +56,14 @@ type SLADefinitionEdges struct {
 	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
 	// provides edit access to the risk to members of the group
 	Editors []*Group `json:"editors,omitempty"`
-	// provides view access to the risk to members of the group
-	Viewers []*Group `json:"viewers,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [3]map[string]int
 
 	namedBlockedGroups map[string][]*Group
 	namedEditors       map[string][]*Group
-	namedViewers       map[string][]*Group
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -96,15 +93,6 @@ func (e SLADefinitionEdges) EditorsOrErr() ([]*Group, error) {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
-}
-
-// ViewersOrErr returns the Viewers value or an error if the edge
-// was not loaded in eager-loading.
-func (e SLADefinitionEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
-		return e.Viewers, nil
-	}
-	return nil, &NotLoadedError{edge: "viewers"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -237,11 +225,6 @@ func (_m *SLADefinition) QueryEditors() *GroupQuery {
 	return NewSLADefinitionClient(_m.config).QueryEditors(_m)
 }
 
-// QueryViewers queries the "viewers" edge of the SLADefinition entity.
-func (_m *SLADefinition) QueryViewers() *GroupQuery {
-	return NewSLADefinitionClient(_m.config).QueryViewers(_m)
-}
-
 // Update returns a builder for updating this SLADefinition.
 // Note that you need to call SLADefinition.Unwrap() before calling this method if this SLADefinition
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -346,30 +329,6 @@ func (_m *SLADefinition) appendNamedEditors(name string, edges ...*Group) {
 		_m.Edges.namedEditors[name] = []*Group{}
 	} else {
 		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
-	}
-}
-
-// NamedViewers returns the Viewers named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *SLADefinition) NamedViewers(name string) ([]*Group, error) {
-	if _m.Edges.namedViewers == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedViewers[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *SLADefinition) appendNamedViewers(name string, edges ...*Group) {
-	if _m.Edges.namedViewers == nil {
-		_m.Edges.namedViewers = make(map[string][]*Group)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedViewers[name] = []*Group{}
-	} else {
-		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
 	}
 }
 

@@ -939,21 +939,6 @@ func (_c *EntityCreate) AddEditors(v ...*Group) *EntityCreate {
 	return _c.AddEditorIDs(ids...)
 }
 
-// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (_c *EntityCreate) AddViewerIDs(ids ...string) *EntityCreate {
-	_c.mutation.AddViewerIDs(ids...)
-	return _c
-}
-
-// AddViewers adds the "viewers" edges to the Group entity.
-func (_c *EntityCreate) AddViewers(v ...*Group) *EntityCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddViewerIDs(ids...)
-}
-
 // SetInternalOwnerUser sets the "internal_owner_user" edge to the User entity.
 func (_c *EntityCreate) SetInternalOwnerUser(v *User) *EntityCreate {
 	return _c.SetInternalOwnerUserID(v.ID)
@@ -1773,23 +1758,6 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.EntityEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.ViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   entity.ViewersTable,
-			Columns: entity.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.EntityViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

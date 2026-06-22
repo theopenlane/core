@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
@@ -34,6 +35,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -642,96 +645,6 @@ func (_u *GroupUpdate) AddControlImplementationViewers(v ...*ControlImplementati
 	return _u.AddControlImplementationViewerIDs(ids...)
 }
 
-// AddScanEditorIDs adds the "scan_editors" edge to the Scan entity by IDs.
-func (_u *GroupUpdate) AddScanEditorIDs(ids ...string) *GroupUpdate {
-	_u.mutation.AddScanEditorIDs(ids...)
-	return _u
-}
-
-// AddScanEditors adds the "scan_editors" edges to the Scan entity.
-func (_u *GroupUpdate) AddScanEditors(v ...*Scan) *GroupUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddScanEditorIDs(ids...)
-}
-
-// AddScanBlockedGroupIDs adds the "scan_blocked_groups" edge to the Scan entity by IDs.
-func (_u *GroupUpdate) AddScanBlockedGroupIDs(ids ...string) *GroupUpdate {
-	_u.mutation.AddScanBlockedGroupIDs(ids...)
-	return _u
-}
-
-// AddScanBlockedGroups adds the "scan_blocked_groups" edges to the Scan entity.
-func (_u *GroupUpdate) AddScanBlockedGroups(v ...*Scan) *GroupUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddScanBlockedGroupIDs(ids...)
-}
-
-// AddScanViewerIDs adds the "scan_viewers" edge to the Scan entity by IDs.
-func (_u *GroupUpdate) AddScanViewerIDs(ids ...string) *GroupUpdate {
-	_u.mutation.AddScanViewerIDs(ids...)
-	return _u
-}
-
-// AddScanViewers adds the "scan_viewers" edges to the Scan entity.
-func (_u *GroupUpdate) AddScanViewers(v ...*Scan) *GroupUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddScanViewerIDs(ids...)
-}
-
-// AddEntityEditorIDs adds the "entity_editors" edge to the Entity entity by IDs.
-func (_u *GroupUpdate) AddEntityEditorIDs(ids ...string) *GroupUpdate {
-	_u.mutation.AddEntityEditorIDs(ids...)
-	return _u
-}
-
-// AddEntityEditors adds the "entity_editors" edges to the Entity entity.
-func (_u *GroupUpdate) AddEntityEditors(v ...*Entity) *GroupUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddEntityEditorIDs(ids...)
-}
-
-// AddEntityBlockedGroupIDs adds the "entity_blocked_groups" edge to the Entity entity by IDs.
-func (_u *GroupUpdate) AddEntityBlockedGroupIDs(ids ...string) *GroupUpdate {
-	_u.mutation.AddEntityBlockedGroupIDs(ids...)
-	return _u
-}
-
-// AddEntityBlockedGroups adds the "entity_blocked_groups" edges to the Entity entity.
-func (_u *GroupUpdate) AddEntityBlockedGroups(v ...*Entity) *GroupUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddEntityBlockedGroupIDs(ids...)
-}
-
-// AddEntityViewerIDs adds the "entity_viewers" edge to the Entity entity by IDs.
-func (_u *GroupUpdate) AddEntityViewerIDs(ids ...string) *GroupUpdate {
-	_u.mutation.AddEntityViewerIDs(ids...)
-	return _u
-}
-
-// AddEntityViewers adds the "entity_viewers" edges to the Entity entity.
-func (_u *GroupUpdate) AddEntityViewers(v ...*Entity) *GroupUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddEntityViewerIDs(ids...)
-}
-
 // AddActionPlanEditorIDs adds the "action_plan_editors" edge to the ActionPlan entity by IDs.
 func (_u *GroupUpdate) AddActionPlanEditorIDs(ids ...string) *GroupUpdate {
 	_u.mutation.AddActionPlanEditorIDs(ids...)
@@ -985,6 +898,156 @@ func (_u *GroupUpdate) AddMappedControlBlockedGroups(v ...*MappedControl) *Group
 		ids[i] = v[i].ID
 	}
 	return _u.AddMappedControlBlockedGroupIDs(ids...)
+}
+
+// AddScanEditorIDs adds the "scan_editors" edge to the Scan entity by IDs.
+func (_u *GroupUpdate) AddScanEditorIDs(ids ...string) *GroupUpdate {
+	_u.mutation.AddScanEditorIDs(ids...)
+	return _u
+}
+
+// AddScanEditors adds the "scan_editors" edges to the Scan entity.
+func (_u *GroupUpdate) AddScanEditors(v ...*Scan) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddScanEditorIDs(ids...)
+}
+
+// AddScanBlockedGroupIDs adds the "scan_blocked_groups" edge to the Scan entity by IDs.
+func (_u *GroupUpdate) AddScanBlockedGroupIDs(ids ...string) *GroupUpdate {
+	_u.mutation.AddScanBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddScanBlockedGroups adds the "scan_blocked_groups" edges to the Scan entity.
+func (_u *GroupUpdate) AddScanBlockedGroups(v ...*Scan) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddScanBlockedGroupIDs(ids...)
+}
+
+// AddEntityEditorIDs adds the "entity_editors" edge to the Entity entity by IDs.
+func (_u *GroupUpdate) AddEntityEditorIDs(ids ...string) *GroupUpdate {
+	_u.mutation.AddEntityEditorIDs(ids...)
+	return _u
+}
+
+// AddEntityEditors adds the "entity_editors" edges to the Entity entity.
+func (_u *GroupUpdate) AddEntityEditors(v ...*Entity) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEntityEditorIDs(ids...)
+}
+
+// AddEntityBlockedGroupIDs adds the "entity_blocked_groups" edge to the Entity entity by IDs.
+func (_u *GroupUpdate) AddEntityBlockedGroupIDs(ids ...string) *GroupUpdate {
+	_u.mutation.AddEntityBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddEntityBlockedGroups adds the "entity_blocked_groups" edges to the Entity entity.
+func (_u *GroupUpdate) AddEntityBlockedGroups(v ...*Entity) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEntityBlockedGroupIDs(ids...)
+}
+
+// AddFindingEditorIDs adds the "finding_editors" edge to the Finding entity by IDs.
+func (_u *GroupUpdate) AddFindingEditorIDs(ids ...string) *GroupUpdate {
+	_u.mutation.AddFindingEditorIDs(ids...)
+	return _u
+}
+
+// AddFindingEditors adds the "finding_editors" edges to the Finding entity.
+func (_u *GroupUpdate) AddFindingEditors(v ...*Finding) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingEditorIDs(ids...)
+}
+
+// AddFindingBlockedGroupIDs adds the "finding_blocked_groups" edge to the Finding entity by IDs.
+func (_u *GroupUpdate) AddFindingBlockedGroupIDs(ids ...string) *GroupUpdate {
+	_u.mutation.AddFindingBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddFindingBlockedGroups adds the "finding_blocked_groups" edges to the Finding entity.
+func (_u *GroupUpdate) AddFindingBlockedGroups(v ...*Finding) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingBlockedGroupIDs(ids...)
+}
+
+// AddReviewEditorIDs adds the "review_editors" edge to the Review entity by IDs.
+func (_u *GroupUpdate) AddReviewEditorIDs(ids ...string) *GroupUpdate {
+	_u.mutation.AddReviewEditorIDs(ids...)
+	return _u
+}
+
+// AddReviewEditors adds the "review_editors" edges to the Review entity.
+func (_u *GroupUpdate) AddReviewEditors(v ...*Review) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReviewEditorIDs(ids...)
+}
+
+// AddReviewBlockedGroupIDs adds the "review_blocked_groups" edge to the Review entity by IDs.
+func (_u *GroupUpdate) AddReviewBlockedGroupIDs(ids ...string) *GroupUpdate {
+	_u.mutation.AddReviewBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddReviewBlockedGroups adds the "review_blocked_groups" edges to the Review entity.
+func (_u *GroupUpdate) AddReviewBlockedGroups(v ...*Review) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReviewBlockedGroupIDs(ids...)
+}
+
+// AddRemediationEditorIDs adds the "remediation_editors" edge to the Remediation entity by IDs.
+func (_u *GroupUpdate) AddRemediationEditorIDs(ids ...string) *GroupUpdate {
+	_u.mutation.AddRemediationEditorIDs(ids...)
+	return _u
+}
+
+// AddRemediationEditors adds the "remediation_editors" edges to the Remediation entity.
+func (_u *GroupUpdate) AddRemediationEditors(v ...*Remediation) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRemediationEditorIDs(ids...)
+}
+
+// AddRemediationBlockedGroupIDs adds the "remediation_blocked_groups" edge to the Remediation entity by IDs.
+func (_u *GroupUpdate) AddRemediationBlockedGroupIDs(ids ...string) *GroupUpdate {
+	_u.mutation.AddRemediationBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddRemediationBlockedGroups adds the "remediation_blocked_groups" edges to the Remediation entity.
+func (_u *GroupUpdate) AddRemediationBlockedGroups(v ...*Remediation) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRemediationBlockedGroupIDs(ids...)
 }
 
 // SetSettingID sets the "setting" edge to the GroupSetting entity by ID.
@@ -1486,132 +1549,6 @@ func (_u *GroupUpdate) RemoveControlImplementationViewers(v ...*ControlImplement
 	return _u.RemoveControlImplementationViewerIDs(ids...)
 }
 
-// ClearScanEditors clears all "scan_editors" edges to the Scan entity.
-func (_u *GroupUpdate) ClearScanEditors() *GroupUpdate {
-	_u.mutation.ClearScanEditors()
-	return _u
-}
-
-// RemoveScanEditorIDs removes the "scan_editors" edge to Scan entities by IDs.
-func (_u *GroupUpdate) RemoveScanEditorIDs(ids ...string) *GroupUpdate {
-	_u.mutation.RemoveScanEditorIDs(ids...)
-	return _u
-}
-
-// RemoveScanEditors removes "scan_editors" edges to Scan entities.
-func (_u *GroupUpdate) RemoveScanEditors(v ...*Scan) *GroupUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveScanEditorIDs(ids...)
-}
-
-// ClearScanBlockedGroups clears all "scan_blocked_groups" edges to the Scan entity.
-func (_u *GroupUpdate) ClearScanBlockedGroups() *GroupUpdate {
-	_u.mutation.ClearScanBlockedGroups()
-	return _u
-}
-
-// RemoveScanBlockedGroupIDs removes the "scan_blocked_groups" edge to Scan entities by IDs.
-func (_u *GroupUpdate) RemoveScanBlockedGroupIDs(ids ...string) *GroupUpdate {
-	_u.mutation.RemoveScanBlockedGroupIDs(ids...)
-	return _u
-}
-
-// RemoveScanBlockedGroups removes "scan_blocked_groups" edges to Scan entities.
-func (_u *GroupUpdate) RemoveScanBlockedGroups(v ...*Scan) *GroupUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveScanBlockedGroupIDs(ids...)
-}
-
-// ClearScanViewers clears all "scan_viewers" edges to the Scan entity.
-func (_u *GroupUpdate) ClearScanViewers() *GroupUpdate {
-	_u.mutation.ClearScanViewers()
-	return _u
-}
-
-// RemoveScanViewerIDs removes the "scan_viewers" edge to Scan entities by IDs.
-func (_u *GroupUpdate) RemoveScanViewerIDs(ids ...string) *GroupUpdate {
-	_u.mutation.RemoveScanViewerIDs(ids...)
-	return _u
-}
-
-// RemoveScanViewers removes "scan_viewers" edges to Scan entities.
-func (_u *GroupUpdate) RemoveScanViewers(v ...*Scan) *GroupUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveScanViewerIDs(ids...)
-}
-
-// ClearEntityEditors clears all "entity_editors" edges to the Entity entity.
-func (_u *GroupUpdate) ClearEntityEditors() *GroupUpdate {
-	_u.mutation.ClearEntityEditors()
-	return _u
-}
-
-// RemoveEntityEditorIDs removes the "entity_editors" edge to Entity entities by IDs.
-func (_u *GroupUpdate) RemoveEntityEditorIDs(ids ...string) *GroupUpdate {
-	_u.mutation.RemoveEntityEditorIDs(ids...)
-	return _u
-}
-
-// RemoveEntityEditors removes "entity_editors" edges to Entity entities.
-func (_u *GroupUpdate) RemoveEntityEditors(v ...*Entity) *GroupUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveEntityEditorIDs(ids...)
-}
-
-// ClearEntityBlockedGroups clears all "entity_blocked_groups" edges to the Entity entity.
-func (_u *GroupUpdate) ClearEntityBlockedGroups() *GroupUpdate {
-	_u.mutation.ClearEntityBlockedGroups()
-	return _u
-}
-
-// RemoveEntityBlockedGroupIDs removes the "entity_blocked_groups" edge to Entity entities by IDs.
-func (_u *GroupUpdate) RemoveEntityBlockedGroupIDs(ids ...string) *GroupUpdate {
-	_u.mutation.RemoveEntityBlockedGroupIDs(ids...)
-	return _u
-}
-
-// RemoveEntityBlockedGroups removes "entity_blocked_groups" edges to Entity entities.
-func (_u *GroupUpdate) RemoveEntityBlockedGroups(v ...*Entity) *GroupUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveEntityBlockedGroupIDs(ids...)
-}
-
-// ClearEntityViewers clears all "entity_viewers" edges to the Entity entity.
-func (_u *GroupUpdate) ClearEntityViewers() *GroupUpdate {
-	_u.mutation.ClearEntityViewers()
-	return _u
-}
-
-// RemoveEntityViewerIDs removes the "entity_viewers" edge to Entity entities by IDs.
-func (_u *GroupUpdate) RemoveEntityViewerIDs(ids ...string) *GroupUpdate {
-	_u.mutation.RemoveEntityViewerIDs(ids...)
-	return _u
-}
-
-// RemoveEntityViewers removes "entity_viewers" edges to Entity entities.
-func (_u *GroupUpdate) RemoveEntityViewers(v ...*Entity) *GroupUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveEntityViewerIDs(ids...)
-}
-
 // ClearActionPlanEditors clears all "action_plan_editors" edges to the ActionPlan entity.
 func (_u *GroupUpdate) ClearActionPlanEditors() *GroupUpdate {
 	_u.mutation.ClearActionPlanEditors()
@@ -1967,6 +1904,216 @@ func (_u *GroupUpdate) RemoveMappedControlBlockedGroups(v ...*MappedControl) *Gr
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveMappedControlBlockedGroupIDs(ids...)
+}
+
+// ClearScanEditors clears all "scan_editors" edges to the Scan entity.
+func (_u *GroupUpdate) ClearScanEditors() *GroupUpdate {
+	_u.mutation.ClearScanEditors()
+	return _u
+}
+
+// RemoveScanEditorIDs removes the "scan_editors" edge to Scan entities by IDs.
+func (_u *GroupUpdate) RemoveScanEditorIDs(ids ...string) *GroupUpdate {
+	_u.mutation.RemoveScanEditorIDs(ids...)
+	return _u
+}
+
+// RemoveScanEditors removes "scan_editors" edges to Scan entities.
+func (_u *GroupUpdate) RemoveScanEditors(v ...*Scan) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveScanEditorIDs(ids...)
+}
+
+// ClearScanBlockedGroups clears all "scan_blocked_groups" edges to the Scan entity.
+func (_u *GroupUpdate) ClearScanBlockedGroups() *GroupUpdate {
+	_u.mutation.ClearScanBlockedGroups()
+	return _u
+}
+
+// RemoveScanBlockedGroupIDs removes the "scan_blocked_groups" edge to Scan entities by IDs.
+func (_u *GroupUpdate) RemoveScanBlockedGroupIDs(ids ...string) *GroupUpdate {
+	_u.mutation.RemoveScanBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveScanBlockedGroups removes "scan_blocked_groups" edges to Scan entities.
+func (_u *GroupUpdate) RemoveScanBlockedGroups(v ...*Scan) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveScanBlockedGroupIDs(ids...)
+}
+
+// ClearEntityEditors clears all "entity_editors" edges to the Entity entity.
+func (_u *GroupUpdate) ClearEntityEditors() *GroupUpdate {
+	_u.mutation.ClearEntityEditors()
+	return _u
+}
+
+// RemoveEntityEditorIDs removes the "entity_editors" edge to Entity entities by IDs.
+func (_u *GroupUpdate) RemoveEntityEditorIDs(ids ...string) *GroupUpdate {
+	_u.mutation.RemoveEntityEditorIDs(ids...)
+	return _u
+}
+
+// RemoveEntityEditors removes "entity_editors" edges to Entity entities.
+func (_u *GroupUpdate) RemoveEntityEditors(v ...*Entity) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEntityEditorIDs(ids...)
+}
+
+// ClearEntityBlockedGroups clears all "entity_blocked_groups" edges to the Entity entity.
+func (_u *GroupUpdate) ClearEntityBlockedGroups() *GroupUpdate {
+	_u.mutation.ClearEntityBlockedGroups()
+	return _u
+}
+
+// RemoveEntityBlockedGroupIDs removes the "entity_blocked_groups" edge to Entity entities by IDs.
+func (_u *GroupUpdate) RemoveEntityBlockedGroupIDs(ids ...string) *GroupUpdate {
+	_u.mutation.RemoveEntityBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveEntityBlockedGroups removes "entity_blocked_groups" edges to Entity entities.
+func (_u *GroupUpdate) RemoveEntityBlockedGroups(v ...*Entity) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEntityBlockedGroupIDs(ids...)
+}
+
+// ClearFindingEditors clears all "finding_editors" edges to the Finding entity.
+func (_u *GroupUpdate) ClearFindingEditors() *GroupUpdate {
+	_u.mutation.ClearFindingEditors()
+	return _u
+}
+
+// RemoveFindingEditorIDs removes the "finding_editors" edge to Finding entities by IDs.
+func (_u *GroupUpdate) RemoveFindingEditorIDs(ids ...string) *GroupUpdate {
+	_u.mutation.RemoveFindingEditorIDs(ids...)
+	return _u
+}
+
+// RemoveFindingEditors removes "finding_editors" edges to Finding entities.
+func (_u *GroupUpdate) RemoveFindingEditors(v ...*Finding) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingEditorIDs(ids...)
+}
+
+// ClearFindingBlockedGroups clears all "finding_blocked_groups" edges to the Finding entity.
+func (_u *GroupUpdate) ClearFindingBlockedGroups() *GroupUpdate {
+	_u.mutation.ClearFindingBlockedGroups()
+	return _u
+}
+
+// RemoveFindingBlockedGroupIDs removes the "finding_blocked_groups" edge to Finding entities by IDs.
+func (_u *GroupUpdate) RemoveFindingBlockedGroupIDs(ids ...string) *GroupUpdate {
+	_u.mutation.RemoveFindingBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveFindingBlockedGroups removes "finding_blocked_groups" edges to Finding entities.
+func (_u *GroupUpdate) RemoveFindingBlockedGroups(v ...*Finding) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingBlockedGroupIDs(ids...)
+}
+
+// ClearReviewEditors clears all "review_editors" edges to the Review entity.
+func (_u *GroupUpdate) ClearReviewEditors() *GroupUpdate {
+	_u.mutation.ClearReviewEditors()
+	return _u
+}
+
+// RemoveReviewEditorIDs removes the "review_editors" edge to Review entities by IDs.
+func (_u *GroupUpdate) RemoveReviewEditorIDs(ids ...string) *GroupUpdate {
+	_u.mutation.RemoveReviewEditorIDs(ids...)
+	return _u
+}
+
+// RemoveReviewEditors removes "review_editors" edges to Review entities.
+func (_u *GroupUpdate) RemoveReviewEditors(v ...*Review) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReviewEditorIDs(ids...)
+}
+
+// ClearReviewBlockedGroups clears all "review_blocked_groups" edges to the Review entity.
+func (_u *GroupUpdate) ClearReviewBlockedGroups() *GroupUpdate {
+	_u.mutation.ClearReviewBlockedGroups()
+	return _u
+}
+
+// RemoveReviewBlockedGroupIDs removes the "review_blocked_groups" edge to Review entities by IDs.
+func (_u *GroupUpdate) RemoveReviewBlockedGroupIDs(ids ...string) *GroupUpdate {
+	_u.mutation.RemoveReviewBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveReviewBlockedGroups removes "review_blocked_groups" edges to Review entities.
+func (_u *GroupUpdate) RemoveReviewBlockedGroups(v ...*Review) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReviewBlockedGroupIDs(ids...)
+}
+
+// ClearRemediationEditors clears all "remediation_editors" edges to the Remediation entity.
+func (_u *GroupUpdate) ClearRemediationEditors() *GroupUpdate {
+	_u.mutation.ClearRemediationEditors()
+	return _u
+}
+
+// RemoveRemediationEditorIDs removes the "remediation_editors" edge to Remediation entities by IDs.
+func (_u *GroupUpdate) RemoveRemediationEditorIDs(ids ...string) *GroupUpdate {
+	_u.mutation.RemoveRemediationEditorIDs(ids...)
+	return _u
+}
+
+// RemoveRemediationEditors removes "remediation_editors" edges to Remediation entities.
+func (_u *GroupUpdate) RemoveRemediationEditors(v ...*Remediation) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRemediationEditorIDs(ids...)
+}
+
+// ClearRemediationBlockedGroups clears all "remediation_blocked_groups" edges to the Remediation entity.
+func (_u *GroupUpdate) ClearRemediationBlockedGroups() *GroupUpdate {
+	_u.mutation.ClearRemediationBlockedGroups()
+	return _u
+}
+
+// RemoveRemediationBlockedGroupIDs removes the "remediation_blocked_groups" edge to Remediation entities by IDs.
+func (_u *GroupUpdate) RemoveRemediationBlockedGroupIDs(ids ...string) *GroupUpdate {
+	_u.mutation.RemoveRemediationBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveRemediationBlockedGroups removes "remediation_blocked_groups" edges to Remediation entities.
+func (_u *GroupUpdate) RemoveRemediationBlockedGroups(v ...*Remediation) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRemediationBlockedGroupIDs(ids...)
 }
 
 // ClearSetting clears the "setting" edge to the GroupSetting entity.
@@ -3126,294 +3273,6 @@ func (_u *GroupUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.ScanEditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ScanEditorsTable,
-			Columns: group.ScanEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScanEditors
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedScanEditorsIDs(); len(nodes) > 0 && !_u.mutation.ScanEditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ScanEditorsTable,
-			Columns: group.ScanEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScanEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ScanEditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ScanEditorsTable,
-			Columns: group.ScanEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScanEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ScanBlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ScanBlockedGroupsTable,
-			Columns: group.ScanBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScanBlockedGroups
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedScanBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.ScanBlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ScanBlockedGroupsTable,
-			Columns: group.ScanBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScanBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ScanBlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ScanBlockedGroupsTable,
-			Columns: group.ScanBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScanBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ScanViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ScanViewersTable,
-			Columns: group.ScanViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScanViewers
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedScanViewersIDs(); len(nodes) > 0 && !_u.mutation.ScanViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ScanViewersTable,
-			Columns: group.ScanViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScanViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ScanViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ScanViewersTable,
-			Columns: group.ScanViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScanViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.EntityEditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.EntityEditorsTable,
-			Columns: group.EntityEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityEditors
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedEntityEditorsIDs(); len(nodes) > 0 && !_u.mutation.EntityEditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.EntityEditorsTable,
-			Columns: group.EntityEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.EntityEditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.EntityEditorsTable,
-			Columns: group.EntityEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.EntityBlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.EntityBlockedGroupsTable,
-			Columns: group.EntityBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityBlockedGroups
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedEntityBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.EntityBlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.EntityBlockedGroupsTable,
-			Columns: group.EntityBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.EntityBlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.EntityBlockedGroupsTable,
-			Columns: group.EntityBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.EntityViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.EntityViewersTable,
-			Columns: group.EntityViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityViewers
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedEntityViewersIDs(); len(nodes) > 0 && !_u.mutation.EntityViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.EntityViewersTable,
-			Columns: group.EntityViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.EntityViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.EntityViewersTable,
-			Columns: group.EntityViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if _u.mutation.ActionPlanEditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4225,6 +4084,486 @@ func (_u *GroupUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.MappedControlBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScanEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanEditorsTable,
+			Columns: group.ScanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedScanEditorsIDs(); len(nodes) > 0 && !_u.mutation.ScanEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanEditorsTable,
+			Columns: group.ScanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScanEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanEditorsTable,
+			Columns: group.ScanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScanBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanBlockedGroupsTable,
+			Columns: group.ScanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedScanBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.ScanBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanBlockedGroupsTable,
+			Columns: group.ScanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScanBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanBlockedGroupsTable,
+			Columns: group.ScanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EntityEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityEditorsTable,
+			Columns: group.EntityEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEntityEditorsIDs(); len(nodes) > 0 && !_u.mutation.EntityEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityEditorsTable,
+			Columns: group.EntityEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntityEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityEditorsTable,
+			Columns: group.EntityEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EntityBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityBlockedGroupsTable,
+			Columns: group.EntityBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEntityBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.EntityBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityBlockedGroupsTable,
+			Columns: group.EntityBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntityBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityBlockedGroupsTable,
+			Columns: group.EntityBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.FindingEditorsTable,
+			Columns: group.FindingEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingEditorsIDs(); len(nodes) > 0 && !_u.mutation.FindingEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.FindingEditorsTable,
+			Columns: group.FindingEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.FindingEditorsTable,
+			Columns: group.FindingEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.FindingBlockedGroupsTable,
+			Columns: group.FindingBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.FindingBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.FindingBlockedGroupsTable,
+			Columns: group.FindingBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.FindingBlockedGroupsTable,
+			Columns: group.FindingBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReviewEditorsTable,
+			Columns: group.ReviewEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReviewEditorsIDs(); len(nodes) > 0 && !_u.mutation.ReviewEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReviewEditorsTable,
+			Columns: group.ReviewEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReviewEditorsTable,
+			Columns: group.ReviewEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReviewBlockedGroupsTable,
+			Columns: group.ReviewBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReviewBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.ReviewBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReviewBlockedGroupsTable,
+			Columns: group.ReviewBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReviewBlockedGroupsTable,
+			Columns: group.ReviewBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RemediationEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RemediationEditorsTable,
+			Columns: group.RemediationEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRemediationEditorsIDs(); len(nodes) > 0 && !_u.mutation.RemediationEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RemediationEditorsTable,
+			Columns: group.RemediationEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemediationEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RemediationEditorsTable,
+			Columns: group.RemediationEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RemediationBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RemediationBlockedGroupsTable,
+			Columns: group.RemediationBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRemediationBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.RemediationBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RemediationBlockedGroupsTable,
+			Columns: group.RemediationBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemediationBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RemediationBlockedGroupsTable,
+			Columns: group.RemediationBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5355,96 +5694,6 @@ func (_u *GroupUpdateOne) AddControlImplementationViewers(v ...*ControlImplement
 	return _u.AddControlImplementationViewerIDs(ids...)
 }
 
-// AddScanEditorIDs adds the "scan_editors" edge to the Scan entity by IDs.
-func (_u *GroupUpdateOne) AddScanEditorIDs(ids ...string) *GroupUpdateOne {
-	_u.mutation.AddScanEditorIDs(ids...)
-	return _u
-}
-
-// AddScanEditors adds the "scan_editors" edges to the Scan entity.
-func (_u *GroupUpdateOne) AddScanEditors(v ...*Scan) *GroupUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddScanEditorIDs(ids...)
-}
-
-// AddScanBlockedGroupIDs adds the "scan_blocked_groups" edge to the Scan entity by IDs.
-func (_u *GroupUpdateOne) AddScanBlockedGroupIDs(ids ...string) *GroupUpdateOne {
-	_u.mutation.AddScanBlockedGroupIDs(ids...)
-	return _u
-}
-
-// AddScanBlockedGroups adds the "scan_blocked_groups" edges to the Scan entity.
-func (_u *GroupUpdateOne) AddScanBlockedGroups(v ...*Scan) *GroupUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddScanBlockedGroupIDs(ids...)
-}
-
-// AddScanViewerIDs adds the "scan_viewers" edge to the Scan entity by IDs.
-func (_u *GroupUpdateOne) AddScanViewerIDs(ids ...string) *GroupUpdateOne {
-	_u.mutation.AddScanViewerIDs(ids...)
-	return _u
-}
-
-// AddScanViewers adds the "scan_viewers" edges to the Scan entity.
-func (_u *GroupUpdateOne) AddScanViewers(v ...*Scan) *GroupUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddScanViewerIDs(ids...)
-}
-
-// AddEntityEditorIDs adds the "entity_editors" edge to the Entity entity by IDs.
-func (_u *GroupUpdateOne) AddEntityEditorIDs(ids ...string) *GroupUpdateOne {
-	_u.mutation.AddEntityEditorIDs(ids...)
-	return _u
-}
-
-// AddEntityEditors adds the "entity_editors" edges to the Entity entity.
-func (_u *GroupUpdateOne) AddEntityEditors(v ...*Entity) *GroupUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddEntityEditorIDs(ids...)
-}
-
-// AddEntityBlockedGroupIDs adds the "entity_blocked_groups" edge to the Entity entity by IDs.
-func (_u *GroupUpdateOne) AddEntityBlockedGroupIDs(ids ...string) *GroupUpdateOne {
-	_u.mutation.AddEntityBlockedGroupIDs(ids...)
-	return _u
-}
-
-// AddEntityBlockedGroups adds the "entity_blocked_groups" edges to the Entity entity.
-func (_u *GroupUpdateOne) AddEntityBlockedGroups(v ...*Entity) *GroupUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddEntityBlockedGroupIDs(ids...)
-}
-
-// AddEntityViewerIDs adds the "entity_viewers" edge to the Entity entity by IDs.
-func (_u *GroupUpdateOne) AddEntityViewerIDs(ids ...string) *GroupUpdateOne {
-	_u.mutation.AddEntityViewerIDs(ids...)
-	return _u
-}
-
-// AddEntityViewers adds the "entity_viewers" edges to the Entity entity.
-func (_u *GroupUpdateOne) AddEntityViewers(v ...*Entity) *GroupUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddEntityViewerIDs(ids...)
-}
-
 // AddActionPlanEditorIDs adds the "action_plan_editors" edge to the ActionPlan entity by IDs.
 func (_u *GroupUpdateOne) AddActionPlanEditorIDs(ids ...string) *GroupUpdateOne {
 	_u.mutation.AddActionPlanEditorIDs(ids...)
@@ -5698,6 +5947,156 @@ func (_u *GroupUpdateOne) AddMappedControlBlockedGroups(v ...*MappedControl) *Gr
 		ids[i] = v[i].ID
 	}
 	return _u.AddMappedControlBlockedGroupIDs(ids...)
+}
+
+// AddScanEditorIDs adds the "scan_editors" edge to the Scan entity by IDs.
+func (_u *GroupUpdateOne) AddScanEditorIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.AddScanEditorIDs(ids...)
+	return _u
+}
+
+// AddScanEditors adds the "scan_editors" edges to the Scan entity.
+func (_u *GroupUpdateOne) AddScanEditors(v ...*Scan) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddScanEditorIDs(ids...)
+}
+
+// AddScanBlockedGroupIDs adds the "scan_blocked_groups" edge to the Scan entity by IDs.
+func (_u *GroupUpdateOne) AddScanBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.AddScanBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddScanBlockedGroups adds the "scan_blocked_groups" edges to the Scan entity.
+func (_u *GroupUpdateOne) AddScanBlockedGroups(v ...*Scan) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddScanBlockedGroupIDs(ids...)
+}
+
+// AddEntityEditorIDs adds the "entity_editors" edge to the Entity entity by IDs.
+func (_u *GroupUpdateOne) AddEntityEditorIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.AddEntityEditorIDs(ids...)
+	return _u
+}
+
+// AddEntityEditors adds the "entity_editors" edges to the Entity entity.
+func (_u *GroupUpdateOne) AddEntityEditors(v ...*Entity) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEntityEditorIDs(ids...)
+}
+
+// AddEntityBlockedGroupIDs adds the "entity_blocked_groups" edge to the Entity entity by IDs.
+func (_u *GroupUpdateOne) AddEntityBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.AddEntityBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddEntityBlockedGroups adds the "entity_blocked_groups" edges to the Entity entity.
+func (_u *GroupUpdateOne) AddEntityBlockedGroups(v ...*Entity) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEntityBlockedGroupIDs(ids...)
+}
+
+// AddFindingEditorIDs adds the "finding_editors" edge to the Finding entity by IDs.
+func (_u *GroupUpdateOne) AddFindingEditorIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.AddFindingEditorIDs(ids...)
+	return _u
+}
+
+// AddFindingEditors adds the "finding_editors" edges to the Finding entity.
+func (_u *GroupUpdateOne) AddFindingEditors(v ...*Finding) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingEditorIDs(ids...)
+}
+
+// AddFindingBlockedGroupIDs adds the "finding_blocked_groups" edge to the Finding entity by IDs.
+func (_u *GroupUpdateOne) AddFindingBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.AddFindingBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddFindingBlockedGroups adds the "finding_blocked_groups" edges to the Finding entity.
+func (_u *GroupUpdateOne) AddFindingBlockedGroups(v ...*Finding) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingBlockedGroupIDs(ids...)
+}
+
+// AddReviewEditorIDs adds the "review_editors" edge to the Review entity by IDs.
+func (_u *GroupUpdateOne) AddReviewEditorIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.AddReviewEditorIDs(ids...)
+	return _u
+}
+
+// AddReviewEditors adds the "review_editors" edges to the Review entity.
+func (_u *GroupUpdateOne) AddReviewEditors(v ...*Review) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReviewEditorIDs(ids...)
+}
+
+// AddReviewBlockedGroupIDs adds the "review_blocked_groups" edge to the Review entity by IDs.
+func (_u *GroupUpdateOne) AddReviewBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.AddReviewBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddReviewBlockedGroups adds the "review_blocked_groups" edges to the Review entity.
+func (_u *GroupUpdateOne) AddReviewBlockedGroups(v ...*Review) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReviewBlockedGroupIDs(ids...)
+}
+
+// AddRemediationEditorIDs adds the "remediation_editors" edge to the Remediation entity by IDs.
+func (_u *GroupUpdateOne) AddRemediationEditorIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.AddRemediationEditorIDs(ids...)
+	return _u
+}
+
+// AddRemediationEditors adds the "remediation_editors" edges to the Remediation entity.
+func (_u *GroupUpdateOne) AddRemediationEditors(v ...*Remediation) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRemediationEditorIDs(ids...)
+}
+
+// AddRemediationBlockedGroupIDs adds the "remediation_blocked_groups" edge to the Remediation entity by IDs.
+func (_u *GroupUpdateOne) AddRemediationBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.AddRemediationBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddRemediationBlockedGroups adds the "remediation_blocked_groups" edges to the Remediation entity.
+func (_u *GroupUpdateOne) AddRemediationBlockedGroups(v ...*Remediation) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRemediationBlockedGroupIDs(ids...)
 }
 
 // SetSettingID sets the "setting" edge to the GroupSetting entity by ID.
@@ -6199,132 +6598,6 @@ func (_u *GroupUpdateOne) RemoveControlImplementationViewers(v ...*ControlImplem
 	return _u.RemoveControlImplementationViewerIDs(ids...)
 }
 
-// ClearScanEditors clears all "scan_editors" edges to the Scan entity.
-func (_u *GroupUpdateOne) ClearScanEditors() *GroupUpdateOne {
-	_u.mutation.ClearScanEditors()
-	return _u
-}
-
-// RemoveScanEditorIDs removes the "scan_editors" edge to Scan entities by IDs.
-func (_u *GroupUpdateOne) RemoveScanEditorIDs(ids ...string) *GroupUpdateOne {
-	_u.mutation.RemoveScanEditorIDs(ids...)
-	return _u
-}
-
-// RemoveScanEditors removes "scan_editors" edges to Scan entities.
-func (_u *GroupUpdateOne) RemoveScanEditors(v ...*Scan) *GroupUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveScanEditorIDs(ids...)
-}
-
-// ClearScanBlockedGroups clears all "scan_blocked_groups" edges to the Scan entity.
-func (_u *GroupUpdateOne) ClearScanBlockedGroups() *GroupUpdateOne {
-	_u.mutation.ClearScanBlockedGroups()
-	return _u
-}
-
-// RemoveScanBlockedGroupIDs removes the "scan_blocked_groups" edge to Scan entities by IDs.
-func (_u *GroupUpdateOne) RemoveScanBlockedGroupIDs(ids ...string) *GroupUpdateOne {
-	_u.mutation.RemoveScanBlockedGroupIDs(ids...)
-	return _u
-}
-
-// RemoveScanBlockedGroups removes "scan_blocked_groups" edges to Scan entities.
-func (_u *GroupUpdateOne) RemoveScanBlockedGroups(v ...*Scan) *GroupUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveScanBlockedGroupIDs(ids...)
-}
-
-// ClearScanViewers clears all "scan_viewers" edges to the Scan entity.
-func (_u *GroupUpdateOne) ClearScanViewers() *GroupUpdateOne {
-	_u.mutation.ClearScanViewers()
-	return _u
-}
-
-// RemoveScanViewerIDs removes the "scan_viewers" edge to Scan entities by IDs.
-func (_u *GroupUpdateOne) RemoveScanViewerIDs(ids ...string) *GroupUpdateOne {
-	_u.mutation.RemoveScanViewerIDs(ids...)
-	return _u
-}
-
-// RemoveScanViewers removes "scan_viewers" edges to Scan entities.
-func (_u *GroupUpdateOne) RemoveScanViewers(v ...*Scan) *GroupUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveScanViewerIDs(ids...)
-}
-
-// ClearEntityEditors clears all "entity_editors" edges to the Entity entity.
-func (_u *GroupUpdateOne) ClearEntityEditors() *GroupUpdateOne {
-	_u.mutation.ClearEntityEditors()
-	return _u
-}
-
-// RemoveEntityEditorIDs removes the "entity_editors" edge to Entity entities by IDs.
-func (_u *GroupUpdateOne) RemoveEntityEditorIDs(ids ...string) *GroupUpdateOne {
-	_u.mutation.RemoveEntityEditorIDs(ids...)
-	return _u
-}
-
-// RemoveEntityEditors removes "entity_editors" edges to Entity entities.
-func (_u *GroupUpdateOne) RemoveEntityEditors(v ...*Entity) *GroupUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveEntityEditorIDs(ids...)
-}
-
-// ClearEntityBlockedGroups clears all "entity_blocked_groups" edges to the Entity entity.
-func (_u *GroupUpdateOne) ClearEntityBlockedGroups() *GroupUpdateOne {
-	_u.mutation.ClearEntityBlockedGroups()
-	return _u
-}
-
-// RemoveEntityBlockedGroupIDs removes the "entity_blocked_groups" edge to Entity entities by IDs.
-func (_u *GroupUpdateOne) RemoveEntityBlockedGroupIDs(ids ...string) *GroupUpdateOne {
-	_u.mutation.RemoveEntityBlockedGroupIDs(ids...)
-	return _u
-}
-
-// RemoveEntityBlockedGroups removes "entity_blocked_groups" edges to Entity entities.
-func (_u *GroupUpdateOne) RemoveEntityBlockedGroups(v ...*Entity) *GroupUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveEntityBlockedGroupIDs(ids...)
-}
-
-// ClearEntityViewers clears all "entity_viewers" edges to the Entity entity.
-func (_u *GroupUpdateOne) ClearEntityViewers() *GroupUpdateOne {
-	_u.mutation.ClearEntityViewers()
-	return _u
-}
-
-// RemoveEntityViewerIDs removes the "entity_viewers" edge to Entity entities by IDs.
-func (_u *GroupUpdateOne) RemoveEntityViewerIDs(ids ...string) *GroupUpdateOne {
-	_u.mutation.RemoveEntityViewerIDs(ids...)
-	return _u
-}
-
-// RemoveEntityViewers removes "entity_viewers" edges to Entity entities.
-func (_u *GroupUpdateOne) RemoveEntityViewers(v ...*Entity) *GroupUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveEntityViewerIDs(ids...)
-}
-
 // ClearActionPlanEditors clears all "action_plan_editors" edges to the ActionPlan entity.
 func (_u *GroupUpdateOne) ClearActionPlanEditors() *GroupUpdateOne {
 	_u.mutation.ClearActionPlanEditors()
@@ -6680,6 +6953,216 @@ func (_u *GroupUpdateOne) RemoveMappedControlBlockedGroups(v ...*MappedControl) 
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveMappedControlBlockedGroupIDs(ids...)
+}
+
+// ClearScanEditors clears all "scan_editors" edges to the Scan entity.
+func (_u *GroupUpdateOne) ClearScanEditors() *GroupUpdateOne {
+	_u.mutation.ClearScanEditors()
+	return _u
+}
+
+// RemoveScanEditorIDs removes the "scan_editors" edge to Scan entities by IDs.
+func (_u *GroupUpdateOne) RemoveScanEditorIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.RemoveScanEditorIDs(ids...)
+	return _u
+}
+
+// RemoveScanEditors removes "scan_editors" edges to Scan entities.
+func (_u *GroupUpdateOne) RemoveScanEditors(v ...*Scan) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveScanEditorIDs(ids...)
+}
+
+// ClearScanBlockedGroups clears all "scan_blocked_groups" edges to the Scan entity.
+func (_u *GroupUpdateOne) ClearScanBlockedGroups() *GroupUpdateOne {
+	_u.mutation.ClearScanBlockedGroups()
+	return _u
+}
+
+// RemoveScanBlockedGroupIDs removes the "scan_blocked_groups" edge to Scan entities by IDs.
+func (_u *GroupUpdateOne) RemoveScanBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.RemoveScanBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveScanBlockedGroups removes "scan_blocked_groups" edges to Scan entities.
+func (_u *GroupUpdateOne) RemoveScanBlockedGroups(v ...*Scan) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveScanBlockedGroupIDs(ids...)
+}
+
+// ClearEntityEditors clears all "entity_editors" edges to the Entity entity.
+func (_u *GroupUpdateOne) ClearEntityEditors() *GroupUpdateOne {
+	_u.mutation.ClearEntityEditors()
+	return _u
+}
+
+// RemoveEntityEditorIDs removes the "entity_editors" edge to Entity entities by IDs.
+func (_u *GroupUpdateOne) RemoveEntityEditorIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.RemoveEntityEditorIDs(ids...)
+	return _u
+}
+
+// RemoveEntityEditors removes "entity_editors" edges to Entity entities.
+func (_u *GroupUpdateOne) RemoveEntityEditors(v ...*Entity) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEntityEditorIDs(ids...)
+}
+
+// ClearEntityBlockedGroups clears all "entity_blocked_groups" edges to the Entity entity.
+func (_u *GroupUpdateOne) ClearEntityBlockedGroups() *GroupUpdateOne {
+	_u.mutation.ClearEntityBlockedGroups()
+	return _u
+}
+
+// RemoveEntityBlockedGroupIDs removes the "entity_blocked_groups" edge to Entity entities by IDs.
+func (_u *GroupUpdateOne) RemoveEntityBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.RemoveEntityBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveEntityBlockedGroups removes "entity_blocked_groups" edges to Entity entities.
+func (_u *GroupUpdateOne) RemoveEntityBlockedGroups(v ...*Entity) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEntityBlockedGroupIDs(ids...)
+}
+
+// ClearFindingEditors clears all "finding_editors" edges to the Finding entity.
+func (_u *GroupUpdateOne) ClearFindingEditors() *GroupUpdateOne {
+	_u.mutation.ClearFindingEditors()
+	return _u
+}
+
+// RemoveFindingEditorIDs removes the "finding_editors" edge to Finding entities by IDs.
+func (_u *GroupUpdateOne) RemoveFindingEditorIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.RemoveFindingEditorIDs(ids...)
+	return _u
+}
+
+// RemoveFindingEditors removes "finding_editors" edges to Finding entities.
+func (_u *GroupUpdateOne) RemoveFindingEditors(v ...*Finding) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingEditorIDs(ids...)
+}
+
+// ClearFindingBlockedGroups clears all "finding_blocked_groups" edges to the Finding entity.
+func (_u *GroupUpdateOne) ClearFindingBlockedGroups() *GroupUpdateOne {
+	_u.mutation.ClearFindingBlockedGroups()
+	return _u
+}
+
+// RemoveFindingBlockedGroupIDs removes the "finding_blocked_groups" edge to Finding entities by IDs.
+func (_u *GroupUpdateOne) RemoveFindingBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.RemoveFindingBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveFindingBlockedGroups removes "finding_blocked_groups" edges to Finding entities.
+func (_u *GroupUpdateOne) RemoveFindingBlockedGroups(v ...*Finding) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingBlockedGroupIDs(ids...)
+}
+
+// ClearReviewEditors clears all "review_editors" edges to the Review entity.
+func (_u *GroupUpdateOne) ClearReviewEditors() *GroupUpdateOne {
+	_u.mutation.ClearReviewEditors()
+	return _u
+}
+
+// RemoveReviewEditorIDs removes the "review_editors" edge to Review entities by IDs.
+func (_u *GroupUpdateOne) RemoveReviewEditorIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.RemoveReviewEditorIDs(ids...)
+	return _u
+}
+
+// RemoveReviewEditors removes "review_editors" edges to Review entities.
+func (_u *GroupUpdateOne) RemoveReviewEditors(v ...*Review) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReviewEditorIDs(ids...)
+}
+
+// ClearReviewBlockedGroups clears all "review_blocked_groups" edges to the Review entity.
+func (_u *GroupUpdateOne) ClearReviewBlockedGroups() *GroupUpdateOne {
+	_u.mutation.ClearReviewBlockedGroups()
+	return _u
+}
+
+// RemoveReviewBlockedGroupIDs removes the "review_blocked_groups" edge to Review entities by IDs.
+func (_u *GroupUpdateOne) RemoveReviewBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.RemoveReviewBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveReviewBlockedGroups removes "review_blocked_groups" edges to Review entities.
+func (_u *GroupUpdateOne) RemoveReviewBlockedGroups(v ...*Review) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReviewBlockedGroupIDs(ids...)
+}
+
+// ClearRemediationEditors clears all "remediation_editors" edges to the Remediation entity.
+func (_u *GroupUpdateOne) ClearRemediationEditors() *GroupUpdateOne {
+	_u.mutation.ClearRemediationEditors()
+	return _u
+}
+
+// RemoveRemediationEditorIDs removes the "remediation_editors" edge to Remediation entities by IDs.
+func (_u *GroupUpdateOne) RemoveRemediationEditorIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.RemoveRemediationEditorIDs(ids...)
+	return _u
+}
+
+// RemoveRemediationEditors removes "remediation_editors" edges to Remediation entities.
+func (_u *GroupUpdateOne) RemoveRemediationEditors(v ...*Remediation) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRemediationEditorIDs(ids...)
+}
+
+// ClearRemediationBlockedGroups clears all "remediation_blocked_groups" edges to the Remediation entity.
+func (_u *GroupUpdateOne) ClearRemediationBlockedGroups() *GroupUpdateOne {
+	_u.mutation.ClearRemediationBlockedGroups()
+	return _u
+}
+
+// RemoveRemediationBlockedGroupIDs removes the "remediation_blocked_groups" edge to Remediation entities by IDs.
+func (_u *GroupUpdateOne) RemoveRemediationBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.RemoveRemediationBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveRemediationBlockedGroups removes "remediation_blocked_groups" edges to Remediation entities.
+func (_u *GroupUpdateOne) RemoveRemediationBlockedGroups(v ...*Remediation) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRemediationBlockedGroupIDs(ids...)
 }
 
 // ClearSetting clears the "setting" edge to the GroupSetting entity.
@@ -7869,294 +8352,6 @@ func (_u *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.ScanEditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ScanEditorsTable,
-			Columns: group.ScanEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScanEditors
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedScanEditorsIDs(); len(nodes) > 0 && !_u.mutation.ScanEditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ScanEditorsTable,
-			Columns: group.ScanEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScanEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ScanEditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ScanEditorsTable,
-			Columns: group.ScanEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScanEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ScanBlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ScanBlockedGroupsTable,
-			Columns: group.ScanBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScanBlockedGroups
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedScanBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.ScanBlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ScanBlockedGroupsTable,
-			Columns: group.ScanBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScanBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ScanBlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ScanBlockedGroupsTable,
-			Columns: group.ScanBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScanBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ScanViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ScanViewersTable,
-			Columns: group.ScanViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScanViewers
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedScanViewersIDs(); len(nodes) > 0 && !_u.mutation.ScanViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ScanViewersTable,
-			Columns: group.ScanViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScanViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ScanViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ScanViewersTable,
-			Columns: group.ScanViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScanViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.EntityEditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.EntityEditorsTable,
-			Columns: group.EntityEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityEditors
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedEntityEditorsIDs(); len(nodes) > 0 && !_u.mutation.EntityEditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.EntityEditorsTable,
-			Columns: group.EntityEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.EntityEditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.EntityEditorsTable,
-			Columns: group.EntityEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.EntityBlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.EntityBlockedGroupsTable,
-			Columns: group.EntityBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityBlockedGroups
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedEntityBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.EntityBlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.EntityBlockedGroupsTable,
-			Columns: group.EntityBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.EntityBlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.EntityBlockedGroupsTable,
-			Columns: group.EntityBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.EntityViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.EntityViewersTable,
-			Columns: group.EntityViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityViewers
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedEntityViewersIDs(); len(nodes) > 0 && !_u.mutation.EntityViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.EntityViewersTable,
-			Columns: group.EntityViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.EntityViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.EntityViewersTable,
-			Columns: group.EntityViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if _u.mutation.ActionPlanEditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -8968,6 +9163,486 @@ func (_u *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error)
 			},
 		}
 		edge.Schema = _u.schemaConfig.MappedControlBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScanEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanEditorsTable,
+			Columns: group.ScanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedScanEditorsIDs(); len(nodes) > 0 && !_u.mutation.ScanEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanEditorsTable,
+			Columns: group.ScanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScanEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanEditorsTable,
+			Columns: group.ScanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScanBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanBlockedGroupsTable,
+			Columns: group.ScanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedScanBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.ScanBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanBlockedGroupsTable,
+			Columns: group.ScanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScanBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanBlockedGroupsTable,
+			Columns: group.ScanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ScanBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EntityEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityEditorsTable,
+			Columns: group.EntityEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEntityEditorsIDs(); len(nodes) > 0 && !_u.mutation.EntityEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityEditorsTable,
+			Columns: group.EntityEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntityEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityEditorsTable,
+			Columns: group.EntityEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EntityBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityBlockedGroupsTable,
+			Columns: group.EntityBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEntityBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.EntityBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityBlockedGroupsTable,
+			Columns: group.EntityBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntityBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityBlockedGroupsTable,
+			Columns: group.EntityBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.EntityBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.FindingEditorsTable,
+			Columns: group.FindingEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingEditorsIDs(); len(nodes) > 0 && !_u.mutation.FindingEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.FindingEditorsTable,
+			Columns: group.FindingEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.FindingEditorsTable,
+			Columns: group.FindingEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.FindingBlockedGroupsTable,
+			Columns: group.FindingBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.FindingBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.FindingBlockedGroupsTable,
+			Columns: group.FindingBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.FindingBlockedGroupsTable,
+			Columns: group.FindingBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReviewEditorsTable,
+			Columns: group.ReviewEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReviewEditorsIDs(); len(nodes) > 0 && !_u.mutation.ReviewEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReviewEditorsTable,
+			Columns: group.ReviewEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReviewEditorsTable,
+			Columns: group.ReviewEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReviewBlockedGroupsTable,
+			Columns: group.ReviewBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReviewBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.ReviewBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReviewBlockedGroupsTable,
+			Columns: group.ReviewBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReviewBlockedGroupsTable,
+			Columns: group.ReviewBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RemediationEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RemediationEditorsTable,
+			Columns: group.RemediationEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRemediationEditorsIDs(); len(nodes) > 0 && !_u.mutation.RemediationEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RemediationEditorsTable,
+			Columns: group.RemediationEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemediationEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RemediationEditorsTable,
+			Columns: group.RemediationEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RemediationBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RemediationBlockedGroupsTable,
+			Columns: group.RemediationBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRemediationBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.RemediationBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RemediationBlockedGroupsTable,
+			Columns: group.RemediationBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemediationBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RemediationBlockedGroupsTable,
+			Columns: group.RemediationBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

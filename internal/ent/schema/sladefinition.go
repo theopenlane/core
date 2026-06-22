@@ -65,7 +65,7 @@ func (s SLADefinition) Mixin() []ent.Mixin {
 		prefix: "SLAD",
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(s),
-			newGroupPermissionsMixin(),
+			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
 	}.getMixins(s)
 }

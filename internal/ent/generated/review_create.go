@@ -534,21 +534,6 @@ func (_c *ReviewCreate) AddEditors(v ...*Group) *ReviewCreate {
 	return _c.AddEditorIDs(ids...)
 }
 
-// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (_c *ReviewCreate) AddViewerIDs(ids ...string) *ReviewCreate {
-	_c.mutation.AddViewerIDs(ids...)
-	return _c
-}
-
-// AddViewers adds the "viewers" edges to the Group entity.
-func (_c *ReviewCreate) AddViewers(v ...*Group) *ReviewCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddViewerIDs(ids...)
-}
-
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_c *ReviewCreate) SetEnvironment(v *CustomTypeEnum) *ReviewCreate {
 	return _c.SetEnvironmentID(v.ID)
@@ -1062,16 +1047,16 @@ func (_c *ReviewCreate) createSpec() (*Review, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.BlockedGroupsTable,
-			Columns: []string{review.BlockedGroupsColumn},
+			Columns: review.BlockedGroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.ReviewBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1079,33 +1064,16 @@ func (_c *ReviewCreate) createSpec() (*Review, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.EditorsTable,
-			Columns: []string{review.EditorsColumn},
+			Columns: review.EditorsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.ViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   review.ViewersTable,
-			Columns: []string{review.ViewersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.ReviewEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -12434,7 +12434,6 @@ input CreateEntityInput {
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
-  viewerIDs: [ID!]
   internalOwnerUserID: ID
   internalOwnerGroupID: ID
   reviewedByUserID: ID
@@ -12954,7 +12953,6 @@ input CreateFindingInput {
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
-  viewerIDs: [ID!]
   environmentID: ID
   scopeID: ID
   findingStatusID: ID
@@ -13047,12 +13045,6 @@ input CreateGroupInput {
   controlImplementationEditorIDs: [ID!]
   controlImplementationBlockedGroupIDs: [ID!]
   controlImplementationViewerIDs: [ID!]
-  scanEditorIDs: [ID!]
-  scanBlockedGroupIDs: [ID!]
-  scanViewerIDs: [ID!]
-  entityEditorIDs: [ID!]
-  entityBlockedGroupIDs: [ID!]
-  entityViewerIDs: [ID!]
   actionPlanEditorIDs: [ID!]
   actionPlanBlockedGroupIDs: [ID!]
   actionPlanViewerIDs: [ID!]
@@ -13070,6 +13062,16 @@ input CreateGroupInput {
   controlBlockedGroupIDs: [ID!]
   mappedControlEditorIDs: [ID!]
   mappedControlBlockedGroupIDs: [ID!]
+  scanEditorIDs: [ID!]
+  scanBlockedGroupIDs: [ID!]
+  entityEditorIDs: [ID!]
+  entityBlockedGroupIDs: [ID!]
+  findingEditorIDs: [ID!]
+  findingBlockedGroupIDs: [ID!]
+  reviewEditorIDs: [ID!]
+  reviewBlockedGroupIDs: [ID!]
+  remediationEditorIDs: [ID!]
+  remediationBlockedGroupIDs: [ID!]
   settingID: ID
   eventIDs: [ID!]
   integrationIDs: [ID!]
@@ -14847,7 +14849,6 @@ input CreateRemediationInput {
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
-  viewerIDs: [ID!]
   environmentID: ID
   scopeID: ID
   integrationIDs: [ID!]
@@ -14966,7 +14967,6 @@ input CreateReviewInput {
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
-  viewerIDs: [ID!]
   environmentID: ID
   scopeID: ID
   integrationIDs: [ID!]
@@ -15142,7 +15142,6 @@ input CreateSLADefinitionInput {
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
-  viewerIDs: [ID!]
 }
 """
 CreateScanInput is used for create Scan object.
@@ -15208,7 +15207,6 @@ input CreateScanInput {
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
-  viewerIDs: [ID!]
   reviewedByUserID: ID
   reviewedByGroupID: ID
   assignedToUserID: ID
@@ -23036,37 +23034,6 @@ type Entity implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  viewers(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
   internalOwnerUser: User
   internalOwnerGroup: Group
   reviewedByUser: User
@@ -24978,11 +24945,6 @@ input EntityWhereInput {
   """
   hasEditors: Boolean
   hasEditorsWith: [GroupWhereInput!]
-  """
-  viewers edge predicates
-  """
-  hasViewers: Boolean
-  hasViewersWith: [GroupWhereInput!]
   """
   internal_owner_user edge predicates
   """
@@ -28381,37 +28343,6 @@ type Finding implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  viewers(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
   environment: CustomTypeEnum
   scope: CustomTypeEnum
   findingStatus: CustomTypeEnum
@@ -30088,11 +30019,6 @@ input FindingWhereInput {
   hasEditors: Boolean
   hasEditorsWith: [GroupWhereInput!]
   """
-  viewers edge predicates
-  """
-  hasViewers: Boolean
-  hasViewersWith: [GroupWhereInput!]
-  """
   environment edge predicates
   """
   hasEnvironment: Boolean
@@ -30768,192 +30694,6 @@ type Group implements Node {
     """
     where: ControlImplementationWhereInput
   ): ControlImplementationConnection!
-  scanEditors(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Scans returned from the connection.
-    """
-    orderBy: [ScanOrder!]
-
-    """
-    Filtering options for Scans returned from the connection.
-    """
-    where: ScanWhereInput
-  ): ScanConnection!
-  scanBlockedGroups(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Scans returned from the connection.
-    """
-    orderBy: [ScanOrder!]
-
-    """
-    Filtering options for Scans returned from the connection.
-    """
-    where: ScanWhereInput
-  ): ScanConnection!
-  scanViewers(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Scans returned from the connection.
-    """
-    orderBy: [ScanOrder!]
-
-    """
-    Filtering options for Scans returned from the connection.
-    """
-    where: ScanWhereInput
-  ): ScanConnection!
-  entityEditors(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Entities returned from the connection.
-    """
-    orderBy: [EntityOrder!]
-
-    """
-    Filtering options for Entities returned from the connection.
-    """
-    where: EntityWhereInput
-  ): EntityConnection!
-  entityBlockedGroups(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Entities returned from the connection.
-    """
-    orderBy: [EntityOrder!]
-
-    """
-    Filtering options for Entities returned from the connection.
-    """
-    where: EntityWhereInput
-  ): EntityConnection!
-  entityViewers(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Entities returned from the connection.
-    """
-    orderBy: [EntityOrder!]
-
-    """
-    Filtering options for Entities returned from the connection.
-    """
-    where: EntityWhereInput
-  ): EntityConnection!
   actionPlanEditors(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -31481,6 +31221,316 @@ type Group implements Node {
     """
     where: MappedControlWhereInput
   ): MappedControlConnection!
+  scanEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
+  scanBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
+  entityEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  entityBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  findingEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Findings returned from the connection.
+    """
+    orderBy: [FindingOrder!]
+
+    """
+    Filtering options for Findings returned from the connection.
+    """
+    where: FindingWhereInput
+  ): FindingConnection!
+  findingBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Findings returned from the connection.
+    """
+    orderBy: [FindingOrder!]
+
+    """
+    Filtering options for Findings returned from the connection.
+    """
+    where: FindingWhereInput
+  ): FindingConnection!
+  reviewEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
+  reviewBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
+  remediationEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Remediations returned from the connection.
+    """
+    orderBy: [RemediationOrder!]
+
+    """
+    Filtering options for Remediations returned from the connection.
+    """
+    where: RemediationWhereInput
+  ): RemediationConnection!
+  remediationBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Remediations returned from the connection.
+    """
+    orderBy: [RemediationOrder!]
+
+    """
+    Filtering options for Remediations returned from the connection.
+    """
+    where: RemediationWhereInput
+  ): RemediationConnection!
   setting: GroupSetting
   users(
     """
@@ -32557,36 +32607,6 @@ input GroupWhereInput {
   hasControlImplementationViewers: Boolean
   hasControlImplementationViewersWith: [ControlImplementationWhereInput!]
   """
-  scan_editors edge predicates
-  """
-  hasScanEditors: Boolean
-  hasScanEditorsWith: [ScanWhereInput!]
-  """
-  scan_blocked_groups edge predicates
-  """
-  hasScanBlockedGroups: Boolean
-  hasScanBlockedGroupsWith: [ScanWhereInput!]
-  """
-  scan_viewers edge predicates
-  """
-  hasScanViewers: Boolean
-  hasScanViewersWith: [ScanWhereInput!]
-  """
-  entity_editors edge predicates
-  """
-  hasEntityEditors: Boolean
-  hasEntityEditorsWith: [EntityWhereInput!]
-  """
-  entity_blocked_groups edge predicates
-  """
-  hasEntityBlockedGroups: Boolean
-  hasEntityBlockedGroupsWith: [EntityWhereInput!]
-  """
-  entity_viewers edge predicates
-  """
-  hasEntityViewers: Boolean
-  hasEntityViewersWith: [EntityWhereInput!]
-  """
   action_plan_editors edge predicates
   """
   hasActionPlanEditors: Boolean
@@ -32671,6 +32691,56 @@ input GroupWhereInput {
   """
   hasMappedControlBlockedGroups: Boolean
   hasMappedControlBlockedGroupsWith: [MappedControlWhereInput!]
+  """
+  scan_editors edge predicates
+  """
+  hasScanEditors: Boolean
+  hasScanEditorsWith: [ScanWhereInput!]
+  """
+  scan_blocked_groups edge predicates
+  """
+  hasScanBlockedGroups: Boolean
+  hasScanBlockedGroupsWith: [ScanWhereInput!]
+  """
+  entity_editors edge predicates
+  """
+  hasEntityEditors: Boolean
+  hasEntityEditorsWith: [EntityWhereInput!]
+  """
+  entity_blocked_groups edge predicates
+  """
+  hasEntityBlockedGroups: Boolean
+  hasEntityBlockedGroupsWith: [EntityWhereInput!]
+  """
+  finding_editors edge predicates
+  """
+  hasFindingEditors: Boolean
+  hasFindingEditorsWith: [FindingWhereInput!]
+  """
+  finding_blocked_groups edge predicates
+  """
+  hasFindingBlockedGroups: Boolean
+  hasFindingBlockedGroupsWith: [FindingWhereInput!]
+  """
+  review_editors edge predicates
+  """
+  hasReviewEditors: Boolean
+  hasReviewEditorsWith: [ReviewWhereInput!]
+  """
+  review_blocked_groups edge predicates
+  """
+  hasReviewBlockedGroups: Boolean
+  hasReviewBlockedGroupsWith: [ReviewWhereInput!]
+  """
+  remediation_editors edge predicates
+  """
+  hasRemediationEditors: Boolean
+  hasRemediationEditorsWith: [RemediationWhereInput!]
+  """
+  remediation_blocked_groups edge predicates
+  """
+  hasRemediationBlockedGroups: Boolean
+  hasRemediationBlockedGroupsWith: [RemediationWhereInput!]
   """
   setting edge predicates
   """
@@ -58148,37 +58218,6 @@ type Remediation implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  viewers(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
   environment: CustomTypeEnum
   scope: CustomTypeEnum
   integrations(
@@ -59278,11 +59317,6 @@ input RemediationWhereInput {
   hasEditors: Boolean
   hasEditorsWith: [GroupWhereInput!]
   """
-  viewers edge predicates
-  """
-  hasViewers: Boolean
-  hasViewersWith: [GroupWhereInput!]
-  """
   environment edge predicates
   """
   hasEnvironment: Boolean
@@ -59523,37 +59557,6 @@ type Review implements Node {
     where: GroupWhereInput
   ): GroupConnection!
   editors(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
-  viewers(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -60620,11 +60623,6 @@ input ReviewWhereInput {
   """
   hasEditors: Boolean
   hasEditorsWith: [GroupWhereInput!]
-  """
-  viewers edge predicates
-  """
-  hasViewers: Boolean
-  hasViewersWith: [GroupWhereInput!]
   """
   environment edge predicates
   """
@@ -62341,37 +62339,6 @@ type SLADefinition implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  viewers(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
 }
 """
 A connection to a list of items.
@@ -62586,11 +62553,6 @@ input SLADefinitionWhereInput {
   hasEditors: Boolean
   hasEditorsWith: [GroupWhereInput!]
   """
-  viewers edge predicates
-  """
-  hasViewers: Boolean
-  hasViewersWith: [GroupWhereInput!]
-  """
   Filter for tagsHas to contain a specific value
   """
   tagsHas: String
@@ -62730,37 +62692,6 @@ type Scan implements Node {
     where: GroupWhereInput
   ): GroupConnection!
   editors(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
-  viewers(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -63638,11 +63569,6 @@ input ScanWhereInput {
   """
   hasEditors: Boolean
   hasEditorsWith: [GroupWhereInput!]
-  """
-  viewers edge predicates
-  """
-  hasViewers: Boolean
-  hasViewersWith: [GroupWhereInput!]
   """
   reviewed_by_user edge predicates
   """
@@ -76965,9 +76891,6 @@ input UpdateEntityInput {
   addEditorIDs: [ID!]
   removeEditorIDs: [ID!]
   clearEditors: Boolean
-  addViewerIDs: [ID!]
-  removeViewerIDs: [ID!]
-  clearViewers: Boolean
   internalOwnerUserID: ID
   clearInternalOwnerUser: Boolean
   internalOwnerGroupID: ID
@@ -77716,9 +77639,6 @@ input UpdateFindingInput {
   addEditorIDs: [ID!]
   removeEditorIDs: [ID!]
   clearEditors: Boolean
-  addViewerIDs: [ID!]
-  removeViewerIDs: [ID!]
-  clearViewers: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID
@@ -77895,24 +77815,6 @@ input UpdateGroupInput {
   addControlImplementationViewerIDs: [ID!]
   removeControlImplementationViewerIDs: [ID!]
   clearControlImplementationViewers: Boolean
-  addScanEditorIDs: [ID!]
-  removeScanEditorIDs: [ID!]
-  clearScanEditors: Boolean
-  addScanBlockedGroupIDs: [ID!]
-  removeScanBlockedGroupIDs: [ID!]
-  clearScanBlockedGroups: Boolean
-  addScanViewerIDs: [ID!]
-  removeScanViewerIDs: [ID!]
-  clearScanViewers: Boolean
-  addEntityEditorIDs: [ID!]
-  removeEntityEditorIDs: [ID!]
-  clearEntityEditors: Boolean
-  addEntityBlockedGroupIDs: [ID!]
-  removeEntityBlockedGroupIDs: [ID!]
-  clearEntityBlockedGroups: Boolean
-  addEntityViewerIDs: [ID!]
-  removeEntityViewerIDs: [ID!]
-  clearEntityViewers: Boolean
   addActionPlanEditorIDs: [ID!]
   removeActionPlanEditorIDs: [ID!]
   clearActionPlanEditors: Boolean
@@ -77964,6 +77866,36 @@ input UpdateGroupInput {
   addMappedControlBlockedGroupIDs: [ID!]
   removeMappedControlBlockedGroupIDs: [ID!]
   clearMappedControlBlockedGroups: Boolean
+  addScanEditorIDs: [ID!]
+  removeScanEditorIDs: [ID!]
+  clearScanEditors: Boolean
+  addScanBlockedGroupIDs: [ID!]
+  removeScanBlockedGroupIDs: [ID!]
+  clearScanBlockedGroups: Boolean
+  addEntityEditorIDs: [ID!]
+  removeEntityEditorIDs: [ID!]
+  clearEntityEditors: Boolean
+  addEntityBlockedGroupIDs: [ID!]
+  removeEntityBlockedGroupIDs: [ID!]
+  clearEntityBlockedGroups: Boolean
+  addFindingEditorIDs: [ID!]
+  removeFindingEditorIDs: [ID!]
+  clearFindingEditors: Boolean
+  addFindingBlockedGroupIDs: [ID!]
+  removeFindingBlockedGroupIDs: [ID!]
+  clearFindingBlockedGroups: Boolean
+  addReviewEditorIDs: [ID!]
+  removeReviewEditorIDs: [ID!]
+  clearReviewEditors: Boolean
+  addReviewBlockedGroupIDs: [ID!]
+  removeReviewBlockedGroupIDs: [ID!]
+  clearReviewBlockedGroups: Boolean
+  addRemediationEditorIDs: [ID!]
+  removeRemediationEditorIDs: [ID!]
+  clearRemediationEditors: Boolean
+  addRemediationBlockedGroupIDs: [ID!]
+  removeRemediationBlockedGroupIDs: [ID!]
+  clearRemediationBlockedGroups: Boolean
   settingID: ID
   clearSetting: Boolean
   addEventIDs: [ID!]
@@ -80554,9 +80486,6 @@ input UpdateRemediationInput {
   addEditorIDs: [ID!]
   removeEditorIDs: [ID!]
   clearEditors: Boolean
-  addViewerIDs: [ID!]
-  removeViewerIDs: [ID!]
-  clearViewers: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID
@@ -80733,9 +80662,6 @@ input UpdateReviewInput {
   addEditorIDs: [ID!]
   removeEditorIDs: [ID!]
   clearEditors: Boolean
-  addViewerIDs: [ID!]
-  removeViewerIDs: [ID!]
-  clearViewers: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID
@@ -81023,9 +80949,6 @@ input UpdateSLADefinitionInput {
   addEditorIDs: [ID!]
   removeEditorIDs: [ID!]
   clearEditors: Boolean
-  addViewerIDs: [ID!]
-  removeViewerIDs: [ID!]
-  clearViewers: Boolean
 }
 """
 UpdateScanInput is used for update Scan object.
@@ -81107,9 +81030,6 @@ input UpdateScanInput {
   addEditorIDs: [ID!]
   removeEditorIDs: [ID!]
   clearEditors: Boolean
-  addViewerIDs: [ID!]
-  removeViewerIDs: [ID!]
-  clearViewers: Boolean
   reviewedByUserID: ID
   clearReviewedByUser: Boolean
   reviewedByGroupID: ID

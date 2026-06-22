@@ -168,17 +168,34 @@ const (
 	totalCountField = "totalCount"
 )
 
-// paginateLimit calculates the limit for pagination based on the first and last arguments.
-// and returns the limit multiplied by 10.
-// This is to ensure we overfetch the data to get the number of requested results.
-func paginateLimit(first, last *int) int {
-	var limit int
+// paginateLimitMult calculates the DB fetch limit with the given multiplier.
+// Use multiplier > 1 when per-object FGA post-filtering may discard results,
+// or 1 when SQL-level filtering handles result restriction at query time.
+func paginateLimitMult(first, last *int, multiplier int) int {
 	if first != nil {
-		limit = *first * 10
-	} else if last != nil {
-		limit = *last * 10
+		return *first * multiplier
 	}
-	return limit
+	if last != nil {
+		return *last * multiplier
+	}
+	return 0
+}
+
+// paginateLimit is the default overfetch variant used by edge collection queries.
+func paginateLimit(first, last *int) int {
+	return paginateLimitMult(first, last, 10)
+}
+
+// paginateLimitSingle calculates the DB fetch limit for non-overfetch queries (first+1 or last+1)
+// so that the build() function can detect hasNextPage/hasPreviousPage correctly.
+func paginateLimitSingle(first, last *int) int {
+	if first != nil {
+		return *first + 1
+	}
+	if last != nil {
+		return *last + 1
+	}
+	return 0
 }
 
 // ActionPlanHistoryEdge is the edge representation of ActionPlanHistory.
