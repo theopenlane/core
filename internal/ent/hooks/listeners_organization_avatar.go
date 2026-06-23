@@ -190,15 +190,10 @@ func retrieveAvailableIcons(document *goquery.Document, pageURL *url.URL) []stri
 		resolvedIcon := icon{url: resolvedURL.String(), size: getLargestIconSize(selection.AttrOr("sizes", ""))}
 
 		switch {
-
 		case strings.Contains(rel, "apple-touch-icon"):
-
 			appleIcons = append(appleIcons, resolvedIcon)
-
 		case rel == "shortcut icon":
-
 			shortcutIcons = append(shortcutIcons, resolvedIcon)
-
 		case lo.Contains(strings.Fields(rel), "icon"):
 			icons = append(icons, resolvedIcon)
 		}
