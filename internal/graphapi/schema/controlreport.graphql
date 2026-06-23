@@ -121,6 +121,10 @@ type ControlReport implements Node {
   """
   id: ID!
   """
+  the id of the parent control, only populated when the object is a subcontrol
+  """
+  parentControlID: ID
+  """
   the unique reference code for the control
   """
   refCode: String! @externalSource(source: FRAMEWORK)
@@ -214,6 +218,10 @@ type ControlInfo {
   whether this entry is a subcontrol rather than a top-level control
   """
   isSubcontrol: Boolean!
+  """
+  the id of the parent control if this is a subcontrol, empty if isSubcontrol is false
+  """
+  parentControlID: ID
 }
 
 """
