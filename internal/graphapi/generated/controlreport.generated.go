@@ -151,6 +151,52 @@ func (ec *executionContext) fieldContext_ControlInfo_id(_ context.Context, field
 	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
+func (ec *executionContext) _ControlInfo_mappedControlReferenceIDs(ctx context.Context, field graphql.CollectedField, obj *model.ControlInfo) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlInfo_mappedControlReferenceIDs(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MappedControlReferenceIDs, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlInfo_mappedControlReferenceIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _ControlInfo_inheritedFromSubcontrolIDs(ctx context.Context, field graphql.CollectedField, obj *model.ControlInfo) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlInfo_inheritedFromSubcontrolIDs(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InheritedFromSubcontrolIDs, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlInfo_inheritedFromSubcontrolIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
 func (ec *executionContext) _ControlInfo_refCode(ctx context.Context, field graphql.CollectedField, obj *model.ControlInfo) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1376,6 +1422,16 @@ func (ec *executionContext) _ControlInfo(ctx context.Context, sel ast.SelectionS
 		case "id":
 			out.Values[i] = ec._ControlInfo_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "mappedControlReferenceIDs":
+			out.Values[i] = ec._ControlInfo_mappedControlReferenceIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "inheritedFromSubcontrolIDs":
+			out.Values[i] = ec._ControlInfo_inheritedFromSubcontrolIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
 		case "refCode":

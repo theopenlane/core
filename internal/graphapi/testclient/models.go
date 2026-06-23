@@ -5037,6 +5037,10 @@ type ControlImplementationWhereInput struct {
 type ControlInfo struct {
 	// unique identifier of the control
 	ID string `json:"id"`
+	// id(s) of the mapped_control this related control from if the mapping is org owned
+	MappedControlReferenceIDs []string `json:"mappedControlReferenceIDs,omitempty"`
+	// id(s) of the subcontrol the mapping was inherited from, this is null if the control was directly mapped, if it was inherited from a subcontrol it will have the subcontrol IDs that are providing the mapping
+	InheritedFromSubcontrolIDs []string `json:"inheritedFromSubcontrolIDs,omitempty"`
 	// the unique reference code for the control
 	RefCode string `json:"refCode"`
 	// description of what the control is supposed to accomplish

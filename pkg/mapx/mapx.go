@@ -136,6 +136,18 @@ func AppendOnce[K comparable, V any](key K, value V, m map[K][]V, seen map[K]str
 	}
 }
 
+// AppendUnique appends value to m[key], deduplicating by value so the slice for a
+// key never contains the same value twice
+func AppendUnique[K, V comparable](m map[K][]V, key K, value V) {
+	if m == nil {
+		panic("mapx.AppendUnique: m must not be nil")
+	}
+
+	if !slices.Contains(m[key], value) {
+		m[key] = append(m[key], value)
+	}
+}
+
 // MapSetFromSlice converts a slice into a set represented as map[T]struct{}
 func MapSetFromSlice[T comparable](items []T) map[T]struct{} {
 	set := make(map[T]struct{}, len(items))

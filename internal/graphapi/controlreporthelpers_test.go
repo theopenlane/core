@@ -1,6 +1,7 @@
 package graphapi
 
 import (
+	"context"
 	"testing"
 
 	"entgo.io/contrib/entgql"
@@ -610,7 +611,7 @@ func TestResolveRawRelated(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := resolveRawRelated(tt.raw, tt.sysControls, tt.orgLookup)
+			result := resolveRawRelated(tt.raw, nil, tt.sysControls, tt.orgLookup)
 			assert.Check(t, is.Equal(len(tt.wantKeys), len(result)))
 
 			for outerKey, wantIDs := range tt.wantIDs {
@@ -628,6 +629,195 @@ func TestResolveRawRelated(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestRelatedControlMappingReferenceIDs(t *testing.T) {
+	fw := "SOC2"
+	orgB := &model.ControlInfo{ID: "org-b", RefCode: "CC1.2", ReferenceFramework: &fw}
+	keyB := generateMapControlKey(orgB.RefCode, orgB.ReferenceFramework)
+
+	const (
+		outerKey = "outer"
+		selfKey  = "self"
+	)
+
+	type mapping struct {
+		id          string
+		systemOwned bool
+	}
+
+	tests := []struct {
+		name       string
+		mappings   []mapping
+		wantRefIDs []string
+	}{
+		{
+			name:       "system-owned mapping contributes no reference ids",
+			mappings:   []mapping{{id: "mc-sys", systemOwned: true}},
+			wantRefIDs: nil,
+		},
+		{
+			name:       "single org-owned mapping contributes one reference id",
+			mappings:   []mapping{{id: "mc-1", systemOwned: false}},
+			wantRefIDs: []string{"mc-1"},
+		},
+		{
+			name: "duplicate mapping ids are deduplicated to two unique reference ids",
+			mappings: []mapping{
+				{id: "mc-1", systemOwned: false},
+				{id: "mc-2", systemOwned: false},
+				{id: "mc-1", systemOwned: false},
+			},
+			wantRefIDs: []string{"mc-1", "mc-2"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			raw := map[string]map[string]*model.ControlInfo{}
+			refIDs := map[string]map[string][]string{}
+
+			for _, m := range tt.mappings {
+				indexRelated(raw, refIDs, outerKey, selfKey, m.id, m.systemOwned, []mcPart{{key: keyB, info: orgB}})
+			}
+
+			result := resolveRawRelated(raw, refIDs, map[string]*model.ControlInfo{}, map[string]*model.ControlInfo{})
+
+			related := result[outerKey]
+			assert.Assert(t, is.Len(related, 1))
+			assert.Check(t, is.Equal(orgB.ID, related[0].ID))
+			assert.Check(t, is.DeepEqual(tt.wantRefIDs, related[0].MappedControlReferenceIDs))
+		})
+	}
+}
+
+func TestInheritSubcontrolRelatedControls(t *testing.T) {
+	type sub struct {
+		id         string
+		relatedIDs []string
+	}
+
+	build := func(directIDs []string, subs []sub) *model.ControlReport {
+		r := &model.ControlReport{}
+		for _, id := range directIDs {
+			r.RelatedControls = append(r.RelatedControls, &model.ControlInfo{ID: id})
+		}
+		for _, s := range subs {
+			scr := &model.ControlReport{ID: s.id}
+			for _, rid := range s.relatedIDs {
+				scr.RelatedControls = append(scr.RelatedControls, &model.ControlInfo{ID: rid})
+			}
+			r.Subcontrols = append(r.Subcontrols, scr)
+		}
+		return r
+	}
+
+	t.Run("subcontrol-only related control is inherited", func(t *testing.T) {
+		r := build(nil, []sub{{id: "sc1", relatedIDs: []string{"A"}}})
+		inheritSubcontrolRelatedControls(r)
+
+		assert.Assert(t, is.Len(r.RelatedControls, 1))
+		assert.Check(t, is.Equal("A", r.RelatedControls[0].ID))
+		assert.Check(t, is.DeepEqual([]string{"sc1"}, r.RelatedControls[0].InheritedFromSubcontrolIDs))
+		// the subcontrol's own related control must never report inheritance
+		assert.Check(t, is.Len(r.Subcontrols[0].RelatedControls[0].InheritedFromSubcontrolIDs, 0))
+	})
+
+	t.Run("direct control mapping suppresses the inheritance flag", func(t *testing.T) {
+		r := build([]string{"A"}, []sub{{id: "sc1", relatedIDs: []string{"A"}}})
+		inheritSubcontrolRelatedControls(r)
+
+		assert.Assert(t, is.Len(r.RelatedControls, 1))
+		assert.Check(t, is.Equal("A", r.RelatedControls[0].ID))
+		assert.Check(t, is.Len(r.RelatedControls[0].InheritedFromSubcontrolIDs, 0))
+	})
+
+	t.Run("multiple subcontrols contribute all their ids", func(t *testing.T) {
+		r := build(nil, []sub{
+			{id: "sc1", relatedIDs: []string{"A"}},
+			{id: "sc2", relatedIDs: []string{"A"}},
+		})
+		inheritSubcontrolRelatedControls(r)
+
+		assert.Assert(t, is.Len(r.RelatedControls, 1))
+		assert.Check(t, is.DeepEqual([]string{"sc1", "sc2"}, r.RelatedControls[0].InheritedFromSubcontrolIDs))
+	})
+
+	t.Run("shared related-controls backing is not corrupted across reports", func(t *testing.T) {
+		shared := make([]*model.ControlInfo, 1, 8)
+		shared[0] = &model.ControlInfo{ID: "direct"}
+
+		reportA := &model.ControlReport{
+			RelatedControls: shared,
+			Subcontrols:     []*model.ControlReport{{ID: "scA", RelatedControls: []*model.ControlInfo{{ID: "TA"}}}},
+		}
+		reportB := &model.ControlReport{
+			RelatedControls: shared,
+			Subcontrols:     []*model.ControlReport{{ID: "scB", RelatedControls: []*model.ControlInfo{{ID: "TB"}}}},
+		}
+
+		inheritSubcontrolRelatedControls(reportA)
+		inheritSubcontrolRelatedControls(reportB)
+
+		a := map[string]*model.ControlInfo{}
+		for _, rc := range reportA.RelatedControls {
+			a[rc.ID] = rc
+		}
+		b := map[string]*model.ControlInfo{}
+		for _, rc := range reportB.RelatedControls {
+			b[rc.ID] = rc
+		}
+
+		// each report keeps only its own inherited entry tagged with its own subcontrol id
+		assert.Assert(t, a["TA"] != nil)
+		assert.Check(t, is.DeepEqual([]string{"scA"}, a["TA"].InheritedFromSubcontrolIDs))
+		assert.Check(t, a["TB"] == nil, "report A must not see report B's inherited control")
+
+		assert.Assert(t, b["TB"] != nil)
+		assert.Check(t, is.DeepEqual([]string{"scB"}, b["TB"].InheritedFromSubcontrolIDs))
+		assert.Check(t, b["TA"] == nil, "report B must not see report A's inherited control")
+	})
+
+	t.Run("direct and inherited related controls coexist", func(t *testing.T) {
+		r := build([]string{"B"}, []sub{{id: "sc1", relatedIDs: []string{"A", "B"}}})
+		inheritSubcontrolRelatedControls(r)
+
+		assert.Assert(t, is.Len(r.RelatedControls, 2))
+
+		byID := map[string]*model.ControlInfo{}
+		for _, rc := range r.RelatedControls {
+			byID[rc.ID] = rc
+		}
+		assert.Check(t, is.Len(byID["B"].InheritedFromSubcontrolIDs, 0))
+		assert.Check(t, is.DeepEqual([]string{"sc1"}, byID["A"].InheritedFromSubcontrolIDs))
+	})
+}
+
+func TestProcessMappedControlResultsNeverSetsInheritedField(t *testing.T) {
+	ctx := context.Background()
+	fw := "SOC2"
+
+	self := &generated.Control{ID: "self", RefCode: "CC1.1", ReferenceFramework: &fw}
+	relatedCtrl := &generated.Control{ID: "ctrl-a", RefCode: "A1.1", ReferenceFramework: &fw}
+	relatedSub := &generated.Subcontrol{ID: "sub-a", RefCode: "A1.2", ReferenceFramework: &fw, ControlID: "parent-x"}
+
+	mc := &generated.MappedControl{
+		ID:          "mc-1",
+		SystemOwned: false,
+		Edges: generated.MappedControlEdges{
+			FromControls:  []*generated.Control{self},
+			ToControls:    []*generated.Control{relatedCtrl},
+			ToSubcontrols: []*generated.Subcontrol{relatedSub},
+		},
+	}
+
+	result, err := processMappedControlResults(ctx, []*generated.MappedControl{mc}, "self", "CC1.1", &fw, []string{fw})
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(result, 2))
+
+	for _, rc := range result {
+		assert.Check(t, is.Len(rc.InheritedFromSubcontrolIDs, 0), "control resolver must never set inheritedFromSubcontrolIDs")
 	}
 }
 
