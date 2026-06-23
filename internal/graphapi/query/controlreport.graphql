@@ -10,6 +10,7 @@ query GetAllControlReports {
     edges {
       node {
         id
+        parentControlID
         refCode
         status
         referenceFramework
@@ -23,6 +24,7 @@ query GetAllControlReports {
           refCode
           referenceFramework
           isSubcontrol
+          parentControlID
         }
         evidenceStatus {
           totalCount
@@ -46,11 +48,13 @@ query GetAllControlReports {
           refCode
           status
           referenceFramework
+          parentControlID
           relatedControls {
             id
             refCode
             referenceFramework
             isSubcontrol
+            parentControlID
           }
           evidenceStatus {
             totalCount
@@ -89,6 +93,7 @@ query GetControlReports($first: Int, $last: Int, $after: Cursor, $before: Cursor
     edges {
       node {
         id
+        parentControlID
         refCode
         status
         referenceFramework
@@ -102,6 +107,7 @@ query GetControlReports($first: Int, $last: Int, $after: Cursor, $before: Cursor
           refCode
           referenceFramework
           isSubcontrol
+          parentControlID
         }
         evidenceStatus {
           totalCount
@@ -125,11 +131,13 @@ query GetControlReports($first: Int, $last: Int, $after: Cursor, $before: Cursor
           refCode
           status
           referenceFramework
+          parentControlID
           relatedControls {
             id
             refCode
             referenceFramework
             isSubcontrol
+            parentControlID
           }
           evidenceStatus {
             totalCount
@@ -155,6 +163,7 @@ query GetControlReportsByCategory($where: ControlWhereInput) {
     totalCount
     controls {
       id
+      parentControlID
       refCode
       status
       referenceFramework
@@ -167,6 +176,7 @@ query GetControlReportsByCategory($where: ControlWhereInput) {
         refCode
         referenceFramework
         isSubcontrol
+        parentControlID
       }
       evidenceStatus {
         totalCount
@@ -190,11 +200,13 @@ query GetControlReportsByCategory($where: ControlWhereInput) {
         refCode
         status
         referenceFramework
+        parentControlID
         relatedControls {
           id
           refCode
           referenceFramework
           isSubcontrol
+          parentControlID
         }
         evidenceStatus {
           totalCount

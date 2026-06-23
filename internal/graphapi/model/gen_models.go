@@ -608,6 +608,8 @@ type ControlInfo struct {
 	Subcategory *string `json:"subcategory,omitempty"`
 	// whether this entry is a subcontrol rather than a top-level control
 	IsSubcontrol bool `json:"isSubcontrol"`
+	// the id of the parent control if this is a subcontrol, empty if isSubcontrol is false
+	ParentControlID *string `json:"parentControlID,omitempty"`
 }
 
 // Return response for createBulkControlObjective mutation
@@ -665,6 +667,8 @@ type ControlPolicies struct {
 type ControlReport struct {
 	// unique identifier of the control
 	ID string `json:"id"`
+	// the id of the parent control, only populated when the object is a subcontrol
+	ParentControlID *string `json:"parentControlID,omitempty"`
 	// the unique reference code for the control
 	RefCode string `json:"refCode"`
 	// description of what the control is supposed to accomplish

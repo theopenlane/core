@@ -185,17 +185,34 @@ const (
 	totalCountField = "totalCount"
 )
 
-// paginateLimit calculates the limit for pagination based on the first and last arguments.
-// and returns the limit multiplied by 10.
-// This is to ensure we overfetch the data to get the number of requested results.
-func paginateLimit(first, last *int) int {
-	var limit int
+// paginateLimitMult calculates the DB fetch limit with the given multiplier.
+// Use multiplier > 1 when per-object FGA post-filtering may discard results,
+// or 1 when SQL-level filtering handles result restriction at query time.
+func paginateLimitMult(first, last *int, multiplier int) int {
 	if first != nil {
-		limit = *first * 10
-	} else if last != nil {
-		limit = *last * 10
+		return *first * multiplier
 	}
-	return limit
+	if last != nil {
+		return *last * multiplier
+	}
+	return 0
+}
+
+// paginateLimit is the default overfetch variant used by edge collection queries.
+func paginateLimit(first, last *int) int {
+	return paginateLimitMult(first, last, 10)
+}
+
+// paginateLimitSingle calculates the DB fetch limit for non-overfetch queries (first+1 or last+1)
+// so that the build() function can detect hasNextPage/hasPreviousPage correctly.
+func paginateLimitSingle(first, last *int) int {
+	if first != nil {
+		return *first + 1
+	}
+	if last != nil {
+		return *last + 1
+	}
+	return 0
 }
 
 // APITokenEdge is the edge representation of APIToken.
@@ -429,7 +446,7 @@ func (_m *APITokenQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -4760,7 +4777,7 @@ func (_m *ContactQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -5267,7 +5284,7 @@ func (_m *ControlQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -6741,7 +6758,7 @@ func (_m *CustomDomainQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -7114,7 +7131,7 @@ func (_m *CustomTypeEnumQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -7523,7 +7540,7 @@ func (_m *DNSVerificationQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -8362,7 +8379,7 @@ func (_m *DirectoryGroupQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -8846,7 +8863,7 @@ func (_m *DirectoryMembershipQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -9232,7 +9249,7 @@ func (_m *DirectorySyncRunQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -10814,7 +10831,7 @@ func (_m *EntityQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -11800,7 +11817,7 @@ func (_m *EntityTypeQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -12999,7 +13016,7 @@ func (_m *ExportQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -13812,7 +13829,7 @@ func (_m *FindingQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -14674,7 +14691,7 @@ func (_m *GroupQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -15793,7 +15810,7 @@ func (_m *HushQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -16915,7 +16932,7 @@ func (_m *IntegrationQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -17414,7 +17431,7 @@ func (_m *InternalPolicyQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -17877,7 +17894,7 @@ func (_m *InviteQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -18286,7 +18303,7 @@ func (_m *JobResultQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -18726,7 +18743,7 @@ func (_m *JobRunnerQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -19099,7 +19116,7 @@ func (_m *JobRunnerRegistrationTokenQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -19485,7 +19502,7 @@ func (_m *JobRunnerTokenQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -19902,7 +19919,7 @@ func (_m *JobTemplateQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -20666,7 +20683,7 @@ func (_m *MappedControlQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -21744,7 +21761,7 @@ func (_m *NotificationQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -22099,7 +22116,7 @@ func (_m *NotificationPreferenceQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -23624,7 +23641,7 @@ func (_m *OrgSubscriptionQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -25963,7 +25980,7 @@ func (_m *ProcedureQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -26426,7 +26443,7 @@ func (_m *ProgramQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -27244,7 +27261,7 @@ func (_m *RemediationQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -27689,7 +27706,7 @@ func (_m *ReviewQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -28824,7 +28841,7 @@ func (_m *SLADefinitionQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -29215,7 +29232,7 @@ func (_m *ScanQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -30023,7 +30040,7 @@ func (_m *ScheduledJobRunQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -30378,7 +30395,7 @@ func (_m *StandardQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -30872,7 +30889,7 @@ func (_m *SubcontrolQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -31811,7 +31828,7 @@ func (_m *SubscriberQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -32966,7 +32983,7 @@ func (_m *TagDefinitionQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -34237,7 +34254,7 @@ func (_m *TrustCenterQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}
@@ -38677,7 +38694,7 @@ func (_m *VendorScoringConfigQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
+	limit := paginateLimitSingle(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}

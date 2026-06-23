@@ -791,6 +791,46 @@ data:
       dryrun: {{ .Values.openlane.coreConfiguration.ratelimit.dryrun }}
       {{- end }}
     {{- end }}
+    {{- if .Values.openlane.coreConfiguration.ratelimitunmatched }}
+    ratelimitunmatched:
+      {{- if .Values.openlane.coreConfiguration.ratelimitunmatched.enabled }}
+      enabled: {{ .Values.openlane.coreConfiguration.ratelimitunmatched.enabled }}
+      {{- end }}
+      {{- $sliceValue := (.Values.openlane.coreConfiguration.ratelimitunmatched.options | default (list)) }}
+      {{- if gt (len $sliceValue) 0 }}
+      options:
+      {{- toYaml $sliceValue | nindent 8 }}
+      {{- end }}
+      {{- $sliceValue := (.Values.openlane.coreConfiguration.ratelimitunmatched.headers | default (list)) }}
+      {{- if gt (len $sliceValue) 0 }}
+      headers:
+      {{- toYaml $sliceValue | nindent 8 }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.ratelimitunmatched.forwardedindexfrombehind }}
+      forwardedindexfrombehind: {{ .Values.openlane.coreConfiguration.ratelimitunmatched.forwardedindexfrombehind }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.ratelimitunmatched.includepath }}
+      includepath: {{ .Values.openlane.coreConfiguration.ratelimitunmatched.includepath }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.ratelimitunmatched.includemethod }}
+      includemethod: {{ .Values.openlane.coreConfiguration.ratelimitunmatched.includemethod }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.ratelimitunmatched.keyprefix }}
+      keyprefix: {{ .Values.openlane.coreConfiguration.ratelimitunmatched.keyprefix | quote }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.ratelimitunmatched.denystatus }}
+      denystatus: {{ .Values.openlane.coreConfiguration.ratelimitunmatched.denystatus }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.ratelimitunmatched.denymessage }}
+      denymessage: {{ .Values.openlane.coreConfiguration.ratelimitunmatched.denymessage | quote }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.ratelimitunmatched.sendretryafterheader }}
+      sendretryafterheader: {{ .Values.openlane.coreConfiguration.ratelimitunmatched.sendretryafterheader }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.ratelimitunmatched.dryrun }}
+      dryrun: {{ .Values.openlane.coreConfiguration.ratelimitunmatched.dryrun }}
+      {{- end }}
+    {{- end }}
     {{- if .Values.openlane.coreConfiguration.objectstorage }}
     objectstorage:
       {{- if .Values.openlane.coreConfiguration.objectstorage.enabled }}

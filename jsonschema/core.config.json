@@ -1161,7 +1161,7 @@
         },
         "headers": {
           "$ref": "#/$defs/[]string",
-          "description": "Headers determines which headers are inspected to determine the origin IP.\nDefaults to X-Forwarded-For, True-Client-IP, RemoteAddr."
+          "description": "Headers determines which headers are inspected to determine the origin IP.\nDefaults to CF-Connecting-IP, True-Client-IP, RemoteAddr."
         },
         "forwardedindexfrombehind": {
           "type": "integer",
@@ -2092,7 +2092,11 @@
     },
     "ratelimit": {
       "$ref": "#/$defs/ratelimit.Config",
-      "description": "Ratelimit contains the configuration for the rate limiter"
+      "description": "Ratelimit contains the configuration for the global rate limiter applied to all requests"
+    },
+    "ratelimitunmatched": {
+      "$ref": "#/$defs/ratelimit.Config",
+      "description": "RatelimitUnmatched contains the rate limiter configuration applied only to requests that do not match a registered route"
     },
     "objectstorage": {
       "$ref": "#/$defs/storage.ProviderConfig",

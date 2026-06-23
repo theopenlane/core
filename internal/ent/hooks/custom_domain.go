@@ -50,7 +50,7 @@ func HookCreateCustomDomain() ent.Hook {
 	)
 }
 
-// HookCustomDomain runs on create mutations
+// HookDeleteCustomDomain runs on single and bulk deletions.
 func HookDeleteCustomDomain() ent.Hook {
 	return hook.If(
 		func(next ent.Mutator) ent.Mutator {
@@ -68,70 +68,31 @@ func HookDeleteCustomDomain() ent.Hook {
 					return next.Mutate(ctx, m)
 				}
 
-				id, ok := m.ID()
-				if !ok {
-					return nil, fmt.Errorf("%w: %s", ErrInvalidInput, "id is required")
-				}
+				var ids []string
 
-				cd, err := m.Client().CustomDomain.Query().Where(customdomain.ID(id)).
-					Select(customdomain.FieldDNSVerificationID, customdomain.FieldMappableDomainID, customdomain.FieldDNSVerificationID).
-					Only(ctx)
-				if err != nil {
-					return nil, err
-				}
+				switch m.Op() {
 
-				trustCenters, err := m.Client().TrustCenter.Query().
-					Where(trustcenter.Or(
-						trustcenter.HasCustomDomainWith(customdomain.ID(id)),
-						trustcenter.HasPreviewDomainWith(customdomain.ID(id)),
-					)).
-					All(ctx)
-				if err != nil {
-					return nil, err
-				}
-
-				for _, tc := range trustCenters {
-					update := m.Client().TrustCenter.UpdateOneID(tc.ID)
-					if tc.CustomDomainID != nil && *tc.CustomDomainID == id {
-						update.ClearCustomDomain()
-					}
-					if tc.PreviewDomainID == id {
-						update.ClearPreviewDomain()
-					}
-
-					if err = update.Exec(ctx); err != nil {
+				case ent.OpDelete, ent.OpUpdate:
+					var err error
+					ids, err = m.IDs(ctx)
+					if err != nil {
 						return nil, err
 					}
+
+				case ent.OpDeleteOne, ent.OpUpdateOne:
+
+					id, ok := m.ID()
+					if !ok {
+						return nil, fmt.Errorf("%w: %s", ErrInvalidInput, "id is required")
+					}
+
+					ids = []string{id}
 				}
 
-				if cd.DNSVerificationID == "" {
-					return next.Mutate(ctx, m)
-				}
-
-				mappableDomain, err := m.Client().MappableDomain.Query().
-					Where(mappabledomain.ID(cd.MappableDomainID)).
-					Select(mappabledomain.FieldZoneID).
-					Only(ctx)
-				if err != nil {
-					return nil, err
-				}
-
-				dnsVerification, err := m.Client().DNSVerification.Query().
-					Where(dnsverification.ID(cd.DNSVerificationID)).
-					Select(dnsverification.FieldCloudflareHostnameID).
-					Only(ctx)
-				if err != nil {
-					return nil, err
-				}
-
-				err = enqueueJob(ctx, m.Job, jobspec.DeleteCustomDomainArgs{
-					CustomDomainID:             id,
-					DNSVerificationID:          cd.DNSVerificationID,
-					CloudflareCustomHostnameID: dnsVerification.CloudflareHostnameID,
-					CloudflareZoneID:           mappableDomain.ZoneID,
-				}, nil)
-				if err != nil {
-					return nil, err
+				for _, id := range ids {
+					if err := deleteCustomDomain(ctx, m, id); err != nil {
+						return nil, err
+					}
 				}
 
 				return next.Mutate(ctx, m)
@@ -139,4 +100,64 @@ func HookDeleteCustomDomain() ent.Hook {
 		},
 		hook.HasOp(ent.OpDeleteOne|ent.OpDelete|ent.OpUpdate|ent.OpUpdateOne),
 	)
+}
+
+func deleteCustomDomain(ctx context.Context, m *generated.CustomDomainMutation, id string) error {
+	cd, err := m.Client().CustomDomain.Query().Where(customdomain.ID(id)).
+		Select(customdomain.FieldDNSVerificationID, customdomain.FieldMappableDomainID).
+		Only(ctx)
+	if err != nil {
+		return err
+	}
+
+	trustCenters, err := m.Client().TrustCenter.Query().
+		Where(trustcenter.Or(
+			trustcenter.HasCustomDomainWith(customdomain.ID(id)),
+			trustcenter.HasPreviewDomainWith(customdomain.ID(id)),
+		)).
+		All(ctx)
+	if err != nil {
+		return err
+	}
+
+	for _, tc := range trustCenters {
+		update := m.Client().TrustCenter.UpdateOneID(tc.ID)
+		if tc.CustomDomainID != nil && *tc.CustomDomainID == id {
+			update.ClearCustomDomain()
+		}
+		if tc.PreviewDomainID == id {
+			update.ClearPreviewDomain()
+		}
+
+		if err = update.Exec(ctx); err != nil {
+			return err
+		}
+	}
+
+	if cd.DNSVerificationID == "" {
+		return nil
+	}
+
+	mappableDomain, err := m.Client().MappableDomain.Query().
+		Where(mappabledomain.ID(cd.MappableDomainID)).
+		Select(mappabledomain.FieldZoneID).
+		Only(ctx)
+	if err != nil {
+		return err
+	}
+
+	dnsVerification, err := m.Client().DNSVerification.Query().
+		Where(dnsverification.ID(cd.DNSVerificationID)).
+		Select(dnsverification.FieldCloudflareHostnameID).
+		Only(ctx)
+	if err != nil {
+		return err
+	}
+
+	return enqueueJob(ctx, m.Job, jobspec.DeleteCustomDomainArgs{
+		CustomDomainID:             id,
+		DNSVerificationID:          cd.DNSVerificationID,
+		CloudflareCustomHostnameID: dnsVerification.CloudflareHostnameID,
+		CloudflareZoneID:           mappableDomain.ZoneID,
+	}, nil)
 }

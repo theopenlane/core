@@ -2346,34 +2346,34 @@ func init() {
 
 	entity.Hooks[7] = entityMixinHooks6[1]
 
-	entity.Hooks[8] = entityMixinHooks6[2]
+	entity.Hooks[8] = entityMixinHooks8[0]
 
-	entity.Hooks[9] = entityMixinHooks8[0]
+	entity.Hooks[9] = entityMixinHooks8[1]
 
-	entity.Hooks[10] = entityMixinHooks8[1]
+	entity.Hooks[10] = entityMixinHooks9[0]
 
-	entity.Hooks[11] = entityMixinHooks9[0]
+	entity.Hooks[11] = entityMixinHooks10[0]
 
-	entity.Hooks[12] = entityMixinHooks10[0]
+	entity.Hooks[12] = entityMixinHooks11[0]
 
-	entity.Hooks[13] = entityMixinHooks11[0]
+	entity.Hooks[13] = entityMixinHooks12[0]
 
-	entity.Hooks[14] = entityMixinHooks12[0]
+	entity.Hooks[14] = entityMixinHooks13[0]
 
-	entity.Hooks[15] = entityMixinHooks13[0]
+	entity.Hooks[15] = entityHooks[0]
 
-	entity.Hooks[16] = entityHooks[0]
+	entity.Hooks[16] = entityHooks[1]
 
-	entity.Hooks[17] = entityHooks[1]
+	entity.Hooks[17] = entityHooks[2]
 
-	entity.Hooks[18] = entityHooks[2]
-
-	entity.Hooks[19] = entityHooks[3]
+	entity.Hooks[18] = entityHooks[3]
 	entityMixinInters1 := entityMixin[1].Interceptors()
 	entityMixinInters5 := entityMixin[5].Interceptors()
+	entityMixinInters6 := entityMixin[6].Interceptors()
 	entity.Interceptors[0] = entityMixinInters1[0]
 	entity.Interceptors[1] = entityMixinInters5[0]
 	entity.Interceptors[2] = entityMixinInters5[1]
+	entity.Interceptors[3] = entityMixinInters6[0]
 	entityMixinFields0 := entityMixin[0].Fields()
 	_ = entityMixinFields0
 	entityMixinFields2 := entityMixin[2].Fields()
@@ -2974,22 +2974,22 @@ func init() {
 
 	finding.Hooks[8] = findingMixinHooks6[1]
 
-	finding.Hooks[9] = findingMixinHooks6[2]
+	finding.Hooks[9] = findingMixinHooks7[0]
 
-	finding.Hooks[10] = findingMixinHooks7[0]
+	finding.Hooks[10] = findingMixinHooks8[0]
 
-	finding.Hooks[11] = findingMixinHooks8[0]
+	finding.Hooks[11] = findingMixinHooks9[0]
 
-	finding.Hooks[12] = findingMixinHooks9[0]
+	finding.Hooks[12] = findingMixinHooks10[0]
 
-	finding.Hooks[13] = findingMixinHooks10[0]
-
-	finding.Hooks[14] = findingHooks[0]
+	finding.Hooks[13] = findingHooks[0]
 	findingMixinInters1 := findingMixin[1].Interceptors()
 	findingMixinInters5 := findingMixin[5].Interceptors()
+	findingMixinInters6 := findingMixin[6].Interceptors()
 	finding.Interceptors[0] = findingMixinInters1[0]
 	finding.Interceptors[1] = findingMixinInters5[0]
 	finding.Interceptors[2] = findingMixinInters5[1]
+	finding.Interceptors[3] = findingMixinInters6[0]
 	findingMixinFields0 := findingMixin[0].Fields()
 	_ = findingMixinFields0
 	findingMixinFields2 := findingMixin[2].Fields()
@@ -4480,8 +4480,10 @@ func init() {
 	mappedcontrol.Hooks[9] = mappedcontrolHooks[1]
 	mappedcontrolMixinInters1 := mappedcontrolMixin[1].Interceptors()
 	mappedcontrolMixinInters6 := mappedcontrolMixin[6].Interceptors()
+	mappedcontrolMixinInters7 := mappedcontrolMixin[7].Interceptors()
 	mappedcontrol.Interceptors[0] = mappedcontrolMixinInters1[0]
 	mappedcontrol.Interceptors[1] = mappedcontrolMixinInters6[0]
+	mappedcontrol.Interceptors[2] = mappedcontrolMixinInters7[0]
 	mappedcontrolMixinFields0 := mappedcontrolMixin[0].Fields()
 	_ = mappedcontrolMixinFields0
 	mappedcontrolMixinFields2 := mappedcontrolMixin[2].Fields()
@@ -6200,18 +6202,18 @@ func init() {
 
 	remediation.Hooks[8] = remediationMixinHooks6[1]
 
-	remediation.Hooks[9] = remediationMixinHooks6[2]
+	remediation.Hooks[9] = remediationMixinHooks7[0]
 
-	remediation.Hooks[10] = remediationMixinHooks7[0]
+	remediation.Hooks[10] = remediationMixinHooks8[0]
 
-	remediation.Hooks[11] = remediationMixinHooks8[0]
-
-	remediation.Hooks[12] = remediationMixinHooks9[0]
+	remediation.Hooks[11] = remediationMixinHooks9[0]
 	remediationMixinInters1 := remediationMixin[1].Interceptors()
 	remediationMixinInters5 := remediationMixin[5].Interceptors()
+	remediationMixinInters6 := remediationMixin[6].Interceptors()
 	remediation.Interceptors[0] = remediationMixinInters1[0]
 	remediation.Interceptors[1] = remediationMixinInters5[0]
 	remediation.Interceptors[2] = remediationMixinInters5[1]
+	remediation.Interceptors[3] = remediationMixinInters6[0]
 	remediationMixinFields0 := remediationMixin[0].Fields()
 	_ = remediationMixinFields0
 	remediationMixinFields2 := remediationMixin[2].Fields()
@@ -6288,22 +6290,22 @@ func init() {
 
 	review.Hooks[7] = reviewMixinHooks6[1]
 
-	review.Hooks[8] = reviewMixinHooks6[2]
+	review.Hooks[8] = reviewMixinHooks7[0]
 
-	review.Hooks[9] = reviewMixinHooks7[0]
+	review.Hooks[9] = reviewMixinHooks8[0]
 
-	review.Hooks[10] = reviewMixinHooks8[0]
+	review.Hooks[10] = reviewMixinHooks9[0]
 
-	review.Hooks[11] = reviewMixinHooks9[0]
+	review.Hooks[11] = reviewHooks[0]
 
-	review.Hooks[12] = reviewHooks[0]
-
-	review.Hooks[13] = reviewHooks[1]
+	review.Hooks[12] = reviewHooks[1]
 	reviewMixinInters1 := reviewMixin[1].Interceptors()
 	reviewMixinInters5 := reviewMixin[5].Interceptors()
+	reviewMixinInters6 := reviewMixin[6].Interceptors()
 	review.Interceptors[0] = reviewMixinInters1[0]
 	review.Interceptors[1] = reviewMixinInters5[0]
 	review.Interceptors[2] = reviewMixinInters5[1]
+	review.Interceptors[3] = reviewMixinInters6[0]
 	reviewMixinFields0 := reviewMixin[0].Fields()
 	_ = reviewMixinFields0
 	reviewMixinFields2 := reviewMixin[2].Fields()
@@ -6484,8 +6486,6 @@ func init() {
 	sladefinition.Hooks[6] = sladefinitionMixinHooks6[0]
 
 	sladefinition.Hooks[7] = sladefinitionMixinHooks6[1]
-
-	sladefinition.Hooks[8] = sladefinitionMixinHooks6[2]
 	sladefinitionMixinInters1 := sladefinitionMixin[1].Interceptors()
 	sladefinitionMixinInters5 := sladefinitionMixin[5].Interceptors()
 	sladefinition.Interceptors[0] = sladefinitionMixinInters1[0]
@@ -6562,16 +6562,16 @@ func init() {
 
 	scan.Hooks[7] = scanMixinHooks6[1]
 
-	scan.Hooks[8] = scanMixinHooks6[2]
+	scan.Hooks[8] = scanMixinHooks8[0]
 
-	scan.Hooks[9] = scanMixinHooks8[0]
-
-	scan.Hooks[10] = scanMixinHooks9[0]
+	scan.Hooks[9] = scanMixinHooks9[0]
 	scanMixinInters1 := scanMixin[1].Interceptors()
 	scanMixinInters5 := scanMixin[5].Interceptors()
+	scanMixinInters6 := scanMixin[6].Interceptors()
 	scan.Interceptors[0] = scanMixinInters1[0]
 	scan.Interceptors[1] = scanMixinInters5[0]
 	scan.Interceptors[2] = scanMixinInters5[1]
+	scan.Interceptors[3] = scanMixinInters6[0]
 	scanMixinFields0 := scanMixin[0].Fields()
 	_ = scanMixinFields0
 	scanMixinFields2 := scanMixin[2].Fields()
@@ -6923,10 +6923,12 @@ func init() {
 	subcontrolMixinInters1 := subcontrolMixin[1].Interceptors()
 	subcontrolMixinInters5 := subcontrolMixin[5].Interceptors()
 	subcontrolMixinInters6 := subcontrolMixin[6].Interceptors()
+	subcontrolInters := schema.Subcontrol{}.Interceptors()
 	subcontrol.Interceptors[0] = subcontrolMixinInters1[0]
 	subcontrol.Interceptors[1] = subcontrolMixinInters5[0]
 	subcontrol.Interceptors[2] = subcontrolMixinInters6[0]
 	subcontrol.Interceptors[3] = subcontrolMixinInters6[1]
+	subcontrol.Interceptors[4] = subcontrolInters[0]
 	subcontrolMixinFields0 := subcontrolMixin[0].Fields()
 	_ = subcontrolMixinFields0
 	subcontrolMixinFields2 := subcontrolMixin[2].Fields()
@@ -7532,9 +7534,11 @@ func init() {
 	template.Hooks[12] = templateHooks[2]
 	templateMixinInters1 := templateMixin[1].Interceptors()
 	templateMixinInters5 := templateMixin[5].Interceptors()
+	templateInters := schema.Template{}.Interceptors()
 	template.Interceptors[0] = templateMixinInters1[0]
 	template.Interceptors[1] = templateMixinInters5[0]
 	template.Interceptors[2] = templateMixinInters5[1]
+	template.Interceptors[3] = templateInters[0]
 	templateMixinFields0 := templateMixin[0].Fields()
 	_ = templateMixinFields0
 	templateMixinFields2 := templateMixin[2].Fields()

@@ -16,6 +16,7 @@ func registerJobRunnerRegistrationHandler(router *Router) error {
 		OperationID: "AgentNodeRegistration",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.RegisterJobRunner,
 	}
 

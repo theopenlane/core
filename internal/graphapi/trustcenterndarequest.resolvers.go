@@ -12,10 +12,10 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/anon"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
@@ -23,20 +23,10 @@ import (
 
 // CreateTrustCenterNDARequest is the resolver for the createTrustCenterNDARequest field.
 func (r *mutationResolver) CreateTrustCenterNDARequest(ctx context.Context, input generated.CreateTrustCenterNDARequestInput) (*model.TrustCenterNDARequestCreatePayload, error) {
-	if tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok {
+	if tcID, _, ok := anon.TrustCenterScope(ctx); ok {
 		if input.TrustCenterID == nil || *input.TrustCenterID != tcID {
 			return nil, rout.ErrPermissionDenied
 		}
-
-		caller, callerOk := auth.CallerFromContext(ctx)
-		if !callerOk || caller == nil {
-			return nil, rout.ErrPermissionDenied
-		}
-
-		ctx = auth.WithCaller(
-			privacy.DecisionContext(ctx, privacy.Allow),
-			caller,
-		)
 	}
 
 	if input.TrustCenterID == nil {
@@ -177,13 +167,12 @@ func (r *mutationResolver) RequestNewTrustCenterToken(ctx context.Context, email
 		return nil, rout.ErrPermissionDenied
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	existing, err := withTransactionalMutation(ctx).TrustCenterNDARequest.Query().Where(
 		trustcenterndarequest.And(
 			trustcenterndarequest.Email(email),
 			trustcenterndarequest.TrustCenterIDEQ(tcID),
 		),
-	).Only(allowCtx)
+	).Only(ctx)
 	if err == nil {
 		// do an create to the request to re-trigger any notifications or resend emails, this will follow-the same logic as creating a new request, but will be idempotent for users that have already signed the nda
 		if _, err = r.CreateTrustCenterNDARequest(ctx, generated.CreateTrustCenterNDARequestInput{

@@ -65,6 +65,7 @@ func serve(ctx context.Context) error {
 		serveropts.WithHTTPS(),
 		serveropts.WithMiddleware(),
 		serveropts.WithRateLimiter(),
+		serveropts.WithGraphRateLimiter(),
 		serveropts.WithSecureMW(),
 		serveropts.WithCacheHeaders(),
 		serveropts.WithCORS(),

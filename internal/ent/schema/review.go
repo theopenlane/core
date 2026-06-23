@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -254,8 +255,9 @@ func (r Review) Mixin() []ent.Mixin {
 				),
 				withOrganizationOwner(),
 				withSkipForSystemAdmin(),
+				withSkipFilterInterceptor(interceptors.SkipAllQuery|interceptors.SkipIDsQuery),
 			),
-			newGroupPermissionsMixin(),
+			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor()),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(r, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(r, withEnumFieldName("scope"), withGlobalEnum()),

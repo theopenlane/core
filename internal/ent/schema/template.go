@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -134,6 +135,16 @@ func (t Template) Edges() []ent.Edge {
 		}),
 		defaultEdgeToWithPagination(t, Campaign{}),
 		defaultEdgeFromWithPagination(t, IdentityHolder{}),
+	}
+}
+
+// Interceptors of the Template
+func (Template) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		// Filters anon trust center requests by the trust_center_id associated with the organization
+		// all other requests bypass this filter and just have the default interceptors from the object owned
+		// mixin
+		interceptors.AnonInterceptorTrustCenterChild(),
 	}
 }
 

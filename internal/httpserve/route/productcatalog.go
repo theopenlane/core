@@ -18,6 +18,7 @@ func registerProductCatalogHandler(router *Router) error {
 		OperationID: "ProductCatalog",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   publicStaticRateLimit,
 		Handler:     router.Handler.ProductCatalogHandler,
 	}
 

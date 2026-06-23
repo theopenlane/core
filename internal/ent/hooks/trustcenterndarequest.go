@@ -7,7 +7,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/samber/lo"
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/common/enums"
@@ -24,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/pkg/anon"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -53,7 +53,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 			email, _ := m.Email()
 
 			queryCtx := ctx
-			if _, isAnon := auth.ActiveTrustCenterIDKey.Get(ctx); isAnon {
+			if anon.IsTrustCenter(ctx) {
 				queryCtx = privacy.DecisionContext(ctx, privacy.Allow)
 			}
 
@@ -265,40 +265,51 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 
 			return v, nil
 		})
-	}, ent.OpUpdateOne|ent.OpUpdate|ent.OpDeleteOne)
+	}, ent.OpUpdateOne|ent.OpUpdate|ent.OpDeleteOne|ent.OpDelete)
 }
 
 func handleNDARequestDelete(ctx context.Context, m *generated.TrustCenterNDARequestMutation) error {
-	id, ok := m.ID()
-	if !ok {
-		logx.FromContext(ctx).Error().Msg("missing ID for deleted NDA request, unable to cleanup tuples")
+	var ids []string
 
+	switch m.Op() {
+	case ent.OpDelete, ent.OpUpdate:
+		var err error
+		ids, err = m.IDs(ctx)
+		if err != nil {
+			return err
+		}
+	case ent.OpDeleteOne, ent.OpUpdateOne:
+		id, ok := m.ID()
+		if !ok {
+			return fmt.Errorf("%w: %s", ErrInvalidInput, "id is required")
+		}
+
+		ids = []string{id}
+	}
+
+	requests, err := m.Client().TrustCenterNDARequest.Query().
+		Where(trustcenterndarequest.IDIn(ids...)).
+		Select(trustcenterndarequest.FieldID, trustcenterndarequest.FieldTrustCenterID).
+		All(ctx)
+	if err != nil {
+		return err
+	}
+	if len(requests) == 0 {
 		return nil
 	}
 
-	tcID, ok := m.TrustCenterID()
-	if !ok && m.Op().Is(ent.OpUpdateOne) {
-
-		oldTrustcenterID, err := m.OldTrustCenterID(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("missing trust center ID for deleted NDA request, unable to cleanup tuples")
-
-			return err
-		}
-
-		tcID = oldTrustcenterID
+	deleteTuples := make([]fgax.TupleKey, 0, len(requests))
+	for _, request := range requests {
+		deleteTuples = append(deleteTuples, fgax.GetTupleKey(fgax.TupleRequest{
+			SubjectID:   fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, request.ID),
+			SubjectType: "user",
+			ObjectID:    request.TrustCenterID,
+			ObjectType:  "trust_center",
+			Relation:    "nda_signed",
+		}))
 	}
 
-	// delete any tuples associated with the nda request
-	deleteTuple := fgax.GetTupleKey(fgax.TupleRequest{
-		SubjectID:   fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, id),
-		SubjectType: "user",
-		ObjectID:    tcID,
-		ObjectType:  "trust_center",
-		Relation:    "nda_signed",
-	})
-
-	if _, err := m.Authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{deleteTuple}); err != nil {
+	if _, err := m.Authz.WriteTupleKeys(ctx, nil, deleteTuples); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to delete relationship tuple for deleted NDA request")
 
 		return ErrInternalServerError

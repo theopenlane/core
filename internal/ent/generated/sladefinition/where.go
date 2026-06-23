@@ -795,35 +795,6 @@ func HasEditorsWith(preds ...predicate.Group) predicate.SLADefinition {
 	})
 }
 
-// HasViewers applies the HasEdge predicate on the "viewers" edge.
-func HasViewers() predicate.SLADefinition {
-	return predicate.SLADefinition(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, ViewersTable, ViewersColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasViewersWith applies the HasEdge predicate on the "viewers" edge with a given conditions (other predicates).
-func HasViewersWith(preds ...predicate.Group) predicate.SLADefinition {
-	return predicate.SLADefinition(func(s *sql.Selector) {
-		step := newViewersStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.SLADefinition) predicate.SLADefinition {
 	return predicate.SLADefinition(sql.AndPredicates(predicates...))

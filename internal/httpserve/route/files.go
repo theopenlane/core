@@ -26,6 +26,7 @@ func registerUploadsHandler(router *Router) (err error) {
 		OperationID: "Files",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   publicStaticRateLimit,
 		SimpleHandler: func(ctx echo.Context) error {
 			fileSystem := os.DirFS(router.LocalFilePath)
 

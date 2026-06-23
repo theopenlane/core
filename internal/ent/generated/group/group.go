@@ -93,18 +93,6 @@ const (
 	EdgeControlImplementationBlockedGroups = "control_implementation_blocked_groups"
 	// EdgeControlImplementationViewers holds the string denoting the control_implementation_viewers edge name in mutations.
 	EdgeControlImplementationViewers = "control_implementation_viewers"
-	// EdgeScanEditors holds the string denoting the scan_editors edge name in mutations.
-	EdgeScanEditors = "scan_editors"
-	// EdgeScanBlockedGroups holds the string denoting the scan_blocked_groups edge name in mutations.
-	EdgeScanBlockedGroups = "scan_blocked_groups"
-	// EdgeScanViewers holds the string denoting the scan_viewers edge name in mutations.
-	EdgeScanViewers = "scan_viewers"
-	// EdgeEntityEditors holds the string denoting the entity_editors edge name in mutations.
-	EdgeEntityEditors = "entity_editors"
-	// EdgeEntityBlockedGroups holds the string denoting the entity_blocked_groups edge name in mutations.
-	EdgeEntityBlockedGroups = "entity_blocked_groups"
-	// EdgeEntityViewers holds the string denoting the entity_viewers edge name in mutations.
-	EdgeEntityViewers = "entity_viewers"
 	// EdgeActionPlanEditors holds the string denoting the action_plan_editors edge name in mutations.
 	EdgeActionPlanEditors = "action_plan_editors"
 	// EdgeActionPlanBlockedGroups holds the string denoting the action_plan_blocked_groups edge name in mutations.
@@ -139,6 +127,26 @@ const (
 	EdgeMappedControlEditors = "mapped_control_editors"
 	// EdgeMappedControlBlockedGroups holds the string denoting the mapped_control_blocked_groups edge name in mutations.
 	EdgeMappedControlBlockedGroups = "mapped_control_blocked_groups"
+	// EdgeScanEditors holds the string denoting the scan_editors edge name in mutations.
+	EdgeScanEditors = "scan_editors"
+	// EdgeScanBlockedGroups holds the string denoting the scan_blocked_groups edge name in mutations.
+	EdgeScanBlockedGroups = "scan_blocked_groups"
+	// EdgeEntityEditors holds the string denoting the entity_editors edge name in mutations.
+	EdgeEntityEditors = "entity_editors"
+	// EdgeEntityBlockedGroups holds the string denoting the entity_blocked_groups edge name in mutations.
+	EdgeEntityBlockedGroups = "entity_blocked_groups"
+	// EdgeFindingEditors holds the string denoting the finding_editors edge name in mutations.
+	EdgeFindingEditors = "finding_editors"
+	// EdgeFindingBlockedGroups holds the string denoting the finding_blocked_groups edge name in mutations.
+	EdgeFindingBlockedGroups = "finding_blocked_groups"
+	// EdgeReviewEditors holds the string denoting the review_editors edge name in mutations.
+	EdgeReviewEditors = "review_editors"
+	// EdgeReviewBlockedGroups holds the string denoting the review_blocked_groups edge name in mutations.
+	EdgeReviewBlockedGroups = "review_blocked_groups"
+	// EdgeRemediationEditors holds the string denoting the remediation_editors edge name in mutations.
+	EdgeRemediationEditors = "remediation_editors"
+	// EdgeRemediationBlockedGroups holds the string denoting the remediation_blocked_groups edge name in mutations.
+	EdgeRemediationBlockedGroups = "remediation_blocked_groups"
 	// EdgeSetting holds the string denoting the setting edge name in mutations.
 	EdgeSetting = "setting"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
@@ -245,36 +253,6 @@ const (
 	// ControlImplementationViewersInverseTable is the table name for the ControlImplementation entity.
 	// It exists in this package in order to avoid circular dependency with the "controlimplementation" package.
 	ControlImplementationViewersInverseTable = "control_implementations"
-	// ScanEditorsTable is the table that holds the scan_editors relation/edge. The primary key declared below.
-	ScanEditorsTable = "scan_editors"
-	// ScanEditorsInverseTable is the table name for the Scan entity.
-	// It exists in this package in order to avoid circular dependency with the "scan" package.
-	ScanEditorsInverseTable = "scans"
-	// ScanBlockedGroupsTable is the table that holds the scan_blocked_groups relation/edge. The primary key declared below.
-	ScanBlockedGroupsTable = "scan_blocked_groups"
-	// ScanBlockedGroupsInverseTable is the table name for the Scan entity.
-	// It exists in this package in order to avoid circular dependency with the "scan" package.
-	ScanBlockedGroupsInverseTable = "scans"
-	// ScanViewersTable is the table that holds the scan_viewers relation/edge. The primary key declared below.
-	ScanViewersTable = "scan_viewers"
-	// ScanViewersInverseTable is the table name for the Scan entity.
-	// It exists in this package in order to avoid circular dependency with the "scan" package.
-	ScanViewersInverseTable = "scans"
-	// EntityEditorsTable is the table that holds the entity_editors relation/edge. The primary key declared below.
-	EntityEditorsTable = "entity_editors"
-	// EntityEditorsInverseTable is the table name for the Entity entity.
-	// It exists in this package in order to avoid circular dependency with the "entity" package.
-	EntityEditorsInverseTable = "entities"
-	// EntityBlockedGroupsTable is the table that holds the entity_blocked_groups relation/edge. The primary key declared below.
-	EntityBlockedGroupsTable = "entity_blocked_groups"
-	// EntityBlockedGroupsInverseTable is the table name for the Entity entity.
-	// It exists in this package in order to avoid circular dependency with the "entity" package.
-	EntityBlockedGroupsInverseTable = "entities"
-	// EntityViewersTable is the table that holds the entity_viewers relation/edge. The primary key declared below.
-	EntityViewersTable = "entity_viewers"
-	// EntityViewersInverseTable is the table name for the Entity entity.
-	// It exists in this package in order to avoid circular dependency with the "entity" package.
-	EntityViewersInverseTable = "entities"
 	// ActionPlanEditorsTable is the table that holds the action_plan_editors relation/edge. The primary key declared below.
 	ActionPlanEditorsTable = "action_plan_editors"
 	// ActionPlanEditorsInverseTable is the table name for the ActionPlan entity.
@@ -360,6 +338,56 @@ const (
 	// MappedControlBlockedGroupsInverseTable is the table name for the MappedControl entity.
 	// It exists in this package in order to avoid circular dependency with the "mappedcontrol" package.
 	MappedControlBlockedGroupsInverseTable = "mapped_controls"
+	// ScanEditorsTable is the table that holds the scan_editors relation/edge. The primary key declared below.
+	ScanEditorsTable = "scan_editors"
+	// ScanEditorsInverseTable is the table name for the Scan entity.
+	// It exists in this package in order to avoid circular dependency with the "scan" package.
+	ScanEditorsInverseTable = "scans"
+	// ScanBlockedGroupsTable is the table that holds the scan_blocked_groups relation/edge. The primary key declared below.
+	ScanBlockedGroupsTable = "scan_blocked_groups"
+	// ScanBlockedGroupsInverseTable is the table name for the Scan entity.
+	// It exists in this package in order to avoid circular dependency with the "scan" package.
+	ScanBlockedGroupsInverseTable = "scans"
+	// EntityEditorsTable is the table that holds the entity_editors relation/edge. The primary key declared below.
+	EntityEditorsTable = "entity_editors"
+	// EntityEditorsInverseTable is the table name for the Entity entity.
+	// It exists in this package in order to avoid circular dependency with the "entity" package.
+	EntityEditorsInverseTable = "entities"
+	// EntityBlockedGroupsTable is the table that holds the entity_blocked_groups relation/edge. The primary key declared below.
+	EntityBlockedGroupsTable = "entity_blocked_groups"
+	// EntityBlockedGroupsInverseTable is the table name for the Entity entity.
+	// It exists in this package in order to avoid circular dependency with the "entity" package.
+	EntityBlockedGroupsInverseTable = "entities"
+	// FindingEditorsTable is the table that holds the finding_editors relation/edge. The primary key declared below.
+	FindingEditorsTable = "finding_editors"
+	// FindingEditorsInverseTable is the table name for the Finding entity.
+	// It exists in this package in order to avoid circular dependency with the "finding" package.
+	FindingEditorsInverseTable = "findings"
+	// FindingBlockedGroupsTable is the table that holds the finding_blocked_groups relation/edge. The primary key declared below.
+	FindingBlockedGroupsTable = "finding_blocked_groups"
+	// FindingBlockedGroupsInverseTable is the table name for the Finding entity.
+	// It exists in this package in order to avoid circular dependency with the "finding" package.
+	FindingBlockedGroupsInverseTable = "findings"
+	// ReviewEditorsTable is the table that holds the review_editors relation/edge. The primary key declared below.
+	ReviewEditorsTable = "review_editors"
+	// ReviewEditorsInverseTable is the table name for the Review entity.
+	// It exists in this package in order to avoid circular dependency with the "review" package.
+	ReviewEditorsInverseTable = "reviews"
+	// ReviewBlockedGroupsTable is the table that holds the review_blocked_groups relation/edge. The primary key declared below.
+	ReviewBlockedGroupsTable = "review_blocked_groups"
+	// ReviewBlockedGroupsInverseTable is the table name for the Review entity.
+	// It exists in this package in order to avoid circular dependency with the "review" package.
+	ReviewBlockedGroupsInverseTable = "reviews"
+	// RemediationEditorsTable is the table that holds the remediation_editors relation/edge. The primary key declared below.
+	RemediationEditorsTable = "remediation_editors"
+	// RemediationEditorsInverseTable is the table name for the Remediation entity.
+	// It exists in this package in order to avoid circular dependency with the "remediation" package.
+	RemediationEditorsInverseTable = "remediations"
+	// RemediationBlockedGroupsTable is the table that holds the remediation_blocked_groups relation/edge. The primary key declared below.
+	RemediationBlockedGroupsTable = "remediation_blocked_groups"
+	// RemediationBlockedGroupsInverseTable is the table name for the Remediation entity.
+	// It exists in this package in order to avoid circular dependency with the "remediation" package.
+	RemediationBlockedGroupsInverseTable = "remediations"
 	// SettingTable is the table that holds the setting relation/edge.
 	SettingTable = "group_settings"
 	// SettingInverseTable is the table name for the GroupSetting entity.
@@ -470,9 +498,6 @@ var ForeignKeys = []string{
 	"email_template_blocked_groups",
 	"email_template_editors",
 	"email_template_viewers",
-	"finding_blocked_groups",
-	"finding_editors",
-	"finding_viewers",
 	"identity_holder_blocked_groups",
 	"identity_holder_editors",
 	"identity_holder_viewers",
@@ -557,15 +582,8 @@ var ForeignKeys = []string{
 	"organization_risk_manager",
 	"organization_trust_center_manager",
 	"organization_workflows_manager",
-	"remediation_blocked_groups",
-	"remediation_editors",
-	"remediation_viewers",
-	"review_blocked_groups",
-	"review_editors",
-	"review_viewers",
 	"sla_definition_blocked_groups",
 	"sla_definition_editors",
-	"sla_definition_viewers",
 	"trust_center_blocked_groups",
 	"trust_center_editors",
 	"trust_center_compliance_blocked_groups",
@@ -639,24 +657,6 @@ var (
 	// ControlImplementationViewersPrimaryKey and ControlImplementationViewersColumn2 are the table columns denoting the
 	// primary key for the control_implementation_viewers relation (M2M).
 	ControlImplementationViewersPrimaryKey = []string{"control_implementation_id", "group_id"}
-	// ScanEditorsPrimaryKey and ScanEditorsColumn2 are the table columns denoting the
-	// primary key for the scan_editors relation (M2M).
-	ScanEditorsPrimaryKey = []string{"scan_id", "group_id"}
-	// ScanBlockedGroupsPrimaryKey and ScanBlockedGroupsColumn2 are the table columns denoting the
-	// primary key for the scan_blocked_groups relation (M2M).
-	ScanBlockedGroupsPrimaryKey = []string{"scan_id", "group_id"}
-	// ScanViewersPrimaryKey and ScanViewersColumn2 are the table columns denoting the
-	// primary key for the scan_viewers relation (M2M).
-	ScanViewersPrimaryKey = []string{"scan_id", "group_id"}
-	// EntityEditorsPrimaryKey and EntityEditorsColumn2 are the table columns denoting the
-	// primary key for the entity_editors relation (M2M).
-	EntityEditorsPrimaryKey = []string{"entity_id", "group_id"}
-	// EntityBlockedGroupsPrimaryKey and EntityBlockedGroupsColumn2 are the table columns denoting the
-	// primary key for the entity_blocked_groups relation (M2M).
-	EntityBlockedGroupsPrimaryKey = []string{"entity_id", "group_id"}
-	// EntityViewersPrimaryKey and EntityViewersColumn2 are the table columns denoting the
-	// primary key for the entity_viewers relation (M2M).
-	EntityViewersPrimaryKey = []string{"entity_id", "group_id"}
 	// ActionPlanEditorsPrimaryKey and ActionPlanEditorsColumn2 are the table columns denoting the
 	// primary key for the action_plan_editors relation (M2M).
 	ActionPlanEditorsPrimaryKey = []string{"action_plan_id", "group_id"}
@@ -708,6 +708,36 @@ var (
 	// MappedControlBlockedGroupsPrimaryKey and MappedControlBlockedGroupsColumn2 are the table columns denoting the
 	// primary key for the mapped_control_blocked_groups relation (M2M).
 	MappedControlBlockedGroupsPrimaryKey = []string{"mapped_control_id", "group_id"}
+	// ScanEditorsPrimaryKey and ScanEditorsColumn2 are the table columns denoting the
+	// primary key for the scan_editors relation (M2M).
+	ScanEditorsPrimaryKey = []string{"scan_id", "group_id"}
+	// ScanBlockedGroupsPrimaryKey and ScanBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the scan_blocked_groups relation (M2M).
+	ScanBlockedGroupsPrimaryKey = []string{"scan_id", "group_id"}
+	// EntityEditorsPrimaryKey and EntityEditorsColumn2 are the table columns denoting the
+	// primary key for the entity_editors relation (M2M).
+	EntityEditorsPrimaryKey = []string{"entity_id", "group_id"}
+	// EntityBlockedGroupsPrimaryKey and EntityBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the entity_blocked_groups relation (M2M).
+	EntityBlockedGroupsPrimaryKey = []string{"entity_id", "group_id"}
+	// FindingEditorsPrimaryKey and FindingEditorsColumn2 are the table columns denoting the
+	// primary key for the finding_editors relation (M2M).
+	FindingEditorsPrimaryKey = []string{"finding_id", "group_id"}
+	// FindingBlockedGroupsPrimaryKey and FindingBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the finding_blocked_groups relation (M2M).
+	FindingBlockedGroupsPrimaryKey = []string{"finding_id", "group_id"}
+	// ReviewEditorsPrimaryKey and ReviewEditorsColumn2 are the table columns denoting the
+	// primary key for the review_editors relation (M2M).
+	ReviewEditorsPrimaryKey = []string{"review_id", "group_id"}
+	// ReviewBlockedGroupsPrimaryKey and ReviewBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the review_blocked_groups relation (M2M).
+	ReviewBlockedGroupsPrimaryKey = []string{"review_id", "group_id"}
+	// RemediationEditorsPrimaryKey and RemediationEditorsColumn2 are the table columns denoting the
+	// primary key for the remediation_editors relation (M2M).
+	RemediationEditorsPrimaryKey = []string{"remediation_id", "group_id"}
+	// RemediationBlockedGroupsPrimaryKey and RemediationBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the remediation_blocked_groups relation (M2M).
+	RemediationBlockedGroupsPrimaryKey = []string{"remediation_id", "group_id"}
 	// UsersPrimaryKey and UsersColumn2 are the table columns denoting the
 	// primary key for the users relation (M2M).
 	UsersPrimaryKey = []string{"user_id", "group_id"}
@@ -1112,90 +1142,6 @@ func ByControlImplementationViewers(term sql.OrderTerm, terms ...sql.OrderTerm) 
 	}
 }
 
-// ByScanEditorsCount orders the results by scan_editors count.
-func ByScanEditorsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newScanEditorsStep(), opts...)
-	}
-}
-
-// ByScanEditors orders the results by scan_editors terms.
-func ByScanEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newScanEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByScanBlockedGroupsCount orders the results by scan_blocked_groups count.
-func ByScanBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newScanBlockedGroupsStep(), opts...)
-	}
-}
-
-// ByScanBlockedGroups orders the results by scan_blocked_groups terms.
-func ByScanBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newScanBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByScanViewersCount orders the results by scan_viewers count.
-func ByScanViewersCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newScanViewersStep(), opts...)
-	}
-}
-
-// ByScanViewers orders the results by scan_viewers terms.
-func ByScanViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newScanViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByEntityEditorsCount orders the results by entity_editors count.
-func ByEntityEditorsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newEntityEditorsStep(), opts...)
-	}
-}
-
-// ByEntityEditors orders the results by entity_editors terms.
-func ByEntityEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEntityEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByEntityBlockedGroupsCount orders the results by entity_blocked_groups count.
-func ByEntityBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newEntityBlockedGroupsStep(), opts...)
-	}
-}
-
-// ByEntityBlockedGroups orders the results by entity_blocked_groups terms.
-func ByEntityBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEntityBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByEntityViewersCount orders the results by entity_viewers count.
-func ByEntityViewersCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newEntityViewersStep(), opts...)
-	}
-}
-
-// ByEntityViewers orders the results by entity_viewers terms.
-func ByEntityViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEntityViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByActionPlanEditorsCount orders the results by action_plan_editors count.
 func ByActionPlanEditorsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1431,6 +1377,146 @@ func ByMappedControlBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption 
 func ByMappedControlBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newMappedControlBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByScanEditorsCount orders the results by scan_editors count.
+func ByScanEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newScanEditorsStep(), opts...)
+	}
+}
+
+// ByScanEditors orders the results by scan_editors terms.
+func ByScanEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newScanEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByScanBlockedGroupsCount orders the results by scan_blocked_groups count.
+func ByScanBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newScanBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByScanBlockedGroups orders the results by scan_blocked_groups terms.
+func ByScanBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newScanBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEntityEditorsCount orders the results by entity_editors count.
+func ByEntityEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEntityEditorsStep(), opts...)
+	}
+}
+
+// ByEntityEditors orders the results by entity_editors terms.
+func ByEntityEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEntityEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEntityBlockedGroupsCount orders the results by entity_blocked_groups count.
+func ByEntityBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEntityBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByEntityBlockedGroups orders the results by entity_blocked_groups terms.
+func ByEntityBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEntityBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByFindingEditorsCount orders the results by finding_editors count.
+func ByFindingEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFindingEditorsStep(), opts...)
+	}
+}
+
+// ByFindingEditors orders the results by finding_editors terms.
+func ByFindingEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFindingEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByFindingBlockedGroupsCount orders the results by finding_blocked_groups count.
+func ByFindingBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFindingBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByFindingBlockedGroups orders the results by finding_blocked_groups terms.
+func ByFindingBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFindingBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByReviewEditorsCount orders the results by review_editors count.
+func ByReviewEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newReviewEditorsStep(), opts...)
+	}
+}
+
+// ByReviewEditors orders the results by review_editors terms.
+func ByReviewEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByReviewBlockedGroupsCount orders the results by review_blocked_groups count.
+func ByReviewBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newReviewBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByReviewBlockedGroups orders the results by review_blocked_groups terms.
+func ByReviewBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByRemediationEditorsCount orders the results by remediation_editors count.
+func ByRemediationEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRemediationEditorsStep(), opts...)
+	}
+}
+
+// ByRemediationEditors orders the results by remediation_editors terms.
+func ByRemediationEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRemediationEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByRemediationBlockedGroupsCount orders the results by remediation_blocked_groups count.
+func ByRemediationBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRemediationBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByRemediationBlockedGroups orders the results by remediation_blocked_groups terms.
+func ByRemediationBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRemediationBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -1685,48 +1771,6 @@ func newControlImplementationViewersStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, ControlImplementationViewersTable, ControlImplementationViewersPrimaryKey...),
 	)
 }
-func newScanEditorsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ScanEditorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ScanEditorsTable, ScanEditorsPrimaryKey...),
-	)
-}
-func newScanBlockedGroupsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ScanBlockedGroupsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ScanBlockedGroupsTable, ScanBlockedGroupsPrimaryKey...),
-	)
-}
-func newScanViewersStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ScanViewersInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ScanViewersTable, ScanViewersPrimaryKey...),
-	)
-}
-func newEntityEditorsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(EntityEditorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, EntityEditorsTable, EntityEditorsPrimaryKey...),
-	)
-}
-func newEntityBlockedGroupsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(EntityBlockedGroupsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, EntityBlockedGroupsTable, EntityBlockedGroupsPrimaryKey...),
-	)
-}
-func newEntityViewersStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(EntityViewersInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, EntityViewersTable, EntityViewersPrimaryKey...),
-	)
-}
 func newActionPlanEditorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1844,6 +1888,76 @@ func newMappedControlBlockedGroupsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MappedControlBlockedGroupsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, MappedControlBlockedGroupsTable, MappedControlBlockedGroupsPrimaryKey...),
+	)
+}
+func newScanEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ScanEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ScanEditorsTable, ScanEditorsPrimaryKey...),
+	)
+}
+func newScanBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ScanBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ScanBlockedGroupsTable, ScanBlockedGroupsPrimaryKey...),
+	)
+}
+func newEntityEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EntityEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, EntityEditorsTable, EntityEditorsPrimaryKey...),
+	)
+}
+func newEntityBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EntityBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, EntityBlockedGroupsTable, EntityBlockedGroupsPrimaryKey...),
+	)
+}
+func newFindingEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FindingEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, FindingEditorsTable, FindingEditorsPrimaryKey...),
+	)
+}
+func newFindingBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FindingBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, FindingBlockedGroupsTable, FindingBlockedGroupsPrimaryKey...),
+	)
+}
+func newReviewEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ReviewEditorsTable, ReviewEditorsPrimaryKey...),
+	)
+}
+func newReviewBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ReviewBlockedGroupsTable, ReviewBlockedGroupsPrimaryKey...),
+	)
+}
+func newRemediationEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RemediationEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, RemediationEditorsTable, RemediationEditorsPrimaryKey...),
+	)
+}
+func newRemediationBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RemediationBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, RemediationBlockedGroupsTable, RemediationBlockedGroupsPrimaryKey...),
 	)
 }
 func newSettingStep() *sqlgraph.Step {

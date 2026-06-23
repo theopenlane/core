@@ -4632,14 +4632,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CampaignHistory.TemplateID(childComplexity), true
-
 	case "CampaignHistory.trustCenterID":
 		if e.ComplexityRoot.CampaignHistory.TrustCenterID == nil {
 			break
 		}
 
 		return e.ComplexityRoot.CampaignHistory.TrustCenterID(childComplexity), true
-
 	case "CampaignHistory.updatedAt":
 		if e.ComplexityRoot.CampaignHistory.UpdatedAt == nil {
 			break
@@ -4787,14 +4785,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CampaignTargetHistory.Status(childComplexity), true
-
 	case "CampaignTargetHistory.subscriberID":
 		if e.ComplexityRoot.CampaignTargetHistory.SubscriberID == nil {
 			break
 		}
 
 		return e.ComplexityRoot.CampaignTargetHistory.SubscriberID(childComplexity), true
-
 	case "CampaignTargetHistory.updatedAt":
 		if e.ComplexityRoot.CampaignTargetHistory.UpdatedAt == nil {
 			break
@@ -7270,14 +7266,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplateHistory.TemplateContext(childComplexity), true
-
 	case "EmailTemplateHistory.trustCenterID":
 		if e.ComplexityRoot.EmailTemplateHistory.TrustCenterID == nil {
 			break
 		}
 
 		return e.ComplexityRoot.EmailTemplateHistory.TrustCenterID(childComplexity), true
-
 	case "EmailTemplateHistory.updatedAt":
 		if e.ComplexityRoot.EmailTemplateHistory.UpdatedAt == nil {
 			break
@@ -10746,21 +10740,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.NoteHistory.NoteRef(childComplexity), true
-
 	case "NoteHistory.notifiedAt":
 		if e.ComplexityRoot.NoteHistory.NotifiedAt == nil {
 			break
 		}
 
 		return e.ComplexityRoot.NoteHistory.NotifiedAt(childComplexity), true
-
 	case "NoteHistory.notifySubscribers":
 		if e.ComplexityRoot.NoteHistory.NotifySubscribers == nil {
 			break
 		}
 
 		return e.ComplexityRoot.NoteHistory.NotifySubscribers(childComplexity), true
-
 	case "NoteHistory.operation":
 		if e.ComplexityRoot.NoteHistory.Operation == nil {
 			break
@@ -17184,14 +17175,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.NdaApproverGroupID(childComplexity), true
-
 	case "TrustCenterSettingHistory.notifySubscribersOnSubprocessorChange":
 		if e.ComplexityRoot.TrustCenterSettingHistory.NotifySubscribersOnSubprocessorChange == nil {
 			break
 		}
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.NotifySubscribersOnSubprocessorChange(childComplexity), true
-
 	case "TrustCenterSettingHistory.operation":
 		if e.ComplexityRoot.TrustCenterSettingHistory.Operation == nil {
 			break
@@ -17246,14 +17235,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.StatusPageURL(childComplexity), true
-
 	case "TrustCenterSettingHistory.subprocessorsNotifiedAt":
 		if e.ComplexityRoot.TrustCenterSettingHistory.SubprocessorsNotifiedAt == nil {
 			break
 		}
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.SubprocessorsNotifiedAt(childComplexity), true
-
 	case "TrustCenterSettingHistory.themeMode":
 		if e.ComplexityRoot.TrustCenterSettingHistory.ThemeMode == nil {
 			break

@@ -75,10 +75,11 @@ func TestQueryTemplate(t *testing.T) {
 			errorMsg: notFoundErrorMsg,
 		},
 		{
-			name:    "anonymous user can access root template",
-			queryID: templateRoot.ID,
-			client:  suite.client.api,
-			ctx:     createAnonymousTrustCenterContext(ulids.New().String(), sharedTestUser1.OrganizationID),
+			name:     "anonymous user can access templates, including root",
+			queryID:  templateRoot.ID,
+			client:   suite.client.api,
+			ctx:      createAnonymousTrustCenterContext(ulids.New().String(), sharedTestUser1.OrganizationID),
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 

@@ -19,6 +19,7 @@ mutation CreateBulkCSVEmailTemplate ($input: Upload!) {
 			systemInternalID
 			systemOwned
 			templateContext
+			trustCenterID
 			updatedAt
 			updatedBy
 			version
@@ -48,6 +49,7 @@ mutation CreateBulkEmailTemplate ($input: [CreateEmailTemplateInput!]) {
 			systemInternalID
 			systemOwned
 			templateContext
+			trustCenterID
 			updatedAt
 			updatedBy
 			version
@@ -77,6 +79,7 @@ mutation CreateEmailTemplate ($input: CreateEmailTemplateInput!) {
 			systemInternalID
 			systemOwned
 			templateContext
+			trustCenterID
 			updatedAt
 			updatedBy
 			version
@@ -124,6 +127,7 @@ query GetAllEmailTemplates ($first: Int, $last: Int, $after: Cursor, $before: Cu
 				systemInternalID
 				systemOwned
 				templateContext
+				trustCenterID
 				updatedAt
 				updatedBy
 				version
@@ -153,6 +157,7 @@ query GetEmailTemplateByID ($emailTemplateId: ID!) {
 		systemInternalID
 		systemOwned
 		templateContext
+		trustCenterID
 		updatedAt
 		updatedBy
 		version
@@ -189,6 +194,7 @@ query GetEmailTemplates ($first: Int, $last: Int, $after: Cursor, $before: Curso
 				systemInternalID
 				systemOwned
 				templateContext
+				trustCenterID
 				updatedAt
 				updatedBy
 				version
@@ -222,6 +228,7 @@ mutation UpdateBulkCSVEmailTemplate ($input: Upload!) {
 			systemInternalID
 			systemOwned
 			templateContext
+			trustCenterID
 			updatedAt
 			updatedBy
 			version
@@ -252,6 +259,7 @@ mutation UpdateBulkEmailTemplate ($ids: [ID!]!, $input: UpdateEmailTemplateInput
 			systemInternalID
 			systemOwned
 			templateContext
+			trustCenterID
 			updatedAt
 			updatedBy
 			version
@@ -282,6 +290,7 @@ mutation UpdateEmailTemplate ($updateEmailTemplateId: ID!, $input: UpdateEmailTe
 			systemInternalID
 			systemOwned
 			templateContext
+			trustCenterID
 			updatedAt
 			updatedBy
 			version

@@ -17,6 +17,7 @@ func registerWebfingerHandler(router *Router) error {
 		OperationID: "Webfinger",
 		Security:    &openapi3.SecurityRequirements{},
 		Middlewares: *publicEndpoint,
+		RateLimit:   publicStaticRateLimit,
 		Handler:     router.Handler.WebfingerHandler,
 	}
 
@@ -35,6 +36,7 @@ func registerSSOLoginHandler(router *Router) error {
 		OperationID: "SSOLogin",
 		Security:    &openapi3.SecurityRequirements{},
 		Middlewares: *unauthenticatedEndpoint,
+		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.SSOLoginHandler,
 	}
 
@@ -52,6 +54,7 @@ func registerSSOCallbackHandler(router *Router) error {
 		OperationID: "SSOCallback",
 		Security:    &openapi3.SecurityRequirements{},
 		Middlewares: *unauthenticatedEndpoint,
+		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.SSOCallbackHandler,
 	}
 

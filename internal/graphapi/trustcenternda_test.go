@@ -41,8 +41,7 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 
 	anonUser := auth.NewTrustCenterCaller(trustCenter.OwnerID, anonUserID, "Anonymous User", email)
 
-	anonCtxForRequest := auth.WithCaller(context.Background(), anonUser)
-	anonCtxForRequest = auth.ActiveTrustCenterIDKey.Set(anonCtxForRequest, trustCenter.ID)
+	anonCtxForRequest := newAnonTrustCenterCtxFromCaller(anonUser, trustCenter.ID)
 	ndaCreateResp, err := suite.client.api.CreateTrustCenterNDARequest(anonCtxForRequest, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     "Test",
 		LastName:      "User",
@@ -74,18 +73,19 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 		},
 	}
 
-	ctx := context.Background()
-	anonCtx := auth.WithCaller(ctx, anonUser)
-	anonCtx = auth.ActiveTrustCenterIDKey.Set(anonCtx, trustCenter.ID)
+	anonCtx := newAnonTrustCenterCtxFromCaller(anonUser, trustCenter.ID)
 
 	// check that the anonymous user can't query the protected doc's files
 	getTrustCenterDocResp, err := suite.client.api.GetTrustCenterDocByID(anonCtx, trustCenterDocProtected.ID)
 	assert.NilError(t, err)
 	assert.Assert(t, getTrustCenterDocResp.TrustCenterDoc.OriginalFile == nil)
 
-	// Clear any existing jobs
+	// Clear any existing jobs and emails before submitting
 	err = suite.client.db.Job.TruncateRiverTables(tcOrg.owner.UserCtx)
 	assert.NilError(t, err)
+
+	suite.mockEmailSender().Reset()
+	expectAttestedUpload(t, suite.client.mockProvider)
 
 	resp, err := suite.client.api.SubmitTrustCenterNDAResponse(anonCtx, input)
 
@@ -100,6 +100,16 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	assert.Assert(t, len(ndaRequest.TrustCenterNdaRequests.Edges) == 1)
 	assert.Equal(t, ndaRequest.TrustCenterNdaRequests.Edges[0].Node.Status.String(), enums.TrustCenterNDARequestStatusSigned.String())
 	assert.Check(t, ndaRequest.TrustCenterNdaRequests.Edges[0].Node.SignedAt != nil)
+
+	// wait for the NDA attestation listener to process the document data creation
+	suite.WaitForEvents()
+
+	// verify the signed NDA email was sent with the attested PDF attached
+	msgs := suite.mockEmailSender().Messages()
+	assert.Assert(t, len(msgs) == 1, "expected 1 email after NDA signing, got %d", len(msgs))
+	assert.Assert(t, len(msgs[0].Attachments) == 1, "expected signed PDF attachment")
+	assert.Equal(t, "signed_nda_file.pdf", msgs[0].Attachments[0].Filename)
+	assert.Assert(t, len(msgs[0].Attachments[0].Content) > 0, "expected non-empty PDF content in attachment")
 
 	// now, check that the anonymous user can query the protected doc's files
 	getTrustCenterDocResp, err = suite.client.api.GetTrustCenterDocByID(anonCtx, trustCenterDocProtected.ID)
@@ -272,11 +282,8 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 	anonUser := auth.NewTrustCenterCaller(trustCenter.OwnerID, anonUserID, "Anonymous User", "test@example.com")
 	anonUser2 := auth.NewTrustCenterCaller(trustCenter2.OwnerID, anonUserID2, "Anonymous User", "testother@example.com")
 
-	ctx := context.Background()
-	anonCtx := auth.WithCaller(ctx, anonUser)
-	anonCtx = auth.ActiveTrustCenterIDKey.Set(anonCtx, trustCenter.ID)
-	anonCtx2 := auth.WithCaller(ctx, anonUser2)
-	anonCtx2 = auth.ActiveTrustCenterIDKey.Set(anonCtx2, trustCenter2.ID)
+	anonCtx := newAnonTrustCenterCtxFromCaller(anonUser, trustCenter.ID)
+	anonCtx2 := newAnonTrustCenterCtxFromCaller(anonUser2, trustCenter2.ID)
 
 	_, err = suite.client.api.CreateTrustCenterNDARequest(anonCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     "Test",

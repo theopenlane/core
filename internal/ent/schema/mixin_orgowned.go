@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/anon"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -234,7 +235,7 @@ func (o ObjectOwnedMixin) setOwnerIDField(ctx context.Context, m ent.Mutation) e
 // owned mixin
 var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		if skip := o.orgInterceptorSkipper(ctx, q); skip {
+		if skip := o.orgInterceptorSkipper(ctx); skip {
 			return nil
 		}
 
@@ -243,16 +244,37 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			return nil
 		}
 
-		tcID, hasAnonTCUser := auth.ActiveTrustCenterIDKey.Get(ctx)
+		// check for anon trust center JWT; this also returns ErrNoAuthUser when no caller
+		// or organization is present, which guards the classification below
+		trustCenterOrganization, isTrustCenterAnon, err := isAnonTrustCenterCaller(ctx)
+		if err != nil {
+			return err
+		}
 
-		if o.AllowAnonymousTrustCenterAccess && hasAnonTCUser {
-			caller, callerOk := auth.CallerFromContext(ctx)
-			if callerOk && caller != nil && tcID != "" && caller.OrganizationID != "" {
-				o.PWithField(q, ownerFieldName, []string{caller.OrganizationID})
-				return nil
+		// classify the anonymous caller for the access checks below
+		isAnon := anon.IsAnonymous(ctx)
+
+		// questionnaire callers only happen via REST handlers
+		isQuestionnaireCaller := anon.IsQuestionnaire(ctx)
+
+		// Trust Center anon users without GraphQL key are blocked by BlockNonTrustCenterAnonymous middleware;
+		// questionnaire callers are legitimate REST callers and fall through to the org filter further down
+		if isAnon && !isTrustCenterAnon && !isQuestionnaireCaller {
+			return privacy.Denyf("anonymous access not allowed unless filtered by a trust center")
+		}
+
+		// check for trust center anon access on schemas, if its not allowed
+		// deny the query, otherwise filter on trust center
+		if isTrustCenterAnon {
+			if !o.AllowAnonymousTrustCenterAccess {
+				return privacy.Denyf("anonymous trust center access not allowed")
 			}
-		} else if !o.AllowAnonymousTrustCenterAccess && hasAnonTCUser {
-			return privacy.Denyf("anonymous trust center access not allowed")
+
+			// Trust Center users with an active trust center key: scope results to their specific org
+			// to prevent cross-org data leakage through the org filter fallback below
+			o.PWithField(q, ownerFieldName, []string{trustCenterOrganization})
+
+			return nil
 		}
 
 		// check API Token scope and return error if scope not set on token for object
@@ -262,12 +284,13 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			}
 		}
 
-		// add owner id(s) to the query
+		// add owner id(s) to all remaining query requests
 		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
 		if err != nil {
 			return err
 		}
 
+		// this should not happen, but log when it does - no results get returned if there are no org ids present
 		if len(orgIDs) == 0 {
 			logx.FromContext(ctx).Warn().Msg("no organization ids found in context, but interceptor was not skipped, no results will be returned")
 		}
@@ -279,15 +302,31 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 	})
 }
 
+// isAnonTrustCenterCaller returns the organization id the trust center is associated with
+// and whether the caller is an anonymous trust center caller. A caller that carries the
+// trust center anonymous capability without an active trust center key is malformed and is
+// denied rather than falling through to the organization filter
+func isAnonTrustCenterCaller(ctx context.Context) (string, bool, error) {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || caller.OrganizationID == "" {
+		return "", false, auth.ErrNoAuthUser
+	}
+
+	if _, orgID, ok := anon.TrustCenterScope(ctx); ok {
+		return orgID, true, nil
+	}
+
+	if caller.Has(auth.CapTrustCenterAnonymous) {
+		return "", false, privacy.Denyf("trust center request without active trust center key")
+	}
+
+	return "", false, nil
+}
+
 // orgInterceptorSkipper skips the organization interceptor based on the context
 // and query type. Callers with CapBypassOrgFilter skip the interceptor.
-func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept.Query) bool {
+func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context) bool {
 	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapBypassOrgFilter) {
-		// anonymous callers (trust center, questionnaire) still scope template queries by org
-		if caller.OrganizationRole == auth.AnonymousRole && q.Type() == generated.TypeTemplate {
-			return false
-		}
-
 		return true
 	}
 

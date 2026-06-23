@@ -3037,7 +3037,7 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			resp, err := tc.client.GetControlByID(tc.ctx, tc.queryID)
+			resp, err := tc.client.GetTrustCenterControlByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
@@ -3052,7 +3052,7 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 
 	// test list query: anonymous user should only see the publicly visible trust center control
 	t.Run("anonymous user list query returns only public trust center controls", func(t *testing.T) {
-		resp, err := suite.client.api.GetAllControls(anonCtx)
+		resp, err := suite.client.api.GetTrustCenterControls(anonCtx)
 		assert.NilError(t, err)
 		assert.Check(t, resp != nil)
 		assert.Check(t, is.Equal(1, len(resp.Controls.Edges)))

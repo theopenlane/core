@@ -42,6 +42,7 @@ func registerIntegrationAuthCallbackHandler(router *Router) error {
 		OperationID: "IntegrationAuthCallback",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.HandleIntegrationAuthCallback,
 	}
 
