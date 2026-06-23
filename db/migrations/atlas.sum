@@ -1,4 +1,4 @@
-h1:qW6Bh9Gx37FyIL7/6QBlM8K8O/ujNj3eJZg9ym9cbHU=
+h1:zNCELA/CKYHN7gls0JulHSbkhvp2ut85opAkjbT2X+I=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -146,3 +146,5 @@ h1:qW6Bh9Gx37FyIL7/6QBlM8K8O/ujNj3eJZg9ym9cbHU=
 20260621232927_trust_center_subscribe.sql h1:7LBjf3JKAQHldA7w98AfByDJxiBq69w/TV58Dty1SdY=
 20260621232930_trust_center_subscribe_history.sql h1:Kj7oiOSgeaAA+aBne5DPkUKF4bDNxirlmimAFMYFy48=
 20260622183305_remove_extra_viewer_groups.sql h1:JTNaiBKtEbxoEADTlmhdwABvJPLmKEM/ZYZamo1j+EQ=
+20260623191743_ssoexclusions.sql h1:KLVxk7hFIBaVRWY11RY3Y+0S0JSbcej0BoiZN9TPAwM=
+20260623191746_ssoexclusions_history.sql h1:Z219dtA8+awhPTmIt6rpBRfRBQklG3qH2UoD52MtzQA=

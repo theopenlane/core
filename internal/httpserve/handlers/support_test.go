@@ -6,16 +6,22 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"testing"
 
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/iam/auth"
+
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/pkg/middleware/impersonation"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -267,4 +273,132 @@ func (suite *HandlerTestSuite) TestSupportAccessRejectsDomainMismatch() {
 	suite.e.ServeHTTP(cbRec, cbReq)
 
 	assert.Equal(t, http.StatusForbidden, cbRec.Code)
+}
+
+// supportCallerContext resolves an issued support token through the impersonation middleware exactly as
+// the router does, returning the request context carrying the virtual support caller
+func (suite *HandlerTestSuite) supportCallerContext(token string) context.Context {
+	mw := impersonation.New(suite.h.TokenManager, suite.h.SupportAccessConfig.SubjectID, suite.h.SupportAccessConfig.DisplayName)
+
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	req.Header.Set(auth.Authorization, auth.ImpersonationScheme+" "+token)
+
+	c := suite.e.NewContext(req, httptest.NewRecorder())
+
+	var resolved context.Context
+
+	err := mw.Process(func(c echo.Context) error {
+		resolved = c.Request().Context()
+		return nil
+	})(c)
+	require.NoError(suite.T(), err)
+
+	return ent.NewContext(resolved, suite.db)
+}
+
+// supportSessionToken runs the full two-factor support login against a mock identity provider and returns
+// the issued impersonation token along with the consenting organization it targets
+func (suite *HandlerTestSuite) supportSessionToken(t *testing.T) (string, *ent.Organization) {
+	loginOp := suite.createImpersonationOperation("LoginHandler", "Login handler")
+	callbackOp := suite.createImpersonationOperation("SupportCallback", "Support callback handler")
+	suite.registerTestHandler("POST", "v1/login", loginOp, suite.h.LoginHandler)
+	suite.registerTestHandler("POST", "v1/support/callback", callbackOp, suite.h.SupportCallbackHandler)
+
+	oidc := newMockOIDCServer(t,
+		withExpectedCode("code123"),
+		withClientSecret("secret"),
+		withUserInfo("engineer@theopenlane.io", "Support Engineer", ""),
+	)
+	defer oidc.Close()
+
+	suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
+
+	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx = ent.NewContext(ctx, suite.db)
+	org := suite.createConsentingOrg(ctx)
+
+	loginBody, _ := json.Marshal(models.LoginRequest{
+		Username:             "support@theopenlane.io",
+		Password:             "super-secret-support-password",
+		TargetOrganizationID: org.ID,
+		Reason:               "assisting customer with data import",
+	})
+	loginReq := httptest.NewRequest(http.MethodPost, "/v1/login", strings.NewReader(string(loginBody)))
+	loginReq.Header.Set("Content-Type", "application/json")
+	loginRec := httptest.NewRecorder()
+	suite.e.ServeHTTP(loginRec, loginReq)
+	require.Equal(t, http.StatusOK, loginRec.Code)
+
+	cookieParts := []string{}
+	var state string
+	for _, c := range loginRec.Result().Cookies() {
+		cookieParts = append(cookieParts, c.Name+"="+c.Value)
+		if c.Name == "support_state" {
+			state = c.Value
+		}
+		if c.Name == "support_nonce" {
+			oidc.nonce = c.Value
+		}
+	}
+
+	cbBody, _ := json.Marshal(models.SupportCallbackRequest{Code: "code123", State: state})
+	cbReq := httptest.NewRequest(http.MethodPost, "/v1/support/callback", strings.NewReader(string(cbBody)))
+	cbReq.Header.Set("Content-Type", "application/json")
+	cbReq.Header.Set("Cookie", strings.Join(cookieParts, "; "))
+	cbRec := httptest.NewRecorder()
+	suite.e.ServeHTTP(cbRec, cbReq)
+	require.Equal(t, http.StatusOK, cbRec.Code)
+
+	var cbOut models.SupportAccessReply
+	require.NoError(t, json.NewDecoder(cbRec.Body).Decode(&cbOut))
+	require.NotEmpty(t, cbOut.Token)
+
+	return cbOut.Token, org
+}
+
+// TestSupportAccessCanQueryOrgData confirms the issued support token can read org-scoped data within the
+// consented organization, without any privacy bypass in the request context
+func (suite *HandlerTestSuite) TestSupportAccessCanQueryOrgData() {
+	t := suite.T()
+
+	original := suite.h.SupportAccessConfig
+	defer func() { suite.h.SupportAccessConfig = original }()
+
+	token, org := suite.supportSessionToken(t)
+
+	supportCtx := suite.supportCallerContext(token)
+
+	setting, err := suite.db.OrganizationSetting.Query().
+		Where(organizationsetting.OrganizationID(org.ID)).
+		Only(supportCtx)
+	require.NoError(t, err)
+	assert.True(t, setting.AllowSupportAccess, "support should read the consenting org setting")
+}
+
+// TestSupportAccessCanUpdateOrgData confirms the issued support token can mutate org-scoped data within
+// the consented organization, without any privacy bypass in the request context
+func (suite *HandlerTestSuite) TestSupportAccessCanUpdateOrgData() {
+	t := suite.T()
+
+	original := suite.h.SupportAccessConfig
+	defer func() { suite.h.SupportAccessConfig = original }()
+
+	token, org := suite.supportSessionToken(t)
+
+	supportCtx := suite.supportCallerContext(token)
+
+	const updatedContact = "support-updated-contact"
+
+	setting, err := suite.db.OrganizationSetting.Query().
+		Where(organizationsetting.OrganizationID(org.ID)).
+		Only(supportCtx)
+	require.NoError(t, err)
+
+	_, err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+		SetBillingContact(updatedContact).
+		Save(supportCtx)
+	require.NoError(t, err)
+
+	got := suite.db.OrganizationSetting.GetX(supportCtx, setting.ID)
+	assert.Equal(t, updatedContact, got.BillingContact, "support update should persist to the org setting")
 }

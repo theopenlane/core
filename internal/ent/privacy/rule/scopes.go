@@ -120,6 +120,13 @@ func CheckSubjectScope(ctx context.Context, objectType string, relation string, 
 		return privacy.Skip
 	}
 
+	// org-scoped support sessions hold every scope for their organization, equivalent to a fully scoped
+	// token; delete is excluded so support cannot remove organizations or their objects
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.OrganizationID != "" &&
+		caller.Has(auth.CapOrgSupport) && !strings.HasPrefix(scopedRelation, CanDeletePrefix) {
+		return privacy.Allow
+	}
+
 	scopeSet, err := fgamodel.DefaultServiceScopeSet()
 	if err != nil {
 		return err

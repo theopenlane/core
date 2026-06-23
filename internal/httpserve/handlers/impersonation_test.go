@@ -84,7 +84,6 @@ func (suite *HandlerTestSuite) TestStartImpersonation() {
 				Type:         "support",
 				Reason:       "debugging issue for customer support",
 				Duration:     intPtr(2),
-				Scopes:       []string{"read", "debug"},
 			},
 			setupContext: func() context.Context {
 				ctx := context.Background()
@@ -231,7 +230,6 @@ func (suite *HandlerTestSuite) TestEndImpersonation() {
 						ImpersonatorEmail: "admin@example.com",
 						TargetUserEmail:   "user@example.com",
 						Type:              auth.SupportImpersonation,
-						Scopes:            []string{"read", "debug"},
 					},
 				}
 				return auth.WithCaller(ctx, impUser)
@@ -331,7 +329,6 @@ func (suite *HandlerTestSuite) TestExtractSessionIDFromToken() {
 		Type:              "support",
 		Reason:            "testing",
 		Duration:          time.Hour,
-		Scopes:            []string{"read"},
 	}
 
 	_, err := suite.h.TokenManager.CreateImpersonationToken(context.Background(), opts)
@@ -389,7 +386,6 @@ func (suite *HandlerTestSuite) TestExtractSessionIDFromToken() {
 		Type:         "support",
 		Reason:       "testing session ID extraction",
 		Duration:     intPtr(1),
-		Scopes:       []string{"read"},
 	}
 
 	reqBody, err := json.Marshal(request)

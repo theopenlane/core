@@ -177,7 +177,6 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context, openapi *OpenAPIConte
 		Type:              string(auth.SupportImpersonation),
 		Reason:            reason,
 		Duration:          duration,
-		Scopes:            []string{"read", "write"},
 	})
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error creating support access token")
@@ -204,7 +203,6 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context, openapi *OpenAPIConte
 		IPAddress:         ctx.RealIP(),
 		UserAgent:         ctx.Request().UserAgent(),
 		OrganizationID:    orgCookie.Value,
-		Scopes:            []string{"read", "write"},
 	}
 
 	if err := h.logImpersonationEvent(reqCtx, "start", auditLog); err != nil {
