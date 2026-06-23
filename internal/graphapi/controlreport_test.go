@@ -442,3 +442,85 @@ func TestQueryControlReportsByCategory(t *testing.T) {
 	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
 	cleanupOrganizationDataWithContext(orgUser.owner.UserCtx, t)
 }
+
+// TestControlReportRelatedControlsScoping verifies two properties of relatedControls (and the
+// linkedPolicies derived from it):
+//
+//   - same-side siblings are not related: a mapping only asserts a relationship between its
+//     from-side and its to-side, so two controls sharing the from-side are not related to each other
+//   - mappings are not chased transitively: if sibA → target and target → hop2 are two separate
+//     mappings, sibA's related controls are target only, never hop2
+//
+// Because linkedPolicies unions the policies of a control's related controls, the sibling's and
+// the transitive control's policies must not leak into sibA's linkedPolicies.
+func TestControlReportRelatedControlsScoping(t *testing.T) {
+	t.Parallel()
+
+	org := suite.seedOrgOwner(t)
+	ctx := org.owner.UserCtx
+
+	// sibA and sibB share the from-side of one mapping; target is its lone to-side control
+	sibA := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
+	sibB := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
+	target := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
+	// hop2 is a second hop reachable only by chasing target's mapping transitively
+	hop2 := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
+
+	// mapping 1: [sibA, sibB] -> [target]
+	(&MappedControlBuilder{
+		client:         suite.client,
+		FromControlIDs: []string{sibA.ID, sibB.ID},
+		ToControlIDs:   []string{target.ID},
+	}).MustNew(ctx, t)
+
+	// mapping 2: [target] -> [hop2]
+	(&MappedControlBuilder{
+		client:         suite.client,
+		FromControlIDs: []string{target.ID},
+		ToControlIDs:   []string{hop2.ID},
+	}).MustNew(ctx, t)
+
+	// the sibling and the transitive hop each get a distinct linked policy; target's own policy
+	// lets us prove only the direct related control's policy surfaces on sibA
+	siblingPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(ctx, t)
+	transitivePolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(ctx, t)
+	targetPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(ctx, t)
+
+	dbCtx := setContext(ctx, suite.client.db)
+	requireNoError(t, suite.client.db.InternalPolicy.UpdateOneID(siblingPolicy.ID).AddControlIDs(sibB.ID).Exec(dbCtx))
+	requireNoError(t, suite.client.db.InternalPolicy.UpdateOneID(transitivePolicy.ID).AddControlIDs(hop2.ID).Exec(dbCtx))
+	requireNoError(t, suite.client.db.InternalPolicy.UpdateOneID(targetPolicy.ID).AddControlIDs(target.ID).Exec(dbCtx))
+
+	resp, err := suite.client.api.GetAllControlReports(ctx)
+	assert.NilError(t, err)
+	assert.Check(t, resp != nil)
+
+	var checkedSibA bool
+	for _, edge := range resp.ControlReports.Edges {
+		if edge.Node.ID != sibA.ID {
+			continue
+		}
+
+		checkedSibA = true
+
+		// related controls is the opposite side of sibA's own mapping only: target, never the
+		// same-side sibling sibB and never the transitive hop2
+		assert.Check(t, is.Len(edge.Node.RelatedControls, 1))
+		assert.Check(t, is.Equal(target.ID, edge.Node.RelatedControls[0].ID))
+
+		for _, rc := range edge.Node.RelatedControls {
+			assert.Check(t, rc.ID != sibB.ID, "same-side sibling must not be a related control")
+			assert.Check(t, rc.ID != hop2.ID, "transitively mapped control must not be a related control")
+		}
+
+		// linkedPolicies is derived from relatedControls, so only the target's policy surfaces,
+		// not the sibling's or the transitive hop's
+		assert.Check(t, is.Equal(int64(1), edge.Node.LinkedPolicies.TotalCount))
+		assert.Check(t, is.Len(edge.Node.LinkedPolicies.InternalPolicies, 1))
+		assert.Check(t, is.Equal(targetPolicy.ID, edge.Node.LinkedPolicies.InternalPolicies[0].ID))
+	}
+
+	assert.Check(t, checkedSibA)
+
+	cleanupOrganizationDataWithContext(ctx, t)
+}
