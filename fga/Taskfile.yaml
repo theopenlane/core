@@ -18,6 +18,13 @@ tasks:
     dir: ../
     cmds:
       - go run fga/generate/main.go
+      - task: generate:permissions
+
+  generate:permissions:
+    desc: generates the organization permission catalog (consumed by the frontend codegen)
+    dir: ../
+    cmds:
+      - go run -tags fgagenerate ./fga/generate/permissions/
 
   validate:
     desc: validates the fga model file
