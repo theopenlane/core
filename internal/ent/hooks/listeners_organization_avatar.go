@@ -269,7 +269,7 @@ func getLargestIconSize(sizes string) int {
 	areas := lo.FilterMap(sizesCollection, func(size string, _ int) (int, bool) {
 
 		parts := strings.SplitN(size, "x", 2) //nolint:mnd
-		if len(parts) != 2 { //nolint:mnd
+		if len(parts) != 2 {                  //nolint:mnd
 			return 0, false
 		}
 
