@@ -387,6 +387,7 @@ func TestComputeEvidenceStatus(t *testing.T) {
 		id              string
 		relatedControls []*model.ControlInfo
 		wantCount       int
+		wantInherited   int
 		wantWorst       *enums.EvidenceStatus
 	}{
 		{
@@ -410,8 +411,9 @@ func TestComputeEvidenceStatus(t *testing.T) {
 			relatedControls: []*model.ControlInfo{
 				{ID: "ctrl-rel", IsSubcontrol: false},
 			},
-			wantCount: 2,
-			wantWorst: func() *enums.EvidenceStatus { s := enums.EvidenceStatusRejected; return &s }(),
+			wantCount:     2,
+			wantInherited: 1, // e2 from ctrl-rel
+			wantWorst:     func() *enums.EvidenceStatus { s := enums.EvidenceStatusRejected; return &s }(),
 		},
 		{
 			name:        "duplicate evidence across entity and related control deduplicated",
@@ -420,8 +422,9 @@ func TestComputeEvidenceStatus(t *testing.T) {
 			relatedControls: []*model.ControlInfo{
 				{ID: "ctrl-rel", IsSubcontrol: false},
 			},
-			wantCount: 3, // e1, e2, e3 — e2 counted once
-			wantWorst: func() *enums.EvidenceStatus { s := enums.EvidenceStatusRejected; return &s }(),
+			wantCount:     3, // e1, e2, e3 — e2 counted once
+			wantInherited: 1, // e3 only; e2 is direct so it wins
+			wantWorst:     func() *enums.EvidenceStatus { s := enums.EvidenceStatusRejected; return &s }(),
 		},
 		{
 			// buildEvidenceMap scopes WithControls to controlIDs so out-of-scope controls
@@ -443,8 +446,9 @@ func TestComputeEvidenceStatus(t *testing.T) {
 			relatedControls: []*model.ControlInfo{
 				{ID: "ctrl-rel", IsSubcontrol: false},
 			},
-			wantCount: 2,
-			wantWorst: func() *enums.EvidenceStatus { s := enums.EvidenceStatusSubmitted; return &s }(),
+			wantCount:     2,
+			wantInherited: 2, // both e1 and e3 come from ctrl-rel
+			wantWorst:     func() *enums.EvidenceStatus { s := enums.EvidenceStatusSubmitted; return &s }(),
 		},
 	}
 
@@ -453,6 +457,7 @@ func TestComputeEvidenceStatus(t *testing.T) {
 			result := computeEvidenceStatus(tt.evidenceMap, tt.id, tt.relatedControls)
 			assert.Assert(t, result != nil)
 			assert.Check(t, is.Equal(tt.wantCount, result.TotalCount))
+			assert.Check(t, is.Equal(tt.wantInherited, result.InheritedCount))
 			if tt.wantWorst == nil {
 				assert.Check(t, result.WorstStatus == nil)
 			} else {
@@ -468,11 +473,12 @@ func TestComputeLinkedPolicies(t *testing.T) {
 	p2 := &generated.InternalPolicy{ID: "p2", Name: "Policy B", Status: enums.DocumentDraft}
 
 	tests := []struct {
-		name            string
-		policiesMap     map[string][]*generated.InternalPolicy
-		id              string
-		relatedControls []*model.ControlInfo
-		wantCount       int
+		name              string
+		policiesMap       map[string][]*generated.InternalPolicy
+		id                string
+		relatedControls   []*model.ControlInfo
+		wantCount         int
+		wantInheritedFrom map[string][]string
 	}{
 		{
 			name:        "no policies",
@@ -493,7 +499,8 @@ func TestComputeLinkedPolicies(t *testing.T) {
 			relatedControls: []*model.ControlInfo{
 				{ID: "ctrl-rel", IsSubcontrol: false},
 			},
-			wantCount: 2,
+			wantCount:         2,
+			wantInheritedFrom: map[string][]string{"p2": {"ctrl-rel"}},
 		},
 		{
 			name:        "duplicate policy across entity and related control deduplicated",
@@ -523,7 +530,8 @@ func TestComputeLinkedPolicies(t *testing.T) {
 			relatedControls: []*model.ControlInfo{
 				{ID: "ctrl-rel", IsSubcontrol: false},
 			},
-			wantCount: 2,
+			wantCount:         2,
+			wantInheritedFrom: map[string][]string{"p1": {"ctrl-rel"}, "p2": {"ctrl-rel"}},
 		},
 	}
 
@@ -533,6 +541,10 @@ func TestComputeLinkedPolicies(t *testing.T) {
 			assert.Assert(t, result != nil)
 			assert.Check(t, is.Equal(tt.wantCount, result.TotalCount))
 			assert.Check(t, is.Equal(tt.wantCount, len(result.InternalPolicies)))
+
+			for _, ps := range result.InternalPolicies {
+				assert.Check(t, is.DeepEqual(tt.wantInheritedFrom[ps.ID], ps.InheritedFromIDs))
+			}
 		})
 	}
 }

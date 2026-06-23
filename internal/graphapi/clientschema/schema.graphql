@@ -9229,6 +9229,11 @@ type ControlEvidence {
 	"""
 	totalCount: Int!
 	"""
+	from the total number, the amount inherited from linked controls instead of directly
+	linked to this control
+	"""
+	inheritedCount: Int!
+	"""
 	the most severe evidence status among all linked evidence items
 	"""
 	worstStatus: EvidenceEvidenceStatus
@@ -63070,6 +63075,10 @@ type PolicySummary implements Node {
 	status of the policy, e.g. draft, published, archived, etc.
 	"""
 	status: InternalPolicyDocumentStatus!
+	"""
+	empty when linked directly to the control; otherwise the related/mapped control IDs that contributed it
+	"""
+	inheritedFromIDs: [ID!]
 }
 """
 The `Price` scalar type represents a monetary value for a subscription, including the numerical amount, the interval of recurrence and the currency to be charged in (e.g. USD)

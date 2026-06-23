@@ -30,6 +30,7 @@ query GetAllControlReports {
         }
         evidenceStatus {
           totalCount
+          inheritedCount
           worstStatus
           approvedCount
           countByStatus {
@@ -43,6 +44,7 @@ query GetAllControlReports {
             id
             name
             status
+            inheritedFromIDs
           }
         }
         subcontrols {
@@ -61,6 +63,7 @@ query GetAllControlReports {
           }
           evidenceStatus {
             totalCount
+            inheritedCount
             worstStatus
           }
           linkedPolicies {
@@ -69,6 +72,7 @@ query GetAllControlReports {
               id
               name
               status
+              inheritedFromIDs
             }
           }
         }
@@ -116,6 +120,7 @@ query GetControlReports($first: Int, $last: Int, $after: Cursor, $before: Cursor
         }
         evidenceStatus {
           totalCount
+          inheritedCount
           worstStatus
           approvedCount
           countByStatus {
@@ -129,6 +134,7 @@ query GetControlReports($first: Int, $last: Int, $after: Cursor, $before: Cursor
             id
             name
             status
+            inheritedFromIDs
           }
         }
         subcontrols {
@@ -147,6 +153,7 @@ query GetControlReports($first: Int, $last: Int, $after: Cursor, $before: Cursor
           }
           evidenceStatus {
             totalCount
+            inheritedCount
             worstStatus
           }
           linkedPolicies {
@@ -155,6 +162,7 @@ query GetControlReports($first: Int, $last: Int, $after: Cursor, $before: Cursor
               id
               name
               status
+              inheritedFromIDs
             }
           }
         }
@@ -188,6 +196,7 @@ query GetControlReportsByCategory($where: ControlWhereInput) {
       }
       evidenceStatus {
         totalCount
+        inheritedCount
         worstStatus
         approvedCount
         countByStatus {
@@ -201,6 +210,7 @@ query GetControlReportsByCategory($where: ControlWhereInput) {
           id
           name
           status
+          inheritedFromIDs
         }
       }
       subcontrols {
@@ -219,6 +229,7 @@ query GetControlReportsByCategory($where: ControlWhereInput) {
         }
         evidenceStatus {
           totalCount
+          inheritedCount
           worstStatus
           approvedCount
           countByStatus {
@@ -232,6 +243,7 @@ query GetControlReportsByCategory($where: ControlWhereInput) {
             id
             name
             status
+            inheritedFromIDs
           }
         }
       }

@@ -4693,6 +4693,9 @@ type ControlEdge struct {
 type ControlEvidence struct {
 	// total number of evidence items linked to the control
 	TotalCount int64 `json:"totalCount"`
+	// from the total number, the amount inherited from linked controls instead of directly
+	// linked to this control
+	InheritedCount int64 `json:"inheritedCount"`
 	// the most severe evidence status among all linked evidence items
 	WorstStatus *enums.EvidenceStatus `json:"worstStatus,omitempty"`
 	// number of evidence items with auditor-approved status
@@ -28542,6 +28545,8 @@ type PolicySummary struct {
 	Name string `json:"name"`
 	// status of the policy, e.g. draft, published, archived, etc.
 	Status enums.DocumentStatus `json:"status"`
+	// empty when linked directly to the control; otherwise the related/mapped control IDs that contributed it
+	InheritedFromIDs []string `json:"inheritedFromIDs,omitempty"`
 }
 
 func (PolicySummary) IsNode() {}

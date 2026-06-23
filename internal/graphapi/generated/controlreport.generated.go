@@ -50,6 +50,29 @@ func (ec *executionContext) fieldContext_ControlEvidence_totalCount(_ context.Co
 	return graphql.NewScalarFieldContext("ControlEvidence", field, false, false, errors.New("field of type Int does not have child fields"))
 }
 
+func (ec *executionContext) _ControlEvidence_inheritedCount(ctx context.Context, field graphql.CollectedField, obj *model.ControlEvidence) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlEvidence_inheritedCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InheritedCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ControlEvidence_inheritedCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlEvidence", field, false, false, errors.New("field of type Int does not have child fields"))
+}
+
 func (ec *executionContext) _ControlEvidence_worstStatus(ctx context.Context, field graphql.CollectedField, obj *model.ControlEvidence) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1301,6 +1324,29 @@ func (ec *executionContext) fieldContext_PolicySummary_status(_ context.Context,
 	return graphql.NewScalarFieldContext("PolicySummary", field, false, false, errors.New("field of type InternalPolicyDocumentStatus does not have child fields"))
 }
 
+func (ec *executionContext) _PolicySummary_inheritedFromIDs(ctx context.Context, field graphql.CollectedField, obj *model.PolicySummary) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PolicySummary_inheritedFromIDs(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InheritedFromIDs, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PolicySummary_inheritedFromIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PolicySummary", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
 // endregion **************************** field.gotpl *****************************
 
 // region    **************************** input.gotpl *****************************
@@ -1367,6 +1413,11 @@ func (ec *executionContext) _ControlEvidence(ctx context.Context, sel ast.Select
 			out.Values[i] = graphql.MarshalString("ControlEvidence")
 		case "totalCount":
 			out.Values[i] = ec._ControlEvidence_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "inheritedCount":
+			out.Values[i] = ec._ControlEvidence_inheritedCount(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -1865,6 +1916,11 @@ func (ec *executionContext) _PolicySummary(ctx context.Context, sel ast.Selectio
 		case "status":
 			out.Values[i] = ec._PolicySummary_status(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "inheritedFromIDs":
+			out.Values[i] = ec._PolicySummary_inheritedFromIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
 		default:

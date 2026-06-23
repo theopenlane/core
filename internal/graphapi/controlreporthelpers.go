@@ -108,11 +108,13 @@ var controlReportPathPrefixes = []string{pathPrefixPaginated, pathPrefixCategory
 // ControlReport node) are requested in the current operation, under any known path prefix.
 func controlReportFieldRequested(ctx context.Context, fields ...string) bool {
 	paths := make([]string, 0, len(fields)*len(controlReportPathPrefixes))
+
 	for _, prefix := range controlReportPathPrefixes {
 		for _, field := range fields {
 			paths = append(paths, prefix+field)
 		}
 	}
+
 	return graphql.AnyFieldRequested(ctx, paths...)
 }
 
@@ -417,11 +419,14 @@ func computeEvidenceStatus(evidenceMap map[string][]*generated.Evidence, id stri
 			all = append(all, e)
 		}
 	}
+
+	inheritedCount := 0
 	for _, rc := range relatedControls {
 		for _, e := range evidenceMap[rc.ID] {
 			if _, ok := seen[e.ID]; !ok {
 				seen[e.ID] = struct{}{}
 				all = append(all, e)
+				inheritedCount++
 			}
 		}
 	}
@@ -447,37 +452,51 @@ func computeEvidenceStatus(evidenceMap map[string][]*generated.Evidence, id stri
 	})
 
 	return &model.ControlEvidence{
-		TotalCount:    len(all),
-		WorstStatus:   worstEvidenceStatus(all),
-		ApprovedCount: approvedCount,
-		CountByStatus: countByStatus,
+		TotalCount:     len(all),
+		InheritedCount: inheritedCount,
+		WorstStatus:    worstEvidenceStatus(all),
+		ApprovedCount:  approvedCount,
+		CountByStatus:  countByStatus,
 	}
+}
+
+// getOrCreatePolicySummary returns the summary for p from byID, creating and registering a new one
+func getOrCreatePolicySummary(byID map[string]*model.PolicySummary, p *generated.InternalPolicy) (summary *model.PolicySummary, created bool) {
+	if s, ok := byID[p.ID]; ok {
+		return s, false
+	}
+
+	s := &model.PolicySummary{ID: p.ID, Name: p.Name, Status: p.Status}
+	byID[p.ID] = s
+
+	return s, true
 }
 
 // computeLinkedPolicies aggregates policies for a single entity from the pre-fetched map,
 // including policies from related controls, deduplicating by policy ID.
 func computeLinkedPolicies(policiesMap map[string][]*generated.InternalPolicy, id string, relatedControls []*model.ControlInfo) *model.ControlPolicies {
-	seen := map[string]struct{}{}
+	byID := map[string]*model.PolicySummary{}
+	direct := map[string]struct{}{}
 	var summaries []*model.PolicySummary
 
-	collect := func(p *generated.InternalPolicy) {
-		if _, ok := seen[p.ID]; !ok {
-			seen[p.ID] = struct{}{}
-			summaries = append(summaries, &model.PolicySummary{
-				ID:     p.ID,
-				Name:   p.Name,
-				Status: p.Status,
-			})
-		}
-	}
-
 	for _, p := range policiesMap[id] {
-		collect(p)
+		if s, created := getOrCreatePolicySummary(byID, p); created {
+			summaries = append(summaries, s)
+		}
+
+		direct[p.ID] = struct{}{}
 	}
 
 	for _, rc := range relatedControls {
 		for _, p := range policiesMap[rc.ID] {
-			collect(p)
+			s, created := getOrCreatePolicySummary(byID, p)
+			if created {
+				summaries = append(summaries, s)
+			}
+
+			if _, isDirect := direct[p.ID]; !isDirect {
+				s.InheritedFromIDs = append(s.InheritedFromIDs, rc.ID)
+			}
 		}
 	}
 
