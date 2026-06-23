@@ -272,6 +272,7 @@ func deriveRateLimitLogger(c echo.Context, key string) zerolog.Logger {
 		Str("request_path", c.Path()).
 		Str("request_method", c.Request().Method).
 		Str("remote_ip", c.RealIP()).
+		Str("cf_connecting_ip", c.Request().Header.Get("CF-Connecting-IP")).
 		Logger()
 }
 

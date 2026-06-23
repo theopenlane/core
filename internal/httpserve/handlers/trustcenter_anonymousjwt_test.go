@@ -156,9 +156,12 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			target := fmt.Sprintf("/trustcenter/auth/anonymous?referer=%s", tc.referer)
+			target := "/trustcenter/auth/anonymous"
 
 			req := httptest.NewRequest(http.MethodPost, target, nil)
+			if tc.referer != "" {
+				req.Header.Set("Referer", tc.referer)
+			}
 
 			// Set writer for tests that write on the response
 			recorder := httptest.NewRecorder()
@@ -191,6 +194,9 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 					var errorResp map[string]interface{}
 					res.Body.Close()
 					req2 := httptest.NewRequest(http.MethodPost, target, nil)
+					if tc.referer != "" {
+						req2.Header.Set("Referer", tc.referer)
+					}
 					recorder2 := httptest.NewRecorder()
 					suite.e.ServeHTTP(recorder2, req2)
 					res2 := recorder2.Result()
