@@ -11,11 +11,6 @@ import (
 	"github.com/theopenlane/iam/tokens"
 )
 
-// supportCapabilities are granted to the virtual Openlane support identity during a support session.
-// They allow owner-level work (FGA, feature, and subscription checks bypassed) while remaining scoped
-// to the consented organization, since the org filter is intentionally not bypassed
-const supportCapabilities = auth.CapBypassFGA | auth.CapBypassFeatureCheck | auth.CapBypassSubscriptionCheck
-
 // Middleware handles detection and processing of impersonation tokens
 type Middleware struct {
 	tokenManager *tokens.TokenManager
@@ -92,19 +87,19 @@ func (m *Middleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 
 // createImpersonatedCaller creates a Caller with impersonation context from impersonation claims.
 func (m *Middleware) createImpersonatedCaller(claims *tokens.ImpersonationClaims) (*auth.Caller, error) {
-	caller := &auth.Caller{
-		SubjectID:          claims.UserID,
-		SubjectEmail:       claims.TargetUserEmail,
-		OrganizationID:     claims.OrgID,
-		OrganizationIDs:    []string{claims.OrgID},
-		AuthenticationType: auth.JWTAuthentication,
-	}
+	var caller *auth.Caller
 
-	// the virtual Openlane support identity is granted owner-level, org-scoped capabilities so support
-	// staff can perform tasks such as ownership transfer or organization deletion within the consented org
+	// the virtual Openlane support identity gets org-scoped support capabilities within the consented org
 	if m.supportSubjectID != "" && claims.UserID == m.supportSubjectID {
-		caller.SubjectName = m.supportName
-		caller.Capabilities = supportCapabilities
+		caller = auth.NewOrgSupportCaller(claims.OrgID, claims.UserID, m.supportName, claims.TargetUserEmail)
+	} else {
+		caller = &auth.Caller{
+			SubjectID:          claims.UserID,
+			SubjectEmail:       claims.TargetUserEmail,
+			OrganizationID:     claims.OrgID,
+			OrganizationIDs:    []string{claims.OrgID},
+			AuthenticationType: auth.JWTAuthentication,
+		}
 	}
 
 	// Create the impersonation context
@@ -118,7 +113,6 @@ func (m *Middleware) createImpersonatedCaller(claims *tokens.ImpersonationClaims
 		StartedAt:         claims.IssuedAt.Time,
 		ExpiresAt:         claims.ExpiresAt.Time,
 		SessionID:         claims.SessionID,
-		Scopes:            claims.Scopes,
 	}
 
 	caller.Impersonation = impersonationContext
@@ -134,32 +128,6 @@ func (m *Middleware) logImpersonationAccess(claims *tokens.ImpersonationClaims, 
 	}
 
 	logx.FromContext(ctx).Info().Str("impersonator", claims.ImpersonatorID).Str("target", claims.UserID).Msg("impersonation token used")
-}
-
-// RequireImpersonationScope creates middleware that requires specific impersonation scopes
-func RequireImpersonationScope(requiredScope string) echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			ctx := c.Request().Context()
-
-			caller, ok := auth.CallerFromContext(ctx)
-			if !ok || caller == nil || !caller.IsImpersonated() {
-				// Not impersonated, proceed normally
-				return next(c)
-			}
-
-			// Check if the impersonation has the required scope
-			if !caller.CanPerformAction(requiredScope) {
-				logx.FromContext(ctx).Info().
-					Str("user_id", caller.SubjectID).
-					Str("missing_scope", requiredScope).
-					Msg("impersonated user missing required scope for this action")
-				return echo.NewHTTPError(http.StatusForbidden, "impersonation scope insufficient for this action")
-			}
-
-			return next(c)
-		}
-	}
 }
 
 // BlockImpersonation creates middleware that blocks impersonated users from certain endpoints

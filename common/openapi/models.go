@@ -2087,8 +2087,6 @@ type StartImpersonationRequest struct {
 	Reason string `json:"reason" validate:"required,min=10,max=500" description:"Reason for the impersonation"`
 	// Duration is the duration_hours value.
 	Duration *int `json:"duration_hours,omitempty" description:"Duration in hours (optional, defaults to 1 hour)"`
-	// Scopes is the scopes value.
-	Scopes []string `json:"scopes,omitempty" description:"Specific scopes for the impersonation session"`
 	// OrganizationID is the organization_id value.
 	OrganizationID string `json:"organization_id,omitempty" description:"Organization context for impersonation"`
 }
