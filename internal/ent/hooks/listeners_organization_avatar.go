@@ -28,7 +28,7 @@ import (
 
 const (
 	avatarFetchTimeout = 1 * time.Minute
-	// 2MB
+	// avatarMaxBytes set to 2MB
 	avatarMaxBytes = 2 << 20
 )
 
