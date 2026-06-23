@@ -4,7 +4,7 @@ services:
       - ./configs/keycloak/init.sql:/docker-entrypoint-initdb.d/init_keycloak.sql
 
   keycloak:
-    image: quay.io/keycloak/keycloak:26.2.4
+    image: quay.io/keycloak/keycloak:latest
     command: start-dev
     env_file:
       - ${PWD}/docker/configs/keycloak/.env-example
