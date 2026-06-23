@@ -17,7 +17,6 @@ func registerTrustCenterAnonymousJWTHandler(router *Router) error {
 		OperationID: "TrustCenterAnonymousJWT",
 		Security:    handlers.BasicSecurity(),
 		Middlewares: *unauthenticatedEndpoint,
-		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.CreateTrustCenterAnonymousJWT,
 	}
 

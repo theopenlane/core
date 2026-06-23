@@ -21,7 +21,7 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenA
 		return h.Success(ctx, response, openapi)
 	}
 
-	referer := ctx.Request().URL.Query().Get("referer")
+	referer := ctx.Request().Referer()
 
 	// 1. create the auth allowContext with a bootstrap trust center caller
 	reqCtx := ctx.Request().Context()
