@@ -137,7 +137,7 @@ func fetchAvatarFromURL(ctx context.Context, client *http.Client, websiteURL str
 	defer resp.Body.Close()
 
 	if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusMultipleChoices {
-		return "", fmt.Errorf("domain returned status %d", resp.StatusCode)
+		return "", fmt.Errorf("domain returned status %d", resp.StatusCode) //nolint:err113
 	}
 
 	reader := io.LimitReader(resp.Body, avatarMaxBytes)
@@ -268,8 +268,8 @@ func getLargestIconSize(sizes string) int {
 
 	areas := lo.FilterMap(sizesCollection, func(size string, _ int) (int, bool) {
 
-		parts := strings.SplitN(size, "x", 2)
-		if len(parts) != 2 {
+		parts := strings.SplitN(size, "x", 2) //nolint:mnd
+		if len(parts) != 2 { //nolint:mnd
 			return 0, false
 		}
 
