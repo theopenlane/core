@@ -68,12 +68,6 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	// Set default scopes based on impersonation type
-	scopes := req.Scopes
-	if len(scopes) == 0 {
-		scopes = h.getDefaultScopes(req.Type)
-	}
-
 	// Calculate duration
 	duration := time.Hour // Default 1 hour
 	if req.Duration != nil {
@@ -97,7 +91,6 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 		Type:              req.Type,
 		Reason:            req.Reason,
 		Duration:          duration,
-		Scopes:            scopes,
 	})
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error creating impersonation token")
@@ -128,7 +121,6 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 		IPAddress:         ctx.RealIP(),
 		UserAgent:         ctx.Request().UserAgent(),
 		OrganizationID:    orgID,
-		Scopes:            scopes,
 	}
 
 	if caller.Has(auth.CapSystemAdmin) {
@@ -185,7 +177,6 @@ func (h *Handler) EndImpersonation(ctx echo.Context, openapi *OpenAPIContext) er
 		IPAddress:         ctx.RealIP(),
 		UserAgent:         ctx.Request().UserAgent(),
 		OrganizationID:    caller.OrganizationID,
-		Scopes:            caller.Impersonation.Scopes,
 	}); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to log impersonation end event")
 	}
@@ -250,20 +241,6 @@ func (h *Handler) getTargetUser(ctx context.Context, userID string, orgID string
 	return user, nil
 }
 
-// getDefaultScopes returns default scopes for each impersonation type
-func (h *Handler) getDefaultScopes(impType string) []string {
-	switch impType {
-	case "support":
-		return []string{"read", "debug"} // Limited read access for debugging
-	case "admin":
-		return []string{"*"} // Full access
-	case "job":
-		return []string{"read", "write"} // Standard job permissions
-	default:
-		return []string{"read"}
-	}
-}
-
 // logImpersonationEvent logs impersonation events for audit purposes
 // and persists it into the database
 func (h *Handler) logImpersonationEvent(ctx context.Context, action string, auditLog *auth.ImpersonationAuditLog) error {
@@ -274,7 +251,6 @@ func (h *Handler) logImpersonationEvent(ctx context.Context, action string, audi
 		SetImpersonationType(*enums.ToImpersonationType(string(auditLog.Type))).
 		SetReason(auditLog.Reason).
 		SetIPAddress(auditLog.IPAddress).
-		SetScopes(auditLog.Scopes).
 		SetUserAgent(auditLog.UserAgent).
 		SetUserID(auditLog.ImpersonatorID).
 		SetTargetUserID(auditLog.TargetUserID).
