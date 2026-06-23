@@ -293,6 +293,7 @@ func TestQueryControlReports(t *testing.T) {
 							if rc.ID == richData.ctrlToSubcontrolRelatedID {
 								foundSubcontrolRelated = true
 								assert.Check(t, rc.IsSubcontrol)
+								assert.Check(t, rc.ParentControlID != nil)
 							}
 						}
 						assert.Check(t, foundSubcontrolRelated)
@@ -392,6 +393,7 @@ func TestQueryControlReportsByCategory(t *testing.T) {
 						if c.ID == richData.primaryControlID {
 							assert.Check(t, is.Len(c.Subcontrols, 1))
 							assert.Check(t, is.Equal(c.Subcontrols[0].ID, richData.subcontrolID))
+							assert.Check(t, c.Subcontrols[0].ParentControlID != nil)
 							assert.Check(t, is.Equal(int64(2), c.EvidenceStatus.TotalCount))
 							assert.Check(t, is.Equal(int64(1), c.EvidenceStatus.ApprovedCount))
 							assert.Check(t, is.Len(c.EvidenceStatus.CountByStatus, 2))

@@ -421,6 +421,29 @@ func (ec *executionContext) fieldContext_ControlInfo_isSubcontrol(_ context.Cont
 	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, errors.New("field of type Boolean does not have child fields"))
 }
 
+func (ec *executionContext) _ControlInfo_parentControlID(ctx context.Context, field graphql.CollectedField, obj *model.ControlInfo) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlInfo_parentControlID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ParentControlID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOID2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlInfo_parentControlID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlInfo", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
 func (ec *executionContext) _ControlPolicies_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.ControlPolicies) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -496,6 +519,29 @@ func (ec *executionContext) _ControlReport_id(ctx context.Context, field graphql
 	)
 }
 func (ec *executionContext) fieldContext_ControlReport_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlReport", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _ControlReport_parentControlID(ctx context.Context, field graphql.CollectedField, obj *model.ControlReport) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlReport_parentControlID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ParentControlID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOID2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlReport_parentControlID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("ControlReport", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
@@ -1377,6 +1423,11 @@ func (ec *executionContext) _ControlInfo(ctx context.Context, sel ast.SelectionS
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "parentControlID":
+			out.Values[i] = ec._ControlInfo_parentControlID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -1458,6 +1509,11 @@ func (ec *executionContext) _ControlReport(ctx context.Context, sel ast.Selectio
 		case "id":
 			out.Values[i] = ec._ControlReport_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "parentControlID":
+			out.Values[i] = ec._ControlReport_parentControlID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
 		case "refCode":

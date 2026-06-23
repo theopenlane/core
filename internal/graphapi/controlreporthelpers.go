@@ -33,6 +33,7 @@ const (
 	fieldSubcontrols     = "subcontrols"
 	fieldRelatedControls = "relatedControls"
 	fieldControlOwner    = "controlOwner"
+	fieldParentControlID = "parentControlID"
 
 	fieldSubcontrolRelated        = fieldSubcontrols + "." + fieldRelatedControls
 	fieldSubcontrolEvidenceStatus = fieldSubcontrols + "." + fieldEvidenceStatus
@@ -51,6 +52,7 @@ var nonColumnControlReportFields = map[string]struct{}{
 	fieldSubcontrols:     {},
 	fieldRelatedControls: {},
 	fieldControlOwner:    {},
+	fieldParentControlID: {},
 }
 
 // collectControlReportEntFields walks the GraphQL selection set along path, then collects
@@ -484,6 +486,7 @@ func controlToReport(c *generated.Control) *model.ControlReport {
 func subcontrolToReport(c *generated.Subcontrol) *model.ControlReport {
 	return &model.ControlReport{
 		ID:                 c.ID,
+		ParentControlID:    &c.ControlID,
 		RefCode:            c.RefCode,
 		Description:        &c.Description,
 		Title:              &c.Title,
@@ -545,6 +548,7 @@ func subcontrolEdgeToControlInfo(c *generated.Subcontrol) *model.ControlInfo {
 		ControlOwner:       c.Edges.ControlOwner,
 		ReferenceFramework: c.ReferenceFramework,
 		IsSubcontrol:       true,
+		ParentControlID:    &c.ControlID,
 	}
 }
 
