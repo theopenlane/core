@@ -53,7 +53,6 @@ type FindingQuery struct {
 	withOwner                   *OrganizationQuery
 	withBlockedGroups           *GroupQuery
 	withEditors                 *GroupQuery
-	withViewers                 *GroupQuery
 	withEnvironment             *CustomTypeEnumQuery
 	withScope                   *CustomTypeEnumQuery
 	withFindingStatus           *CustomTypeEnumQuery
@@ -81,7 +80,6 @@ type FindingQuery struct {
 	modifiers                   []func(*sql.Selector)
 	withNamedBlockedGroups      map[string]*GroupQuery
 	withNamedEditors            map[string]*GroupQuery
-	withNamedViewers            map[string]*GroupQuery
 	withNamedIntegrations       map[string]*IntegrationQuery
 	withNamedVulnerabilities    map[string]*VulnerabilityQuery
 	withNamedActionPlans        map[string]*ActionPlanQuery
@@ -177,11 +175,11 @@ func (_q *FindingQuery) QueryBlockedGroups() *GroupQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(finding.Table, finding.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, finding.BlockedGroupsTable, finding.BlockedGroupsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, finding.BlockedGroupsTable, finding.BlockedGroupsPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.FindingBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -202,36 +200,11 @@ func (_q *FindingQuery) QueryEditors() *GroupQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(finding.Table, finding.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, finding.EditorsTable, finding.EditorsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, finding.EditorsTable, finding.EditorsPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryViewers chains the current query on the "viewers" edge.
-func (_q *FindingQuery) QueryViewers() *GroupQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(finding.Table, finding.FieldID, selector),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, finding.ViewersTable, finding.ViewersColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.FindingEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1008,7 +981,6 @@ func (_q *FindingQuery) Clone() *FindingQuery {
 		withOwner:              _q.withOwner.Clone(),
 		withBlockedGroups:      _q.withBlockedGroups.Clone(),
 		withEditors:            _q.withEditors.Clone(),
-		withViewers:            _q.withViewers.Clone(),
 		withEnvironment:        _q.withEnvironment.Clone(),
 		withScope:              _q.withScope.Clone(),
 		withFindingStatus:      _q.withFindingStatus.Clone(),
@@ -1069,17 +1041,6 @@ func (_q *FindingQuery) WithEditors(opts ...func(*GroupQuery)) *FindingQuery {
 		opt(query)
 	}
 	_q.withEditors = query
-	return _q
-}
-
-// WithViewers tells the query-builder to eager-load the nodes that are connected to
-// the "viewers" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *FindingQuery) WithViewers(opts ...func(*GroupQuery)) *FindingQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withViewers = query
 	return _q
 }
 
@@ -1420,11 +1381,10 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 	var (
 		nodes       = []*Finding{}
 		_spec       = _q.querySpec()
-		loadedTypes = [27]bool{
+		loadedTypes = [26]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
-			_q.withViewers != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
 			_q.withFindingStatus != nil,
@@ -1490,13 +1450,6 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *Finding) { n.Edges.Editors = []*Group{} },
 			func(n *Finding, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withViewers; query != nil {
-		if err := _q.loadViewers(ctx, query, nodes,
-			func(n *Finding) { n.Edges.Viewers = []*Group{} },
-			func(n *Finding, e *Group) { n.Edges.Viewers = append(n.Edges.Viewers, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1673,13 +1626,6 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *Finding) { n.appendNamedEditors(name) },
 			func(n *Finding, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedViewers {
-		if err := _q.loadViewers(ctx, query, nodes,
-			func(n *Finding) { n.appendNamedViewers(name) },
-			func(n *Finding, e *Group) { n.appendNamedViewers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1861,95 +1807,126 @@ func (_q *FindingQuery) loadOwner(ctx context.Context, query *OrganizationQuery,
 	return nil
 }
 func (_q *FindingQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *Group)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Finding)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Finding)
+	nids := make(map[string]map[*Finding]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Group(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(finding.BlockedGroupsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(finding.BlockedGroupsTable)
+		joinT.Schema(_q.schemaConfig.FindingBlockedGroups)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(finding.BlockedGroupsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(finding.BlockedGroupsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(finding.BlockedGroupsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Finding]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.finding_blocked_groups
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "finding_blocked_groups" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "finding_blocked_groups" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "blocked_groups" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
 func (_q *FindingQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *Group)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Finding)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Finding)
+	nids := make(map[string]map[*Finding]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Group(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(finding.EditorsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(finding.EditorsTable)
+		joinT.Schema(_q.schemaConfig.FindingEditors)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(finding.EditorsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(finding.EditorsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(finding.EditorsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Finding]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.finding_editors
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "finding_editors" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "finding_editors" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "editors" node returned %v`, n.ID)
 		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *FindingQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *Group)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Finding)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
+		for kn := range nodes {
+			assign(kn, n)
 		}
-	}
-	query.withFKs = true
-	query.Where(predicate.Group(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(finding.ViewersColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.finding_viewers
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "finding_viewers" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "finding_viewers" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
 	}
 	return nil
 }
@@ -3105,20 +3082,6 @@ func (_q *FindingQuery) WithNamedEditors(name string, opts ...func(*GroupQuery))
 		_q.withNamedEditors = make(map[string]*GroupQuery)
 	}
 	_q.withNamedEditors[name] = query
-	return _q
-}
-
-// WithNamedViewers tells the query-builder to eager-load the nodes that are connected to the "viewers"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *FindingQuery) WithNamedViewers(name string, opts ...func(*GroupQuery)) *FindingQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedViewers == nil {
-		_q.withNamedViewers = make(map[string]*GroupQuery)
-	}
-	_q.withNamedViewers[name] = query
 	return _q
 }
 

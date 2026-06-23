@@ -215,21 +215,6 @@ func (_u *SLADefinitionUpdate) AddEditors(v ...*Group) *SLADefinitionUpdate {
 	return _u.AddEditorIDs(ids...)
 }
 
-// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (_u *SLADefinitionUpdate) AddViewerIDs(ids ...string) *SLADefinitionUpdate {
-	_u.mutation.AddViewerIDs(ids...)
-	return _u
-}
-
-// AddViewers adds the "viewers" edges to the Group entity.
-func (_u *SLADefinitionUpdate) AddViewers(v ...*Group) *SLADefinitionUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddViewerIDs(ids...)
-}
-
 // Mutation returns the SLADefinitionMutation object of the builder.
 func (_u *SLADefinitionUpdate) Mutation() *SLADefinitionMutation {
 	return _u.mutation
@@ -281,27 +266,6 @@ func (_u *SLADefinitionUpdate) RemoveEditors(v ...*Group) *SLADefinitionUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEditorIDs(ids...)
-}
-
-// ClearViewers clears all "viewers" edges to the Group entity.
-func (_u *SLADefinitionUpdate) ClearViewers() *SLADefinitionUpdate {
-	_u.mutation.ClearViewers()
-	return _u
-}
-
-// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (_u *SLADefinitionUpdate) RemoveViewerIDs(ids ...string) *SLADefinitionUpdate {
-	_u.mutation.RemoveViewerIDs(ids...)
-	return _u
-}
-
-// RemoveViewers removes "viewers" edges to Group entities.
-func (_u *SLADefinitionUpdate) RemoveViewers(v ...*Group) *SLADefinitionUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveViewerIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -561,54 +525,6 @@ func (_u *SLADefinitionUpdate) sqlSave(ctx context.Context) (_node int, err erro
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   sladefinition.ViewersTable,
-			Columns: []string{sladefinition.ViewersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   sladefinition.ViewersTable,
-			Columns: []string{sladefinition.ViewersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   sladefinition.ViewersTable,
-			Columns: []string{sladefinition.ViewersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	_spec.Node.Schema = _u.schemaConfig.SLADefinition
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -813,21 +729,6 @@ func (_u *SLADefinitionUpdateOne) AddEditors(v ...*Group) *SLADefinitionUpdateOn
 	return _u.AddEditorIDs(ids...)
 }
 
-// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (_u *SLADefinitionUpdateOne) AddViewerIDs(ids ...string) *SLADefinitionUpdateOne {
-	_u.mutation.AddViewerIDs(ids...)
-	return _u
-}
-
-// AddViewers adds the "viewers" edges to the Group entity.
-func (_u *SLADefinitionUpdateOne) AddViewers(v ...*Group) *SLADefinitionUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddViewerIDs(ids...)
-}
-
 // Mutation returns the SLADefinitionMutation object of the builder.
 func (_u *SLADefinitionUpdateOne) Mutation() *SLADefinitionMutation {
 	return _u.mutation
@@ -879,27 +780,6 @@ func (_u *SLADefinitionUpdateOne) RemoveEditors(v ...*Group) *SLADefinitionUpdat
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEditorIDs(ids...)
-}
-
-// ClearViewers clears all "viewers" edges to the Group entity.
-func (_u *SLADefinitionUpdateOne) ClearViewers() *SLADefinitionUpdateOne {
-	_u.mutation.ClearViewers()
-	return _u
-}
-
-// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (_u *SLADefinitionUpdateOne) RemoveViewerIDs(ids ...string) *SLADefinitionUpdateOne {
-	_u.mutation.RemoveViewerIDs(ids...)
-	return _u
-}
-
-// RemoveViewers removes "viewers" edges to Group entities.
-func (_u *SLADefinitionUpdateOne) RemoveViewers(v ...*Group) *SLADefinitionUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveViewerIDs(ids...)
 }
 
 // Where appends a list predicates to the SLADefinitionUpdate builder.
@@ -1178,54 +1058,6 @@ func (_u *SLADefinitionUpdateOne) sqlSave(ctx context.Context) (_node *SLADefini
 			Inverse: false,
 			Table:   sladefinition.EditorsTable,
 			Columns: []string{sladefinition.EditorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   sladefinition.ViewersTable,
-			Columns: []string{sladefinition.ViewersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   sladefinition.ViewersTable,
-			Columns: []string{sladefinition.ViewersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   sladefinition.ViewersTable,
-			Columns: []string{sladefinition.ViewersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),

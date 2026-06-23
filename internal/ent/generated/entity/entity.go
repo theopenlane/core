@@ -152,8 +152,6 @@ const (
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
 	EdgeEditors = "editors"
-	// EdgeViewers holds the string denoting the viewers edge name in mutations.
-	EdgeViewers = "viewers"
 	// EdgeInternalOwnerUser holds the string denoting the internal_owner_user edge name in mutations.
 	EdgeInternalOwnerUser = "internal_owner_user"
 	// EdgeInternalOwnerGroup holds the string denoting the internal_owner_group edge name in mutations.
@@ -235,11 +233,6 @@ const (
 	// EditorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	EditorsInverseTable = "groups"
-	// ViewersTable is the table that holds the viewers relation/edge. The primary key declared below.
-	ViewersTable = "entity_viewers"
-	// ViewersInverseTable is the table name for the Group entity.
-	// It exists in this package in order to avoid circular dependency with the "group" package.
-	ViewersInverseTable = "groups"
 	// InternalOwnerUserTable is the table that holds the internal_owner_user relation/edge.
 	InternalOwnerUserTable = "entities"
 	// InternalOwnerUserInverseTable is the table name for the User entity.
@@ -521,9 +514,6 @@ var (
 	// EditorsPrimaryKey and EditorsColumn2 are the table columns denoting the
 	// primary key for the editors relation (M2M).
 	EditorsPrimaryKey = []string{"entity_id", "group_id"}
-	// ViewersPrimaryKey and ViewersColumn2 are the table columns denoting the
-	// primary key for the viewers relation (M2M).
-	ViewersPrimaryKey = []string{"entity_id", "group_id"}
 	// ContactsPrimaryKey and ContactsColumn2 are the table columns denoting the
 	// primary key for the contacts relation (M2M).
 	ContactsPrimaryKey = []string{"entity_id", "contact_id"}
@@ -586,8 +576,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [20]ent.Hook
-	Interceptors [3]ent.Interceptor
+	Hooks        [19]ent.Hook
+	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -1006,20 +996,6 @@ func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByViewersCount orders the results by viewers count.
-func ByViewersCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newViewersStep(), opts...)
-	}
-}
-
-// ByViewers orders the results by viewers terms.
-func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByInternalOwnerUserField orders the results by internal_owner_user field.
 func ByInternalOwnerUserField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1395,13 +1371,6 @@ func newEditorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EditorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
-	)
-}
-func newViewersStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ViewersInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
 	)
 }
 func newInternalOwnerUserStep() *sqlgraph.Step {

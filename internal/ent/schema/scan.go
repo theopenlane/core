@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/entx"
@@ -136,7 +137,9 @@ func (s Scan) Mixin() []ent.Mixin {
 				),
 				withOrganizationOwner(),
 				withSkipForSystemAdmin(),
-			), newGroupPermissionsMixin(),
+				withSkipFilterInterceptor(interceptors.SkipAllQuery|interceptors.SkipIDsQuery),
+			),
+			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor()),
 			newResponsibilityMixin(s, withReviewedBy(), withAssignedTo()),
 			newCustomEnumMixin(s, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(s, withEnumFieldName("scope"), withGlobalEnum()),

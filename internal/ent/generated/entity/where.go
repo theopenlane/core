@@ -4001,35 +4001,6 @@ func HasEditorsWith(preds ...predicate.Group) predicate.Entity {
 	})
 }
 
-// HasViewers applies the HasEdge predicate on the "viewers" edge.
-func HasViewers() predicate.Entity {
-	return predicate.Entity(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.EntityViewers
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasViewersWith applies the HasEdge predicate on the "viewers" edge with a given conditions (other predicates).
-func HasViewersWith(preds ...predicate.Group) predicate.Entity {
-	return predicate.Entity(func(s *sql.Selector) {
-		step := newViewersStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.EntityViewers
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasInternalOwnerUser applies the HasEdge predicate on the "internal_owner_user" edge.
 func HasInternalOwnerUser() predicate.Entity {
 	return predicate.Entity(func(s *sql.Selector) {

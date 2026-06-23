@@ -49,7 +49,6 @@ type ReviewQuery struct {
 	withOwner                 *OrganizationQuery
 	withBlockedGroups         *GroupQuery
 	withEditors               *GroupQuery
-	withViewers               *GroupQuery
 	withEnvironment           *CustomTypeEnumQuery
 	withScope                 *CustomTypeEnumQuery
 	withIntegrations          *IntegrationQuery
@@ -72,7 +71,6 @@ type ReviewQuery struct {
 	modifiers                 []func(*sql.Selector)
 	withNamedBlockedGroups    map[string]*GroupQuery
 	withNamedEditors          map[string]*GroupQuery
-	withNamedViewers          map[string]*GroupQuery
 	withNamedIntegrations     map[string]*IntegrationQuery
 	withNamedFindings         map[string]*FindingQuery
 	withNamedVulnerabilities  map[string]*VulnerabilityQuery
@@ -163,11 +161,11 @@ func (_q *ReviewQuery) QueryBlockedGroups() *GroupQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(review.Table, review.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, review.BlockedGroupsTable, review.BlockedGroupsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, review.BlockedGroupsTable, review.BlockedGroupsPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.ReviewBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -188,36 +186,11 @@ func (_q *ReviewQuery) QueryEditors() *GroupQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(review.Table, review.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, review.EditorsTable, review.EditorsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, review.EditorsTable, review.EditorsPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryViewers chains the current query on the "viewers" edge.
-func (_q *ReviewQuery) QueryViewers() *GroupQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(review.Table, review.FieldID, selector),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, review.ViewersTable, review.ViewersColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.ReviewEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -869,7 +842,6 @@ func (_q *ReviewQuery) Clone() *ReviewQuery {
 		withOwner:            _q.withOwner.Clone(),
 		withBlockedGroups:    _q.withBlockedGroups.Clone(),
 		withEditors:          _q.withEditors.Clone(),
-		withViewers:          _q.withViewers.Clone(),
 		withEnvironment:      _q.withEnvironment.Clone(),
 		withScope:            _q.withScope.Clone(),
 		withIntegrations:     _q.withIntegrations.Clone(),
@@ -925,17 +897,6 @@ func (_q *ReviewQuery) WithEditors(opts ...func(*GroupQuery)) *ReviewQuery {
 		opt(query)
 	}
 	_q.withEditors = query
-	return _q
-}
-
-// WithViewers tells the query-builder to eager-load the nodes that are connected to
-// the "viewers" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *ReviewQuery) WithViewers(opts ...func(*GroupQuery)) *ReviewQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withViewers = query
 	return _q
 }
 
@@ -1221,11 +1182,10 @@ func (_q *ReviewQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Revie
 	var (
 		nodes       = []*Review{}
 		_spec       = _q.querySpec()
-		loadedTypes = [22]bool{
+		loadedTypes = [21]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
-			_q.withViewers != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
 			_q.withIntegrations != nil,
@@ -1286,13 +1246,6 @@ func (_q *ReviewQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Revie
 		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *Review) { n.Edges.Editors = []*Group{} },
 			func(n *Review, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withViewers; query != nil {
-		if err := _q.loadViewers(ctx, query, nodes,
-			func(n *Review) { n.Edges.Viewers = []*Group{} },
-			func(n *Review, e *Group) { n.Edges.Viewers = append(n.Edges.Viewers, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1430,13 +1383,6 @@ func (_q *ReviewQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Revie
 		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *Review) { n.appendNamedEditors(name) },
 			func(n *Review, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedViewers {
-		if err := _q.loadViewers(ctx, query, nodes,
-			func(n *Review) { n.appendNamedViewers(name) },
-			func(n *Review, e *Group) { n.appendNamedViewers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1583,95 +1529,126 @@ func (_q *ReviewQuery) loadOwner(ctx context.Context, query *OrganizationQuery, 
 	return nil
 }
 func (_q *ReviewQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*Review, init func(*Review), assign func(*Review, *Group)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Review)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Review)
+	nids := make(map[string]map[*Review]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Group(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(review.BlockedGroupsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(review.BlockedGroupsTable)
+		joinT.Schema(_q.schemaConfig.ReviewBlockedGroups)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(review.BlockedGroupsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(review.BlockedGroupsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(review.BlockedGroupsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Review]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.review_blocked_groups
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "review_blocked_groups" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "review_blocked_groups" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "blocked_groups" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
 func (_q *ReviewQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*Review, init func(*Review), assign func(*Review, *Group)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Review)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Review)
+	nids := make(map[string]map[*Review]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Group(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(review.EditorsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(review.EditorsTable)
+		joinT.Schema(_q.schemaConfig.ReviewEditors)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(review.EditorsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(review.EditorsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(review.EditorsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Review]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.review_editors
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "review_editors" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "review_editors" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "editors" node returned %v`, n.ID)
 		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *ReviewQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes []*Review, init func(*Review), assign func(*Review, *Group)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Review)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
+		for kn := range nodes {
+			assign(kn, n)
 		}
-	}
-	query.withFKs = true
-	query.Where(predicate.Group(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(review.ViewersColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.review_viewers
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "review_viewers" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "review_viewers" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
 	}
 	return nil
 }
@@ -2642,20 +2619,6 @@ func (_q *ReviewQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) 
 		_q.withNamedEditors = make(map[string]*GroupQuery)
 	}
 	_q.withNamedEditors[name] = query
-	return _q
-}
-
-// WithNamedViewers tells the query-builder to eager-load the nodes that are connected to the "viewers"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *ReviewQuery) WithNamedViewers(name string, opts ...func(*GroupQuery)) *ReviewQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedViewers == nil {
-		_q.withNamedViewers = make(map[string]*GroupQuery)
-	}
-	_q.withNamedViewers[name] = query
 	return _q
 }
 

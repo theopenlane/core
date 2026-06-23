@@ -159,6 +159,13 @@ func classifyMappedControl(info *model.ControlInfo, systemOwned bool, selfID str
 	}
 }
 
+// sidedControlInfo pairs a mapped control participant with its system-owned flag so the
+// originating from/to side can be classified after the side is determined
+type sidedControlInfo struct {
+	info        *model.ControlInfo
+	systemOwned bool
+}
+
 // processMappedControlResults converts a slice of MappedControl records into ControlInfo entries,
 // excluding the entry identified by selfID and deduplicating via refCode+framework key
 func processMappedControlResults(ctx context.Context, result []*generated.MappedControl, selfID string, selfRefCode string, selfFramework *string, frameworksInOrg []string) ([]*model.ControlInfo, error) {
@@ -172,17 +179,45 @@ func processMappedControlResults(ctx context.Context, result []*generated.Mapped
 	allInOrgControlMappings := map[string]*model.ControlInfo{}
 
 	for _, r := range result {
-		for _, c := range r.Edges.FromControls {
-			classifyMappedControl(controlEdgeToControlInfo(c), c.SystemOwned, selfID, frameworksInOrg, systemOwnedMappedControls, allInOrgControlMappings)
+		var fromParts, toParts []sidedControlInfo
+		selfOnFrom, selfOnTo := false, false
+
+		addPart := func(info *model.ControlInfo, systemOwned bool, side *[]sidedControlInfo, selfFlag *bool) {
+			// the matched mapping may reference self via its system-owned twin, so identify
+			// self by refCode+framework rather than ID
+			if isSameControlInfo(selfRefCode, selfFramework, info) {
+				*selfFlag = true
+				return
+			}
+
+			*side = append(*side, sidedControlInfo{info: info, systemOwned: systemOwned})
 		}
-		for _, c := range r.Edges.ToControls {
-			classifyMappedControl(controlEdgeToControlInfo(c), c.SystemOwned, selfID, frameworksInOrg, systemOwnedMappedControls, allInOrgControlMappings)
+
+		for _, c := range r.Edges.FromControls {
+			addPart(controlEdgeToControlInfo(c), c.SystemOwned, &fromParts, &selfOnFrom)
 		}
 		for _, c := range r.Edges.FromSubcontrols {
-			classifyMappedControl(subcontrolEdgeToControlInfo(c), c.SystemOwned, selfID, frameworksInOrg, systemOwnedMappedControls, allInOrgControlMappings)
+			addPart(subcontrolEdgeToControlInfo(c), c.SystemOwned, &fromParts, &selfOnFrom)
+		}
+		for _, c := range r.Edges.ToControls {
+			addPart(controlEdgeToControlInfo(c), c.SystemOwned, &toParts, &selfOnTo)
 		}
 		for _, c := range r.Edges.ToSubcontrols {
-			classifyMappedControl(subcontrolEdgeToControlInfo(c), c.SystemOwned, selfID, frameworksInOrg, systemOwnedMappedControls, allInOrgControlMappings)
+			addPart(subcontrolEdgeToControlInfo(c), c.SystemOwned, &toParts, &selfOnTo)
+		}
+
+		// a mapping asserts a relationship between its from-side and its to-side, so relate
+		// self only to the opposite side of whichever side(s) it appears on, never to the
+		// siblings sharing its own side
+		if selfOnFrom {
+			for _, p := range toParts {
+				classifyMappedControl(p.info, p.systemOwned, selfID, frameworksInOrg, systemOwnedMappedControls, allInOrgControlMappings)
+			}
+		}
+		if selfOnTo {
+			for _, p := range fromParts {
+				classifyMappedControl(p.info, p.systemOwned, selfID, frameworksInOrg, systemOwnedMappedControls, allInOrgControlMappings)
+			}
 		}
 	}
 
@@ -768,34 +803,41 @@ func buildRelatedFromMappedControls(ctx context.Context, mcs []*generated.Mapped
 	raw := map[string]map[string]*model.ControlInfo{}
 
 	for _, mc := range mcs {
-		var parts []mcPart
+		var fromParts, toParts []mcPart
 
 		for _, c := range mc.Edges.FromControls {
 			if p, ok := collectControlPart(c, frameworksInOrg, sysControls); ok {
-				parts = append(parts, p)
+				fromParts = append(fromParts, p)
 			}
 		}
 
 		for _, c := range mc.Edges.ToControls {
 			if p, ok := collectControlPart(c, frameworksInOrg, sysControls); ok {
-				parts = append(parts, p)
+				toParts = append(toParts, p)
 			}
 		}
 
 		for _, sc := range mc.Edges.FromSubcontrols {
 			if p, ok := collectSubcontrolPart(sc, frameworksInOrg, sysControls); ok {
-				parts = append(parts, p)
+				fromParts = append(fromParts, p)
 			}
 		}
 
 		for _, sc := range mc.Edges.ToSubcontrols {
 			if p, ok := collectSubcontrolPart(sc, frameworksInOrg, sysControls); ok {
-				parts = append(parts, p)
+				toParts = append(toParts, p)
 			}
 		}
 
-		for _, e := range outerKeys(parts) {
-			indexRelated(raw, e.outerKey, e.selfKey, parts)
+		// a mapping asserts a relationship between its from-side and its to-side, so a
+		// control's related controls are the members of the opposite side only, never
+		// the siblings sharing its own side
+		for _, e := range outerKeys(fromParts) {
+			indexRelated(raw, e.outerKey, e.selfKey, toParts)
+		}
+
+		for _, e := range outerKeys(toParts) {
+			indexRelated(raw, e.outerKey, e.selfKey, fromParts)
 		}
 	}
 
