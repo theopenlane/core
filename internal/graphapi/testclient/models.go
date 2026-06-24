@@ -4693,6 +4693,9 @@ type ControlEdge struct {
 type ControlEvidence struct {
 	// total number of evidence items linked to the control
 	TotalCount int64 `json:"totalCount"`
+	// from the total number, the amount inherited from linked controls instead of directly
+	// linked to this control
+	InheritedCount int64 `json:"inheritedCount"`
 	// the most severe evidence status among all linked evidence items
 	WorstStatus *enums.EvidenceStatus `json:"worstStatus,omitempty"`
 	// number of evidence items with auditor-approved status
@@ -5037,6 +5040,10 @@ type ControlImplementationWhereInput struct {
 type ControlInfo struct {
 	// unique identifier of the control
 	ID string `json:"id"`
+	// id(s) of the mapped_control this related control from if the mapping is org owned
+	MappedControlReferenceIDs []string `json:"mappedControlReferenceIDs,omitempty"`
+	// id(s) of the subcontrol the mapping was inherited from, this is null if the control was directly mapped, if it was inherited from a subcontrol it will have the subcontrol IDs that are providing the mapping
+	InheritedFromSubcontrolIDs []string `json:"inheritedFromSubcontrolIDs,omitempty"`
 	// the unique reference code for the control
 	RefCode string `json:"refCode"`
 	// description of what the control is supposed to accomplish
@@ -28538,6 +28545,8 @@ type PolicySummary struct {
 	Name string `json:"name"`
 	// status of the policy, e.g. draft, published, archived, etc.
 	Status enums.DocumentStatus `json:"status"`
+	// empty when linked directly to the control; otherwise the related/mapped control IDs that contributed it
+	InheritedFromIDs []string `json:"inheritedFromIDs,omitempty"`
 }
 
 func (PolicySummary) IsNode() {}

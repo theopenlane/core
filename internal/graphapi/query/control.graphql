@@ -385,6 +385,15 @@ query GetControlByID($controlId: ID!) {
     updatedAt
     updatedBy
     workflowEligibleMarker
+    relatedControls {
+      id
+      refCode
+      referenceFramework
+      isSubcontrol
+      parentControlID
+      mappedControlReferenceIDs
+      inheritedFromSubcontrolIDs
+    }
     controlOwner {
       id
       name

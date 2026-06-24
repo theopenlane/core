@@ -9229,6 +9229,11 @@ type ControlEvidence {
 	"""
 	totalCount: Int!
 	"""
+	from the total number, the amount inherited from linked controls instead of directly
+	linked to this control
+	"""
+	inheritedCount: Int!
+	"""
 	the most severe evidence status among all linked evidence items
 	"""
 	worstStatus: EvidenceEvidenceStatus
@@ -9894,6 +9899,14 @@ type ControlInfo {
 	unique identifier of the control
 	"""
 	id: ID!
+	"""
+	id(s) of the mapped_control this related control from if the mapping is org owned
+	"""
+	mappedControlReferenceIDs: [ID!]
+	"""
+	id(s) of the subcontrol the mapping was inherited from, this is null if the control was directly mapped, if it was inherited from a subcontrol it will have the subcontrol IDs that are providing the mapping
+	"""
+	inheritedFromSubcontrolIDs: [ID!]
 	"""
 	the unique reference code for the control
 	"""
@@ -63062,6 +63075,10 @@ type PolicySummary implements Node {
 	status of the policy, e.g. draft, published, archived, etc.
 	"""
 	status: InternalPolicyDocumentStatus!
+	"""
+	empty when linked directly to the control; otherwise the related/mapped control IDs that contributed it
+	"""
+	inheritedFromIDs: [ID!]
 }
 """
 The `Price` scalar type represents a monetary value for a subscription, including the numerical amount, the interval of recurrence and the currency to be charged in (e.g. USD)

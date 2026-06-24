@@ -3063,3 +3063,56 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{publicControl.ID, hiddenControl.ID, regularControl.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
+
+func TestControlRelatedControlsInheritedFromSubcontrols(t *testing.T) {
+	t.Parallel()
+
+	org := suite.seedOrgOwner(t)
+	ctx := org.owner.UserCtx
+
+	parent := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
+	sub := (&SubcontrolBuilder{client: suite.client, ControlID: parent.ID}).MustNew(ctx, t)
+
+	// inheritedTarget is mapped only through the subcontrol
+	// directTarget is mapped directly to the parent and also through the subcontrol
+	inheritedTarget := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
+	directTarget := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
+
+	(&MappedControlBuilder{
+		client:            suite.client,
+		FromSubcontrolIDs: []string{sub.ID},
+		ToControlIDs:      []string{inheritedTarget.ID},
+	}).MustNew(ctx, t)
+
+	(&MappedControlBuilder{
+		client:         suite.client,
+		FromControlIDs: []string{parent.ID},
+		ToControlIDs:   []string{directTarget.ID},
+	}).MustNew(ctx, t)
+
+	// subcontrol mapping to the same directTarget,the direct mapping must suppress inheritance
+	(&MappedControlBuilder{
+		client:            suite.client,
+		FromSubcontrolIDs: []string{sub.ID},
+		ToControlIDs:      []string{directTarget.ID},
+	}).MustNew(ctx, t)
+
+	resp, err := suite.client.api.GetControlByID(ctx, parent.ID)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+
+	assert.Check(t, is.Len(resp.Control.RelatedControls, 2))
+
+	related := map[string]*testclient.GetControlByID_Control_RelatedControls{}
+	for _, rc := range resp.Control.RelatedControls {
+		related[rc.ID] = rc
+	}
+
+	assert.Assert(t, related[inheritedTarget.ID] != nil)
+	assert.Check(t, is.DeepEqual([]string{sub.ID}, related[inheritedTarget.ID].InheritedFromSubcontrolIDs))
+
+	assert.Assert(t, related[directTarget.ID] != nil)
+	assert.Check(t, is.Len(related[directTarget.ID].InheritedFromSubcontrolIDs, 0))
+
+	cleanupOrganizationDataWithContext(ctx, t)
+}

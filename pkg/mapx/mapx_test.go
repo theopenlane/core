@@ -206,6 +206,54 @@ func TestAppendOnce(t *testing.T) {
 	}
 }
 
+func TestAppendUnique(t *testing.T) {
+	tests := []struct {
+		name string
+		ops  []struct{ key, val string }
+		want map[string][]string
+	}{
+		{
+			name: "first occurrence is appended",
+			ops:  []struct{ key, val string }{{"a", "x"}},
+			want: map[string][]string{"a": {"x"}},
+		},
+		{
+			name: "duplicate value for same key is skipped",
+			ops:  []struct{ key, val string }{{"a", "x"}, {"a", "x"}},
+			want: map[string][]string{"a": {"x"}},
+		},
+		{
+			name: "distinct values for same key are all appended",
+			ops:  []struct{ key, val string }{{"a", "x"}, {"a", "y"}},
+			want: map[string][]string{"a": {"x", "y"}},
+		},
+		{
+			name: "distinct keys each appended",
+			ops:  []struct{ key, val string }{{"a", "x"}, {"b", "y"}},
+			want: map[string][]string{"a": {"x"}, "b": {"y"}},
+		},
+		{
+			name: "empty ops produces empty map",
+			ops:  []struct{ key, val string }{},
+			want: map[string][]string{},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			m := map[string][]string{}
+
+			for _, op := range tt.ops {
+				AppendUnique(m, op.key, op.val)
+			}
+
+			if !reflect.DeepEqual(tt.want, m) {
+				t.Fatalf("expected %v, got %v", tt.want, m)
+			}
+		})
+	}
+}
+
 func TestMapIntersectionUnique(t *testing.T) {
 	tests := []struct {
 		name  string
