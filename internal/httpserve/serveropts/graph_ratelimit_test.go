@@ -10,12 +10,19 @@ import (
 
 	coreconfig "github.com/theopenlane/core/config"
 	serverconfig "github.com/theopenlane/core/internal/httpserve/config"
+	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 )
 
 func TestGraphRateLimitConfig(t *testing.T) {
 	t.Parallel()
 
-	cfg := graphRateLimitConfig()
+	in := ratelimit.Config{
+		Enabled:              true,
+		SendRetryAfterHeader: true,
+		DryRun:               true,
+	}
+
+	cfg := graphRateLimitConfig(in)
 
 	if !cfg.Enabled {
 		t.Fatalf("expected graph rate limit config to be enabled")
@@ -23,6 +30,10 @@ func TestGraphRateLimitConfig(t *testing.T) {
 
 	if !cfg.SendRetryAfterHeader {
 		t.Fatalf("expected graph rate limit config to send Retry-After")
+	}
+
+	if !cfg.DryRun {
+		t.Fatalf("expected graph rate limit config to inherit DryRun from the base config")
 	}
 
 	if len(cfg.Options) != 1 || cfg.Options[0].Requests != graphRateLimitRequests || cfg.Options[0].Window != graphRateLimitWindow {
@@ -48,7 +59,12 @@ func TestWithGraphRateLimiterEnforcesAheadOfGraphMiddleware(t *testing.T) {
 		}
 	}
 
-	so := &ServerOptions{Config: serverconfig.Config{Settings: coreconfig.Config{}}}
+	so := &ServerOptions{Config: serverconfig.Config{Settings: coreconfig.Config{
+		Ratelimit: ratelimit.Config{
+			Enabled:              true,
+			SendRetryAfterHeader: true,
+		},
+	}}}
 	so.Config.GraphMiddleware = append(so.Config.GraphMiddleware, marker)
 
 	WithGraphRateLimiter().apply(so)
