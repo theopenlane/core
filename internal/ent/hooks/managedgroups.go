@@ -16,7 +16,8 @@ import (
 )
 
 const (
-	// AdminsGroup is the group name for all organization admins and owner, these users have full read and write access in the organization
+	// AdminsGroup is the group name for all organization admins, super admins, and owners.
+	// These users have full read and write access in the organization.
 	AdminsGroup = "Admins"
 	// ViewersGroup is the group name for all organization members that only have view access in the organization
 	ViewersGroup = "Viewers"
@@ -26,7 +27,7 @@ const (
 
 // defaultGroups are the default groups created for an organization that are managed by the system
 var defaultGroups = map[string]string{
-	AdminsGroup:     "Openlane managed group containing all organization admins with full access",
+	AdminsGroup:     "Openlane managed group containing all organization admins, super admins, and owners with full access",
 	ViewersGroup:    "Openlane managed group containing all organization members with only view access",
 	AllMembersGroup: "Openlane managed group containing all members of the organization",
 }
@@ -200,7 +201,7 @@ func addToManagedGroups(ctx context.Context, m *generated.OrgMembershipMutation,
 		if err := addMemberToManagedGroup(ctx, m, om, ViewersGroup); err != nil {
 			return err
 		}
-	case enums.RoleAdmin:
+	case enums.RoleAdmin, enums.RoleSuperAdmin, enums.RoleOwner:
 		if err := addMemberToManagedGroup(ctx, m, om, AdminsGroup); err != nil {
 			return err
 		}
@@ -222,7 +223,7 @@ func removeFromManagedGroups(ctx context.Context, m *generated.OrgMembershipMuta
 		if err := removeMemberFromManagedGroup(ctx, m, om, ViewersGroup); err != nil {
 			return err
 		}
-	case enums.RoleAdmin:
+	case enums.RoleAdmin, enums.RoleSuperAdmin, enums.RoleOwner:
 		if err := removeMemberFromManagedGroup(ctx, m, om, AdminsGroup); err != nil {
 			return err
 		}

@@ -15,6 +15,10 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
@@ -1295,4 +1299,61 @@ func TestManagedGroups(t *testing.T) {
 
 	// cleanup objects created
 	cleanupOrganizationDataWithContext(testUser.UserCtx, t)
+}
+
+func TestManagedGroupMembership_AdminGroup(t *testing.T) {
+	t.Parallel()
+
+	users := suite.seedFreshOrgUsers(t)
+	ctx := privacy.DecisionContext(users.owner.UserCtx, privacy.Allow)
+
+	groupID, err := suite.client.db.Group.Query().
+		Where(
+			group.OwnerID(users.owner.OrganizationID),
+			group.IsManaged(true),
+			group.Name("Admins"),
+		).
+		OnlyID(ctx)
+	assert.NilError(t, err)
+
+	adminUserIDs, err := suite.client.db.GroupMembership.Query().
+		Where(groupmembership.GroupID(groupID)).
+		Select(groupmembership.FieldUserID).
+		Strings(ctx)
+
+	assert.NilError(t, err)
+
+	assert.Check(t, is.Len(adminUserIDs, 3))
+
+	// verify the memberships
+	assert.Check(t, is.Contains(adminUserIDs, users.owner.ID))
+	assert.Check(t, is.Contains(adminUserIDs, users.superAdmin.ID))
+	assert.Check(t, is.Contains(adminUserIDs, users.admin.ID))
+
+	membershipID, err := suite.client.db.OrgMembership.Query().
+		Where(
+			orgmembership.OrganizationID(users.owner.OrganizationID),
+			orgmembership.UserID(users.admin.ID),
+		).
+		OnlyID(ctx)
+	assert.NilError(t, err)
+
+	// try to promote an admin to a super admin and verify they are still in the group
+	superAdminRole := enums.RoleSuperAdmin
+
+	_, err = suite.client.api.UpdateUserRoleInOrg(users.owner.UserCtx, membershipID, testclient.UpdateOrgMembershipInput{
+		Role: &superAdminRole,
+	})
+	assert.NilError(t, err)
+
+	exists, err := suite.client.db.GroupMembership.Query().
+		Where(
+			groupmembership.GroupID(groupID),
+			groupmembership.UserID(users.admin.ID),
+		).
+		Exist(ctx)
+	assert.NilError(t, err)
+	assert.Check(t, exists)
+
+	cleanupOrganizationDataWithContext(users.owner.UserCtx, t)
 }
