@@ -471,12 +471,13 @@ const (
 
 // graphRateLimitConfig builds the dedicated limiter applied to the GraphQL endpoints, keyed on the real client IP
 // (Cloudflare's CF-Connecting-IP, falling back to the socket peer) to match the other per-route limiters
-func graphRateLimitConfig() *ratelimit.Config {
+func graphRateLimitConfig(cfg ratelimit.Config) *ratelimit.Config {
 	return &ratelimit.Config{
-		Enabled:              true,
+		Enabled:              cfg.Enabled,
 		Headers:              ratelimit.DefaultClientIPHeaders,
 		Options:              []ratelimit.RateOption{{Requests: graphRateLimitRequests, Window: graphRateLimitWindow}},
-		SendRetryAfterHeader: true,
+		SendRetryAfterHeader: cfg.SendRetryAfterHeader,
+		DryRun:               cfg.DryRun,
 	}
 }
 
@@ -484,8 +485,10 @@ func graphRateLimitConfig() *ratelimit.Config {
 // throttled ahead of authentication and resolver work
 func WithGraphRateLimiter() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		limiter := ratelimit.RateLimiterWithConfig(graphRateLimitConfig())
-		s.Config.GraphMiddleware = append([]echo.MiddlewareFunc{limiter}, s.Config.GraphMiddleware...)
+		if s.Config.Settings.Ratelimit.Enabled || s.Config.Settings.Ratelimit.DryRun {
+			limiter := ratelimit.RateLimiterWithConfig(graphRateLimitConfig(s.Config.Settings.Ratelimit))
+			s.Config.GraphMiddleware = append([]echo.MiddlewareFunc{limiter}, s.Config.GraphMiddleware...)
+		}
 	})
 }
 
