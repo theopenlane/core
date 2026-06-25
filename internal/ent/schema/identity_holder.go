@@ -310,6 +310,7 @@ func (IdentityHolder) Indexes() []ent.Index {
 func (IdentityHolder) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
+		models.CatalogRegistryModule,
 	}
 }
 

@@ -360,6 +360,7 @@ func (Platform) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
 		models.CatalogEntityManagementModule,
+		models.CatalogRegistryModule,
 	}
 }
 
