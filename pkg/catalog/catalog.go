@@ -398,7 +398,7 @@ func (c *Catalog) SaveCatalog(path string) (string, error) {
 		c.SHA = computeSHA(c.Version)
 	}
 
-	newData, err := yaml.Marshal(c)
+	newData, err := yaml.Marshal(c.Catalog)
 	if err != nil {
 		return "", err
 	}
@@ -416,7 +416,7 @@ func (c *Catalog) SaveCatalog(path string) (string, error) {
 
 			c.SHA = computeSHA(c.Version)
 
-			if newData, err = yaml.Marshal(c); err != nil {
+			if newData, err = yaml.Marshal(c.Catalog); err != nil {
 				return "", err
 			}
 		}
