@@ -139,6 +139,9 @@ func (OrganizationSetting) Fields() []ent.Field {
 		field.Bool("identity_provider_login_enforced").
 			Comment("enforce SSO authentication for organization members").
 			Default(false),
+		field.Bool("identity_provider_jit_provisioning").
+			Comment("when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider").
+			Default(true),
 		field.Bool("multifactor_auth_enforced").
 			Comment("enforce 2fa / multifactor authentication for organization members").
 			Optional().
