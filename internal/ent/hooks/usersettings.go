@@ -175,6 +175,9 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 			organization.HasSettingWith(
 				organizationsetting.And(
 					organizationsetting.AllowMatchingDomainsAutojoin(true),
+					// allowed email domains only govern auto-join when SSO is not enforced; enforced
+					// organizations provision members via the identity provider instead
+					organizationsetting.IdentityProviderLoginEnforced(false),
 					func(s *sql.Selector) {
 						s.Where(sqljson.ValueContains(organizationsetting.FieldAllowedEmailDomains, userDomain))
 					},

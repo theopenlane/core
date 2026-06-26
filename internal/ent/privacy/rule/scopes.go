@@ -121,10 +121,17 @@ func CheckSubjectScope(ctx context.Context, objectType string, relation string, 
 	}
 
 	// org-scoped support sessions hold every scope for their organization, equivalent to a fully scoped
-	// token; delete is excluded so support cannot remove organizations or their objects
+	// token; delete is excluded so support cannot remove organizations or their objects. Delete is
+	// denied here rather than falling through to an FGA check it could never satisfy
 	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.OrganizationID != "" &&
-		caller.Has(auth.CapOrgSupport) && !strings.HasPrefix(scopedRelation, CanDeletePrefix) {
-		return privacy.Allow
+		caller.Has(auth.CapOrgSupport) {
+		if !strings.HasPrefix(scopedRelation, CanDeletePrefix) {
+			return privacy.Allow
+		}
+
+		logx.FromContext(ctx).Info().Str("scope", scopedRelation).Str("user_id", caller.SubjectID).Msg("support attempting to perform action thats not allowed")
+
+		return ErrRequiredScopeNotSet
 	}
 
 	scopeSet, err := fgamodel.DefaultServiceScopeSet()
