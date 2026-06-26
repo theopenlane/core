@@ -1,4 +1,4 @@
-version: v0.0.14
+version: v0.0.15
 sha: e8fd713c4b3b614220b734973cbb016d1bbfea582f135ca74f3b973d54efd093
 modules:
   base_module:
@@ -99,7 +99,7 @@ modules:
         nickname: price_trustcenter_annually
         lookup_key: price_trustcenter_annually
         price_id: price_1S3qXBJIzM4Pa2Zcq3Y0vzDa
-    audience: beta
+    audience: public
     product_id: prod_SzqDywr83XkXk5
     include_with_trial: true
   vulnerability_management_module:

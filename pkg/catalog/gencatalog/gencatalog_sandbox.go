@@ -177,7 +177,7 @@ var DefaultSandboxCatalog = models.Catalog{
 			ProductID:            "prod_UlcOm2q6nv0DJC",
 		},
 		string(models.CatalogTrustCenterModule): models.Feature{
-			Audience: "beta",
+			Audience: "public",
 			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
 				Interval:   "month",
 				LookupKey:  "price_trustcenter_monthly",
@@ -221,5 +221,5 @@ var DefaultSandboxCatalog = models.Catalog{
 		},
 	},
 	SHA:     "e8fd713c4b3b614220b734973cbb016d1bbfea582f135ca74f3b973d54efd093",
-	Version: "v0.0.14",
+	Version: "v0.0.15",
 }
