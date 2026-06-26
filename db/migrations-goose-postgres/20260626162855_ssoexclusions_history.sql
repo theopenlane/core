@@ -84,7 +84,7 @@ ALTER TABLE "org_subscription_history" ADD COLUMN "updated_by_impersonator" char
 -- modify "organization_history" table
 ALTER TABLE "organization_history" ADD COLUMN "updated_by_impersonator" character varying NULL;
 -- modify "organization_setting_history" table
-ALTER TABLE "organization_setting_history" ADD COLUMN "updated_by_impersonator" character varying NULL, ADD COLUMN "sso_exempt_domains" jsonb NULL, ADD COLUMN "allow_support_access" boolean NULL DEFAULT false;
+ALTER TABLE "organization_setting_history" ADD COLUMN "updated_by_impersonator" character varying NULL, ADD COLUMN "identity_provider_jit_provisioning" boolean NOT NULL DEFAULT true, ADD COLUMN "sso_exempt_domains" jsonb NULL, ADD COLUMN "allow_support_access" boolean NULL DEFAULT false;
 -- modify "platform_history" table
 ALTER TABLE "platform_history" ADD COLUMN "updated_by_impersonator" character varying NULL;
 -- modify "procedure_history" table
@@ -228,7 +228,7 @@ ALTER TABLE "procedure_history" DROP COLUMN "updated_by_impersonator";
 -- reverse: modify "platform_history" table
 ALTER TABLE "platform_history" DROP COLUMN "updated_by_impersonator";
 -- reverse: modify "organization_setting_history" table
-ALTER TABLE "organization_setting_history" DROP COLUMN "allow_support_access", DROP COLUMN "sso_exempt_domains", DROP COLUMN "updated_by_impersonator";
+ALTER TABLE "organization_setting_history" DROP COLUMN "allow_support_access", DROP COLUMN "sso_exempt_domains", DROP COLUMN "identity_provider_jit_provisioning", DROP COLUMN "updated_by_impersonator";
 -- reverse: modify "organization_history" table
 ALTER TABLE "organization_history" DROP COLUMN "updated_by_impersonator";
 -- reverse: modify "org_subscription_history" table

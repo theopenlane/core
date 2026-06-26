@@ -113,7 +113,7 @@ ALTER TABLE "org_products" ADD COLUMN "updated_by_impersonator" character varyin
 -- Modify "org_subscriptions" table
 ALTER TABLE "org_subscriptions" ADD COLUMN "updated_by_impersonator" character varying NULL;
 -- Modify "organization_settings" table
-ALTER TABLE "organization_settings" ADD COLUMN "updated_by_impersonator" character varying NULL, ADD COLUMN "sso_exempt_domains" jsonb NULL, ADD COLUMN "allow_support_access" boolean NULL DEFAULT false;
+ALTER TABLE "organization_settings" ADD COLUMN "updated_by_impersonator" character varying NULL, ADD COLUMN "identity_provider_jit_provisioning" boolean NOT NULL DEFAULT true, ADD COLUMN "sso_exempt_domains" jsonb NULL, ADD COLUMN "allow_support_access" boolean NULL DEFAULT false;
 -- Modify "organizations" table
 ALTER TABLE "organizations" ADD COLUMN "updated_by_impersonator" character varying NULL;
 -- Modify "personal_access_tokens" table
