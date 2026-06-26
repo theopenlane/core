@@ -1841,6 +1841,7 @@ type ComplexityRoot struct {
 		IdentityProviderClientID         func(childComplexity int) int
 		IdentityProviderClientSecret     func(childComplexity int) int
 		IdentityProviderEntityID         func(childComplexity int) int
+		IdentityProviderJitProvisioning  func(childComplexity int) int
 		IdentityProviderLoginEnforced    func(childComplexity int) int
 		IdentityProviderMetadataEndpoint func(childComplexity int) int
 		MultifactorAuthEnforced          func(childComplexity int) int
@@ -12138,6 +12139,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderEntityID(childComplexity), true
+	case "OrganizationSettingHistory.identityProviderJitProvisioning":
+		if e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderJitProvisioning == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderJitProvisioning(childComplexity), true
 	case "OrganizationSettingHistory.identityProviderLoginEnforced":
 		if e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderLoginEnforced == nil {
 			break
@@ -44214,6 +44221,10 @@ type OrganizationSettingHistory implements Node {
   """
   identityProviderLoginEnforced: Boolean!
   """
+  when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider
+  """
+  identityProviderJitProvisioning: Boolean!
+  """
   enforce 2fa / multifactor authentication for organization members
   """
   multifactorAuthEnforced: Boolean
@@ -44729,6 +44740,11 @@ input OrganizationSettingHistoryWhereInput {
   """
   identityProviderLoginEnforced: Boolean
   identityProviderLoginEnforcedNEQ: Boolean
+  """
+  identity_provider_jit_provisioning field predicates
+  """
+  identityProviderJitProvisioning: Boolean
+  identityProviderJitProvisioningNEQ: Boolean
   """
   multifactor_auth_enforced field predicates
   """
@@ -70260,6 +70276,8 @@ func (ec *executionContext) childFields_OrganizationSettingHistory(ctx context.C
 		return ec.fieldContext_OrganizationSettingHistory_samlCert(ctx, field)
 	case "identityProviderLoginEnforced":
 		return ec.fieldContext_OrganizationSettingHistory_identityProviderLoginEnforced(ctx, field)
+	case "identityProviderJitProvisioning":
+		return ec.fieldContext_OrganizationSettingHistory_identityProviderJitProvisioning(ctx, field)
 	case "multifactorAuthEnforced":
 		return ec.fieldContext_OrganizationSettingHistory_multifactorAuthEnforced(ctx, field)
 	case "ssoExemptDomains":

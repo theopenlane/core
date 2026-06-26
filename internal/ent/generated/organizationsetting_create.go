@@ -420,6 +420,20 @@ func (_c *OrganizationSettingCreate) SetNillableIdentityProviderLoginEnforced(v 
 	return _c
 }
 
+// SetIdentityProviderJitProvisioning sets the "identity_provider_jit_provisioning" field.
+func (_c *OrganizationSettingCreate) SetIdentityProviderJitProvisioning(v bool) *OrganizationSettingCreate {
+	_c.mutation.SetIdentityProviderJitProvisioning(v)
+	return _c
+}
+
+// SetNillableIdentityProviderJitProvisioning sets the "identity_provider_jit_provisioning" field if the given value is not nil.
+func (_c *OrganizationSettingCreate) SetNillableIdentityProviderJitProvisioning(v *bool) *OrganizationSettingCreate {
+	if v != nil {
+		_c.SetIdentityProviderJitProvisioning(*v)
+	}
+	return _c
+}
+
 // SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
 func (_c *OrganizationSettingCreate) SetMultifactorAuthEnforced(v bool) *OrganizationSettingCreate {
 	_c.mutation.SetMultifactorAuthEnforced(v)
@@ -609,6 +623,10 @@ func (_c *OrganizationSettingCreate) defaults() error {
 		v := organizationsetting.DefaultIdentityProviderLoginEnforced
 		_c.mutation.SetIdentityProviderLoginEnforced(v)
 	}
+	if _, ok := _c.mutation.IdentityProviderJitProvisioning(); !ok {
+		v := organizationsetting.DefaultIdentityProviderJitProvisioning
+		_c.mutation.SetIdentityProviderJitProvisioning(v)
+	}
 	if _, ok := _c.mutation.MultifactorAuthEnforced(); !ok {
 		v := organizationsetting.DefaultMultifactorAuthEnforced
 		_c.mutation.SetMultifactorAuthEnforced(v)
@@ -683,6 +701,9 @@ func (_c *OrganizationSettingCreate) check() error {
 	}
 	if _, ok := _c.mutation.IdentityProviderLoginEnforced(); !ok {
 		return &ValidationError{Name: "identity_provider_login_enforced", err: errors.New(`generated: missing required field "OrganizationSetting.identity_provider_login_enforced"`)}
+	}
+	if _, ok := _c.mutation.IdentityProviderJitProvisioning(); !ok {
+		return &ValidationError{Name: "identity_provider_jit_provisioning", err: errors.New(`generated: missing required field "OrganizationSetting.identity_provider_jit_provisioning"`)}
 	}
 	if v, ok := _c.mutation.SSOExemptDomains(); ok {
 		if err := organizationsetting.SSOExemptDomainsValidator(v); err != nil {
@@ -843,6 +864,10 @@ func (_c *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgra
 	if value, ok := _c.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
 		_node.IdentityProviderLoginEnforced = value
+	}
+	if value, ok := _c.mutation.IdentityProviderJitProvisioning(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderJitProvisioning, field.TypeBool, value)
+		_node.IdentityProviderJitProvisioning = value
 	}
 	if value, ok := _c.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsetting.FieldMultifactorAuthEnforced, field.TypeBool, value)

@@ -8807,6 +8807,8 @@ type CreateOrganizationSettingInput struct {
 	SamlCert *string `json:"samlCert,omitempty"`
 	// enforce SSO authentication for organization members
 	IdentityProviderLoginEnforced *bool `json:"identityProviderLoginEnforced,omitempty"`
+	// when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider
+	IdentityProviderJitProvisioning *bool `json:"identityProviderJitProvisioning,omitempty"`
 	// enforce 2fa / multifactor authentication for organization members
 	MultifactorAuthEnforced *bool `json:"multifactorAuthEnforced,omitempty"`
 	// email domains whose existing members skip the SSO redirect even when SSO is enforced; TFA enforcement still applies
@@ -27047,6 +27049,8 @@ type OrganizationSetting struct {
 	SamlCert *string `json:"samlCert,omitempty"`
 	// enforce SSO authentication for organization members
 	IdentityProviderLoginEnforced bool `json:"identityProviderLoginEnforced"`
+	// when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider
+	IdentityProviderJitProvisioning bool `json:"identityProviderJitProvisioning"`
 	// enforce 2fa / multifactor authentication for organization members
 	MultifactorAuthEnforced *bool `json:"multifactorAuthEnforced,omitempty"`
 	// email domains whose existing members skip the SSO redirect even when SSO is enforced; TFA enforcement still applies
@@ -27456,6 +27460,9 @@ type OrganizationSettingWhereInput struct {
 	// identity_provider_login_enforced field predicates
 	IdentityProviderLoginEnforced    *bool `json:"identityProviderLoginEnforced,omitempty"`
 	IdentityProviderLoginEnforcedNeq *bool `json:"identityProviderLoginEnforcedNEQ,omitempty"`
+	// identity_provider_jit_provisioning field predicates
+	IdentityProviderJitProvisioning    *bool `json:"identityProviderJitProvisioning,omitempty"`
+	IdentityProviderJitProvisioningNeq *bool `json:"identityProviderJitProvisioningNEQ,omitempty"`
 	// multifactor_auth_enforced field predicates
 	MultifactorAuthEnforced       *bool `json:"multifactorAuthEnforced,omitempty"`
 	MultifactorAuthEnforcedNeq    *bool `json:"multifactorAuthEnforcedNEQ,omitempty"`
@@ -45361,6 +45368,8 @@ type UpdateOrganizationSettingInput struct {
 	ClearSamlCert *bool   `json:"clearSamlCert,omitempty"`
 	// enforce SSO authentication for organization members
 	IdentityProviderLoginEnforced *bool `json:"identityProviderLoginEnforced,omitempty"`
+	// when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider
+	IdentityProviderJitProvisioning *bool `json:"identityProviderJitProvisioning,omitempty"`
 	// enforce 2fa / multifactor authentication for organization members
 	MultifactorAuthEnforced      *bool `json:"multifactorAuthEnforced,omitempty"`
 	ClearMultifactorAuthEnforced *bool `json:"clearMultifactorAuthEnforced,omitempty"`

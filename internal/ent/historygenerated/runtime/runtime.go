@@ -2016,20 +2016,24 @@ func init() {
 	organizationsettinghistoryDescIdentityProviderLoginEnforced := organizationsettinghistoryFields[33].Descriptor()
 	// organizationsettinghistory.DefaultIdentityProviderLoginEnforced holds the default value on creation for the identity_provider_login_enforced field.
 	organizationsettinghistory.DefaultIdentityProviderLoginEnforced = organizationsettinghistoryDescIdentityProviderLoginEnforced.Default.(bool)
+	// organizationsettinghistoryDescIdentityProviderJitProvisioning is the schema descriptor for identity_provider_jit_provisioning field.
+	organizationsettinghistoryDescIdentityProviderJitProvisioning := organizationsettinghistoryFields[34].Descriptor()
+	// organizationsettinghistory.DefaultIdentityProviderJitProvisioning holds the default value on creation for the identity_provider_jit_provisioning field.
+	organizationsettinghistory.DefaultIdentityProviderJitProvisioning = organizationsettinghistoryDescIdentityProviderJitProvisioning.Default.(bool)
 	// organizationsettinghistoryDescMultifactorAuthEnforced is the schema descriptor for multifactor_auth_enforced field.
-	organizationsettinghistoryDescMultifactorAuthEnforced := organizationsettinghistoryFields[34].Descriptor()
+	organizationsettinghistoryDescMultifactorAuthEnforced := organizationsettinghistoryFields[35].Descriptor()
 	// organizationsettinghistory.DefaultMultifactorAuthEnforced holds the default value on creation for the multifactor_auth_enforced field.
 	organizationsettinghistory.DefaultMultifactorAuthEnforced = organizationsettinghistoryDescMultifactorAuthEnforced.Default.(bool)
 	// organizationsettinghistoryDescAllowSupportAccess is the schema descriptor for allow_support_access field.
-	organizationsettinghistoryDescAllowSupportAccess := organizationsettinghistoryFields[36].Descriptor()
+	organizationsettinghistoryDescAllowSupportAccess := organizationsettinghistoryFields[37].Descriptor()
 	// organizationsettinghistory.DefaultAllowSupportAccess holds the default value on creation for the allow_support_access field.
 	organizationsettinghistory.DefaultAllowSupportAccess = organizationsettinghistoryDescAllowSupportAccess.Default.(bool)
 	// organizationsettinghistoryDescComplianceWebhookToken is the schema descriptor for compliance_webhook_token field.
-	organizationsettinghistoryDescComplianceWebhookToken := organizationsettinghistoryFields[37].Descriptor()
+	organizationsettinghistoryDescComplianceWebhookToken := organizationsettinghistoryFields[38].Descriptor()
 	// organizationsettinghistory.DefaultComplianceWebhookToken holds the default value on creation for the compliance_webhook_token field.
 	organizationsettinghistory.DefaultComplianceWebhookToken = organizationsettinghistoryDescComplianceWebhookToken.Default.(func() string)
 	// organizationsettinghistoryDescPaymentMethodAdded is the schema descriptor for payment_method_added field.
-	organizationsettinghistoryDescPaymentMethodAdded := organizationsettinghistoryFields[38].Descriptor()
+	organizationsettinghistoryDescPaymentMethodAdded := organizationsettinghistoryFields[39].Descriptor()
 	// organizationsettinghistory.DefaultPaymentMethodAdded holds the default value on creation for the payment_method_added field.
 	organizationsettinghistory.DefaultPaymentMethodAdded = organizationsettinghistoryDescPaymentMethodAdded.Default.(bool)
 	// organizationsettinghistoryDescID is the schema descriptor for id field.

@@ -15958,6 +15958,10 @@ input CreateOrganizationSettingInput {
 	"""
 	identityProviderLoginEnforced: Boolean
 	"""
+	when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider
+	"""
+	identityProviderJitProvisioning: Boolean
+	"""
 	enforce 2fa / multifactor authentication for organization members
 	"""
 	multifactorAuthEnforced: Boolean
@@ -59895,6 +59899,10 @@ type OrganizationSetting implements Node {
 	"""
 	identityProviderLoginEnforced: Boolean!
 	"""
+	when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider
+	"""
+	identityProviderJitProvisioning: Boolean!
+	"""
 	enforce 2fa / multifactor authentication for organization members
 	"""
 	multifactorAuthEnforced: Boolean
@@ -60463,6 +60471,11 @@ input OrganizationSettingWhereInput {
 	"""
 	identityProviderLoginEnforced: Boolean
 	identityProviderLoginEnforcedNEQ: Boolean
+	"""
+	identity_provider_jit_provisioning field predicates
+	"""
+	identityProviderJitProvisioning: Boolean
+	identityProviderJitProvisioningNEQ: Boolean
 	"""
 	multifactor_auth_enforced field predicates
 	"""
@@ -96430,6 +96443,10 @@ input UpdateOrganizationSettingInput {
 	enforce SSO authentication for organization members
 	"""
 	identityProviderLoginEnforced: Boolean
+	"""
+	when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider
+	"""
+	identityProviderJitProvisioning: Boolean
 	"""
 	enforce 2fa / multifactor authentication for organization members
 	"""

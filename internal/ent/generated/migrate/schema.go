@@ -5792,6 +5792,7 @@ var (
 		{Name: "saml_issuer", Type: field.TypeString, Nullable: true},
 		{Name: "saml_cert", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "identity_provider_login_enforced", Type: field.TypeBool, Default: false},
+		{Name: "identity_provider_jit_provisioning", Type: field.TypeBool, Default: true},
 		{Name: "multifactor_auth_enforced", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "sso_exempt_domains", Type: field.TypeJSON, Nullable: true},
 		{Name: "allow_support_access", Type: field.TypeBool, Nullable: true, Default: false},
@@ -5808,7 +5809,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organization_settings_organizations_setting",
-				Columns:    []*schema.Column{OrganizationSettingsColumns[36]},
+				Columns:    []*schema.Column{OrganizationSettingsColumns[37]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

@@ -564,6 +564,20 @@ func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderLoginEnfo
 	return _u
 }
 
+// SetIdentityProviderJitProvisioning sets the "identity_provider_jit_provisioning" field.
+func (_u *OrganizationSettingHistoryUpdate) SetIdentityProviderJitProvisioning(v bool) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetIdentityProviderJitProvisioning(v)
+	return _u
+}
+
+// SetNillableIdentityProviderJitProvisioning sets the "identity_provider_jit_provisioning" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderJitProvisioning(v *bool) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetIdentityProviderJitProvisioning(*v)
+	}
+	return _u
+}
+
 // SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
 func (_u *OrganizationSettingHistoryUpdate) SetMultifactorAuthEnforced(v bool) *OrganizationSettingHistoryUpdate {
 	_u.mutation.SetMultifactorAuthEnforced(v)
@@ -938,6 +952,9 @@ func (_u *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	}
 	if value, ok := _u.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IdentityProviderJitProvisioning(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderJitProvisioning, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool, value)
@@ -1529,6 +1546,20 @@ func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderLoginE
 	return _u
 }
 
+// SetIdentityProviderJitProvisioning sets the "identity_provider_jit_provisioning" field.
+func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProviderJitProvisioning(v bool) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetIdentityProviderJitProvisioning(v)
+	return _u
+}
+
+// SetNillableIdentityProviderJitProvisioning sets the "identity_provider_jit_provisioning" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderJitProvisioning(v *bool) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetIdentityProviderJitProvisioning(*v)
+	}
+	return _u
+}
+
 // SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
 func (_u *OrganizationSettingHistoryUpdateOne) SetMultifactorAuthEnforced(v bool) *OrganizationSettingHistoryUpdateOne {
 	_u.mutation.SetMultifactorAuthEnforced(v)
@@ -1933,6 +1964,9 @@ func (_u *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if value, ok := _u.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IdentityProviderJitProvisioning(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderJitProvisioning, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool, value)

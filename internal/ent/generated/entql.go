@@ -2412,6 +2412,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsetting.FieldSamlIssuer:                       {Type: field.TypeString, Column: organizationsetting.FieldSamlIssuer},
 			organizationsetting.FieldSamlCert:                         {Type: field.TypeString, Column: organizationsetting.FieldSamlCert},
 			organizationsetting.FieldIdentityProviderLoginEnforced:    {Type: field.TypeBool, Column: organizationsetting.FieldIdentityProviderLoginEnforced},
+			organizationsetting.FieldIdentityProviderJitProvisioning:  {Type: field.TypeBool, Column: organizationsetting.FieldIdentityProviderJitProvisioning},
 			organizationsetting.FieldMultifactorAuthEnforced:          {Type: field.TypeBool, Column: organizationsetting.FieldMultifactorAuthEnforced},
 			organizationsetting.FieldSSOExemptDomains:                 {Type: field.TypeJSON, Column: organizationsetting.FieldSSOExemptDomains},
 			organizationsetting.FieldAllowSupportAccess:               {Type: field.TypeBool, Column: organizationsetting.FieldAllowSupportAccess},
@@ -38950,6 +38951,11 @@ func (f *OrganizationSettingFilter) WhereSamlCert(p entql.StringP) {
 // WhereIdentityProviderLoginEnforced applies the entql bool predicate on the identity_provider_login_enforced field.
 func (f *OrganizationSettingFilter) WhereIdentityProviderLoginEnforced(p entql.BoolP) {
 	f.Where(p.Field(organizationsetting.FieldIdentityProviderLoginEnforced))
+}
+
+// WhereIdentityProviderJitProvisioning applies the entql bool predicate on the identity_provider_jit_provisioning field.
+func (f *OrganizationSettingFilter) WhereIdentityProviderJitProvisioning(p entql.BoolP) {
+	f.Where(p.Field(organizationsetting.FieldIdentityProviderJitProvisioning))
 }
 
 // WhereMultifactorAuthEnforced applies the entql bool predicate on the multifactor_auth_enforced field.

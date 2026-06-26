@@ -9569,6 +9569,11 @@ func (_q *OrganizationSettingHistoryQuery) collectField(ctx context.Context, one
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProviderLoginEnforced)
 				fieldSeen[organizationsettinghistory.FieldIdentityProviderLoginEnforced] = struct{}{}
 			}
+		case "identityProviderJitProvisioning":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProviderJitProvisioning]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProviderJitProvisioning)
+				fieldSeen[organizationsettinghistory.FieldIdentityProviderJitProvisioning] = struct{}{}
+			}
 		case "multifactorAuthEnforced":
 			if _, ok := fieldSeen[organizationsettinghistory.FieldMultifactorAuthEnforced]; !ok {
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldMultifactorAuthEnforced)

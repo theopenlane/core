@@ -1,158 +1,163 @@
 query GetAllOrganizationSettings {
-	organizationSettings {
-		edges {
-			node {
-				allowedEmailDomains
-				allowMatchingDomainsAutojoin
-				billingAddress
-				billingContact
-				billingEmail
-				billingPhone
-				createdAt
-				createdBy
-				domains
-				geoLocation
-				id
-				tags
-				taxIdentifier
-				updatedAt
-				updatedBy
-				identityProviderAuthTested
-				identityProvider
-				identityProviderEntityID
-				identityProviderLoginEnforced
-				oidcDiscoveryEndpoint
-				identityProviderClientSecret
-				identityProviderMetadataEndpoint
-				complianceWebhookToken
-				organization {
-					id
-					displayName
-				}
-			}
-		}
-	}
+  organizationSettings {
+    edges {
+      node {
+        allowedEmailDomains
+        allowMatchingDomainsAutojoin
+        billingAddress
+        billingContact
+        billingEmail
+        billingPhone
+        createdAt
+        createdBy
+        domains
+        geoLocation
+        id
+        tags
+        taxIdentifier
+        updatedAt
+        updatedBy
+        identityProviderAuthTested
+        identityProvider
+        identityProviderEntityID
+        identityProviderLoginEnforced
+        oidcDiscoveryEndpoint
+        identityProviderClientSecret
+        identityProviderMetadataEndpoint
+        complianceWebhookToken
+        organization {
+          id
+          displayName
+        }
+      }
+    }
+  }
 }
-query GetOrganizationSettingByID ($organizationSettingId: ID!) {
-	organizationSetting(id: $organizationSettingId) {
-		allowMatchingDomainsAutojoin
-		allowSupportAccess
-		allowedEmailDomains
-		billingAddress
-		billingContact
-		billingEmail
-		billingNotificationsEnabled
-		billingPhone
-		complianceWebhookToken
-		createdAt
-		createdBy
-		domains
-		geoLocation
-		id
-		identityProvider
-		identityProviderAuthTested
-		identityProviderClientID
-		identityProviderClientSecret
-		identityProviderEntityID
-		identityProviderLoginEnforced
-		identityProviderMetadataEndpoint
-		multifactorAuthEnforced
-		oidcDiscoveryEndpoint
-		organizationID
-		paymentMethodAdded
-		pendingDeletionAt
-		samlCert
-		samlIssuer
-		samlSigninURL
-		ssoExemptDomains
-		tags
-		taxIdentifier
-		updatedAt
-		updatedBy
-		updatedByImpersonator
-		organization {
-			id
-			displayName
-		}
-	}
+
+query GetOrganizationSettingByID($organizationSettingId: ID!) {
+  organizationSetting(id: $organizationSettingId) {
+    allowMatchingDomainsAutojoin
+    allowSupportAccess
+    allowedEmailDomains
+    billingAddress
+    billingContact
+    billingEmail
+    billingNotificationsEnabled
+    billingPhone
+    complianceWebhookToken
+    createdAt
+    createdBy
+    domains
+    geoLocation
+    id
+    identityProvider
+    identityProviderAuthTested
+    identityProviderClientID
+    identityProviderClientSecret
+    identityProviderEntityID
+    identityProviderJitProvisioning
+    identityProviderLoginEnforced
+    identityProviderMetadataEndpoint
+    multifactorAuthEnforced
+    oidcDiscoveryEndpoint
+    organizationID
+    paymentMethodAdded
+    pendingDeletionAt
+    samlCert
+    samlIssuer
+    samlSigninURL
+    ssoExemptDomains
+    tags
+    taxIdentifier
+    updatedAt
+    updatedBy
+    updatedByImpersonator
+    organization {
+      id
+      displayName
+    }
+  }
 }
-query GetOrganizationSettings ($where: OrganizationSettingWhereInput!) {
-	organizationSettings(where: $where) {
-		edges {
-			node {
-				allowedEmailDomains
-				allowMatchingDomainsAutojoin
-				billingAddress
-				billingContact
-				billingEmail
-				billingPhone
-				createdAt
-				createdBy
-				domains
-				geoLocation
-				id
-				tags
-				taxIdentifier
-				updatedAt
-				updatedBy
-				identityProvider
-				identityProviderEntityID
-				identityProviderLoginEnforced
-				oidcDiscoveryEndpoint
-				identityProviderClientSecret
-				identityProviderMetadataEndpoint
-				identityProviderAuthTested
-				complianceWebhookToken
-				organization {
-					id
-					displayName
-				}
-			}
-		}
-	}
+
+query GetOrganizationSettings($where: OrganizationSettingWhereInput!) {
+  organizationSettings(where: $where) {
+    edges {
+      node {
+        allowedEmailDomains
+        allowMatchingDomainsAutojoin
+        billingAddress
+        billingContact
+        billingEmail
+        billingPhone
+        createdAt
+        createdBy
+        domains
+        geoLocation
+        id
+        tags
+        taxIdentifier
+        updatedAt
+        updatedBy
+        identityProvider
+        identityProviderEntityID
+        identityProviderLoginEnforced
+        oidcDiscoveryEndpoint
+        identityProviderClientSecret
+        identityProviderMetadataEndpoint
+        identityProviderAuthTested
+        complianceWebhookToken
+        organization {
+          id
+          displayName
+        }
+      }
+    }
+  }
 }
-mutation UpdateOrganizationSetting ($updateOrganizationSettingId: ID!, $input: UpdateOrganizationSettingInput!) {
-	updateOrganizationSetting(id: $updateOrganizationSettingId, input: $input) {
-		organizationSetting {
-			allowMatchingDomainsAutojoin
-			allowSupportAccess
-			allowedEmailDomains
-			billingAddress
-			billingContact
-			billingEmail
-			billingNotificationsEnabled
-			billingPhone
-			complianceWebhookToken
-			createdAt
-			createdBy
-			domains
-			geoLocation
-			id
-			identityProvider
-			identityProviderAuthTested
-			identityProviderClientID
-			identityProviderClientSecret
-			identityProviderEntityID
-			identityProviderLoginEnforced
-			identityProviderMetadataEndpoint
-			multifactorAuthEnforced
-			oidcDiscoveryEndpoint
-			organizationID
-			paymentMethodAdded
-			pendingDeletionAt
-			samlCert
-			samlIssuer
-			samlSigninURL
-			ssoExemptDomains
-			tags
-			taxIdentifier
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-			organization {
-				id
-				displayName
-			}
-		}
-	}
+
+mutation UpdateOrganizationSetting($updateOrganizationSettingId: ID!, $input: UpdateOrganizationSettingInput!) {
+  updateOrganizationSetting(id: $updateOrganizationSettingId, input: $input) {
+    organizationSetting {
+      allowMatchingDomainsAutojoin
+      allowSupportAccess
+      allowedEmailDomains
+      billingAddress
+      billingContact
+      billingEmail
+      billingNotificationsEnabled
+      billingPhone
+      complianceWebhookToken
+      createdAt
+      createdBy
+      domains
+      geoLocation
+      id
+      identityProvider
+      identityProviderAuthTested
+      identityProviderClientID
+      identityProviderClientSecret
+      identityProviderEntityID
+      identityProviderJitProvisioning
+      identityProviderLoginEnforced
+      identityProviderMetadataEndpoint
+      multifactorAuthEnforced
+      oidcDiscoveryEndpoint
+      organizationID
+      paymentMethodAdded
+      pendingDeletionAt
+      samlCert
+      samlIssuer
+      samlSigninURL
+      ssoExemptDomains
+      tags
+      taxIdentifier
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+      organization {
+        id
+        displayName
+      }
+    }
+  }
 }

@@ -89,6 +89,8 @@ type OrganizationSettingHistory struct {
 	SamlCert string `json:"saml_cert,omitempty"`
 	// enforce SSO authentication for organization members
 	IdentityProviderLoginEnforced bool `json:"identity_provider_login_enforced,omitempty"`
+	// when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider
+	IdentityProviderJitProvisioning bool `json:"identity_provider_jit_provisioning,omitempty"`
 	// enforce 2fa / multifactor authentication for organization members
 	MultifactorAuthEnforced bool `json:"multifactor_auth_enforced,omitempty"`
 	// email domains whose existing members skip the SSO redirect even when SSO is enforced; TFA enforcement still applies
@@ -115,7 +117,7 @@ func (*OrganizationSettingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case organizationsettinghistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case organizationsettinghistory.FieldBillingNotificationsEnabled, organizationsettinghistory.FieldAllowMatchingDomainsAutojoin, organizationsettinghistory.FieldIdentityProviderAuthTested, organizationsettinghistory.FieldIdentityProviderLoginEnforced, organizationsettinghistory.FieldMultifactorAuthEnforced, organizationsettinghistory.FieldAllowSupportAccess, organizationsettinghistory.FieldPaymentMethodAdded:
+		case organizationsettinghistory.FieldBillingNotificationsEnabled, organizationsettinghistory.FieldAllowMatchingDomainsAutojoin, organizationsettinghistory.FieldIdentityProviderAuthTested, organizationsettinghistory.FieldIdentityProviderLoginEnforced, organizationsettinghistory.FieldIdentityProviderJitProvisioning, organizationsettinghistory.FieldMultifactorAuthEnforced, organizationsettinghistory.FieldAllowSupportAccess, organizationsettinghistory.FieldPaymentMethodAdded:
 			values[i] = new(sql.NullBool)
 		case organizationsettinghistory.FieldID, organizationsettinghistory.FieldRef, organizationsettinghistory.FieldCreatedBy, organizationsettinghistory.FieldUpdatedBy, organizationsettinghistory.FieldUpdatedByImpersonator, organizationsettinghistory.FieldDeletedBy, organizationsettinghistory.FieldBillingContact, organizationsettinghistory.FieldBillingEmail, organizationsettinghistory.FieldBillingPhone, organizationsettinghistory.FieldTaxIdentifier, organizationsettinghistory.FieldGeoLocation, organizationsettinghistory.FieldOrganizationID, organizationsettinghistory.FieldIdentityProvider, organizationsettinghistory.FieldIdentityProviderClientID, organizationsettinghistory.FieldIdentityProviderClientSecret, organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, organizationsettinghistory.FieldIdentityProviderEntityID, organizationsettinghistory.FieldOidcDiscoveryEndpoint, organizationsettinghistory.FieldSamlSigninURL, organizationsettinghistory.FieldSamlIssuer, organizationsettinghistory.FieldSamlCert, organizationsettinghistory.FieldComplianceWebhookToken:
 			values[i] = new(sql.NullString)
@@ -351,6 +353,12 @@ func (_m *OrganizationSettingHistory) assignValues(columns []string, values []an
 			} else if value.Valid {
 				_m.IdentityProviderLoginEnforced = value.Bool
 			}
+		case organizationsettinghistory.FieldIdentityProviderJitProvisioning:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_provider_jit_provisioning", values[i])
+			} else if value.Valid {
+				_m.IdentityProviderJitProvisioning = value.Bool
+			}
 		case organizationsettinghistory.FieldMultifactorAuthEnforced:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field multifactor_auth_enforced", values[i])
@@ -530,6 +538,9 @@ func (_m *OrganizationSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("identity_provider_login_enforced=")
 	builder.WriteString(fmt.Sprintf("%v", _m.IdentityProviderLoginEnforced))
+	builder.WriteString(", ")
+	builder.WriteString("identity_provider_jit_provisioning=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IdentityProviderJitProvisioning))
 	builder.WriteString(", ")
 	builder.WriteString("multifactor_auth_enforced=")
 	builder.WriteString(fmt.Sprintf("%v", _m.MultifactorAuthEnforced))

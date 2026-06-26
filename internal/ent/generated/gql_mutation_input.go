@@ -18792,6 +18792,7 @@ type CreateOrganizationSettingInput struct {
 	SamlIssuer                       *string
 	SamlCert                         *string
 	IdentityProviderLoginEnforced    *bool
+	IdentityProviderJitProvisioning  *bool
 	MultifactorAuthEnforced          *bool
 	SSOExemptDomains                 []string
 	AllowSupportAccess               *bool
@@ -18865,6 +18866,9 @@ func (i *CreateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	if v := i.IdentityProviderLoginEnforced; v != nil {
 		m.SetIdentityProviderLoginEnforced(*v)
 	}
+	if v := i.IdentityProviderJitProvisioning; v != nil {
+		m.SetIdentityProviderJitProvisioning(*v)
+	}
 	if v := i.MultifactorAuthEnforced; v != nil {
 		m.SetMultifactorAuthEnforced(*v)
 	}
@@ -18936,6 +18940,7 @@ type UpdateOrganizationSettingInput struct {
 	ClearSamlCert                         bool
 	SamlCert                              *string
 	IdentityProviderLoginEnforced         *bool
+	IdentityProviderJitProvisioning       *bool
 	ClearMultifactorAuthEnforced          bool
 	MultifactorAuthEnforced               *bool
 	ClearSSOExemptDomains                 bool
@@ -19084,6 +19089,9 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if v := i.IdentityProviderLoginEnforced; v != nil {
 		m.SetIdentityProviderLoginEnforced(*v)
+	}
+	if v := i.IdentityProviderJitProvisioning; v != nil {
+		m.SetIdentityProviderJitProvisioning(*v)
 	}
 	if i.ClearMultifactorAuthEnforced {
 		m.ClearMultifactorAuthEnforced()
