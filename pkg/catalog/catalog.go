@@ -34,7 +34,7 @@ const ManagedByValue = "module-manager"
 // Catalog wraps models.Catalog
 type Catalog struct {
 	// embed the base catalog model
-	models.Catalog
+	models.Catalog `yaml:",inline"`
 }
 
 type (
@@ -398,7 +398,7 @@ func (c *Catalog) SaveCatalog(path string) (string, error) {
 		c.SHA = computeSHA(c.Version)
 	}
 
-	newData, err := yaml.Marshal(c.Catalog)
+	newData, err := yaml.Marshal(c)
 	if err != nil {
 		return "", err
 	}
@@ -416,7 +416,7 @@ func (c *Catalog) SaveCatalog(path string) (string, error) {
 
 			c.SHA = computeSHA(c.Version)
 
-			if newData, err = yaml.Marshal(c.Catalog); err != nil {
+			if newData, err = yaml.Marshal(c); err != nil {
 				return "", err
 			}
 		}
