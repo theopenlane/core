@@ -20,6 +20,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/middleware/impersonation"
 	"github.com/theopenlane/utils/ulids"
@@ -387,18 +388,33 @@ func (suite *HandlerTestSuite) TestSupportAccessCanUpdateOrgData() {
 
 	supportCtx := suite.supportCallerContext(token)
 
-	const updatedContact = "support-updated-contact"
+	// ensure org interceptor works for support
+	orgMembers, err := suite.api.GetOrgMembersByOrgID(supportCtx, &testclient.OrgMembershipWhereInput{OrganizationID: &org.ID})
+	require.NoError(t, err)
+	assert.NotEmpty(t, orgMembers.OrgMemberships.Edges)
 
-	setting, err := suite.db.OrganizationSetting.Query().
-		Where(organizationsetting.OrganizationID(org.ID)).
-		Only(supportCtx)
+	resp, err := suite.api.GetOrganizationSettings(supportCtx, testclient.OrganizationSettingWhereInput{})
+	require.NoError(t, err)
+	assert.NotEmpty(t, resp.OrganizationSettings.Edges)
+	assert.Len(t, resp.OrganizationSettings.Edges, 1)
+
+	// set for other tests
+	setting := resp.OrganizationSettings.Edges[0].Node
+
+	var updatedContact = "support-updated-contact"
+
+	_, err = suite.api.UpdateOrganizationSetting(supportCtx, setting.ID, testclient.UpdateOrganizationSettingInput{
+		BillingContact: &updatedContact,
+	})
 	require.NoError(t, err)
 
-	_, err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).
-		SetBillingContact(updatedContact).
-		Save(supportCtx)
+	got, err := suite.db.OrganizationSetting.Get(supportCtx, setting.ID)
 	require.NoError(t, err)
-
-	got := suite.db.OrganizationSetting.GetX(supportCtx, setting.ID)
 	assert.Equal(t, updatedContact, got.BillingContact, "support update should persist to the org setting")
+
+	// create task to ensure assigner doesn't error on constraint
+	_, err = suite.api.CreateTask(supportCtx, testclient.CreateTaskInput{
+		Title: "new task from support user",
+	})
+	require.NoError(t, err)
 }
