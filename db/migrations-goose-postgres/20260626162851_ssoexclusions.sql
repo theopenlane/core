@@ -114,7 +114,7 @@ ALTER TABLE "org_products" ADD COLUMN "updated_by_impersonator" character varyin
 -- modify "org_subscriptions" table
 ALTER TABLE "org_subscriptions" ADD COLUMN "updated_by_impersonator" character varying NULL;
 -- modify "organization_settings" table
-ALTER TABLE "organization_settings" ADD COLUMN "updated_by_impersonator" character varying NULL, ADD COLUMN "sso_exempt_domains" jsonb NULL, ADD COLUMN "allow_support_access" boolean NULL DEFAULT false;
+ALTER TABLE "organization_settings" ADD COLUMN "updated_by_impersonator" character varying NULL, ADD COLUMN "identity_provider_jit_provisioning" boolean NOT NULL DEFAULT true, ADD COLUMN "sso_exempt_domains" jsonb NULL, ADD COLUMN "allow_support_access" boolean NULL DEFAULT false;
 -- modify "organizations" table
 ALTER TABLE "organizations" ADD COLUMN "updated_by_impersonator" character varying NULL;
 -- modify "personal_access_tokens" table
@@ -286,7 +286,7 @@ ALTER TABLE "personal_access_tokens" DROP COLUMN "updated_by_impersonator";
 -- reverse: modify "organizations" table
 ALTER TABLE "organizations" DROP COLUMN "updated_by_impersonator";
 -- reverse: modify "organization_settings" table
-ALTER TABLE "organization_settings" DROP COLUMN "allow_support_access", DROP COLUMN "sso_exempt_domains", DROP COLUMN "updated_by_impersonator";
+ALTER TABLE "organization_settings" DROP COLUMN "allow_support_access", DROP COLUMN "sso_exempt_domains", DROP COLUMN "identity_provider_jit_provisioning", DROP COLUMN "updated_by_impersonator";
 -- reverse: modify "org_subscriptions" table
 ALTER TABLE "org_subscriptions" DROP COLUMN "updated_by_impersonator";
 -- reverse: modify "org_products" table

@@ -83,7 +83,7 @@ ALTER TABLE "org_subscription_history" ADD COLUMN "updated_by_impersonator" char
 -- Modify "organization_history" table
 ALTER TABLE "organization_history" ADD COLUMN "updated_by_impersonator" character varying NULL;
 -- Modify "organization_setting_history" table
-ALTER TABLE "organization_setting_history" ADD COLUMN "updated_by_impersonator" character varying NULL, ADD COLUMN "sso_exempt_domains" jsonb NULL, ADD COLUMN "allow_support_access" boolean NULL DEFAULT false;
+ALTER TABLE "organization_setting_history" ADD COLUMN "updated_by_impersonator" character varying NULL, ADD COLUMN "identity_provider_jit_provisioning" boolean NOT NULL DEFAULT true, ADD COLUMN "sso_exempt_domains" jsonb NULL, ADD COLUMN "allow_support_access" boolean NULL DEFAULT false;
 -- Modify "platform_history" table
 ALTER TABLE "platform_history" ADD COLUMN "updated_by_impersonator" character varying NULL;
 -- Modify "procedure_history" table
