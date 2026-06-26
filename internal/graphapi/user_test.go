@@ -370,6 +370,44 @@ func TestMutationDeleteUser(t *testing.T) {
 	}
 }
 
+func TestQueryUserSupportContext(t *testing.T) {
+	const (
+		supportSubjectID = "01JSPPRT000000000000000000"
+		supportName      = "Openlane Support"
+		supportEmail     = "support@theopenlane.io"
+	)
+
+	orgID := sharedTestUser1.OrganizationID
+
+	caller := auth.NewOrgSupportCaller(orgID, supportSubjectID, supportName, supportEmail)
+	supportCtx := auth.WithCaller(sharedTestUser1.UserCtx, caller)
+
+	t.Run("Self returns synthetic support user", func(t *testing.T) {
+		resp, err := suite.client.api.GetSelf(supportCtx)
+
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		assert.Check(t, is.Equal(supportSubjectID, resp.Self.ID))
+		assert.Check(t, is.Equal(supportName, resp.Self.DisplayName))
+		assert.Check(t, is.Equal(supportEmail, resp.Self.Email))
+		assert.Check(t, resp.Self.Setting.EmailConfirmed)
+		assert.Check(t, resp.Self.Setting.DefaultOrg != nil)
+		assert.Check(t, is.Equal(orgID, resp.Self.Setting.DefaultOrg.ID))
+	})
+
+	t.Run("User returns synthetic support user", func(t *testing.T) {
+		resp, err := suite.client.api.GetUserByID(supportCtx, supportSubjectID)
+
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		assert.Check(t, is.Equal(supportSubjectID, resp.User.ID))
+		assert.Check(t, is.Equal(supportName, resp.User.DisplayName))
+		assert.Check(t, is.Equal(supportEmail, resp.User.Email))
+	})
+}
+
 func TestMutationDeleteUser_OrgOwnerCannotBeDeleted(t *testing.T) {
 	t.Parallel()
 	localTestOrg := suite.seedFreshOrgUsers(t)

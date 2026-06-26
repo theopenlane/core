@@ -198,7 +198,8 @@ func WithAuth() ServerOption {
 
 		s.Config.Handler.WebAuthn = webauthn.NewWithConfig(s.Config.Settings.Auth.Providers.Webauthn)
 
-		s.Config.GraphMiddleware = append(s.Config.GraphMiddleware, authmw.Authenticate(&conf), impersonation.SystemAdminUserContextMiddleware(), authmw.BlockNonTrustCenterAnonymous())
+		impersonationMW := impersonation.New(s.Config.Handler.TokenManager, s.Config.Handler.SupportAccessConfig.SubjectID, s.Config.Handler.SupportAccessConfig.DisplayName)
+		s.Config.GraphMiddleware = append(s.Config.GraphMiddleware, impersonationMW.Process, authmw.Authenticate(&conf), impersonation.SystemAdminUserContextMiddleware(), authmw.BlockNonTrustCenterAnonymous())
 		s.Config.Handler.AuthMiddleware = append(s.Config.Handler.AuthMiddleware, authmw.Authenticate(&conf))
 	})
 }

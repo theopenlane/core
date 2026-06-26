@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"slices"
 
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/pkg/logx"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
@@ -77,6 +78,12 @@ func (m *Middleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 		// Set the impersonated caller in the context.
 		ctx = auth.WithCaller(ctx, impersonatedCaller)
 		c.SetRequest(c.Request().WithContext(ctx))
+
+		// add the user and org ID to the logger context
+		logx.FromContext(ctx).UpdateContext(func(c zerolog.Context) zerolog.Context {
+			return c.Str("support_user_id", impersonatedCaller.SubjectID).
+				Strs("org_id", impersonatedCaller.OrganizationIDs)
+		})
 
 		// Log the impersonation action
 		m.logImpersonationAccess(claims, c)

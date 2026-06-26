@@ -212,7 +212,7 @@ github.com/theopenlane/go-client v0.12.2 h1:6D7vp8hmA7RJsdWG0xlipjkySypOm1mLO36L
 github.com/theopenlane/go-client v0.12.2/go.mod h1:F+s557MiWmXv9MJB8f7mwuSyxhvDMMV1ZqEhvgKcVBc=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
-github.com/theopenlane/iam v0.34.0 h1:8zz7wV2/Fmj91LojzLnglZsW4octWEok7d3Oa3BZCP8=
+github.com/theopenlane/iam v0.34.1 h1:/14mG1lJc2A/p9gKVv2Eh95jBlu43vLPxFO/xHO8mK4=
 github.com/theopenlane/utils v0.7.1 h1:x+9kVMgOALYqAH6GaLaDb9tj16nzasoGM8X0v0XNTn8=
 github.com/theopenlane/utils v0.7.1/go.mod h1:uxiLqjtcqgH57yOpYl3tTfKuenGYyAROxHFMpXx6mDY=
 github.com/tinylib/msgp v1.6.4 h1:mOwYbyYDLPj35mkA2BjjYejgJk9BuHxDdvRnb6v2ZcQ=
