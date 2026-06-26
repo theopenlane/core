@@ -950,11 +950,6 @@
       },
       "LoginRequest": {
         "properties": {
-          "duration_hours": {
-            "description": "For Openlane support login only: session length in hours",
-            "nullable": true,
-            "type": "integer"
-          },
           "password": {
             "description": "The password associated with the account",
             "example": "Wint3rIsC0ming123!",
@@ -2146,14 +2141,6 @@
           "reason": {
             "description": "Reason for the impersonation",
             "type": "string"
-          },
-          "scopes": {
-            "description": "Specific scopes for the impersonation session",
-            "items": {
-              "description": "Specific scopes for the impersonation session",
-              "type": "string"
-            },
-            "type": "array"
           },
           "target_user_id": {
             "description": "The ID of the user to impersonate",

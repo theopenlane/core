@@ -5761,24 +5761,28 @@ func init() {
 	organizationsettingDescIdentityProviderLoginEnforced := organizationsettingFields[21].Descriptor()
 	// organizationsetting.DefaultIdentityProviderLoginEnforced holds the default value on creation for the identity_provider_login_enforced field.
 	organizationsetting.DefaultIdentityProviderLoginEnforced = organizationsettingDescIdentityProviderLoginEnforced.Default.(bool)
+	// organizationsettingDescIdentityProviderJitProvisioning is the schema descriptor for identity_provider_jit_provisioning field.
+	organizationsettingDescIdentityProviderJitProvisioning := organizationsettingFields[22].Descriptor()
+	// organizationsetting.DefaultIdentityProviderJitProvisioning holds the default value on creation for the identity_provider_jit_provisioning field.
+	organizationsetting.DefaultIdentityProviderJitProvisioning = organizationsettingDescIdentityProviderJitProvisioning.Default.(bool)
 	// organizationsettingDescMultifactorAuthEnforced is the schema descriptor for multifactor_auth_enforced field.
-	organizationsettingDescMultifactorAuthEnforced := organizationsettingFields[22].Descriptor()
+	organizationsettingDescMultifactorAuthEnforced := organizationsettingFields[23].Descriptor()
 	// organizationsetting.DefaultMultifactorAuthEnforced holds the default value on creation for the multifactor_auth_enforced field.
 	organizationsetting.DefaultMultifactorAuthEnforced = organizationsettingDescMultifactorAuthEnforced.Default.(bool)
 	// organizationsettingDescSSOExemptDomains is the schema descriptor for sso_exempt_domains field.
-	organizationsettingDescSSOExemptDomains := organizationsettingFields[23].Descriptor()
+	organizationsettingDescSSOExemptDomains := organizationsettingFields[24].Descriptor()
 	// organizationsetting.SSOExemptDomainsValidator is a validator for the "sso_exempt_domains" field. It is called by the builders before save.
 	organizationsetting.SSOExemptDomainsValidator = organizationsettingDescSSOExemptDomains.Validators[0].(func([]string) error)
 	// organizationsettingDescAllowSupportAccess is the schema descriptor for allow_support_access field.
-	organizationsettingDescAllowSupportAccess := organizationsettingFields[24].Descriptor()
+	organizationsettingDescAllowSupportAccess := organizationsettingFields[25].Descriptor()
 	// organizationsetting.DefaultAllowSupportAccess holds the default value on creation for the allow_support_access field.
 	organizationsetting.DefaultAllowSupportAccess = organizationsettingDescAllowSupportAccess.Default.(bool)
 	// organizationsettingDescComplianceWebhookToken is the schema descriptor for compliance_webhook_token field.
-	organizationsettingDescComplianceWebhookToken := organizationsettingFields[25].Descriptor()
+	organizationsettingDescComplianceWebhookToken := organizationsettingFields[26].Descriptor()
 	// organizationsetting.DefaultComplianceWebhookToken holds the default value on creation for the compliance_webhook_token field.
 	organizationsetting.DefaultComplianceWebhookToken = organizationsettingDescComplianceWebhookToken.Default.(func() string)
 	// organizationsettingDescPaymentMethodAdded is the schema descriptor for payment_method_added field.
-	organizationsettingDescPaymentMethodAdded := organizationsettingFields[26].Descriptor()
+	organizationsettingDescPaymentMethodAdded := organizationsettingFields[27].Descriptor()
 	// organizationsetting.DefaultPaymentMethodAdded holds the default value on creation for the payment_method_added field.
 	organizationsetting.DefaultPaymentMethodAdded = organizationsettingDescPaymentMethodAdded.Default.(bool)
 	// organizationsettingDescID is the schema descriptor for id field.

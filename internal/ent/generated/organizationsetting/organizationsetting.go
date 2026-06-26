@@ -78,6 +78,8 @@ const (
 	FieldSamlCert = "saml_cert"
 	// FieldIdentityProviderLoginEnforced holds the string denoting the identity_provider_login_enforced field in the database.
 	FieldIdentityProviderLoginEnforced = "identity_provider_login_enforced"
+	// FieldIdentityProviderJitProvisioning holds the string denoting the identity_provider_jit_provisioning field in the database.
+	FieldIdentityProviderJitProvisioning = "identity_provider_jit_provisioning"
 	// FieldMultifactorAuthEnforced holds the string denoting the multifactor_auth_enforced field in the database.
 	FieldMultifactorAuthEnforced = "multifactor_auth_enforced"
 	// FieldSSOExemptDomains holds the string denoting the sso_exempt_domains field in the database.
@@ -143,6 +145,7 @@ var Columns = []string{
 	FieldSamlIssuer,
 	FieldSamlCert,
 	FieldIdentityProviderLoginEnforced,
+	FieldIdentityProviderJitProvisioning,
 	FieldMultifactorAuthEnforced,
 	FieldSSOExemptDomains,
 	FieldAllowSupportAccess,
@@ -202,6 +205,8 @@ var (
 	SamlSigninURLValidator func(string) error
 	// DefaultIdentityProviderLoginEnforced holds the default value on creation for the "identity_provider_login_enforced" field.
 	DefaultIdentityProviderLoginEnforced bool
+	// DefaultIdentityProviderJitProvisioning holds the default value on creation for the "identity_provider_jit_provisioning" field.
+	DefaultIdentityProviderJitProvisioning bool
 	// DefaultMultifactorAuthEnforced holds the default value on creation for the "multifactor_auth_enforced" field.
 	DefaultMultifactorAuthEnforced bool
 	// SSOExemptDomainsValidator is a validator for the "sso_exempt_domains" field. It is called by the builders before save.
@@ -376,6 +381,11 @@ func BySamlCert(opts ...sql.OrderTermOption) OrderOption {
 // ByIdentityProviderLoginEnforced orders the results by the identity_provider_login_enforced field.
 func ByIdentityProviderLoginEnforced(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIdentityProviderLoginEnforced, opts...).ToFunc()
+}
+
+// ByIdentityProviderJitProvisioning orders the results by the identity_provider_jit_provisioning field.
+func ByIdentityProviderJitProvisioning(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIdentityProviderJitProvisioning, opts...).ToFunc()
 }
 
 // ByMultifactorAuthEnforced orders the results by the multifactor_auth_enforced field.

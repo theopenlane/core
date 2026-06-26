@@ -455,6 +455,20 @@ func (_c *OrganizationSettingHistoryCreate) SetNillableIdentityProviderLoginEnfo
 	return _c
 }
 
+// SetIdentityProviderJitProvisioning sets the "identity_provider_jit_provisioning" field.
+func (_c *OrganizationSettingHistoryCreate) SetIdentityProviderJitProvisioning(v bool) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetIdentityProviderJitProvisioning(v)
+	return _c
+}
+
+// SetNillableIdentityProviderJitProvisioning sets the "identity_provider_jit_provisioning" field if the given value is not nil.
+func (_c *OrganizationSettingHistoryCreate) SetNillableIdentityProviderJitProvisioning(v *bool) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetIdentityProviderJitProvisioning(*v)
+	}
+	return _c
+}
+
 // SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
 func (_c *OrganizationSettingHistoryCreate) SetMultifactorAuthEnforced(v bool) *OrganizationSettingHistoryCreate {
 	_c.mutation.SetMultifactorAuthEnforced(v)
@@ -631,6 +645,10 @@ func (_c *OrganizationSettingHistoryCreate) defaults() error {
 		v := organizationsettinghistory.DefaultIdentityProviderLoginEnforced
 		_c.mutation.SetIdentityProviderLoginEnforced(v)
 	}
+	if _, ok := _c.mutation.IdentityProviderJitProvisioning(); !ok {
+		v := organizationsettinghistory.DefaultIdentityProviderJitProvisioning
+		_c.mutation.SetIdentityProviderJitProvisioning(v)
+	}
 	if _, ok := _c.mutation.MultifactorAuthEnforced(); !ok {
 		v := organizationsettinghistory.DefaultMultifactorAuthEnforced
 		_c.mutation.SetMultifactorAuthEnforced(v)
@@ -691,6 +709,9 @@ func (_c *OrganizationSettingHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.IdentityProviderLoginEnforced(); !ok {
 		return &ValidationError{Name: "identity_provider_login_enforced", err: errors.New(`historygenerated: missing required field "OrganizationSettingHistory.identity_provider_login_enforced"`)}
+	}
+	if _, ok := _c.mutation.IdentityProviderJitProvisioning(); !ok {
+		return &ValidationError{Name: "identity_provider_jit_provisioning", err: errors.New(`historygenerated: missing required field "OrganizationSettingHistory.identity_provider_jit_provisioning"`)}
 	}
 	if _, ok := _c.mutation.PaymentMethodAdded(); !ok {
 		return &ValidationError{Name: "payment_method_added", err: errors.New(`historygenerated: missing required field "OrganizationSettingHistory.payment_method_added"`)}
@@ -862,6 +883,10 @@ func (_c *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSettingHi
 	if value, ok := _c.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
 		_node.IdentityProviderLoginEnforced = value
+	}
+	if value, ok := _c.mutation.IdentityProviderJitProvisioning(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderJitProvisioning, field.TypeBool, value)
+		_node.IdentityProviderJitProvisioning = value
 	}
 	if value, ok := _c.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool, value)

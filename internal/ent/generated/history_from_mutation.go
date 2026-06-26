@@ -16253,6 +16253,10 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetIdentityProviderLoginEnforced(identityProviderLoginEnforced)
 	}
 
+	if identityProviderJitProvisioning, exists := m.IdentityProviderJitProvisioning(); exists {
+		create = create.SetIdentityProviderJitProvisioning(identityProviderJitProvisioning)
+	}
+
 	if multifactorAuthEnforced, exists := m.MultifactorAuthEnforced(); exists {
 		create = create.SetMultifactorAuthEnforced(multifactorAuthEnforced)
 	}
@@ -16488,6 +16492,12 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetIdentityProviderLoginEnforced(organizationsetting.IdentityProviderLoginEnforced)
 		}
 
+		if identityProviderJitProvisioning, exists := m.IdentityProviderJitProvisioning(); exists {
+			create = create.SetIdentityProviderJitProvisioning(identityProviderJitProvisioning)
+		} else {
+			create = create.SetIdentityProviderJitProvisioning(organizationsetting.IdentityProviderJitProvisioning)
+		}
+
 		if multifactorAuthEnforced, exists := m.MultifactorAuthEnforced(); exists {
 			create = create.SetMultifactorAuthEnforced(multifactorAuthEnforced)
 		} else {
@@ -16589,6 +16599,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetSamlIssuer(organizationsetting.SamlIssuer).
 			SetSamlCert(organizationsetting.SamlCert).
 			SetIdentityProviderLoginEnforced(organizationsetting.IdentityProviderLoginEnforced).
+			SetIdentityProviderJitProvisioning(organizationsetting.IdentityProviderJitProvisioning).
 			SetMultifactorAuthEnforced(organizationsetting.MultifactorAuthEnforced).
 			SetSSOExemptDomains(organizationsetting.SSOExemptDomains).
 			SetAllowSupportAccess(organizationsetting.AllowSupportAccess).

@@ -60002,6 +60002,11 @@ func (_q *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProviderLoginEnforced)
 				fieldSeen[organizationsetting.FieldIdentityProviderLoginEnforced] = struct{}{}
 			}
+		case "identityProviderJitProvisioning":
+			if _, ok := fieldSeen[organizationsetting.FieldIdentityProviderJitProvisioning]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProviderJitProvisioning)
+				fieldSeen[organizationsetting.FieldIdentityProviderJitProvisioning] = struct{}{}
+			}
 		case "multifactorAuthEnforced":
 			if _, ok := fieldSeen[organizationsetting.FieldMultifactorAuthEnforced]; !ok {
 				selectedFields = append(selectedFields, organizationsetting.FieldMultifactorAuthEnforced)

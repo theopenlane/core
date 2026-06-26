@@ -199,6 +199,11 @@ func IdentityProviderLoginEnforced(v bool) predicate.OrganizationSettingHistory 
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderLoginEnforced, v))
 }
 
+// IdentityProviderJitProvisioning applies equality check predicate on the "identity_provider_jit_provisioning" field. It's identical to IdentityProviderJitProvisioningEQ.
+func IdentityProviderJitProvisioning(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderJitProvisioning, v))
+}
+
 // MultifactorAuthEnforced applies equality check predicate on the "multifactor_auth_enforced" field. It's identical to MultifactorAuthEnforcedEQ.
 func MultifactorAuthEnforced(v bool) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldMultifactorAuthEnforced, v))
@@ -1952,6 +1957,16 @@ func IdentityProviderLoginEnforcedEQ(v bool) predicate.OrganizationSettingHistor
 // IdentityProviderLoginEnforcedNEQ applies the NEQ predicate on the "identity_provider_login_enforced" field.
 func IdentityProviderLoginEnforcedNEQ(v bool) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldIdentityProviderLoginEnforced, v))
+}
+
+// IdentityProviderJitProvisioningEQ applies the EQ predicate on the "identity_provider_jit_provisioning" field.
+func IdentityProviderJitProvisioningEQ(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderJitProvisioning, v))
+}
+
+// IdentityProviderJitProvisioningNEQ applies the NEQ predicate on the "identity_provider_jit_provisioning" field.
+func IdentityProviderJitProvisioningNEQ(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldIdentityProviderJitProvisioning, v))
 }
 
 // MultifactorAuthEnforcedEQ applies the EQ predicate on the "multifactor_auth_enforced" field.
