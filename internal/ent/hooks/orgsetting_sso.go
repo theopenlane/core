@@ -16,14 +16,12 @@ import (
 func HookValidateIdentityProviderConfig() ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return hook.OrganizationSettingFunc(func(ctx context.Context, m *generated.OrganizationSettingMutation) (generated.Value, error) {
-			if hasIdentityProviderConfigFields(m) {
-				if err := disableEnforcementIfConfigChanged(ctx, m); err != nil {
-					return nil, err
-				}
+			if err := disableEnforcementIfConfigChanged(ctx, m); err != nil {
+				return nil, err
+			}
 
-				if err := ValidateIdentityProviderConfig(ctx, m); err != nil {
-					return nil, err
-				}
+			if err := ValidateIdentityProviderConfig(ctx, m); err != nil {
+				return nil, err
 			}
 
 			return next.Mutate(ctx, m)
@@ -38,18 +36,6 @@ func HookValidateIdentityProviderConfig() ent.Hook {
 		),
 		hook.HasOp(ent.OpCreate|ent.OpUpdateOne),
 	))
-}
-
-// hasIdentityProviderConfigFields reports whether any identity provider configuration field is part of
-// the mutation; a change to any single field resets the enforced/tested status, matching the prior behavior
-func hasIdentityProviderConfigFields(m *generated.OrganizationSettingMutation) bool {
-	_, provider := m.IdentityProvider()
-	_, clientID := m.IdentityProviderClientID()
-	_, clientSecret := m.IdentityProviderClientSecret()
-	_, discovery := m.OidcDiscoveryEndpoint()
-	_, enforced := m.IdentityProviderLoginEnforced()
-
-	return provider || clientID || clientSecret || discovery || enforced
 }
 
 // ValidateIdentityProviderConfig checks if the identity provider configuration is valid
@@ -170,6 +156,7 @@ func disableEnforcementIfConfigChanged(ctx context.Context, m *generated.Organiz
 	return nil
 }
 
+// didSSOConfigChange checks if any of the SSO configuration fields have changed in the mutation
 func didSSOConfigChange(ctx context.Context, m *generated.OrganizationSettingMutation) bool {
 	if enforced, ok := m.IdentityProviderLoginEnforced(); ok {
 		if oldEnforcement, err := m.OldIdentityProviderLoginEnforced(ctx); err == nil && oldEnforcement && !enforced {

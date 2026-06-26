@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
@@ -115,7 +116,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 		ImpersonatorEmail: caller.SubjectEmail,
 		TargetUserID:      req.TargetUserID,
 		TargetUserEmail:   targetUser.Email,
-		Action:            "start",
+		Action:            enums.ImpersonationActionStart.String(),
 		Reason:            req.Reason,
 		Timestamp:         time.Now(),
 		IPAddress:         ctx.RealIP(),
@@ -171,7 +172,7 @@ func (h *Handler) EndImpersonation(ctx echo.Context, openapi *OpenAPIContext) er
 		ImpersonatorEmail: caller.Impersonation.ImpersonatorEmail,
 		TargetUserID:      caller.Impersonation.TargetUserID,
 		TargetUserEmail:   caller.Impersonation.TargetUserEmail,
-		Action:            "end",
+		Action:            enums.ImpersonationActionStop.String(),
 		Reason:            req.Reason,
 		Timestamp:         time.Now(),
 		IPAddress:         ctx.RealIP(),
@@ -246,6 +247,7 @@ func (h *Handler) getTargetUser(ctx context.Context, userID string, orgID string
 func (h *Handler) logImpersonationEvent(ctx context.Context, action string, auditLog *auth.ImpersonationAuditLog) error {
 	logx.FromContext(ctx).Info().Str("action", action).Str("target_user_id", auditLog.TargetUserID).Msg("impersonation event")
 
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	_, err := h.DBClient.ImpersonationEvent.Create().
 		SetAction(*enums.ToImpersonationAction(action)).
 		SetImpersonationType(*enums.ToImpersonationType(string(auditLog.Type))).
@@ -257,7 +259,7 @@ func (h *Handler) logImpersonationEvent(ctx context.Context, action string, audi
 		SetOrganizationID(auditLog.OrganizationID).
 		SetCreatedBy(auditLog.ImpersonatorID).
 		SetCreatedAt(time.Now()).
-		Save(ctx)
+		Save(allowCtx)
 	return err
 }
 

@@ -1,6 +1,7 @@
 package handlers_test
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -26,8 +27,27 @@ import (
 	"github.com/theopenlane/utils/ulids"
 )
 
-// ssoEnforcedOrg creates an SSO-enforced organization owned by a fresh user and returns it. The
-// setting only sets the enforcement flag so the identity provider validation hook does not run
+// enforceSSOOnSetting configures a tested identity provider on the organization setting and turns on SSO
+// login enforcement, following the configure -> mark tested -> enforce sequence the organization setting
+// hooks require before enforcement is allowed
+func (suite *HandlerTestSuite) enforceSSOOnSetting(ctx context.Context, settingID string) {
+	suite.db.OrganizationSetting.UpdateOneID(settingID).
+		SetIdentityProvider(enums.SSOProviderOkta).
+		SetIdentityProviderClientID("client").
+		SetIdentityProviderClientSecret("secret").
+		SetOidcDiscoveryEndpoint("http://example.com").
+		ExecX(ctx)
+
+	suite.db.OrganizationSetting.UpdateOneID(settingID).
+		SetIdentityProviderAuthTested(true).
+		ExecX(ctx)
+
+	suite.db.OrganizationSetting.UpdateOneID(settingID).
+		SetIdentityProviderLoginEnforced(true).
+		ExecX(ctx)
+}
+
+// ssoEnforcedOrg creates an SSO-enforced organization owned by a fresh user and returns it
 func (suite *HandlerTestSuite) ssoEnforcedOrg() *ent.Organization {
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -36,9 +56,7 @@ func (suite *HandlerTestSuite) ssoEnforcedOrg() *ent.Organization {
 	ownerCtx := privacy.DecisionContext(owner.UserCtx, privacy.Allow)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
-	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		IdentityProviderLoginEnforced: lo.ToPtr(true),
-	}).SaveX(ownerCtx)
+	setting := suite.db.OrganizationSetting.Create().SaveX(ownerCtx)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
@@ -46,6 +64,8 @@ func (suite *HandlerTestSuite) ssoEnforcedOrg() *ent.Organization {
 	}).SaveX(ownerCtx)
 
 	suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).ExecX(ownerCtx)
+
+	suite.enforceSSOOnSetting(ownerCtx, setting.ID)
 
 	return org
 }
@@ -304,10 +324,10 @@ func (suite *HandlerTestSuite) TestImpersonatorAttributionStamped() {
 	assert.Equal(t, "engineer@theopenlane.io", *group.UpdatedByImpersonator)
 }
 
-// TestExemptDomainAllowedDomainConflict verifies the organization setting hook rejects a domain that
-// appears in both the sso exempt domains and the allowed email domains lists, in either direction and
-// case-insensitively, while still permitting disjoint lists
-func (suite *HandlerTestSuite) TestExemptDomainAllowedDomainConflict() {
+// TestExemptDomainAllowedDomainOverlap verifies a domain may appear in both the sso exempt domains and the
+// allowed email domains lists; the two are independent because allowed email domains only govern auto-join
+// when SSO is not enforced, while exempt domains only affect the SSO redirect when it is enforced
+func (suite *HandlerTestSuite) TestExemptDomainAllowedDomainOverlap() {
 	t := suite.T()
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
@@ -318,29 +338,10 @@ func (suite *HandlerTestSuite) TestExemptDomainAllowedDomainConflict() {
 		SetAllowedEmailDomains([]string{"audit.com"}).
 		SaveX(ctx)
 
-	// adding an exempt domain already in the allowed list must fail
-	_, err := suite.db.OrganizationSetting.UpdateOneID(setting.ID).
-		SetSSOExemptDomains([]string{"audit.com"}).
-		Save(ctx)
-	require.Error(t, err)
-	assert.ErrorContains(t, err, "cannot be in both")
-
-	// the conflict is case-insensitive
-	_, err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).
-		SetSSOExemptDomains([]string{"AUDIT.com"}).
-		Save(ctx)
-	require.Error(t, err)
-
-	// a disjoint exempt domain is accepted
+	// the same domain may also be marked sso exempt; previously this was rejected as a conflict
 	updated := suite.db.OrganizationSetting.UpdateOneID(setting.ID).
-		SetSSOExemptDomains([]string{"contractor.com"}).
+		SetSSOExemptDomains([]string{"audit.com"}).
 		SaveX(ctx)
-	assert.Equal(t, []string{"contractor.com"}, updated.SSOExemptDomains)
-
-	// the reverse direction is also rejected: an allowed domain already in the exempt list
-	_, err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).
-		SetAllowedEmailDomains([]string{"contractor.com"}).
-		Save(ctx)
-	require.Error(t, err)
-	assert.ErrorContains(t, err, "cannot be in both")
+	assert.Equal(t, []string{"audit.com"}, updated.AllowedEmailDomains)
+	assert.Equal(t, []string{"audit.com"}, updated.SSOExemptDomains)
 }

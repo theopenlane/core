@@ -325,9 +325,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
-	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		IdentityProviderLoginEnforced: func(b bool) *bool { return &b }(true),
-	}).SaveX(ownerCtx)
+	setting := suite.db.OrganizationSetting.Create().SaveX(ownerCtx)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
@@ -337,6 +335,8 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetOrganizationID(org.ID).
 		ExecX(ownerCtx)
+
+	suite.enforceSSOOnSetting(ownerCtx, setting.ID)
 
 	// Create a non-owner user
 	testUser := suite.userBuilderWithInput(ctx, &userInput{
@@ -382,9 +382,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOwnerBypass() {
 	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
-	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		IdentityProviderLoginEnforced: func(b bool) *bool { return &b }(true),
-	}).SaveX(ownerCtx)
+	setting := suite.db.OrganizationSetting.Create().SaveX(ownerCtx)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
@@ -394,6 +392,8 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOwnerBypass() {
 	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetOrganizationID(org.ID).
 		ExecX(ownerCtx)
+
+	suite.enforceSSOOnSetting(ownerCtx, setting.ID)
 	// OrganizationCreate hook automatically adds the creating user as the organization owner
 
 	suite.db.UserSetting.UpdateOneID(ownerUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(ownerCtx)

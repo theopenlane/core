@@ -157,6 +157,15 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 		return h.BadRequest(ctx, err)
 	}
 
+	// just-in-time provision the user into the organization when SSO is enforced and the org opts in,
+	// so a directory-authenticated user gains access instead of falling back to their personal org
+	if err := h.jitProvisionMembership(userCtx, orgCookie.Value, entUser); err != nil {
+		metrics.RecordLogin(false)
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to provision organization membership for sso user")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+	}
+
 	// build the OAuth session request
 	oauthReq := apimodels.OauthTokenRequest{
 		Email:            tokens.IDTokenClaims.Email,

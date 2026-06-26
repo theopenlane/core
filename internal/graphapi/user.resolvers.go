@@ -61,6 +61,12 @@ func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*model.Us
 
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*generated.User, error) {
+	// return support user when looking up user from support context
+	caller, ok := auth.CallerFromContext(ctx)
+	if ok && caller != nil && caller.Has(auth.CapOrgSupport) {
+		return supportUserFromCaller(caller), nil
+	}
+
 	query, err := withTransactionalMutation(ctx).User.Query().Where(user.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "user"})
@@ -80,6 +86,11 @@ func (r *queryResolver) Self(ctx context.Context) (*generated.User, error) {
 	if !ok || caller == nil {
 		return nil, parseRequestError(ctx, auth.ErrNoAuthUser, common.Action{Action: common.ActionGet, Object: "user"})
 	}
+
+	if caller.Has(auth.CapOrgSupport) {
+		return supportUserFromCaller(caller), nil
+	}
+
 	userID := caller.SubjectID
 	if userID == "" {
 		return nil, parseRequestError(ctx, auth.ErrNoAuthUser, common.Action{Action: common.ActionGet, Object: "user"})

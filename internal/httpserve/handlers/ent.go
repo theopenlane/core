@@ -6,6 +6,8 @@ import (
 	"time"
 
 	gowebauthn "github.com/go-webauthn/webauthn/webauthn"
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	apimodels "github.com/theopenlane/core/common/openapi"
@@ -16,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
@@ -646,6 +649,55 @@ func (h *Handler) getOrganizationSettingByOrgID(ctx context.Context, orgID strin
 	}
 
 	return setting, nil
+}
+
+// jitProvisionMembership adds an organization membership for a user who successfully authenticated against
+// the organization's configured identity provider, when SSO login is enforced and just-in-time provisioning
+// is enabled for the organization; existing members are left unchanged
+func (h *Handler) jitProvisionMembership(ctx context.Context, orgID string, user *ent.User) error {
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	setting, err := h.getOrganizationSettingByOrgID(allowCtx, orgID)
+	if err != nil {
+		return err
+	}
+
+	if !setting.IdentityProviderLoginEnforced || !setting.IdentityProviderJitProvisioning {
+		return nil
+	}
+
+	exists, err := transaction.FromContext(ctx).OrgMembership.Query().
+		Where(
+			orgmembership.UserID(user.ID),
+			orgmembership.OrganizationID(orgID),
+		).
+		Exist(allowCtx)
+	if err != nil {
+		return err
+	}
+
+	if exists {
+		return nil
+	}
+
+	// the membership create hooks resolve the organization from the caller, so scope the context to the
+	// target org before creating the membership
+	memberCtx := auth.WithCaller(allowCtx, &auth.Caller{
+		SubjectID:       user.ID,
+		SubjectEmail:    user.Email,
+		OrganizationID:  orgID,
+		OrganizationIDs: []string{orgID},
+	})
+
+	role := enums.RoleMember
+
+	return transaction.FromContext(ctx).OrgMembership.Create().
+		SetInput(ent.CreateOrgMembershipInput{
+			OrganizationID: orgID,
+			UserID:         user.ID,
+			Role:           &role,
+		}).
+		Exec(memberCtx)
 }
 
 // getUserDefaultOrgID returns the default organization ID for a user

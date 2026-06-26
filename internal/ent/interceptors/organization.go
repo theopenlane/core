@@ -43,6 +43,13 @@ func InterceptorOrganization() ent.Interceptor {
 		// query to fga
 		caller, ok := auth.CallerFromContext(ctx)
 		if ok && caller != nil && len(caller.OrgIDs()) > 0 {
+			// // support callers are scoped to one org and have no FGA tuples; bypass FGA and restrict directly
+			if caller.Has(auth.CapOrgSupport) {
+				q.WhereP(organization.IDIn(caller.OrgIDs()...))
+
+				return nil
+			}
+
 			// if the request is not using a JWT, we can restrict to the authorized orgs
 			// from the context
 			if caller.AuthenticationType != auth.JWTAuthentication {

@@ -39,6 +39,11 @@ func TraverseUser() ent.Interceptor {
 			return nil
 		}
 
+		caller, callerOK := auth.CallerFromContext(ctx)
+		if callerOK && caller.Has(auth.CapOrgSupport) {
+			return nil
+		}
+
 		switch userFilterType(ctx) {
 		// if we are looking at a user in the context of an organization or group
 		// filter for just those users
@@ -46,7 +51,7 @@ func TraverseUser() ent.Interceptor {
 			return filterUsingFGA(ctx, q)
 		case "user":
 			// if we are looking at self
-			if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.SubjectID != "" {
+			if callerOK && caller != nil && caller.SubjectID != "" {
 				q.Where(user.ID(caller.SubjectID))
 
 				return nil

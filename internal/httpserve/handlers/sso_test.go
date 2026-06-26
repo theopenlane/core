@@ -16,6 +16,7 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	jose "github.com/go-jose/go-jose/v4"
 	"github.com/zitadel/oidc/v3/pkg/client"
@@ -27,6 +28,7 @@ import (
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/iam/auth"
@@ -44,16 +46,15 @@ func (suite *HandlerTestSuite) TestWebfingerHandler() {
 	ctx = ent.NewContext(ctx, suite.db)
 
 	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		IdentityProviderLoginEnforced: lo.ToPtr(true),
-		IdentityProvider:              lo.ToPtr(enums.SSOProviderOkta),
-		OidcDiscoveryEndpoint:         lo.ToPtr("http://example.com"),
-		MultifactorAuthEnforced:       lo.ToPtr(true),
+		MultifactorAuthEnforced: lo.ToPtr(true),
 	}).SaveX(ctx)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      gofakeit.Name(),
 		SettingID: &setting.ID,
 	}).SaveX(ctx)
+
+	suite.enforceSSOOnSetting(ctx, setting.ID)
 
 	suite.db.UserSetting.Update().Where(usersetting.UserID(testUser1.ID)).SetDefaultOrgID(org.ID).ExecX(ctx)
 
@@ -383,4 +384,93 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 	var out models.LoginReply
 	assert.NoError(t, json.NewDecoder(cbRec.Body).Decode(&out))
 	assert.True(t, out.Success)
+}
+
+// TestSSOCallbackJITProvisioning verifies that when SSO login is enforced and just-in-time provisioning is
+// enabled, a user who authenticates against the configured identity provider but is not yet a member is
+// provisioned into the organization as a member during the callback
+func (suite *HandlerTestSuite) TestSSOCallbackJITProvisioning() {
+	t := suite.T()
+
+	ssoLoginOp := suite.createImpersonationOperation("SSOLoginHandler", "SSO login handler")
+	ssoCallbackOp := suite.createImpersonationOperation("SSOCallbackHandler", "SSO callback handler")
+	suite.registerTestHandler("GET", "v1/sso/login", ssoLoginOp, suite.h.SSOLoginHandler)
+	suite.registerTestHandler("GET", "v1/sso/callback", ssoCallbackOp, suite.h.SSOCallbackHandler)
+
+	oidc := newMockOIDCServer(t,
+		withExpectedCode("code123"),
+		withClientSecret("secret"),
+		withUserInfo("jit@example.com", "JIT User", ""),
+	)
+	defer oidc.Close()
+
+	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx = ent.NewContext(ctx, suite.db)
+
+	ssoUser := suite.db.User.Create().
+		SetEmail("jit@example.com").
+		SetFirstName("JIT").
+		SetLastName("User").
+		SetLastLoginProvider(enums.AuthProviderOIDC).
+		SetLastSeen(time.Now()).
+		SaveX(ctx)
+
+	discovery := oidc.server.URL + "/.well-known/openid-configuration"
+	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+		IdentityProvider:             lo.ToPtr(enums.SSOProviderOkta),
+		OidcDiscoveryEndpoint:        &discovery,
+		IdentityProviderClientID:     lo.ToPtr("client"),
+		IdentityProviderClientSecret: lo.ToPtr("secret"),
+	}).SaveX(ctx)
+
+	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+		Name:      ulids.New().String(),
+		SettingID: &setting.ID,
+	}).SaveX(ctx)
+
+	// mark the connection tested, then enforce SSO; JIT provisioning is left at its enabled default
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+		SetOrganizationID(org.ID).
+		SetIdentityProviderAuthTested(true).
+		ExecX(ctx)
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+		SetIdentityProviderLoginEnforced(true).
+		ExecX(ctx)
+
+	// the user is intentionally not a member of the target org before the callback
+	require.False(t, suite.db.OrgMembership.Query().
+		Where(orgmembership.UserID(ssoUser.ID), orgmembership.OrganizationID(org.ID)).
+		ExistX(ctx))
+
+	req := httptest.NewRequest(http.MethodGet, "/v1/sso/login?organization_id="+org.ID, nil)
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req)
+	require.Equal(t, http.StatusOK, rec.Code)
+
+	var state, nonce *http.Cookie
+	for _, c := range rec.Result().Cookies() {
+		switch c.Name {
+		case "state":
+			state = c
+		case "nonce":
+			nonce = c
+		}
+	}
+	require.NotNil(t, state)
+	require.NotNil(t, nonce)
+
+	oidc.nonce = nonce.Value
+
+	cookieHeader := "state=" + state.Value + "; nonce=" + nonce.Value + "; organization_id=" + org.ID
+	cbReq := httptest.NewRequest(http.MethodGet, "/v1/sso/callback?code=code123&state="+url.QueryEscape(state.Value)+"&organization_id="+org.ID, nil)
+	cbReq.Header.Set("Cookie", cookieHeader)
+	cbRec := httptest.NewRecorder()
+	suite.e.ServeHTTP(cbRec, cbReq)
+	require.Equal(t, http.StatusOK, cbRec.Code)
+
+	// the callback provisioned the membership just-in-time, as a member
+	membership := suite.db.OrgMembership.Query().
+		Where(orgmembership.UserID(ssoUser.ID), orgmembership.OrganizationID(org.ID)).
+		OnlyX(ctx)
+	assert.Equal(t, enums.RoleMember, membership.Role)
 }

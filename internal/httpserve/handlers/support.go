@@ -15,6 +15,7 @@ import (
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 	"golang.org/x/oauth2"
 
+	"github.com/theopenlane/core/common/enums"
 	apimodels "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -197,7 +198,7 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context, openapi *OpenAPIConte
 		ImpersonatorEmail: individualEmail,
 		TargetUserID:      cfg.SubjectID,
 		TargetUserEmail:   cfg.Email,
-		Action:            "start",
+		Action:            enums.ImpersonationActionStart.String(),
 		Reason:            reason,
 		Timestamp:         time.Now(),
 		IPAddress:         ctx.RealIP(),
