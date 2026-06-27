@@ -9,6 +9,8 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/pkg/catalog"
+	"github.com/theopenlane/core/pkg/catalog/gencatalog"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/orgprice"
@@ -244,6 +246,30 @@ func (h *Handler) removeAllModules(ctx context.Context, subscription *stripe.Sub
 			orgmodule.OwnerID(orgSub.OwnerID),
 			orgmodule.SubscriptionID(orgSub.ID),
 			orgmodule.ModuleNEQ(models.CatalogBaseModule),
+		),
+	).Exec(allowCtx)
+
+	return err
+}
+
+// removeNonFreeModules drops all paid modules, preserving those with zero-cost prices in the catalog
+func (h *Handler) removeNonFreeModules(ctx context.Context, subscription *stripe.Subscription) error {
+	orgSub, err := getOrgSubscription(ctx, subscription)
+	if err != nil {
+		return err
+	}
+
+	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(orgSub.OwnerID))
+	tx := transaction.FromContext(ctx)
+
+	cat := catalog.Catalog{Catalog: gencatalog.DefaultCatalog}
+	freeModules := cat.FreeModules()
+
+	_, err = tx.OrgModule.Delete().Where(
+		orgmodule.And(
+			orgmodule.OwnerID(orgSub.OwnerID),
+			orgmodule.SubscriptionID(orgSub.ID),
+			orgmodule.ModuleNotIn(freeModules...),
 		),
 	).Exec(allowCtx)
 

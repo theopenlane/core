@@ -65,6 +65,28 @@ func (c *Catalog) IsCurrent() bool {
 	return c.SHA == computeSHA(c.Version)
 }
 
+// FreeModules returns the lookup keys of all modules where every price has a unit amount of zero
+func (c *Catalog) FreeModules() []models.OrgModule {
+	var free []models.OrgModule
+
+	for key, f := range c.Modules {
+		allFree := true
+
+		for _, p := range f.Billing.Prices {
+			if p.UnitAmount != 0 {
+				allFree = false
+				break
+			}
+		}
+
+		if allFree {
+			free = append(free, models.OrgModule(key))
+		}
+	}
+
+	return free
+}
+
 // Visible returns modules and addons filtered by audience
 func (c *Catalog) Visible(audience string) *Catalog {
 	if c == nil {

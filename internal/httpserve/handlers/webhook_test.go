@@ -154,6 +154,22 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 				},
 			},
 			expectedStatus:          http.StatusOK,
+			expectRevocation:        false,
+			configAPIVersion:        strPtr(currentAPIVersion),
+			configDiscardAPIVersion: strPtr(discardAPIVersion),
+		},
+		{
+			name: "deleted subscription revokes tokens",
+			payload: &stripe.Event{
+				ID:         "evt_test_webhook_paused_no_payment",
+				Object:     "event",
+				Type:       stripe.EventTypeCustomerSubscriptionDeleted,
+				APIVersion: currentAPIVersion,
+				Data: &stripe.EventData{
+					Raw: json.RawMessage(jsonDataUpdate),
+				},
+			},
+			expectedStatus:          http.StatusOK,
 			expectRevocation:        true,
 			configAPIVersion:        strPtr(currentAPIVersion),
 			configDiscardAPIVersion: strPtr(discardAPIVersion),

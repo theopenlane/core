@@ -231,7 +231,21 @@ func (h *Handler) HandleEvent(c context.Context, e *stripe.Event) error {
 		}
 
 		return h.handleTrialWillEnd(c, subscription)
-	case stripe.EventTypeCustomerSubscriptionDeleted, stripe.EventTypeCustomerSubscriptionPaused:
+	case stripe.EventTypeCustomerSubscriptionDeleted:
+		subscription, err := unmarshalEventData[stripe.Subscription](e)
+		if err != nil {
+			return err
+		}
+
+		err = h.handleSubscriptionCanceled(c, subscription)
+		if ent.IsNotFound(err) {
+			logx.FromContext(c).Info().Str("subscription_id", subscription.ID).Msg("org subscription not found for deleted subscription, skipping further processing")
+
+			return nil
+		}
+
+		return err
+	case stripe.EventTypeCustomerSubscriptionPaused:
 		subscription, err := unmarshalEventData[stripe.Subscription](e)
 		if err != nil {
 			return err
@@ -239,8 +253,7 @@ func (h *Handler) HandleEvent(c context.Context, e *stripe.Event) error {
 
 		err = h.handleSubscriptionPaused(c, subscription)
 		if ent.IsNotFound(err) {
-			// if org subscription not found, just log and move on
-			logx.FromContext(c).Info().Str("subscription_id", subscription.ID).Msg("org subscription not found for paused/deleted subscription, skipping further processing")
+			logx.FromContext(c).Info().Str("subscription_id", subscription.ID).Msg("org subscription not found for paused subscription, skipping further processing")
 
 			return nil
 		}
@@ -293,23 +306,33 @@ func (h *Handler) invalidatePersonalAccessTokens(ctx context.Context, orgID stri
 	return nil
 }
 
-// handleSubscriptionPaused handles subscription updated events for paused subscriptions
-func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscription) (err error) {
+// handleSubscriptionCanceled handles subscription deleted events and will remove all modules and invalidates tokens
+func (h *Handler) handleSubscriptionCanceled(ctx context.Context, s *stripe.Subscription) error {
+	return h.handleSubscriptionTerminated(ctx, s, true)
+}
+
+// handleSubscriptionPaused handles subscription paused events where it will downgrade to only include free modules
+func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscription) error {
+	return h.handleSubscriptionTerminated(ctx, s, false)
+}
+
+// handleSubscriptionTerminated syncs the subscription, optionally removes all or only non-free modules,
+// and invalidates all tokens for the organization when removing all
+func (h *Handler) handleSubscriptionTerminated(ctx context.Context, s *stripe.Subscription, removeAll bool) (err error) {
 	ownerID, err := h.syncOrgSubscriptionWithStripe(ctx, s)
-	if err != nil {
+	if err != nil || ownerID == nil {
 		return
+	}
+
+	if !removeAll {
+		return h.removeNonFreeModules(ctx, s)
 	}
 
 	if err = h.removeAllModules(ctx, s); err != nil {
 		return
 	}
 
-	if ownerID == nil {
-		return
-	}
-
-	err = h.invalidateAPITokens(ctx, *ownerID)
-	if err != nil {
+	if err = h.invalidateAPITokens(ctx, *ownerID); err != nil {
 		return
 	}
 

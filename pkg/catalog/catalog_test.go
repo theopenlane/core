@@ -3,11 +3,14 @@ package catalog_test
 import (
 	"os"
 	"path/filepath"
+	"slices"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/pkg/catalog"
+	"github.com/theopenlane/core/pkg/catalog/gencatalog"
 )
 
 func writeTempCatalog(t *testing.T, data string) string {
@@ -58,6 +61,79 @@ func TestLoadCatalogMissing(t *testing.T) {
 	t.Parallel()
 	_, err := catalog.LoadCatalog("/no/such/file")
 	assert.ErrorIs(t, err, os.ErrNotExist)
+}
+
+func TestFreeModules(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name     string
+		modules  catalog.FeatureSet
+		expected []models.OrgModule
+	}{
+		{
+			name: "returns only modules where all prices are zero",
+			modules: catalog.FeatureSet{
+				"free_mod": {Billing: catalog.Billing{Prices: []catalog.Price{
+					{Interval: "month", UnitAmount: 0},
+					{Interval: "year", UnitAmount: 0},
+				}}},
+				"paid_mod": {Billing: catalog.Billing{Prices: []catalog.Price{
+					{Interval: "month", UnitAmount: 1000},
+				}}},
+			},
+			expected: []models.OrgModule{"free_mod"},
+		},
+		{
+			name: "module with mixed prices is not free",
+			modules: catalog.FeatureSet{
+				"mixed_mod": {Billing: catalog.Billing{Prices: []catalog.Price{
+					{Interval: "month", UnitAmount: 0},
+					{Interval: "year", UnitAmount: 500},
+				}}},
+			},
+			expected: nil,
+		},
+		{
+			name:     "no modules returns empty",
+			modules:  catalog.FeatureSet{},
+			expected: nil,
+		},
+		{
+			name: "all free modules returned",
+			modules: catalog.FeatureSet{
+				"free_a": {Billing: catalog.Billing{Prices: []catalog.Price{{Interval: "month", UnitAmount: 0}}}},
+				"free_b": {Billing: catalog.Billing{Prices: []catalog.Price{{Interval: "month", UnitAmount: 0}}}},
+			},
+			expected: []models.OrgModule{"free_a", "free_b"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			c := catalog.New()
+			c.Modules = tt.modules
+
+			got := c.FreeModules()
+
+			slices.Sort(got)
+			slices.Sort(tt.expected)
+
+			assert.Equal(t, tt.expected, got)
+		})
+	}
+}
+
+func TestFreeModulesDefaultCatalog(t *testing.T) {
+	t.Parallel()
+
+	c := catalog.Catalog{Catalog: gencatalog.DefaultCatalog}
+	free := c.FreeModules()
+
+	assert.Contains(t, free, models.CatalogBaseModule)
+	assert.Contains(t, free, models.CatalogRegistryModule)
 }
 
 func TestVisible(t *testing.T) {
