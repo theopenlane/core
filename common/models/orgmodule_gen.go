@@ -9,10 +9,11 @@ const (
 	CatalogEntityManagementModule        OrgModule = "entity_management_module"
 	CatalogExtraEvidenceStorageAddon     OrgModule = "extra_evidence_storage_addon"
 	CatalogPolicyManagementAddon         OrgModule = "policy_management_addon"
+	CatalogRegistryModule                OrgModule = "registry_module"
 	CatalogRiskManagementAddon           OrgModule = "risk_management_addon"
 	CatalogTrustCenterModule             OrgModule = "trust_center_module"
 	CatalogVulnerabilityManagementModule OrgModule = "vulnerability_management_module"
 )
 
-var AllOrgModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogDomainScanningAddon, CatalogEntityManagementModule, CatalogExtraEvidenceStorageAddon, CatalogPolicyManagementAddon, CatalogRiskManagementAddon, CatalogTrustCenterModule, CatalogVulnerabilityManagementModule}
-var TrialModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogTrustCenterModule}
+var AllOrgModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogDomainScanningAddon, CatalogEntityManagementModule, CatalogExtraEvidenceStorageAddon, CatalogPolicyManagementAddon, CatalogRegistryModule, CatalogRiskManagementAddon, CatalogTrustCenterModule, CatalogVulnerabilityManagementModule}
+var TrialModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogRegistryModule, CatalogTrustCenterModule}

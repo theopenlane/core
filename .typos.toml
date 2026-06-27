@@ -19,6 +19,7 @@ extend-exclude = [
   "internal/graphapi/historyschema/*",
   "internal/graphapi/testclient/*",
   "pkg/catalog/catalog.yaml",
+  "pkg/catalog/catalog_sandbox.yaml",
   "pkg/catalog/gencatalog/*",
   ".buildkite/*",
   ".task/*",
