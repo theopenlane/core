@@ -163,6 +163,13 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	suite.db.UserSetting.UpdateOneID(userWithInactiveDefaultOrg.UserInfo.Edges.Setting.ID).
 		SetDefaultOrgID(userWithInactiveDefaultOrg.OrganizationID).ExecX(allowCtx)
 
+	allModulesWithSignup := []any{
+		models.CatalogBaseModule.String(),
+		models.CatalogComplianceModule.String(),
+		models.CatalogTrustCenterModule.String(),
+		models.CatalogRegistryModule.String(),
+	}
+
 	testCases := []struct {
 		name            string
 		username        string
@@ -173,40 +180,28 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		expectedModules []interface{}
 	}{
 		{
-			name:           "happy path, valid credentials",
-			username:       validConfirmedUser.UserInfo.Email,
-			password:       validPassword,
-			expectedStatus: http.StatusOK,
-			expectedOrgID:  validConfirmedUser.OrganizationID,
-			expectedModules: []interface{}{
-				models.CatalogBaseModule.String(),
-				models.CatalogComplianceModule.String(),
-				models.CatalogTrustCenterModule.String(),
-			},
+			name:            "happy path, valid credentials",
+			username:        validConfirmedUser.UserInfo.Email,
+			password:        validPassword,
+			expectedStatus:  http.StatusOK,
+			expectedOrgID:   validConfirmedUser.OrganizationID,
+			expectedModules: allModulesWithSignup,
 		},
 		{
-			name:           "happy path, domain restricted org, but owner so domains can be mismatched",
-			username:       validConfirmedUserRestrictedOrg.UserInfo.Email,
-			password:       validPassword,
-			expectedStatus: http.StatusOK,
-			expectedOrgID:  org.ID,
-			expectedModules: []interface{}{
-				models.CatalogBaseModule.String(),
-				models.CatalogComplianceModule.String(),
-				models.CatalogTrustCenterModule.String(),
-			},
+			name:            "happy path, domain restricted org, but owner so domains can be mismatched",
+			username:        validConfirmedUserRestrictedOrg.UserInfo.Email,
+			password:        validPassword,
+			expectedStatus:  http.StatusOK,
+			expectedOrgID:   org.ID,
+			expectedModules: allModulesWithSignup,
 		},
 		{
-			name:           "happy path, auditor default org",
-			username:       auditorUser.UserInfo.Email,
-			password:       validPassword,
-			expectedStatus: http.StatusOK,
-			expectedOrgID:  org.ID,
-			expectedModules: []interface{}{
-				models.CatalogBaseModule.String(),
-				models.CatalogComplianceModule.String(),
-				models.CatalogTrustCenterModule.String(),
-			},
+			name:            "happy path, auditor default org",
+			username:        auditorUser.UserInfo.Email,
+			password:        validPassword,
+			expectedStatus:  http.StatusOK,
+			expectedOrgID:   org.ID,
+			expectedModules: allModulesWithSignup,
 		},
 		{
 			name:            "domain restricted org, email not allowed, switch to personal org",

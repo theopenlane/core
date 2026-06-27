@@ -24,7 +24,7 @@ func (suite *HandlerTestSuite) TestAccountFeaturesHandler() {
 	suite.registerTestHandler("POST", "account/features", operation, suite.h.AccountFeaturesHandler)
 
 	// add modules for the user
-	modulesEnabled := []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogEntityManagementModule, models.CatalogTrustCenterModule}
+	modulesEnabled := []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogEntityManagementModule, models.CatalogTrustCenterModule, models.CatalogRegistryModule}
 
 	featuresExpected := []string{}
 	for _, m := range modulesEnabled {
