@@ -258,6 +258,26 @@ func (_u *OrganizationHistoryUpdate) ClearStripeCustomerID() *OrganizationHistor
 	return _u
 }
 
+// SetSlugName sets the "slug_name" field.
+func (_u *OrganizationHistoryUpdate) SetSlugName(v string) *OrganizationHistoryUpdate {
+	_u.mutation.SetSlugName(v)
+	return _u
+}
+
+// SetNillableSlugName sets the "slug_name" field if the given value is not nil.
+func (_u *OrganizationHistoryUpdate) SetNillableSlugName(v *string) *OrganizationHistoryUpdate {
+	if v != nil {
+		_u.SetSlugName(*v)
+	}
+	return _u
+}
+
+// ClearSlugName clears the value of the "slug_name" field.
+func (_u *OrganizationHistoryUpdate) ClearSlugName() *OrganizationHistoryUpdate {
+	_u.mutation.ClearSlugName()
+	return _u
+}
+
 // Mutation returns the OrganizationHistoryMutation object of the builder.
 func (_u *OrganizationHistoryUpdate) Mutation() *OrganizationHistoryMutation {
 	return _u.mutation
@@ -408,6 +428,12 @@ func (_u *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	}
 	if _u.mutation.StripeCustomerIDCleared() {
 		_spec.ClearField(organizationhistory.FieldStripeCustomerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SlugName(); ok {
+		_spec.SetField(organizationhistory.FieldSlugName, field.TypeString, value)
+	}
+	if _u.mutation.SlugNameCleared() {
+		_spec.ClearField(organizationhistory.FieldSlugName, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.OrganizationHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -657,6 +683,26 @@ func (_u *OrganizationHistoryUpdateOne) ClearStripeCustomerID() *OrganizationHis
 	return _u
 }
 
+// SetSlugName sets the "slug_name" field.
+func (_u *OrganizationHistoryUpdateOne) SetSlugName(v string) *OrganizationHistoryUpdateOne {
+	_u.mutation.SetSlugName(v)
+	return _u
+}
+
+// SetNillableSlugName sets the "slug_name" field if the given value is not nil.
+func (_u *OrganizationHistoryUpdateOne) SetNillableSlugName(v *string) *OrganizationHistoryUpdateOne {
+	if v != nil {
+		_u.SetSlugName(*v)
+	}
+	return _u
+}
+
+// ClearSlugName clears the value of the "slug_name" field.
+func (_u *OrganizationHistoryUpdateOne) ClearSlugName() *OrganizationHistoryUpdateOne {
+	_u.mutation.ClearSlugName()
+	return _u
+}
+
 // Mutation returns the OrganizationHistoryMutation object of the builder.
 func (_u *OrganizationHistoryUpdateOne) Mutation() *OrganizationHistoryMutation {
 	return _u.mutation
@@ -837,6 +883,12 @@ func (_u *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Org
 	}
 	if _u.mutation.StripeCustomerIDCleared() {
 		_spec.ClearField(organizationhistory.FieldStripeCustomerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SlugName(); ok {
+		_spec.SetField(organizationhistory.FieldSlugName, field.TypeString, value)
+	}
+	if _u.mutation.SlugNameCleared() {
+		_spec.ClearField(organizationhistory.FieldSlugName, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.OrganizationHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

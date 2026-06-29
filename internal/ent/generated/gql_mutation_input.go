@@ -18793,6 +18793,7 @@ type CreateOrganizationSettingInput struct {
 	SamlCert                         *string
 	IdentityProviderLoginEnforced    *bool
 	IdentityProviderJitProvisioning  *bool
+	JitAllowedEmailDomains           []string
 	MultifactorAuthEnforced          *bool
 	SSOExemptDomains                 []string
 	AllowSupportAccess               *bool
@@ -18869,6 +18870,9 @@ func (i *CreateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	if v := i.IdentityProviderJitProvisioning; v != nil {
 		m.SetIdentityProviderJitProvisioning(*v)
 	}
+	if v := i.JitAllowedEmailDomains; v != nil {
+		m.SetJitAllowedEmailDomains(v)
+	}
 	if v := i.MultifactorAuthEnforced; v != nil {
 		m.SetMultifactorAuthEnforced(*v)
 	}
@@ -18941,6 +18945,9 @@ type UpdateOrganizationSettingInput struct {
 	SamlCert                              *string
 	IdentityProviderLoginEnforced         *bool
 	IdentityProviderJitProvisioning       *bool
+	ClearJitAllowedEmailDomains           bool
+	JitAllowedEmailDomains                []string
+	AppendJitAllowedEmailDomains          []string
 	ClearMultifactorAuthEnforced          bool
 	MultifactorAuthEnforced               *bool
 	ClearSSOExemptDomains                 bool
@@ -19092,6 +19099,15 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if v := i.IdentityProviderJitProvisioning; v != nil {
 		m.SetIdentityProviderJitProvisioning(*v)
+	}
+	if i.ClearJitAllowedEmailDomains {
+		m.ClearJitAllowedEmailDomains()
+	}
+	if v := i.JitAllowedEmailDomains; v != nil {
+		m.SetJitAllowedEmailDomains(v)
+	}
+	if i.AppendJitAllowedEmailDomains != nil {
+		m.AppendJitAllowedEmailDomains(i.JitAllowedEmailDomains)
 	}
 	if i.ClearMultifactorAuthEnforced {
 		m.ClearMultifactorAuthEnforced()

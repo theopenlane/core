@@ -14582,6 +14582,10 @@ input CreateOrganizationSettingInput {
   """
   identityProviderJitProvisioning: Boolean
   """
+  when set, restricts just-in-time provisioning to users whose authenticated email domain is in this list; when empty, any user who authenticates against the identity provider is provisioned
+  """
+  jitAllowedEmailDomains: [String!]
+  """
   enforce 2fa / multifactor authentication for organization members
   """
   multifactorAuthEnforced: Boolean
@@ -44514,6 +44518,10 @@ type Organization implements Node {
   the stripe customer ID this organization is associated to
   """
   stripeCustomerID: String
+  """
+  a stable slug identifying the organization in its public SSO initiation URL, e.g. /orgs/<sso_slug>/sso
+  """
+  slugName: String
   actionPlanCreators(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -49576,6 +49584,10 @@ type OrganizationSetting implements Node {
   """
   identityProviderJitProvisioning: Boolean!
   """
+  when set, restricts just-in-time provisioning to users whose authenticated email domain is in this list; when empty, any user who authenticates against the identity provider is provisioned
+  """
+  jitAllowedEmailDomains: [String!]
+  """
   enforce 2fa / multifactor authentication for organization members
   """
   multifactorAuthEnforced: Boolean
@@ -50156,6 +50168,10 @@ input OrganizationSettingWhereInput {
   """
   allowedEmailDomainsHas: String
   """
+  Filter for jitAllowedEmailDomainsHas to contain a specific value
+  """
+  jitAllowedEmailDomainsHas: String
+  """
   Filter for ssoExemptDomainsHas to contain a specific value
   """
   ssoExemptDomainsHas: String
@@ -50351,6 +50367,24 @@ input OrganizationWhereInput {
   avatarUpdatedAtLTE: Time
   avatarUpdatedAtIsNil: Boolean
   avatarUpdatedAtNotNil: Boolean
+  """
+  slug_name field predicates
+  """
+  slugName: String
+  slugNameNEQ: String
+  slugNameIn: [String!]
+  slugNameNotIn: [String!]
+  slugNameGT: String
+  slugNameGTE: String
+  slugNameLT: String
+  slugNameLTE: String
+  slugNameContains: String
+  slugNameHasPrefix: String
+  slugNameHasSuffix: String
+  slugNameIsNil: Boolean
+  slugNameNotNil: Boolean
+  slugNameEqualFold: String
+  slugNameContainsFold: String
   """
   action_plan_creators edge predicates
   """
@@ -81642,6 +81676,12 @@ input UpdateOrganizationSettingInput {
   when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider
   """
   identityProviderJitProvisioning: Boolean
+  """
+  when set, restricts just-in-time provisioning to users whose authenticated email domain is in this list; when empty, any user who authenticates against the identity provider is provisioned
+  """
+  jitAllowedEmailDomains: [String!]
+  appendJitAllowedEmailDomains: [String!]
+  clearJitAllowedEmailDomains: Boolean
   """
   enforce 2fa / multifactor authentication for organization members
   """

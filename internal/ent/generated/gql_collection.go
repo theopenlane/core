@@ -59664,6 +59664,11 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, organization.FieldStripeCustomerID)
 				fieldSeen[organization.FieldStripeCustomerID] = struct{}{}
 			}
+		case "slugName":
+			if _, ok := fieldSeen[organization.FieldSlugName]; !ok {
+				selectedFields = append(selectedFields, organization.FieldSlugName)
+				fieldSeen[organization.FieldSlugName] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -60006,6 +60011,11 @@ func (_q *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[organizationsetting.FieldIdentityProviderJitProvisioning]; !ok {
 				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProviderJitProvisioning)
 				fieldSeen[organizationsetting.FieldIdentityProviderJitProvisioning] = struct{}{}
+			}
+		case "jitAllowedEmailDomains":
+			if _, ok := fieldSeen[organizationsetting.FieldJitAllowedEmailDomains]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldJitAllowedEmailDomains)
+				fieldSeen[organizationsetting.FieldJitAllowedEmailDomains] = struct{}{}
 			}
 		case "multifactorAuthEnforced":
 			if _, ok := fieldSeen[organizationsetting.FieldMultifactorAuthEnforced]; !ok {

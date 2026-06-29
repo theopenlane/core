@@ -1879,6 +1879,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationhistory.FieldAvatarLocalFileID:     {Type: field.TypeString, Column: organizationhistory.FieldAvatarLocalFileID},
 			organizationhistory.FieldAvatarUpdatedAt:       {Type: field.TypeTime, Column: organizationhistory.FieldAvatarUpdatedAt},
 			organizationhistory.FieldStripeCustomerID:      {Type: field.TypeString, Column: organizationhistory.FieldStripeCustomerID},
+			organizationhistory.FieldSlugName:              {Type: field.TypeString, Column: organizationhistory.FieldSlugName},
 		},
 	}
 	graph.Nodes[42] = &sqlgraph.Node{
@@ -1926,6 +1927,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsettinghistory.FieldSamlCert:                         {Type: field.TypeString, Column: organizationsettinghistory.FieldSamlCert},
 			organizationsettinghistory.FieldIdentityProviderLoginEnforced:    {Type: field.TypeBool, Column: organizationsettinghistory.FieldIdentityProviderLoginEnforced},
 			organizationsettinghistory.FieldIdentityProviderJitProvisioning:  {Type: field.TypeBool, Column: organizationsettinghistory.FieldIdentityProviderJitProvisioning},
+			organizationsettinghistory.FieldJitAllowedEmailDomains:           {Type: field.TypeJSON, Column: organizationsettinghistory.FieldJitAllowedEmailDomains},
 			organizationsettinghistory.FieldMultifactorAuthEnforced:          {Type: field.TypeBool, Column: organizationsettinghistory.FieldMultifactorAuthEnforced},
 			organizationsettinghistory.FieldSSOExemptDomains:                 {Type: field.TypeJSON, Column: organizationsettinghistory.FieldSSOExemptDomains},
 			organizationsettinghistory.FieldAllowSupportAccess:               {Type: field.TypeBool, Column: organizationsettinghistory.FieldAllowSupportAccess},
@@ -11303,6 +11305,11 @@ func (f *OrganizationHistoryFilter) WhereStripeCustomerID(p entql.StringP) {
 	f.Where(p.Field(organizationhistory.FieldStripeCustomerID))
 }
 
+// WhereSlugName applies the entql string predicate on the slug_name field.
+func (f *OrganizationHistoryFilter) WhereSlugName(p entql.StringP) {
+	f.Where(p.Field(organizationhistory.FieldSlugName))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *OrganizationSettingHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -11511,6 +11518,11 @@ func (f *OrganizationSettingHistoryFilter) WhereIdentityProviderLoginEnforced(p 
 // WhereIdentityProviderJitProvisioning applies the entql bool predicate on the identity_provider_jit_provisioning field.
 func (f *OrganizationSettingHistoryFilter) WhereIdentityProviderJitProvisioning(p entql.BoolP) {
 	f.Where(p.Field(organizationsettinghistory.FieldIdentityProviderJitProvisioning))
+}
+
+// WhereJitAllowedEmailDomains applies the entql json.RawMessage predicate on the jit_allowed_email_domains field.
+func (f *OrganizationSettingHistoryFilter) WhereJitAllowedEmailDomains(p entql.BytesP) {
+	f.Where(p.Field(organizationsettinghistory.FieldJitAllowedEmailDomains))
 }
 
 // WhereMultifactorAuthEnforced applies the entql bool predicate on the multifactor_auth_enforced field.

@@ -1802,6 +1802,7 @@ type ComplexityRoot struct {
 		Operation             func(childComplexity int) int
 		PersonalOrg           func(childComplexity int) int
 		Ref                   func(childComplexity int) int
+		SlugName              func(childComplexity int) int
 		StripeCustomerID      func(childComplexity int) int
 		Tags                  func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
@@ -1844,6 +1845,7 @@ type ComplexityRoot struct {
 		IdentityProviderJitProvisioning  func(childComplexity int) int
 		IdentityProviderLoginEnforced    func(childComplexity int) int
 		IdentityProviderMetadataEndpoint func(childComplexity int) int
+		JitAllowedEmailDomains           func(childComplexity int) int
 		MultifactorAuthEnforced          func(childComplexity int) int
 		OidcDiscoveryEndpoint            func(childComplexity int) int
 		Operation                        func(childComplexity int) int
@@ -11956,6 +11958,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationHistory.Ref(childComplexity), true
+	case "OrganizationHistory.slugName":
+		if e.ComplexityRoot.OrganizationHistory.SlugName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationHistory.SlugName(childComplexity), true
 	case "OrganizationHistory.stripeCustomerID":
 		if e.ComplexityRoot.OrganizationHistory.StripeCustomerID == nil {
 			break
@@ -12157,6 +12165,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderMetadataEndpoint(childComplexity), true
+	case "OrganizationSettingHistory.jitAllowedEmailDomains":
+		if e.ComplexityRoot.OrganizationSettingHistory.JitAllowedEmailDomains == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationSettingHistory.JitAllowedEmailDomains(childComplexity), true
 	case "OrganizationSettingHistory.multifactorAuthEnforced":
 		if e.ComplexityRoot.OrganizationSettingHistory.MultifactorAuthEnforced == nil {
 			break
@@ -43825,6 +43839,10 @@ type OrganizationHistory implements Node {
   the stripe customer ID this organization is associated to
   """
   stripeCustomerID: String
+  """
+  a stable slug identifying the organization in its public SSO initiation URL, e.g. /orgs/<sso_slug>/sso
+  """
+  slugName: String
 }
 """
 A connection to a list of items.
@@ -44114,6 +44132,24 @@ input OrganizationHistoryWhereInput {
   avatarUpdatedAtLTE: Time
   avatarUpdatedAtIsNil: Boolean
   avatarUpdatedAtNotNil: Boolean
+  """
+  slug_name field predicates
+  """
+  slugName: String
+  slugNameNEQ: String
+  slugNameIn: [String!]
+  slugNameNotIn: [String!]
+  slugNameGT: String
+  slugNameGTE: String
+  slugNameLT: String
+  slugNameLTE: String
+  slugNameContains: String
+  slugNameHasPrefix: String
+  slugNameHasSuffix: String
+  slugNameIsNil: Boolean
+  slugNameNotNil: Boolean
+  slugNameEqualFold: String
+  slugNameContainsFold: String
 }
 type OrganizationSettingHistory implements Node {
   id: ID!
@@ -44224,6 +44260,10 @@ type OrganizationSettingHistory implements Node {
   when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider
   """
   identityProviderJitProvisioning: Boolean!
+  """
+  when set, restricts just-in-time provisioning to users whose authenticated email domain is in this list; when empty, any user who authenticates against the identity provider is provisioned
+  """
+  jitAllowedEmailDomains: [String!]
   """
   enforce 2fa / multifactor authentication for organization members
   """
@@ -70184,6 +70224,8 @@ func (ec *executionContext) childFields_OrganizationHistory(ctx context.Context,
 		return ec.fieldContext_OrganizationHistory_avatarUpdatedAt(ctx, field)
 	case "stripeCustomerID":
 		return ec.fieldContext_OrganizationHistory_stripeCustomerID(ctx, field)
+	case "slugName":
+		return ec.fieldContext_OrganizationHistory_slugName(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type OrganizationHistory", field.Name)
 }
@@ -70278,6 +70320,8 @@ func (ec *executionContext) childFields_OrganizationSettingHistory(ctx context.C
 		return ec.fieldContext_OrganizationSettingHistory_identityProviderLoginEnforced(ctx, field)
 	case "identityProviderJitProvisioning":
 		return ec.fieldContext_OrganizationSettingHistory_identityProviderJitProvisioning(ctx, field)
+	case "jitAllowedEmailDomains":
+		return ec.fieldContext_OrganizationSettingHistory_jitAllowedEmailDomains(ctx, field)
 	case "multifactorAuthEnforced":
 		return ec.fieldContext_OrganizationSettingHistory_multifactorAuthEnforced(ctx, field)
 	case "ssoExemptDomains":

@@ -578,6 +578,24 @@ func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderJitProvis
 	return _u
 }
 
+// SetJitAllowedEmailDomains sets the "jit_allowed_email_domains" field.
+func (_u *OrganizationSettingHistoryUpdate) SetJitAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetJitAllowedEmailDomains(v)
+	return _u
+}
+
+// AppendJitAllowedEmailDomains appends value to the "jit_allowed_email_domains" field.
+func (_u *OrganizationSettingHistoryUpdate) AppendJitAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.AppendJitAllowedEmailDomains(v)
+	return _u
+}
+
+// ClearJitAllowedEmailDomains clears the value of the "jit_allowed_email_domains" field.
+func (_u *OrganizationSettingHistoryUpdate) ClearJitAllowedEmailDomains() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearJitAllowedEmailDomains()
+	return _u
+}
+
 // SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
 func (_u *OrganizationSettingHistoryUpdate) SetMultifactorAuthEnforced(v bool) *OrganizationSettingHistoryUpdate {
 	_u.mutation.SetMultifactorAuthEnforced(v)
@@ -955,6 +973,17 @@ func (_u *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	}
 	if value, ok := _u.mutation.IdentityProviderJitProvisioning(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderJitProvisioning, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.JitAllowedEmailDomains(); ok {
+		_spec.SetField(organizationsettinghistory.FieldJitAllowedEmailDomains, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedJitAllowedEmailDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsettinghistory.FieldJitAllowedEmailDomains, value)
+		})
+	}
+	if _u.mutation.JitAllowedEmailDomainsCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldJitAllowedEmailDomains, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool, value)
@@ -1560,6 +1589,24 @@ func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderJitPro
 	return _u
 }
 
+// SetJitAllowedEmailDomains sets the "jit_allowed_email_domains" field.
+func (_u *OrganizationSettingHistoryUpdateOne) SetJitAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetJitAllowedEmailDomains(v)
+	return _u
+}
+
+// AppendJitAllowedEmailDomains appends value to the "jit_allowed_email_domains" field.
+func (_u *OrganizationSettingHistoryUpdateOne) AppendJitAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.AppendJitAllowedEmailDomains(v)
+	return _u
+}
+
+// ClearJitAllowedEmailDomains clears the value of the "jit_allowed_email_domains" field.
+func (_u *OrganizationSettingHistoryUpdateOne) ClearJitAllowedEmailDomains() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearJitAllowedEmailDomains()
+	return _u
+}
+
 // SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
 func (_u *OrganizationSettingHistoryUpdateOne) SetMultifactorAuthEnforced(v bool) *OrganizationSettingHistoryUpdateOne {
 	_u.mutation.SetMultifactorAuthEnforced(v)
@@ -1967,6 +2014,17 @@ func (_u *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if value, ok := _u.mutation.IdentityProviderJitProvisioning(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderJitProvisioning, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.JitAllowedEmailDomains(); ok {
+		_spec.SetField(organizationsettinghistory.FieldJitAllowedEmailDomains, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedJitAllowedEmailDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsettinghistory.FieldJitAllowedEmailDomains, value)
+		})
+	}
+	if _u.mutation.JitAllowedEmailDomainsCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldJitAllowedEmailDomains, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool, value)

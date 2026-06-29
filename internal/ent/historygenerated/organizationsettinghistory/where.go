@@ -1969,6 +1969,16 @@ func IdentityProviderJitProvisioningNEQ(v bool) predicate.OrganizationSettingHis
 	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldIdentityProviderJitProvisioning, v))
 }
 
+// JitAllowedEmailDomainsIsNil applies the IsNil predicate on the "jit_allowed_email_domains" field.
+func JitAllowedEmailDomainsIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldJitAllowedEmailDomains))
+}
+
+// JitAllowedEmailDomainsNotNil applies the NotNil predicate on the "jit_allowed_email_domains" field.
+func JitAllowedEmailDomainsNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldJitAllowedEmailDomains))
+}
+
 // MultifactorAuthEnforcedEQ applies the EQ predicate on the "multifactor_auth_enforced" field.
 func MultifactorAuthEnforcedEQ(v bool) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldMultifactorAuthEnforced, v))

@@ -434,6 +434,12 @@ func (_c *OrganizationSettingCreate) SetNillableIdentityProviderJitProvisioning(
 	return _c
 }
 
+// SetJitAllowedEmailDomains sets the "jit_allowed_email_domains" field.
+func (_c *OrganizationSettingCreate) SetJitAllowedEmailDomains(v []string) *OrganizationSettingCreate {
+	_c.mutation.SetJitAllowedEmailDomains(v)
+	return _c
+}
+
 // SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
 func (_c *OrganizationSettingCreate) SetMultifactorAuthEnforced(v bool) *OrganizationSettingCreate {
 	_c.mutation.SetMultifactorAuthEnforced(v)
@@ -705,6 +711,11 @@ func (_c *OrganizationSettingCreate) check() error {
 	if _, ok := _c.mutation.IdentityProviderJitProvisioning(); !ok {
 		return &ValidationError{Name: "identity_provider_jit_provisioning", err: errors.New(`generated: missing required field "OrganizationSetting.identity_provider_jit_provisioning"`)}
 	}
+	if v, ok := _c.mutation.JitAllowedEmailDomains(); ok {
+		if err := organizationsetting.JitAllowedEmailDomainsValidator(v); err != nil {
+			return &ValidationError{Name: "jit_allowed_email_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.jit_allowed_email_domains": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.SSOExemptDomains(); ok {
 		if err := organizationsetting.SSOExemptDomainsValidator(v); err != nil {
 			return &ValidationError{Name: "sso_exempt_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.sso_exempt_domains": %w`, err)}
@@ -868,6 +879,10 @@ func (_c *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgra
 	if value, ok := _c.mutation.IdentityProviderJitProvisioning(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderJitProvisioning, field.TypeBool, value)
 		_node.IdentityProviderJitProvisioning = value
+	}
+	if value, ok := _c.mutation.JitAllowedEmailDomains(); ok {
+		_spec.SetField(organizationsetting.FieldJitAllowedEmailDomains, field.TypeJSON, value)
+		_node.JitAllowedEmailDomains = value
 	}
 	if value, ok := _c.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsetting.FieldMultifactorAuthEnforced, field.TypeBool, value)

@@ -9330,6 +9330,11 @@ func (_q *OrganizationHistoryQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, organizationhistory.FieldStripeCustomerID)
 				fieldSeen[organizationhistory.FieldStripeCustomerID] = struct{}{}
 			}
+		case "slugName":
+			if _, ok := fieldSeen[organizationhistory.FieldSlugName]; !ok {
+				selectedFields = append(selectedFields, organizationhistory.FieldSlugName)
+				fieldSeen[organizationhistory.FieldSlugName] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -9573,6 +9578,11 @@ func (_q *OrganizationSettingHistoryQuery) collectField(ctx context.Context, one
 			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProviderJitProvisioning]; !ok {
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProviderJitProvisioning)
 				fieldSeen[organizationsettinghistory.FieldIdentityProviderJitProvisioning] = struct{}{}
+			}
+		case "jitAllowedEmailDomains":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldJitAllowedEmailDomains]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldJitAllowedEmailDomains)
+				fieldSeen[organizationsettinghistory.FieldJitAllowedEmailDomains] = struct{}{}
 			}
 		case "multifactorAuthEnforced":
 			if _, ok := fieldSeen[organizationsettinghistory.FieldMultifactorAuthEnforced]; !ok {

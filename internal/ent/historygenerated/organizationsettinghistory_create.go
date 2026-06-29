@@ -469,6 +469,12 @@ func (_c *OrganizationSettingHistoryCreate) SetNillableIdentityProviderJitProvis
 	return _c
 }
 
+// SetJitAllowedEmailDomains sets the "jit_allowed_email_domains" field.
+func (_c *OrganizationSettingHistoryCreate) SetJitAllowedEmailDomains(v []string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetJitAllowedEmailDomains(v)
+	return _c
+}
+
 // SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
 func (_c *OrganizationSettingHistoryCreate) SetMultifactorAuthEnforced(v bool) *OrganizationSettingHistoryCreate {
 	_c.mutation.SetMultifactorAuthEnforced(v)
@@ -887,6 +893,10 @@ func (_c *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSettingHi
 	if value, ok := _c.mutation.IdentityProviderJitProvisioning(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderJitProvisioning, field.TypeBool, value)
 		_node.IdentityProviderJitProvisioning = value
+	}
+	if value, ok := _c.mutation.JitAllowedEmailDomains(); ok {
+		_spec.SetField(organizationsettinghistory.FieldJitAllowedEmailDomains, field.TypeJSON, value)
+		_node.JitAllowedEmailDomains = value
 	}
 	if value, ok := _c.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool, value)

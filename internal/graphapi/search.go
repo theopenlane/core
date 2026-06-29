@@ -1410,6 +1410,7 @@ func adminSearchOrganizations(ctx context.Context, query string, after *entgql.C
 				organization.DisplayNameContainsFold(query),       // search by DisplayName
 				organization.AvatarRemoteURLContainsFold(query),   // search by AvatarRemoteURL
 				organization.AvatarLocalFileIDContainsFold(query), // search by AvatarLocalFileID
+				organization.SlugNameContainsFold(query),          // search by SlugName
 			),
 		)
 

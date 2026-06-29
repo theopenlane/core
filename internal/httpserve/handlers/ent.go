@@ -3,9 +3,11 @@ package handlers
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	gowebauthn "github.com/go-webauthn/webauthn/webauthn"
+	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
@@ -28,6 +30,7 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
+	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
 
 // updateUserLastSeen updates the last seen timestamp of the user and login method used
@@ -664,6 +667,17 @@ func (h *Handler) jitProvisionMembership(ctx context.Context, orgID string, user
 
 	if !setting.IdentityProviderLoginEnforced || !setting.IdentityProviderJitProvisioning {
 		return nil
+	}
+
+	// when an allowlist is configured, only provision users whose authenticated email domain is in it;
+	// an empty list provisions any user who authenticates against the identity provider
+	if domains := setting.JitAllowedEmailDomains; len(domains) > 0 {
+		userDomain := sso.EmailDomain(user.Email)
+		if !lo.ContainsBy(domains, func(d string) bool {
+			return strings.EqualFold(strings.TrimSpace(d), userDomain)
+		}) {
+			return nil
+		}
 	}
 
 	exists, err := transaction.FromContext(ctx).OrgMembership.Query().

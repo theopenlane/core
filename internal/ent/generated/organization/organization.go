@@ -49,6 +49,8 @@ const (
 	FieldAvatarUpdatedAt = "avatar_updated_at"
 	// FieldStripeCustomerID holds the string denoting the stripe_customer_id field in the database.
 	FieldStripeCustomerID = "stripe_customer_id"
+	// FieldSlugName holds the string denoting the slug_name field in the database.
+	FieldSlugName = "slug_name"
 	// EdgeActionPlanCreators holds the string denoting the action_plan_creators edge name in mutations.
 	EdgeActionPlanCreators = "action_plan_creators"
 	// EdgeAPITokenCreators holds the string denoting the api_token_creators edge name in mutations.
@@ -1589,6 +1591,7 @@ var Columns = []string{
 	FieldAvatarLocalFileID,
 	FieldAvatarUpdatedAt,
 	FieldStripeCustomerID,
+	FieldSlugName,
 }
 
 var (
@@ -1645,6 +1648,8 @@ var (
 	AvatarRemoteURLValidator func(string) error
 	// DefaultAvatarUpdatedAt holds the default value on creation for the "avatar_updated_at" field.
 	DefaultAvatarUpdatedAt func() time.Time
+	// SlugNameValidator is a validator for the "slug_name" field. It is called by the builders before save.
+	SlugNameValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -1735,6 +1740,11 @@ func ByAvatarUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByStripeCustomerID orders the results by the stripe_customer_id field.
 func ByStripeCustomerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStripeCustomerID, opts...).ToFunc()
+}
+
+// BySlugName orders the results by the slug_name field.
+func BySlugName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSlugName, opts...).ToFunc()
 }
 
 // ByActionPlanCreatorsCount orders the results by action_plan_creators count.

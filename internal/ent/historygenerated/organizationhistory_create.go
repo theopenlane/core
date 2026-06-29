@@ -279,6 +279,20 @@ func (_c *OrganizationHistoryCreate) SetNillableStripeCustomerID(v *string) *Org
 	return _c
 }
 
+// SetSlugName sets the "slug_name" field.
+func (_c *OrganizationHistoryCreate) SetSlugName(v string) *OrganizationHistoryCreate {
+	_c.mutation.SetSlugName(v)
+	return _c
+}
+
+// SetNillableSlugName sets the "slug_name" field if the given value is not nil.
+func (_c *OrganizationHistoryCreate) SetNillableSlugName(v *string) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetSlugName(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *OrganizationHistoryCreate) SetID(v string) *OrganizationHistoryCreate {
 	_c.mutation.SetID(v)
@@ -514,6 +528,10 @@ func (_c *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgra
 	if value, ok := _c.mutation.StripeCustomerID(); ok {
 		_spec.SetField(organizationhistory.FieldStripeCustomerID, field.TypeString, value)
 		_node.StripeCustomerID = &value
+	}
+	if value, ok := _c.mutation.SlugName(); ok {
+		_spec.SetField(organizationhistory.FieldSlugName, field.TypeString, value)
+		_node.SlugName = value
 	}
 	return _node, _spec
 }

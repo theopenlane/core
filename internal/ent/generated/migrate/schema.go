@@ -5727,6 +5727,7 @@ var (
 		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "stripe_customer_id", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "slug_name", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "parent_organization_id", Type: field.TypeString, Nullable: true},
 		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 	}
@@ -5738,13 +5739,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organizations_organizations_children",
-				Columns:    []*schema.Column{OrganizationsColumns[16]},
+				Columns:    []*schema.Column{OrganizationsColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "organizations_files_avatar_file",
-				Columns:    []*schema.Column{OrganizationsColumns[17]},
+				Columns:    []*schema.Column{OrganizationsColumns[18]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -5793,6 +5794,7 @@ var (
 		{Name: "saml_cert", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "identity_provider_login_enforced", Type: field.TypeBool, Default: false},
 		{Name: "identity_provider_jit_provisioning", Type: field.TypeBool, Default: true},
+		{Name: "jit_allowed_email_domains", Type: field.TypeJSON, Nullable: true},
 		{Name: "multifactor_auth_enforced", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "sso_exempt_domains", Type: field.TypeJSON, Nullable: true},
 		{Name: "allow_support_access", Type: field.TypeBool, Nullable: true, Default: false},
@@ -5809,7 +5811,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organization_settings_organizations_setting",
-				Columns:    []*schema.Column{OrganizationSettingsColumns[37]},
+				Columns:    []*schema.Column{OrganizationSettingsColumns[38]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

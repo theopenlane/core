@@ -147,6 +147,11 @@ func StripeCustomerID(v string) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldStripeCustomerID, v))
 }
 
+// SlugName applies equality check predicate on the "slug_name" field. It's identical to SlugNameEQ.
+func SlugName(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldSlugName, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldCreatedAt, v))
@@ -1180,6 +1185,81 @@ func StripeCustomerIDEqualFold(v string) predicate.Organization {
 // StripeCustomerIDContainsFold applies the ContainsFold predicate on the "stripe_customer_id" field.
 func StripeCustomerIDContainsFold(v string) predicate.Organization {
 	return predicate.Organization(sql.FieldContainsFold(FieldStripeCustomerID, v))
+}
+
+// SlugNameEQ applies the EQ predicate on the "slug_name" field.
+func SlugNameEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldSlugName, v))
+}
+
+// SlugNameNEQ applies the NEQ predicate on the "slug_name" field.
+func SlugNameNEQ(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldNEQ(FieldSlugName, v))
+}
+
+// SlugNameIn applies the In predicate on the "slug_name" field.
+func SlugNameIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldIn(FieldSlugName, vs...))
+}
+
+// SlugNameNotIn applies the NotIn predicate on the "slug_name" field.
+func SlugNameNotIn(vs ...string) predicate.Organization {
+	return predicate.Organization(sql.FieldNotIn(FieldSlugName, vs...))
+}
+
+// SlugNameGT applies the GT predicate on the "slug_name" field.
+func SlugNameGT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGT(FieldSlugName, v))
+}
+
+// SlugNameGTE applies the GTE predicate on the "slug_name" field.
+func SlugNameGTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldGTE(FieldSlugName, v))
+}
+
+// SlugNameLT applies the LT predicate on the "slug_name" field.
+func SlugNameLT(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLT(FieldSlugName, v))
+}
+
+// SlugNameLTE applies the LTE predicate on the "slug_name" field.
+func SlugNameLTE(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldLTE(FieldSlugName, v))
+}
+
+// SlugNameContains applies the Contains predicate on the "slug_name" field.
+func SlugNameContains(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContains(FieldSlugName, v))
+}
+
+// SlugNameHasPrefix applies the HasPrefix predicate on the "slug_name" field.
+func SlugNameHasPrefix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasPrefix(FieldSlugName, v))
+}
+
+// SlugNameHasSuffix applies the HasSuffix predicate on the "slug_name" field.
+func SlugNameHasSuffix(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldHasSuffix(FieldSlugName, v))
+}
+
+// SlugNameIsNil applies the IsNil predicate on the "slug_name" field.
+func SlugNameIsNil() predicate.Organization {
+	return predicate.Organization(sql.FieldIsNull(FieldSlugName))
+}
+
+// SlugNameNotNil applies the NotNil predicate on the "slug_name" field.
+func SlugNameNotNil() predicate.Organization {
+	return predicate.Organization(sql.FieldNotNull(FieldSlugName))
+}
+
+// SlugNameEqualFold applies the EqualFold predicate on the "slug_name" field.
+func SlugNameEqualFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldEqualFold(FieldSlugName, v))
+}
+
+// SlugNameContainsFold applies the ContainsFold predicate on the "slug_name" field.
+func SlugNameContainsFold(v string) predicate.Organization {
+	return predicate.Organization(sql.FieldContainsFold(FieldSlugName, v))
 }
 
 // HasActionPlanCreators applies the HasEdge predicate on the "action_plan_creators" edge.

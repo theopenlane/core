@@ -142,6 +142,10 @@ func (OrganizationSetting) Fields() []ent.Field {
 		field.Bool("identity_provider_jit_provisioning").
 			Comment("when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider").
 			Default(true),
+		field.Strings("jit_allowed_email_domains").
+			Comment("when set, restricts just-in-time provisioning to users whose authenticated email domain is in this list; when empty, any user who authenticates against the identity provider is provisioned").
+			Validate(validator.ValidateDomains()).
+			Optional(),
 		field.Bool("multifactor_auth_enforced").
 			Comment("enforce 2fa / multifactor authentication for organization members").
 			Optional().

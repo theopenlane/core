@@ -1952,6 +1952,7 @@ var (
 		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "stripe_customer_id", Type: field.TypeString, Nullable: true},
+		{Name: "slug_name", Type: field.TypeString, Nullable: true, Size: 160},
 	}
 	// OrganizationHistoryTable holds the schema information for the "organization_history" table.
 	OrganizationHistoryTable = &schema.Table{
@@ -2003,6 +2004,7 @@ var (
 		{Name: "saml_cert", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "identity_provider_login_enforced", Type: field.TypeBool, Default: false},
 		{Name: "identity_provider_jit_provisioning", Type: field.TypeBool, Default: true},
+		{Name: "jit_allowed_email_domains", Type: field.TypeJSON, Nullable: true},
 		{Name: "multifactor_auth_enforced", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "sso_exempt_domains", Type: field.TypeJSON, Nullable: true},
 		{Name: "allow_support_access", Type: field.TypeBool, Nullable: true, Default: false},

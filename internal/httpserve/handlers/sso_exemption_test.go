@@ -345,3 +345,49 @@ func (suite *HandlerTestSuite) TestExemptDomainAllowedDomainOverlap() {
 	assert.Equal(t, []string{"audit.com"}, updated.AllowedEmailDomains)
 	assert.Equal(t, []string{"audit.com"}, updated.SSOExemptDomains)
 }
+
+// TestAutoJoinSuppressedWhenSSOEnforced verifies that domain-based auto-join does not add a user to an
+// organization that enforces SSO; for enforced organizations membership comes through the identity
+// provider (JIT) instead
+func (suite *HandlerTestSuite) TestAutoJoinSuppressedWhenSSOEnforced() {
+	t := suite.T()
+
+	// a real caller is required so the organization create hook can assign the owner membership
+	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx = ent.NewContext(ctx, suite.db)
+
+	const allowedDomain = "enforced-autojoin.com"
+
+	// an organization that has domain auto-join configured AND enforces SSO
+	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+		AllowedEmailDomains:          []string{allowedDomain},
+		AllowMatchingDomainsAutojoin: lo.ToPtr(true),
+	}).SaveX(ctx)
+
+	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+		Name:      ulids.New().String(),
+		SettingID: &setting.ID,
+	}).SaveX(ctx)
+
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).ExecX(ctx)
+	suite.enforceSSOOnSetting(ctx, setting.ID)
+
+	// a brand-new user on the allowed domain confirms their email, which triggers the auto-join hook
+	userSetting := suite.db.UserSetting.Create().SetEmailConfirmed(false).SaveX(ctx)
+	user := suite.db.User.Create().
+		SetFirstName("Auto").
+		SetLastName("Join").
+		SetEmail(ulids.New().String() + "@" + allowedDomain).
+		SetSetting(userSetting).
+		SetLastLoginProvider(enums.AuthProviderCredentials).
+		SetLastSeen(time.Now()).
+		SaveX(ctx)
+
+	suite.db.UserSetting.UpdateOneID(userSetting.ID).SetEmailConfirmed(true).ExecX(ctx)
+
+	// the enforced organization must not have auto-joined the user
+	exists := suite.db.OrgMembership.Query().
+		Where(orgmembership.UserID(user.ID), orgmembership.OrganizationID(org.ID)).
+		ExistX(ctx)
+	assert.False(t, exists, "auto-join must be suppressed for SSO-enforced organizations")
+}

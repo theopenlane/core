@@ -15923,6 +15923,10 @@ func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetNillableStripeCustomerID(&stripeCustomerID)
 	}
 
+	if slugName, exists := m.SlugName(); exists {
+		create = create.SetSlugName(slugName)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -16056,6 +16060,12 @@ func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetNillableStripeCustomerID(organization.StripeCustomerID)
 		}
 
+		if slugName, exists := m.SlugName(); exists {
+			create = create.SetSlugName(slugName)
+		} else {
+			create = create.SetSlugName(organization.SlugName)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -16108,6 +16118,7 @@ func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetNillableAvatarLocalFileID(organization.AvatarLocalFileID).
 			SetNillableAvatarUpdatedAt(organization.AvatarUpdatedAt).
 			SetNillableStripeCustomerID(organization.StripeCustomerID).
+			SetSlugName(organization.SlugName).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -16255,6 +16266,10 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 
 	if identityProviderJitProvisioning, exists := m.IdentityProviderJitProvisioning(); exists {
 		create = create.SetIdentityProviderJitProvisioning(identityProviderJitProvisioning)
+	}
+
+	if jitAllowedEmailDomains, exists := m.JitAllowedEmailDomains(); exists {
+		create = create.SetJitAllowedEmailDomains(jitAllowedEmailDomains)
 	}
 
 	if multifactorAuthEnforced, exists := m.MultifactorAuthEnforced(); exists {
@@ -16498,6 +16513,12 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetIdentityProviderJitProvisioning(organizationsetting.IdentityProviderJitProvisioning)
 		}
 
+		if jitAllowedEmailDomains, exists := m.JitAllowedEmailDomains(); exists {
+			create = create.SetJitAllowedEmailDomains(jitAllowedEmailDomains)
+		} else {
+			create = create.SetJitAllowedEmailDomains(organizationsetting.JitAllowedEmailDomains)
+		}
+
 		if multifactorAuthEnforced, exists := m.MultifactorAuthEnforced(); exists {
 			create = create.SetMultifactorAuthEnforced(multifactorAuthEnforced)
 		} else {
@@ -16600,6 +16621,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetSamlCert(organizationsetting.SamlCert).
 			SetIdentityProviderLoginEnforced(organizationsetting.IdentityProviderLoginEnforced).
 			SetIdentityProviderJitProvisioning(organizationsetting.IdentityProviderJitProvisioning).
+			SetJitAllowedEmailDomains(organizationsetting.JitAllowedEmailDomains).
 			SetMultifactorAuthEnforced(organizationsetting.MultifactorAuthEnforced).
 			SetSSOExemptDomains(organizationsetting.SSOExemptDomains).
 			SetAllowSupportAccess(organizationsetting.AllowSupportAccess).

@@ -91,6 +91,8 @@ type OrganizationSettingHistory struct {
 	IdentityProviderLoginEnforced bool `json:"identity_provider_login_enforced,omitempty"`
 	// when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider
 	IdentityProviderJitProvisioning bool `json:"identity_provider_jit_provisioning,omitempty"`
+	// when set, restricts just-in-time provisioning to users whose authenticated email domain is in this list; when empty, any user who authenticates against the identity provider is provisioned
+	JitAllowedEmailDomains []string `json:"jit_allowed_email_domains,omitempty"`
 	// enforce 2fa / multifactor authentication for organization members
 	MultifactorAuthEnforced bool `json:"multifactor_auth_enforced,omitempty"`
 	// email domains whose existing members skip the SSO redirect even when SSO is enforced; TFA enforcement still applies
@@ -113,7 +115,7 @@ func (*OrganizationSettingHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case organizationsettinghistory.FieldPendingDeletionAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
-		case organizationsettinghistory.FieldTags, organizationsettinghistory.FieldDomains, organizationsettinghistory.FieldBillingAddress, organizationsettinghistory.FieldAllowedEmailDomains, organizationsettinghistory.FieldSSOExemptDomains:
+		case organizationsettinghistory.FieldTags, organizationsettinghistory.FieldDomains, organizationsettinghistory.FieldBillingAddress, organizationsettinghistory.FieldAllowedEmailDomains, organizationsettinghistory.FieldJitAllowedEmailDomains, organizationsettinghistory.FieldSSOExemptDomains:
 			values[i] = new([]byte)
 		case organizationsettinghistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -359,6 +361,14 @@ func (_m *OrganizationSettingHistory) assignValues(columns []string, values []an
 			} else if value.Valid {
 				_m.IdentityProviderJitProvisioning = value.Bool
 			}
+		case organizationsettinghistory.FieldJitAllowedEmailDomains:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field jit_allowed_email_domains", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.JitAllowedEmailDomains); err != nil {
+					return fmt.Errorf("unmarshal field jit_allowed_email_domains: %w", err)
+				}
+			}
 		case organizationsettinghistory.FieldMultifactorAuthEnforced:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field multifactor_auth_enforced", values[i])
@@ -541,6 +551,9 @@ func (_m *OrganizationSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("identity_provider_jit_provisioning=")
 	builder.WriteString(fmt.Sprintf("%v", _m.IdentityProviderJitProvisioning))
+	builder.WriteString(", ")
+	builder.WriteString("jit_allowed_email_domains=")
+	builder.WriteString(fmt.Sprintf("%v", _m.JitAllowedEmailDomains))
 	builder.WriteString(", ")
 	builder.WriteString("multifactor_auth_enforced=")
 	builder.WriteString(fmt.Sprintf("%v", _m.MultifactorAuthEnforced))

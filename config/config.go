@@ -87,6 +87,15 @@ type Config struct {
 	Cloudflare handlers.CloudflareConfig `json:"cloudflare" koanf:"cloudflare"`
 	// Shortlinks contains configuration for the URL shortening service
 	Shortlinks shortlinks.Config `json:"shortlinks" koanf:"shortlinks"`
+	// Backfill contains configuration for one-time startup data backfill routines
+	Backfill Backfill `json:"backfill" koanf:"backfill"`
+}
+
+// Backfill configures one-time startup data backfill routines that populate fields introduced by recent
+// migrations for organizations and memberships that pre-date them
+type Backfill struct {
+	// Enabled runs the backfill routines on server startup
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 }
 
 // Server settings for the echo server

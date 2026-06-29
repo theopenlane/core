@@ -666,6 +666,7 @@ func RegisterRoutes(router *Router) error {
 		registerCSRFHandler,
 		registerWebfingerHandler,
 		registerSSOLoginHandler,
+		registerSSOInitiateHandler,
 		registerSSOCallbackHandler,
 		registerSSOTokenAuthorizeHandler,
 		registerSSOTokenCallbackHandler,

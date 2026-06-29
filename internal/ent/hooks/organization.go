@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
+	"github.com/stoewer/go-strcase"
 	"github.com/stripe/stripe-go/v84"
 
 	"github.com/theopenlane/iam/auth"
@@ -64,9 +65,11 @@ func HookOrganization() ent.Hook {
 					return nil, err
 				}
 
-				// trim trailing whitespace from the name
+				// trim trailing whitespace from the name and derive the SSO slug from it
 				if name, ok := m.Name(); ok {
-					m.SetName(strings.TrimSpace(name))
+					trimmed := strings.TrimSpace(name)
+					m.SetName(trimmed)
+					m.SetSlugName(strcase.KebabCase(trimmed))
 				}
 			}
 

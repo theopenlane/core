@@ -8809,6 +8809,8 @@ type CreateOrganizationSettingInput struct {
 	IdentityProviderLoginEnforced *bool `json:"identityProviderLoginEnforced,omitempty"`
 	// when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider
 	IdentityProviderJitProvisioning *bool `json:"identityProviderJitProvisioning,omitempty"`
+	// when set, restricts just-in-time provisioning to users whose authenticated email domain is in this list; when empty, any user who authenticates against the identity provider is provisioned
+	JitAllowedEmailDomains []string `json:"jitAllowedEmailDomains,omitempty"`
 	// enforce 2fa / multifactor authentication for organization members
 	MultifactorAuthEnforced *bool `json:"multifactorAuthEnforced,omitempty"`
 	// email domains whose existing members skip the SSO redirect even when SSO is enforced; TFA enforcement still applies
@@ -26784,7 +26786,9 @@ type Organization struct {
 	// The time the user's (local) avatar was last updated
 	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
 	// the stripe customer ID this organization is associated to
-	StripeCustomerID                   *string                               `json:"stripeCustomerID,omitempty"`
+	StripeCustomerID *string `json:"stripeCustomerID,omitempty"`
+	// a stable slug identifying the organization in its public SSO initiation URL, e.g. /orgs/<sso_slug>/sso
+	SlugName                           *string                               `json:"slugName,omitempty"`
 	ActionPlanCreators                 *GroupConnection                      `json:"actionPlanCreators"`
 	APITokenCreators                   *GroupConnection                      `json:"apiTokenCreators"`
 	AssessmentCreators                 *GroupConnection                      `json:"assessmentCreators"`
@@ -27051,6 +27055,8 @@ type OrganizationSetting struct {
 	IdentityProviderLoginEnforced bool `json:"identityProviderLoginEnforced"`
 	// when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider
 	IdentityProviderJitProvisioning bool `json:"identityProviderJitProvisioning"`
+	// when set, restricts just-in-time provisioning to users whose authenticated email domain is in this list; when empty, any user who authenticates against the identity provider is provisioned
+	JitAllowedEmailDomains []string `json:"jitAllowedEmailDomains,omitempty"`
 	// enforce 2fa / multifactor authentication for organization members
 	MultifactorAuthEnforced *bool `json:"multifactorAuthEnforced,omitempty"`
 	// email domains whose existing members skip the SSO redirect even when SSO is enforced; TFA enforcement still applies
@@ -27515,6 +27521,8 @@ type OrganizationSettingWhereInput struct {
 	DomainsHas *string `json:"domainsHas,omitempty"`
 	// Filter for allowedEmailDomainsHas to contain a specific value
 	AllowedEmailDomainsHas *string `json:"allowedEmailDomainsHas,omitempty"`
+	// Filter for jitAllowedEmailDomainsHas to contain a specific value
+	JitAllowedEmailDomainsHas *string `json:"jitAllowedEmailDomainsHas,omitempty"`
 	// Filter for ssoExemptDomainsHas to contain a specific value
 	SsoExemptDomainsHas *string `json:"ssoExemptDomainsHas,omitempty"`
 }
@@ -27698,6 +27706,22 @@ type OrganizationWhereInput struct {
 	AvatarUpdatedAtLte    *time.Time   `json:"avatarUpdatedAtLTE,omitempty"`
 	AvatarUpdatedAtIsNil  *bool        `json:"avatarUpdatedAtIsNil,omitempty"`
 	AvatarUpdatedAtNotNil *bool        `json:"avatarUpdatedAtNotNil,omitempty"`
+	// slug_name field predicates
+	SlugName             *string  `json:"slugName,omitempty"`
+	SlugNameNeq          *string  `json:"slugNameNEQ,omitempty"`
+	SlugNameIn           []string `json:"slugNameIn,omitempty"`
+	SlugNameNotIn        []string `json:"slugNameNotIn,omitempty"`
+	SlugNameGt           *string  `json:"slugNameGT,omitempty"`
+	SlugNameGte          *string  `json:"slugNameGTE,omitempty"`
+	SlugNameLt           *string  `json:"slugNameLT,omitempty"`
+	SlugNameLte          *string  `json:"slugNameLTE,omitempty"`
+	SlugNameContains     *string  `json:"slugNameContains,omitempty"`
+	SlugNameHasPrefix    *string  `json:"slugNameHasPrefix,omitempty"`
+	SlugNameHasSuffix    *string  `json:"slugNameHasSuffix,omitempty"`
+	SlugNameIsNil        *bool    `json:"slugNameIsNil,omitempty"`
+	SlugNameNotNil       *bool    `json:"slugNameNotNil,omitempty"`
+	SlugNameEqualFold    *string  `json:"slugNameEqualFold,omitempty"`
+	SlugNameContainsFold *string  `json:"slugNameContainsFold,omitempty"`
 	// action_plan_creators edge predicates
 	HasActionPlanCreators     *bool              `json:"hasActionPlanCreators,omitempty"`
 	HasActionPlanCreatorsWith []*GroupWhereInput `json:"hasActionPlanCreatorsWith,omitempty"`
@@ -45370,6 +45394,10 @@ type UpdateOrganizationSettingInput struct {
 	IdentityProviderLoginEnforced *bool `json:"identityProviderLoginEnforced,omitempty"`
 	// when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider
 	IdentityProviderJitProvisioning *bool `json:"identityProviderJitProvisioning,omitempty"`
+	// when set, restricts just-in-time provisioning to users whose authenticated email domain is in this list; when empty, any user who authenticates against the identity provider is provisioned
+	JitAllowedEmailDomains       []string `json:"jitAllowedEmailDomains,omitempty"`
+	AppendJitAllowedEmailDomains []string `json:"appendJitAllowedEmailDomains,omitempty"`
+	ClearJitAllowedEmailDomains  *bool    `json:"clearJitAllowedEmailDomains,omitempty"`
 	// enforce 2fa / multifactor authentication for organization members
 	MultifactorAuthEnforced      *bool `json:"multifactorAuthEnforced,omitempty"`
 	ClearMultifactorAuthEnforced *bool `json:"clearMultifactorAuthEnforced,omitempty"`

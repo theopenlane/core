@@ -1824,6 +1824,16 @@ func IdentityProviderJitProvisioningNEQ(v bool) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldNEQ(FieldIdentityProviderJitProvisioning, v))
 }
 
+// JitAllowedEmailDomainsIsNil applies the IsNil predicate on the "jit_allowed_email_domains" field.
+func JitAllowedEmailDomainsIsNil() predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldIsNull(FieldJitAllowedEmailDomains))
+}
+
+// JitAllowedEmailDomainsNotNil applies the NotNil predicate on the "jit_allowed_email_domains" field.
+func JitAllowedEmailDomainsNotNil() predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldNotNull(FieldJitAllowedEmailDomains))
+}
+
 // MultifactorAuthEnforcedEQ applies the EQ predicate on the "multifactor_auth_enforced" field.
 func MultifactorAuthEnforcedEQ(v bool) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldEQ(FieldMultifactorAuthEnforced, v))

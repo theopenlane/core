@@ -19,6 +19,8 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	apimodels "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	entval "github.com/theopenlane/core/internal/ent/validator"
@@ -81,6 +83,47 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) err
 	}
 
 	return h.Success(ctx, out, openapi)
+}
+
+// SSOInitiateHandler resolves an organization by its public slug and starts the SSO login flow, keyed by
+// the shareable /orgs/<slug_name>/sso URL the console hosts. It mirrors SSOLoginHandler: it sets the
+// state/nonce/organization_id cookies and returns the identity provider redirect URL so the console proxy
+// can mediate the flow on the UI origin, rather than redirecting straight to the provider from the API
+func (h *Handler) SSOInitiateHandler(ctx echo.Context, openapi *OpenAPIContext) error {
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, apimodels.ExampleSSOInitiateRequest, apimodels.SSOLoginReply{}, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
+	}
+
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
+	allowCtx := privacy.DecisionContext(ctx.Request().Context(), privacy.Allow)
+
+	org, err := h.DBClient.Organization.Query().
+		Where(organization.SlugName(in.SlugName)).
+		Only(allowCtx)
+	if err != nil {
+		if generated.IsNotFound(err) {
+			return h.NotFound(ctx, ErrNotFound, openapi)
+		}
+
+		metrics.RecordLogin(false)
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+	}
+
+	authURL, err := h.generateSSOAuthURL(ctx, org.ID)
+	if err != nil {
+		metrics.RecordLogin(false)
+		return h.BadRequest(ctx, err, openapi)
+	}
+
+	return h.Success(ctx, apimodels.SSOLoginReply{
+		Reply:       rout.Reply{Success: true},
+		RedirectURI: authURL,
+	}, openapi)
 }
 
 // SSOCallbackHandler completes the OIDC login flow after the user returns from the IdP
@@ -148,6 +191,17 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
+	// OIDC has already verified the user's email. Marking it confirmed before session generation triggers
+	// the existing matching-domain auto-join hook for non-enforced organizations
+	if !entUser.Edges.Setting.EmailConfirmed {
+		if err := h.setEmailConfirmed(ctxWithToken, entUser); err != nil {
+			metrics.RecordLogin(false)
+			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to set SSO email as verified")
+
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		}
+	}
+
 	// set the context for the authenticated user
 	userCtx := setAuthenticatedContext(ctxWithToken, entUser)
 
@@ -179,6 +233,19 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 	authData, err := h.AuthManager.GenerateOauthAuthSession(userCtx, ctx.Response().Writer, entUser, oauthReq)
 	if err != nil {
 		metrics.RecordLogin(false)
+
+		// the user authenticated with the identity provider but is not a member of the target organization
+		// (e.g. JIT is off or their domain is not in the allowlist); return a clear forbidden response
+		// rather than a generic server error so the UI can guide them to request access
+		if errors.Is(err, generated.ErrPermissionDenied) {
+			logx.FromContext(reqCtx).Warn().
+				Str("email", tokens.IDTokenClaims.Email).
+				Str("organization_id", orgCookie.Value).
+				Msg("sso user authenticated but is not a member of the organization")
+
+			return h.Forbidden(ctx, ErrSSONoOrganizationAccess, openapi)
+		}
+
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
@@ -310,8 +377,9 @@ func (h *Handler) setIDPAuthTested(ctx context.Context, orgID string) error {
 // to create the relying party instance, passing in the issuer URL, client credentials, the callback URL for the OIDC flow,
 // and a set of standard OIDC scopes (openid, profile, email).
 func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty, error) {
-	// Fetch the organization's OIDC settings from the database
-	setting, err := h.getOrganizationSettingByOrgID(ctx, orgID)
+	// Fetch the organization's OIDC settings from the database under an allow context; these public auth
+	// endpoints serve users who are not yet members, and the client secret is only used server-side here
+	setting, err := h.getOrganizationSettingByOrgID(privacy.DecisionContext(ctx, privacy.Allow), orgID)
 	if err != nil {
 		return nil, err
 	}

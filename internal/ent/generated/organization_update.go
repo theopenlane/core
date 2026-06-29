@@ -342,6 +342,26 @@ func (_u *OrganizationUpdate) ClearStripeCustomerID() *OrganizationUpdate {
 	return _u
 }
 
+// SetSlugName sets the "slug_name" field.
+func (_u *OrganizationUpdate) SetSlugName(v string) *OrganizationUpdate {
+	_u.mutation.SetSlugName(v)
+	return _u
+}
+
+// SetNillableSlugName sets the "slug_name" field if the given value is not nil.
+func (_u *OrganizationUpdate) SetNillableSlugName(v *string) *OrganizationUpdate {
+	if v != nil {
+		_u.SetSlugName(*v)
+	}
+	return _u
+}
+
+// ClearSlugName clears the value of the "slug_name" field.
+func (_u *OrganizationUpdate) ClearSlugName() *OrganizationUpdate {
+	_u.mutation.ClearSlugName()
+	return _u
+}
+
 // AddActionPlanCreatorIDs adds the "action_plan_creators" edge to the Group entity by IDs.
 func (_u *OrganizationUpdate) AddActionPlanCreatorIDs(ids ...string) *OrganizationUpdate {
 	_u.mutation.AddActionPlanCreatorIDs(ids...)
@@ -6463,6 +6483,11 @@ func (_u *OrganizationUpdate) check() error {
 			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "Organization.avatar_remote_url": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.SlugName(); ok {
+		if err := organization.SlugNameValidator(v); err != nil {
+			return &ValidationError{Name: "slug_name", err: fmt.Errorf(`generated: validator failed for field "Organization.slug_name": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -6560,6 +6585,12 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if _u.mutation.StripeCustomerIDCleared() {
 		_spec.ClearField(organization.FieldStripeCustomerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SlugName(); ok {
+		_spec.SetField(organization.FieldSlugName, field.TypeString, value)
+	}
+	if _u.mutation.SlugNameCleared() {
+		_spec.ClearField(organization.FieldSlugName, field.TypeString)
 	}
 	if _u.mutation.ActionPlanCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -14908,6 +14939,26 @@ func (_u *OrganizationUpdateOne) ClearStripeCustomerID() *OrganizationUpdateOne 
 	return _u
 }
 
+// SetSlugName sets the "slug_name" field.
+func (_u *OrganizationUpdateOne) SetSlugName(v string) *OrganizationUpdateOne {
+	_u.mutation.SetSlugName(v)
+	return _u
+}
+
+// SetNillableSlugName sets the "slug_name" field if the given value is not nil.
+func (_u *OrganizationUpdateOne) SetNillableSlugName(v *string) *OrganizationUpdateOne {
+	if v != nil {
+		_u.SetSlugName(*v)
+	}
+	return _u
+}
+
+// ClearSlugName clears the value of the "slug_name" field.
+func (_u *OrganizationUpdateOne) ClearSlugName() *OrganizationUpdateOne {
+	_u.mutation.ClearSlugName()
+	return _u
+}
+
 // AddActionPlanCreatorIDs adds the "action_plan_creators" edge to the Group entity by IDs.
 func (_u *OrganizationUpdateOne) AddActionPlanCreatorIDs(ids ...string) *OrganizationUpdateOne {
 	_u.mutation.AddActionPlanCreatorIDs(ids...)
@@ -21042,6 +21093,11 @@ func (_u *OrganizationUpdateOne) check() error {
 			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "Organization.avatar_remote_url": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.SlugName(); ok {
+		if err := organization.SlugNameValidator(v); err != nil {
+			return &ValidationError{Name: "slug_name", err: fmt.Errorf(`generated: validator failed for field "Organization.slug_name": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -21156,6 +21212,12 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 	}
 	if _u.mutation.StripeCustomerIDCleared() {
 		_spec.ClearField(organization.FieldStripeCustomerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SlugName(); ok {
+		_spec.SetField(organization.FieldSlugName, field.TypeString, value)
+	}
+	if _u.mutation.SlugNameCleared() {
+		_spec.ClearField(organization.FieldSlugName, field.TypeString)
 	}
 	if _u.mutation.ActionPlanCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{

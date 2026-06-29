@@ -88,6 +88,8 @@ const (
 	FieldIdentityProviderLoginEnforced = "identity_provider_login_enforced"
 	// FieldIdentityProviderJitProvisioning holds the string denoting the identity_provider_jit_provisioning field in the database.
 	FieldIdentityProviderJitProvisioning = "identity_provider_jit_provisioning"
+	// FieldJitAllowedEmailDomains holds the string denoting the jit_allowed_email_domains field in the database.
+	FieldJitAllowedEmailDomains = "jit_allowed_email_domains"
 	// FieldMultifactorAuthEnforced holds the string denoting the multifactor_auth_enforced field in the database.
 	FieldMultifactorAuthEnforced = "multifactor_auth_enforced"
 	// FieldSSOExemptDomains holds the string denoting the sso_exempt_domains field in the database.
@@ -141,6 +143,7 @@ var Columns = []string{
 	FieldSamlCert,
 	FieldIdentityProviderLoginEnforced,
 	FieldIdentityProviderJitProvisioning,
+	FieldJitAllowedEmailDomains,
 	FieldMultifactorAuthEnforced,
 	FieldSSOExemptDomains,
 	FieldAllowSupportAccess,

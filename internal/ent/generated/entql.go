@@ -2369,6 +2369,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organization.FieldAvatarLocalFileID:     {Type: field.TypeString, Column: organization.FieldAvatarLocalFileID},
 			organization.FieldAvatarUpdatedAt:       {Type: field.TypeTime, Column: organization.FieldAvatarUpdatedAt},
 			organization.FieldStripeCustomerID:      {Type: field.TypeString, Column: organization.FieldStripeCustomerID},
+			organization.FieldSlugName:              {Type: field.TypeString, Column: organization.FieldSlugName},
 		},
 	}
 	graph.Nodes[62] = &sqlgraph.Node{
@@ -2413,6 +2414,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsetting.FieldSamlCert:                         {Type: field.TypeString, Column: organizationsetting.FieldSamlCert},
 			organizationsetting.FieldIdentityProviderLoginEnforced:    {Type: field.TypeBool, Column: organizationsetting.FieldIdentityProviderLoginEnforced},
 			organizationsetting.FieldIdentityProviderJitProvisioning:  {Type: field.TypeBool, Column: organizationsetting.FieldIdentityProviderJitProvisioning},
+			organizationsetting.FieldJitAllowedEmailDomains:           {Type: field.TypeJSON, Column: organizationsetting.FieldJitAllowedEmailDomains},
 			organizationsetting.FieldMultifactorAuthEnforced:          {Type: field.TypeBool, Column: organizationsetting.FieldMultifactorAuthEnforced},
 			organizationsetting.FieldSSOExemptDomains:                 {Type: field.TypeJSON, Column: organizationsetting.FieldSSOExemptDomains},
 			organizationsetting.FieldAllowSupportAccess:               {Type: field.TypeBool, Column: organizationsetting.FieldAllowSupportAccess},
@@ -36383,6 +36385,11 @@ func (f *OrganizationFilter) WhereStripeCustomerID(p entql.StringP) {
 	f.Where(p.Field(organization.FieldStripeCustomerID))
 }
 
+// WhereSlugName applies the entql string predicate on the slug_name field.
+func (f *OrganizationFilter) WhereSlugName(p entql.StringP) {
+	f.Where(p.Field(organization.FieldSlugName))
+}
+
 // WhereHasActionPlanCreators applies a predicate to check if query has an edge action_plan_creators.
 func (f *OrganizationFilter) WhereHasActionPlanCreators() {
 	f.Where(entql.HasEdge("action_plan_creators"))
@@ -38956,6 +38963,11 @@ func (f *OrganizationSettingFilter) WhereIdentityProviderLoginEnforced(p entql.B
 // WhereIdentityProviderJitProvisioning applies the entql bool predicate on the identity_provider_jit_provisioning field.
 func (f *OrganizationSettingFilter) WhereIdentityProviderJitProvisioning(p entql.BoolP) {
 	f.Where(p.Field(organizationsetting.FieldIdentityProviderJitProvisioning))
+}
+
+// WhereJitAllowedEmailDomains applies the entql json.RawMessage predicate on the jit_allowed_email_domains field.
+func (f *OrganizationSettingFilter) WhereJitAllowedEmailDomains(p entql.BytesP) {
+	f.Where(p.Field(organizationsetting.FieldJitAllowedEmailDomains))
 }
 
 // WhereMultifactorAuthEnforced applies the entql bool predicate on the multifactor_auth_enforced field.

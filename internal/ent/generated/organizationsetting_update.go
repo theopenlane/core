@@ -578,6 +578,24 @@ func (_u *OrganizationSettingUpdate) SetNillableIdentityProviderJitProvisioning(
 	return _u
 }
 
+// SetJitAllowedEmailDomains sets the "jit_allowed_email_domains" field.
+func (_u *OrganizationSettingUpdate) SetJitAllowedEmailDomains(v []string) *OrganizationSettingUpdate {
+	_u.mutation.SetJitAllowedEmailDomains(v)
+	return _u
+}
+
+// AppendJitAllowedEmailDomains appends value to the "jit_allowed_email_domains" field.
+func (_u *OrganizationSettingUpdate) AppendJitAllowedEmailDomains(v []string) *OrganizationSettingUpdate {
+	_u.mutation.AppendJitAllowedEmailDomains(v)
+	return _u
+}
+
+// ClearJitAllowedEmailDomains clears the value of the "jit_allowed_email_domains" field.
+func (_u *OrganizationSettingUpdate) ClearJitAllowedEmailDomains() *OrganizationSettingUpdate {
+	_u.mutation.ClearJitAllowedEmailDomains()
+	return _u
+}
+
 // SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
 func (_u *OrganizationSettingUpdate) SetMultifactorAuthEnforced(v bool) *OrganizationSettingUpdate {
 	_u.mutation.SetMultifactorAuthEnforced(v)
@@ -821,6 +839,11 @@ func (_u *OrganizationSettingUpdate) check() error {
 			return &ValidationError{Name: "saml_signin_url", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.saml_signin_url": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.JitAllowedEmailDomains(); ok {
+		if err := organizationsetting.JitAllowedEmailDomainsValidator(v); err != nil {
+			return &ValidationError{Name: "jit_allowed_email_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.jit_allowed_email_domains": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.SSOExemptDomains(); ok {
 		if err := organizationsetting.SSOExemptDomainsValidator(v); err != nil {
 			return &ValidationError{Name: "sso_exempt_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.sso_exempt_domains": %w`, err)}
@@ -1023,6 +1046,17 @@ func (_u *OrganizationSettingUpdate) sqlSave(ctx context.Context) (_node int, er
 	}
 	if value, ok := _u.mutation.IdentityProviderJitProvisioning(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderJitProvisioning, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.JitAllowedEmailDomains(); ok {
+		_spec.SetField(organizationsetting.FieldJitAllowedEmailDomains, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedJitAllowedEmailDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsetting.FieldJitAllowedEmailDomains, value)
+		})
+	}
+	if _u.mutation.JitAllowedEmailDomainsCleared() {
+		_spec.ClearField(organizationsetting.FieldJitAllowedEmailDomains, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsetting.FieldMultifactorAuthEnforced, field.TypeBool, value)
@@ -1707,6 +1741,24 @@ func (_u *OrganizationSettingUpdateOne) SetNillableIdentityProviderJitProvisioni
 	return _u
 }
 
+// SetJitAllowedEmailDomains sets the "jit_allowed_email_domains" field.
+func (_u *OrganizationSettingUpdateOne) SetJitAllowedEmailDomains(v []string) *OrganizationSettingUpdateOne {
+	_u.mutation.SetJitAllowedEmailDomains(v)
+	return _u
+}
+
+// AppendJitAllowedEmailDomains appends value to the "jit_allowed_email_domains" field.
+func (_u *OrganizationSettingUpdateOne) AppendJitAllowedEmailDomains(v []string) *OrganizationSettingUpdateOne {
+	_u.mutation.AppendJitAllowedEmailDomains(v)
+	return _u
+}
+
+// ClearJitAllowedEmailDomains clears the value of the "jit_allowed_email_domains" field.
+func (_u *OrganizationSettingUpdateOne) ClearJitAllowedEmailDomains() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearJitAllowedEmailDomains()
+	return _u
+}
+
 // SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
 func (_u *OrganizationSettingUpdateOne) SetMultifactorAuthEnforced(v bool) *OrganizationSettingUpdateOne {
 	_u.mutation.SetMultifactorAuthEnforced(v)
@@ -1963,6 +2015,11 @@ func (_u *OrganizationSettingUpdateOne) check() error {
 			return &ValidationError{Name: "saml_signin_url", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.saml_signin_url": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.JitAllowedEmailDomains(); ok {
+		if err := organizationsetting.JitAllowedEmailDomainsValidator(v); err != nil {
+			return &ValidationError{Name: "jit_allowed_email_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.jit_allowed_email_domains": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.SSOExemptDomains(); ok {
 		if err := organizationsetting.SSOExemptDomainsValidator(v); err != nil {
 			return &ValidationError{Name: "sso_exempt_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.sso_exempt_domains": %w`, err)}
@@ -2182,6 +2239,17 @@ func (_u *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *Org
 	}
 	if value, ok := _u.mutation.IdentityProviderJitProvisioning(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderJitProvisioning, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.JitAllowedEmailDomains(); ok {
+		_spec.SetField(organizationsetting.FieldJitAllowedEmailDomains, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedJitAllowedEmailDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsetting.FieldJitAllowedEmailDomains, value)
+		})
+	}
+	if _u.mutation.JitAllowedEmailDomainsCleared() {
+		_spec.ClearField(organizationsetting.FieldJitAllowedEmailDomains, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsetting.FieldMultifactorAuthEnforced, field.TypeBool, value)

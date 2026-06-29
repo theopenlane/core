@@ -1753,6 +1753,28 @@ var ExampleSSOCallbackRequest = SSOCallbackRequest{
 	OrganizationID: exampleULID("organization"),
 }
 
+// SSOInitiateRequest holds the path parameters for the public, shareable SSO initiation endpoint
+type SSOInitiateRequest struct {
+	// SlugName is the organization slug used to resolve which organization's SSO flow to start
+	SlugName string `param:"slug_name" description:"the organization slug" example:"acme"`
+}
+
+// Validate ensures the required fields are set on the SSOInitiateRequest
+func (r *SSOInitiateRequest) Validate() error {
+	r.SlugName = strings.TrimSpace(r.SlugName)
+
+	if r.SlugName == "" {
+		return rout.NewMissingRequiredFieldError("slug_name")
+	}
+
+	return nil
+}
+
+// ExampleSSOInitiateRequest is an example request for OpenAPI documentation
+var ExampleSSOInitiateRequest = SSOInitiateRequest{
+	SlugName: "acme",
+}
+
 // SSOTokenCallbackRequest holds the query parameters for completing token SSO authorization
 type SSOTokenCallbackRequest struct {
 	// Code is the code value.

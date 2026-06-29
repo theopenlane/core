@@ -146,6 +146,9 @@ var (
 	ErrTokenManagerNotConfigured = errors.New("token manager not configured")
 	// ErrFailedToExtractSessionID indicates that the session ID could not be extracted from the token
 	ErrFailedToExtractSessionID = errors.New("failed to extract session ID from token")
+	// ErrSSONoOrganizationAccess indicates the user authenticated with the identity provider but is not a
+	// member of the organization and was not provisioned, so they cannot be granted access to it
+	ErrSSONoOrganizationAccess = errors.New("you authenticated successfully but are not a member of this organization; ask an administrator to invite you")
 	// ErrSupportAccessNotConsented indicates that the organization has not consented to Openlane support access
 	ErrSupportAccessNotConsented = errors.New("organization has not granted Openlane support access")
 	// ErrSupportAccessNotEnabled indicates that the Openlane support access flow is not enabled in configuration
