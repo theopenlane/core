@@ -2,7 +2,7 @@ package upload
 
 import (
 	"context"
-	"crypto/md5"
+	"crypto/md5" // #nosec G501 -- not used for security
 	"encoding/hex"
 	"io"
 	"path"
@@ -221,7 +221,7 @@ func computeMD5Hash(file io.ReadSeeker) ([]byte, error) {
 		return nil, err
 	}
 
-	h := md5.New()
+	h := md5.New() // #nosec G401 -- not used for security
 	if _, err := io.Copy(h, file); err != nil {
 		return nil, err
 	}
