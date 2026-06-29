@@ -171,7 +171,7 @@ extend type organization
     define identity_holder_creator: [group#member]
     define can_create_identity_holder: can_edit or can_edit_identity_holder or identity_holder_creator or can_manage_registry or can_manage_compliance
 
-    define can_view_internal_policy: [service, user, group#member] or can_edit_internal_policy or can_manage_compliance or can_manage_policies or full_access
+    define can_view_internal_policy: [service, user, group#member] or auditor or can_edit_internal_policy or can_manage_compliance or can_manage_policies or full_access
     define can_edit_internal_policy: [service, user, group#member] or can_delete_internal_policy or can_manage_compliance or can_manage_policies or full_access
     define can_delete_internal_policy: [service, user, group#member] or can_manage_compliance or can_manage_policies or full_access
     define internal_policy_creator: [group#member]
