@@ -25,6 +25,7 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(tcOrg.owner.UserCtx, t)
 
 	up := uploadFile(t, pdfFilePath)
+	pdfHash := getMD5Hash(t, pdfFilePath)
 	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*up})
 
 	trustCenterNDA, err := suite.client.api.CreateTrustCenterNda(tcOrg.owner.UserCtx, testclient.CreateTrustCenterNDAInput{
@@ -65,7 +66,7 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 			"signature_metadata": map[string]any{
 				"ip_address": "192.168.1.100",
 				"timestamp":  "2025-09-22T19:37:59.988Z",
-				"pdf_hash":   "a1b2c3d4e5f6789012345678901234567890abcd",
+				"pdf_hash":   pdfHash,
 				"user_id":    anonUserID,
 			},
 			"pdf_file_id":     trustCenterNDA.CreateTrustCenterNda.Template.Files.Edges[0].Node.ID,
@@ -265,6 +266,7 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 	trustCenter2 := tcOrg2.trustCenter
 
 	up := uploadFile(t, pdfFilePath)
+	pdfHash := getMD5Hash(t, pdfFilePath)
 
 	// the happy path triggers attestNDADocument which uploads the attested PDF
 	expectAttestedUpload(t, suite.client.mockProvider)
@@ -326,7 +328,7 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 					"signature_metadata": map[string]any{
 						"ip_address": "192.168.1.100",
 						"timestamp":  "2025-09-22T19:37:59.988Z",
-						"pdf_hash":   "a1b2c3d4e5f6789012345678901234567890abcd",
+						"pdf_hash":   pdfHash,
 						"user_id":    anonUserID,
 					},
 					"pdf_file_id":     trustCenterNDA.CreateTrustCenterNda.Template.Files.Edges[0].Node.ID,
@@ -348,7 +350,7 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 					"signature_metadata": map[string]any{
 						"ip_address": "192.168.1.100",
 						"timestamp":  "2025-09-22T19:37:59.988Z",
-						"pdf_hash":   "a1b2c3d4e5f6789012345678901234567890abcd",
+						"pdf_hash":   pdfHash,
 						"user_id":    anonUserID,
 					},
 					"pdf_file_id":     trustCenterNDA.CreateTrustCenterNda.Template.Files.Edges[0].Node.ID,
@@ -370,7 +372,7 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 					"signature_metadata": map[string]any{
 						"ip_address": "192.168.1.100",
 						"timestamp":  "2025-09-22T19:37:59.988Z",
-						"pdf_hash":   "a1b2c3d4e5f6789012345678901234567890abcd",
+						"pdf_hash":   pdfHash,
 						"user_id":    anonUserID,
 					},
 					"pdf_file_id":     trustCenterNDA.CreateTrustCenterNda.Template.Files.Edges[0].Node.ID,
@@ -392,7 +394,7 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 					"signature_metadata": map[string]any{
 						"ip_address": "192.168.1.100",
 						"timestamp":  "2025-09-22T19:37:59.988Z",
-						"pdf_hash":   "a1b2c3d4e5f6789012345678901234567890abcd",
+						"pdf_hash":   pdfHash,
 						"user_id":    "abc123",
 					},
 					"pdf_file_id":     trustCenterNDA.CreateTrustCenterNda.Template.Files.Edges[0].Node.ID,
@@ -400,6 +402,50 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 				},
 			},
 			errorMsg: "NDA submission does not match authenticated user",
+		},
+		{
+			name: "invalid pdf file ID",
+			ctx:  anonCtx,
+			input: testclient.SubmitTrustCenterNDAResponseInput{
+				TemplateID: trustCenterNDA.CreateTrustCenterNda.Template.ID,
+				Response: map[string]any{
+					"signatory_info": map[string]any{
+						"email": "test@example.com",
+					},
+					"acknowledgment": true,
+					"signature_metadata": map[string]any{
+						"ip_address": "192.168.1.100",
+						"timestamp":  "2026-06-29T19:37:59.988Z",
+						"pdf_hash":   pdfHash,
+						"user_id":    anonUserID,
+					},
+					"pdf_file_id":     "non-existent-id",
+					"trust_center_id": trustCenter.ID,
+				},
+			},
+			errorMsg: "NDA PDF file does not match the template",
+		},
+		{
+			name: "invalid pdf hash",
+			ctx:  anonCtx,
+			input: testclient.SubmitTrustCenterNDAResponseInput{
+				TemplateID: trustCenterNDA.CreateTrustCenterNda.Template.ID,
+				Response: map[string]any{
+					"signatory_info": map[string]any{
+						"email": "test@example.com",
+					},
+					"acknowledgment": true,
+					"signature_metadata": map[string]any{
+						"ip_address": "192.168.1.100",
+						"timestamp":  "2026-06-29T20:37:59.988Z",
+						"pdf_hash":   "invalid hash",
+						"user_id":    anonUserID,
+					},
+					"pdf_file_id":     trustCenterNDA.CreateTrustCenterNda.Template.Files.Edges[0].Node.ID,
+					"trust_center_id": trustCenter.ID,
+				},
+			},
+			errorMsg: "NDA PDF hash does not match the template",
 		},
 		{
 			name: "happy path",
@@ -414,7 +460,7 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 					"signature_metadata": map[string]any{
 						"ip_address": "192.168.1.100",
 						"timestamp":  "2025-09-22T19:37:59.988Z",
-						"pdf_hash":   "a1b2c3d4e5f6789012345678901234567890abcd",
+						"pdf_hash":   pdfHash,
 						"user_id":    anonUserID,
 					},
 					"pdf_file_id":     trustCenterNDA.CreateTrustCenterNda.Template.Files.Edges[0].Node.ID,
