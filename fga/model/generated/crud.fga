@@ -241,7 +241,7 @@ extend type organization
     define can_edit_organization_setting: [service, user] or can_delete_organization_setting or can_edit_organization or full_access
     define can_delete_organization_setting: [service, user] or can_delete_organization or full_access
 
-    define can_view_platform: [service, user, group#member] or can_edit_platform or can_manage_compliance or can_manage_registry or full_access
+    define can_view_platform: [service, user, group#member] or auditor or can_edit_platform or can_manage_compliance or can_manage_registry or full_access
     define can_edit_platform: [service, user, group#member] or can_delete_platform or can_manage_compliance or can_manage_registry or full_access
     define can_delete_platform: [service, user, group#member] or can_manage_compliance or can_manage_registry or full_access
     define platform_creator: [group#member]
