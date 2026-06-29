@@ -14,7 +14,7 @@ extend type organization
     define owner: [user] or owner from parent
 
     # @create: comment, discussion, task
-    # @view: control, subcontrol, program, evidence, policy, procedure, review
+    # @view: control, subcontrol, program, evidence, policy, procedure, review, platform
     # @crud: evidence, review
     define auditor: [user] or auditor from parent
 
