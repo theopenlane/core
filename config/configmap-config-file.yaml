@@ -1264,4 +1264,10 @@ data:
       endpointurl: {{ .Values.openlane.coreConfiguration.shortlinks.endpointurl | quote }}
       {{- end }}
     {{- end }}
+    {{- if .Values.openlane.coreConfiguration.backfill }}
+    backfill:
+      {{- if .Values.openlane.coreConfiguration.backfill.enabled }}
+      enabled: {{ .Values.openlane.coreConfiguration.backfill.enabled }}
+      {{- end }}
+    {{- end }}
 {{- end }}

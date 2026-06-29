@@ -27,6 +27,7 @@ Config contains the configuration for the core server
 |[**workflows**](#workflows)|`object`|||
 |[**cloudflare**](#cloudflare)|`object`|CloudflareConfig contains configuration for Cloudflare integration.<br/>||
 |[**shortlinks**](#shortlinks)|`object`|||
+|[**backfill**](#backfill)|`object`|Backfill configures one-time startup data backfill routines that populate fields introduced by recent migrations for organizations and memberships that pre-date them<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -154,7 +155,8 @@ Config contains the configuration for the core server
         "gala": {}
     },
     "cloudflare": {},
-    "shortlinks": {}
+    "shortlinks": {},
+    "backfill": {}
 }
 ```
 
@@ -1967,6 +1969,19 @@ CloudflareConfig contains configuration for Cloudflare integration.
 |**clientid**|`string`|||
 |**clientsecret**|`string`|||
 |**endpointurl**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="backfill"></a>
+## backfill: object
+
+Backfill configures one-time startup data backfill routines that populate fields introduced by recent migrations for organizations and memberships that pre-date them
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled runs the backfill routines on server startup<br/>||
 
 **Additional Properties:** not allowed  
 

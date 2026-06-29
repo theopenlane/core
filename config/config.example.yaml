@@ -94,6 +94,8 @@ authz:
     parentcontextskipkinds: []
     storeid: ""
     storename: openlane
+backfill:
+    enabled: false
 cloudflare:
     accountid: ""
     apitoken: ""

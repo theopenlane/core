@@ -213,6 +213,17 @@
       ],
       "description": "Auth settings including oauth2 providers and token configuration"
     },
+    "config.Backfill": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled runs the backfill routines on server startup"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Backfill configures one-time startup data backfill routines that populate fields introduced by recent migrations for organizations and memberships that pre-date them"
+    },
     "config.KeyWatcher": {
       "properties": {
         "enabled": {
@@ -2180,6 +2191,10 @@
     "shortlinks": {
       "$ref": "#/$defs/shortlinks.Config",
       "description": "Shortlinks contains configuration for the URL shortening service"
+    },
+    "backfill": {
+      "$ref": "#/$defs/config.Backfill",
+      "description": "Backfill contains configuration for one-time startup data backfill routines"
     }
   },
   "additionalProperties": false,
