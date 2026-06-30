@@ -31,4 +31,6 @@ var (
 	ErrAnonymousAccessNotAllowed = errors.New("anonymous access not allowed")
 	// ErrUnableToAuthenticateTransport is returned when unable to authenticate transport
 	ErrUnableToAuthenticateTransport = errors.New("unable to authenticate transport")
+	// ErrTokenRevoked is returned when a personal access or API token has been revoked
+	ErrTokenRevoked = errors.New("token has been revoked")
 )

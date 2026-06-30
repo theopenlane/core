@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/iam/providers/google"
 	oauth "github.com/theopenlane/iam/providers/oauth2"
 	"github.com/theopenlane/iam/providers/webauthn"
-	"github.com/theopenlane/iam/sessions"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
@@ -154,7 +153,7 @@ func (h *Handler) issueGoogleSession() http.Handler {
 
 		metrics.Logins.WithLabelValues("true").Inc()
 		// remove cookie
-		sessions.RemoveCookie(w, "redirect_to", *h.SessionConfig.CookieConfig)
+		h.clearAuthFlowCookies(w, "redirect_to")
 
 		http.Redirect(w, req, fmt.Sprintf("%s?session=%s", redirectURI, auth.Session), http.StatusFound) //nolint:gosec
 	}
@@ -233,7 +232,7 @@ func (h *Handler) issueGitHubSession() http.Handler {
 		metrics.RecordLogin(true)
 
 		// remove cookie now that its in the context
-		sessions.RemoveCookie(w, "redirect_to", *h.SessionConfig.CookieConfig)
+		h.clearAuthFlowCookies(w, "redirect_to")
 
 		// redirect with context set
 		http.Redirect(w, req, fmt.Sprintf("%s?session=%s", redirectURI, auth.Session), http.StatusFound) //nolint:gosec

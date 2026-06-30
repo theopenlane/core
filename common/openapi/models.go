@@ -289,6 +289,49 @@ var ExampleRefreshSuccessResponse = RefreshReply{
 }
 
 // =========
+// LOGOUT
+// =========
+
+// LogoutRequest optionally carries the refresh token to revoke when it is not supplied via cookie
+type LogoutRequest struct {
+	// RefreshToken is an optional refresh_token value for API clients that do not use cookies.
+	RefreshToken string `json:"refresh_token,omitempty" description:"Optional refresh token to revoke when not provided via cookie"`
+}
+
+// LogoutReply confirms the session and tokens were revoked
+type LogoutReply struct {
+	// Reply is the reply value.
+	rout.Reply
+	// Message is the message value.
+	Message string `json:"message,omitempty"`
+}
+
+// ExampleResponse returns an example LogoutReply for OpenAPI documentation
+func (r *LogoutReply) ExampleResponse() any {
+	return LogoutReply{
+		Reply:   rout.Reply{Success: true},
+		Message: "logged out successfully",
+	}
+}
+
+// Validate ensures the LogoutRequest is well formed; all fields are optional since tokens are
+// normally read from cookies
+func (r *LogoutRequest) Validate() error {
+	return nil
+}
+
+// ExampleLogoutRequest is an example logout request for OpenAPI documentation
+var ExampleLogoutRequest = LogoutRequest{
+	RefreshToken: "token",
+}
+
+// ExampleLogoutSuccessResponse is an example of a successful logout response for OpenAPI documentation
+var ExampleLogoutSuccessResponse = LogoutReply{
+	Reply:   rout.Reply{Success: true},
+	Message: "success",
+}
+
+// =========
 // USERINFO
 // =========
 

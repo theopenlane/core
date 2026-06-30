@@ -163,7 +163,7 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context, openapi *OpenAPICont
 	}
 
 	// cleanup cookies
-	sessions.RemoveCookies(ctx.Response().Writer, sessions.CookieConfig{Path: "/"}, "token_id", "token_type", "organization_id", "state", "nonce")
+	h.clearAuthFlowCookies(ctx.Response().Writer, "token_id", "token_type", "organization_id", "state", "nonce")
 
 	out := apimodels.SSOTokenAuthorizeReply{
 		Reply:          rout.Reply{Success: true},

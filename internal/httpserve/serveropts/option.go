@@ -194,6 +194,10 @@ func WithAuth() ServerOption {
 		// add auth middleware
 		opts := getAuthOptions(s)
 
+		if !s.Config.Handler.TokenManager.RevocationEnabled() {
+			log.Warn().Msg("token revocation is inoperative: no Redis blacklist configured; logout and token or user revocation will not invalidate issued JWTs")
+		}
+
 		conf := authmw.NewAuthOptions(opts...)
 
 		s.Config.Handler.WebAuthn = webauthn.NewWithConfig(s.Config.Settings.Auth.Providers.Webauthn)
@@ -229,6 +233,12 @@ func getAuthOptions(s *ServerOptions) []authmw.Option {
 
 	if s.Config.Handler.RedisClient != nil {
 		opts = append(opts, authmw.WithRedisClient(s.Config.Handler.RedisClient))
+		// share a single Redis-backed blacklist between the token manager (used for refresh
+		// verification and impersonation) and the request-path JWKS validator, so revocations
+		// written on logout are honored on every subsequent request
+		blacklist := tokens.NewRedisTokenBlacklist(s.Config.Handler.RedisClient, s.Config.Settings.Auth.Token.Redis.BlacklistPrefix)
+		s.Config.Handler.TokenManager.WithBlacklist(blacklist)
+		opts = append(opts, authmw.WithBlacklist(blacklist))
 	}
 
 	return opts

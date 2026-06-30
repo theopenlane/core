@@ -628,6 +628,7 @@ func RegisterRoutes(router *Router) error {
 		registerVerifySubscribeHandler,
 		registerUnsubscribeHandler,
 		registerRefreshHandler,
+		registerLogoutHandler,
 		registerJwksWellKnownHandler,
 		registerInviteHandler,
 		registerGithubLoginHandler,

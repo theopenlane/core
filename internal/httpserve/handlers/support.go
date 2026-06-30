@@ -210,7 +210,7 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context, openapi *OpenAPIConte
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to log support access event")
 	}
 
-	sessions.RemoveCookies(ctx.Response().Writer, sessions.CookieConfig{Path: "/"},
+	h.clearAuthFlowCookies(ctx.Response().Writer,
 		supportPendingCookie, supportStateCookie, supportNonceCookie, supportOrgCookie, supportReasonCookie)
 
 	return h.Success(ctx, apimodels.SupportAccessReply{

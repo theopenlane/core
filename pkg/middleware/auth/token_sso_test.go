@@ -15,10 +15,11 @@ import (
 
 func TestAPITokenSSOAuthorization(t *testing.T) {
 	tok := &generated.APIToken{
-		ID:      "t1",
-		OwnerID: "org",
-		Name:    "token",
-		Token:   "tola_token",
+		ID:       "t1",
+		OwnerID:  "org",
+		Name:     "token",
+		Token:    "tola_token",
+		IsActive: true,
 	}
 
 	origFetch := fetchAPITokenFunc
@@ -48,9 +49,10 @@ func TestPATTokenSSOAuthorization(t *testing.T) {
 	user := &generated.User{ID: "u1", Email: "u@example.com", DisplayName: "u"}
 	org := &generated.Organization{ID: "org", Name: "org"}
 	pat := &generated.PersonalAccessToken{
-		ID:      "p1",
-		OwnerID: user.ID,
-		Token:   "tolp_token",
+		ID:       "p1",
+		OwnerID:  user.ID,
+		Token:    "tolp_token",
+		IsActive: true,
 		Edges: generated.PersonalAccessTokenEdges{
 			Owner:         user,
 			Organizations: []*generated.Organization{org},
@@ -117,9 +119,10 @@ func TestPATTokenSSOExemptOwner(t *testing.T) {
 	user := &generated.User{ID: "u1", Email: "u@example.com", DisplayName: "u"}
 	org := &generated.Organization{ID: "org", Name: "org"}
 	pat := &generated.PersonalAccessToken{
-		ID:      "p1",
-		OwnerID: user.ID,
-		Token:   "tolp_token",
+		ID:       "p1",
+		OwnerID:  user.ID,
+		Token:    "tolp_token",
+		IsActive: true,
 		Edges: generated.PersonalAccessTokenEdges{
 			Owner:         user,
 			Organizations: []*generated.Organization{org},

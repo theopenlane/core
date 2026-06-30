@@ -275,7 +275,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 		}
 
-		sessions.RemoveCookies(ctx.Response().Writer, sessions.CookieConfig{Path: "/"}, "token_id", "token_type")
+		h.clearAuthFlowCookies(ctx.Response().Writer, "token_id", "token_type")
 	}
 
 	ssoTestCookie, err := sessions.GetCookie(ctx.Request(), authenticatedUserSSOCookieName)
@@ -294,7 +294,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 
 	// if a return URL was set, redirect there and clean up cookies
 	if ret, err := sessions.GetCookie(ctx.Request(), "return"); err == nil && ret.Value != "" {
-		sessions.RemoveCookies(ctx.Response().Writer, sessions.CookieConfig{Path: "/"}, "return", "organization_id")
+		h.clearAuthFlowCookies(ctx.Response().Writer, "return", "organization_id")
 
 		req, _ := httpsling.Request(httpsling.Get(ret.Value), httpsling.QueryParam("email", tokens.IDTokenClaims.Email))
 
@@ -302,7 +302,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 	}
 
 	// clean up the org ID cookie after successful login
-	sessions.RemoveCookie(ctx.Response().Writer, "organization_id", sessions.CookieConfig{Path: "/"})
+	h.clearAuthFlowCookies(ctx.Response().Writer, "organization_id")
 
 	metrics.RecordLogin(true)
 

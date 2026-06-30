@@ -376,6 +376,12 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
 		return nil, "", rout.ErrExpiredCredentials
 	}
 
+	// reject revoked tokens; expiry alone is insufficient since revocation marks the token
+	// inactive without necessarily backdating its expiration
+	if !pat.IsActive || pat.RevokedAt != nil {
+		return nil, "", ErrTokenRevoked
+	}
+
 	// gather the authorized organization IDs
 	var orgIDs []string
 
@@ -449,6 +455,12 @@ func isValidAPIToken(ctx context.Context, dbClient *ent.Client, token string) (*
 	// check if the token has expired
 	if t.ExpiresAt != nil && t.ExpiresAt.Before(time.Now()) {
 		return nil, "", rout.ErrExpiredCredentials
+	}
+
+	// reject revoked tokens; expiry alone is insufficient since revocation marks the token
+	// inactive without necessarily backdating its expiration
+	if !t.IsActive || t.RevokedAt != nil {
+		return nil, "", ErrTokenRevoked
 	}
 
 	enforced, err := isSSOEnforcedFunc(ctx, dbClient, t.OwnerID)
