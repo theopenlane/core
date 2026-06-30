@@ -52,6 +52,7 @@ mutation CreateBulkControl($input: [CreateControlInput!]) {
       trustCenterVisibility
       updatedAt
       updatedBy
+      updatedByImpersonator
       workflowEligibleMarker
     }
   }
@@ -111,6 +112,7 @@ mutation CreateBulkCSVControl($input: Upload!) {
       trustCenterVisibility
       updatedAt
       updatedBy
+      updatedByImpersonator
       workflowEligibleMarker
     }
   }
@@ -170,6 +172,7 @@ mutation CreateControl($input: CreateControlInput!) {
       trustCenterVisibility
       updatedAt
       updatedBy
+      updatedByImpersonator
       workflowEligibleMarker
       controlOwner {
         id
@@ -384,6 +387,7 @@ query GetControlByID($controlId: ID!) {
     trustCenterVisibility
     updatedAt
     updatedBy
+    updatedByImpersonator
     workflowEligibleMarker
     relatedControls {
       id
@@ -523,6 +527,7 @@ query GetControls($first: Int, $last: Int, $after: Cursor, $before: Cursor, $ord
         trustCenterVisibility
         updatedAt
         updatedBy
+        updatedByImpersonator
         workflowEligibleMarker
         controlOwner {
           id
@@ -679,6 +684,7 @@ mutation UpdateBulkControl($ids: [ID!]!, $input: UpdateControlInput!) {
       trustCenterVisibility
       updatedAt
       updatedBy
+      updatedByImpersonator
       workflowEligibleMarker
       controlOwner {
         id
@@ -781,6 +787,7 @@ mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
       trustCenterVisibility
       updatedAt
       updatedBy
+      updatedByImpersonator
       workflowEligibleMarker
       controlOwner {
         id

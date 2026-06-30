@@ -111,6 +111,8 @@ func TestMutationTransferOrganizationOwnership(t *testing.T) {
 					Only(allowCtx)
 				assert.NilError(t, err)
 				assert.Check(t, is.Equal(enums.RoleOwner, newOwnerMembership.Role))
+				// verify new owner is sso exempt
+				assert.Check(t, newOwnerMembership.SSOExempt)
 
 				// Verify old owner has SUPER_ADMIN role
 				oldOwnerMembership, err := suite.client.db.OrgMembership.Query().
@@ -121,6 +123,8 @@ func TestMutationTransferOrganizationOwnership(t *testing.T) {
 					Only(allowCtx)
 				assert.NilError(t, err)
 				assert.Check(t, is.Equal(enums.RoleSuperAdmin, oldOwnerMembership.Role))
+				// verify old owner is no longer sso exempt
+				assert.Check(t, !oldOwnerMembership.SSOExempt)
 
 				// Transfer back to original owner for other tests
 				// Use auth context with proper org ID

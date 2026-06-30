@@ -253,9 +253,15 @@ func HookInviteAccepted() ent.Hook {
 
 			// grant the SSO exemption requested by the invitation, attributing it to the inviter
 			// rather than the accepting user
-			if ssoExempt {
+			if ssoExempt || ownershipTransfer {
+				reason := "granted via invitation"
+
+				if ownershipTransfer {
+					reason = "organization owner"
+				}
+
 				memberCreate.SetSSOExempt(true).
-					SetSSOExemptReason("granted via invitation").
+					SetSSOExemptReason(reason).
 					SetSSOExemptGrantedBy(inviteResp.RequestorID).
 					SetSSOExemptGrantedAt(models.DateTime(time.Now()))
 			}
@@ -283,10 +289,16 @@ func HookInviteAccepted() ent.Hook {
 				}
 
 				for _, currentOwner := range currentOwners {
-					superAdminRole := enums.RoleSuperAdmin
-					if err := m.Client().OrgMembership.UpdateOneID(currentOwner.ID).
-						SetRole(superAdminRole).
-						Exec(allowCtx); err != nil {
+					updateOldOwner := m.Client().OrgMembership.UpdateOneID(currentOwner.ID).
+						SetRole(enums.RoleSuperAdmin)
+
+					// Unless explicitly set on the invite, mark the old owner as not sso exempt
+					if !ssoExempt {
+						updateOldOwner.SetSSOExempt(false).
+							ClearSSOExemptReason()
+					}
+
+					if err := updateOldOwner.Exec(allowCtx); err != nil {
 						logx.FromContext(ctx).Error().Err(err).
 							Str("user_id", currentOwner.UserID).
 							Msg("unable to set current owner to super admin")
@@ -517,7 +529,7 @@ func checkAllowedEmailDomain(email string, orgSetting *generated.OrganizationSet
 	// safety check so we don't panic with an invalid email on user creation before
 	// validation
 	emailParts := strings.SplitAfter(email, "@")
-	if len(emailParts) != 2 { //nolint:mnd
+	if len(emailParts) != 2 { // nolint:mnd
 		return ErrEmailDomainNotAllowed
 	}
 

@@ -129,17 +129,15 @@ func HookOrgMembers() ent.Hook {
 func HookUpdateManagedGroups() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.OrgMembershipFunc(func(ctx context.Context, m *generated.OrgMembershipMutation) (generated.Value, error) {
-			if !isDeleteOp(ctx, m) {
-				// update the managed group members when members are added
-				// before the mutation has been executed
-				if err := updateManagedGroupMembers(ctx, m); err != nil {
-					return nil, err
-				}
+			// update the managed group members when members are added
+			// before the mutation has been executed
+			if err := updateManagedGroupMembers(ctx, m); err != nil {
+				return nil, err
 			}
 
 			return next.Mutate(ctx, m)
 		})
-	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne) // handle soft deletes as well as hard deletes
+	}, ent.OpUpdate|ent.OpUpdateOne)
 }
 
 // HookBlockOwnerRoleChange blocks direct owner role changes and enforces it goes through the transfer route
@@ -223,7 +221,7 @@ func HookOrgMembersDelete() ent.Hook {
 			// deleteOrganization will be handled by the organization hook
 			rootFieldCtx := graphql.GetRootFieldContext(ctx)
 			if rootFieldCtx == nil || rootFieldCtx.Object != "deleteOrgMembership" {
-				logx.FromContext(ctx).Info().Msg("skipping org membership delete hook")
+				logx.FromContext(ctx).Debug().Msg("skipping org membership delete hook")
 
 				return next.Mutate(ctx, m)
 			}

@@ -1683,6 +1683,29 @@
         },
         "type": "object"
       },
+      "SSOLoginReply": {
+        "properties": {
+          "error": {
+            "description": "The error message if the request was unsuccessful",
+            "type": "string"
+          },
+          "error_code": {
+            "description": "The error code if the request was unsuccessful",
+            "type": "string"
+          },
+          "redirect_uri": {
+            "type": "string"
+          },
+          "success": {
+            "description": "Whether or not the request was successful or not",
+            "type": "boolean"
+          },
+          "unverified": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
       "SSOStatusReply": {
         "properties": {
           "discovery_url": {
@@ -6006,6 +6029,57 @@
         "summary": "Login",
         "tags": [
           "authentication"
+        ]
+      }
+    },
+    "/v1/orgs/{slug_name}/sso": {
+      "get": {
+        "description": "Initiate an organization's SSO flow from its shareable slug URL",
+        "operationId": "SSOInitiate",
+        "parameters": [
+          {
+            "description": "the organization slug",
+            "example": "acme",
+            "in": "path",
+            "name": "slug_name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": {
+                      "success": false
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/SSOLoginReply"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [],
+        "summary": "SSOInitiate",
+        "tags": [
+          "sso"
         ]
       }
     },
