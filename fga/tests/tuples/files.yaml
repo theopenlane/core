@@ -30,11 +30,11 @@
   relation: auditor
   object: organization:auditor-file-org
 - user: organization:auditor-file-org
-  relation: parent_context
-  object: file:file-org-context
-- user: organization:auditor-file-org
   relation: parent
   object: file:file-org-avatar
+- user: organization:auditor-file-org
+  relation: parent_context
+  object: file:file-org-scoped
 
 #setup organization with empty domain condition
 - user: organization:contact-org#member
