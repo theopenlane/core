@@ -1154,11 +1154,11 @@ data:
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.organizationdelete }}
       organizationdelete:
-        {{- if .Values.openlane.coreConfiguration.integrations.organizationdelete.enabled }}
-        enabled: {{ .Values.openlane.coreConfiguration.integrations.organizationdelete.enabled }}
-        {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.organizationdelete.maxdeletesperrun }}
         maxdeletesperrun: {{ .Values.openlane.coreConfiguration.integrations.organizationdelete.maxdeletesperrun }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.organizationdelete.enabled }}
+        enabled: {{ .Values.openlane.coreConfiguration.integrations.organizationdelete.enabled }}
         {{- end }}
       {{- end }}
     {{- end }}
