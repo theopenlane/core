@@ -445,7 +445,7 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 					"trust_center_id": trustCenter.ID,
 				},
 			},
-			errorMsg: "NDA PDF hash does not match the template",
+			errorMsg: "NDA PDF hash does not match template",
 		},
 		{
 			name: "happy path",
