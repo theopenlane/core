@@ -78,28 +78,6 @@ func HookOrgMembers() ent.Hook {
 				return nil, ErrPersonalOrgsNoMembers
 			}
 
-			// allow the request, which is for a user other than the authenticated user
-			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-			// ensure user email can be added to the org
-			user, err := m.Client().User.Get(allowCtx, userID)
-			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("failed to get user")
-
-				if generated.IsNotFound(err) {
-					// use a different error message for user not found
-					// so our error parsing can differentiate between the two
-					return nil, ErrUserNotFound
-				}
-
-				return nil, err
-			}
-
-			if err := checkAllowedEmailDomain(user.Email, org.Edges.Setting); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("email", user.Email).Msg("error adding user to organization")
-				return nil, err
-			}
-
 			retValue, err := next.Mutate(ctx, m)
 			if err != nil {
 				return nil, err

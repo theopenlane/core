@@ -63,7 +63,7 @@ type OrganizationSettingHistory struct {
 	OrganizationID string `json:"organization_id,omitempty"`
 	// should we send email notifications related to billing
 	BillingNotificationsEnabled bool `json:"billing_notifications_enabled,omitempty"`
-	// domains allowed to access the organization, if empty all domains are allowed
+	// domains allowed to access the organization via autojoin
 	AllowedEmailDomains []string `json:"allowed_email_domains,omitempty"`
 	// allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
 	AllowMatchingDomainsAutojoin bool `json:"allow_matching_domains_autojoin,omitempty"`

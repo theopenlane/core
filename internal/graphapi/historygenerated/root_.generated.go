@@ -44205,7 +44205,7 @@ type OrganizationSettingHistory implements Node {
   """
   billingNotificationsEnabled: Boolean!
   """
-  domains allowed to access the organization, if empty all domains are allowed
+  domains allowed to access the organization via autojoin
   """
   allowedEmailDomains: [String!]
   """

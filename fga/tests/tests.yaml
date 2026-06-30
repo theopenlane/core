@@ -8,8 +8,6 @@ tests:
     check:
       - user: user:ulid-of-owner
         object: organization:openlane
-        context:
-          email_domain: "example.com"
         assertions:
           member: true
           admin: false
@@ -48,8 +46,6 @@ tests:
           can_create_identity_holder: true
       - user: user:ulid-super-admin
         object: organization:openlane
-        context:
-          email_domain: "example.com"
         assertions:
           member:
           super_admin: true
@@ -91,8 +87,6 @@ tests:
           can_create_identity_holder: true
       - user: user:ulid-of-member
         object: organization:openlane
-        context:
-          email_domain: "example.com"
         assertions:
           member: true
           admin: false
@@ -206,8 +200,6 @@ tests:
           can_create_identity_holder: false
       - user: user:ulid-of-admin
         object: organization:openlane # parent org
-        context:
-          email_domain: "example.com"
         assertions:
           member: true
           admin: true
@@ -245,8 +237,6 @@ tests:
           can_create_identity_holder: true
       - user: user:ulid-of-audit-log-viewer
         object: organization:openlane # parent org
-        context:
-          email_domain: "example.com"
         assertions:
           member: true
           admin: false
@@ -259,8 +249,6 @@ tests:
           can_invite_admins: false
       - user: user:ulid-of-owner
         object: organization:foo #child org
-        context:
-          email_domain: "example.com"
         assertions:
           member: true
           admin: false
@@ -297,8 +285,6 @@ tests:
           can_create_identity_holder: true
       - user: user:ulid-of-member
         object: organization:foo # child org
-        context:
-          email_domain: "example.com"
         assertions:
           member: true
           admin: false
@@ -311,8 +297,6 @@ tests:
           can_invite_admins: false
       - user: user:ulid-of-admin
         object: organization:foo # child org
-        context:
-          email_domain: "example.com"
         assertions:
           member: true
           admin: true
@@ -351,24 +335,8 @@ tests:
           audit_log_viewer: false
           can_invite_members: false
           can_invite_admins: false
-      - user: user:ulid-of-member
-        object: organization:restricted
-        context:
-          email_domain: "example.com"
-        assertions:
-          member: true # they are a member of the org, but have no other permissions
-          admin: false
-          owner: false
-          can_delete: false
-          can_edit: false
-          can_view: false
-          audit_log_viewer: false
-          can_invite_members: false
-          can_invite_admins: false
       - user: user:ulid-auditor
         object: organization:openlane
-        context:
-          email_domain: "example.com"
         assertions:
           member: false
           admin: false
@@ -410,8 +378,6 @@ tests:
           can_create_asset: false
       - user: user:ulid-risk-manager
         object: organization:openlane
-        context:
-          email_domain: "example.com"
         assertions:
           member: true
           admin: false
@@ -453,8 +419,6 @@ tests:
           can_create_asset: false
       - user: user:ulid-policy-manager
         object: organization:openlane
-        context:
-          email_domain: "example.com"
         assertions:
           member: true
           admin: false
@@ -496,8 +460,6 @@ tests:
           can_create_asset: false
       - user: user:ulid-registry-manager
         object: organization:openlane
-        context:
-          email_domain: "example.com"
         assertions:
           member: true
           admin: false
@@ -539,8 +501,6 @@ tests:
           can_create_asset: true
       - user: user:ulid-campaign-manager
         object: organization:openlane
-        context:
-          email_domain: "example.com"
         assertions:
           member: true
           admin: false
@@ -585,8 +545,6 @@ tests:
           can_create_assessment: true
       - user: user:ulid-compliance-manager
         object: organization:openlane
-        context:
-          email_domain: "example.com"
         assertions:
           member: true
           admin: false
@@ -628,8 +586,6 @@ tests:
           can_create_asset: true
       - user: user:ulid-workflow-manager
         object: organization:openlane
-        context:
-          email_domain: "example.com"
         assertions:
           member: true
           admin: false
@@ -689,7 +645,6 @@ tests:
           member:
             - organization:foo
             - organization:openlane
-            - organization:restricted
       - user: service:ulid-of-service-editor
         type: organization
         assertions:
@@ -839,24 +794,18 @@ tests:
           can_delete: true
       - user: user:ulid-org-member-viewer # org member should be able to view user-owned file
         object: file:file-user-owned
-        context:
-          email_domain: "theopenlane.io"
         assertions:
           can_view: true
           can_edit: false
           can_delete: false
       - user: user:ulid-of-member # existing org member should be able to view user-owned file
         object: file:file-user-owned
-        context:
-          email_domain: "theopenlane.io"
         assertions:
           can_view: true
           can_edit: false
           can_delete: false
       - user: user:ulid-other-org-user # user from a different org should NOT be able to view file
         object: file:file-user-owned
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: false
           can_edit: false
@@ -873,8 +822,6 @@ tests:
             - file:file-user-owned
       - user: user:ulid-org-member-viewer
         type: file
-        context:
-          email_domain: "theopenlane.io"
         assertions:
           can_view:
             - file:file-user-owned
@@ -882,8 +829,6 @@ tests:
           can_delete:
       - user: user:ulid-of-member
         type: file
-        context:
-          email_domain: "theopenlane.io"
         assertions:
           can_view:
             - file:file-user-owned
@@ -891,8 +836,6 @@ tests:
           can_delete:
       - user: user:ulid-other-org-user
         type: file
-        context:
-          email_domain: "example.com"
         assertions:
           can_view:
           can_edit:
@@ -981,8 +924,6 @@ tests:
           can_delete: false
       - user: user:ulid-of-member-3 # member has access task 2 via control association
         object: task:task-2
-        context:
-          email_domain: example.com
         assertions:
           can_view: true
           can_edit: false
@@ -1099,8 +1040,6 @@ tests:
           can_delete: false
       - user: user:ulid-of-member
         object: internal_policy:internal_policy-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -1164,8 +1103,6 @@ tests:
           audit_log_viewer: true
       - user: user:ulid-of-member # org member can view
         object: asset:asset-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -1207,8 +1144,6 @@ tests:
           audit_log_viewer: true
       - user: user:ulid-of-member # org member can view
         object: entity:entity-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -1297,8 +1232,6 @@ tests:
     check:
       - user: user:ulid-of-admin
         object: scan:scan-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: true
@@ -1316,8 +1249,6 @@ tests:
           audit_log_viewer: true
       - user: user:ulid-of-member # org member can view
         object: platform:platform-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -1347,8 +1278,6 @@ tests:
           audit_log_viewer: true
       - user: user:ulid-of-member # org member can view
         object: identity_holder:identity_holder-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -1401,8 +1330,6 @@ tests:
           can_delete: false
       - user: user:ulid-member # has access to the evidence via the control that is linked to the evidence
         object: evidence:evidence-2
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -1447,24 +1374,18 @@ tests:
     check:
       - user: user:ulid-of-member # member of the program that has access to the control
         object: control:control-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
           can_delete: false
       - user: user:ulid-of-another-member # no access to the control
         object: control:control-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: false
           can_edit: false
           can_delete: false
       - user: user:ulid-of-member-2 # member of the parent organization that has access to the control
         object: control:control-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -1495,16 +1416,12 @@ tests:
           can_delete: true
       - user: user:ulid-of-member # member of the program that has access to the control
         object: subcontrol:subcontrol-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
           can_delete: false
       - user: user:ulid-of-member-3 # access to the control from the parent control
         object: subcontrol:subcontrol-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -1529,24 +1446,18 @@ tests:
           can_delete: true
       - user: user:ulid-of-member # member of the program that has access to the control objective via the control
         object: control_objective:control_objective-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
           can_delete: false
       - user: user:ulid-of-member # member of the program that has access to the control implementation via the control
         object: control_implementation:control_implementation-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
           can_delete: false
       - user: user:ulid-of-member-3 # access to the control objective from the parent control
         object: control_objective:control_objective-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -1601,8 +1512,6 @@ tests:
           can_delete: true
       - user: user:ulid-of-member # member of the program that has access to the control objective via the subcontrol
         object: control_objective:control_objective-3
-        context:
-          email_domain: example.com
         assertions:
           can_view: true
           can_edit: false
@@ -1669,8 +1578,6 @@ tests:
           can_delete: false
       - user: user:ulid-of-member
         object: mapped_control:mapped_control-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -1747,8 +1654,6 @@ tests:
           can_delete: false
       - user: user:ulid-of-member
         object: standard:standard-org-custom
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -1834,8 +1739,6 @@ tests:
     list_objects:
       - user: user:ulid-response-owner
         type: assessment_response
-        context:
-          email_domain: "example.com"
         assertions:
           can_view:
             - assessment_response:response-1
@@ -1860,40 +1763,30 @@ tests:
       # campaign with organization parent - org member has no access unless given explicitly
       - user: user:ulid-of-member
         object: campaign:campaign-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: false
           can_edit: false
           can_delete: false
       - user: user:ulid-of-member # group access given, user has full edit access
         object: campaign:campaign-3
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: true
           can_delete: true
       - user: user:ulid-of-another-member # campaign manager has access to all campaigns in the org
         object: campaign:campaign-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: true
           can_delete: true
       - user: user:ulid-of-another-member # campaign manager has access to all campaigns in the org
         object: campaign:campaign-2
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: true
           can_delete: true
       - user: user:ulid-of-another-member # campaign manager has access to all campaigns in the org
         object: campaign:campaign-3
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: true
@@ -2038,8 +1931,6 @@ tests:
           audit_log_viewer: true
       - user: user:ulid-of-member # org member can view cannot view by default
         object: workflow_definition:workflow_definition-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: false
           can_edit: false
@@ -2066,16 +1957,12 @@ tests:
           audit_log_viewer: true
       - user: user:ulid-of-member # org member can view via control view access
         object: workflow_instance:workflow_instance-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
           can_delete: false
       - user: user:ulid-of-member # org member cannot view because there is no parent access in this case
         object: workflow_instance:workflow_instance-2
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: false
           can_edit: false
@@ -2102,8 +1989,6 @@ tests:
           audit_log_viewer: true
       - user: user:ulid-of-member # org member can view via workflow_instance -> control access view
         object: workflow_assignment:workflow_assignment-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -2130,8 +2015,6 @@ tests:
           audit_log_viewer: true
       - user: user:ulid-of-member # org member can view via workflow_instance -> control access view
         object: workflow_object_ref:workflow_object_ref-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -2158,8 +2041,6 @@ tests:
           audit_log_viewer: true
       - user: user:ulid-of-member # org member can view via workflow_instance -> control access view
         object: workflow_assignment_target:workflow_assignment_target-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -2186,8 +2067,6 @@ tests:
           audit_log_viewer: true
       - user: user:ulid-of-member # org member can view via workflow_instance -> control access view
         object: workflow_event:workflow_event-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -2214,8 +2093,6 @@ tests:
           audit_log_viewer: true
       - user: user:ulid-of-member # org member can view
         object: workflow_proposal:workflow_proposal-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -2253,8 +2130,6 @@ tests:
             - workflow_definition:workflow_definition-2
       - user: user:ulid-of-member
         type: workflow_definition
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: [] # org member cannot view workflow definitions by default
           can_edit: [] # no edit access to any workflow definitions
@@ -2269,8 +2144,6 @@ tests:
           can_delete: [] # system-driven, only services can delete
       - user: user:ulid-of-member
         type: workflow_instance
-        context:
-          email_domain: "example.com"
         assertions:
           can_view:
             - workflow_instance:workflow_instance-1 # can only see via control, cannot access the other one that doesn't have a parent control
@@ -2294,8 +2167,6 @@ tests:
           can_delete: [] # system-driven, only services can delete
       - user: user:ulid-of-member
         type: workflow_object_ref
-        context:
-          email_domain: "example.com"
         assertions:
           can_view:
             - workflow_object_ref:workflow_object_ref-1 # can only see via control, cannot access the other one that doesn't have a parent control
@@ -2311,8 +2182,6 @@ tests:
           can_delete: [] # system-driven, only services can delete
       - user: user:ulid-of-member
         type: workflow_assignment_target
-        context:
-          email_domain: "example.com"
         assertions:
           can_view:
             - workflow_assignment_target:workflow_assignment_target-1 # can only see via control, cannot access the other one that doesn't have a parent control
@@ -2328,8 +2197,6 @@ tests:
           can_delete: [] # system-driven, only services can delete
       - user: user:ulid-of-member
         type: workflow_event
-        context:
-          email_domain: "example.com"
         assertions:
           can_view:
             - workflow_event:workflow_event-1 # can only see via control, cannot access the other one that doesn't have a parent control
@@ -2379,24 +2246,18 @@ tests:
           can_delete: true
       - user: user:tc-org-admin-tc-2
         object: trust_center:tc-2
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: true
           can_delete: false
       - user: user:tc-viewer-tc-2
         object: trust_center:tc-2
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
           can_delete: false
       - user: user:tc-manager-tc-2
         object: trust_center:tc-2
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: true
@@ -2485,8 +2346,6 @@ tests:
           can_delete: true
       - user: user:tc-viewer-2
         object: trust_center_doc:tcdoc-2
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -2551,8 +2410,6 @@ tests:
           audit_log_viewer: true
       - user: user:ulid-of-admin # org admin has full access
         object: risk:risk-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: true
@@ -2560,8 +2417,6 @@ tests:
           audit_log_viewer: true
       - user: user:ulid-of-member # org member has no access by default
         object: risk:risk-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: false
           can_edit: false
@@ -2569,8 +2424,6 @@ tests:
           audit_log_viewer: false
       - user: user:ulid-of-owner-foobar # user of another org has no access
         object: risk:risk-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: false
           can_edit: false
@@ -2578,8 +2431,6 @@ tests:
           audit_log_viewer: false
       - user: user:ulid-member-user-1 # user should be able to view program
         object: program:program-with-risk-1
-        context:
-          email_domain: "example.com"
         assertions:
           member: false
           admin: true
@@ -2589,8 +2440,6 @@ tests:
           audit_log_viewer: true
       - user: user:ulid-member-user-1 # program admin access gives admin access to risk
         object: risk:risk-1
-        context:
-          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: true

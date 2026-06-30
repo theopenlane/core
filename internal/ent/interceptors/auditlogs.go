@@ -31,7 +31,6 @@ func HistoryAccess(relation string, orgOwned, userOwed bool, objectOwner string)
 			SubjectID:   caller.SubjectID,
 			SubjectType: caller.SubjectType(),
 			ObjectType:  generated.TypeOrganization,
-			Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 		}
 
 		var allowedOrgs []string

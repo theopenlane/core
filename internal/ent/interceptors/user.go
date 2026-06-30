@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
 // TraverseUser returns an ent interceptor for user that filters users based on the context of the query
@@ -133,9 +132,8 @@ func filterUsingFGA(ctx context.Context, q *generated.UserQuery) error {
 
 	for _, orgID := range orgIDs {
 		req := fgax.ListRequest{
-			ObjectID:         orgID,
-			ObjectType:       generated.TypeOrganization,
-			ConditionContext: utils.NewOrganizationContextKey(""), // use an empty domain context on list
+			ObjectID:   orgID,
+			ObjectType: generated.TypeOrganization,
 		}
 
 		listUserResp, err := q.Authz.ListUserRequest(ctx, req)
@@ -150,10 +148,9 @@ func filterUsingFGA(ctx context.Context, q *generated.UserQuery) error {
 		// auditors do not have can_view on the org, so they must be listed separately
 		// auditor inherits from parent via "auditor from parent" in the FGA model
 		auditorReq := fgax.ListRequest{
-			ObjectID:         orgID,
-			ObjectType:       generated.TypeOrganization,
-			Relation:         fgax.AuditorRelation,
-			ConditionContext: utils.NewOrganizationContextKey(""),
+			ObjectID:   orgID,
+			ObjectType: generated.TypeOrganization,
+			Relation:   fgax.AuditorRelation,
 		}
 
 		listAuditorResp, err := q.Authz.ListUserRequest(ctx, auditorReq)

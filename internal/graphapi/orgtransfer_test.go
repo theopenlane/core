@@ -80,7 +80,7 @@ func TestMutationTransferOrganizationOwnership(t *testing.T) {
 			newOwnerEmail: "invalid-email",
 			client:        suite.client.api,
 			ctx:           sharedTestUser1.UserCtx,
-			expectedErr:   "email domain not allowed in organization",
+			expectedErr:   invalidInputErrorMsg,
 		},
 	}
 

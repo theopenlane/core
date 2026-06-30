@@ -110,7 +110,6 @@ func checkTrustCenterAccess(ctx context.Context, relation string, trustCenterID 
 		Relation:    relation,
 		ObjectType:  fgax.Kind(strcase.SnakeCase(generated.TypeTrustCenter)),
 		ObjectID:    trustCenterID,
-		Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 	}
 
 	access, err := utils.AuthzClientFromContext(ctx).CheckAccess(ctx, ac)

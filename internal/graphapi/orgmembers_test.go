@@ -279,7 +279,7 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 	user3 := (&UserBuilder{client: suite.client, Email: "mitb2@anderson.io", FirstName: "FirstName!@"}).MustNew(userCtx, t)
 
 	userWithValidDomain := (&UserBuilder{client: suite.client, Email: "matt@anderson.net"}).MustNew(userCtx, t)
-	userWithInvalidDomain := (&UserBuilder{client: suite.client, Email: "mitb@example.com"}).MustNew(userCtx, t)
+	userWithAnotherDomain := (&UserBuilder{client: suite.client, Email: "mitb@example.com"}).MustNew(userCtx, t)
 
 	orgWithRestrictions := (&OrganizationBuilder{client: suite.client, AllowedDomains: []string{"anderson.io", "anderson.net"}}).MustNew(localTestOrg.owner.UserCtx, t)
 	otherOrgCtx := auth.NewTestContextWithOrgID(localTestOrg.owner.ID, orgWithRestrictions.ID)
@@ -322,12 +322,11 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 			role:   enums.RoleMember,
 		},
 		{
-			name:   "add member with invalid domain",
+			name:   "add member with another domain, allowed because allowed domains is only enforce for auto join",
 			orgID:  orgWithRestrictions.ID,
-			userID: userWithInvalidDomain.ID,
+			userID: userWithAnotherDomain.ID,
 			ctx:    otherOrgCtx,
-			role:   enums.RoleMember,
-			errMsg: "email domain not allowed in organization",
+			role:   enums.RoleAuditor,
 		},
 		{
 			name:   "duplicate user, different role",
@@ -359,7 +358,7 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 			userID: ulids.New().String(),
 			role:   enums.RoleMember,
 			ctx:    userCtx,
-			errMsg: "user not found",
+			errMsg: "constraint failed",
 		},
 		{
 			name:   "no access",
@@ -654,79 +653,6 @@ func TestMutationBulkUpdateOrgMemberRole(t *testing.T) {
 
 	cleanupOrganizationDataWithContext(org.owner.UserCtx, t)
 }
-
-// func TestMutationBulkUpdateOrgMember(t *testing.T) {
-// 	t.Parallel()
-
-// 	org := suite.seedFreshOrgUsers(t)
-// 	allowCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
-
-// 	user1 := suite.userBuilder(context.Background(), t)
-// 	user2 := suite.userBuilder(context.Background(), t)
-
-// 	suite.addUserToOrganization(org.owner.UserCtx, t, &user1, enums.RoleMember, org.owner.OrganizationID)
-// 	suite.addUserToOrganization(org.owner.UserCtx, t, &user2, enums.RoleMember, org.owner.OrganizationID)
-
-// 	currentMembers, err := suite.client.db.OrgMembership.Query().
-// 		Where(
-// 			orgmembership.OrganizationID(org.owner.OrganizationID),
-// 			orgmembership.UserIDIn(user1.ID, user2.ID),
-// 		).
-// 		All(allowCtx)
-// 	assert.NilError(t, err)
-// 	assert.Check(t, is.Len(currentMembers, 2))
-
-// 	ids := make([]string, len(currentMembers))
-// 	for i, member := range currentMembers {
-// 		ids[i] = member.ID
-// 	}
-
-// 	adminRole := enums.RoleAdmin
-
-// 	input := testclient.UpdateOrgMembershipInput{
-// 		Role: &adminRole,
-// 	}
-
-// 	resp, err := suite.client.api.(org.admin.UserCtx, ids, input)
-// 	assert.NilError(t, err)
-// 	assert.Assert(t, resp != nil)
-// 	assert.Check(t, is.Len(resp.UpdateBulkOrgMembership.UpdatedIDs, len(ids)))
-// 	assert.Check(t, is.Len(resp.UpdateBulkOrgMembership.OrgMemberships, len(ids)))
-
-// 	updatedMembers, err := suite.client.db.OrgMembership.Query().
-// 		Where(orgmembership.IDIn(ids...)).
-// 		All(allowCtx)
-// 	assert.NilError(t, err)
-
-// 	for _, member := range updatedMembers {
-// 		assert.Check(t, is.Equal(enums.RoleAdmin, member.Role))
-// 	}
-
-// 	ownerMember, err := suite.client.db.OrgMembership.Query().
-// 		Where(
-// 			orgmembership.OrganizationID(org.owner.OrganizationID),
-// 			orgmembership.UserID(org.owner.ID),
-// 		).
-// 		Only(allowCtx)
-// 	assert.NilError(t, err)
-
-// 	memberRole := enums.RoleMember
-// 	input.Role = &memberRole
-
-// 	ownerResp, err := suite.client.api.UpdateBulkOrgMemberRoles(org.admin.UserCtx, []string{ownerMember.ID}, input)
-// 	assert.NilError(t, err)
-// 	assert.Assert(t, ownerResp != nil)
-// 	assert.Check(t, is.Len(ownerResp.UpdateBulkOrgMembership.UpdatedIDs, 0))
-// 	assert.Check(t, is.Len(ownerResp.UpdateBulkOrgMembership.OrgMemberships, 0))
-
-// 	ownerMember, err = suite.client.db.OrgMembership.Query().
-// 		Where(orgmembership.ID(ownerMember.ID)).
-// 		Only(allowCtx)
-// 	assert.NilError(t, err)
-// 	assert.Check(t, is.Equal(enums.RoleOwner, ownerMember.Role))
-
-// 	cleanupOrganizationDataWithContext(org.owner.UserCtx, t)
-// }
 
 func TestMutationDeleteOrgMembers(t *testing.T) {
 	t.Parallel()

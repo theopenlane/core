@@ -62,8 +62,6 @@ var (
 	ErrManagedGroup = errors.New("managed groups cannot be modified")
 	// ErrMaxAttemptsOrganization is returned when the max attempts have been reached to create an organization via onboarding
 	ErrMaxAttemptsOrganization = errors.New("too many attempts to create organization")
-	// ErrEmailDomainNotAllowed is returned when an email domain is not allowed to be used for an organization
-	ErrEmailDomainNotAllowed = errors.New("email domain not allowed in organization")
 	// ErrUserNotFound is returned when a user is not found in the system
 	ErrUserNotFound = errors.New("user not found")
 	// ErrCronRequired is returned when a user does not provide a cron expression

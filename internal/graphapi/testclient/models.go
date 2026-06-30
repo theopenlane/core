@@ -8783,7 +8783,7 @@ type CreateOrganizationSettingInput struct {
 	GeoLocation *enums.Region `json:"geoLocation,omitempty"`
 	// should we send email notifications related to billing
 	BillingNotificationsEnabled *bool `json:"billingNotificationsEnabled,omitempty"`
-	// domains allowed to access the organization, if empty all domains are allowed
+	// domains allowed to access the organization via autojoin
 	AllowedEmailDomains []string `json:"allowedEmailDomains,omitempty"`
 	// allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
 	AllowMatchingDomainsAutojoin *bool `json:"allowMatchingDomainsAutojoin,omitempty"`
@@ -27027,7 +27027,7 @@ type OrganizationSetting struct {
 	OrganizationID *string `json:"organizationID,omitempty"`
 	// should we send email notifications related to billing
 	BillingNotificationsEnabled bool `json:"billingNotificationsEnabled"`
-	// domains allowed to access the organization, if empty all domains are allowed
+	// domains allowed to access the organization via autojoin
 	AllowedEmailDomains []string `json:"allowedEmailDomains,omitempty"`
 	// allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
 	AllowMatchingDomainsAutojoin *bool `json:"allowMatchingDomainsAutojoin,omitempty"`
@@ -45356,7 +45356,7 @@ type UpdateOrganizationSettingInput struct {
 	ClearGeoLocation *bool         `json:"clearGeoLocation,omitempty"`
 	// should we send email notifications related to billing
 	BillingNotificationsEnabled *bool `json:"billingNotificationsEnabled,omitempty"`
-	// domains allowed to access the organization, if empty all domains are allowed
+	// domains allowed to access the organization via autojoin
 	AllowedEmailDomains       []string `json:"allowedEmailDomains,omitempty"`
 	AppendAllowedEmailDomains []string `json:"appendAllowedEmailDomains,omitempty"`
 	ClearAllowedEmailDomains  *bool    `json:"clearAllowedEmailDomains,omitempty"`

@@ -60,7 +60,6 @@ func checkCreateAccess(ctx context.Context, m generated.Mutation, serviceOnly bo
 		ObjectID:    caller.OrganizationID,
 		ObjectType:  generated.TypeOrganization,
 		Relation:    relation,
-		Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 	}
 
 	access, err := utils.AuthzClientFromContext(ctx).CheckAccess(ctx, ac)

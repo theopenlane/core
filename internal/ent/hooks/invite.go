@@ -2,8 +2,6 @@ package hooks
 
 import (
 	"context"
-	"slices"
-	"strings"
 	"time"
 
 	"entgo.io/ent"
@@ -383,11 +381,6 @@ func validateCanCreateInvite(ctx context.Context, m *generated.InviteMutation) e
 	// check if the the email can be invited to the organization
 	email, _ := m.Recipient()
 
-	if err := checkAllowedEmailDomain(email, org.Edges.Setting); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("email", email).Msg("error adding user to organization")
-		return err
-	}
-
 	// make sure the user is not already a member of the org
 	return checkUserAlreadyMember(ctx, m, email, orgID)
 }
@@ -513,30 +506,4 @@ func getInvite(ctx context.Context, m *generated.InviteMutation) (*generated.Inv
 	ownerID, _ := m.OwnerID()
 
 	return m.Client().Invite.Query().Where(invite.Recipient(rec)).Where(invite.OwnerID(ownerID)).Only(ctx)
-}
-
-// checkAllowedEmailDomain checks if the email domain is allowed for the organization
-func checkAllowedEmailDomain(email string, orgSetting *generated.OrganizationSetting) error {
-	if orgSetting == nil || email == "" {
-		return nil
-	}
-
-	// allow all domains if none are set
-	if orgSetting.AllowedEmailDomains == nil {
-		return nil
-	}
-
-	// safety check so we don't panic with an invalid email on user creation before
-	// validation
-	emailParts := strings.SplitAfter(email, "@")
-	if len(emailParts) != 2 { // nolint:mnd
-		return ErrEmailDomainNotAllowed
-	}
-
-	emailDomain := emailParts[1]
-	if slices.Contains(orgSetting.AllowedEmailDomains, emailDomain) {
-		return nil
-	}
-
-	return ErrEmailDomainNotAllowed
 }
