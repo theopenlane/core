@@ -41,6 +41,8 @@ type Config struct {
 	CatalogConfig catalog.Config
 	// PaymentReminder configures the payment reminder scheduled listener
 	PaymentReminder operations.PaymentReminderConfig
+	// OrganizationDelete configures the scheduled organization deletion listener
+	OrganizationDelete operations.OrganizationDeleteConfig
 	// DevMode is the server-level development flag; when true, integrations that
 	// support it use local file-based senders instead of calling provider APIs
 	DevMode bool
@@ -63,6 +65,8 @@ type Runtime struct {
 	defaultLookback time.Duration
 	// paymentReminderConfig holds the payment reminder scheduling parameters
 	paymentReminderConfig operations.PaymentReminderConfig
+	// organizationDeleteConfig holds the organization deletion scheduling parameters
+	organizationDeleteConfig operations.OrganizationDeleteConfig
 	// devMode indicates the server is running in development mode
 	devMode bool
 }
@@ -207,10 +211,11 @@ func New(config Config) (*Runtime, error) {
 
 	injector := do.New()
 	rt := &Runtime{
-		injector:              injector,
-		defaultLookback:       lookback,
-		paymentReminderConfig: config.PaymentReminder,
-		devMode:               config.DevMode,
+		injector:                 injector,
+		defaultLookback:          lookback,
+		paymentReminderConfig:    config.PaymentReminder,
+		organizationDeleteConfig: config.OrganizationDelete,
+		devMode:                  config.DevMode,
 	}
 
 	do.ProvideValue(injector, config.DB)
@@ -277,6 +282,11 @@ func New(config Config) (*Runtime, error) {
 		gala.WithMaxInterval(operations.PaymentReminderMaxInterval),
 	)
 
+	organizationDeleteSchedule := gala.NewSchedule(
+		gala.WithMinInterval(operations.OrganizationDeleteMinInterval),
+		gala.WithMaxInterval(operations.OrganizationDeleteMaxInterval),
+	)
+
 	if err := operations.RegisterRuntimeListeners(rt.Gala(), rt.Registry(), rt.HandleOperation, rt.HandleWebhookEvent); err != nil {
 		return nil, err
 	}
@@ -290,6 +300,10 @@ func New(config Config) (*Runtime, error) {
 	}
 
 	if err := operations.RegisterPaymentReminderListener(rt.Gala(), rt.HandlePaymentReminders, paymentReminderSchedule); err != nil {
+		return nil, err
+	}
+
+	if err := operations.RegisterOrganizationDeleteListener(rt.Gala(), rt.HandleOrganizationDeletes, organizationDeleteSchedule); err != nil {
 		return nil, err
 	}
 

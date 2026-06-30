@@ -1152,6 +1152,15 @@ data:
         dryrun: {{ .Values.openlane.coreConfiguration.integrations.paymentreminder.dryrun }}
         {{- end }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.organizationdelete }}
+      organizationdelete:
+        {{- if .Values.openlane.coreConfiguration.integrations.organizationdelete.enabled }}
+        enabled: {{ .Values.openlane.coreConfiguration.integrations.organizationdelete.enabled }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.organizationdelete.maxdeletesperrun }}
+        maxdeletesperrun: {{ .Values.openlane.coreConfiguration.integrations.organizationdelete.maxdeletesperrun }}
+        {{- end }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.workflows }}
     workflows:

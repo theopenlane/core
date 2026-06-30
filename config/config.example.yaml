@@ -197,6 +197,9 @@ integrations:
         dryrun: false
         enabled: false
         paymentmethodinterval: 0
+    organizationdelete:
+        enabled: false
+        maxdeletesperrun: 0
     slack:
         appid: ""
         clientid: ""
