@@ -785,6 +785,18 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
+      - user: user:ulid-auditor # organization auditor should be able to view organization avatar files
+        object: file:file-org-avatar
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-auditor # organization auditor should not view all organization-scoped files
+        object: file:file-org-scoped
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
       # test user-owned file access
       - user: user:ulid-file-owner # the file owner should have full access
         object: file:file-user-owned
