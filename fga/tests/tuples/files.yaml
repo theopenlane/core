@@ -26,6 +26,15 @@
 - user: contact:contact-1
   relation: parent
   object: file:file-3 # contact has access to file
+- user: user:ulid-auditor
+  relation: auditor
+  object: organization:auditor-file-org
+- user: organization:auditor-file-org
+  relation: parent_context
+  object: file:file-org-context
+- user: organization:auditor-file-org
+  relation: parent
+  object: file:file-org-avatar
 
 #setup organization with empty domain condition
 - user: organization:contact-org#member
