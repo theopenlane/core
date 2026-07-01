@@ -92,7 +92,7 @@ func TestSystemEmailSubjects(t *testing.T) {
 				Token:   "tok",
 				OrgName: "OrgY",
 			}),
-			contains: []string{"subscribed", "Acme"},
+			contains: []string{"subscription", "OrgY"},
 		},
 		{
 			name: "verify billing",

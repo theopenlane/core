@@ -3,7 +3,10 @@
 // (e.g. tokenized unsubscribe links) without an import cycle
 package trustcenterurl
 
-import "fmt"
+import (
+	"fmt"
+	"net/url"
+)
 
 // Config holds the trust center URL-building configuration, set once at server startup
 type Config struct {
@@ -17,8 +20,6 @@ type Config struct {
 	CacheRefreshScheme string
 }
 
-// unsubscribePath is the trust center page where subscribers manage unsubscribes
-const unsubscribePath = "/unsubscribe"
 
 var config Config
 
@@ -65,5 +66,17 @@ func UnsubscribeURL(customDomain, slug string) string {
 		return ""
 	}
 
-	return fmt.Sprintf("%s%s?token={{ .unsubscribeToken }}", base, unsubscribePath)
+	return fmt.Sprintf("%s/unsubscribe?token={{ .unsubscribeToken }}", base)
+}
+
+// UnsubscribeURLWithToken builds the unsubscribe link for a trust center with a concrete per-recipient
+// token. It is used by direct system sends that do not run template interpolation (unlike campaign
+// sends, which carry the {{ .unsubscribeToken }} placeholder). Returns empty when the URL cannot resolve
+func UnsubscribeURLWithToken(customDomain, slug, token string) string {
+	base := BuildURL(customDomain, slug)
+	if base == "" {
+		return ""
+	}
+
+	return fmt.Sprintf("%s/unsubscribe?token=%s", base, url.QueryEscape(token))
 }

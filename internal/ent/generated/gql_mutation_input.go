@@ -28216,6 +28216,7 @@ type CreateTrustCenterSettingInput struct {
 	CompanyDomain                         *string
 	SecurityContact                       *string
 	NdaApprovalRequired                   *bool
+	AllowSubscribers                      *bool
 	NotifySubscribersOnSubprocessorChange *bool
 	StatusPageURL                         *string
 	BlockedGroupIDs                       []string
@@ -28284,6 +28285,9 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.NdaApprovalRequired; v != nil {
 		m.SetNdaApprovalRequired(*v)
+	}
+	if v := i.AllowSubscribers; v != nil {
+		m.SetAllowSubscribers(*v)
 	}
 	if v := i.NotifySubscribersOnSubprocessorChange; v != nil {
 		m.SetNotifySubscribersOnSubprocessorChange(*v)
@@ -28355,6 +28359,8 @@ type UpdateTrustCenterSettingInput struct {
 	SecurityContact                            *string
 	ClearNdaApprovalRequired                   bool
 	NdaApprovalRequired                        *bool
+	ClearAllowSubscribers                      bool
+	AllowSubscribers                           *bool
 	ClearNotifySubscribersOnSubprocessorChange bool
 	NotifySubscribersOnSubprocessorChange      *bool
 	ClearStatusPageURL                         bool
@@ -28484,6 +28490,12 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.NdaApprovalRequired; v != nil {
 		m.SetNdaApprovalRequired(*v)
+	}
+	if i.ClearAllowSubscribers {
+		m.ClearAllowSubscribers()
+	}
+	if v := i.AllowSubscribers; v != nil {
+		m.SetAllowSubscribers(*v)
 	}
 	if i.ClearNotifySubscribersOnSubprocessorChange {
 		m.ClearNotifySubscribersOnSubprocessorChange()

@@ -28,7 +28,7 @@ func registerVerifySubscribeHandler(router *Router) error {
 func registerUnsubscribeHandler(router *Router) error {
 	config := Config{
 		Path:        "/unsubscribe",
-		Method:      http.MethodGet,
+		Method:      http.MethodPost,
 		Name:        "Unsubscribe",
 		Description: "Unsubscribe from communications",
 		Tags:        []string{"subscription"},

@@ -94,21 +94,23 @@ func (r *mutationResolver) PublishTrustCenterSetting(ctx context.Context) (*mode
 
 	// copy fields from preview to live
 	input := generated.UpdateTrustCenterSettingInput{
-		Title:                    &previewSetting.Title,
-		Overview:                 &previewSetting.Overview,
-		ThemeMode:                &previewSetting.ThemeMode,
-		PrimaryColor:             &previewSetting.PrimaryColor,
-		Font:                     &previewSetting.Font,
-		ForegroundColor:          &previewSetting.ForegroundColor,
-		BackgroundColor:          &previewSetting.BackgroundColor,
-		AccentColor:              &previewSetting.AccentColor,
-		SecondaryBackgroundColor: &previewSetting.SecondaryBackgroundColor,
-		SecondaryForegroundColor: &previewSetting.SecondaryForegroundColor,
-		LogoFileID:               previewSetting.LogoLocalFileID,
-		FaviconFileID:            previewSetting.FaviconLocalFileID,
-		HeroImageFileID:          previewSetting.HeroImageLocalFileID,
-		LogoRemoteURL:            previewSetting.LogoRemoteURL,
-		FaviconRemoteURL:         previewSetting.FaviconRemoteURL,
+		Title:                                 &previewSetting.Title,
+		Overview:                              &previewSetting.Overview,
+		ThemeMode:                             &previewSetting.ThemeMode,
+		PrimaryColor:                          &previewSetting.PrimaryColor,
+		Font:                                  &previewSetting.Font,
+		ForegroundColor:                       &previewSetting.ForegroundColor,
+		BackgroundColor:                       &previewSetting.BackgroundColor,
+		AccentColor:                           &previewSetting.AccentColor,
+		SecondaryBackgroundColor:              &previewSetting.SecondaryBackgroundColor,
+		SecondaryForegroundColor:              &previewSetting.SecondaryForegroundColor,
+		LogoFileID:                            previewSetting.LogoLocalFileID,
+		FaviconFileID:                         previewSetting.FaviconLocalFileID,
+		HeroImageFileID:                       previewSetting.HeroImageLocalFileID,
+		LogoRemoteURL:                         previewSetting.LogoRemoteURL,
+		FaviconRemoteURL:                      previewSetting.FaviconRemoteURL,
+		AllowSubscribers:                      &previewSetting.AllowSubscribers,
+		NotifySubscribersOnSubprocessorChange: &previewSetting.NotifySubscribersOnSubprocessorChange,
 	}
 
 	req := liveSetting.Update().SetInput(input)

@@ -52,12 +52,6 @@ func TestUserInput_ToRuntimeConfig(t *testing.T) {
 		FromEmail:      "from@example.com",
 		CompanyName:    "Acme Corp",
 		CompanyAddress: "123 Main St",
-		Corporation:    "Acme Inc",
-		SupportEmail:   "support@example.com",
-		LogoURL:        "https://example.com/logo.png",
-		RootURL:        "https://example.com",
-		ProductURL:     "https://app.example.com",
-		DocsURL:        "https://docs.example.com",
 	}
 
 	cfg := input.ToRuntimeConfig()
@@ -65,10 +59,4 @@ func TestUserInput_ToRuntimeConfig(t *testing.T) {
 	require.Equal(t, input.FromEmail, cfg.FromEmail)
 	assert.Equal(t, input.CompanyName, cfg.CompanyName)
 	assert.Equal(t, input.CompanyAddress, cfg.CompanyAddress)
-	assert.Equal(t, input.Corporation, cfg.Corporation)
-	assert.Equal(t, input.SupportEmail, cfg.SupportEmail)
-	assert.Equal(t, input.LogoURL, cfg.LogoURL)
-	assert.Equal(t, input.RootURL, cfg.RootURL)
-	assert.Equal(t, input.ProductURL, cfg.ProductURL)
-	assert.Equal(t, input.DocsURL, cfg.DocsURL)
 }

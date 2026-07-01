@@ -42,13 +42,12 @@ func (h *Handler) UnsubscribeHandler(ctx echo.Context, openapi *OpenAPIContext) 
 		return h.InternalServerError(ctx, ErrUnableToUnsubscribe, openapi)
 	}
 
-	// add org to the authenticated context so the update passes org-scoped checks
-	reqCtx = auth.WithCaller(ctxWithToken, &auth.Caller{
+	// scope the caller to the subscriber's owning org so the update passes the org-ownership pre-policy
+	// (DenyIfNotInOrganization); the verify token set above is preserved and authorizes the mutation
+	ctxWithToken = auth.WithCaller(ctxWithToken, &auth.Caller{
 		OrganizationID:  entSubscriber.OwnerID,
 		OrganizationIDs: []string{entSubscriber.OwnerID},
 	})
-
-	ctxWithToken = token.NewContextWithVerifyToken(reqCtx, in.Token)
 
 	if !entSubscriber.Unsubscribed {
 		if err := h.setSubscriberUnsubscribed(ctxWithToken, entSubscriber.ID); err != nil {

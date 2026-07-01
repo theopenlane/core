@@ -25023,6 +25023,10 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetNdaApprovalRequired(ndaApprovalRequired)
 	}
 
+	if allowSubscribers, exists := m.AllowSubscribers(); exists {
+		create = create.SetAllowSubscribers(allowSubscribers)
+	}
+
 	if notifySubscribersOnSubprocessorChange, exists := m.NotifySubscribersOnSubprocessorChange(); exists {
 		create = create.SetNotifySubscribersOnSubprocessorChange(notifySubscribersOnSubprocessorChange)
 	}
@@ -25250,6 +25254,12 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetNdaApprovalRequired(trustcentersetting.NdaApprovalRequired)
 		}
 
+		if allowSubscribers, exists := m.AllowSubscribers(); exists {
+			create = create.SetAllowSubscribers(allowSubscribers)
+		} else {
+			create = create.SetAllowSubscribers(trustcentersetting.AllowSubscribers)
+		}
+
 		if notifySubscribersOnSubprocessorChange, exists := m.NotifySubscribersOnSubprocessorChange(); exists {
 			create = create.SetNotifySubscribersOnSubprocessorChange(notifySubscribersOnSubprocessorChange)
 		} else {
@@ -25339,6 +25349,7 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetNillableCompanyDomain(trustcentersetting.CompanyDomain).
 			SetNillableSecurityContact(trustcentersetting.SecurityContact).
 			SetNdaApprovalRequired(trustcentersetting.NdaApprovalRequired).
+			SetAllowSubscribers(trustcentersetting.AllowSubscribers).
 			SetNotifySubscribersOnSubprocessorChange(trustcentersetting.NotifySubscribersOnSubprocessorChange).
 			SetNillableSubprocessorsNotifiedAt(trustcentersetting.SubprocessorsNotifiedAt).
 			SetNillableNdaApproverGroupID(trustcentersetting.NdaApproverGroupID).

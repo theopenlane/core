@@ -45,41 +45,37 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context, openapi *OpenAPICo
 		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 	}
 
-	// add org to the authenticated context
-	reqCtx = auth.WithCaller(ctxWithToken, &auth.Caller{
+	// scope the caller to the subscriber's owning org so the update passes the org-ownership pre-policy
+	// (DenyIfNotInOrganization); the verify token set above is preserved and authorizes the mutation
+	ctxWithToken = auth.WithCaller(ctxWithToken, &auth.Caller{
 		OrganizationID:  entSubscriber.OwnerID,
 		OrganizationIDs: []string{entSubscriber.OwnerID},
 	})
 
-	ctxWithToken = token.NewContextWithVerifyToken(reqCtx, in.Token)
-
-	if !entSubscriber.VerifiedEmail {
+	// confirm only a not-yet-verified, still-subscribed contact; an unsubscribed contact is never
+	// resurrected by replaying a verify link — re-subscription goes through the createSubscriber mutation
+	if !entSubscriber.VerifiedEmail && !entSubscriber.Unsubscribed {
 		if err := h.verifySubscriberToken(ctxWithToken, entSubscriber); err != nil {
-			if errors.Is(err, ErrExpiredToken) {
-				out := &models.VerifySubscribeReply{
-					Reply:   rout.Reply{Success: false},
-					Message: "The verification link has expired, a new one has been sent to your email.",
-				}
+			// an expired link (a fresh one was already sent) or a capped retry still lands the subscriber on
+			// the trust center; only a genuine failure is surfaced as an error
+			if !errors.Is(err, ErrExpiredToken) && !errors.Is(err, ErrMaxAttempts) {
+				logx.FromContext(reqCtx).Error().Err(err).Msg("error verifying subscriber token")
 
-				return h.Created(ctx, out)
+				return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 			}
-
-			logx.FromContext(reqCtx).Error().Err(err).Msg("error verifying subscriber token")
-
-			return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
-		}
-
-		input := generated.UpdateSubscriberInput{
-			Email: &entSubscriber.Email,
-		}
-
-		if err := h.updateSubscriberVerifiedEmail(ctxWithToken, entSubscriber.ID, input); err != nil {
+		} else if err := h.updateSubscriberVerifiedEmail(ctxWithToken, entSubscriber.ID, generated.UpdateSubscriberInput{Email: &entSubscriber.Email}); err != nil {
 			logx.FromContext(reqCtx).Error().Err(err).Msg("error updating subscriber")
 
 			return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 		}
 	}
 
+	// land the subscriber on the trust center they subscribed to
+	if tcURL := h.subscriberTrustCenterURL(ctxWithToken, entSubscriber); tcURL != "" {
+		return h.Redirect(ctx, tcURL, openapi)
+	}
+
+	// no trust center to redirect to (organization-level subscriber): reply inline
 	out := &models.VerifySubscribeReply{
 		Reply:   rout.Reply{Success: true},
 		Message: "Subscription confirmed, looking forward to sending you updates!",
@@ -104,47 +100,58 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 
 	// verify token is valid, otherwise reset and send new token
 	if err := t.Verify(entSubscriber.Token, *entSubscriber.Secret); err != nil {
-		// if token is expired, create new token and send email
-		if errors.Is(err, tokens.ErrTokenExpired) {
-			verify, err := tokens.NewVerificationToken(entSubscriber.Email)
-			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("error creating verification token")
+		// a non-expired verification failure (tampered/mismatched secret) is not recoverable by a resend;
+		// reject it rather than masquerading as an expired link that "sent a new email"
+		if !errors.Is(err, tokens.ErrTokenExpired) {
+			return ErrUnableToVerifyEmail
+		}
 
-				return err
-			}
+		// cap the auto-resend at the same attempt budget the subscribe flow enforces so repeated
+		// expired-link hits cannot send unbounded verification emails
+		if entSubscriber.SendAttempts >= maxEmailAttempts {
+			return ErrMaxAttempts
+		}
 
-			tokenValue, secret, err := verify.Sign()
-			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("error signing verification token")
+		// token is expired, create a new token and send email
+		verify, err := tokens.NewVerificationToken(entSubscriber.Email)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error creating verification token")
 
-				return err
-			}
+			return err
+		}
 
-			// update token settings in the database
-			if err := h.updateSubscriberVerificationToken(ctx, entSubscriber.ID, tokenValue, verify.ExpiresAt, secret); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("error updating subscriber verification token")
+		tokenValue, secret, err := verify.Sign()
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error signing verification token")
 
-				return err
-			}
+			return err
+		}
 
-			// set viewer context
-			ctxWithToken := token.NewContextWithSignUpToken(ctx, entSubscriber.Email)
+		// update token settings in the database
+		if err := h.updateSubscriberVerificationToken(ctx, entSubscriber.ID, tokenValue, verify.ExpiresAt, secret); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error updating subscriber verification token")
 
-			// resend email with new token to the subscriber
-			org, err := h.getOrgByID(ctxWithToken, entSubscriber.OwnerID)
-			if err != nil {
-				return err
-			}
+			return err
+		}
 
-			if err := h.sendEmail(ctxWithToken, email.SubscribeOp.Name(), email.SubscribeRequest{
-				RecipientInfo: email.RecipientInfo{Email: entSubscriber.Email},
-				OrgName:       org.DisplayName,
-				Token:         tokenValue,
-			}); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("error sending subscriber email")
+		// set viewer context
+		ctxWithToken := token.NewContextWithSignUpToken(ctx, entSubscriber.Email)
 
-				return err
-			}
+		// resend email with new token to the subscriber, naming the trust center they subscribed to
+		orgName, err := h.subscriberNotificationOrgName(ctxWithToken, entSubscriber)
+		if err != nil {
+			return err
+		}
+
+		if err := h.sendEmail(ctxWithToken, email.SubscribeOp.Name(), email.SubscribeRequest{
+			RecipientInfo:  email.RecipientInfo{Email: entSubscriber.Email},
+			OrgName:        orgName,
+			Token:          tokenValue,
+			UnsubscribeURL: h.subscriberUnsubscribeURL(ctxWithToken, entSubscriber),
+		}); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error sending subscriber email")
+
+			return err
 		}
 
 		return ErrExpiredToken

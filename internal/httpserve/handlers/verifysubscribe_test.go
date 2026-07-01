@@ -64,7 +64,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
 		t.Run(tc.name, func(t *testing.T) {
 			suite.ClearTestData()
 
-			sub := suite.createTestSubscriber(t, testUser1.OrganizationID, tc.email, tc.ttl)
+			sub := suite.createTestSubscriber(t, "", tc.email, tc.ttl)
 
 			target := "/subscribe/verify"
 			if tc.tokenSet {
@@ -101,14 +101,125 @@ func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
 
 				msgs := suite.mockEmailSender().Messages()
 				require.NotEmpty(t, msgs)
-				assert.Contains(t, msgs[0].Subject, "subscribed")
+				assert.Contains(t, msgs[0].Subject, "subscription")
 			}
 		})
 	}
 }
 
-// createTestSubscriber is a helper to create a test subscriber
-func (suite *HandlerTestSuite) createTestSubscriber(t *testing.T, orgID, email, ttl string) *ent.Subscriber {
+// TestVerifySubscribeDoesNotResurrectUnsubscribed verifies that replaying a verify link for a contact
+// who unsubscribed does NOT re-subscribe them: they stay unsubscribed and inactive. Re-subscription must
+// go through the createSubscriber mutation (covered in the graphapi tests), not the verify endpoint
+func (suite *HandlerTestSuite) TestVerifySubscribeDoesNotResurrectUnsubscribed() {
+	t := suite.T()
+
+	operation := suite.createImpersonationOperation("VerifySubscriptionHandler", "Verify subscription")
+	suite.registerTestHandler("GET", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
+
+	suite.ClearTestData()
+
+	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	sub := suite.createTestSubscriber(t, "", gofakeit.Email(), "")
+
+	// the contact verified previously and then opted out
+	suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetUnsubscribed(true).SetActive(false).ExecX(allowCtx)
+
+	target := fmt.Sprintf("/subscribe/verify?token=%s", sub.Token)
+	req := httptest.NewRequest(http.MethodGet, target, nil)
+	recorder := httptest.NewRecorder()
+	suite.e.ServeHTTP(recorder, req)
+
+	assert.Equal(t, http.StatusOK, recorder.Code)
+
+	// no resurrection: still unsubscribed and inactive
+	updated := suite.db.Subscriber.GetX(allowCtx, sub.ID)
+	assert.True(t, updated.Unsubscribed)
+	assert.False(t, updated.Active)
+}
+
+// TestVerifySubscribeTrustCenterSubscriber confirms the handler verifies a subscriber scoped to a trust
+// center: the org caller set in the handler resolves to the trust center's owning org, satisfying the
+// org-ownership pre-policy on the update
+func (suite *HandlerTestSuite) TestVerifySubscribeTrustCenterSubscriber() {
+	t := suite.T()
+
+	operation := suite.createImpersonationOperation("VerifySubscriptionHandler", "Verify subscription")
+	suite.registerTestHandler("GET", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
+
+	suite.ClearTestData()
+
+	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+
+	// creating the trust center provisions its live setting (allow_subscribers defaults true), so a
+	// subscriber scoped to it is permitted
+	tc := suite.db.TrustCenter.Create().
+		SetSlug("audit-verify").
+		SetOwnerID(testUser1.OrganizationID).
+		SaveX(testUser1.UserCtx)
+	t.Cleanup(func() { _ = suite.db.TrustCenter.DeleteOneID(tc.ID).Exec(allowCtx) })
+
+	sub := suite.createTestSubscriber(t, tc.ID, gofakeit.Email(), "")
+
+	target := fmt.Sprintf("/subscribe/verify?token=%s", sub.Token)
+	req := httptest.NewRequest(http.MethodGet, target, nil)
+	recorder := httptest.NewRecorder()
+	suite.e.ServeHTTP(recorder, req)
+
+	assert.Equal(t, http.StatusOK, recorder.Code)
+
+	updated := suite.db.Subscriber.GetX(allowCtx, sub.ID)
+	assert.True(t, updated.VerifiedEmail)
+	assert.True(t, updated.Active)
+	require.NotNil(t, updated.TrustCenterID)
+	assert.Equal(t, tc.ID, *updated.TrustCenterID)
+}
+
+// TestVerifySubscribeUnknownToken rejects a verify request whose token matches no subscriber
+func (suite *HandlerTestSuite) TestVerifySubscribeUnknownToken() {
+	t := suite.T()
+
+	operation := suite.createImpersonationOperation("VerifySubscriptionHandler", "Verify subscription")
+	suite.registerTestHandler("GET", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
+
+	suite.ClearTestData()
+
+	req := httptest.NewRequest(http.MethodGet, "/subscribe/verify?token=not-a-real-token", nil)
+	recorder := httptest.NewRecorder()
+	suite.e.ServeHTTP(recorder, req)
+
+	assert.Equal(t, http.StatusBadRequest, recorder.Code)
+}
+
+// TestVerifySubscribeAlreadyVerified confirms re-hitting verify for an already active subscriber is a
+// safe no-op: still 200 and the status is unchanged
+func (suite *HandlerTestSuite) TestVerifySubscribeAlreadyVerified() {
+	t := suite.T()
+
+	operation := suite.createImpersonationOperation("VerifySubscriptionHandler", "Verify subscription")
+	suite.registerTestHandler("GET", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
+
+	suite.ClearTestData()
+
+	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	sub := suite.createTestSubscriber(t, "", gofakeit.Email(), "")
+	suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).ExecX(allowCtx)
+
+	target := fmt.Sprintf("/subscribe/verify?token=%s", sub.Token)
+	req := httptest.NewRequest(http.MethodGet, target, nil)
+	recorder := httptest.NewRecorder()
+	suite.e.ServeHTTP(recorder, req)
+
+	assert.Equal(t, http.StatusOK, recorder.Code)
+
+	updated := suite.db.Subscriber.GetX(allowCtx, sub.ID)
+	assert.True(t, updated.VerifiedEmail)
+	assert.True(t, updated.Active)
+	assert.False(t, updated.Unsubscribed)
+}
+
+// createTestSubscriber is a helper to create a test subscriber. When trustCenterID is non-empty the
+// subscriber is scoped to that trust center, otherwise it is an organization-level subscriber
+func (suite *HandlerTestSuite) createTestSubscriber(t *testing.T, trustCenterID, email, ttl string) *ent.Subscriber {
 	user := handlers.User{
 		Email: email,
 	}
@@ -129,10 +240,15 @@ func (suite *HandlerTestSuite) createTestSubscriber(t *testing.T, orgID, email, 
 	reqCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
 	// store token in db
-	return suite.db.Subscriber.Create().
+	builder := suite.db.Subscriber.Create().
 		SetToken(user.EmailVerificationToken.String).
 		SetEmail(user.Email).
 		SetSecret(user.EmailVerificationSecret).
-		SetTTL(expires).
-		SaveX(reqCtx)
+		SetTTL(expires)
+
+	if trustCenterID != "" {
+		builder = builder.SetTrustCenterID(trustCenterID)
+	}
+
+	return builder.SaveX(reqCtx)
 }

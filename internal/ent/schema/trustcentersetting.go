@@ -167,6 +167,10 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Comment("whether NDA requests require approval before being processed").
 			Default(false).
 			Optional(),
+		field.Bool("allow_subscribers").
+			Comment("whether the trust center accepts new subscriber registrations; when false, subscriber creation for the trust center is blocked").
+			Default(true).
+			Optional(),
 		field.Bool("notify_subscribers_on_subprocessor_change").
 			Comment("whether to email trust center subscribers when subprocessors are added, updated, or removed").
 			Default(false).

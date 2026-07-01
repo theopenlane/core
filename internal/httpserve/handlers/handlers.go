@@ -182,6 +182,13 @@ func BindAndValidate[T any](ctx echo.Context) (*T, error) {
 		return nil, err
 	}
 
+	// echo's binder only binds query params on GET/DELETE/HEAD; bind them for every method so request
+	// models can rely on the query:"..." tag regardless of HTTP method (e.g. a token in a POST email link)
+	if err := echo.BindQueryParams(ctx, &obj); err != nil {
+		metrics.RequestValidations.WithLabelValues(reqType, "false").Inc()
+		return nil, err
+	}
+
 	if v, ok := any(&obj).(validator); ok {
 		if err := v.Validate(); err != nil {
 			metrics.RequestValidations.WithLabelValues(reqType, "false").Inc()

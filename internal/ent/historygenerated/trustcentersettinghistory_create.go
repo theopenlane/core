@@ -478,6 +478,20 @@ func (_c *TrustCenterSettingHistoryCreate) SetNillableNdaApprovalRequired(v *boo
 	return _c
 }
 
+// SetAllowSubscribers sets the "allow_subscribers" field.
+func (_c *TrustCenterSettingHistoryCreate) SetAllowSubscribers(v bool) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetAllowSubscribers(v)
+	return _c
+}
+
+// SetNillableAllowSubscribers sets the "allow_subscribers" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableAllowSubscribers(v *bool) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetAllowSubscribers(*v)
+	}
+	return _c
+}
+
 // SetNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field.
 func (_c *TrustCenterSettingHistoryCreate) SetNotifySubscribersOnSubprocessorChange(v bool) *TrustCenterSettingHistoryCreate {
 	_c.mutation.SetNotifySubscribersOnSubprocessorChange(v)
@@ -621,6 +635,10 @@ func (_c *TrustCenterSettingHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.NdaApprovalRequired(); !ok {
 		v := trustcentersettinghistory.DefaultNdaApprovalRequired
 		_c.mutation.SetNdaApprovalRequired(v)
+	}
+	if _, ok := _c.mutation.AllowSubscribers(); !ok {
+		v := trustcentersettinghistory.DefaultAllowSubscribers
+		_c.mutation.SetAllowSubscribers(v)
 	}
 	if _, ok := _c.mutation.NotifySubscribersOnSubprocessorChange(); !ok {
 		v := trustcentersettinghistory.DefaultNotifySubscribersOnSubprocessorChange
@@ -826,6 +844,10 @@ func (_c *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingHist
 	if value, ok := _c.mutation.NdaApprovalRequired(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool, value)
 		_node.NdaApprovalRequired = value
+	}
+	if value, ok := _c.mutation.AllowSubscribers(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldAllowSubscribers, field.TypeBool, value)
+		_node.AllowSubscribers = value
 	}
 	if value, ok := _c.mutation.NotifySubscribersOnSubprocessorChange(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange, field.TypeBool, value)

@@ -98,8 +98,10 @@ func TestRecipient(toEmail string) RecipientInfo {
 // TestFixture returns a scaffolded JSON payload for the given dispatcher name.
 // All required fields are populated with realistic test values; URL-resolved fields
 // (NDAURL, AuthURL) are set directly so PreHooks that require a database are bypassed.
-// Returns nil when no fixture is defined for the dispatcher
-func TestFixture(name, toEmail string) json.RawMessage {
+// When defaultBranding is true, the trust center branding overlay is stripped from trust-center emails
+// so they render with the Openlane system defaults (the fallback used when a trust center configures no
+// branding), letting both branding variants be previewed. Returns nil when no fixture is defined
+func TestFixture(name, toEmail string, defaultBranding bool) json.RawMessage {
 	r := TestRecipient(toEmail)
 
 	fixtures := map[string]any{
@@ -192,11 +194,52 @@ func TestFixture(name, toEmail string) json.RawMessage {
 			ButtonLink: "{{ .rootURL }}/campaigns",
 			Outros:     []string{"If you received this, the branded message template is working as expected.", "Questions? Reach us at {{ .supportEmail }}."},
 		},
+		"SubprocessorNotificationRequest": SubprocessorNotificationRequest{
+			RecipientInfo: RecipientInfo{
+				Email:            toEmail,
+				FirstName:        r.FirstName,
+				LastName:         r.LastName,
+				UnsubscribeToken: "test-unsubscribe-token-12345",
+			},
+			Subject: "SecureCorp subprocessor update",
+			Title:   "We've updated our subprocessors",
+			Intros:  []string{"The subprocessors we use have changed. The updates are listed below - review the full list anytime in our trust center."},
+			Subprocessors: []SubprocessorEntry{
+				{Name: "Amazon Web Services", Change: "Added"},
+				{Name: "Stripe", Change: "Updated"},
+				{Name: "Twilio", Change: "Removed"},
+			},
+			ButtonText:          "View subprocessors",
+			ButtonLink:          "https://securecorp.example.com/trust",
+			UnsubscribeURL:      "https://securecorp.example.com/unsubscribe?token={{ .unsubscribeToken }}",
+			CompanyName:         "SecureCorp",
+			LogoURL:             "https://securecorp.example.com/logo.png",
+			PrimaryColor:        "#0f3d3a",
+			ButtonColor:         "#3fc2b4",
+			BodyBackgroundColor: "#e8eaed",
+			CardBackgroundColor: "#ffffff",
+			TextColor:           "#14171e",
+		},
 	}
 
 	fixture, ok := fixtures[name]
 	if !ok {
 		return nil
+	}
+
+	// preview the Openlane fallback by clearing the trust center branding overlay
+	if defaultBranding {
+		if sub, ok := fixture.(SubprocessorNotificationRequest); ok {
+			sub.CompanyName = ""
+			sub.Corporation = ""
+			sub.LogoURL = ""
+			sub.PrimaryColor = ""
+			sub.ButtonColor = ""
+			sub.BodyBackgroundColor = ""
+			sub.CardBackgroundColor = ""
+			sub.TextColor = ""
+			fixture = sub
+		}
 	}
 
 	data, err := json.Marshal(fixture)

@@ -132,6 +132,9 @@ type SubscribeRequest struct {
 	OrgName string `json:"org_name" jsonschema:"required,description=Organization display name"`
 	// Token is the subscriber verification token appended to the verify URL
 	Token string `json:"token" jsonschema:"required,description=Subscriber verification token"`
+	// UnsubscribeURL is the trust center's tokenized unsubscribe link shown in the footer; built by the
+	// caller from the trust center domain since the operation has no access to it
+	UnsubscribeURL string `json:"unsubscribeURL,omitempty" jsonschema:"description=Trust center unsubscribe link shown in the footer"`
 }
 
 // VerifyBillingRequest is the input for the billing email verification operation
@@ -482,47 +485,58 @@ var _ = RegisterEmailOperation(Operation[PasswordResetSuccessRequest]{
 
 var _ = RegisterEmailOperation(Operation[SubscribeRequest]{
 	Op: SubscribeOp, Schema: subscribeSchema, Theme: baseTheme,
-	Description: "System email confirming a subscriber's early access signup",
-	Subject: func(cfg RuntimeEmailConfig, _ SubscribeRequest) string {
-		return "You've been subscribed to " + cfg.CompanyName
+	Description: "System email asking a trust center subscriber to confirm their email address",
+	Subject: func(cfg RuntimeEmailConfig, req SubscribeRequest) string {
+		return "Confirm your subscription to " + subscribeOrgName(cfg, req) + " updates"
 	},
 	Build: func(cfg RuntimeEmailConfig, req SubscribeRequest) render.ContentBody {
-		verifyURL := tokenURL(cfg.ProductURL, "/subscribe/verify", req.Token)
+		// the confirm link hits the API directly (GET), which verifies the token and redirects the
+		// subscriber to the trust center they subscribed to — not the console
+		verifyURL := tokenURL(cfg.APIURL, "/v1/subscribe/verify", req.Token)
+		orgName := subscribeOrgName(cfg, req)
 
 		return render.ContentBody{
-			Preheader: "You're In - Early Access Secured! Thanks for your interest in our beta program.",
+			Preheader: "Confirm your email to start receiving " + orgName + " trust center updates.",
 			Header:    defaultHeader(cfg),
 			Name:      req.FirstName,
-			Title:     "You're In - Early Access Secured!",
+			Title:     "Confirm your subscription",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
-					"We're thrilled to have you as part of our early community. Your interest means the world to us as we work to build a cutting-edge solution. We can't wait to share it with you!",
-					"Please confirm your email address to ensure you receive all important updates about your early access.",
+					"You're almost subscribed to updates from " + orgName + "'s trust center.",
+					"Confirm your email address using the button below and we'll let you know whenever the trust center is updated - new posts, document changes, and subprocessor updates.",
 				},
 			},
 			Actions: []render.Action{{
-				Button: render.Button{Text: "Confirm Email", Link: verifyURL},
+				Button: render.Button{Text: "Confirm subscription", Link: verifyURL},
 			}},
-			Callout: &render.Callout{
-				Title: "What to Expect Next:",
-				Style: calloutStyle(),
-				Items: []template.HTML{
-					"You'll hear from us soon - We'll email you as soon as your spot is ready.",
-					"Early access to beta features - Get a first look at everything we're building.",
-					"Help shape the future - Your feedback will directly influence the product.",
-				},
-			},
 			Outros: render.OutrosBlock{
 				Paragraphs: []string{
-					"Thank you for being part of this journey - we're excited to have you on board!",
+					"If you didn't request this subscription you can safely ignore this email and you won't receive any further messages.",
 				},
 			},
 		}
 	},
-	Config: func(cfg RuntimeEmailConfig, _ SubscribeRequest) RuntimeEmailConfig {
-		return applyCalloutBranding(cfg)
+	Config: func(cfg RuntimeEmailConfig, req SubscribeRequest) RuntimeEmailConfig {
+		cfg = applySystemBranding(cfg)
+		// the unsubscribe link is the trust center's tokenized unsubscribe, built by the caller from the
+		// trust center domain (not the product URL, which points at the app console). The token is what
+		// actually resolves and unsubscribes the subscriber, unlike the theme's generic footer fallback
+		if req.UnsubscribeURL != "" {
+			cfg.UnsubscribeURL = req.UnsubscribeURL
+		}
+		return cfg
 	},
 })
+
+// subscribeOrgName returns the display name of the trust center the recipient subscribed to,
+// falling back to the system company name when the caller did not supply one
+func subscribeOrgName(cfg RuntimeEmailConfig, req SubscribeRequest) string {
+	if req.OrgName != "" {
+		return req.OrgName
+	}
+
+	return cfg.CompanyName
+}
 
 var _ = RegisterEmailOperation(Operation[VerifyBillingRequest]{
 	Op: VerifyBillingOp, Schema: verifyBillingSchema, Theme: baseTheme,

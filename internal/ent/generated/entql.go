@@ -3492,6 +3492,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersetting.FieldCompanyDomain:                         {Type: field.TypeString, Column: trustcentersetting.FieldCompanyDomain},
 			trustcentersetting.FieldSecurityContact:                       {Type: field.TypeString, Column: trustcentersetting.FieldSecurityContact},
 			trustcentersetting.FieldNdaApprovalRequired:                   {Type: field.TypeBool, Column: trustcentersetting.FieldNdaApprovalRequired},
+			trustcentersetting.FieldAllowSubscribers:                      {Type: field.TypeBool, Column: trustcentersetting.FieldAllowSubscribers},
 			trustcentersetting.FieldNotifySubscribersOnSubprocessorChange: {Type: field.TypeBool, Column: trustcentersetting.FieldNotifySubscribersOnSubprocessorChange},
 			trustcentersetting.FieldSubprocessorsNotifiedAt:               {Type: field.TypeTime, Column: trustcentersetting.FieldSubprocessorsNotifiedAt},
 			trustcentersetting.FieldNdaApproverGroupID:                    {Type: field.TypeString, Column: trustcentersetting.FieldNdaApproverGroupID},
@@ -48342,6 +48343,11 @@ func (f *TrustCenterSettingFilter) WhereSecurityContact(p entql.StringP) {
 // WhereNdaApprovalRequired applies the entql bool predicate on the nda_approval_required field.
 func (f *TrustCenterSettingFilter) WhereNdaApprovalRequired(p entql.BoolP) {
 	f.Where(p.Field(trustcentersetting.FieldNdaApprovalRequired))
+}
+
+// WhereAllowSubscribers applies the entql bool predicate on the allow_subscribers field.
+func (f *TrustCenterSettingFilter) WhereAllowSubscribers(p entql.BoolP) {
+	f.Where(p.Field(trustcentersetting.FieldAllowSubscribers))
 }
 
 // WhereNotifySubscribersOnSubprocessorChange applies the entql bool predicate on the notify_subscribers_on_subprocessor_change field.
