@@ -83,6 +83,10 @@ func createFile(ctx context.Context, f pkgobjects.File) (*ent.File, error) {
 		StoragePath:           &f.Folder,
 	}
 
+	if len(f.MD5) > 0 {
+		set.Md5Hash = lo.ToPtr(string(f.MD5))
+	}
+
 	if name := getCategoryNameForSchema(f); name != "" {
 		set.CategoryName = &name
 	}
