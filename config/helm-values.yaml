@@ -624,6 +624,8 @@ coreConfiguration:
       producturl: "https://console.theopenlane.io"  # @schema type:string; default:https://console.theopenlane.io
       # -- Documentation URL
       docsurl: "https://docs.theopenlane.io"  # @schema type:string; default:https://docs.theopenlane.io
+      # -- Public base URL of the API for email links that hit the API directly
+      apiurl: "https://api.theopenlane.io"  # @schema type:string; default:https://api.theopenlane.io
     paymentreminder:
       # -- Days after org creation before marking for deletion
       paymentmethodinterval: 0
