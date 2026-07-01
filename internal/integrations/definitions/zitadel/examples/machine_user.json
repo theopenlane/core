@@ -1,0 +1,9 @@
+{
+  "user_id": "...",
+  "state": 1,
+  "username": "openlane-sync",
+  "machine": {
+    "name": "OpenLane Sync",
+    "description": "Service account"
+  }
+}

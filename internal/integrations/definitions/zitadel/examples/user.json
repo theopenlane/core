@@ -1,0 +1,16 @@
+{
+  "user_id": "...",
+  "state": 1,
+  "username": "john.doe",
+  "human": {
+    "profile": {
+      "given_name": "John",
+      "family_name": "Doe",
+      "display_name": "John Doe"
+    },
+    "email": {
+      "email": "john.doe@company.com",
+      "is_verified": true
+    }
+  }
+}
