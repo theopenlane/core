@@ -86,6 +86,26 @@ func (_u *InternalPolicyUpdate) ClearUpdatedBy() *InternalPolicyUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *InternalPolicyUpdate) SetUpdatedByImpersonator(v string) *InternalPolicyUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableUpdatedByImpersonator(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *InternalPolicyUpdate) ClearUpdatedByImpersonator() *InternalPolicyUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *InternalPolicyUpdate) SetDeletedAt(v time.Time) *InternalPolicyUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -1663,6 +1683,12 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(internalpolicy.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(internalpolicy.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(internalpolicy.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(internalpolicy.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -3059,6 +3085,26 @@ func (_u *InternalPolicyUpdateOne) SetNillableUpdatedBy(v *string) *InternalPoli
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *InternalPolicyUpdateOne) ClearUpdatedBy() *InternalPolicyUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *InternalPolicyUpdateOne) SetUpdatedByImpersonator(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableUpdatedByImpersonator(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *InternalPolicyUpdateOne) ClearUpdatedByImpersonator() *InternalPolicyUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -4668,6 +4714,12 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(internalpolicy.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(internalpolicy.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(internalpolicy.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(internalpolicy.FieldDeletedAt, field.TypeTime, value)

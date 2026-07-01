@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"slices"
 
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/pkg/logx"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
@@ -14,29 +15,53 @@ import (
 // Middleware handles detection and processing of impersonation tokens
 type Middleware struct {
 	tokenManager *tokens.TokenManager
+	// supportSubjectID is the configured subject id of the virtual support identity; sessions targeting
+	// it are granted the support capabilities
+	supportSubjectID string
+	// supportName is the configured display name of the virtual support identity
+	supportName string
 }
 
-// New creates a new impersonation middleware
-func New(tokenManager *tokens.TokenManager) *Middleware {
+// New creates a new impersonation middleware. supportSubjectID and supportName come from the support
+// access configuration so support sessions can be recognized and attributed without hardcoded values
+func New(tokenManager *tokens.TokenManager, supportSubjectID, supportName string) *Middleware {
 	return &Middleware{
-		tokenManager: tokenManager,
+		tokenManager:     tokenManager,
+		supportSubjectID: supportSubjectID,
+		supportName:      supportName,
 	}
 }
 
-// Process is the middleware function that processes impersonation tokens
+// Process is the middleware function that processes impersonation tokens. An impersonation token may
+// be presented either with the dedicated Impersonation authorization scheme or, for clients that only
+// send Bearer (such as the web UI), as a Bearer token. A normal access token fails impersonation
+// validation because it lacks the required impersonation claims, so the request falls through to the
+// normal authentication middleware in that case
 func (m *Middleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 
-		// Check for impersonation token in Authorization header
+		// prefer the dedicated Impersonation scheme; fall back to a Bearer token for UI clients
+		viaBearer := false
+
 		tokenString, err := auth.GetImpersonationToken(c)
 		if err != nil {
-			return next(c)
+			tokenString, err = auth.GetBearerToken(c)
+			if err != nil || tokenString == "" {
+				return next(c)
+			}
+
+			viaBearer = true
 		}
 
 		// Validate the impersonation token
 		claims, err := m.tokenManager.ValidateImpersonationToken(ctx, tokenString)
 		if err != nil {
+			if viaBearer {
+				// the Bearer token is not an impersonation token; let normal authentication handle it
+				return next(c)
+			}
+
 			logx.FromContext(ctx).Warn().Err(err).Str("ip", c.RealIP()).Msg("invalid impersonation token")
 
 			return echo.NewHTTPError(http.StatusUnauthorized, "invalid impersonation token")
@@ -54,6 +79,12 @@ func (m *Middleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 		ctx = auth.WithCaller(ctx, impersonatedCaller)
 		c.SetRequest(c.Request().WithContext(ctx))
 
+		// add the user and org ID to the logger context
+		logx.FromContext(ctx).UpdateContext(func(c zerolog.Context) zerolog.Context {
+			return c.Str("support_user_id", impersonatedCaller.SubjectID).
+				Strs("org_id", impersonatedCaller.OrganizationIDs)
+		})
+
 		// Log the impersonation action
 		m.logImpersonationAccess(claims, c)
 
@@ -63,11 +94,19 @@ func (m *Middleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 
 // createImpersonatedCaller creates a Caller with impersonation context from impersonation claims.
 func (m *Middleware) createImpersonatedCaller(claims *tokens.ImpersonationClaims) (*auth.Caller, error) {
-	caller := &auth.Caller{
-		SubjectID:          claims.UserID,
-		SubjectEmail:       claims.TargetUserEmail,
-		OrganizationID:     claims.OrgID,
-		AuthenticationType: auth.JWTAuthentication,
+	var caller *auth.Caller
+
+	// the virtual Openlane support identity gets org-scoped support capabilities within the consented org
+	if m.supportSubjectID != "" && claims.UserID == m.supportSubjectID {
+		caller = auth.NewOrgSupportCaller(claims.OrgID, claims.UserID, m.supportName, claims.TargetUserEmail)
+	} else {
+		caller = &auth.Caller{
+			SubjectID:          claims.UserID,
+			SubjectEmail:       claims.TargetUserEmail,
+			OrganizationID:     claims.OrgID,
+			OrganizationIDs:    []string{claims.OrgID},
+			AuthenticationType: auth.JWTAuthentication,
+		}
 	}
 
 	// Create the impersonation context
@@ -81,7 +120,6 @@ func (m *Middleware) createImpersonatedCaller(claims *tokens.ImpersonationClaims
 		StartedAt:         claims.IssuedAt.Time,
 		ExpiresAt:         claims.ExpiresAt.Time,
 		SessionID:         claims.SessionID,
-		Scopes:            claims.Scopes,
 	}
 
 	caller.Impersonation = impersonationContext
@@ -97,32 +135,6 @@ func (m *Middleware) logImpersonationAccess(claims *tokens.ImpersonationClaims, 
 	}
 
 	logx.FromContext(ctx).Info().Str("impersonator", claims.ImpersonatorID).Str("target", claims.UserID).Msg("impersonation token used")
-}
-
-// RequireImpersonationScope creates middleware that requires specific impersonation scopes
-func RequireImpersonationScope(requiredScope string) echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			ctx := c.Request().Context()
-
-			caller, ok := auth.CallerFromContext(ctx)
-			if !ok || caller == nil || !caller.IsImpersonated() {
-				// Not impersonated, proceed normally
-				return next(c)
-			}
-
-			// Check if the impersonation has the required scope
-			if !caller.CanPerformAction(requiredScope) {
-				logx.FromContext(ctx).Info().
-					Str("user_id", caller.SubjectID).
-					Str("missing_scope", requiredScope).
-					Msg("impersonated user missing required scope for this action")
-				return echo.NewHTTPError(http.StatusForbidden, "impersonation scope insufficient for this action")
-			}
-
-			return next(c)
-		}
-	}
 }
 
 // BlockImpersonation creates middleware that blocks impersonated users from certain endpoints

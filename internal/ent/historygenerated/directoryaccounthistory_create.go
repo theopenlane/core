@@ -114,6 +114,20 @@ func (_c *DirectoryAccountHistoryCreate) SetNillableUpdatedBy(v *string) *Direct
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *DirectoryAccountHistoryCreate) SetUpdatedByImpersonator(v string) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDisplayID sets the "display_id" field.
 func (_c *DirectoryAccountHistoryCreate) SetDisplayID(v string) *DirectoryAccountHistoryCreate {
 	_c.mutation.SetDisplayID(v)
@@ -904,6 +918,10 @@ func (_c *DirectoryAccountHistoryCreate) createSpec() (*DirectoryAccountHistory,
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(directoryaccounthistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(directoryaccounthistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(directoryaccounthistory.FieldDisplayID, field.TypeString, value)

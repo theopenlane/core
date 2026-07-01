@@ -79,6 +79,20 @@ func (_c *DNSVerificationCreate) SetNillableUpdatedBy(v *string) *DNSVerificatio
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *DNSVerificationCreate) SetUpdatedByImpersonator(v string) *DNSVerificationCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *DNSVerificationCreate) SetNillableUpdatedByImpersonator(v *string) *DNSVerificationCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *DNSVerificationCreate) SetDeletedAt(v time.Time) *DNSVerificationCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -449,6 +463,10 @@ func (_c *DNSVerificationCreate) createSpec() (*DNSVerification, *sqlgraph.Creat
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(dnsverification.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(dnsverification.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(dnsverification.FieldDeletedAt, field.TypeTime, value)

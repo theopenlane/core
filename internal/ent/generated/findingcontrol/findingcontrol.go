@@ -23,6 +23,8 @@ const (
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
+	// FieldUpdatedByImpersonator holds the string denoting the updated_by_impersonator field in the database.
+	FieldUpdatedByImpersonator = "updated_by_impersonator"
 	// FieldFindingID holds the string denoting the finding_id field in the database.
 	FieldFindingID = "finding_id"
 	// FieldControlID holds the string denoting the control_id field in the database.
@@ -79,6 +81,7 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldCreatedBy,
 	FieldUpdatedBy,
+	FieldUpdatedByImpersonator,
 	FieldFindingID,
 	FieldControlID,
 	FieldStandardID,
@@ -106,7 +109,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks  [2]ent.Hook
+	Hooks  [3]ent.Hook
 	Policy ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -144,6 +147,11 @@ func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedBy orders the results by the updated_by field.
 func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
+}
+
+// ByUpdatedByImpersonator orders the results by the updated_by_impersonator field.
+func ByUpdatedByImpersonator(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedByImpersonator, opts...).ToFunc()
 }
 
 // ByFindingID orders the results by the finding_id field.

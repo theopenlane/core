@@ -29,8 +29,10 @@ func HookTaskCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TaskFunc(func(ctx context.Context, m *generated.TaskMutation) (generated.Value, error) {
 			if assigner, _ := m.AssignerID(); assigner == "" {
-				// if the assigner is not provided, set it to the current user if not using an API token
-				if !auth.IsAPITokenAuthentication(ctx) {
+				// if the assigner is not provided, set it to the current user if not using an API token or support caller
+				caller, _ := auth.CallerFromContext(ctx)
+
+				if !auth.IsAPITokenAuthentication(ctx) && !caller.Has(auth.CapOrgSupport) {
 					assigner, err := auth.GetSubjectIDFromContext(ctx)
 					if err != nil {
 						return nil, err

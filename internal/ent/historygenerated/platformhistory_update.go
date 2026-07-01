@@ -68,6 +68,26 @@ func (_u *PlatformHistoryUpdate) ClearUpdatedBy() *PlatformHistoryUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *PlatformHistoryUpdate) SetUpdatedByImpersonator(v string) *PlatformHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *PlatformHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *PlatformHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *PlatformHistoryUpdate) ClearUpdatedByImpersonator() *PlatformHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *PlatformHistoryUpdate) SetDeletedAt(v time.Time) *PlatformHistoryUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -1168,6 +1188,12 @@ func (_u *PlatformHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(platformhistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(platformhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(platformhistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(platformhistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -1529,6 +1555,26 @@ func (_u *PlatformHistoryUpdateOne) SetNillableUpdatedBy(v *string) *PlatformHis
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *PlatformHistoryUpdateOne) ClearUpdatedBy() *PlatformHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *PlatformHistoryUpdateOne) SetUpdatedByImpersonator(v string) *PlatformHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *PlatformHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *PlatformHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *PlatformHistoryUpdateOne) ClearUpdatedByImpersonator() *PlatformHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -2661,6 +2707,12 @@ func (_u *PlatformHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Platfor
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(platformhistory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(platformhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(platformhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(platformhistory.FieldDeletedAt, field.TypeTime, value)

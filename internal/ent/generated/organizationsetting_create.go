@@ -80,6 +80,20 @@ func (_c *OrganizationSettingCreate) SetNillableUpdatedBy(v *string) *Organizati
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *OrganizationSettingCreate) SetUpdatedByImpersonator(v string) *OrganizationSettingCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *OrganizationSettingCreate) SetNillableUpdatedByImpersonator(v *string) *OrganizationSettingCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *OrganizationSettingCreate) SetDeletedAt(v time.Time) *OrganizationSettingCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -406,6 +420,26 @@ func (_c *OrganizationSettingCreate) SetNillableIdentityProviderLoginEnforced(v 
 	return _c
 }
 
+// SetIdentityProviderJitProvisioning sets the "identity_provider_jit_provisioning" field.
+func (_c *OrganizationSettingCreate) SetIdentityProviderJitProvisioning(v bool) *OrganizationSettingCreate {
+	_c.mutation.SetIdentityProviderJitProvisioning(v)
+	return _c
+}
+
+// SetNillableIdentityProviderJitProvisioning sets the "identity_provider_jit_provisioning" field if the given value is not nil.
+func (_c *OrganizationSettingCreate) SetNillableIdentityProviderJitProvisioning(v *bool) *OrganizationSettingCreate {
+	if v != nil {
+		_c.SetIdentityProviderJitProvisioning(*v)
+	}
+	return _c
+}
+
+// SetJitAllowedEmailDomains sets the "jit_allowed_email_domains" field.
+func (_c *OrganizationSettingCreate) SetJitAllowedEmailDomains(v []string) *OrganizationSettingCreate {
+	_c.mutation.SetJitAllowedEmailDomains(v)
+	return _c
+}
+
 // SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
 func (_c *OrganizationSettingCreate) SetMultifactorAuthEnforced(v bool) *OrganizationSettingCreate {
 	_c.mutation.SetMultifactorAuthEnforced(v)
@@ -416,6 +450,26 @@ func (_c *OrganizationSettingCreate) SetMultifactorAuthEnforced(v bool) *Organiz
 func (_c *OrganizationSettingCreate) SetNillableMultifactorAuthEnforced(v *bool) *OrganizationSettingCreate {
 	if v != nil {
 		_c.SetMultifactorAuthEnforced(*v)
+	}
+	return _c
+}
+
+// SetSSOExemptDomains sets the "sso_exempt_domains" field.
+func (_c *OrganizationSettingCreate) SetSSOExemptDomains(v []string) *OrganizationSettingCreate {
+	_c.mutation.SetSSOExemptDomains(v)
+	return _c
+}
+
+// SetAllowSupportAccess sets the "allow_support_access" field.
+func (_c *OrganizationSettingCreate) SetAllowSupportAccess(v bool) *OrganizationSettingCreate {
+	_c.mutation.SetAllowSupportAccess(v)
+	return _c
+}
+
+// SetNillableAllowSupportAccess sets the "allow_support_access" field if the given value is not nil.
+func (_c *OrganizationSettingCreate) SetNillableAllowSupportAccess(v *bool) *OrganizationSettingCreate {
+	if v != nil {
+		_c.SetAllowSupportAccess(*v)
 	}
 	return _c
 }
@@ -575,9 +629,17 @@ func (_c *OrganizationSettingCreate) defaults() error {
 		v := organizationsetting.DefaultIdentityProviderLoginEnforced
 		_c.mutation.SetIdentityProviderLoginEnforced(v)
 	}
+	if _, ok := _c.mutation.IdentityProviderJitProvisioning(); !ok {
+		v := organizationsetting.DefaultIdentityProviderJitProvisioning
+		_c.mutation.SetIdentityProviderJitProvisioning(v)
+	}
 	if _, ok := _c.mutation.MultifactorAuthEnforced(); !ok {
 		v := organizationsetting.DefaultMultifactorAuthEnforced
 		_c.mutation.SetMultifactorAuthEnforced(v)
+	}
+	if _, ok := _c.mutation.AllowSupportAccess(); !ok {
+		v := organizationsetting.DefaultAllowSupportAccess
+		_c.mutation.SetAllowSupportAccess(v)
 	}
 	if _, ok := _c.mutation.ComplianceWebhookToken(); !ok {
 		if organizationsetting.DefaultComplianceWebhookToken == nil {
@@ -646,6 +708,19 @@ func (_c *OrganizationSettingCreate) check() error {
 	if _, ok := _c.mutation.IdentityProviderLoginEnforced(); !ok {
 		return &ValidationError{Name: "identity_provider_login_enforced", err: errors.New(`generated: missing required field "OrganizationSetting.identity_provider_login_enforced"`)}
 	}
+	if _, ok := _c.mutation.IdentityProviderJitProvisioning(); !ok {
+		return &ValidationError{Name: "identity_provider_jit_provisioning", err: errors.New(`generated: missing required field "OrganizationSetting.identity_provider_jit_provisioning"`)}
+	}
+	if v, ok := _c.mutation.JitAllowedEmailDomains(); ok {
+		if err := organizationsetting.JitAllowedEmailDomainsValidator(v); err != nil {
+			return &ValidationError{Name: "jit_allowed_email_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.jit_allowed_email_domains": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.SSOExemptDomains(); ok {
+		if err := organizationsetting.SSOExemptDomainsValidator(v); err != nil {
+			return &ValidationError{Name: "sso_exempt_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.sso_exempt_domains": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.PaymentMethodAdded(); !ok {
 		return &ValidationError{Name: "payment_method_added", err: errors.New(`generated: missing required field "OrganizationSetting.payment_method_added"`)}
 	}
@@ -700,6 +775,10 @@ func (_c *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgra
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(organizationsetting.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(organizationsetting.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationsetting.FieldDeletedAt, field.TypeTime, value)
@@ -797,9 +876,25 @@ func (_c *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgra
 		_spec.SetField(organizationsetting.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
 		_node.IdentityProviderLoginEnforced = value
 	}
+	if value, ok := _c.mutation.IdentityProviderJitProvisioning(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderJitProvisioning, field.TypeBool, value)
+		_node.IdentityProviderJitProvisioning = value
+	}
+	if value, ok := _c.mutation.JitAllowedEmailDomains(); ok {
+		_spec.SetField(organizationsetting.FieldJitAllowedEmailDomains, field.TypeJSON, value)
+		_node.JitAllowedEmailDomains = value
+	}
 	if value, ok := _c.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsetting.FieldMultifactorAuthEnforced, field.TypeBool, value)
 		_node.MultifactorAuthEnforced = value
+	}
+	if value, ok := _c.mutation.SSOExemptDomains(); ok {
+		_spec.SetField(organizationsetting.FieldSSOExemptDomains, field.TypeJSON, value)
+		_node.SSOExemptDomains = value
+	}
+	if value, ok := _c.mutation.AllowSupportAccess(); ok {
+		_spec.SetField(organizationsetting.FieldAllowSupportAccess, field.TypeBool, value)
+		_node.AllowSupportAccess = value
 	}
 	if value, ok := _c.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsetting.FieldComplianceWebhookToken, field.TypeString, value)

@@ -14,6 +14,7 @@ mutation CreateBulkCSVCheckResult ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -33,6 +34,7 @@ mutation CreateBulkCheckResult ($input: [CreateCheckResultInput!]) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -52,6 +54,7 @@ mutation CreateCheckResult ($input: CreateCheckResultInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -89,6 +92,7 @@ query GetAllCheckResults ($first: Int, $last: Int, $after: Cursor, $before: Curs
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 			}
 		}
 	}
@@ -108,6 +112,7 @@ query GetCheckResultByID ($checkResultId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 	}
 }
 query GetCheckResults ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [CheckResultOrder!], $where: CheckResultWhereInput) {
@@ -134,6 +139,7 @@ query GetCheckResults ($first: Int, $last: Int, $after: Cursor, $before: Cursor,
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 			}
 		}
 	}
@@ -154,6 +160,7 @@ mutation UpdateBulkCSVCheckResult ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 		updatedIDs
 	}
@@ -174,6 +181,7 @@ mutation UpdateBulkCheckResult ($ids: [ID!]!, $input: UpdateCheckResultInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 		updatedIDs
 	}
@@ -194,6 +202,7 @@ mutation UpdateCheckResult ($updateCheckResultId: ID!, $input: UpdateCheckResult
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }

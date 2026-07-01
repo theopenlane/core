@@ -98,8 +98,15 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context, openapi *OpenAPICon
 		AuthData:    *auth,
 	}
 
+	// resolve enforcement for the accepting user; a member granted an SSO exemption via the
+	// invitation will not be flagged as needing SSO
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-	status, err := h.fetchSSOStatus(allowCtx, invitedUser.OwnerID, "")
+	status, err := h.fetchSSOStatus(allowCtx, invitedUser.OwnerID, user.ID)
+	if err != nil {
+		// the invitation is already accepted and the auth session issued at this point, so a failure to
+		// resolve enforcement must not fail the request; log it and leave NeedsSSO at its default
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to resolve sso enforcement after invite acceptance")
+	}
 
 	if err == nil && status.Enforced {
 		out.NeedsSSO = true

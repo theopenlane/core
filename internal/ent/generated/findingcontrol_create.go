@@ -80,6 +80,20 @@ func (_c *FindingControlCreate) SetNillableUpdatedBy(v *string) *FindingControlC
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *FindingControlCreate) SetUpdatedByImpersonator(v string) *FindingControlCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *FindingControlCreate) SetNillableUpdatedByImpersonator(v *string) *FindingControlCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetFindingID sets the "finding_id" field.
 func (_c *FindingControlCreate) SetFindingID(v string) *FindingControlCreate {
 	_c.mutation.SetFindingID(v)
@@ -337,6 +351,10 @@ func (_c *FindingControlCreate) createSpec() (*FindingControl, *sqlgraph.CreateS
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(findingcontrol.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(findingcontrol.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.ExternalStandard(); ok {
 		_spec.SetField(findingcontrol.FieldExternalStandard, field.TypeString, value)

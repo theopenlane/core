@@ -67,6 +67,26 @@ func (_u *MappedControlHistoryUpdate) ClearUpdatedBy() *MappedControlHistoryUpda
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *MappedControlHistoryUpdate) SetUpdatedByImpersonator(v string) *MappedControlHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *MappedControlHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *MappedControlHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *MappedControlHistoryUpdate) ClearUpdatedByImpersonator() *MappedControlHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *MappedControlHistoryUpdate) SetDeletedAt(v time.Time) *MappedControlHistoryUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -367,6 +387,12 @@ func (_u *MappedControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -488,6 +514,26 @@ func (_u *MappedControlHistoryUpdateOne) SetNillableUpdatedBy(v *string) *Mapped
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *MappedControlHistoryUpdateOne) ClearUpdatedBy() *MappedControlHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *MappedControlHistoryUpdateOne) SetUpdatedByImpersonator(v string) *MappedControlHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *MappedControlHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *MappedControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *MappedControlHistoryUpdateOne) ClearUpdatedByImpersonator() *MappedControlHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -820,6 +866,12 @@ func (_u *MappedControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ma
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldDeletedAt, field.TypeTime, value)

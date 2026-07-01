@@ -34,9 +34,7 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforced() {
 	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
-	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		IdentityProviderLoginEnforced: ptr(true),
-	}).Save(ownerCtx)
+	setting, err := suite.db.OrganizationSetting.Create().Save(ownerCtx)
 	assert.NoError(t, err)
 
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
@@ -49,6 +47,8 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforced() {
 		SetOrganizationID(org.ID).
 		Exec(ownerCtx)
 	assert.NoError(t, err)
+
+	suite.enforceSSOOnSetting(ownerCtx, setting.ID)
 
 	testUser := suite.userBuilderWithInput(ctx, &userInput{
 		password:      "$uper$ecretP@ssword",
@@ -91,9 +91,7 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforcedOwnerBypass() {
 	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
-	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		IdentityProviderLoginEnforced: ptr(true),
-	}).Save(ownerCtx)
+	setting, err := suite.db.OrganizationSetting.Create().Save(ownerCtx)
 	assert.NoError(t, err)
 
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
@@ -106,6 +104,8 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforcedOwnerBypass() {
 		SetOrganizationID(org.ID).
 		Exec(ownerCtx)
 	assert.NoError(t, err)
+
+	suite.enforceSSOOnSetting(ownerCtx, setting.ID)
 
 	// user is set as owner by default
 	suite.db.UserSetting.UpdateOneID(ownerUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(ownerCtx)

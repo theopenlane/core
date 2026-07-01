@@ -12,8 +12,8 @@ func ValidateIP(s string) error {
 		return errors.New("invalid ip address") //nolint:err113
 	}
 
-	if ip.IsLoopback() || ip.IsUnspecified() {
-		return errors.New("you cannot use a loopback address or unspecified IP like 0.0.0.0 and others") //nolint:err113
+	if ip.IsUnspecified() {
+		return errors.New("you cannot use a unspecified IP like 0.0.0.0 and others") //nolint:err113
 	}
 
 	return nil

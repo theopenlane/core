@@ -11,9 +11,11 @@ mutation CreateBulkCSVInvite ($input: Upload!) {
 			requestorID
 			role
 			sendAttempts
+			ssoExempt
 			status
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -30,9 +32,11 @@ mutation CreateBulkInvite ($input: [CreateInviteInput!]) {
 			requestorID
 			role
 			sendAttempts
+			ssoExempt
 			status
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -49,9 +53,11 @@ mutation CreateInvite ($input: CreateInviteInput!) {
 			requestorID
 			role
 			sendAttempts
+			ssoExempt
 			status
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			owner {
 				id
 			}
@@ -101,9 +107,11 @@ query GetInviteByID ($inviteId: ID!) {
 		requestorID
 		role
 		sendAttempts
+		ssoExempt
 		status
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		owner {
 			displayName
 			id

@@ -18,6 +18,7 @@ mutation CreateBulkCSVContact ($input: Upload!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -41,6 +42,7 @@ mutation CreateBulkContact ($input: [CreateContactInput!]) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -64,6 +66,7 @@ mutation CreateContact ($input: CreateContactInput!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -113,6 +116,7 @@ query GetContactByID ($contactId: ID!) {
 		title
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 	}
 }
 query GetContacts ($where: ContactWhereInput) {
@@ -157,6 +161,7 @@ mutation UpdateBulkContact ($ids: [ID!]!, $input: UpdateContactInput!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 		updatedIDs
 	}
@@ -181,6 +186,7 @@ mutation UpdateContact ($updateContactId: ID!, $input: UpdateContactInput!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }

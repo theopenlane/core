@@ -66,6 +66,26 @@ func (_u *CustomDomainUpdate) ClearUpdatedBy() *CustomDomainUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *CustomDomainUpdate) SetUpdatedByImpersonator(v string) *CustomDomainUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *CustomDomainUpdate) SetNillableUpdatedByImpersonator(v *string) *CustomDomainUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *CustomDomainUpdate) ClearUpdatedByImpersonator() *CustomDomainUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *CustomDomainUpdate) SetDeletedAt(v time.Time) *CustomDomainUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -337,6 +357,12 @@ func (_u *CustomDomainUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(customdomain.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(customdomain.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(customdomain.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(customdomain.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -496,6 +522,26 @@ func (_u *CustomDomainUpdateOne) SetNillableUpdatedBy(v *string) *CustomDomainUp
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *CustomDomainUpdateOne) ClearUpdatedBy() *CustomDomainUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *CustomDomainUpdateOne) SetUpdatedByImpersonator(v string) *CustomDomainUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *CustomDomainUpdateOne) SetNillableUpdatedByImpersonator(v *string) *CustomDomainUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *CustomDomainUpdateOne) ClearUpdatedByImpersonator() *CustomDomainUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -799,6 +845,12 @@ func (_u *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDoma
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(customdomain.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(customdomain.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(customdomain.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(customdomain.FieldDeletedAt, field.TypeTime, value)

@@ -36,6 +36,7 @@ mutation CreateBulkCSVIdentityHolder ($input: Upload!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			userID
 			workflowEligibleMarker
 		}
@@ -79,6 +80,7 @@ mutation CreateBulkIdentityHolder ($input: [CreateIdentityHolderInput!]) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			userID
 			workflowEligibleMarker
 		}
@@ -122,6 +124,7 @@ mutation CreateIdentityHolder ($input: CreateIdentityHolderInput!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			userID
 			workflowEligibleMarker
 		}
@@ -178,6 +181,7 @@ query GetAllIdentityHolders ($first: Int, $last: Int, $after: Cursor, $before: C
 				title
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				userID
 				workflowEligibleMarker
 				campaigns {
@@ -245,6 +249,7 @@ query GetIdentityHolderByID ($identityHolderId: ID!) {
 		title
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		userID
 		workflowEligibleMarker
 		campaigns {
@@ -385,6 +390,7 @@ query GetIdentityHolders ($first: Int, $last: Int, $after: Cursor, $before: Curs
 				title
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				userID
 				workflowEligibleMarker
 				campaigns {
@@ -439,6 +445,7 @@ mutation UpdateIdentityHolder ($updateIdentityHolderId: ID!, $input: UpdateIdent
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			userID
 			workflowEligibleMarker
 		}

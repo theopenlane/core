@@ -84,6 +84,20 @@ func (_c *AssessmentCreate) SetNillableUpdatedBy(v *string) *AssessmentCreate {
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *AssessmentCreate) SetUpdatedByImpersonator(v string) *AssessmentCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *AssessmentCreate) SetNillableUpdatedByImpersonator(v *string) *AssessmentCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *AssessmentCreate) SetDeletedAt(v time.Time) *AssessmentCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -510,6 +524,10 @@ func (_c *AssessmentCreate) createSpec() (*Assessment, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(assessment.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(assessment.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(assessment.FieldDeletedAt, field.TypeTime, value)

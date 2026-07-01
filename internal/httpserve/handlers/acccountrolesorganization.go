@@ -10,7 +10,6 @@ import (
 
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -51,7 +50,6 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context, openapi *Ope
 		SubjectID:   caller.SubjectID,
 		ObjectID:    in.ID,
 		ObjectType:  fgax.Kind(generated.TypeOrganization),
-		Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 	}
 
 	roles, err := h.DBClient.Authz.ListRelations(reqCtx, req)

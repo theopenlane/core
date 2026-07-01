@@ -68,6 +68,26 @@ func (_u *CampaignHistoryUpdate) ClearUpdatedBy() *CampaignHistoryUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *CampaignHistoryUpdate) SetUpdatedByImpersonator(v string) *CampaignHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *CampaignHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *CampaignHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *CampaignHistoryUpdate) ClearUpdatedByImpersonator() *CampaignHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *CampaignHistoryUpdate) SetDeletedAt(v time.Time) *CampaignHistoryUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -860,6 +880,12 @@ func (_u *CampaignHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(campaignhistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(campaignhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(campaignhistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(campaignhistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -1125,6 +1151,26 @@ func (_u *CampaignHistoryUpdateOne) SetNillableUpdatedBy(v *string) *CampaignHis
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *CampaignHistoryUpdateOne) ClearUpdatedBy() *CampaignHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *CampaignHistoryUpdateOne) SetUpdatedByImpersonator(v string) *CampaignHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *CampaignHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *CampaignHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *CampaignHistoryUpdateOne) ClearUpdatedByImpersonator() *CampaignHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -1949,6 +1995,12 @@ func (_u *CampaignHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Campaig
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(campaignhistory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(campaignhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(campaignhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(campaignhistory.FieldDeletedAt, field.TypeTime, value)

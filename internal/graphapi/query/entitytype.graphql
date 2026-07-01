@@ -12,6 +12,7 @@ mutation CreateBulkCSVEntityType ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -29,6 +30,7 @@ mutation CreateBulkEntityType ($input: [CreateEntityTypeInput!]) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -46,6 +48,7 @@ mutation CreateEntityType ($input: CreateEntityTypeInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -83,6 +86,7 @@ query GetEntityTypeByID ($entityTypeId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 	}
 }
 query GetEntityTypes ($where: EntityTypeWhereInput) {
@@ -115,6 +119,7 @@ mutation UpdateEntityType ($updateEntityTypeId: ID!, $input: UpdateEntityTypeInp
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }

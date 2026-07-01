@@ -163,6 +163,8 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 		newRole := enums.RoleOwner
 		if err := c.OrgMembership.UpdateOneID(newOwnerMembership.ID).
 			SetRole(newRole).
+			SetSSOExempt(true).
+			SetSSOExemptReason("organization owner").
 			Exec(allowCtx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("unable to update new owner role")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "org_membership"})
@@ -172,6 +174,8 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 		superAdminRole := enums.RoleSuperAdmin
 		if err := c.OrgMembership.UpdateOneID(currentUserMembership.ID).
 			SetRole(superAdminRole).
+			SetSSOExempt(false).
+			ClearSSOExemptReason().
 			Exec(allowCtx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("unable to set current owner to super admin")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "org_membership"})

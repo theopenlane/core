@@ -69,6 +69,26 @@ func (_u *OrgSubscriptionUpdate) ClearUpdatedBy() *OrgSubscriptionUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *OrgSubscriptionUpdate) SetUpdatedByImpersonator(v string) *OrgSubscriptionUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *OrgSubscriptionUpdate) SetNillableUpdatedByImpersonator(v *string) *OrgSubscriptionUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *OrgSubscriptionUpdate) ClearUpdatedByImpersonator() *OrgSubscriptionUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *OrgSubscriptionUpdate) SetDeletedAt(v time.Time) *OrgSubscriptionUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -509,6 +529,12 @@ func (_u *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgsubscription.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(orgsubscription.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(orgsubscription.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(orgsubscription.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -841,6 +867,26 @@ func (_u *OrgSubscriptionUpdateOne) SetNillableUpdatedBy(v *string) *OrgSubscrip
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *OrgSubscriptionUpdateOne) ClearUpdatedBy() *OrgSubscriptionUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *OrgSubscriptionUpdateOne) SetUpdatedByImpersonator(v string) *OrgSubscriptionUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *OrgSubscriptionUpdateOne) SetNillableUpdatedByImpersonator(v *string) *OrgSubscriptionUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *OrgSubscriptionUpdateOne) ClearUpdatedByImpersonator() *OrgSubscriptionUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -1313,6 +1359,12 @@ func (_u *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubs
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgsubscription.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(orgsubscription.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(orgsubscription.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(orgsubscription.FieldDeletedAt, field.TypeTime, value)

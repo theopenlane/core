@@ -3,19 +3,16 @@ package hooks
 import (
 	"context"
 	"fmt"
-	"slices"
 	"strings"
 	"time"
 
 	"entgo.io/ent"
-	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -31,9 +28,6 @@ func HookOrganizationCreatePolicy() ent.Hook {
 				return nil, err
 			}
 
-			// setup vars before switch
-			orgID := ""
-
 			allowedDomains := []string{}
 
 			var client *generated.Client
@@ -42,23 +36,7 @@ func HookOrganizationCreatePolicy() ent.Hook {
 			case *generated.OrganizationSettingMutation:
 				client = m.Client()
 				allowedDomains, _ = m.AllowedEmailDomains()
-
-				orgID, err = getOrgIDFromSettingMutation(ctx, m, retVal)
-				if err != nil {
-					// skip if its a not found error
-					// a setting can be created without an organization
-					if generated.IsNotFound(err) {
-						return retVal, nil
-					}
-
-					return nil, err
-				}
 			case *generated.OrganizationMutation:
-				orgID, err = GetObjectIDFromEntValue(retVal)
-				if err != nil {
-					return nil, err
-				}
-
 				settingID, ok := m.SettingID()
 				if !ok || settingID == "" {
 					return retVal, nil
@@ -87,10 +65,6 @@ func HookOrganizationCreatePolicy() ent.Hook {
 				return nil, fmt.Errorf("%w: allowed email domains cannot include free email domains", ErrInvalidInput)
 			}
 
-			if err := updateOrgConditionalTuples(ctx, m, orgID, allowedDomains); err != nil {
-				return nil, err
-			}
-
 			return retVal, nil
 		})
 	},
@@ -108,51 +82,18 @@ func HookOrganizationUpdatePolicy() ent.Hook {
 				return nil, err
 			}
 
-			orgID, err := getOrgIDFromSettingMutation(ctx, m, retVal)
-			if err != nil {
-				return nil, err
-			}
-
 			allowedEmailDomains, okSet := m.AllowedEmailDomains()
-			if m.EmailVerifier.IncludesFreeDomain(allowedEmailDomains) {
+			if okSet && m.EmailVerifier.IncludesFreeDomain(allowedEmailDomains) {
 				logx.FromContext(ctx).Warn().Strs("domains", allowedEmailDomains).Msg("organization allowed email domains include free email domains")
 
 				return nil, fmt.Errorf("%w: allowed email domains cannot include free email domains", ErrInvalidInput)
 			}
 
-			okClear := m.AllowedEmailDomainsCleared()
-
-			appendedDomains, okAppend := m.AppendedAllowedEmailDomains()
-
-			if m.EmailVerifier.IncludesFreeDomain(appendedDomains) {
+			appendedDomains, ok := m.AppendedAllowedEmailDomains()
+			if ok && m.EmailVerifier.IncludesFreeDomain(appendedDomains) {
 				logx.FromContext(ctx).Warn().Strs("domains", appendedDomains).Msg("organization allowed email domains include free email domains")
 
 				return nil, fmt.Errorf("%w: allowed email domains cannot include free email domains", ErrInvalidInput)
-			}
-
-			var domainUpdates []string
-
-			switch {
-			case okSet:
-				domainUpdates = allowedEmailDomains
-			case okClear:
-				domainUpdates = []string{}
-			case okAppend:
-				originalDomains, err := m.OldAllowedEmailDomains(ctx)
-				if err != nil {
-					return nil, err
-				}
-
-				domainUpdates = slices.Concat(originalDomains, appendedDomains)
-			default:
-				// we shouldn't get here because the hook is only called when the allowed email domains are set
-				// but if we do, just return
-				return retVal, nil
-			}
-
-			// update the conditional tuples with the new set of domains
-			if err := updateOrgConditionalTuples(ctx, m, orgID, domainUpdates); err != nil {
-				return nil, err
 			}
 
 			return retVal, nil
@@ -235,41 +176,6 @@ func sendBillingEmailChangeNotifications(ctx context.Context, client *generated.
 		}); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to send billing email change notification")
 		}
-	}
-
-	return nil
-}
-
-// updateOrgConditionalTuples will update (or create) a conditional tuple for the organization
-// that restricts access based on the email domain
-// the tuple will look like the following, where the allowed_domains are the email domains that are allowed
-// if the list is empty, then all domains are allowed
-//
-// user: organization:openlane#member
-// relation: access
-// object: organization:openlane
-// condition:
-//
-//	name: email_domain_allowed
-//	context:
-//	  allowed_domains: []
-func updateOrgConditionalTuples(ctx context.Context, m ent.Mutation, orgID string, allowedEmailDomains []string) error {
-	// create the tuple request, this is a self-referential tuple so the object and subject are the same
-	tk := fgax.TupleRequest{
-		ObjectID:         orgID,
-		ObjectType:       generated.TypeOrganization,
-		SubjectID:        orgID,
-		SubjectType:      generated.TypeOrganization,
-		SubjectRelation:  fgax.MemberRelation,
-		Relation:         utils.OrgAccessCheckRelation,
-		ConditionName:    utils.OrgEmailConditionName,
-		ConditionContext: utils.NewOrganizationConditionContext(allowedEmailDomains),
-	}
-
-	if _, err := utils.AuthzClient(ctx, m).UpdateConditionalTupleKey(ctx, fgax.GetTupleKey(tk)); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to create org access restriction tuple")
-
-		return err
 	}
 
 	return nil

@@ -67,6 +67,26 @@ func (_u *NotificationPreferenceHistoryUpdate) ClearUpdatedBy() *NotificationPre
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *NotificationPreferenceHistoryUpdate) SetUpdatedByImpersonator(v string) *NotificationPreferenceHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *NotificationPreferenceHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *NotificationPreferenceHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *NotificationPreferenceHistoryUpdate) ClearUpdatedByImpersonator() *NotificationPreferenceHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *NotificationPreferenceHistoryUpdate) SetDeletedAt(v time.Time) *NotificationPreferenceHistoryUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -582,6 +602,12 @@ func (_u *NotificationPreferenceHistoryUpdate) sqlSave(ctx context.Context) (_no
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(notificationpreferencehistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(notificationpreferencehistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(notificationpreferencehistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(notificationpreferencehistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -763,6 +789,26 @@ func (_u *NotificationPreferenceHistoryUpdateOne) SetNillableUpdatedBy(v *string
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *NotificationPreferenceHistoryUpdateOne) ClearUpdatedBy() *NotificationPreferenceHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *NotificationPreferenceHistoryUpdateOne) SetUpdatedByImpersonator(v string) *NotificationPreferenceHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *NotificationPreferenceHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *NotificationPreferenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *NotificationPreferenceHistoryUpdateOne) ClearUpdatedByImpersonator() *NotificationPreferenceHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -1310,6 +1356,12 @@ func (_u *NotificationPreferenceHistoryUpdateOne) sqlSave(ctx context.Context) (
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(notificationpreferencehistory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(notificationpreferencehistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(notificationpreferencehistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(notificationpreferencehistory.FieldDeletedAt, field.TypeTime, value)

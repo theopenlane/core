@@ -114,6 +114,20 @@ func (_c *CustomDomainHistoryCreate) SetNillableUpdatedBy(v *string) *CustomDoma
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *CustomDomainHistoryCreate) SetUpdatedByImpersonator(v string) *CustomDomainHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *CustomDomainHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *CustomDomainHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *CustomDomainHistoryCreate) SetDeletedAt(v time.Time) *CustomDomainHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -442,6 +456,10 @@ func (_c *CustomDomainHistoryCreate) createSpec() (*CustomDomainHistory, *sqlgra
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(customdomainhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(customdomainhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(customdomainhistory.FieldDeletedAt, field.TypeTime, value)

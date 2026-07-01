@@ -30,6 +30,8 @@ type WorkflowProposal struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -128,7 +130,7 @@ func (*WorkflowProposal) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case workflowproposal.FieldRevision:
 			values[i] = new(sql.NullInt64)
-		case workflowproposal.FieldID, workflowproposal.FieldCreatedBy, workflowproposal.FieldUpdatedBy, workflowproposal.FieldOwnerID, workflowproposal.FieldWorkflowObjectRefID, workflowproposal.FieldDomainKey, workflowproposal.FieldState, workflowproposal.FieldProposedHash, workflowproposal.FieldApprovedHash, workflowproposal.FieldSubmittedByUserID:
+		case workflowproposal.FieldID, workflowproposal.FieldCreatedBy, workflowproposal.FieldUpdatedBy, workflowproposal.FieldUpdatedByImpersonator, workflowproposal.FieldOwnerID, workflowproposal.FieldWorkflowObjectRefID, workflowproposal.FieldDomainKey, workflowproposal.FieldState, workflowproposal.FieldProposedHash, workflowproposal.FieldApprovedHash, workflowproposal.FieldSubmittedByUserID:
 			values[i] = new(sql.NullString)
 		case workflowproposal.FieldCreatedAt, workflowproposal.FieldUpdatedAt, workflowproposal.FieldSubmittedAt:
 			values[i] = new(sql.NullTime)
@@ -176,6 +178,13 @@ func (_m *WorkflowProposal) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case workflowproposal.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case workflowproposal.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -315,6 +324,11 @@ func (_m *WorkflowProposal) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))

@@ -85,6 +85,7 @@ query GetWorkflowInstanceByID ($workflowInstanceId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		workflowDefinitionID
 		workflowProposalID
 		workflowAssignments {

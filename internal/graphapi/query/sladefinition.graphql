@@ -11,6 +11,7 @@ mutation CreateBulkCSVSLADefinition ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -27,6 +28,7 @@ mutation CreateBulkSLADefinition ($input: [CreateSLADefinitionInput!]) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -43,6 +45,7 @@ mutation CreateSLADefinition ($input: CreateSLADefinitionInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -77,6 +80,7 @@ query GetAllSLADefinitions ($first: Int, $last: Int, $after: Cursor, $before: Cu
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 			}
 		}
 	}
@@ -93,6 +97,7 @@ query GetSLADefinitionByID ($slaDefinitionId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 	}
 }
 query GetSLADefinitions ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [SLADefinitionOrder!], $where: SLADefinitionWhereInput) {
@@ -116,6 +121,7 @@ query GetSLADefinitions ($first: Int, $last: Int, $after: Cursor, $before: Curso
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 			}
 		}
 	}
@@ -133,6 +139,7 @@ mutation UpdateBulkCSVSLADefinition ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 		updatedIDs
 	}
@@ -150,6 +157,7 @@ mutation UpdateBulkSLADefinition ($ids: [ID!]!, $input: UpdateSLADefinitionInput
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 		updatedIDs
 	}
@@ -167,6 +175,7 @@ mutation UpdateSLADefinition ($updateSLADefinitionId: ID!, $input: UpdateSLADefi
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }

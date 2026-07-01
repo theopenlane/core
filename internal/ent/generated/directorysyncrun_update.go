@@ -69,6 +69,26 @@ func (_u *DirectorySyncRunUpdate) ClearUpdatedBy() *DirectorySyncRunUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *DirectorySyncRunUpdate) SetUpdatedByImpersonator(v string) *DirectorySyncRunUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *DirectorySyncRunUpdate) SetNillableUpdatedByImpersonator(v *string) *DirectorySyncRunUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *DirectorySyncRunUpdate) ClearUpdatedByImpersonator() *DirectorySyncRunUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *DirectorySyncRunUpdate) SetOwnerID(v string) *DirectorySyncRunUpdate {
 	_u.mutation.SetOwnerID(v)
@@ -593,6 +613,12 @@ func (_u *DirectorySyncRunUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(directorysyncrun.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(directorysyncrun.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(directorysyncrun.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(directorysyncrun.FieldEnvironmentName, field.TypeString, value)
 	}
@@ -949,6 +975,26 @@ func (_u *DirectorySyncRunUpdateOne) SetNillableUpdatedBy(v *string) *DirectoryS
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *DirectorySyncRunUpdateOne) ClearUpdatedBy() *DirectorySyncRunUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *DirectorySyncRunUpdateOne) SetUpdatedByImpersonator(v string) *DirectorySyncRunUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *DirectorySyncRunUpdateOne) SetNillableUpdatedByImpersonator(v *string) *DirectorySyncRunUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *DirectorySyncRunUpdateOne) ClearUpdatedByImpersonator() *DirectorySyncRunUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -1505,6 +1551,12 @@ func (_u *DirectorySyncRunUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(directorysyncrun.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(directorysyncrun.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(directorysyncrun.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(directorysyncrun.FieldEnvironmentName, field.TypeString, value)

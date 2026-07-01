@@ -46,6 +46,7 @@ mutation CreateBulkCSVSubcontrol ($input: Upload!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			workflowEligibleMarker
 			controlOwner {
 				id
@@ -106,6 +107,7 @@ mutation CreateBulkSubcontrol ($input: [CreateSubcontrolInput!]) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			workflowEligibleMarker
 			controlOwner {
 				id
@@ -166,6 +168,7 @@ mutation CreateSubcontrol ($input: CreateSubcontrolInput!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			workflowEligibleMarker
 			controlOwner {
 				id
@@ -277,6 +280,7 @@ query GetSubcontrolByID ($subcontrolId: ID!) {
 		title
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		workflowEligibleMarker
 		control {
 			id
@@ -389,6 +393,7 @@ mutation UpdateSubcontrol ($updateSubcontrolId: ID!, $input: UpdateSubcontrolInp
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			workflowEligibleMarker
 			control {
 				id

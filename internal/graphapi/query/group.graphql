@@ -23,6 +23,7 @@ mutation CreateBulkCSVGroup ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			owner {
 				id
 				displayName
@@ -76,6 +77,7 @@ mutation CreateBulkGroup ($input: [CreateGroupInput!]) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			owner {
 				id
 				displayName
@@ -129,6 +131,7 @@ mutation CreateGroup ($input: CreateGroupInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			owner {
 				id
 				displayName
@@ -306,6 +309,7 @@ query GetGroupByID ($groupId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		owner {
 			id
 			displayName
@@ -462,6 +466,7 @@ mutation UpdateGroup ($updateGroupId: ID!, $input: UpdateGroupInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			owner {
 				id
 				displayName

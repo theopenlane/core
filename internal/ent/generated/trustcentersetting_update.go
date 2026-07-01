@@ -66,6 +66,26 @@ func (_u *TrustCenterSettingUpdate) ClearUpdatedBy() *TrustCenterSettingUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *TrustCenterSettingUpdate) SetUpdatedByImpersonator(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableUpdatedByImpersonator(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *TrustCenterSettingUpdate) ClearUpdatedByImpersonator() *TrustCenterSettingUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *TrustCenterSettingUpdate) SetDeletedAt(v time.Time) *TrustCenterSettingUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -952,6 +972,12 @@ func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcentersetting.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(trustcentersetting.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(trustcentersetting.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(trustcentersetting.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -1372,6 +1398,26 @@ func (_u *TrustCenterSettingUpdateOne) SetNillableUpdatedBy(v *string) *TrustCen
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *TrustCenterSettingUpdateOne) ClearUpdatedBy() *TrustCenterSettingUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *TrustCenterSettingUpdateOne) SetUpdatedByImpersonator(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableUpdatedByImpersonator(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *TrustCenterSettingUpdateOne) ClearUpdatedByImpersonator() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -2290,6 +2336,12 @@ func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcentersetting.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(trustcentersetting.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(trustcentersetting.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(trustcentersetting.FieldDeletedAt, field.TypeTime, value)

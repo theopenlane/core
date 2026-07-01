@@ -23,6 +23,8 @@ const (
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
+	// FieldUpdatedByImpersonator holds the string denoting the updated_by_impersonator field in the database.
+	FieldUpdatedByImpersonator = "updated_by_impersonator"
 	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
@@ -47,6 +49,8 @@ const (
 	FieldAvatarUpdatedAt = "avatar_updated_at"
 	// FieldStripeCustomerID holds the string denoting the stripe_customer_id field in the database.
 	FieldStripeCustomerID = "stripe_customer_id"
+	// FieldSlugName holds the string denoting the slug_name field in the database.
+	FieldSlugName = "slug_name"
 	// EdgeActionPlanCreators holds the string denoting the action_plan_creators edge name in mutations.
 	EdgeActionPlanCreators = "action_plan_creators"
 	// EdgeAPITokenCreators holds the string denoting the api_token_creators edge name in mutations.
@@ -1574,6 +1578,7 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldCreatedBy,
 	FieldUpdatedBy,
+	FieldUpdatedByImpersonator,
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
@@ -1586,6 +1591,7 @@ var Columns = []string{
 	FieldAvatarLocalFileID,
 	FieldAvatarUpdatedAt,
 	FieldStripeCustomerID,
+	FieldSlugName,
 }
 
 var (
@@ -1619,7 +1625,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [88]ent.Hook
+	Hooks        [89]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -1642,6 +1648,8 @@ var (
 	AvatarRemoteURLValidator func(string) error
 	// DefaultAvatarUpdatedAt holds the default value on creation for the "avatar_updated_at" field.
 	DefaultAvatarUpdatedAt func() time.Time
+	// SlugNameValidator is a validator for the "slug_name" field. It is called by the builders before save.
+	SlugNameValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -1672,6 +1680,11 @@ func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedBy orders the results by the updated_by field.
 func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
+}
+
+// ByUpdatedByImpersonator orders the results by the updated_by_impersonator field.
+func ByUpdatedByImpersonator(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedByImpersonator, opts...).ToFunc()
 }
 
 // ByDeletedAt orders the results by the deleted_at field.
@@ -1727,6 +1740,11 @@ func ByAvatarUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByStripeCustomerID orders the results by the stripe_customer_id field.
 func ByStripeCustomerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStripeCustomerID, opts...).ToFunc()
+}
+
+// BySlugName orders the results by the slug_name field.
+func BySlugName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSlugName, opts...).ToFunc()
 }
 
 // ByActionPlanCreatorsCount orders the results by action_plan_creators count.

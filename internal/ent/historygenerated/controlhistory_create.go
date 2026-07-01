@@ -115,6 +115,20 @@ func (_c *ControlHistoryCreate) SetNillableUpdatedBy(v *string) *ControlHistoryC
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *ControlHistoryCreate) SetUpdatedByImpersonator(v string) *ControlHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *ControlHistoryCreate) SetDeletedAt(v time.Time) *ControlHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -905,6 +919,10 @@ func (_c *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(controlhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(controlhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(controlhistory.FieldDeletedAt, field.TypeTime, value)

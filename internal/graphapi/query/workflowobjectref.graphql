@@ -52,6 +52,7 @@ query GetWorkflowObjectRefByID ($workflowObjectRefId: ID!) {
 		taskID
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		workflowInstanceID
 	}
 }

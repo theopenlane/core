@@ -26,6 +26,7 @@ mutation CreateBulkCSVNotificationPreference ($input: Upload!) {
 			topicPatterns
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			userID
 			verifiedAt
 		}
@@ -59,6 +60,7 @@ mutation CreateBulkNotificationPreference ($input: [CreateNotificationPreference
 			topicPatterns
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			userID
 			verifiedAt
 		}
@@ -92,6 +94,7 @@ mutation CreateNotificationPreference ($input: CreateNotificationPreferenceInput
 			topicPatterns
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			userID
 			verifiedAt
 		}
@@ -143,6 +146,7 @@ query GetAllNotificationPreferences ($first: Int, $last: Int, $after: Cursor, $b
 				topicPatterns
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				userID
 				verifiedAt
 			}
@@ -176,6 +180,7 @@ query GetNotificationPreferenceByID ($notificationPreferenceId: ID!) {
 		topicPatterns
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		userID
 		verifiedAt
 	}
@@ -216,6 +221,7 @@ query GetNotificationPreferences ($first: Int, $last: Int, $after: Cursor, $befo
 				topicPatterns
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				userID
 				verifiedAt
 			}
@@ -250,6 +256,7 @@ mutation UpdateBulkCSVNotificationPreference ($input: Upload!) {
 			topicPatterns
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			userID
 			verifiedAt
 		}
@@ -284,6 +291,7 @@ mutation UpdateBulkNotificationPreference ($ids: [ID!]!, $input: UpdateNotificat
 			topicPatterns
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			userID
 			verifiedAt
 		}
@@ -318,6 +326,7 @@ mutation UpdateNotificationPreference ($updateNotificationPreferenceId: ID!, $in
 			topicPatterns
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			userID
 			verifiedAt
 		}

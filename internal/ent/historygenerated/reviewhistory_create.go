@@ -115,6 +115,20 @@ func (_c *ReviewHistoryCreate) SetNillableUpdatedBy(v *string) *ReviewHistoryCre
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *ReviewHistoryCreate) SetUpdatedByImpersonator(v string) *ReviewHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *ReviewHistoryCreate) SetDeletedAt(v time.Time) *ReviewHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -685,6 +699,10 @@ func (_c *ReviewHistoryCreate) createSpec() (*ReviewHistory, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(reviewhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(reviewhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(reviewhistory.FieldDeletedAt, field.TypeTime, value)

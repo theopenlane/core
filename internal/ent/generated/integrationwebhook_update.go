@@ -66,6 +66,26 @@ func (_u *IntegrationWebhookUpdate) ClearUpdatedBy() *IntegrationWebhookUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *IntegrationWebhookUpdate) SetUpdatedByImpersonator(v string) *IntegrationWebhookUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *IntegrationWebhookUpdate) SetNillableUpdatedByImpersonator(v *string) *IntegrationWebhookUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *IntegrationWebhookUpdate) ClearUpdatedByImpersonator() *IntegrationWebhookUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *IntegrationWebhookUpdate) SetDeletedAt(v time.Time) *IntegrationWebhookUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -413,6 +433,12 @@ func (_u *IntegrationWebhookUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(integrationwebhook.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(integrationwebhook.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(integrationwebhook.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(integrationwebhook.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -577,6 +603,26 @@ func (_u *IntegrationWebhookUpdateOne) SetNillableUpdatedBy(v *string) *Integrat
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *IntegrationWebhookUpdateOne) ClearUpdatedBy() *IntegrationWebhookUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *IntegrationWebhookUpdateOne) SetUpdatedByImpersonator(v string) *IntegrationWebhookUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *IntegrationWebhookUpdateOne) SetNillableUpdatedByImpersonator(v *string) *IntegrationWebhookUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *IntegrationWebhookUpdateOne) ClearUpdatedByImpersonator() *IntegrationWebhookUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -956,6 +1002,12 @@ func (_u *IntegrationWebhookUpdateOne) sqlSave(ctx context.Context) (_node *Inte
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(integrationwebhook.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(integrationwebhook.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(integrationwebhook.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(integrationwebhook.FieldDeletedAt, field.TypeTime, value)

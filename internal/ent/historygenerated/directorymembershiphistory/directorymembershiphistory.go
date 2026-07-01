@@ -34,6 +34,8 @@ const (
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
+	// FieldUpdatedByImpersonator holds the string denoting the updated_by_impersonator field in the database.
+	FieldUpdatedByImpersonator = "updated_by_impersonator"
 	// FieldDisplayID holds the string denoting the display_id field in the database.
 	FieldDisplayID = "display_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
@@ -92,6 +94,7 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldCreatedBy,
 	FieldUpdatedBy,
+	FieldUpdatedByImpersonator,
 	FieldDisplayID,
 	FieldOwnerID,
 	FieldEnvironmentName,
@@ -212,6 +215,11 @@ func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedBy orders the results by the updated_by field.
 func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
+}
+
+// ByUpdatedByImpersonator orders the results by the updated_by_impersonator field.
+func ByUpdatedByImpersonator(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedByImpersonator, opts...).ToFunc()
 }
 
 // ByDisplayID orders the results by the display_id field.

@@ -39,6 +39,7 @@ mutation CreateBulkCSVProcedure ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			url
 			workflowEligibleMarker
 			approver {
@@ -93,6 +94,7 @@ mutation CreateBulkProcedure ($input: [CreateProcedureInput!]) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			url
 			workflowEligibleMarker
 			approver {
@@ -147,6 +149,7 @@ mutation CreateProcedure ($input: CreateProcedureInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			url
 			workflowEligibleMarker
 			editors {
@@ -320,6 +323,7 @@ query GetProcedureByID ($procedureId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		url
 		workflowEligibleMarker
 		editors {
@@ -436,6 +440,7 @@ mutation UpdateBulkProcedure ($ids: [ID!]!, $input: UpdateProcedureInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			url
 			workflowEligibleMarker
 			approver {
@@ -491,6 +496,7 @@ mutation UpdateProcedure ($updateProcedureId: ID!, $input: UpdateProcedureInput!
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			url
 			workflowEligibleMarker
 			editors {

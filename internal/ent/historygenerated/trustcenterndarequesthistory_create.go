@@ -115,6 +115,20 @@ func (_c *TrustCenterNDARequestHistoryCreate) SetNillableUpdatedBy(v *string) *T
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *TrustCenterNDARequestHistoryCreate) SetUpdatedByImpersonator(v string) *TrustCenterNDARequestHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *TrustCenterNDARequestHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *TrustCenterNDARequestHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *TrustCenterNDARequestHistoryCreate) SetDeletedAt(v time.Time) *TrustCenterNDARequestHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -496,6 +510,10 @@ func (_c *TrustCenterNDARequestHistoryCreate) createSpec() (*TrustCenterNDAReque
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(trustcenterndarequesthistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(trustcenterndarequesthistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(trustcenterndarequesthistory.FieldDeletedAt, field.TypeTime, value)

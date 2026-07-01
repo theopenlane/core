@@ -114,6 +114,20 @@ func (_c *ControlImplementationHistoryCreate) SetNillableUpdatedBy(v *string) *C
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *ControlImplementationHistoryCreate) SetUpdatedByImpersonator(v string) *ControlImplementationHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *ControlImplementationHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *ControlImplementationHistoryCreate) SetDeletedAt(v time.Time) *ControlImplementationHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -455,6 +469,10 @@ func (_c *ControlImplementationHistoryCreate) createSpec() (*ControlImplementati
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(controlimplementationhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(controlimplementationhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(controlimplementationhistory.FieldDeletedAt, field.TypeTime, value)

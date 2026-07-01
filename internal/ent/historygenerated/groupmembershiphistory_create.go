@@ -114,6 +114,20 @@ func (_c *GroupMembershipHistoryCreate) SetNillableUpdatedBy(v *string) *GroupMe
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *GroupMembershipHistoryCreate) SetUpdatedByImpersonator(v string) *GroupMembershipHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *GroupMembershipHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *GroupMembershipHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetRole sets the "role" field.
 func (_c *GroupMembershipHistoryCreate) SetRole(v enums.Role) *GroupMembershipHistoryCreate {
 	_c.mutation.SetRole(v)
@@ -316,6 +330,10 @@ func (_c *GroupMembershipHistoryCreate) createSpec() (*GroupMembershipHistory, *
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(groupmembershiphistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(groupmembershiphistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(groupmembershiphistory.FieldRole, field.TypeEnum, value)

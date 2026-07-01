@@ -31,6 +31,8 @@ type DirectorySyncRun struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
 	// the organization id that owns the object
@@ -193,7 +195,7 @@ func (*DirectorySyncRun) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case directorysyncrun.FieldFullCount, directorysyncrun.FieldDeltaCount:
 			values[i] = new(sql.NullInt64)
-		case directorysyncrun.FieldID, directorysyncrun.FieldCreatedBy, directorysyncrun.FieldUpdatedBy, directorysyncrun.FieldDisplayID, directorysyncrun.FieldOwnerID, directorysyncrun.FieldEnvironmentName, directorysyncrun.FieldEnvironmentID, directorysyncrun.FieldScopeName, directorysyncrun.FieldScopeID, directorysyncrun.FieldIntegrationID, directorysyncrun.FieldPlatformID, directorysyncrun.FieldDirectoryInstanceID, directorysyncrun.FieldStatus, directorysyncrun.FieldSourceCursor, directorysyncrun.FieldError, directorysyncrun.FieldRawManifestFileID:
+		case directorysyncrun.FieldID, directorysyncrun.FieldCreatedBy, directorysyncrun.FieldUpdatedBy, directorysyncrun.FieldUpdatedByImpersonator, directorysyncrun.FieldDisplayID, directorysyncrun.FieldOwnerID, directorysyncrun.FieldEnvironmentName, directorysyncrun.FieldEnvironmentID, directorysyncrun.FieldScopeName, directorysyncrun.FieldScopeID, directorysyncrun.FieldIntegrationID, directorysyncrun.FieldPlatformID, directorysyncrun.FieldDirectoryInstanceID, directorysyncrun.FieldStatus, directorysyncrun.FieldSourceCursor, directorysyncrun.FieldError, directorysyncrun.FieldRawManifestFileID:
 			values[i] = new(sql.NullString)
 		case directorysyncrun.FieldCreatedAt, directorysyncrun.FieldUpdatedAt, directorysyncrun.FieldStartedAt, directorysyncrun.FieldCompletedAt:
 			values[i] = new(sql.NullTime)
@@ -241,6 +243,13 @@ func (_m *DirectorySyncRun) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case directorysyncrun.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case directorysyncrun.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -444,6 +453,11 @@ func (_m *DirectorySyncRun) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
 	builder.WriteString(_m.DisplayID)

@@ -52,6 +52,7 @@ query GetIntegrationByID ($integrationId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 	}
 }
 query GetIntegrationByIDWithSecrets ($integrationId: ID!) {

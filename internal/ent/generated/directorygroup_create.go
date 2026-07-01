@@ -85,6 +85,20 @@ func (_c *DirectoryGroupCreate) SetNillableUpdatedBy(v *string) *DirectoryGroupC
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *DirectoryGroupCreate) SetUpdatedByImpersonator(v string) *DirectoryGroupCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *DirectoryGroupCreate) SetNillableUpdatedByImpersonator(v *string) *DirectoryGroupCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDisplayID sets the "display_id" field.
 func (_c *DirectoryGroupCreate) SetDisplayID(v string) *DirectoryGroupCreate {
 	_c.mutation.SetDisplayID(v)
@@ -754,6 +768,10 @@ func (_c *DirectoryGroupCreate) createSpec() (*DirectoryGroup, *sqlgraph.CreateS
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(directorygroup.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(directorygroup.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(directorygroup.FieldDisplayID, field.TypeString, value)

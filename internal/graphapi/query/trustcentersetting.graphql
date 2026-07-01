@@ -131,6 +131,7 @@ query GetTrustCenterSettingByID ($trustCenterSettingId: ID!) {
 		trustCenterID
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		logoFile {
 			presignedURL
 		}
