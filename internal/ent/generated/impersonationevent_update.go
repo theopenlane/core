@@ -12,11 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -145,190 +142,9 @@ func (_u *ImpersonationEventUpdate) ClearTags() *ImpersonationEventUpdate {
 	return _u
 }
 
-// SetImpersonationType sets the "impersonation_type" field.
-func (_u *ImpersonationEventUpdate) SetImpersonationType(v enums.ImpersonationType) *ImpersonationEventUpdate {
-	_u.mutation.SetImpersonationType(v)
-	return _u
-}
-
-// SetNillableImpersonationType sets the "impersonation_type" field if the given value is not nil.
-func (_u *ImpersonationEventUpdate) SetNillableImpersonationType(v *enums.ImpersonationType) *ImpersonationEventUpdate {
-	if v != nil {
-		_u.SetImpersonationType(*v)
-	}
-	return _u
-}
-
-// SetAction sets the "action" field.
-func (_u *ImpersonationEventUpdate) SetAction(v enums.ImpersonationAction) *ImpersonationEventUpdate {
-	_u.mutation.SetAction(v)
-	return _u
-}
-
-// SetNillableAction sets the "action" field if the given value is not nil.
-func (_u *ImpersonationEventUpdate) SetNillableAction(v *enums.ImpersonationAction) *ImpersonationEventUpdate {
-	if v != nil {
-		_u.SetAction(*v)
-	}
-	return _u
-}
-
-// SetReason sets the "reason" field.
-func (_u *ImpersonationEventUpdate) SetReason(v string) *ImpersonationEventUpdate {
-	_u.mutation.SetReason(v)
-	return _u
-}
-
-// SetNillableReason sets the "reason" field if the given value is not nil.
-func (_u *ImpersonationEventUpdate) SetNillableReason(v *string) *ImpersonationEventUpdate {
-	if v != nil {
-		_u.SetReason(*v)
-	}
-	return _u
-}
-
-// ClearReason clears the value of the "reason" field.
-func (_u *ImpersonationEventUpdate) ClearReason() *ImpersonationEventUpdate {
-	_u.mutation.ClearReason()
-	return _u
-}
-
-// SetIPAddress sets the "ip_address" field.
-func (_u *ImpersonationEventUpdate) SetIPAddress(v string) *ImpersonationEventUpdate {
-	_u.mutation.SetIPAddress(v)
-	return _u
-}
-
-// SetNillableIPAddress sets the "ip_address" field if the given value is not nil.
-func (_u *ImpersonationEventUpdate) SetNillableIPAddress(v *string) *ImpersonationEventUpdate {
-	if v != nil {
-		_u.SetIPAddress(*v)
-	}
-	return _u
-}
-
-// ClearIPAddress clears the value of the "ip_address" field.
-func (_u *ImpersonationEventUpdate) ClearIPAddress() *ImpersonationEventUpdate {
-	_u.mutation.ClearIPAddress()
-	return _u
-}
-
-// SetUserAgent sets the "user_agent" field.
-func (_u *ImpersonationEventUpdate) SetUserAgent(v string) *ImpersonationEventUpdate {
-	_u.mutation.SetUserAgent(v)
-	return _u
-}
-
-// SetNillableUserAgent sets the "user_agent" field if the given value is not nil.
-func (_u *ImpersonationEventUpdate) SetNillableUserAgent(v *string) *ImpersonationEventUpdate {
-	if v != nil {
-		_u.SetUserAgent(*v)
-	}
-	return _u
-}
-
-// ClearUserAgent clears the value of the "user_agent" field.
-func (_u *ImpersonationEventUpdate) ClearUserAgent() *ImpersonationEventUpdate {
-	_u.mutation.ClearUserAgent()
-	return _u
-}
-
-// SetScopes sets the "scopes" field.
-func (_u *ImpersonationEventUpdate) SetScopes(v []string) *ImpersonationEventUpdate {
-	_u.mutation.SetScopes(v)
-	return _u
-}
-
-// AppendScopes appends value to the "scopes" field.
-func (_u *ImpersonationEventUpdate) AppendScopes(v []string) *ImpersonationEventUpdate {
-	_u.mutation.AppendScopes(v)
-	return _u
-}
-
-// ClearScopes clears the value of the "scopes" field.
-func (_u *ImpersonationEventUpdate) ClearScopes() *ImpersonationEventUpdate {
-	_u.mutation.ClearScopes()
-	return _u
-}
-
-// SetUserID sets the "user_id" field.
-func (_u *ImpersonationEventUpdate) SetUserID(v string) *ImpersonationEventUpdate {
-	_u.mutation.SetUserID(v)
-	return _u
-}
-
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *ImpersonationEventUpdate) SetNillableUserID(v *string) *ImpersonationEventUpdate {
-	if v != nil {
-		_u.SetUserID(*v)
-	}
-	return _u
-}
-
-// SetOrganizationID sets the "organization_id" field.
-func (_u *ImpersonationEventUpdate) SetOrganizationID(v string) *ImpersonationEventUpdate {
-	_u.mutation.SetOrganizationID(v)
-	return _u
-}
-
-// SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (_u *ImpersonationEventUpdate) SetNillableOrganizationID(v *string) *ImpersonationEventUpdate {
-	if v != nil {
-		_u.SetOrganizationID(*v)
-	}
-	return _u
-}
-
-// SetTargetUserID sets the "target_user_id" field.
-func (_u *ImpersonationEventUpdate) SetTargetUserID(v string) *ImpersonationEventUpdate {
-	_u.mutation.SetTargetUserID(v)
-	return _u
-}
-
-// SetNillableTargetUserID sets the "target_user_id" field if the given value is not nil.
-func (_u *ImpersonationEventUpdate) SetNillableTargetUserID(v *string) *ImpersonationEventUpdate {
-	if v != nil {
-		_u.SetTargetUserID(*v)
-	}
-	return _u
-}
-
-// SetUser sets the "user" edge to the User entity.
-func (_u *ImpersonationEventUpdate) SetUser(v *User) *ImpersonationEventUpdate {
-	return _u.SetUserID(v.ID)
-}
-
-// SetTargetUser sets the "target_user" edge to the User entity.
-func (_u *ImpersonationEventUpdate) SetTargetUser(v *User) *ImpersonationEventUpdate {
-	return _u.SetTargetUserID(v.ID)
-}
-
-// SetOrganization sets the "organization" edge to the Organization entity.
-func (_u *ImpersonationEventUpdate) SetOrganization(v *Organization) *ImpersonationEventUpdate {
-	return _u.SetOrganizationID(v.ID)
-}
-
 // Mutation returns the ImpersonationEventMutation object of the builder.
 func (_u *ImpersonationEventUpdate) Mutation() *ImpersonationEventMutation {
 	return _u.mutation
-}
-
-// ClearUser clears the "user" edge to the User entity.
-func (_u *ImpersonationEventUpdate) ClearUser() *ImpersonationEventUpdate {
-	_u.mutation.ClearUser()
-	return _u
-}
-
-// ClearTargetUser clears the "target_user" edge to the User entity.
-func (_u *ImpersonationEventUpdate) ClearTargetUser() *ImpersonationEventUpdate {
-	_u.mutation.ClearTargetUser()
-	return _u
-}
-
-// ClearOrganization clears the "organization" edge to the Organization entity.
-func (_u *ImpersonationEventUpdate) ClearOrganization() *ImpersonationEventUpdate {
-	_u.mutation.ClearOrganization()
-	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -375,26 +191,8 @@ func (_u *ImpersonationEventUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *ImpersonationEventUpdate) check() error {
-	if v, ok := _u.mutation.ImpersonationType(); ok {
-		if err := impersonationevent.ImpersonationTypeValidator(v); err != nil {
-			return &ValidationError{Name: "impersonation_type", err: fmt.Errorf(`generated: validator failed for field "ImpersonationEvent.impersonation_type": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Action(); ok {
-		if err := impersonationevent.ActionValidator(v); err != nil {
-			return &ValidationError{Name: "action", err: fmt.Errorf(`generated: validator failed for field "ImpersonationEvent.action": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.IPAddress(); ok {
-		if err := impersonationevent.IPAddressValidator(v); err != nil {
-			return &ValidationError{Name: "ip_address", err: fmt.Errorf(`generated: validator failed for field "ImpersonationEvent.ip_address": %w`, err)}
-		}
-	}
 	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "ImpersonationEvent.user"`)
-	}
-	if _u.mutation.TargetUserCleared() && len(_u.mutation.TargetUserIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "ImpersonationEvent.target_user"`)
 	}
 	if _u.mutation.OrganizationCleared() && len(_u.mutation.OrganizationIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "ImpersonationEvent.organization"`)
@@ -467,133 +265,17 @@ func (_u *ImpersonationEventUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(impersonationevent.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.ImpersonationType(); ok {
-		_spec.SetField(impersonationevent.FieldImpersonationType, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.Action(); ok {
-		_spec.SetField(impersonationevent.FieldAction, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.Reason(); ok {
-		_spec.SetField(impersonationevent.FieldReason, field.TypeString, value)
-	}
 	if _u.mutation.ReasonCleared() {
 		_spec.ClearField(impersonationevent.FieldReason, field.TypeString)
-	}
-	if value, ok := _u.mutation.IPAddress(); ok {
-		_spec.SetField(impersonationevent.FieldIPAddress, field.TypeString, value)
 	}
 	if _u.mutation.IPAddressCleared() {
 		_spec.ClearField(impersonationevent.FieldIPAddress, field.TypeString)
 	}
-	if value, ok := _u.mutation.UserAgent(); ok {
-		_spec.SetField(impersonationevent.FieldUserAgent, field.TypeString, value)
-	}
 	if _u.mutation.UserAgentCleared() {
 		_spec.ClearField(impersonationevent.FieldUserAgent, field.TypeString)
 	}
-	if value, ok := _u.mutation.Scopes(); ok {
-		_spec.SetField(impersonationevent.FieldScopes, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedScopes(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, impersonationevent.FieldScopes, value)
-		})
-	}
 	if _u.mutation.ScopesCleared() {
 		_spec.ClearField(impersonationevent.FieldScopes, field.TypeJSON)
-	}
-	if _u.mutation.UserCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   impersonationevent.UserTable,
-			Columns: []string{impersonationevent.UserColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   impersonationevent.UserTable,
-			Columns: []string{impersonationevent.UserColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.TargetUserCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   impersonationevent.TargetUserTable,
-			Columns: []string{impersonationevent.TargetUserColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.TargetUserIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   impersonationevent.TargetUserTable,
-			Columns: []string{impersonationevent.TargetUserColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.OrganizationCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   impersonationevent.OrganizationTable,
-			Columns: []string{impersonationevent.OrganizationColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OrganizationIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   impersonationevent.OrganizationTable,
-			Columns: []string{impersonationevent.OrganizationColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.Node.Schema = _u.schemaConfig.ImpersonationEvent
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -729,190 +411,9 @@ func (_u *ImpersonationEventUpdateOne) ClearTags() *ImpersonationEventUpdateOne 
 	return _u
 }
 
-// SetImpersonationType sets the "impersonation_type" field.
-func (_u *ImpersonationEventUpdateOne) SetImpersonationType(v enums.ImpersonationType) *ImpersonationEventUpdateOne {
-	_u.mutation.SetImpersonationType(v)
-	return _u
-}
-
-// SetNillableImpersonationType sets the "impersonation_type" field if the given value is not nil.
-func (_u *ImpersonationEventUpdateOne) SetNillableImpersonationType(v *enums.ImpersonationType) *ImpersonationEventUpdateOne {
-	if v != nil {
-		_u.SetImpersonationType(*v)
-	}
-	return _u
-}
-
-// SetAction sets the "action" field.
-func (_u *ImpersonationEventUpdateOne) SetAction(v enums.ImpersonationAction) *ImpersonationEventUpdateOne {
-	_u.mutation.SetAction(v)
-	return _u
-}
-
-// SetNillableAction sets the "action" field if the given value is not nil.
-func (_u *ImpersonationEventUpdateOne) SetNillableAction(v *enums.ImpersonationAction) *ImpersonationEventUpdateOne {
-	if v != nil {
-		_u.SetAction(*v)
-	}
-	return _u
-}
-
-// SetReason sets the "reason" field.
-func (_u *ImpersonationEventUpdateOne) SetReason(v string) *ImpersonationEventUpdateOne {
-	_u.mutation.SetReason(v)
-	return _u
-}
-
-// SetNillableReason sets the "reason" field if the given value is not nil.
-func (_u *ImpersonationEventUpdateOne) SetNillableReason(v *string) *ImpersonationEventUpdateOne {
-	if v != nil {
-		_u.SetReason(*v)
-	}
-	return _u
-}
-
-// ClearReason clears the value of the "reason" field.
-func (_u *ImpersonationEventUpdateOne) ClearReason() *ImpersonationEventUpdateOne {
-	_u.mutation.ClearReason()
-	return _u
-}
-
-// SetIPAddress sets the "ip_address" field.
-func (_u *ImpersonationEventUpdateOne) SetIPAddress(v string) *ImpersonationEventUpdateOne {
-	_u.mutation.SetIPAddress(v)
-	return _u
-}
-
-// SetNillableIPAddress sets the "ip_address" field if the given value is not nil.
-func (_u *ImpersonationEventUpdateOne) SetNillableIPAddress(v *string) *ImpersonationEventUpdateOne {
-	if v != nil {
-		_u.SetIPAddress(*v)
-	}
-	return _u
-}
-
-// ClearIPAddress clears the value of the "ip_address" field.
-func (_u *ImpersonationEventUpdateOne) ClearIPAddress() *ImpersonationEventUpdateOne {
-	_u.mutation.ClearIPAddress()
-	return _u
-}
-
-// SetUserAgent sets the "user_agent" field.
-func (_u *ImpersonationEventUpdateOne) SetUserAgent(v string) *ImpersonationEventUpdateOne {
-	_u.mutation.SetUserAgent(v)
-	return _u
-}
-
-// SetNillableUserAgent sets the "user_agent" field if the given value is not nil.
-func (_u *ImpersonationEventUpdateOne) SetNillableUserAgent(v *string) *ImpersonationEventUpdateOne {
-	if v != nil {
-		_u.SetUserAgent(*v)
-	}
-	return _u
-}
-
-// ClearUserAgent clears the value of the "user_agent" field.
-func (_u *ImpersonationEventUpdateOne) ClearUserAgent() *ImpersonationEventUpdateOne {
-	_u.mutation.ClearUserAgent()
-	return _u
-}
-
-// SetScopes sets the "scopes" field.
-func (_u *ImpersonationEventUpdateOne) SetScopes(v []string) *ImpersonationEventUpdateOne {
-	_u.mutation.SetScopes(v)
-	return _u
-}
-
-// AppendScopes appends value to the "scopes" field.
-func (_u *ImpersonationEventUpdateOne) AppendScopes(v []string) *ImpersonationEventUpdateOne {
-	_u.mutation.AppendScopes(v)
-	return _u
-}
-
-// ClearScopes clears the value of the "scopes" field.
-func (_u *ImpersonationEventUpdateOne) ClearScopes() *ImpersonationEventUpdateOne {
-	_u.mutation.ClearScopes()
-	return _u
-}
-
-// SetUserID sets the "user_id" field.
-func (_u *ImpersonationEventUpdateOne) SetUserID(v string) *ImpersonationEventUpdateOne {
-	_u.mutation.SetUserID(v)
-	return _u
-}
-
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *ImpersonationEventUpdateOne) SetNillableUserID(v *string) *ImpersonationEventUpdateOne {
-	if v != nil {
-		_u.SetUserID(*v)
-	}
-	return _u
-}
-
-// SetOrganizationID sets the "organization_id" field.
-func (_u *ImpersonationEventUpdateOne) SetOrganizationID(v string) *ImpersonationEventUpdateOne {
-	_u.mutation.SetOrganizationID(v)
-	return _u
-}
-
-// SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (_u *ImpersonationEventUpdateOne) SetNillableOrganizationID(v *string) *ImpersonationEventUpdateOne {
-	if v != nil {
-		_u.SetOrganizationID(*v)
-	}
-	return _u
-}
-
-// SetTargetUserID sets the "target_user_id" field.
-func (_u *ImpersonationEventUpdateOne) SetTargetUserID(v string) *ImpersonationEventUpdateOne {
-	_u.mutation.SetTargetUserID(v)
-	return _u
-}
-
-// SetNillableTargetUserID sets the "target_user_id" field if the given value is not nil.
-func (_u *ImpersonationEventUpdateOne) SetNillableTargetUserID(v *string) *ImpersonationEventUpdateOne {
-	if v != nil {
-		_u.SetTargetUserID(*v)
-	}
-	return _u
-}
-
-// SetUser sets the "user" edge to the User entity.
-func (_u *ImpersonationEventUpdateOne) SetUser(v *User) *ImpersonationEventUpdateOne {
-	return _u.SetUserID(v.ID)
-}
-
-// SetTargetUser sets the "target_user" edge to the User entity.
-func (_u *ImpersonationEventUpdateOne) SetTargetUser(v *User) *ImpersonationEventUpdateOne {
-	return _u.SetTargetUserID(v.ID)
-}
-
-// SetOrganization sets the "organization" edge to the Organization entity.
-func (_u *ImpersonationEventUpdateOne) SetOrganization(v *Organization) *ImpersonationEventUpdateOne {
-	return _u.SetOrganizationID(v.ID)
-}
-
 // Mutation returns the ImpersonationEventMutation object of the builder.
 func (_u *ImpersonationEventUpdateOne) Mutation() *ImpersonationEventMutation {
 	return _u.mutation
-}
-
-// ClearUser clears the "user" edge to the User entity.
-func (_u *ImpersonationEventUpdateOne) ClearUser() *ImpersonationEventUpdateOne {
-	_u.mutation.ClearUser()
-	return _u
-}
-
-// ClearTargetUser clears the "target_user" edge to the User entity.
-func (_u *ImpersonationEventUpdateOne) ClearTargetUser() *ImpersonationEventUpdateOne {
-	_u.mutation.ClearTargetUser()
-	return _u
-}
-
-// ClearOrganization clears the "organization" edge to the Organization entity.
-func (_u *ImpersonationEventUpdateOne) ClearOrganization() *ImpersonationEventUpdateOne {
-	_u.mutation.ClearOrganization()
-	return _u
 }
 
 // Where appends a list predicates to the ImpersonationEventUpdate builder.
@@ -972,26 +473,8 @@ func (_u *ImpersonationEventUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *ImpersonationEventUpdateOne) check() error {
-	if v, ok := _u.mutation.ImpersonationType(); ok {
-		if err := impersonationevent.ImpersonationTypeValidator(v); err != nil {
-			return &ValidationError{Name: "impersonation_type", err: fmt.Errorf(`generated: validator failed for field "ImpersonationEvent.impersonation_type": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Action(); ok {
-		if err := impersonationevent.ActionValidator(v); err != nil {
-			return &ValidationError{Name: "action", err: fmt.Errorf(`generated: validator failed for field "ImpersonationEvent.action": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.IPAddress(); ok {
-		if err := impersonationevent.IPAddressValidator(v); err != nil {
-			return &ValidationError{Name: "ip_address", err: fmt.Errorf(`generated: validator failed for field "ImpersonationEvent.ip_address": %w`, err)}
-		}
-	}
 	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "ImpersonationEvent.user"`)
-	}
-	if _u.mutation.TargetUserCleared() && len(_u.mutation.TargetUserIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "ImpersonationEvent.target_user"`)
 	}
 	if _u.mutation.OrganizationCleared() && len(_u.mutation.OrganizationIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "ImpersonationEvent.organization"`)
@@ -1081,133 +564,17 @@ func (_u *ImpersonationEventUpdateOne) sqlSave(ctx context.Context) (_node *Impe
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(impersonationevent.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.ImpersonationType(); ok {
-		_spec.SetField(impersonationevent.FieldImpersonationType, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.Action(); ok {
-		_spec.SetField(impersonationevent.FieldAction, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.Reason(); ok {
-		_spec.SetField(impersonationevent.FieldReason, field.TypeString, value)
-	}
 	if _u.mutation.ReasonCleared() {
 		_spec.ClearField(impersonationevent.FieldReason, field.TypeString)
-	}
-	if value, ok := _u.mutation.IPAddress(); ok {
-		_spec.SetField(impersonationevent.FieldIPAddress, field.TypeString, value)
 	}
 	if _u.mutation.IPAddressCleared() {
 		_spec.ClearField(impersonationevent.FieldIPAddress, field.TypeString)
 	}
-	if value, ok := _u.mutation.UserAgent(); ok {
-		_spec.SetField(impersonationevent.FieldUserAgent, field.TypeString, value)
-	}
 	if _u.mutation.UserAgentCleared() {
 		_spec.ClearField(impersonationevent.FieldUserAgent, field.TypeString)
 	}
-	if value, ok := _u.mutation.Scopes(); ok {
-		_spec.SetField(impersonationevent.FieldScopes, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedScopes(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, impersonationevent.FieldScopes, value)
-		})
-	}
 	if _u.mutation.ScopesCleared() {
 		_spec.ClearField(impersonationevent.FieldScopes, field.TypeJSON)
-	}
-	if _u.mutation.UserCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   impersonationevent.UserTable,
-			Columns: []string{impersonationevent.UserColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   impersonationevent.UserTable,
-			Columns: []string{impersonationevent.UserColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.TargetUserCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   impersonationevent.TargetUserTable,
-			Columns: []string{impersonationevent.TargetUserColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.TargetUserIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   impersonationevent.TargetUserTable,
-			Columns: []string{impersonationevent.TargetUserColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.OrganizationCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   impersonationevent.OrganizationTable,
-			Columns: []string{impersonationevent.OrganizationColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OrganizationIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   impersonationevent.OrganizationTable,
-			Columns: []string{impersonationevent.OrganizationColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.Node.Schema = _u.schemaConfig.ImpersonationEvent
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

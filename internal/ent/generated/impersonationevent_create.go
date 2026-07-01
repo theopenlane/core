@@ -205,6 +205,14 @@ func (_c *ImpersonationEventCreate) SetTargetUserID(v string) *ImpersonationEven
 	return _c
 }
 
+// SetNillableTargetUserID sets the "target_user_id" field if the given value is not nil.
+func (_c *ImpersonationEventCreate) SetNillableTargetUserID(v *string) *ImpersonationEventCreate {
+	if v != nil {
+		_c.SetTargetUserID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ImpersonationEventCreate) SetID(v string) *ImpersonationEventCreate {
 	_c.mutation.SetID(v)
@@ -328,14 +336,8 @@ func (_c *ImpersonationEventCreate) check() error {
 	if _, ok := _c.mutation.OrganizationID(); !ok {
 		return &ValidationError{Name: "organization_id", err: errors.New(`generated: missing required field "ImpersonationEvent.organization_id"`)}
 	}
-	if _, ok := _c.mutation.TargetUserID(); !ok {
-		return &ValidationError{Name: "target_user_id", err: errors.New(`generated: missing required field "ImpersonationEvent.target_user_id"`)}
-	}
 	if len(_c.mutation.UserIDs()) == 0 {
 		return &ValidationError{Name: "user", err: errors.New(`generated: missing required edge "ImpersonationEvent.user"`)}
-	}
-	if len(_c.mutation.TargetUserIDs()) == 0 {
-		return &ValidationError{Name: "target_user", err: errors.New(`generated: missing required edge "ImpersonationEvent.target_user"`)}
 	}
 	if len(_c.mutation.OrganizationIDs()) == 0 {
 		return &ValidationError{Name: "organization", err: errors.New(`generated: missing required edge "ImpersonationEvent.organization"`)}

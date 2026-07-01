@@ -155,6 +155,14 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context, openapi *OpenAPIConte
 		return h.Forbidden(ctx, ErrSupportAccessNotConsented, openapi)
 	}
 
+	individualID := ""
+	supportUser, err := h.getUserByEmail(allowCtx, individualEmail)
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Str("email", individualEmail).Msg("failed to look up support user by email, session will not be logged")
+	} else {
+		individualID = supportUser.ID
+	}
+
 	reason := ""
 	if c, cErr := sessions.GetCookie(ctx.Request(), supportReasonCookie); cErr == nil {
 		reason = c.Value
@@ -192,12 +200,26 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context, openapi *OpenAPIConte
 		return h.InternalServerError(ctx, ErrFailedToExtractSessionID, openapi)
 	}
 
+	// create a session so the graph session middleware can validate subsequent authenticated
+	// requests; the session cookie is also set on the response so browsers receive it directly
+	reqCtx, err = h.SessionConfig.CreateAndStoreSession(reqCtx, ctx.Response().Writer, cfg.SubjectID)
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create support session")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+	}
+
+	sessionToken, err := sessions.SessionToken(reqCtx)
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get support session token")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+	}
+
 	auditLog := &auth.ImpersonationAuditLog{
 		Type:              auth.SupportImpersonation,
-		ImpersonatorID:    individualEmail,
+		ImpersonatorID:    individualID,
 		ImpersonatorEmail: individualEmail,
-		TargetUserID:      cfg.SubjectID,
-		TargetUserEmail:   cfg.Email,
 		Action:            enums.ImpersonationActionStart.String(),
 		Reason:            reason,
 		Timestamp:         time.Now(),
@@ -215,6 +237,7 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context, openapi *OpenAPIConte
 
 	return h.Success(ctx, apimodels.SupportAccessReply{
 		Reply:          rout.Reply{Success: true},
+		AuthData:       apimodels.AuthData{Session: sessionToken},
 		Token:          token,
 		ExpiresAt:      time.Now().Add(duration),
 		SessionID:      sessionID,

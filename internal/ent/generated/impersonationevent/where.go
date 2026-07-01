@@ -1073,6 +1073,16 @@ func TargetUserIDHasSuffix(v string) predicate.ImpersonationEvent {
 	return predicate.ImpersonationEvent(sql.FieldHasSuffix(FieldTargetUserID, v))
 }
 
+// TargetUserIDIsNil applies the IsNil predicate on the "target_user_id" field.
+func TargetUserIDIsNil() predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldIsNull(FieldTargetUserID))
+}
+
+// TargetUserIDNotNil applies the NotNil predicate on the "target_user_id" field.
+func TargetUserIDNotNil() predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldNotNull(FieldTargetUserID))
+}
+
 // TargetUserIDEqualFold applies the EqualFold predicate on the "target_user_id" field.
 func TargetUserIDEqualFold(v string) predicate.ImpersonationEvent {
 	return predicate.ImpersonationEvent(sql.FieldEqualFold(FieldTargetUserID, v))

@@ -2258,6 +2258,8 @@ var ExampleSupportCallbackRequest = SupportCallbackRequest{
 type SupportAccessReply struct {
 	// Reply is the reply value
 	rout.Reply
+	// AuthData contains the session token required for subsequent authenticated requests
+	AuthData
 	// Token is the support session token to use as the Impersonation Authorization scheme
 	Token string `json:"token" description:"The support access token"`
 	// ExpiresAt is when the support token expires
@@ -2276,6 +2278,7 @@ type SupportAccessReply struct {
 func (r *SupportAccessReply) ExampleResponse() any {
 	return SupportAccessReply{
 		Reply:     rout.Reply{Success: true},
+		AuthData:  AuthData{Session: "session"},
 		Token:     "imp_" + exampleULID("token"),
 		ExpiresAt: exampleTime(time.Hour),
 		SessionID: exampleULID("session"),
@@ -2286,6 +2289,7 @@ func (r *SupportAccessReply) ExampleResponse() any {
 // ExampleSupportAccessReply is an example response for OpenAPI documentation
 var ExampleSupportAccessReply = SupportAccessReply{
 	Reply:     rout.Reply{Success: true},
+	AuthData:  AuthData{Session: "session"},
 	Token:     "imp_" + exampleULID("token"),
 	ExpiresAt: exampleTime(time.Hour),
 	SessionID: exampleULID("session"),

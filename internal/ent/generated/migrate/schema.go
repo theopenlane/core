@@ -4176,7 +4176,7 @@ var (
 		{Name: "scopes", Type: field.TypeJSON, Nullable: true},
 		{Name: "organization_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
-		{Name: "target_user_id", Type: field.TypeString},
+		{Name: "target_user_id", Type: field.TypeString, Nullable: true},
 	}
 	// ImpersonationEventsTable holds the schema information for the "impersonation_events" table.
 	ImpersonationEventsTable = &schema.Table{
@@ -4200,7 +4200,7 @@ var (
 				Symbol:     "impersonation_events_users_targeted_impersonations",
 				Columns:    []*schema.Column{ImpersonationEventsColumns[17]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.SetNull,
 			},
 		},
 	}

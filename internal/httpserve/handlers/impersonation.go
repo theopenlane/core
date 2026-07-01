@@ -248,18 +248,22 @@ func (h *Handler) logImpersonationEvent(ctx context.Context, action string, audi
 	logx.FromContext(ctx).Info().Str("action", action).Str("target_user_id", auditLog.TargetUserID).Msg("impersonation event")
 
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	_, err := h.DBClient.ImpersonationEvent.Create().
+	create := h.DBClient.ImpersonationEvent.Create().
 		SetAction(*enums.ToImpersonationAction(action)).
 		SetImpersonationType(*enums.ToImpersonationType(string(auditLog.Type))).
 		SetReason(auditLog.Reason).
 		SetIPAddress(auditLog.IPAddress).
 		SetUserAgent(auditLog.UserAgent).
 		SetUserID(auditLog.ImpersonatorID).
-		SetTargetUserID(auditLog.TargetUserID).
 		SetOrganizationID(auditLog.OrganizationID).
 		SetCreatedBy(auditLog.ImpersonatorID).
-		SetCreatedAt(time.Now()).
-		Save(allowCtx)
+		SetCreatedAt(time.Now())
+
+	if auditLog.TargetUserID != "" {
+		create.SetTargetUserID(auditLog.TargetUserID)
+	}
+
+	_, err := create.Save(allowCtx)
 	return err
 }
 
