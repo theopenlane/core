@@ -146,8 +146,8 @@ func checkOnlyDefaultFields(m *generated.GroupMutation) error {
 		"display_id",
 	}
 
-	// check if any of the fields are not default fields
-	for _, field := range fields {
+	// check if any of the set, numeric, or cleared fields are not default fields
+	for _, field := range slices.Concat(fields, numericFields, clearedFields) {
 		if !slices.Contains(defaultFields, field) {
 			return ErrManagedGroup
 		}

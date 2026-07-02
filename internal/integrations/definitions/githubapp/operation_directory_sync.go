@@ -66,7 +66,7 @@ type teamNodeGQL struct {
 	Privacy string
 	// Members are the users assigned to the team
 	Members struct {
-		Nodes    []teamMemberNodeGQL
+		Edges    []teamMemberEdgeGQL
 		PageInfo pageInfo
 	} `graphql:"members(first: $memberFirst)"`
 }
@@ -85,6 +85,14 @@ type teamMemberNodeGQL struct {
 	DatabaseID int `graphql:"databaseId"`
 	// Login is the GitHub username
 	Login string
+}
+
+// teamMemberEdgeGQL is a GitHub team membership edge carrying the member role
+type teamMemberEdgeGQL struct {
+	// Node is the team member
+	Node teamMemberNodeGQL
+	// Role is the member's role in the team, MEMBER or MAINTAINER
+	Role string
 }
 
 // teamMembershipNode represents one GitHub team membership edge for ingest
@@ -106,9 +114,9 @@ type orgNode struct {
 }
 
 // IngestHandle adapts directory sync to the ingest operation registration boundary
-func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(gitHubClient, func(ctx context.Context, _ types.OperationRequest, client GraphQLClient) ([]types.IngestPayloadSet, error) {
-		return d.Run(ctx, client)
+func (DirectorySync) IngestHandle() types.IngestHandler {
+	return providerkit.WithClientRequestConfig(gitHubClient, directorySyncOperation, ErrOperationConfigInvalid, func(ctx context.Context, _ types.OperationRequest, client GraphQLClient, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
+		return cfg.Run(ctx, client)
 	})
 }
 
@@ -453,7 +461,7 @@ func queryOrganizationTeams(ctx context.Context, client GraphQLClient, orgLogin 
 		}
 
 		for _, team := range query.Organization.Teams.Nodes {
-			members := team.Members.Nodes
+			members := team.Members.Edges
 			if team.Members.PageInfo.HasNextPage && team.Slug != "" {
 				remaining, err := queryOrganizationTeamMembers(ctx, client, orgLogin, team.Slug, team.Members.PageInfo.EndCursor)
 				if err != nil {
@@ -473,8 +481,8 @@ func queryOrganizationTeams(ctx context.Context, client GraphQLClient, orgLogin 
 				memberships = append(memberships, teamMembershipNode{
 					Org:    orgLogin,
 					Team:   team,
-					Member: member,
-					Role:   "MEMBER",
+					Member: member.Node,
+					Role:   member.Role,
 				})
 			}
 		}
@@ -490,8 +498,8 @@ func queryOrganizationTeams(ctx context.Context, client GraphQLClient, orgLogin 
 }
 
 // queryOrganizationTeamMembers fetches additional member pages for the requested team
-func queryOrganizationTeamMembers(ctx context.Context, client GraphQLClient, orgLogin string, teamSlug string, firstAfter string) ([]teamMemberNodeGQL, error) {
-	members := make([]teamMemberNodeGQL, 0)
+func queryOrganizationTeamMembers(ctx context.Context, client GraphQLClient, orgLogin string, teamSlug string, firstAfter string) ([]teamMemberEdgeGQL, error) {
+	members := make([]teamMemberEdgeGQL, 0)
 	after := githubv4.NewString(githubv4.String(firstAfter))
 
 	for {
@@ -503,7 +511,7 @@ func queryOrganizationTeamMembers(ctx context.Context, client GraphQLClient, org
 			Organization struct {
 				Team struct {
 					Members struct {
-						Nodes    []teamMemberNodeGQL
+						Edges    []teamMemberEdgeGQL
 						PageInfo pageInfo
 					} `graphql:"members(first: $first, after: $after)"`
 				} `graphql:"team(slug: $slug)"`
@@ -521,7 +529,7 @@ func queryOrganizationTeamMembers(ctx context.Context, client GraphQLClient, org
 			return nil, fmt.Errorf("%w: %w", ErrAPIRequest, err)
 		}
 
-		members = append(members, query.Organization.Team.Members.Nodes...)
+		members = append(members, query.Organization.Team.Members.Edges...)
 
 		if !query.Organization.Team.Members.PageInfo.HasNextPage || query.Organization.Team.Members.PageInfo.EndCursor == "" {
 			break
