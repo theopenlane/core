@@ -98,6 +98,7 @@ require (
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
 	github.com/stripe/stripe-go/v84 v84.4.1
+	github.com/stripe/stripe-go/v86 v86.1.0
 	github.com/tailscale/tailscale-client-go/v2 v2.0.0-20250129222324-74c8fc3cb4d7
 	github.com/theopenlane/core/common v1.0.24
 	github.com/theopenlane/echo-prometheus v0.1.0
