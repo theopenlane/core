@@ -1,0 +1,44 @@
+services:
+  postgres:
+    volumes:
+      - ./configs/keycloak/init.sql:/docker-entrypoint-initdb.d/init_keycloak.sql
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    command: start-dev
+    env_file:
+      - ${PWD}/docker/configs/keycloak/.env-example
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: postgres
+      KC_HOSTNAME: ${KC_HOSTNAME:-localhost}
+      KC_HTTP_PORT: 8180
+    ports:
+      - 8180:8180
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/localhost/8180"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    networks:
+      - default
+
+  keycloak-init:
+    image: quay.io/keycloak/keycloak:latest
+    depends_on:
+      keycloak:
+        condition: service_healthy
+    env_file:
+      - ${PWD}/docker/configs/keycloak/.env-example
+    entrypoint:
+      - sh
+      - -c
+      - "/opt/keycloak/bin/kcadm.sh config credentials --server http://keycloak:8180 --realm master --user $$KC_BOOTSTRAP_ADMIN_USERNAME --password $$KC_BOOTSTRAP_ADMIN_PASSWORD --client admin-cli && /opt/keycloak/bin/kcadm.sh update realms/master --set sslRequired=NONE"
+    networks:
+      - default
+    restart: "no"
