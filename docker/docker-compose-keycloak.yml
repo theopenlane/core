@@ -20,7 +20,7 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "curl -fs http://localhost:8180/health/ready || exit 1"]
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/localhost/8180"]
       interval: 10s
       timeout: 5s
       retries: 12
@@ -35,16 +35,10 @@ services:
         condition: service_healthy
     env_file:
       - ${PWD}/docker/configs/keycloak/.env-example
-    entrypoint: >
-      sh -c "
-        /opt/keycloak/bin/kcadm.sh config credentials
-          --server http://keycloak:8180
-          --realm master
-          --user $$KC_BOOTSTRAP_ADMIN_USERNAME
-          --password $$KC_BOOTSTRAP_ADMIN_PASSWORD
-          --client admin-cli &&
-        /opt/keycloak/bin/kcadm.sh update realms/master --set sslRequired=NONE
-      "
+    entrypoint:
+      - sh
+      - -c
+      - "/opt/keycloak/bin/kcadm.sh config credentials --server http://keycloak:8180 --realm master --user $$KC_BOOTSTRAP_ADMIN_USERNAME --password $$KC_BOOTSTRAP_ADMIN_PASSWORD --client admin-cli && /opt/keycloak/bin/kcadm.sh update realms/master --set sslRequired=NONE"
     networks:
       - default
     restart: "no"
