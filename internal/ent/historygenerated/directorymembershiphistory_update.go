@@ -66,6 +66,26 @@ func (_u *DirectoryMembershipHistoryUpdate) ClearUpdatedBy() *DirectoryMembershi
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *DirectoryMembershipHistoryUpdate) SetUpdatedByImpersonator(v string) *DirectoryMembershipHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *DirectoryMembershipHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *DirectoryMembershipHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *DirectoryMembershipHistoryUpdate) ClearUpdatedByImpersonator() *DirectoryMembershipHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *DirectoryMembershipHistoryUpdate) SetOwnerID(v string) *DirectoryMembershipHistoryUpdate {
 	_u.mutation.SetOwnerID(v)
@@ -454,6 +474,12 @@ func (_u *DirectoryMembershipHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(directorymembershiphistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(directorymembershiphistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(directorymembershiphistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(directorymembershiphistory.FieldOwnerID, field.TypeString, value)
 	}
@@ -600,6 +626,26 @@ func (_u *DirectoryMembershipHistoryUpdateOne) SetNillableUpdatedBy(v *string) *
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *DirectoryMembershipHistoryUpdateOne) ClearUpdatedBy() *DirectoryMembershipHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *DirectoryMembershipHistoryUpdateOne) SetUpdatedByImpersonator(v string) *DirectoryMembershipHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *DirectoryMembershipHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *DirectoryMembershipHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *DirectoryMembershipHistoryUpdateOne) ClearUpdatedByImpersonator() *DirectoryMembershipHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -1020,6 +1066,12 @@ func (_u *DirectoryMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(directorymembershiphistory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(directorymembershiphistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(directorymembershiphistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(directorymembershiphistory.FieldOwnerID, field.TypeString, value)

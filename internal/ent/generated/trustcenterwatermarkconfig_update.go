@@ -67,6 +67,26 @@ func (_u *TrustCenterWatermarkConfigUpdate) ClearUpdatedBy() *TrustCenterWaterma
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *TrustCenterWatermarkConfigUpdate) SetUpdatedByImpersonator(v string) *TrustCenterWatermarkConfigUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *TrustCenterWatermarkConfigUpdate) SetNillableUpdatedByImpersonator(v *string) *TrustCenterWatermarkConfigUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *TrustCenterWatermarkConfigUpdate) ClearUpdatedByImpersonator() *TrustCenterWatermarkConfigUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *TrustCenterWatermarkConfigUpdate) SetDeletedAt(v time.Time) *TrustCenterWatermarkConfigUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -534,6 +554,12 @@ func (_u *TrustCenterWatermarkConfigUpdate) sqlSave(ctx context.Context) (_node 
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcenterwatermarkconfig.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(trustcenterwatermarkconfig.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(trustcenterwatermarkconfig.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(trustcenterwatermarkconfig.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -828,6 +854,26 @@ func (_u *TrustCenterWatermarkConfigUpdateOne) SetNillableUpdatedBy(v *string) *
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *TrustCenterWatermarkConfigUpdateOne) ClearUpdatedBy() *TrustCenterWatermarkConfigUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *TrustCenterWatermarkConfigUpdateOne) SetUpdatedByImpersonator(v string) *TrustCenterWatermarkConfigUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *TrustCenterWatermarkConfigUpdateOne) SetNillableUpdatedByImpersonator(v *string) *TrustCenterWatermarkConfigUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *TrustCenterWatermarkConfigUpdateOne) ClearUpdatedByImpersonator() *TrustCenterWatermarkConfigUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -1327,6 +1373,12 @@ func (_u *TrustCenterWatermarkConfigUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcenterwatermarkconfig.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(trustcenterwatermarkconfig.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(trustcenterwatermarkconfig.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(trustcenterwatermarkconfig.FieldDeletedAt, field.TypeTime, value)

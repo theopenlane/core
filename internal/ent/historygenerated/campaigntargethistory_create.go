@@ -115,6 +115,20 @@ func (_c *CampaignTargetHistoryCreate) SetNillableUpdatedBy(v *string) *Campaign
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *CampaignTargetHistoryCreate) SetUpdatedByImpersonator(v string) *CampaignTargetHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *CampaignTargetHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *CampaignTargetHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *CampaignTargetHistoryCreate) SetDeletedAt(v time.Time) *CampaignTargetHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -481,6 +495,10 @@ func (_c *CampaignTargetHistoryCreate) createSpec() (*CampaignTargetHistory, *sq
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(campaigntargethistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(campaigntargethistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(campaigntargethistory.FieldDeletedAt, field.TypeTime, value)

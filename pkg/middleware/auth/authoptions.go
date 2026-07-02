@@ -50,6 +50,8 @@ type Options struct {
 	DBClient *ent.Client
 	// RedisClient is used to set the permission cache in the context
 	RedisClient *redis.Client
+	// blacklist is consulted by the constructed validator to honor token and user revocation
+	blacklist tokens.TokenBlacklist
 }
 
 // Reauthenticator generates new access and refresh pair given a valid refresh token.
@@ -103,10 +105,16 @@ func (conf *Options) Validator() (tokens.Validator, error) {
 		return nil, ErrUnableToConstructValidator
 	}
 
-	conf.validator, err = tokens.NewCachedJWKSValidator(cache, conf.KeysURL, conf.Audience, conf.Issuer)
+	validator, err := tokens.NewCachedJWKSValidator(cache, conf.KeysURL, conf.Audience, conf.Issuer)
 	if err != nil {
 		return nil, err
 	}
+
+	if conf.blacklist != nil {
+		validator.WithBlacklist(conf.blacklist)
+	}
+
+	conf.validator = validator
 
 	return conf.validator, nil
 }
@@ -262,5 +270,13 @@ func WithCookieConfig(cookieConfig *sessions.CookieConfig) Option {
 func WithRedisClient(redisClient *redis.Client) Option {
 	return func(opts *Options) {
 		opts.RedisClient = redisClient
+	}
+}
+
+// WithBlacklist supplies the token blacklist the constructed validator consults to honor token
+// and user revocation on every request.
+func WithBlacklist(blacklist tokens.TokenBlacklist) Option {
+	return func(opts *Options) {
+		opts.blacklist = blacklist
 	}
 }

@@ -9,6 +9,7 @@ mutation CreateBulkCSVDiscussion ($input: Upload!) {
 			ownerID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -23,6 +24,7 @@ mutation CreateBulkDiscussion ($input: [CreateDiscussionInput!]) {
 			ownerID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -37,6 +39,7 @@ mutation CreateDiscussion ($input: CreateDiscussionInput!) {
 			ownerID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -78,6 +81,7 @@ query GetDiscussionByID ($discussionId: ID!) {
 		ownerID
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 	}
 }
 query GetDiscussions ($first: Int, $last: Int, $where: DiscussionWhereInput) {
@@ -114,6 +118,7 @@ mutation UpdateDiscussion ($updateDiscussionId: ID!, $input: UpdateDiscussionInp
 			ownerID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }

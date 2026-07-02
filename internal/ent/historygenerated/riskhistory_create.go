@@ -115,6 +115,20 @@ func (_c *RiskHistoryCreate) SetNillableUpdatedBy(v *string) *RiskHistoryCreate 
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *RiskHistoryCreate) SetUpdatedByImpersonator(v string) *RiskHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *RiskHistoryCreate) SetDeletedAt(v time.Time) *RiskHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -808,6 +822,10 @@ func (_c *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(riskhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(riskhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(riskhistory.FieldDeletedAt, field.TypeTime, value)

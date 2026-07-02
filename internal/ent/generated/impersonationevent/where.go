@@ -88,6 +88,11 @@ func UpdatedBy(v string) predicate.ImpersonationEvent {
 	return predicate.ImpersonationEvent(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
+// UpdatedByImpersonator applies equality check predicate on the "updated_by_impersonator" field. It's identical to UpdatedByImpersonatorEQ.
+func UpdatedByImpersonator(v string) predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldEQ(FieldUpdatedByImpersonator, v))
+}
+
 // DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
 func DeletedAt(v time.Time) predicate.ImpersonationEvent {
 	return predicate.ImpersonationEvent(sql.FieldEQ(FieldDeletedAt, v))
@@ -376,6 +381,81 @@ func UpdatedByEqualFold(v string) predicate.ImpersonationEvent {
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
 func UpdatedByContainsFold(v string) predicate.ImpersonationEvent {
 	return predicate.ImpersonationEvent(sql.FieldContainsFold(FieldUpdatedBy, v))
+}
+
+// UpdatedByImpersonatorEQ applies the EQ predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorEQ(v string) predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldEQ(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorNEQ applies the NEQ predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNEQ(v string) predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldNEQ(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorIn applies the In predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorIn(vs ...string) predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldIn(FieldUpdatedByImpersonator, vs...))
+}
+
+// UpdatedByImpersonatorNotIn applies the NotIn predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNotIn(vs ...string) predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldNotIn(FieldUpdatedByImpersonator, vs...))
+}
+
+// UpdatedByImpersonatorGT applies the GT predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorGT(v string) predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldGT(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorGTE applies the GTE predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorGTE(v string) predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldGTE(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorLT applies the LT predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorLT(v string) predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldLT(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorLTE applies the LTE predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorLTE(v string) predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldLTE(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorContains applies the Contains predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorContains(v string) predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldContains(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorHasPrefix applies the HasPrefix predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorHasPrefix(v string) predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldHasPrefix(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorHasSuffix applies the HasSuffix predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorHasSuffix(v string) predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldHasSuffix(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorIsNil applies the IsNil predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorIsNil() predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldIsNull(FieldUpdatedByImpersonator))
+}
+
+// UpdatedByImpersonatorNotNil applies the NotNil predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNotNil() predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldNotNull(FieldUpdatedByImpersonator))
+}
+
+// UpdatedByImpersonatorEqualFold applies the EqualFold predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorEqualFold(v string) predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldEqualFold(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorContainsFold applies the ContainsFold predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorContainsFold(v string) predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldContainsFold(FieldUpdatedByImpersonator, v))
 }
 
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
@@ -991,6 +1071,16 @@ func TargetUserIDHasPrefix(v string) predicate.ImpersonationEvent {
 // TargetUserIDHasSuffix applies the HasSuffix predicate on the "target_user_id" field.
 func TargetUserIDHasSuffix(v string) predicate.ImpersonationEvent {
 	return predicate.ImpersonationEvent(sql.FieldHasSuffix(FieldTargetUserID, v))
+}
+
+// TargetUserIDIsNil applies the IsNil predicate on the "target_user_id" field.
+func TargetUserIDIsNil() predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldIsNull(FieldTargetUserID))
+}
+
+// TargetUserIDNotNil applies the NotNil predicate on the "target_user_id" field.
+func TargetUserIDNotNil() predicate.ImpersonationEvent {
+	return predicate.ImpersonationEvent(sql.FieldNotNull(FieldTargetUserID))
 }
 
 // TargetUserIDEqualFold applies the EqualFold predicate on the "target_user_id" field.

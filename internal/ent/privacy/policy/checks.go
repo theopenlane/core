@@ -310,7 +310,6 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 				ObjectType:  fgax.Kind(edgeMap.ObjectType),
 				SubjectID:   actor.SubjectID,
 				SubjectType: actor.SubjectType(),
-				Context:     utils.NewOrganizationContextKey(actor.SubjectEmail),
 			}
 
 			if allow, err := utils.AuthzClient(ctx, m).CheckAccess(ctx, ac); err != nil || !allow {

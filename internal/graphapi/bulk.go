@@ -6314,7 +6314,7 @@ func (r *mutationResolver) bulkUpdateOrganizationSetting(ctx context.Context, id
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendDomains(input.AppendDomains).AppendAllowedEmailDomains(input.AppendAllowedEmailDomains).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendDomains(input.AppendDomains).AppendAllowedEmailDomains(input.AppendAllowedEmailDomains).AppendJitAllowedEmailDomains(input.AppendJitAllowedEmailDomains).AppendSSOExemptDomains(input.AppendSSOExemptDomains).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("organizationsetting_id", id).Msg("failed to update organizationsetting in bulk operation")
 			continue
@@ -6355,7 +6355,7 @@ func (r *mutationResolver) bulkUpdateCSVOrganizationSetting(ctx context.Context,
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDomains(input.Input.AppendDomains).AppendAllowedEmailDomains(input.Input.AppendAllowedEmailDomains).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDomains(input.Input.AppendDomains).AppendAllowedEmailDomains(input.Input.AppendAllowedEmailDomains).AppendJitAllowedEmailDomains(input.Input.AppendJitAllowedEmailDomains).AppendSSOExemptDomains(input.Input.AppendSSOExemptDomains).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("organizationsetting_id", input.ID).Msg("failed to update organizationsetting in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organizationsetting"})

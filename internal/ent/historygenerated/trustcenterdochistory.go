@@ -36,6 +36,8 @@ type TrustCenterDocHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -76,7 +78,7 @@ func (*TrustCenterDocHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case trustcenterdochistory.FieldWatermarkingEnabled:
 			values[i] = new(sql.NullBool)
-		case trustcenterdochistory.FieldID, trustcenterdochistory.FieldRef, trustcenterdochistory.FieldCreatedBy, trustcenterdochistory.FieldUpdatedBy, trustcenterdochistory.FieldDeletedBy, trustcenterdochistory.FieldTrustCenterDocKindName, trustcenterdochistory.FieldTrustCenterDocKindID, trustcenterdochistory.FieldTrustCenterID, trustcenterdochistory.FieldTitle, trustcenterdochistory.FieldFileID, trustcenterdochistory.FieldOriginalFileID, trustcenterdochistory.FieldWatermarkStatus, trustcenterdochistory.FieldVisibility, trustcenterdochistory.FieldStandardID:
+		case trustcenterdochistory.FieldID, trustcenterdochistory.FieldRef, trustcenterdochistory.FieldCreatedBy, trustcenterdochistory.FieldUpdatedBy, trustcenterdochistory.FieldUpdatedByImpersonator, trustcenterdochistory.FieldDeletedBy, trustcenterdochistory.FieldTrustCenterDocKindName, trustcenterdochistory.FieldTrustCenterDocKindID, trustcenterdochistory.FieldTrustCenterID, trustcenterdochistory.FieldTitle, trustcenterdochistory.FieldFileID, trustcenterdochistory.FieldOriginalFileID, trustcenterdochistory.FieldWatermarkStatus, trustcenterdochistory.FieldVisibility, trustcenterdochistory.FieldStandardID:
 			values[i] = new(sql.NullString)
 		case trustcenterdochistory.FieldHistoryTime, trustcenterdochistory.FieldCreatedAt, trustcenterdochistory.FieldUpdatedAt, trustcenterdochistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -142,6 +144,13 @@ func (_m *TrustCenterDocHistory) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case trustcenterdochistory.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case trustcenterdochistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -281,6 +290,11 @@ func (_m *TrustCenterDocHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))

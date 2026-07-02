@@ -10,18 +10,6 @@
     context:
       grant_time: "2025-02-14T00:00:00Z"
       grant_duration: 1h
-# setup organization with empty domain condition
-- user: organization:restricted#member
-  relation: access
-  object: organization:restricted
-  condition:
-    name: email_domains_allowed
-    context:
-      allowed_domains: ["meow.com"]
-# setup org member
-- user: user:ulid-of-member
-  relation: member
-  object: organization:restricted
 # setup group for group creator access check
 - user: organization:openlane
   relation: parent_context

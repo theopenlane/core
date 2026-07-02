@@ -78,6 +78,20 @@ func (_c *EntityTypeCreate) SetNillableUpdatedBy(v *string) *EntityTypeCreate {
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *EntityTypeCreate) SetUpdatedByImpersonator(v string) *EntityTypeCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *EntityTypeCreate) SetNillableUpdatedByImpersonator(v *string) *EntityTypeCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *EntityTypeCreate) SetDeletedAt(v time.Time) *EntityTypeCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -338,6 +352,10 @@ func (_c *EntityTypeCreate) createSpec() (*EntityType, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(entitytype.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(entitytype.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(entitytype.FieldDeletedAt, field.TypeTime, value)

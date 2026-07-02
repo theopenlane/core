@@ -4,22 +4,6 @@
 #  this file contains tuples used across different tests
 ############################################
 
-# setup organization with empty domain condition
-- user: organization:openlane#member
-  relation: access
-  object: organization:openlane
-  condition:
-    name: email_domains_allowed
-    context:
-      allowed_domains: []
-# setup child organization with empty domain condition
-- user: organization:foo#member
-  relation: access
-  object: organization:foo
-  condition:
-    name: email_domains_allowed
-    context:
-      allowed_domains: []
 # setup parent child org relationship
 - user: organization:openlane
   relation: parent

@@ -143,8 +143,7 @@ func (h *Handler) HandleIntegrationAuthCallback(ctx echo.Context, openapiCtx *Op
 		redirectTo = redirectCookie.Value
 	}
 
-	cfg := *h.SessionConfig.CookieConfig
-	sessions.RemoveCookies(ctx.Response().Writer, cfg, "state", "organization_id", "redirect_to")
+	h.clearAuthFlowCookies(ctx.Response().Writer, "state", "organization_id", "redirect_to")
 
 	return h.Redirect(ctx, redirectTo, openapiCtx)
 }

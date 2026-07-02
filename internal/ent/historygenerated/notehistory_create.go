@@ -113,6 +113,20 @@ func (_c *NoteHistoryCreate) SetNillableUpdatedBy(v *string) *NoteHistoryCreate 
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *NoteHistoryCreate) SetUpdatedByImpersonator(v string) *NoteHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *NoteHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *NoteHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *NoteHistoryCreate) SetDeletedAt(v time.Time) *NoteHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -446,6 +460,10 @@ func (_c *NoteHistoryCreate) createSpec() (*NoteHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(notehistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(notehistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(notehistory.FieldDeletedAt, field.TypeTime, value)

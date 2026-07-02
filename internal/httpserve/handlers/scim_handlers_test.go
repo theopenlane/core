@@ -101,8 +101,7 @@ func (suite *HandlerTestSuite) TestSCIMUserHandlerCreate() {
 	suite.Require().NoError(err)
 	setting, err := org.Setting(allowCtx)
 	suite.Require().NoError(err)
-	err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetIdentityProviderLoginEnforced(true).Exec(allowCtx)
-	suite.Require().NoError(err)
+	suite.enforceSSOOnSetting(allowCtx, setting.ID)
 
 	restore := suite.registerSCIMRoutesWithAuth()
 	defer restore()
@@ -232,8 +231,7 @@ func (suite *HandlerTestSuite) TestSCIMUserHandlerPatchActiveToggle() {
 	suite.Require().NoError(err)
 	setting, err := org.Setting(allowCtx)
 	suite.Require().NoError(err)
-	err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetIdentityProviderLoginEnforced(true).Exec(allowCtx)
-	suite.Require().NoError(err)
+	suite.enforceSSOOnSetting(allowCtx, setting.ID)
 
 	restore := suite.registerSCIMRoutesWithAuth()
 	defer restore()
@@ -320,8 +318,7 @@ func (suite *HandlerTestSuite) TestSCIMGroupHandlerCreateDeduplicatesMembers() {
 	suite.Require().NoError(err)
 	setting, err := org.Setting(allowCtx)
 	suite.Require().NoError(err)
-	err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetIdentityProviderLoginEnforced(true).Exec(allowCtx)
-	suite.Require().NoError(err)
+	suite.enforceSSOOnSetting(allowCtx, setting.ID)
 
 	restore := suite.registerSCIMRoutesWithAuth()
 	defer restore()

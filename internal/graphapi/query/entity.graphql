@@ -244,6 +244,7 @@ query GetEntityByID ($entityId: ID!) {
 		tier
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		vendorMetadata
 		logoFile {
 			id

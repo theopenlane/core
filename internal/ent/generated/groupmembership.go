@@ -29,6 +29,8 @@ type GroupMembership struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// Role holds the value of the "role" field.
 	Role enums.Role `json:"role,omitempty"`
 	// GroupID holds the value of the "group_id" field.
@@ -108,7 +110,7 @@ func (*GroupMembership) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case groupmembership.FieldID, groupmembership.FieldCreatedBy, groupmembership.FieldUpdatedBy, groupmembership.FieldRole, groupmembership.FieldGroupID, groupmembership.FieldUserID:
+		case groupmembership.FieldID, groupmembership.FieldCreatedBy, groupmembership.FieldUpdatedBy, groupmembership.FieldUpdatedByImpersonator, groupmembership.FieldRole, groupmembership.FieldGroupID, groupmembership.FieldUserID:
 			values[i] = new(sql.NullString)
 		case groupmembership.FieldCreatedAt, groupmembership.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -158,6 +160,13 @@ func (_m *GroupMembership) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case groupmembership.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case groupmembership.FieldRole:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -251,6 +260,11 @@ func (_m *GroupMembership) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("role=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Role))

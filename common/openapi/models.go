@@ -98,6 +98,10 @@ type LoginRequest struct {
 	Username string `json:"username" description:"The email address associated with the existing account" example:"jsnow@example.com"`
 	// Password is the password value.
 	Password string `json:"password" description:"The password associated with the account" example:"Wint3rIsC0ming123!"`
+	// TargetOrganizationID is only used for the Openlane support login path to scope the support session
+	TargetOrganizationID string `json:"target_organization_id,omitempty" description:"For Openlane support login only: the organization to access"`
+	// Reason is only used for the Openlane support login path to record why support is accessing the org
+	Reason string `json:"reason,omitempty" description:"For Openlane support login only: the reason for accessing the organization"`
 }
 
 // LoginReply contains authentication tokens and user information after successful login
@@ -110,6 +114,8 @@ type LoginReply struct {
 	TFAEnabled bool `json:"tfa_enabled,omitempty"`
 	// TFASetupRequired is the tfa_required value.
 	TFASetupRequired bool `json:"tfa_required,omitempty"`
+	// RedirectURI directs the caller to a second factor identity provider; set for the Openlane support login path
+	RedirectURI string `json:"redirect_uri,omitempty"`
 	// Message is the message value.
 	Message string `json:"message"`
 }
@@ -280,6 +286,49 @@ var ExampleRefreshSuccessResponse = RefreshReply{
 		Session:      "session",
 		TokenType:    "bearer",
 	},
+}
+
+// =========
+// LOGOUT
+// =========
+
+// LogoutRequest optionally carries the refresh token to revoke when it is not supplied via cookie
+type LogoutRequest struct {
+	// RefreshToken is an optional refresh_token value for API clients that do not use cookies.
+	RefreshToken string `json:"refresh_token,omitempty" description:"Optional refresh token to revoke when not provided via cookie"`
+}
+
+// LogoutReply confirms the session and tokens were revoked
+type LogoutReply struct {
+	// Reply is the reply value.
+	rout.Reply
+	// Message is the message value.
+	Message string `json:"message,omitempty"`
+}
+
+// ExampleResponse returns an example LogoutReply for OpenAPI documentation
+func (r *LogoutReply) ExampleResponse() any {
+	return LogoutReply{
+		Reply:   rout.Reply{Success: true},
+		Message: "logged out successfully",
+	}
+}
+
+// Validate ensures the LogoutRequest is well formed; all fields are optional since tokens are
+// normally read from cookies
+func (r *LogoutRequest) Validate() error {
+	return nil
+}
+
+// ExampleLogoutRequest is an example logout request for OpenAPI documentation
+var ExampleLogoutRequest = LogoutRequest{
+	RefreshToken: "token",
+}
+
+// ExampleLogoutSuccessResponse is an example of a successful logout response for OpenAPI documentation
+var ExampleLogoutSuccessResponse = LogoutReply{
+	Reply:   rout.Reply{Success: true},
+	Message: "success",
 }
 
 // =========
@@ -1747,6 +1796,28 @@ var ExampleSSOCallbackRequest = SSOCallbackRequest{
 	OrganizationID: exampleULID("organization"),
 }
 
+// SSOInitiateRequest holds the path parameters for the public, shareable SSO initiation endpoint
+type SSOInitiateRequest struct {
+	// SlugName is the organization slug used to resolve which organization's SSO flow to start
+	SlugName string `param:"slug_name" description:"the organization slug" example:"acme"`
+}
+
+// Validate ensures the required fields are set on the SSOInitiateRequest
+func (r *SSOInitiateRequest) Validate() error {
+	r.SlugName = strings.TrimSpace(r.SlugName)
+
+	if r.SlugName == "" {
+		return rout.NewMissingRequiredFieldError("slug_name")
+	}
+
+	return nil
+}
+
+// ExampleSSOInitiateRequest is an example request for OpenAPI documentation
+var ExampleSSOInitiateRequest = SSOInitiateRequest{
+	SlugName: "acme",
+}
+
 // SSOTokenCallbackRequest holds the query parameters for completing token SSO authorization
 type SSOTokenCallbackRequest struct {
 	// Code is the code value.
@@ -2081,8 +2152,6 @@ type StartImpersonationRequest struct {
 	Reason string `json:"reason" validate:"required,min=10,max=500" description:"Reason for the impersonation"`
 	// Duration is the duration_hours value.
 	Duration *int `json:"duration_hours,omitempty" description:"Duration in hours (optional, defaults to 1 hour)"`
-	// Scopes is the scopes value.
-	Scopes []string `json:"scopes,omitempty" description:"Specific scopes for the impersonation session"`
 	// OrganizationID is the organization_id value.
 	OrganizationID string `json:"organization_id,omitempty" description:"Organization context for impersonation"`
 }
@@ -2169,6 +2238,62 @@ func (r *EndImpersonationRequest) Validate() error {
 	}
 
 	return nil
+}
+
+// SupportCallbackRequest carries the second factor identity provider authorization code and state
+type SupportCallbackRequest struct {
+	// Code is the authorization code returned by the identity provider
+	Code string `json:"code" query:"code" description:"authorization code"`
+	// State is the state value returned by the identity provider
+	State string `json:"state" query:"state" description:"state value"`
+}
+
+// ExampleSupportCallbackRequest is an example request for OpenAPI documentation
+var ExampleSupportCallbackRequest = SupportCallbackRequest{
+	Code:  "authcode123",
+	State: "state123",
+}
+
+// SupportAccessReply represents the support session token returned after the second factor completes
+type SupportAccessReply struct {
+	// Reply is the reply value
+	rout.Reply
+	// AuthData contains the session token required for subsequent authenticated requests
+	AuthData
+	// Token is the support session token to use as the Impersonation Authorization scheme
+	Token string `json:"token" description:"The support access token"`
+	// ExpiresAt is when the support token expires
+	ExpiresAt time.Time `json:"expires_at" description:"When the support access token expires"`
+	// SessionID is the support access session id
+	SessionID string `json:"session_id" description:"The support access session ID"`
+	// OrganizationID is the organization the support session is scoped to, for the impersonation banner
+	OrganizationID string `json:"organization_id" description:"The organization the support session is scoped to"`
+	// Impersonator is the individual who completed the second factor, for the impersonation banner and audit
+	Impersonator string `json:"impersonator" description:"The individual acting in the support session"`
+	// Message is a human readable success message
+	Message string `json:"message" description:"Success message"`
+}
+
+// ExampleResponse returns an example SupportAccessReply for OpenAPI documentation
+func (r *SupportAccessReply) ExampleResponse() any {
+	return SupportAccessReply{
+		Reply:     rout.Reply{Success: true},
+		AuthData:  AuthData{Session: "session"},
+		Token:     "imp_" + exampleULID("token"),
+		ExpiresAt: exampleTime(time.Hour),
+		SessionID: exampleULID("session"),
+		Message:   "Support access session started successfully",
+	}
+}
+
+// ExampleSupportAccessReply is an example response for OpenAPI documentation
+var ExampleSupportAccessReply = SupportAccessReply{
+	Reply:     rout.Reply{Success: true},
+	AuthData:  AuthData{Session: "session"},
+	Token:     "imp_" + exampleULID("token"),
+	ExpiresAt: exampleTime(time.Hour),
+	SessionID: exampleULID("session"),
+	Message:   "Support access session started successfully",
 }
 
 // =========

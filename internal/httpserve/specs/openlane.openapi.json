@@ -916,6 +916,9 @@
           "message": {
             "type": "string"
           },
+          "redirect_uri": {
+            "type": "string"
+          },
           "refresh_token": {
             "description": "The refresh token to be used to refresh the access token after it expires",
             "type": "string"
@@ -952,9 +955,49 @@
             "example": "Wint3rIsC0ming123!",
             "type": "string"
           },
+          "reason": {
+            "description": "For Openlane support login only: the reason for accessing the organization",
+            "type": "string"
+          },
+          "target_organization_id": {
+            "description": "For Openlane support login only: the organization to access",
+            "type": "string"
+          },
           "username": {
             "description": "The email address associated with the existing account",
             "example": "jsnow@example.com",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "LogoutReply": {
+        "properties": {
+          "error": {
+            "description": "The error message if the request was unsuccessful",
+            "type": "string"
+          },
+          "error_code": {
+            "description": "The error code if the request was unsuccessful",
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "success": {
+            "description": "Whether or not the request was successful or not",
+            "type": "boolean"
+          },
+          "unverified": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "LogoutRequest": {
+        "properties": {
+          "refresh_token": {
+            "description": "Optional refresh token to revoke when not provided via cookie",
             "type": "string"
           }
         },
@@ -1672,6 +1715,29 @@
         },
         "type": "object"
       },
+      "SSOLoginReply": {
+        "properties": {
+          "error": {
+            "description": "The error message if the request was unsuccessful",
+            "type": "string"
+          },
+          "error_code": {
+            "description": "The error code if the request was unsuccessful",
+            "type": "string"
+          },
+          "redirect_uri": {
+            "type": "string"
+          },
+          "success": {
+            "description": "Whether or not the request was successful or not",
+            "type": "boolean"
+          },
+          "unverified": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
       "SSOStatusReply": {
         "properties": {
           "discovery_url": {
@@ -2131,14 +2197,6 @@
             "description": "Reason for the impersonation",
             "type": "string"
           },
-          "scopes": {
-            "description": "Specific scopes for the impersonation session",
-            "items": {
-              "description": "Specific scopes for the impersonation session",
-              "type": "string"
-            },
-            "type": "array"
-          },
           "target_user_id": {
             "description": "The ID of the user to impersonate",
             "type": "string"
@@ -2160,6 +2218,68 @@
           },
           "status": {
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "SupportAccessReply": {
+        "properties": {
+          "access_token": {
+            "description": "The access token to be used for authentication",
+            "type": "string"
+          },
+          "error": {
+            "description": "The error message if the request was unsuccessful",
+            "type": "string"
+          },
+          "error_code": {
+            "description": "The error code if the request was unsuccessful",
+            "type": "string"
+          },
+          "expires_at": {
+            "description": "When the support access token expires",
+            "format": "date-time",
+            "type": "string"
+          },
+          "impersonator": {
+            "description": "The individual acting in the support session",
+            "type": "string"
+          },
+          "message": {
+            "description": "Success message",
+            "type": "string"
+          },
+          "organization_id": {
+            "description": "The organization the support session is scoped to",
+            "type": "string"
+          },
+          "refresh_token": {
+            "description": "The refresh token to be used to refresh the access token after it expires",
+            "type": "string"
+          },
+          "session": {
+            "description": "The short-lived session token required for authentication",
+            "type": "string"
+          },
+          "session_id": {
+            "description": "The support access session ID",
+            "type": "string"
+          },
+          "success": {
+            "description": "Whether or not the request was successful or not",
+            "type": "boolean"
+          },
+          "token": {
+            "description": "The support access token",
+            "type": "string"
+          },
+          "token_type": {
+            "description": "The type of token being returned",
+            "example": "bearer",
+            "type": "string"
+          },
+          "unverified": {
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -5961,6 +6081,127 @@
         ]
       }
     },
+    "/v1/logout": {
+      "post": {
+        "description": "The Logout endpoint revokes the caller's access and refresh tokens and deletes their server-side session so that the credentials can no longer be used. It is intended to be called by clients on sign-out to ensure logout is enforced on the server rather than only clearing client-side state.",
+        "operationId": "LogoutHandler",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "success": {
+                  "value": {
+                    "refresh_token": "token"
+                  }
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/LogoutRequest"
+              }
+            }
+          },
+          "description": "Request body"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": {
+                      "message": "logged out successfully",
+                      "success": true
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/LogoutReply"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "oauth2": []
+          },
+          {
+            "basic": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "summary": "Logout",
+        "tags": [
+          "logout"
+        ]
+      }
+    },
+    "/v1/orgs/{slug_name}/sso": {
+      "get": {
+        "description": "Initiate an organization's SSO flow from its shareable slug URL",
+        "operationId": "SSOInitiate",
+        "parameters": [
+          {
+            "description": "the organization slug",
+            "example": "acme",
+            "in": "path",
+            "name": "slug_name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": {
+                      "success": false
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/SSOLoginReply"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [],
+        "summary": "SSOInitiate",
+        "tags": [
+          "sso"
+        ]
+      }
+    },
     "/v1/password-reset": {
       "post": {
         "description": "ResetPassword allows the user (after requesting a password reset) to set a new password - the password reset token needs to be set in the request and not expired. If the request is successful, a confirmation of the reset is sent to the user and a 200 StatusOK is returned",
@@ -6818,6 +7059,71 @@
         ]
       }
     },
+    "/v1/support/callback": {
+      "post": {
+        "description": "Second factor of Openlane support access: complete the configured identity provider exchange, enforce the domain restriction, and mint the support session token.",
+        "operationId": "SupportCallback",
+        "parameters": [
+          {
+            "description": "authorization code",
+            "in": "query",
+            "name": "code",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "state value",
+            "in": "query",
+            "name": "state",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": {
+                      "access_token": "",
+                      "expires_at": "2025-01-01T13:00:00Z",
+                      "impersonator": "",
+                      "message": "Support access session started successfully",
+                      "organization_id": "",
+                      "session": "session",
+                      "session_id": "01K9MJ23ND309PAN0Z6GN2BH90",
+                      "success": true,
+                      "token": "imp_01K9MJ23ND309PAN0ZA9XQ3MFH"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/SupportAccessReply"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [],
+        "summary": "SupportCallback",
+        "tags": [
+          "support"
+        ]
+      }
+    },
     "/v1/switch": {
       "post": {
         "description": "Switch the user's organization context",
@@ -7071,6 +7377,10 @@
       "name": "impersonation"
     },
     {
+      "description": "Logout",
+      "name": "logout"
+    },
+    {
       "description": "MSFTIdentityWellKnown",
       "name": "msft"
     },
@@ -7121,6 +7431,10 @@
     {
       "description": "Unsubscribe",
       "name": "subscription"
+    },
+    {
+      "description": "SupportCallback",
+      "name": "support"
     },
     {
       "description": "TFAValidation",

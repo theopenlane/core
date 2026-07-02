@@ -36,6 +36,8 @@ type DirectoryAccountHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
@@ -136,7 +138,7 @@ func (*DirectoryAccountHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case directoryaccounthistory.FieldPrimarySource:
 			values[i] = new(sql.NullBool)
-		case directoryaccounthistory.FieldID, directoryaccounthistory.FieldRef, directoryaccounthistory.FieldCreatedBy, directoryaccounthistory.FieldUpdatedBy, directoryaccounthistory.FieldDisplayID, directoryaccounthistory.FieldOwnerID, directoryaccounthistory.FieldEnvironmentName, directoryaccounthistory.FieldEnvironmentID, directoryaccounthistory.FieldScopeName, directoryaccounthistory.FieldScopeID, directoryaccounthistory.FieldIntegrationID, directoryaccounthistory.FieldDirectorySyncRunID, directoryaccounthistory.FieldPlatformID, directoryaccounthistory.FieldDirectoryInstanceID, directoryaccounthistory.FieldIdentityHolderID, directoryaccounthistory.FieldDirectoryName, directoryaccounthistory.FieldExternalID, directoryaccounthistory.FieldSecondaryKey, directoryaccounthistory.FieldCanonicalEmail, directoryaccounthistory.FieldPhoneNumber, directoryaccounthistory.FieldDisplayName, directoryaccounthistory.FieldAvatarRemoteURL, directoryaccounthistory.FieldAvatarLocalFileID, directoryaccounthistory.FieldGivenName, directoryaccounthistory.FieldFamilyName, directoryaccounthistory.FieldJobTitle, directoryaccounthistory.FieldDepartment, directoryaccounthistory.FieldOrganizationUnit, directoryaccounthistory.FieldAccountType, directoryaccounthistory.FieldStatus, directoryaccounthistory.FieldMfaState, directoryaccounthistory.FieldLastSeenIP, directoryaccounthistory.FieldProfileHash, directoryaccounthistory.FieldRawProfileFileID, directoryaccounthistory.FieldSourceVersion:
+		case directoryaccounthistory.FieldID, directoryaccounthistory.FieldRef, directoryaccounthistory.FieldCreatedBy, directoryaccounthistory.FieldUpdatedBy, directoryaccounthistory.FieldUpdatedByImpersonator, directoryaccounthistory.FieldDisplayID, directoryaccounthistory.FieldOwnerID, directoryaccounthistory.FieldEnvironmentName, directoryaccounthistory.FieldEnvironmentID, directoryaccounthistory.FieldScopeName, directoryaccounthistory.FieldScopeID, directoryaccounthistory.FieldIntegrationID, directoryaccounthistory.FieldDirectorySyncRunID, directoryaccounthistory.FieldPlatformID, directoryaccounthistory.FieldDirectoryInstanceID, directoryaccounthistory.FieldIdentityHolderID, directoryaccounthistory.FieldDirectoryName, directoryaccounthistory.FieldExternalID, directoryaccounthistory.FieldSecondaryKey, directoryaccounthistory.FieldCanonicalEmail, directoryaccounthistory.FieldPhoneNumber, directoryaccounthistory.FieldDisplayName, directoryaccounthistory.FieldAvatarRemoteURL, directoryaccounthistory.FieldAvatarLocalFileID, directoryaccounthistory.FieldGivenName, directoryaccounthistory.FieldFamilyName, directoryaccounthistory.FieldJobTitle, directoryaccounthistory.FieldDepartment, directoryaccounthistory.FieldOrganizationUnit, directoryaccounthistory.FieldAccountType, directoryaccounthistory.FieldStatus, directoryaccounthistory.FieldMfaState, directoryaccounthistory.FieldLastSeenIP, directoryaccounthistory.FieldProfileHash, directoryaccounthistory.FieldRawProfileFileID, directoryaccounthistory.FieldSourceVersion:
 			values[i] = new(sql.NullString)
 		case directoryaccounthistory.FieldHistoryTime, directoryaccounthistory.FieldCreatedAt, directoryaccounthistory.FieldUpdatedAt, directoryaccounthistory.FieldAvatarUpdatedAt, directoryaccounthistory.FieldLastLoginAt, directoryaccounthistory.FieldFirstSeenAt, directoryaccounthistory.FieldLastSeenAt, directoryaccounthistory.FieldAddedAt, directoryaccounthistory.FieldRemovedAt, directoryaccounthistory.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -202,6 +204,13 @@ func (_m *DirectoryAccountHistory) assignValues(columns []string, values []any) 
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case directoryaccounthistory.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case directoryaccounthistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -547,6 +556,11 @@ func (_m *DirectoryAccountHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
 	builder.WriteString(_m.DisplayID)

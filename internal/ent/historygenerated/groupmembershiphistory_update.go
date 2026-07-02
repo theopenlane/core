@@ -66,6 +66,26 @@ func (_u *GroupMembershipHistoryUpdate) ClearUpdatedBy() *GroupMembershipHistory
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *GroupMembershipHistoryUpdate) SetUpdatedByImpersonator(v string) *GroupMembershipHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *GroupMembershipHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *GroupMembershipHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *GroupMembershipHistoryUpdate) ClearUpdatedByImpersonator() *GroupMembershipHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetRole sets the "role" field.
 func (_u *GroupMembershipHistoryUpdate) SetRole(v enums.Role) *GroupMembershipHistoryUpdate {
 	_u.mutation.SetRole(v)
@@ -176,6 +196,12 @@ func (_u *GroupMembershipHistoryUpdate) sqlSave(ctx context.Context) (_node int,
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(groupmembershiphistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(groupmembershiphistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(groupmembershiphistory.FieldRole, field.TypeEnum, value)
 	}
@@ -232,6 +258,26 @@ func (_u *GroupMembershipHistoryUpdateOne) SetNillableUpdatedBy(v *string) *Grou
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *GroupMembershipHistoryUpdateOne) ClearUpdatedBy() *GroupMembershipHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *GroupMembershipHistoryUpdateOne) SetUpdatedByImpersonator(v string) *GroupMembershipHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *GroupMembershipHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *GroupMembershipHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *GroupMembershipHistoryUpdateOne) ClearUpdatedByImpersonator() *GroupMembershipHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -374,6 +420,12 @@ func (_u *GroupMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(groupmembershiphistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(groupmembershiphistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(groupmembershiphistory.FieldRole, field.TypeEnum, value)

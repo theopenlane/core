@@ -66,6 +66,26 @@ func (_u *HushHistoryUpdate) ClearUpdatedBy() *HushHistoryUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *HushHistoryUpdate) SetUpdatedByImpersonator(v string) *HushHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *HushHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *HushHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *HushHistoryUpdate) ClearUpdatedByImpersonator() *HushHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *HushHistoryUpdate) SetDeletedAt(v time.Time) *HushHistoryUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -375,6 +395,12 @@ func (_u *HushHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(hushhistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(hushhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(hushhistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(hushhistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -506,6 +532,26 @@ func (_u *HushHistoryUpdateOne) SetNillableUpdatedBy(v *string) *HushHistoryUpda
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *HushHistoryUpdateOne) ClearUpdatedBy() *HushHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *HushHistoryUpdateOne) SetUpdatedByImpersonator(v string) *HushHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *HushHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *HushHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *HushHistoryUpdateOne) ClearUpdatedByImpersonator() *HushHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -847,6 +893,12 @@ func (_u *HushHistoryUpdateOne) sqlSave(ctx context.Context) (_node *HushHistory
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(hushhistory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(hushhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(hushhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(hushhistory.FieldDeletedAt, field.TypeTime, value)

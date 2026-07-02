@@ -28,6 +28,7 @@ query GetActionPlanWorkflowStatus($actionPlanId: ID!) {
       tags
       updatedAt
       updatedBy
+      updatedByImpersonator
       workflowDefinitionID
       workflowProposalID
     }
@@ -65,6 +66,7 @@ query GetActionPlanWorkflowTimeline($actionPlanId: ID!, $first: Int, $last: Int,
           tags
           updatedAt
           updatedBy
+          updatedByImpersonator
           workflowInstanceID
         }
       }
@@ -101,6 +103,7 @@ query GetCampaignWorkflowStatus($campaignId: ID!) {
       tags
       updatedAt
       updatedBy
+      updatedByImpersonator
       workflowDefinitionID
       workflowProposalID
     }
@@ -138,6 +141,7 @@ query GetCampaignWorkflowTimeline($campaignId: ID!, $first: Int, $last: Int, $af
           tags
           updatedAt
           updatedBy
+          updatedByImpersonator
           workflowInstanceID
         }
       }
@@ -174,6 +178,7 @@ query GetCampaignTargetWorkflowStatus($campaignTargetId: ID!) {
       tags
       updatedAt
       updatedBy
+      updatedByImpersonator
       workflowDefinitionID
       workflowProposalID
     }
@@ -211,6 +216,7 @@ query GetCampaignTargetWorkflowTimeline($campaignTargetId: ID!, $first: Int, $la
           tags
           updatedAt
           updatedBy
+          updatedByImpersonator
           workflowInstanceID
         }
       }
@@ -247,6 +253,7 @@ query GetControlWorkflowStatus($controlId: ID!) {
       tags
       updatedAt
       updatedBy
+      updatedByImpersonator
       workflowDefinitionID
       workflowProposalID
     }
@@ -284,6 +291,7 @@ query GetControlWorkflowTimeline($controlId: ID!, $first: Int, $last: Int, $afte
           tags
           updatedAt
           updatedBy
+          updatedByImpersonator
           workflowInstanceID
         }
       }
@@ -320,6 +328,7 @@ query GetEvidenceWorkflowStatus($evidenceId: ID!) {
       tags
       updatedAt
       updatedBy
+      updatedByImpersonator
       workflowDefinitionID
       workflowProposalID
     }
@@ -357,6 +366,7 @@ query GetEvidenceWorkflowTimeline($evidenceId: ID!, $first: Int, $last: Int, $af
           tags
           updatedAt
           updatedBy
+          updatedByImpersonator
           workflowInstanceID
         }
       }
@@ -393,6 +403,7 @@ query GetIdentityHolderWorkflowStatus($identityHolderId: ID!) {
       tags
       updatedAt
       updatedBy
+      updatedByImpersonator
       workflowDefinitionID
       workflowProposalID
     }
@@ -430,6 +441,7 @@ query GetIdentityHolderWorkflowTimeline($identityHolderId: ID!, $first: Int, $la
           tags
           updatedAt
           updatedBy
+          updatedByImpersonator
           workflowInstanceID
         }
       }
@@ -466,6 +478,7 @@ query GetInternalPolicyWorkflowStatus($internalPolicyId: ID!) {
       tags
       updatedAt
       updatedBy
+      updatedByImpersonator
       workflowDefinitionID
       workflowProposalID
     }
@@ -503,6 +516,7 @@ query GetInternalPolicyWorkflowTimeline($internalPolicyId: ID!, $first: Int, $la
           tags
           updatedAt
           updatedBy
+          updatedByImpersonator
           workflowInstanceID
         }
       }
@@ -539,6 +553,7 @@ query GetPlatformWorkflowStatus($platformId: ID!) {
       tags
       updatedAt
       updatedBy
+      updatedByImpersonator
       workflowDefinitionID
       workflowProposalID
     }
@@ -576,6 +591,7 @@ query GetPlatformWorkflowTimeline($platformId: ID!, $first: Int, $last: Int, $af
           tags
           updatedAt
           updatedBy
+          updatedByImpersonator
           workflowInstanceID
         }
       }
@@ -612,6 +628,7 @@ query GetProcedureWorkflowStatus($procedureId: ID!) {
       tags
       updatedAt
       updatedBy
+      updatedByImpersonator
       workflowDefinitionID
       workflowProposalID
     }
@@ -649,6 +666,7 @@ query GetProcedureWorkflowTimeline($procedureId: ID!, $first: Int, $last: Int, $
           tags
           updatedAt
           updatedBy
+          updatedByImpersonator
           workflowInstanceID
         }
       }
@@ -685,6 +703,7 @@ query GetSubcontrolWorkflowStatus($subcontrolId: ID!) {
       tags
       updatedAt
       updatedBy
+      updatedByImpersonator
       workflowDefinitionID
       workflowProposalID
     }
@@ -722,6 +741,7 @@ query GetSubcontrolWorkflowTimeline($subcontrolId: ID!, $first: Int, $last: Int,
           tags
           updatedAt
           updatedBy
+          updatedByImpersonator
           workflowInstanceID
         }
       }

@@ -34,6 +34,8 @@ type DirectoryMembership struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
 	// the organization id that owns the object
@@ -229,7 +231,7 @@ func (*DirectoryMembership) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case directorymembership.FieldMetadata:
 			values[i] = new([]byte)
-		case directorymembership.FieldID, directorymembership.FieldCreatedBy, directorymembership.FieldUpdatedBy, directorymembership.FieldDisplayID, directorymembership.FieldOwnerID, directorymembership.FieldEnvironmentName, directorymembership.FieldEnvironmentID, directorymembership.FieldScopeName, directorymembership.FieldScopeID, directorymembership.FieldIntegrationID, directorymembership.FieldPlatformID, directorymembership.FieldDirectoryInstanceID, directorymembership.FieldDirectorySyncRunID, directorymembership.FieldDirectoryAccountID, directorymembership.FieldDirectoryGroupID, directorymembership.FieldRole, directorymembership.FieldSource, directorymembership.FieldDirectoryName, directorymembership.FieldLastConfirmedRunID:
+		case directorymembership.FieldID, directorymembership.FieldCreatedBy, directorymembership.FieldUpdatedBy, directorymembership.FieldUpdatedByImpersonator, directorymembership.FieldDisplayID, directorymembership.FieldOwnerID, directorymembership.FieldEnvironmentName, directorymembership.FieldEnvironmentID, directorymembership.FieldScopeName, directorymembership.FieldScopeID, directorymembership.FieldIntegrationID, directorymembership.FieldPlatformID, directorymembership.FieldDirectoryInstanceID, directorymembership.FieldDirectorySyncRunID, directorymembership.FieldDirectoryAccountID, directorymembership.FieldDirectoryGroupID, directorymembership.FieldRole, directorymembership.FieldSource, directorymembership.FieldDirectoryName, directorymembership.FieldLastConfirmedRunID:
 			values[i] = new(sql.NullString)
 		case directorymembership.FieldCreatedAt, directorymembership.FieldUpdatedAt, directorymembership.FieldFirstSeenAt, directorymembership.FieldLastSeenAt, directorymembership.FieldAddedAt, directorymembership.FieldRemovedAt, directorymembership.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -277,6 +279,13 @@ func (_m *DirectoryMembership) assignValues(columns []string, values []any) erro
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case directorymembership.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case directorymembership.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -517,6 +526,11 @@ func (_m *DirectoryMembership) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
 	builder.WriteString(_m.DisplayID)

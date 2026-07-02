@@ -80,6 +80,20 @@ func (_c *VendorScoringConfigCreate) SetNillableUpdatedBy(v *string) *VendorScor
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *VendorScoringConfigCreate) SetUpdatedByImpersonator(v string) *VendorScoringConfigCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *VendorScoringConfigCreate) SetNillableUpdatedByImpersonator(v *string) *VendorScoringConfigCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *VendorScoringConfigCreate) SetDeletedAt(v time.Time) *VendorScoringConfigCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -353,6 +367,10 @@ func (_c *VendorScoringConfigCreate) createSpec() (*VendorScoringConfig, *sqlgra
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(vendorscoringconfig.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(vendorscoringconfig.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(vendorscoringconfig.FieldDeletedAt, field.TypeTime, value)

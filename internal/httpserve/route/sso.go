@@ -43,6 +43,24 @@ func registerSSOLoginHandler(router *Router) error {
 	return router.AddV1HandlerRoute(config)
 }
 
+// registerSSOInitiateHandler is the public, shareable per-organization SSO entry point.
+func registerSSOInitiateHandler(router *Router) error {
+	config := Config{
+		Path:        "/orgs/:slug_name/sso",
+		Method:      http.MethodGet,
+		Name:        "SSOInitiate",
+		Description: "Initiate an organization's SSO flow from its shareable slug URL",
+		Tags:        []string{"sso"},
+		OperationID: "SSOInitiate",
+		Security:    &openapi3.SecurityRequirements{},
+		Middlewares: *unauthenticatedEndpoint,
+		RateLimit:   authFlowRateLimit,
+		Handler:     router.Handler.SSOInitiateHandler,
+	}
+
+	return router.AddV1HandlerRoute(config)
+}
+
 // registerSSOCallbackHandler completes the OIDC login flow.
 func registerSSOCallbackHandler(router *Router) error {
 	config := Config{

@@ -163,6 +163,13 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	suite.db.UserSetting.UpdateOneID(userWithInactiveDefaultOrg.UserInfo.Edges.Setting.ID).
 		SetDefaultOrgID(userWithInactiveDefaultOrg.OrganizationID).ExecX(allowCtx)
 
+	allModulesWithSignup := []any{
+		models.CatalogBaseModule.String(),
+		models.CatalogComplianceModule.String(),
+		models.CatalogTrustCenterModule.String(),
+		models.CatalogRegistryModule.String(),
+	}
+
 	testCases := []struct {
 		name            string
 		username        string
@@ -173,40 +180,28 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		expectedModules []interface{}
 	}{
 		{
-			name:           "happy path, valid credentials",
-			username:       validConfirmedUser.UserInfo.Email,
-			password:       validPassword,
-			expectedStatus: http.StatusOK,
-			expectedOrgID:  validConfirmedUser.OrganizationID,
-			expectedModules: []interface{}{
-				models.CatalogBaseModule.String(),
-				models.CatalogComplianceModule.String(),
-				models.CatalogTrustCenterModule.String(),
-			},
+			name:            "happy path, valid credentials",
+			username:        validConfirmedUser.UserInfo.Email,
+			password:        validPassword,
+			expectedStatus:  http.StatusOK,
+			expectedOrgID:   validConfirmedUser.OrganizationID,
+			expectedModules: allModulesWithSignup,
 		},
 		{
-			name:           "happy path, domain restricted org, but owner so domains can be mismatched",
-			username:       validConfirmedUserRestrictedOrg.UserInfo.Email,
-			password:       validPassword,
-			expectedStatus: http.StatusOK,
-			expectedOrgID:  org.ID,
-			expectedModules: []interface{}{
-				models.CatalogBaseModule.String(),
-				models.CatalogComplianceModule.String(),
-				models.CatalogTrustCenterModule.String(),
-			},
+			name:            "happy path, domain restricted org, but owner so domains can be mismatched",
+			username:        validConfirmedUserRestrictedOrg.UserInfo.Email,
+			password:        validPassword,
+			expectedStatus:  http.StatusOK,
+			expectedOrgID:   org.ID,
+			expectedModules: allModulesWithSignup,
 		},
 		{
-			name:           "happy path, auditor default org",
-			username:       auditorUser.UserInfo.Email,
-			password:       validPassword,
-			expectedStatus: http.StatusOK,
-			expectedOrgID:  org.ID,
-			expectedModules: []interface{}{
-				models.CatalogBaseModule.String(),
-				models.CatalogComplianceModule.String(),
-				models.CatalogTrustCenterModule.String(),
-			},
+			name:            "happy path, auditor default org",
+			username:        auditorUser.UserInfo.Email,
+			password:        validPassword,
+			expectedStatus:  http.StatusOK,
+			expectedOrgID:   org.ID,
+			expectedModules: allModulesWithSignup,
 		},
 		{
 			name:            "domain restricted org, email not allowed, switch to personal org",
@@ -330,9 +325,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
-	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		IdentityProviderLoginEnforced: func(b bool) *bool { return &b }(true),
-	}).SaveX(ownerCtx)
+	setting := suite.db.OrganizationSetting.Create().SaveX(ownerCtx)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
@@ -342,6 +335,8 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetOrganizationID(org.ID).
 		ExecX(ownerCtx)
+
+	suite.enforceSSOOnSetting(ownerCtx, setting.ID)
 
 	// Create a non-owner user
 	testUser := suite.userBuilderWithInput(ctx, &userInput{
@@ -387,9 +382,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOwnerBypass() {
 	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
-	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		IdentityProviderLoginEnforced: func(b bool) *bool { return &b }(true),
-	}).SaveX(ownerCtx)
+	setting := suite.db.OrganizationSetting.Create().SaveX(ownerCtx)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
@@ -399,6 +392,8 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOwnerBypass() {
 	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetOrganizationID(org.ID).
 		ExecX(ownerCtx)
+
+	suite.enforceSSOOnSetting(ownerCtx, setting.ID)
 	// OrganizationCreate hook automatically adds the creating user as the organization owner
 
 	suite.db.UserSetting.UpdateOneID(ownerUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(ownerCtx)

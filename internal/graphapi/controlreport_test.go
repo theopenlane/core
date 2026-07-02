@@ -287,13 +287,22 @@ func TestQueryControlReports(t *testing.T) {
 						assert.Check(t, edge.Node.ControlOwner != nil)
 						assert.Check(t, is.Equal(richData.controlOwnerID, edge.Node.ControlOwner.ID))
 
-						// the subcontrol mapped directly to primary must appear with IsSubcontrol: true
 						var foundSubcontrolRelated bool
 						for _, rc := range edge.Node.RelatedControls {
-							if rc.ID == richData.ctrlToSubcontrolRelatedID {
+							switch rc.ID {
+							case richData.ctrlToSubcontrolRelatedID:
 								foundSubcontrolRelated = true
 								assert.Check(t, rc.IsSubcontrol)
 								assert.Check(t, rc.ParentControlID != nil)
+							case richData.secondaryControlID:
+								// secondary is related via both the forward and reverse org mappings
+								assert.Check(t, is.Len(rc.MappedControlReferenceIDs, 2))
+								assert.Check(t, is.Contains(rc.MappedControlReferenceIDs, richData.forwardMappingID))
+								assert.Check(t, is.Contains(rc.MappedControlReferenceIDs, richData.reverseMappingID))
+							case richData.tertiaryControlID:
+								// tertiary is related via the single tertiary org mapping
+								assert.Check(t, is.Len(rc.MappedControlReferenceIDs, 1))
+								assert.Check(t, is.Contains(rc.MappedControlReferenceIDs, richData.tertiaryMappingID))
 							}
 						}
 						assert.Check(t, foundSubcontrolRelated)
@@ -302,6 +311,8 @@ func TestQueryControlReports(t *testing.T) {
 					// org control matching sysControlA should surface sysMapOrgTarget via system mapping
 					if edge.Node.ID == richData.sysMapOrgSourceID {
 						assert.Check(t, is.Len(edge.Node.RelatedControls, 1))
+						// the relationship was created by a system-owned mapping, so no reference ids are reported
+						assert.Check(t, is.Len(edge.Node.RelatedControls[0].MappedControlReferenceIDs, 0))
 					}
 				}
 			} else {
@@ -523,6 +534,81 @@ func TestControlReportRelatedControlsScoping(t *testing.T) {
 	}
 
 	assert.Check(t, checkedSibA)
+
+	cleanupOrganizationDataWithContext(ctx, t)
+}
+
+func TestControlReportInheritedRelatedControls(t *testing.T) {
+	t.Parallel()
+
+	org := suite.seedOrgOwner(t)
+	ctx := org.owner.UserCtx
+
+	parent := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
+	sub := (&SubcontrolBuilder{client: suite.client, ControlID: parent.ID}).MustNew(ctx, t)
+
+	inheritedTarget := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
+	directTarget := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
+
+	(&MappedControlBuilder{
+		client:            suite.client,
+		FromSubcontrolIDs: []string{sub.ID},
+		ToControlIDs:      []string{inheritedTarget.ID},
+	}).MustNew(ctx, t)
+
+	(&MappedControlBuilder{
+		client:         suite.client,
+		FromControlIDs: []string{parent.ID},
+		ToControlIDs:   []string{directTarget.ID},
+	}).MustNew(ctx, t)
+
+	(&MappedControlBuilder{
+		client:            suite.client,
+		FromSubcontrolIDs: []string{sub.ID},
+		ToControlIDs:      []string{directTarget.ID},
+	}).MustNew(ctx, t)
+
+	// the inherited target carries a policy; it should surface on the parent's linkedPolicies
+	// because inheritance runs before the policy aggregation
+	inheritedPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(ctx, t)
+	dbCtx := setContext(ctx, suite.client.db)
+	requireNoError(t, suite.client.db.InternalPolicy.UpdateOneID(inheritedPolicy.ID).AddControlIDs(inheritedTarget.ID).Exec(dbCtx))
+
+	resp, err := suite.client.api.GetAllControlReports(ctx)
+	assert.NilError(t, err)
+	assert.Check(t, resp != nil)
+
+	var checkedParent bool
+	for _, edge := range resp.ControlReports.Edges {
+		if edge.Node.ID != parent.ID {
+			continue
+		}
+
+		checkedParent = true
+
+		// parent relates to directTarget (direct) and inheritedTarget (via the subcontrol)
+		assert.Check(t, is.Len(edge.Node.RelatedControls, 2))
+
+		related := map[string]*testclient.GetAllControlReports_ControlReports_Edges_Node_RelatedControls{}
+		for _, rc := range edge.Node.RelatedControls {
+			related[rc.ID] = rc
+		}
+
+		// reached only through the subcontrol: inherited, tagged with the subcontrol id
+		assert.Assert(t, related[inheritedTarget.ID] != nil)
+		assert.Check(t, is.DeepEqual([]string{sub.ID}, related[inheritedTarget.ID].InheritedFromSubcontrolIDs))
+
+		// has a direct mapping (even though also mapped via the subcontrol)
+		assert.Assert(t, related[directTarget.ID] != nil)
+		assert.Check(t, is.Len(related[directTarget.ID].InheritedFromSubcontrolIDs, 0))
+
+		// inheritance runs before the policy pass, so the inherited target's policy surfaces here
+		assert.Check(t, is.Equal(int64(1), edge.Node.LinkedPolicies.TotalCount))
+		assert.Assert(t, is.Len(edge.Node.LinkedPolicies.InternalPolicies, 1))
+		assert.Check(t, is.Equal(inheritedPolicy.ID, edge.Node.LinkedPolicies.InternalPolicies[0].ID))
+	}
+
+	assert.Check(t, checkedParent)
 
 	cleanupOrganizationDataWithContext(ctx, t)
 }

@@ -114,6 +114,20 @@ func (_c *EmailTemplateHistoryCreate) SetNillableUpdatedBy(v *string) *EmailTemp
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *EmailTemplateHistoryCreate) SetUpdatedByImpersonator(v string) *EmailTemplateHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *EmailTemplateHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *EmailTemplateHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *EmailTemplateHistoryCreate) SetDeletedAt(v time.Time) *EmailTemplateHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -651,6 +665,10 @@ func (_c *EmailTemplateHistoryCreate) createSpec() (*EmailTemplateHistory, *sqlg
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(emailtemplatehistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(emailtemplatehistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(emailtemplatehistory.FieldDeletedAt, field.TypeTime, value)

@@ -8,7 +8,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -44,7 +43,6 @@ func CanInviteUsers() privacy.InviteMutationRuleFunc {
 			SubjectType: caller.SubjectType(),
 			ObjectID:    oID,
 			Relation:    relation,
-			Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 		}
 
 		logx.FromContext(ctx).Debug().Interface("tuple", ac).Msg("checking relationship tuples")

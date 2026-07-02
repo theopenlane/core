@@ -7,9 +7,9 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
+	sso "github.com/theopenlane/core/pkg/ssoutils"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/utils/rout"
 )
@@ -85,10 +85,12 @@ func (h *Handler) WebfingerHandler(ctx echo.Context, openapi *OpenAPIContext) er
 
 type nonce string
 
-// fetchSSOStatus returns the SSO enforcement status for a given organization
-// it checks the organization's settings and returns whether SSO is enforced, the provider, and discovery URL
+// fetchSSOStatus returns the SSO status for an organization. For the org level lookup (no userID) it
+// reports the raw organization enforcement; when a userID is provided it additionally applies that
+// user's owner, per-user, and per-domain exemptions, so callers and the webfinger acct lookup do not
+// route an exempt user through SSO. Provider, discovery URL, and TFA enforcement are always reported
 func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (models.SSOStatusReply, error) {
-	setting, err := h.getOrganizationSettingByOrgID(ctx, orgID)
+	in, setting, err := sso.LoadEnforcement(ctx, h.DBClient, orgID, userID, "")
 	if err != nil {
 		return models.SSOStatusReply{}, err
 	}
@@ -98,21 +100,11 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (mod
 		Enforced:       setting.IdentityProviderLoginEnforced,
 		OrganizationID: orgID,
 		OrgTFAEnforced: setting.MultifactorAuthEnforced,
+		IsOrgOwner:     in.IsOwner,
 	}
 
-	if userID != "" {
-		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-		member, err := h.DBClient.OrgMembership.
-			Query().Where(
-			orgmembership.OrganizationID(orgID),
-			orgmembership.UserID(userID),
-		).Only(allowCtx)
-		if err != nil {
-			return models.SSOStatusReply{}, err
-		}
-
-		out.IsOrgOwner = member.Role == enums.RoleOwner
+	if userID != "" && out.Enforced {
+		out.Enforced = sso.Evaluate(in).MustSSO
 	}
 
 	if setting.IdentityProvider != enums.SSOProvider("") {

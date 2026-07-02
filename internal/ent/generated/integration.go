@@ -31,6 +31,8 @@ type Integration struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -432,7 +434,7 @@ func (*Integration) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case integration.FieldSystemOwned, integration.FieldPrimaryDirectory, integration.FieldCampaignEmail:
 			values[i] = new(sql.NullBool)
-		case integration.FieldID, integration.FieldCreatedBy, integration.FieldUpdatedBy, integration.FieldDeletedBy, integration.FieldOwnerID, integration.FieldInternalNotes, integration.FieldSystemInternalID, integration.FieldEnvironmentName, integration.FieldEnvironmentID, integration.FieldScopeName, integration.FieldScopeID, integration.FieldName, integration.FieldDescription, integration.FieldKind, integration.FieldIntegrationType, integration.FieldPlatformID, integration.FieldDefinitionID, integration.FieldDefinitionVersion, integration.FieldDefinitionSlug, integration.FieldFamily, integration.FieldStatus:
+		case integration.FieldID, integration.FieldCreatedBy, integration.FieldUpdatedBy, integration.FieldUpdatedByImpersonator, integration.FieldDeletedBy, integration.FieldOwnerID, integration.FieldInternalNotes, integration.FieldSystemInternalID, integration.FieldEnvironmentName, integration.FieldEnvironmentID, integration.FieldScopeName, integration.FieldScopeID, integration.FieldName, integration.FieldDescription, integration.FieldKind, integration.FieldIntegrationType, integration.FieldPlatformID, integration.FieldDefinitionID, integration.FieldDefinitionVersion, integration.FieldDefinitionSlug, integration.FieldFamily, integration.FieldStatus:
 			values[i] = new(sql.NullString)
 		case integration.FieldCreatedAt, integration.FieldUpdatedAt, integration.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -484,6 +486,13 @@ func (_m *Integration) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case integration.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case integration.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -866,6 +875,11 @@ func (_m *Integration) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))

@@ -115,6 +115,20 @@ func (_c *RemediationHistoryCreate) SetNillableUpdatedBy(v *string) *Remediation
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *RemediationHistoryCreate) SetUpdatedByImpersonator(v string) *RemediationHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *RemediationHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *RemediationHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *RemediationHistoryCreate) SetDeletedAt(v time.Time) *RemediationHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -717,6 +731,10 @@ func (_c *RemediationHistoryCreate) createSpec() (*RemediationHistory, *sqlgraph
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(remediationhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(remediationhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(remediationhistory.FieldDeletedAt, field.TypeTime, value)

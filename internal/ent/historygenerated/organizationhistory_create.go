@@ -113,6 +113,20 @@ func (_c *OrganizationHistoryCreate) SetNillableUpdatedBy(v *string) *Organizati
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *OrganizationHistoryCreate) SetUpdatedByImpersonator(v string) *OrganizationHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *OrganizationHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *OrganizationHistoryCreate) SetDeletedAt(v time.Time) *OrganizationHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -261,6 +275,20 @@ func (_c *OrganizationHistoryCreate) SetStripeCustomerID(v string) *Organization
 func (_c *OrganizationHistoryCreate) SetNillableStripeCustomerID(v *string) *OrganizationHistoryCreate {
 	if v != nil {
 		_c.SetStripeCustomerID(*v)
+	}
+	return _c
+}
+
+// SetSlugName sets the "slug_name" field.
+func (_c *OrganizationHistoryCreate) SetSlugName(v string) *OrganizationHistoryCreate {
+	_c.mutation.SetSlugName(v)
+	return _c
+}
+
+// SetNillableSlugName sets the "slug_name" field if the given value is not nil.
+func (_c *OrganizationHistoryCreate) SetNillableSlugName(v *string) *OrganizationHistoryCreate {
+	if v != nil {
+		_c.SetSlugName(*v)
 	}
 	return _c
 }
@@ -449,6 +477,10 @@ func (_c *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgra
 		_spec.SetField(organizationhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(organizationhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
+	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -496,6 +528,10 @@ func (_c *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgra
 	if value, ok := _c.mutation.StripeCustomerID(); ok {
 		_spec.SetField(organizationhistory.FieldStripeCustomerID, field.TypeString, value)
 		_node.StripeCustomerID = &value
+	}
+	if value, ok := _c.mutation.SlugName(); ok {
+		_spec.SetField(organizationhistory.FieldSlugName, field.TypeString, value)
+		_node.SlugName = value
 	}
 	return _node, _spec
 }

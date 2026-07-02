@@ -72,6 +72,26 @@ func (_u *EmailTemplateUpdate) ClearUpdatedBy() *EmailTemplateUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *EmailTemplateUpdate) SetUpdatedByImpersonator(v string) *EmailTemplateUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *EmailTemplateUpdate) SetNillableUpdatedByImpersonator(v *string) *EmailTemplateUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *EmailTemplateUpdate) ClearUpdatedByImpersonator() *EmailTemplateUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *EmailTemplateUpdate) SetDeletedAt(v time.Time) *EmailTemplateUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -890,6 +910,12 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(emailtemplate.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(emailtemplate.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(emailtemplate.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(emailtemplate.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -1472,6 +1498,26 @@ func (_u *EmailTemplateUpdateOne) SetNillableUpdatedBy(v *string) *EmailTemplate
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *EmailTemplateUpdateOne) ClearUpdatedBy() *EmailTemplateUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *EmailTemplateUpdateOne) SetUpdatedByImpersonator(v string) *EmailTemplateUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *EmailTemplateUpdateOne) SetNillableUpdatedByImpersonator(v *string) *EmailTemplateUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *EmailTemplateUpdateOne) ClearUpdatedByImpersonator() *EmailTemplateUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -2322,6 +2368,12 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(emailtemplate.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(emailtemplate.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(emailtemplate.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(emailtemplate.FieldDeletedAt, field.TypeTime, value)

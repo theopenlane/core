@@ -37,9 +37,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
 	ownerCtx := privacy.DecisionContext(owner.UserCtx, privacy.Allow)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
-	setting := suite.db.OrganizationSetting.Create().SetInput(ent.CreateOrganizationSettingInput{
-		IdentityProviderLoginEnforced: func(b bool) *bool { return &b }(true),
-	}).SaveX(ownerCtx)
+	setting := suite.db.OrganizationSetting.Create().SaveX(ownerCtx)
 
 	org := suite.db.Organization.Create().SetInput(ent.CreateOrganizationInput{
 		Name:      ulids.New().String(),
@@ -47,6 +45,8 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
 	}).SaveX(ownerCtx)
 
 	suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).ExecX(ownerCtx)
+
+	suite.enforceSSOOnSetting(ownerCtx, setting.ID)
 
 	// Test user attempting to switch.
 	testUser := suite.userBuilderWithInput(ctx, &userInput{

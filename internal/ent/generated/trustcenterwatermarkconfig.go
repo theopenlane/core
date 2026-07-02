@@ -28,6 +28,8 @@ type TrustCenterWatermarkConfig struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -139,7 +141,7 @@ func (*TrustCenterWatermarkConfig) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case trustcenterwatermarkconfig.FieldFontSize, trustcenterwatermarkconfig.FieldOpacity, trustcenterwatermarkconfig.FieldRotation:
 			values[i] = new(sql.NullFloat64)
-		case trustcenterwatermarkconfig.FieldID, trustcenterwatermarkconfig.FieldCreatedBy, trustcenterwatermarkconfig.FieldUpdatedBy, trustcenterwatermarkconfig.FieldDeletedBy, trustcenterwatermarkconfig.FieldOwnerID, trustcenterwatermarkconfig.FieldTrustCenterID, trustcenterwatermarkconfig.FieldLogoID, trustcenterwatermarkconfig.FieldText, trustcenterwatermarkconfig.FieldColor, trustcenterwatermarkconfig.FieldFont:
+		case trustcenterwatermarkconfig.FieldID, trustcenterwatermarkconfig.FieldCreatedBy, trustcenterwatermarkconfig.FieldUpdatedBy, trustcenterwatermarkconfig.FieldUpdatedByImpersonator, trustcenterwatermarkconfig.FieldDeletedBy, trustcenterwatermarkconfig.FieldOwnerID, trustcenterwatermarkconfig.FieldTrustCenterID, trustcenterwatermarkconfig.FieldLogoID, trustcenterwatermarkconfig.FieldText, trustcenterwatermarkconfig.FieldColor, trustcenterwatermarkconfig.FieldFont:
 			values[i] = new(sql.NullString)
 		case trustcenterwatermarkconfig.FieldCreatedAt, trustcenterwatermarkconfig.FieldUpdatedAt, trustcenterwatermarkconfig.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -187,6 +189,13 @@ func (_m *TrustCenterWatermarkConfig) assignValues(columns []string, values []an
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case trustcenterwatermarkconfig.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case trustcenterwatermarkconfig.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -333,6 +342,11 @@ func (_m *TrustCenterWatermarkConfig) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))

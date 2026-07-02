@@ -47,6 +47,7 @@ query GetAllIdentityHolderHistories ($first: Int, $last: Int, $after: Cursor, $b
 				title
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				userID
 				workflowEligibleMarker
 			}
@@ -102,6 +103,7 @@ query GetIdentityHolderHistories ($first: Int, $last: Int, $after: Cursor, $befo
 				title
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				userID
 				workflowEligibleMarker
 			}

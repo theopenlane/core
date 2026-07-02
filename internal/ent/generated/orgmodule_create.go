@@ -81,6 +81,20 @@ func (_c *OrgModuleCreate) SetNillableUpdatedBy(v *string) *OrgModuleCreate {
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *OrgModuleCreate) SetUpdatedByImpersonator(v string) *OrgModuleCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *OrgModuleCreate) SetNillableUpdatedByImpersonator(v *string) *OrgModuleCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *OrgModuleCreate) SetDeletedAt(v time.Time) *OrgModuleCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -453,6 +467,10 @@ func (_c *OrgModuleCreate) createSpec() (*OrgModule, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgmodule.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(orgmodule.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(orgmodule.FieldDeletedAt, field.TypeTime, value)

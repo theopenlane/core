@@ -17,6 +17,7 @@ mutation CreateAssessment ($input: CreateAssessmentInput!) {
 			uischema
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -83,6 +84,7 @@ query GetAssessmentByID ($assessmentId: ID!) {
 		uischema
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		campaigns {
 			edges {
 				node {
@@ -149,6 +151,7 @@ mutation UpdateAssessment ($updateAssessmentId: ID!, $input: UpdateAssessmentInp
 			uischema
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }

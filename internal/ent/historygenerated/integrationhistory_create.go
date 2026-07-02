@@ -115,6 +115,20 @@ func (_c *IntegrationHistoryCreate) SetNillableUpdatedBy(v *string) *Integration
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *IntegrationHistoryCreate) SetUpdatedByImpersonator(v string) *IntegrationHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *IntegrationHistoryCreate) SetDeletedAt(v time.Time) *IntegrationHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -684,6 +698,10 @@ func (_c *IntegrationHistoryCreate) createSpec() (*IntegrationHistory, *sqlgraph
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(integrationhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(integrationhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(integrationhistory.FieldDeletedAt, field.TypeTime, value)

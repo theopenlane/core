@@ -75,6 +75,7 @@ query GetTrustCenterWatermarkConfigByID ($trustCenterWatermarkConfigId: ID!) {
 		trustCenterID
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		file {
 			id
 			presignedURL

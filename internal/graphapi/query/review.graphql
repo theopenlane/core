@@ -34,6 +34,7 @@ mutation CreateBulkCSVReview ($input: Upload!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -73,6 +74,7 @@ mutation CreateBulkReview ($input: [CreateReviewInput!]) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -112,6 +114,7 @@ mutation CreateReview ($input: CreateReviewInput!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -199,6 +202,7 @@ query GetReviewByID ($reviewId: ID!) {
 		title
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 	}
 }
 query GetReviews ($first: Int, $last: Int, $where: ReviewWhereInput) {
@@ -276,6 +280,7 @@ mutation UpdateBulkCSVReview ($input: Upload!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 		updatedIDs
 	}
@@ -316,6 +321,7 @@ mutation UpdateBulkReview ($ids: [ID!]!, $input: UpdateReviewInput!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 		updatedIDs
 	}

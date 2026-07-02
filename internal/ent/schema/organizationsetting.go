@@ -91,7 +91,7 @@ func (OrganizationSetting) Fields() []ent.Field {
 			Comment("should we send email notifications related to billing").
 			Default(true),
 		field.Strings("allowed_email_domains").
-			Comment("domains allowed to access the organization, if empty all domains are allowed").
+			Comment("domains allowed to access the organization via autojoin").
 			Validate(validator.ValidateDomains()).
 			Optional(),
 		field.Bool("allow_matching_domains_autojoin").
@@ -139,10 +139,25 @@ func (OrganizationSetting) Fields() []ent.Field {
 		field.Bool("identity_provider_login_enforced").
 			Comment("enforce SSO authentication for organization members").
 			Default(false),
+		field.Bool("identity_provider_jit_provisioning").
+			Comment("when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider").
+			Default(true),
+		field.Strings("jit_allowed_email_domains").
+			Comment("when set, restricts just-in-time provisioning to users whose authenticated email domain is in this list; when empty, any user who authenticates against the identity provider is provisioned").
+			Validate(validator.ValidateDomains()).
+			Optional(),
 		field.Bool("multifactor_auth_enforced").
 			Comment("enforce 2fa / multifactor authentication for organization members").
 			Optional().
 			Default(false),
+		field.Strings("sso_exempt_domains").
+			Comment("email domains whose existing members skip the SSO redirect even when SSO is enforced; TFA enforcement still applies").
+			Validate(validator.ValidateDomains()).
+			Optional(),
+		field.Bool("allow_support_access").
+			Comment("allow Openlane support to access this organization without a directory account").
+			Default(false).
+			Optional(),
 		field.String("compliance_webhook_token").
 			Comment("unique token used to receive compliance webhook events").
 			Unique().

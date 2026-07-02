@@ -26,15 +26,17 @@
 - user: contact:contact-1
   relation: parent
   object: file:file-3 # contact has access to file
+- user: user:ulid-auditor
+  relation: auditor
+  object: organization:auditor-file-org
+- user: organization:auditor-file-org
+  relation: parent
+  object: file:file-org-avatar
+- user: organization:auditor-file-org
+  relation: parent_context
+  object: file:file-org-scoped
 
-#setup organization with empty domain condition
-- user: organization:contact-org#member
-  relation: access
-  object: organization:contact-org
-  condition:
-    name: email_domains_allowed
-    context:
-      allowed_domains: []
+# setup another organization
 - user: user:ulid-contact-1
   relation: owner
   object: organization:contact-org
@@ -67,13 +69,6 @@
 - user: user:ulid-other-org-user
   relation: member
   object: organization:other-org
-- user: organization:other-org#member
-  relation: access
-  object: organization:other-org
-  condition:
-    name: email_domains_allowed
-    context:
-      allowed_domains: []
 - user: user:ulid-other-org-owner
   relation: owner
   object: organization:other-org

@@ -28,7 +28,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -85,7 +84,6 @@ func allowDefaultOrgUpdate(ctx context.Context, m *generated.UserSettingMutation
 		SubjectType: auth.UserSubjectType,
 		ObjectID:    orgID,
 		Relation:    "can_view_org",
-		Context:     utils.NewOrganizationContextKey(usCaller.SubjectEmail),
 	}
 
 	allow, err := m.Authz.CheckOrgAccess(ctx, req)
@@ -175,6 +173,9 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 			organization.HasSettingWith(
 				organizationsetting.And(
 					organizationsetting.AllowMatchingDomainsAutojoin(true),
+					// allowed email domains only govern auto-join when SSO is not enforced; enforced
+					// organizations provision members via the identity provider instead
+					organizationsetting.IdentityProviderLoginEnforced(false),
 					func(s *sql.Selector) {
 						s.Where(sqljson.ValueContains(organizationsetting.FieldAllowedEmailDomains, userDomain))
 					},

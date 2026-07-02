@@ -13,31 +13,22 @@ import (
 	iamauth "github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
-	"github.com/theopenlane/core/common/enums"
 	generated "github.com/theopenlane/core/internal/ent/generated"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
 
-// withOverrides allows us to inject custom functions for testing
-// isSSOEnforcedFunc and orgRoleFunc, which are used to determine SSO enforcement
-// and the user's role in the organization, respectively - seemed easier than
-// spinning up a database + seeding information every time just to verify the
-// behavior if a org setting is enforced or not, so creating some "mocking"
-// functions for this purpose
-func withOverrides(ssoFn func(context.Context, *generated.Client, string) (bool, error), roleFn func(context.Context, *generated.Client, string, string) (enums.Role, error)) func() {
-	origSSO := isSSOEnforcedFunc
-	origRole := orgRoleFunc
-	isSSOEnforcedFunc = ssoFn
-	orgRoleFunc = roleFn
-	return func() { isSSOEnforcedFunc = origSSO; orgRoleFunc = origRole }
+// withOverrides injects a custom userMustSSOFunc for testing. userMustSSOFunc encapsulates the
+// full SSO routing decision (enforcement, owner, per-user and per-domain exemptions), so overriding
+// it lets us verify the unauthorized redirect behavior without a database
+func withOverrides(mustSSOFn func(context.Context, *generated.Client, string, string) (bool, error)) func() {
+	origMustSSO := userMustSSOFunc
+	userMustSSOFunc = mustSSOFn
+	return func() { userMustSSOFunc = origMustSSO }
 }
 
 func TestUnauthorizedRedirectToSSO(t *testing.T) {
 	restore := withOverrides(
-		func(context.Context, *generated.Client, string) (bool, error) { return true, nil },
-		func(context.Context, *generated.Client, string, string) (enums.Role, error) {
-			return enums.RoleMember, nil
-		},
+		func(context.Context, *generated.Client, string, string) (bool, error) { return true, nil },
 	)
 
 	// the test temporarily overrides the isSSOEnforcedFunc and orgRoleFunc
@@ -74,10 +65,7 @@ func TestUnauthorizedRedirectToSSO(t *testing.T) {
 
 func TestUnauthorizedNoSSORedirect(t *testing.T) {
 	restore := withOverrides(
-		func(context.Context, *generated.Client, string) (bool, error) { return false, nil },
-		func(context.Context, *generated.Client, string, string) (enums.Role, error) {
-			return enums.RoleMember, nil
-		},
+		func(context.Context, *generated.Client, string, string) (bool, error) { return false, nil },
 	)
 
 	defer restore()
@@ -102,12 +90,43 @@ func TestUnauthorizedNoSSORedirect(t *testing.T) {
 	assert.Equal(t, http.StatusUnauthorized, rec.Code)
 }
 
-func TestUnauthorizedOwnerBypass(t *testing.T) {
-	restore := withOverrides(
-		func(context.Context, *generated.Client, string) (bool, error) { return true, nil },
-		func(context.Context, *generated.Client, string, string) (enums.Role, error) {
-			return enums.RoleOwner, nil
+// TestAuthenticateSkipperSkipsSupportSession documents the actual mechanism by which an Openlane support
+// session is exempt from organization SSO enforcement: an impersonated caller skips the Authenticate
+// middleware entirely, so it is never routed through the SSO redirect regardless of org enforcement
+func TestAuthenticateSkipperSkipsSupportSession(t *testing.T) {
+	e := echox.New()
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+
+	caller := &iamauth.Caller{
+		SubjectID: "support",
+		Impersonation: &iamauth.ImpersonationContext{
+			Type:              iamauth.SupportImpersonation,
+			ImpersonatorID:    "engineer@theopenlane.io",
+			ImpersonatorEmail: "engineer@theopenlane.io",
 		},
+	}
+
+	req = req.WithContext(iamauth.WithCaller(req.Context(), caller))
+	c := e.NewContext(req, httptest.NewRecorder())
+
+	assert.True(t, AuthenticateSkipperFuncForImpersonation(c))
+}
+
+// TestAuthenticateSkipperDoesNotSkipNormalSession verifies a non-impersonated request is not skipped, so
+// normal sessions still pass through Authenticate and its SSO enforcement
+func TestAuthenticateSkipperDoesNotSkipNormalSession(t *testing.T) {
+	e := echox.New()
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	c := e.NewContext(req, httptest.NewRecorder())
+
+	assert.False(t, AuthenticateSkipperFuncForImpersonation(c))
+}
+
+// TestUnauthorizedExemptNoRedirect verifies an exempt user (e.g. owner or per-user exemption),
+// for whom userMustSSO resolves false, is not redirected through SSO
+func TestUnauthorizedExemptNoRedirect(t *testing.T) {
+	restore := withOverrides(
+		func(context.Context, *generated.Client, string, string) (bool, error) { return false, nil },
 	)
 
 	defer restore()

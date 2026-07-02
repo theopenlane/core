@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -108,7 +107,6 @@ func AllowOrgMemberRoleUpdate() privacy.OrgMembershipMutationRuleFunc {
 				SubjectType: caller.SubjectType(),
 				ObjectID:    member.OrganizationID,
 				Relation:    InviteRelationForRole(member.Role),
-				Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 			}
 
 			access, err := m.Authz.CheckOrgAccess(ctx, check)

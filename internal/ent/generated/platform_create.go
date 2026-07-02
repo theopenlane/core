@@ -100,6 +100,20 @@ func (_c *PlatformCreate) SetNillableUpdatedBy(v *string) *PlatformCreate {
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *PlatformCreate) SetUpdatedByImpersonator(v string) *PlatformCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *PlatformCreate) SetNillableUpdatedByImpersonator(v *string) *PlatformCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *PlatformCreate) SetDeletedAt(v time.Time) *PlatformCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -1524,6 +1538,10 @@ func (_c *PlatformCreate) createSpec() (*Platform, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(platform.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(platform.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(platform.FieldDeletedAt, field.TypeTime, value)

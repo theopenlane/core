@@ -131,6 +131,7 @@ query GetStandardByID ($standardId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		version
 		controls {
 			totalCount

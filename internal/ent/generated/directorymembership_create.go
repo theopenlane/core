@@ -86,6 +86,20 @@ func (_c *DirectoryMembershipCreate) SetNillableUpdatedBy(v *string) *DirectoryM
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *DirectoryMembershipCreate) SetUpdatedByImpersonator(v string) *DirectoryMembershipCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *DirectoryMembershipCreate) SetNillableUpdatedByImpersonator(v *string) *DirectoryMembershipCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDisplayID sets the "display_id" field.
 func (_c *DirectoryMembershipCreate) SetDisplayID(v string) *DirectoryMembershipCreate {
 	_c.mutation.SetDisplayID(v)
@@ -625,6 +639,10 @@ func (_c *DirectoryMembershipCreate) createSpec() (*DirectoryMembership, *sqlgra
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(directorymembership.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(directorymembership.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(directorymembership.FieldDisplayID, field.TypeString, value)

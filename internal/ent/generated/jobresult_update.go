@@ -67,6 +67,26 @@ func (_u *JobResultUpdate) ClearUpdatedBy() *JobResultUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *JobResultUpdate) SetUpdatedByImpersonator(v string) *JobResultUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *JobResultUpdate) SetNillableUpdatedByImpersonator(v *string) *JobResultUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *JobResultUpdate) ClearUpdatedByImpersonator() *JobResultUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *JobResultUpdate) SetDeletedAt(v time.Time) *JobResultUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -326,6 +346,12 @@ func (_u *JobResultUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(jobresult.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(jobresult.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(jobresult.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(jobresult.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -493,6 +519,26 @@ func (_u *JobResultUpdateOne) SetNillableUpdatedBy(v *string) *JobResultUpdateOn
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *JobResultUpdateOne) ClearUpdatedBy() *JobResultUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *JobResultUpdateOne) SetUpdatedByImpersonator(v string) *JobResultUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *JobResultUpdateOne) SetNillableUpdatedByImpersonator(v *string) *JobResultUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *JobResultUpdateOne) ClearUpdatedByImpersonator() *JobResultUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -784,6 +830,12 @@ func (_u *JobResultUpdateOne) sqlSave(ctx context.Context) (_node *JobResult, er
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(jobresult.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(jobresult.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(jobresult.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(jobresult.FieldDeletedAt, field.TypeTime, value)
