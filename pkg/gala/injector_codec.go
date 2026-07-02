@@ -37,7 +37,7 @@ func (c InjectorCodec[T]) Capture(_ context.Context) (json.RawMessage, bool, err
 func (c InjectorCodec[T]) Restore(ctx context.Context, _ json.RawMessage) (context.Context, error) {
 	val, err := do.Invoke[T](c.injector)
 	if err != nil {
-		return ctx, nil
+		return ctx, ErrContextSnapshotRestoreFailed
 	}
 
 	return c.setter(ctx, val), nil

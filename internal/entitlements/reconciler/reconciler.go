@@ -527,7 +527,6 @@ func CreateDefaultOrgModulesProductsPrices(ctx context.Context, db *ent.Client, 
 		orgProduct, err := db.OrgProduct.Create().
 			SetModule(moduleName).
 			SetOwnerID(orgID).
-			SetModule(orgMod.ID).
 			SetSubscriptionID(orgSubs.ID).
 			SetActive(true).
 			Save(newCtx)

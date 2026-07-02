@@ -505,13 +505,13 @@ func (r *mutationResolver) markSubcontrolsAsNotApplicable(ctx context.Context, i
 			aliases := sc.Aliases
 
 			for _, c := range input {
-				if c.RefCode == &refCode {
+				if c.RefCode != nil && *c.RefCode == refCode {
 					found = true
 					break
 				}
 
 				for _, alias := range aliases {
-					if c.RefCode == &alias {
+					if c.RefCode != nil && *c.RefCode == alias {
 						found = true
 						break
 					}
