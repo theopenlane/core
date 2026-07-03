@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -295,7 +296,30 @@ func installationTokenClient(ctx context.Context, cfg Config, jwtToken string) *
 	source := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: jwtToken})
 	httpClient := oauth2.NewClient(ctx, source)
 
-	client, err := gh.NewClient(gh.WithHTTPClient(httpClient))
+	opts := []gh.ClientOptionsFunc{
+		gh.WithHTTPClient(httpClient),
+	}
+
+	if cfg.APIURL != "" {
+		apiURL, err := url.Parse(strings.TrimRight(cfg.APIURL, "/") + "/api/v3/")
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("api url in config is not valid, unable to create client")
+			return nil
+		}
+
+		uploadURL, err := url.Parse(strings.TrimRight(cfg.APIURL, "/") + "/api/uploads/")
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("unable to get upload url, unable to create client")
+			return nil
+		}
+
+		baseURLStr := apiURL.String()
+		uploadURLStr := uploadURL.String()
+
+		opts = append(opts, gh.WithURLs(&baseURLStr, &uploadURLStr))
+	}
+
+	client, err := gh.NewClient(opts...)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error creating github client")
 		return nil
