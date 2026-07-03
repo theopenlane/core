@@ -187,7 +187,7 @@ func WithTokenManager() ServerOption {
 // WithAuth supplies the authn and jwt config for the server
 func WithAuth() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		// add oauth providers for social login
+		// add oauth providers for social login and integrations
 		s.Config.Handler.OauthProvider = s.Config.Settings.Auth.Providers
 		s.Config.Handler.ConsoleURL = s.Config.Settings.EntConfig.Notifications.ConsoleURL
 

@@ -1657,6 +1657,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|**consoleintegrationpath**|`string`|||
 |[**awssecurityhub**](#integrationsawssecurityhub)|`object`|||
 |[**githubapp**](#integrationsgithubapp)|`object`|||
 |[**slack**](#integrationsslack)|`object`|||
