@@ -9345,6 +9345,7 @@ enum ControlControlSource @goModel(model: "github.com/theopenlane/core/common/en
 ControlControlStatus is enum for the field status
 """
 enum ControlControlStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlStatus") {
+	DRAFT
 	PREPARING
 	NEEDS_APPROVAL
 	CHANGES_REQUESTED
@@ -81212,6 +81213,7 @@ enum SubcontrolControlSource @goModel(model: "github.com/theopenlane/core/common
 SubcontrolControlStatus is enum for the field status
 """
 enum SubcontrolControlStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlStatus") {
+	DRAFT
 	PREPARING
 	NEEDS_APPROVAL
 	CHANGES_REQUESTED
