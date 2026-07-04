@@ -536,11 +536,17 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 }
 
 func (r *Runtime) isOrgSubscriptionActive(ctx context.Context, orgID string) (bool, error) {
+	client := r.DB()
+
+	if client.EntitlementManager == nil || client.EntitlementManager.Config == nil || !client.EntitlementManager.Config.IsEnabled() {
+		return true, nil
+	}
+
 	if orgID == "" {
 		return false, nil
 	}
 
-	return r.DB().OrgSubscription.Query().
+	return client.OrgSubscription.Query().
 		Where(
 			orgsubscription.OwnerIDEQ(orgID),
 			orgsubscription.Or(
