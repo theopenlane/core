@@ -16,7 +16,7 @@ func registerLogoutHandler(router *Router) error {
 		Tags:        []string{"logout"},
 		OperationID: "LogoutHandler",
 		Security:    handlers.AllSecurityRequirements(),
-		Middlewares: *publicEndpoint,
+		Middlewares: *unauthenticatedEndpoint,
 		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.LogoutHandler,
 	}
