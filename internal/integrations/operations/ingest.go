@@ -72,10 +72,12 @@ func setIntegrationAuthCaller(ctx context.Context, integration *ent.Integration)
 		return ctx
 	}
 
-	caller := auth.NewWebhookCaller(integration.OwnerID)
-	caller.SubjectID = integration.ID
-	caller.SubjectName = integration.Name
-	caller.AuthenticationType = auth.APITokenAuthentication
+	caller := &auth.Caller{
+		SubjectID:      integration.ID,
+		SubjectName:    integration.Name,
+		OrganizationID: integration.OwnerID,
+		Capabilities:   auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
+	}
 
 	return auth.WithCaller(ctx, caller)
 }
