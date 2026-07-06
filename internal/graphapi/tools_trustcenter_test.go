@@ -5,15 +5,14 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/theopenlane/echox/middleware/echocontext"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
-	"github.com/theopenlane/utils/ulids"
-
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
+	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/contextx"
+	"github.com/theopenlane/utils/ulids"
 )
 
 func cleanupOrganizationDataWithContext(ctx context.Context, t *testing.T) {
@@ -57,7 +56,6 @@ type trustCenterOrg struct {
 	organizationID string
 	trustCenter    *generated.TrustCenter
 	ndaTemplateID  *string
-	ndaFileID      *string
 	*testOrgUsers
 }
 
@@ -66,7 +64,6 @@ type trustCenterConfig struct {
 	trustCenterID    *string
 	customDomainID   *string
 	ndaTemplateID    *string
-	ndaFileID        *string
 	seedAllUserTypes bool
 	seedAPIClients   bool
 }
@@ -104,21 +101,13 @@ func withNDATemplate() trustCenterOption {
 			return
 		}
 
-		ndaFile := (&FileBuilder{
-			client:  suite.client,
-			Name:    "hello.pdf",
-			MD5Hash: getMD5Hash(t, pdfFilePath),
-		}).MustNew(ctx, t)
-
 		tmpl := (&TemplateBuilder{
 			client:        suite.client,
 			Kind:          enums.TemplateKindTrustCenterNda,
 			TrustCenterID: *c.trustCenterID,
-			FileIDs:       []string{ndaFile.ID},
 		}).MustNew(ctx, t)
 
 		c.ndaTemplateID = &tmpl.ID
-		c.ndaFileID = &ndaFile.ID
 	}
 }
 
@@ -168,7 +157,6 @@ func createFreshOrgWithTrustCenter(t *testing.T, opts ...trustCenterOption) *tru
 		organizationID: localUsers.owner.OrganizationID,
 		trustCenter:    localTrustCenter,
 		ndaTemplateID:  config.ndaTemplateID,
-		ndaFileID:      config.ndaFileID,
 		testOrgUsers:   localUsers,
 	}
 }
