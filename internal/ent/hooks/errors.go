@@ -209,14 +209,6 @@ var (
 	errMissingTemplate = errors.New("missing template")
 	// errDocInfoDoesNotMatchCaller is returned when the document data submitted for an NDA does not match the authenticated user's information, such as email
 	errDocInfoDoesNotMatchCaller = errors.New("NDA submission does not match authenticated user")
-	// errNDATemplateDoesNotMatchTrustCenter is returned when an NDA response references a template for a different trust center
-	errNDATemplateDoesNotMatchTrustCenter = errors.New("NDA template does not match the authenticated trust center")
-	// errNDAPDFFileDoesNotMatchTemplate is returned when an NDA response links a PDF file other than the template file
-	errNDAPDFFileDoesNotMatchTemplate = errors.New("NDA PDF file does not match the template")
-	// errNDAPDFHashDoesNotMatchTemplate is returned when an NDA response hash does not match the template file hash
-	errNDAPDFHashDoesNotMatchTemplate = errors.New("NDA PDF hash does not match template")
-	// errNDATemplateFileMissingHash is returned when the NDA template file has no md5 hash to verify against
-	errNDATemplateFileMissingHash = errors.New("NDA template file is missing the file md5 hash")
 	// errUserHasAlreadySignedNDA is returned when a user attempts to submit an NDA document but has already signed the NDA
 	errUserHasAlreadySignedNDA = errors.New("user has already signed the NDA")
 	// errValidationFailed is returned when validation of an NDA submission fails for any reason not covered by the other specific errors
