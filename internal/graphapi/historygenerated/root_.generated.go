@@ -25873,6 +25873,7 @@ enum ControlHistoryControlSource @goModel(model: "github.com/theopenlane/core/co
 ControlHistoryControlStatus is enum for the field status
 """
 enum ControlHistoryControlStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlStatus") {
+  DRAFT
   PREPARING
   NEEDS_APPROVAL
   CHANGES_REQUESTED
@@ -54674,6 +54675,7 @@ enum SubcontrolHistoryControlSource @goModel(model: "github.com/theopenlane/core
 SubcontrolHistoryControlStatus is enum for the field status
 """
 enum SubcontrolHistoryControlStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlStatus") {
+  DRAFT
   PREPARING
   NEEDS_APPROVAL
   CHANGES_REQUESTED
