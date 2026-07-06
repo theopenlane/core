@@ -3,6 +3,7 @@ package hooks
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"entgo.io/ent"
 	"github.com/theopenlane/iam/auth"
@@ -50,6 +51,10 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 				return nil, errMustBeAnonymousUser
 			}
 
+			if docTemplate.TrustCenterID != tcID {
+				return nil, errNDATemplateDoesNotMatchTrustCenter
+			}
+
 			response, ok := m.Data()
 			if !ok {
 				return nil, errMissingResponse
@@ -64,8 +69,20 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 				return nil, errUserHasAlreadySignedNDA
 			}
 
-			if err = validateTrustCenterNDAJSON(response, tcID, caller.SubjectEmail, caller.SubjectID); err != nil {
+			f, err := fetchNDATemplateFile(ctx, m.Client(), templateID)
+			if err != nil {
 				return nil, err
+			}
+
+			if err = validateTrustCenterNDAJSON(response, tcID, caller.SubjectEmail, caller.SubjectID, f); err != nil {
+				return nil, err
+			}
+
+			response["trust_center_id"] = tcID
+			response["pdf_file_id"] = f.ID
+
+			if metadata, ok := response["signature_metadata"].(map[string]any); ok {
+				metadata["pdf_hash"] = f.Md5Hash
 			}
 
 			v, err := next.Mutate(ctx, m)
@@ -162,8 +179,8 @@ func HookDocumentDataFile() ent.Hook {
 }
 
 // validateTrustCenterNDAJSON validates the document against the struct-derived schema
-// and checks the trust center id, email, and user id match the authenticated user
-func validateTrustCenterNDAJSON(document map[string]any, trustCenterID, subjectEmail, subjectID string) error {
+// and checks the trust center id, email, user id, PDF file attached to the response
+func validateTrustCenterNDAJSON(document map[string]any, trustCenterID, subjectEmail, subjectID string, templateFile *generated.File) error {
 	schema := jsonx.SchemaFrom[signedNDADocumentData]()
 
 	result, err := jsonx.ValidateSchema(schema, document)
@@ -185,6 +202,22 @@ func validateTrustCenterNDAJSON(document map[string]any, trustCenterID, subjectE
 		doc.SignatureMetadata.UserID != subjectID {
 
 		return errDocInfoDoesNotMatchCaller
+	}
+
+	if templateFile == nil || templateFile.ID == "" {
+		return ErrMissingNDATemplateFile
+	}
+
+	if doc.PDFFileID != templateFile.ID {
+		return errNDAPDFFileDoesNotMatchTemplate
+	}
+
+	if templateFile.Md5Hash == "" {
+		return errNDATemplateFileMissingHash
+	}
+
+	if !strings.EqualFold(doc.SignatureMetadata.PDFHash, templateFile.Md5Hash) {
+		return errNDAPDFHashDoesNotMatchTemplate
 	}
 
 	return nil

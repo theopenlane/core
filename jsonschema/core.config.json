@@ -143,6 +143,9 @@
     },
     "catalog.Config": {
       "properties": {
+        "consoleintegrationpath": {
+          "type": "string"
+        },
         "awssecurityhub": {
           "$ref": "#/$defs/awssecurityhub.Config"
         },

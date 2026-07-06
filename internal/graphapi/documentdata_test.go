@@ -18,6 +18,8 @@ func TestDocumentDataAnonymousTrustCenterAccess(t *testing.T) {
 	tcOrg := createFreshOrgWithTrustCenter(t, withNDATemplate())
 	trustCenter := tcOrg.trustCenter
 
+	pdfHash := getMD5Hash(t, pdfFilePath)
+
 	newAnonCtx := func(email string) (context.Context, string) {
 		anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, ulids.New().String())
 		caller := auth.NewTrustCenterCaller(trustCenter.OwnerID, anonUserID, "Anon User", email)
@@ -46,10 +48,10 @@ func TestDocumentDataAnonymousTrustCenterAccess(t *testing.T) {
 				"signature_metadata": map[string]any{
 					"ip_address": "192.168.1.100",
 					"timestamp":  "2025-09-22T19:37:59.988Z",
-					"pdf_hash":   "a1b2c3d4e5f6789012345678901234567890abcd",
+					"pdf_hash":   pdfHash,
 					"user_id":    anonUserID,
 				},
-				"pdf_file_id":     "some-pdf-file-id",
+				"pdf_file_id":     *tcOrg.ndaFileID,
 				"trust_center_id": trustCenter.ID,
 			},
 		})

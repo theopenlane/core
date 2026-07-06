@@ -165,6 +165,7 @@ integrations:
         clientsecret: ""
         defaulttenant: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
+    consoleintegrationpath: /organization-settings/integrations
     email:
         apikey: ""
         docsurl: https://docs.theopenlane.io

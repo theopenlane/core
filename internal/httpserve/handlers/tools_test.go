@@ -41,6 +41,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/server"
 	mockprovider "github.com/theopenlane/newman/providers/mock"
 
+	"github.com/theopenlane/core/internal/integrations/definitions/catalog"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
@@ -503,6 +504,9 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 		},
 		ConsoleURL:               "http://console.example",
 		DefaultTrustCenterDomain: "trust.openlane.com",
+		IntegrationsConfig: catalog.Config{
+			ConsoleIntegrationPath: "/organization-settings/integrations",
+		},
 	}
 
 	return h
