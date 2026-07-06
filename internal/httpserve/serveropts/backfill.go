@@ -126,7 +126,17 @@ func backfillFileMD5Hashes(ctx context.Context, dbClient *ent.Client) {
 		for _, f := range files {
 			lastKnownID = f.ID
 
-			downloaded, err := dbClient.ObjectManager.Download(ctx, nil, interceptors.StorageFileFromEnt(f), &storage.DownloadOptions{})
+			file := interceptors.StorageFileFromEnt(f)
+
+			if file == nil || file.ProviderHints == nil || file.ProviderHints.KnownProvider == "" {
+				failedCounter++
+				log.Error().Str("file_id", f.ID).
+					Msg("backfill: file storage provider is missing, skipping md5 hash")
+
+				continue
+			}
+
+			downloaded, err := dbClient.ObjectManager.Download(ctx, nil, file, &storage.DownloadOptions{})
 			if err != nil {
 				failedCounter++
 				log.Error().Err(err).Str("file_id", f.ID).Msg("backfill: failed to download file for md5 hash")
