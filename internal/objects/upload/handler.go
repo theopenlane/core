@@ -2,13 +2,16 @@ package upload
 
 import (
 	"context"
+	"crypto/md5" // #nosec G501 -- not used for security
+	"encoding/hex"
 	"io"
 	"path"
 	"strings"
 	"time"
 
-	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/iam/auth"
+
+	"github.com/theopenlane/core/common/storagetypes"
 
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/objects/store"
@@ -51,6 +54,17 @@ func HandleUploads(ctx context.Context, svc *objects.Service, files []pkgobjects
 		// Normalize metadata (content type, hints) before we persist the file record so
 		// downstream storage providers see consistent values.
 		uploadOpts := BuildUploadOptions(ctx, &file)
+
+		hashSum, err := computeMD5Hash(file.RawFile)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("file", file.OriginalName).
+				Msg("failed to calculate md5 hash")
+			finish("error")
+
+			return ctx, nil, err
+		}
+
+		file.MD5 = hashSum
 
 		entFile, err := store.CreateFileRecord(ctx, file)
 		if err != nil {
@@ -196,6 +210,33 @@ func BuildUploadOptions(ctx context.Context, f *pkgobjects.File) *pkgobjects.Upl
 			ProviderHints: f.ProviderHints,
 		},
 	}
+}
+
+func computeMD5Hash(file io.ReadSeeker) ([]byte, error) {
+	if file == nil {
+		return nil, nil
+	}
+
+	if _, err := file.Seek(0, io.SeekStart); err != nil {
+		return nil, err
+	}
+
+	h := md5.New() // #nosec G401 -- not used for security
+	if _, err := io.Copy(h, file); err != nil {
+		return nil, err
+	}
+
+	if _, err := file.Seek(0, io.SeekStart); err != nil {
+		return nil, err
+	}
+
+	sum := h.Sum(nil)
+
+	encoded := make([]byte, hex.EncodedLen(len(sum)))
+
+	_ = hex.Encode(encoded, sum)
+
+	return encoded, nil
 }
 
 func mergeUploadedFileMetadata(dest *pkgobjects.File, entFileID string, src pkgobjects.File) {

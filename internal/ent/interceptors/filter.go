@@ -119,8 +119,6 @@ func GetAuthorizedObjectIDs(ctx context.Context, queryType string, relation fgax
 		SubjectType: caller.SubjectType(),
 		ObjectType:  strcase.SnakeCase(objectType),
 		Relation:    relation.String(),
-		// add email domain to satisfy any list requests with organization conditions
-		ConditionContext: utils.NewOrganizationContextKey(caller.SubjectEmail),
 	}
 
 	if strings.Contains(queryType, "History") {
@@ -443,7 +441,6 @@ func filterAuthorizedObjectIDs(ctx context.Context, objectType string, objectIDs
 	logObjectIDs(ctx, objectType, objectIDs, "filtering authorized object ids")
 
 	var (
-		context     *map[string]any
 		subjectID   string
 		subjectType string
 	)
@@ -459,7 +456,6 @@ func filterAuthorizedObjectIDs(ctx context.Context, objectType string, objectIDs
 		subjectType = auth.UserSubjectType
 	} else {
 		subjectType = caller.SubjectType()
-		context = utils.NewOrganizationContextKey(caller.SubjectEmail)
 	}
 
 	checks := []fgax.AccessCheck{}
@@ -471,7 +467,6 @@ func filterAuthorizedObjectIDs(ctx context.Context, objectType string, objectIDs
 			ObjectID:    id,
 			ObjectType:  fgax.Kind(strcase.SnakeCase(objectType)), // convert to snake case e.g. InternalPolicy -> internal_policy
 			Relation:    fgax.CanView,
-			Context:     context,
 		}
 
 		checks = append(checks, ac)

@@ -68,6 +68,26 @@ func (_u *OrganizationSettingHistoryUpdate) ClearUpdatedBy() *OrganizationSettin
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *OrganizationSettingHistoryUpdate) SetUpdatedByImpersonator(v string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *OrganizationSettingHistoryUpdate) ClearUpdatedByImpersonator() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *OrganizationSettingHistoryUpdate) SetDeletedAt(v time.Time) *OrganizationSettingHistoryUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -544,6 +564,38 @@ func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderLoginEnfo
 	return _u
 }
 
+// SetIdentityProviderJitProvisioning sets the "identity_provider_jit_provisioning" field.
+func (_u *OrganizationSettingHistoryUpdate) SetIdentityProviderJitProvisioning(v bool) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetIdentityProviderJitProvisioning(v)
+	return _u
+}
+
+// SetNillableIdentityProviderJitProvisioning sets the "identity_provider_jit_provisioning" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderJitProvisioning(v *bool) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetIdentityProviderJitProvisioning(*v)
+	}
+	return _u
+}
+
+// SetJitAllowedEmailDomains sets the "jit_allowed_email_domains" field.
+func (_u *OrganizationSettingHistoryUpdate) SetJitAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetJitAllowedEmailDomains(v)
+	return _u
+}
+
+// AppendJitAllowedEmailDomains appends value to the "jit_allowed_email_domains" field.
+func (_u *OrganizationSettingHistoryUpdate) AppendJitAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.AppendJitAllowedEmailDomains(v)
+	return _u
+}
+
+// ClearJitAllowedEmailDomains clears the value of the "jit_allowed_email_domains" field.
+func (_u *OrganizationSettingHistoryUpdate) ClearJitAllowedEmailDomains() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearJitAllowedEmailDomains()
+	return _u
+}
+
 // SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
 func (_u *OrganizationSettingHistoryUpdate) SetMultifactorAuthEnforced(v bool) *OrganizationSettingHistoryUpdate {
 	_u.mutation.SetMultifactorAuthEnforced(v)
@@ -561,6 +613,44 @@ func (_u *OrganizationSettingHistoryUpdate) SetNillableMultifactorAuthEnforced(v
 // ClearMultifactorAuthEnforced clears the value of the "multifactor_auth_enforced" field.
 func (_u *OrganizationSettingHistoryUpdate) ClearMultifactorAuthEnforced() *OrganizationSettingHistoryUpdate {
 	_u.mutation.ClearMultifactorAuthEnforced()
+	return _u
+}
+
+// SetSSOExemptDomains sets the "sso_exempt_domains" field.
+func (_u *OrganizationSettingHistoryUpdate) SetSSOExemptDomains(v []string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetSSOExemptDomains(v)
+	return _u
+}
+
+// AppendSSOExemptDomains appends value to the "sso_exempt_domains" field.
+func (_u *OrganizationSettingHistoryUpdate) AppendSSOExemptDomains(v []string) *OrganizationSettingHistoryUpdate {
+	_u.mutation.AppendSSOExemptDomains(v)
+	return _u
+}
+
+// ClearSSOExemptDomains clears the value of the "sso_exempt_domains" field.
+func (_u *OrganizationSettingHistoryUpdate) ClearSSOExemptDomains() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearSSOExemptDomains()
+	return _u
+}
+
+// SetAllowSupportAccess sets the "allow_support_access" field.
+func (_u *OrganizationSettingHistoryUpdate) SetAllowSupportAccess(v bool) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetAllowSupportAccess(v)
+	return _u
+}
+
+// SetNillableAllowSupportAccess sets the "allow_support_access" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdate) SetNillableAllowSupportAccess(v *bool) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetAllowSupportAccess(*v)
+	}
+	return _u
+}
+
+// ClearAllowSupportAccess clears the value of the "allow_support_access" field.
+func (_u *OrganizationSettingHistoryUpdate) ClearAllowSupportAccess() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearAllowSupportAccess()
 	return _u
 }
 
@@ -719,6 +809,12 @@ func (_u *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(organizationsettinghistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationsettinghistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -875,11 +971,42 @@ func (_u *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	if value, ok := _u.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
 	}
+	if value, ok := _u.mutation.IdentityProviderJitProvisioning(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderJitProvisioning, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.JitAllowedEmailDomains(); ok {
+		_spec.SetField(organizationsettinghistory.FieldJitAllowedEmailDomains, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedJitAllowedEmailDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsettinghistory.FieldJitAllowedEmailDomains, value)
+		})
+	}
+	if _u.mutation.JitAllowedEmailDomainsCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldJitAllowedEmailDomains, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool, value)
 	}
 	if _u.mutation.MultifactorAuthEnforcedCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool)
+	}
+	if value, ok := _u.mutation.SSOExemptDomains(); ok {
+		_spec.SetField(organizationsettinghistory.FieldSSOExemptDomains, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedSSOExemptDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsettinghistory.FieldSSOExemptDomains, value)
+		})
+	}
+	if _u.mutation.SSOExemptDomainsCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldSSOExemptDomains, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.AllowSupportAccess(); ok {
+		_spec.SetField(organizationsettinghistory.FieldAllowSupportAccess, field.TypeBool, value)
+	}
+	if _u.mutation.AllowSupportAccessCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldAllowSupportAccess, field.TypeBool)
 	}
 	if value, ok := _u.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString, value)
@@ -949,6 +1076,26 @@ func (_u *OrganizationSettingHistoryUpdateOne) SetNillableUpdatedBy(v *string) *
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *OrganizationSettingHistoryUpdateOne) ClearUpdatedBy() *OrganizationSettingHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *OrganizationSettingHistoryUpdateOne) SetUpdatedByImpersonator(v string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *OrganizationSettingHistoryUpdateOne) ClearUpdatedByImpersonator() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -1428,6 +1575,38 @@ func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderLoginE
 	return _u
 }
 
+// SetIdentityProviderJitProvisioning sets the "identity_provider_jit_provisioning" field.
+func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProviderJitProvisioning(v bool) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetIdentityProviderJitProvisioning(v)
+	return _u
+}
+
+// SetNillableIdentityProviderJitProvisioning sets the "identity_provider_jit_provisioning" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderJitProvisioning(v *bool) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetIdentityProviderJitProvisioning(*v)
+	}
+	return _u
+}
+
+// SetJitAllowedEmailDomains sets the "jit_allowed_email_domains" field.
+func (_u *OrganizationSettingHistoryUpdateOne) SetJitAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetJitAllowedEmailDomains(v)
+	return _u
+}
+
+// AppendJitAllowedEmailDomains appends value to the "jit_allowed_email_domains" field.
+func (_u *OrganizationSettingHistoryUpdateOne) AppendJitAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.AppendJitAllowedEmailDomains(v)
+	return _u
+}
+
+// ClearJitAllowedEmailDomains clears the value of the "jit_allowed_email_domains" field.
+func (_u *OrganizationSettingHistoryUpdateOne) ClearJitAllowedEmailDomains() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearJitAllowedEmailDomains()
+	return _u
+}
+
 // SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
 func (_u *OrganizationSettingHistoryUpdateOne) SetMultifactorAuthEnforced(v bool) *OrganizationSettingHistoryUpdateOne {
 	_u.mutation.SetMultifactorAuthEnforced(v)
@@ -1445,6 +1624,44 @@ func (_u *OrganizationSettingHistoryUpdateOne) SetNillableMultifactorAuthEnforce
 // ClearMultifactorAuthEnforced clears the value of the "multifactor_auth_enforced" field.
 func (_u *OrganizationSettingHistoryUpdateOne) ClearMultifactorAuthEnforced() *OrganizationSettingHistoryUpdateOne {
 	_u.mutation.ClearMultifactorAuthEnforced()
+	return _u
+}
+
+// SetSSOExemptDomains sets the "sso_exempt_domains" field.
+func (_u *OrganizationSettingHistoryUpdateOne) SetSSOExemptDomains(v []string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetSSOExemptDomains(v)
+	return _u
+}
+
+// AppendSSOExemptDomains appends value to the "sso_exempt_domains" field.
+func (_u *OrganizationSettingHistoryUpdateOne) AppendSSOExemptDomains(v []string) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.AppendSSOExemptDomains(v)
+	return _u
+}
+
+// ClearSSOExemptDomains clears the value of the "sso_exempt_domains" field.
+func (_u *OrganizationSettingHistoryUpdateOne) ClearSSOExemptDomains() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearSSOExemptDomains()
+	return _u
+}
+
+// SetAllowSupportAccess sets the "allow_support_access" field.
+func (_u *OrganizationSettingHistoryUpdateOne) SetAllowSupportAccess(v bool) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetAllowSupportAccess(v)
+	return _u
+}
+
+// SetNillableAllowSupportAccess sets the "allow_support_access" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillableAllowSupportAccess(v *bool) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetAllowSupportAccess(*v)
+	}
+	return _u
+}
+
+// ClearAllowSupportAccess clears the value of the "allow_support_access" field.
+func (_u *OrganizationSettingHistoryUpdateOne) ClearAllowSupportAccess() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearAllowSupportAccess()
 	return _u
 }
 
@@ -1633,6 +1850,12 @@ func (_u *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(organizationsettinghistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationsettinghistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -1789,11 +2012,42 @@ func (_u *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	if value, ok := _u.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
 	}
+	if value, ok := _u.mutation.IdentityProviderJitProvisioning(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderJitProvisioning, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.JitAllowedEmailDomains(); ok {
+		_spec.SetField(organizationsettinghistory.FieldJitAllowedEmailDomains, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedJitAllowedEmailDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsettinghistory.FieldJitAllowedEmailDomains, value)
+		})
+	}
+	if _u.mutation.JitAllowedEmailDomainsCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldJitAllowedEmailDomains, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.MultifactorAuthEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool, value)
 	}
 	if _u.mutation.MultifactorAuthEnforcedCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool)
+	}
+	if value, ok := _u.mutation.SSOExemptDomains(); ok {
+		_spec.SetField(organizationsettinghistory.FieldSSOExemptDomains, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedSSOExemptDomains(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, organizationsettinghistory.FieldSSOExemptDomains, value)
+		})
+	}
+	if _u.mutation.SSOExemptDomainsCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldSSOExemptDomains, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.AllowSupportAccess(); ok {
+		_spec.SetField(organizationsettinghistory.FieldAllowSupportAccess, field.TypeBool, value)
+	}
+	if _u.mutation.AllowSupportAccessCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldAllowSupportAccess, field.TypeBool)
 	}
 	if value, ok := _u.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString, value)

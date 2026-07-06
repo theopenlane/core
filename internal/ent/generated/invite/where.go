@@ -88,6 +88,11 @@ func UpdatedBy(v string) predicate.Invite {
 	return predicate.Invite(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
+// UpdatedByImpersonator applies equality check predicate on the "updated_by_impersonator" field. It's identical to UpdatedByImpersonatorEQ.
+func UpdatedByImpersonator(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldEQ(FieldUpdatedByImpersonator, v))
+}
+
 // DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
 func DeletedAt(v time.Time) predicate.Invite {
 	return predicate.Invite(sql.FieldEQ(FieldDeletedAt, v))
@@ -136,6 +141,11 @@ func Secret(v []byte) predicate.Invite {
 // OwnershipTransfer applies equality check predicate on the "ownership_transfer" field. It's identical to OwnershipTransferEQ.
 func OwnershipTransfer(v bool) predicate.Invite {
 	return predicate.Invite(sql.FieldEQ(FieldOwnershipTransfer, v))
+}
+
+// SSOExempt applies equality check predicate on the "sso_exempt" field. It's identical to SSOExemptEQ.
+func SSOExempt(v bool) predicate.Invite {
+	return predicate.Invite(sql.FieldEQ(FieldSSOExempt, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -386,6 +396,81 @@ func UpdatedByEqualFold(v string) predicate.Invite {
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
 func UpdatedByContainsFold(v string) predicate.Invite {
 	return predicate.Invite(sql.FieldContainsFold(FieldUpdatedBy, v))
+}
+
+// UpdatedByImpersonatorEQ applies the EQ predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorEQ(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldEQ(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorNEQ applies the NEQ predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNEQ(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldNEQ(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorIn applies the In predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorIn(vs ...string) predicate.Invite {
+	return predicate.Invite(sql.FieldIn(FieldUpdatedByImpersonator, vs...))
+}
+
+// UpdatedByImpersonatorNotIn applies the NotIn predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNotIn(vs ...string) predicate.Invite {
+	return predicate.Invite(sql.FieldNotIn(FieldUpdatedByImpersonator, vs...))
+}
+
+// UpdatedByImpersonatorGT applies the GT predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorGT(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldGT(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorGTE applies the GTE predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorGTE(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldGTE(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorLT applies the LT predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorLT(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldLT(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorLTE applies the LTE predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorLTE(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldLTE(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorContains applies the Contains predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorContains(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldContains(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorHasPrefix applies the HasPrefix predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorHasPrefix(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldHasPrefix(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorHasSuffix applies the HasSuffix predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorHasSuffix(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldHasSuffix(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorIsNil applies the IsNil predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorIsNil() predicate.Invite {
+	return predicate.Invite(sql.FieldIsNull(FieldUpdatedByImpersonator))
+}
+
+// UpdatedByImpersonatorNotNil applies the NotNil predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNotNil() predicate.Invite {
+	return predicate.Invite(sql.FieldNotNull(FieldUpdatedByImpersonator))
+}
+
+// UpdatedByImpersonatorEqualFold applies the EqualFold predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorEqualFold(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldEqualFold(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorContainsFold applies the ContainsFold predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorContainsFold(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldContainsFold(FieldUpdatedByImpersonator, v))
 }
 
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
@@ -1001,6 +1086,26 @@ func OwnershipTransferIsNil() predicate.Invite {
 // OwnershipTransferNotNil applies the NotNil predicate on the "ownership_transfer" field.
 func OwnershipTransferNotNil() predicate.Invite {
 	return predicate.Invite(sql.FieldNotNull(FieldOwnershipTransfer))
+}
+
+// SSOExemptEQ applies the EQ predicate on the "sso_exempt" field.
+func SSOExemptEQ(v bool) predicate.Invite {
+	return predicate.Invite(sql.FieldEQ(FieldSSOExempt, v))
+}
+
+// SSOExemptNEQ applies the NEQ predicate on the "sso_exempt" field.
+func SSOExemptNEQ(v bool) predicate.Invite {
+	return predicate.Invite(sql.FieldNEQ(FieldSSOExempt, v))
+}
+
+// SSOExemptIsNil applies the IsNil predicate on the "sso_exempt" field.
+func SSOExemptIsNil() predicate.Invite {
+	return predicate.Invite(sql.FieldIsNull(FieldSSOExempt))
+}
+
+// SSOExemptNotNil applies the NotNil predicate on the "sso_exempt" field.
+func SSOExemptNotNil() predicate.Invite {
+	return predicate.Invite(sql.FieldNotNull(FieldSSOExempt))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

@@ -388,7 +388,8 @@ type FileBuilder struct {
 	client *client
 
 	// Fields
-	Name string
+	Name    string
+	MD5Hash string
 }
 
 type TemplateBuilder struct {
@@ -2295,6 +2296,10 @@ func (fb *FileBuilder) MustNew(ctx context.Context, t *testing.T) *ent.File {
 		SetProvidedFileExtension("csv").
 		SetDetectedContentType("application/csv").
 		SetURI(url)
+
+	if fb.MD5Hash != "" {
+		mutation.SetMd5Hash(fb.MD5Hash)
+	}
 
 	file, err := mutation.Save(ctx)
 	requireNoError(t, err)

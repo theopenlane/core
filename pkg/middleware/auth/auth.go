@@ -376,6 +376,12 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
 		return nil, "", rout.ErrExpiredCredentials
 	}
 
+	// reject revoked tokens; expiry alone is insufficient since revocation marks the token
+	// inactive without necessarily backdating its expiration
+	if !pat.IsActive || pat.RevokedAt != nil {
+		return nil, "", ErrTokenRevoked
+	}
+
 	// gather the authorized organization IDs
 	var orgIDs []string
 
@@ -387,12 +393,15 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
 	}
 
 	for _, org := range orgs {
-		enforced, err := isSSOEnforcedFunc(ctx, dbClient, org.ID)
+		// honor the owner's SSO exemption: an exempt owner (owner role, per-user, or per-domain) is not
+		// required to SSO-authorize their personal access token for the organization, mirroring how the
+		// same owner skips the SSO redirect in the browser login flows
+		mustSSO, err := userMustSSOFunc(ctx, dbClient, org.ID, pat.OwnerID)
 		if err != nil {
 			return nil, "", err
 		}
 
-		if enforced {
+		if mustSSO {
 			authorized, err := isPATSSOAuthorizedFunc(ctx, dbClient, pat.ID, org.ID)
 			if err != nil {
 				return nil, "", err
@@ -446,6 +455,12 @@ func isValidAPIToken(ctx context.Context, dbClient *ent.Client, token string) (*
 	// check if the token has expired
 	if t.ExpiresAt != nil && t.ExpiresAt.Before(time.Now()) {
 		return nil, "", rout.ErrExpiredCredentials
+	}
+
+	// reject revoked tokens; expiry alone is insufficient since revocation marks the token
+	// inactive without necessarily backdating its expiration
+	if !t.IsActive || t.RevokedAt != nil {
+		return nil, "", ErrTokenRevoked
 	}
 
 	enforced, err := isSSOEnforcedFunc(ctx, dbClient, t.OwnerID)
@@ -527,18 +542,17 @@ func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) 
 		if orgID != "" {
 			userID := userIDFromToken(c, v)
 			if userID != "" {
-				enforced, dbErr := isSSOEnforcedFunc(reqCtx, conf.DBClient, orgID)
+				mustSSO, dbErr := userMustSSOFunc(reqCtx, conf.DBClient, orgID, userID)
+				if dbErr != nil {
+					logger.Error().Err(dbErr).Msg("unable to evaluate sso enforcement for unauthorized request")
+				}
 
-				if dbErr == nil && enforced {
-					role, mErr := orgRoleFunc(reqCtx, conf.DBClient, userID, orgID)
-
-					if mErr == nil && role != enums.RoleOwner {
-						if redirErr := c.Redirect(http.StatusFound, sso.SSOLogin(c.Echo(), orgID)); redirErr != nil {
-							return redirErr
-						}
-
-						return nil
+				if dbErr == nil && mustSSO {
+					if redirErr := c.Redirect(http.StatusFound, sso.SSOLogin(c.Echo(), orgID)); redirErr != nil {
+						return redirErr
 					}
+
+					return nil
 				}
 			}
 		}
@@ -596,6 +610,22 @@ func isSSOEnforced(ctx context.Context, db *ent.Client, orgID string) (bool, err
 	}
 
 	return setting.IdentityProviderLoginEnforced, nil
+}
+
+// userMustSSO reports whether the user must be redirected through the organization's SSO login
+// flow, taking owner, per-user, and per-domain exemptions into account. TFA enforcement is
+// evaluated separately and is not affected by SSO exemption
+func userMustSSO(ctx context.Context, db *ent.Client, orgID, userID string) (bool, error) {
+	in, _, err := sso.LoadEnforcement(ctx, db, orgID, userID, "")
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return false, nil
+		}
+
+		return false, err
+	}
+
+	return sso.Evaluate(in).MustSSO, nil
 }
 
 // userIDFromToken extracts the user ID from the token in the request context
@@ -682,16 +712,7 @@ func getRole(ctx context.Context, db *ent.Client, userID, orgID string) (enums.R
 // function variables allow tests to override SSO checks without a database
 var (
 	isSSOEnforcedFunc = isSSOEnforced
-	orgRoleFunc       = func(ctx context.Context, db *ent.Client, userID, orgID string) (enums.Role, error) {
-		member, err := db.OrgMembership.Query().
-			Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
-			Only(privacy.DecisionContext(ctx, privacy.Allow))
-		if err != nil {
-			return "", err
-		}
-
-		return member.Role, nil
-	}
+	userMustSSOFunc   = userMustSSO
 
 	fetchPATFunc = func(ctx context.Context, db *ent.Client, token string) (*ent.PersonalAccessToken, error) {
 		return db.PersonalAccessToken.Query().Where(personalaccesstoken.Token(token)).

@@ -552,6 +552,33 @@ data:
           {{- end }}
         {{- end }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.auth.supportaccess }}
+      supportaccess:
+        {{- if .Values.openlane.coreConfiguration.auth.supportaccess.enabled }}
+        enabled: {{ .Values.openlane.coreConfiguration.auth.supportaccess.enabled }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.auth.supportaccess.email }}
+        email: {{ .Values.openlane.coreConfiguration.auth.supportaccess.email | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.auth.supportaccess.displayname }}
+        displayname: {{ .Values.openlane.coreConfiguration.auth.supportaccess.displayname | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.auth.supportaccess.subjectid }}
+        subjectid: {{ .Values.openlane.coreConfiguration.auth.supportaccess.subjectid | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.auth.supportaccess.issuerurl }}
+        issuerurl: {{ .Values.openlane.coreConfiguration.auth.supportaccess.issuerurl | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.auth.supportaccess.discoveryendpoint }}
+        discoveryendpoint: {{ .Values.openlane.coreConfiguration.auth.supportaccess.discoveryendpoint | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.auth.supportaccess.redirecturl }}
+        redirecturl: {{ .Values.openlane.coreConfiguration.auth.supportaccess.redirecturl | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.auth.supportaccess.alloweddomain }}
+        alloweddomain: {{ .Values.openlane.coreConfiguration.auth.supportaccess.alloweddomain | quote }}
+        {{- end }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.authz }}
     authz:
@@ -999,6 +1026,9 @@ data:
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.integrations }}
     integrations:
+      {{- if .Values.openlane.coreConfiguration.integrations.consoleintegrationpath }}
+      consoleintegrationpath: {{ .Values.openlane.coreConfiguration.integrations.consoleintegrationpath | quote }}
+      {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.awssecurityhub }}
       awssecurityhub:
         {{- if .Values.openlane.coreConfiguration.integrations.awssecurityhub.arn }}
@@ -1244,6 +1274,12 @@ data:
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.shortlinks.endpointurl }}
       endpointurl: {{ .Values.openlane.coreConfiguration.shortlinks.endpointurl | quote }}
+      {{- end }}
+    {{- end }}
+    {{- if .Values.openlane.coreConfiguration.backfill }}
+    backfill:
+      {{- if .Values.openlane.coreConfiguration.backfill.enabled }}
+      enabled: {{ .Values.openlane.coreConfiguration.backfill.enabled }}
       {{- end }}
     {{- end }}
 {{- end }}

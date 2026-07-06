@@ -97,6 +97,11 @@ func UpdatedBy(v string) predicate.HushHistory {
 	return predicate.HushHistory(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
+// UpdatedByImpersonator applies equality check predicate on the "updated_by_impersonator" field. It's identical to UpdatedByImpersonatorEQ.
+func UpdatedByImpersonator(v string) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldEQ(FieldUpdatedByImpersonator, v))
+}
+
 // DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
 func DeletedAt(v time.Time) predicate.HushHistory {
 	return predicate.HushHistory(sql.FieldEQ(FieldDeletedAt, v))
@@ -545,6 +550,81 @@ func UpdatedByEqualFold(v string) predicate.HushHistory {
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
 func UpdatedByContainsFold(v string) predicate.HushHistory {
 	return predicate.HushHistory(sql.FieldContainsFold(FieldUpdatedBy, v))
+}
+
+// UpdatedByImpersonatorEQ applies the EQ predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorEQ(v string) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldEQ(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorNEQ applies the NEQ predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNEQ(v string) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldNEQ(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorIn applies the In predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorIn(vs ...string) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldIn(FieldUpdatedByImpersonator, vs...))
+}
+
+// UpdatedByImpersonatorNotIn applies the NotIn predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNotIn(vs ...string) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldNotIn(FieldUpdatedByImpersonator, vs...))
+}
+
+// UpdatedByImpersonatorGT applies the GT predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorGT(v string) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldGT(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorGTE applies the GTE predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorGTE(v string) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldGTE(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorLT applies the LT predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorLT(v string) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldLT(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorLTE applies the LTE predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorLTE(v string) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldLTE(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorContains applies the Contains predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorContains(v string) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldContains(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorHasPrefix applies the HasPrefix predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorHasPrefix(v string) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldHasPrefix(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorHasSuffix applies the HasSuffix predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorHasSuffix(v string) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldHasSuffix(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorIsNil applies the IsNil predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorIsNil() predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldIsNull(FieldUpdatedByImpersonator))
+}
+
+// UpdatedByImpersonatorNotNil applies the NotNil predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNotNil() predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldNotNull(FieldUpdatedByImpersonator))
+}
+
+// UpdatedByImpersonatorEqualFold applies the EqualFold predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorEqualFold(v string) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldEqualFold(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorContainsFold applies the ContainsFold predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorContainsFold(v string) predicate.HushHistory {
+	return predicate.HushHistory(sql.FieldContainsFold(FieldUpdatedByImpersonator, v))
 }
 
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.

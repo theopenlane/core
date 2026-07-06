@@ -16,6 +16,7 @@ mutation CreateExport ($input: CreateExportInput!) {
 			status
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -74,6 +75,7 @@ query GetExportByID ($exportId: ID!) {
 		status
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		files {
 			edges {
 				node {

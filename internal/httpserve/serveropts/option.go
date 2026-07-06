@@ -187,18 +187,23 @@ func WithTokenManager() ServerOption {
 // WithAuth supplies the authn and jwt config for the server
 func WithAuth() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		// add oauth providers for social login
+		// add oauth providers for social login and integrations
 		s.Config.Handler.OauthProvider = s.Config.Settings.Auth.Providers
 		s.Config.Handler.ConsoleURL = s.Config.Settings.EntConfig.Notifications.ConsoleURL
 
 		// add auth middleware
 		opts := getAuthOptions(s)
 
+		if !s.Config.Handler.TokenManager.RevocationEnabled() {
+			log.Warn().Msg("token revocation is inoperative: no Redis blacklist configured; logout and token or user revocation will not invalidate issued JWTs")
+		}
+
 		conf := authmw.NewAuthOptions(opts...)
 
 		s.Config.Handler.WebAuthn = webauthn.NewWithConfig(s.Config.Settings.Auth.Providers.Webauthn)
 
-		s.Config.GraphMiddleware = append(s.Config.GraphMiddleware, authmw.Authenticate(&conf), impersonation.SystemAdminUserContextMiddleware(), authmw.BlockNonTrustCenterAnonymous())
+		impersonationMW := impersonation.New(s.Config.Handler.TokenManager, s.Config.Handler.SupportAccessConfig.SubjectID, s.Config.Handler.SupportAccessConfig.DisplayName)
+		s.Config.GraphMiddleware = append(s.Config.GraphMiddleware, impersonationMW.Process, authmw.Authenticate(&conf), impersonation.SystemAdminUserContextMiddleware(), authmw.BlockNonTrustCenterAnonymous())
 		s.Config.Handler.AuthMiddleware = append(s.Config.Handler.AuthMiddleware, authmw.Authenticate(&conf))
 	})
 }
@@ -228,6 +233,12 @@ func getAuthOptions(s *ServerOptions) []authmw.Option {
 
 	if s.Config.Handler.RedisClient != nil {
 		opts = append(opts, authmw.WithRedisClient(s.Config.Handler.RedisClient))
+		// share a single Redis-backed blacklist between the token manager (used for refresh
+		// verification and impersonation) and the request-path JWKS validator, so revocations
+		// written on logout are honored on every subsequent request
+		blacklist := tokens.NewRedisTokenBlacklist(s.Config.Handler.RedisClient, s.Config.Settings.Auth.Token.Redis.BlacklistPrefix)
+		s.Config.Handler.TokenManager.WithBlacklist(blacklist)
+		opts = append(opts, authmw.WithBlacklist(blacklist))
 	}
 
 	return opts
@@ -626,6 +637,13 @@ func WithWorkflows(wf *engine.WorkflowEngine) ServerOption {
 func WithCloudflareConfig() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		s.Config.Handler.CloudflareConfig = s.Config.Settings.Cloudflare
+	})
+}
+
+// WithSupportAccessConfig sets up the Openlane support access configuration for the server
+func WithSupportAccessConfig() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		s.Config.Handler.SupportAccessConfig = s.Config.Settings.Auth.SupportAccess
 	})
 }
 

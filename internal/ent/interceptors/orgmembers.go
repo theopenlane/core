@@ -134,7 +134,6 @@ func GetFunctionalRolesForSubject(ctx context.Context, subjectType, subjectID, o
 		ObjectID:    orgID,
 		ObjectType:  fgax.Kind(generated.TypeOrganization),
 		Relations:   ids,
-		Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 	}
 
 	client := utils.AuthzClientFromContext(ctx)

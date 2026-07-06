@@ -66,6 +66,26 @@ func (_u *OrganizationHistoryUpdate) ClearUpdatedBy() *OrganizationHistoryUpdate
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *OrganizationHistoryUpdate) SetUpdatedByImpersonator(v string) *OrganizationHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *OrganizationHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *OrganizationHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *OrganizationHistoryUpdate) ClearUpdatedByImpersonator() *OrganizationHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *OrganizationHistoryUpdate) SetDeletedAt(v time.Time) *OrganizationHistoryUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -238,6 +258,26 @@ func (_u *OrganizationHistoryUpdate) ClearStripeCustomerID() *OrganizationHistor
 	return _u
 }
 
+// SetSlugName sets the "slug_name" field.
+func (_u *OrganizationHistoryUpdate) SetSlugName(v string) *OrganizationHistoryUpdate {
+	_u.mutation.SetSlugName(v)
+	return _u
+}
+
+// SetNillableSlugName sets the "slug_name" field if the given value is not nil.
+func (_u *OrganizationHistoryUpdate) SetNillableSlugName(v *string) *OrganizationHistoryUpdate {
+	if v != nil {
+		_u.SetSlugName(*v)
+	}
+	return _u
+}
+
+// ClearSlugName clears the value of the "slug_name" field.
+func (_u *OrganizationHistoryUpdate) ClearSlugName() *OrganizationHistoryUpdate {
+	_u.mutation.ClearSlugName()
+	return _u
+}
+
 // Mutation returns the OrganizationHistoryMutation object of the builder.
 func (_u *OrganizationHistoryUpdate) Mutation() *OrganizationHistoryMutation {
 	return _u.mutation
@@ -321,6 +361,12 @@ func (_u *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationhistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(organizationhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(organizationhistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationhistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -383,6 +429,12 @@ func (_u *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.StripeCustomerIDCleared() {
 		_spec.ClearField(organizationhistory.FieldStripeCustomerID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SlugName(); ok {
+		_spec.SetField(organizationhistory.FieldSlugName, field.TypeString, value)
+	}
+	if _u.mutation.SlugNameCleared() {
+		_spec.ClearField(organizationhistory.FieldSlugName, field.TypeString)
+	}
 	_spec.Node.Schema = _u.schemaConfig.OrganizationHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -436,6 +488,26 @@ func (_u *OrganizationHistoryUpdateOne) SetNillableUpdatedBy(v *string) *Organiz
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *OrganizationHistoryUpdateOne) ClearUpdatedBy() *OrganizationHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *OrganizationHistoryUpdateOne) SetUpdatedByImpersonator(v string) *OrganizationHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *OrganizationHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *OrganizationHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *OrganizationHistoryUpdateOne) ClearUpdatedByImpersonator() *OrganizationHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -611,6 +683,26 @@ func (_u *OrganizationHistoryUpdateOne) ClearStripeCustomerID() *OrganizationHis
 	return _u
 }
 
+// SetSlugName sets the "slug_name" field.
+func (_u *OrganizationHistoryUpdateOne) SetSlugName(v string) *OrganizationHistoryUpdateOne {
+	_u.mutation.SetSlugName(v)
+	return _u
+}
+
+// SetNillableSlugName sets the "slug_name" field if the given value is not nil.
+func (_u *OrganizationHistoryUpdateOne) SetNillableSlugName(v *string) *OrganizationHistoryUpdateOne {
+	if v != nil {
+		_u.SetSlugName(*v)
+	}
+	return _u
+}
+
+// ClearSlugName clears the value of the "slug_name" field.
+func (_u *OrganizationHistoryUpdateOne) ClearSlugName() *OrganizationHistoryUpdateOne {
+	_u.mutation.ClearSlugName()
+	return _u
+}
+
 // Mutation returns the OrganizationHistoryMutation object of the builder.
 func (_u *OrganizationHistoryUpdateOne) Mutation() *OrganizationHistoryMutation {
 	return _u.mutation
@@ -724,6 +816,12 @@ func (_u *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Org
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationhistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(organizationhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(organizationhistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationhistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -785,6 +883,12 @@ func (_u *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Org
 	}
 	if _u.mutation.StripeCustomerIDCleared() {
 		_spec.ClearField(organizationhistory.FieldStripeCustomerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SlugName(); ok {
+		_spec.SetField(organizationhistory.FieldSlugName, field.TypeString, value)
+	}
+	if _u.mutation.SlugNameCleared() {
+		_spec.ClearField(organizationhistory.FieldSlugName, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.OrganizationHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

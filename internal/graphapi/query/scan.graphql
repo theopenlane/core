@@ -29,6 +29,7 @@ mutation CreateBulkCSVScan ($input: Upload!) {
 			target
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			vulnerabilityIds
 		}
 	}
@@ -64,6 +65,7 @@ mutation CreateBulkScan ($input: [CreateScanInput!]) {
 			target
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			vulnerabilityIds
 		}
 	}
@@ -99,6 +101,7 @@ mutation CreateScan ($input: CreateScanInput!) {
 			target
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			vulnerabilityIds
 		}
 	}
@@ -164,6 +167,7 @@ query GetScanByID ($scanId: ID!) {
 		target
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		vulnerabilityIds
 	}
 }
@@ -224,6 +228,7 @@ mutation UpdateScan ($updateScanId: ID!, $input: UpdateScanInput!) {
 			target
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			vulnerabilityIds
 		}
 	}

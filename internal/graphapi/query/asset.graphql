@@ -48,6 +48,7 @@ mutation CreateAsset ($input: CreateAssetInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			website
 		}
 	}
@@ -102,6 +103,7 @@ mutation CreateBulkAsset ($input: [CreateAssetInput!]) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			website
 		}
 	}
@@ -156,6 +158,7 @@ mutation CreateBulkCSVAsset ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			website
 		}
 	}
@@ -228,6 +231,7 @@ query GetAllAssets ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $o
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				website
 			}
 		}
@@ -282,6 +286,7 @@ query GetAssetByID ($assetId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		website
 	}
 }
@@ -343,6 +348,7 @@ query GetAssets ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orde
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				website
 			}
 		}
@@ -398,6 +404,7 @@ mutation UpdateAsset ($updateAssetId: ID!, $input: UpdateAssetInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			website
 		}
 	}
@@ -452,6 +459,7 @@ mutation UpdateBulkAsset ($ids: [ID!]!, $input: UpdateAssetInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			website
 		}
 		updatedIDs
@@ -507,6 +515,7 @@ mutation UpdateBulkCSVAsset ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			website
 		}
 		updatedIDs

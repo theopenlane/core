@@ -12,6 +12,7 @@ mutation CreateJobRunnerRegistrationToken ($input: CreateJobRunnerRegistrationTo
 			token
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -59,6 +60,7 @@ query GetJobRunnerRegistrationTokenByID ($jobRunnerRegistrationTokenId: ID!) {
 		token
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 	}
 }
 query GetJobRunnerRegistrationTokens ($first: Int, $last: Int, $where: JobRunnerRegistrationTokenWhereInput) {

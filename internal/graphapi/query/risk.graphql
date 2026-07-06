@@ -42,6 +42,7 @@ mutation CreateBulkCSVRisk ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			stakeholder {
 				id
 				name
@@ -97,6 +98,7 @@ mutation CreateBulkRisk ($input: [CreateRiskInput!]) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			stakeholder {
 				id
 				name
@@ -152,6 +154,7 @@ mutation CreateRisk ($input: CreateRiskInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			programs {
 				edges {
 					node {
@@ -252,6 +255,7 @@ query GetAllRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				programs {
 					edges {
 						node {
@@ -339,6 +343,7 @@ query GetRiskByID ($riskId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		programs {
 			edges {
 				node {
@@ -433,6 +438,7 @@ query GetRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				programs {
 					edges {
 						node {
@@ -521,6 +527,7 @@ mutation UpdateBulkRisk ($ids: [ID!]!, $input: UpdateRiskInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			stakeholder {
 				id
 				name
@@ -577,6 +584,7 @@ mutation UpdateRisk ($updateRiskId: ID!, $input: UpdateRiskInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			programs {
 				edges {
 					node {

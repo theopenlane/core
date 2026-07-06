@@ -31,6 +31,7 @@ mutation CreateBulkCSVNotificationTemplate ($input: Upload!) {
 			uischema
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 			workflowDefinitionID
 		}
@@ -69,6 +70,7 @@ mutation CreateBulkNotificationTemplate ($input: [CreateNotificationTemplateInpu
 			uischema
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 			workflowDefinitionID
 		}
@@ -107,6 +109,7 @@ mutation CreateNotificationTemplate ($input: CreateNotificationTemplateInput!) {
 			uischema
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 			workflowDefinitionID
 		}
@@ -163,6 +166,7 @@ query GetAllNotificationTemplates ($first: Int, $last: Int, $after: Cursor, $bef
 				uischema
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				version
 				workflowDefinitionID
 			}
@@ -201,6 +205,7 @@ query GetNotificationTemplateByID ($notificationTemplateId: ID!) {
 		uischema
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		version
 		workflowDefinitionID
 	}
@@ -246,6 +251,7 @@ query GetNotificationTemplates ($first: Int, $last: Int, $after: Cursor, $before
 				uischema
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				version
 				workflowDefinitionID
 			}
@@ -285,6 +291,7 @@ mutation UpdateBulkCSVNotificationTemplate ($input: Upload!) {
 			uischema
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 			workflowDefinitionID
 		}
@@ -324,6 +331,7 @@ mutation UpdateBulkNotificationTemplate ($ids: [ID!]!, $input: UpdateNotificatio
 			uischema
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 			workflowDefinitionID
 		}
@@ -363,6 +371,7 @@ mutation UpdateNotificationTemplate ($updateNotificationTemplateId: ID!, $input:
 			uischema
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 			workflowDefinitionID
 		}

@@ -81,6 +81,20 @@ func (_c *MappedControlCreate) SetNillableUpdatedBy(v *string) *MappedControlCre
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *MappedControlCreate) SetUpdatedByImpersonator(v string) *MappedControlCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *MappedControlCreate) SetNillableUpdatedByImpersonator(v *string) *MappedControlCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *MappedControlCreate) SetDeletedAt(v time.Time) *MappedControlCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -484,6 +498,10 @@ func (_c *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(mappedcontrol.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(mappedcontrol.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(mappedcontrol.FieldDeletedAt, field.TypeTime, value)

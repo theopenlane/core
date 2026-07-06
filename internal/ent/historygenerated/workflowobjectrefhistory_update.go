@@ -65,6 +65,26 @@ func (_u *WorkflowObjectRefHistoryUpdate) ClearUpdatedBy() *WorkflowObjectRefHis
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *WorkflowObjectRefHistoryUpdate) SetUpdatedByImpersonator(v string) *WorkflowObjectRefHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *WorkflowObjectRefHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *WorkflowObjectRefHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *WorkflowObjectRefHistoryUpdate) ClearUpdatedByImpersonator() *WorkflowObjectRefHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // Mutation returns the WorkflowObjectRefHistoryMutation object of the builder.
 func (_u *WorkflowObjectRefHistoryUpdate) Mutation() *WorkflowObjectRefHistoryMutation {
 	return _u.mutation
@@ -147,6 +167,12 @@ func (_u *WorkflowObjectRefHistoryUpdate) sqlSave(ctx context.Context) (_node in
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowobjectrefhistory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(workflowobjectrefhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(workflowobjectrefhistory.FieldOwnerID, field.TypeString)
@@ -249,6 +275,26 @@ func (_u *WorkflowObjectRefHistoryUpdateOne) SetNillableUpdatedBy(v *string) *Wo
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *WorkflowObjectRefHistoryUpdateOne) ClearUpdatedBy() *WorkflowObjectRefHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *WorkflowObjectRefHistoryUpdateOne) SetUpdatedByImpersonator(v string) *WorkflowObjectRefHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *WorkflowObjectRefHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *WorkflowObjectRefHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *WorkflowObjectRefHistoryUpdateOne) ClearUpdatedByImpersonator() *WorkflowObjectRefHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -364,6 +410,12 @@ func (_u *WorkflowObjectRefHistoryUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowobjectrefhistory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(workflowobjectrefhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(workflowobjectrefhistory.FieldOwnerID, field.TypeString)

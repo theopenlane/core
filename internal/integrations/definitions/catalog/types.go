@@ -15,8 +15,10 @@ import (
 )
 
 // Config aggregates the definitions configuration structs (for when definitions require operator-held credentials or other config)
-// this is here purely to drive the konaf output config constructs we use as a standard in this repo
+// this is here purely to drive the koanf output config constructs we use as a standard in this repo
 type Config struct {
+	// ConsoleIntegrationPath is the relative path in the frontend for the integrations page
+	ConsoleIntegrationPath string `json:"consoleintegrationpath" koanf:"consoleintegrationpath" default:"/organization-settings/integrations"`
 	// AWSSecurityHub holds operator credentials for the AWS Security Hub definition
 	AWSSecurityHub awssecurityhub.Config `json:"awssecurityhub" koanf:"awssecurityhub"`
 	// GitHubApp holds operator credentials for the GitHub App definition

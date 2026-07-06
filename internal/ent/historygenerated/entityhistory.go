@@ -37,6 +37,8 @@ type EntityHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -177,7 +179,7 @@ func (*EntityHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case entityhistory.FieldTerminationNoticeDays, entityhistory.FieldRiskScore, entityhistory.FieldRiskScoreCoverage:
 			values[i] = new(sql.NullInt64)
-		case entityhistory.FieldID, entityhistory.FieldRef, entityhistory.FieldCreatedBy, entityhistory.FieldUpdatedBy, entityhistory.FieldDeletedBy, entityhistory.FieldOwnerID, entityhistory.FieldInternalOwner, entityhistory.FieldInternalOwnerUserID, entityhistory.FieldInternalOwnerGroupID, entityhistory.FieldReviewedBy, entityhistory.FieldReviewedByUserID, entityhistory.FieldReviewedByGroupID, entityhistory.FieldInternalNotes, entityhistory.FieldSystemInternalID, entityhistory.FieldEntityRelationshipStateName, entityhistory.FieldEntityRelationshipStateID, entityhistory.FieldEntitySecurityQuestionnaireStatusName, entityhistory.FieldEntitySecurityQuestionnaireStatusID, entityhistory.FieldEntitySourceTypeName, entityhistory.FieldEntitySourceTypeID, entityhistory.FieldEnvironmentName, entityhistory.FieldEnvironmentID, entityhistory.FieldScopeName, entityhistory.FieldScopeID, entityhistory.FieldName, entityhistory.FieldDisplayName, entityhistory.FieldDescription, entityhistory.FieldEntityTypeID, entityhistory.FieldStatus, entityhistory.FieldSpendCurrency, entityhistory.FieldBillingModel, entityhistory.FieldRenewalRisk, entityhistory.FieldStatusPageURL, entityhistory.FieldRiskRating, entityhistory.FieldTier, entityhistory.FieldReviewFrequency, entityhistory.FieldLogoRemoteURL, entityhistory.FieldLogoFileID, entityhistory.FieldExternalID:
+		case entityhistory.FieldID, entityhistory.FieldRef, entityhistory.FieldCreatedBy, entityhistory.FieldUpdatedBy, entityhistory.FieldUpdatedByImpersonator, entityhistory.FieldDeletedBy, entityhistory.FieldOwnerID, entityhistory.FieldInternalOwner, entityhistory.FieldInternalOwnerUserID, entityhistory.FieldInternalOwnerGroupID, entityhistory.FieldReviewedBy, entityhistory.FieldReviewedByUserID, entityhistory.FieldReviewedByGroupID, entityhistory.FieldInternalNotes, entityhistory.FieldSystemInternalID, entityhistory.FieldEntityRelationshipStateName, entityhistory.FieldEntityRelationshipStateID, entityhistory.FieldEntitySecurityQuestionnaireStatusName, entityhistory.FieldEntitySecurityQuestionnaireStatusID, entityhistory.FieldEntitySourceTypeName, entityhistory.FieldEntitySourceTypeID, entityhistory.FieldEnvironmentName, entityhistory.FieldEnvironmentID, entityhistory.FieldScopeName, entityhistory.FieldScopeID, entityhistory.FieldName, entityhistory.FieldDisplayName, entityhistory.FieldDescription, entityhistory.FieldEntityTypeID, entityhistory.FieldStatus, entityhistory.FieldSpendCurrency, entityhistory.FieldBillingModel, entityhistory.FieldRenewalRisk, entityhistory.FieldStatusPageURL, entityhistory.FieldRiskRating, entityhistory.FieldTier, entityhistory.FieldReviewFrequency, entityhistory.FieldLogoRemoteURL, entityhistory.FieldLogoFileID, entityhistory.FieldExternalID:
 			values[i] = new(sql.NullString)
 		case entityhistory.FieldHistoryTime, entityhistory.FieldCreatedAt, entityhistory.FieldUpdatedAt, entityhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -243,6 +245,13 @@ func (_m *EntityHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case entityhistory.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case entityhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -683,6 +692,11 @@ func (_m *EntityHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))

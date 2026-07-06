@@ -70,6 +70,7 @@ query GetFileByID ($fileId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		uri
 	}
 }

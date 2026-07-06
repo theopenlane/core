@@ -183,10 +183,12 @@ query GetOrganizationByID ($organizationId: ID!) {
 		id
 		name
 		personalOrg
+		slugName
 		stripeCustomerID
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		parent {
 			id
 			name

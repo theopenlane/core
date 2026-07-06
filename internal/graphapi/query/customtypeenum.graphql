@@ -16,6 +16,7 @@ mutation CreateBulkCSVCustomTypeEnum ($input: Upload!) {
 			systemOwned
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -37,6 +38,7 @@ mutation CreateBulkCustomTypeEnum ($input: [CreateCustomTypeEnumInput!]) {
 			systemOwned
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -58,6 +60,7 @@ mutation CreateCustomTypeEnum ($input: CreateCustomTypeEnumInput!) {
 			systemOwned
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -112,6 +115,7 @@ query GetCustomTypeEnumByID ($customTypeEnumId: ID!) {
 		systemOwned
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 	}
 }
 query GetCustomTypeEnums ($first: Int, $last: Int, $where: CustomTypeEnumWhereInput) {
@@ -161,6 +165,7 @@ mutation UpdateCustomTypeEnum ($updateCustomTypeEnumId: ID!, $input: UpdateCusto
 			systemOwned
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }

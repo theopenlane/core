@@ -34,6 +34,8 @@ type WorkflowObjectRefHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -80,7 +82,7 @@ func (*WorkflowObjectRefHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case workflowobjectrefhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case workflowobjectrefhistory.FieldID, workflowobjectrefhistory.FieldRef, workflowobjectrefhistory.FieldCreatedBy, workflowobjectrefhistory.FieldUpdatedBy, workflowobjectrefhistory.FieldDisplayID, workflowobjectrefhistory.FieldOwnerID, workflowobjectrefhistory.FieldWorkflowInstanceID, workflowobjectrefhistory.FieldControlID, workflowobjectrefhistory.FieldTaskID, workflowobjectrefhistory.FieldInternalPolicyID, workflowobjectrefhistory.FieldFindingID, workflowobjectrefhistory.FieldDirectoryAccountID, workflowobjectrefhistory.FieldDirectoryGroupID, workflowobjectrefhistory.FieldDirectoryMembershipID, workflowobjectrefhistory.FieldEvidenceID, workflowobjectrefhistory.FieldSubcontrolID, workflowobjectrefhistory.FieldActionPlanID, workflowobjectrefhistory.FieldProcedureID, workflowobjectrefhistory.FieldCampaignID, workflowobjectrefhistory.FieldCampaignTargetID, workflowobjectrefhistory.FieldIdentityHolderID, workflowobjectrefhistory.FieldPlatformID:
+		case workflowobjectrefhistory.FieldID, workflowobjectrefhistory.FieldRef, workflowobjectrefhistory.FieldCreatedBy, workflowobjectrefhistory.FieldUpdatedBy, workflowobjectrefhistory.FieldUpdatedByImpersonator, workflowobjectrefhistory.FieldDisplayID, workflowobjectrefhistory.FieldOwnerID, workflowobjectrefhistory.FieldWorkflowInstanceID, workflowobjectrefhistory.FieldControlID, workflowobjectrefhistory.FieldTaskID, workflowobjectrefhistory.FieldInternalPolicyID, workflowobjectrefhistory.FieldFindingID, workflowobjectrefhistory.FieldDirectoryAccountID, workflowobjectrefhistory.FieldDirectoryGroupID, workflowobjectrefhistory.FieldDirectoryMembershipID, workflowobjectrefhistory.FieldEvidenceID, workflowobjectrefhistory.FieldSubcontrolID, workflowobjectrefhistory.FieldActionPlanID, workflowobjectrefhistory.FieldProcedureID, workflowobjectrefhistory.FieldCampaignID, workflowobjectrefhistory.FieldCampaignTargetID, workflowobjectrefhistory.FieldIdentityHolderID, workflowobjectrefhistory.FieldPlatformID:
 			values[i] = new(sql.NullString)
 		case workflowobjectrefhistory.FieldHistoryTime, workflowobjectrefhistory.FieldCreatedAt, workflowobjectrefhistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -146,6 +148,13 @@ func (_m *WorkflowObjectRefHistory) assignValues(columns []string, values []any)
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case workflowobjectrefhistory.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case workflowobjectrefhistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -311,6 +320,11 @@ func (_m *WorkflowObjectRefHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
 	builder.WriteString(_m.DisplayID)

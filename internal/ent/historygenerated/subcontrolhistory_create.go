@@ -115,6 +115,20 @@ func (_c *SubcontrolHistoryCreate) SetNillableUpdatedBy(v *string) *SubcontrolHi
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *SubcontrolHistoryCreate) SetUpdatedByImpersonator(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *SubcontrolHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *SubcontrolHistoryCreate) SetDeletedAt(v time.Time) *SubcontrolHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -803,6 +817,10 @@ func (_c *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.C
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(subcontrolhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(subcontrolhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(subcontrolhistory.FieldDeletedAt, field.TypeTime, value)

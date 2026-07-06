@@ -18,6 +18,7 @@ mutation CreateBulkCSVHush ($input: Upload!) {
 			systemOwned
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			integrations {
 				edges {
 					node {
@@ -48,6 +49,7 @@ mutation CreateBulkHush ($input: [CreateHushInput!]) {
 			systemOwned
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			integrations {
 				edges {
 					node {
@@ -78,6 +80,7 @@ mutation CreateHush ($input: CreateHushInput!) {
 			systemOwned
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			integrations {
 				edges {
 					node {
@@ -132,6 +135,7 @@ query GetHushByID ($hushId: ID!) {
 		systemOwned
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		integrations {
 			edges {
 				node {
@@ -186,6 +190,7 @@ mutation UpdateHush ($updateHushId: ID!, $input: UpdateHushInput!) {
 			systemOwned
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			integrations {
 				edges {
 					node {

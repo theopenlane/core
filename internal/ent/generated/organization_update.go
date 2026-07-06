@@ -150,6 +150,26 @@ func (_u *OrganizationUpdate) ClearUpdatedBy() *OrganizationUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *OrganizationUpdate) SetUpdatedByImpersonator(v string) *OrganizationUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *OrganizationUpdate) SetNillableUpdatedByImpersonator(v *string) *OrganizationUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *OrganizationUpdate) ClearUpdatedByImpersonator() *OrganizationUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *OrganizationUpdate) SetDeletedAt(v time.Time) *OrganizationUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -319,6 +339,26 @@ func (_u *OrganizationUpdate) SetNillableStripeCustomerID(v *string) *Organizati
 // ClearStripeCustomerID clears the value of the "stripe_customer_id" field.
 func (_u *OrganizationUpdate) ClearStripeCustomerID() *OrganizationUpdate {
 	_u.mutation.ClearStripeCustomerID()
+	return _u
+}
+
+// SetSlugName sets the "slug_name" field.
+func (_u *OrganizationUpdate) SetSlugName(v string) *OrganizationUpdate {
+	_u.mutation.SetSlugName(v)
+	return _u
+}
+
+// SetNillableSlugName sets the "slug_name" field if the given value is not nil.
+func (_u *OrganizationUpdate) SetNillableSlugName(v *string) *OrganizationUpdate {
+	if v != nil {
+		_u.SetSlugName(*v)
+	}
+	return _u
+}
+
+// ClearSlugName clears the value of the "slug_name" field.
+func (_u *OrganizationUpdate) ClearSlugName() *OrganizationUpdate {
+	_u.mutation.ClearSlugName()
 	return _u
 }
 
@@ -6443,6 +6483,11 @@ func (_u *OrganizationUpdate) check() error {
 			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "Organization.avatar_remote_url": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.SlugName(); ok {
+		if err := organization.SlugNameValidator(v); err != nil {
+			return &ValidationError{Name: "slug_name", err: fmt.Errorf(`generated: validator failed for field "Organization.slug_name": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -6481,6 +6526,12 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organization.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(organization.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(organization.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(organization.FieldDeletedAt, field.TypeTime, value)
@@ -6534,6 +6585,12 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if _u.mutation.StripeCustomerIDCleared() {
 		_spec.ClearField(organization.FieldStripeCustomerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SlugName(); ok {
+		_spec.SetField(organization.FieldSlugName, field.TypeString, value)
+	}
+	if _u.mutation.SlugNameCleared() {
+		_spec.ClearField(organization.FieldSlugName, field.TypeString)
 	}
 	if _u.mutation.ActionPlanCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -14690,6 +14747,26 @@ func (_u *OrganizationUpdateOne) ClearUpdatedBy() *OrganizationUpdateOne {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *OrganizationUpdateOne) SetUpdatedByImpersonator(v string) *OrganizationUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *OrganizationUpdateOne) SetNillableUpdatedByImpersonator(v *string) *OrganizationUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *OrganizationUpdateOne) ClearUpdatedByImpersonator() *OrganizationUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *OrganizationUpdateOne) SetDeletedAt(v time.Time) *OrganizationUpdateOne {
 	_u.mutation.SetDeletedAt(v)
@@ -14859,6 +14936,26 @@ func (_u *OrganizationUpdateOne) SetNillableStripeCustomerID(v *string) *Organiz
 // ClearStripeCustomerID clears the value of the "stripe_customer_id" field.
 func (_u *OrganizationUpdateOne) ClearStripeCustomerID() *OrganizationUpdateOne {
 	_u.mutation.ClearStripeCustomerID()
+	return _u
+}
+
+// SetSlugName sets the "slug_name" field.
+func (_u *OrganizationUpdateOne) SetSlugName(v string) *OrganizationUpdateOne {
+	_u.mutation.SetSlugName(v)
+	return _u
+}
+
+// SetNillableSlugName sets the "slug_name" field if the given value is not nil.
+func (_u *OrganizationUpdateOne) SetNillableSlugName(v *string) *OrganizationUpdateOne {
+	if v != nil {
+		_u.SetSlugName(*v)
+	}
+	return _u
+}
+
+// ClearSlugName clears the value of the "slug_name" field.
+func (_u *OrganizationUpdateOne) ClearSlugName() *OrganizationUpdateOne {
+	_u.mutation.ClearSlugName()
 	return _u
 }
 
@@ -20996,6 +21093,11 @@ func (_u *OrganizationUpdateOne) check() error {
 			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "Organization.avatar_remote_url": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.SlugName(); ok {
+		if err := organization.SlugNameValidator(v); err != nil {
+			return &ValidationError{Name: "slug_name", err: fmt.Errorf(`generated: validator failed for field "Organization.slug_name": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -21052,6 +21154,12 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organization.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(organization.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(organization.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(organization.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -21104,6 +21212,12 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 	}
 	if _u.mutation.StripeCustomerIDCleared() {
 		_spec.ClearField(organization.FieldStripeCustomerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SlugName(); ok {
+		_spec.SetField(organization.FieldSlugName, field.TypeString, value)
+	}
+	if _u.mutation.SlugNameCleared() {
+		_spec.ClearField(organization.FieldSlugName, field.TypeString)
 	}
 	if _u.mutation.ActionPlanCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{

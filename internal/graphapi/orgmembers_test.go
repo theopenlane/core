@@ -279,7 +279,7 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 	user3 := (&UserBuilder{client: suite.client, Email: "mitb2@anderson.io", FirstName: "FirstName!@"}).MustNew(userCtx, t)
 
 	userWithValidDomain := (&UserBuilder{client: suite.client, Email: "matt@anderson.net"}).MustNew(userCtx, t)
-	userWithInvalidDomain := (&UserBuilder{client: suite.client, Email: "mitb@example.com"}).MustNew(userCtx, t)
+	userWithAnotherDomain := (&UserBuilder{client: suite.client, Email: "mitb@example.com"}).MustNew(userCtx, t)
 
 	orgWithRestrictions := (&OrganizationBuilder{client: suite.client, AllowedDomains: []string{"anderson.io", "anderson.net"}}).MustNew(localTestOrg.owner.UserCtx, t)
 	otherOrgCtx := auth.NewTestContextWithOrgID(localTestOrg.owner.ID, orgWithRestrictions.ID)
@@ -322,12 +322,11 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 			role:   enums.RoleMember,
 		},
 		{
-			name:   "add member with invalid domain",
+			name:   "add member with another domain, allowed because allowed domains is only enforce for auto join",
 			orgID:  orgWithRestrictions.ID,
-			userID: userWithInvalidDomain.ID,
+			userID: userWithAnotherDomain.ID,
 			ctx:    otherOrgCtx,
-			role:   enums.RoleMember,
-			errMsg: "email domain not allowed in organization",
+			role:   enums.RoleAuditor,
 		},
 		{
 			name:   "duplicate user, different role",
@@ -359,7 +358,7 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 			userID: ulids.New().String(),
 			role:   enums.RoleMember,
 			ctx:    userCtx,
-			errMsg: "user not found",
+			errMsg: "constraint failed",
 		},
 		{
 			name:   "no access",

@@ -40,6 +40,7 @@ query GetUserSettingByID ($userSettingId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		userID
 		defaultOrg {
 			id
@@ -91,6 +92,7 @@ mutation UpdateUserSetting ($updateUserSettingId: ID!, $input: UpdateUserSetting
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			userID
 			defaultOrg {
 				id

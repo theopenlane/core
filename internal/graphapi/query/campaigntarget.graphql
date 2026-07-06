@@ -17,6 +17,7 @@ mutation CreateBulkCSVCampaignTarget ($input: Upload!) {
 			subscriberID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			userID
 			workflowEligibleMarker
 		}
@@ -41,6 +42,7 @@ mutation CreateBulkCampaignTarget ($input: [CreateCampaignTargetInput!]) {
 			subscriberID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			userID
 			workflowEligibleMarker
 		}
@@ -65,6 +67,7 @@ mutation CreateCampaignTarget ($input: CreateCampaignTargetInput!) {
 			subscriberID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			userID
 			workflowEligibleMarker
 		}
@@ -102,6 +105,7 @@ query GetAllCampaignTargets ($first: Int, $last: Int, $after: Cursor, $before: C
 				subscriberID
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				userID
 				workflowEligibleMarker
 			}
@@ -126,6 +130,7 @@ query GetCampaignTargetByID ($campaignTargetId: ID!) {
 		subscriberID
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		userID
 		workflowEligibleMarker
 	}
@@ -157,6 +162,7 @@ query GetCampaignTargets ($first: Int, $last: Int, $after: Cursor, $before: Curs
 				subscriberID
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				userID
 				workflowEligibleMarker
 			}
@@ -182,6 +188,7 @@ mutation UpdateCampaignTarget ($updateCampaignTargetId: ID!, $input: UpdateCampa
 			subscriberID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			userID
 			workflowEligibleMarker
 		}

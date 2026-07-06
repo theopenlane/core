@@ -17,6 +17,7 @@ mutation CreateNotification ($input: CreateNotificationInput!) {
 			topic
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			userID
 		}
 	}
@@ -40,6 +41,7 @@ mutation UpdateNotification ($updateNotificationId: ID!, $input: UpdateNotificat
 			topic
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			userID
 		}
 	}

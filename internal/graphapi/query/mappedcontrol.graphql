@@ -15,6 +15,7 @@ mutation CreateBulkCSVMappedControl ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -35,6 +36,7 @@ mutation CreateBulkMappedControl ($input: [CreateMappedControlInput!]) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			fromControls {
 				edges {
 					node {
@@ -87,6 +89,7 @@ mutation CreateMappedControl ($input: CreateMappedControlInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			fromControls {
 				edges {
 					node {
@@ -202,6 +205,7 @@ query GetMappedControlByID ($mappedControlId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		fromControls {
 			edges {
 				node {
@@ -312,6 +316,7 @@ mutation UpdateMappedControl ($updateMappedControlId: ID!, $input: UpdateMappedC
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			fromControls {
 				edges {
 					node {

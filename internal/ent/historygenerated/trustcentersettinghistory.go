@@ -35,6 +35,8 @@ type TrustCenterSettingHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -105,7 +107,7 @@ func (*TrustCenterSettingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case trustcentersettinghistory.FieldRemoveBranding, trustcentersettinghistory.FieldNdaApprovalRequired, trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange:
 			values[i] = new(sql.NullBool)
-		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldCompanyName, trustcentersettinghistory.FieldCompanyDescription, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID, trustcentersettinghistory.FieldHeroImageLocalFileID, trustcentersettinghistory.FieldThemeMode, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldFont, trustcentersettinghistory.FieldForegroundColor, trustcentersettinghistory.FieldBackgroundColor, trustcentersettinghistory.FieldAccentColor, trustcentersettinghistory.FieldSecondaryBackgroundColor, trustcentersettinghistory.FieldSecondaryForegroundColor, trustcentersettinghistory.FieldEnvironment, trustcentersettinghistory.FieldCompanyDomain, trustcentersettinghistory.FieldSecurityContact, trustcentersettinghistory.FieldNdaApproverGroupID, trustcentersettinghistory.FieldStatusPageURL:
+		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldUpdatedByImpersonator, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldCompanyName, trustcentersettinghistory.FieldCompanyDescription, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID, trustcentersettinghistory.FieldHeroImageLocalFileID, trustcentersettinghistory.FieldThemeMode, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldFont, trustcentersettinghistory.FieldForegroundColor, trustcentersettinghistory.FieldBackgroundColor, trustcentersettinghistory.FieldAccentColor, trustcentersettinghistory.FieldSecondaryBackgroundColor, trustcentersettinghistory.FieldSecondaryForegroundColor, trustcentersettinghistory.FieldEnvironment, trustcentersettinghistory.FieldCompanyDomain, trustcentersettinghistory.FieldSecurityContact, trustcentersettinghistory.FieldNdaApproverGroupID, trustcentersettinghistory.FieldStatusPageURL:
 			values[i] = new(sql.NullString)
 		case trustcentersettinghistory.FieldHistoryTime, trustcentersettinghistory.FieldCreatedAt, trustcentersettinghistory.FieldUpdatedAt, trustcentersettinghistory.FieldDeletedAt, trustcentersettinghistory.FieldSubprocessorsNotifiedAt:
 			values[i] = new(sql.NullTime)
@@ -171,6 +173,13 @@ func (_m *TrustCenterSettingHistory) assignValues(columns []string, values []any
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case trustcentersettinghistory.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case trustcentersettinghistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -412,6 +421,11 @@ func (_m *TrustCenterSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))

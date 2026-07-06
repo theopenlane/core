@@ -23,6 +23,18 @@ auth:
             relyingpartyid: ""
             requestorigins: []
             timeout: 60000000000
+    supportaccess:
+        alloweddomain: ""
+        clientid: ""
+        clientsecret: ""
+        discoveryendpoint: ""
+        displayname: Openlane Support
+        email: support@theopenlane.io
+        enabled: false
+        issuerurl: ""
+        password: ""
+        redirecturl: ""
+        subjectid: 01JSPPRT000000000000000000
     supportedproviders: []
     token:
         accessduration: 3600000000000
@@ -82,6 +94,8 @@ authz:
     parentcontextskipkinds: []
     storeid: ""
     storename: openlane
+backfill:
+    enabled: false
 cloudflare:
     accountid: ""
     apitoken: ""
@@ -151,6 +165,7 @@ integrations:
         clientsecret: ""
         defaulttenant: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
+    consoleintegrationpath: /organization-settings/integrations
     email:
         apikey: ""
         docsurl: https://docs.theopenlane.io

@@ -67,6 +67,26 @@ func (_u *InviteUpdate) ClearUpdatedBy() *InviteUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *InviteUpdate) SetUpdatedByImpersonator(v string) *InviteUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *InviteUpdate) SetNillableUpdatedByImpersonator(v *string) *InviteUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *InviteUpdate) ClearUpdatedByImpersonator() *InviteUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *InviteUpdate) SetDeletedAt(v time.Time) *InviteUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -233,6 +253,26 @@ func (_u *InviteUpdate) SetNillableOwnershipTransfer(v *bool) *InviteUpdate {
 // ClearOwnershipTransfer clears the value of the "ownership_transfer" field.
 func (_u *InviteUpdate) ClearOwnershipTransfer() *InviteUpdate {
 	_u.mutation.ClearOwnershipTransfer()
+	return _u
+}
+
+// SetSSOExempt sets the "sso_exempt" field.
+func (_u *InviteUpdate) SetSSOExempt(v bool) *InviteUpdate {
+	_u.mutation.SetSSOExempt(v)
+	return _u
+}
+
+// SetNillableSSOExempt sets the "sso_exempt" field if the given value is not nil.
+func (_u *InviteUpdate) SetNillableSSOExempt(v *bool) *InviteUpdate {
+	if v != nil {
+		_u.SetSSOExempt(*v)
+	}
+	return _u
+}
+
+// ClearSSOExempt clears the value of the "sso_exempt" field.
+func (_u *InviteUpdate) ClearSSOExempt() *InviteUpdate {
+	_u.mutation.ClearSSOExempt()
 	return _u
 }
 
@@ -432,6 +472,12 @@ func (_u *InviteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(invite.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(invite.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(invite.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(invite.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -476,6 +522,12 @@ func (_u *InviteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.OwnershipTransferCleared() {
 		_spec.ClearField(invite.FieldOwnershipTransfer, field.TypeBool)
+	}
+	if value, ok := _u.mutation.SSOExempt(); ok {
+		_spec.SetField(invite.FieldSSOExempt, field.TypeBool, value)
+	}
+	if _u.mutation.SSOExemptCleared() {
+		_spec.ClearField(invite.FieldSSOExempt, field.TypeBool)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -660,6 +712,26 @@ func (_u *InviteUpdateOne) ClearUpdatedBy() *InviteUpdateOne {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *InviteUpdateOne) SetUpdatedByImpersonator(v string) *InviteUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *InviteUpdateOne) SetNillableUpdatedByImpersonator(v *string) *InviteUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *InviteUpdateOne) ClearUpdatedByImpersonator() *InviteUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *InviteUpdateOne) SetDeletedAt(v time.Time) *InviteUpdateOne {
 	_u.mutation.SetDeletedAt(v)
@@ -826,6 +898,26 @@ func (_u *InviteUpdateOne) SetNillableOwnershipTransfer(v *bool) *InviteUpdateOn
 // ClearOwnershipTransfer clears the value of the "ownership_transfer" field.
 func (_u *InviteUpdateOne) ClearOwnershipTransfer() *InviteUpdateOne {
 	_u.mutation.ClearOwnershipTransfer()
+	return _u
+}
+
+// SetSSOExempt sets the "sso_exempt" field.
+func (_u *InviteUpdateOne) SetSSOExempt(v bool) *InviteUpdateOne {
+	_u.mutation.SetSSOExempt(v)
+	return _u
+}
+
+// SetNillableSSOExempt sets the "sso_exempt" field if the given value is not nil.
+func (_u *InviteUpdateOne) SetNillableSSOExempt(v *bool) *InviteUpdateOne {
+	if v != nil {
+		_u.SetSSOExempt(*v)
+	}
+	return _u
+}
+
+// ClearSSOExempt clears the value of the "sso_exempt" field.
+func (_u *InviteUpdateOne) ClearSSOExempt() *InviteUpdateOne {
+	_u.mutation.ClearSSOExempt()
 	return _u
 }
 
@@ -1055,6 +1147,12 @@ func (_u *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err erro
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(invite.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(invite.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(invite.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(invite.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -1099,6 +1197,12 @@ func (_u *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err erro
 	}
 	if _u.mutation.OwnershipTransferCleared() {
 		_spec.ClearField(invite.FieldOwnershipTransfer, field.TypeBool)
+	}
+	if value, ok := _u.mutation.SSOExempt(); ok {
+		_spec.SetField(invite.FieldSSOExempt, field.TypeBool, value)
+	}
+	if _u.mutation.SSOExemptCleared() {
+		_spec.ClearField(invite.FieldSSOExempt, field.TypeBool)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

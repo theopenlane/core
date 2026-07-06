@@ -68,6 +68,26 @@ func (_u *WorkflowAssignmentHistoryUpdate) ClearUpdatedBy() *WorkflowAssignmentH
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *WorkflowAssignmentHistoryUpdate) SetUpdatedByImpersonator(v string) *WorkflowAssignmentHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *WorkflowAssignmentHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *WorkflowAssignmentHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *WorkflowAssignmentHistoryUpdate) ClearUpdatedByImpersonator() *WorkflowAssignmentHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *WorkflowAssignmentHistoryUpdate) SetDeletedAt(v time.Time) *WorkflowAssignmentHistoryUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -484,6 +504,12 @@ func (_u *WorkflowAssignmentHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(workflowassignmenthistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(workflowassignmenthistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(workflowassignmenthistory.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -638,6 +664,26 @@ func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableUpdatedBy(v *string) *W
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *WorkflowAssignmentHistoryUpdateOne) ClearUpdatedBy() *WorkflowAssignmentHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *WorkflowAssignmentHistoryUpdateOne) SetUpdatedByImpersonator(v string) *WorkflowAssignmentHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *WorkflowAssignmentHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *WorkflowAssignmentHistoryUpdateOne) ClearUpdatedByImpersonator() *WorkflowAssignmentHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -1086,6 +1132,12 @@ func (_u *WorkflowAssignmentHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(workflowassignmenthistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(workflowassignmenthistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(workflowassignmenthistory.FieldDeletedAt, field.TypeTime, value)

@@ -17,6 +17,7 @@ mutation CreateJobRunner ($input: CreateJobRunnerInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 		}
 	}
@@ -70,6 +71,7 @@ query GetJobRunnerByID ($jobRunnerId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		version
 	}
 }
@@ -118,6 +120,7 @@ mutation UpdateJobRunner ($updateJobRunnerId: ID!, $input: UpdateJobRunnerInput!
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 		}
 	}

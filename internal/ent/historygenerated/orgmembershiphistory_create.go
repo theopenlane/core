@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -114,6 +115,20 @@ func (_c *OrgMembershipHistoryCreate) SetNillableUpdatedBy(v *string) *OrgMember
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *OrgMembershipHistoryCreate) SetUpdatedByImpersonator(v string) *OrgMembershipHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *OrgMembershipHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *OrgMembershipHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetRole sets the "role" field.
 func (_c *OrgMembershipHistoryCreate) SetRole(v enums.Role) *OrgMembershipHistoryCreate {
 	_c.mutation.SetRole(v)
@@ -137,6 +152,62 @@ func (_c *OrgMembershipHistoryCreate) SetOrganizationID(v string) *OrgMembership
 // SetUserID sets the "user_id" field.
 func (_c *OrgMembershipHistoryCreate) SetUserID(v string) *OrgMembershipHistoryCreate {
 	_c.mutation.SetUserID(v)
+	return _c
+}
+
+// SetSSOExempt sets the "sso_exempt" field.
+func (_c *OrgMembershipHistoryCreate) SetSSOExempt(v bool) *OrgMembershipHistoryCreate {
+	_c.mutation.SetSSOExempt(v)
+	return _c
+}
+
+// SetNillableSSOExempt sets the "sso_exempt" field if the given value is not nil.
+func (_c *OrgMembershipHistoryCreate) SetNillableSSOExempt(v *bool) *OrgMembershipHistoryCreate {
+	if v != nil {
+		_c.SetSSOExempt(*v)
+	}
+	return _c
+}
+
+// SetSSOExemptReason sets the "sso_exempt_reason" field.
+func (_c *OrgMembershipHistoryCreate) SetSSOExemptReason(v string) *OrgMembershipHistoryCreate {
+	_c.mutation.SetSSOExemptReason(v)
+	return _c
+}
+
+// SetNillableSSOExemptReason sets the "sso_exempt_reason" field if the given value is not nil.
+func (_c *OrgMembershipHistoryCreate) SetNillableSSOExemptReason(v *string) *OrgMembershipHistoryCreate {
+	if v != nil {
+		_c.SetSSOExemptReason(*v)
+	}
+	return _c
+}
+
+// SetSSOExemptGrantedBy sets the "sso_exempt_granted_by" field.
+func (_c *OrgMembershipHistoryCreate) SetSSOExemptGrantedBy(v string) *OrgMembershipHistoryCreate {
+	_c.mutation.SetSSOExemptGrantedBy(v)
+	return _c
+}
+
+// SetNillableSSOExemptGrantedBy sets the "sso_exempt_granted_by" field if the given value is not nil.
+func (_c *OrgMembershipHistoryCreate) SetNillableSSOExemptGrantedBy(v *string) *OrgMembershipHistoryCreate {
+	if v != nil {
+		_c.SetSSOExemptGrantedBy(*v)
+	}
+	return _c
+}
+
+// SetSSOExemptGrantedAt sets the "sso_exempt_granted_at" field.
+func (_c *OrgMembershipHistoryCreate) SetSSOExemptGrantedAt(v models.DateTime) *OrgMembershipHistoryCreate {
+	_c.mutation.SetSSOExemptGrantedAt(v)
+	return _c
+}
+
+// SetNillableSSOExemptGrantedAt sets the "sso_exempt_granted_at" field if the given value is not nil.
+func (_c *OrgMembershipHistoryCreate) SetNillableSSOExemptGrantedAt(v *models.DateTime) *OrgMembershipHistoryCreate {
+	if v != nil {
+		_c.SetSSOExemptGrantedAt(*v)
+	}
 	return _c
 }
 
@@ -215,6 +286,10 @@ func (_c *OrgMembershipHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.Role(); !ok {
 		v := orgmembershiphistory.DefaultRole
 		_c.mutation.SetRole(v)
+	}
+	if _, ok := _c.mutation.SSOExempt(); !ok {
+		v := orgmembershiphistory.DefaultSSOExempt
+		_c.mutation.SetSSOExempt(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if orgmembershiphistory.DefaultID == nil {
@@ -317,6 +392,10 @@ func (_c *OrgMembershipHistoryCreate) createSpec() (*OrgMembershipHistory, *sqlg
 		_spec.SetField(orgmembershiphistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(orgmembershiphistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
+	}
 	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(orgmembershiphistory.FieldRole, field.TypeEnum, value)
 		_node.Role = value
@@ -328,6 +407,22 @@ func (_c *OrgMembershipHistoryCreate) createSpec() (*OrgMembershipHistory, *sqlg
 	if value, ok := _c.mutation.UserID(); ok {
 		_spec.SetField(orgmembershiphistory.FieldUserID, field.TypeString, value)
 		_node.UserID = value
+	}
+	if value, ok := _c.mutation.SSOExempt(); ok {
+		_spec.SetField(orgmembershiphistory.FieldSSOExempt, field.TypeBool, value)
+		_node.SSOExempt = value
+	}
+	if value, ok := _c.mutation.SSOExemptReason(); ok {
+		_spec.SetField(orgmembershiphistory.FieldSSOExemptReason, field.TypeString, value)
+		_node.SSOExemptReason = &value
+	}
+	if value, ok := _c.mutation.SSOExemptGrantedBy(); ok {
+		_spec.SetField(orgmembershiphistory.FieldSSOExemptGrantedBy, field.TypeString, value)
+		_node.SSOExemptGrantedBy = &value
+	}
+	if value, ok := _c.mutation.SSOExemptGrantedAt(); ok {
+		_spec.SetField(orgmembershiphistory.FieldSSOExemptGrantedAt, field.TypeTime, value)
+		_node.SSOExemptGrantedAt = &value
 	}
 	return _node, _spec
 }

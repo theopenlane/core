@@ -28,6 +28,7 @@ query GetAllCampaignTargetHistories ($first: Int, $last: Int, $after: Cursor, $b
 				subscriberID
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				userID
 				workflowEligibleMarker
 			}
@@ -64,6 +65,7 @@ query GetCampaignTargetHistories ($first: Int, $last: Int, $after: Cursor, $befo
 				subscriberID
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				userID
 				workflowEligibleMarker
 			}

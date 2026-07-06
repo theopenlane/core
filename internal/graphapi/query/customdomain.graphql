@@ -16,6 +16,7 @@ mutation CreateBulkCSVCustomDomain ($input: Upload!) {
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -37,6 +38,7 @@ mutation CreateBulkCustomDomain ($input: [CreateCustomDomainInput!]) {
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -58,6 +60,7 @@ mutation CreateCustomDomain ($input: CreateCustomDomainInput!) {
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			dnsVerification {
 				id
 				dnsTxtRecord
@@ -132,6 +135,7 @@ query GetCustomDomainByID ($customDomainId: ID!) {
 		trustCenterID
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		dnsVerification {
 			id
 			dnsTxtRecord
@@ -201,6 +205,7 @@ mutation UpdateCustomDomain ($updateCustomDomainId: ID!, $input: UpdateCustomDom
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			dnsVerification {
 				id
 				dnsTxtRecord

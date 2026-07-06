@@ -84,6 +84,7 @@ type ComplexityRoot struct {
 		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
+		UpdatedByImpersonator           func(childComplexity int) int
 		WorkflowEligibleMarker          func(childComplexity int) int
 	}
 
@@ -99,25 +100,26 @@ type ComplexityRoot struct {
 	}
 
 	AssessmentHistory struct {
-		AssessmentType      func(childComplexity int) int
-		CreatedAt           func(childComplexity int) int
-		CreatedBy           func(childComplexity int) int
-		HistoryTime         func(childComplexity int) int
-		ID                  func(childComplexity int) int
-		InternalNotes       func(childComplexity int) int
-		Jsonconfig          func(childComplexity int) int
-		Name                func(childComplexity int) int
-		Operation           func(childComplexity int) int
-		OwnerID             func(childComplexity int) int
-		Ref                 func(childComplexity int) int
-		ResponseDueDuration func(childComplexity int) int
-		SystemInternalID    func(childComplexity int) int
-		SystemOwned         func(childComplexity int) int
-		Tags                func(childComplexity int) int
-		TemplateID          func(childComplexity int) int
-		Uischema            func(childComplexity int) int
-		UpdatedAt           func(childComplexity int) int
-		UpdatedBy           func(childComplexity int) int
+		AssessmentType        func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		Jsonconfig            func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		ResponseDueDuration   func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		TemplateID            func(childComplexity int) int
+		Uischema              func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	AssessmentHistoryConnection struct {
@@ -132,37 +134,38 @@ type ComplexityRoot struct {
 	}
 
 	AssessmentResponseHistory struct {
-		AssessmentID     func(childComplexity int) int
-		AssignedAt       func(childComplexity int) int
-		CampaignID       func(childComplexity int) int
-		CompletedAt      func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		DisplayName      func(childComplexity int) int
-		DocumentDataID   func(childComplexity int) int
-		DueDate          func(childComplexity int) int
-		Email            func(childComplexity int) int
-		EmailClickCount  func(childComplexity int) int
-		EmailClickedAt   func(childComplexity int) int
-		EmailDeliveredAt func(childComplexity int) int
-		EmailMetadata    func(childComplexity int) int
-		EmailOpenCount   func(childComplexity int) int
-		EmailOpenedAt    func(childComplexity int) int
-		EntityID         func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		IdentityHolderID func(childComplexity int) int
-		IsDraft          func(childComplexity int) int
-		IsTest           func(childComplexity int) int
-		LastEmailEventAt func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		SendAttempts     func(childComplexity int) int
-		StartedAt        func(childComplexity int) int
-		Status           func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		AssessmentID          func(childComplexity int) int
+		AssignedAt            func(childComplexity int) int
+		CampaignID            func(childComplexity int) int
+		CompletedAt           func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DisplayName           func(childComplexity int) int
+		DocumentDataID        func(childComplexity int) int
+		DueDate               func(childComplexity int) int
+		Email                 func(childComplexity int) int
+		EmailClickCount       func(childComplexity int) int
+		EmailClickedAt        func(childComplexity int) int
+		EmailDeliveredAt      func(childComplexity int) int
+		EmailMetadata         func(childComplexity int) int
+		EmailOpenCount        func(childComplexity int) int
+		EmailOpenedAt         func(childComplexity int) int
+		EntityID              func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		IdentityHolderID      func(childComplexity int) int
+		IsDraft               func(childComplexity int) int
+		IsTest                func(childComplexity int) int
+		LastEmailEventAt      func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		SendAttempts          func(childComplexity int) int
+		StartedAt             func(childComplexity int) int
+		Status                func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	AssessmentResponseHistoryConnection struct {
@@ -227,6 +230,7 @@ type ComplexityRoot struct {
 		Tags                        func(childComplexity int) int
 		UpdatedAt                   func(childComplexity int) int
 		UpdatedBy                   func(childComplexity int) int
+		UpdatedByImpersonator       func(childComplexity int) int
 		Website                     func(childComplexity int) int
 	}
 
@@ -284,6 +288,7 @@ type ComplexityRoot struct {
 		TrustCenterID          func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
+		UpdatedByImpersonator  func(childComplexity int) int
 		WorkflowEligibleMarker func(childComplexity int) int
 	}
 
@@ -318,6 +323,7 @@ type ComplexityRoot struct {
 		SubscriberID           func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
+		UpdatedByImpersonator  func(childComplexity int) int
 		UserID                 func(childComplexity int) int
 		WorkflowEligibleMarker func(childComplexity int) int
 	}
@@ -334,22 +340,23 @@ type ComplexityRoot struct {
 	}
 
 	CheckResultHistory struct {
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Details          func(childComplexity int) int
-		ExternalURI      func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		IntegrationID    func(childComplexity int) int
-		LastObservedAt   func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		ParentExternalID func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		Source           func(childComplexity int) int
-		Status           func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Details               func(childComplexity int) int
+		ExternalURI           func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		IntegrationID         func(childComplexity int) int
+		LastObservedAt        func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		ParentExternalID      func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Source                func(childComplexity int) int
+		Status                func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	CheckResultHistoryConnection struct {
@@ -364,26 +371,27 @@ type ComplexityRoot struct {
 	}
 
 	ContactHistory struct {
-		Address       func(childComplexity int) int
-		Company       func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Email         func(childComplexity int) int
-		ExternalID    func(childComplexity int) int
-		FullName      func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		IntegrationID func(childComplexity int) int
-		ObservedAt    func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		PhoneNumber   func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		Status        func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		Title         func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Address               func(childComplexity int) int
+		Company               func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Email                 func(childComplexity int) int
+		ExternalID            func(childComplexity int) int
+		FullName              func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		IntegrationID         func(childComplexity int) int
+		ObservedAt            func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		PhoneNumber           func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Status                func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		Title                 func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	ContactHistoryConnection struct {
@@ -452,6 +460,7 @@ type ComplexityRoot struct {
 		TrustCenterVisibility      func(childComplexity int) int
 		UpdatedAt                  func(childComplexity int) int
 		UpdatedBy                  func(childComplexity int) int
+		UpdatedByImpersonator      func(childComplexity int) int
 		WorkflowEligibleMarker     func(childComplexity int) int
 	}
 
@@ -467,25 +476,26 @@ type ComplexityRoot struct {
 	}
 
 	ControlImplementationHistory struct {
-		CreatedAt          func(childComplexity int) int
-		CreatedBy          func(childComplexity int) int
-		Details            func(childComplexity int) int
-		DetailsJSON        func(childComplexity int) int
-		HistoryTime        func(childComplexity int) int
-		ID                 func(childComplexity int) int
-		ImplementationDate func(childComplexity int) int
-		InternalNotes      func(childComplexity int) int
-		Operation          func(childComplexity int) int
-		OwnerID            func(childComplexity int) int
-		Ref                func(childComplexity int) int
-		Status             func(childComplexity int) int
-		SystemInternalID   func(childComplexity int) int
-		SystemOwned        func(childComplexity int) int
-		Tags               func(childComplexity int) int
-		UpdatedAt          func(childComplexity int) int
-		UpdatedBy          func(childComplexity int) int
-		VerificationDate   func(childComplexity int) int
-		Verified           func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Details               func(childComplexity int) int
+		DetailsJSON           func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		ImplementationDate    func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Status                func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		VerificationDate      func(childComplexity int) int
+		Verified              func(childComplexity int) int
 	}
 
 	ControlImplementationHistoryConnection struct {
@@ -500,29 +510,30 @@ type ComplexityRoot struct {
 	}
 
 	ControlObjectiveHistory struct {
-		Category             func(childComplexity int) int
-		ControlObjectiveType func(childComplexity int) int
-		CreatedAt            func(childComplexity int) int
-		CreatedBy            func(childComplexity int) int
-		DesiredOutcome       func(childComplexity int) int
-		DesiredOutcomeJSON   func(childComplexity int) int
-		DisplayID            func(childComplexity int) int
-		HistoryTime          func(childComplexity int) int
-		ID                   func(childComplexity int) int
-		InternalNotes        func(childComplexity int) int
-		Name                 func(childComplexity int) int
-		Operation            func(childComplexity int) int
-		OwnerID              func(childComplexity int) int
-		Ref                  func(childComplexity int) int
-		Revision             func(childComplexity int) int
-		Source               func(childComplexity int) int
-		Status               func(childComplexity int) int
-		Subcategory          func(childComplexity int) int
-		SystemInternalID     func(childComplexity int) int
-		SystemOwned          func(childComplexity int) int
-		Tags                 func(childComplexity int) int
-		UpdatedAt            func(childComplexity int) int
-		UpdatedBy            func(childComplexity int) int
+		Category              func(childComplexity int) int
+		ControlObjectiveType  func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DesiredOutcome        func(childComplexity int) int
+		DesiredOutcomeJSON    func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Revision              func(childComplexity int) int
+		Source                func(childComplexity int) int
+		Status                func(childComplexity int) int
+		Subcategory           func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	ControlObjectiveHistoryConnection struct {
@@ -537,24 +548,25 @@ type ComplexityRoot struct {
 	}
 
 	CustomDomainHistory struct {
-		CnameRecord       func(childComplexity int) int
-		CreatedAt         func(childComplexity int) int
-		CreatedBy         func(childComplexity int) int
-		DNSVerificationID func(childComplexity int) int
-		DomainType        func(childComplexity int) int
-		HistoryTime       func(childComplexity int) int
-		ID                func(childComplexity int) int
-		InternalNotes     func(childComplexity int) int
-		MappableDomainID  func(childComplexity int) int
-		Operation         func(childComplexity int) int
-		OwnerID           func(childComplexity int) int
-		Ref               func(childComplexity int) int
-		SystemInternalID  func(childComplexity int) int
-		SystemOwned       func(childComplexity int) int
-		Tags              func(childComplexity int) int
-		TrustCenterID     func(childComplexity int) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
+		CnameRecord           func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DNSVerificationID     func(childComplexity int) int
+		DomainType            func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		MappableDomainID      func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		TrustCenterID         func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	CustomDomainHistoryConnection struct {
@@ -588,6 +600,7 @@ type ComplexityRoot struct {
 		Tags                        func(childComplexity int) int
 		UpdatedAt                   func(childComplexity int) int
 		UpdatedBy                   func(childComplexity int) int
+		UpdatedByImpersonator       func(childComplexity int) int
 	}
 
 	DNSVerificationHistoryConnection struct {
@@ -602,57 +615,58 @@ type ComplexityRoot struct {
 	}
 
 	DirectoryAccountHistory struct {
-		AccountType         func(childComplexity int) int
-		AddedAt             func(childComplexity int) int
-		AvatarLocalFileID   func(childComplexity int) int
-		AvatarRemoteURL     func(childComplexity int) int
-		AvatarUpdatedAt     func(childComplexity int) int
-		CanonicalEmail      func(childComplexity int) int
-		CreatedAt           func(childComplexity int) int
-		CreatedBy           func(childComplexity int) int
-		Department          func(childComplexity int) int
-		DirectoryInstanceID func(childComplexity int) int
-		DirectoryName       func(childComplexity int) int
-		DirectorySyncRunID  func(childComplexity int) int
-		DisplayID           func(childComplexity int) int
-		DisplayName         func(childComplexity int) int
-		EmailAliases        func(childComplexity int) int
-		EnvironmentID       func(childComplexity int) int
-		EnvironmentName     func(childComplexity int) int
-		ExternalID          func(childComplexity int) int
-		FamilyName          func(childComplexity int) int
-		FirstSeenAt         func(childComplexity int) int
-		GivenName           func(childComplexity int) int
-		HistoryTime         func(childComplexity int) int
-		ID                  func(childComplexity int) int
-		IdentityHolderID    func(childComplexity int) int
-		IntegrationID       func(childComplexity int) int
-		JobTitle            func(childComplexity int) int
-		LastLoginAt         func(childComplexity int) int
-		LastSeenAt          func(childComplexity int) int
-		LastSeenIP          func(childComplexity int) int
-		Metadata            func(childComplexity int) int
-		MfaState            func(childComplexity int) int
-		ObservedAt          func(childComplexity int) int
-		Operation           func(childComplexity int) int
-		OrganizationUnit    func(childComplexity int) int
-		OwnerID             func(childComplexity int) int
-		PhoneNumber         func(childComplexity int) int
-		PlatformID          func(childComplexity int) int
-		PrimarySource       func(childComplexity int) int
-		Profile             func(childComplexity int) int
-		ProfileHash         func(childComplexity int) int
-		RawProfileFileID    func(childComplexity int) int
-		Ref                 func(childComplexity int) int
-		RemovedAt           func(childComplexity int) int
-		ScopeID             func(childComplexity int) int
-		ScopeName           func(childComplexity int) int
-		SecondaryKey        func(childComplexity int) int
-		SourceVersion       func(childComplexity int) int
-		Status              func(childComplexity int) int
-		Tags                func(childComplexity int) int
-		UpdatedAt           func(childComplexity int) int
-		UpdatedBy           func(childComplexity int) int
+		AccountType           func(childComplexity int) int
+		AddedAt               func(childComplexity int) int
+		AvatarLocalFileID     func(childComplexity int) int
+		AvatarRemoteURL       func(childComplexity int) int
+		AvatarUpdatedAt       func(childComplexity int) int
+		CanonicalEmail        func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Department            func(childComplexity int) int
+		DirectoryInstanceID   func(childComplexity int) int
+		DirectoryName         func(childComplexity int) int
+		DirectorySyncRunID    func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		DisplayName           func(childComplexity int) int
+		EmailAliases          func(childComplexity int) int
+		EnvironmentID         func(childComplexity int) int
+		EnvironmentName       func(childComplexity int) int
+		ExternalID            func(childComplexity int) int
+		FamilyName            func(childComplexity int) int
+		FirstSeenAt           func(childComplexity int) int
+		GivenName             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		IdentityHolderID      func(childComplexity int) int
+		IntegrationID         func(childComplexity int) int
+		JobTitle              func(childComplexity int) int
+		LastLoginAt           func(childComplexity int) int
+		LastSeenAt            func(childComplexity int) int
+		LastSeenIP            func(childComplexity int) int
+		Metadata              func(childComplexity int) int
+		MfaState              func(childComplexity int) int
+		ObservedAt            func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OrganizationUnit      func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		PhoneNumber           func(childComplexity int) int
+		PlatformID            func(childComplexity int) int
+		PrimarySource         func(childComplexity int) int
+		Profile               func(childComplexity int) int
+		ProfileHash           func(childComplexity int) int
+		RawProfileFileID      func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		RemovedAt             func(childComplexity int) int
+		ScopeID               func(childComplexity int) int
+		ScopeName             func(childComplexity int) int
+		SecondaryKey          func(childComplexity int) int
+		SourceVersion         func(childComplexity int) int
+		Status                func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	DirectoryAccountHistoryConnection struct {
@@ -705,6 +719,7 @@ type ComplexityRoot struct {
 		Tags                   func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
+		UpdatedByImpersonator  func(childComplexity int) int
 	}
 
 	DirectoryGroupHistoryConnection struct {
@@ -719,36 +734,37 @@ type ComplexityRoot struct {
 	}
 
 	DirectoryMembershipHistory struct {
-		AddedAt             func(childComplexity int) int
-		CreatedAt           func(childComplexity int) int
-		CreatedBy           func(childComplexity int) int
-		DirectoryAccountID  func(childComplexity int) int
-		DirectoryGroupID    func(childComplexity int) int
-		DirectoryInstanceID func(childComplexity int) int
-		DirectoryName       func(childComplexity int) int
-		DirectorySyncRunID  func(childComplexity int) int
-		DisplayID           func(childComplexity int) int
-		EnvironmentID       func(childComplexity int) int
-		EnvironmentName     func(childComplexity int) int
-		FirstSeenAt         func(childComplexity int) int
-		HistoryTime         func(childComplexity int) int
-		ID                  func(childComplexity int) int
-		IntegrationID       func(childComplexity int) int
-		LastConfirmedRunID  func(childComplexity int) int
-		LastSeenAt          func(childComplexity int) int
-		Metadata            func(childComplexity int) int
-		ObservedAt          func(childComplexity int) int
-		Operation           func(childComplexity int) int
-		OwnerID             func(childComplexity int) int
-		PlatformID          func(childComplexity int) int
-		Ref                 func(childComplexity int) int
-		RemovedAt           func(childComplexity int) int
-		Role                func(childComplexity int) int
-		ScopeID             func(childComplexity int) int
-		ScopeName           func(childComplexity int) int
-		Source              func(childComplexity int) int
-		UpdatedAt           func(childComplexity int) int
-		UpdatedBy           func(childComplexity int) int
+		AddedAt               func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DirectoryAccountID    func(childComplexity int) int
+		DirectoryGroupID      func(childComplexity int) int
+		DirectoryInstanceID   func(childComplexity int) int
+		DirectoryName         func(childComplexity int) int
+		DirectorySyncRunID    func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		EnvironmentID         func(childComplexity int) int
+		EnvironmentName       func(childComplexity int) int
+		FirstSeenAt           func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		IntegrationID         func(childComplexity int) int
+		LastConfirmedRunID    func(childComplexity int) int
+		LastSeenAt            func(childComplexity int) int
+		Metadata              func(childComplexity int) int
+		ObservedAt            func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		PlatformID            func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		RemovedAt             func(childComplexity int) int
+		Role                  func(childComplexity int) int
+		ScopeID               func(childComplexity int) int
+		ScopeName             func(childComplexity int) int
+		Source                func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	DirectoryMembershipHistoryConnection struct {
@@ -763,17 +779,18 @@ type ComplexityRoot struct {
 	}
 
 	DiscussionHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		ExternalID  func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		IsResolved  func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		ExternalID            func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		IsResolved            func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	DiscussionHistoryConnection struct {
@@ -788,22 +805,23 @@ type ComplexityRoot struct {
 	}
 
 	DocumentDataHistory struct {
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		Data            func(childComplexity int) int
-		EnvironmentID   func(childComplexity int) int
-		EnvironmentName func(childComplexity int) int
-		HistoryTime     func(childComplexity int) int
-		ID              func(childComplexity int) int
-		Operation       func(childComplexity int) int
-		OwnerID         func(childComplexity int) int
-		Ref             func(childComplexity int) int
-		ScopeID         func(childComplexity int) int
-		ScopeName       func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		TemplateID      func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Data                  func(childComplexity int) int
+		EnvironmentID         func(childComplexity int) int
+		EnvironmentName       func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		ScopeID               func(childComplexity int) int
+		ScopeName             func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		TemplateID            func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	DocumentDataHistoryConnection struct {
@@ -818,33 +836,34 @@ type ComplexityRoot struct {
 	}
 
 	EmailTemplateHistory struct {
-		Active               func(childComplexity int) int
-		CreatedAt            func(childComplexity int) int
-		CreatedBy            func(childComplexity int) int
-		Defaults             func(childComplexity int) int
-		Description          func(childComplexity int) int
-		Format               func(childComplexity int) int
-		HistoryTime          func(childComplexity int) int
-		ID                   func(childComplexity int) int
-		IntegrationID        func(childComplexity int) int
-		InternalNotes        func(childComplexity int) int
-		Key                  func(childComplexity int) int
-		Locale               func(childComplexity int) int
-		Metadata             func(childComplexity int) int
-		Name                 func(childComplexity int) int
-		Operation            func(childComplexity int) int
-		OwnerID              func(childComplexity int) int
-		Ref                  func(childComplexity int) int
-		Revision             func(childComplexity int) int
-		SystemInternalID     func(childComplexity int) int
-		SystemOwned          func(childComplexity int) int
-		TemplateContext      func(childComplexity int) int
-		TrustCenterID        func(childComplexity int) int
-		UpdatedAt            func(childComplexity int) int
-		UpdatedBy            func(childComplexity int) int
-		Version              func(childComplexity int) int
-		WorkflowDefinitionID func(childComplexity int) int
-		WorkflowInstanceID   func(childComplexity int) int
+		Active                func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Defaults              func(childComplexity int) int
+		Description           func(childComplexity int) int
+		Format                func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		IntegrationID         func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		Key                   func(childComplexity int) int
+		Locale                func(childComplexity int) int
+		Metadata              func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Revision              func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		TemplateContext       func(childComplexity int) int
+		TrustCenterID         func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		Version               func(childComplexity int) int
+		WorkflowDefinitionID  func(childComplexity int) int
+		WorkflowInstanceID    func(childComplexity int) int
 	}
 
 	EmailTemplateHistoryConnection struct {
@@ -924,6 +943,7 @@ type ComplexityRoot struct {
 		Tier                                  func(childComplexity int) int
 		UpdatedAt                             func(childComplexity int) int
 		UpdatedBy                             func(childComplexity int) int
+		UpdatedByImpersonator                 func(childComplexity int) int
 		VendorMetadata                        func(childComplexity int) int
 	}
 
@@ -939,20 +959,21 @@ type ComplexityRoot struct {
 	}
 
 	EntityTypeHistory struct {
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	EntityTypeHistoryConnection struct {
@@ -993,6 +1014,7 @@ type ComplexityRoot struct {
 		URL                    func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
+		UpdatedByImpersonator  func(childComplexity int) int
 		WorkflowEligibleMarker func(childComplexity int) int
 	}
 
@@ -1044,6 +1066,7 @@ type ComplexityRoot struct {
 		URI                   func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	FileHistoryConnection struct {
@@ -1075,6 +1098,7 @@ type ComplexityRoot struct {
 		StandardID              func(childComplexity int) int
 		UpdatedAt               func(childComplexity int) int
 		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
 	}
 
 	FindingControlHistoryConnection struct {
@@ -1089,63 +1113,64 @@ type ComplexityRoot struct {
 	}
 
 	FindingHistory struct {
-		AssessmentID       func(childComplexity int) int
-		BlocksProduction   func(childComplexity int) int
-		Categories         func(childComplexity int) int
-		Category           func(childComplexity int) int
-		CreatedAt          func(childComplexity int) int
-		CreatedBy          func(childComplexity int) int
-		Description        func(childComplexity int) int
-		DisplayID          func(childComplexity int) int
-		DisplayName        func(childComplexity int) int
-		EnvironmentID      func(childComplexity int) int
-		EnvironmentName    func(childComplexity int) int
-		EventTime          func(childComplexity int) int
-		Exploitability     func(childComplexity int) int
-		ExternalID         func(childComplexity int) int
-		ExternalOwnerID    func(childComplexity int) int
-		ExternalURI        func(childComplexity int) int
-		FindingClass       func(childComplexity int) int
-		FindingStatusID    func(childComplexity int) int
-		FindingStatusName  func(childComplexity int) int
-		HistoryTime        func(childComplexity int) int
-		ID                 func(childComplexity int) int
-		Impact             func(childComplexity int) int
-		InternalNotes      func(childComplexity int) int
-		Metadata           func(childComplexity int) int
-		NumericSeverity    func(childComplexity int) int
-		Open               func(childComplexity int) int
-		Operation          func(childComplexity int) int
-		OwnerID            func(childComplexity int) int
-		Priority           func(childComplexity int) int
-		Production         func(childComplexity int) int
-		Public             func(childComplexity int) int
-		RawPayload         func(childComplexity int) int
-		Recommendation     func(childComplexity int) int
-		RecommendedActions func(childComplexity int) int
-		Ref                func(childComplexity int) int
-		References         func(childComplexity int) int
-		RemediationSLA     func(childComplexity int) int
-		ReportedAt         func(childComplexity int) int
-		ResourceName       func(childComplexity int) int
-		ScopeID            func(childComplexity int) int
-		ScopeName          func(childComplexity int) int
-		Score              func(childComplexity int) int
-		SecurityLevel      func(childComplexity int) int
-		Severity           func(childComplexity int) int
-		Source             func(childComplexity int) int
-		SourceUpdatedAt    func(childComplexity int) int
-		State              func(childComplexity int) int
-		StepsToReproduce   func(childComplexity int) int
-		SystemInternalID   func(childComplexity int) int
-		SystemOwned        func(childComplexity int) int
-		Tags               func(childComplexity int) int
-		TargetDetails      func(childComplexity int) int
-		Targets            func(childComplexity int) int
-		UpdatedAt          func(childComplexity int) int
-		UpdatedBy          func(childComplexity int) int
-		Validated          func(childComplexity int) int
-		Vector             func(childComplexity int) int
+		AssessmentID          func(childComplexity int) int
+		BlocksProduction      func(childComplexity int) int
+		Categories            func(childComplexity int) int
+		Category              func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Description           func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		DisplayName           func(childComplexity int) int
+		EnvironmentID         func(childComplexity int) int
+		EnvironmentName       func(childComplexity int) int
+		EventTime             func(childComplexity int) int
+		Exploitability        func(childComplexity int) int
+		ExternalID            func(childComplexity int) int
+		ExternalOwnerID       func(childComplexity int) int
+		ExternalURI           func(childComplexity int) int
+		FindingClass          func(childComplexity int) int
+		FindingStatusID       func(childComplexity int) int
+		FindingStatusName     func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Impact                func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		Metadata              func(childComplexity int) int
+		NumericSeverity       func(childComplexity int) int
+		Open                  func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Priority              func(childComplexity int) int
+		Production            func(childComplexity int) int
+		Public                func(childComplexity int) int
+		RawPayload            func(childComplexity int) int
+		Recommendation        func(childComplexity int) int
+		RecommendedActions    func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		References            func(childComplexity int) int
+		RemediationSLA        func(childComplexity int) int
+		ReportedAt            func(childComplexity int) int
+		ResourceName          func(childComplexity int) int
+		ScopeID               func(childComplexity int) int
+		ScopeName             func(childComplexity int) int
+		Score                 func(childComplexity int) int
+		SecurityLevel         func(childComplexity int) int
+		Severity              func(childComplexity int) int
+		Source                func(childComplexity int) int
+		SourceUpdatedAt       func(childComplexity int) int
+		State                 func(childComplexity int) int
+		StepsToReproduce      func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		TargetDetails         func(childComplexity int) int
+		Targets               func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		Validated             func(childComplexity int) int
+		Vector                func(childComplexity int) int
 	}
 
 	FindingHistoryConnection struct {
@@ -1160,31 +1185,32 @@ type ComplexityRoot struct {
 	}
 
 	GroupHistory struct {
-		AvatarLocalFileID func(childComplexity int) int
-		CreatedAt         func(childComplexity int) int
-		CreatedBy         func(childComplexity int) int
-		Description       func(childComplexity int) int
-		DisplayID         func(childComplexity int) int
-		DisplayName       func(childComplexity int) int
-		GravatarLogoURL   func(childComplexity int) int
-		HistoryTime       func(childComplexity int) int
-		ID                func(childComplexity int) int
-		IsManaged         func(childComplexity int) int
-		LogoURL           func(childComplexity int) int
-		Name              func(childComplexity int) int
-		Operation         func(childComplexity int) int
-		OscalContactUuids func(childComplexity int) int
-		OscalPartyUUID    func(childComplexity int) int
-		OscalRole         func(childComplexity int) int
-		OwnerID           func(childComplexity int) int
-		Ref               func(childComplexity int) int
-		ScimActive        func(childComplexity int) int
-		ScimDisplayName   func(childComplexity int) int
-		ScimExternalID    func(childComplexity int) int
-		ScimGroupMailing  func(childComplexity int) int
-		Tags              func(childComplexity int) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
+		AvatarLocalFileID     func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Description           func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		DisplayName           func(childComplexity int) int
+		GravatarLogoURL       func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		IsManaged             func(childComplexity int) int
+		LogoURL               func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OscalContactUuids     func(childComplexity int) int
+		OscalPartyUUID        func(childComplexity int) int
+		OscalRole             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		ScimActive            func(childComplexity int) int
+		ScimDisplayName       func(childComplexity int) int
+		ScimExternalID        func(childComplexity int) int
+		ScimGroupMailing      func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	GroupHistoryConnection struct {
@@ -1199,17 +1225,18 @@ type ComplexityRoot struct {
 	}
 
 	GroupMembershipHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		GroupID     func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Role        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UserID      func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		GroupID               func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Role                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		UserID                func(childComplexity int) int
 	}
 
 	GroupMembershipHistoryConnection struct {
@@ -1224,19 +1251,20 @@ type ComplexityRoot struct {
 	}
 
 	GroupSettingHistory struct {
-		CreatedAt    func(childComplexity int) int
-		CreatedBy    func(childComplexity int) int
-		GroupID      func(childComplexity int) int
-		HistoryTime  func(childComplexity int) int
-		ID           func(childComplexity int) int
-		JoinPolicy   func(childComplexity int) int
-		Operation    func(childComplexity int) int
-		Ref          func(childComplexity int) int
-		SyncToGithub func(childComplexity int) int
-		SyncToSlack  func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
-		Visibility   func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		GroupID               func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		JoinPolicy            func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		SyncToGithub          func(childComplexity int) int
+		SyncToSlack           func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		Visibility            func(childComplexity int) int
 	}
 
 	GroupSettingHistoryConnection struct {
@@ -1251,26 +1279,27 @@ type ComplexityRoot struct {
 	}
 
 	HushHistory struct {
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		CredentialSet    func(childComplexity int) int
-		Description      func(childComplexity int) int
-		ExpiresAt        func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		Kind             func(childComplexity int) int
-		LastUsedAt       func(childComplexity int) int
-		Metadata         func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		SecretName       func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		CredentialSet         func(childComplexity int) int
+		Description           func(childComplexity int) int
+		ExpiresAt             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		Kind                  func(childComplexity int) int
+		LastUsedAt            func(childComplexity int) int
+		Metadata              func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		SecretName            func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	HushHistoryConnection struct {
@@ -1323,6 +1352,7 @@ type ComplexityRoot struct {
 		Title                  func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
+		UpdatedByImpersonator  func(childComplexity int) int
 		UserID                 func(childComplexity int) int
 		WorkflowEligibleMarker func(childComplexity int) int
 	}
@@ -1370,6 +1400,7 @@ type ComplexityRoot struct {
 		Tags                     func(childComplexity int) int
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
+		UpdatedByImpersonator    func(childComplexity int) int
 	}
 
 	IntegrationHistoryConnection struct {
@@ -1427,6 +1458,7 @@ type ComplexityRoot struct {
 		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
+		UpdatedByImpersonator           func(childComplexity int) int
 		WorkflowEligibleMarker          func(childComplexity int) int
 	}
 
@@ -1442,26 +1474,27 @@ type ComplexityRoot struct {
 	}
 
 	JobTemplateHistory struct {
-		Configuration    func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Cron             func(childComplexity int) int
-		Description      func(childComplexity int) int
-		DisplayID        func(childComplexity int) int
-		DownloadURL      func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Platform         func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		Title            func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		Configuration         func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Cron                  func(childComplexity int) int
+		Description           func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		DownloadURL           func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Platform              func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		Title                 func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	JobTemplateHistoryConnection struct {
@@ -1476,17 +1509,18 @@ type ComplexityRoot struct {
 	}
 
 	MappableDomainHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		ZoneID      func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		ZoneID                func(childComplexity int) int
 	}
 
 	MappableDomainHistoryConnection struct {
@@ -1501,23 +1535,24 @@ type ComplexityRoot struct {
 	}
 
 	MappedControlHistory struct {
-		Confidence       func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		MappingType      func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		Relation         func(childComplexity int) int
-		Source           func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		Confidence            func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		MappingType           func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Relation              func(childComplexity int) int
+		Source                func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	MappedControlHistoryConnection struct {
@@ -1532,23 +1567,24 @@ type ComplexityRoot struct {
 	}
 
 	NarrativeHistory struct {
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Description      func(childComplexity int) int
-		Details          func(childComplexity int) int
-		DisplayID        func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Description           func(childComplexity int) int
+		Details               func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	NarrativeHistoryConnection struct {
@@ -1563,25 +1599,26 @@ type ComplexityRoot struct {
 	}
 
 	NoteHistory struct {
-		CreatedAt         func(childComplexity int) int
-		CreatedBy         func(childComplexity int) int
-		DiscussionID      func(childComplexity int) int
-		DisplayID         func(childComplexity int) int
-		HistoryTime       func(childComplexity int) int
-		ID                func(childComplexity int) int
-		IsEdited          func(childComplexity int) int
-		NoteRef           func(childComplexity int) int
-		NotifiedAt        func(childComplexity int) int
-		NotifySubscribers func(childComplexity int) int
-		Operation         func(childComplexity int) int
-		OwnerID           func(childComplexity int) int
-		Ref               func(childComplexity int) int
-		Text              func(childComplexity int) int
-		TextJSON          func(childComplexity int) int
-		Title             func(childComplexity int) int
-		TrustCenterID     func(childComplexity int) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DiscussionID          func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		IsEdited              func(childComplexity int) int
+		NoteRef               func(childComplexity int) int
+		NotifiedAt            func(childComplexity int) int
+		NotifySubscribers     func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Text                  func(childComplexity int) int
+		TextJSON              func(childComplexity int) int
+		Title                 func(childComplexity int) int
+		TrustCenterID         func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	NoteHistoryConnection struct {
@@ -1596,36 +1633,37 @@ type ComplexityRoot struct {
 	}
 
 	NotificationPreferenceHistory struct {
-		Cadence         func(childComplexity int) int
-		Channel         func(childComplexity int) int
-		Config          func(childComplexity int) int
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		Destination     func(childComplexity int) int
-		Enabled         func(childComplexity int) int
-		HistoryTime     func(childComplexity int) int
-		ID              func(childComplexity int) int
-		IsDefault       func(childComplexity int) int
-		LastError       func(childComplexity int) int
-		LastUsedAt      func(childComplexity int) int
-		Metadata        func(childComplexity int) int
-		MuteUntil       func(childComplexity int) int
-		Operation       func(childComplexity int) int
-		OwnerID         func(childComplexity int) int
-		Priority        func(childComplexity int) int
-		Provider        func(childComplexity int) int
-		QuietHoursEnd   func(childComplexity int) int
-		QuietHoursStart func(childComplexity int) int
-		Ref             func(childComplexity int) int
-		Status          func(childComplexity int) int
-		TemplateID      func(childComplexity int) int
-		Timezone        func(childComplexity int) int
-		TopicOverrides  func(childComplexity int) int
-		TopicPatterns   func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
-		UserID          func(childComplexity int) int
-		VerifiedAt      func(childComplexity int) int
+		Cadence               func(childComplexity int) int
+		Channel               func(childComplexity int) int
+		Config                func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Destination           func(childComplexity int) int
+		Enabled               func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		IsDefault             func(childComplexity int) int
+		LastError             func(childComplexity int) int
+		LastUsedAt            func(childComplexity int) int
+		Metadata              func(childComplexity int) int
+		MuteUntil             func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Priority              func(childComplexity int) int
+		Provider              func(childComplexity int) int
+		QuietHoursEnd         func(childComplexity int) int
+		QuietHoursStart       func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Status                func(childComplexity int) int
+		TemplateID            func(childComplexity int) int
+		Timezone              func(childComplexity int) int
+		TopicOverrides        func(childComplexity int) int
+		TopicPatterns         func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		UserID                func(childComplexity int) int
+		VerifiedAt            func(childComplexity int) int
 	}
 
 	NotificationPreferenceHistoryConnection struct {
@@ -1640,41 +1678,42 @@ type ComplexityRoot struct {
 	}
 
 	NotificationTemplateHistory struct {
-		Active               func(childComplexity int) int
-		Blocks               func(childComplexity int) int
-		BodyTemplate         func(childComplexity int) int
-		Channel              func(childComplexity int) int
-		CreatedAt            func(childComplexity int) int
-		CreatedBy            func(childComplexity int) int
-		Defaults             func(childComplexity int) int
-		Description          func(childComplexity int) int
-		Destinations         func(childComplexity int) int
-		EmailTemplateID      func(childComplexity int) int
-		Format               func(childComplexity int) int
-		HistoryTime          func(childComplexity int) int
-		ID                   func(childComplexity int) int
-		IntegrationID        func(childComplexity int) int
-		InternalNotes        func(childComplexity int) int
-		Jsonconfig           func(childComplexity int) int
-		Key                  func(childComplexity int) int
-		Locale               func(childComplexity int) int
-		Metadata             func(childComplexity int) int
-		Name                 func(childComplexity int) int
-		Operation            func(childComplexity int) int
-		OwnerID              func(childComplexity int) int
-		Ref                  func(childComplexity int) int
-		Revision             func(childComplexity int) int
-		SubjectTemplate      func(childComplexity int) int
-		SystemInternalID     func(childComplexity int) int
-		SystemOwned          func(childComplexity int) int
-		TemplateContext      func(childComplexity int) int
-		TitleTemplate        func(childComplexity int) int
-		TopicPattern         func(childComplexity int) int
-		Uischema             func(childComplexity int) int
-		UpdatedAt            func(childComplexity int) int
-		UpdatedBy            func(childComplexity int) int
-		Version              func(childComplexity int) int
-		WorkflowDefinitionID func(childComplexity int) int
+		Active                func(childComplexity int) int
+		Blocks                func(childComplexity int) int
+		BodyTemplate          func(childComplexity int) int
+		Channel               func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Defaults              func(childComplexity int) int
+		Description           func(childComplexity int) int
+		Destinations          func(childComplexity int) int
+		EmailTemplateID       func(childComplexity int) int
+		Format                func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		IntegrationID         func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		Jsonconfig            func(childComplexity int) int
+		Key                   func(childComplexity int) int
+		Locale                func(childComplexity int) int
+		Metadata              func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Revision              func(childComplexity int) int
+		SubjectTemplate       func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		TemplateContext       func(childComplexity int) int
+		TitleTemplate         func(childComplexity int) int
+		TopicPattern          func(childComplexity int) int
+		Uischema              func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		Version               func(childComplexity int) int
+		WorkflowDefinitionID  func(childComplexity int) int
 	}
 
 	NotificationTemplateHistoryConnection struct {
@@ -1689,17 +1728,22 @@ type ComplexityRoot struct {
 	}
 
 	OrgMembershipHistory struct {
-		CreatedAt      func(childComplexity int) int
-		CreatedBy      func(childComplexity int) int
-		HistoryTime    func(childComplexity int) int
-		ID             func(childComplexity int) int
-		Operation      func(childComplexity int) int
-		OrganizationID func(childComplexity int) int
-		Ref            func(childComplexity int) int
-		Role           func(childComplexity int) int
-		UpdatedAt      func(childComplexity int) int
-		UpdatedBy      func(childComplexity int) int
-		UserID         func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OrganizationID        func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Role                  func(childComplexity int) int
+		SSOExempt             func(childComplexity int) int
+		SSOExemptGrantedAt    func(childComplexity int) int
+		SSOExemptGrantedBy    func(childComplexity int) int
+		SSOExemptReason       func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		UserID                func(childComplexity int) int
 	}
 
 	OrgMembershipHistoryConnection struct {
@@ -1730,6 +1774,7 @@ type ComplexityRoot struct {
 		TrialExpiresAt           func(childComplexity int) int
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
+		UpdatedByImpersonator    func(childComplexity int) int
 	}
 
 	OrgSubscriptionHistoryConnection struct {
@@ -1744,23 +1789,25 @@ type ComplexityRoot struct {
 	}
 
 	OrganizationHistory struct {
-		AvatarLocalFileID func(childComplexity int) int
-		AvatarRemoteURL   func(childComplexity int) int
-		AvatarUpdatedAt   func(childComplexity int) int
-		CreatedAt         func(childComplexity int) int
-		CreatedBy         func(childComplexity int) int
-		Description       func(childComplexity int) int
-		DisplayName       func(childComplexity int) int
-		HistoryTime       func(childComplexity int) int
-		ID                func(childComplexity int) int
-		Name              func(childComplexity int) int
-		Operation         func(childComplexity int) int
-		PersonalOrg       func(childComplexity int) int
-		Ref               func(childComplexity int) int
-		StripeCustomerID  func(childComplexity int) int
-		Tags              func(childComplexity int) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
+		AvatarLocalFileID     func(childComplexity int) int
+		AvatarRemoteURL       func(childComplexity int) int
+		AvatarUpdatedAt       func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Description           func(childComplexity int) int
+		DisplayName           func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		PersonalOrg           func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		SlugName              func(childComplexity int) int
+		StripeCustomerID      func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	OrganizationHistoryConnection struct {
@@ -1776,6 +1823,7 @@ type ComplexityRoot struct {
 
 	OrganizationSettingHistory struct {
 		AllowMatchingDomainsAutojoin     func(childComplexity int) int
+		AllowSupportAccess               func(childComplexity int) int
 		AllowedEmailDomains              func(childComplexity int) int
 		BillingAddress                   func(childComplexity int) int
 		BillingContact                   func(childComplexity int) int
@@ -1794,8 +1842,10 @@ type ComplexityRoot struct {
 		IdentityProviderClientID         func(childComplexity int) int
 		IdentityProviderClientSecret     func(childComplexity int) int
 		IdentityProviderEntityID         func(childComplexity int) int
+		IdentityProviderJitProvisioning  func(childComplexity int) int
 		IdentityProviderLoginEnforced    func(childComplexity int) int
 		IdentityProviderMetadataEndpoint func(childComplexity int) int
+		JitAllowedEmailDomains           func(childComplexity int) int
 		MultifactorAuthEnforced          func(childComplexity int) int
 		OidcDiscoveryEndpoint            func(childComplexity int) int
 		Operation                        func(childComplexity int) int
@@ -1803,6 +1853,7 @@ type ComplexityRoot struct {
 		PaymentMethodAdded               func(childComplexity int) int
 		PendingDeletionAt                func(childComplexity int) int
 		Ref                              func(childComplexity int) int
+		SSOExemptDomains                 func(childComplexity int) int
 		SamlCert                         func(childComplexity int) int
 		SamlIssuer                       func(childComplexity int) int
 		SamlSigninURL                    func(childComplexity int) int
@@ -1810,6 +1861,7 @@ type ComplexityRoot struct {
 		TaxIdentifier                    func(childComplexity int) int
 		UpdatedAt                        func(childComplexity int) int
 		UpdatedBy                        func(childComplexity int) int
+		UpdatedByImpersonator            func(childComplexity int) int
 	}
 
 	OrganizationSettingHistoryConnection struct {
@@ -1889,6 +1941,7 @@ type ComplexityRoot struct {
 		TrustBoundaryDescription       func(childComplexity int) int
 		UpdatedAt                      func(childComplexity int) int
 		UpdatedBy                      func(childComplexity int) int
+		UpdatedByImpersonator          func(childComplexity int) int
 		WorkflowEligibleMarker         func(childComplexity int) int
 	}
 
@@ -1946,6 +1999,7 @@ type ComplexityRoot struct {
 		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
+		UpdatedByImpersonator           func(childComplexity int) int
 		WorkflowEligibleMarker          func(childComplexity int) int
 	}
 
@@ -1961,33 +2015,34 @@ type ComplexityRoot struct {
 	}
 
 	ProgramHistory struct {
-		AuditFirm            func(childComplexity int) int
-		Auditor              func(childComplexity int) int
-		AuditorEmail         func(childComplexity int) int
-		AuditorReadComments  func(childComplexity int) int
-		AuditorReady         func(childComplexity int) int
-		AuditorWriteComments func(childComplexity int) int
-		CreatedAt            func(childComplexity int) int
-		CreatedBy            func(childComplexity int) int
-		Description          func(childComplexity int) int
-		DisplayID            func(childComplexity int) int
-		EndDate              func(childComplexity int) int
-		ExternalUUID         func(childComplexity int) int
-		FrameworkName        func(childComplexity int) int
-		HistoryTime          func(childComplexity int) int
-		ID                   func(childComplexity int) int
-		Name                 func(childComplexity int) int
-		Operation            func(childComplexity int) int
-		OwnerID              func(childComplexity int) int
-		ProgramKindID        func(childComplexity int) int
-		ProgramKindName      func(childComplexity int) int
-		ProgramOwnerID       func(childComplexity int) int
-		Ref                  func(childComplexity int) int
-		StartDate            func(childComplexity int) int
-		Status               func(childComplexity int) int
-		Tags                 func(childComplexity int) int
-		UpdatedAt            func(childComplexity int) int
-		UpdatedBy            func(childComplexity int) int
+		AuditFirm             func(childComplexity int) int
+		Auditor               func(childComplexity int) int
+		AuditorEmail          func(childComplexity int) int
+		AuditorReadComments   func(childComplexity int) int
+		AuditorReady          func(childComplexity int) int
+		AuditorWriteComments  func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Description           func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		EndDate               func(childComplexity int) int
+		ExternalUUID          func(childComplexity int) int
+		FrameworkName         func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		ProgramKindID         func(childComplexity int) int
+		ProgramKindName       func(childComplexity int) int
+		ProgramOwnerID        func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		StartDate             func(childComplexity int) int
+		Status                func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	ProgramHistoryConnection struct {
@@ -2002,17 +2057,18 @@ type ComplexityRoot struct {
 	}
 
 	ProgramMembershipHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		ProgramID   func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Role        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-		UserID      func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		ProgramID             func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Role                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		UserID                func(childComplexity int) int
 	}
 
 	ProgramMembershipHistoryConnection struct {
@@ -2111,44 +2167,45 @@ type ComplexityRoot struct {
 	}
 
 	RemediationHistory struct {
-		CompletedAt      func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		DisplayID        func(childComplexity int) int
-		DueAt            func(childComplexity int) int
-		EnvironmentID    func(childComplexity int) int
-		EnvironmentName  func(childComplexity int) int
-		Error            func(childComplexity int) int
-		Explanation      func(childComplexity int) int
-		ExternalID       func(childComplexity int) int
-		ExternalOwnerID  func(childComplexity int) int
-		ExternalURI      func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		Instructions     func(childComplexity int) int
-		Intent           func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		Metadata         func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		OwnerReference   func(childComplexity int) int
-		PrGeneratedAt    func(childComplexity int) int
-		PullRequestURI   func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		RepositoryURI    func(childComplexity int) int
-		ScopeID          func(childComplexity int) int
-		ScopeName        func(childComplexity int) int
-		Source           func(childComplexity int) int
-		State            func(childComplexity int) int
-		Status           func(childComplexity int) int
-		Summary          func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		TicketReference  func(childComplexity int) int
-		Title            func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		CompletedAt           func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		DueAt                 func(childComplexity int) int
+		EnvironmentID         func(childComplexity int) int
+		EnvironmentName       func(childComplexity int) int
+		Error                 func(childComplexity int) int
+		Explanation           func(childComplexity int) int
+		ExternalID            func(childComplexity int) int
+		ExternalOwnerID       func(childComplexity int) int
+		ExternalURI           func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Instructions          func(childComplexity int) int
+		Intent                func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		Metadata              func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		OwnerReference        func(childComplexity int) int
+		PrGeneratedAt         func(childComplexity int) int
+		PullRequestURI        func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		RepositoryURI         func(childComplexity int) int
+		ScopeID               func(childComplexity int) int
+		ScopeName             func(childComplexity int) int
+		Source                func(childComplexity int) int
+		State                 func(childComplexity int) int
+		Status                func(childComplexity int) int
+		Summary               func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		TicketReference       func(childComplexity int) int
+		Title                 func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	RemediationHistoryConnection struct {
@@ -2163,42 +2220,43 @@ type ComplexityRoot struct {
 	}
 
 	ReviewHistory struct {
-		Approved         func(childComplexity int) int
-		ApprovedAt       func(childComplexity int) int
-		Category         func(childComplexity int) int
-		Classification   func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Details          func(childComplexity int) int
-		EnvironmentID    func(childComplexity int) int
-		EnvironmentName  func(childComplexity int) int
-		ExternalID       func(childComplexity int) int
-		ExternalOwnerID  func(childComplexity int) int
-		ExternalURI      func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		Metadata         func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		RawPayload       func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		ReportedAt       func(childComplexity int) int
-		Reporter         func(childComplexity int) int
-		ReviewedAt       func(childComplexity int) int
-		ReviewerID       func(childComplexity int) int
-		ScopeID          func(childComplexity int) int
-		ScopeName        func(childComplexity int) int
-		Source           func(childComplexity int) int
-		State            func(childComplexity int) int
-		Status           func(childComplexity int) int
-		Summary          func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		Title            func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		Approved              func(childComplexity int) int
+		ApprovedAt            func(childComplexity int) int
+		Category              func(childComplexity int) int
+		Classification        func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Details               func(childComplexity int) int
+		EnvironmentID         func(childComplexity int) int
+		EnvironmentName       func(childComplexity int) int
+		ExternalID            func(childComplexity int) int
+		ExternalOwnerID       func(childComplexity int) int
+		ExternalURI           func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		Metadata              func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		RawPayload            func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		ReportedAt            func(childComplexity int) int
+		Reporter              func(childComplexity int) int
+		ReviewedAt            func(childComplexity int) int
+		ReviewerID            func(childComplexity int) int
+		ScopeID               func(childComplexity int) int
+		ScopeName             func(childComplexity int) int
+		Source                func(childComplexity int) int
+		State                 func(childComplexity int) int
+		Status                func(childComplexity int) int
+		Summary               func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		Title                 func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	ReviewHistoryConnection struct {
@@ -2213,50 +2271,51 @@ type ComplexityRoot struct {
 	}
 
 	RiskHistory struct {
-		BusinessCosts     func(childComplexity int) int
-		BusinessCostsJSON func(childComplexity int) int
-		CreatedAt         func(childComplexity int) int
-		CreatedBy         func(childComplexity int) int
-		DelegateID        func(childComplexity int) int
-		Details           func(childComplexity int) int
-		DetailsJSON       func(childComplexity int) int
-		DisplayID         func(childComplexity int) int
-		DueDate           func(childComplexity int) int
-		EnvironmentID     func(childComplexity int) int
-		EnvironmentName   func(childComplexity int) int
-		ExternalID        func(childComplexity int) int
-		ExternalUUID      func(childComplexity int) int
-		HistoryTime       func(childComplexity int) int
-		ID                func(childComplexity int) int
-		Impact            func(childComplexity int) int
-		IntegrationID     func(childComplexity int) int
-		LastReviewedAt    func(childComplexity int) int
-		Likelihood        func(childComplexity int) int
-		MitigatedAt       func(childComplexity int) int
-		Mitigation        func(childComplexity int) int
-		MitigationJSON    func(childComplexity int) int
-		Name              func(childComplexity int) int
-		NextReviewDueAt   func(childComplexity int) int
-		ObservedAt        func(childComplexity int) int
-		Operation         func(childComplexity int) int
-		OwnerID           func(childComplexity int) int
-		Ref               func(childComplexity int) int
-		ResidualScore     func(childComplexity int) int
-		ReviewFrequency   func(childComplexity int) int
-		ReviewRequired    func(childComplexity int) int
-		RiskCategoryID    func(childComplexity int) int
-		RiskCategoryName  func(childComplexity int) int
-		RiskDecision      func(childComplexity int) int
-		RiskKindID        func(childComplexity int) int
-		RiskKindName      func(childComplexity int) int
-		ScopeID           func(childComplexity int) int
-		ScopeName         func(childComplexity int) int
-		Score             func(childComplexity int) int
-		StakeholderID     func(childComplexity int) int
-		Status            func(childComplexity int) int
-		Tags              func(childComplexity int) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
+		BusinessCosts         func(childComplexity int) int
+		BusinessCostsJSON     func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DelegateID            func(childComplexity int) int
+		Details               func(childComplexity int) int
+		DetailsJSON           func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		DueDate               func(childComplexity int) int
+		EnvironmentID         func(childComplexity int) int
+		EnvironmentName       func(childComplexity int) int
+		ExternalID            func(childComplexity int) int
+		ExternalUUID          func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Impact                func(childComplexity int) int
+		IntegrationID         func(childComplexity int) int
+		LastReviewedAt        func(childComplexity int) int
+		Likelihood            func(childComplexity int) int
+		MitigatedAt           func(childComplexity int) int
+		Mitigation            func(childComplexity int) int
+		MitigationJSON        func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		NextReviewDueAt       func(childComplexity int) int
+		ObservedAt            func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		ResidualScore         func(childComplexity int) int
+		ReviewFrequency       func(childComplexity int) int
+		ReviewRequired        func(childComplexity int) int
+		RiskCategoryID        func(childComplexity int) int
+		RiskCategoryName      func(childComplexity int) int
+		RiskDecision          func(childComplexity int) int
+		RiskKindID            func(childComplexity int) int
+		RiskKindName          func(childComplexity int) int
+		ScopeID               func(childComplexity int) int
+		ScopeName             func(childComplexity int) int
+		Score                 func(childComplexity int) int
+		StakeholderID         func(childComplexity int) int
+		Status                func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	RiskHistoryConnection struct {
@@ -2271,19 +2330,20 @@ type ComplexityRoot struct {
 	}
 
 	SLADefinitionHistory struct {
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		DisplayID     func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		SLADays       func(childComplexity int) int
-		SecurityLevel func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		SLADays               func(childComplexity int) int
+		SecurityLevel         func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	SLADefinitionHistoryConnection struct {
@@ -2329,6 +2389,7 @@ type ComplexityRoot struct {
 		Target                func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 		VulnerabilityIds      func(childComplexity int) int
 	}
 
@@ -2344,21 +2405,22 @@ type ComplexityRoot struct {
 	}
 
 	ScheduledJobHistory struct {
-		Active        func(childComplexity int) int
-		Configuration func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Cron          func(childComplexity int) int
-		DisplayID     func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		JobID         func(childComplexity int) int
-		JobRunnerID   func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Active                func(childComplexity int) int
+		Configuration         func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Cron                  func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		JobID                 func(childComplexity int) int
+		JobRunnerID           func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	ScheduledJobHistoryConnection struct {
@@ -2373,34 +2435,35 @@ type ComplexityRoot struct {
 	}
 
 	StandardHistory struct {
-		CreatedAt            func(childComplexity int) int
-		CreatedBy            func(childComplexity int) int
-		Description          func(childComplexity int) int
-		Domains              func(childComplexity int) int
-		Framework            func(childComplexity int) int
-		FreeToUse            func(childComplexity int) int
-		GoverningBody        func(childComplexity int) int
-		GoverningBodyLogoURL func(childComplexity int) int
-		HistoryTime          func(childComplexity int) int
-		ID                   func(childComplexity int) int
-		InternalNotes        func(childComplexity int) int
-		IsPublic             func(childComplexity int) int
-		Link                 func(childComplexity int) int
-		LogoFileID           func(childComplexity int) int
-		Name                 func(childComplexity int) int
-		Operation            func(childComplexity int) int
-		OwnerID              func(childComplexity int) int
-		Ref                  func(childComplexity int) int
-		Revision             func(childComplexity int) int
-		ShortName            func(childComplexity int) int
-		StandardType         func(childComplexity int) int
-		Status               func(childComplexity int) int
-		SystemInternalID     func(childComplexity int) int
-		SystemOwned          func(childComplexity int) int
-		Tags                 func(childComplexity int) int
-		UpdatedAt            func(childComplexity int) int
-		UpdatedBy            func(childComplexity int) int
-		Version              func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Description           func(childComplexity int) int
+		Domains               func(childComplexity int) int
+		Framework             func(childComplexity int) int
+		FreeToUse             func(childComplexity int) int
+		GoverningBody         func(childComplexity int) int
+		GoverningBodyLogoURL  func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		IsPublic              func(childComplexity int) int
+		Link                  func(childComplexity int) int
+		LogoFileID            func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Revision              func(childComplexity int) int
+		ShortName             func(childComplexity int) int
+		StandardType          func(childComplexity int) int
+		Status                func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		Version               func(childComplexity int) int
 	}
 
 	StandardHistoryConnection struct {
@@ -2463,6 +2526,7 @@ type ComplexityRoot struct {
 		Title                      func(childComplexity int) int
 		UpdatedAt                  func(childComplexity int) int
 		UpdatedBy                  func(childComplexity int) int
+		UpdatedByImpersonator      func(childComplexity int) int
 		WorkflowEligibleMarker     func(childComplexity int) int
 	}
 
@@ -2478,23 +2542,24 @@ type ComplexityRoot struct {
 	}
 
 	SubprocessorHistory struct {
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Description      func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		LogoFileID       func(childComplexity int) int
-		LogoRemoteURL    func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Description           func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		LogoFileID            func(childComplexity int) int
+		LogoRemoteURL         func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	SubprocessorHistoryConnection struct {
@@ -2529,6 +2594,7 @@ type ComplexityRoot struct {
 		Tags                  func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 		Version               func(childComplexity int) int
 	}
 
@@ -2544,37 +2610,38 @@ type ComplexityRoot struct {
 	}
 
 	TaskHistory struct {
-		AssigneeID           func(childComplexity int) int
-		AssignerID           func(childComplexity int) int
-		Completed            func(childComplexity int) int
-		CreatedAt            func(childComplexity int) int
-		CreatedBy            func(childComplexity int) int
-		Details              func(childComplexity int) int
-		DetailsJSON          func(childComplexity int) int
-		DisplayID            func(childComplexity int) int
-		Due                  func(childComplexity int) int
-		EnvironmentID        func(childComplexity int) int
-		EnvironmentName      func(childComplexity int) int
-		ExternalReferenceURL func(childComplexity int) int
-		ExternalUUID         func(childComplexity int) int
-		HistoryTime          func(childComplexity int) int
-		ID                   func(childComplexity int) int
-		IdempotencyKey       func(childComplexity int) int
-		IsTemplate           func(childComplexity int) int
-		Operation            func(childComplexity int) int
-		OwnerID              func(childComplexity int) int
-		ParentTaskID         func(childComplexity int) int
-		Ref                  func(childComplexity int) int
-		ScopeID              func(childComplexity int) int
-		ScopeName            func(childComplexity int) int
-		Status               func(childComplexity int) int
-		SystemGenerated      func(childComplexity int) int
-		Tags                 func(childComplexity int) int
-		TaskKindID           func(childComplexity int) int
-		TaskKindName         func(childComplexity int) int
-		Title                func(childComplexity int) int
-		UpdatedAt            func(childComplexity int) int
-		UpdatedBy            func(childComplexity int) int
+		AssigneeID            func(childComplexity int) int
+		AssignerID            func(childComplexity int) int
+		Completed             func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Details               func(childComplexity int) int
+		DetailsJSON           func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		Due                   func(childComplexity int) int
+		EnvironmentID         func(childComplexity int) int
+		EnvironmentName       func(childComplexity int) int
+		ExternalReferenceURL  func(childComplexity int) int
+		ExternalUUID          func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		IdempotencyKey        func(childComplexity int) int
+		IsTemplate            func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		ParentTaskID          func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		ScopeID               func(childComplexity int) int
+		ScopeName             func(childComplexity int) int
+		Status                func(childComplexity int) int
+		SystemGenerated       func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		TaskKindID            func(childComplexity int) int
+		TaskKindName          func(childComplexity int) int
+		Title                 func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	TaskHistoryConnection struct {
@@ -2614,6 +2681,7 @@ type ComplexityRoot struct {
 		Uischema               func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
+		UpdatedByImpersonator  func(childComplexity int) int
 	}
 
 	TemplateHistoryConnection struct {
@@ -2628,17 +2696,18 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterComplianceHistory struct {
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		StandardID    func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		TrustCenterID func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		StandardID            func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		TrustCenterID         func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	TrustCenterComplianceHistoryConnection struct {
@@ -2669,6 +2738,7 @@ type ComplexityRoot struct {
 		TrustCenterID          func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
+		UpdatedByImpersonator  func(childComplexity int) int
 		Visibility             func(childComplexity int) int
 		WatermarkStatus        func(childComplexity int) int
 		WatermarkingEnabled    func(childComplexity int) int
@@ -2686,19 +2756,20 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterEntityHistory struct {
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		EntityTypeID  func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		LogoFileID    func(childComplexity int) int
-		Name          func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		TrustCenterID func(childComplexity int) int
-		URL           func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		EntityTypeID          func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		LogoFileID            func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		TrustCenterID         func(childComplexity int) int
+		URL                   func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	TrustCenterEntityHistoryConnection struct {
@@ -2727,6 +2798,7 @@ type ComplexityRoot struct {
 		TrustCenterID          func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
+		UpdatedByImpersonator  func(childComplexity int) int
 	}
 
 	TrustCenterFAQHistoryConnection struct {
@@ -2759,6 +2831,7 @@ type ComplexityRoot struct {
 		Tags                     func(childComplexity int) int
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
+		UpdatedByImpersonator    func(childComplexity int) int
 	}
 
 	TrustCenterHistoryConnection struct {
@@ -2773,28 +2846,29 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterNDARequestHistory struct {
-		AccessLevel      func(childComplexity int) int
-		ApprovedAt       func(childComplexity int) int
-		ApprovedByUserID func(childComplexity int) int
-		CompanyName      func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		DocumentDataID   func(childComplexity int) int
-		Email            func(childComplexity int) int
-		FileID           func(childComplexity int) int
-		FirstName        func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		LastName         func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		Reason           func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		SignedAt         func(childComplexity int) int
-		Status           func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		TrustCenterID    func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		AccessLevel           func(childComplexity int) int
+		ApprovedAt            func(childComplexity int) int
+		ApprovedByUserID      func(childComplexity int) int
+		CompanyName           func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DocumentDataID        func(childComplexity int) int
+		Email                 func(childComplexity int) int
+		FileID                func(childComplexity int) int
+		FirstName             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		LastName              func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		Reason                func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		SignedAt              func(childComplexity int) int
+		Status                func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		TrustCenterID         func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	TrustCenterNDARequestHistoryConnection struct {
@@ -2844,6 +2918,7 @@ type ComplexityRoot struct {
 		TrustCenterID                         func(childComplexity int) int
 		UpdatedAt                             func(childComplexity int) int
 		UpdatedBy                             func(childComplexity int) int
+		UpdatedByImpersonator                 func(childComplexity int) int
 	}
 
 	TrustCenterSettingHistoryConnection struct {
@@ -2871,6 +2946,7 @@ type ComplexityRoot struct {
 		TrustCenterSubprocessorKindName func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
+		UpdatedByImpersonator           func(childComplexity int) int
 	}
 
 	TrustCenterSubprocessorHistoryConnection struct {
@@ -2885,24 +2961,25 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterWatermarkConfigHistory struct {
-		Color         func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Font          func(childComplexity int) int
-		FontSize      func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		IsEnabled     func(childComplexity int) int
-		LogoID        func(childComplexity int) int
-		Opacity       func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		Rotation      func(childComplexity int) int
-		Text          func(childComplexity int) int
-		TrustCenterID func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Color                 func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Font                  func(childComplexity int) int
+		FontSize              func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		IsEnabled             func(childComplexity int) int
+		LogoID                func(childComplexity int) int
+		Opacity               func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Rotation              func(childComplexity int) int
+		Text                  func(childComplexity int) int
+		TrustCenterID         func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	TrustCenterWatermarkConfigHistoryConnection struct {
@@ -2958,26 +3035,27 @@ type ComplexityRoot struct {
 	}
 
 	UserSettingHistory struct {
-		CreatedAt         func(childComplexity int) int
-		CreatedBy         func(childComplexity int) int
-		DelegateEndAt     func(childComplexity int) int
-		DelegateStartAt   func(childComplexity int) int
-		DelegateUserID    func(childComplexity int) int
-		EmailConfirmed    func(childComplexity int) int
-		HistoryTime       func(childComplexity int) int
-		ID                func(childComplexity int) int
-		IsTfaEnabled      func(childComplexity int) int
-		IsWebauthnAllowed func(childComplexity int) int
-		Locked            func(childComplexity int) int
-		Operation         func(childComplexity int) int
-		Ref               func(childComplexity int) int
-		SilencedAt        func(childComplexity int) int
-		Status            func(childComplexity int) int
-		SuspendedAt       func(childComplexity int) int
-		Tags              func(childComplexity int) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
-		UserID            func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DelegateEndAt         func(childComplexity int) int
+		DelegateStartAt       func(childComplexity int) int
+		DelegateUserID        func(childComplexity int) int
+		EmailConfirmed        func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		IsTfaEnabled          func(childComplexity int) int
+		IsWebauthnAllowed     func(childComplexity int) int
+		Locked                func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		SilencedAt            func(childComplexity int) int
+		Status                func(childComplexity int) int
+		SuspendedAt           func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		UserID                func(childComplexity int) int
 	}
 
 	UserSettingHistoryConnection struct {
@@ -3014,6 +3092,7 @@ type ComplexityRoot struct {
 		Tags                  func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 		VendorScoringConfigID func(childComplexity int) int
 	}
 
@@ -3029,19 +3108,20 @@ type ComplexityRoot struct {
 	}
 
 	VendorScoringConfigHistory struct {
-		CreatedAt      func(childComplexity int) int
-		CreatedBy      func(childComplexity int) int
-		HistoryTime    func(childComplexity int) int
-		ID             func(childComplexity int) int
-		Operation      func(childComplexity int) int
-		OwnerID        func(childComplexity int) int
-		Questions      func(childComplexity int) int
-		Ref            func(childComplexity int) int
-		RiskThresholds func(childComplexity int) int
-		ScoringMode    func(childComplexity int) int
-		Tags           func(childComplexity int) int
-		UpdatedAt      func(childComplexity int) int
-		UpdatedBy      func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Questions             func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		RiskThresholds        func(childComplexity int) int
+		ScoringMode           func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 	}
 
 	VendorScoringConfigHistoryConnection struct {
@@ -3113,6 +3193,7 @@ type ComplexityRoot struct {
 		Tags                    func(childComplexity int) int
 		UpdatedAt               func(childComplexity int) int
 		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
 		Validated               func(childComplexity int) int
 		Vector                  func(childComplexity int) int
 		VulnerabilityStatusID   func(childComplexity int) int
@@ -3132,32 +3213,33 @@ type ComplexityRoot struct {
 	}
 
 	WorkflowAssignmentHistory struct {
-		ActorGroupID         func(childComplexity int) int
-		ActorUserID          func(childComplexity int) int
-		ApprovalMetadata     func(childComplexity int) int
-		AssignmentKey        func(childComplexity int) int
-		CreatedAt            func(childComplexity int) int
-		CreatedBy            func(childComplexity int) int
-		DecidedAt            func(childComplexity int) int
-		DisplayID            func(childComplexity int) int
-		DueAt                func(childComplexity int) int
-		HistoryTime          func(childComplexity int) int
-		ID                   func(childComplexity int) int
-		InvalidationMetadata func(childComplexity int) int
-		Label                func(childComplexity int) int
-		Metadata             func(childComplexity int) int
-		Notes                func(childComplexity int) int
-		Operation            func(childComplexity int) int
-		OwnerID              func(childComplexity int) int
-		Ref                  func(childComplexity int) int
-		RejectionMetadata    func(childComplexity int) int
-		Required             func(childComplexity int) int
-		Role                 func(childComplexity int) int
-		Status               func(childComplexity int) int
-		Tags                 func(childComplexity int) int
-		UpdatedAt            func(childComplexity int) int
-		UpdatedBy            func(childComplexity int) int
-		WorkflowInstanceID   func(childComplexity int) int
+		ActorGroupID          func(childComplexity int) int
+		ActorUserID           func(childComplexity int) int
+		ApprovalMetadata      func(childComplexity int) int
+		AssignmentKey         func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DecidedAt             func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		DueAt                 func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		InvalidationMetadata  func(childComplexity int) int
+		Label                 func(childComplexity int) int
+		Metadata              func(childComplexity int) int
+		Notes                 func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		RejectionMetadata     func(childComplexity int) int
+		Required              func(childComplexity int) int
+		Role                  func(childComplexity int) int
+		Status                func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		WorkflowInstanceID    func(childComplexity int) int
 	}
 
 	WorkflowAssignmentHistoryConnection struct {
@@ -3172,22 +3254,23 @@ type ComplexityRoot struct {
 	}
 
 	WorkflowAssignmentTargetHistory struct {
-		CreatedAt            func(childComplexity int) int
-		CreatedBy            func(childComplexity int) int
-		DisplayID            func(childComplexity int) int
-		HistoryTime          func(childComplexity int) int
-		ID                   func(childComplexity int) int
-		Operation            func(childComplexity int) int
-		OwnerID              func(childComplexity int) int
-		Ref                  func(childComplexity int) int
-		ResolverKey          func(childComplexity int) int
-		Tags                 func(childComplexity int) int
-		TargetGroupID        func(childComplexity int) int
-		TargetType           func(childComplexity int) int
-		TargetUserID         func(childComplexity int) int
-		UpdatedAt            func(childComplexity int) int
-		UpdatedBy            func(childComplexity int) int
-		WorkflowAssignmentID func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		ResolverKey           func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		TargetGroupID         func(childComplexity int) int
+		TargetType            func(childComplexity int) int
+		TargetUserID          func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		WorkflowAssignmentID  func(childComplexity int) int
 	}
 
 	WorkflowAssignmentTargetHistoryConnection struct {
@@ -3202,32 +3285,33 @@ type ComplexityRoot struct {
 	}
 
 	WorkflowDefinitionHistory struct {
-		Active           func(childComplexity int) int
-		CooldownSeconds  func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		DefinitionJSON   func(childComplexity int) int
-		Description      func(childComplexity int) int
-		DisplayID        func(childComplexity int) int
-		Draft            func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		IsDefault        func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		PublishedAt      func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		Revision         func(childComplexity int) int
-		SchemaType       func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		TrackedFields    func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		WorkflowKind     func(childComplexity int) int
+		Active                func(childComplexity int) int
+		CooldownSeconds       func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DefinitionJSON        func(childComplexity int) int
+		Description           func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		Draft                 func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		InternalNotes         func(childComplexity int) int
+		IsDefault             func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		PublishedAt           func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Revision              func(childComplexity int) int
+		SchemaType            func(childComplexity int) int
+		SystemInternalID      func(childComplexity int) int
+		SystemOwned           func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		TrackedFields         func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		WorkflowKind          func(childComplexity int) int
 	}
 
 	WorkflowDefinitionHistoryConnection struct {
@@ -3242,20 +3326,21 @@ type ComplexityRoot struct {
 	}
 
 	WorkflowEventHistory struct {
-		CreatedAt          func(childComplexity int) int
-		CreatedBy          func(childComplexity int) int
-		DisplayID          func(childComplexity int) int
-		EventType          func(childComplexity int) int
-		HistoryTime        func(childComplexity int) int
-		ID                 func(childComplexity int) int
-		Operation          func(childComplexity int) int
-		OwnerID            func(childComplexity int) int
-		Payload            func(childComplexity int) int
-		Ref                func(childComplexity int) int
-		Tags               func(childComplexity int) int
-		UpdatedAt          func(childComplexity int) int
-		UpdatedBy          func(childComplexity int) int
-		WorkflowInstanceID func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		EventType             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Payload               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		WorkflowInstanceID    func(childComplexity int) int
 	}
 
 	WorkflowEventHistoryConnection struct {
@@ -3270,34 +3355,35 @@ type ComplexityRoot struct {
 	}
 
 	WorkflowInstanceHistory struct {
-		ActionPlanID         func(childComplexity int) int
-		CampaignID           func(childComplexity int) int
-		CampaignTargetID     func(childComplexity int) int
-		Context              func(childComplexity int) int
-		ControlID            func(childComplexity int) int
-		CreatedAt            func(childComplexity int) int
-		CreatedBy            func(childComplexity int) int
-		CurrentActionIndex   func(childComplexity int) int
-		DefinitionSnapshot   func(childComplexity int) int
-		DisplayID            func(childComplexity int) int
-		EvidenceID           func(childComplexity int) int
-		HistoryTime          func(childComplexity int) int
-		ID                   func(childComplexity int) int
-		IdentityHolderID     func(childComplexity int) int
-		InternalPolicyID     func(childComplexity int) int
-		LastEvaluatedAt      func(childComplexity int) int
-		Operation            func(childComplexity int) int
-		OwnerID              func(childComplexity int) int
-		PlatformID           func(childComplexity int) int
-		ProcedureID          func(childComplexity int) int
-		Ref                  func(childComplexity int) int
-		State                func(childComplexity int) int
-		SubcontrolID         func(childComplexity int) int
-		Tags                 func(childComplexity int) int
-		UpdatedAt            func(childComplexity int) int
-		UpdatedBy            func(childComplexity int) int
-		WorkflowDefinitionID func(childComplexity int) int
-		WorkflowProposalID   func(childComplexity int) int
+		ActionPlanID          func(childComplexity int) int
+		CampaignID            func(childComplexity int) int
+		CampaignTargetID      func(childComplexity int) int
+		Context               func(childComplexity int) int
+		ControlID             func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		CurrentActionIndex    func(childComplexity int) int
+		DefinitionSnapshot    func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		EvidenceID            func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		IdentityHolderID      func(childComplexity int) int
+		InternalPolicyID      func(childComplexity int) int
+		LastEvaluatedAt       func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		PlatformID            func(childComplexity int) int
+		ProcedureID           func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		State                 func(childComplexity int) int
+		SubcontrolID          func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		WorkflowDefinitionID  func(childComplexity int) int
+		WorkflowProposalID    func(childComplexity int) int
 	}
 
 	WorkflowInstanceHistoryConnection struct {
@@ -3337,6 +3423,7 @@ type ComplexityRoot struct {
 		TaskID                func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
 		WorkflowInstanceID    func(childComplexity int) int
 	}
 
@@ -3654,6 +3741,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ActionPlanHistory.UpdatedBy(childComplexity), true
+	case "ActionPlanHistory.updatedByImpersonator":
+		if e.ComplexityRoot.ActionPlanHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlanHistory.UpdatedByImpersonator(childComplexity), true
 	case "ActionPlanHistory.workflowEligibleMarker":
 		if e.ComplexityRoot.ActionPlanHistory.WorkflowEligibleMarker == nil {
 			break
@@ -3807,6 +3900,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentHistory.UpdatedBy(childComplexity), true
+	case "AssessmentHistory.updatedByImpersonator":
+		if e.ComplexityRoot.AssessmentHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "AssessmentHistoryConnection.edges":
 		if e.ComplexityRoot.AssessmentHistoryConnection.Edges == nil {
@@ -4026,6 +4125,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentResponseHistory.UpdatedBy(childComplexity), true
+	case "AssessmentResponseHistory.updatedByImpersonator":
+		if e.ComplexityRoot.AssessmentResponseHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentResponseHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "AssessmentResponseHistoryConnection.edges":
 		if e.ComplexityRoot.AssessmentResponseHistoryConnection.Edges == nil {
@@ -4359,6 +4464,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssetHistory.UpdatedBy(childComplexity), true
+	case "AssetHistory.updatedByImpersonator":
+		if e.ComplexityRoot.AssetHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssetHistory.UpdatedByImpersonator(childComplexity), true
 	case "AssetHistory.website":
 		if e.ComplexityRoot.AssetHistory.Website == nil {
 			break
@@ -4650,6 +4761,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CampaignHistory.UpdatedBy(childComplexity), true
+	case "CampaignHistory.updatedByImpersonator":
+		if e.ComplexityRoot.CampaignHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignHistory.UpdatedByImpersonator(childComplexity), true
 	case "CampaignHistory.workflowEligibleMarker":
 		if e.ComplexityRoot.CampaignHistory.WorkflowEligibleMarker == nil {
 			break
@@ -4803,6 +4920,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CampaignTargetHistory.UpdatedBy(childComplexity), true
+	case "CampaignTargetHistory.updatedByImpersonator":
+		if e.ComplexityRoot.CampaignTargetHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignTargetHistory.UpdatedByImpersonator(childComplexity), true
 	case "CampaignTargetHistory.userID":
 		if e.ComplexityRoot.CampaignTargetHistory.UserID == nil {
 			break
@@ -4944,6 +5067,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CheckResultHistory.UpdatedBy(childComplexity), true
+	case "CheckResultHistory.updatedByImpersonator":
+		if e.ComplexityRoot.CheckResultHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "CheckResultHistoryConnection.edges":
 		if e.ComplexityRoot.CheckResultHistoryConnection.Edges == nil {
@@ -5097,6 +5226,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ContactHistory.UpdatedBy(childComplexity), true
+	case "ContactHistory.updatedByImpersonator":
+		if e.ComplexityRoot.ContactHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ContactHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "ContactHistoryConnection.edges":
 		if e.ComplexityRoot.ContactHistoryConnection.Edges == nil {
@@ -5454,6 +5589,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlHistory.UpdatedBy(childComplexity), true
+	case "ControlHistory.updatedByImpersonator":
+		if e.ComplexityRoot.ControlHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlHistory.UpdatedByImpersonator(childComplexity), true
 	case "ControlHistory.workflowEligibleMarker":
 		if e.ComplexityRoot.ControlHistory.WorkflowEligibleMarker == nil {
 			break
@@ -5595,6 +5736,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlImplementationHistory.UpdatedBy(childComplexity), true
+	case "ControlImplementationHistory.updatedByImpersonator":
+		if e.ComplexityRoot.ControlImplementationHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementationHistory.UpdatedByImpersonator(childComplexity), true
 	case "ControlImplementationHistory.verificationDate":
 		if e.ComplexityRoot.ControlImplementationHistory.VerificationDate == nil {
 			break
@@ -5778,6 +5925,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlObjectiveHistory.UpdatedBy(childComplexity), true
+	case "ControlObjectiveHistory.updatedByImpersonator":
+		if e.ComplexityRoot.ControlObjectiveHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlObjectiveHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "ControlObjectiveHistoryConnection.edges":
 		if e.ComplexityRoot.ControlObjectiveHistoryConnection.Edges == nil {
@@ -5919,6 +6072,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CustomDomainHistory.UpdatedBy(childComplexity), true
+	case "CustomDomainHistory.updatedByImpersonator":
+		if e.ComplexityRoot.CustomDomainHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CustomDomainHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "CustomDomainHistoryConnection.edges":
 		if e.ComplexityRoot.CustomDomainHistoryConnection.Edges == nil {
@@ -6066,6 +6225,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DNSVerificationHistory.UpdatedBy(childComplexity), true
+	case "DNSVerificationHistory.updatedByImpersonator":
+		if e.ComplexityRoot.DNSVerificationHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DNSVerificationHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "DNSVerificationHistoryConnection.edges":
 		if e.ComplexityRoot.DNSVerificationHistoryConnection.Edges == nil {
@@ -6405,6 +6570,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryAccountHistory.UpdatedBy(childComplexity), true
+	case "DirectoryAccountHistory.updatedByImpersonator":
+		if e.ComplexityRoot.DirectoryAccountHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryAccountHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "DirectoryAccountHistoryConnection.edges":
 		if e.ComplexityRoot.DirectoryAccountHistoryConnection.Edges == nil {
@@ -6666,6 +6837,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryGroupHistory.UpdatedBy(childComplexity), true
+	case "DirectoryGroupHistory.updatedByImpersonator":
+		if e.ComplexityRoot.DirectoryGroupHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryGroupHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "DirectoryGroupHistoryConnection.edges":
 		if e.ComplexityRoot.DirectoryGroupHistoryConnection.Edges == nil {
@@ -6879,6 +7056,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryMembershipHistory.UpdatedBy(childComplexity), true
+	case "DirectoryMembershipHistory.updatedByImpersonator":
+		if e.ComplexityRoot.DirectoryMembershipHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryMembershipHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "DirectoryMembershipHistoryConnection.edges":
 		if e.ComplexityRoot.DirectoryMembershipHistoryConnection.Edges == nil {
@@ -6978,6 +7161,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DiscussionHistory.UpdatedBy(childComplexity), true
+	case "DiscussionHistory.updatedByImpersonator":
+		if e.ComplexityRoot.DiscussionHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DiscussionHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "DiscussionHistoryConnection.edges":
 		if e.ComplexityRoot.DiscussionHistoryConnection.Edges == nil {
@@ -7107,6 +7296,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DocumentDataHistory.UpdatedBy(childComplexity), true
+	case "DocumentDataHistory.updatedByImpersonator":
+		if e.ComplexityRoot.DocumentDataHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DocumentDataHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "DocumentDataHistoryConnection.edges":
 		if e.ComplexityRoot.DocumentDataHistoryConnection.Edges == nil {
@@ -7284,6 +7479,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplateHistory.UpdatedBy(childComplexity), true
+	case "EmailTemplateHistory.updatedByImpersonator":
+		if e.ComplexityRoot.EmailTemplateHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateHistory.UpdatedByImpersonator(childComplexity), true
 	case "EmailTemplateHistory.version":
 		if e.ComplexityRoot.EmailTemplateHistory.Version == nil {
 			break
@@ -7725,6 +7926,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityHistory.UpdatedBy(childComplexity), true
+	case "EntityHistory.updatedByImpersonator":
+		if e.ComplexityRoot.EntityHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.UpdatedByImpersonator(childComplexity), true
 	case "EntityHistory.vendorMetadata":
 		if e.ComplexityRoot.EntityHistory.VendorMetadata == nil {
 			break
@@ -7848,6 +8055,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityTypeHistory.UpdatedBy(childComplexity), true
+	case "EntityTypeHistory.updatedByImpersonator":
+		if e.ComplexityRoot.EntityTypeHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityTypeHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "EntityTypeHistoryConnection.edges":
 		if e.ComplexityRoot.EntityTypeHistoryConnection.Edges == nil {
@@ -8037,6 +8250,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EvidenceHistory.UpdatedBy(childComplexity), true
+	case "EvidenceHistory.updatedByImpersonator":
+		if e.ComplexityRoot.EvidenceHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EvidenceHistory.UpdatedByImpersonator(childComplexity), true
 	case "EvidenceHistory.workflowEligibleMarker":
 		if e.ComplexityRoot.EvidenceHistory.WorkflowEligibleMarker == nil {
 			break
@@ -8292,6 +8511,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FileHistory.UpdatedBy(childComplexity), true
+	case "FileHistory.updatedByImpersonator":
+		if e.ComplexityRoot.FileHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FileHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "FileHistoryConnection.edges":
 		if e.ComplexityRoot.FileHistoryConnection.Edges == nil {
@@ -8427,6 +8652,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FindingControlHistory.UpdatedBy(childComplexity), true
+	case "FindingControlHistory.updatedByImpersonator":
+		if e.ComplexityRoot.FindingControlHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingControlHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "FindingControlHistoryConnection.edges":
 		if e.ComplexityRoot.FindingControlHistoryConnection.Edges == nil {
@@ -8790,6 +9021,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FindingHistory.UpdatedBy(childComplexity), true
+	case "FindingHistory.updatedByImpersonator":
+		if e.ComplexityRoot.FindingHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingHistory.UpdatedByImpersonator(childComplexity), true
 	case "FindingHistory.validated":
 		if e.ComplexityRoot.FindingHistory.Validated == nil {
 			break
@@ -8985,6 +9222,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.GroupHistory.UpdatedBy(childComplexity), true
+	case "GroupHistory.updatedByImpersonator":
+		if e.ComplexityRoot.GroupHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "GroupHistoryConnection.edges":
 		if e.ComplexityRoot.GroupHistoryConnection.Edges == nil {
@@ -9078,6 +9321,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.GroupMembershipHistory.UpdatedBy(childComplexity), true
+	case "GroupMembershipHistory.updatedByImpersonator":
+		if e.ComplexityRoot.GroupMembershipHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupMembershipHistory.UpdatedByImpersonator(childComplexity), true
 	case "GroupMembershipHistory.userID":
 		if e.ComplexityRoot.GroupMembershipHistory.UserID == nil {
 			break
@@ -9189,6 +9438,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.GroupSettingHistory.UpdatedBy(childComplexity), true
+	case "GroupSettingHistory.updatedByImpersonator":
+		if e.ComplexityRoot.GroupSettingHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupSettingHistory.UpdatedByImpersonator(childComplexity), true
 	case "GroupSettingHistory.visibility":
 		if e.ComplexityRoot.GroupSettingHistory.Visibility == nil {
 			break
@@ -9348,6 +9603,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.HushHistory.UpdatedBy(childComplexity), true
+	case "HushHistory.updatedByImpersonator":
+		if e.ComplexityRoot.HushHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.HushHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "HushHistoryConnection.edges":
 		if e.ComplexityRoot.HushHistoryConnection.Edges == nil {
@@ -9609,6 +9870,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolderHistory.UpdatedBy(childComplexity), true
+	case "IdentityHolderHistory.updatedByImpersonator":
+		if e.ComplexityRoot.IdentityHolderHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolderHistory.UpdatedByImpersonator(childComplexity), true
 	case "IdentityHolderHistory.userID":
 		if e.ComplexityRoot.IdentityHolderHistory.UserID == nil {
 			break
@@ -9840,6 +10107,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IntegrationHistory.UpdatedBy(childComplexity), true
+	case "IntegrationHistory.updatedByImpersonator":
+		if e.ComplexityRoot.IntegrationHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "IntegrationHistoryConnection.edges":
 		if e.ComplexityRoot.IntegrationHistoryConnection.Edges == nil {
@@ -10131,6 +10404,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.InternalPolicyHistory.UpdatedBy(childComplexity), true
+	case "InternalPolicyHistory.updatedByImpersonator":
+		if e.ComplexityRoot.InternalPolicyHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.InternalPolicyHistory.UpdatedByImpersonator(childComplexity), true
 	case "InternalPolicyHistory.workflowEligibleMarker":
 		if e.ComplexityRoot.InternalPolicyHistory.WorkflowEligibleMarker == nil {
 			break
@@ -10290,6 +10569,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.JobTemplateHistory.UpdatedBy(childComplexity), true
+	case "JobTemplateHistory.updatedByImpersonator":
+		if e.ComplexityRoot.JobTemplateHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.JobTemplateHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "JobTemplateHistoryConnection.edges":
 		if e.ComplexityRoot.JobTemplateHistoryConnection.Edges == nil {
@@ -10383,6 +10668,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.MappableDomainHistory.UpdatedBy(childComplexity), true
+	case "MappableDomainHistory.updatedByImpersonator":
+		if e.ComplexityRoot.MappableDomainHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappableDomainHistory.UpdatedByImpersonator(childComplexity), true
 	case "MappableDomainHistory.zoneID":
 		if e.ComplexityRoot.MappableDomainHistory.ZoneID == nil {
 			break
@@ -10524,6 +10815,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.MappedControlHistory.UpdatedBy(childComplexity), true
+	case "MappedControlHistory.updatedByImpersonator":
+		if e.ComplexityRoot.MappedControlHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappedControlHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "MappedControlHistoryConnection.edges":
 		if e.ComplexityRoot.MappedControlHistoryConnection.Edges == nil {
@@ -10659,6 +10956,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.NarrativeHistory.UpdatedBy(childComplexity), true
+	case "NarrativeHistory.updatedByImpersonator":
+		if e.ComplexityRoot.NarrativeHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NarrativeHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "NarrativeHistoryConnection.edges":
 		if e.ComplexityRoot.NarrativeHistoryConnection.Edges == nil {
@@ -10806,6 +11109,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.NoteHistory.UpdatedBy(childComplexity), true
+	case "NoteHistory.updatedByImpersonator":
+		if e.ComplexityRoot.NoteHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NoteHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "NoteHistoryConnection.edges":
 		if e.ComplexityRoot.NoteHistoryConnection.Edges == nil {
@@ -11007,6 +11316,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.NotificationPreferenceHistory.UpdatedBy(childComplexity), true
+	case "NotificationPreferenceHistory.updatedByImpersonator":
+		if e.ComplexityRoot.NotificationPreferenceHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationPreferenceHistory.UpdatedByImpersonator(childComplexity), true
 	case "NotificationPreferenceHistory.userID":
 		if e.ComplexityRoot.NotificationPreferenceHistory.UserID == nil {
 			break
@@ -11250,6 +11565,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.NotificationTemplateHistory.UpdatedBy(childComplexity), true
+	case "NotificationTemplateHistory.updatedByImpersonator":
+		if e.ComplexityRoot.NotificationTemplateHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationTemplateHistory.UpdatedByImpersonator(childComplexity), true
 	case "NotificationTemplateHistory.version":
 		if e.ComplexityRoot.NotificationTemplateHistory.Version == nil {
 			break
@@ -11343,6 +11664,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrgMembershipHistory.Role(childComplexity), true
+	case "OrgMembershipHistory.ssoExempt":
+		if e.ComplexityRoot.OrgMembershipHistory.SSOExempt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrgMembershipHistory.SSOExempt(childComplexity), true
+	case "OrgMembershipHistory.ssoExemptGrantedAt":
+		if e.ComplexityRoot.OrgMembershipHistory.SSOExemptGrantedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrgMembershipHistory.SSOExemptGrantedAt(childComplexity), true
+	case "OrgMembershipHistory.ssoExemptGrantedBy":
+		if e.ComplexityRoot.OrgMembershipHistory.SSOExemptGrantedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrgMembershipHistory.SSOExemptGrantedBy(childComplexity), true
+	case "OrgMembershipHistory.ssoExemptReason":
+		if e.ComplexityRoot.OrgMembershipHistory.SSOExemptReason == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrgMembershipHistory.SSOExemptReason(childComplexity), true
 	case "OrgMembershipHistory.updatedAt":
 		if e.ComplexityRoot.OrgMembershipHistory.UpdatedAt == nil {
 			break
@@ -11355,6 +11700,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrgMembershipHistory.UpdatedBy(childComplexity), true
+	case "OrgMembershipHistory.updatedByImpersonator":
+		if e.ComplexityRoot.OrgMembershipHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrgMembershipHistory.UpdatedByImpersonator(childComplexity), true
 	case "OrgMembershipHistory.userID":
 		if e.ComplexityRoot.OrgMembershipHistory.UserID == nil {
 			break
@@ -11490,6 +11841,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrgSubscriptionHistory.UpdatedBy(childComplexity), true
+	case "OrgSubscriptionHistory.updatedByImpersonator":
+		if e.ComplexityRoot.OrgSubscriptionHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrgSubscriptionHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "OrgSubscriptionHistoryConnection.edges":
 		if e.ComplexityRoot.OrgSubscriptionHistoryConnection.Edges == nil {
@@ -11601,6 +11958,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationHistory.Ref(childComplexity), true
+	case "OrganizationHistory.slugName":
+		if e.ComplexityRoot.OrganizationHistory.SlugName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationHistory.SlugName(childComplexity), true
 	case "OrganizationHistory.stripeCustomerID":
 		if e.ComplexityRoot.OrganizationHistory.StripeCustomerID == nil {
 			break
@@ -11625,6 +11988,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationHistory.UpdatedBy(childComplexity), true
+	case "OrganizationHistory.updatedByImpersonator":
+		if e.ComplexityRoot.OrganizationHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "OrganizationHistoryConnection.edges":
 		if e.ComplexityRoot.OrganizationHistoryConnection.Edges == nil {
@@ -11664,6 +12033,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationSettingHistory.AllowMatchingDomainsAutojoin(childComplexity), true
+	case "OrganizationSettingHistory.allowSupportAccess":
+		if e.ComplexityRoot.OrganizationSettingHistory.AllowSupportAccess == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationSettingHistory.AllowSupportAccess(childComplexity), true
 	case "OrganizationSettingHistory.allowedEmailDomains":
 		if e.ComplexityRoot.OrganizationSettingHistory.AllowedEmailDomains == nil {
 			break
@@ -11772,6 +12147,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderEntityID(childComplexity), true
+	case "OrganizationSettingHistory.identityProviderJitProvisioning":
+		if e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderJitProvisioning == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderJitProvisioning(childComplexity), true
 	case "OrganizationSettingHistory.identityProviderLoginEnforced":
 		if e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderLoginEnforced == nil {
 			break
@@ -11784,6 +12165,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderMetadataEndpoint(childComplexity), true
+	case "OrganizationSettingHistory.jitAllowedEmailDomains":
+		if e.ComplexityRoot.OrganizationSettingHistory.JitAllowedEmailDomains == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationSettingHistory.JitAllowedEmailDomains(childComplexity), true
 	case "OrganizationSettingHistory.multifactorAuthEnforced":
 		if e.ComplexityRoot.OrganizationSettingHistory.MultifactorAuthEnforced == nil {
 			break
@@ -11826,6 +12213,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationSettingHistory.Ref(childComplexity), true
+	case "OrganizationSettingHistory.ssoExemptDomains":
+		if e.ComplexityRoot.OrganizationSettingHistory.SSOExemptDomains == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationSettingHistory.SSOExemptDomains(childComplexity), true
 	case "OrganizationSettingHistory.samlCert":
 		if e.ComplexityRoot.OrganizationSettingHistory.SamlCert == nil {
 			break
@@ -11868,6 +12261,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationSettingHistory.UpdatedBy(childComplexity), true
+	case "OrganizationSettingHistory.updatedByImpersonator":
+		if e.ComplexityRoot.OrganizationSettingHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationSettingHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "OrganizationSettingHistoryConnection.edges":
 		if e.ComplexityRoot.OrganizationSettingHistoryConnection.Edges == nil {
@@ -12274,6 +12673,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.PlatformHistory.UpdatedBy(childComplexity), true
+	case "PlatformHistory.updatedByImpersonator":
+		if e.ComplexityRoot.PlatformHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PlatformHistory.UpdatedByImpersonator(childComplexity), true
 	case "PlatformHistory.workflowEligibleMarker":
 		if e.ComplexityRoot.PlatformHistory.WorkflowEligibleMarker == nil {
 			break
@@ -12565,6 +12970,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ProcedureHistory.UpdatedBy(childComplexity), true
+	case "ProcedureHistory.updatedByImpersonator":
+		if e.ComplexityRoot.ProcedureHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProcedureHistory.UpdatedByImpersonator(childComplexity), true
 	case "ProcedureHistory.workflowEligibleMarker":
 		if e.ComplexityRoot.ProcedureHistory.WorkflowEligibleMarker == nil {
 			break
@@ -12766,6 +13177,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ProgramHistory.UpdatedBy(childComplexity), true
+	case "ProgramHistory.updatedByImpersonator":
+		if e.ComplexityRoot.ProgramHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProgramHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "ProgramHistoryConnection.edges":
 		if e.ComplexityRoot.ProgramHistoryConnection.Edges == nil {
@@ -12859,6 +13276,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ProgramMembershipHistory.UpdatedBy(childComplexity), true
+	case "ProgramMembershipHistory.updatedByImpersonator":
+		if e.ComplexityRoot.ProgramMembershipHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProgramMembershipHistory.UpdatedByImpersonator(childComplexity), true
 	case "ProgramMembershipHistory.userID":
 		if e.ComplexityRoot.ProgramMembershipHistory.UserID == nil {
 			break
@@ -14019,6 +14442,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RemediationHistory.UpdatedBy(childComplexity), true
+	case "RemediationHistory.updatedByImpersonator":
+		if e.ComplexityRoot.RemediationHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RemediationHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "RemediationHistoryConnection.edges":
 		if e.ComplexityRoot.RemediationHistoryConnection.Edges == nil {
@@ -14268,6 +14697,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ReviewHistory.UpdatedBy(childComplexity), true
+	case "ReviewHistory.updatedByImpersonator":
+		if e.ComplexityRoot.ReviewHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "ReviewHistoryConnection.edges":
 		if e.ComplexityRoot.ReviewHistoryConnection.Edges == nil {
@@ -14565,6 +15000,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RiskHistory.UpdatedBy(childComplexity), true
+	case "RiskHistory.updatedByImpersonator":
+		if e.ComplexityRoot.RiskHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "RiskHistoryConnection.edges":
 		if e.ComplexityRoot.RiskHistoryConnection.Edges == nil {
@@ -14676,6 +15117,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SLADefinitionHistory.UpdatedBy(childComplexity), true
+	case "SLADefinitionHistory.updatedByImpersonator":
+		if e.ComplexityRoot.SLADefinitionHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "SLADefinitionHistoryConnection.edges":
 		if e.ComplexityRoot.SLADefinitionHistoryConnection.Edges == nil {
@@ -14895,6 +15342,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ScanHistory.UpdatedBy(childComplexity), true
+	case "ScanHistory.updatedByImpersonator":
+		if e.ComplexityRoot.ScanHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ScanHistory.UpdatedByImpersonator(childComplexity), true
 	case "ScanHistory.vulnerabilityIds":
 		if e.ComplexityRoot.ScanHistory.VulnerabilityIds == nil {
 			break
@@ -15024,6 +15477,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ScheduledJobHistory.UpdatedBy(childComplexity), true
+	case "ScheduledJobHistory.updatedByImpersonator":
+		if e.ComplexityRoot.ScheduledJobHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ScheduledJobHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "ScheduledJobHistoryConnection.edges":
 		if e.ComplexityRoot.ScheduledJobHistoryConnection.Edges == nil {
@@ -15219,6 +15678,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.StandardHistory.UpdatedBy(childComplexity), true
+	case "StandardHistory.updatedByImpersonator":
+		if e.ComplexityRoot.StandardHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.StandardHistory.UpdatedByImpersonator(childComplexity), true
 	case "StandardHistory.version":
 		if e.ComplexityRoot.StandardHistory.Version == nil {
 			break
@@ -15546,6 +16011,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SubcontrolHistory.UpdatedBy(childComplexity), true
+	case "SubcontrolHistory.updatedByImpersonator":
+		if e.ComplexityRoot.SubcontrolHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolHistory.UpdatedByImpersonator(childComplexity), true
 	case "SubcontrolHistory.workflowEligibleMarker":
 		if e.ComplexityRoot.SubcontrolHistory.WorkflowEligibleMarker == nil {
 			break
@@ -15687,6 +16158,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SubprocessorHistory.UpdatedBy(childComplexity), true
+	case "SubprocessorHistory.updatedByImpersonator":
+		if e.ComplexityRoot.SubprocessorHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubprocessorHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "SubprocessorHistoryConnection.edges":
 		if e.ComplexityRoot.SubprocessorHistoryConnection.Edges == nil {
@@ -15840,6 +16317,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SystemDetailHistory.UpdatedBy(childComplexity), true
+	case "SystemDetailHistory.updatedByImpersonator":
+		if e.ComplexityRoot.SystemDetailHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.UpdatedByImpersonator(childComplexity), true
 	case "SystemDetailHistory.version":
 		if e.ComplexityRoot.SystemDetailHistory.Version == nil {
 			break
@@ -16065,6 +16548,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TaskHistory.UpdatedBy(childComplexity), true
+	case "TaskHistory.updatedByImpersonator":
+		if e.ComplexityRoot.TaskHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "TaskHistoryConnection.edges":
 		if e.ComplexityRoot.TaskHistoryConnection.Edges == nil {
@@ -16248,6 +16737,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TemplateHistory.UpdatedBy(childComplexity), true
+	case "TemplateHistory.updatedByImpersonator":
+		if e.ComplexityRoot.TemplateHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "TemplateHistoryConnection.edges":
 		if e.ComplexityRoot.TemplateHistoryConnection.Edges == nil {
@@ -16347,6 +16842,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterComplianceHistory.UpdatedBy(childComplexity), true
+	case "TrustCenterComplianceHistory.updatedByImpersonator":
+		if e.ComplexityRoot.TrustCenterComplianceHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterComplianceHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "TrustCenterComplianceHistoryConnection.edges":
 		if e.ComplexityRoot.TrustCenterComplianceHistoryConnection.Edges == nil {
@@ -16476,6 +16977,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterDocHistory.UpdatedBy(childComplexity), true
+	case "TrustCenterDocHistory.updatedByImpersonator":
+		if e.ComplexityRoot.TrustCenterDocHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterDocHistory.UpdatedByImpersonator(childComplexity), true
 	case "TrustCenterDocHistory.visibility":
 		if e.ComplexityRoot.TrustCenterDocHistory.Visibility == nil {
 			break
@@ -16605,6 +17112,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterEntityHistory.UpdatedBy(childComplexity), true
+	case "TrustCenterEntityHistory.updatedByImpersonator":
+		if e.ComplexityRoot.TrustCenterEntityHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterEntityHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "TrustCenterEntityHistoryConnection.edges":
 		if e.ComplexityRoot.TrustCenterEntityHistoryConnection.Edges == nil {
@@ -16722,6 +17235,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterFAQHistory.UpdatedBy(childComplexity), true
+	case "TrustCenterFAQHistory.updatedByImpersonator":
+		if e.ComplexityRoot.TrustCenterFAQHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterFAQHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "TrustCenterFAQHistoryConnection.edges":
 		if e.ComplexityRoot.TrustCenterFAQHistoryConnection.Edges == nil {
@@ -16863,6 +17382,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterHistory.UpdatedBy(childComplexity), true
+	case "TrustCenterHistory.updatedByImpersonator":
+		if e.ComplexityRoot.TrustCenterHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "TrustCenterHistoryConnection.edges":
 		if e.ComplexityRoot.TrustCenterHistoryConnection.Edges == nil {
@@ -17028,6 +17553,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterNDARequestHistory.UpdatedBy(childComplexity), true
+	case "TrustCenterNDARequestHistory.updatedByImpersonator":
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "TrustCenterNDARequestHistoryConnection.edges":
 		if e.ComplexityRoot.TrustCenterNDARequestHistoryConnection.Edges == nil {
@@ -17271,6 +17802,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.UpdatedBy(childComplexity), true
+	case "TrustCenterSettingHistory.updatedByImpersonator":
+		if e.ComplexityRoot.TrustCenterSettingHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSettingHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "TrustCenterSettingHistoryConnection.edges":
 		if e.ComplexityRoot.TrustCenterSettingHistoryConnection.Edges == nil {
@@ -17382,6 +17919,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSubprocessorHistory.UpdatedBy(childComplexity), true
+	case "TrustCenterSubprocessorHistory.updatedByImpersonator":
+		if e.ComplexityRoot.TrustCenterSubprocessorHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSubprocessorHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "TrustCenterSubprocessorHistoryConnection.edges":
 		if e.ComplexityRoot.TrustCenterSubprocessorHistoryConnection.Edges == nil {
@@ -17523,6 +18066,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.UpdatedBy(childComplexity), true
+	case "TrustCenterWatermarkConfigHistory.updatedByImpersonator":
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistoryConnection.edges":
 		if e.ComplexityRoot.TrustCenterWatermarkConfigHistoryConnection.Edges == nil {
@@ -17865,6 +18414,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.UserSettingHistory.UpdatedBy(childComplexity), true
+	case "UserSettingHistory.updatedByImpersonator":
+		if e.ComplexityRoot.UserSettingHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.UserSettingHistory.UpdatedByImpersonator(childComplexity), true
 	case "UserSettingHistory.userID":
 		if e.ComplexityRoot.UserSettingHistory.UserID == nil {
 			break
@@ -18036,6 +18591,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VendorRiskScoreHistory.UpdatedBy(childComplexity), true
+	case "VendorRiskScoreHistory.updatedByImpersonator":
+		if e.ComplexityRoot.VendorRiskScoreHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.UpdatedByImpersonator(childComplexity), true
 	case "VendorRiskScoreHistory.vendorScoringConfigID":
 		if e.ComplexityRoot.VendorRiskScoreHistory.VendorScoringConfigID == nil {
 			break
@@ -18153,6 +18714,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VendorScoringConfigHistory.UpdatedBy(childComplexity), true
+	case "VendorScoringConfigHistory.updatedByImpersonator":
+		if e.ComplexityRoot.VendorScoringConfigHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistory.UpdatedByImpersonator(childComplexity), true
 
 	case "VendorScoringConfigHistoryConnection.edges":
 		if e.ComplexityRoot.VendorScoringConfigHistoryConnection.Edges == nil {
@@ -18528,6 +19095,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VulnerabilityHistory.UpdatedBy(childComplexity), true
+	case "VulnerabilityHistory.updatedByImpersonator":
+		if e.ComplexityRoot.VulnerabilityHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.UpdatedByImpersonator(childComplexity), true
 	case "VulnerabilityHistory.validated":
 		if e.ComplexityRoot.VulnerabilityHistory.Validated == nil {
 			break
@@ -18741,6 +19314,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkflowAssignmentHistory.UpdatedBy(childComplexity), true
+	case "WorkflowAssignmentHistory.updatedByImpersonator":
+		if e.ComplexityRoot.WorkflowAssignmentHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowAssignmentHistory.UpdatedByImpersonator(childComplexity), true
 	case "WorkflowAssignmentHistory.workflowInstanceID":
 		if e.ComplexityRoot.WorkflowAssignmentHistory.WorkflowInstanceID == nil {
 			break
@@ -18870,6 +19449,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkflowAssignmentTargetHistory.UpdatedBy(childComplexity), true
+	case "WorkflowAssignmentTargetHistory.updatedByImpersonator":
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistory.UpdatedByImpersonator(childComplexity), true
 	case "WorkflowAssignmentTargetHistory.workflowAssignmentID":
 		if e.ComplexityRoot.WorkflowAssignmentTargetHistory.WorkflowAssignmentID == nil {
 			break
@@ -19059,6 +19644,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkflowDefinitionHistory.UpdatedBy(childComplexity), true
+	case "WorkflowDefinitionHistory.updatedByImpersonator":
+		if e.ComplexityRoot.WorkflowDefinitionHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowDefinitionHistory.UpdatedByImpersonator(childComplexity), true
 	case "WorkflowDefinitionHistory.workflowKind":
 		if e.ComplexityRoot.WorkflowDefinitionHistory.WorkflowKind == nil {
 			break
@@ -19176,6 +19767,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkflowEventHistory.UpdatedBy(childComplexity), true
+	case "WorkflowEventHistory.updatedByImpersonator":
+		if e.ComplexityRoot.WorkflowEventHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowEventHistory.UpdatedByImpersonator(childComplexity), true
 	case "WorkflowEventHistory.workflowInstanceID":
 		if e.ComplexityRoot.WorkflowEventHistory.WorkflowInstanceID == nil {
 			break
@@ -19371,6 +19968,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkflowInstanceHistory.UpdatedBy(childComplexity), true
+	case "WorkflowInstanceHistory.updatedByImpersonator":
+		if e.ComplexityRoot.WorkflowInstanceHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowInstanceHistory.UpdatedByImpersonator(childComplexity), true
 	case "WorkflowInstanceHistory.workflowDefinitionID":
 		if e.ComplexityRoot.WorkflowInstanceHistory.WorkflowDefinitionID == nil {
 			break
@@ -19566,6 +20169,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkflowObjectRefHistory.UpdatedBy(childComplexity), true
+	case "WorkflowObjectRefHistory.updatedByImpersonator":
+		if e.ComplexityRoot.WorkflowObjectRefHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowObjectRefHistory.UpdatedByImpersonator(childComplexity), true
 	case "WorkflowObjectRefHistory.workflowInstanceID":
 		if e.ComplexityRoot.WorkflowObjectRefHistory.WorkflowInstanceID == nil {
 			break
@@ -19999,6 +20608,10 @@ type ActionPlanHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -20388,6 +21001,24 @@ input ActionPlanHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   revision field predicates
   """
@@ -20825,6 +21456,10 @@ type AssessmentHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -21055,6 +21690,24 @@ input AssessmentHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -21179,6 +21832,10 @@ type AssessmentResponseHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   the ID of the organization owner of the object
   """
@@ -21476,6 +22133,24 @@ input AssessmentResponseHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -21763,6 +22438,10 @@ type AssetHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -22143,6 +22822,24 @@ input AssetHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   owner_id field predicates
   """
@@ -22813,6 +23510,10 @@ type CampaignHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -23183,6 +23884,24 @@ input CampaignHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -23643,6 +24362,10 @@ type CampaignTargetHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -23889,6 +24612,24 @@ input CampaignTargetHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -24078,6 +24819,10 @@ type CheckResultHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -24301,6 +25046,24 @@ input CheckResultHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   status field predicates
   """
   status: CheckResultHistoryCheckStatus
@@ -24418,6 +25181,10 @@ type ContactHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -24664,6 +25431,24 @@ input ContactHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -24855,6 +25640,10 @@ type ControlHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -25084,6 +25873,7 @@ enum ControlHistoryControlSource @goModel(model: "github.com/theopenlane/core/co
 ControlHistoryControlStatus is enum for the field status
 """
 enum ControlHistoryControlStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlStatus") {
+  DRAFT
   PREPARING
   NEEDS_APPROVAL
   CHANGES_REQUESTED
@@ -25267,6 +26057,24 @@ input ControlHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -25835,6 +26643,10 @@ type ControlImplementationHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -26073,6 +26885,24 @@ input ControlImplementationHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -26203,6 +27033,10 @@ type ControlObjectiveHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -26467,6 +27301,24 @@ input ControlObjectiveHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -26682,6 +27534,10 @@ type CustomDomainHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -26911,6 +27767,24 @@ input CustomDomainHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -27056,6 +27930,10 @@ type DNSVerificationHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -27327,6 +28205,24 @@ input DNSVerificationHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -27488,6 +28384,10 @@ type DirectoryAccountHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -27871,6 +28771,24 @@ input DirectoryAccountHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -28479,6 +29397,10 @@ type DirectoryGroupHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -28799,6 +29721,24 @@ input DirectoryGroupHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -29185,6 +30125,10 @@ type DirectoryMembershipHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -29460,6 +30404,24 @@ input DirectoryMembershipHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -29803,6 +30765,10 @@ type DiscussionHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -29994,6 +30960,24 @@ input DiscussionHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -30044,6 +31028,10 @@ type DocumentDataHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -30256,6 +31244,24 @@ input DocumentDataHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -30373,6 +31379,10 @@ type EmailTemplateHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
   """
@@ -30653,6 +31663,24 @@ input EmailTemplateHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   revision field predicates
   """
@@ -30986,6 +32014,10 @@ type EntityHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -31462,6 +32494,24 @@ input EntityHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   owner_id field predicates
   """
@@ -32250,6 +33300,10 @@ type EntityTypeHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -32454,6 +33508,24 @@ input EntityTypeHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -32540,6 +33612,10 @@ type EvidenceHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -32827,6 +33903,24 @@ input EvidenceHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -33104,6 +34198,10 @@ type FileHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -33390,6 +34488,24 @@ input FileHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   system_owned field predicates
   """
@@ -33837,6 +34953,10 @@ type FindingControlHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   the id of the finding associated with the control
   """
   findingID: String!
@@ -34052,6 +35172,24 @@ input FindingControlHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   finding_id field predicates
   """
   findingID: String
@@ -34196,6 +35334,10 @@ type FindingHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -34588,6 +35730,24 @@ input FindingHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -35220,6 +36380,10 @@ type GroupHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -35469,6 +36633,24 @@ input GroupHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -35666,6 +36848,10 @@ type GroupMembershipHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   role: GroupMembershipHistoryRole!
   groupID: String!
   userID: String!
@@ -35857,6 +37043,24 @@ input GroupMembershipHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   role field predicates
   """
   role: GroupMembershipHistoryRole
@@ -35905,6 +37109,10 @@ type GroupSettingHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   whether the group is visible to it's members / owners only or if it's searchable by anyone within the organization
   """
@@ -36121,6 +37329,24 @@ input GroupSettingHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   visibility field predicates
   """
   visibility: GroupSettingHistoryVisibility
@@ -36176,6 +37402,10 @@ type HushHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   the organization id that owns the object
   """
@@ -36405,6 +37635,24 @@ input HushHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -36553,6 +37801,10 @@ type IdentityHolderHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -36898,6 +38150,24 @@ input IdentityHolderHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -37358,6 +38628,10 @@ type IntegrationHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -37646,6 +38920,24 @@ input IntegrationHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   owner_id field predicates
   """
@@ -37948,6 +39240,10 @@ type InternalPolicyHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -38305,6 +39601,24 @@ input InternalPolicyHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -38733,6 +40047,10 @@ type JobTemplateHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -38969,6 +40287,24 @@ input JobTemplateHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -39100,6 +40436,10 @@ type MappableDomainHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -39293,6 +40633,24 @@ input MappableDomainHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -39334,6 +40692,10 @@ type MappedControlHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -39570,6 +40932,24 @@ input MappedControlHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   system_owned field predicates
   """
   systemOwned: Boolean
@@ -39687,6 +41067,10 @@ type NarrativeHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -39904,6 +41288,24 @@ input NarrativeHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -40052,6 +41454,10 @@ type NoteHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -40276,6 +41682,24 @@ input NoteHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -40432,6 +41856,10 @@ type NotificationPreferenceHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   the organization id that owns the object
   """
@@ -40741,6 +42169,24 @@ input NotificationPreferenceHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -40989,6 +42435,10 @@ type NotificationTemplateHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
   """
@@ -41312,6 +42762,24 @@ input NotificationTemplateHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   revision field predicates
   """
@@ -41645,9 +43113,29 @@ type OrgMembershipHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   role: OrgMembershipHistoryRole!
   organizationID: String!
   userID: String!
+  """
+  member is exempt from the SSO login redirect for this organization; TFA enforcement still applies. Who may set this is gated by the org membership mutation policy
+  """
+  ssoExempt: Boolean
+  """
+  reason the member was granted an SSO exemption
+  """
+  ssoExemptReason: String
+  """
+  id of the user that granted the SSO exemption; stamped server-side, not settable via the API
+  """
+  ssoExemptGrantedBy: String
+  """
+  when the SSO exemption was granted; stamped server-side, not settable via the API
+  """
+  ssoExemptGrantedAt: DateTime
 }
 """
 A connection to a list of items.
@@ -41839,6 +43327,24 @@ input OrgMembershipHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   role field predicates
   """
   role: OrgMembershipHistoryRole
@@ -41877,6 +43383,62 @@ input OrgMembershipHistoryWhereInput {
   userIDHasSuffix: String
   userIDEqualFold: String
   userIDContainsFold: String
+  """
+  sso_exempt field predicates
+  """
+  ssoExempt: Boolean
+  ssoExemptNEQ: Boolean
+  ssoExemptIsNil: Boolean
+  ssoExemptNotNil: Boolean
+  """
+  sso_exempt_reason field predicates
+  """
+  ssoExemptReason: String
+  ssoExemptReasonNEQ: String
+  ssoExemptReasonIn: [String!]
+  ssoExemptReasonNotIn: [String!]
+  ssoExemptReasonGT: String
+  ssoExemptReasonGTE: String
+  ssoExemptReasonLT: String
+  ssoExemptReasonLTE: String
+  ssoExemptReasonContains: String
+  ssoExemptReasonHasPrefix: String
+  ssoExemptReasonHasSuffix: String
+  ssoExemptReasonIsNil: Boolean
+  ssoExemptReasonNotNil: Boolean
+  ssoExemptReasonEqualFold: String
+  ssoExemptReasonContainsFold: String
+  """
+  sso_exempt_granted_by field predicates
+  """
+  ssoExemptGrantedBy: String
+  ssoExemptGrantedByNEQ: String
+  ssoExemptGrantedByIn: [String!]
+  ssoExemptGrantedByNotIn: [String!]
+  ssoExemptGrantedByGT: String
+  ssoExemptGrantedByGTE: String
+  ssoExemptGrantedByLT: String
+  ssoExemptGrantedByLTE: String
+  ssoExemptGrantedByContains: String
+  ssoExemptGrantedByHasPrefix: String
+  ssoExemptGrantedByHasSuffix: String
+  ssoExemptGrantedByIsNil: Boolean
+  ssoExemptGrantedByNotNil: Boolean
+  ssoExemptGrantedByEqualFold: String
+  ssoExemptGrantedByContainsFold: String
+  """
+  sso_exempt_granted_at field predicates
+  """
+  ssoExemptGrantedAt: DateTime
+  ssoExemptGrantedAtNEQ: DateTime
+  ssoExemptGrantedAtIn: [DateTime!]
+  ssoExemptGrantedAtNotIn: [DateTime!]
+  ssoExemptGrantedAtGT: DateTime
+  ssoExemptGrantedAtGTE: DateTime
+  ssoExemptGrantedAtLT: DateTime
+  ssoExemptGrantedAtLTE: DateTime
+  ssoExemptGrantedAtIsNil: Boolean
+  ssoExemptGrantedAtNotNil: Boolean
 }
 type OrgSubscriptionHistory implements Node {
   id: ID!
@@ -41887,6 +43449,10 @@ type OrgSubscriptionHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -42104,6 +43670,24 @@ input OrgSubscriptionHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -42217,6 +43801,10 @@ type OrganizationHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -42252,6 +43840,10 @@ type OrganizationHistory implements Node {
   the stripe customer ID this organization is associated to
   """
   stripeCustomerID: String
+  """
+  a stable slug identifying the organization in its public SSO initiation URL, e.g. /orgs/<sso_slug>/sso
+  """
+  slugName: String
 }
 """
 A connection to a list of items.
@@ -42434,6 +44026,24 @@ input OrganizationHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_name field predicates
   """
   displayName: String
@@ -42523,6 +44133,24 @@ input OrganizationHistoryWhereInput {
   avatarUpdatedAtLTE: Time
   avatarUpdatedAtIsNil: Boolean
   avatarUpdatedAtNotNil: Boolean
+  """
+  slug_name field predicates
+  """
+  slugName: String
+  slugNameNEQ: String
+  slugNameIn: [String!]
+  slugNameNotIn: [String!]
+  slugNameGT: String
+  slugNameGTE: String
+  slugNameLT: String
+  slugNameLTE: String
+  slugNameContains: String
+  slugNameHasPrefix: String
+  slugNameHasSuffix: String
+  slugNameIsNil: Boolean
+  slugNameNotNil: Boolean
+  slugNameEqualFold: String
+  slugNameContainsFold: String
 }
 type OrganizationSettingHistory implements Node {
   id: ID!
@@ -42533,6 +44161,10 @@ type OrganizationSettingHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -42574,7 +44206,7 @@ type OrganizationSettingHistory implements Node {
   """
   billingNotificationsEnabled: Boolean!
   """
-  domains allowed to access the organization, if empty all domains are allowed
+  domains allowed to access the organization via autojoin
   """
   allowedEmailDomains: [String!]
   """
@@ -42626,9 +44258,25 @@ type OrganizationSettingHistory implements Node {
   """
   identityProviderLoginEnforced: Boolean!
   """
+  when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider
+  """
+  identityProviderJitProvisioning: Boolean!
+  """
+  when set, restricts just-in-time provisioning to users whose authenticated email domain is in this list; when empty, any user who authenticates against the identity provider is provisioned
+  """
+  jitAllowedEmailDomains: [String!]
+  """
   enforce 2fa / multifactor authentication for organization members
   """
   multifactorAuthEnforced: Boolean
+  """
+  email domains whose existing members skip the SSO redirect even when SSO is enforced; TFA enforcement still applies
+  """
+  ssoExemptDomains: [String!]
+  """
+  allow Openlane support to access this organization without a directory account
+  """
+  allowSupportAccess: Boolean
   """
   unique token used to receive compliance webhook events
   """
@@ -42841,6 +44489,24 @@ input OrganizationSettingHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   billing_contact field predicates
   """
@@ -43116,12 +44782,24 @@ input OrganizationSettingHistoryWhereInput {
   identityProviderLoginEnforced: Boolean
   identityProviderLoginEnforcedNEQ: Boolean
   """
+  identity_provider_jit_provisioning field predicates
+  """
+  identityProviderJitProvisioning: Boolean
+  identityProviderJitProvisioningNEQ: Boolean
+  """
   multifactor_auth_enforced field predicates
   """
   multifactorAuthEnforced: Boolean
   multifactorAuthEnforcedNEQ: Boolean
   multifactorAuthEnforcedIsNil: Boolean
   multifactorAuthEnforcedNotNil: Boolean
+  """
+  allow_support_access field predicates
+  """
+  allowSupportAccess: Boolean
+  allowSupportAccessNEQ: Boolean
+  allowSupportAccessIsNil: Boolean
+  allowSupportAccessNotNil: Boolean
   """
   compliance_webhook_token field predicates
   """
@@ -43190,6 +44868,10 @@ type PlatformHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -43606,6 +45288,24 @@ input PlatformHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -44387,6 +46087,10 @@ type ProcedureHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -44739,6 +46443,24 @@ input ProcedureHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -45149,6 +46871,10 @@ type ProgramHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -45420,6 +47146,24 @@ input ProgramHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -45689,6 +47433,10 @@ type ProgramMembershipHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   role: ProgramMembershipHistoryRole!
   programID: String!
   userID: String!
@@ -45880,6 +47628,24 @@ input ProgramMembershipHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   role field predicates
   """
@@ -48399,6 +50165,10 @@ type RemediationHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -48712,6 +50482,24 @@ input RemediationHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -49190,6 +50978,10 @@ type ReviewHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -49494,6 +51286,24 @@ input ReviewHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   owner_id field predicates
   """
@@ -49907,6 +51717,10 @@ type RiskHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -50295,6 +52109,24 @@ input RiskHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -50787,6 +52619,10 @@ type SLADefinitionHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -50998,6 +52834,24 @@ input SLADefinitionHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -51059,6 +52913,10 @@ type ScanHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -51356,6 +53214,24 @@ input ScanHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   owner_id field predicates
   """
@@ -51693,6 +53569,10 @@ type ScheduledJobHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -51900,6 +53780,24 @@ input ScheduledJobHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -51982,6 +53880,10 @@ type StandardHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -52256,6 +54158,24 @@ input StandardHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   revision field predicates
   """
@@ -52547,6 +54467,10 @@ type SubcontrolHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -52751,6 +54675,7 @@ enum SubcontrolHistoryControlSource @goModel(model: "github.com/theopenlane/core
 SubcontrolHistoryControlStatus is enum for the field status
 """
 enum SubcontrolHistoryControlStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlStatus") {
+  DRAFT
   PREPARING
   NEEDS_APPROVAL
   CHANGES_REQUESTED
@@ -52927,6 +54852,24 @@ input SubcontrolHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -53405,6 +55348,10 @@ type SubprocessorHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -53621,6 +55568,24 @@ input SubprocessorHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -53761,6 +55726,10 @@ type SystemDetailHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -54003,6 +55972,24 @@ input SystemDetailHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -54174,6 +56161,10 @@ type TaskHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -54460,6 +56451,24 @@ input TaskHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -54780,6 +56789,10 @@ type TemplateHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -55045,6 +57058,24 @@ input TemplateHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -55260,6 +57291,10 @@ type TrustCenterComplianceHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -55451,6 +57486,24 @@ input TrustCenterComplianceHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   standard_id field predicates
   """
   standardID: String
@@ -55494,6 +57547,10 @@ type TrustCenterDocHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -55736,6 +57793,24 @@ input TrustCenterDocHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   trust_center_doc_kind_name field predicates
   """
   trustCenterDocKindName: String
@@ -55894,6 +57969,10 @@ type TrustCenterEntityHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   The local logo file id
   """
@@ -56095,6 +58174,24 @@ input TrustCenterEntityHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   logo_file_id field predicates
   """
   logoFileID: String
@@ -56174,6 +58271,10 @@ type TrustCenterFAQHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   the kind of the trust_center_faq
   """
@@ -56379,6 +58480,24 @@ input TrustCenterFAQHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   trust_center_faq_kind_name field predicates
   """
   trustCenterFaqKindName: String
@@ -56489,6 +58608,10 @@ type TrustCenterHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -56719,6 +58842,24 @@ input TrustCenterHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -56881,6 +59022,10 @@ type TrustCenterNDARequestHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -57134,6 +59279,24 @@ input TrustCenterNDARequestHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   trust_center_id field predicates
   """
   trustCenterID: String
@@ -57343,6 +59506,10 @@ type TrustCenterSettingHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   the ID of the trust center the settings belong to
   """
@@ -57644,6 +59811,24 @@ input TrustCenterSettingHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   trust_center_id field predicates
   """
@@ -58085,6 +60270,10 @@ type TrustCenterSubprocessorHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   the kind of the trust_center_subprocessor
   """
   trustCenterSubprocessorKindName: String
@@ -58284,6 +60473,24 @@ input TrustCenterSubprocessorHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   trust_center_subprocessor_kind_name field predicates
   """
   trustCenterSubprocessorKindName: String
@@ -58363,6 +60570,10 @@ type TrustCenterWatermarkConfigHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   the ID of the organization owner of the object
   """
@@ -58600,6 +60811,24 @@ input TrustCenterWatermarkConfigHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   owner_id field predicates
   """
@@ -59301,6 +61530,10 @@ type UserSettingHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   tags associated with the object
   """
   tags: [String!]
@@ -59536,6 +61769,24 @@ input UserSettingHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   user_id field predicates
   """
   userID: String
@@ -59657,6 +61908,10 @@ type VendorRiskScoreHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -59945,6 +62200,24 @@ input VendorRiskScoreHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -60149,6 +62422,10 @@ type VendorScoringConfigHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   tags associated with the object
   """
@@ -60358,6 +62635,24 @@ input VendorScoringConfigHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -60392,6 +62687,10 @@ type VulnerabilityHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -60803,6 +63102,24 @@ input VulnerabilityHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -61538,6 +63855,10 @@ type WorkflowAssignmentHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -61789,6 +64110,24 @@ input WorkflowAssignmentHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -61999,6 +64338,10 @@ type WorkflowAssignmentTargetHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -62211,6 +64554,24 @@ input WorkflowAssignmentTargetHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -62341,6 +64702,10 @@ type WorkflowDefinitionHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -62593,6 +64958,24 @@ input WorkflowDefinitionHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -62794,6 +65177,10 @@ type WorkflowEventHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -62998,6 +65385,24 @@ input WorkflowEventHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
   display_id field predicates
   """
   displayID: String
@@ -63087,6 +65492,10 @@ type WorkflowInstanceHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -63346,6 +65755,24 @@ input WorkflowInstanceHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -63645,6 +66072,10 @@ type WorkflowObjectRefHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
   a shortened prefixed id field to use as a human readable identifier
   """
   displayID: String!
@@ -63895,6 +66326,24 @@ input WorkflowObjectRefHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
   """
   display_id field predicates
   """
@@ -64251,6 +66700,8 @@ func (ec *executionContext) childFields_ActionPlanHistory(ctx context.Context, f
 		return ec.fieldContext_ActionPlanHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_ActionPlanHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_ActionPlanHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_ActionPlanHistory_tags(ctx, field)
 	case "revision":
@@ -64377,6 +66828,8 @@ func (ec *executionContext) childFields_AssessmentHistory(ctx context.Context, f
 		return ec.fieldContext_AssessmentHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_AssessmentHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_AssessmentHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_AssessmentHistory_tags(ctx, field)
 	case "ownerID":
@@ -64443,6 +66896,8 @@ func (ec *executionContext) childFields_AssessmentResponseHistory(ctx context.Co
 		return ec.fieldContext_AssessmentResponseHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_AssessmentResponseHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_AssessmentResponseHistory_updatedByImpersonator(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_AssessmentResponseHistory_ownerID(ctx, field)
 	case "assessmentID":
@@ -64533,6 +66988,8 @@ func (ec *executionContext) childFields_AssetHistory(ctx context.Context, field 
 		return ec.fieldContext_AssetHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_AssetHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_AssetHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_AssetHistory_tags(ctx, field)
 	case "ownerID":
@@ -64663,6 +67120,8 @@ func (ec *executionContext) childFields_CampaignHistory(ctx context.Context, fie
 		return ec.fieldContext_CampaignHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_CampaignHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_CampaignHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_CampaignHistory_displayID(ctx, field)
 	case "tags":
@@ -64777,6 +67236,8 @@ func (ec *executionContext) childFields_CampaignTargetHistory(ctx context.Contex
 		return ec.fieldContext_CampaignTargetHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_CampaignTargetHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_CampaignTargetHistory_updatedByImpersonator(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_CampaignTargetHistory_ownerID(ctx, field)
 	case "workflowEligibleMarker":
@@ -64847,6 +67308,8 @@ func (ec *executionContext) childFields_CheckResultHistory(ctx context.Context, 
 		return ec.fieldContext_CheckResultHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_CheckResultHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_CheckResultHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_CheckResultHistory_tags(ctx, field)
 	case "status":
@@ -64907,6 +67370,8 @@ func (ec *executionContext) childFields_ContactHistory(ctx context.Context, fiel
 		return ec.fieldContext_ContactHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_ContactHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_ContactHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_ContactHistory_tags(ctx, field)
 	case "ownerID":
@@ -64975,6 +67440,8 @@ func (ec *executionContext) childFields_ControlHistory(ctx context.Context, fiel
 		return ec.fieldContext_ControlHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_ControlHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_ControlHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_ControlHistory_displayID(ctx, field)
 	case "tags":
@@ -65113,6 +67580,8 @@ func (ec *executionContext) childFields_ControlImplementationHistory(ctx context
 		return ec.fieldContext_ControlImplementationHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_ControlImplementationHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_ControlImplementationHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_ControlImplementationHistory_tags(ctx, field)
 	case "ownerID":
@@ -65179,6 +67648,8 @@ func (ec *executionContext) childFields_ControlObjectiveHistory(ctx context.Cont
 		return ec.fieldContext_ControlObjectiveHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_ControlObjectiveHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_ControlObjectiveHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_ControlObjectiveHistory_displayID(ctx, field)
 	case "tags":
@@ -65253,6 +67724,8 @@ func (ec *executionContext) childFields_CustomDomainHistory(ctx context.Context,
 		return ec.fieldContext_CustomDomainHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_CustomDomainHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_CustomDomainHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_CustomDomainHistory_tags(ctx, field)
 	case "ownerID":
@@ -65317,6 +67790,8 @@ func (ec *executionContext) childFields_DNSVerificationHistory(ctx context.Conte
 		return ec.fieldContext_DNSVerificationHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_DNSVerificationHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_DNSVerificationHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_DNSVerificationHistory_tags(ctx, field)
 	case "ownerID":
@@ -65383,6 +67858,8 @@ func (ec *executionContext) childFields_DirectoryAccountHistory(ctx context.Cont
 		return ec.fieldContext_DirectoryAccountHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_DirectoryAccountHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_DirectoryAccountHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_DirectoryAccountHistory_displayID(ctx, field)
 	case "tags":
@@ -65513,6 +67990,8 @@ func (ec *executionContext) childFields_DirectoryGroupHistory(ctx context.Contex
 		return ec.fieldContext_DirectoryGroupHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_DirectoryGroupHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_DirectoryGroupHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_DirectoryGroupHistory_displayID(ctx, field)
 	case "tags":
@@ -65617,6 +68096,8 @@ func (ec *executionContext) childFields_DirectoryMembershipHistory(ctx context.C
 		return ec.fieldContext_DirectoryMembershipHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_DirectoryMembershipHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_DirectoryMembershipHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_DirectoryMembershipHistory_displayID(ctx, field)
 	case "ownerID":
@@ -65705,6 +68186,8 @@ func (ec *executionContext) childFields_DiscussionHistory(ctx context.Context, f
 		return ec.fieldContext_DiscussionHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_DiscussionHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_DiscussionHistory_updatedByImpersonator(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_DiscussionHistory_ownerID(ctx, field)
 	case "externalID":
@@ -65755,6 +68238,8 @@ func (ec *executionContext) childFields_DocumentDataHistory(ctx context.Context,
 		return ec.fieldContext_DocumentDataHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_DocumentDataHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_DocumentDataHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_DocumentDataHistory_tags(ctx, field)
 	case "ownerID":
@@ -65815,6 +68300,8 @@ func (ec *executionContext) childFields_EmailTemplateHistory(ctx context.Context
 		return ec.fieldContext_EmailTemplateHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_EmailTemplateHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_EmailTemplateHistory_updatedByImpersonator(ctx, field)
 	case "revision":
 		return ec.fieldContext_EmailTemplateHistory_revision(ctx, field)
 	case "ownerID":
@@ -65897,6 +68384,8 @@ func (ec *executionContext) childFields_EntityHistory(ctx context.Context, field
 		return ec.fieldContext_EntityHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_EntityHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_EntityHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_EntityHistory_tags(ctx, field)
 	case "ownerID":
@@ -66057,6 +68546,8 @@ func (ec *executionContext) childFields_EntityTypeHistory(ctx context.Context, f
 		return ec.fieldContext_EntityTypeHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_EntityTypeHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_EntityTypeHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_EntityTypeHistory_tags(ctx, field)
 	case "ownerID":
@@ -66113,6 +68604,8 @@ func (ec *executionContext) childFields_EvidenceHistory(ctx context.Context, fie
 		return ec.fieldContext_EvidenceHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_EvidenceHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_EvidenceHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_EvidenceHistory_displayID(ctx, field)
 	case "tags":
@@ -66195,6 +68688,8 @@ func (ec *executionContext) childFields_FileHistory(ctx context.Context, field g
 		return ec.fieldContext_FileHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_FileHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_FileHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_FileHistory_tags(ctx, field)
 	case "systemOwned":
@@ -66295,6 +68790,8 @@ func (ec *executionContext) childFields_FindingControlHistory(ctx context.Contex
 		return ec.fieldContext_FindingControlHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_FindingControlHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_FindingControlHistory_updatedByImpersonator(ctx, field)
 	case "findingID":
 		return ec.fieldContext_FindingControlHistory_findingID(ctx, field)
 	case "controlID":
@@ -66357,6 +68854,8 @@ func (ec *executionContext) childFields_FindingHistory(ctx context.Context, fiel
 		return ec.fieldContext_FindingHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_FindingHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_FindingHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_FindingHistory_displayID(ctx, field)
 	case "tags":
@@ -66499,6 +68998,8 @@ func (ec *executionContext) childFields_GroupHistory(ctx context.Context, field 
 		return ec.fieldContext_GroupHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_GroupHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_GroupHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_GroupHistory_displayID(ctx, field)
 	case "tags":
@@ -66577,6 +69078,8 @@ func (ec *executionContext) childFields_GroupMembershipHistory(ctx context.Conte
 		return ec.fieldContext_GroupMembershipHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_GroupMembershipHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_GroupMembershipHistory_updatedByImpersonator(ctx, field)
 	case "role":
 		return ec.fieldContext_GroupMembershipHistory_role(ctx, field)
 	case "groupID":
@@ -66627,6 +69130,8 @@ func (ec *executionContext) childFields_GroupSettingHistory(ctx context.Context,
 		return ec.fieldContext_GroupSettingHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_GroupSettingHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_GroupSettingHistory_updatedByImpersonator(ctx, field)
 	case "visibility":
 		return ec.fieldContext_GroupSettingHistory_visibility(ctx, field)
 	case "joinPolicy":
@@ -66681,6 +69186,8 @@ func (ec *executionContext) childFields_HushHistory(ctx context.Context, field g
 		return ec.fieldContext_HushHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_HushHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_HushHistory_updatedByImpersonator(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_HushHistory_ownerID(ctx, field)
 	case "systemOwned":
@@ -66749,6 +69256,8 @@ func (ec *executionContext) childFields_IdentityHolderHistory(ctx context.Contex
 		return ec.fieldContext_IdentityHolderHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_IdentityHolderHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_IdentityHolderHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_IdentityHolderHistory_displayID(ctx, field)
 	case "tags":
@@ -66857,6 +69366,8 @@ func (ec *executionContext) childFields_IntegrationHistory(ctx context.Context, 
 		return ec.fieldContext_IntegrationHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_IntegrationHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_IntegrationHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_IntegrationHistory_tags(ctx, field)
 	case "ownerID":
@@ -66947,6 +69458,8 @@ func (ec *executionContext) childFields_InternalPolicyHistory(ctx context.Contex
 		return ec.fieldContext_InternalPolicyHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_InternalPolicyHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_InternalPolicyHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_InternalPolicyHistory_displayID(ctx, field)
 	case "tags":
@@ -67063,6 +69576,8 @@ func (ec *executionContext) childFields_JobTemplateHistory(ctx context.Context, 
 		return ec.fieldContext_JobTemplateHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_JobTemplateHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_JobTemplateHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_JobTemplateHistory_displayID(ctx, field)
 	case "tags":
@@ -67131,6 +69646,8 @@ func (ec *executionContext) childFields_MappableDomainHistory(ctx context.Contex
 		return ec.fieldContext_MappableDomainHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_MappableDomainHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_MappableDomainHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_MappableDomainHistory_tags(ctx, field)
 	case "name":
@@ -67181,6 +69698,8 @@ func (ec *executionContext) childFields_MappedControlHistory(ctx context.Context
 		return ec.fieldContext_MappedControlHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_MappedControlHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_MappedControlHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_MappedControlHistory_tags(ctx, field)
 	case "systemOwned":
@@ -67243,6 +69762,8 @@ func (ec *executionContext) childFields_NarrativeHistory(ctx context.Context, fi
 		return ec.fieldContext_NarrativeHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_NarrativeHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_NarrativeHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_NarrativeHistory_displayID(ctx, field)
 	case "tags":
@@ -67305,6 +69826,8 @@ func (ec *executionContext) childFields_NoteHistory(ctx context.Context, field g
 		return ec.fieldContext_NoteHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_NoteHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_NoteHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_NoteHistory_displayID(ctx, field)
 	case "ownerID":
@@ -67371,6 +69894,8 @@ func (ec *executionContext) childFields_NotificationPreferenceHistory(ctx contex
 		return ec.fieldContext_NotificationPreferenceHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_NotificationPreferenceHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_NotificationPreferenceHistory_updatedByImpersonator(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_NotificationPreferenceHistory_ownerID(ctx, field)
 	case "userID":
@@ -67459,6 +69984,8 @@ func (ec *executionContext) childFields_NotificationTemplateHistory(ctx context.
 		return ec.fieldContext_NotificationTemplateHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_NotificationTemplateHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_NotificationTemplateHistory_updatedByImpersonator(ctx, field)
 	case "revision":
 		return ec.fieldContext_NotificationTemplateHistory_revision(ctx, field)
 	case "ownerID":
@@ -67557,12 +70084,22 @@ func (ec *executionContext) childFields_OrgMembershipHistory(ctx context.Context
 		return ec.fieldContext_OrgMembershipHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_OrgMembershipHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_OrgMembershipHistory_updatedByImpersonator(ctx, field)
 	case "role":
 		return ec.fieldContext_OrgMembershipHistory_role(ctx, field)
 	case "organizationID":
 		return ec.fieldContext_OrgMembershipHistory_organizationID(ctx, field)
 	case "userID":
 		return ec.fieldContext_OrgMembershipHistory_userID(ctx, field)
+	case "ssoExempt":
+		return ec.fieldContext_OrgMembershipHistory_ssoExempt(ctx, field)
+	case "ssoExemptReason":
+		return ec.fieldContext_OrgMembershipHistory_ssoExemptReason(ctx, field)
+	case "ssoExemptGrantedBy":
+		return ec.fieldContext_OrgMembershipHistory_ssoExemptGrantedBy(ctx, field)
+	case "ssoExemptGrantedAt":
+		return ec.fieldContext_OrgMembershipHistory_ssoExemptGrantedAt(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type OrgMembershipHistory", field.Name)
 }
@@ -67607,6 +70144,8 @@ func (ec *executionContext) childFields_OrgSubscriptionHistory(ctx context.Conte
 		return ec.fieldContext_OrgSubscriptionHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_OrgSubscriptionHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_OrgSubscriptionHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_OrgSubscriptionHistory_tags(ctx, field)
 	case "ownerID":
@@ -67667,6 +70206,8 @@ func (ec *executionContext) childFields_OrganizationHistory(ctx context.Context,
 		return ec.fieldContext_OrganizationHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_OrganizationHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_OrganizationHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_OrganizationHistory_tags(ctx, field)
 	case "name":
@@ -67685,6 +70226,8 @@ func (ec *executionContext) childFields_OrganizationHistory(ctx context.Context,
 		return ec.fieldContext_OrganizationHistory_avatarUpdatedAt(ctx, field)
 	case "stripeCustomerID":
 		return ec.fieldContext_OrganizationHistory_stripeCustomerID(ctx, field)
+	case "slugName":
+		return ec.fieldContext_OrganizationHistory_slugName(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type OrganizationHistory", field.Name)
 }
@@ -67729,6 +70272,8 @@ func (ec *executionContext) childFields_OrganizationSettingHistory(ctx context.C
 		return ec.fieldContext_OrganizationSettingHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_OrganizationSettingHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_OrganizationSettingHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_OrganizationSettingHistory_tags(ctx, field)
 	case "domains":
@@ -67775,8 +70320,16 @@ func (ec *executionContext) childFields_OrganizationSettingHistory(ctx context.C
 		return ec.fieldContext_OrganizationSettingHistory_samlCert(ctx, field)
 	case "identityProviderLoginEnforced":
 		return ec.fieldContext_OrganizationSettingHistory_identityProviderLoginEnforced(ctx, field)
+	case "identityProviderJitProvisioning":
+		return ec.fieldContext_OrganizationSettingHistory_identityProviderJitProvisioning(ctx, field)
+	case "jitAllowedEmailDomains":
+		return ec.fieldContext_OrganizationSettingHistory_jitAllowedEmailDomains(ctx, field)
 	case "multifactorAuthEnforced":
 		return ec.fieldContext_OrganizationSettingHistory_multifactorAuthEnforced(ctx, field)
+	case "ssoExemptDomains":
+		return ec.fieldContext_OrganizationSettingHistory_ssoExemptDomains(ctx, field)
+	case "allowSupportAccess":
+		return ec.fieldContext_OrganizationSettingHistory_allowSupportAccess(ctx, field)
 	case "complianceWebhookToken":
 		return ec.fieldContext_OrganizationSettingHistory_complianceWebhookToken(ctx, field)
 	case "paymentMethodAdded":
@@ -67841,6 +70394,8 @@ func (ec *executionContext) childFields_PlatformHistory(ctx context.Context, fie
 		return ec.fieldContext_PlatformHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_PlatformHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_PlatformHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_PlatformHistory_displayID(ctx, field)
 	case "tags":
@@ -67987,6 +70542,8 @@ func (ec *executionContext) childFields_ProcedureHistory(ctx context.Context, fi
 		return ec.fieldContext_ProcedureHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_ProcedureHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_ProcedureHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_ProcedureHistory_displayID(ctx, field)
 	case "tags":
@@ -68101,6 +70658,8 @@ func (ec *executionContext) childFields_ProgramHistory(ctx context.Context, fiel
 		return ec.fieldContext_ProgramHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_ProgramHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_ProgramHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_ProgramHistory_displayID(ctx, field)
 	case "tags":
@@ -68183,6 +70742,8 @@ func (ec *executionContext) childFields_ProgramMembershipHistory(ctx context.Con
 		return ec.fieldContext_ProgramMembershipHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_ProgramMembershipHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_ProgramMembershipHistory_updatedByImpersonator(ctx, field)
 	case "role":
 		return ec.fieldContext_ProgramMembershipHistory_role(ctx, field)
 	case "programID":
@@ -68233,6 +70794,8 @@ func (ec *executionContext) childFields_RemediationHistory(ctx context.Context, 
 		return ec.fieldContext_RemediationHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_RemediationHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_RemediationHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_RemediationHistory_displayID(ctx, field)
 	case "tags":
@@ -68337,6 +70900,8 @@ func (ec *executionContext) childFields_ReviewHistory(ctx context.Context, field
 		return ec.fieldContext_ReviewHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_ReviewHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_ReviewHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_ReviewHistory_tags(ctx, field)
 	case "ownerID":
@@ -68437,6 +71002,8 @@ func (ec *executionContext) childFields_RiskHistory(ctx context.Context, field g
 		return ec.fieldContext_RiskHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_RiskHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_RiskHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_RiskHistory_displayID(ctx, field)
 	case "tags":
@@ -68553,6 +71120,8 @@ func (ec *executionContext) childFields_SLADefinitionHistory(ctx context.Context
 		return ec.fieldContext_SLADefinitionHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_SLADefinitionHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_SLADefinitionHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_SLADefinitionHistory_displayID(ctx, field)
 	case "tags":
@@ -68607,6 +71176,8 @@ func (ec *executionContext) childFields_ScanHistory(ctx context.Context, field g
 		return ec.fieldContext_ScanHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_ScanHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_ScanHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_ScanHistory_tags(ctx, field)
 	case "ownerID":
@@ -68699,6 +71270,8 @@ func (ec *executionContext) childFields_ScheduledJobHistory(ctx context.Context,
 		return ec.fieldContext_ScheduledJobHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_ScheduledJobHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_ScheduledJobHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_ScheduledJobHistory_displayID(ctx, field)
 	case "ownerID":
@@ -68757,6 +71330,8 @@ func (ec *executionContext) childFields_StandardHistory(ctx context.Context, fie
 		return ec.fieldContext_StandardHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_StandardHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_StandardHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_StandardHistory_tags(ctx, field)
 	case "revision":
@@ -68841,6 +71416,8 @@ func (ec *executionContext) childFields_SubcontrolHistory(ctx context.Context, f
 		return ec.fieldContext_SubcontrolHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_SubcontrolHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_SubcontrolHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_SubcontrolHistory_displayID(ctx, field)
 	case "tags":
@@ -68967,6 +71544,8 @@ func (ec *executionContext) childFields_SubprocessorHistory(ctx context.Context,
 		return ec.fieldContext_SubprocessorHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_SubprocessorHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_SubprocessorHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_SubprocessorHistory_tags(ctx, field)
 	case "ownerID":
@@ -69029,6 +71608,8 @@ func (ec *executionContext) childFields_SystemDetailHistory(ctx context.Context,
 		return ec.fieldContext_SystemDetailHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_SystemDetailHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_SystemDetailHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_SystemDetailHistory_displayID(ctx, field)
 	case "tags":
@@ -69099,6 +71680,8 @@ func (ec *executionContext) childFields_TaskHistory(ctx context.Context, field g
 		return ec.fieldContext_TaskHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_TaskHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_TaskHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_TaskHistory_displayID(ctx, field)
 	case "tags":
@@ -69189,6 +71772,8 @@ func (ec *executionContext) childFields_TemplateHistory(ctx context.Context, fie
 		return ec.fieldContext_TemplateHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_TemplateHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_TemplateHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_TemplateHistory_tags(ctx, field)
 	case "ownerID":
@@ -69267,6 +71852,8 @@ func (ec *executionContext) childFields_TrustCenterComplianceHistory(ctx context
 		return ec.fieldContext_TrustCenterComplianceHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_TrustCenterComplianceHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_TrustCenterComplianceHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_TrustCenterComplianceHistory_tags(ctx, field)
 	case "standardID":
@@ -69317,6 +71904,8 @@ func (ec *executionContext) childFields_TrustCenterDocHistory(ctx context.Contex
 		return ec.fieldContext_TrustCenterDocHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_TrustCenterDocHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_TrustCenterDocHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_TrustCenterDocHistory_tags(ctx, field)
 	case "trustCenterDocKindName":
@@ -69383,6 +71972,8 @@ func (ec *executionContext) childFields_TrustCenterEntityHistory(ctx context.Con
 		return ec.fieldContext_TrustCenterEntityHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_TrustCenterEntityHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_TrustCenterEntityHistory_updatedByImpersonator(ctx, field)
 	case "logoFileID":
 		return ec.fieldContext_TrustCenterEntityHistory_logoFileID(ctx, field)
 	case "url":
@@ -69437,6 +72028,8 @@ func (ec *executionContext) childFields_TrustCenterFAQHistory(ctx context.Contex
 		return ec.fieldContext_TrustCenterFAQHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_TrustCenterFAQHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_TrustCenterFAQHistory_updatedByImpersonator(ctx, field)
 	case "trustCenterFaqKindName":
 		return ec.fieldContext_TrustCenterFAQHistory_trustCenterFaqKindName(ctx, field)
 	case "trustCenterFaqKindID":
@@ -69493,6 +72086,8 @@ func (ec *executionContext) childFields_TrustCenterHistory(ctx context.Context, 
 		return ec.fieldContext_TrustCenterHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_TrustCenterHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_TrustCenterHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_TrustCenterHistory_tags(ctx, field)
 	case "ownerID":
@@ -69557,6 +72152,8 @@ func (ec *executionContext) childFields_TrustCenterNDARequestHistory(ctx context
 		return ec.fieldContext_TrustCenterNDARequestHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_TrustCenterNDARequestHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_TrustCenterNDARequestHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_TrustCenterNDARequestHistory_tags(ctx, field)
 	case "trustCenterID":
@@ -69629,6 +72226,8 @@ func (ec *executionContext) childFields_TrustCenterSettingHistory(ctx context.Co
 		return ec.fieldContext_TrustCenterSettingHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_TrustCenterSettingHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_TrustCenterSettingHistory_updatedByImpersonator(ctx, field)
 	case "trustCenterID":
 		return ec.fieldContext_TrustCenterSettingHistory_trustCenterID(ctx, field)
 	case "title":
@@ -69727,6 +72326,8 @@ func (ec *executionContext) childFields_TrustCenterSubprocessorHistory(ctx conte
 		return ec.fieldContext_TrustCenterSubprocessorHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_TrustCenterSubprocessorHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_TrustCenterSubprocessorHistory_updatedByImpersonator(ctx, field)
 	case "trustCenterSubprocessorKindName":
 		return ec.fieldContext_TrustCenterSubprocessorHistory_trustCenterSubprocessorKindName(ctx, field)
 	case "trustCenterSubprocessorKindID":
@@ -69781,6 +72382,8 @@ func (ec *executionContext) childFields_TrustCenterWatermarkConfigHistory(ctx co
 		return ec.fieldContext_TrustCenterWatermarkConfigHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_TrustCenterWatermarkConfigHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistory_updatedByImpersonator(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_TrustCenterWatermarkConfigHistory_ownerID(ctx, field)
 	case "trustCenterID":
@@ -69927,6 +72530,8 @@ func (ec *executionContext) childFields_UserSettingHistory(ctx context.Context, 
 		return ec.fieldContext_UserSettingHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_UserSettingHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_UserSettingHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_UserSettingHistory_tags(ctx, field)
 	case "userID":
@@ -69995,6 +72600,8 @@ func (ec *executionContext) childFields_VendorRiskScoreHistory(ctx context.Conte
 		return ec.fieldContext_VendorRiskScoreHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_VendorRiskScoreHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_VendorRiskScoreHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_VendorRiskScoreHistory_tags(ctx, field)
 	case "ownerID":
@@ -70069,6 +72676,8 @@ func (ec *executionContext) childFields_VendorScoringConfigHistory(ctx context.C
 		return ec.fieldContext_VendorScoringConfigHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_VendorScoringConfigHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_VendorScoringConfigHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_VendorScoringConfigHistory_tags(ctx, field)
 	case "ownerID":
@@ -70123,6 +72732,8 @@ func (ec *executionContext) childFields_VulnerabilityHistory(ctx context.Context
 		return ec.fieldContext_VulnerabilityHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_VulnerabilityHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_VulnerabilityHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_VulnerabilityHistory_displayID(ctx, field)
 	case "tags":
@@ -70275,6 +72886,8 @@ func (ec *executionContext) childFields_WorkflowAssignmentHistory(ctx context.Co
 		return ec.fieldContext_WorkflowAssignmentHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_WorkflowAssignmentHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_WorkflowAssignmentHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_WorkflowAssignmentHistory_displayID(ctx, field)
 	case "tags":
@@ -70355,6 +72968,8 @@ func (ec *executionContext) childFields_WorkflowAssignmentTargetHistory(ctx cont
 		return ec.fieldContext_WorkflowAssignmentTargetHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_WorkflowAssignmentTargetHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_WorkflowAssignmentTargetHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_WorkflowAssignmentTargetHistory_displayID(ctx, field)
 	case "tags":
@@ -70415,6 +73030,8 @@ func (ec *executionContext) childFields_WorkflowDefinitionHistory(ctx context.Co
 		return ec.fieldContext_WorkflowDefinitionHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_WorkflowDefinitionHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_WorkflowDefinitionHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_WorkflowDefinitionHistory_displayID(ctx, field)
 	case "tags":
@@ -70495,6 +73112,8 @@ func (ec *executionContext) childFields_WorkflowEventHistory(ctx context.Context
 		return ec.fieldContext_WorkflowEventHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_WorkflowEventHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_WorkflowEventHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_WorkflowEventHistory_displayID(ctx, field)
 	case "tags":
@@ -70551,6 +73170,8 @@ func (ec *executionContext) childFields_WorkflowInstanceHistory(ctx context.Cont
 		return ec.fieldContext_WorkflowInstanceHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_WorkflowInstanceHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_WorkflowInstanceHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_WorkflowInstanceHistory_displayID(ctx, field)
 	case "tags":
@@ -70635,6 +73256,8 @@ func (ec *executionContext) childFields_WorkflowObjectRefHistory(ctx context.Con
 		return ec.fieldContext_WorkflowObjectRefHistory_createdBy(ctx, field)
 	case "updatedBy":
 		return ec.fieldContext_WorkflowObjectRefHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_WorkflowObjectRefHistory_updatedByImpersonator(ctx, field)
 	case "displayID":
 		return ec.fieldContext_WorkflowObjectRefHistory_displayID(ctx, field)
 	case "ownerID":

@@ -48,7 +48,7 @@ require (
 	github.com/go-jose/go-jose/v4 v4.1.4
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/go-webauthn/webauthn v0.17.4
-	github.com/gocarina/gocsv v0.0.0-20260607070740-0735908c6461
+	github.com/gocarina/gocsv v0.0.0-20260628180327-50907998929c
 	github.com/goccy/go-yaml v1.19.2
 	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/google/go-github/v88 v88.0.0
@@ -106,7 +106,7 @@ require (
 	github.com/theopenlane/go-client v0.12.2
 	github.com/theopenlane/gqlgen-plugins v0.14.7
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.34.0
+	github.com/theopenlane/iam v0.35.0
 	github.com/theopenlane/newman v0.4.1
 	github.com/theopenlane/riverboat v0.9.18
 	github.com/theopenlane/utils v0.7.1
@@ -124,7 +124,7 @@ require (
 	golang.org/x/sync v0.21.0
 	golang.org/x/text v0.38.0
 	golang.org/x/tools v0.46.0
-	google.golang.org/api v0.284.0
+	google.golang.org/api v0.285.0
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
 )
@@ -355,7 +355,7 @@ require (
 	github.com/opencontainers/image-spec v1.1.1 // indirect
 	github.com/opencontainers/runc v1.3.6 // indirect
 	github.com/openfga/api/proto v0.0.0-20260319214821-f153694bfc20 // indirect
-	github.com/openfga/language/pkg/go v0.2.1
+	github.com/openfga/language/pkg/go v0.3.0
 	github.com/openfga/openfga v1.18.0 // indirect
 	github.com/ory/dockertest v3.3.5+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.3.1 // indirect
@@ -404,7 +404,7 @@ require (
 	golang.org/x/time v0.15.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260526163538-3dc84a4a5aaa // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260610212136-7ab31c22f7ad // indirect
 	google.golang.org/grpc v1.81.1 // indirect
 	google.golang.org/protobuf v1.36.11
 )

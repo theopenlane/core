@@ -88,6 +88,26 @@ func (_u *FindingUpdate) ClearUpdatedBy() *FindingUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *FindingUpdate) SetUpdatedByImpersonator(v string) *FindingUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableUpdatedByImpersonator(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *FindingUpdate) ClearUpdatedByImpersonator() *FindingUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *FindingUpdate) SetDeletedAt(v time.Time) *FindingUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -1967,6 +1987,12 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(finding.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(finding.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(finding.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(finding.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -3503,6 +3529,26 @@ func (_u *FindingUpdateOne) SetNillableUpdatedBy(v *string) *FindingUpdateOne {
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *FindingUpdateOne) ClearUpdatedBy() *FindingUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *FindingUpdateOne) SetUpdatedByImpersonator(v string) *FindingUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableUpdatedByImpersonator(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *FindingUpdateOne) ClearUpdatedByImpersonator() *FindingUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -5414,6 +5460,12 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(finding.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(finding.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(finding.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(finding.FieldDeletedAt, field.TypeTime, value)

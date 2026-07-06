@@ -36,6 +36,7 @@ mutation CreateBulkCSVRemediation ($input: Upload!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -77,6 +78,7 @@ mutation CreateBulkRemediation ($input: [CreateRemediationInput!]) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -118,6 +120,7 @@ mutation CreateRemediation ($input: CreateRemediationInput!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -208,6 +211,7 @@ query GetRemediationByID ($remediationId: ID!) {
 		title
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 	}
 }
 query GetRemediations ($first: Int, $last: Int, $where: RemediationWhereInput) {
@@ -288,6 +292,7 @@ mutation UpdateBulkCSVRemediation ($input: Upload!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 		updatedIDs
 	}
@@ -330,6 +335,7 @@ mutation UpdateBulkRemediation ($ids: [ID!]!, $input: UpdateRemediationInput!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 		updatedIDs
 	}
@@ -372,6 +378,7 @@ mutation UpdateRemediation ($updateRemediationId: ID!, $input: UpdateRemediation
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }

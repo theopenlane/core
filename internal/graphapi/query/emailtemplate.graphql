@@ -22,6 +22,7 @@ mutation CreateBulkCSVEmailTemplate ($input: Upload!) {
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 			workflowDefinitionID
 			workflowInstanceID
@@ -52,6 +53,7 @@ mutation CreateBulkEmailTemplate ($input: [CreateEmailTemplateInput!]) {
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 			workflowDefinitionID
 			workflowInstanceID
@@ -82,6 +84,7 @@ mutation CreateEmailTemplate ($input: CreateEmailTemplateInput!) {
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 			workflowDefinitionID
 			workflowInstanceID
@@ -130,6 +133,7 @@ query GetAllEmailTemplates ($first: Int, $last: Int, $after: Cursor, $before: Cu
 				trustCenterID
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				version
 				workflowDefinitionID
 				workflowInstanceID
@@ -160,6 +164,7 @@ query GetEmailTemplateByID ($emailTemplateId: ID!) {
 		trustCenterID
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		version
 		workflowDefinitionID
 		workflowInstanceID
@@ -197,6 +202,7 @@ query GetEmailTemplates ($first: Int, $last: Int, $after: Cursor, $before: Curso
 				trustCenterID
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				version
 				workflowDefinitionID
 				workflowInstanceID
@@ -231,6 +237,7 @@ mutation UpdateBulkCSVEmailTemplate ($input: Upload!) {
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 			workflowDefinitionID
 			workflowInstanceID
@@ -262,6 +269,7 @@ mutation UpdateBulkEmailTemplate ($ids: [ID!]!, $input: UpdateEmailTemplateInput
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 			workflowDefinitionID
 			workflowInstanceID
@@ -293,6 +301,7 @@ mutation UpdateEmailTemplate ($updateEmailTemplateId: ID!, $input: UpdateEmailTe
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 			workflowDefinitionID
 			workflowInstanceID

@@ -79,6 +79,20 @@ func (_c *ImpersonationEventCreate) SetNillableUpdatedBy(v *string) *Impersonati
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *ImpersonationEventCreate) SetUpdatedByImpersonator(v string) *ImpersonationEventCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *ImpersonationEventCreate) SetNillableUpdatedByImpersonator(v *string) *ImpersonationEventCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *ImpersonationEventCreate) SetDeletedAt(v time.Time) *ImpersonationEventCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -188,6 +202,14 @@ func (_c *ImpersonationEventCreate) SetOrganizationID(v string) *ImpersonationEv
 // SetTargetUserID sets the "target_user_id" field.
 func (_c *ImpersonationEventCreate) SetTargetUserID(v string) *ImpersonationEventCreate {
 	_c.mutation.SetTargetUserID(v)
+	return _c
+}
+
+// SetNillableTargetUserID sets the "target_user_id" field if the given value is not nil.
+func (_c *ImpersonationEventCreate) SetNillableTargetUserID(v *string) *ImpersonationEventCreate {
+	if v != nil {
+		_c.SetTargetUserID(*v)
+	}
 	return _c
 }
 
@@ -314,14 +336,8 @@ func (_c *ImpersonationEventCreate) check() error {
 	if _, ok := _c.mutation.OrganizationID(); !ok {
 		return &ValidationError{Name: "organization_id", err: errors.New(`generated: missing required field "ImpersonationEvent.organization_id"`)}
 	}
-	if _, ok := _c.mutation.TargetUserID(); !ok {
-		return &ValidationError{Name: "target_user_id", err: errors.New(`generated: missing required field "ImpersonationEvent.target_user_id"`)}
-	}
 	if len(_c.mutation.UserIDs()) == 0 {
 		return &ValidationError{Name: "user", err: errors.New(`generated: missing required edge "ImpersonationEvent.user"`)}
-	}
-	if len(_c.mutation.TargetUserIDs()) == 0 {
-		return &ValidationError{Name: "target_user", err: errors.New(`generated: missing required edge "ImpersonationEvent.target_user"`)}
 	}
 	if len(_c.mutation.OrganizationIDs()) == 0 {
 		return &ValidationError{Name: "organization", err: errors.New(`generated: missing required edge "ImpersonationEvent.organization"`)}
@@ -377,6 +393,10 @@ func (_c *ImpersonationEventCreate) createSpec() (*ImpersonationEvent, *sqlgraph
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(impersonationevent.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(impersonationevent.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(impersonationevent.FieldDeletedAt, field.TypeTime, value)

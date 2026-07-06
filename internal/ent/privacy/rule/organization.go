@@ -136,7 +136,6 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 		SubjectType: caller.SubjectType(),
 		Relation:    relation,
 		ObjectID:    organizationID,
-		Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 	}
 
 	access, err := utils.AuthzClientFromContext(ctx).CheckOrgAccess(ctx, ac)
@@ -214,7 +213,6 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 			SubjectID:   caller.SubjectID,
 			SubjectType: caller.SubjectType(),
 			Relation:    relation,
-			Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 		}
 
 		// No permissions checks on creation of org except if this is not a root org

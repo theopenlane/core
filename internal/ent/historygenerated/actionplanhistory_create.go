@@ -114,6 +114,20 @@ func (_c *ActionPlanHistoryCreate) SetNillableUpdatedBy(v *string) *ActionPlanHi
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *ActionPlanHistoryCreate) SetUpdatedByImpersonator(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *ActionPlanHistoryCreate) SetDeletedAt(v time.Time) *ActionPlanHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -878,6 +892,10 @@ func (_c *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph.C
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(actionplanhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(actionplanhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(actionplanhistory.FieldDeletedAt, field.TypeTime, value)

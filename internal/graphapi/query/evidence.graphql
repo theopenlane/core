@@ -23,6 +23,7 @@ mutation CreateBulkCSVEvidence ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			url
 			workflowEligibleMarker
 		}
@@ -211,6 +212,7 @@ query GetEvidenceByID ($evidenceId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		url
 		workflowEligibleMarker
 		files {
@@ -369,6 +371,7 @@ mutation UpdateBulkEvidence ($ids: [ID!]!, $input: UpdateEvidenceInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			url
 			workflowEligibleMarker
 		}

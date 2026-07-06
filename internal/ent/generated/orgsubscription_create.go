@@ -81,6 +81,20 @@ func (_c *OrgSubscriptionCreate) SetNillableUpdatedBy(v *string) *OrgSubscriptio
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *OrgSubscriptionCreate) SetUpdatedByImpersonator(v string) *OrgSubscriptionCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *OrgSubscriptionCreate) SetNillableUpdatedByImpersonator(v *string) *OrgSubscriptionCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *OrgSubscriptionCreate) SetDeletedAt(v time.Time) *OrgSubscriptionCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -422,6 +436,10 @@ func (_c *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Creat
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgsubscription.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(orgsubscription.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(orgsubscription.FieldDeletedAt, field.TypeTime, value)

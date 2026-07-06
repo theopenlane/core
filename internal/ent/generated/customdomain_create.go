@@ -80,6 +80,20 @@ func (_c *CustomDomainCreate) SetNillableUpdatedBy(v *string) *CustomDomainCreat
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *CustomDomainCreate) SetUpdatedByImpersonator(v string) *CustomDomainCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *CustomDomainCreate) SetNillableUpdatedByImpersonator(v *string) *CustomDomainCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *CustomDomainCreate) SetDeletedAt(v time.Time) *CustomDomainCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -406,6 +420,10 @@ func (_c *CustomDomainCreate) createSpec() (*CustomDomain, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(customdomain.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(customdomain.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(customdomain.FieldDeletedAt, field.TypeTime, value)

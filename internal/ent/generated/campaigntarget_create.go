@@ -85,6 +85,20 @@ func (_c *CampaignTargetCreate) SetNillableUpdatedBy(v *string) *CampaignTargetC
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *CampaignTargetCreate) SetUpdatedByImpersonator(v string) *CampaignTargetCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *CampaignTargetCreate) SetNillableUpdatedByImpersonator(v *string) *CampaignTargetCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *CampaignTargetCreate) SetDeletedAt(v time.Time) *CampaignTargetCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -484,6 +498,10 @@ func (_c *CampaignTargetCreate) createSpec() (*CampaignTarget, *sqlgraph.CreateS
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(campaigntarget.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(campaigntarget.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(campaigntarget.FieldDeletedAt, field.TypeTime, value)

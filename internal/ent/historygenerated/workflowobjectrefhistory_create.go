@@ -113,6 +113,20 @@ func (_c *WorkflowObjectRefHistoryCreate) SetNillableUpdatedBy(v *string) *Workf
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *WorkflowObjectRefHistoryCreate) SetUpdatedByImpersonator(v string) *WorkflowObjectRefHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *WorkflowObjectRefHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *WorkflowObjectRefHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDisplayID sets the "display_id" field.
 func (_c *WorkflowObjectRefHistoryCreate) SetDisplayID(v string) *WorkflowObjectRefHistoryCreate {
 	_c.mutation.SetDisplayID(v)
@@ -513,6 +527,10 @@ func (_c *WorkflowObjectRefHistoryCreate) createSpec() (*WorkflowObjectRefHistor
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(workflowobjectrefhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(workflowobjectrefhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(workflowobjectrefhistory.FieldDisplayID, field.TypeString, value)

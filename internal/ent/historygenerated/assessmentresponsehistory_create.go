@@ -114,6 +114,20 @@ func (_c *AssessmentResponseHistoryCreate) SetNillableUpdatedBy(v *string) *Asse
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *AssessmentResponseHistoryCreate) SetUpdatedByImpersonator(v string) *AssessmentResponseHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *AssessmentResponseHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *AssessmentResponseHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *AssessmentResponseHistoryCreate) SetDeletedAt(v time.Time) *AssessmentResponseHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -667,6 +681,10 @@ func (_c *AssessmentResponseHistoryCreate) createSpec() (*AssessmentResponseHist
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldDeletedAt, field.TypeTime, value)

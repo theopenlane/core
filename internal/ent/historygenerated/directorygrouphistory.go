@@ -36,6 +36,8 @@ type DirectoryGroupHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
@@ -112,7 +114,7 @@ func (*DirectoryGroupHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case directorygrouphistory.FieldMemberCount:
 			values[i] = new(sql.NullInt64)
-		case directorygrouphistory.FieldID, directorygrouphistory.FieldRef, directorygrouphistory.FieldCreatedBy, directorygrouphistory.FieldUpdatedBy, directorygrouphistory.FieldDisplayID, directorygrouphistory.FieldOwnerID, directorygrouphistory.FieldEnvironmentName, directorygrouphistory.FieldEnvironmentID, directorygrouphistory.FieldScopeName, directorygrouphistory.FieldScopeID, directorygrouphistory.FieldIntegrationID, directorygrouphistory.FieldPlatformID, directorygrouphistory.FieldDirectoryInstanceID, directorygrouphistory.FieldDirectorySyncRunID, directorygrouphistory.FieldExternalID, directorygrouphistory.FieldEmail, directorygrouphistory.FieldDisplayName, directorygrouphistory.FieldDescription, directorygrouphistory.FieldClassification, directorygrouphistory.FieldStatus, directorygrouphistory.FieldProfileHash, directorygrouphistory.FieldRawProfileFileID, directorygrouphistory.FieldSourceVersion, directorygrouphistory.FieldDirectoryName:
+		case directorygrouphistory.FieldID, directorygrouphistory.FieldRef, directorygrouphistory.FieldCreatedBy, directorygrouphistory.FieldUpdatedBy, directorygrouphistory.FieldUpdatedByImpersonator, directorygrouphistory.FieldDisplayID, directorygrouphistory.FieldOwnerID, directorygrouphistory.FieldEnvironmentName, directorygrouphistory.FieldEnvironmentID, directorygrouphistory.FieldScopeName, directorygrouphistory.FieldScopeID, directorygrouphistory.FieldIntegrationID, directorygrouphistory.FieldPlatformID, directorygrouphistory.FieldDirectoryInstanceID, directorygrouphistory.FieldDirectorySyncRunID, directorygrouphistory.FieldExternalID, directorygrouphistory.FieldEmail, directorygrouphistory.FieldDisplayName, directorygrouphistory.FieldDescription, directorygrouphistory.FieldClassification, directorygrouphistory.FieldStatus, directorygrouphistory.FieldProfileHash, directorygrouphistory.FieldRawProfileFileID, directorygrouphistory.FieldSourceVersion, directorygrouphistory.FieldDirectoryName:
 			values[i] = new(sql.NullString)
 		case directorygrouphistory.FieldHistoryTime, directorygrouphistory.FieldCreatedAt, directorygrouphistory.FieldUpdatedAt, directorygrouphistory.FieldFirstSeenAt, directorygrouphistory.FieldLastSeenAt, directorygrouphistory.FieldAddedAt, directorygrouphistory.FieldRemovedAt, directorygrouphistory.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -178,6 +180,13 @@ func (_m *DirectoryGroupHistory) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case directorygrouphistory.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case directorygrouphistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -431,6 +440,11 @@ func (_m *DirectoryGroupHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
 	builder.WriteString(_m.DisplayID)

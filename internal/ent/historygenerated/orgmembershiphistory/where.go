@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/entx/history"
 )
@@ -98,6 +99,11 @@ func UpdatedBy(v string) predicate.OrgMembershipHistory {
 	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
+// UpdatedByImpersonator applies equality check predicate on the "updated_by_impersonator" field. It's identical to UpdatedByImpersonatorEQ.
+func UpdatedByImpersonator(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldUpdatedByImpersonator, v))
+}
+
 // OrganizationID applies equality check predicate on the "organization_id" field. It's identical to OrganizationIDEQ.
 func OrganizationID(v string) predicate.OrgMembershipHistory {
 	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldOrganizationID, v))
@@ -106,6 +112,26 @@ func OrganizationID(v string) predicate.OrgMembershipHistory {
 // UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
 func UserID(v string) predicate.OrgMembershipHistory {
 	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldUserID, v))
+}
+
+// SSOExempt applies equality check predicate on the "sso_exempt" field. It's identical to SSOExemptEQ.
+func SSOExempt(v bool) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldSSOExempt, v))
+}
+
+// SSOExemptReason applies equality check predicate on the "sso_exempt_reason" field. It's identical to SSOExemptReasonEQ.
+func SSOExemptReason(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldSSOExemptReason, v))
+}
+
+// SSOExemptGrantedBy applies equality check predicate on the "sso_exempt_granted_by" field. It's identical to SSOExemptGrantedByEQ.
+func SSOExemptGrantedBy(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldSSOExemptGrantedBy, v))
+}
+
+// SSOExemptGrantedAt applies equality check predicate on the "sso_exempt_granted_at" field. It's identical to SSOExemptGrantedAtEQ.
+func SSOExemptGrantedAt(v models.DateTime) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldSSOExemptGrantedAt, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -493,6 +519,81 @@ func UpdatedByContainsFold(v string) predicate.OrgMembershipHistory {
 	return predicate.OrgMembershipHistory(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
+// UpdatedByImpersonatorEQ applies the EQ predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorEQ(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorNEQ applies the NEQ predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNEQ(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNEQ(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorIn applies the In predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorIn(vs ...string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldIn(FieldUpdatedByImpersonator, vs...))
+}
+
+// UpdatedByImpersonatorNotIn applies the NotIn predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNotIn(vs ...string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNotIn(FieldUpdatedByImpersonator, vs...))
+}
+
+// UpdatedByImpersonatorGT applies the GT predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorGT(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldGT(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorGTE applies the GTE predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorGTE(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldGTE(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorLT applies the LT predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorLT(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldLT(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorLTE applies the LTE predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorLTE(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldLTE(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorContains applies the Contains predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorContains(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldContains(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorHasPrefix applies the HasPrefix predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorHasPrefix(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldHasPrefix(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorHasSuffix applies the HasSuffix predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorHasSuffix(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldHasSuffix(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorIsNil applies the IsNil predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorIsNil() predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldIsNull(FieldUpdatedByImpersonator))
+}
+
+// UpdatedByImpersonatorNotNil applies the NotNil predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNotNil() predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNotNull(FieldUpdatedByImpersonator))
+}
+
+// UpdatedByImpersonatorEqualFold applies the EqualFold predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorEqualFold(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEqualFold(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorContainsFold applies the ContainsFold predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorContainsFold(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldContainsFold(FieldUpdatedByImpersonator, v))
+}
+
 // RoleEQ applies the EQ predicate on the "role" field.
 func RoleEQ(v enums.Role) predicate.OrgMembershipHistory {
 	vc := v
@@ -651,6 +752,226 @@ func UserIDEqualFold(v string) predicate.OrgMembershipHistory {
 // UserIDContainsFold applies the ContainsFold predicate on the "user_id" field.
 func UserIDContainsFold(v string) predicate.OrgMembershipHistory {
 	return predicate.OrgMembershipHistory(sql.FieldContainsFold(FieldUserID, v))
+}
+
+// SSOExemptEQ applies the EQ predicate on the "sso_exempt" field.
+func SSOExemptEQ(v bool) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldSSOExempt, v))
+}
+
+// SSOExemptNEQ applies the NEQ predicate on the "sso_exempt" field.
+func SSOExemptNEQ(v bool) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNEQ(FieldSSOExempt, v))
+}
+
+// SSOExemptIsNil applies the IsNil predicate on the "sso_exempt" field.
+func SSOExemptIsNil() predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldIsNull(FieldSSOExempt))
+}
+
+// SSOExemptNotNil applies the NotNil predicate on the "sso_exempt" field.
+func SSOExemptNotNil() predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNotNull(FieldSSOExempt))
+}
+
+// SSOExemptReasonEQ applies the EQ predicate on the "sso_exempt_reason" field.
+func SSOExemptReasonEQ(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldSSOExemptReason, v))
+}
+
+// SSOExemptReasonNEQ applies the NEQ predicate on the "sso_exempt_reason" field.
+func SSOExemptReasonNEQ(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNEQ(FieldSSOExemptReason, v))
+}
+
+// SSOExemptReasonIn applies the In predicate on the "sso_exempt_reason" field.
+func SSOExemptReasonIn(vs ...string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldIn(FieldSSOExemptReason, vs...))
+}
+
+// SSOExemptReasonNotIn applies the NotIn predicate on the "sso_exempt_reason" field.
+func SSOExemptReasonNotIn(vs ...string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNotIn(FieldSSOExemptReason, vs...))
+}
+
+// SSOExemptReasonGT applies the GT predicate on the "sso_exempt_reason" field.
+func SSOExemptReasonGT(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldGT(FieldSSOExemptReason, v))
+}
+
+// SSOExemptReasonGTE applies the GTE predicate on the "sso_exempt_reason" field.
+func SSOExemptReasonGTE(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldGTE(FieldSSOExemptReason, v))
+}
+
+// SSOExemptReasonLT applies the LT predicate on the "sso_exempt_reason" field.
+func SSOExemptReasonLT(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldLT(FieldSSOExemptReason, v))
+}
+
+// SSOExemptReasonLTE applies the LTE predicate on the "sso_exempt_reason" field.
+func SSOExemptReasonLTE(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldLTE(FieldSSOExemptReason, v))
+}
+
+// SSOExemptReasonContains applies the Contains predicate on the "sso_exempt_reason" field.
+func SSOExemptReasonContains(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldContains(FieldSSOExemptReason, v))
+}
+
+// SSOExemptReasonHasPrefix applies the HasPrefix predicate on the "sso_exempt_reason" field.
+func SSOExemptReasonHasPrefix(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldHasPrefix(FieldSSOExemptReason, v))
+}
+
+// SSOExemptReasonHasSuffix applies the HasSuffix predicate on the "sso_exempt_reason" field.
+func SSOExemptReasonHasSuffix(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldHasSuffix(FieldSSOExemptReason, v))
+}
+
+// SSOExemptReasonIsNil applies the IsNil predicate on the "sso_exempt_reason" field.
+func SSOExemptReasonIsNil() predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldIsNull(FieldSSOExemptReason))
+}
+
+// SSOExemptReasonNotNil applies the NotNil predicate on the "sso_exempt_reason" field.
+func SSOExemptReasonNotNil() predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNotNull(FieldSSOExemptReason))
+}
+
+// SSOExemptReasonEqualFold applies the EqualFold predicate on the "sso_exempt_reason" field.
+func SSOExemptReasonEqualFold(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEqualFold(FieldSSOExemptReason, v))
+}
+
+// SSOExemptReasonContainsFold applies the ContainsFold predicate on the "sso_exempt_reason" field.
+func SSOExemptReasonContainsFold(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldContainsFold(FieldSSOExemptReason, v))
+}
+
+// SSOExemptGrantedByEQ applies the EQ predicate on the "sso_exempt_granted_by" field.
+func SSOExemptGrantedByEQ(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldSSOExemptGrantedBy, v))
+}
+
+// SSOExemptGrantedByNEQ applies the NEQ predicate on the "sso_exempt_granted_by" field.
+func SSOExemptGrantedByNEQ(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNEQ(FieldSSOExemptGrantedBy, v))
+}
+
+// SSOExemptGrantedByIn applies the In predicate on the "sso_exempt_granted_by" field.
+func SSOExemptGrantedByIn(vs ...string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldIn(FieldSSOExemptGrantedBy, vs...))
+}
+
+// SSOExemptGrantedByNotIn applies the NotIn predicate on the "sso_exempt_granted_by" field.
+func SSOExemptGrantedByNotIn(vs ...string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNotIn(FieldSSOExemptGrantedBy, vs...))
+}
+
+// SSOExemptGrantedByGT applies the GT predicate on the "sso_exempt_granted_by" field.
+func SSOExemptGrantedByGT(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldGT(FieldSSOExemptGrantedBy, v))
+}
+
+// SSOExemptGrantedByGTE applies the GTE predicate on the "sso_exempt_granted_by" field.
+func SSOExemptGrantedByGTE(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldGTE(FieldSSOExemptGrantedBy, v))
+}
+
+// SSOExemptGrantedByLT applies the LT predicate on the "sso_exempt_granted_by" field.
+func SSOExemptGrantedByLT(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldLT(FieldSSOExemptGrantedBy, v))
+}
+
+// SSOExemptGrantedByLTE applies the LTE predicate on the "sso_exempt_granted_by" field.
+func SSOExemptGrantedByLTE(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldLTE(FieldSSOExemptGrantedBy, v))
+}
+
+// SSOExemptGrantedByContains applies the Contains predicate on the "sso_exempt_granted_by" field.
+func SSOExemptGrantedByContains(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldContains(FieldSSOExemptGrantedBy, v))
+}
+
+// SSOExemptGrantedByHasPrefix applies the HasPrefix predicate on the "sso_exempt_granted_by" field.
+func SSOExemptGrantedByHasPrefix(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldHasPrefix(FieldSSOExemptGrantedBy, v))
+}
+
+// SSOExemptGrantedByHasSuffix applies the HasSuffix predicate on the "sso_exempt_granted_by" field.
+func SSOExemptGrantedByHasSuffix(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldHasSuffix(FieldSSOExemptGrantedBy, v))
+}
+
+// SSOExemptGrantedByIsNil applies the IsNil predicate on the "sso_exempt_granted_by" field.
+func SSOExemptGrantedByIsNil() predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldIsNull(FieldSSOExemptGrantedBy))
+}
+
+// SSOExemptGrantedByNotNil applies the NotNil predicate on the "sso_exempt_granted_by" field.
+func SSOExemptGrantedByNotNil() predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNotNull(FieldSSOExemptGrantedBy))
+}
+
+// SSOExemptGrantedByEqualFold applies the EqualFold predicate on the "sso_exempt_granted_by" field.
+func SSOExemptGrantedByEqualFold(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEqualFold(FieldSSOExemptGrantedBy, v))
+}
+
+// SSOExemptGrantedByContainsFold applies the ContainsFold predicate on the "sso_exempt_granted_by" field.
+func SSOExemptGrantedByContainsFold(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldContainsFold(FieldSSOExemptGrantedBy, v))
+}
+
+// SSOExemptGrantedAtEQ applies the EQ predicate on the "sso_exempt_granted_at" field.
+func SSOExemptGrantedAtEQ(v models.DateTime) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldSSOExemptGrantedAt, v))
+}
+
+// SSOExemptGrantedAtNEQ applies the NEQ predicate on the "sso_exempt_granted_at" field.
+func SSOExemptGrantedAtNEQ(v models.DateTime) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNEQ(FieldSSOExemptGrantedAt, v))
+}
+
+// SSOExemptGrantedAtIn applies the In predicate on the "sso_exempt_granted_at" field.
+func SSOExemptGrantedAtIn(vs ...models.DateTime) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldIn(FieldSSOExemptGrantedAt, vs...))
+}
+
+// SSOExemptGrantedAtNotIn applies the NotIn predicate on the "sso_exempt_granted_at" field.
+func SSOExemptGrantedAtNotIn(vs ...models.DateTime) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNotIn(FieldSSOExemptGrantedAt, vs...))
+}
+
+// SSOExemptGrantedAtGT applies the GT predicate on the "sso_exempt_granted_at" field.
+func SSOExemptGrantedAtGT(v models.DateTime) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldGT(FieldSSOExemptGrantedAt, v))
+}
+
+// SSOExemptGrantedAtGTE applies the GTE predicate on the "sso_exempt_granted_at" field.
+func SSOExemptGrantedAtGTE(v models.DateTime) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldGTE(FieldSSOExemptGrantedAt, v))
+}
+
+// SSOExemptGrantedAtLT applies the LT predicate on the "sso_exempt_granted_at" field.
+func SSOExemptGrantedAtLT(v models.DateTime) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldLT(FieldSSOExemptGrantedAt, v))
+}
+
+// SSOExemptGrantedAtLTE applies the LTE predicate on the "sso_exempt_granted_at" field.
+func SSOExemptGrantedAtLTE(v models.DateTime) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldLTE(FieldSSOExemptGrantedAt, v))
+}
+
+// SSOExemptGrantedAtIsNil applies the IsNil predicate on the "sso_exempt_granted_at" field.
+func SSOExemptGrantedAtIsNil() predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldIsNull(FieldSSOExemptGrantedAt))
+}
+
+// SSOExemptGrantedAtNotNil applies the NotNil predicate on the "sso_exempt_granted_at" field.
+func SSOExemptGrantedAtNotNil() predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNotNull(FieldSSOExemptGrantedAt))
 }
 
 // And groups predicates with the AND operator between them.

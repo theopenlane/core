@@ -25,6 +25,7 @@ mutation CreateBulkCSVProgram ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -55,6 +56,7 @@ mutation CreateBulkProgram ($input: [CreateProgramInput!]) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -178,6 +180,7 @@ mutation CreateProgram ($input: CreateProgramInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			procedures {
 				edges {
 					node {
@@ -393,6 +396,7 @@ query GetProgramByID ($programId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		procedures {
 			edges {
 				node {
@@ -590,6 +594,7 @@ mutation UpdateProgram ($updateProgramId: ID!, $input: UpdateProgramInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			procedures {
 				edges {
 					node {

@@ -94,6 +94,20 @@ func (_c *WorkflowObjectRefCreate) SetNillableUpdatedBy(v *string) *WorkflowObje
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *WorkflowObjectRefCreate) SetUpdatedByImpersonator(v string) *WorkflowObjectRefCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *WorkflowObjectRefCreate) SetNillableUpdatedByImpersonator(v *string) *WorkflowObjectRefCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDisplayID sets the "display_id" field.
 func (_c *WorkflowObjectRefCreate) SetDisplayID(v string) *WorkflowObjectRefCreate {
 	_c.mutation.SetDisplayID(v)
@@ -582,6 +596,10 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(workflowobjectref.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(workflowobjectref.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(workflowobjectref.FieldDisplayID, field.TypeString, value)
