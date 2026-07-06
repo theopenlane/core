@@ -81,12 +81,7 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 				organization.IDNEQ(consts.SystemAdminOrgID),
 				organization.PersonalOrg(false),
 				organization.Not(
-					organization.HasOrgSubscriptionsWith(
-						orgsubscription.Or(
-							orgsubscription.ActiveEQ(true),
-							orgsubscription.StripeSubscriptionStatusEQ(string(stripe.SubscriptionStatusTrialing)),
-						),
-					),
+					organization.HasOrgSubscriptionsWith(activeOrTrialingSubscriptionPredicates()...),
 				),
 				organization.HasOrgSubscriptionsWith(
 					orgsubscription.ActiveEQ(false),
