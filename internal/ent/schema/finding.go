@@ -374,6 +374,7 @@ func (Finding) Annotations() []schema.Annotation {
 func (f Finding) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			policy.CanCreateObjectsUnderParents([]string{Control{}.PluralName(), Review{}.PluralName()}),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.FindingMutation](),
 		),
