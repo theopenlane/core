@@ -139,7 +139,10 @@ func backfillFileMD5Hashes(ctx context.Context, dbClient *ent.Client) {
 			downloaded, err := dbClient.ObjectManager.Download(ctx, nil, file, &storage.DownloadOptions{})
 			if err != nil {
 				failedCounter++
-				log.Error().Err(err).Str("file_id", f.ID).Msg("backfill: failed to download file for md5 hash")
+				log.Error().Err(err).Str("file_id", f.ID).
+					Str("storage_key", f.StoreKey).
+					Str("storage_path", f.StoragePath).
+					Msg("backfill: failed to download file for md5 hash")
 
 				continue
 			}
