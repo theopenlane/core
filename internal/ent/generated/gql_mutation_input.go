@@ -9994,6 +9994,8 @@ func (c *FileUpdateOne) SetInput(i UpdateFileInput) *FileUpdateOne {
 // CreateFindingInput represents a mutation input for creating findings.
 type CreateFindingInput struct {
 	Tags                 []string
+	ReviewedBy           *string
+	AssignedTo           *string
 	InternalNotes        *string
 	SystemInternalID     *string
 	EnvironmentName      *string
@@ -10038,6 +10040,10 @@ type CreateFindingInput struct {
 	OwnerID              *string
 	BlockedGroupIDs      []string
 	EditorIDs            []string
+	ReviewedByUserID     *string
+	ReviewedByGroupID    *string
+	AssignedToUserID     *string
+	AssignedToGroupID    *string
 	EnvironmentID        *string
 	ScopeID              *string
 	FindingStatusID      *string
@@ -10066,6 +10072,12 @@ type CreateFindingInput struct {
 func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ReviewedBy; v != nil {
+		m.SetReviewedBy(*v)
+	}
+	if v := i.AssignedTo; v != nil {
+		m.SetAssignedTo(*v)
 	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
@@ -10199,6 +10211,18 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	if v := i.EditorIDs; len(v) > 0 {
 		m.AddEditorIDs(v...)
 	}
+	if v := i.ReviewedByUserID; v != nil {
+		m.SetReviewedByUserID(*v)
+	}
+	if v := i.ReviewedByGroupID; v != nil {
+		m.SetReviewedByGroupID(*v)
+	}
+	if v := i.AssignedToUserID; v != nil {
+		m.SetAssignedToUserID(*v)
+	}
+	if v := i.AssignedToGroupID; v != nil {
+		m.SetAssignedToGroupID(*v)
+	}
 	if v := i.EnvironmentID; v != nil {
 		m.SetEnvironmentID(*v)
 	}
@@ -10278,6 +10302,10 @@ type UpdateFindingInput struct {
 	ClearTags                  bool
 	Tags                       []string
 	AppendTags                 []string
+	ClearReviewedBy            bool
+	ReviewedBy                 *string
+	ClearAssignedTo            bool
+	AssignedTo                 *string
 	ClearInternalNotes         bool
 	InternalNotes              *string
 	ClearSystemInternalID      bool
@@ -10370,6 +10398,14 @@ type UpdateFindingInput struct {
 	ClearEditors               bool
 	AddEditorIDs               []string
 	RemoveEditorIDs            []string
+	ClearReviewedByUser        bool
+	ReviewedByUserID           *string
+	ClearReviewedByGroup       bool
+	ReviewedByGroupID          *string
+	ClearAssignedToUser        bool
+	AssignedToUserID           *string
+	ClearAssignedToGroup       bool
+	AssignedToGroupID          *string
 	ClearEnvironment           bool
 	EnvironmentID              *string
 	ClearScope                 bool
@@ -10445,6 +10481,18 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearReviewedBy {
+		m.ClearReviewedBy()
+	}
+	if v := i.ReviewedBy; v != nil {
+		m.SetReviewedBy(*v)
+	}
+	if i.ClearAssignedTo {
+		m.ClearAssignedTo()
+	}
+	if v := i.AssignedTo; v != nil {
+		m.SetAssignedTo(*v)
 	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
@@ -10721,6 +10769,30 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.RemoveEditorIDs; len(v) > 0 {
 		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearReviewedByUser {
+		m.ClearReviewedByUser()
+	}
+	if v := i.ReviewedByUserID; v != nil {
+		m.SetReviewedByUserID(*v)
+	}
+	if i.ClearReviewedByGroup {
+		m.ClearReviewedByGroup()
+	}
+	if v := i.ReviewedByGroupID; v != nil {
+		m.SetReviewedByGroupID(*v)
+	}
+	if i.ClearAssignedToUser {
+		m.ClearAssignedToUser()
+	}
+	if v := i.AssignedToUserID; v != nil {
+		m.SetAssignedToUserID(*v)
+	}
+	if i.ClearAssignedToGroup {
+		m.ClearAssignedToGroup()
+	}
+	if v := i.AssignedToGroupID; v != nil {
+		m.SetAssignedToGroupID(*v)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()
@@ -29764,6 +29836,8 @@ func (c *VendorScoringConfigUpdateOne) SetInput(i UpdateVendorScoringConfigInput
 // CreateVulnerabilityInput represents a mutation input for creating vulnerabilities.
 type CreateVulnerabilityInput struct {
 	Tags                    []string
+	ReviewedBy              *string
+	AssignedTo              *string
 	InternalNotes           *string
 	SystemInternalID        *string
 	EnvironmentName         *string
@@ -29814,6 +29888,10 @@ type CreateVulnerabilityInput struct {
 	BlockedGroupIDs         []string
 	EditorIDs               []string
 	ViewerIDs               []string
+	ReviewedByUserID        *string
+	ReviewedByGroupID       *string
+	AssignedToUserID        *string
+	AssignedToGroupID       *string
 	EnvironmentID           *string
 	ScopeID                 *string
 	VulnerabilityStatusID   *string
@@ -29838,6 +29916,12 @@ type CreateVulnerabilityInput struct {
 func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ReviewedBy; v != nil {
+		m.SetReviewedBy(*v)
+	}
+	if v := i.AssignedTo; v != nil {
+		m.SetAssignedTo(*v)
 	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
@@ -29987,6 +30071,18 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if v := i.ViewerIDs; len(v) > 0 {
 		m.AddViewerIDs(v...)
 	}
+	if v := i.ReviewedByUserID; v != nil {
+		m.SetReviewedByUserID(*v)
+	}
+	if v := i.ReviewedByGroupID; v != nil {
+		m.SetReviewedByGroupID(*v)
+	}
+	if v := i.AssignedToUserID; v != nil {
+		m.SetAssignedToUserID(*v)
+	}
+	if v := i.AssignedToGroupID; v != nil {
+		m.SetAssignedToGroupID(*v)
+	}
 	if v := i.EnvironmentID; v != nil {
 		m.SetEnvironmentID(*v)
 	}
@@ -30054,6 +30150,10 @@ type UpdateVulnerabilityInput struct {
 	ClearTags                    bool
 	Tags                         []string
 	AppendTags                   []string
+	ClearReviewedBy              bool
+	ReviewedBy                   *string
+	ClearAssignedTo              bool
+	AssignedTo                   *string
 	ClearInternalNotes           bool
 	InternalNotes                *string
 	ClearSystemInternalID        bool
@@ -30157,6 +30257,14 @@ type UpdateVulnerabilityInput struct {
 	ClearViewers                 bool
 	AddViewerIDs                 []string
 	RemoveViewerIDs              []string
+	ClearReviewedByUser          bool
+	ReviewedByUserID             *string
+	ClearReviewedByGroup         bool
+	ReviewedByGroupID            *string
+	ClearAssignedToUser          bool
+	AssignedToUserID             *string
+	ClearAssignedToGroup         bool
+	AssignedToGroupID            *string
 	ClearEnvironment             bool
 	EnvironmentID                *string
 	ClearScope                   bool
@@ -30220,6 +30328,18 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearReviewedBy {
+		m.ClearReviewedBy()
+	}
+	if v := i.ReviewedBy; v != nil {
+		m.SetReviewedBy(*v)
+	}
+	if i.ClearAssignedTo {
+		m.ClearAssignedTo()
+	}
+	if v := i.AssignedTo; v != nil {
+		m.SetAssignedTo(*v)
 	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
@@ -30529,6 +30649,30 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.RemoveViewerIDs; len(v) > 0 {
 		m.RemoveViewerIDs(v...)
+	}
+	if i.ClearReviewedByUser {
+		m.ClearReviewedByUser()
+	}
+	if v := i.ReviewedByUserID; v != nil {
+		m.SetReviewedByUserID(*v)
+	}
+	if i.ClearReviewedByGroup {
+		m.ClearReviewedByGroup()
+	}
+	if v := i.ReviewedByGroupID; v != nil {
+		m.SetReviewedByGroupID(*v)
+	}
+	if i.ClearAssignedToUser {
+		m.ClearAssignedToUser()
+	}
+	if v := i.AssignedToUserID; v != nil {
+		m.SetAssignedToUserID(*v)
+	}
+	if i.ClearAssignedToGroup {
+		m.ClearAssignedToGroup()
+	}
+	if v := i.AssignedToGroupID; v != nil {
+		m.SetAssignedToGroupID(*v)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()

@@ -37,10 +37,14 @@ func TestMutationCreateFinding(t *testing.T) {
 		{
 			name: "happy path",
 			request: testclient.CreateFindingInput{
-				DisplayName:     lo.ToPtr("Finding"),
-				ExternalID:      lo.ToPtr("finding-" + ulids.New().String()),
-				ExternalOwnerID: lo.ToPtr("external-owner"),
-				OwnerID:         &sharedTestUser1.OrganizationID,
+				DisplayName:       lo.ToPtr("Finding"),
+				ExternalID:        lo.ToPtr("finding-" + ulids.New().String()),
+				ExternalOwnerID:   lo.ToPtr("external-owner"),
+				OwnerID:           &sharedTestUser1.OrganizationID,
+				AssignedToUserID:  &sharedViewOnlyUser.ID,
+				AssignedToGroupID: &sharedTestUser1.GroupID,
+				ReviewedByUserID:  &sharedViewOnlyUser.ID,
+				ReviewedByGroupID: &sharedTestUser1.GroupID,
 			},
 		},
 		{
@@ -105,6 +109,30 @@ func TestMutationCreateFinding(t *testing.T) {
 
 			if tc.request.Severity != nil {
 				assert.Check(t, is.Equal(*tc.request.Severity, *resp.CreateFinding.Finding.Severity))
+			}
+
+			if tc.request.AssignedToUserID != nil {
+				assert.Check(t, is.Equal(*tc.request.AssignedToUserID, *resp.CreateFinding.Finding.AssignedToUserID))
+			} else {
+				assert.Check(t, *resp.CreateFinding.Finding.AssignedToUserID == "", "expected AssignedToUserID to be empty but was %v", resp.CreateFinding.Finding.AssignedToUserID)
+			}
+
+			if tc.request.AssignedToGroupID != nil {
+				assert.Check(t, is.Equal(*tc.request.AssignedToGroupID, *resp.CreateFinding.Finding.AssignedToGroupID))
+			} else {
+				assert.Check(t, *resp.CreateFinding.Finding.AssignedToGroupID == "", "expected AssignedToGroupID to be empty but was %v", resp.CreateFinding.Finding.AssignedToGroupID)
+			}
+
+			if tc.request.ReviewedByUserID != nil {
+				assert.Check(t, is.Equal(*tc.request.ReviewedByUserID, *resp.CreateFinding.Finding.ReviewedByUserID))
+			} else {
+				assert.Check(t, *resp.CreateFinding.Finding.ReviewedByUserID == "", "expected ReviewedByUserID to be empty but was %v", resp.CreateFinding.Finding.ReviewedByUserID)
+			}
+
+			if tc.request.ReviewedByGroupID != nil {
+				assert.Check(t, is.Equal(*tc.request.ReviewedByGroupID, *resp.CreateFinding.Finding.ReviewedByGroupID))
+			} else {
+				assert.Check(t, *resp.CreateFinding.Finding.ReviewedByGroupID == "", "expected ReviewedByGroupID to be empty but was %v", resp.CreateFinding.Finding.ReviewedByGroupID)
 			}
 
 			(&Cleanup[*generated.FindingDeleteOne]{client: suite.client.db.Finding, ID: resp.CreateFinding.Finding.ID}).MustDelete(sharedTestUser1.UserCtx, t)
@@ -223,11 +251,15 @@ func TestMutationUpdateFinding(t *testing.T) {
 			name: "happy path",
 			id:   finding.ID,
 			request: testclient.UpdateFindingInput{
-				DisplayName: lo.ToPtr("Updated Finding"),
-				Description: lo.ToPtr("Updated description"),
-				Severity:    lo.ToPtr("critical"),
-				Open:        lo.ToPtr(false),
-				Tags:        []string{"updated", "finding"},
+				DisplayName:       lo.ToPtr("Updated Finding"),
+				Description:       lo.ToPtr("Updated description"),
+				Severity:          lo.ToPtr("critical"),
+				Open:              lo.ToPtr(false),
+				Tags:              []string{"updated", "finding"},
+				AssignedToUserID:  &sharedViewOnlyUser.ID,
+				AssignedToGroupID: &sharedTestUser1.GroupID,
+				ReviewedByUserID:  &sharedViewOnlyUser.ID,
+				ReviewedByGroupID: &sharedTestUser1.GroupID,
 			},
 		},
 		{
@@ -315,6 +347,22 @@ func TestMutationUpdateFinding(t *testing.T) {
 
 			if tc.request.Open != nil {
 				assert.Check(t, is.Equal(*tc.request.Open, *resp.UpdateFinding.Finding.Open))
+			}
+
+			if tc.request.AssignedToUserID != nil {
+				assert.Check(t, is.Equal(*tc.request.AssignedToUserID, *resp.UpdateFinding.Finding.AssignedToUserID))
+			}
+
+			if tc.request.AssignedToGroupID != nil {
+				assert.Check(t, is.Equal(*tc.request.AssignedToGroupID, *resp.UpdateFinding.Finding.AssignedToGroupID))
+			}
+
+			if tc.request.ReviewedByUserID != nil {
+				assert.Check(t, is.Equal(*tc.request.ReviewedByUserID, *resp.UpdateFinding.Finding.ReviewedByUserID))
+			}
+
+			if tc.request.ReviewedByGroupID != nil {
+				assert.Check(t, is.Equal(*tc.request.ReviewedByGroupID, *resp.UpdateFinding.Finding.ReviewedByGroupID))
 			}
 
 			if tc.request.Tags != nil {

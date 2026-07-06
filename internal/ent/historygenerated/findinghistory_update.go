@@ -146,6 +146,126 @@ func (_u *FindingHistoryUpdate) ClearTags() *FindingHistoryUpdate {
 	return _u
 }
 
+// SetReviewedBy sets the "reviewed_by" field.
+func (_u *FindingHistoryUpdate) SetReviewedBy(v string) *FindingHistoryUpdate {
+	_u.mutation.SetReviewedBy(v)
+	return _u
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_u *FindingHistoryUpdate) SetNillableReviewedBy(v *string) *FindingHistoryUpdate {
+	if v != nil {
+		_u.SetReviewedBy(*v)
+	}
+	return _u
+}
+
+// ClearReviewedBy clears the value of the "reviewed_by" field.
+func (_u *FindingHistoryUpdate) ClearReviewedBy() *FindingHistoryUpdate {
+	_u.mutation.ClearReviewedBy()
+	return _u
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_u *FindingHistoryUpdate) SetReviewedByUserID(v string) *FindingHistoryUpdate {
+	_u.mutation.SetReviewedByUserID(v)
+	return _u
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_u *FindingHistoryUpdate) SetNillableReviewedByUserID(v *string) *FindingHistoryUpdate {
+	if v != nil {
+		_u.SetReviewedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByUserID clears the value of the "reviewed_by_user_id" field.
+func (_u *FindingHistoryUpdate) ClearReviewedByUserID() *FindingHistoryUpdate {
+	_u.mutation.ClearReviewedByUserID()
+	return _u
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_u *FindingHistoryUpdate) SetReviewedByGroupID(v string) *FindingHistoryUpdate {
+	_u.mutation.SetReviewedByGroupID(v)
+	return _u
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_u *FindingHistoryUpdate) SetNillableReviewedByGroupID(v *string) *FindingHistoryUpdate {
+	if v != nil {
+		_u.SetReviewedByGroupID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByGroupID clears the value of the "reviewed_by_group_id" field.
+func (_u *FindingHistoryUpdate) ClearReviewedByGroupID() *FindingHistoryUpdate {
+	_u.mutation.ClearReviewedByGroupID()
+	return _u
+}
+
+// SetAssignedTo sets the "assigned_to" field.
+func (_u *FindingHistoryUpdate) SetAssignedTo(v string) *FindingHistoryUpdate {
+	_u.mutation.SetAssignedTo(v)
+	return _u
+}
+
+// SetNillableAssignedTo sets the "assigned_to" field if the given value is not nil.
+func (_u *FindingHistoryUpdate) SetNillableAssignedTo(v *string) *FindingHistoryUpdate {
+	if v != nil {
+		_u.SetAssignedTo(*v)
+	}
+	return _u
+}
+
+// ClearAssignedTo clears the value of the "assigned_to" field.
+func (_u *FindingHistoryUpdate) ClearAssignedTo() *FindingHistoryUpdate {
+	_u.mutation.ClearAssignedTo()
+	return _u
+}
+
+// SetAssignedToUserID sets the "assigned_to_user_id" field.
+func (_u *FindingHistoryUpdate) SetAssignedToUserID(v string) *FindingHistoryUpdate {
+	_u.mutation.SetAssignedToUserID(v)
+	return _u
+}
+
+// SetNillableAssignedToUserID sets the "assigned_to_user_id" field if the given value is not nil.
+func (_u *FindingHistoryUpdate) SetNillableAssignedToUserID(v *string) *FindingHistoryUpdate {
+	if v != nil {
+		_u.SetAssignedToUserID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToUserID clears the value of the "assigned_to_user_id" field.
+func (_u *FindingHistoryUpdate) ClearAssignedToUserID() *FindingHistoryUpdate {
+	_u.mutation.ClearAssignedToUserID()
+	return _u
+}
+
+// SetAssignedToGroupID sets the "assigned_to_group_id" field.
+func (_u *FindingHistoryUpdate) SetAssignedToGroupID(v string) *FindingHistoryUpdate {
+	_u.mutation.SetAssignedToGroupID(v)
+	return _u
+}
+
+// SetNillableAssignedToGroupID sets the "assigned_to_group_id" field if the given value is not nil.
+func (_u *FindingHistoryUpdate) SetNillableAssignedToGroupID(v *string) *FindingHistoryUpdate {
+	if v != nil {
+		_u.SetAssignedToGroupID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToGroupID clears the value of the "assigned_to_group_id" field.
+func (_u *FindingHistoryUpdate) ClearAssignedToGroupID() *FindingHistoryUpdate {
+	_u.mutation.ClearAssignedToGroupID()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *FindingHistoryUpdate) SetInternalNotes(v string) *FindingHistoryUpdate {
 	_u.mutation.SetInternalNotes(v)
@@ -1177,6 +1297,42 @@ func (_u *FindingHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(findinghistory.FieldOwnerID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ReviewedBy(); ok {
+		_spec.SetField(findinghistory.FieldReviewedBy, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByCleared() {
+		_spec.ClearField(findinghistory.FieldReviewedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewedByUserID(); ok {
+		_spec.SetField(findinghistory.FieldReviewedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByUserIDCleared() {
+		_spec.ClearField(findinghistory.FieldReviewedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewedByGroupID(); ok {
+		_spec.SetField(findinghistory.FieldReviewedByGroupID, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByGroupIDCleared() {
+		_spec.ClearField(findinghistory.FieldReviewedByGroupID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssignedTo(); ok {
+		_spec.SetField(findinghistory.FieldAssignedTo, field.TypeString, value)
+	}
+	if _u.mutation.AssignedToCleared() {
+		_spec.ClearField(findinghistory.FieldAssignedTo, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssignedToUserID(); ok {
+		_spec.SetField(findinghistory.FieldAssignedToUserID, field.TypeString, value)
+	}
+	if _u.mutation.AssignedToUserIDCleared() {
+		_spec.ClearField(findinghistory.FieldAssignedToUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssignedToGroupID(); ok {
+		_spec.SetField(findinghistory.FieldAssignedToGroupID, field.TypeString, value)
+	}
+	if _u.mutation.AssignedToGroupIDCleared() {
+		_spec.ClearField(findinghistory.FieldAssignedToGroupID, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(findinghistory.FieldSystemOwned, field.TypeBool)
 	}
@@ -1616,6 +1772,126 @@ func (_u *FindingHistoryUpdateOne) AppendTags(v []string) *FindingHistoryUpdateO
 // ClearTags clears the value of the "tags" field.
 func (_u *FindingHistoryUpdateOne) ClearTags() *FindingHistoryUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetReviewedBy sets the "reviewed_by" field.
+func (_u *FindingHistoryUpdateOne) SetReviewedBy(v string) *FindingHistoryUpdateOne {
+	_u.mutation.SetReviewedBy(v)
+	return _u
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_u *FindingHistoryUpdateOne) SetNillableReviewedBy(v *string) *FindingHistoryUpdateOne {
+	if v != nil {
+		_u.SetReviewedBy(*v)
+	}
+	return _u
+}
+
+// ClearReviewedBy clears the value of the "reviewed_by" field.
+func (_u *FindingHistoryUpdateOne) ClearReviewedBy() *FindingHistoryUpdateOne {
+	_u.mutation.ClearReviewedBy()
+	return _u
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_u *FindingHistoryUpdateOne) SetReviewedByUserID(v string) *FindingHistoryUpdateOne {
+	_u.mutation.SetReviewedByUserID(v)
+	return _u
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_u *FindingHistoryUpdateOne) SetNillableReviewedByUserID(v *string) *FindingHistoryUpdateOne {
+	if v != nil {
+		_u.SetReviewedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByUserID clears the value of the "reviewed_by_user_id" field.
+func (_u *FindingHistoryUpdateOne) ClearReviewedByUserID() *FindingHistoryUpdateOne {
+	_u.mutation.ClearReviewedByUserID()
+	return _u
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_u *FindingHistoryUpdateOne) SetReviewedByGroupID(v string) *FindingHistoryUpdateOne {
+	_u.mutation.SetReviewedByGroupID(v)
+	return _u
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_u *FindingHistoryUpdateOne) SetNillableReviewedByGroupID(v *string) *FindingHistoryUpdateOne {
+	if v != nil {
+		_u.SetReviewedByGroupID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByGroupID clears the value of the "reviewed_by_group_id" field.
+func (_u *FindingHistoryUpdateOne) ClearReviewedByGroupID() *FindingHistoryUpdateOne {
+	_u.mutation.ClearReviewedByGroupID()
+	return _u
+}
+
+// SetAssignedTo sets the "assigned_to" field.
+func (_u *FindingHistoryUpdateOne) SetAssignedTo(v string) *FindingHistoryUpdateOne {
+	_u.mutation.SetAssignedTo(v)
+	return _u
+}
+
+// SetNillableAssignedTo sets the "assigned_to" field if the given value is not nil.
+func (_u *FindingHistoryUpdateOne) SetNillableAssignedTo(v *string) *FindingHistoryUpdateOne {
+	if v != nil {
+		_u.SetAssignedTo(*v)
+	}
+	return _u
+}
+
+// ClearAssignedTo clears the value of the "assigned_to" field.
+func (_u *FindingHistoryUpdateOne) ClearAssignedTo() *FindingHistoryUpdateOne {
+	_u.mutation.ClearAssignedTo()
+	return _u
+}
+
+// SetAssignedToUserID sets the "assigned_to_user_id" field.
+func (_u *FindingHistoryUpdateOne) SetAssignedToUserID(v string) *FindingHistoryUpdateOne {
+	_u.mutation.SetAssignedToUserID(v)
+	return _u
+}
+
+// SetNillableAssignedToUserID sets the "assigned_to_user_id" field if the given value is not nil.
+func (_u *FindingHistoryUpdateOne) SetNillableAssignedToUserID(v *string) *FindingHistoryUpdateOne {
+	if v != nil {
+		_u.SetAssignedToUserID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToUserID clears the value of the "assigned_to_user_id" field.
+func (_u *FindingHistoryUpdateOne) ClearAssignedToUserID() *FindingHistoryUpdateOne {
+	_u.mutation.ClearAssignedToUserID()
+	return _u
+}
+
+// SetAssignedToGroupID sets the "assigned_to_group_id" field.
+func (_u *FindingHistoryUpdateOne) SetAssignedToGroupID(v string) *FindingHistoryUpdateOne {
+	_u.mutation.SetAssignedToGroupID(v)
+	return _u
+}
+
+// SetNillableAssignedToGroupID sets the "assigned_to_group_id" field if the given value is not nil.
+func (_u *FindingHistoryUpdateOne) SetNillableAssignedToGroupID(v *string) *FindingHistoryUpdateOne {
+	if v != nil {
+		_u.SetAssignedToGroupID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToGroupID clears the value of the "assigned_to_group_id" field.
+func (_u *FindingHistoryUpdateOne) ClearAssignedToGroupID() *FindingHistoryUpdateOne {
+	_u.mutation.ClearAssignedToGroupID()
 	return _u
 }
 
@@ -2679,6 +2955,42 @@ func (_u *FindingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FindingH
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(findinghistory.FieldOwnerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewedBy(); ok {
+		_spec.SetField(findinghistory.FieldReviewedBy, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByCleared() {
+		_spec.ClearField(findinghistory.FieldReviewedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewedByUserID(); ok {
+		_spec.SetField(findinghistory.FieldReviewedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByUserIDCleared() {
+		_spec.ClearField(findinghistory.FieldReviewedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewedByGroupID(); ok {
+		_spec.SetField(findinghistory.FieldReviewedByGroupID, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByGroupIDCleared() {
+		_spec.ClearField(findinghistory.FieldReviewedByGroupID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssignedTo(); ok {
+		_spec.SetField(findinghistory.FieldAssignedTo, field.TypeString, value)
+	}
+	if _u.mutation.AssignedToCleared() {
+		_spec.ClearField(findinghistory.FieldAssignedTo, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssignedToUserID(); ok {
+		_spec.SetField(findinghistory.FieldAssignedToUserID, field.TypeString, value)
+	}
+	if _u.mutation.AssignedToUserIDCleared() {
+		_spec.ClearField(findinghistory.FieldAssignedToUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssignedToGroupID(); ok {
+		_spec.SetField(findinghistory.FieldAssignedToGroupID, field.TypeString, value)
+	}
+	if _u.mutation.AssignedToGroupIDCleared() {
+		_spec.ClearField(findinghistory.FieldAssignedToGroupID, field.TypeString)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(findinghistory.FieldSystemOwned, field.TypeBool)

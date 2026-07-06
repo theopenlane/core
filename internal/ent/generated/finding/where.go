@@ -114,6 +114,36 @@ func OwnerID(v string) predicate.Finding {
 	return predicate.Finding(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// ReviewedBy applies equality check predicate on the "reviewed_by" field. It's identical to ReviewedByEQ.
+func ReviewedBy(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldReviewedBy, v))
+}
+
+// ReviewedByUserID applies equality check predicate on the "reviewed_by_user_id" field. It's identical to ReviewedByUserIDEQ.
+func ReviewedByUserID(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldReviewedByUserID, v))
+}
+
+// ReviewedByGroupID applies equality check predicate on the "reviewed_by_group_id" field. It's identical to ReviewedByGroupIDEQ.
+func ReviewedByGroupID(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldReviewedByGroupID, v))
+}
+
+// AssignedTo applies equality check predicate on the "assigned_to" field. It's identical to AssignedToEQ.
+func AssignedTo(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldAssignedTo, v))
+}
+
+// AssignedToUserID applies equality check predicate on the "assigned_to_user_id" field. It's identical to AssignedToUserIDEQ.
+func AssignedToUserID(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldAssignedToUserID, v))
+}
+
+// AssignedToGroupID applies equality check predicate on the "assigned_to_group_id" field. It's identical to AssignedToGroupIDEQ.
+func AssignedToGroupID(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldAssignedToGroupID, v))
+}
+
 // SystemOwned applies equality check predicate on the "system_owned" field. It's identical to SystemOwnedEQ.
 func SystemOwned(v bool) predicate.Finding {
 	return predicate.Finding(sql.FieldEQ(FieldSystemOwned, v))
@@ -902,6 +932,456 @@ func OwnerIDEqualFold(v string) predicate.Finding {
 // OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
 func OwnerIDContainsFold(v string) predicate.Finding {
 	return predicate.Finding(sql.FieldContainsFold(FieldOwnerID, v))
+}
+
+// ReviewedByEQ applies the EQ predicate on the "reviewed_by" field.
+func ReviewedByEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldReviewedBy, v))
+}
+
+// ReviewedByNEQ applies the NEQ predicate on the "reviewed_by" field.
+func ReviewedByNEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldNEQ(FieldReviewedBy, v))
+}
+
+// ReviewedByIn applies the In predicate on the "reviewed_by" field.
+func ReviewedByIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldIn(FieldReviewedBy, vs...))
+}
+
+// ReviewedByNotIn applies the NotIn predicate on the "reviewed_by" field.
+func ReviewedByNotIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldNotIn(FieldReviewedBy, vs...))
+}
+
+// ReviewedByGT applies the GT predicate on the "reviewed_by" field.
+func ReviewedByGT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGT(FieldReviewedBy, v))
+}
+
+// ReviewedByGTE applies the GTE predicate on the "reviewed_by" field.
+func ReviewedByGTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGTE(FieldReviewedBy, v))
+}
+
+// ReviewedByLT applies the LT predicate on the "reviewed_by" field.
+func ReviewedByLT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLT(FieldReviewedBy, v))
+}
+
+// ReviewedByLTE applies the LTE predicate on the "reviewed_by" field.
+func ReviewedByLTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLTE(FieldReviewedBy, v))
+}
+
+// ReviewedByContains applies the Contains predicate on the "reviewed_by" field.
+func ReviewedByContains(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContains(FieldReviewedBy, v))
+}
+
+// ReviewedByHasPrefix applies the HasPrefix predicate on the "reviewed_by" field.
+func ReviewedByHasPrefix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasPrefix(FieldReviewedBy, v))
+}
+
+// ReviewedByHasSuffix applies the HasSuffix predicate on the "reviewed_by" field.
+func ReviewedByHasSuffix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasSuffix(FieldReviewedBy, v))
+}
+
+// ReviewedByIsNil applies the IsNil predicate on the "reviewed_by" field.
+func ReviewedByIsNil() predicate.Finding {
+	return predicate.Finding(sql.FieldIsNull(FieldReviewedBy))
+}
+
+// ReviewedByNotNil applies the NotNil predicate on the "reviewed_by" field.
+func ReviewedByNotNil() predicate.Finding {
+	return predicate.Finding(sql.FieldNotNull(FieldReviewedBy))
+}
+
+// ReviewedByEqualFold applies the EqualFold predicate on the "reviewed_by" field.
+func ReviewedByEqualFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEqualFold(FieldReviewedBy, v))
+}
+
+// ReviewedByContainsFold applies the ContainsFold predicate on the "reviewed_by" field.
+func ReviewedByContainsFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContainsFold(FieldReviewedBy, v))
+}
+
+// ReviewedByUserIDEQ applies the EQ predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDNEQ applies the NEQ predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDNEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldNEQ(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDIn applies the In predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldIn(FieldReviewedByUserID, vs...))
+}
+
+// ReviewedByUserIDNotIn applies the NotIn predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDNotIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldNotIn(FieldReviewedByUserID, vs...))
+}
+
+// ReviewedByUserIDGT applies the GT predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDGT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGT(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDGTE applies the GTE predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDGTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGTE(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDLT applies the LT predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDLT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLT(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDLTE applies the LTE predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDLTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLTE(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDContains applies the Contains predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDContains(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContains(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDHasPrefix applies the HasPrefix predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDHasPrefix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasPrefix(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDHasSuffix applies the HasSuffix predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDHasSuffix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasSuffix(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDIsNil applies the IsNil predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDIsNil() predicate.Finding {
+	return predicate.Finding(sql.FieldIsNull(FieldReviewedByUserID))
+}
+
+// ReviewedByUserIDNotNil applies the NotNil predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDNotNil() predicate.Finding {
+	return predicate.Finding(sql.FieldNotNull(FieldReviewedByUserID))
+}
+
+// ReviewedByUserIDEqualFold applies the EqualFold predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDEqualFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEqualFold(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDContainsFold applies the ContainsFold predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDContainsFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContainsFold(FieldReviewedByUserID, v))
+}
+
+// ReviewedByGroupIDEQ applies the EQ predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDNEQ applies the NEQ predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDNEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldNEQ(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDIn applies the In predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldIn(FieldReviewedByGroupID, vs...))
+}
+
+// ReviewedByGroupIDNotIn applies the NotIn predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDNotIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldNotIn(FieldReviewedByGroupID, vs...))
+}
+
+// ReviewedByGroupIDGT applies the GT predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDGT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGT(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDGTE applies the GTE predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDGTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGTE(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDLT applies the LT predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDLT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLT(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDLTE applies the LTE predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDLTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLTE(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDContains applies the Contains predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDContains(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContains(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDHasPrefix applies the HasPrefix predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDHasPrefix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasPrefix(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDHasSuffix applies the HasSuffix predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDHasSuffix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasSuffix(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDIsNil applies the IsNil predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDIsNil() predicate.Finding {
+	return predicate.Finding(sql.FieldIsNull(FieldReviewedByGroupID))
+}
+
+// ReviewedByGroupIDNotNil applies the NotNil predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDNotNil() predicate.Finding {
+	return predicate.Finding(sql.FieldNotNull(FieldReviewedByGroupID))
+}
+
+// ReviewedByGroupIDEqualFold applies the EqualFold predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDEqualFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEqualFold(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDContainsFold applies the ContainsFold predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDContainsFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContainsFold(FieldReviewedByGroupID, v))
+}
+
+// AssignedToEQ applies the EQ predicate on the "assigned_to" field.
+func AssignedToEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldAssignedTo, v))
+}
+
+// AssignedToNEQ applies the NEQ predicate on the "assigned_to" field.
+func AssignedToNEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldNEQ(FieldAssignedTo, v))
+}
+
+// AssignedToIn applies the In predicate on the "assigned_to" field.
+func AssignedToIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldIn(FieldAssignedTo, vs...))
+}
+
+// AssignedToNotIn applies the NotIn predicate on the "assigned_to" field.
+func AssignedToNotIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldNotIn(FieldAssignedTo, vs...))
+}
+
+// AssignedToGT applies the GT predicate on the "assigned_to" field.
+func AssignedToGT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGT(FieldAssignedTo, v))
+}
+
+// AssignedToGTE applies the GTE predicate on the "assigned_to" field.
+func AssignedToGTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGTE(FieldAssignedTo, v))
+}
+
+// AssignedToLT applies the LT predicate on the "assigned_to" field.
+func AssignedToLT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLT(FieldAssignedTo, v))
+}
+
+// AssignedToLTE applies the LTE predicate on the "assigned_to" field.
+func AssignedToLTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLTE(FieldAssignedTo, v))
+}
+
+// AssignedToContains applies the Contains predicate on the "assigned_to" field.
+func AssignedToContains(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContains(FieldAssignedTo, v))
+}
+
+// AssignedToHasPrefix applies the HasPrefix predicate on the "assigned_to" field.
+func AssignedToHasPrefix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasPrefix(FieldAssignedTo, v))
+}
+
+// AssignedToHasSuffix applies the HasSuffix predicate on the "assigned_to" field.
+func AssignedToHasSuffix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasSuffix(FieldAssignedTo, v))
+}
+
+// AssignedToIsNil applies the IsNil predicate on the "assigned_to" field.
+func AssignedToIsNil() predicate.Finding {
+	return predicate.Finding(sql.FieldIsNull(FieldAssignedTo))
+}
+
+// AssignedToNotNil applies the NotNil predicate on the "assigned_to" field.
+func AssignedToNotNil() predicate.Finding {
+	return predicate.Finding(sql.FieldNotNull(FieldAssignedTo))
+}
+
+// AssignedToEqualFold applies the EqualFold predicate on the "assigned_to" field.
+func AssignedToEqualFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEqualFold(FieldAssignedTo, v))
+}
+
+// AssignedToContainsFold applies the ContainsFold predicate on the "assigned_to" field.
+func AssignedToContainsFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContainsFold(FieldAssignedTo, v))
+}
+
+// AssignedToUserIDEQ applies the EQ predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDNEQ applies the NEQ predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDNEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldNEQ(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDIn applies the In predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldIn(FieldAssignedToUserID, vs...))
+}
+
+// AssignedToUserIDNotIn applies the NotIn predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDNotIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldNotIn(FieldAssignedToUserID, vs...))
+}
+
+// AssignedToUserIDGT applies the GT predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDGT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGT(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDGTE applies the GTE predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDGTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGTE(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDLT applies the LT predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDLT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLT(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDLTE applies the LTE predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDLTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLTE(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDContains applies the Contains predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDContains(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContains(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDHasPrefix applies the HasPrefix predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDHasPrefix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasPrefix(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDHasSuffix applies the HasSuffix predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDHasSuffix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasSuffix(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDIsNil applies the IsNil predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDIsNil() predicate.Finding {
+	return predicate.Finding(sql.FieldIsNull(FieldAssignedToUserID))
+}
+
+// AssignedToUserIDNotNil applies the NotNil predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDNotNil() predicate.Finding {
+	return predicate.Finding(sql.FieldNotNull(FieldAssignedToUserID))
+}
+
+// AssignedToUserIDEqualFold applies the EqualFold predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDEqualFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEqualFold(FieldAssignedToUserID, v))
+}
+
+// AssignedToUserIDContainsFold applies the ContainsFold predicate on the "assigned_to_user_id" field.
+func AssignedToUserIDContainsFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContainsFold(FieldAssignedToUserID, v))
+}
+
+// AssignedToGroupIDEQ applies the EQ predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDNEQ applies the NEQ predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDNEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldNEQ(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDIn applies the In predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldIn(FieldAssignedToGroupID, vs...))
+}
+
+// AssignedToGroupIDNotIn applies the NotIn predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDNotIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldNotIn(FieldAssignedToGroupID, vs...))
+}
+
+// AssignedToGroupIDGT applies the GT predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDGT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGT(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDGTE applies the GTE predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDGTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGTE(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDLT applies the LT predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDLT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLT(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDLTE applies the LTE predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDLTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLTE(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDContains applies the Contains predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDContains(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContains(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDHasPrefix applies the HasPrefix predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDHasPrefix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasPrefix(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDHasSuffix applies the HasSuffix predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDHasSuffix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasSuffix(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDIsNil applies the IsNil predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDIsNil() predicate.Finding {
+	return predicate.Finding(sql.FieldIsNull(FieldAssignedToGroupID))
+}
+
+// AssignedToGroupIDNotNil applies the NotNil predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDNotNil() predicate.Finding {
+	return predicate.Finding(sql.FieldNotNull(FieldAssignedToGroupID))
+}
+
+// AssignedToGroupIDEqualFold applies the EqualFold predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDEqualFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEqualFold(FieldAssignedToGroupID, v))
+}
+
+// AssignedToGroupIDContainsFold applies the ContainsFold predicate on the "assigned_to_group_id" field.
+func AssignedToGroupIDContainsFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContainsFold(FieldAssignedToGroupID, v))
 }
 
 // SystemOwnedEQ applies the EQ predicate on the "system_owned" field.
@@ -3413,6 +3893,122 @@ func HasEditorsWith(preds ...predicate.Group) predicate.Finding {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.FindingEditors
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReviewedByUser applies the HasEdge predicate on the "reviewed_by_user" edge.
+func HasReviewedByUser() predicate.Finding {
+	return predicate.Finding(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByUserTable, ReviewedByUserColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Finding
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReviewedByUserWith applies the HasEdge predicate on the "reviewed_by_user" edge with a given conditions (other predicates).
+func HasReviewedByUserWith(preds ...predicate.User) predicate.Finding {
+	return predicate.Finding(func(s *sql.Selector) {
+		step := newReviewedByUserStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Finding
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReviewedByGroup applies the HasEdge predicate on the "reviewed_by_group" edge.
+func HasReviewedByGroup() predicate.Finding {
+	return predicate.Finding(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByGroupTable, ReviewedByGroupColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Finding
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReviewedByGroupWith applies the HasEdge predicate on the "reviewed_by_group" edge with a given conditions (other predicates).
+func HasReviewedByGroupWith(preds ...predicate.Group) predicate.Finding {
+	return predicate.Finding(func(s *sql.Selector) {
+		step := newReviewedByGroupStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Finding
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAssignedToUser applies the HasEdge predicate on the "assigned_to_user" edge.
+func HasAssignedToUser() predicate.Finding {
+	return predicate.Finding(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, AssignedToUserTable, AssignedToUserColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Finding
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAssignedToUserWith applies the HasEdge predicate on the "assigned_to_user" edge with a given conditions (other predicates).
+func HasAssignedToUserWith(preds ...predicate.User) predicate.Finding {
+	return predicate.Finding(func(s *sql.Selector) {
+		step := newAssignedToUserStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Finding
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAssignedToGroup applies the HasEdge predicate on the "assigned_to_group" edge.
+func HasAssignedToGroup() predicate.Finding {
+	return predicate.Finding(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, AssignedToGroupTable, AssignedToGroupColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Finding
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAssignedToGroupWith applies the HasEdge predicate on the "assigned_to_group" edge with a given conditions (other predicates).
+func HasAssignedToGroupWith(preds ...predicate.Group) predicate.Finding {
+	return predicate.Finding(func(s *sql.Selector) {
+		step := newAssignedToGroupStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Finding
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
