@@ -55,7 +55,7 @@ func HandleUploads(ctx context.Context, svc *objects.Service, files []pkgobjects
 		// downstream storage providers see consistent values.
 		uploadOpts := BuildUploadOptions(ctx, &file)
 
-		hashSum, err := computeMD5Hash(file.RawFile)
+		hashSum, err := ComputeMD5Hash(file.RawFile)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("file", file.OriginalName).
 				Msg("failed to calculate md5 hash")
@@ -212,7 +212,8 @@ func BuildUploadOptions(ctx context.Context, f *pkgobjects.File) *pkgobjects.Upl
 	}
 }
 
-func computeMD5Hash(file io.ReadSeeker) ([]byte, error) {
+// ComputeMD5Hash returns the MD5 digest calculated from the contents of a file
+func ComputeMD5Hash(file io.ReadSeeker) ([]byte, error) {
 	if file == nil {
 		return nil, nil
 	}
