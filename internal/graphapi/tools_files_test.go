@@ -1,11 +1,15 @@
 package graphapi_test
 
 import (
+	"crypto/md5"
+	"encoding/hex"
+	"os"
 	"testing"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/pkg/objects/storage"
 	"gotest.tools/v3/assert"
+
+	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 const (
@@ -38,4 +42,15 @@ func uploadFile(t *testing.T, path string) *graphql.Upload {
 		Size:        pdfFile.Size,
 		ContentType: pdfFile.ContentType,
 	}
+}
+
+func getMD5Hash(t *testing.T, path string) string {
+	t.Helper()
+
+	data, err := os.ReadFile(path)
+	assert.NilError(t, err)
+
+	sum := md5.Sum(data)
+
+	return hex.EncodeToString(sum[:])
 }
