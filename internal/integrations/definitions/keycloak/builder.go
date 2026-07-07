@@ -75,7 +75,7 @@ func Builder() registry.Builder {
 					ConfigSchema:        directorySyncSchema,
 					Policy:              types.ExecutionPolicy{Reconcile: true},
 					SkipDefaultLookback: true,
-					RequiredPermissions: []string{"view-users", "query-groups", "view-events"},
+					RequiredPermissions: []string{"view-realm", "view-users", "query-groups", "view-events"},
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
