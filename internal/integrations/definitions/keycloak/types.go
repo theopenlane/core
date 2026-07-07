@@ -41,7 +41,7 @@ type UserInput struct {
 	// DisableGroupSync when true only syncs users, skipping groups and memberships
 	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users disable group and membership sync operations"`
 	// FilterExpr limits imported records to envelopes matching a CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting, example=Example: payload.type == 'internal'"`
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting, example=Example: payload.enabled == true"`
 }
 
 // InstallationMetadata holds the stable Keycloak realm identity for one installation
