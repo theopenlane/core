@@ -70,12 +70,8 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context, openapi *OpenAPICo
 		}
 	}
 
-	// land the subscriber on the trust center they subscribed to
-	if tcURL := h.subscriberTrustCenterURL(ctxWithToken, entSubscriber); tcURL != "" {
-		return h.Redirect(ctx, tcURL, openapi)
-	}
-
-	// no trust center to redirect to (organization-level subscriber): reply inline
+	// the confirmation UX lives on the trust center's own domain (the page that called this endpoint), so
+	// reply inline; the caller lands the subscriber on the trust center
 	out := &models.VerifySubscribeReply{
 		Reply:   rout.Reply{Success: true},
 		Message: "Subscription confirmed, looking forward to sending you updates!",
@@ -147,6 +143,7 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 			RecipientInfo:  email.RecipientInfo{Email: entSubscriber.Email},
 			OrgName:        orgName,
 			Token:          tokenValue,
+			VerifyURL:      h.subscriberVerifyURL(ctxWithToken, entSubscriber),
 			UnsubscribeURL: h.subscriberUnsubscribeURL(ctxWithToken, entSubscriber),
 		}); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("error sending subscriber email")

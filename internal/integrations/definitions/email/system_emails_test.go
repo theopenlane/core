@@ -289,11 +289,35 @@ func TestPasswordResetURLConstruction(t *testing.T) {
 	assert.Equal(t, "https://app.testco.com/password-reset?token=reset-xyz", body.Actions[0].Button.Link)
 }
 
-// TestSubscribeVerifyURLConstruction verifies the subscribe verification URL
-func TestSubscribeVerifyURLConstruction(t *testing.T) {
+// TestSubscribeVerifyURLTrustCenterDomain verifies the confirm button uses the caller-supplied trust
+// center domain link when present, so subscribers land on the trust center rather than the API host
+func TestSubscribeVerifyURLTrustCenterDomain(t *testing.T) {
 	cfg := RuntimeEmailConfig{
 		CompanyName: "TestCo",
 		ProductURL:  "https://app.testco.com",
+		APIURL:      "https://api.testco.com",
+	}
+
+	req := SubscribeRequest{
+		RecipientInfo: RecipientInfo{FirstName: "Dana"},
+		OrgName:       "SubOrg",
+		Token:         "sub-tok",
+		VerifyURL:     "https://trust.suborg.com/subscribe/verify?token=sub-tok",
+	}
+
+	body := testDispatcher[SubscribeRequest](t, "SubscribeRequest").Build(cfg, req)
+
+	require.Len(t, body.Actions, 1)
+	assert.Equal(t, "https://trust.suborg.com/subscribe/verify?token=sub-tok", body.Actions[0].Button.Link)
+}
+
+// TestSubscribeVerifyURLFallback verifies that an organization-level subscriber with no trust center to
+// land on falls back to the API-direct verify endpoint
+func TestSubscribeVerifyURLFallback(t *testing.T) {
+	cfg := RuntimeEmailConfig{
+		CompanyName: "TestCo",
+		ProductURL:  "https://app.testco.com",
+		APIURL:      "https://api.testco.com",
 	}
 
 	req := SubscribeRequest{
@@ -305,7 +329,7 @@ func TestSubscribeVerifyURLConstruction(t *testing.T) {
 	body := testDispatcher[SubscribeRequest](t, "SubscribeRequest").Build(cfg, req)
 
 	require.Len(t, body.Actions, 1)
-	assert.Equal(t, "https://app.testco.com/subscribe/verify?token=sub-tok", body.Actions[0].Button.Link)
+	assert.Equal(t, "https://api.testco.com/v1/subscribe/verify?token=sub-tok", body.Actions[0].Button.Link)
 }
 
 // TestVerifyBillingURLConstruction verifies the billing verification URL
@@ -464,6 +488,9 @@ func TestOrgDeletionNoticeContent(t *testing.T) {
 	require.Len(t, body.Actions, 1)
 	assert.Equal(t, "https://app.testco.com/billing", body.Actions[0].Button.Link)
 	assert.Equal(t, "Add Payment Method", body.Actions[0].Button.Text)
+	// matches the questionnaire email treatment: trust center teal button on the base theme
+	assert.Equal(t, tcButtonColor, body.Actions[0].Button.Color)
+	assert.Equal(t, tcButtonTextColor, body.Actions[0].Button.TextColor)
 }
 
 // TestAllEmailOperationsCount verifies every dispatcher surfaces exactly one registration

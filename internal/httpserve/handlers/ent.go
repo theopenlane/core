@@ -674,15 +674,16 @@ func (h *Handler) subscriberUnsubscribeURL(ctx context.Context, sub *ent.Subscri
 	return trustcenterurl.UnsubscribeURLWithToken(customDomain, slug, sub.Token)
 }
 
-// subscriberTrustCenterURL returns the public homepage URL of a subscriber's trust center, used to redirect
-// the subscriber there after they confirm. Returns empty when the trust center cannot resolve
-func (h *Handler) subscriberTrustCenterURL(ctx context.Context, sub *ent.Subscriber) string {
+// subscriberVerifyURL builds the tokenized subscription-confirmation link for a subscriber, so the confirm
+// button lands on the trust center's own domain rather than the API host. Returns empty when the trust
+// center cannot resolve (organization-level subscriber), falling the email back to the API-direct endpoint
+func (h *Handler) subscriberVerifyURL(ctx context.Context, sub *ent.Subscriber) string {
 	customDomain, slug, ok := h.subscriberTrustCenterDomain(ctx, sub)
 	if !ok {
 		return ""
 	}
 
-	return trustcenterurl.BuildURL(customDomain, slug)
+	return trustcenterurl.SubscribeVerifyURLWithToken(customDomain, slug, sub.Token)
 }
 
 // createEvent creates a new event in the database but requires mapped input

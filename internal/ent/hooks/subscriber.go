@@ -81,11 +81,14 @@ func HookSubscriberCreate() ent.Hook {
 				return nil, err
 			}
 
+			customDomain, slug := subscriberTrustCenterDomain(ctx, m.Client(), trustCenterID)
+
 			if err := sendSystemEmail(ctx, m.Client(), emaildef.SubscribeOp.Name(), emaildef.SubscribeRequest{
 				RecipientInfo:  emaildef.RecipientInfo{Email: emailAddress},
 				OrgName:        orgName,
 				Token:          tokenValue,
-				UnsubscribeURL: subscriberUnsubscribeURL(ctx, m.Client(), trustCenterID, tokenValue),
+				VerifyURL:      trustcenterurl.SubscribeVerifyURLWithToken(customDomain, slug, tokenValue),
+				UnsubscribeURL: trustcenterurl.UnsubscribeURLWithToken(customDomain, slug, tokenValue),
 			}); err != nil {
 				return nil, err
 			}
@@ -183,12 +186,12 @@ func getSubscriber(ctx context.Context, m *generated.SubscriberMutation) (*gener
 	return query.Only(ctx)
 }
 
-// subscriberUnsubscribeURL builds the tokenized trust center unsubscribe link for a subscriber, reading
-// the trust center slug and optional custom domain so the link lands on the trust center (not the app
-// console). Returns empty for subscribers with no trust center, or when it cannot be resolved
-func subscriberUnsubscribeURL(ctx context.Context, client *generated.Client, trustCenterID, token string) string {
+// subscriberTrustCenterDomain resolves the custom domain and slug of a subscriber's trust center so the
+// caller can build links that land on the trust center (not the app console). Returns empty strings for
+// subscribers with no trust center, or when it cannot be resolved
+func subscriberTrustCenterDomain(ctx context.Context, client *generated.Client, trustCenterID string) (customDomain, slug string) {
 	if trustCenterID == "" {
-		return ""
+		return "", ""
 	}
 
 	tc, err := client.TrustCenter.Query().
@@ -196,17 +199,16 @@ func subscriberUnsubscribeURL(ctx context.Context, client *generated.Client, tru
 		WithCustomDomain().
 		Only(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("unable to resolve trust center for subscriber unsubscribe link")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to resolve trust center for subscriber link")
 
-		return ""
+		return "", ""
 	}
 
-	customDomain := ""
 	if tc.Edges.CustomDomain != nil {
 		customDomain = tc.Edges.CustomDomain.CnameRecord
 	}
 
-	return trustcenterurl.UnsubscribeURLWithToken(customDomain, tc.Slug, token)
+	return customDomain, tc.Slug
 }
 
 func updateSubscriber(ctx context.Context,

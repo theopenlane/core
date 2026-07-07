@@ -132,6 +132,11 @@ type SubscribeRequest struct {
 	OrgName string `json:"org_name" jsonschema:"required,description=Organization display name"`
 	// Token is the subscriber verification token appended to the verify URL
 	Token string `json:"token" jsonschema:"required,description=Subscriber verification token"`
+	// VerifyURL is the trust center's tokenized subscription-confirmation link the confirm button points at;
+	// built by the caller from the trust center domain since the operation has no access to it. When empty
+	// the operation falls back to the API-direct verify endpoint (organization-level subscribers with no
+	// trust center to land on)
+	VerifyURL string `json:"verifyURL,omitempty" jsonschema:"description=Trust center subscription confirmation link the button points at"`
 	// UnsubscribeURL is the trust center's tokenized unsubscribe link shown in the footer; built by the
 	// caller from the trust center domain since the operation has no access to it
 	UnsubscribeURL string `json:"unsubscribeURL,omitempty" jsonschema:"description=Trust center unsubscribe link shown in the footer"`
@@ -391,25 +396,14 @@ var _ = RegisterEmailOperation(Operation[InviteJoinedRequest]{
 			Header:    defaultHeader(cfg),
 			Name:      req.FirstName,
 			Title:     "You're in - welcome to " + req.OrgName + " on " + cfg.CompanyName + "!",
-			Intros: render.IntrosBlock{
-				Paragraphs: []string{
-					"Welcome to " + cfg.CompanyName + " - we're excited to have you on board with " + req.OrgName + "!",
-					"Ditch the spreadsheets, and embrace the pipeline with a faster, cleaner way to automate compliance, manage risk, and stay ahead of security threats - without the manual overhead.",
-				},
-			},
 			Callout: &render.Callout{
-				Title:   "Here's how to get started:",
+				Title:   "Some tips:",
 				Ordered: true,
 				Style:   calloutStyle(),
 				Items: []template.HTML{
 					"Complete the onboarding flow to tailor your experience",
 					"Explore any active " + render.LinkWithColor(cfg.ProductURL+"/programs", "programs", brandLight100) + " your team is running",
 					"Checkout our " + render.LinkWithColor(cfg.DocsURL, "quickstart guide", brandLight100) + " for helpful resources",
-				},
-			},
-			Outros: render.OutrosBlock{
-				Paragraphs: []string{
-					"When you're ready, hop into the platform and start exploring:",
 				},
 			},
 			Actions: []render.Action{{
@@ -490,9 +484,13 @@ var _ = RegisterEmailOperation(Operation[SubscribeRequest]{
 		return "Confirm your subscription to " + subscribeOrgName(cfg, req) + " updates"
 	},
 	Build: func(cfg RuntimeEmailConfig, req SubscribeRequest) render.ContentBody {
-		// the confirm link hits the API directly (GET), which verifies the token and redirects the
-		// subscriber to the trust center they subscribed to — not the console
-		verifyURL := tokenURL(cfg.APIURL, "/v1/subscribe/verify", req.Token)
+		// the confirm button lands the subscriber on their trust center's own domain, where the page
+		// confirms the subscription against the API. Organization-level subscribers have no trust center
+		// to land on, so they fall back to the API-direct verify endpoint
+		verifyURL := req.VerifyURL
+		if verifyURL == "" {
+			verifyURL = tokenURL(cfg.APIURL, "/v1/subscribe/verify", req.Token)
+		}
 		orgName := subscribeOrgName(cfg, req)
 
 		return render.ContentBody{
@@ -502,12 +500,11 @@ var _ = RegisterEmailOperation(Operation[SubscribeRequest]{
 			Title:     "Confirm your subscription",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
-					"You're almost subscribed to updates from " + orgName + "'s trust center.",
 					"Confirm your email address using the button below and we'll let you know whenever the trust center is updated - new posts, document changes, and subprocessor updates.",
 				},
 			},
 			Actions: []render.Action{{
-				Button: render.Button{Text: "Confirm subscription", Link: verifyURL},
+				Button: render.Button{Text: "Confirm subscription", Link: verifyURL, Color: tcButtonColor, TextColor: tcButtonTextColor},
 			}},
 			Outros: render.OutrosBlock{
 				Paragraphs: []string{
@@ -517,7 +514,6 @@ var _ = RegisterEmailOperation(Operation[SubscribeRequest]{
 		}
 	},
 	Config: func(cfg RuntimeEmailConfig, req SubscribeRequest) RuntimeEmailConfig {
-		cfg = applySystemBranding(cfg)
 		// the unsubscribe link is the trust center's tokenized unsubscribe, built by the caller from the
 		// trust center domain (not the product URL, which points at the app console). The token is what
 		// actually resolves and unsubscribes the subscriber, unlike the theme's generic footer fallback
@@ -795,7 +791,7 @@ var _ = RegisterEmailOperation(Operation[OrgDeletionNoticeEmail]{
 				},
 			},
 			Actions: []render.Action{{
-				Button: render.Button{Text: "Add Payment Method", Link: cfg.ProductURL + "/billing"},
+				Button: render.Button{Text: "Add Payment Method", Link: cfg.ProductURL + "/billing", Color: tcButtonColor, TextColor: tcButtonTextColor},
 			}},
 			Outros: render.OutrosBlock{
 				Paragraphs: []string{
@@ -804,9 +800,6 @@ var _ = RegisterEmailOperation(Operation[OrgDeletionNoticeEmail]{
 				},
 			},
 		}
-	},
-	Config: func(cfg RuntimeEmailConfig, _ OrgDeletionNoticeEmail) RuntimeEmailConfig {
-		return applySystemBranding(cfg)
 	},
 })
 
