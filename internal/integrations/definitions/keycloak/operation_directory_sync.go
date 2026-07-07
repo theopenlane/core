@@ -245,6 +245,7 @@ func fetchLastLoginTimes(ctx context.Context, gc *gocloak.GoCloak, token, realm 
 	})
 	if err != nil {
 		// non-fatal — return empty map, sync continues without lastLogin
+		logx.FromContext(ctx).Error().Err(err).Msg("error fetching last login events")
 		return map[string]int64{}, nil
 	}
 

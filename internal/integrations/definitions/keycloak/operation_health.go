@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // HealthCheck holds the result of a Keycloak health check
@@ -32,16 +33,20 @@ func (h HealthCheck) Handle() types.OperationHandler {
 func (HealthCheck) Run(ctx context.Context, gc *gocloak.GoCloak, req types.OperationRequest) (json.RawMessage, error) {
 	cred, err := resolveCredential(req.Credentials)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error resolving credentials")
 		return nil, ErrHealthCheckFailed
 	}
 
 	token, err := gc.LoginClient(ctx, cred.ClientID, cred.ClientSecret, cred.Realm)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error logging in client")
 		return nil, ErrHealthCheckFailed
 	}
 
 	realm, err := gc.GetRealm(ctx, token.AccessToken, cred.Realm)
+
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting realm")
 		return nil, ErrHealthCheckFailed
 	}
 
