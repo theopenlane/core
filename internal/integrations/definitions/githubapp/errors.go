@@ -37,6 +37,8 @@ var (
 	ErrAppSlugMissing = errors.New("githubapp: app slug missing")
 	// ErrClientType indicates the provided client is not a supported type
 	ErrClientType = errors.New("githubapp: unexpected client type")
+	// ErrClientNil indicates the provided client was unable to be created and is nil
+	ErrClientNil = errors.New("githubapp: unexpected nil client")
 	// ErrOperationConfigInvalid indicates operation config could not be decoded
 	ErrOperationConfigInvalid = errors.New("githubapp: operation config invalid")
 	// ErrResultEncode indicates an operation result could not be serialized

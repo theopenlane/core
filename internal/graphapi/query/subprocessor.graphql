@@ -1,252 +1,235 @@
-mutation CreateBulkCSVSubprocessor($input: Upload!) {
-  createBulkCSVSubprocessor(input: $input) {
-    subprocessors {
-      createdAt
-      createdBy
-      description
-      id
-      internalNotes
-      logoFileID
-      logoRemoteURL
-      name
-      ownerID
-      systemInternalID
-      systemOwned
-      tags
-      updatedAt
-      updatedBy
-      updatedByImpersonator
-      logoFile {
-        id
-        presignedURL
-      }
-      owner {
-        id
-        name
-      }
-    }
-  }
+mutation CreateBulkCSVSubprocessor ($input: Upload!) {
+	createBulkCSVSubprocessor(input: $input) {
+		subprocessors {
+			createdAt
+			createdBy
+			description
+			id
+			internalNotes
+			logoFileID
+			logoRemoteURL
+			name
+			ownerID
+			systemInternalID
+			systemOwned
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			logoFile {
+				id
+				presignedURL
+			}
+			owner {
+				id
+				name
+			}
+		}
+	}
 }
-
-mutation CreateBulkSubprocessor($input: [CreateSubprocessorInput!]) {
-  createBulkSubprocessor(input: $input) {
-    subprocessors {
-      createdAt
-      createdBy
-      description
-      id
-      internalNotes
-      logoFileID
-      logoRemoteURL
-      name
-      ownerID
-      systemInternalID
-      systemOwned
-      tags
-      updatedAt
-      updatedBy
-      updatedByImpersonator
-      logoFile {
-        id
-        presignedURL
-      }
-      owner {
-        id
-        name
-      }
-    }
-  }
+mutation CreateBulkSubprocessor ($input: [CreateSubprocessorInput!]) {
+	createBulkSubprocessor(input: $input) {
+		subprocessors {
+			createdAt
+			createdBy
+			description
+			id
+			internalNotes
+			logoFileID
+			logoRemoteURL
+			name
+			ownerID
+			systemInternalID
+			systemOwned
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			logoFile {
+				id
+				presignedURL
+			}
+			owner {
+				id
+				name
+			}
+		}
+	}
 }
-
-mutation CreateSubprocessor($input: CreateSubprocessorInput!, $logoFile: Upload, $logoFileMetadata: FileMetadataInput) {
-  createSubprocessor(
-    input: $input
-    logoFile: $logoFile
-    logoFileMetadata: $logoFileMetadata
-  ) {
-    subprocessor {
-      createdAt
-      createdBy
-      id
-      tags
-      updatedAt
-      updatedBy
-      name
-      description
-      logoRemoteURL
-      logoFileID
-      logoFile {
-        id
-        name
-        metadata
-        presignedURL
-      }
-      owner {
-        id
-        name
-      }
-    }
-  }
+mutation CreateSubprocessor ($input: CreateSubprocessorInput!, $logoFile: Upload, $logoFileMetadata: FileMetadataInput) {
+	createSubprocessor(input: $input, logoFile: $logoFile, logoFileMetadata: $logoFileMetadata) {
+		subprocessor {
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+			name
+			description
+			logoRemoteURL
+			logoFileID
+			logoFile {
+				id
+				name
+				metadata
+				presignedURL
+			}
+			owner {
+				id
+				name
+			}
+		}
+	}
 }
-
-mutation DeleteSubprocessor($deleteSubprocessorId: ID!) {
-  deleteSubprocessor(id: $deleteSubprocessorId) {
-    deletedID
-  }
+mutation DeleteSubprocessor ($deleteSubprocessorId: ID!) {
+	deleteSubprocessor(id: $deleteSubprocessorId) {
+		deletedID
+	}
 }
-
 query GetAllSubprocessors {
-  subprocessors {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        id
-        tags
-        updatedAt
-        updatedBy
-        name
-        description
-        logoRemoteURL
-        logoFileID
-        logoFile {
-          presignedURL
-        }
-        owner {
-          id
-          name
-        }
-      }
-    }
-  }
+	subprocessors {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				tags
+				updatedAt
+				updatedBy
+				name
+				description
+				logoRemoteURL
+				logoFileID
+				logoFile {
+					presignedURL
+				}
+				owner {
+					id
+					name
+				}
+			}
+		}
+	}
 }
-
-query GetSubprocessorByID($subprocessorId: ID!) {
-  subprocessor(id: $subprocessorId) {
-    createdAt
-    createdBy
-    description
-    id
-    internalNotes
-    logoFileID
-    logoRemoteURL
-    name
-    ownerID
-    systemInternalID
-    systemOwned
-    tags
-    updatedAt
-    updatedBy
-    updatedByImpersonator
-    logoFile {
-      id
-      presignedURL
-    }
-    owner {
-      id
-      name
-    }
-  }
+query GetSubprocessorByID ($subprocessorId: ID!) {
+	subprocessor(id: $subprocessorId) {
+		createdAt
+		createdBy
+		description
+		id
+		internalNotes
+		logoFileID
+		logoRemoteURL
+		name
+		ownerID
+		systemInternalID
+		systemOwned
+		tags
+		updatedAt
+		updatedBy
+		updatedByImpersonator
+		logoFile {
+			id
+			presignedURL
+		}
+		owner {
+			id
+			name
+		}
+	}
 }
-
-query GetSubprocessors($first: Int, $last: Int, $where: SubprocessorWhereInput) {
-  subprocessors(first: $first, last: $last, where: $where) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        id
-        tags
-        updatedAt
-        updatedBy
-        name
-        description
-        logoRemoteURL
-        logoFileID
-        logoFile {
-          presignedURL
-        }
-        owner {
-          id
-          name
-        }
-      }
-    }
-  }
+query GetSubprocessors ($first: Int, $last: Int, $where: SubprocessorWhereInput) {
+	subprocessors(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				tags
+				updatedAt
+				updatedBy
+				name
+				description
+				logoRemoteURL
+				logoFileID
+				logoFile {
+					presignedURL
+				}
+				owner {
+					id
+					name
+				}
+			}
+		}
+	}
 }
-
-mutation UpdateBulkSubprocessor($ids: [ID!]!, $input: UpdateSubprocessorInput!) {
-  updateBulkSubprocessor(ids: $ids, input: $input) {
-    subprocessors {
-      createdAt
-      createdBy
-      description
-      id
-      internalNotes
-      logoFileID
-      logoRemoteURL
-      name
-      ownerID
-      systemInternalID
-      systemOwned
-      tags
-      updatedAt
-      updatedBy
-      updatedByImpersonator
-      logoFile {
-        presignedURL
-      }
-      owner {
-        id
-        name
-      }
-    }
-    updatedIDs
-  }
+mutation UpdateBulkSubprocessor ($ids: [ID!]!, $input: UpdateSubprocessorInput!) {
+	updateBulkSubprocessor(ids: $ids, input: $input) {
+		subprocessors {
+			createdAt
+			createdBy
+			description
+			id
+			internalNotes
+			logoFileID
+			logoRemoteURL
+			name
+			ownerID
+			systemInternalID
+			systemOwned
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			logoFile {
+				presignedURL
+			}
+			owner {
+				id
+				name
+			}
+		}
+		updatedIDs
+	}
 }
-
-mutation UpdateSubprocessor($updateSubprocessorId: ID!, $input: UpdateSubprocessorInput!, $logoFile: Upload, $logoFileMetadata: FileMetadataInput) {
-  updateSubprocessor(
-    id: $updateSubprocessorId
-    input: $input
-    logoFile: $logoFile
-    logoFileMetadata: $logoFileMetadata
-  ) {
-    subprocessor {
-      createdAt
-      createdBy
-      id
-      tags
-      updatedAt
-      updatedBy
-      name
-      description
-      logoRemoteURL
-      logoFileID
-      logoFile {
-        id
-        name
-        metadata
-        presignedURL
-      }
-      owner {
-        id
-        name
-      }
-    }
-  }
+mutation UpdateSubprocessor ($updateSubprocessorId: ID!, $input: UpdateSubprocessorInput!, $logoFile: Upload, $logoFileMetadata: FileMetadataInput) {
+	updateSubprocessor(id: $updateSubprocessorId, input: $input, logoFile: $logoFile, logoFileMetadata: $logoFileMetadata) {
+		subprocessor {
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+			name
+			description
+			logoRemoteURL
+			logoFileID
+			logoFile {
+				id
+				name
+				metadata
+				presignedURL
+			}
+			owner {
+				id
+				name
+			}
+		}
+	}
 }

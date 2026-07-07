@@ -1026,6 +1026,9 @@ data:
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.integrations }}
     integrations:
+      {{- if .Values.openlane.coreConfiguration.integrations.consoleintegrationpath }}
+      consoleintegrationpath: {{ .Values.openlane.coreConfiguration.integrations.consoleintegrationpath | quote }}
+      {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.awssecurityhub }}
       awssecurityhub:
         {{- if .Values.openlane.coreConfiguration.integrations.awssecurityhub.arn }}

@@ -498,7 +498,7 @@ const DefaultStatus enums.ControlStatus = "NOT_IMPLEMENTED"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.ControlStatus) error {
 	switch s.String() {
-	case "PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED", "NOT_APPLICABLE":
+	case "DRAFT", "PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED", "NOT_APPLICABLE":
 		return nil
 	default:
 		return fmt.Errorf("subcontrol: invalid enum value for status field: %q", s)
