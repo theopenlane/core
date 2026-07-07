@@ -12,7 +12,6 @@ env:
   GRAPHQL_HISTORY_SCHEMA_LOCATION: "internal/graphapi/historyschema/schema.graphql"
   GRAPHQL_SCHEMA_NAME: "Openlane-0dedz@current"
   GRAPHQL_HISTORY_SCHEMA_NAME: "Openlane-History@current"
-  GOFLAGS: -buildvcs=false
   GOCACHE: $HOME/.cache/go-build
   GOMODCACHE: $HOME/.cache/go/pkg/mod
   GOLANGCI_LINT_CACHE: $HOME/.cache/golangci-lint
@@ -573,9 +572,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
-                - CGO_ENABLED=0
                 - GOOS=linux
-                - GOFLAGS="-buildvcs=false -gcflags=all=-l"
               command: ["task", "go:build:ci"]
       - label: ":terminal: build cli"
         key: "gobuild-cli"
@@ -599,10 +596,8 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
-                - CGO_ENABLED=0
                 - GOOS=darwin
                 - GOARCH=arm64
-                - GOFLAGS="-buildvcs=false -gcflags=all=-l"
               command: ["task", "go:build-cli:ci"]
       - label: ":golang: build release"
         key: "gobuild-server-release"
@@ -622,9 +617,8 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
-                - CGO_ENABLED=0
                 - GOOS=linux
-              command: ["task", "go:build:ci"]
+              command: ["task", "go:build:ci:release"]
       - label: ":terminal: build cli release"
         if: build.tag != null && build.tag =~ /cli\//
         key: "gobuild-cli-release"
@@ -643,7 +637,6 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
-                - CGO_ENABLED=0
                 - GOOS=darwin
                 - GOARCH=arm64
               command: ["task", "go:build-cli:ci"]

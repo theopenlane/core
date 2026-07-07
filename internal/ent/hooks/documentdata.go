@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"entgo.io/ent"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -183,17 +184,33 @@ func HookDocumentDataFile() ent.Hook {
 func validateTrustCenterNDAJSON(document map[string]any, trustCenterID, subjectEmail, subjectID string, templateFile *generated.File) error {
 	schema := jsonx.SchemaFrom[signedNDADocumentData]()
 
+	logger := log.With().
+		Str("trust_center_id", trustCenterID).
+		Str("subject_id", subjectID).
+		Logger()
+
 	result, err := jsonx.ValidateSchema(schema, document)
 	if err != nil {
+		logger.Error().Err(err).
+			Msg("failed to validate trust center nda json schema")
+
 		return err
 	}
 
 	if !result.Valid() {
-		return fmt.Errorf("%w: %v", errValidationFailed, jsonx.ValidationErrorStrings(result))
+		errs := jsonx.ValidationErrorStrings(result)
+		logger.Error().
+			Strs("validation_errors", errs).
+			Msg("trust center nda json failed schema validation")
+
+		return fmt.Errorf("%w: %v", errValidationFailed, errs)
 	}
 
 	var doc signedNDADocumentData
 	if err := jsonx.RoundTrip(document, &doc); err != nil {
+		logger.Error().Err(err).
+			Msg("failed to decode trust center nda json")
+
 		return fmt.Errorf("%w: %v", errValidationFailed, err)
 	}
 
@@ -201,22 +218,47 @@ func validateTrustCenterNDAJSON(document map[string]any, trustCenterID, subjectE
 		doc.SignatoryInfo.Email != subjectEmail ||
 		doc.SignatureMetadata.UserID != subjectID {
 
+		logger.Error().
+			Str("expected_trust_center_id", trustCenterID).
+			Str("document_trust_center_id", doc.TrustCenterID).
+			Str("expected_subject_id", subjectID).
+			Str("document_subject_id", doc.SignatureMetadata.UserID).
+			Msg("trust center nda json does not match caller")
+
 		return errDocInfoDoesNotMatchCaller
 	}
 
 	if templateFile == nil || templateFile.ID == "" {
+		logger.Error().
+			Msg("trust center nda template file is missing")
+
 		return ErrMissingNDATemplateFile
 	}
 
 	if doc.PDFFileID != templateFile.ID {
+		logger.Error().
+			Str("document_pdf_file_id", doc.PDFFileID).
+			Str("template_file_id", templateFile.ID).
+			Msg("trust center nda pdf file does not match template")
+
 		return errNDAPDFFileDoesNotMatchTemplate
 	}
 
 	if templateFile.Md5Hash == "" {
+		logger.Error().
+			Str("template_file_id", templateFile.ID).
+			Msg("trust center nda template file is missing md5 hash")
+
 		return errNDATemplateFileMissingHash
 	}
 
 	if !strings.EqualFold(doc.SignatureMetadata.PDFHash, templateFile.Md5Hash) {
+		logger.Error().
+			Str("template_file_id", templateFile.ID).
+			Str("document_pdf_hash", doc.SignatureMetadata.PDFHash).
+			Str("template_pdf_hash", templateFile.Md5Hash).
+			Msg("trust center nda pdf hash does not match template")
+
 		return errNDAPDFHashDoesNotMatchTemplate
 	}
 

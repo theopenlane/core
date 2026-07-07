@@ -448,9 +448,19 @@ tasks:
       - "CGO_ENABLED=0 {{ .GOOS }} {{ .GOARCH }} go build -o core"
 
   go:build:ci:
-    desc: Runs go build for the core server
+    desc: Runs go build for the core server for PR/branch CI, favors build speed over binary size
     cmds:
-      - CGO_ENABLED=0 go build -mod=readonly -o bin/core
+      # -gcflags=all=-l disables inlining, which is faster to compile and gives more
+      # accurate stack traces, at the cost of a larger, unstripped binary
+      # these binaries are not published so the larger size is ok here
+      - CGO_ENABLED=0 go build -mod=readonly -gcflags=all=-l -o bin/core
+
+  go:build:ci:release:
+    desc: Runs go build for the core server for tagged releases, favors binary size over build speed
+    cmds:
+      # -s -w strip the symbol table and DWARF debug info (biggest size win)
+      # -trimpath removes local build paths from the binary
+      - CGO_ENABLED=0 go build -mod=readonly -trimpath -ldflags="-s -w" -o bin/core
 
   go:build-cli:
     aliases: [buildcli]
