@@ -111,11 +111,19 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 		suite.e.ServeHTTP(recorder, req)
 		assert.Equal(t, http.StatusOK, recorder.Code)
 
-		// reuse the same token against an already-unsubscribed subscriber: still succeeds, stays unsubscribed
+		// reuse the same token against an already-unsubscribed subscriber: idempotent success with a
+		// distinct "already unsubscribed" acknowledgment, state unchanged
 		req2 := httptest.NewRequest(http.MethodPost, target, nil)
 		recorder2 := httptest.NewRecorder()
 		suite.e.ServeHTTP(recorder2, req2)
 		assert.Equal(t, http.StatusOK, recorder2.Code)
+
+		res2 := recorder2.Result()
+		defer res2.Body.Close()
+
+		var out2 *models.UnsubscribeReply
+		require.NoError(t, json.NewDecoder(res2.Body).Decode(&out2))
+		assert.Contains(t, out2.Message, "already unsubscribed")
 
 		updated := suite.db.Subscriber.GetX(allowCtx, sub.ID)
 		assert.True(t, updated.Unsubscribed)

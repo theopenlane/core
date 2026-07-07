@@ -70,6 +70,10 @@ var (
 	ErrDeviceAlreadyRegistered = errors.New("device already registered")
 	// ErrSubscriberNotFound is returned when the subscriber is not found
 	ErrSubscriberNotFound = errors.New("subscriber not found")
+	// ErrSubscriptionTokenAlreadyUsed is returned when a single-use subscription verify token is replayed
+	ErrSubscriptionTokenAlreadyUsed = errors.New("subscription verification token has already been used")
+	// ErrEmailAlreadyConfirmed is returned when a single-use email verify token is replayed
+	ErrEmailAlreadyConfirmed = errors.New("email address has already been verified")
 	// ErrExpiredToken is returned when the token has expired
 	ErrExpiredToken = errors.New("token has expired")
 	// ErrUnauthorized is returned when the user is not authorized to make the request

@@ -52,9 +52,15 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context, openapi *OpenAPICo
 		OrganizationIDs: []string{entSubscriber.OwnerID},
 	})
 
-	// confirm only a not-yet-verified, still-subscribed contact; an unsubscribed contact is never
-	// resurrected by replaying a verify link — re-subscription goes through the createSubscriber mutation
-	if !entSubscriber.VerifiedEmail && !entSubscriber.Unsubscribed {
+	// single-use: token stays on the row for the unsubscribe link, so gate on the verified flag
+	if entSubscriber.VerifiedEmail {
+		logx.FromContext(reqCtx).Error().Err(ErrSubscriptionTokenAlreadyUsed).Msg("subscription verify token replayed")
+
+		return h.BadRequest(ctx, ErrSubscriptionTokenAlreadyUsed, openapi)
+	}
+
+	// never resurrect an unsubscribed contact; re-subscription goes through createSubscriber
+	if !entSubscriber.Unsubscribed {
 		if err := h.verifySubscriberToken(ctxWithToken, entSubscriber); err != nil {
 			// an expired link (a fresh one was already sent) or a capped retry still lands the subscriber on
 			// the trust center; only a genuine failure is surfaced as an error

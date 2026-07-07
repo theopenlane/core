@@ -24,7 +24,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
 	// add handler
 	// Create operation for VerifySubscriptionHandler
 	operation := suite.createImpersonationOperation("VerifySubscriptionHandler", "Verify subscription")
-	suite.registerTestHandler("GET", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
+	suite.registerTestHandler("POST", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
 
 	expiredTTL := time.Now().AddDate(0, 0, -1).Format(time.RFC3339Nano)
 
@@ -71,7 +71,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
 				target = fmt.Sprintf("/subscribe/verify?token=%s", sub.Token)
 			}
 
-			req := httptest.NewRequest(http.MethodGet, target, nil)
+			req := httptest.NewRequest(http.MethodPost, target, nil)
 
 			// Set writer for tests that write on the response
 			recorder := httptest.NewRecorder()
@@ -114,27 +114,28 @@ func (suite *HandlerTestSuite) TestVerifySubscribeDoesNotResurrectUnsubscribed()
 	t := suite.T()
 
 	operation := suite.createImpersonationOperation("VerifySubscriptionHandler", "Verify subscription")
-	suite.registerTestHandler("GET", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
+	suite.registerTestHandler("POST", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
 
 	suite.ClearTestData()
 
 	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 	sub := suite.createTestSubscriber(t, "", gofakeit.Email(), "")
 
-	// the contact verified previously and then opted out
-	suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetUnsubscribed(true).SetActive(false).ExecX(allowCtx)
+	// opted out before confirming: token unused, but the unsubscribed guard still refuses to activate them
+	suite.db.Subscriber.UpdateOneID(sub.ID).SetUnsubscribed(true).SetActive(false).ExecX(allowCtx)
 
 	target := fmt.Sprintf("/subscribe/verify?token=%s", sub.Token)
-	req := httptest.NewRequest(http.MethodGet, target, nil)
+	req := httptest.NewRequest(http.MethodPost, target, nil)
 	recorder := httptest.NewRecorder()
 	suite.e.ServeHTTP(recorder, req)
 
 	assert.Equal(t, http.StatusOK, recorder.Code)
 
-	// no resurrection: still unsubscribed and inactive
+	// no resurrection: still unsubscribed, inactive, and unverified
 	updated := suite.db.Subscriber.GetX(allowCtx, sub.ID)
 	assert.True(t, updated.Unsubscribed)
 	assert.False(t, updated.Active)
+	assert.False(t, updated.VerifiedEmail)
 }
 
 // TestVerifySubscribeTrustCenterSubscriber confirms the handler verifies a subscriber scoped to a trust
@@ -144,7 +145,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeTrustCenterSubscriber() {
 	t := suite.T()
 
 	operation := suite.createImpersonationOperation("VerifySubscriptionHandler", "Verify subscription")
-	suite.registerTestHandler("GET", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
+	suite.registerTestHandler("POST", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
 
 	suite.ClearTestData()
 
@@ -161,7 +162,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeTrustCenterSubscriber() {
 	sub := suite.createTestSubscriber(t, tc.ID, gofakeit.Email(), "")
 
 	target := fmt.Sprintf("/subscribe/verify?token=%s", sub.Token)
-	req := httptest.NewRequest(http.MethodGet, target, nil)
+	req := httptest.NewRequest(http.MethodPost, target, nil)
 	recorder := httptest.NewRecorder()
 	suite.e.ServeHTTP(recorder, req)
 
@@ -179,42 +180,54 @@ func (suite *HandlerTestSuite) TestVerifySubscribeUnknownToken() {
 	t := suite.T()
 
 	operation := suite.createImpersonationOperation("VerifySubscriptionHandler", "Verify subscription")
-	suite.registerTestHandler("GET", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
+	suite.registerTestHandler("POST", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
 
 	suite.ClearTestData()
 
-	req := httptest.NewRequest(http.MethodGet, "/subscribe/verify?token=not-a-real-token", nil)
+	req := httptest.NewRequest(http.MethodPost, "/subscribe/verify?token=not-a-real-token", nil)
 	recorder := httptest.NewRecorder()
 	suite.e.ServeHTTP(recorder, req)
 
 	assert.Equal(t, http.StatusBadRequest, recorder.Code)
 }
 
-// TestVerifySubscribeAlreadyVerified confirms re-hitting verify for an already active subscriber is a
-// safe no-op: still 200 and the status is unchanged
-func (suite *HandlerTestSuite) TestVerifySubscribeAlreadyVerified() {
+// TestVerifySubscribeTokenSingleUse confirms a verify token works once (200) and a replay is rejected
+// (400) with no further change to the subscriber
+func (suite *HandlerTestSuite) TestVerifySubscribeTokenSingleUse() {
 	t := suite.T()
 
 	operation := suite.createImpersonationOperation("VerifySubscriptionHandler", "Verify subscription")
-	suite.registerTestHandler("GET", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
+	suite.registerTestHandler("POST", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
 
 	suite.ClearTestData()
 
 	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 	sub := suite.createTestSubscriber(t, "", gofakeit.Email(), "")
-	suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).ExecX(allowCtx)
 
 	target := fmt.Sprintf("/subscribe/verify?token=%s", sub.Token)
-	req := httptest.NewRequest(http.MethodGet, target, nil)
-	recorder := httptest.NewRecorder()
-	suite.e.ServeHTTP(recorder, req)
 
-	assert.Equal(t, http.StatusOK, recorder.Code)
+	// first use confirms the subscriber
+	firstReq := httptest.NewRequest(http.MethodPost, target, nil)
+	firstRec := httptest.NewRecorder()
+	suite.e.ServeHTTP(firstRec, firstReq)
+	assert.Equal(t, http.StatusOK, firstRec.Code)
 
-	updated := suite.db.Subscriber.GetX(allowCtx, sub.ID)
-	assert.True(t, updated.VerifiedEmail)
-	assert.True(t, updated.Active)
-	assert.False(t, updated.Unsubscribed)
+	confirmed := suite.db.Subscriber.GetX(allowCtx, sub.ID)
+	require.True(t, confirmed.VerifiedEmail)
+	require.True(t, confirmed.Active)
+
+	// replaying the same token is rejected
+	secondReq := httptest.NewRequest(http.MethodPost, target, nil)
+	secondRec := httptest.NewRecorder()
+	suite.e.ServeHTTP(secondRec, secondReq)
+	assert.Equal(t, http.StatusBadRequest, secondRec.Code)
+
+	// the replay changed nothing
+	after := suite.db.Subscriber.GetX(allowCtx, sub.ID)
+	assert.True(t, after.VerifiedEmail)
+	assert.True(t, after.Active)
+	assert.False(t, after.Unsubscribed)
+	assert.Equal(t, confirmed.SendAttempts, after.SendAttempts)
 }
 
 // createTestSubscriber is a helper to create a test subscriber. When trustCenterID is non-empty the

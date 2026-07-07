@@ -81,9 +81,8 @@ func UnsubscribeURLWithToken(customDomain, slug, token string) string {
 	return fmt.Sprintf("%s/unsubscribe?token=%s", base, url.QueryEscape(token))
 }
 
-// SubscribeVerifyURLWithToken builds the subscription confirmation link for a trust center with a concrete
-// per-recipient token. The link lands on the trust center's own domain (not the API host); the page there
-// confirms the subscription against the core API. Returns empty when the trust center URL cannot resolve
+// SubscribeVerifyURLWithToken builds the trust-center-domain subscription confirmation link for a concrete
+// per-recipient token; empty when the trust center URL cannot resolve
 func SubscribeVerifyURLWithToken(customDomain, slug, token string) string {
 	base := BuildURL(customDomain, slug)
 	if base == "" {

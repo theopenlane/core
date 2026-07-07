@@ -132,10 +132,8 @@ type SubscribeRequest struct {
 	OrgName string `json:"org_name" jsonschema:"required,description=Organization display name"`
 	// Token is the subscriber verification token appended to the verify URL
 	Token string `json:"token" jsonschema:"required,description=Subscriber verification token"`
-	// VerifyURL is the trust center's tokenized subscription-confirmation link the confirm button points at;
-	// built by the caller from the trust center domain since the operation has no access to it. When empty
-	// the operation falls back to the API-direct verify endpoint (organization-level subscribers with no
-	// trust center to land on)
+	// VerifyURL is the trust-center-domain confirmation link the button points at; empty falls back to the
+	// API-direct verify endpoint (organization-level subscribers with no trust center)
 	VerifyURL string `json:"verifyURL,omitempty" jsonschema:"description=Trust center subscription confirmation link the button points at"`
 	// UnsubscribeURL is the trust center's tokenized unsubscribe link shown in the footer; built by the
 	// caller from the trust center domain since the operation has no access to it
@@ -484,9 +482,7 @@ var _ = RegisterEmailOperation(Operation[SubscribeRequest]{
 		return "Confirm your subscription to " + subscribeOrgName(cfg, req) + " updates"
 	},
 	Build: func(cfg RuntimeEmailConfig, req SubscribeRequest) render.ContentBody {
-		// the confirm button lands the subscriber on their trust center's own domain, where the page
-		// confirms the subscription against the API. Organization-level subscribers have no trust center
-		// to land on, so they fall back to the API-direct verify endpoint
+		// fall back to the API-direct endpoint for subscribers with no trust center domain
 		verifyURL := req.VerifyURL
 		if verifyURL == "" {
 			verifyURL = tokenURL(cfg.APIURL, "/v1/subscribe/verify", req.Token)

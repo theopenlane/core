@@ -243,7 +243,7 @@ func (s *APIv1) AcceptInvite(ctx context.Context, in *api.InviteRequest) (out *a
 // VerifySubscriberEmail verifies the email address of a subscriber
 func (s *APIv1) VerifySubscriberEmail(ctx context.Context, in *api.VerifySubscribeRequest) (out *api.VerifySubscribeReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
-		httpsling.Get(v1Path("subscribe/verify")),
+		httpsling.Post(v1Path("subscribe/verify")),
 		httpsling.QueryParam("token", in.Token))
 	if err != nil {
 		return nil, err

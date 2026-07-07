@@ -167,6 +167,7 @@ func createVerificationToken(m *generated.SubscriberMutation, email string) erro
 	return nil
 }
 
+// getSubscriber looks up an existing subscriber by email and owner ID, optionally scoped to a trust center
 func getSubscriber(ctx context.Context, m *generated.SubscriberMutation) (*generated.Subscriber, error) {
 	email, _ := m.Email()
 	ownerID, _ := m.OwnerID()
@@ -186,9 +187,8 @@ func getSubscriber(ctx context.Context, m *generated.SubscriberMutation) (*gener
 	return query.Only(ctx)
 }
 
-// subscriberTrustCenterDomain resolves the custom domain and slug of a subscriber's trust center so the
-// caller can build links that land on the trust center (not the app console). Returns empty strings for
-// subscribers with no trust center, or when it cannot be resolved
+// subscriberTrustCenterDomain resolves a subscriber's trust center custom domain and slug for link
+// building; empty strings when there is no trust center or it cannot be resolved
 func subscriberTrustCenterDomain(ctx context.Context, client *generated.Client, trustCenterID string) (customDomain, slug string) {
 	if trustCenterID == "" {
 		return "", ""
@@ -211,6 +211,7 @@ func subscriberTrustCenterDomain(ctx context.Context, client *generated.Client, 
 	return customDomain, tc.Slug
 }
 
+// updateSubscriber updates an existing subscriber's send attempts and resets the verified email status
 func updateSubscriber(ctx context.Context,
 	m *generated.SubscriberMutation, subscriber *generated.Subscriber) (*generated.Subscriber, error) {
 	if subscriber.SendAttempts >= maxAttempts {

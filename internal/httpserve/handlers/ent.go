@@ -674,9 +674,7 @@ func (h *Handler) subscriberUnsubscribeURL(ctx context.Context, sub *ent.Subscri
 	return trustcenterurl.UnsubscribeURLWithToken(customDomain, slug, sub.Token)
 }
 
-// subscriberVerifyURL builds the tokenized subscription-confirmation link for a subscriber, so the confirm
-// button lands on the trust center's own domain rather than the API host. Returns empty when the trust
-// center cannot resolve (organization-level subscriber), falling the email back to the API-direct endpoint
+// subscriberVerifyURL builds the trust-center-domain confirmation link; empty when no trust center resolves
 func (h *Handler) subscriberVerifyURL(ctx context.Context, sub *ent.Subscriber) string {
 	customDomain, slug, ok := h.subscriberTrustCenterDomain(ctx, sub)
 	if !ok {
