@@ -566,6 +566,7 @@ coreConfiguration:
     keydir: "./keys"  # @schema type:string; default:./keys
   # -- Integrations contains operator-level credentials for all v2 integration definitions
   integrations:
+    consoleintegrationpath: "/organization-settings/integrations"  # @schema type:string; default:/organization-settings/integrations
     awssecurityhub:
       arn: ""  # @schema type:string
     githubapp:

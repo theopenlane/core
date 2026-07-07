@@ -133,28 +133,32 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 
 	wherePredicate := []predicate.Control{}
 	for _, c := range controlsToClone {
-		wherePredicate = append(wherePredicate, control.Or(
-			control.RefCode(c.RefCode),
-			control.StandardID(c.StandardID),
-		))
+		cloneInput, _ := controls.CreateCloneControlInput(c, nil, orgID)
+		where := []predicate.Control{control.RefCode(c.RefCode)}
+		if standardID := cloneInput.StandardID; standardID != nil {
+			where = append(where, control.StandardID(*standardID))
+		} else {
+			where = append(where, control.StandardIDIsNil())
+		}
+
+		wherePredicate = append(wherePredicate, control.And(where...))
 	}
 
 	// get existing controls that match the refCode and standardID
 	// skip the access checks for the controls, we are already filtering on organization id
 	// and controls are visible to users in the organization
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	existingWhere := []predicate.Control{
+		control.DeletedAtIsNil(),
+		control.OwnerID(orgID),
+	}
+	if len(wherePredicate) > 0 {
+		existingWhere = append(existingWhere, control.Or(wherePredicate...))
+	}
 
 	existingControls, err := r.db.Control.Query().
 		Where(
-			control.And(
-				append(
-					[]predicate.Control{
-						control.DeletedAtIsNil(),
-						control.OwnerID(orgID),
-					},
-					wherePredicate...,
-				)...,
-			),
+			control.And(existingWhere...),
 		).
 		Select(control.FieldID, control.FieldRefCode, control.FieldStandardID, control.FieldReferenceFrameworkRevision).
 		All(allowCtx)
@@ -168,16 +172,24 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	controlsToUpdate := []controls.ControlToUpdate{}
 
 	for _, c := range controlsToClone {
+		cloneInput, _ := controls.CreateCloneControlInput(c, nil, orgID)
+		targetStandardID := cloneInput.StandardID
+
 		// check if the control already exists in the organization
 		exists := false
 
 		for _, existingControl := range existingControls {
-			if existingControl.RefCode == c.RefCode && existingControl.StandardID == c.StandardID {
+			targetStandardMatches := targetStandardID == nil && existingControl.StandardID == ""
+			if targetStandardID != nil {
+				targetStandardMatches = *targetStandardID == existingControl.StandardID
+			}
+
+			if existingControl.RefCode == c.RefCode && targetStandardMatches {
 				existingControlIDs = append(existingControlIDs, existingControl.ID)
 				exists = true
 
 				// we need to check if the revision of the standard has changed since this control was originally cloned
-				if c.Edges.Standard != nil && controls.HasRevisionChanged(existingControl.ReferenceFrameworkRevision, c.Edges.Standard.Revision) {
+				if targetStandardID != nil && c.Edges.Standard != nil && controls.HasRevisionChanged(existingControl.ReferenceFrameworkRevision, c.Edges.Standard.Revision) {
 					controlsToUpdate = append(controlsToUpdate, controls.ControlToUpdate{
 						ExistingControlID: existingControl.ID,
 						SourceControl:     c,
@@ -339,7 +351,7 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, subcontrolsToCr
 		return err
 	}
 
-	subcontrolsToClone := []*generated.Subcontrol{}
+	subcontrolsToClone := []*generated.CreateSubcontrolInput{}
 
 	// get the subcontrols we actually need to clone
 	for _, c := range subcontrolsToCreate {
@@ -359,23 +371,12 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, subcontrolsToCr
 				// add the subcontrol to the list of subcontrols to clone
 				toCloneSubcontrol.ControlID = c.NewControlID
 
-				if c.RefControl.Edges.Standard != nil {
-					toCloneSubcontrol.ReferenceFramework = &c.RefControl.Edges.Standard.ShortName
-					toCloneSubcontrol.ReferenceFrameworkRevision = &c.RefControl.Edges.Standard.Revision
-				}
-
-				subcontrolsToClone = append(subcontrolsToClone, toCloneSubcontrol)
+				subcontrolsToClone = append(subcontrolsToClone, controls.CreateCloneSubcontrolInput(toCloneSubcontrol, orgID, c))
 			}
 		}
 	}
 
-	subcontrols := make([]*generated.CreateSubcontrolInput, len(subcontrolsToClone))
-
-	for j, subcontrol := range subcontrolsToClone {
-		subcontrols[j] = controls.CreateCloneSubcontrolInput(subcontrol, orgID)
-	}
-
-	return r.bulkCreateSubcontrolNoTransaction(ctx, subcontrols)
+	return r.bulkCreateSubcontrolNoTransaction(ctx, subcontrolsToClone)
 }
 
 // bulkCreateSubcontrolNoTransaction creates multiple subcontrols in a single request without a transaction to allow it to be run in parallel

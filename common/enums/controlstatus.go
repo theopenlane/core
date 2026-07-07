@@ -9,6 +9,8 @@ import (
 type ControlStatus string
 
 var (
+	// ControlStatusDraft indicates the control is being drafted
+	ControlStatusDraft ControlStatus = "DRAFT"
 	// ControlStatusNotImplemented indicates that this control has not yet been worked on, this is the default value
 	ControlStatusNotImplemented ControlStatus = "NOT_IMPLEMENTED"
 	// ControlStatusPreparing indicates the control is being prepared
@@ -28,6 +30,7 @@ var (
 )
 
 var controlStatusValues = []ControlStatus{
+	ControlStatusDraft,
 	ControlStatusPreparing,
 	ControlStatusNeedsApproval,
 	ControlStatusChangesRequested,
