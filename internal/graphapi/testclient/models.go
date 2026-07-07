@@ -7794,6 +7794,10 @@ type CreateFindingControlInput struct {
 type CreateFindingInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// who reviewed the finding when no user or group is linked
+	ReviewedBy *string `json:"reviewedBy,omitempty"`
+	// who the finding is assigned to when no user or group is linked
+	AssignedTo *string `json:"assignedTo,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
@@ -7879,6 +7883,10 @@ type CreateFindingInput struct {
 	OwnerID              *string        `json:"ownerID,omitempty"`
 	BlockedGroupIDs      []string       `json:"blockedGroupIDs,omitempty"`
 	EditorIDs            []string       `json:"editorIDs,omitempty"`
+	ReviewedByUserID     *string        `json:"reviewedByUserID,omitempty"`
+	ReviewedByGroupID    *string        `json:"reviewedByGroupID,omitempty"`
+	AssignedToUserID     *string        `json:"assignedToUserID,omitempty"`
+	AssignedToGroupID    *string        `json:"assignedToGroupID,omitempty"`
 	EnvironmentID        *string        `json:"environmentID,omitempty"`
 	ScopeID              *string        `json:"scopeID,omitempty"`
 	FindingStatusID      *string        `json:"findingStatusID,omitempty"`
@@ -10172,6 +10180,10 @@ type CreateVendorScoringConfigInput struct {
 type CreateVulnerabilityInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// who reviewed the vulnerability when no user or group is linked
+	ReviewedBy *string `json:"reviewedBy,omitempty"`
+	// who the vulnerability is assigned to when no user or group is linked
+	AssignedTo *string `json:"assignedTo,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
@@ -10268,6 +10280,10 @@ type CreateVulnerabilityInput struct {
 	BlockedGroupIDs       []string       `json:"blockedGroupIDs,omitempty"`
 	EditorIDs             []string       `json:"editorIDs,omitempty"`
 	ViewerIDs             []string       `json:"viewerIDs,omitempty"`
+	ReviewedByUserID      *string        `json:"reviewedByUserID,omitempty"`
+	ReviewedByGroupID     *string        `json:"reviewedByGroupID,omitempty"`
+	AssignedToUserID      *string        `json:"assignedToUserID,omitempty"`
+	AssignedToGroupID     *string        `json:"assignedToGroupID,omitempty"`
 	EnvironmentID         *string        `json:"environmentID,omitempty"`
 	ScopeID               *string        `json:"scopeID,omitempty"`
 	VulnerabilityStatusID *string        `json:"vulnerabilityStatusID,omitempty"`
@@ -17753,6 +17769,18 @@ type Finding struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// who reviewed the finding when no user or group is linked
+	ReviewedBy *string `json:"reviewedBy,omitempty"`
+	// the user id that reviewed the finding
+	ReviewedByUserID *string `json:"reviewedByUserID,omitempty"`
+	// the group id that reviewed the finding
+	ReviewedByGroupID *string `json:"reviewedByGroupID,omitempty"`
+	// who the finding is assigned to when no user or group is linked
+	AssignedTo *string `json:"assignedTo,omitempty"`
+	// the user id assigned to the finding
+	AssignedToUserID *string `json:"assignedToUserID,omitempty"`
+	// the group id assigned to the finding
+	AssignedToGroupID *string `json:"assignedToGroupID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
@@ -17848,6 +17876,10 @@ type Finding struct {
 	Owner              *Organization                `json:"owner,omitempty"`
 	BlockedGroups      *GroupConnection             `json:"blockedGroups"`
 	Editors            *GroupConnection             `json:"editors"`
+	ReviewedByUser     *User                        `json:"reviewedByUser,omitempty"`
+	ReviewedByGroup    *Group                       `json:"reviewedByGroup,omitempty"`
+	AssignedToUser     *User                        `json:"assignedToUser,omitempty"`
+	AssignedToGroup    *Group                       `json:"assignedToGroup,omitempty"`
 	Environment        *CustomTypeEnum              `json:"environment,omitempty"`
 	Scope              *CustomTypeEnum              `json:"scope,omitempty"`
 	FindingStatus      *CustomTypeEnum              `json:"findingStatus,omitempty"`
@@ -18307,6 +18339,102 @@ type FindingWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// reviewed_by field predicates
+	ReviewedBy             *string  `json:"reviewedBy,omitempty"`
+	ReviewedByNeq          *string  `json:"reviewedByNEQ,omitempty"`
+	ReviewedByIn           []string `json:"reviewedByIn,omitempty"`
+	ReviewedByNotIn        []string `json:"reviewedByNotIn,omitempty"`
+	ReviewedByGt           *string  `json:"reviewedByGT,omitempty"`
+	ReviewedByGte          *string  `json:"reviewedByGTE,omitempty"`
+	ReviewedByLt           *string  `json:"reviewedByLT,omitempty"`
+	ReviewedByLte          *string  `json:"reviewedByLTE,omitempty"`
+	ReviewedByContains     *string  `json:"reviewedByContains,omitempty"`
+	ReviewedByHasPrefix    *string  `json:"reviewedByHasPrefix,omitempty"`
+	ReviewedByHasSuffix    *string  `json:"reviewedByHasSuffix,omitempty"`
+	ReviewedByIsNil        *bool    `json:"reviewedByIsNil,omitempty"`
+	ReviewedByNotNil       *bool    `json:"reviewedByNotNil,omitempty"`
+	ReviewedByEqualFold    *string  `json:"reviewedByEqualFold,omitempty"`
+	ReviewedByContainsFold *string  `json:"reviewedByContainsFold,omitempty"`
+	// reviewed_by_user_id field predicates
+	ReviewedByUserID             *string  `json:"reviewedByUserID,omitempty"`
+	ReviewedByUserIdneq          *string  `json:"reviewedByUserIDNEQ,omitempty"`
+	ReviewedByUserIDIn           []string `json:"reviewedByUserIDIn,omitempty"`
+	ReviewedByUserIDNotIn        []string `json:"reviewedByUserIDNotIn,omitempty"`
+	ReviewedByUserIdgt           *string  `json:"reviewedByUserIDGT,omitempty"`
+	ReviewedByUserIdgte          *string  `json:"reviewedByUserIDGTE,omitempty"`
+	ReviewedByUserIdlt           *string  `json:"reviewedByUserIDLT,omitempty"`
+	ReviewedByUserIdlte          *string  `json:"reviewedByUserIDLTE,omitempty"`
+	ReviewedByUserIDContains     *string  `json:"reviewedByUserIDContains,omitempty"`
+	ReviewedByUserIDHasPrefix    *string  `json:"reviewedByUserIDHasPrefix,omitempty"`
+	ReviewedByUserIDHasSuffix    *string  `json:"reviewedByUserIDHasSuffix,omitempty"`
+	ReviewedByUserIDIsNil        *bool    `json:"reviewedByUserIDIsNil,omitempty"`
+	ReviewedByUserIDNotNil       *bool    `json:"reviewedByUserIDNotNil,omitempty"`
+	ReviewedByUserIDEqualFold    *string  `json:"reviewedByUserIDEqualFold,omitempty"`
+	ReviewedByUserIDContainsFold *string  `json:"reviewedByUserIDContainsFold,omitempty"`
+	// reviewed_by_group_id field predicates
+	ReviewedByGroupID             *string  `json:"reviewedByGroupID,omitempty"`
+	ReviewedByGroupIdneq          *string  `json:"reviewedByGroupIDNEQ,omitempty"`
+	ReviewedByGroupIDIn           []string `json:"reviewedByGroupIDIn,omitempty"`
+	ReviewedByGroupIDNotIn        []string `json:"reviewedByGroupIDNotIn,omitempty"`
+	ReviewedByGroupIdgt           *string  `json:"reviewedByGroupIDGT,omitempty"`
+	ReviewedByGroupIdgte          *string  `json:"reviewedByGroupIDGTE,omitempty"`
+	ReviewedByGroupIdlt           *string  `json:"reviewedByGroupIDLT,omitempty"`
+	ReviewedByGroupIdlte          *string  `json:"reviewedByGroupIDLTE,omitempty"`
+	ReviewedByGroupIDContains     *string  `json:"reviewedByGroupIDContains,omitempty"`
+	ReviewedByGroupIDHasPrefix    *string  `json:"reviewedByGroupIDHasPrefix,omitempty"`
+	ReviewedByGroupIDHasSuffix    *string  `json:"reviewedByGroupIDHasSuffix,omitempty"`
+	ReviewedByGroupIDIsNil        *bool    `json:"reviewedByGroupIDIsNil,omitempty"`
+	ReviewedByGroupIDNotNil       *bool    `json:"reviewedByGroupIDNotNil,omitempty"`
+	ReviewedByGroupIDEqualFold    *string  `json:"reviewedByGroupIDEqualFold,omitempty"`
+	ReviewedByGroupIDContainsFold *string  `json:"reviewedByGroupIDContainsFold,omitempty"`
+	// assigned_to field predicates
+	AssignedTo             *string  `json:"assignedTo,omitempty"`
+	AssignedToNeq          *string  `json:"assignedToNEQ,omitempty"`
+	AssignedToIn           []string `json:"assignedToIn,omitempty"`
+	AssignedToNotIn        []string `json:"assignedToNotIn,omitempty"`
+	AssignedToGt           *string  `json:"assignedToGT,omitempty"`
+	AssignedToGte          *string  `json:"assignedToGTE,omitempty"`
+	AssignedToLt           *string  `json:"assignedToLT,omitempty"`
+	AssignedToLte          *string  `json:"assignedToLTE,omitempty"`
+	AssignedToContains     *string  `json:"assignedToContains,omitempty"`
+	AssignedToHasPrefix    *string  `json:"assignedToHasPrefix,omitempty"`
+	AssignedToHasSuffix    *string  `json:"assignedToHasSuffix,omitempty"`
+	AssignedToIsNil        *bool    `json:"assignedToIsNil,omitempty"`
+	AssignedToNotNil       *bool    `json:"assignedToNotNil,omitempty"`
+	AssignedToEqualFold    *string  `json:"assignedToEqualFold,omitempty"`
+	AssignedToContainsFold *string  `json:"assignedToContainsFold,omitempty"`
+	// assigned_to_user_id field predicates
+	AssignedToUserID             *string  `json:"assignedToUserID,omitempty"`
+	AssignedToUserIdneq          *string  `json:"assignedToUserIDNEQ,omitempty"`
+	AssignedToUserIDIn           []string `json:"assignedToUserIDIn,omitempty"`
+	AssignedToUserIDNotIn        []string `json:"assignedToUserIDNotIn,omitempty"`
+	AssignedToUserIdgt           *string  `json:"assignedToUserIDGT,omitempty"`
+	AssignedToUserIdgte          *string  `json:"assignedToUserIDGTE,omitempty"`
+	AssignedToUserIdlt           *string  `json:"assignedToUserIDLT,omitempty"`
+	AssignedToUserIdlte          *string  `json:"assignedToUserIDLTE,omitempty"`
+	AssignedToUserIDContains     *string  `json:"assignedToUserIDContains,omitempty"`
+	AssignedToUserIDHasPrefix    *string  `json:"assignedToUserIDHasPrefix,omitempty"`
+	AssignedToUserIDHasSuffix    *string  `json:"assignedToUserIDHasSuffix,omitempty"`
+	AssignedToUserIDIsNil        *bool    `json:"assignedToUserIDIsNil,omitempty"`
+	AssignedToUserIDNotNil       *bool    `json:"assignedToUserIDNotNil,omitempty"`
+	AssignedToUserIDEqualFold    *string  `json:"assignedToUserIDEqualFold,omitempty"`
+	AssignedToUserIDContainsFold *string  `json:"assignedToUserIDContainsFold,omitempty"`
+	// assigned_to_group_id field predicates
+	AssignedToGroupID             *string  `json:"assignedToGroupID,omitempty"`
+	AssignedToGroupIdneq          *string  `json:"assignedToGroupIDNEQ,omitempty"`
+	AssignedToGroupIDIn           []string `json:"assignedToGroupIDIn,omitempty"`
+	AssignedToGroupIDNotIn        []string `json:"assignedToGroupIDNotIn,omitempty"`
+	AssignedToGroupIdgt           *string  `json:"assignedToGroupIDGT,omitempty"`
+	AssignedToGroupIdgte          *string  `json:"assignedToGroupIDGTE,omitempty"`
+	AssignedToGroupIdlt           *string  `json:"assignedToGroupIDLT,omitempty"`
+	AssignedToGroupIdlte          *string  `json:"assignedToGroupIDLTE,omitempty"`
+	AssignedToGroupIDContains     *string  `json:"assignedToGroupIDContains,omitempty"`
+	AssignedToGroupIDHasPrefix    *string  `json:"assignedToGroupIDHasPrefix,omitempty"`
+	AssignedToGroupIDHasSuffix    *string  `json:"assignedToGroupIDHasSuffix,omitempty"`
+	AssignedToGroupIDIsNil        *bool    `json:"assignedToGroupIDIsNil,omitempty"`
+	AssignedToGroupIDNotNil       *bool    `json:"assignedToGroupIDNotNil,omitempty"`
+	AssignedToGroupIDEqualFold    *string  `json:"assignedToGroupIDEqualFold,omitempty"`
+	AssignedToGroupIDContainsFold *string  `json:"assignedToGroupIDContainsFold,omitempty"`
 	// system_owned field predicates
 	SystemOwned       *bool `json:"systemOwned,omitempty"`
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
@@ -18825,6 +18953,18 @@ type FindingWhereInput struct {
 	// editors edge predicates
 	HasEditors     *bool              `json:"hasEditors,omitempty"`
 	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// reviewed_by_user edge predicates
+	HasReviewedByUser     *bool             `json:"hasReviewedByUser,omitempty"`
+	HasReviewedByUserWith []*UserWhereInput `json:"hasReviewedByUserWith,omitempty"`
+	// reviewed_by_group edge predicates
+	HasReviewedByGroup     *bool              `json:"hasReviewedByGroup,omitempty"`
+	HasReviewedByGroupWith []*GroupWhereInput `json:"hasReviewedByGroupWith,omitempty"`
+	// assigned_to_user edge predicates
+	HasAssignedToUser     *bool             `json:"hasAssignedToUser,omitempty"`
+	HasAssignedToUserWith []*UserWhereInput `json:"hasAssignedToUserWith,omitempty"`
+	// assigned_to_group edge predicates
+	HasAssignedToGroup     *bool              `json:"hasAssignedToGroup,omitempty"`
+	HasAssignedToGroupWith []*GroupWhereInput `json:"hasAssignedToGroupWith,omitempty"`
 	// environment edge predicates
 	HasEnvironment     *bool                       `json:"hasEnvironment,omitempty"`
 	HasEnvironmentWith []*CustomTypeEnumWhereInput `json:"hasEnvironmentWith,omitempty"`
@@ -43596,6 +43736,12 @@ type UpdateFindingInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// who reviewed the finding when no user or group is linked
+	ReviewedBy      *string `json:"reviewedBy,omitempty"`
+	ClearReviewedBy *bool   `json:"clearReviewedBy,omitempty"`
+	// who the finding is assigned to when no user or group is linked
+	AssignedTo      *string `json:"assignedTo,omitempty"`
+	ClearAssignedTo *bool   `json:"clearAssignedTo,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes      *string `json:"internalNotes,omitempty"`
 	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
@@ -43729,6 +43875,14 @@ type UpdateFindingInput struct {
 	AddEditorIDs               []string       `json:"addEditorIDs,omitempty"`
 	RemoveEditorIDs            []string       `json:"removeEditorIDs,omitempty"`
 	ClearEditors               *bool          `json:"clearEditors,omitempty"`
+	ReviewedByUserID           *string        `json:"reviewedByUserID,omitempty"`
+	ClearReviewedByUser        *bool          `json:"clearReviewedByUser,omitempty"`
+	ReviewedByGroupID          *string        `json:"reviewedByGroupID,omitempty"`
+	ClearReviewedByGroup       *bool          `json:"clearReviewedByGroup,omitempty"`
+	AssignedToUserID           *string        `json:"assignedToUserID,omitempty"`
+	ClearAssignedToUser        *bool          `json:"clearAssignedToUser,omitempty"`
+	AssignedToGroupID          *string        `json:"assignedToGroupID,omitempty"`
+	ClearAssignedToGroup       *bool          `json:"clearAssignedToGroup,omitempty"`
 	EnvironmentID              *string        `json:"environmentID,omitempty"`
 	ClearEnvironment           *bool          `json:"clearEnvironment,omitempty"`
 	ScopeID                    *string        `json:"scopeID,omitempty"`
@@ -47638,6 +47792,12 @@ type UpdateVulnerabilityInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// who reviewed the vulnerability when no user or group is linked
+	ReviewedBy      *string `json:"reviewedBy,omitempty"`
+	ClearReviewedBy *bool   `json:"clearReviewedBy,omitempty"`
+	// who the vulnerability is assigned to when no user or group is linked
+	AssignedTo      *string `json:"assignedTo,omitempty"`
+	ClearAssignedTo *bool   `json:"clearAssignedTo,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes      *string `json:"internalNotes,omitempty"`
 	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
@@ -47787,6 +47947,14 @@ type UpdateVulnerabilityInput struct {
 	AddViewerIDs             []string       `json:"addViewerIDs,omitempty"`
 	RemoveViewerIDs          []string       `json:"removeViewerIDs,omitempty"`
 	ClearViewers             *bool          `json:"clearViewers,omitempty"`
+	ReviewedByUserID         *string        `json:"reviewedByUserID,omitempty"`
+	ClearReviewedByUser      *bool          `json:"clearReviewedByUser,omitempty"`
+	ReviewedByGroupID        *string        `json:"reviewedByGroupID,omitempty"`
+	ClearReviewedByGroup     *bool          `json:"clearReviewedByGroup,omitempty"`
+	AssignedToUserID         *string        `json:"assignedToUserID,omitempty"`
+	ClearAssignedToUser      *bool          `json:"clearAssignedToUser,omitempty"`
+	AssignedToGroupID        *string        `json:"assignedToGroupID,omitempty"`
+	ClearAssignedToGroup     *bool          `json:"clearAssignedToGroup,omitempty"`
 	EnvironmentID            *string        `json:"environmentID,omitempty"`
 	ClearEnvironment         *bool          `json:"clearEnvironment,omitempty"`
 	ScopeID                  *string        `json:"scopeID,omitempty"`
@@ -49300,6 +49468,18 @@ type Vulnerability struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// who reviewed the vulnerability when no user or group is linked
+	ReviewedBy *string `json:"reviewedBy,omitempty"`
+	// the user id that reviewed the vulnerability
+	ReviewedByUserID *string `json:"reviewedByUserID,omitempty"`
+	// the group id that reviewed the vulnerability
+	ReviewedByGroupID *string `json:"reviewedByGroupID,omitempty"`
+	// who the vulnerability is assigned to when no user or group is linked
+	AssignedTo *string `json:"assignedTo,omitempty"`
+	// the user id assigned to the vulnerability
+	AssignedToUserID *string `json:"assignedToUserID,omitempty"`
+	// the group id assigned to the vulnerability
+	AssignedToGroupID *string `json:"assignedToGroupID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
@@ -49406,6 +49586,10 @@ type Vulnerability struct {
 	BlockedGroups       *GroupConnection       `json:"blockedGroups"`
 	Editors             *GroupConnection       `json:"editors"`
 	Viewers             *GroupConnection       `json:"viewers"`
+	ReviewedByUser      *User                  `json:"reviewedByUser,omitempty"`
+	ReviewedByGroup     *Group                 `json:"reviewedByGroup,omitempty"`
+	AssignedToUser      *User                  `json:"assignedToUser,omitempty"`
+	AssignedToGroup     *Group                 `json:"assignedToGroup,omitempty"`
 	Environment         *CustomTypeEnum        `json:"environment,omitempty"`
 	Scope               *CustomTypeEnum        `json:"scope,omitempty"`
 	VulnerabilityStatus *CustomTypeEnum        `json:"vulnerabilityStatus,omitempty"`
@@ -49641,6 +49825,102 @@ type VulnerabilityWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// reviewed_by field predicates
+	ReviewedBy             *string  `json:"reviewedBy,omitempty"`
+	ReviewedByNeq          *string  `json:"reviewedByNEQ,omitempty"`
+	ReviewedByIn           []string `json:"reviewedByIn,omitempty"`
+	ReviewedByNotIn        []string `json:"reviewedByNotIn,omitempty"`
+	ReviewedByGt           *string  `json:"reviewedByGT,omitempty"`
+	ReviewedByGte          *string  `json:"reviewedByGTE,omitempty"`
+	ReviewedByLt           *string  `json:"reviewedByLT,omitempty"`
+	ReviewedByLte          *string  `json:"reviewedByLTE,omitempty"`
+	ReviewedByContains     *string  `json:"reviewedByContains,omitempty"`
+	ReviewedByHasPrefix    *string  `json:"reviewedByHasPrefix,omitempty"`
+	ReviewedByHasSuffix    *string  `json:"reviewedByHasSuffix,omitempty"`
+	ReviewedByIsNil        *bool    `json:"reviewedByIsNil,omitempty"`
+	ReviewedByNotNil       *bool    `json:"reviewedByNotNil,omitempty"`
+	ReviewedByEqualFold    *string  `json:"reviewedByEqualFold,omitempty"`
+	ReviewedByContainsFold *string  `json:"reviewedByContainsFold,omitempty"`
+	// reviewed_by_user_id field predicates
+	ReviewedByUserID             *string  `json:"reviewedByUserID,omitempty"`
+	ReviewedByUserIdneq          *string  `json:"reviewedByUserIDNEQ,omitempty"`
+	ReviewedByUserIDIn           []string `json:"reviewedByUserIDIn,omitempty"`
+	ReviewedByUserIDNotIn        []string `json:"reviewedByUserIDNotIn,omitempty"`
+	ReviewedByUserIdgt           *string  `json:"reviewedByUserIDGT,omitempty"`
+	ReviewedByUserIdgte          *string  `json:"reviewedByUserIDGTE,omitempty"`
+	ReviewedByUserIdlt           *string  `json:"reviewedByUserIDLT,omitempty"`
+	ReviewedByUserIdlte          *string  `json:"reviewedByUserIDLTE,omitempty"`
+	ReviewedByUserIDContains     *string  `json:"reviewedByUserIDContains,omitempty"`
+	ReviewedByUserIDHasPrefix    *string  `json:"reviewedByUserIDHasPrefix,omitempty"`
+	ReviewedByUserIDHasSuffix    *string  `json:"reviewedByUserIDHasSuffix,omitempty"`
+	ReviewedByUserIDIsNil        *bool    `json:"reviewedByUserIDIsNil,omitempty"`
+	ReviewedByUserIDNotNil       *bool    `json:"reviewedByUserIDNotNil,omitempty"`
+	ReviewedByUserIDEqualFold    *string  `json:"reviewedByUserIDEqualFold,omitempty"`
+	ReviewedByUserIDContainsFold *string  `json:"reviewedByUserIDContainsFold,omitempty"`
+	// reviewed_by_group_id field predicates
+	ReviewedByGroupID             *string  `json:"reviewedByGroupID,omitempty"`
+	ReviewedByGroupIdneq          *string  `json:"reviewedByGroupIDNEQ,omitempty"`
+	ReviewedByGroupIDIn           []string `json:"reviewedByGroupIDIn,omitempty"`
+	ReviewedByGroupIDNotIn        []string `json:"reviewedByGroupIDNotIn,omitempty"`
+	ReviewedByGroupIdgt           *string  `json:"reviewedByGroupIDGT,omitempty"`
+	ReviewedByGroupIdgte          *string  `json:"reviewedByGroupIDGTE,omitempty"`
+	ReviewedByGroupIdlt           *string  `json:"reviewedByGroupIDLT,omitempty"`
+	ReviewedByGroupIdlte          *string  `json:"reviewedByGroupIDLTE,omitempty"`
+	ReviewedByGroupIDContains     *string  `json:"reviewedByGroupIDContains,omitempty"`
+	ReviewedByGroupIDHasPrefix    *string  `json:"reviewedByGroupIDHasPrefix,omitempty"`
+	ReviewedByGroupIDHasSuffix    *string  `json:"reviewedByGroupIDHasSuffix,omitempty"`
+	ReviewedByGroupIDIsNil        *bool    `json:"reviewedByGroupIDIsNil,omitempty"`
+	ReviewedByGroupIDNotNil       *bool    `json:"reviewedByGroupIDNotNil,omitempty"`
+	ReviewedByGroupIDEqualFold    *string  `json:"reviewedByGroupIDEqualFold,omitempty"`
+	ReviewedByGroupIDContainsFold *string  `json:"reviewedByGroupIDContainsFold,omitempty"`
+	// assigned_to field predicates
+	AssignedTo             *string  `json:"assignedTo,omitempty"`
+	AssignedToNeq          *string  `json:"assignedToNEQ,omitempty"`
+	AssignedToIn           []string `json:"assignedToIn,omitempty"`
+	AssignedToNotIn        []string `json:"assignedToNotIn,omitempty"`
+	AssignedToGt           *string  `json:"assignedToGT,omitempty"`
+	AssignedToGte          *string  `json:"assignedToGTE,omitempty"`
+	AssignedToLt           *string  `json:"assignedToLT,omitempty"`
+	AssignedToLte          *string  `json:"assignedToLTE,omitempty"`
+	AssignedToContains     *string  `json:"assignedToContains,omitempty"`
+	AssignedToHasPrefix    *string  `json:"assignedToHasPrefix,omitempty"`
+	AssignedToHasSuffix    *string  `json:"assignedToHasSuffix,omitempty"`
+	AssignedToIsNil        *bool    `json:"assignedToIsNil,omitempty"`
+	AssignedToNotNil       *bool    `json:"assignedToNotNil,omitempty"`
+	AssignedToEqualFold    *string  `json:"assignedToEqualFold,omitempty"`
+	AssignedToContainsFold *string  `json:"assignedToContainsFold,omitempty"`
+	// assigned_to_user_id field predicates
+	AssignedToUserID             *string  `json:"assignedToUserID,omitempty"`
+	AssignedToUserIdneq          *string  `json:"assignedToUserIDNEQ,omitempty"`
+	AssignedToUserIDIn           []string `json:"assignedToUserIDIn,omitempty"`
+	AssignedToUserIDNotIn        []string `json:"assignedToUserIDNotIn,omitempty"`
+	AssignedToUserIdgt           *string  `json:"assignedToUserIDGT,omitempty"`
+	AssignedToUserIdgte          *string  `json:"assignedToUserIDGTE,omitempty"`
+	AssignedToUserIdlt           *string  `json:"assignedToUserIDLT,omitempty"`
+	AssignedToUserIdlte          *string  `json:"assignedToUserIDLTE,omitempty"`
+	AssignedToUserIDContains     *string  `json:"assignedToUserIDContains,omitempty"`
+	AssignedToUserIDHasPrefix    *string  `json:"assignedToUserIDHasPrefix,omitempty"`
+	AssignedToUserIDHasSuffix    *string  `json:"assignedToUserIDHasSuffix,omitempty"`
+	AssignedToUserIDIsNil        *bool    `json:"assignedToUserIDIsNil,omitempty"`
+	AssignedToUserIDNotNil       *bool    `json:"assignedToUserIDNotNil,omitempty"`
+	AssignedToUserIDEqualFold    *string  `json:"assignedToUserIDEqualFold,omitempty"`
+	AssignedToUserIDContainsFold *string  `json:"assignedToUserIDContainsFold,omitempty"`
+	// assigned_to_group_id field predicates
+	AssignedToGroupID             *string  `json:"assignedToGroupID,omitempty"`
+	AssignedToGroupIdneq          *string  `json:"assignedToGroupIDNEQ,omitempty"`
+	AssignedToGroupIDIn           []string `json:"assignedToGroupIDIn,omitempty"`
+	AssignedToGroupIDNotIn        []string `json:"assignedToGroupIDNotIn,omitempty"`
+	AssignedToGroupIdgt           *string  `json:"assignedToGroupIDGT,omitempty"`
+	AssignedToGroupIdgte          *string  `json:"assignedToGroupIDGTE,omitempty"`
+	AssignedToGroupIdlt           *string  `json:"assignedToGroupIDLT,omitempty"`
+	AssignedToGroupIdlte          *string  `json:"assignedToGroupIDLTE,omitempty"`
+	AssignedToGroupIDContains     *string  `json:"assignedToGroupIDContains,omitempty"`
+	AssignedToGroupIDHasPrefix    *string  `json:"assignedToGroupIDHasPrefix,omitempty"`
+	AssignedToGroupIDHasSuffix    *string  `json:"assignedToGroupIDHasSuffix,omitempty"`
+	AssignedToGroupIDIsNil        *bool    `json:"assignedToGroupIDIsNil,omitempty"`
+	AssignedToGroupIDNotNil       *bool    `json:"assignedToGroupIDNotNil,omitempty"`
+	AssignedToGroupIDEqualFold    *string  `json:"assignedToGroupIDEqualFold,omitempty"`
+	AssignedToGroupIDContainsFold *string  `json:"assignedToGroupIDContainsFold,omitempty"`
 	// system_owned field predicates
 	SystemOwned       *bool `json:"systemOwned,omitempty"`
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
@@ -50251,6 +50531,18 @@ type VulnerabilityWhereInput struct {
 	// viewers edge predicates
 	HasViewers     *bool              `json:"hasViewers,omitempty"`
 	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
+	// reviewed_by_user edge predicates
+	HasReviewedByUser     *bool             `json:"hasReviewedByUser,omitempty"`
+	HasReviewedByUserWith []*UserWhereInput `json:"hasReviewedByUserWith,omitempty"`
+	// reviewed_by_group edge predicates
+	HasReviewedByGroup     *bool              `json:"hasReviewedByGroup,omitempty"`
+	HasReviewedByGroupWith []*GroupWhereInput `json:"hasReviewedByGroupWith,omitempty"`
+	// assigned_to_user edge predicates
+	HasAssignedToUser     *bool             `json:"hasAssignedToUser,omitempty"`
+	HasAssignedToUserWith []*UserWhereInput `json:"hasAssignedToUserWith,omitempty"`
+	// assigned_to_group edge predicates
+	HasAssignedToGroup     *bool              `json:"hasAssignedToGroup,omitempty"`
+	HasAssignedToGroupWith []*GroupWhereInput `json:"hasAssignedToGroupWith,omitempty"`
 	// environment edge predicates
 	HasEnvironment     *bool                       `json:"hasEnvironment,omitempty"`
 	HasEnvironmentWith []*CustomTypeEnumWhereInput `json:"hasEnvironmentWith,omitempty"`
@@ -58710,6 +59002,7 @@ const (
 	VulnerabilityOrderFieldCveID           VulnerabilityOrderField = "cve_id"
 	VulnerabilityOrderFieldCategory        VulnerabilityOrderField = "category"
 	VulnerabilityOrderFieldSeverity        VulnerabilityOrderField = "severity"
+	VulnerabilityOrderFieldScore           VulnerabilityOrderField = "score"
 )
 
 var AllVulnerabilityOrderField = []VulnerabilityOrderField{
@@ -58721,11 +59014,12 @@ var AllVulnerabilityOrderField = []VulnerabilityOrderField{
 	VulnerabilityOrderFieldCveID,
 	VulnerabilityOrderFieldCategory,
 	VulnerabilityOrderFieldSeverity,
+	VulnerabilityOrderFieldScore,
 }
 
 func (e VulnerabilityOrderField) IsValid() bool {
 	switch e {
-	case VulnerabilityOrderFieldCreatedAt, VulnerabilityOrderFieldUpdatedAt, VulnerabilityOrderFieldExternalOwnerID, VulnerabilityOrderFieldSecurityLevel, VulnerabilityOrderFieldExternalID, VulnerabilityOrderFieldCveID, VulnerabilityOrderFieldCategory, VulnerabilityOrderFieldSeverity:
+	case VulnerabilityOrderFieldCreatedAt, VulnerabilityOrderFieldUpdatedAt, VulnerabilityOrderFieldExternalOwnerID, VulnerabilityOrderFieldSecurityLevel, VulnerabilityOrderFieldExternalID, VulnerabilityOrderFieldCveID, VulnerabilityOrderFieldCategory, VulnerabilityOrderFieldSeverity, VulnerabilityOrderFieldScore:
 		return true
 	}
 	return false

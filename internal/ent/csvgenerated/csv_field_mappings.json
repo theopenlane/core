@@ -171,6 +171,28 @@
       "isSlice": true
     }
   ],
+  "Finding": [
+    {
+      "csvColumn": "AssignedToGroupName",
+      "targetField": "AssignedToGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "AssignedToUserEmail",
+      "targetField": "AssignedToUserID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ReviewedByGroupName",
+      "targetField": "ReviewedByGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ReviewedByUserEmail",
+      "targetField": "ReviewedByUserID",
+      "isSlice": false
+    }
+  ],
   "IdentityHolder": [
     {
       "csvColumn": "EmployerEntityName",
@@ -479,9 +501,29 @@
   ],
   "Vulnerability": [
     {
+      "csvColumn": "AssignedToGroupName",
+      "targetField": "AssignedToGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "AssignedToUserEmail",
+      "targetField": "AssignedToUserID",
+      "isSlice": false
+    },
+    {
       "csvColumn": "ControlRefCodes",
       "targetField": "ControlIDs",
       "isSlice": true
+    },
+    {
+      "csvColumn": "ReviewedByGroupName",
+      "targetField": "ReviewedByGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ReviewedByUserEmail",
+      "targetField": "ReviewedByUserID",
+      "isSlice": false
     }
   ]
 }

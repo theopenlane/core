@@ -1114,6 +1114,9 @@ type ComplexityRoot struct {
 
 	FindingHistory struct {
 		AssessmentID          func(childComplexity int) int
+		AssignedTo            func(childComplexity int) int
+		AssignedToGroupID     func(childComplexity int) int
+		AssignedToUserID      func(childComplexity int) int
 		BlocksProduction      func(childComplexity int) int
 		Categories            func(childComplexity int) int
 		Category              func(childComplexity int) int
@@ -1152,6 +1155,9 @@ type ComplexityRoot struct {
 		RemediationSLA        func(childComplexity int) int
 		ReportedAt            func(childComplexity int) int
 		ResourceName          func(childComplexity int) int
+		ReviewedBy            func(childComplexity int) int
+		ReviewedByGroupID     func(childComplexity int) int
+		ReviewedByUserID      func(childComplexity int) int
 		ScopeID               func(childComplexity int) int
 		ScopeName             func(childComplexity int) int
 		Score                 func(childComplexity int) int
@@ -3136,6 +3142,9 @@ type ComplexityRoot struct {
 	}
 
 	VulnerabilityHistory struct {
+		AssignedTo              func(childComplexity int) int
+		AssignedToGroupID       func(childComplexity int) int
+		AssignedToUserID        func(childComplexity int) int
 		AutoDismissedAt         func(childComplexity int) int
 		Blocking                func(childComplexity int) int
 		Category                func(childComplexity int) int
@@ -3180,6 +3189,9 @@ type ComplexityRoot struct {
 		Ref                     func(childComplexity int) int
 		References              func(childComplexity int) int
 		RemediationSLA          func(childComplexity int) int
+		ReviewedBy              func(childComplexity int) int
+		ReviewedByGroupID       func(childComplexity int) int
+		ReviewedByUserID        func(childComplexity int) int
 		ScopeID                 func(childComplexity int) int
 		ScopeName               func(childComplexity int) int
 		Score                   func(childComplexity int) int
@@ -8697,6 +8709,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FindingHistory.AssessmentID(childComplexity), true
+	case "FindingHistory.assignedTo":
+		if e.ComplexityRoot.FindingHistory.AssignedTo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingHistory.AssignedTo(childComplexity), true
+	case "FindingHistory.assignedToGroupID":
+		if e.ComplexityRoot.FindingHistory.AssignedToGroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingHistory.AssignedToGroupID(childComplexity), true
+	case "FindingHistory.assignedToUserID":
+		if e.ComplexityRoot.FindingHistory.AssignedToUserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingHistory.AssignedToUserID(childComplexity), true
 	case "FindingHistory.blocksProduction":
 		if e.ComplexityRoot.FindingHistory.BlocksProduction == nil {
 			break
@@ -8925,6 +8955,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FindingHistory.ResourceName(childComplexity), true
+	case "FindingHistory.reviewedBy":
+		if e.ComplexityRoot.FindingHistory.ReviewedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingHistory.ReviewedBy(childComplexity), true
+	case "FindingHistory.reviewedByGroupID":
+		if e.ComplexityRoot.FindingHistory.ReviewedByGroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingHistory.ReviewedByGroupID(childComplexity), true
+	case "FindingHistory.reviewedByUserID":
+		if e.ComplexityRoot.FindingHistory.ReviewedByUserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingHistory.ReviewedByUserID(childComplexity), true
 	case "FindingHistory.scopeID":
 		if e.ComplexityRoot.FindingHistory.ScopeID == nil {
 			break
@@ -18753,6 +18801,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.VendorScoringConfigHistoryEdge.Node(childComplexity), true
 
+	case "VulnerabilityHistory.assignedTo":
+		if e.ComplexityRoot.VulnerabilityHistory.AssignedTo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.AssignedTo(childComplexity), true
+	case "VulnerabilityHistory.assignedToGroupID":
+		if e.ComplexityRoot.VulnerabilityHistory.AssignedToGroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.AssignedToGroupID(childComplexity), true
+	case "VulnerabilityHistory.assignedToUserID":
+		if e.ComplexityRoot.VulnerabilityHistory.AssignedToUserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.AssignedToUserID(childComplexity), true
 	case "VulnerabilityHistory.autoDismissedAt":
 		if e.ComplexityRoot.VulnerabilityHistory.AutoDismissedAt == nil {
 			break
@@ -19017,6 +19083,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VulnerabilityHistory.RemediationSLA(childComplexity), true
+	case "VulnerabilityHistory.reviewedBy":
+		if e.ComplexityRoot.VulnerabilityHistory.ReviewedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.ReviewedBy(childComplexity), true
+	case "VulnerabilityHistory.reviewedByGroupID":
+		if e.ComplexityRoot.VulnerabilityHistory.ReviewedByGroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.ReviewedByGroupID(childComplexity), true
+	case "VulnerabilityHistory.reviewedByUserID":
+		if e.ComplexityRoot.VulnerabilityHistory.ReviewedByUserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.ReviewedByUserID(childComplexity), true
 	case "VulnerabilityHistory.scopeID":
 		if e.ComplexityRoot.VulnerabilityHistory.ScopeID == nil {
 			break
@@ -35351,6 +35435,30 @@ type FindingHistory implements Node {
   """
   ownerID: String
   """
+  who reviewed the finding when no user or group is linked
+  """
+  reviewedBy: String
+  """
+  the user id that reviewed the finding
+  """
+  reviewedByUserID: String
+  """
+  the group id that reviewed the finding
+  """
+  reviewedByGroupID: String
+  """
+  who the finding is assigned to when no user or group is linked
+  """
+  assignedTo: String
+  """
+  the user id assigned to the finding
+  """
+  assignedToUserID: String
+  """
+  the group id assigned to the finding
+  """
+  assignedToGroupID: String
+  """
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
@@ -35782,6 +35890,114 @@ input FindingHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
+  """
+  reviewed_by field predicates
+  """
+  reviewedBy: String
+  reviewedByNEQ: String
+  reviewedByIn: [String!]
+  reviewedByNotIn: [String!]
+  reviewedByGT: String
+  reviewedByGTE: String
+  reviewedByLT: String
+  reviewedByLTE: String
+  reviewedByContains: String
+  reviewedByHasPrefix: String
+  reviewedByHasSuffix: String
+  reviewedByIsNil: Boolean
+  reviewedByNotNil: Boolean
+  reviewedByEqualFold: String
+  reviewedByContainsFold: String
+  """
+  reviewed_by_user_id field predicates
+  """
+  reviewedByUserID: String
+  reviewedByUserIDNEQ: String
+  reviewedByUserIDIn: [String!]
+  reviewedByUserIDNotIn: [String!]
+  reviewedByUserIDGT: String
+  reviewedByUserIDGTE: String
+  reviewedByUserIDLT: String
+  reviewedByUserIDLTE: String
+  reviewedByUserIDContains: String
+  reviewedByUserIDHasPrefix: String
+  reviewedByUserIDHasSuffix: String
+  reviewedByUserIDIsNil: Boolean
+  reviewedByUserIDNotNil: Boolean
+  reviewedByUserIDEqualFold: String
+  reviewedByUserIDContainsFold: String
+  """
+  reviewed_by_group_id field predicates
+  """
+  reviewedByGroupID: String
+  reviewedByGroupIDNEQ: String
+  reviewedByGroupIDIn: [String!]
+  reviewedByGroupIDNotIn: [String!]
+  reviewedByGroupIDGT: String
+  reviewedByGroupIDGTE: String
+  reviewedByGroupIDLT: String
+  reviewedByGroupIDLTE: String
+  reviewedByGroupIDContains: String
+  reviewedByGroupIDHasPrefix: String
+  reviewedByGroupIDHasSuffix: String
+  reviewedByGroupIDIsNil: Boolean
+  reviewedByGroupIDNotNil: Boolean
+  reviewedByGroupIDEqualFold: String
+  reviewedByGroupIDContainsFold: String
+  """
+  assigned_to field predicates
+  """
+  assignedTo: String
+  assignedToNEQ: String
+  assignedToIn: [String!]
+  assignedToNotIn: [String!]
+  assignedToGT: String
+  assignedToGTE: String
+  assignedToLT: String
+  assignedToLTE: String
+  assignedToContains: String
+  assignedToHasPrefix: String
+  assignedToHasSuffix: String
+  assignedToIsNil: Boolean
+  assignedToNotNil: Boolean
+  assignedToEqualFold: String
+  assignedToContainsFold: String
+  """
+  assigned_to_user_id field predicates
+  """
+  assignedToUserID: String
+  assignedToUserIDNEQ: String
+  assignedToUserIDIn: [String!]
+  assignedToUserIDNotIn: [String!]
+  assignedToUserIDGT: String
+  assignedToUserIDGTE: String
+  assignedToUserIDLT: String
+  assignedToUserIDLTE: String
+  assignedToUserIDContains: String
+  assignedToUserIDHasPrefix: String
+  assignedToUserIDHasSuffix: String
+  assignedToUserIDIsNil: Boolean
+  assignedToUserIDNotNil: Boolean
+  assignedToUserIDEqualFold: String
+  assignedToUserIDContainsFold: String
+  """
+  assigned_to_group_id field predicates
+  """
+  assignedToGroupID: String
+  assignedToGroupIDNEQ: String
+  assignedToGroupIDIn: [String!]
+  assignedToGroupIDNotIn: [String!]
+  assignedToGroupIDGT: String
+  assignedToGroupIDGTE: String
+  assignedToGroupIDLT: String
+  assignedToGroupIDLTE: String
+  assignedToGroupIDContains: String
+  assignedToGroupIDHasPrefix: String
+  assignedToGroupIDHasSuffix: String
+  assignedToGroupIDIsNil: Boolean
+  assignedToGroupIDNotNil: Boolean
+  assignedToGroupIDEqualFold: String
+  assignedToGroupIDContainsFold: String
   """
   system_owned field predicates
   """
@@ -62704,6 +62920,30 @@ type VulnerabilityHistory implements Node {
   """
   ownerID: String
   """
+  who reviewed the vulnerability when no user or group is linked
+  """
+  reviewedBy: String
+  """
+  the user id that reviewed the vulnerability
+  """
+  reviewedByUserID: String
+  """
+  the group id that reviewed the vulnerability
+  """
+  reviewedByGroupID: String
+  """
+  who the vulnerability is assigned to when no user or group is linked
+  """
+  assignedTo: String
+  """
+  the user id assigned to the vulnerability
+  """
+  assignedToUserID: String
+  """
+  the group id assigned to the vulnerability
+  """
+  assignedToGroupID: String
+  """
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
@@ -62972,6 +63212,7 @@ enum VulnerabilityHistoryOrderField {
   cve_id
   category
   severity
+  score
 }
 """
 VulnerabilityHistorySecurityLevel is enum for the field security_level
@@ -63154,6 +63395,114 @@ input VulnerabilityHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
+  """
+  reviewed_by field predicates
+  """
+  reviewedBy: String
+  reviewedByNEQ: String
+  reviewedByIn: [String!]
+  reviewedByNotIn: [String!]
+  reviewedByGT: String
+  reviewedByGTE: String
+  reviewedByLT: String
+  reviewedByLTE: String
+  reviewedByContains: String
+  reviewedByHasPrefix: String
+  reviewedByHasSuffix: String
+  reviewedByIsNil: Boolean
+  reviewedByNotNil: Boolean
+  reviewedByEqualFold: String
+  reviewedByContainsFold: String
+  """
+  reviewed_by_user_id field predicates
+  """
+  reviewedByUserID: String
+  reviewedByUserIDNEQ: String
+  reviewedByUserIDIn: [String!]
+  reviewedByUserIDNotIn: [String!]
+  reviewedByUserIDGT: String
+  reviewedByUserIDGTE: String
+  reviewedByUserIDLT: String
+  reviewedByUserIDLTE: String
+  reviewedByUserIDContains: String
+  reviewedByUserIDHasPrefix: String
+  reviewedByUserIDHasSuffix: String
+  reviewedByUserIDIsNil: Boolean
+  reviewedByUserIDNotNil: Boolean
+  reviewedByUserIDEqualFold: String
+  reviewedByUserIDContainsFold: String
+  """
+  reviewed_by_group_id field predicates
+  """
+  reviewedByGroupID: String
+  reviewedByGroupIDNEQ: String
+  reviewedByGroupIDIn: [String!]
+  reviewedByGroupIDNotIn: [String!]
+  reviewedByGroupIDGT: String
+  reviewedByGroupIDGTE: String
+  reviewedByGroupIDLT: String
+  reviewedByGroupIDLTE: String
+  reviewedByGroupIDContains: String
+  reviewedByGroupIDHasPrefix: String
+  reviewedByGroupIDHasSuffix: String
+  reviewedByGroupIDIsNil: Boolean
+  reviewedByGroupIDNotNil: Boolean
+  reviewedByGroupIDEqualFold: String
+  reviewedByGroupIDContainsFold: String
+  """
+  assigned_to field predicates
+  """
+  assignedTo: String
+  assignedToNEQ: String
+  assignedToIn: [String!]
+  assignedToNotIn: [String!]
+  assignedToGT: String
+  assignedToGTE: String
+  assignedToLT: String
+  assignedToLTE: String
+  assignedToContains: String
+  assignedToHasPrefix: String
+  assignedToHasSuffix: String
+  assignedToIsNil: Boolean
+  assignedToNotNil: Boolean
+  assignedToEqualFold: String
+  assignedToContainsFold: String
+  """
+  assigned_to_user_id field predicates
+  """
+  assignedToUserID: String
+  assignedToUserIDNEQ: String
+  assignedToUserIDIn: [String!]
+  assignedToUserIDNotIn: [String!]
+  assignedToUserIDGT: String
+  assignedToUserIDGTE: String
+  assignedToUserIDLT: String
+  assignedToUserIDLTE: String
+  assignedToUserIDContains: String
+  assignedToUserIDHasPrefix: String
+  assignedToUserIDHasSuffix: String
+  assignedToUserIDIsNil: Boolean
+  assignedToUserIDNotNil: Boolean
+  assignedToUserIDEqualFold: String
+  assignedToUserIDContainsFold: String
+  """
+  assigned_to_group_id field predicates
+  """
+  assignedToGroupID: String
+  assignedToGroupIDNEQ: String
+  assignedToGroupIDIn: [String!]
+  assignedToGroupIDNotIn: [String!]
+  assignedToGroupIDGT: String
+  assignedToGroupIDGTE: String
+  assignedToGroupIDLT: String
+  assignedToGroupIDLTE: String
+  assignedToGroupIDContains: String
+  assignedToGroupIDHasPrefix: String
+  assignedToGroupIDHasSuffix: String
+  assignedToGroupIDIsNil: Boolean
+  assignedToGroupIDNotNil: Boolean
+  assignedToGroupIDEqualFold: String
+  assignedToGroupIDContainsFold: String
   """
   system_owned field predicates
   """
@@ -68862,6 +69211,18 @@ func (ec *executionContext) childFields_FindingHistory(ctx context.Context, fiel
 		return ec.fieldContext_FindingHistory_tags(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_FindingHistory_ownerID(ctx, field)
+	case "reviewedBy":
+		return ec.fieldContext_FindingHistory_reviewedBy(ctx, field)
+	case "reviewedByUserID":
+		return ec.fieldContext_FindingHistory_reviewedByUserID(ctx, field)
+	case "reviewedByGroupID":
+		return ec.fieldContext_FindingHistory_reviewedByGroupID(ctx, field)
+	case "assignedTo":
+		return ec.fieldContext_FindingHistory_assignedTo(ctx, field)
+	case "assignedToUserID":
+		return ec.fieldContext_FindingHistory_assignedToUserID(ctx, field)
+	case "assignedToGroupID":
+		return ec.fieldContext_FindingHistory_assignedToGroupID(ctx, field)
 	case "systemOwned":
 		return ec.fieldContext_FindingHistory_systemOwned(ctx, field)
 	case "internalNotes":
@@ -72740,6 +73101,18 @@ func (ec *executionContext) childFields_VulnerabilityHistory(ctx context.Context
 		return ec.fieldContext_VulnerabilityHistory_tags(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_VulnerabilityHistory_ownerID(ctx, field)
+	case "reviewedBy":
+		return ec.fieldContext_VulnerabilityHistory_reviewedBy(ctx, field)
+	case "reviewedByUserID":
+		return ec.fieldContext_VulnerabilityHistory_reviewedByUserID(ctx, field)
+	case "reviewedByGroupID":
+		return ec.fieldContext_VulnerabilityHistory_reviewedByGroupID(ctx, field)
+	case "assignedTo":
+		return ec.fieldContext_VulnerabilityHistory_assignedTo(ctx, field)
+	case "assignedToUserID":
+		return ec.fieldContext_VulnerabilityHistory_assignedToUserID(ctx, field)
+	case "assignedToGroupID":
+		return ec.fieldContext_VulnerabilityHistory_assignedToGroupID(ctx, field)
 	case "systemOwned":
 		return ec.fieldContext_VulnerabilityHistory_systemOwned(ctx, field)
 	case "internalNotes":

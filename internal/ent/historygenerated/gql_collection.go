@@ -5767,6 +5767,36 @@ func (_q *FindingHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, findinghistory.FieldOwnerID)
 				fieldSeen[findinghistory.FieldOwnerID] = struct{}{}
 			}
+		case "reviewedBy":
+			if _, ok := fieldSeen[findinghistory.FieldReviewedBy]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldReviewedBy)
+				fieldSeen[findinghistory.FieldReviewedBy] = struct{}{}
+			}
+		case "reviewedByUserID":
+			if _, ok := fieldSeen[findinghistory.FieldReviewedByUserID]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldReviewedByUserID)
+				fieldSeen[findinghistory.FieldReviewedByUserID] = struct{}{}
+			}
+		case "reviewedByGroupID":
+			if _, ok := fieldSeen[findinghistory.FieldReviewedByGroupID]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldReviewedByGroupID)
+				fieldSeen[findinghistory.FieldReviewedByGroupID] = struct{}{}
+			}
+		case "assignedTo":
+			if _, ok := fieldSeen[findinghistory.FieldAssignedTo]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldAssignedTo)
+				fieldSeen[findinghistory.FieldAssignedTo] = struct{}{}
+			}
+		case "assignedToUserID":
+			if _, ok := fieldSeen[findinghistory.FieldAssignedToUserID]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldAssignedToUserID)
+				fieldSeen[findinghistory.FieldAssignedToUserID] = struct{}{}
+			}
+		case "assignedToGroupID":
+			if _, ok := fieldSeen[findinghistory.FieldAssignedToGroupID]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldAssignedToGroupID)
+				fieldSeen[findinghistory.FieldAssignedToGroupID] = struct{}{}
+			}
 		case "systemOwned":
 			if _, ok := fieldSeen[findinghistory.FieldSystemOwned]; !ok {
 				selectedFields = append(selectedFields, findinghistory.FieldSystemOwned)
@@ -15858,6 +15888,36 @@ func (_q *VulnerabilityHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, vulnerabilityhistory.FieldOwnerID)
 				fieldSeen[vulnerabilityhistory.FieldOwnerID] = struct{}{}
+			}
+		case "reviewedBy":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldReviewedBy]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldReviewedBy)
+				fieldSeen[vulnerabilityhistory.FieldReviewedBy] = struct{}{}
+			}
+		case "reviewedByUserID":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldReviewedByUserID]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldReviewedByUserID)
+				fieldSeen[vulnerabilityhistory.FieldReviewedByUserID] = struct{}{}
+			}
+		case "reviewedByGroupID":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldReviewedByGroupID]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldReviewedByGroupID)
+				fieldSeen[vulnerabilityhistory.FieldReviewedByGroupID] = struct{}{}
+			}
+		case "assignedTo":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldAssignedTo]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldAssignedTo)
+				fieldSeen[vulnerabilityhistory.FieldAssignedTo] = struct{}{}
+			}
+		case "assignedToUserID":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldAssignedToUserID]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldAssignedToUserID)
+				fieldSeen[vulnerabilityhistory.FieldAssignedToUserID] = struct{}{}
+			}
+		case "assignedToGroupID":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldAssignedToGroupID]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldAssignedToGroupID)
+				fieldSeen[vulnerabilityhistory.FieldAssignedToGroupID] = struct{}{}
 			}
 		case "systemOwned":
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldSystemOwned]; !ok {

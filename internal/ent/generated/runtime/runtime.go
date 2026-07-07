@@ -3018,7 +3018,7 @@ func init() {
 	// filedownloadtoken.DefaultID holds the default value on creation for the id field.
 	filedownloadtoken.DefaultID = filedownloadtokenDescID.Default.(func() string)
 	findingMixin := schema.Finding{}.Mixin()
-	finding.Policy = privacy.NewPolicies(findingMixin[8], schema.Finding{})
+	finding.Policy = privacy.NewPolicies(findingMixin[9], schema.Finding{})
 	finding.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := finding.Policy.EvalMutation(ctx, m); err != nil {
@@ -3034,10 +3034,10 @@ func init() {
 	findingMixinHooks4 := findingMixin[4].Hooks()
 	findingMixinHooks6 := findingMixin[6].Hooks()
 	findingMixinHooks7 := findingMixin[7].Hooks()
-	findingMixinHooks8 := findingMixin[8].Hooks()
 	findingMixinHooks9 := findingMixin[9].Hooks()
 	findingMixinHooks10 := findingMixin[10].Hooks()
 	findingMixinHooks11 := findingMixin[11].Hooks()
+	findingMixinHooks12 := findingMixin[12].Hooks()
 	findingHooks := schema.Finding{}.Hooks()
 
 	finding.Hooks[1] = findingMixinHooks0[0]
@@ -3058,13 +3058,13 @@ func init() {
 
 	finding.Hooks[9] = findingMixinHooks7[1]
 
-	finding.Hooks[10] = findingMixinHooks8[0]
+	finding.Hooks[10] = findingMixinHooks9[0]
 
-	finding.Hooks[11] = findingMixinHooks9[0]
+	finding.Hooks[11] = findingMixinHooks10[0]
 
-	finding.Hooks[12] = findingMixinHooks10[0]
+	finding.Hooks[12] = findingMixinHooks11[0]
 
-	finding.Hooks[13] = findingMixinHooks11[0]
+	finding.Hooks[13] = findingMixinHooks12[0]
 
 	finding.Hooks[14] = findingHooks[0]
 	findingMixinInters2 := findingMixin[2].Interceptors()
@@ -3082,8 +3082,8 @@ func init() {
 	_ = findingMixinFields4
 	findingMixinFields6 := findingMixin[6].Fields()
 	_ = findingMixinFields6
-	findingMixinFields8 := findingMixin[8].Fields()
-	_ = findingMixinFields8
+	findingMixinFields9 := findingMixin[9].Fields()
+	_ = findingMixinFields9
 	findingFields := schema.Finding{}.Fields()
 	_ = findingFields
 	// findingDescCreatedAt is the schema descriptor for created_at field.
@@ -3109,7 +3109,7 @@ func init() {
 	// finding.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	finding.OwnerIDValidator = findingDescOwnerID.Validators[0].(func(string) error)
 	// findingDescSystemOwned is the schema descriptor for system_owned field.
-	findingDescSystemOwned := findingMixinFields8[0].Descriptor()
+	findingDescSystemOwned := findingMixinFields9[0].Descriptor()
 	// finding.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	finding.DefaultSystemOwned = findingDescSystemOwned.Default.(bool)
 	// findingDescCategories is the schema descriptor for categories field.
@@ -9067,7 +9067,7 @@ func init() {
 	// vendorscoringconfig.DefaultID holds the default value on creation for the id field.
 	vendorscoringconfig.DefaultID = vendorscoringconfigDescID.Default.(func() string)
 	vulnerabilityMixin := schema.Vulnerability{}.Mixin()
-	vulnerability.Policy = privacy.NewPolicies(vulnerabilityMixin[8], schema.Vulnerability{})
+	vulnerability.Policy = privacy.NewPolicies(vulnerabilityMixin[9], schema.Vulnerability{})
 	vulnerability.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := vulnerability.Policy.EvalMutation(ctx, m); err != nil {
@@ -9083,10 +9083,10 @@ func init() {
 	vulnerabilityMixinHooks4 := vulnerabilityMixin[4].Hooks()
 	vulnerabilityMixinHooks6 := vulnerabilityMixin[6].Hooks()
 	vulnerabilityMixinHooks7 := vulnerabilityMixin[7].Hooks()
-	vulnerabilityMixinHooks8 := vulnerabilityMixin[8].Hooks()
 	vulnerabilityMixinHooks9 := vulnerabilityMixin[9].Hooks()
 	vulnerabilityMixinHooks10 := vulnerabilityMixin[10].Hooks()
 	vulnerabilityMixinHooks11 := vulnerabilityMixin[11].Hooks()
+	vulnerabilityMixinHooks12 := vulnerabilityMixin[12].Hooks()
 	vulnerabilityHooks := schema.Vulnerability{}.Hooks()
 
 	vulnerability.Hooks[1] = vulnerabilityMixinHooks0[0]
@@ -9109,13 +9109,13 @@ func init() {
 
 	vulnerability.Hooks[10] = vulnerabilityMixinHooks7[2]
 
-	vulnerability.Hooks[11] = vulnerabilityMixinHooks8[0]
+	vulnerability.Hooks[11] = vulnerabilityMixinHooks9[0]
 
-	vulnerability.Hooks[12] = vulnerabilityMixinHooks9[0]
+	vulnerability.Hooks[12] = vulnerabilityMixinHooks10[0]
 
-	vulnerability.Hooks[13] = vulnerabilityMixinHooks10[0]
+	vulnerability.Hooks[13] = vulnerabilityMixinHooks11[0]
 
-	vulnerability.Hooks[14] = vulnerabilityMixinHooks11[0]
+	vulnerability.Hooks[14] = vulnerabilityMixinHooks12[0]
 
 	vulnerability.Hooks[15] = vulnerabilityHooks[0]
 	vulnerabilityMixinInters2 := vulnerabilityMixin[2].Interceptors()
@@ -9131,8 +9131,8 @@ func init() {
 	_ = vulnerabilityMixinFields4
 	vulnerabilityMixinFields6 := vulnerabilityMixin[6].Fields()
 	_ = vulnerabilityMixinFields6
-	vulnerabilityMixinFields8 := vulnerabilityMixin[8].Fields()
-	_ = vulnerabilityMixinFields8
+	vulnerabilityMixinFields9 := vulnerabilityMixin[9].Fields()
+	_ = vulnerabilityMixinFields9
 	vulnerabilityFields := schema.Vulnerability{}.Fields()
 	_ = vulnerabilityFields
 	// vulnerabilityDescCreatedAt is the schema descriptor for created_at field.
@@ -9158,7 +9158,7 @@ func init() {
 	// vulnerability.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	vulnerability.OwnerIDValidator = vulnerabilityDescOwnerID.Validators[0].(func(string) error)
 	// vulnerabilityDescSystemOwned is the schema descriptor for system_owned field.
-	vulnerabilityDescSystemOwned := vulnerabilityMixinFields8[0].Descriptor()
+	vulnerabilityDescSystemOwned := vulnerabilityMixinFields9[0].Descriptor()
 	// vulnerability.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	vulnerability.DefaultSystemOwned = vulnerabilityDescSystemOwned.Default.(bool)
 	// vulnerabilityDescExternalID is the schema descriptor for external_id field.

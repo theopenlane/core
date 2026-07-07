@@ -38,6 +38,18 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldReviewedBy holds the string denoting the reviewed_by field in the database.
+	FieldReviewedBy = "reviewed_by"
+	// FieldReviewedByUserID holds the string denoting the reviewed_by_user_id field in the database.
+	FieldReviewedByUserID = "reviewed_by_user_id"
+	// FieldReviewedByGroupID holds the string denoting the reviewed_by_group_id field in the database.
+	FieldReviewedByGroupID = "reviewed_by_group_id"
+	// FieldAssignedTo holds the string denoting the assigned_to field in the database.
+	FieldAssignedTo = "assigned_to"
+	// FieldAssignedToUserID holds the string denoting the assigned_to_user_id field in the database.
+	FieldAssignedToUserID = "assigned_to_user_id"
+	// FieldAssignedToGroupID holds the string denoting the assigned_to_group_id field in the database.
+	FieldAssignedToGroupID = "assigned_to_group_id"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
 	FieldSystemOwned = "system_owned"
 	// FieldInternalNotes holds the string denoting the internal_notes field in the database.
@@ -136,6 +148,14 @@ const (
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
 	EdgeEditors = "editors"
+	// EdgeReviewedByUser holds the string denoting the reviewed_by_user edge name in mutations.
+	EdgeReviewedByUser = "reviewed_by_user"
+	// EdgeReviewedByGroup holds the string denoting the reviewed_by_group edge name in mutations.
+	EdgeReviewedByGroup = "reviewed_by_group"
+	// EdgeAssignedToUser holds the string denoting the assigned_to_user edge name in mutations.
+	EdgeAssignedToUser = "assigned_to_user"
+	// EdgeAssignedToGroup holds the string denoting the assigned_to_group edge name in mutations.
+	EdgeAssignedToGroup = "assigned_to_group"
 	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
 	EdgeEnvironment = "environment"
 	// EdgeScope holds the string denoting the scope edge name in mutations.
@@ -201,6 +221,34 @@ const (
 	// EditorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	EditorsInverseTable = "groups"
+	// ReviewedByUserTable is the table that holds the reviewed_by_user relation/edge.
+	ReviewedByUserTable = "findings"
+	// ReviewedByUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	ReviewedByUserInverseTable = "users"
+	// ReviewedByUserColumn is the table column denoting the reviewed_by_user relation/edge.
+	ReviewedByUserColumn = "reviewed_by_user_id"
+	// ReviewedByGroupTable is the table that holds the reviewed_by_group relation/edge.
+	ReviewedByGroupTable = "findings"
+	// ReviewedByGroupInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ReviewedByGroupInverseTable = "groups"
+	// ReviewedByGroupColumn is the table column denoting the reviewed_by_group relation/edge.
+	ReviewedByGroupColumn = "reviewed_by_group_id"
+	// AssignedToUserTable is the table that holds the assigned_to_user relation/edge.
+	AssignedToUserTable = "findings"
+	// AssignedToUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	AssignedToUserInverseTable = "users"
+	// AssignedToUserColumn is the table column denoting the assigned_to_user relation/edge.
+	AssignedToUserColumn = "assigned_to_user_id"
+	// AssignedToGroupTable is the table that holds the assigned_to_group relation/edge.
+	AssignedToGroupTable = "findings"
+	// AssignedToGroupInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	AssignedToGroupInverseTable = "groups"
+	// AssignedToGroupColumn is the table column denoting the assigned_to_group relation/edge.
+	AssignedToGroupColumn = "assigned_to_group_id"
 	// EnvironmentTable is the table that holds the environment relation/edge.
 	EnvironmentTable = "findings"
 	// EnvironmentInverseTable is the table name for the CustomTypeEnum entity.
@@ -357,6 +405,12 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldTags,
 	FieldOwnerID,
+	FieldReviewedBy,
+	FieldReviewedByUserID,
+	FieldReviewedByGroupID,
+	FieldAssignedTo,
+	FieldAssignedToUserID,
+	FieldAssignedToGroupID,
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
@@ -554,6 +608,36 @@ func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// ByReviewedBy orders the results by the reviewed_by field.
+func ByReviewedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedBy, opts...).ToFunc()
+}
+
+// ByReviewedByUserID orders the results by the reviewed_by_user_id field.
+func ByReviewedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByUserID, opts...).ToFunc()
+}
+
+// ByReviewedByGroupID orders the results by the reviewed_by_group_id field.
+func ByReviewedByGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByGroupID, opts...).ToFunc()
+}
+
+// ByAssignedTo orders the results by the assigned_to field.
+func ByAssignedTo(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssignedTo, opts...).ToFunc()
+}
+
+// ByAssignedToUserID orders the results by the assigned_to_user_id field.
+func ByAssignedToUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssignedToUserID, opts...).ToFunc()
+}
+
+// ByAssignedToGroupID orders the results by the assigned_to_group_id field.
+func ByAssignedToGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssignedToGroupID, opts...).ToFunc()
 }
 
 // BySystemOwned orders the results by the system_owned field.
@@ -783,6 +867,34 @@ func ByEditorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByReviewedByUserField orders the results by reviewed_by_user field.
+func ByReviewedByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewedByUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByReviewedByGroupField orders the results by reviewed_by_group field.
+func ByReviewedByGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewedByGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByAssignedToUserField orders the results by assigned_to_user field.
+func ByAssignedToUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssignedToUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByAssignedToGroupField orders the results by assigned_to_group field.
+func ByAssignedToGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssignedToGroupStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -1105,6 +1217,34 @@ func newEditorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EditorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
+	)
+}
+func newReviewedByUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewedByUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByUserTable, ReviewedByUserColumn),
+	)
+}
+func newReviewedByGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewedByGroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByGroupTable, ReviewedByGroupColumn),
+	)
+}
+func newAssignedToUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssignedToUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, AssignedToUserTable, AssignedToUserColumn),
+	)
+}
+func newAssignedToGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssignedToGroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, AssignedToGroupTable, AssignedToGroupColumn),
 	)
 }
 func newEnvironmentStep() *sqlgraph.Step {

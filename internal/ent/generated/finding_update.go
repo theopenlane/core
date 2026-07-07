@@ -36,6 +36,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
@@ -163,6 +164,126 @@ func (_u *FindingUpdate) AppendTags(v []string) *FindingUpdate {
 // ClearTags clears the value of the "tags" field.
 func (_u *FindingUpdate) ClearTags() *FindingUpdate {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetReviewedBy sets the "reviewed_by" field.
+func (_u *FindingUpdate) SetReviewedBy(v string) *FindingUpdate {
+	_u.mutation.SetReviewedBy(v)
+	return _u
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableReviewedBy(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetReviewedBy(*v)
+	}
+	return _u
+}
+
+// ClearReviewedBy clears the value of the "reviewed_by" field.
+func (_u *FindingUpdate) ClearReviewedBy() *FindingUpdate {
+	_u.mutation.ClearReviewedBy()
+	return _u
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_u *FindingUpdate) SetReviewedByUserID(v string) *FindingUpdate {
+	_u.mutation.SetReviewedByUserID(v)
+	return _u
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableReviewedByUserID(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetReviewedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByUserID clears the value of the "reviewed_by_user_id" field.
+func (_u *FindingUpdate) ClearReviewedByUserID() *FindingUpdate {
+	_u.mutation.ClearReviewedByUserID()
+	return _u
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_u *FindingUpdate) SetReviewedByGroupID(v string) *FindingUpdate {
+	_u.mutation.SetReviewedByGroupID(v)
+	return _u
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableReviewedByGroupID(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetReviewedByGroupID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByGroupID clears the value of the "reviewed_by_group_id" field.
+func (_u *FindingUpdate) ClearReviewedByGroupID() *FindingUpdate {
+	_u.mutation.ClearReviewedByGroupID()
+	return _u
+}
+
+// SetAssignedTo sets the "assigned_to" field.
+func (_u *FindingUpdate) SetAssignedTo(v string) *FindingUpdate {
+	_u.mutation.SetAssignedTo(v)
+	return _u
+}
+
+// SetNillableAssignedTo sets the "assigned_to" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableAssignedTo(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetAssignedTo(*v)
+	}
+	return _u
+}
+
+// ClearAssignedTo clears the value of the "assigned_to" field.
+func (_u *FindingUpdate) ClearAssignedTo() *FindingUpdate {
+	_u.mutation.ClearAssignedTo()
+	return _u
+}
+
+// SetAssignedToUserID sets the "assigned_to_user_id" field.
+func (_u *FindingUpdate) SetAssignedToUserID(v string) *FindingUpdate {
+	_u.mutation.SetAssignedToUserID(v)
+	return _u
+}
+
+// SetNillableAssignedToUserID sets the "assigned_to_user_id" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableAssignedToUserID(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetAssignedToUserID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToUserID clears the value of the "assigned_to_user_id" field.
+func (_u *FindingUpdate) ClearAssignedToUserID() *FindingUpdate {
+	_u.mutation.ClearAssignedToUserID()
+	return _u
+}
+
+// SetAssignedToGroupID sets the "assigned_to_group_id" field.
+func (_u *FindingUpdate) SetAssignedToGroupID(v string) *FindingUpdate {
+	_u.mutation.SetAssignedToGroupID(v)
+	return _u
+}
+
+// SetNillableAssignedToGroupID sets the "assigned_to_group_id" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableAssignedToGroupID(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetAssignedToGroupID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToGroupID clears the value of the "assigned_to_group_id" field.
+func (_u *FindingUpdate) ClearAssignedToGroupID() *FindingUpdate {
+	_u.mutation.ClearAssignedToGroupID()
 	return _u
 }
 
@@ -1099,6 +1220,26 @@ func (_u *FindingUpdate) AddEditors(v ...*Group) *FindingUpdate {
 	return _u.AddEditorIDs(ids...)
 }
 
+// SetReviewedByUser sets the "reviewed_by_user" edge to the User entity.
+func (_u *FindingUpdate) SetReviewedByUser(v *User) *FindingUpdate {
+	return _u.SetReviewedByUserID(v.ID)
+}
+
+// SetReviewedByGroup sets the "reviewed_by_group" edge to the Group entity.
+func (_u *FindingUpdate) SetReviewedByGroup(v *Group) *FindingUpdate {
+	return _u.SetReviewedByGroupID(v.ID)
+}
+
+// SetAssignedToUser sets the "assigned_to_user" edge to the User entity.
+func (_u *FindingUpdate) SetAssignedToUser(v *User) *FindingUpdate {
+	return _u.SetAssignedToUserID(v.ID)
+}
+
+// SetAssignedToGroup sets the "assigned_to_group" edge to the Group entity.
+func (_u *FindingUpdate) SetAssignedToGroup(v *Group) *FindingUpdate {
+	return _u.SetAssignedToGroupID(v.ID)
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *FindingUpdate) SetEnvironment(v *CustomTypeEnum) *FindingUpdate {
 	return _u.SetEnvironmentID(v.ID)
@@ -1459,6 +1600,30 @@ func (_u *FindingUpdate) RemoveEditors(v ...*Group) *FindingUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEditorIDs(ids...)
+}
+
+// ClearReviewedByUser clears the "reviewed_by_user" edge to the User entity.
+func (_u *FindingUpdate) ClearReviewedByUser() *FindingUpdate {
+	_u.mutation.ClearReviewedByUser()
+	return _u
+}
+
+// ClearReviewedByGroup clears the "reviewed_by_group" edge to the Group entity.
+func (_u *FindingUpdate) ClearReviewedByGroup() *FindingUpdate {
+	_u.mutation.ClearReviewedByGroup()
+	return _u
+}
+
+// ClearAssignedToUser clears the "assigned_to_user" edge to the User entity.
+func (_u *FindingUpdate) ClearAssignedToUser() *FindingUpdate {
+	_u.mutation.ClearAssignedToUser()
+	return _u
+}
+
+// ClearAssignedToGroup clears the "assigned_to_group" edge to the Group entity.
+func (_u *FindingUpdate) ClearAssignedToGroup() *FindingUpdate {
+	_u.mutation.ClearAssignedToGroup()
+	return _u
 }
 
 // ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
@@ -2016,6 +2181,18 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(finding.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.ReviewedBy(); ok {
+		_spec.SetField(finding.FieldReviewedBy, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByCleared() {
+		_spec.ClearField(finding.FieldReviewedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssignedTo(); ok {
+		_spec.SetField(finding.FieldAssignedTo, field.TypeString, value)
+	}
+	if _u.mutation.AssignedToCleared() {
+		_spec.ClearField(finding.FieldAssignedTo, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(finding.FieldSystemOwned, field.TypeBool)
 	}
@@ -2397,6 +2574,130 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.FindingEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ReviewedByUserTable,
+			Columns: []string{finding.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ReviewedByUserTable,
+			Columns: []string{finding.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ReviewedByGroupTable,
+			Columns: []string{finding.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ReviewedByGroupTable,
+			Columns: []string{finding.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssignedToUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.AssignedToUserTable,
+			Columns: []string{finding.AssignedToUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssignedToUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.AssignedToUserTable,
+			Columns: []string{finding.AssignedToUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssignedToGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.AssignedToGroupTable,
+			Columns: []string{finding.AssignedToGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssignedToGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.AssignedToGroupTable,
+			Columns: []string{finding.AssignedToGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3610,6 +3911,126 @@ func (_u *FindingUpdateOne) ClearTags() *FindingUpdateOne {
 	return _u
 }
 
+// SetReviewedBy sets the "reviewed_by" field.
+func (_u *FindingUpdateOne) SetReviewedBy(v string) *FindingUpdateOne {
+	_u.mutation.SetReviewedBy(v)
+	return _u
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableReviewedBy(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetReviewedBy(*v)
+	}
+	return _u
+}
+
+// ClearReviewedBy clears the value of the "reviewed_by" field.
+func (_u *FindingUpdateOne) ClearReviewedBy() *FindingUpdateOne {
+	_u.mutation.ClearReviewedBy()
+	return _u
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_u *FindingUpdateOne) SetReviewedByUserID(v string) *FindingUpdateOne {
+	_u.mutation.SetReviewedByUserID(v)
+	return _u
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableReviewedByUserID(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetReviewedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByUserID clears the value of the "reviewed_by_user_id" field.
+func (_u *FindingUpdateOne) ClearReviewedByUserID() *FindingUpdateOne {
+	_u.mutation.ClearReviewedByUserID()
+	return _u
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_u *FindingUpdateOne) SetReviewedByGroupID(v string) *FindingUpdateOne {
+	_u.mutation.SetReviewedByGroupID(v)
+	return _u
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableReviewedByGroupID(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetReviewedByGroupID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByGroupID clears the value of the "reviewed_by_group_id" field.
+func (_u *FindingUpdateOne) ClearReviewedByGroupID() *FindingUpdateOne {
+	_u.mutation.ClearReviewedByGroupID()
+	return _u
+}
+
+// SetAssignedTo sets the "assigned_to" field.
+func (_u *FindingUpdateOne) SetAssignedTo(v string) *FindingUpdateOne {
+	_u.mutation.SetAssignedTo(v)
+	return _u
+}
+
+// SetNillableAssignedTo sets the "assigned_to" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableAssignedTo(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetAssignedTo(*v)
+	}
+	return _u
+}
+
+// ClearAssignedTo clears the value of the "assigned_to" field.
+func (_u *FindingUpdateOne) ClearAssignedTo() *FindingUpdateOne {
+	_u.mutation.ClearAssignedTo()
+	return _u
+}
+
+// SetAssignedToUserID sets the "assigned_to_user_id" field.
+func (_u *FindingUpdateOne) SetAssignedToUserID(v string) *FindingUpdateOne {
+	_u.mutation.SetAssignedToUserID(v)
+	return _u
+}
+
+// SetNillableAssignedToUserID sets the "assigned_to_user_id" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableAssignedToUserID(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetAssignedToUserID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToUserID clears the value of the "assigned_to_user_id" field.
+func (_u *FindingUpdateOne) ClearAssignedToUserID() *FindingUpdateOne {
+	_u.mutation.ClearAssignedToUserID()
+	return _u
+}
+
+// SetAssignedToGroupID sets the "assigned_to_group_id" field.
+func (_u *FindingUpdateOne) SetAssignedToGroupID(v string) *FindingUpdateOne {
+	_u.mutation.SetAssignedToGroupID(v)
+	return _u
+}
+
+// SetNillableAssignedToGroupID sets the "assigned_to_group_id" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableAssignedToGroupID(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetAssignedToGroupID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToGroupID clears the value of the "assigned_to_group_id" field.
+func (_u *FindingUpdateOne) ClearAssignedToGroupID() *FindingUpdateOne {
+	_u.mutation.ClearAssignedToGroupID()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *FindingUpdateOne) SetInternalNotes(v string) *FindingUpdateOne {
 	_u.mutation.SetInternalNotes(v)
@@ -4543,6 +4964,26 @@ func (_u *FindingUpdateOne) AddEditors(v ...*Group) *FindingUpdateOne {
 	return _u.AddEditorIDs(ids...)
 }
 
+// SetReviewedByUser sets the "reviewed_by_user" edge to the User entity.
+func (_u *FindingUpdateOne) SetReviewedByUser(v *User) *FindingUpdateOne {
+	return _u.SetReviewedByUserID(v.ID)
+}
+
+// SetReviewedByGroup sets the "reviewed_by_group" edge to the Group entity.
+func (_u *FindingUpdateOne) SetReviewedByGroup(v *Group) *FindingUpdateOne {
+	return _u.SetReviewedByGroupID(v.ID)
+}
+
+// SetAssignedToUser sets the "assigned_to_user" edge to the User entity.
+func (_u *FindingUpdateOne) SetAssignedToUser(v *User) *FindingUpdateOne {
+	return _u.SetAssignedToUserID(v.ID)
+}
+
+// SetAssignedToGroup sets the "assigned_to_group" edge to the Group entity.
+func (_u *FindingUpdateOne) SetAssignedToGroup(v *Group) *FindingUpdateOne {
+	return _u.SetAssignedToGroupID(v.ID)
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *FindingUpdateOne) SetEnvironment(v *CustomTypeEnum) *FindingUpdateOne {
 	return _u.SetEnvironmentID(v.ID)
@@ -4903,6 +5344,30 @@ func (_u *FindingUpdateOne) RemoveEditors(v ...*Group) *FindingUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEditorIDs(ids...)
+}
+
+// ClearReviewedByUser clears the "reviewed_by_user" edge to the User entity.
+func (_u *FindingUpdateOne) ClearReviewedByUser() *FindingUpdateOne {
+	_u.mutation.ClearReviewedByUser()
+	return _u
+}
+
+// ClearReviewedByGroup clears the "reviewed_by_group" edge to the Group entity.
+func (_u *FindingUpdateOne) ClearReviewedByGroup() *FindingUpdateOne {
+	_u.mutation.ClearReviewedByGroup()
+	return _u
+}
+
+// ClearAssignedToUser clears the "assigned_to_user" edge to the User entity.
+func (_u *FindingUpdateOne) ClearAssignedToUser() *FindingUpdateOne {
+	_u.mutation.ClearAssignedToUser()
+	return _u
+}
+
+// ClearAssignedToGroup clears the "assigned_to_group" edge to the Group entity.
+func (_u *FindingUpdateOne) ClearAssignedToGroup() *FindingUpdateOne {
+	_u.mutation.ClearAssignedToGroup()
+	return _u
 }
 
 // ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
@@ -5490,6 +5955,18 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(finding.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.ReviewedBy(); ok {
+		_spec.SetField(finding.FieldReviewedBy, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByCleared() {
+		_spec.ClearField(finding.FieldReviewedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssignedTo(); ok {
+		_spec.SetField(finding.FieldAssignedTo, field.TypeString, value)
+	}
+	if _u.mutation.AssignedToCleared() {
+		_spec.ClearField(finding.FieldAssignedTo, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(finding.FieldSystemOwned, field.TypeBool)
 	}
@@ -5871,6 +6348,130 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 			},
 		}
 		edge.Schema = _u.schemaConfig.FindingEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ReviewedByUserTable,
+			Columns: []string{finding.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ReviewedByUserTable,
+			Columns: []string{finding.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ReviewedByGroupTable,
+			Columns: []string{finding.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ReviewedByGroupTable,
+			Columns: []string{finding.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssignedToUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.AssignedToUserTable,
+			Columns: []string{finding.AssignedToUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssignedToUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.AssignedToUserTable,
+			Columns: []string{finding.AssignedToUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssignedToGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.AssignedToGroupTable,
+			Columns: []string{finding.AssignedToGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssignedToGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.AssignedToGroupTable,
+			Columns: []string{finding.AssignedToGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

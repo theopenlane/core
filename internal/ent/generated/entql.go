@@ -1320,6 +1320,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 			finding.FieldDisplayID:             {Type: field.TypeString, Column: finding.FieldDisplayID},
 			finding.FieldTags:                  {Type: field.TypeJSON, Column: finding.FieldTags},
 			finding.FieldOwnerID:               {Type: field.TypeString, Column: finding.FieldOwnerID},
+			finding.FieldReviewedBy:            {Type: field.TypeString, Column: finding.FieldReviewedBy},
+			finding.FieldReviewedByUserID:      {Type: field.TypeString, Column: finding.FieldReviewedByUserID},
+			finding.FieldReviewedByGroupID:     {Type: field.TypeString, Column: finding.FieldReviewedByGroupID},
+			finding.FieldAssignedTo:            {Type: field.TypeString, Column: finding.FieldAssignedTo},
+			finding.FieldAssignedToUserID:      {Type: field.TypeString, Column: finding.FieldAssignedToUserID},
+			finding.FieldAssignedToGroupID:     {Type: field.TypeString, Column: finding.FieldAssignedToGroupID},
 			finding.FieldSystemOwned:           {Type: field.TypeBool, Column: finding.FieldSystemOwned},
 			finding.FieldInternalNotes:         {Type: field.TypeString, Column: finding.FieldInternalNotes},
 			finding.FieldSystemInternalID:      {Type: field.TypeString, Column: finding.FieldSystemInternalID},
@@ -3700,6 +3706,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vulnerability.FieldDisplayID:               {Type: field.TypeString, Column: vulnerability.FieldDisplayID},
 			vulnerability.FieldTags:                    {Type: field.TypeJSON, Column: vulnerability.FieldTags},
 			vulnerability.FieldOwnerID:                 {Type: field.TypeString, Column: vulnerability.FieldOwnerID},
+			vulnerability.FieldReviewedBy:              {Type: field.TypeString, Column: vulnerability.FieldReviewedBy},
+			vulnerability.FieldReviewedByUserID:        {Type: field.TypeString, Column: vulnerability.FieldReviewedByUserID},
+			vulnerability.FieldReviewedByGroupID:       {Type: field.TypeString, Column: vulnerability.FieldReviewedByGroupID},
+			vulnerability.FieldAssignedTo:              {Type: field.TypeString, Column: vulnerability.FieldAssignedTo},
+			vulnerability.FieldAssignedToUserID:        {Type: field.TypeString, Column: vulnerability.FieldAssignedToUserID},
+			vulnerability.FieldAssignedToGroupID:       {Type: field.TypeString, Column: vulnerability.FieldAssignedToGroupID},
 			vulnerability.FieldSystemOwned:             {Type: field.TypeBool, Column: vulnerability.FieldSystemOwned},
 			vulnerability.FieldInternalNotes:           {Type: field.TypeString, Column: vulnerability.FieldInternalNotes},
 			vulnerability.FieldSystemInternalID:        {Type: field.TypeString, Column: vulnerability.FieldSystemInternalID},
@@ -7965,6 +7977,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Inverse: false,
 			Table:   finding.EditorsTable,
 			Columns: finding.EditorsPrimaryKey,
+			Bidi:    false,
+		},
+		"Finding",
+		"Group",
+	)
+	graph.MustAddE(
+		"reviewed_by_user",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ReviewedByUserTable,
+			Columns: []string{finding.ReviewedByUserColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"User",
+	)
+	graph.MustAddE(
+		"reviewed_by_group",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ReviewedByGroupTable,
+			Columns: []string{finding.ReviewedByGroupColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"Group",
+	)
+	graph.MustAddE(
+		"assigned_to_user",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.AssignedToUserTable,
+			Columns: []string{finding.AssignedToUserColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"User",
+	)
+	graph.MustAddE(
+		"assigned_to_group",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.AssignedToGroupTable,
+			Columns: []string{finding.AssignedToGroupColumn},
 			Bidi:    false,
 		},
 		"Finding",
@@ -17601,6 +17661,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Inverse: false,
 			Table:   vulnerability.ViewersTable,
 			Columns: []string{vulnerability.ViewersColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"Group",
+	)
+	graph.MustAddE(
+		"reviewed_by_user",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   vulnerability.ReviewedByUserTable,
+			Columns: []string{vulnerability.ReviewedByUserColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"User",
+	)
+	graph.MustAddE(
+		"reviewed_by_group",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   vulnerability.ReviewedByGroupTable,
+			Columns: []string{vulnerability.ReviewedByGroupColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"Group",
+	)
+	graph.MustAddE(
+		"assigned_to_user",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   vulnerability.AssignedToUserTable,
+			Columns: []string{vulnerability.AssignedToUserColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"User",
+	)
+	graph.MustAddE(
+		"assigned_to_group",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   vulnerability.AssignedToGroupTable,
+			Columns: []string{vulnerability.AssignedToGroupColumn},
 			Bidi:    false,
 		},
 		"Vulnerability",
@@ -28345,6 +28453,36 @@ func (f *FindingFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(finding.FieldOwnerID))
 }
 
+// WhereReviewedBy applies the entql string predicate on the reviewed_by field.
+func (f *FindingFilter) WhereReviewedBy(p entql.StringP) {
+	f.Where(p.Field(finding.FieldReviewedBy))
+}
+
+// WhereReviewedByUserID applies the entql string predicate on the reviewed_by_user_id field.
+func (f *FindingFilter) WhereReviewedByUserID(p entql.StringP) {
+	f.Where(p.Field(finding.FieldReviewedByUserID))
+}
+
+// WhereReviewedByGroupID applies the entql string predicate on the reviewed_by_group_id field.
+func (f *FindingFilter) WhereReviewedByGroupID(p entql.StringP) {
+	f.Where(p.Field(finding.FieldReviewedByGroupID))
+}
+
+// WhereAssignedTo applies the entql string predicate on the assigned_to field.
+func (f *FindingFilter) WhereAssignedTo(p entql.StringP) {
+	f.Where(p.Field(finding.FieldAssignedTo))
+}
+
+// WhereAssignedToUserID applies the entql string predicate on the assigned_to_user_id field.
+func (f *FindingFilter) WhereAssignedToUserID(p entql.StringP) {
+	f.Where(p.Field(finding.FieldAssignedToUserID))
+}
+
+// WhereAssignedToGroupID applies the entql string predicate on the assigned_to_group_id field.
+func (f *FindingFilter) WhereAssignedToGroupID(p entql.StringP) {
+	f.Where(p.Field(finding.FieldAssignedToGroupID))
+}
+
 // WhereSystemOwned applies the entql bool predicate on the system_owned field.
 func (f *FindingFilter) WhereSystemOwned(p entql.BoolP) {
 	f.Where(p.Field(finding.FieldSystemOwned))
@@ -28611,6 +28749,62 @@ func (f *FindingFilter) WhereHasEditors() {
 // WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
 func (f *FindingFilter) WhereHasEditorsWith(preds ...predicate.Group) {
 	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviewedByUser applies a predicate to check if query has an edge reviewed_by_user.
+func (f *FindingFilter) WhereHasReviewedByUser() {
+	f.Where(entql.HasEdge("reviewed_by_user"))
+}
+
+// WhereHasReviewedByUserWith applies a predicate to check if query has an edge reviewed_by_user with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasReviewedByUserWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("reviewed_by_user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviewedByGroup applies a predicate to check if query has an edge reviewed_by_group.
+func (f *FindingFilter) WhereHasReviewedByGroup() {
+	f.Where(entql.HasEdge("reviewed_by_group"))
+}
+
+// WhereHasReviewedByGroupWith applies a predicate to check if query has an edge reviewed_by_group with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasReviewedByGroupWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("reviewed_by_group", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssignedToUser applies a predicate to check if query has an edge assigned_to_user.
+func (f *FindingFilter) WhereHasAssignedToUser() {
+	f.Where(entql.HasEdge("assigned_to_user"))
+}
+
+// WhereHasAssignedToUserWith applies a predicate to check if query has an edge assigned_to_user with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasAssignedToUserWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("assigned_to_user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssignedToGroup applies a predicate to check if query has an edge assigned_to_group.
+func (f *FindingFilter) WhereHasAssignedToGroup() {
+	f.Where(entql.HasEdge("assigned_to_group"))
+}
+
+// WhereHasAssignedToGroupWith applies a predicate to check if query has an edge assigned_to_group with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasAssignedToGroupWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("assigned_to_group", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -49773,6 +49967,36 @@ func (f *VulnerabilityFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(vulnerability.FieldOwnerID))
 }
 
+// WhereReviewedBy applies the entql string predicate on the reviewed_by field.
+func (f *VulnerabilityFilter) WhereReviewedBy(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldReviewedBy))
+}
+
+// WhereReviewedByUserID applies the entql string predicate on the reviewed_by_user_id field.
+func (f *VulnerabilityFilter) WhereReviewedByUserID(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldReviewedByUserID))
+}
+
+// WhereReviewedByGroupID applies the entql string predicate on the reviewed_by_group_id field.
+func (f *VulnerabilityFilter) WhereReviewedByGroupID(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldReviewedByGroupID))
+}
+
+// WhereAssignedTo applies the entql string predicate on the assigned_to field.
+func (f *VulnerabilityFilter) WhereAssignedTo(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldAssignedTo))
+}
+
+// WhereAssignedToUserID applies the entql string predicate on the assigned_to_user_id field.
+func (f *VulnerabilityFilter) WhereAssignedToUserID(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldAssignedToUserID))
+}
+
+// WhereAssignedToGroupID applies the entql string predicate on the assigned_to_group_id field.
+func (f *VulnerabilityFilter) WhereAssignedToGroupID(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldAssignedToGroupID))
+}
+
 // WhereSystemOwned applies the entql bool predicate on the system_owned field.
 func (f *VulnerabilityFilter) WhereSystemOwned(p entql.BoolP) {
 	f.Where(p.Field(vulnerability.FieldSystemOwned))
@@ -50078,6 +50302,62 @@ func (f *VulnerabilityFilter) WhereHasViewers() {
 // WhereHasViewersWith applies a predicate to check if query has an edge viewers with a given conditions (other predicates).
 func (f *VulnerabilityFilter) WhereHasViewersWith(preds ...predicate.Group) {
 	f.Where(entql.HasEdgeWith("viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviewedByUser applies a predicate to check if query has an edge reviewed_by_user.
+func (f *VulnerabilityFilter) WhereHasReviewedByUser() {
+	f.Where(entql.HasEdge("reviewed_by_user"))
+}
+
+// WhereHasReviewedByUserWith applies a predicate to check if query has an edge reviewed_by_user with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasReviewedByUserWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("reviewed_by_user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviewedByGroup applies a predicate to check if query has an edge reviewed_by_group.
+func (f *VulnerabilityFilter) WhereHasReviewedByGroup() {
+	f.Where(entql.HasEdge("reviewed_by_group"))
+}
+
+// WhereHasReviewedByGroupWith applies a predicate to check if query has an edge reviewed_by_group with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasReviewedByGroupWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("reviewed_by_group", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssignedToUser applies a predicate to check if query has an edge assigned_to_user.
+func (f *VulnerabilityFilter) WhereHasAssignedToUser() {
+	f.Where(entql.HasEdge("assigned_to_user"))
+}
+
+// WhereHasAssignedToUserWith applies a predicate to check if query has an edge assigned_to_user with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasAssignedToUserWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("assigned_to_user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssignedToGroup applies a predicate to check if query has an edge assigned_to_group.
+func (f *VulnerabilityFilter) WhereHasAssignedToGroup() {
+	f.Where(entql.HasEdge("assigned_to_group"))
+}
+
+// WhereHasAssignedToGroupWith applies a predicate to check if query has an edge assigned_to_group with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasAssignedToGroupWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("assigned_to_group", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
