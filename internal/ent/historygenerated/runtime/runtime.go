@@ -2962,11 +2962,11 @@ func init() {
 	// trustcentersettinghistory.DefaultNdaApprovalRequired holds the default value on creation for the nda_approval_required field.
 	trustcentersettinghistory.DefaultNdaApprovalRequired = trustcentersettinghistoryDescNdaApprovalRequired.Default.(bool)
 	// trustcentersettinghistoryDescAllowSubscribers is the schema descriptor for allow_subscribers field.
-	trustcentersettinghistoryDescAllowSubscribers := trustcentersettinghistoryFields[33].Descriptor()
+	trustcentersettinghistoryDescAllowSubscribers := trustcentersettinghistoryFields[34].Descriptor()
 	// trustcentersettinghistory.DefaultAllowSubscribers holds the default value on creation for the allow_subscribers field.
 	trustcentersettinghistory.DefaultAllowSubscribers = trustcentersettinghistoryDescAllowSubscribers.Default.(bool)
 	// trustcentersettinghistoryDescNotifySubscribersOnSubprocessorChange is the schema descriptor for notify_subscribers_on_subprocessor_change field.
-	trustcentersettinghistoryDescNotifySubscribersOnSubprocessorChange := trustcentersettinghistoryFields[34].Descriptor()
+	trustcentersettinghistoryDescNotifySubscribersOnSubprocessorChange := trustcentersettinghistoryFields[35].Descriptor()
 	// trustcentersettinghistory.DefaultNotifySubscribersOnSubprocessorChange holds the default value on creation for the notify_subscribers_on_subprocessor_change field.
 	trustcentersettinghistory.DefaultNotifySubscribersOnSubprocessorChange = trustcentersettinghistoryDescNotifySubscribersOnSubprocessorChange.Default.(bool)
 	// trustcentersettinghistoryDescID is the schema descriptor for id field.

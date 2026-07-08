@@ -2401,6 +2401,15 @@
         },
         "type": "object"
       },
+      "UnsubscribeRequest": {
+        "properties": {
+          "Token": {
+            "description": "The token to be used to unsubscribe, token is sent via email",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "User": {
         "description": "SCIM User resource as defined in RFC 7643 Section 4.1.\nRepresents a user account in the system.\n",
         "properties": {
@@ -2698,6 +2707,15 @@
           },
           "unverified": {
             "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "VerifySubscribeRequest": {
+        "properties": {
+          "Token": {
+            "description": "The token to be used to verify the subscription, token is sent via email",
+            "type": "string"
           }
         },
         "type": "object"
@@ -7020,9 +7038,26 @@
       }
     },
     "/v1/subscribe/verify": {
-      "get": {
+      "post": {
         "description": "Verify a subscription",
         "operationId": "VerifySubscription",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "success": {
+                  "value": {
+                    "Token": "token"
+                  }
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/VerifySubscribeRequest"
+              }
+            }
+          },
+          "description": "Request body"
+        },
         "responses": {
           "200": {
             "content": {
@@ -7195,9 +7230,26 @@
       }
     },
     "/v1/unsubscribe": {
-      "get": {
+      "post": {
         "description": "Unsubscribe from communications",
         "operationId": "Unsubscribe",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "success": {
+                  "value": {
+                    "Token": "token"
+                  }
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/UnsubscribeRequest"
+              }
+            }
+          },
+          "description": "Request body"
+        },
         "responses": {
           "200": {
             "content": {

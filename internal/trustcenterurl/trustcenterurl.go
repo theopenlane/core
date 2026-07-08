@@ -20,7 +20,6 @@ type Config struct {
 	CacheRefreshScheme string
 }
 
-
 var config Config
 
 // SetConfig sets the package-level trust center configuration
