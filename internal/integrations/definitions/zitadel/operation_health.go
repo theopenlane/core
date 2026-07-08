@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // HealthCheck holds the result of a Zitadel health check
@@ -31,6 +32,7 @@ func (h HealthCheck) Handle() types.OperationHandler {
 func (HealthCheck) Run(ctx context.Context, c *client.Client, req types.OperationRequest) (json.RawMessage, error) {
 	cred, err := resolveCredential(req.Credentials)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error resolving credentials")
 		return nil, ErrHealthCheckFailed
 	}
 
@@ -40,6 +42,7 @@ func (HealthCheck) Run(ctx context.Context, c *client.Client, req types.Operatio
 	},
 })
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error listing users for health check")
 		return nil, ErrHealthCheckFailed
 	}
 

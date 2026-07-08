@@ -2,6 +2,8 @@ package zitadel
 
 import (
 	"context"
+	"net"
+	"strconv"
 	"strings"
 
 	"github.com/zitadel/zitadel-go/v3/pkg/client"
@@ -33,13 +35,11 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 		return nil, ErrTokenMissing
 	}
 
-	host := strings.TrimPrefix(cred.Domain, "https://")
-	host = strings.TrimPrefix(host, "http://")
-	host = strings.TrimRight(host, "/")
+	host, opts := parseHost(cred.Domain)
 
 	api, err := client.New(
 		ctx,
-		zitadel.New(host),
+		zitadel.New(host, opts...),
 		client.WithAuth(client.PAT(cred.Token)),
 	)
 	if err != nil {
@@ -47,6 +47,30 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 	}
 
 	return api, nil
+}
+
+// parseHost normalizes the configured domain into a bare host and, when an explicit
+// port is present (e.g. self-hosted "zitadel.example.com:8443"), a WithPort option.
+// TLS is always required; plaintext HTTP instances are not supported.
+func parseHost(domain string) (string, []zitadel.Option) {
+	host := strings.TrimSpace(domain)
+	host = strings.TrimPrefix(host, "https://")
+	host = strings.TrimPrefix(host, "http://")
+	host = strings.TrimRight(host, "/")
+
+	// drop any trailing path so only host[:port] remains
+	if i := strings.IndexByte(host, '/'); i >= 0 {
+		host = host[:i]
+	}
+
+	// SplitHostPort errors when no port is present, in which case the default port is used
+	if h, p, err := net.SplitHostPort(host); err == nil {
+		if port, perr := strconv.ParseUint(p, 10, 16); perr == nil {
+			return h, []zitadel.Option{zitadel.WithPort(uint16(port))}
+		}
+	}
+
+	return host, nil
 }
 
 // resolveCredential extracts the CredentialSchema from the provided credential bindings
