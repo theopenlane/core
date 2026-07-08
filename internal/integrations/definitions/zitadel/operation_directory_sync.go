@@ -3,9 +3,10 @@ package zitadel
 import (
 	"context"
 
+	"github.com/zitadel/zitadel-go/v3/pkg/client"
 	objectv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/object/v2"
 	userv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/user/v2"
-	zitadelUser "github.com/zitadel/zitadel-go/v3/pkg/client/user/v2"
+	"google.golang.org/protobuf/encoding/protojson"
 
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
@@ -13,12 +14,18 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
+// protoJSON serializes Zitadel protobuf payloads into the JSON shape the mappings expect:
+// proto field names (snake_case) and integer enum values, so nested oneof messages
+// (human/machine) and timestamps serialize correctly. Standard encoding/json mangles proto
+// messages (oneof wrappers, google.protobuf.Timestamp), so protojson is required here.
+var protoJSON = protojson.MarshalOptions{UseProtoNames: true, UseEnumNumbers: true}
+
 // DirectorySync collects Zitadel directory users for ingest
 type DirectorySync struct{}
 
 // IngestHandle adapts directory sync to the ingest operation registration boundary
 func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(zitadelClient, func(ctx context.Context, request types.OperationRequest, c *zitadelUser.Client) ([]types.IngestPayloadSet, error) {
+	return providerkit.WithClientRequest(zitadelClient, func(ctx context.Context, request types.OperationRequest, c *client.Client) ([]types.IngestPayloadSet, error) {
 		var cfg UserInput
 		if request.Integration != nil {
 			_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &cfg)
@@ -29,7 +36,7 @@ func (d DirectorySync) IngestHandle() types.IngestHandler {
 }
 
 // Run collects Zitadel directory users
-func (DirectorySync) Run(ctx context.Context, c *zitadelUser.Client, cfg UserInput) ([]types.IngestPayloadSet, error) {
+func (DirectorySync) Run(ctx context.Context, c *client.Client, cfg UserInput) ([]types.IngestPayloadSet, error) {
 	users, err := listDirectoryUsers(ctx, c)
 	if err != nil {
 		return nil, err
@@ -44,12 +51,12 @@ func (DirectorySync) Run(ctx context.Context, c *zitadelUser.Client, cfg UserInp
 
 		resourceID := user.GetUserId()
 
-		envelope, err := providerkit.MarshalEnvelope(resourceID, user, ErrPayloadEncode)
+		raw, err := protoJSON.Marshal(user)
 		if err != nil {
-			return nil, err
+			return nil, ErrPayloadEncode
 		}
 
-		accountEnvelopes = append(accountEnvelopes, envelope)
+		accountEnvelopes = append(accountEnvelopes, providerkit.RawEnvelope(resourceID, raw))
 	}
 
 	return []types.IngestPayloadSet{
@@ -61,7 +68,7 @@ func (DirectorySync) Run(ctx context.Context, c *zitadelUser.Client, cfg UserInp
 }
 
 // listDirectoryUsers pages through all Zitadel users using offset-based pagination
-func listDirectoryUsers(ctx context.Context, c *zitadelUser.Client) ([]*userv2.User, error) {
+func listDirectoryUsers(ctx context.Context, c *client.Client) ([]*userv2.User, error) {
 	users := make([]*userv2.User, 0)
 	var offset uint64 = 0
 
@@ -70,7 +77,7 @@ func listDirectoryUsers(ctx context.Context, c *zitadelUser.Client) ([]*userv2.U
 			return nil, err
 		}
 
-		resp, err := c.ListUsers(ctx, &userv2.ListUsersRequest{
+		resp, err := c.UserServiceV2().ListUsers(ctx, &userv2.ListUsersRequest{
 			Query: &objectv2.ListQuery{
 				Limit:  zitadelDefaultPageSize,
 				Offset: offset,

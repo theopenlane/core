@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/zitadel/zitadel-go/v3/pkg/client"
 	objectv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/object/v2"
 	userv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/user/v2"
-	zitadelUser "github.com/zitadel/zitadel-go/v3/pkg/client/user/v2"
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -22,19 +22,19 @@ type HealthCheck struct {
 
 // Handle adapts the health check to the generic operation registration boundary
 func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.WithClientRequest(zitadelClient, func(ctx context.Context, req types.OperationRequest, c *zitadelUser.Client) (json.RawMessage, error) {
+	return providerkit.WithClientRequest(zitadelClient, func(ctx context.Context, req types.OperationRequest, c *client.Client) (json.RawMessage, error) {
 		return h.Run(ctx, c, req)
 	})
 }
 
 // Run executes the Zitadel health check
-func (HealthCheck) Run(ctx context.Context, c *zitadelUser.Client, req types.OperationRequest) (json.RawMessage, error) {
+func (HealthCheck) Run(ctx context.Context, c *client.Client, req types.OperationRequest) (json.RawMessage, error) {
 	cred, err := resolveCredential(req.Credentials)
 	if err != nil {
 		return nil, ErrHealthCheckFailed
 	}
 
-	resp, err := c.ListUsers(ctx, &userv2.ListUsersRequest{
+	resp, err := c.UserServiceV2().ListUsers(ctx, &userv2.ListUsersRequest{
 	Query: &objectv2.ListQuery{
 		Limit: 1,
 	},

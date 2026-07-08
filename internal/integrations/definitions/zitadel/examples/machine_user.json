@@ -1,9 +1,12 @@
 {
-  "user_id": "...",
+  "user_id": "19cac1ac-19e6-43ed-bf3b-90ced88d3548",
   "state": 1,
   "username": "openlane-sync",
   "machine": {
     "name": "OpenLane Sync",
     "description": "Service account"
+  },
+  "details": {
+    "creation_date": "2026-01-15T10:00:00Z"
   }
 }

@@ -4,11 +4,8 @@ import (
 	"context"
 	"strings"
 
-	"golang.org/x/oauth2"
-	"github.com/zitadel/oidc/v3/pkg/oidc"
-	zitadelPkg "github.com/zitadel/zitadel-go/v3/pkg/client"
-	zitadelSDK "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel"
-	zitadelUser "github.com/zitadel/zitadel-go/v3/pkg/client/user/v2"
+	"github.com/zitadel/zitadel-go/v3/pkg/client"
+	"github.com/zitadel/zitadel-go/v3/pkg/zitadel"
 
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -36,28 +33,20 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 		return nil, ErrTokenMissing
 	}
 
-	domain := strings.TrimPrefix(cred.Domain, "https://")
-	domain = strings.TrimPrefix(domain, "http://")
-	domain = strings.TrimRight(domain, "/")
+	host := strings.TrimPrefix(cred.Domain, "https://")
+	host = strings.TrimPrefix(host, "http://")
+	host = strings.TrimRight(host, "/")
 
-	api := domain + ":443"
-
-	client, err := zitadelUser.NewClient(
+	api, err := client.New(
 		ctx,
-		cred.Domain,
-		api,
-		[]string{oidc.ScopeOpenID, zitadelPkg.ScopeZitadelAPI()},
-		zitadelSDK.WithTokenSource(
-			oauth2.StaticTokenSource(&oauth2.Token{
-				AccessToken: cred.Token,
-			}),
-		),
+		zitadel.New(host),
+		client.WithAuth(client.PAT(cred.Token)),
 	)
 	if err != nil {
 		return nil, ErrClientBuildFailed
 	}
 
-	return client, nil
+	return api, nil
 }
 
 // resolveCredential extracts the CredentialSchema from the provided credential bindings

@@ -48,6 +48,7 @@ func TestExamplePayloads(t *testing.T) {
 		assert.Equal(t, "Doe", mapped["familyName"])
 		assert.Equal(t, "ACTIVE", mapped["status"])
 		assert.Equal(t, "USER", mapped["accountType"])
+		assert.Equal(t, "2026-01-15T10:00:00Z", mapped["addedAt"])
 	})
 
 	t.Run("machine_user_json", func(t *testing.T) {

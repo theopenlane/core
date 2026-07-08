@@ -1,7 +1,7 @@
 package zitadel
 
 import (
-	zitadelUser "github.com/zitadel/zitadel-go/v3/pkg/client/user/v2"
+	"github.com/zitadel/zitadel-go/v3/pkg/client"
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -15,8 +15,8 @@ var (
 	// zitadelCredentialSchema is the JSON schema for the Zitadel credential
 	// zitadelCredential is the typed runtime ref for resolving the credential
 	zitadelCredentialSchema, zitadelCredential = providerkit.CredentialSchema[CredentialSchema]()
-	// zitadelClient is the client ref for the Zitadel user service API client
-	zitadelClient = types.NewClientRef[*zitadelUser.Client]()
+	// zitadelClient is the client ref for the Zitadel unified API client
+	zitadelClient = types.NewClientRef[*client.Client]()
 	// healthCheckSchema, healthCheckOperation is the operation ref for the health check
 	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// directorySyncSchema, directorySyncOperation is the operation ref for directory sync
