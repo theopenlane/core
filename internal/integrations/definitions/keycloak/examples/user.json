@@ -1,0 +1,23 @@
+{
+  "id": "8413c0cc-69a7-4726-a922-63e892264adc",
+  "createdTimestamp": 1746316800000,
+  "username": "john.doe",
+  "enabled": true,
+  "emailVerified": true,
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@company.com",
+  "attributes": {
+    "department": ["Engineering"],
+    "location": ["Remote"]
+  },
+  "disableableCredentialTypes": [],
+  "requiredActions": [],
+  "access": {
+    "manageGroupMembership": true,
+    "view": true,
+    "mapRoles": true,
+    "impersonate": false,
+    "manage": false
+  }
+}
