@@ -161,6 +161,8 @@ func (Task) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("external_uuid", ownerFieldName).
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields(ownerFieldName, "idempotency_key").
+			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL AND idempotency_key IS NOT NULL")),
 	}
 }
 

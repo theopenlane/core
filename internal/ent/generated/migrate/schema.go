@@ -7748,6 +7748,14 @@ var (
 					Where: "deleted_at is NULL",
 				},
 			},
+			{
+				Name:    "task_owner_id_idempotency_key",
+				Unique:  true,
+				Columns: []*schema.Column{TasksColumns[26], TasksColumns[22]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL AND idempotency_key IS NOT NULL",
+				},
+			},
 		},
 	}
 	// TemplatesColumns holds the columns for the "templates" table.

@@ -1,0 +1,32 @@
+# Onboarding Task definition
+#
+# placeholders such as {{ }} and will be replaced at task creation time.
+# this is to make sure we set the idempotency key correctly
+#
+# `if_key_value` should match the metadata from the frontend and the action you want performed
+# after the evaluation
+- key: onboarding.policies.import_existing
+  if_key_value:
+    key: existing_policies_procedures
+    value: true
+  title: Import existing policies and procedures
+  details:
+    - Import your existing policy and procedure documents using Upload.
+    - Import policy and procedure documents from Google Drive after connecting the Google Drive integration.
+    - Review the Openlane documentation for importing and managing documents.
+  urls:
+    - https://docs.theopenlane.io
+  idempotency_key: onboarding:{{organization_id}}:tasks:import_existing
+
+- key: onboarding.policies.create_starter_set
+  if_key_value:
+    key: existing_policies_procedures
+    value: false
+  title: Create your starter policy set
+  details:
+    - Import starter policies from the policy hub.
+    - Generate draft policies with AI.
+    - "Common policies to include: Information Security Policy, Access Control Policy, Acceptable Use Policy, Incident Response Policy, Vendor Management Policy, Data Retention Policy, Privacy Policy, Business Continuity Policy."
+  urls:
+    - https://docs.theopenlane.io
+  idempotency_key: onboarding:{{organization_id}}:tasks:create_starter_set
