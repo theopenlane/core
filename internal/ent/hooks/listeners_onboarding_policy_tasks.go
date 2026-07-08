@@ -133,7 +133,7 @@ func shouldProcessDefinition(definition automatedTaskDefinition, data map[string
 
 	value, ok := data[key]
 	if !ok {
-		return false == definition.IfKeyValue.Value
+		return !definition.IfKeyValue.Value
 	}
 
 	v, ok := value.(bool)
@@ -143,7 +143,7 @@ func shouldProcessDefinition(definition automatedTaskDefinition, data map[string
 func createTask(ctx context.Context, client *generated.Client, orgID string, definition automatedTaskDefinition) error {
 	key := strings.ReplaceAll(definition.IdempotencyKey, "{{organization_id}}", orgID)
 	if strings.TrimSpace(key) == "" {
-		return fmt.Errorf("onboarding task %q missing idempotency key", definition.Key)
+		return fmt.Errorf("onboarding task %q missing idempotency key", definition.Key) //nolint:err113
 	}
 
 	exists, err := client.Task.Query().
