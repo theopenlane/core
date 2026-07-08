@@ -7,10 +7,12 @@ import (
 	"time"
 
 	"github.com/samber/lo"
+	"github.com/stripe/stripe-go/v84"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/consts"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -21,6 +23,8 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
+
+const reminderStaggerDifference = 30 * time.Second
 
 // SeedPaymentReminders starts the durable payment reminder polling loop
 // after runtime listeners have been registered. It is a no-op when an active job
@@ -48,10 +52,8 @@ func (r *Runtime) SeedPaymentReminders(ctx context.Context) error {
 	return receipt.Err
 }
 
-// HandlePaymentReminders queries organizations without payment methods past the
-// configured interval, marks them for deletion, and dispatches notification emails
-// to admin/owner members and the billing contact. Returns the number of emails
-// dispatched as the delta for adaptive scheduling
+// HandlePaymentReminders marks canceled organizations for deletion and dispatches
+// notification emails to admin/owner members and the billing contact.
 func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.PaymentReminderEnvelope) (int, error) {
 	db := r.DB()
 	logger := logx.FromContext(ctx)
@@ -69,16 +71,23 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
 	})
 
+	now := time.Now()
+	canceledBefore := now.Add(-time.Duration(cfg.PaymentMethodInterval) * 24 * time.Hour)
+
 	settings, err := db.OrganizationSetting.Query().
 		Where(
 			organizationsetting.PendingDeletionAtIsNil(),
-			organizationsetting.PaymentMethodAddedEQ(false),
 			organizationsetting.HasOrganizationWith(
+				organization.IDNEQ(consts.SystemAdminOrgID),
 				organization.PersonalOrg(false),
 				organization.Not(
-					organization.HasOrgSubscriptionsWith(
-						orgsubscription.ActiveEQ(true),
-					),
+					organization.HasOrgSubscriptionsWith(activeOrTrialingSubscriptionPredicates()...),
+				),
+				organization.HasOrgSubscriptionsWith(
+					orgsubscription.ActiveEQ(false),
+					orgsubscription.UpdatedAtLTE(canceledBefore),
+					orgsubscription.StripeSubscriptionStatusNEQ(string(stripe.SubscriptionStatusTrialing)),
+					orgsubscription.StripeSubscriptionStatusNEQ(string(stripe.SubscriptionStatusActive)),
 				),
 			),
 		).
@@ -96,14 +105,11 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 	logger.Info().Int("count", len(settings)).Msg("organization settings eligible for payment reminder check")
 
 	dispatched := 0
+	emailQueueOffset := 0
 
 	for _, setting := range settings {
 		org := setting.Edges.Organization
 		if org == nil {
-			continue
-		}
-
-		if !isPastPaymentInterval(org.CreatedAt, cfg.PaymentMethodInterval) {
 			continue
 		}
 
@@ -114,7 +120,7 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 			continue
 		}
 
-		pendingDeletionAt := time.Now().AddDate(0, 0, int(cfg.DeletionDays))
+		pendingDeletionAt := now.AddDate(0, 0, int(cfg.DeletionDays))
 
 		if err := db.OrganizationSetting.UpdateOneID(setting.ID).
 			SetPendingDeletionAt(models.DateTime(pendingDeletionAt)).
@@ -180,17 +186,21 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 				continue
 			}
 
+			scheduledAt := now.Add(time.Duration(emailQueueOffset) * reminderStaggerDifference)
+
 			if _, err := r.Dispatch(systemCtx, operations.DispatchRequest{
 				DefinitionID: emaildef.DefinitionID.ID(),
 				Operation:    emaildef.OrgDeletionNoticeOp.Name(),
 				Config:       config,
 				RunType:      enums.IntegrationRunTypeScheduled,
 				Runtime:      true,
+				ScheduledAt:  &scheduledAt,
 			}); err != nil {
 				logger.Error().Err(err).Str("organization_id", org.ID).Str("email", rcp.email).Msg("failed to dispatch deletion notice email")
 				continue
 			}
 
+			emailQueueOffset++
 			dispatched++
 		}
 
@@ -200,19 +210,8 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 	return dispatched, nil
 }
 
-// paymentReminderRecipient holds the recipient details for a payment reminder email
 type paymentReminderRecipient struct {
 	email     string
 	firstName string
 	lastName  string
-}
-
-// isPastPaymentInterval reports whether the org creation time is past the
-// configured payment method interval
-func isPastPaymentInterval(createdAt time.Time, intervalDays uint8) bool {
-	if intervalDays == 0 {
-		return true
-	}
-
-	return time.Since(createdAt) >= time.Duration(intervalDays)*24*time.Hour
 }
