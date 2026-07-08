@@ -316,6 +316,10 @@ func serve(ctx context.Context) error {
 			log.Error().Err(err).Msg("failed to seed payment reminder listener")
 		}
 
+		if err := rt.SeedOrganizationDeletes(ctx); err != nil {
+			log.Error().Err(err).Msg("failed to seed organization delete listener")
+		}
+
 		if err := rt.SeedTrustCenterNotifications(ctx); err != nil {
 			log.Error().Err(err).Msg("failed to seed trust center notification listener")
 		}
