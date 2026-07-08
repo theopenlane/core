@@ -113,14 +113,16 @@ func TestFixture(name, toEmail string, defaultBranding bool) json.RawMessage {
 			RecipientInfo: r,
 		},
 		"InviteRequest": InviteRequest{
-			RecipientInfo: r,
+			// production sets only Email on the invite recipient (no name), so there is no greeting name
+			RecipientInfo: RecipientInfo{Email: toEmail},
 			InviterName:   "Jane Smith",
 			OrgName:       "Acme Corp",
 			Role:          "admin",
 			Token:         "test-invite-token-12345",
+			NewUser:       true,
 		},
 		"InviteJoinedRequest": InviteJoinedRequest{
-			RecipientInfo: r,
+			RecipientInfo: RecipientInfo{Email: toEmail},
 			OrgName:       "Acme Corp",
 		},
 		"PasswordResetEmailRequest": PasswordResetEmailRequest{
@@ -150,13 +152,13 @@ func TestFixture(name, toEmail string, defaultBranding bool) json.RawMessage {
 			RecipientInfo:      r,
 			OrgName:            "SecureCorp",
 			TrustCenterURL:     "https://trustcenter.example.com/securecorp?token=test",
-			AttachmentFilename: "SecureCorp-NDA-Signed.pdf",
+			AttachmentFilename: "signed_nda_file.pdf",
 			AttachmentData:     testAttestedNDAPDF(),
 		},
 		"TrustCenterAuthEmail": TrustCenterAuthEmail{
 			RecipientInfo: r,
 			OrgName:       "SecureCorp",
-			AuthURL:       "https://trustcenter.example.com/securecorp/auth?token=test",
+			AuthURL:       "https://trustcenter.example.com/securecorp?token=test",
 		},
 		"TrustCenterNDAApprovalRequestEmail": TrustCenterNDAApprovalRequestEmail{
 			RecipientInfo:  RecipientInfo{Email: toEmail, Recipients: []string{toEmail}, FirstName: r.FirstName, LastName: r.LastName},
@@ -168,7 +170,7 @@ func TestFixture(name, toEmail string, defaultBranding bool) json.RawMessage {
 			RecipientInfo:  r,
 			OrgName:        "Acme Corp",
 			AssessmentName: "SOC 2 Type II Review",
-			AuthURL:        "https://questionnaire.example.com/auth?token=test",
+			AuthURL:        "https://questionnaire.example.com/questionnaire?token=test",
 		},
 		"BillingEmailChangedEmail": BillingEmailChangedEmail{
 			RecipientInfo:   r,
