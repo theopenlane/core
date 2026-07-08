@@ -1194,6 +1194,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 			findinghistory.FieldDisplayID:             {Type: field.TypeString, Column: findinghistory.FieldDisplayID},
 			findinghistory.FieldTags:                  {Type: field.TypeJSON, Column: findinghistory.FieldTags},
 			findinghistory.FieldOwnerID:               {Type: field.TypeString, Column: findinghistory.FieldOwnerID},
+			findinghistory.FieldReviewedBy:            {Type: field.TypeString, Column: findinghistory.FieldReviewedBy},
+			findinghistory.FieldReviewedByUserID:      {Type: field.TypeString, Column: findinghistory.FieldReviewedByUserID},
+			findinghistory.FieldReviewedByGroupID:     {Type: field.TypeString, Column: findinghistory.FieldReviewedByGroupID},
+			findinghistory.FieldAssignedTo:            {Type: field.TypeString, Column: findinghistory.FieldAssignedTo},
+			findinghistory.FieldAssignedToUserID:      {Type: field.TypeString, Column: findinghistory.FieldAssignedToUserID},
+			findinghistory.FieldAssignedToGroupID:     {Type: field.TypeString, Column: findinghistory.FieldAssignedToGroupID},
 			findinghistory.FieldSystemOwned:           {Type: field.TypeBool, Column: findinghistory.FieldSystemOwned},
 			findinghistory.FieldInternalNotes:         {Type: field.TypeString, Column: findinghistory.FieldInternalNotes},
 			findinghistory.FieldSystemInternalID:      {Type: field.TypeString, Column: findinghistory.FieldSystemInternalID},
@@ -3129,6 +3135,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vulnerabilityhistory.FieldDisplayID:               {Type: field.TypeString, Column: vulnerabilityhistory.FieldDisplayID},
 			vulnerabilityhistory.FieldTags:                    {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldTags},
 			vulnerabilityhistory.FieldOwnerID:                 {Type: field.TypeString, Column: vulnerabilityhistory.FieldOwnerID},
+			vulnerabilityhistory.FieldReviewedBy:              {Type: field.TypeString, Column: vulnerabilityhistory.FieldReviewedBy},
+			vulnerabilityhistory.FieldReviewedByUserID:        {Type: field.TypeString, Column: vulnerabilityhistory.FieldReviewedByUserID},
+			vulnerabilityhistory.FieldReviewedByGroupID:       {Type: field.TypeString, Column: vulnerabilityhistory.FieldReviewedByGroupID},
+			vulnerabilityhistory.FieldAssignedTo:              {Type: field.TypeString, Column: vulnerabilityhistory.FieldAssignedTo},
+			vulnerabilityhistory.FieldAssignedToUserID:        {Type: field.TypeString, Column: vulnerabilityhistory.FieldAssignedToUserID},
+			vulnerabilityhistory.FieldAssignedToGroupID:       {Type: field.TypeString, Column: vulnerabilityhistory.FieldAssignedToGroupID},
 			vulnerabilityhistory.FieldSystemOwned:             {Type: field.TypeBool, Column: vulnerabilityhistory.FieldSystemOwned},
 			vulnerabilityhistory.FieldInternalNotes:           {Type: field.TypeString, Column: vulnerabilityhistory.FieldInternalNotes},
 			vulnerabilityhistory.FieldSystemInternalID:        {Type: field.TypeString, Column: vulnerabilityhistory.FieldSystemInternalID},
@@ -8303,6 +8315,36 @@ func (f *FindingHistoryFilter) WhereTags(p entql.BytesP) {
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *FindingHistoryFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(findinghistory.FieldOwnerID))
+}
+
+// WhereReviewedBy applies the entql string predicate on the reviewed_by field.
+func (f *FindingHistoryFilter) WhereReviewedBy(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldReviewedBy))
+}
+
+// WhereReviewedByUserID applies the entql string predicate on the reviewed_by_user_id field.
+func (f *FindingHistoryFilter) WhereReviewedByUserID(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldReviewedByUserID))
+}
+
+// WhereReviewedByGroupID applies the entql string predicate on the reviewed_by_group_id field.
+func (f *FindingHistoryFilter) WhereReviewedByGroupID(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldReviewedByGroupID))
+}
+
+// WhereAssignedTo applies the entql string predicate on the assigned_to field.
+func (f *FindingHistoryFilter) WhereAssignedTo(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldAssignedTo))
+}
+
+// WhereAssignedToUserID applies the entql string predicate on the assigned_to_user_id field.
+func (f *FindingHistoryFilter) WhereAssignedToUserID(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldAssignedToUserID))
+}
+
+// WhereAssignedToGroupID applies the entql string predicate on the assigned_to_group_id field.
+func (f *FindingHistoryFilter) WhereAssignedToGroupID(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldAssignedToGroupID))
 }
 
 // WhereSystemOwned applies the entql bool predicate on the system_owned field.
@@ -16778,6 +16820,36 @@ func (f *VulnerabilityHistoryFilter) WhereTags(p entql.BytesP) {
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *VulnerabilityHistoryFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(vulnerabilityhistory.FieldOwnerID))
+}
+
+// WhereReviewedBy applies the entql string predicate on the reviewed_by field.
+func (f *VulnerabilityHistoryFilter) WhereReviewedBy(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldReviewedBy))
+}
+
+// WhereReviewedByUserID applies the entql string predicate on the reviewed_by_user_id field.
+func (f *VulnerabilityHistoryFilter) WhereReviewedByUserID(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldReviewedByUserID))
+}
+
+// WhereReviewedByGroupID applies the entql string predicate on the reviewed_by_group_id field.
+func (f *VulnerabilityHistoryFilter) WhereReviewedByGroupID(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldReviewedByGroupID))
+}
+
+// WhereAssignedTo applies the entql string predicate on the assigned_to field.
+func (f *VulnerabilityHistoryFilter) WhereAssignedTo(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldAssignedTo))
+}
+
+// WhereAssignedToUserID applies the entql string predicate on the assigned_to_user_id field.
+func (f *VulnerabilityHistoryFilter) WhereAssignedToUserID(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldAssignedToUserID))
+}
+
+// WhereAssignedToGroupID applies the entql string predicate on the assigned_to_group_id field.
+func (f *VulnerabilityHistoryFilter) WhereAssignedToGroupID(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldAssignedToGroupID))
 }
 
 // WhereSystemOwned applies the entql bool predicate on the system_owned field.

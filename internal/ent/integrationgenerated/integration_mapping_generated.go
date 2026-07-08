@@ -451,6 +451,9 @@ const (
 // Integration mapping keys for Finding.
 const (
 	IntegrationMappingFindingAssessmentID       = "assessmentID"
+	IntegrationMappingFindingAssignedTo         = "assignedTo"
+	IntegrationMappingFindingAssignedToGroupID  = "assignedToGroupID"
+	IntegrationMappingFindingAssignedToUserID   = "assignedToUserID"
 	IntegrationMappingFindingBlocksProduction   = "blocksProduction"
 	IntegrationMappingFindingCategories         = "categories"
 	IntegrationMappingFindingCategory           = "category"
@@ -482,6 +485,9 @@ const (
 	IntegrationMappingFindingRemediationSLA     = "remediationSLA"
 	IntegrationMappingFindingReportedAt         = "reportedAt"
 	IntegrationMappingFindingResourceName       = "resourceName"
+	IntegrationMappingFindingReviewedBy         = "reviewedBy"
+	IntegrationMappingFindingReviewedByGroupID  = "reviewedByGroupID"
+	IntegrationMappingFindingReviewedByUserID   = "reviewedByUserID"
 	IntegrationMappingFindingScopeID            = "scopeID"
 	IntegrationMappingFindingScopeName          = "scopeName"
 	IntegrationMappingFindingScore              = "score"
@@ -579,6 +585,9 @@ const (
 
 // Integration mapping keys for Vulnerability.
 const (
+	IntegrationMappingVulnerabilityAssignedTo              = "assignedTo"
+	IntegrationMappingVulnerabilityAssignedToGroupID       = "assignedToGroupID"
+	IntegrationMappingVulnerabilityAssignedToUserID        = "assignedToUserID"
 	IntegrationMappingVulnerabilityAutoDismissedAt         = "autoDismissedAt"
 	IntegrationMappingVulnerabilityBlocking                = "blocking"
 	IntegrationMappingVulnerabilityCategory                = "category"
@@ -616,6 +625,9 @@ const (
 	IntegrationMappingVulnerabilityRawPayload              = "rawPayload"
 	IntegrationMappingVulnerabilityReferences              = "references"
 	IntegrationMappingVulnerabilityRemediationSLA          = "remediationSLA"
+	IntegrationMappingVulnerabilityReviewedBy              = "reviewedBy"
+	IntegrationMappingVulnerabilityReviewedByGroupID       = "reviewedByGroupID"
+	IntegrationMappingVulnerabilityReviewedByUserID        = "reviewedByUserID"
 	IntegrationMappingVulnerabilityScopeID                 = "scopeID"
 	IntegrationMappingVulnerabilityScopeName               = "scopeName"
 	IntegrationMappingVulnerabilityScore                   = "score"
@@ -2805,6 +2817,33 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey:  "assignedTo",
+				GoField:   "AssignedTo",
+				EntField:  "assigned_to",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "assignedToGroupID",
+				GoField:   "AssignedToGroupID",
+				EntField:  "assigned_to_group_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "assignedToUserID",
+				GoField:   "AssignedToUserID",
+				EntField:  "assigned_to_user_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "blocksProduction",
 				GoField:   "BlocksProduction",
 				EntField:  "blocks_production",
@@ -3084,6 +3123,33 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey:  "reviewedBy",
+				GoField:   "ReviewedBy",
+				EntField:  "reviewed_by",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "reviewedByGroupID",
+				GoField:   "ReviewedByGroupID",
+				EntField:  "reviewed_by_group_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "reviewedByUserID",
+				GoField:   "ReviewedByUserID",
+				EntField:  "reviewed_by_user_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "scopeID",
 				GoField:   "ScopeID",
 				EntField:  "scope_id",
@@ -3212,6 +3278,9 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 		},
 		AllowedKeys: map[string]struct{}{
 			"assessmentID":       {},
+			"assignedTo":         {},
+			"assignedToGroupID":  {},
+			"assignedToUserID":   {},
 			"blocksProduction":   {},
 			"categories":         {},
 			"category":           {},
@@ -3243,6 +3312,9 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"remediationSLA":     {},
 			"reportedAt":         {},
 			"resourceName":       {},
+			"reviewedBy":         {},
+			"reviewedByGroupID":  {},
+			"reviewedByUserID":   {},
 			"scopeID":            {},
 			"scopeName":          {},
 			"score":              {},
@@ -3981,6 +4053,33 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 		Name: "Vulnerability",
 		Fields: []IntegrationMappingField{
 			{
+				InputKey:  "assignedTo",
+				GoField:   "AssignedTo",
+				EntField:  "assigned_to",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "assignedToGroupID",
+				GoField:   "AssignedToGroupID",
+				EntField:  "assigned_to_group_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "assignedToUserID",
+				GoField:   "AssignedToUserID",
+				EntField:  "assigned_to_user_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "autoDismissedAt",
 				GoField:   "AutoDismissedAt",
 				EntField:  "auto_dismissed_at",
@@ -4314,6 +4413,33 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey:  "reviewedBy",
+				GoField:   "ReviewedBy",
+				EntField:  "reviewed_by",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "reviewedByGroupID",
+				GoField:   "ReviewedByGroupID",
+				EntField:  "reviewed_by_group_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "reviewedByUserID",
+				GoField:   "ReviewedByUserID",
+				EntField:  "reviewed_by_user_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "scopeID",
 				GoField:   "ScopeID",
 				EntField:  "scope_id",
@@ -4441,6 +4567,9 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			},
 		},
 		AllowedKeys: map[string]struct{}{
+			"assignedTo":              {},
+			"assignedToGroupID":       {},
+			"assignedToUserID":        {},
 			"autoDismissedAt":         {},
 			"blocking":                {},
 			"category":                {},
@@ -4478,6 +4607,9 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"rawPayload":              {},
 			"references":              {},
 			"remediationSLA":          {},
+			"reviewedBy":              {},
+			"reviewedByGroupID":       {},
+			"reviewedByUserID":        {},
 			"scopeID":                 {},
 			"scopeName":               {},
 			"score":                   {},

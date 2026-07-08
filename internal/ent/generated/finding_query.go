@@ -36,6 +36,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
@@ -53,6 +54,10 @@ type FindingQuery struct {
 	withOwner                   *OrganizationQuery
 	withBlockedGroups           *GroupQuery
 	withEditors                 *GroupQuery
+	withReviewedByUser          *UserQuery
+	withReviewedByGroup         *GroupQuery
+	withAssignedToUser          *UserQuery
+	withAssignedToGroup         *GroupQuery
 	withEnvironment             *CustomTypeEnumQuery
 	withScope                   *CustomTypeEnumQuery
 	withFindingStatus           *CustomTypeEnumQuery
@@ -205,6 +210,106 @@ func (_q *FindingQuery) QueryEditors() *GroupQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.FindingEditors
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviewedByUser chains the current query on the "reviewed_by_user" edge.
+func (_q *FindingQuery) QueryReviewedByUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.ReviewedByUserTable, finding.ReviewedByUserColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Finding
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviewedByGroup chains the current query on the "reviewed_by_group" edge.
+func (_q *FindingQuery) QueryReviewedByGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.ReviewedByGroupTable, finding.ReviewedByGroupColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Finding
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssignedToUser chains the current query on the "assigned_to_user" edge.
+func (_q *FindingQuery) QueryAssignedToUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.AssignedToUserTable, finding.AssignedToUserColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Finding
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssignedToGroup chains the current query on the "assigned_to_group" edge.
+func (_q *FindingQuery) QueryAssignedToGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.AssignedToGroupTable, finding.AssignedToGroupColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Finding
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -981,6 +1086,10 @@ func (_q *FindingQuery) Clone() *FindingQuery {
 		withOwner:              _q.withOwner.Clone(),
 		withBlockedGroups:      _q.withBlockedGroups.Clone(),
 		withEditors:            _q.withEditors.Clone(),
+		withReviewedByUser:     _q.withReviewedByUser.Clone(),
+		withReviewedByGroup:    _q.withReviewedByGroup.Clone(),
+		withAssignedToUser:     _q.withAssignedToUser.Clone(),
+		withAssignedToGroup:    _q.withAssignedToGroup.Clone(),
 		withEnvironment:        _q.withEnvironment.Clone(),
 		withScope:              _q.withScope.Clone(),
 		withFindingStatus:      _q.withFindingStatus.Clone(),
@@ -1041,6 +1150,50 @@ func (_q *FindingQuery) WithEditors(opts ...func(*GroupQuery)) *FindingQuery {
 		opt(query)
 	}
 	_q.withEditors = query
+	return _q
+}
+
+// WithReviewedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "reviewed_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithReviewedByUser(opts ...func(*UserQuery)) *FindingQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviewedByUser = query
+	return _q
+}
+
+// WithReviewedByGroup tells the query-builder to eager-load the nodes that are connected to
+// the "reviewed_by_group" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithReviewedByGroup(opts ...func(*GroupQuery)) *FindingQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviewedByGroup = query
+	return _q
+}
+
+// WithAssignedToUser tells the query-builder to eager-load the nodes that are connected to
+// the "assigned_to_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithAssignedToUser(opts ...func(*UserQuery)) *FindingQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssignedToUser = query
+	return _q
+}
+
+// WithAssignedToGroup tells the query-builder to eager-load the nodes that are connected to
+// the "assigned_to_group" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithAssignedToGroup(opts ...func(*GroupQuery)) *FindingQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssignedToGroup = query
 	return _q
 }
 
@@ -1381,10 +1534,14 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 	var (
 		nodes       = []*Finding{}
 		_spec       = _q.querySpec()
-		loadedTypes = [26]bool{
+		loadedTypes = [30]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
+			_q.withReviewedByUser != nil,
+			_q.withReviewedByGroup != nil,
+			_q.withAssignedToUser != nil,
+			_q.withAssignedToGroup != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
 			_q.withFindingStatus != nil,
@@ -1450,6 +1607,30 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *Finding) { n.Edges.Editors = []*Group{} },
 			func(n *Finding, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviewedByUser; query != nil {
+		if err := _q.loadReviewedByUser(ctx, query, nodes, nil,
+			func(n *Finding, e *User) { n.Edges.ReviewedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviewedByGroup; query != nil {
+		if err := _q.loadReviewedByGroup(ctx, query, nodes, nil,
+			func(n *Finding, e *Group) { n.Edges.ReviewedByGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssignedToUser; query != nil {
+		if err := _q.loadAssignedToUser(ctx, query, nodes, nil,
+			func(n *Finding, e *User) { n.Edges.AssignedToUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssignedToGroup; query != nil {
+		if err := _q.loadAssignedToGroup(ctx, query, nodes, nil,
+			func(n *Finding, e *Group) { n.Edges.AssignedToGroup = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1926,6 +2107,122 @@ func (_q *FindingQuery) loadEditors(ctx context.Context, query *GroupQuery, node
 		}
 		for kn := range nodes {
 			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *FindingQuery) loadReviewedByUser(ctx context.Context, query *UserQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Finding)
+	for i := range nodes {
+		fk := nodes[i].ReviewedByUserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "reviewed_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *FindingQuery) loadReviewedByGroup(ctx context.Context, query *GroupQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Finding)
+	for i := range nodes {
+		fk := nodes[i].ReviewedByGroupID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "reviewed_by_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *FindingQuery) loadAssignedToUser(ctx context.Context, query *UserQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Finding)
+	for i := range nodes {
+		fk := nodes[i].AssignedToUserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "assigned_to_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *FindingQuery) loadAssignedToGroup(ctx context.Context, query *GroupQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Finding)
+	for i := range nodes {
+		fk := nodes[i].AssignedToGroupID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "assigned_to_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil
@@ -2979,6 +3276,18 @@ func (_q *FindingQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(finding.FieldOwnerID)
+		}
+		if _q.withReviewedByUser != nil {
+			_spec.Node.AddColumnOnce(finding.FieldReviewedByUserID)
+		}
+		if _q.withReviewedByGroup != nil {
+			_spec.Node.AddColumnOnce(finding.FieldReviewedByGroupID)
+		}
+		if _q.withAssignedToUser != nil {
+			_spec.Node.AddColumnOnce(finding.FieldAssignedToUserID)
+		}
+		if _q.withAssignedToGroup != nil {
+			_spec.Node.AddColumnOnce(finding.FieldAssignedToGroupID)
 		}
 		if _q.withEnvironment != nil {
 			_spec.Node.AddColumnOnce(finding.FieldEnvironmentID)

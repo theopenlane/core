@@ -43,4 +43,6 @@ type Config struct {
 	Email email.RuntimeEmailConfig `json:"email" koanf:"email"`
 	// PaymentReminder configures the scheduled payment reminder listener
 	PaymentReminder operations.PaymentReminderConfig `json:"paymentreminder" koanf:"paymentreminder"`
+	// OrganizationDelete configures the scheduled organization deletion listener
+	OrganizationDelete operations.OrganizationDeleteConfig `json:"organizationdelete" koanf:"organizationdelete"`
 }

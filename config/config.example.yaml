@@ -207,6 +207,9 @@ integrations:
         clientsecret: ""
         contentmode: iframe
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
+    organizationdelete:
+        enabled: false
+        maxdeletesperrun: 0
     paymentreminder:
         deletiondays: 0
         dryrun: false

@@ -181,6 +181,9 @@
         },
         "paymentreminder": {
           "$ref": "#/$defs/operations.PaymentReminderConfig"
+        },
+        "organizationdelete": {
+          "$ref": "#/$defs/operations.OrganizationDeleteConfig"
         }
       },
       "additionalProperties": false,
@@ -1190,6 +1193,21 @@
         },
         "applicationid": {
           "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "operations.OrganizationDeleteConfig": {
+      "properties": {
+        "maxdeletesperrun": {
+          "type": "integer",
+          "description": "Maximum overdue organizations to delete per run",
+          "default": 25
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether the organization deletion listener is enabled"
         }
       },
       "additionalProperties": false,

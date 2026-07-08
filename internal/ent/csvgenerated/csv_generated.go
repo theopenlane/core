@@ -1208,7 +1208,40 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 	},
 	"Finding": {
 		SchemaName: "Finding",
-		Rules:      []CSVReferenceRule{},
+		Rules: []CSVReferenceRule{
+			{
+				SourceColumn:    "AssignedToGroupName",
+				TargetField:     "AssignedToGroupID",
+				TargetEntity:    "Group",
+				MatchField:      "name",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "AssignedToUserEmail",
+				TargetField:     "AssignedToUserID",
+				TargetEntity:    "User",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "ReviewedByGroupName",
+				TargetField:     "ReviewedByGroupID",
+				TargetEntity:    "Group",
+				MatchField:      "name",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "ReviewedByUserEmail",
+				TargetField:     "ReviewedByUserID",
+				TargetEntity:    "User",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+		},
 	},
 	"FindingControl": {
 		SchemaName: "FindingControl",
@@ -1903,11 +1936,43 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 		SchemaName: "Vulnerability",
 		Rules: []CSVReferenceRule{
 			{
+				SourceColumn:    "AssignedToGroupName",
+				TargetField:     "AssignedToGroupID",
+				TargetEntity:    "Group",
+				MatchField:      "name",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "AssignedToUserEmail",
+				TargetField:     "AssignedToUserID",
+				TargetEntity:    "User",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
 				SourceColumn:    "ControlRefCodes",
 				TargetField:     "ControlIDs",
 				TargetEntity:    "Control",
 				MatchField:      "ref_code",
 				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "ReviewedByGroupName",
+				TargetField:     "ReviewedByGroupID",
+				TargetEntity:    "Group",
+				MatchField:      "name",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "ReviewedByUserEmail",
+				TargetField:     "ReviewedByUserID",
+				TargetEntity:    "User",
+				MatchField:      "email",
+				IsSlice:         false,
 				CreateIfMissing: false,
 			},
 		},
@@ -2488,7 +2553,11 @@ func (FileCSVUpdateInput) CSVInputWrapper() {}
 
 // FindingCSVInput wraps CreateFindingInput with CSV reference columns.
 type FindingCSVInput struct {
-	Input generated.CreateFindingInput
+	Input               generated.CreateFindingInput
+	AssignedToGroupName string `csv:"AssignedToGroupName"`
+	AssignedToUserEmail string `csv:"AssignedToUserEmail"`
+	ReviewedByGroupName string `csv:"ReviewedByGroupName"`
+	ReviewedByUserEmail string `csv:"ReviewedByUserEmail"`
 }
 
 // CSVInputWrapper marks FindingCSVInput for CSV header preprocessing.
@@ -2497,8 +2566,12 @@ func (FindingCSVInput) CSVInputWrapper() {}
 // FindingCSVUpdateInput wraps UpdateFindingInput with CSV reference columns for bulk updates.
 type FindingCSVUpdateInput struct {
 	// ID is the entity ID to update
-	ID    string `csv:"ID"`
-	Input generated.UpdateFindingInput
+	ID                  string `csv:"ID"`
+	Input               generated.UpdateFindingInput
+	AssignedToGroupName string `csv:"AssignedToGroupName"`
+	AssignedToUserEmail string `csv:"AssignedToUserEmail"`
+	ReviewedByGroupName string `csv:"ReviewedByGroupName"`
+	ReviewedByUserEmail string `csv:"ReviewedByUserEmail"`
 }
 
 // CSVInputWrapper marks FindingCSVUpdateInput for CSV header preprocessing.
@@ -3634,8 +3707,12 @@ func (VendorScoringConfigCSVUpdateInput) CSVInputWrapper() {}
 
 // VulnerabilityCSVInput wraps CreateVulnerabilityInput with CSV reference columns.
 type VulnerabilityCSVInput struct {
-	Input           generated.CreateVulnerabilityInput
-	ControlRefCodes []string `csv:"ControlRefCodes"`
+	Input               generated.CreateVulnerabilityInput
+	AssignedToGroupName string   `csv:"AssignedToGroupName"`
+	AssignedToUserEmail string   `csv:"AssignedToUserEmail"`
+	ControlRefCodes     []string `csv:"ControlRefCodes"`
+	ReviewedByGroupName string   `csv:"ReviewedByGroupName"`
+	ReviewedByUserEmail string   `csv:"ReviewedByUserEmail"`
 }
 
 // CSVInputWrapper marks VulnerabilityCSVInput for CSV header preprocessing.
@@ -3644,9 +3721,13 @@ func (VulnerabilityCSVInput) CSVInputWrapper() {}
 // VulnerabilityCSVUpdateInput wraps UpdateVulnerabilityInput with CSV reference columns for bulk updates.
 type VulnerabilityCSVUpdateInput struct {
 	// ID is the entity ID to update
-	ID              string `csv:"ID"`
-	Input           generated.UpdateVulnerabilityInput
-	ControlRefCodes []string `csv:"ControlRefCodes"`
+	ID                  string `csv:"ID"`
+	Input               generated.UpdateVulnerabilityInput
+	AssignedToGroupName string   `csv:"AssignedToGroupName"`
+	AssignedToUserEmail string   `csv:"AssignedToUserEmail"`
+	ControlRefCodes     []string `csv:"ControlRefCodes"`
+	ReviewedByGroupName string   `csv:"ReviewedByGroupName"`
+	ReviewedByUserEmail string   `csv:"ReviewedByUserEmail"`
 }
 
 // CSVInputWrapper marks VulnerabilityCSVUpdateInput for CSV header preprocessing.

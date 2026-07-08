@@ -39198,6 +39198,20 @@ var (
 			}
 		},
 	}
+	// VulnerabilityOrderFieldScore orders Vulnerability by score.
+	VulnerabilityOrderFieldScore = &VulnerabilityOrderField{
+		Value: func(_m *Vulnerability) (ent.Value, error) {
+			return _m.Score, nil
+		},
+		column: vulnerability.FieldScore,
+		toTerm: vulnerability.ByScore,
+		toCursor: func(_m *Vulnerability) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Score,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -39220,6 +39234,8 @@ func (f VulnerabilityOrderField) String() string {
 		str = "category"
 	case VulnerabilityOrderFieldSeverity.column:
 		str = "severity"
+	case VulnerabilityOrderFieldScore.column:
+		str = "score"
 	}
 	return str
 }
@@ -39252,6 +39268,8 @@ func (f *VulnerabilityOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *VulnerabilityOrderFieldCategory
 	case "severity":
 		*f = *VulnerabilityOrderFieldSeverity
+	case "score":
+		*f = *VulnerabilityOrderFieldScore
 	default:
 		return fmt.Errorf("%s is not a valid VulnerabilityOrderField", str)
 	}

@@ -14401,6 +14401,14 @@ input CreateFindingInput {
 	"""
 	tags: [String!]
 	"""
+	who reviewed the finding when no user or group is linked
+	"""
+	reviewedBy: String
+	"""
+	who the finding is assigned to when no user or group is linked
+	"""
+	assignedTo: String
+	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""
 	internalNotes: String @readOnly
@@ -14567,6 +14575,10 @@ input CreateFindingInput {
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
+	reviewedByUserID: ID
+	reviewedByGroupID: ID
+	assignedToUserID: ID
+	assignedToGroupID: ID
 	environmentID: ID
 	scopeID: ID
 	findingStatusID: ID
@@ -18163,6 +18175,14 @@ input CreateVulnerabilityInput {
 	"""
 	tags: [String!]
 	"""
+	who reviewed the vulnerability when no user or group is linked
+	"""
+	reviewedBy: String
+	"""
+	who the vulnerability is assigned to when no user or group is linked
+	"""
+	assignedTo: String
+	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""
 	internalNotes: String @readOnly
@@ -18350,6 +18370,10 @@ input CreateVulnerabilityInput {
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	viewerIDs: [ID!]
+	reviewedByUserID: ID
+	reviewedByGroupID: ID
+	assignedToUserID: ID
+	assignedToGroupID: ID
 	environmentID: ID
 	scopeID: ID
 	vulnerabilityStatusID: ID
@@ -31142,6 +31166,30 @@ type Finding implements Node {
 	"""
 	ownerID: ID
 	"""
+	who reviewed the finding when no user or group is linked
+	"""
+	reviewedBy: String
+	"""
+	the user id that reviewed the finding
+	"""
+	reviewedByUserID: ID
+	"""
+	the group id that reviewed the finding
+	"""
+	reviewedByGroupID: ID
+	"""
+	who the finding is assigned to when no user or group is linked
+	"""
+	assignedTo: String
+	"""
+	the user id assigned to the finding
+	"""
+	assignedToUserID: ID
+	"""
+	the group id assigned to the finding
+	"""
+	assignedToGroupID: ID
+	"""
 	indicates if the record is owned by the the openlane system and not by an organization
 	"""
 	systemOwned: Boolean
@@ -31388,6 +31436,10 @@ type Finding implements Node {
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
+	reviewedByUser: User
+	reviewedByGroup: Group
+	assignedToUser: User
+	assignedToGroup: Group
 	environment: CustomTypeEnum
 	scope: CustomTypeEnum
 	findingStatus: CustomTypeEnum
@@ -32604,6 +32656,114 @@ input FindingWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
+	reviewed_by field predicates
+	"""
+	reviewedBy: String
+	reviewedByNEQ: String
+	reviewedByIn: [String!]
+	reviewedByNotIn: [String!]
+	reviewedByGT: String
+	reviewedByGTE: String
+	reviewedByLT: String
+	reviewedByLTE: String
+	reviewedByContains: String
+	reviewedByHasPrefix: String
+	reviewedByHasSuffix: String
+	reviewedByIsNil: Boolean
+	reviewedByNotNil: Boolean
+	reviewedByEqualFold: String
+	reviewedByContainsFold: String
+	"""
+	reviewed_by_user_id field predicates
+	"""
+	reviewedByUserID: ID
+	reviewedByUserIDNEQ: ID
+	reviewedByUserIDIn: [ID!]
+	reviewedByUserIDNotIn: [ID!]
+	reviewedByUserIDGT: ID
+	reviewedByUserIDGTE: ID
+	reviewedByUserIDLT: ID
+	reviewedByUserIDLTE: ID
+	reviewedByUserIDContains: ID
+	reviewedByUserIDHasPrefix: ID
+	reviewedByUserIDHasSuffix: ID
+	reviewedByUserIDIsNil: Boolean
+	reviewedByUserIDNotNil: Boolean
+	reviewedByUserIDEqualFold: ID
+	reviewedByUserIDContainsFold: ID
+	"""
+	reviewed_by_group_id field predicates
+	"""
+	reviewedByGroupID: ID
+	reviewedByGroupIDNEQ: ID
+	reviewedByGroupIDIn: [ID!]
+	reviewedByGroupIDNotIn: [ID!]
+	reviewedByGroupIDGT: ID
+	reviewedByGroupIDGTE: ID
+	reviewedByGroupIDLT: ID
+	reviewedByGroupIDLTE: ID
+	reviewedByGroupIDContains: ID
+	reviewedByGroupIDHasPrefix: ID
+	reviewedByGroupIDHasSuffix: ID
+	reviewedByGroupIDIsNil: Boolean
+	reviewedByGroupIDNotNil: Boolean
+	reviewedByGroupIDEqualFold: ID
+	reviewedByGroupIDContainsFold: ID
+	"""
+	assigned_to field predicates
+	"""
+	assignedTo: String
+	assignedToNEQ: String
+	assignedToIn: [String!]
+	assignedToNotIn: [String!]
+	assignedToGT: String
+	assignedToGTE: String
+	assignedToLT: String
+	assignedToLTE: String
+	assignedToContains: String
+	assignedToHasPrefix: String
+	assignedToHasSuffix: String
+	assignedToIsNil: Boolean
+	assignedToNotNil: Boolean
+	assignedToEqualFold: String
+	assignedToContainsFold: String
+	"""
+	assigned_to_user_id field predicates
+	"""
+	assignedToUserID: ID
+	assignedToUserIDNEQ: ID
+	assignedToUserIDIn: [ID!]
+	assignedToUserIDNotIn: [ID!]
+	assignedToUserIDGT: ID
+	assignedToUserIDGTE: ID
+	assignedToUserIDLT: ID
+	assignedToUserIDLTE: ID
+	assignedToUserIDContains: ID
+	assignedToUserIDHasPrefix: ID
+	assignedToUserIDHasSuffix: ID
+	assignedToUserIDIsNil: Boolean
+	assignedToUserIDNotNil: Boolean
+	assignedToUserIDEqualFold: ID
+	assignedToUserIDContainsFold: ID
+	"""
+	assigned_to_group_id field predicates
+	"""
+	assignedToGroupID: ID
+	assignedToGroupIDNEQ: ID
+	assignedToGroupIDIn: [ID!]
+	assignedToGroupIDNotIn: [ID!]
+	assignedToGroupIDGT: ID
+	assignedToGroupIDGTE: ID
+	assignedToGroupIDLT: ID
+	assignedToGroupIDLTE: ID
+	assignedToGroupIDContains: ID
+	assignedToGroupIDHasPrefix: ID
+	assignedToGroupIDHasSuffix: ID
+	assignedToGroupIDIsNil: Boolean
+	assignedToGroupIDNotNil: Boolean
+	assignedToGroupIDEqualFold: ID
+	assignedToGroupIDContainsFold: ID
+	"""
 	system_owned field predicates
 	"""
 	systemOwned: Boolean
@@ -33205,6 +33365,26 @@ input FindingWhereInput {
 	"""
 	hasEditors: Boolean
 	hasEditorsWith: [GroupWhereInput!]
+	"""
+	reviewed_by_user edge predicates
+	"""
+	hasReviewedByUser: Boolean
+	hasReviewedByUserWith: [UserWhereInput!]
+	"""
+	reviewed_by_group edge predicates
+	"""
+	hasReviewedByGroup: Boolean
+	hasReviewedByGroupWith: [GroupWhereInput!]
+	"""
+	assigned_to_user edge predicates
+	"""
+	hasAssignedToUser: Boolean
+	hasAssignedToUserWith: [UserWhereInput!]
+	"""
+	assigned_to_group edge predicates
+	"""
+	hasAssignedToGroup: Boolean
+	hasAssignedToGroupWith: [GroupWhereInput!]
 	"""
 	environment edge predicates
 	"""
@@ -94192,6 +94372,16 @@ input UpdateFindingInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	who reviewed the finding when no user or group is linked
+	"""
+	reviewedBy: String
+	clearReviewedBy: Boolean
+	"""
+	who the finding is assigned to when no user or group is linked
+	"""
+	assignedTo: String
+	clearAssignedTo: Boolean
+	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""
 	internalNotes: String @readOnly
@@ -94406,6 +94596,14 @@ input UpdateFindingInput {
 	addEditorIDs: [ID!]
 	removeEditorIDs: [ID!]
 	clearEditors: Boolean
+	reviewedByUserID: ID
+	clearReviewedByUser: Boolean
+	reviewedByGroupID: ID
+	clearReviewedByGroup: Boolean
+	assignedToUserID: ID
+	clearAssignedToUser: Boolean
+	assignedToGroupID: ID
+	clearAssignedToGroup: Boolean
 	environmentID: ID
 	clearEnvironment: Boolean
 	scopeID: ID
@@ -99519,6 +99717,16 @@ input UpdateVulnerabilityInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	who reviewed the vulnerability when no user or group is linked
+	"""
+	reviewedBy: String
+	clearReviewedBy: Boolean
+	"""
+	who the vulnerability is assigned to when no user or group is linked
+	"""
+	assignedTo: String
+	clearAssignedTo: Boolean
+	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""
 	internalNotes: String @readOnly
@@ -99759,6 +99967,14 @@ input UpdateVulnerabilityInput {
 	addViewerIDs: [ID!]
 	removeViewerIDs: [ID!]
 	clearViewers: Boolean
+	reviewedByUserID: ID
+	clearReviewedByUser: Boolean
+	reviewedByGroupID: ID
+	clearReviewedByGroup: Boolean
+	assignedToUserID: ID
+	clearAssignedToUser: Boolean
+	assignedToGroupID: ID
+	clearAssignedToGroup: Boolean
 	environmentID: ID
 	clearEnvironment: Boolean
 	scopeID: ID
@@ -102525,6 +102741,30 @@ type Vulnerability implements Node {
 	"""
 	ownerID: ID
 	"""
+	who reviewed the vulnerability when no user or group is linked
+	"""
+	reviewedBy: String
+	"""
+	the user id that reviewed the vulnerability
+	"""
+	reviewedByUserID: ID
+	"""
+	the group id that reviewed the vulnerability
+	"""
+	reviewedByGroupID: ID
+	"""
+	who the vulnerability is assigned to when no user or group is linked
+	"""
+	assignedTo: String
+	"""
+	the user id assigned to the vulnerability
+	"""
+	assignedToUserID: ID
+	"""
+	the group id assigned to the vulnerability
+	"""
+	assignedToGroupID: ID
+	"""
 	indicates if the record is owned by the the openlane system and not by an organization
 	"""
 	systemOwned: Boolean
@@ -102822,6 +103062,10 @@ type Vulnerability implements Node {
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
+	reviewedByUser: User
+	reviewedByGroup: Group
+	assignedToUser: User
+	assignedToGroup: Group
 	environment: CustomTypeEnum
 	scope: CustomTypeEnum
 	vulnerabilityStatus: CustomTypeEnum
@@ -103403,6 +103647,7 @@ enum VulnerabilityOrderField {
 	cve_id
 	category
 	severity
+	score
 }
 """
 Return response for resolveVulnerability mutation
@@ -103605,6 +103850,114 @@ input VulnerabilityWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
+	"""
+	reviewed_by field predicates
+	"""
+	reviewedBy: String
+	reviewedByNEQ: String
+	reviewedByIn: [String!]
+	reviewedByNotIn: [String!]
+	reviewedByGT: String
+	reviewedByGTE: String
+	reviewedByLT: String
+	reviewedByLTE: String
+	reviewedByContains: String
+	reviewedByHasPrefix: String
+	reviewedByHasSuffix: String
+	reviewedByIsNil: Boolean
+	reviewedByNotNil: Boolean
+	reviewedByEqualFold: String
+	reviewedByContainsFold: String
+	"""
+	reviewed_by_user_id field predicates
+	"""
+	reviewedByUserID: ID
+	reviewedByUserIDNEQ: ID
+	reviewedByUserIDIn: [ID!]
+	reviewedByUserIDNotIn: [ID!]
+	reviewedByUserIDGT: ID
+	reviewedByUserIDGTE: ID
+	reviewedByUserIDLT: ID
+	reviewedByUserIDLTE: ID
+	reviewedByUserIDContains: ID
+	reviewedByUserIDHasPrefix: ID
+	reviewedByUserIDHasSuffix: ID
+	reviewedByUserIDIsNil: Boolean
+	reviewedByUserIDNotNil: Boolean
+	reviewedByUserIDEqualFold: ID
+	reviewedByUserIDContainsFold: ID
+	"""
+	reviewed_by_group_id field predicates
+	"""
+	reviewedByGroupID: ID
+	reviewedByGroupIDNEQ: ID
+	reviewedByGroupIDIn: [ID!]
+	reviewedByGroupIDNotIn: [ID!]
+	reviewedByGroupIDGT: ID
+	reviewedByGroupIDGTE: ID
+	reviewedByGroupIDLT: ID
+	reviewedByGroupIDLTE: ID
+	reviewedByGroupIDContains: ID
+	reviewedByGroupIDHasPrefix: ID
+	reviewedByGroupIDHasSuffix: ID
+	reviewedByGroupIDIsNil: Boolean
+	reviewedByGroupIDNotNil: Boolean
+	reviewedByGroupIDEqualFold: ID
+	reviewedByGroupIDContainsFold: ID
+	"""
+	assigned_to field predicates
+	"""
+	assignedTo: String
+	assignedToNEQ: String
+	assignedToIn: [String!]
+	assignedToNotIn: [String!]
+	assignedToGT: String
+	assignedToGTE: String
+	assignedToLT: String
+	assignedToLTE: String
+	assignedToContains: String
+	assignedToHasPrefix: String
+	assignedToHasSuffix: String
+	assignedToIsNil: Boolean
+	assignedToNotNil: Boolean
+	assignedToEqualFold: String
+	assignedToContainsFold: String
+	"""
+	assigned_to_user_id field predicates
+	"""
+	assignedToUserID: ID
+	assignedToUserIDNEQ: ID
+	assignedToUserIDIn: [ID!]
+	assignedToUserIDNotIn: [ID!]
+	assignedToUserIDGT: ID
+	assignedToUserIDGTE: ID
+	assignedToUserIDLT: ID
+	assignedToUserIDLTE: ID
+	assignedToUserIDContains: ID
+	assignedToUserIDHasPrefix: ID
+	assignedToUserIDHasSuffix: ID
+	assignedToUserIDIsNil: Boolean
+	assignedToUserIDNotNil: Boolean
+	assignedToUserIDEqualFold: ID
+	assignedToUserIDContainsFold: ID
+	"""
+	assigned_to_group_id field predicates
+	"""
+	assignedToGroupID: ID
+	assignedToGroupIDNEQ: ID
+	assignedToGroupIDIn: [ID!]
+	assignedToGroupIDNotIn: [ID!]
+	assignedToGroupIDGT: ID
+	assignedToGroupIDGTE: ID
+	assignedToGroupIDLT: ID
+	assignedToGroupIDLTE: ID
+	assignedToGroupIDContains: ID
+	assignedToGroupIDHasPrefix: ID
+	assignedToGroupIDHasSuffix: ID
+	assignedToGroupIDIsNil: Boolean
+	assignedToGroupIDNotNil: Boolean
+	assignedToGroupIDEqualFold: ID
+	assignedToGroupIDContainsFold: ID
 	"""
 	system_owned field predicates
 	"""
@@ -104315,6 +104668,26 @@ input VulnerabilityWhereInput {
 	"""
 	hasViewers: Boolean
 	hasViewersWith: [GroupWhereInput!]
+	"""
+	reviewed_by_user edge predicates
+	"""
+	hasReviewedByUser: Boolean
+	hasReviewedByUserWith: [UserWhereInput!]
+	"""
+	reviewed_by_group edge predicates
+	"""
+	hasReviewedByGroup: Boolean
+	hasReviewedByGroupWith: [GroupWhereInput!]
+	"""
+	assigned_to_user edge predicates
+	"""
+	hasAssignedToUser: Boolean
+	hasAssignedToUserWith: [UserWhereInput!]
+	"""
+	assigned_to_group edge predicates
+	"""
+	hasAssignedToGroup: Boolean
+	hasAssignedToGroupWith: [GroupWhereInput!]
 	"""
 	environment edge predicates
 	"""

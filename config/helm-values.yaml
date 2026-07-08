@@ -633,6 +633,11 @@ coreConfiguration:
       enabled: false  # @schema type:boolean
       # -- If true only log organization IDs that would be processed
       dryrun: false  # @schema type:boolean
+    organizationdelete:
+      # -- Maximum overdue organizations to delete per run
+      maxdeletesperrun: 0  # @schema type:integer
+      # -- Whether the organization deletion listener is enabled
+      enabled: false  # @schema type:boolean
   # -- Workflows contains the configuration for the workflows engine
   workflows:
     enabled: false  # @schema type:boolean; default:false

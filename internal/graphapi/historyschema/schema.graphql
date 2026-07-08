@@ -14835,6 +14835,30 @@ type FindingHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	who reviewed the finding when no user or group is linked
+	"""
+	reviewedBy: String
+	"""
+	the user id that reviewed the finding
+	"""
+	reviewedByUserID: String
+	"""
+	the group id that reviewed the finding
+	"""
+	reviewedByGroupID: String
+	"""
+	who the finding is assigned to when no user or group is linked
+	"""
+	assignedTo: String
+	"""
+	the user id assigned to the finding
+	"""
+	assignedToUserID: String
+	"""
+	the group id assigned to the finding
+	"""
+	assignedToGroupID: String
+	"""
 	indicates if the record is owned by the the openlane system and not by an organization
 	"""
 	systemOwned: Boolean
@@ -15266,6 +15290,114 @@ input FindingHistoryWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
+	"""
+	reviewed_by field predicates
+	"""
+	reviewedBy: String
+	reviewedByNEQ: String
+	reviewedByIn: [String!]
+	reviewedByNotIn: [String!]
+	reviewedByGT: String
+	reviewedByGTE: String
+	reviewedByLT: String
+	reviewedByLTE: String
+	reviewedByContains: String
+	reviewedByHasPrefix: String
+	reviewedByHasSuffix: String
+	reviewedByIsNil: Boolean
+	reviewedByNotNil: Boolean
+	reviewedByEqualFold: String
+	reviewedByContainsFold: String
+	"""
+	reviewed_by_user_id field predicates
+	"""
+	reviewedByUserID: String
+	reviewedByUserIDNEQ: String
+	reviewedByUserIDIn: [String!]
+	reviewedByUserIDNotIn: [String!]
+	reviewedByUserIDGT: String
+	reviewedByUserIDGTE: String
+	reviewedByUserIDLT: String
+	reviewedByUserIDLTE: String
+	reviewedByUserIDContains: String
+	reviewedByUserIDHasPrefix: String
+	reviewedByUserIDHasSuffix: String
+	reviewedByUserIDIsNil: Boolean
+	reviewedByUserIDNotNil: Boolean
+	reviewedByUserIDEqualFold: String
+	reviewedByUserIDContainsFold: String
+	"""
+	reviewed_by_group_id field predicates
+	"""
+	reviewedByGroupID: String
+	reviewedByGroupIDNEQ: String
+	reviewedByGroupIDIn: [String!]
+	reviewedByGroupIDNotIn: [String!]
+	reviewedByGroupIDGT: String
+	reviewedByGroupIDGTE: String
+	reviewedByGroupIDLT: String
+	reviewedByGroupIDLTE: String
+	reviewedByGroupIDContains: String
+	reviewedByGroupIDHasPrefix: String
+	reviewedByGroupIDHasSuffix: String
+	reviewedByGroupIDIsNil: Boolean
+	reviewedByGroupIDNotNil: Boolean
+	reviewedByGroupIDEqualFold: String
+	reviewedByGroupIDContainsFold: String
+	"""
+	assigned_to field predicates
+	"""
+	assignedTo: String
+	assignedToNEQ: String
+	assignedToIn: [String!]
+	assignedToNotIn: [String!]
+	assignedToGT: String
+	assignedToGTE: String
+	assignedToLT: String
+	assignedToLTE: String
+	assignedToContains: String
+	assignedToHasPrefix: String
+	assignedToHasSuffix: String
+	assignedToIsNil: Boolean
+	assignedToNotNil: Boolean
+	assignedToEqualFold: String
+	assignedToContainsFold: String
+	"""
+	assigned_to_user_id field predicates
+	"""
+	assignedToUserID: String
+	assignedToUserIDNEQ: String
+	assignedToUserIDIn: [String!]
+	assignedToUserIDNotIn: [String!]
+	assignedToUserIDGT: String
+	assignedToUserIDGTE: String
+	assignedToUserIDLT: String
+	assignedToUserIDLTE: String
+	assignedToUserIDContains: String
+	assignedToUserIDHasPrefix: String
+	assignedToUserIDHasSuffix: String
+	assignedToUserIDIsNil: Boolean
+	assignedToUserIDNotNil: Boolean
+	assignedToUserIDEqualFold: String
+	assignedToUserIDContainsFold: String
+	"""
+	assigned_to_group_id field predicates
+	"""
+	assignedToGroupID: String
+	assignedToGroupIDNEQ: String
+	assignedToGroupIDIn: [String!]
+	assignedToGroupIDNotIn: [String!]
+	assignedToGroupIDGT: String
+	assignedToGroupIDGTE: String
+	assignedToGroupIDLT: String
+	assignedToGroupIDLTE: String
+	assignedToGroupIDContains: String
+	assignedToGroupIDHasPrefix: String
+	assignedToGroupIDHasSuffix: String
+	assignedToGroupIDIsNil: Boolean
+	assignedToGroupIDNotNil: Boolean
+	assignedToGroupIDEqualFold: String
+	assignedToGroupIDContainsFold: String
 	"""
 	system_owned field predicates
 	"""
@@ -42242,6 +42374,30 @@ type VulnerabilityHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	who reviewed the vulnerability when no user or group is linked
+	"""
+	reviewedBy: String
+	"""
+	the user id that reviewed the vulnerability
+	"""
+	reviewedByUserID: String
+	"""
+	the group id that reviewed the vulnerability
+	"""
+	reviewedByGroupID: String
+	"""
+	who the vulnerability is assigned to when no user or group is linked
+	"""
+	assignedTo: String
+	"""
+	the user id assigned to the vulnerability
+	"""
+	assignedToUserID: String
+	"""
+	the group id assigned to the vulnerability
+	"""
+	assignedToGroupID: String
+	"""
 	indicates if the record is owned by the the openlane system and not by an organization
 	"""
 	systemOwned: Boolean
@@ -42510,6 +42666,7 @@ enum VulnerabilityHistoryOrderField {
 	cve_id
 	category
 	severity
+	score
 }
 """
 VulnerabilityHistorySecurityLevel is enum for the field security_level
@@ -42692,6 +42849,114 @@ input VulnerabilityHistoryWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
+	"""
+	reviewed_by field predicates
+	"""
+	reviewedBy: String
+	reviewedByNEQ: String
+	reviewedByIn: [String!]
+	reviewedByNotIn: [String!]
+	reviewedByGT: String
+	reviewedByGTE: String
+	reviewedByLT: String
+	reviewedByLTE: String
+	reviewedByContains: String
+	reviewedByHasPrefix: String
+	reviewedByHasSuffix: String
+	reviewedByIsNil: Boolean
+	reviewedByNotNil: Boolean
+	reviewedByEqualFold: String
+	reviewedByContainsFold: String
+	"""
+	reviewed_by_user_id field predicates
+	"""
+	reviewedByUserID: String
+	reviewedByUserIDNEQ: String
+	reviewedByUserIDIn: [String!]
+	reviewedByUserIDNotIn: [String!]
+	reviewedByUserIDGT: String
+	reviewedByUserIDGTE: String
+	reviewedByUserIDLT: String
+	reviewedByUserIDLTE: String
+	reviewedByUserIDContains: String
+	reviewedByUserIDHasPrefix: String
+	reviewedByUserIDHasSuffix: String
+	reviewedByUserIDIsNil: Boolean
+	reviewedByUserIDNotNil: Boolean
+	reviewedByUserIDEqualFold: String
+	reviewedByUserIDContainsFold: String
+	"""
+	reviewed_by_group_id field predicates
+	"""
+	reviewedByGroupID: String
+	reviewedByGroupIDNEQ: String
+	reviewedByGroupIDIn: [String!]
+	reviewedByGroupIDNotIn: [String!]
+	reviewedByGroupIDGT: String
+	reviewedByGroupIDGTE: String
+	reviewedByGroupIDLT: String
+	reviewedByGroupIDLTE: String
+	reviewedByGroupIDContains: String
+	reviewedByGroupIDHasPrefix: String
+	reviewedByGroupIDHasSuffix: String
+	reviewedByGroupIDIsNil: Boolean
+	reviewedByGroupIDNotNil: Boolean
+	reviewedByGroupIDEqualFold: String
+	reviewedByGroupIDContainsFold: String
+	"""
+	assigned_to field predicates
+	"""
+	assignedTo: String
+	assignedToNEQ: String
+	assignedToIn: [String!]
+	assignedToNotIn: [String!]
+	assignedToGT: String
+	assignedToGTE: String
+	assignedToLT: String
+	assignedToLTE: String
+	assignedToContains: String
+	assignedToHasPrefix: String
+	assignedToHasSuffix: String
+	assignedToIsNil: Boolean
+	assignedToNotNil: Boolean
+	assignedToEqualFold: String
+	assignedToContainsFold: String
+	"""
+	assigned_to_user_id field predicates
+	"""
+	assignedToUserID: String
+	assignedToUserIDNEQ: String
+	assignedToUserIDIn: [String!]
+	assignedToUserIDNotIn: [String!]
+	assignedToUserIDGT: String
+	assignedToUserIDGTE: String
+	assignedToUserIDLT: String
+	assignedToUserIDLTE: String
+	assignedToUserIDContains: String
+	assignedToUserIDHasPrefix: String
+	assignedToUserIDHasSuffix: String
+	assignedToUserIDIsNil: Boolean
+	assignedToUserIDNotNil: Boolean
+	assignedToUserIDEqualFold: String
+	assignedToUserIDContainsFold: String
+	"""
+	assigned_to_group_id field predicates
+	"""
+	assignedToGroupID: String
+	assignedToGroupIDNEQ: String
+	assignedToGroupIDIn: [String!]
+	assignedToGroupIDNotIn: [String!]
+	assignedToGroupIDGT: String
+	assignedToGroupIDGTE: String
+	assignedToGroupIDLT: String
+	assignedToGroupIDLTE: String
+	assignedToGroupIDContains: String
+	assignedToGroupIDHasPrefix: String
+	assignedToGroupIDHasSuffix: String
+	assignedToGroupIDIsNil: Boolean
+	assignedToGroupIDNotNil: Boolean
+	assignedToGroupIDEqualFold: String
+	assignedToGroupIDContainsFold: String
 	"""
 	system_owned field predicates
 	"""

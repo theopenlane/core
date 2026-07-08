@@ -148,6 +148,9 @@ Config contains the configuration for the core server
         "paymentreminder": {
             "paymentmethodinterval": 30,
             "deletiondays": 7
+        },
+        "organizationdelete": {
+            "maxdeletesperrun": 25
         }
     },
     "workflows": {
@@ -1670,6 +1673,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |[**oidclocal**](#integrationsoidclocal)|`object`|||
 |[**email**](#integrationsemail)|`object`||yes|
 |[**paymentreminder**](#integrationspaymentreminder)|`object`|||
+|[**organizationdelete**](#integrationsorganizationdelete)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1690,6 +1694,9 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
     "paymentreminder": {
         "paymentmethodinterval": 30,
         "deletiondays": 7
+    },
+    "organizationdelete": {
+        "maxdeletesperrun": 25
     }
 }
 ```
@@ -1882,6 +1889,25 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 {
     "paymentmethodinterval": 30,
     "deletiondays": 7
+}
+```
+
+<a name="integrationsorganizationdelete"></a>
+### integrations\.organizationdelete: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**maxdeletesperrun**|`integer`|Maximum overdue organizations to delete per run<br/>Default: `25`<br/>||
+|**enabled**|`boolean`|Whether the organization deletion listener is enabled<br/>||
+
+**Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "maxdeletesperrun": 25
 }
 ```
 

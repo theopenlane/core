@@ -9637,6 +9637,30 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if reviewedBy, exists := m.ReviewedBy(); exists {
+		create = create.SetReviewedBy(reviewedBy)
+	}
+
+	if reviewedByUserID, exists := m.ReviewedByUserID(); exists {
+		create = create.SetReviewedByUserID(reviewedByUserID)
+	}
+
+	if reviewedByGroupID, exists := m.ReviewedByGroupID(); exists {
+		create = create.SetReviewedByGroupID(reviewedByGroupID)
+	}
+
+	if assignedTo, exists := m.AssignedTo(); exists {
+		create = create.SetAssignedTo(assignedTo)
+	}
+
+	if assignedToUserID, exists := m.AssignedToUserID(); exists {
+		create = create.SetAssignedToUserID(assignedToUserID)
+	}
+
+	if assignedToGroupID, exists := m.AssignedToGroupID(); exists {
+		create = create.SetAssignedToGroupID(assignedToGroupID)
+	}
+
 	if systemOwned, exists := m.SystemOwned(); exists {
 		create = create.SetSystemOwned(systemOwned)
 	}
@@ -9910,6 +9934,42 @@ func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(ownerID)
 		} else {
 			create = create.SetOwnerID(finding.OwnerID)
+		}
+
+		if reviewedBy, exists := m.ReviewedBy(); exists {
+			create = create.SetReviewedBy(reviewedBy)
+		} else {
+			create = create.SetReviewedBy(finding.ReviewedBy)
+		}
+
+		if reviewedByUserID, exists := m.ReviewedByUserID(); exists {
+			create = create.SetReviewedByUserID(reviewedByUserID)
+		} else {
+			create = create.SetReviewedByUserID(finding.ReviewedByUserID)
+		}
+
+		if reviewedByGroupID, exists := m.ReviewedByGroupID(); exists {
+			create = create.SetReviewedByGroupID(reviewedByGroupID)
+		} else {
+			create = create.SetReviewedByGroupID(finding.ReviewedByGroupID)
+		}
+
+		if assignedTo, exists := m.AssignedTo(); exists {
+			create = create.SetAssignedTo(assignedTo)
+		} else {
+			create = create.SetAssignedTo(finding.AssignedTo)
+		}
+
+		if assignedToUserID, exists := m.AssignedToUserID(); exists {
+			create = create.SetAssignedToUserID(assignedToUserID)
+		} else {
+			create = create.SetAssignedToUserID(finding.AssignedToUserID)
+		}
+
+		if assignedToGroupID, exists := m.AssignedToGroupID(); exists {
+			create = create.SetAssignedToGroupID(assignedToGroupID)
+		} else {
+			create = create.SetAssignedToGroupID(finding.AssignedToGroupID)
 		}
 
 		if systemOwned, exists := m.SystemOwned(); exists {
@@ -10233,6 +10293,12 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDisplayID(finding.DisplayID).
 			SetTags(finding.Tags).
 			SetOwnerID(finding.OwnerID).
+			SetReviewedBy(finding.ReviewedBy).
+			SetReviewedByUserID(finding.ReviewedByUserID).
+			SetReviewedByGroupID(finding.ReviewedByGroupID).
+			SetAssignedTo(finding.AssignedTo).
+			SetAssignedToUserID(finding.AssignedToUserID).
+			SetAssignedToGroupID(finding.AssignedToGroupID).
 			SetSystemOwned(finding.SystemOwned).
 			SetNillableInternalNotes(finding.InternalNotes).
 			SetNillableSystemInternalID(finding.SystemInternalID).
@@ -27087,6 +27153,30 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if reviewedBy, exists := m.ReviewedBy(); exists {
+		create = create.SetReviewedBy(reviewedBy)
+	}
+
+	if reviewedByUserID, exists := m.ReviewedByUserID(); exists {
+		create = create.SetReviewedByUserID(reviewedByUserID)
+	}
+
+	if reviewedByGroupID, exists := m.ReviewedByGroupID(); exists {
+		create = create.SetReviewedByGroupID(reviewedByGroupID)
+	}
+
+	if assignedTo, exists := m.AssignedTo(); exists {
+		create = create.SetAssignedTo(assignedTo)
+	}
+
+	if assignedToUserID, exists := m.AssignedToUserID(); exists {
+		create = create.SetAssignedToUserID(assignedToUserID)
+	}
+
+	if assignedToGroupID, exists := m.AssignedToGroupID(); exists {
+		create = create.SetAssignedToGroupID(assignedToGroupID)
+	}
+
 	if systemOwned, exists := m.SystemOwned(); exists {
 		create = create.SetSystemOwned(systemOwned)
 	}
@@ -27380,6 +27470,42 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetOwnerID(ownerID)
 		} else {
 			create = create.SetOwnerID(vulnerability.OwnerID)
+		}
+
+		if reviewedBy, exists := m.ReviewedBy(); exists {
+			create = create.SetReviewedBy(reviewedBy)
+		} else {
+			create = create.SetReviewedBy(vulnerability.ReviewedBy)
+		}
+
+		if reviewedByUserID, exists := m.ReviewedByUserID(); exists {
+			create = create.SetReviewedByUserID(reviewedByUserID)
+		} else {
+			create = create.SetReviewedByUserID(vulnerability.ReviewedByUserID)
+		}
+
+		if reviewedByGroupID, exists := m.ReviewedByGroupID(); exists {
+			create = create.SetReviewedByGroupID(reviewedByGroupID)
+		} else {
+			create = create.SetReviewedByGroupID(vulnerability.ReviewedByGroupID)
+		}
+
+		if assignedTo, exists := m.AssignedTo(); exists {
+			create = create.SetAssignedTo(assignedTo)
+		} else {
+			create = create.SetAssignedTo(vulnerability.AssignedTo)
+		}
+
+		if assignedToUserID, exists := m.AssignedToUserID(); exists {
+			create = create.SetAssignedToUserID(assignedToUserID)
+		} else {
+			create = create.SetAssignedToUserID(vulnerability.AssignedToUserID)
+		}
+
+		if assignedToGroupID, exists := m.AssignedToGroupID(); exists {
+			create = create.SetAssignedToGroupID(assignedToGroupID)
+		} else {
+			create = create.SetAssignedToGroupID(vulnerability.AssignedToGroupID)
 		}
 
 		if systemOwned, exists := m.SystemOwned(); exists {
@@ -27733,6 +27859,12 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetDisplayID(vulnerability.DisplayID).
 			SetTags(vulnerability.Tags).
 			SetOwnerID(vulnerability.OwnerID).
+			SetReviewedBy(vulnerability.ReviewedBy).
+			SetReviewedByUserID(vulnerability.ReviewedByUserID).
+			SetReviewedByGroupID(vulnerability.ReviewedByGroupID).
+			SetAssignedTo(vulnerability.AssignedTo).
+			SetAssignedToUserID(vulnerability.AssignedToUserID).
+			SetAssignedToGroupID(vulnerability.AssignedToGroupID).
 			SetSystemOwned(vulnerability.SystemOwned).
 			SetNillableInternalNotes(vulnerability.InternalNotes).
 			SetNillableSystemInternalID(vulnerability.SystemInternalID).
