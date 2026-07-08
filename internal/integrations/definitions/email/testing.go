@@ -131,9 +131,11 @@ func TestFixture(name, toEmail string, defaultBranding bool) json.RawMessage {
 			RecipientInfo: r,
 		},
 		"SubscribeRequest": SubscribeRequest{
-			RecipientInfo: r,
-			OrgName:       "Acme Corp",
-			Token:         "test-subscribe-token-12345",
+			RecipientInfo:  r,
+			OrgName:        "Acme Corp",
+			Token:          "test-subscribe-token-12345",
+			VerifyURL:      "https://trustcenter.example.com/acme/subscribe/verify?token=test-subscribe-token-12345",
+			UnsubscribeURL: "https://trustcenter.example.com/acme/unsubscribe?token=test-subscribe-token-12345",
 		},
 		"VerifyBillingRequest": VerifyBillingRequest{
 			RecipientInfo: r,
@@ -191,8 +193,8 @@ func TestFixture(name, toEmail string, defaultBranding bool) json.RawMessage {
 			Title:      "Welcome to {{ .companyName }}",
 			Intros:     []string{"Hi {{ .firstName }}, this branded message was sent via the email-test CLI.", "All templates are rendering correctly for {{ .companyName }}."},
 			ButtonText: "Visit Dashboard",
-			ButtonLink: "{{ .rootURL }}/campaigns",
-			Outros:     []string{"If you received this, the branded message template is working as expected.", "Questions? Reach us at {{ .supportEmail }}."},
+			ButtonLink: "https://app.example.com/campaigns",
+			Outros:     []string{"If you received this, the branded message template is working as expected.", "Questions? Reach us at {{ .supportemail }}."},
 		},
 		"SubprocessorNotificationRequest": SubprocessorNotificationRequest{
 			RecipientInfo: RecipientInfo{
@@ -201,9 +203,10 @@ func TestFixture(name, toEmail string, defaultBranding bool) json.RawMessage {
 				LastName:         r.LastName,
 				UnsubscribeToken: "test-unsubscribe-token-12345",
 			},
-			Subject: "SecureCorp subprocessor update",
-			Title:   "We've updated our subprocessors",
-			Intros:  []string{"The subprocessors we use have changed. The updates are listed below - review the full list anytime in our trust center."},
+			Subject:   "SecureCorp subprocessor update",
+			Preheader: "Review the latest changes to our subprocessor list",
+			Title:     "We've updated our subprocessors",
+			Intros:    []string{"The subprocessors we use have changed. The updates are listed below - review the full list anytime in our trust center."},
 			Subprocessors: []SubprocessorEntry{
 				{Name: "Amazon Web Services", Change: "Added"},
 				{Name: "Stripe", Change: "Updated"},

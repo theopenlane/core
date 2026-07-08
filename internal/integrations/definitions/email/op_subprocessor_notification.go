@@ -92,10 +92,9 @@ var _ = RegisterEmailOperation(Operation[SubprocessorNotificationRequest]{
 		return body
 	},
 	Config: func(cfg RuntimeEmailConfig, req SubprocessorNotificationRequest) RuntimeEmailConfig {
-		// start from the Openlane system treatment, then overlay only the trust center branding
-		// values that are present so the format stays controlled while still honoring TS branding
-		cfg = applySystemBranding(cfg)
-
+		// keep the light base-theme layout (white card on a light background, matching the branded message)
+		// and overlay only the trust center branding values that are present so TS branding is honored
+		// without forcing an unreadable dark hero
 		if req.CompanyName != "" {
 			cfg.CompanyName = req.CompanyName
 		}

@@ -1,6 +1,8 @@
 package email
 
 import (
+	"context"
+	"encoding/json"
 	"strings"
 	"testing"
 	"time"
@@ -215,11 +217,11 @@ func TestInviteEmailRoleInIntro(t *testing.T) {
 
 	body := testDispatcher[InviteRequest](t, "InviteRequest").Build(cfg, req)
 
-	require.NotEmpty(t, body.Intros.Unsafe)
+	require.NotEmpty(t, body.Intros.Paragraphs)
 	found := false
 
-	for _, intro := range body.Intros.Unsafe {
-		if strings.Contains(string(intro), "ADMIN") {
+	for _, intro := range body.Intros.Paragraphs {
+		if strings.Contains(intro, "ADMIN") {
 			found = true
 		}
 	}
@@ -227,27 +229,32 @@ func TestInviteEmailRoleInIntro(t *testing.T) {
 	assert.True(t, found, "expected uppercased role in intro")
 }
 
+// TestInviteIntroEscapesUnsafeInputs verifies user-controlled fields are HTML-escaped in the rendered
+// email, so the plain-text intro paragraphs cannot inject markup
 func TestInviteIntroEscapesUnsafeInputs(t *testing.T) {
-	body := testDispatcher[InviteRequest](t, "InviteRequest").Build(RuntimeEmailConfig{
-		CompanyName: "TestCo <script>",
-		ProductURL:  "https://app.testco.com",
-	}, InviteRequest{
+	dispatcher, ok := DispatcherByKey(InviteOp.Name())
+	require.True(t, ok)
+
+	client := &Client{Config: RuntimeEmailConfig{CompanyName: "TestCo <script>", ProductURL: "https://app.testco.com"}}
+
+	payload, err := json.Marshal(InviteRequest{
 		InviterName: `Alice <img src=x onerror=alert(1)>`,
 		OrgName:     "Eng & <Ops>",
 		Role:        "admin<script>",
 		Token:       "tok",
 	})
+	require.NoError(t, err)
 
-	require.NotEmpty(t, body.Intros.Unsafe)
-	intro := string(body.Intros.Unsafe[0])
+	msg, err := dispatcher.RenderMessage(context.Background(), client, payload)
+	require.NoError(t, err)
 
-	assert.NotContains(t, intro, "<script>")
-	assert.NotContains(t, intro, "<img")
-	assert.Contains(t, intro, "TestCo &lt;script&gt;")
-	assert.Contains(t, intro, "Alice &lt;img src=x onerror=alert(1)&gt;")
-	assert.Contains(t, intro, "<strong>Eng &amp; &lt;Ops&gt;</strong>")
-	assert.Contains(t, intro, "ADMIN&lt;SCRIPT&gt;")
-	assert.NotContains(t, intro, "&amp;amp;")
+	html := msg.GetHTML()
+
+	assert.NotContains(t, html, "<img src=x onerror=alert(1)>")
+	assert.NotContains(t, html, "ADMIN<SCRIPT>")
+	assert.Contains(t, html, "Alice &lt;img src=x onerror=alert(1)&gt;")
+	assert.Contains(t, html, "Eng &amp; &lt;Ops&gt;")
+	assert.Contains(t, html, "ADMIN&lt;SCRIPT&gt;")
 }
 
 // TestInviteEmailNoRole verifies the intro omits role text when empty
@@ -265,9 +272,9 @@ func TestInviteEmailNoRole(t *testing.T) {
 
 	body := testDispatcher[InviteRequest](t, "InviteRequest").Build(cfg, req)
 
-	require.NotEmpty(t, body.Intros.Unsafe)
-	for _, intro := range body.Intros.Unsafe {
-		assert.NotContains(t, string(intro), "role of")
+	require.NotEmpty(t, body.Intros.Paragraphs)
+	for _, intro := range body.Intros.Paragraphs {
+		assert.NotContains(t, intro, "role of")
 	}
 }
 

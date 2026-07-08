@@ -2,7 +2,6 @@ package email
 
 import (
 	"fmt"
-	"html"
 	"html/template"
 	"net/url"
 	"strings"
@@ -349,10 +348,10 @@ var _ = RegisterEmailOperation(Operation[InviteRequest]{
 		if req.NewUser {
 			inviteURL += "&new=true"
 		}
-		inviteIntro := template.HTML("You're in - let's build trust without the busywork. "+html.EscapeString(req.InviterName)+" has invited you to collaborate in "+html.EscapeString(cfg.CompanyName)+", as part of the ") + //nolint:gosec // all user input is escaped via html.EscapeString
-			render.Bold(req.OrgName) + " organization"
+		inviteIntro := "You're in - let's build trust without the busywork. " + req.InviterName +
+			" has invited you to collaborate in " + cfg.CompanyName + ", as part of the " + req.OrgName + " organization"
 		if req.Role != "" {
-			inviteIntro += template.HTML(" with the role of " + html.EscapeString(strings.ToUpper(req.Role))) //nolint:gosec // role is escaped
+			inviteIntro += " with the role of " + strings.ToUpper(req.Role)
 		}
 		inviteIntro += "."
 
@@ -362,7 +361,7 @@ var _ = RegisterEmailOperation(Operation[InviteRequest]{
 			Name:      req.FirstName,
 			Title:     "You've been invited to join " + cfg.CompanyName + "!",
 			Intros: render.IntrosBlock{
-				Unsafe: []template.HTML{
+				Paragraphs: []string{
 					inviteIntro,
 					"To get started (and verify your email), click the link below:",
 				},
@@ -370,11 +369,6 @@ var _ = RegisterEmailOperation(Operation[InviteRequest]{
 			Actions: []render.Action{{
 				Button: render.Button{Text: "Accept Invite", Link: inviteURL},
 			}},
-			Outros: render.OutrosBlock{
-				Paragraphs: []string{
-					"This link expires in 7 days - but don't worry, if it does, you'll get a fresh one when you try to verify later.",
-				},
-			},
 		}
 	},
 	Config: func(cfg RuntimeEmailConfig, _ InviteRequest) RuntimeEmailConfig {

@@ -34,6 +34,7 @@ const (
 	trustCenterUpdateTemplateName = "Trust Center Update"
 	// subprocessorNotificationSubject and the related copy back the subprocessor change system email
 	subprocessorNotificationSubject    = "Subprocessor update"
+	subprocessorNotificationPreheader  = "Review the latest changes to our subprocessor list"
 	subprocessorNotificationTitle      = "We've updated our subprocessors"
 	subprocessorNotificationIntro      = "The subprocessors we use have changed. The updates are listed below - review the full list anytime in our trust center."
 	subprocessorNotificationButtonText = "View subprocessors"
@@ -409,6 +410,7 @@ func (r *Runtime) activeTrustCenterSubscribers(ctx context.Context, trustCenterI
 func subprocessorNotificationRequest(setting *ent.TrustCenterSetting, customDomain, slug string, entries []emaildef.SubprocessorEntry) emaildef.SubprocessorNotificationRequest {
 	return emaildef.SubprocessorNotificationRequest{
 		Subject:             subprocessorNotificationSubject,
+		Preheader:           subprocessorNotificationPreheader,
 		Title:               subprocessorNotificationTitle,
 		Intros:              []string{subprocessorNotificationIntro},
 		Subprocessors:       entries,
