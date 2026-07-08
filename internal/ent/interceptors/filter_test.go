@@ -36,8 +36,8 @@ func TestSkipFilter(t *testing.T) {
 		name        string
 		ctx         context.Context
 		q           intercept.Query
-		forceFilter skipperFunc
-		customSkip  skipperFunc
+		forceFilter SkipperFunc
+		customSkip  SkipperFunc
 		want        bool
 	}{
 		{

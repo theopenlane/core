@@ -12,9 +12,15 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
+
+// impersonationBlacklistTTL is how long a revoked impersonation session is kept on the token blacklist.
+// It must exceed the maximum impersonation token lifetime so a revoked session can never be replayed
+// after the blacklist entry expires
+const impersonationBlacklistTTL = 24 * time.Hour
 
 // StartImpersonation handles requests to start user impersonation
 func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) error {
@@ -63,12 +69,6 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	// Set default scopes based on impersonation type
-	scopes := req.Scopes
-	if len(scopes) == 0 {
-		scopes = h.getDefaultScopes(req.Type)
-	}
-
 	// Calculate duration
 	duration := time.Hour // Default 1 hour
 	if req.Duration != nil {
@@ -92,7 +92,6 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 		Type:              req.Type,
 		Reason:            req.Reason,
 		Duration:          duration,
-		Scopes:            scopes,
 	})
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error creating impersonation token")
@@ -117,13 +116,12 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 		ImpersonatorEmail: caller.SubjectEmail,
 		TargetUserID:      req.TargetUserID,
 		TargetUserEmail:   targetUser.Email,
-		Action:            "start",
+		Action:            enums.ImpersonationActionStart.String(),
 		Reason:            req.Reason,
 		Timestamp:         time.Now(),
 		IPAddress:         ctx.RealIP(),
 		UserAgent:         ctx.Request().UserAgent(),
 		OrganizationID:    orgID,
-		Scopes:            scopes,
 	}
 
 	if caller.Has(auth.CapSystemAdmin) {
@@ -174,15 +172,20 @@ func (h *Handler) EndImpersonation(ctx echo.Context, openapi *OpenAPIContext) er
 		ImpersonatorEmail: caller.Impersonation.ImpersonatorEmail,
 		TargetUserID:      caller.Impersonation.TargetUserID,
 		TargetUserEmail:   caller.Impersonation.TargetUserEmail,
-		Action:            "end",
+		Action:            enums.ImpersonationActionStop.String(),
 		Reason:            req.Reason,
 		Timestamp:         time.Now(),
 		IPAddress:         ctx.RealIP(),
 		UserAgent:         ctx.Request().UserAgent(),
 		OrganizationID:    caller.OrganizationID,
-		Scopes:            caller.Impersonation.Scopes,
 	}); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to log impersonation end event")
+	}
+
+	// revoke the session so the impersonation token cannot be reused before it would have expired; this is
+	// a no-op unless a redis backed token blacklist is configured (auth.token.redis.enabled)
+	if err := h.TokenManager.RevokeImpersonationToken(reqCtx, req.SessionID, impersonationBlacklistTTL); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to revoke impersonation session")
 	}
 
 	response := models.EndImpersonationReply{
@@ -239,38 +242,28 @@ func (h *Handler) getTargetUser(ctx context.Context, userID string, orgID string
 	return user, nil
 }
 
-// getDefaultScopes returns default scopes for each impersonation type
-func (h *Handler) getDefaultScopes(impType string) []string {
-	switch impType {
-	case "support":
-		return []string{"read", "debug"} // Limited read access for debugging
-	case "admin":
-		return []string{"*"} // Full access
-	case "job":
-		return []string{"read", "write"} // Standard job permissions
-	default:
-		return []string{"read"}
-	}
-}
-
 // logImpersonationEvent logs impersonation events for audit purposes
 // and persists it into the database
 func (h *Handler) logImpersonationEvent(ctx context.Context, action string, auditLog *auth.ImpersonationAuditLog) error {
 	logx.FromContext(ctx).Info().Str("action", action).Str("target_user_id", auditLog.TargetUserID).Msg("impersonation event")
 
-	_, err := h.DBClient.ImpersonationEvent.Create().
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	create := h.DBClient.ImpersonationEvent.Create().
 		SetAction(*enums.ToImpersonationAction(action)).
 		SetImpersonationType(*enums.ToImpersonationType(string(auditLog.Type))).
 		SetReason(auditLog.Reason).
 		SetIPAddress(auditLog.IPAddress).
-		SetScopes(auditLog.Scopes).
 		SetUserAgent(auditLog.UserAgent).
 		SetUserID(auditLog.ImpersonatorID).
-		SetTargetUserID(auditLog.TargetUserID).
 		SetOrganizationID(auditLog.OrganizationID).
 		SetCreatedBy(auditLog.ImpersonatorID).
-		SetCreatedAt(time.Now()).
-		Save(ctx)
+		SetCreatedAt(time.Now())
+
+	if auditLog.TargetUserID != "" {
+		create.SetTargetUserID(auditLog.TargetUserID)
+	}
+
+	_, err := create.Save(allowCtx)
 	return err
 }
 

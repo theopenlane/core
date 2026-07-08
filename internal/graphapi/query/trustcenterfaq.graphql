@@ -12,6 +12,7 @@ mutation CreateBulkCSVTrustCenterFAQ ($input: Upload!) {
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -29,6 +30,7 @@ mutation CreateBulkTrustCenterFAQ ($input: [CreateTrustCenterFAQInput!]) {
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -46,6 +48,7 @@ mutation CreateTrustCenterFAQ ($input: CreateTrustCenterFAQInput!) {
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -81,6 +84,7 @@ query GetAllTrustCenterFAQS ($first: Int, $last: Int, $after: Cursor, $before: C
 				trustCenterID
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 			}
 		}
 	}
@@ -124,6 +128,7 @@ query GetTrustCenterFAQS ($first: Int, $last: Int, $after: Cursor, $before: Curs
 				trustCenterID
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 			}
 		}
 	}
@@ -142,6 +147,7 @@ mutation UpdateBulkCSVTrustCenterFAQ ($input: Upload!) {
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 		updatedIDs
 	}
@@ -160,6 +166,7 @@ mutation UpdateBulkTrustCenterFAQ ($ids: [ID!]!, $input: UpdateTrustCenterFAQInp
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 		updatedIDs
 	}
@@ -178,6 +185,7 @@ mutation UpdateTrustCenterFAQ ($updateTrustCenterFAQId: ID!, $input: UpdateTrust
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }

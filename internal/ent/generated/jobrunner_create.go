@@ -79,6 +79,20 @@ func (_c *JobRunnerCreate) SetNillableUpdatedBy(v *string) *JobRunnerCreate {
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *JobRunnerCreate) SetUpdatedByImpersonator(v string) *JobRunnerCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *JobRunnerCreate) SetNillableUpdatedByImpersonator(v *string) *JobRunnerCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *JobRunnerCreate) SetDeletedAt(v time.Time) *JobRunnerCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -435,6 +449,10 @@ func (_c *JobRunnerCreate) createSpec() (*JobRunner, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(jobrunner.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(jobrunner.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(jobrunner.FieldDeletedAt, field.TypeTime, value)

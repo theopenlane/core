@@ -86,6 +86,26 @@ func (_u *EntityUpdate) ClearUpdatedBy() *EntityUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *EntityUpdate) SetUpdatedByImpersonator(v string) *EntityUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableUpdatedByImpersonator(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *EntityUpdate) ClearUpdatedByImpersonator() *EntityUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *EntityUpdate) SetDeletedAt(v time.Time) *EntityUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -1286,21 +1306,6 @@ func (_u *EntityUpdate) AddEditors(v ...*Group) *EntityUpdate {
 	return _u.AddEditorIDs(ids...)
 }
 
-// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (_u *EntityUpdate) AddViewerIDs(ids ...string) *EntityUpdate {
-	_u.mutation.AddViewerIDs(ids...)
-	return _u
-}
-
-// AddViewers adds the "viewers" edges to the Group entity.
-func (_u *EntityUpdate) AddViewers(v ...*Group) *EntityUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddViewerIDs(ids...)
-}
-
 // SetInternalOwnerUser sets the "internal_owner_user" edge to the User entity.
 func (_u *EntityUpdate) SetInternalOwnerUser(v *User) *EntityUpdate {
 	return _u.SetInternalOwnerUserID(v.ID)
@@ -1701,27 +1706,6 @@ func (_u *EntityUpdate) RemoveEditors(v ...*Group) *EntityUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEditorIDs(ids...)
-}
-
-// ClearViewers clears all "viewers" edges to the Group entity.
-func (_u *EntityUpdate) ClearViewers() *EntityUpdate {
-	_u.mutation.ClearViewers()
-	return _u
-}
-
-// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (_u *EntityUpdate) RemoveViewerIDs(ids ...string) *EntityUpdate {
-	_u.mutation.RemoveViewerIDs(ids...)
-	return _u
-}
-
-// RemoveViewers removes "viewers" edges to Group entities.
-func (_u *EntityUpdate) RemoveViewers(v ...*Group) *EntityUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveViewerIDs(ids...)
 }
 
 // ClearInternalOwnerUser clears the "internal_owner_user" edge to the User entity.
@@ -2338,6 +2322,12 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(entity.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(entity.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(entity.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(entity.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -2751,54 +2741,6 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.EntityEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   entity.ViewersTable,
-			Columns: entity.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityViewers
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   entity.ViewersTable,
-			Columns: entity.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   entity.ViewersTable,
-			Columns: entity.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4161,6 +4103,26 @@ func (_u *EntityUpdateOne) ClearUpdatedBy() *EntityUpdateOne {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *EntityUpdateOne) SetUpdatedByImpersonator(v string) *EntityUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableUpdatedByImpersonator(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *EntityUpdateOne) ClearUpdatedByImpersonator() *EntityUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *EntityUpdateOne) SetDeletedAt(v time.Time) *EntityUpdateOne {
 	_u.mutation.SetDeletedAt(v)
@@ -5361,21 +5323,6 @@ func (_u *EntityUpdateOne) AddEditors(v ...*Group) *EntityUpdateOne {
 	return _u.AddEditorIDs(ids...)
 }
 
-// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (_u *EntityUpdateOne) AddViewerIDs(ids ...string) *EntityUpdateOne {
-	_u.mutation.AddViewerIDs(ids...)
-	return _u
-}
-
-// AddViewers adds the "viewers" edges to the Group entity.
-func (_u *EntityUpdateOne) AddViewers(v ...*Group) *EntityUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddViewerIDs(ids...)
-}
-
 // SetInternalOwnerUser sets the "internal_owner_user" edge to the User entity.
 func (_u *EntityUpdateOne) SetInternalOwnerUser(v *User) *EntityUpdateOne {
 	return _u.SetInternalOwnerUserID(v.ID)
@@ -5776,27 +5723,6 @@ func (_u *EntityUpdateOne) RemoveEditors(v ...*Group) *EntityUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEditorIDs(ids...)
-}
-
-// ClearViewers clears all "viewers" edges to the Group entity.
-func (_u *EntityUpdateOne) ClearViewers() *EntityUpdateOne {
-	_u.mutation.ClearViewers()
-	return _u
-}
-
-// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (_u *EntityUpdateOne) RemoveViewerIDs(ids ...string) *EntityUpdateOne {
-	_u.mutation.RemoveViewerIDs(ids...)
-	return _u
-}
-
-// RemoveViewers removes "viewers" edges to Group entities.
-func (_u *EntityUpdateOne) RemoveViewers(v ...*Group) *EntityUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveViewerIDs(ids...)
 }
 
 // ClearInternalOwnerUser clears the "internal_owner_user" edge to the User entity.
@@ -6443,6 +6369,12 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(entity.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(entity.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(entity.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(entity.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -6856,54 +6788,6 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 			},
 		}
 		edge.Schema = _u.schemaConfig.EntityEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   entity.ViewersTable,
-			Columns: entity.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityViewers
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   entity.ViewersTable,
-			Columns: entity.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   entity.ViewersTable,
-			Columns: entity.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EntityViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

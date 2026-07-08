@@ -257,6 +257,7 @@ func (a Asset) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogEntityManagementModule,
 		models.CatalogComplianceModule,
+		models.CatalogRegistryModule,
 	}
 }
 

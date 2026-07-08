@@ -78,6 +78,20 @@ func (_c *APITokenCreate) SetNillableUpdatedBy(v *string) *APITokenCreate {
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *APITokenCreate) SetUpdatedByImpersonator(v string) *APITokenCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *APITokenCreate) SetNillableUpdatedByImpersonator(v *string) *APITokenCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *APITokenCreate) SetDeletedAt(v time.Time) *APITokenCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -420,6 +434,10 @@ func (_c *APITokenCreate) createSpec() (*APIToken, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(apitoken.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(apitoken.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(apitoken.FieldDeletedAt, field.TypeTime, value)

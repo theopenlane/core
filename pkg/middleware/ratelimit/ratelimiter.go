@@ -22,6 +22,12 @@ const (
 	rateLimitLogComponent    = "ratelimit"
 )
 
+// DefaultClientIPHeaders is the header precedence used to derive the originating client IP. It prefers Cloudflare's
+// real-client-IP headers - CF-Connecting-IP (all plans) then the Enterprise True-Client-IP - and falls back to the
+// socket peer (RemoteAddr). These forwarded headers are only trustworthy when the origin is locked to Cloudflare
+// (authenticated origin pulls or firewalling to Cloudflare IP ranges); otherwise a direct-to-origin request can spoof them
+var DefaultClientIPHeaders = []string{"CF-Connecting-IP", "True-Client-IP", "RemoteAddr"}
+
 // RateOption defines a distinct rate limiting window and request allowance.
 type RateOption struct {
 	// Requests is the number of requests allowed within the configured window.
@@ -42,8 +48,8 @@ type Config struct {
 	// Options enables configuring multiple concurrent rate windows that must all pass.
 	Options []RateOption `json:"options" koanf:"options"`
 	// Headers determines which headers are inspected to determine the origin IP.
-	// Defaults to X-Forwarded-For, True-Client-IP, RemoteAddr.
-	Headers []string `json:"headers" koanf:"headers" default:"[True-Client-IP]"`
+	// Defaults to CF-Connecting-IP, True-Client-IP, RemoteAddr.
+	Headers []string `json:"headers" koanf:"headers" default:"[CF-Connecting-IP,True-Client-IP,RemoteAddr]"`
 	// ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.
 	// 0 means the closest client, 1 the proxy behind it, etc.
 	ForwardedIndexFromBehind int `json:"forwardedindexfrombehind" koanf:"forwardedindexfrombehind" default:"0"`
@@ -69,12 +75,41 @@ func RateLimiterWithConfig(conf *Config) echo.MiddlewareFunc {
 		conf = &Config{}
 	}
 
-	limiters := buildLimiters(conf)
-	headers := conf.Headers
-	if len(headers) == 0 {
-		headers = []string{"X-Forwarded-For", "True-Client-IP", "RemoteAddr"}
-	}
+	runtime := newRateLimiterRuntime(conf)
+	headers := resolveHeaders(conf.Headers, DefaultClientIPHeaders)
 
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			key := buildLimiterKey(c, headers, conf)
+			if key == "" {
+				return next(c)
+			}
+
+			if err := runtime.enforce(c, key); err != nil {
+				return err
+			}
+
+			return next(c)
+		}
+	}
+}
+
+// rateLimiterRuntime holds the resolved limiter state shared across limiter middlewares
+type rateLimiterRuntime struct {
+	// limiters are the configured sliding windows that must all pass
+	limiters []*RateLimiter
+	// denyStatus is the HTTP status returned when a limit is exceeded
+	denyStatus int
+	// denyMessage is the error payload returned when a limit is exceeded
+	denyMessage string
+	// dryRun logs decisions without blocking when true
+	dryRun bool
+	// sendRetryAfterHeader adds a Retry-After header on denial when available
+	sendRetryAfterHeader bool
+}
+
+// newRateLimiterRuntime resolves the limiter configuration into reusable runtime state
+func newRateLimiterRuntime(conf *Config) *rateLimiterRuntime {
 	denyStatus := conf.DenyStatus
 	if denyStatus == 0 {
 		denyStatus = http.StatusTooManyRequests
@@ -85,63 +120,78 @@ func RateLimiterWithConfig(conf *Config) echo.MiddlewareFunc {
 		denyMessage = defaultRetryMessage
 	}
 
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			key := buildLimiterKey(c, headers, conf)
-			if key == "" {
-				return next(c)
+	return &rateLimiterRuntime{
+		limiters:             buildLimiters(conf),
+		denyStatus:           denyStatus,
+		denyMessage:          denyMessage,
+		dryRun:               conf.DryRun,
+		sendRetryAfterHeader: conf.SendRetryAfterHeader,
+	}
+}
+
+// enforce runs the configured limiters for the supplied key, returning a non-nil error when the request must be denied
+func (rt *rateLimiterRuntime) enforce(c echo.Context, key string) error {
+	logger := deriveRateLimitLogger(c, key)
+
+	for idx, limiter := range rt.limiters {
+		status, err := limiter.Check(key)
+		if err != nil {
+			logger.
+				Error().
+				Err(err).
+				Int("limiter_index", idx).
+				Msg("ratelimit check failed")
+
+			continue
+		}
+
+		if !status.IsLimited {
+			continue
+		}
+
+		logRateLimitDecision(limitDecisionLogInput{
+			Logger:       logger,
+			Limiter:      limiter,
+			Status:       status,
+			LimiterIndex: idx,
+			DryRun:       rt.dryRun,
+			DenyStatus:   rt.denyStatus,
+			DenyMessage:  rt.denyMessage,
+		})
+
+		if rt.dryRun {
+			continue
+		}
+
+		if rt.sendRetryAfterHeader && status.LimitDuration != nil {
+			seconds := math.Ceil(status.LimitDuration.Seconds())
+			if seconds > 0 {
+				c.Response().Header().Set(echo.HeaderRetryAfter, strconv.Itoa(int(seconds)))
 			}
+		}
 
-			logger := deriveRateLimitLogger(c, key)
+		return echo.NewHTTPError(rt.denyStatus, rt.denyMessage)
+	}
 
-			for idx, limiter := range limiters {
-				status, err := limiter.Check(key)
-				if err != nil {
-					logger.
-						Error().
-						Err(err).
-						Int("limiter_index", idx).
-						Msg("ratelimit check failed")
-					continue
-				}
-
-				if status.IsLimited {
-					logRateLimitDecision(limitDecisionLogInput{
-						Logger:       logger,
-						Limiter:      limiter,
-						Status:       status,
-						LimiterIndex: idx,
-						DryRun:       conf.DryRun,
-						DenyStatus:   denyStatus,
-						DenyMessage:  denyMessage,
-					})
-					if conf.DryRun {
-						continue
-					}
-
-					if conf.SendRetryAfterHeader && status.LimitDuration != nil {
-						seconds := math.Ceil(status.LimitDuration.Seconds())
-						if seconds > 0 {
-							c.Response().Header().Set(echo.HeaderRetryAfter, strconv.Itoa(int(seconds)))
-						}
-					}
-
-					return echo.NewHTTPError(denyStatus, denyMessage)
-				}
-			}
-
-			for _, limiter := range limiters {
-				if err := limiter.Inc(key); err != nil {
-					logger.
-						Error().
-						Err(err).
-						Msg("ratelimit increment failed")
-				}
-			}
-
-			return next(c)
+	for _, limiter := range rt.limiters {
+		if err := limiter.Inc(key); err != nil {
+			logger.
+				Error().
+				Err(err).
+				Msg("ratelimit increment failed")
 		}
 	}
+
+	return nil
+}
+
+// resolveHeaders returns the configured headers when present, otherwise the supplied fallback precedence
+func resolveHeaders(configured, fallback []string) []string {
+	if len(configured) == 0 {
+		return fallback
+	}
+
+	return configured
 }
 
 func buildLimiters(conf *Config) []*RateLimiter {
@@ -222,6 +272,7 @@ func deriveRateLimitLogger(c echo.Context, key string) zerolog.Logger {
 		Str("request_path", c.Path()).
 		Str("request_method", c.Request().Method).
 		Str("remote_ip", c.RealIP()).
+		Str("cf_connecting_ip", c.Request().Header.Get("CF-Connecting-IP")).
 		Logger()
 }
 
@@ -287,10 +338,6 @@ func extractIP(c echo.Context, headers []string, forwardedIndex int) string {
 
 			if parts[index] != "" {
 				return parts[index]
-			}
-		case "True-Client-IP":
-			if value := req.Header.Get("True-Client-IP"); value != "" {
-				return value
 			}
 		default:
 			if value := req.Header.Get(header); value != "" {

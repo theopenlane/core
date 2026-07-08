@@ -17,6 +17,7 @@ func registerWebfingerHandler(router *Router) error {
 		OperationID: "Webfinger",
 		Security:    &openapi3.SecurityRequirements{},
 		Middlewares: *publicEndpoint,
+		RateLimit:   publicStaticRateLimit,
 		Handler:     router.Handler.WebfingerHandler,
 	}
 
@@ -35,7 +36,26 @@ func registerSSOLoginHandler(router *Router) error {
 		OperationID: "SSOLogin",
 		Security:    &openapi3.SecurityRequirements{},
 		Middlewares: *unauthenticatedEndpoint,
+		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.SSOLoginHandler,
+	}
+
+	return router.AddV1HandlerRoute(config)
+}
+
+// registerSSOInitiateHandler is the public, shareable per-organization SSO entry point.
+func registerSSOInitiateHandler(router *Router) error {
+	config := Config{
+		Path:        "/orgs/:slug_name/sso",
+		Method:      http.MethodGet,
+		Name:        "SSOInitiate",
+		Description: "Initiate an organization's SSO flow from its shareable slug URL",
+		Tags:        []string{"sso"},
+		OperationID: "SSOInitiate",
+		Security:    &openapi3.SecurityRequirements{},
+		Middlewares: *unauthenticatedEndpoint,
+		RateLimit:   authFlowRateLimit,
+		Handler:     router.Handler.SSOInitiateHandler,
 	}
 
 	return router.AddV1HandlerRoute(config)
@@ -52,6 +72,7 @@ func registerSSOCallbackHandler(router *Router) error {
 		OperationID: "SSOCallback",
 		Security:    &openapi3.SecurityRequirements{},
 		Middlewares: *unauthenticatedEndpoint,
+		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.SSOCallbackHandler,
 	}
 

@@ -18,6 +18,7 @@ mutation CreatePersonalAccessToken ($input: CreatePersonalAccessTokenInput!) {
 			token
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			organizations {
 				edges {
 					node {
@@ -88,6 +89,7 @@ query GetPersonalAccessTokenByID ($personalAccessTokenId: ID!) {
 		token
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		organizations {
 			edges {
 				node {
@@ -150,6 +152,7 @@ mutation UpdatePersonalAccessToken ($updatePersonalAccessTokenId: ID!, $input: U
 			token
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			organizations {
 				edges {
 					node {

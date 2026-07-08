@@ -11,6 +11,7 @@ mutation CreateBulkCSVTrustCenterSubprocessor ($input: Upload!) {
 			trustCenterSubprocessorKindName
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -27,6 +28,7 @@ mutation CreateBulkTrustCenterSubprocessor ($input: [CreateTrustCenterSubprocess
 			trustCenterSubprocessorKindName
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -43,6 +45,7 @@ mutation CreateTrustCenterSubprocessor ($input: CreateTrustCenterSubprocessorInp
 			trustCenterSubprocessorKindName
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			subprocessor {
 				name
 				description
@@ -102,6 +105,7 @@ query GetTrustCenterSubprocessorByID ($trustCenterSubprocessorId: ID!) {
 		trustCenterSubprocessorKindName
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		subprocessor {
 			name
 			description
@@ -156,6 +160,7 @@ mutation UpdateBulkTrustCenterSubprocessor ($ids: [ID!]!, $input: UpdateTrustCen
 			trustCenterSubprocessorKindName
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			subprocessor {
 				name
 				description
@@ -181,6 +186,7 @@ mutation UpdateTrustCenterSubprocessor ($updateTrustCenterSubprocessorId: ID!, $
 			trustCenterSubprocessorKindName
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			subprocessor {
 				name
 				description

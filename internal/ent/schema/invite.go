@@ -106,6 +106,10 @@ func (Invite) Fields() []ent.Field {
 			Comment("indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes super admin and invitee becomes owner").
 			Default(false).
 			Optional(),
+		field.Bool("sso_exempt").
+			Comment("when accepted, grants the member an SSO exemption so they are not redirected through the organization's SSO login flow").
+			Default(false).
+			Optional(),
 	}
 }
 

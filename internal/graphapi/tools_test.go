@@ -304,6 +304,9 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	_, err = hooks.RegisterGalaEntitlementListeners(galaInstance.Registry())
 	requireNoError(t, err)
 
+	_, err = hooks.RegisterGalaNDAAttestationListeners(galaInstance.Registry())
+	requireNoError(t, err)
+
 	requireNoError(t, galaInstance.StartWorkers(ctx))
 
 	suite.galaRuntime = galaInstance

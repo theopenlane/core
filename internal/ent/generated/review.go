@@ -31,6 +31,8 @@ type Review struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -105,8 +107,6 @@ type ReviewEdges struct {
 	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
 	// provides edit access to the risk to members of the group
 	Editors []*Group `json:"editors,omitempty"`
-	// provides view access to the risk to members of the group
-	Viewers []*Group `json:"viewers,omitempty"`
 	// Environment holds the value of the environment edge.
 	Environment *CustomTypeEnum `json:"environment,omitempty"`
 	// Scope holds the value of the scope edge.
@@ -145,13 +145,12 @@ type ReviewEdges struct {
 	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [22]bool
+	loadedTypes [21]bool
 	// totalCount holds the count of the edges above.
-	totalCount [22]map[string]int
+	totalCount [21]map[string]int
 
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
-	namedViewers          map[string][]*Group
 	namedIntegrations     map[string][]*Integration
 	namedFindings         map[string][]*Finding
 	namedVulnerabilities  map[string][]*Vulnerability
@@ -198,21 +197,12 @@ func (e ReviewEdges) EditorsOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "editors"}
 }
 
-// ViewersOrErr returns the Viewers value or an error if the edge
-// was not loaded in eager-loading.
-func (e ReviewEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
-		return e.Viewers, nil
-	}
-	return nil, &NotLoadedError{edge: "viewers"}
-}
-
 // EnvironmentOrErr returns the Environment value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ReviewEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 	if e.Environment != nil {
 		return e.Environment, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "environment"}
@@ -223,7 +213,7 @@ func (e ReviewEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 func (e ReviewEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 	if e.Scope != nil {
 		return e.Scope, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "scope"}
@@ -232,7 +222,7 @@ func (e ReviewEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[5] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -241,7 +231,7 @@ func (e ReviewEdges) IntegrationsOrErr() ([]*Integration, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[6] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -250,7 +240,7 @@ func (e ReviewEdges) FindingsOrErr() ([]*Finding, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[7] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -259,7 +249,7 @@ func (e ReviewEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[8] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -268,7 +258,7 @@ func (e ReviewEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // RemediationsOrErr returns the Remediations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[9] {
 		return e.Remediations, nil
 	}
 	return nil, &NotLoadedError{edge: "remediations"}
@@ -277,7 +267,7 @@ func (e ReviewEdges) RemediationsOrErr() ([]*Remediation, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[10] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -286,7 +276,7 @@ func (e ReviewEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[11] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -295,7 +285,7 @@ func (e ReviewEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[12] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -304,7 +294,7 @@ func (e ReviewEdges) RisksOrErr() ([]*Risk, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[13] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -313,7 +303,7 @@ func (e ReviewEdges) ProgramsOrErr() ([]*Program, error) {
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[14] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -322,7 +312,7 @@ func (e ReviewEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[15] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -331,7 +321,7 @@ func (e ReviewEdges) EntitiesOrErr() ([]*Entity, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[16] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -342,7 +332,7 @@ func (e ReviewEdges) TasksOrErr() ([]*Task, error) {
 func (e ReviewEdges) ReviewerOrErr() (*User, error) {
 	if e.Reviewer != nil {
 		return e.Reviewer, nil
-	} else if e.loadedTypes[18] {
+	} else if e.loadedTypes[17] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "reviewer"}
@@ -351,7 +341,7 @@ func (e ReviewEdges) ReviewerOrErr() (*User, error) {
 // CommentsOrErr returns the Comments value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) CommentsOrErr() ([]*Note, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[18] {
 		return e.Comments, nil
 	}
 	return nil, &NotLoadedError{edge: "comments"}
@@ -360,7 +350,7 @@ func (e ReviewEdges) CommentsOrErr() ([]*Note, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[19] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -369,7 +359,7 @@ func (e ReviewEdges) FilesOrErr() ([]*File, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[20] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -386,7 +376,7 @@ func (*Review) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case review.FieldSystemOwned, review.FieldApproved:
 			values[i] = new(sql.NullBool)
-		case review.FieldID, review.FieldCreatedBy, review.FieldUpdatedBy, review.FieldDeletedBy, review.FieldOwnerID, review.FieldInternalNotes, review.FieldSystemInternalID, review.FieldEnvironmentName, review.FieldEnvironmentID, review.FieldScopeName, review.FieldScopeID, review.FieldExternalID, review.FieldExternalOwnerID, review.FieldTitle, review.FieldState, review.FieldStatus, review.FieldCategory, review.FieldClassification, review.FieldSummary, review.FieldDetails, review.FieldReporter, review.FieldReviewerID, review.FieldSource, review.FieldExternalURI:
+		case review.FieldID, review.FieldCreatedBy, review.FieldUpdatedBy, review.FieldUpdatedByImpersonator, review.FieldDeletedBy, review.FieldOwnerID, review.FieldInternalNotes, review.FieldSystemInternalID, review.FieldEnvironmentName, review.FieldEnvironmentID, review.FieldScopeName, review.FieldScopeID, review.FieldExternalID, review.FieldExternalOwnerID, review.FieldTitle, review.FieldState, review.FieldStatus, review.FieldCategory, review.FieldClassification, review.FieldSummary, review.FieldDetails, review.FieldReporter, review.FieldReviewerID, review.FieldSource, review.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case review.FieldCreatedAt, review.FieldUpdatedAt, review.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -434,6 +424,13 @@ func (_m *Review) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case review.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case review.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -654,11 +651,6 @@ func (_m *Review) QueryEditors() *GroupQuery {
 	return NewReviewClient(_m.config).QueryEditors(_m)
 }
 
-// QueryViewers queries the "viewers" edge of the Review entity.
-func (_m *Review) QueryViewers() *GroupQuery {
-	return NewReviewClient(_m.config).QueryViewers(_m)
-}
-
 // QueryEnvironment queries the "environment" edge of the Review entity.
 func (_m *Review) QueryEnvironment() *CustomTypeEnumQuery {
 	return NewReviewClient(_m.config).QueryEnvironment(_m)
@@ -783,6 +775,11 @@ func (_m *Review) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
@@ -932,30 +929,6 @@ func (_m *Review) appendNamedEditors(name string, edges ...*Group) {
 		_m.Edges.namedEditors[name] = []*Group{}
 	} else {
 		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
-	}
-}
-
-// NamedViewers returns the Viewers named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *Review) NamedViewers(name string) ([]*Group, error) {
-	if _m.Edges.namedViewers == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedViewers[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *Review) appendNamedViewers(name string, edges ...*Group) {
-	if _m.Edges.namedViewers == nil {
-		_m.Edges.namedViewers = make(map[string][]*Group)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedViewers[name] = []*Group{}
-	} else {
-		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
 	}
 }
 

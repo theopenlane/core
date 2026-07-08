@@ -11,8 +11,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 )
 
-// HookValidateIdentityProviderConfig ensures identity provider configuration is present when SSO login is enforced
-// and resets enforced/tested status when SSO configuration fields change
+// HookValidateIdentityProviderConfig ensures identity provider configuration is present when SSO login is
+// enforced and resets the enforced/tested status whenever any SSO configuration field changes
 func HookValidateIdentityProviderConfig() ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return hook.OrganizationSettingFunc(func(ctx context.Context, m *generated.OrganizationSettingMutation) (generated.Value, error) {
@@ -27,9 +27,13 @@ func HookValidateIdentityProviderConfig() ent.Hook {
 			return next.Mutate(ctx, m)
 		})
 	}, hook.And(
-		hook.HasFields("identity_provider", "identity_provider_client_id",
-			"identity_provider_client_secret", "oidc_discovery_endpoint",
-			"identity_provider_login_enforced"),
+		hook.Or(
+			hook.HasFields("identity_provider"),
+			hook.HasFields("identity_provider_client_id"),
+			hook.HasFields("identity_provider_client_secret"),
+			hook.HasFields("oidc_discovery_endpoint"),
+			hook.HasFields("identity_provider_login_enforced"),
+		),
 		hook.HasOp(ent.OpCreate|ent.OpUpdateOne),
 	))
 }
@@ -152,6 +156,7 @@ func disableEnforcementIfConfigChanged(ctx context.Context, m *generated.Organiz
 	return nil
 }
 
+// didSSOConfigChange checks if any of the SSO configuration fields have changed in the mutation
 func didSSOConfigChange(ctx context.Context, m *generated.OrganizationSettingMutation) bool {
 	if enforced, ok := m.IdentityProviderLoginEnforced(); ok {
 		if oldEnforcement, err := m.OldIdentityProviderLoginEnforced(ctx); err == nil && oldEnforcement && !enforced {

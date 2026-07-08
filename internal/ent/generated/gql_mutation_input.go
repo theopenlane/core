@@ -7446,7 +7446,6 @@ type CreateEntityInput struct {
 	OwnerID                               *string
 	BlockedGroupIDs                       []string
 	EditorIDs                             []string
-	ViewerIDs                             []string
 	InternalOwnerUserID                   *string
 	InternalOwnerGroupID                  *string
 	ReviewedByUserID                      *string
@@ -7622,9 +7621,6 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.EditorIDs; len(v) > 0 {
 		m.AddEditorIDs(v...)
-	}
-	if v := i.ViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
 	}
 	if v := i.InternalOwnerUserID; v != nil {
 		m.SetInternalOwnerUserID(*v)
@@ -7828,9 +7824,6 @@ type UpdateEntityInput struct {
 	ClearEditors                               bool
 	AddEditorIDs                               []string
 	RemoveEditorIDs                            []string
-	ClearViewers                               bool
-	AddViewerIDs                               []string
-	RemoveViewerIDs                            []string
 	ClearInternalOwnerUser                     bool
 	InternalOwnerUserID                        *string
 	ClearInternalOwnerGroup                    bool
@@ -8213,15 +8206,6 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.RemoveEditorIDs; len(v) > 0 {
 		m.RemoveEditorIDs(v...)
-	}
-	if i.ClearViewers {
-		m.ClearViewers()
-	}
-	if v := i.AddViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
-	}
-	if v := i.RemoveViewerIDs; len(v) > 0 {
-		m.RemoveViewerIDs(v...)
 	}
 	if i.ClearInternalOwnerUser {
 		m.ClearInternalOwnerUser()
@@ -10010,6 +9994,8 @@ func (c *FileUpdateOne) SetInput(i UpdateFileInput) *FileUpdateOne {
 // CreateFindingInput represents a mutation input for creating findings.
 type CreateFindingInput struct {
 	Tags                 []string
+	ReviewedBy           *string
+	AssignedTo           *string
 	InternalNotes        *string
 	SystemInternalID     *string
 	EnvironmentName      *string
@@ -10054,7 +10040,10 @@ type CreateFindingInput struct {
 	OwnerID              *string
 	BlockedGroupIDs      []string
 	EditorIDs            []string
-	ViewerIDs            []string
+	ReviewedByUserID     *string
+	ReviewedByGroupID    *string
+	AssignedToUserID     *string
+	AssignedToGroupID    *string
 	EnvironmentID        *string
 	ScopeID              *string
 	FindingStatusID      *string
@@ -10083,6 +10072,12 @@ type CreateFindingInput struct {
 func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ReviewedBy; v != nil {
+		m.SetReviewedBy(*v)
+	}
+	if v := i.AssignedTo; v != nil {
+		m.SetAssignedTo(*v)
 	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
@@ -10216,8 +10211,17 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	if v := i.EditorIDs; len(v) > 0 {
 		m.AddEditorIDs(v...)
 	}
-	if v := i.ViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
+	if v := i.ReviewedByUserID; v != nil {
+		m.SetReviewedByUserID(*v)
+	}
+	if v := i.ReviewedByGroupID; v != nil {
+		m.SetReviewedByGroupID(*v)
+	}
+	if v := i.AssignedToUserID; v != nil {
+		m.SetAssignedToUserID(*v)
+	}
+	if v := i.AssignedToGroupID; v != nil {
+		m.SetAssignedToGroupID(*v)
 	}
 	if v := i.EnvironmentID; v != nil {
 		m.SetEnvironmentID(*v)
@@ -10298,6 +10302,10 @@ type UpdateFindingInput struct {
 	ClearTags                  bool
 	Tags                       []string
 	AppendTags                 []string
+	ClearReviewedBy            bool
+	ReviewedBy                 *string
+	ClearAssignedTo            bool
+	AssignedTo                 *string
 	ClearInternalNotes         bool
 	InternalNotes              *string
 	ClearSystemInternalID      bool
@@ -10390,9 +10398,14 @@ type UpdateFindingInput struct {
 	ClearEditors               bool
 	AddEditorIDs               []string
 	RemoveEditorIDs            []string
-	ClearViewers               bool
-	AddViewerIDs               []string
-	RemoveViewerIDs            []string
+	ClearReviewedByUser        bool
+	ReviewedByUserID           *string
+	ClearReviewedByGroup       bool
+	ReviewedByGroupID          *string
+	ClearAssignedToUser        bool
+	AssignedToUserID           *string
+	ClearAssignedToGroup       bool
+	AssignedToGroupID          *string
 	ClearEnvironment           bool
 	EnvironmentID              *string
 	ClearScope                 bool
@@ -10468,6 +10481,18 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearReviewedBy {
+		m.ClearReviewedBy()
+	}
+	if v := i.ReviewedBy; v != nil {
+		m.SetReviewedBy(*v)
+	}
+	if i.ClearAssignedTo {
+		m.ClearAssignedTo()
+	}
+	if v := i.AssignedTo; v != nil {
+		m.SetAssignedTo(*v)
 	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
@@ -10745,14 +10770,29 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	if v := i.RemoveEditorIDs; len(v) > 0 {
 		m.RemoveEditorIDs(v...)
 	}
-	if i.ClearViewers {
-		m.ClearViewers()
+	if i.ClearReviewedByUser {
+		m.ClearReviewedByUser()
 	}
-	if v := i.AddViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
+	if v := i.ReviewedByUserID; v != nil {
+		m.SetReviewedByUserID(*v)
 	}
-	if v := i.RemoveViewerIDs; len(v) > 0 {
-		m.RemoveViewerIDs(v...)
+	if i.ClearReviewedByGroup {
+		m.ClearReviewedByGroup()
+	}
+	if v := i.ReviewedByGroupID; v != nil {
+		m.SetReviewedByGroupID(*v)
+	}
+	if i.ClearAssignedToUser {
+		m.ClearAssignedToUser()
+	}
+	if v := i.AssignedToUserID; v != nil {
+		m.SetAssignedToUserID(*v)
+	}
+	if i.ClearAssignedToGroup {
+		m.ClearAssignedToGroup()
+	}
+	if v := i.AssignedToGroupID; v != nil {
+		m.SetAssignedToGroupID(*v)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()
@@ -11101,12 +11141,6 @@ type CreateGroupInput struct {
 	ControlImplementationEditorIDs       []string
 	ControlImplementationBlockedGroupIDs []string
 	ControlImplementationViewerIDs       []string
-	ScanEditorIDs                        []string
-	ScanBlockedGroupIDs                  []string
-	ScanViewerIDs                        []string
-	EntityEditorIDs                      []string
-	EntityBlockedGroupIDs                []string
-	EntityViewerIDs                      []string
 	ActionPlanEditorIDs                  []string
 	ActionPlanBlockedGroupIDs            []string
 	ActionPlanViewerIDs                  []string
@@ -11124,6 +11158,16 @@ type CreateGroupInput struct {
 	ControlBlockedGroupIDs               []string
 	MappedControlEditorIDs               []string
 	MappedControlBlockedGroupIDs         []string
+	ScanEditorIDs                        []string
+	ScanBlockedGroupIDs                  []string
+	EntityEditorIDs                      []string
+	EntityBlockedGroupIDs                []string
+	FindingEditorIDs                     []string
+	FindingBlockedGroupIDs               []string
+	ReviewEditorIDs                      []string
+	ReviewBlockedGroupIDs                []string
+	RemediationEditorIDs                 []string
+	RemediationBlockedGroupIDs           []string
 	SettingID                            *string
 	EventIDs                             []string
 	IntegrationIDs                       []string
@@ -11218,24 +11262,6 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.ControlImplementationViewerIDs; len(v) > 0 {
 		m.AddControlImplementationViewerIDs(v...)
 	}
-	if v := i.ScanEditorIDs; len(v) > 0 {
-		m.AddScanEditorIDs(v...)
-	}
-	if v := i.ScanBlockedGroupIDs; len(v) > 0 {
-		m.AddScanBlockedGroupIDs(v...)
-	}
-	if v := i.ScanViewerIDs; len(v) > 0 {
-		m.AddScanViewerIDs(v...)
-	}
-	if v := i.EntityEditorIDs; len(v) > 0 {
-		m.AddEntityEditorIDs(v...)
-	}
-	if v := i.EntityBlockedGroupIDs; len(v) > 0 {
-		m.AddEntityBlockedGroupIDs(v...)
-	}
-	if v := i.EntityViewerIDs; len(v) > 0 {
-		m.AddEntityViewerIDs(v...)
-	}
 	if v := i.ActionPlanEditorIDs; len(v) > 0 {
 		m.AddActionPlanEditorIDs(v...)
 	}
@@ -11286,6 +11312,36 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.MappedControlBlockedGroupIDs; len(v) > 0 {
 		m.AddMappedControlBlockedGroupIDs(v...)
+	}
+	if v := i.ScanEditorIDs; len(v) > 0 {
+		m.AddScanEditorIDs(v...)
+	}
+	if v := i.ScanBlockedGroupIDs; len(v) > 0 {
+		m.AddScanBlockedGroupIDs(v...)
+	}
+	if v := i.EntityEditorIDs; len(v) > 0 {
+		m.AddEntityEditorIDs(v...)
+	}
+	if v := i.EntityBlockedGroupIDs; len(v) > 0 {
+		m.AddEntityBlockedGroupIDs(v...)
+	}
+	if v := i.FindingEditorIDs; len(v) > 0 {
+		m.AddFindingEditorIDs(v...)
+	}
+	if v := i.FindingBlockedGroupIDs; len(v) > 0 {
+		m.AddFindingBlockedGroupIDs(v...)
+	}
+	if v := i.ReviewEditorIDs; len(v) > 0 {
+		m.AddReviewEditorIDs(v...)
+	}
+	if v := i.ReviewBlockedGroupIDs; len(v) > 0 {
+		m.AddReviewBlockedGroupIDs(v...)
+	}
+	if v := i.RemediationEditorIDs; len(v) > 0 {
+		m.AddRemediationEditorIDs(v...)
+	}
+	if v := i.RemediationBlockedGroupIDs; len(v) > 0 {
+		m.AddRemediationBlockedGroupIDs(v...)
 	}
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
@@ -11392,24 +11448,6 @@ type UpdateGroupInput struct {
 	ClearControlImplementationViewers          bool
 	AddControlImplementationViewerIDs          []string
 	RemoveControlImplementationViewerIDs       []string
-	ClearScanEditors                           bool
-	AddScanEditorIDs                           []string
-	RemoveScanEditorIDs                        []string
-	ClearScanBlockedGroups                     bool
-	AddScanBlockedGroupIDs                     []string
-	RemoveScanBlockedGroupIDs                  []string
-	ClearScanViewers                           bool
-	AddScanViewerIDs                           []string
-	RemoveScanViewerIDs                        []string
-	ClearEntityEditors                         bool
-	AddEntityEditorIDs                         []string
-	RemoveEntityEditorIDs                      []string
-	ClearEntityBlockedGroups                   bool
-	AddEntityBlockedGroupIDs                   []string
-	RemoveEntityBlockedGroupIDs                []string
-	ClearEntityViewers                         bool
-	AddEntityViewerIDs                         []string
-	RemoveEntityViewerIDs                      []string
 	ClearActionPlanEditors                     bool
 	AddActionPlanEditorIDs                     []string
 	RemoveActionPlanEditorIDs                  []string
@@ -11461,6 +11499,36 @@ type UpdateGroupInput struct {
 	ClearMappedControlBlockedGroups            bool
 	AddMappedControlBlockedGroupIDs            []string
 	RemoveMappedControlBlockedGroupIDs         []string
+	ClearScanEditors                           bool
+	AddScanEditorIDs                           []string
+	RemoveScanEditorIDs                        []string
+	ClearScanBlockedGroups                     bool
+	AddScanBlockedGroupIDs                     []string
+	RemoveScanBlockedGroupIDs                  []string
+	ClearEntityEditors                         bool
+	AddEntityEditorIDs                         []string
+	RemoveEntityEditorIDs                      []string
+	ClearEntityBlockedGroups                   bool
+	AddEntityBlockedGroupIDs                   []string
+	RemoveEntityBlockedGroupIDs                []string
+	ClearFindingEditors                        bool
+	AddFindingEditorIDs                        []string
+	RemoveFindingEditorIDs                     []string
+	ClearFindingBlockedGroups                  bool
+	AddFindingBlockedGroupIDs                  []string
+	RemoveFindingBlockedGroupIDs               []string
+	ClearReviewEditors                         bool
+	AddReviewEditorIDs                         []string
+	RemoveReviewEditorIDs                      []string
+	ClearReviewBlockedGroups                   bool
+	AddReviewBlockedGroupIDs                   []string
+	RemoveReviewBlockedGroupIDs                []string
+	ClearRemediationEditors                    bool
+	AddRemediationEditorIDs                    []string
+	RemoveRemediationEditorIDs                 []string
+	ClearRemediationBlockedGroups              bool
+	AddRemediationBlockedGroupIDs              []string
+	RemoveRemediationBlockedGroupIDs           []string
 	ClearSetting                               bool
 	SettingID                                  *string
 	ClearEvents                                bool
@@ -11700,60 +11768,6 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.RemoveControlImplementationViewerIDs; len(v) > 0 {
 		m.RemoveControlImplementationViewerIDs(v...)
 	}
-	if i.ClearScanEditors {
-		m.ClearScanEditors()
-	}
-	if v := i.AddScanEditorIDs; len(v) > 0 {
-		m.AddScanEditorIDs(v...)
-	}
-	if v := i.RemoveScanEditorIDs; len(v) > 0 {
-		m.RemoveScanEditorIDs(v...)
-	}
-	if i.ClearScanBlockedGroups {
-		m.ClearScanBlockedGroups()
-	}
-	if v := i.AddScanBlockedGroupIDs; len(v) > 0 {
-		m.AddScanBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveScanBlockedGroupIDs; len(v) > 0 {
-		m.RemoveScanBlockedGroupIDs(v...)
-	}
-	if i.ClearScanViewers {
-		m.ClearScanViewers()
-	}
-	if v := i.AddScanViewerIDs; len(v) > 0 {
-		m.AddScanViewerIDs(v...)
-	}
-	if v := i.RemoveScanViewerIDs; len(v) > 0 {
-		m.RemoveScanViewerIDs(v...)
-	}
-	if i.ClearEntityEditors {
-		m.ClearEntityEditors()
-	}
-	if v := i.AddEntityEditorIDs; len(v) > 0 {
-		m.AddEntityEditorIDs(v...)
-	}
-	if v := i.RemoveEntityEditorIDs; len(v) > 0 {
-		m.RemoveEntityEditorIDs(v...)
-	}
-	if i.ClearEntityBlockedGroups {
-		m.ClearEntityBlockedGroups()
-	}
-	if v := i.AddEntityBlockedGroupIDs; len(v) > 0 {
-		m.AddEntityBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveEntityBlockedGroupIDs; len(v) > 0 {
-		m.RemoveEntityBlockedGroupIDs(v...)
-	}
-	if i.ClearEntityViewers {
-		m.ClearEntityViewers()
-	}
-	if v := i.AddEntityViewerIDs; len(v) > 0 {
-		m.AddEntityViewerIDs(v...)
-	}
-	if v := i.RemoveEntityViewerIDs; len(v) > 0 {
-		m.RemoveEntityViewerIDs(v...)
-	}
 	if i.ClearActionPlanEditors {
 		m.ClearActionPlanEditors()
 	}
@@ -11906,6 +11920,96 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.RemoveMappedControlBlockedGroupIDs; len(v) > 0 {
 		m.RemoveMappedControlBlockedGroupIDs(v...)
+	}
+	if i.ClearScanEditors {
+		m.ClearScanEditors()
+	}
+	if v := i.AddScanEditorIDs; len(v) > 0 {
+		m.AddScanEditorIDs(v...)
+	}
+	if v := i.RemoveScanEditorIDs; len(v) > 0 {
+		m.RemoveScanEditorIDs(v...)
+	}
+	if i.ClearScanBlockedGroups {
+		m.ClearScanBlockedGroups()
+	}
+	if v := i.AddScanBlockedGroupIDs; len(v) > 0 {
+		m.AddScanBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveScanBlockedGroupIDs; len(v) > 0 {
+		m.RemoveScanBlockedGroupIDs(v...)
+	}
+	if i.ClearEntityEditors {
+		m.ClearEntityEditors()
+	}
+	if v := i.AddEntityEditorIDs; len(v) > 0 {
+		m.AddEntityEditorIDs(v...)
+	}
+	if v := i.RemoveEntityEditorIDs; len(v) > 0 {
+		m.RemoveEntityEditorIDs(v...)
+	}
+	if i.ClearEntityBlockedGroups {
+		m.ClearEntityBlockedGroups()
+	}
+	if v := i.AddEntityBlockedGroupIDs; len(v) > 0 {
+		m.AddEntityBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveEntityBlockedGroupIDs; len(v) > 0 {
+		m.RemoveEntityBlockedGroupIDs(v...)
+	}
+	if i.ClearFindingEditors {
+		m.ClearFindingEditors()
+	}
+	if v := i.AddFindingEditorIDs; len(v) > 0 {
+		m.AddFindingEditorIDs(v...)
+	}
+	if v := i.RemoveFindingEditorIDs; len(v) > 0 {
+		m.RemoveFindingEditorIDs(v...)
+	}
+	if i.ClearFindingBlockedGroups {
+		m.ClearFindingBlockedGroups()
+	}
+	if v := i.AddFindingBlockedGroupIDs; len(v) > 0 {
+		m.AddFindingBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveFindingBlockedGroupIDs; len(v) > 0 {
+		m.RemoveFindingBlockedGroupIDs(v...)
+	}
+	if i.ClearReviewEditors {
+		m.ClearReviewEditors()
+	}
+	if v := i.AddReviewEditorIDs; len(v) > 0 {
+		m.AddReviewEditorIDs(v...)
+	}
+	if v := i.RemoveReviewEditorIDs; len(v) > 0 {
+		m.RemoveReviewEditorIDs(v...)
+	}
+	if i.ClearReviewBlockedGroups {
+		m.ClearReviewBlockedGroups()
+	}
+	if v := i.AddReviewBlockedGroupIDs; len(v) > 0 {
+		m.AddReviewBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveReviewBlockedGroupIDs; len(v) > 0 {
+		m.RemoveReviewBlockedGroupIDs(v...)
+	}
+	if i.ClearRemediationEditors {
+		m.ClearRemediationEditors()
+	}
+	if v := i.AddRemediationEditorIDs; len(v) > 0 {
+		m.AddRemediationEditorIDs(v...)
+	}
+	if v := i.RemoveRemediationEditorIDs; len(v) > 0 {
+		m.RemoveRemediationEditorIDs(v...)
+	}
+	if i.ClearRemediationBlockedGroups {
+		m.ClearRemediationBlockedGroups()
+	}
+	if v := i.AddRemediationBlockedGroupIDs; len(v) > 0 {
+		m.AddRemediationBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveRemediationBlockedGroupIDs; len(v) > 0 {
+		m.RemoveRemediationBlockedGroupIDs(v...)
 	}
 	if i.ClearSetting {
 		m.ClearSetting()
@@ -13793,6 +13897,7 @@ type CreateInviteInput struct {
 	Role              *enums.Role
 	SendAttempts      *int
 	OwnershipTransfer *bool
+	SSOExempt         *bool
 	OwnerID           *string
 	EventIDs          []string
 	GroupIDs          []string
@@ -13815,6 +13920,9 @@ func (i *CreateInviteInput) Mutate(m *InviteMutation) {
 	}
 	if v := i.OwnershipTransfer; v != nil {
 		m.SetOwnershipTransfer(*v)
+	}
+	if v := i.SSOExempt; v != nil {
+		m.SetSSOExempt(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -13842,6 +13950,8 @@ type UpdateInviteInput struct {
 	SendAttempts           *int
 	ClearOwnershipTransfer bool
 	OwnershipTransfer      *bool
+	ClearSSOExempt         bool
+	SSOExempt              *bool
 	ClearOwner             bool
 	OwnerID                *string
 	ClearEvents            bool
@@ -13874,6 +13984,12 @@ func (i *UpdateInviteInput) Mutate(m *InviteMutation) {
 	}
 	if v := i.OwnershipTransfer; v != nil {
 		m.SetOwnershipTransfer(*v)
+	}
+	if i.ClearSSOExempt {
+		m.ClearSSOExempt()
+	}
+	if v := i.SSOExempt; v != nil {
+		m.SetSSOExempt(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -16017,16 +16133,24 @@ func (c *OnboardingCreate) SetInput(i CreateOnboardingInput) *OnboardingCreate {
 
 // CreateOrgMembershipInput represents a mutation input for creating orgmemberships.
 type CreateOrgMembershipInput struct {
-	Role           *enums.Role
-	OrganizationID string
-	UserID         string
-	EventIDs       []string
+	Role            *enums.Role
+	SSOExempt       *bool
+	SSOExemptReason *string
+	OrganizationID  string
+	UserID          string
+	EventIDs        []string
 }
 
 // Mutate applies the CreateOrgMembershipInput on the OrgMembershipMutation builder.
 func (i *CreateOrgMembershipInput) Mutate(m *OrgMembershipMutation) {
 	if v := i.Role; v != nil {
 		m.SetRole(*v)
+	}
+	if v := i.SSOExempt; v != nil {
+		m.SetSSOExempt(*v)
+	}
+	if v := i.SSOExemptReason; v != nil {
+		m.SetSSOExemptReason(*v)
 	}
 	m.SetOrganizationID(i.OrganizationID)
 	m.SetUserID(i.UserID)
@@ -16043,16 +16167,32 @@ func (c *OrgMembershipCreate) SetInput(i CreateOrgMembershipInput) *OrgMembershi
 
 // UpdateOrgMembershipInput represents a mutation input for updating orgmemberships.
 type UpdateOrgMembershipInput struct {
-	Role           *enums.Role
-	ClearEvents    bool
-	AddEventIDs    []string
-	RemoveEventIDs []string
+	Role                 *enums.Role
+	ClearSSOExempt       bool
+	SSOExempt            *bool
+	ClearSSOExemptReason bool
+	SSOExemptReason      *string
+	ClearEvents          bool
+	AddEventIDs          []string
+	RemoveEventIDs       []string
 }
 
 // Mutate applies the UpdateOrgMembershipInput on the OrgMembershipMutation builder.
 func (i *UpdateOrgMembershipInput) Mutate(m *OrgMembershipMutation) {
 	if v := i.Role; v != nil {
 		m.SetRole(*v)
+	}
+	if i.ClearSSOExempt {
+		m.ClearSSOExempt()
+	}
+	if v := i.SSOExempt; v != nil {
+		m.SetSSOExempt(*v)
+	}
+	if i.ClearSSOExemptReason {
+		m.ClearSSOExemptReason()
+	}
+	if v := i.SSOExemptReason; v != nil {
+		m.SetSSOExemptReason(*v)
 	}
 	if i.ClearEvents {
 		m.ClearEvents()
@@ -18724,7 +18864,11 @@ type CreateOrganizationSettingInput struct {
 	SamlIssuer                       *string
 	SamlCert                         *string
 	IdentityProviderLoginEnforced    *bool
+	IdentityProviderJitProvisioning  *bool
+	JitAllowedEmailDomains           []string
 	MultifactorAuthEnforced          *bool
+	SSOExemptDomains                 []string
+	AllowSupportAccess               *bool
 	ComplianceWebhookToken           *string
 	OrganizationID                   *string
 	FileIDs                          []string
@@ -18795,8 +18939,20 @@ func (i *CreateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	if v := i.IdentityProviderLoginEnforced; v != nil {
 		m.SetIdentityProviderLoginEnforced(*v)
 	}
+	if v := i.IdentityProviderJitProvisioning; v != nil {
+		m.SetIdentityProviderJitProvisioning(*v)
+	}
+	if v := i.JitAllowedEmailDomains; v != nil {
+		m.SetJitAllowedEmailDomains(v)
+	}
 	if v := i.MultifactorAuthEnforced; v != nil {
 		m.SetMultifactorAuthEnforced(*v)
+	}
+	if v := i.SSOExemptDomains; v != nil {
+		m.SetSSOExemptDomains(v)
+	}
+	if v := i.AllowSupportAccess; v != nil {
+		m.SetAllowSupportAccess(*v)
 	}
 	if v := i.ComplianceWebhookToken; v != nil {
 		m.SetComplianceWebhookToken(*v)
@@ -18860,8 +19016,17 @@ type UpdateOrganizationSettingInput struct {
 	ClearSamlCert                         bool
 	SamlCert                              *string
 	IdentityProviderLoginEnforced         *bool
+	IdentityProviderJitProvisioning       *bool
+	ClearJitAllowedEmailDomains           bool
+	JitAllowedEmailDomains                []string
+	AppendJitAllowedEmailDomains          []string
 	ClearMultifactorAuthEnforced          bool
 	MultifactorAuthEnforced               *bool
+	ClearSSOExemptDomains                 bool
+	SSOExemptDomains                      []string
+	AppendSSOExemptDomains                []string
+	ClearAllowSupportAccess               bool
+	AllowSupportAccess                    *bool
 	ClearComplianceWebhookToken           bool
 	ComplianceWebhookToken                *string
 	ClearPendingDeletionAt                bool
@@ -19004,11 +19169,38 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	if v := i.IdentityProviderLoginEnforced; v != nil {
 		m.SetIdentityProviderLoginEnforced(*v)
 	}
+	if v := i.IdentityProviderJitProvisioning; v != nil {
+		m.SetIdentityProviderJitProvisioning(*v)
+	}
+	if i.ClearJitAllowedEmailDomains {
+		m.ClearJitAllowedEmailDomains()
+	}
+	if v := i.JitAllowedEmailDomains; v != nil {
+		m.SetJitAllowedEmailDomains(v)
+	}
+	if i.AppendJitAllowedEmailDomains != nil {
+		m.AppendJitAllowedEmailDomains(i.JitAllowedEmailDomains)
+	}
 	if i.ClearMultifactorAuthEnforced {
 		m.ClearMultifactorAuthEnforced()
 	}
 	if v := i.MultifactorAuthEnforced; v != nil {
 		m.SetMultifactorAuthEnforced(*v)
+	}
+	if i.ClearSSOExemptDomains {
+		m.ClearSSOExemptDomains()
+	}
+	if v := i.SSOExemptDomains; v != nil {
+		m.SetSSOExemptDomains(v)
+	}
+	if i.AppendSSOExemptDomains != nil {
+		m.AppendSSOExemptDomains(i.SSOExemptDomains)
+	}
+	if i.ClearAllowSupportAccess {
+		m.ClearAllowSupportAccess()
+	}
+	if v := i.AllowSupportAccess; v != nil {
+		m.SetAllowSupportAccess(*v)
 	}
 	if i.ClearComplianceWebhookToken {
 		m.ClearComplianceWebhookToken()
@@ -21459,7 +21651,6 @@ type CreateRemediationInput struct {
 	OwnerID          *string
 	BlockedGroupIDs  []string
 	EditorIDs        []string
-	ViewerIDs        []string
 	EnvironmentID    *string
 	ScopeID          *string
 	IntegrationIDs   []string
@@ -21564,9 +21755,6 @@ func (i *CreateRemediationInput) Mutate(m *RemediationMutation) {
 	}
 	if v := i.EditorIDs; len(v) > 0 {
 		m.AddEditorIDs(v...)
-	}
-	if v := i.ViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
 	}
 	if v := i.EnvironmentID; v != nil {
 		m.SetEnvironmentID(*v)
@@ -21686,9 +21874,6 @@ type UpdateRemediationInput struct {
 	ClearEditors           bool
 	AddEditorIDs           []string
 	RemoveEditorIDs        []string
-	ClearViewers           bool
-	AddViewerIDs           []string
-	RemoveViewerIDs        []string
 	ClearEnvironment       bool
 	EnvironmentID          *string
 	ClearScope             bool
@@ -21913,15 +22098,6 @@ func (i *UpdateRemediationInput) Mutate(m *RemediationMutation) {
 	if v := i.RemoveEditorIDs; len(v) > 0 {
 		m.RemoveEditorIDs(v...)
 	}
-	if i.ClearViewers {
-		m.ClearViewers()
-	}
-	if v := i.AddViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
-	}
-	if v := i.RemoveViewerIDs; len(v) > 0 {
-		m.RemoveViewerIDs(v...)
-	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()
 	}
@@ -22111,7 +22287,6 @@ type CreateReviewInput struct {
 	OwnerID           *string
 	BlockedGroupIDs   []string
 	EditorIDs         []string
-	ViewerIDs         []string
 	EnvironmentID     *string
 	ScopeID           *string
 	IntegrationIDs    []string
@@ -22209,9 +22384,6 @@ func (i *CreateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if v := i.EditorIDs; len(v) > 0 {
 		m.AddEditorIDs(v...)
-	}
-	if v := i.ViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
 	}
 	if v := i.EnvironmentID; v != nil {
 		m.SetEnvironmentID(*v)
@@ -22329,9 +22501,6 @@ type UpdateReviewInput struct {
 	ClearEditors            bool
 	AddEditorIDs            []string
 	RemoveEditorIDs         []string
-	ClearViewers            bool
-	AddViewerIDs            []string
-	RemoveViewerIDs         []string
 	ClearEnvironment        bool
 	EnvironmentID           *string
 	ClearScope              bool
@@ -22542,15 +22711,6 @@ func (i *UpdateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if v := i.RemoveEditorIDs; len(v) > 0 {
 		m.RemoveEditorIDs(v...)
-	}
-	if i.ClearViewers {
-		m.ClearViewers()
-	}
-	if v := i.AddViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
-	}
-	if v := i.RemoveViewerIDs; len(v) > 0 {
-		m.RemoveViewerIDs(v...)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()
@@ -23470,7 +23630,6 @@ type CreateSLADefinitionInput struct {
 	OwnerID         *string
 	BlockedGroupIDs []string
 	EditorIDs       []string
-	ViewerIDs       []string
 }
 
 // Mutate applies the CreateSLADefinitionInput on the SLADefinitionMutation builder.
@@ -23487,9 +23646,6 @@ func (i *CreateSLADefinitionInput) Mutate(m *SLADefinitionMutation) {
 	}
 	if v := i.EditorIDs; len(v) > 0 {
 		m.AddEditorIDs(v...)
-	}
-	if v := i.ViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
 	}
 }
 
@@ -23513,9 +23669,6 @@ type UpdateSLADefinitionInput struct {
 	ClearEditors          bool
 	AddEditorIDs          []string
 	RemoveEditorIDs       []string
-	ClearViewers          bool
-	AddViewerIDs          []string
-	RemoveViewerIDs       []string
 }
 
 // Mutate applies the UpdateSLADefinitionInput on the SLADefinitionMutation builder.
@@ -23556,15 +23709,6 @@ func (i *UpdateSLADefinitionInput) Mutate(m *SLADefinitionMutation) {
 	if v := i.RemoveEditorIDs; len(v) > 0 {
 		m.RemoveEditorIDs(v...)
 	}
-	if i.ClearViewers {
-		m.ClearViewers()
-	}
-	if v := i.AddViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
-	}
-	if v := i.RemoveViewerIDs; len(v) > 0 {
-		m.RemoveViewerIDs(v...)
-	}
 }
 
 // SetInput applies the change-set in the UpdateSLADefinitionInput on the SLADefinitionUpdate builder.
@@ -23598,7 +23742,6 @@ type CreateScanInput struct {
 	OwnerID               *string
 	BlockedGroupIDs       []string
 	EditorIDs             []string
-	ViewerIDs             []string
 	ReviewedByUserID      *string
 	ReviewedByGroupID     *string
 	AssignedToUserID      *string
@@ -23671,9 +23814,6 @@ func (i *CreateScanInput) Mutate(m *ScanMutation) {
 	}
 	if v := i.EditorIDs; len(v) > 0 {
 		m.AddEditorIDs(v...)
-	}
-	if v := i.ViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
 	}
 	if v := i.ReviewedByUserID; v != nil {
 		m.SetReviewedByUserID(*v)
@@ -23778,9 +23918,6 @@ type UpdateScanInput struct {
 	ClearEditors             bool
 	AddEditorIDs             []string
 	RemoveEditorIDs          []string
-	ClearViewers             bool
-	AddViewerIDs             []string
-	RemoveViewerIDs          []string
 	ClearReviewedByUser      bool
 	ReviewedByUserID         *string
 	ClearReviewedByGroup     bool
@@ -23934,15 +24071,6 @@ func (i *UpdateScanInput) Mutate(m *ScanMutation) {
 	}
 	if v := i.RemoveEditorIDs; len(v) > 0 {
 		m.RemoveEditorIDs(v...)
-	}
-	if i.ClearViewers {
-		m.ClearViewers()
-	}
-	if v := i.AddViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
-	}
-	if v := i.RemoveViewerIDs; len(v) > 0 {
-		m.RemoveViewerIDs(v...)
 	}
 	if i.ClearReviewedByUser {
 		m.ClearReviewedByUser()
@@ -29708,6 +29836,8 @@ func (c *VendorScoringConfigUpdateOne) SetInput(i UpdateVendorScoringConfigInput
 // CreateVulnerabilityInput represents a mutation input for creating vulnerabilities.
 type CreateVulnerabilityInput struct {
 	Tags                    []string
+	ReviewedBy              *string
+	AssignedTo              *string
 	InternalNotes           *string
 	SystemInternalID        *string
 	EnvironmentName         *string
@@ -29758,6 +29888,10 @@ type CreateVulnerabilityInput struct {
 	BlockedGroupIDs         []string
 	EditorIDs               []string
 	ViewerIDs               []string
+	ReviewedByUserID        *string
+	ReviewedByGroupID       *string
+	AssignedToUserID        *string
+	AssignedToGroupID       *string
 	EnvironmentID           *string
 	ScopeID                 *string
 	VulnerabilityStatusID   *string
@@ -29782,6 +29916,12 @@ type CreateVulnerabilityInput struct {
 func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ReviewedBy; v != nil {
+		m.SetReviewedBy(*v)
+	}
+	if v := i.AssignedTo; v != nil {
+		m.SetAssignedTo(*v)
 	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
@@ -29931,6 +30071,18 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if v := i.ViewerIDs; len(v) > 0 {
 		m.AddViewerIDs(v...)
 	}
+	if v := i.ReviewedByUserID; v != nil {
+		m.SetReviewedByUserID(*v)
+	}
+	if v := i.ReviewedByGroupID; v != nil {
+		m.SetReviewedByGroupID(*v)
+	}
+	if v := i.AssignedToUserID; v != nil {
+		m.SetAssignedToUserID(*v)
+	}
+	if v := i.AssignedToGroupID; v != nil {
+		m.SetAssignedToGroupID(*v)
+	}
 	if v := i.EnvironmentID; v != nil {
 		m.SetEnvironmentID(*v)
 	}
@@ -29998,6 +30150,10 @@ type UpdateVulnerabilityInput struct {
 	ClearTags                    bool
 	Tags                         []string
 	AppendTags                   []string
+	ClearReviewedBy              bool
+	ReviewedBy                   *string
+	ClearAssignedTo              bool
+	AssignedTo                   *string
 	ClearInternalNotes           bool
 	InternalNotes                *string
 	ClearSystemInternalID        bool
@@ -30101,6 +30257,14 @@ type UpdateVulnerabilityInput struct {
 	ClearViewers                 bool
 	AddViewerIDs                 []string
 	RemoveViewerIDs              []string
+	ClearReviewedByUser          bool
+	ReviewedByUserID             *string
+	ClearReviewedByGroup         bool
+	ReviewedByGroupID            *string
+	ClearAssignedToUser          bool
+	AssignedToUserID             *string
+	ClearAssignedToGroup         bool
+	AssignedToGroupID            *string
 	ClearEnvironment             bool
 	EnvironmentID                *string
 	ClearScope                   bool
@@ -30164,6 +30328,18 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearReviewedBy {
+		m.ClearReviewedBy()
+	}
+	if v := i.ReviewedBy; v != nil {
+		m.SetReviewedBy(*v)
+	}
+	if i.ClearAssignedTo {
+		m.ClearAssignedTo()
+	}
+	if v := i.AssignedTo; v != nil {
+		m.SetAssignedTo(*v)
 	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
@@ -30473,6 +30649,30 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.RemoveViewerIDs; len(v) > 0 {
 		m.RemoveViewerIDs(v...)
+	}
+	if i.ClearReviewedByUser {
+		m.ClearReviewedByUser()
+	}
+	if v := i.ReviewedByUserID; v != nil {
+		m.SetReviewedByUserID(*v)
+	}
+	if i.ClearReviewedByGroup {
+		m.ClearReviewedByGroup()
+	}
+	if v := i.ReviewedByGroupID; v != nil {
+		m.SetReviewedByGroupID(*v)
+	}
+	if i.ClearAssignedToUser {
+		m.ClearAssignedToUser()
+	}
+	if v := i.AssignedToUserID; v != nil {
+		m.SetAssignedToUserID(*v)
+	}
+	if i.ClearAssignedToGroup {
+		m.ClearAssignedToGroup()
+	}
+	if v := i.AssignedToGroupID; v != nil {
+		m.SetAssignedToGroupID(*v)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()

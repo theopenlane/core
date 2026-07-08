@@ -28,6 +28,8 @@ type OrgProduct struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -124,7 +126,7 @@ func (*OrgProduct) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case orgproduct.FieldActive:
 			values[i] = new(sql.NullBool)
-		case orgproduct.FieldID, orgproduct.FieldCreatedBy, orgproduct.FieldUpdatedBy, orgproduct.FieldDeletedBy, orgproduct.FieldOwnerID, orgproduct.FieldModule, orgproduct.FieldStripeProductID, orgproduct.FieldStatus, orgproduct.FieldSubscriptionID, orgproduct.FieldPriceID:
+		case orgproduct.FieldID, orgproduct.FieldCreatedBy, orgproduct.FieldUpdatedBy, orgproduct.FieldUpdatedByImpersonator, orgproduct.FieldDeletedBy, orgproduct.FieldOwnerID, orgproduct.FieldModule, orgproduct.FieldStripeProductID, orgproduct.FieldStatus, orgproduct.FieldSubscriptionID, orgproduct.FieldPriceID:
 			values[i] = new(sql.NullString)
 		case orgproduct.FieldCreatedAt, orgproduct.FieldUpdatedAt, orgproduct.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -174,6 +176,13 @@ func (_m *OrgProduct) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case orgproduct.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case orgproduct.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -311,6 +320,11 @@ func (_m *OrgProduct) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))

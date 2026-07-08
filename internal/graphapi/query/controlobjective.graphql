@@ -21,6 +21,7 @@ mutation CreateBulkCSVControlObjective ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -47,6 +48,7 @@ mutation CreateBulkControlObjective ($input: [CreateControlObjectiveInput!]) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -73,6 +75,7 @@ mutation CreateControlObjective ($input: CreateControlObjectiveInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			controls {
 				edges {
 					node {
@@ -213,6 +216,7 @@ query GetControlObjectiveByID ($controlObjectiveId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		controls {
 			edges {
 				node {
@@ -348,6 +352,7 @@ mutation UpdateControlObjective ($updateControlObjectiveId: ID!, $input: UpdateC
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			controls {
 				edges {
 					node {

@@ -153,6 +153,7 @@ func (Subprocessor) Modules() []models.OrgModule {
 		models.CatalogTrustCenterModule,
 		models.CatalogEntityManagementModule,
 		models.CatalogComplianceModule,
+		models.CatalogRegistryModule,
 	}
 }
 

@@ -45,6 +45,7 @@ mutation CreateActionPlan ($input: CreateActionPlanInput!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			url
 			workflowEligibleMarker
 		}
@@ -97,6 +98,7 @@ mutation CreateBulkActionPlan ($input: [CreateActionPlanInput!]) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			url
 			workflowEligibleMarker
 		}
@@ -149,6 +151,7 @@ mutation CreateBulkCSVActionPlan ($input: Upload!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			url
 			workflowEligibleMarker
 		}
@@ -205,6 +208,7 @@ query GetActionPlanByID ($actionPlanId: ID!) {
 		title
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		url
 		workflowEligibleMarker
 	}
@@ -304,6 +308,7 @@ mutation UpdateActionPlan ($updateActionPlanId: ID!, $input: UpdateActionPlanInp
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			url
 			workflowEligibleMarker
 		}
@@ -356,6 +361,7 @@ mutation UpdateBulkActionPlan ($ids: [ID!]!, $input: UpdateActionPlanInput!) {
 			title
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			url
 			workflowEligibleMarker
 		}

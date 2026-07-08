@@ -926,7 +926,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 	t.Run("anonymous user can query publicly visible trust center controls", func(t *testing.T) {
 		anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, tcOrg.organizationID)
 
-		resp, err := suite.client.api.GetAllControls(anonCtx)
+		resp, err := suite.client.api.GetTrustCenterControls(anonCtx)
 		assert.NilError(t, err)
 		assert.Check(t, resp != nil)
 		assert.Check(t, is.Len(resp.Controls.Edges, 1))

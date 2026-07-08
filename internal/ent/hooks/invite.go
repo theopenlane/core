@@ -2,8 +2,7 @@ package hooks
 
 import (
 	"context"
-	"slices"
-	"strings"
+	"time"
 
 	"entgo.io/ent"
 
@@ -14,6 +13,7 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
@@ -190,12 +190,13 @@ func HookInviteAccepted() ent.Hook {
 			role, roleOK := m.Role()
 			recipient, recipientOK := m.Recipient()
 			ownershipTransfer, ownershipTransferOK := m.OwnershipTransfer()
+			ssoExempt, ssoExemptOK := m.SSOExempt()
 			groupIDs := m.GroupsIDs()
 
 			// if we are missing any, get them from the db
 			// this should happen on an update mutation
 			id, _ := m.ID()
-			if !ownerOK || !roleOK || !recipientOK || !ownershipTransferOK {
+			if !ownerOK || !roleOK || !recipientOK || !ownershipTransferOK || !ssoExemptOK {
 				// bypass interceptors that filters results
 				invite, err := m.Client().Invite.Query().Where(invite.ID(id)).Only(ctx)
 				if err != nil {
@@ -208,6 +209,7 @@ func HookInviteAccepted() ent.Hook {
 				role = invite.Role
 				recipient = invite.Recipient
 				ownershipTransfer = invite.OwnershipTransfer
+				ssoExempt = invite.SSOExempt
 			}
 
 			// add the org to the authenticated context for querying
@@ -245,8 +247,25 @@ func HookInviteAccepted() ent.Hook {
 				Role:           &role,
 			}
 
+			memberCreate := m.Client().OrgMembership.Create().SetInput(input)
+
+			// grant the SSO exemption requested by the invitation, attributing it to the inviter
+			// rather than the accepting user
+			if ssoExempt || ownershipTransfer {
+				reason := "granted via invitation"
+
+				if ownershipTransfer {
+					reason = "organization owner"
+				}
+
+				memberCreate.SetSSOExempt(true).
+					SetSSOExemptReason(reason).
+					SetSSOExemptGrantedBy(inviteResp.RequestorID).
+					SetSSOExemptGrantedAt(models.DateTime(time.Now()))
+			}
+
 			// add user to the inviting org, allow the context to bypass privacy checks
-			if err := m.Client().OrgMembership.Create().SetInput(input).Exec(allowCtx); err != nil {
+			if err := memberCreate.Exec(allowCtx); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("unable to add user to organization")
 
 				return nil, err
@@ -268,10 +287,16 @@ func HookInviteAccepted() ent.Hook {
 				}
 
 				for _, currentOwner := range currentOwners {
-					superAdminRole := enums.RoleSuperAdmin
-					if err := m.Client().OrgMembership.UpdateOneID(currentOwner.ID).
-						SetRole(superAdminRole).
-						Exec(allowCtx); err != nil {
+					updateOldOwner := m.Client().OrgMembership.UpdateOneID(currentOwner.ID).
+						SetRole(enums.RoleSuperAdmin)
+
+					// Unless explicitly set on the invite, mark the old owner as not sso exempt
+					if !ssoExempt {
+						updateOldOwner.SetSSOExempt(false).
+							ClearSSOExemptReason()
+					}
+
+					if err := updateOldOwner.Exec(allowCtx); err != nil {
 						logx.FromContext(ctx).Error().Err(err).
 							Str("user_id", currentOwner.UserID).
 							Msg("unable to set current owner to super admin")
@@ -355,11 +380,6 @@ func validateCanCreateInvite(ctx context.Context, m *generated.InviteMutation) e
 
 	// check if the the email can be invited to the organization
 	email, _ := m.Recipient()
-
-	if err := checkAllowedEmailDomain(email, org.Edges.Setting); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("email", email).Msg("error adding user to organization")
-		return err
-	}
 
 	// make sure the user is not already a member of the org
 	return checkUserAlreadyMember(ctx, m, email, orgID)
@@ -486,30 +506,4 @@ func getInvite(ctx context.Context, m *generated.InviteMutation) (*generated.Inv
 	ownerID, _ := m.OwnerID()
 
 	return m.Client().Invite.Query().Where(invite.Recipient(rec)).Where(invite.OwnerID(ownerID)).Only(ctx)
-}
-
-// checkAllowedEmailDomain checks if the email domain is allowed for the organization
-func checkAllowedEmailDomain(email string, orgSetting *generated.OrganizationSetting) error {
-	if orgSetting == nil || email == "" {
-		return nil
-	}
-
-	// allow all domains if none are set
-	if orgSetting.AllowedEmailDomains == nil {
-		return nil
-	}
-
-	// safety check so we don't panic with an invalid email on user creation before
-	// validation
-	emailParts := strings.SplitAfter(email, "@")
-	if len(emailParts) != 2 { //nolint:mnd
-		return ErrEmailDomainNotAllowed
-	}
-
-	emailDomain := emailParts[1]
-	if slices.Contains(orgSetting.AllowedEmailDomains, emailDomain) {
-		return nil
-	}
-
-	return ErrEmailDomainNotAllowed
 }

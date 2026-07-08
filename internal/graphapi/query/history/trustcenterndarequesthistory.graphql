@@ -31,6 +31,7 @@ query GetAllTrustCenterNDARequestHistories ($first: Int, $last: Int, $after: Cur
 				trustCenterID
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 			}
 		}
 	}
@@ -68,6 +69,7 @@ query GetTrustCenterNDARequestHistories ($first: Int, $last: Int, $after: Cursor
 				trustCenterID
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 			}
 		}
 	}

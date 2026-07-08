@@ -37,6 +37,7 @@ query GetAllNotificationPreferenceHistories ($first: Int, $last: Int, $after: Cu
 				topicPatterns
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				userID
 				verifiedAt
 			}
@@ -82,6 +83,7 @@ query GetNotificationPreferenceHistories ($first: Int, $last: Int, $after: Curso
 				topicPatterns
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				userID
 				verifiedAt
 			}

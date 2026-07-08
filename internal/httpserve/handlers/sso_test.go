@@ -16,6 +16,7 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	jose "github.com/go-jose/go-jose/v4"
 	"github.com/zitadel/oidc/v3/pkg/client"
@@ -27,6 +28,7 @@ import (
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/iam/auth"
@@ -44,16 +46,15 @@ func (suite *HandlerTestSuite) TestWebfingerHandler() {
 	ctx = ent.NewContext(ctx, suite.db)
 
 	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		IdentityProviderLoginEnforced: lo.ToPtr(true),
-		IdentityProvider:              lo.ToPtr(enums.SSOProviderOkta),
-		OidcDiscoveryEndpoint:         lo.ToPtr("http://example.com"),
-		MultifactorAuthEnforced:       lo.ToPtr(true),
+		MultifactorAuthEnforced: lo.ToPtr(true),
 	}).SaveX(ctx)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      gofakeit.Name(),
 		SettingID: &setting.ID,
 	}).SaveX(ctx)
+
+	suite.enforceSSOOnSetting(ctx, setting.ID)
 
 	suite.db.UserSetting.Update().Where(usersetting.UserID(testUser1.ID)).SetDefaultOrgID(org.ID).ExecX(ctx)
 
@@ -76,8 +77,11 @@ func (suite *HandlerTestSuite) TestWebfingerHandler() {
 	assert.Equal(t, http.StatusOK, emailRec.Code)
 	var emailOut models.SSOStatusReply
 	assert.NoError(t, json.NewDecoder(emailRec.Body).Decode(&emailOut))
-	assert.True(t, emailOut.Enforced)
+	// testUser1 is the organization owner, so the per-account lookup reflects the owner SSO exemption;
+	// the org level lookup above still reports enforcement. TFA enforcement is independent of exemption
+	assert.False(t, emailOut.Enforced)
 	assert.True(t, emailOut.OrgTFAEnforced)
+	assert.True(t, emailOut.IsOrgOwner)
 	assert.Equal(t, org.ID, emailOut.OrganizationID)
 }
 
@@ -290,6 +294,66 @@ func newMockOIDCServer(t *testing.T, opts ...oidcServerOption) *mockOIDCServer {
 
 func (m *mockOIDCServer) Close() { m.server.Close() }
 
+// TestSSOInitiateHandler verifies the public, slug-keyed SSO entry point resolves the organization, returns
+// the identity provider redirect URL, and sets the state/nonce/organization_id cookies the callback needs,
+// without requiring the caller to be authenticated or a member
+func (suite *HandlerTestSuite) TestSSOInitiateHandler() {
+	t := suite.T()
+
+	op := suite.createImpersonationOperation("SSOInitiateHandler", "SSO initiate handler")
+	suite.registerTestHandler("GET", "v1/orgs/:slug_name/sso", op, suite.h.SSOInitiateHandler)
+
+	oidc := newMockOIDCServer(t)
+	defer oidc.Close()
+
+	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx = ent.NewContext(ctx, suite.db)
+
+	discovery := oidc.server.URL + "/.well-known/openid-configuration"
+	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+		IdentityProvider:             lo.ToPtr(enums.SSOProviderOkta),
+		OidcDiscoveryEndpoint:        &discovery,
+		IdentityProviderClientID:     lo.ToPtr("client"),
+		IdentityProviderClientSecret: lo.ToPtr("secret"),
+	}).SaveX(ctx)
+
+	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+		Name:      ulids.New().String(),
+		SettingID: &setting.ID,
+	}).SaveX(ctx)
+
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).ExecX(ctx)
+
+	require.NotEmpty(t, org.SlugName, "the organization create hook should derive a slug from the name")
+
+	// a known slug resolves the organization and returns the IdP redirect plus the flow cookies
+	req := httptest.NewRequest(http.MethodGet, "/v1/orgs/"+org.SlugName+"/sso", nil)
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req)
+
+	require.Equal(t, http.StatusOK, rec.Code)
+
+	var out models.SSOLoginReply
+	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.True(t, out.Success)
+	assert.NotEmpty(t, out.RedirectURI, "should return the identity provider redirect URL")
+	assert.Contains(t, out.RedirectURI, oidc.server.URL, "redirect should point at the configured identity provider")
+
+	cookies := map[string]string{}
+	for _, c := range rec.Result().Cookies() {
+		cookies[c.Name] = c.Value
+	}
+	assert.NotEmpty(t, cookies["state"], "state cookie should be set for the callback to validate")
+	assert.NotEmpty(t, cookies["nonce"], "nonce cookie should be set for the callback to validate")
+	assert.Equal(t, org.ID, cookies["organization_id"], "organization_id cookie should be resolved from the slug")
+
+	// an unknown slug returns not found rather than starting a flow
+	missingReq := httptest.NewRequest(http.MethodGet, "/v1/orgs/this-slug-does-not-exist/sso", nil)
+	missingRec := httptest.NewRecorder()
+	suite.e.ServeHTTP(missingRec, missingReq)
+	assert.Equal(t, http.StatusNotFound, missingRec.Code)
+}
+
 func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 	t := suite.T()
 
@@ -380,4 +444,208 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 	var out models.LoginReply
 	assert.NoError(t, json.NewDecoder(cbRec.Body).Decode(&out))
 	assert.True(t, out.Success)
+}
+
+// TestSSOCallbackJITProvisioning verifies that when SSO login is enforced and just-in-time provisioning is
+// enabled, a user who authenticates against the configured identity provider but is not yet a member is
+// provisioned into the organization as a member during the callback
+// ssoJITScenario runs the full SSO login + callback flow for a fresh non-member user with the given email
+// against an organization configured with the provided enforcement and JIT settings, and reports whether
+// the user was provisioned into the organization. Handlers must be registered by the caller
+func (suite *HandlerTestSuite) ssoJITScenario(t *testing.T, email string, enforce, jit bool, jitDomains []string) (bool, int) {
+	t.Helper()
+
+	oidc := newMockOIDCServer(t,
+		withExpectedCode("code123"),
+		withClientSecret("secret"),
+		withUserInfo(email, "JIT User", ""),
+	)
+	defer oidc.Close()
+
+	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx = ent.NewContext(ctx, suite.db)
+
+	ssoUser := suite.db.User.Create().
+		SetEmail(email).
+		SetFirstName("JIT").
+		SetLastName("User").
+		SetLastLoginProvider(enums.AuthProviderOIDC).
+		SetLastSeen(time.Now()).
+		SaveX(ctx)
+
+	discovery := oidc.server.URL + "/.well-known/openid-configuration"
+	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+		IdentityProvider:                lo.ToPtr(enums.SSOProviderOkta),
+		OidcDiscoveryEndpoint:           &discovery,
+		IdentityProviderClientID:        lo.ToPtr("client"),
+		IdentityProviderClientSecret:    lo.ToPtr("secret"),
+		IdentityProviderJitProvisioning: &jit,
+		JitAllowedEmailDomains:          jitDomains,
+	}).SaveX(ctx)
+
+	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+		Name:      ulids.New().String(),
+		SettingID: &setting.ID,
+	}).SaveX(ctx)
+
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+		SetOrganizationID(org.ID).
+		SetIdentityProviderAuthTested(true).
+		ExecX(ctx)
+
+	if enforce {
+		suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+			SetIdentityProviderLoginEnforced(true).
+			ExecX(ctx)
+	}
+
+	req := httptest.NewRequest(http.MethodGet, "/v1/sso/login?organization_id="+org.ID, nil)
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req)
+	require.Equal(t, http.StatusOK, rec.Code)
+
+	var state, nonce *http.Cookie
+	for _, c := range rec.Result().Cookies() {
+		switch c.Name {
+		case "state":
+			state = c
+		case "nonce":
+			nonce = c
+		}
+	}
+	require.NotNil(t, state)
+	require.NotNil(t, nonce)
+
+	oidc.nonce = nonce.Value
+
+	cookieHeader := "state=" + state.Value + "; nonce=" + nonce.Value + "; organization_id=" + org.ID
+	cbReq := httptest.NewRequest(http.MethodGet, "/v1/sso/callback?code=code123&state="+url.QueryEscape(state.Value)+"&organization_id="+org.ID, nil)
+	cbReq.Header.Set("Cookie", cookieHeader)
+	cbRec := httptest.NewRecorder()
+	suite.e.ServeHTTP(cbRec, cbReq)
+
+	// JIT provisioning runs before session generation, so the membership decision is observable even when
+	// an enforced org rejects the session for a user it did not provision
+	member := suite.db.OrgMembership.Query().
+		Where(orgmembership.UserID(ssoUser.ID), orgmembership.OrganizationID(org.ID)).
+		ExistX(ctx)
+
+	return member, cbRec.Code
+}
+
+// TestSSOCallbackJITPermutations covers the JIT provisioning conditions: the domain allowlist (in-list vs
+// not-in-list) and that JIT is skipped when the toggle is off or SSO is not enforced
+func (suite *HandlerTestSuite) TestSSOCallbackJITPermutations() {
+	t := suite.T()
+
+	ssoLoginOp := suite.createImpersonationOperation("SSOLoginHandler", "SSO login handler")
+	ssoCallbackOp := suite.createImpersonationOperation("SSOCallbackHandler", "SSO callback handler")
+	suite.registerTestHandler("GET", "v1/sso/login", ssoLoginOp, suite.h.SSOLoginHandler)
+	suite.registerTestHandler("GET", "v1/sso/callback", ssoCallbackOp, suite.h.SSOCallbackHandler)
+
+	// allowlist match: enforced + JIT on + domain in jit_allowed_email_domains => provisioned
+	member, code := suite.ssoJITScenario(t, "match@allowed-jit.com", true, true, []string{"allowed-jit.com"})
+	assert.True(t, member, "a directory user whose domain is in the JIT allowlist should be provisioned")
+	assert.Equal(t, http.StatusOK, code, "a provisioned user should complete sign-in")
+
+	// allowlist miss: enforced + JIT on but domain NOT in the allowlist => not provisioned, and the
+	// callback returns a clean forbidden response rather than a server error
+	member, code = suite.ssoJITScenario(t, "stranger@other-jit.com", true, true, []string{"allowed-jit.com"})
+	assert.False(t, member, "a directory user whose domain is not in the JIT allowlist should not be provisioned")
+	assert.Equal(t, http.StatusForbidden, code, "an unprovisioned user on an enforced org should get a forbidden response, not a server error")
+
+	// JIT toggle off: enforced but JIT disabled => not provisioned, clean forbidden response
+	member, code = suite.ssoJITScenario(t, "nojit@example-jit.com", true, false, nil)
+	assert.False(t, member, "JIT should not provision when the toggle is off")
+	assert.Equal(t, http.StatusForbidden, code, "an unprovisioned user on an enforced org should get a forbidden response, not a server error")
+
+	// not enforced: JIT on but SSO not enforced => not provisioned (membership comes from auto-join instead)
+	member, _ = suite.ssoJITScenario(t, "unenforced@example-jit.com", false, true, nil)
+	assert.False(t, member, "JIT should not provision when SSO is not enforced")
+}
+
+func (suite *HandlerTestSuite) TestSSOCallbackJITProvisioning() {
+	t := suite.T()
+
+	ssoLoginOp := suite.createImpersonationOperation("SSOLoginHandler", "SSO login handler")
+	ssoCallbackOp := suite.createImpersonationOperation("SSOCallbackHandler", "SSO callback handler")
+	suite.registerTestHandler("GET", "v1/sso/login", ssoLoginOp, suite.h.SSOLoginHandler)
+	suite.registerTestHandler("GET", "v1/sso/callback", ssoCallbackOp, suite.h.SSOCallbackHandler)
+
+	oidc := newMockOIDCServer(t,
+		withExpectedCode("code123"),
+		withClientSecret("secret"),
+		withUserInfo("jit@example.com", "JIT User", ""),
+	)
+	defer oidc.Close()
+
+	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx = ent.NewContext(ctx, suite.db)
+
+	ssoUser := suite.db.User.Create().
+		SetEmail("jit@example.com").
+		SetFirstName("JIT").
+		SetLastName("User").
+		SetLastLoginProvider(enums.AuthProviderOIDC).
+		SetLastSeen(time.Now()).
+		SaveX(ctx)
+
+	discovery := oidc.server.URL + "/.well-known/openid-configuration"
+	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+		IdentityProvider:             lo.ToPtr(enums.SSOProviderOkta),
+		OidcDiscoveryEndpoint:        &discovery,
+		IdentityProviderClientID:     lo.ToPtr("client"),
+		IdentityProviderClientSecret: lo.ToPtr("secret"),
+	}).SaveX(ctx)
+
+	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+		Name:      ulids.New().String(),
+		SettingID: &setting.ID,
+	}).SaveX(ctx)
+
+	// mark the connection tested, then enforce SSO; JIT provisioning is left at its enabled default
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+		SetOrganizationID(org.ID).
+		SetIdentityProviderAuthTested(true).
+		ExecX(ctx)
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+		SetIdentityProviderLoginEnforced(true).
+		ExecX(ctx)
+
+	// the user is intentionally not a member of the target org before the callback
+	require.False(t, suite.db.OrgMembership.Query().
+		Where(orgmembership.UserID(ssoUser.ID), orgmembership.OrganizationID(org.ID)).
+		ExistX(ctx))
+
+	req := httptest.NewRequest(http.MethodGet, "/v1/sso/login?organization_id="+org.ID, nil)
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req)
+	require.Equal(t, http.StatusOK, rec.Code)
+
+	var state, nonce *http.Cookie
+	for _, c := range rec.Result().Cookies() {
+		switch c.Name {
+		case "state":
+			state = c
+		case "nonce":
+			nonce = c
+		}
+	}
+	require.NotNil(t, state)
+	require.NotNil(t, nonce)
+
+	oidc.nonce = nonce.Value
+
+	cookieHeader := "state=" + state.Value + "; nonce=" + nonce.Value + "; organization_id=" + org.ID
+	cbReq := httptest.NewRequest(http.MethodGet, "/v1/sso/callback?code=code123&state="+url.QueryEscape(state.Value)+"&organization_id="+org.ID, nil)
+	cbReq.Header.Set("Cookie", cookieHeader)
+	cbRec := httptest.NewRecorder()
+	suite.e.ServeHTTP(cbRec, cbReq)
+	require.Equal(t, http.StatusOK, cbRec.Code)
+
+	// the callback provisioned the membership just-in-time, as a member
+	membership := suite.db.OrgMembership.Query().
+		Where(orgmembership.UserID(ssoUser.ID), orgmembership.OrganizationID(org.ID)).
+		OnlyX(ctx)
+	assert.Equal(t, enums.RoleMember, membership.Role)
 }

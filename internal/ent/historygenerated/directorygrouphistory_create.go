@@ -114,6 +114,20 @@ func (_c *DirectoryGroupHistoryCreate) SetNillableUpdatedBy(v *string) *Director
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *DirectoryGroupHistoryCreate) SetUpdatedByImpersonator(v string) *DirectoryGroupHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *DirectoryGroupHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *DirectoryGroupHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDisplayID sets the "display_id" field.
 func (_c *DirectoryGroupHistoryCreate) SetDisplayID(v string) *DirectoryGroupHistoryCreate {
 	_c.mutation.SetDisplayID(v)
@@ -697,6 +711,10 @@ func (_c *DirectoryGroupHistoryCreate) createSpec() (*DirectoryGroupHistory, *sq
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(directorygrouphistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(directorygrouphistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(directorygrouphistory.FieldDisplayID, field.TypeString, value)

@@ -28,6 +28,8 @@ type SLADefinition struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -56,17 +58,14 @@ type SLADefinitionEdges struct {
 	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
 	// provides edit access to the risk to members of the group
 	Editors []*Group `json:"editors,omitempty"`
-	// provides view access to the risk to members of the group
-	Viewers []*Group `json:"viewers,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [3]map[string]int
 
 	namedBlockedGroups map[string][]*Group
 	namedEditors       map[string][]*Group
-	namedViewers       map[string][]*Group
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -98,15 +97,6 @@ func (e SLADefinitionEdges) EditorsOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "editors"}
 }
 
-// ViewersOrErr returns the Viewers value or an error if the edge
-// was not loaded in eager-loading.
-func (e SLADefinitionEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
-		return e.Viewers, nil
-	}
-	return nil, &NotLoadedError{edge: "viewers"}
-}
-
 // scanValues returns the types for scanning values from sql.Rows.
 func (*SLADefinition) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -116,7 +106,7 @@ func (*SLADefinition) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case sladefinition.FieldSLADays:
 			values[i] = new(sql.NullInt64)
-		case sladefinition.FieldID, sladefinition.FieldCreatedBy, sladefinition.FieldUpdatedBy, sladefinition.FieldDeletedBy, sladefinition.FieldDisplayID, sladefinition.FieldOwnerID, sladefinition.FieldSecurityLevel:
+		case sladefinition.FieldID, sladefinition.FieldCreatedBy, sladefinition.FieldUpdatedBy, sladefinition.FieldUpdatedByImpersonator, sladefinition.FieldDeletedBy, sladefinition.FieldDisplayID, sladefinition.FieldOwnerID, sladefinition.FieldSecurityLevel:
 			values[i] = new(sql.NullString)
 		case sladefinition.FieldCreatedAt, sladefinition.FieldUpdatedAt, sladefinition.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -164,6 +154,13 @@ func (_m *SLADefinition) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case sladefinition.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case sladefinition.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -237,11 +234,6 @@ func (_m *SLADefinition) QueryEditors() *GroupQuery {
 	return NewSLADefinitionClient(_m.config).QueryEditors(_m)
 }
 
-// QueryViewers queries the "viewers" edge of the SLADefinition entity.
-func (_m *SLADefinition) QueryViewers() *GroupQuery {
-	return NewSLADefinitionClient(_m.config).QueryViewers(_m)
-}
-
 // Update returns a builder for updating this SLADefinition.
 // Note that you need to call SLADefinition.Unwrap() before calling this method if this SLADefinition
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -276,6 +268,11 @@ func (_m *SLADefinition) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
@@ -346,30 +343,6 @@ func (_m *SLADefinition) appendNamedEditors(name string, edges ...*Group) {
 		_m.Edges.namedEditors[name] = []*Group{}
 	} else {
 		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
-	}
-}
-
-// NamedViewers returns the Viewers named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *SLADefinition) NamedViewers(name string) ([]*Group, error) {
-	if _m.Edges.namedViewers == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedViewers[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *SLADefinition) appendNamedViewers(name string, edges ...*Group) {
-	if _m.Edges.namedViewers == nil {
-		_m.Edges.namedViewers = make(map[string][]*Group)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedViewers[name] = []*Group{}
-	} else {
-		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
 	}
 }
 

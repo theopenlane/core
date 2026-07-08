@@ -38,7 +38,7 @@ func checkCreateAccess(ctx context.Context, m generated.Mutation, serviceOnly bo
 
 	caller, ok := auth.CallerFromContext(ctx)
 	if !ok || caller == nil || caller.IsAnonymous() {
-		logx.FromContext(ctx).Info().Msg("unable to get caller from context")
+		logx.FromContext(ctx).Error().Msg("unable to get caller from context for group create access")
 
 		return auth.ErrNoAuthUser
 	}
@@ -60,7 +60,6 @@ func checkCreateAccess(ctx context.Context, m generated.Mutation, serviceOnly bo
 		ObjectID:    caller.OrganizationID,
 		ObjectType:  generated.TypeOrganization,
 		Relation:    relation,
-		Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 	}
 
 	access, err := utils.AuthzClientFromContext(ctx).CheckAccess(ctx, ac)

@@ -1,4 +1,4 @@
-h1:joFoNHvMhlt/ff+/jiEyTvxyEFDoW5E+4C5FkEo64pg=
+h1:b1LLMhdaRDjXwjx0PazN9m5Q4XwBlPa1zAkZp0FKRsU=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -145,3 +145,9 @@ h1:joFoNHvMhlt/ff+/jiEyTvxyEFDoW5E+4C5FkEo64pg=
 20260609205347_integration_run_assessment_response.sql h1:jlA3zVSSccugIp/r8LRvlPaB/uUgu7AwuIvbHoD6mGE=
 20260621232935_trust_center_subscribe.sql h1:kmSEuFsBeogKDKbeyLsupTM+0787yKcR4R2NlOYr9/U=
 20260621232938_trust_center_subscribe_history.sql h1:99bzwU9JAbz4TKjWRWOCpiK4DLh7NqPTMHBvrCyRA2U=
+20260622183314_remove_extra_viewer_groups.sql h1:xU1WYT06h622xPLcqokrEqRz3ty85XVii06HpVN3mF4=
+20260627190132_ssoexclusions.sql h1:O4Bd2InbIP2L/xvKYERG6XG3qUYLSO+XZY6D542NPX8=
+20260627190138_ssoexclusions_history.sql h1:OykPt/NSET1kOySSIFw1XLgzW++n3IrcXndmkSS/PX8=
+20260701043824_impersonation_event_target_user.sql h1:foXrbzAnmwksolPhz0eI5iX586FOu379c4btXA95OUk=
+20260706222051_add_responsibility_mixin_vuln_finding.sql h1:9sjCfZMFoLTbMfdwEax7kaulo26iDt3loioYp6v7nZg=
+20260706222055_add_responsibility_mixin_vuln_finding_history.sql h1:/73jIZlqDfP+kRuvgkWhqHseXWVa++UhXh7YlX9Uscg=

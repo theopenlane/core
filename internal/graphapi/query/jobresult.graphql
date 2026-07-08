@@ -63,6 +63,7 @@ query GetJobResultByID ($jobResultId: ID!) {
 		status
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 	}
 }
 query GetJobResults ($first: Int, $last: Int, $where: JobResultWhereInput) {

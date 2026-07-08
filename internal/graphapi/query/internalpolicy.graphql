@@ -40,6 +40,7 @@ mutation CreateBulkCSVInternalPolicy ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			url
 			workflowEligibleMarker
 			approver {
@@ -95,6 +96,7 @@ mutation CreateBulkInternalPolicy ($input: [CreateInternalPolicyInput!]) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			url
 			workflowEligibleMarker
 			approver {
@@ -150,6 +152,7 @@ mutation CreateInternalPolicy ($input: CreateInternalPolicyInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			url
 			workflowEligibleMarker
 			controls {
@@ -296,6 +299,7 @@ query GetAllInternalPolicies ($first: Int, $last: Int, $after: Cursor, $before: 
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				url
 				workflowEligibleMarker
 				editors {
@@ -376,6 +380,7 @@ query GetInternalPolicies ($first: Int, $last: Int, $after: Cursor, $before: Cur
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				url
 				workflowEligibleMarker
 				editors {
@@ -447,6 +452,7 @@ query GetInternalPolicyByID ($internalPolicyId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		url
 		workflowEligibleMarker
 		editors {
@@ -517,6 +523,7 @@ mutation UpdateBulkInternalPolicy ($ids: [ID!]!, $input: UpdateInternalPolicyInp
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			url
 			workflowEligibleMarker
 			approver {
@@ -573,6 +580,7 @@ mutation UpdateInternalPolicy ($updateInternalPolicyId: ID!, $input: UpdateInter
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			url
 			workflowEligibleMarker
 			editors {

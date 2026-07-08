@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/fga/generate/modelparse"
 	fgamodel "github.com/theopenlane/core/fga/model"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -87,7 +86,6 @@ func (h *Handler) AccountRolesMeHandler(ctx echo.Context, openapi *OpenAPIContex
 		ObjectID:    orgID,
 		ObjectType:  fgax.Kind(generated.TypeOrganization),
 		Relations:   ids,
-		Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 	}
 
 	assignedRoles, err := h.DBClient.Authz.ListRelations(reqCtx, req)

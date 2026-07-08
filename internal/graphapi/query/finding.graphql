@@ -2,6 +2,9 @@ mutation CreateBulkCSVFinding ($input: Upload!) {
 	createBulkCSVFinding(input: $input) {
 		findings {
 			assessmentID
+			assignedTo
+			assignedToGroupID
+			assignedToUserID
 			blocksProduction
 			categories
 			category
@@ -37,6 +40,9 @@ mutation CreateBulkCSVFinding ($input: Upload!) {
 			remediationSLA
 			reportedAt
 			resourceName
+			reviewedBy
+			reviewedByGroupID
+			reviewedByUserID
 			scopeID
 			scopeName
 			score
@@ -53,6 +59,7 @@ mutation CreateBulkCSVFinding ($input: Upload!) {
 			targets
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			validated
 			vector
 		}
@@ -62,6 +69,9 @@ mutation CreateBulkFinding ($input: [CreateFindingInput!]) {
 	createBulkFinding(input: $input) {
 		findings {
 			assessmentID
+			assignedTo
+			assignedToGroupID
+			assignedToUserID
 			blocksProduction
 			categories
 			category
@@ -97,6 +107,9 @@ mutation CreateBulkFinding ($input: [CreateFindingInput!]) {
 			remediationSLA
 			reportedAt
 			resourceName
+			reviewedBy
+			reviewedByGroupID
+			reviewedByUserID
 			scopeID
 			scopeName
 			score
@@ -113,6 +126,7 @@ mutation CreateBulkFinding ($input: [CreateFindingInput!]) {
 			targets
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			validated
 			vector
 		}
@@ -122,6 +136,9 @@ mutation CreateFinding ($input: CreateFindingInput!) {
 	createFinding(input: $input) {
 		finding {
 			assessmentID
+			assignedTo
+			assignedToGroupID
+			assignedToUserID
 			blocksProduction
 			categories
 			category
@@ -157,6 +174,9 @@ mutation CreateFinding ($input: CreateFindingInput!) {
 			remediationSLA
 			reportedAt
 			resourceName
+			reviewedBy
+			reviewedByGroupID
+			reviewedByUserID
 			scopeID
 			scopeName
 			score
@@ -173,6 +193,7 @@ mutation CreateFinding ($input: CreateFindingInput!) {
 			targets
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			validated
 			vector
 		}
@@ -269,6 +290,9 @@ query GetAllFindings {
 query GetFindingByID ($findingId: ID!) {
 	finding(id: $findingId) {
 		assessmentID
+		assignedTo
+		assignedToGroupID
+		assignedToUserID
 		blocksProduction
 		categories
 		category
@@ -304,6 +328,9 @@ query GetFindingByID ($findingId: ID!) {
 		remediationSLA
 		reportedAt
 		resourceName
+		reviewedBy
+		reviewedByGroupID
+		reviewedByUserID
 		scopeID
 		scopeName
 		score
@@ -320,6 +347,7 @@ query GetFindingByID ($findingId: ID!) {
 		targets
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		validated
 		vector
 		remediations {
@@ -426,6 +454,9 @@ mutation UpdateBulkCSVFinding ($input: Upload!) {
 	updateBulkCSVFinding(input: $input) {
 		findings {
 			assessmentID
+			assignedTo
+			assignedToGroupID
+			assignedToUserID
 			blocksProduction
 			categories
 			category
@@ -461,6 +492,9 @@ mutation UpdateBulkCSVFinding ($input: Upload!) {
 			remediationSLA
 			reportedAt
 			resourceName
+			reviewedBy
+			reviewedByGroupID
+			reviewedByUserID
 			scopeID
 			scopeName
 			score
@@ -477,6 +511,7 @@ mutation UpdateBulkCSVFinding ($input: Upload!) {
 			targets
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			validated
 			vector
 		}
@@ -487,6 +522,9 @@ mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
 	updateBulkFinding(ids: $ids, input: $input) {
 		findings {
 			assessmentID
+			assignedTo
+			assignedToGroupID
+			assignedToUserID
 			blocksProduction
 			categories
 			category
@@ -522,6 +560,9 @@ mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
 			remediationSLA
 			reportedAt
 			resourceName
+			reviewedBy
+			reviewedByGroupID
+			reviewedByUserID
 			scopeID
 			scopeName
 			score
@@ -538,6 +579,7 @@ mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
 			targets
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			validated
 			vector
 		}
@@ -548,6 +590,9 @@ mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {
 	updateFinding(id: $updateFindingId, input: $input) {
 		finding {
 			assessmentID
+			assignedTo
+			assignedToGroupID
+			assignedToUserID
 			blocksProduction
 			categories
 			category
@@ -583,6 +628,9 @@ mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {
 			remediationSLA
 			reportedAt
 			resourceName
+			reviewedBy
+			reviewedByGroupID
+			reviewedByUserID
 			scopeID
 			scopeName
 			score
@@ -599,6 +647,7 @@ mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {
 			targets
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			validated
 			vector
 		}

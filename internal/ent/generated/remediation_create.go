@@ -96,6 +96,20 @@ func (_c *RemediationCreate) SetNillableUpdatedBy(v *string) *RemediationCreate 
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *RemediationCreate) SetUpdatedByImpersonator(v string) *RemediationCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *RemediationCreate) SetNillableUpdatedByImpersonator(v *string) *RemediationCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *RemediationCreate) SetDeletedAt(v time.Time) *RemediationCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -569,21 +583,6 @@ func (_c *RemediationCreate) AddEditors(v ...*Group) *RemediationCreate {
 	return _c.AddEditorIDs(ids...)
 }
 
-// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (_c *RemediationCreate) AddViewerIDs(ids ...string) *RemediationCreate {
-	_c.mutation.AddViewerIDs(ids...)
-	return _c
-}
-
-// AddViewers adds the "viewers" edges to the Group entity.
-func (_c *RemediationCreate) AddViewers(v ...*Group) *RemediationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddViewerIDs(ids...)
-}
-
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_c *RemediationCreate) SetEnvironment(v *CustomTypeEnum) *RemediationCreate {
 	return _c.SetEnvironmentID(v.ID)
@@ -964,6 +963,10 @@ func (_c *RemediationCreate) createSpec() (*Remediation, *sqlgraph.CreateSpec) {
 		_spec.SetField(remediation.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(remediation.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
+	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(remediation.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -1100,16 +1103,16 @@ func (_c *RemediationCreate) createSpec() (*Remediation, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.BlockedGroupsTable,
-			Columns: []string{remediation.BlockedGroupsColumn},
+			Columns: remediation.BlockedGroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.RemediationBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1117,33 +1120,16 @@ func (_c *RemediationCreate) createSpec() (*Remediation, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.EditorsTable,
-			Columns: []string{remediation.EditorsColumn},
+			Columns: remediation.EditorsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.ViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   remediation.ViewersTable,
-			Columns: []string{remediation.ViewersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.RemediationEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

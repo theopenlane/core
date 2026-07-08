@@ -114,6 +114,20 @@ func (_c *ProgramHistoryCreate) SetNillableUpdatedBy(v *string) *ProgramHistoryC
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *ProgramHistoryCreate) SetUpdatedByImpersonator(v string) *ProgramHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *ProgramHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *ProgramHistoryCreate) SetDeletedAt(v time.Time) *ProgramHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -585,6 +599,10 @@ func (_c *ProgramHistoryCreate) createSpec() (*ProgramHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(programhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(programhistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(programhistory.FieldDeletedAt, field.TypeTime, value)

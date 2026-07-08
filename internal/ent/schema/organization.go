@@ -121,6 +121,13 @@ func (Organization) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput |
 					entgql.SkipWhereInput | entgql.SkipOrderField),
 			),
+		field.String("slug_name").
+			Comment("a stable slug identifying the organization in its public SSO initiation URL, e.g. /orgs/<sso_slug>/sso").
+			MaxLen(orgNameMaxLen).
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Optional(),
 	}
 }
 

@@ -99,6 +99,11 @@ func UpdatedBy(v string) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
+// UpdatedByImpersonator applies equality check predicate on the "updated_by_impersonator" field. It's identical to UpdatedByImpersonatorEQ.
+func UpdatedByImpersonator(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldUpdatedByImpersonator, v))
+}
+
 // DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
 func DeletedAt(v time.Time) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldDeletedAt, v))
@@ -194,9 +199,19 @@ func IdentityProviderLoginEnforced(v bool) predicate.OrganizationSettingHistory 
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderLoginEnforced, v))
 }
 
+// IdentityProviderJitProvisioning applies equality check predicate on the "identity_provider_jit_provisioning" field. It's identical to IdentityProviderJitProvisioningEQ.
+func IdentityProviderJitProvisioning(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderJitProvisioning, v))
+}
+
 // MultifactorAuthEnforced applies equality check predicate on the "multifactor_auth_enforced" field. It's identical to MultifactorAuthEnforcedEQ.
 func MultifactorAuthEnforced(v bool) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldMultifactorAuthEnforced, v))
+}
+
+// AllowSupportAccess applies equality check predicate on the "allow_support_access" field. It's identical to AllowSupportAccessEQ.
+func AllowSupportAccess(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldAllowSupportAccess, v))
 }
 
 // ComplianceWebhookToken applies equality check predicate on the "compliance_webhook_token" field. It's identical to ComplianceWebhookTokenEQ.
@@ -597,6 +612,81 @@ func UpdatedByEqualFold(v string) predicate.OrganizationSettingHistory {
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
 func UpdatedByContainsFold(v string) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldContainsFold(FieldUpdatedBy, v))
+}
+
+// UpdatedByImpersonatorEQ applies the EQ predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorNEQ applies the NEQ predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorIn applies the In predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIn(FieldUpdatedByImpersonator, vs...))
+}
+
+// UpdatedByImpersonatorNotIn applies the NotIn predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNotIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotIn(FieldUpdatedByImpersonator, vs...))
+}
+
+// UpdatedByImpersonatorGT applies the GT predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorGT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGT(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorGTE applies the GTE predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorGTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGTE(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorLT applies the LT predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorLT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLT(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorLTE applies the LTE predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorLTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLTE(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorContains applies the Contains predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorContains(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContains(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorHasPrefix applies the HasPrefix predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorHasPrefix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasPrefix(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorHasSuffix applies the HasSuffix predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorHasSuffix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasSuffix(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorIsNil applies the IsNil predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldUpdatedByImpersonator))
+}
+
+// UpdatedByImpersonatorNotNil applies the NotNil predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldUpdatedByImpersonator))
+}
+
+// UpdatedByImpersonatorEqualFold applies the EqualFold predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorEqualFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEqualFold(FieldUpdatedByImpersonator, v))
+}
+
+// UpdatedByImpersonatorContainsFold applies the ContainsFold predicate on the "updated_by_impersonator" field.
+func UpdatedByImpersonatorContainsFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContainsFold(FieldUpdatedByImpersonator, v))
 }
 
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
@@ -1869,6 +1959,26 @@ func IdentityProviderLoginEnforcedNEQ(v bool) predicate.OrganizationSettingHisto
 	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldIdentityProviderLoginEnforced, v))
 }
 
+// IdentityProviderJitProvisioningEQ applies the EQ predicate on the "identity_provider_jit_provisioning" field.
+func IdentityProviderJitProvisioningEQ(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderJitProvisioning, v))
+}
+
+// IdentityProviderJitProvisioningNEQ applies the NEQ predicate on the "identity_provider_jit_provisioning" field.
+func IdentityProviderJitProvisioningNEQ(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldIdentityProviderJitProvisioning, v))
+}
+
+// JitAllowedEmailDomainsIsNil applies the IsNil predicate on the "jit_allowed_email_domains" field.
+func JitAllowedEmailDomainsIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldJitAllowedEmailDomains))
+}
+
+// JitAllowedEmailDomainsNotNil applies the NotNil predicate on the "jit_allowed_email_domains" field.
+func JitAllowedEmailDomainsNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldJitAllowedEmailDomains))
+}
+
 // MultifactorAuthEnforcedEQ applies the EQ predicate on the "multifactor_auth_enforced" field.
 func MultifactorAuthEnforcedEQ(v bool) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldMultifactorAuthEnforced, v))
@@ -1887,6 +1997,36 @@ func MultifactorAuthEnforcedIsNil() predicate.OrganizationSettingHistory {
 // MultifactorAuthEnforcedNotNil applies the NotNil predicate on the "multifactor_auth_enforced" field.
 func MultifactorAuthEnforcedNotNil() predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldMultifactorAuthEnforced))
+}
+
+// SSOExemptDomainsIsNil applies the IsNil predicate on the "sso_exempt_domains" field.
+func SSOExemptDomainsIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldSSOExemptDomains))
+}
+
+// SSOExemptDomainsNotNil applies the NotNil predicate on the "sso_exempt_domains" field.
+func SSOExemptDomainsNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldSSOExemptDomains))
+}
+
+// AllowSupportAccessEQ applies the EQ predicate on the "allow_support_access" field.
+func AllowSupportAccessEQ(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldAllowSupportAccess, v))
+}
+
+// AllowSupportAccessNEQ applies the NEQ predicate on the "allow_support_access" field.
+func AllowSupportAccessNEQ(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldAllowSupportAccess, v))
+}
+
+// AllowSupportAccessIsNil applies the IsNil predicate on the "allow_support_access" field.
+func AllowSupportAccessIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldAllowSupportAccess))
+}
+
+// AllowSupportAccessNotNil applies the NotNil predicate on the "allow_support_access" field.
+func AllowSupportAccessNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldAllowSupportAccess))
 }
 
 // ComplianceWebhookTokenEQ applies the EQ predicate on the "compliance_webhook_token" field.

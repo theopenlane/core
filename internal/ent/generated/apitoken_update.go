@@ -66,6 +66,26 @@ func (_u *APITokenUpdate) ClearUpdatedBy() *APITokenUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *APITokenUpdate) SetUpdatedByImpersonator(v string) *APITokenUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *APITokenUpdate) SetNillableUpdatedByImpersonator(v *string) *APITokenUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *APITokenUpdate) ClearUpdatedByImpersonator() *APITokenUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *APITokenUpdate) SetDeletedAt(v time.Time) *APITokenUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -437,6 +457,12 @@ func (_u *APITokenUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(apitoken.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(apitoken.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(apitoken.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(apitoken.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -606,6 +632,26 @@ func (_u *APITokenUpdateOne) SetNillableUpdatedBy(v *string) *APITokenUpdateOne 
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *APITokenUpdateOne) ClearUpdatedBy() *APITokenUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *APITokenUpdateOne) SetUpdatedByImpersonator(v string) *APITokenUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *APITokenUpdateOne) SetNillableUpdatedByImpersonator(v *string) *APITokenUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *APITokenUpdateOne) ClearUpdatedByImpersonator() *APITokenUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -1009,6 +1055,12 @@ func (_u *APITokenUpdateOne) sqlSave(ctx context.Context) (_node *APIToken, err 
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(apitoken.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(apitoken.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(apitoken.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(apitoken.FieldDeletedAt, field.TypeTime, value)

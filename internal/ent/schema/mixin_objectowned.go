@@ -356,13 +356,23 @@ func (o ObjectOwnedMixin) Interceptors() []ent.Interceptor {
 }
 
 func (o ObjectOwnedMixin) Annotations() []schema.Annotation {
-	if o.IncludeOrganizationOwner || slices.Contains(o.FieldNames, o.OwnerFieldName) {
-		return []schema.Annotation{
-			entx.OrgOwnedSchema{},
-		}
+	isOrgOwned := o.IncludeOrganizationOwner || slices.Contains(o.FieldNames, o.OwnerFieldName)
+	if !isOrgOwned {
+		return []schema.Annotation{}
 	}
 
-	return []schema.Annotation{}
+	annotations := []schema.Annotation{entx.OrgOwnedSchema{}}
+
+	// org-owned schemas (newOrgOwnedMixin) never add FilterQueryResults for list queries,
+	// and object-owned schemas with withSkipFilterInterceptor explicitly bypass FGA on list queries
+	// — neither needs the 10x pagination overfetch multiplier
+	isOrgOwnedMixin := !o.IncludeOrganizationOwner
+	hasSkipInterceptor := o.SkipListFilterInterceptor != interceptors.SkipNone
+	if isOrgOwnedMixin || hasSkipInterceptor {
+		annotations = append(annotations, SkipFGAOverfetch{Enabled: true})
+	}
+
+	return annotations
 }
 
 // P adds a storage-level predicate to the queries and mutations for the provided field name

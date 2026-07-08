@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
+	"github.com/stoewer/go-strcase"
 	"github.com/stripe/stripe-go/v84"
 
 	"github.com/theopenlane/iam/auth"
@@ -64,9 +65,11 @@ func HookOrganization() ent.Hook {
 					return nil, err
 				}
 
-				// trim trailing whitespace from the name
+				// trim trailing whitespace from the name and derive the SSO slug from it
 				if name, ok := m.Name(); ok {
-					m.SetName(strings.TrimSpace(name))
+					trimmed := strings.TrimSpace(name)
+					m.SetName(trimmed)
+					m.SetSlugName(strcase.KebabCase(trimmed))
 				}
 			}
 
@@ -611,12 +614,18 @@ func createOrgMemberOwner(ctx context.Context, oID string, m *generated.Organiza
 		return err
 	}
 
-	// Add User as owner of organization
+	// Add User as owner of organization. Owners are exempt from the SSO login redirect; this seeds
+	// the per-user exemption so the bypass is recorded data rather than a hardcoded role check. The
+	// attribution hook stamps sso_exempt_granted_by/_at from the creating user's context
 	owner := enums.RoleOwner
+	exempt := true
+	exemptReason := "organization owner"
 	input := generated.CreateOrgMembershipInput{
-		UserID:         userID,
-		OrganizationID: oID,
-		Role:           &owner,
+		UserID:          userID,
+		OrganizationID:  oID,
+		Role:            &owner,
+		SSOExempt:       &exempt,
+		SSOExemptReason: &exemptReason,
 	}
 
 	if err := m.Client().OrgMembership.Create().SetInput(input).Exec(ctx); err != nil {

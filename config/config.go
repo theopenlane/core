@@ -69,8 +69,10 @@ type Config struct {
 	Sessions sessions.Config `json:"sessions" koanf:"sessions"`
 	// TOTP contains the configuration for the TOTP provider
 	TOTP totp.Config `json:"totp" koanf:"totp"`
-	// Ratelimit contains the configuration for the rate limiter
+	// Ratelimit contains the configuration for the global rate limiter applied to all requests
 	Ratelimit ratelimit.Config `json:"ratelimit" koanf:"ratelimit"`
+	// RatelimitUnmatched contains the rate limiter configuration applied only to requests that do not match a registered route
+	RatelimitUnmatched ratelimit.Config `json:"ratelimitunmatched" koanf:"ratelimitunmatched"`
 	// ObjectStorage contains the configuration for the object storage backend
 	ObjectStorage storage.ProviderConfig `json:"objectstorage" koanf:"objectstorage"`
 	// Entitlements contains the configuration for the entitlements service
@@ -85,6 +87,15 @@ type Config struct {
 	Cloudflare handlers.CloudflareConfig `json:"cloudflare" koanf:"cloudflare"`
 	// Shortlinks contains configuration for the URL shortening service
 	Shortlinks shortlinks.Config `json:"shortlinks" koanf:"shortlinks"`
+	// Backfill contains configuration for one-time startup data backfill routines
+	Backfill Backfill `json:"backfill" koanf:"backfill"`
+}
+
+// Backfill configures one-time startup data backfill routines that populate fields introduced by recent
+// migrations for organizations and memberships that pre-date them
+type Backfill struct {
+	// Enabled runs the backfill routines on server startup
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 }
 
 // Server settings for the echo server
@@ -163,6 +174,8 @@ type Auth struct {
 	SupportedProviders []string `json:"supportedproviders" koanf:"supportedproviders"`
 	// Providers contains supported oauth2 providers configuration
 	Providers handlers.OauthProviderConfig `json:"providers" koanf:"providers"`
+	// SupportAccess contains the configuration for the Openlane support access flow
+	SupportAccess handlers.SupportAccessConfig `json:"supportaccess" koanf:"supportaccess"`
 }
 
 // TLS settings for the server for secure connections

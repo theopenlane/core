@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -268,7 +267,6 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 		SubjectType: auth.UserSubjectType,
 		ObjectID:    orgID,
 		Relation:    "can_view_org",
-		Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 	}
 
 	allow, err := a.db.Authz.CheckOrgAccess(ctx, req)

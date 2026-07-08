@@ -15,6 +15,7 @@ mutation CreateBulkCSVSubprocessor ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			logoFile {
 				id
 				presignedURL
@@ -43,6 +44,7 @@ mutation CreateBulkSubprocessor ($input: [CreateSubprocessorInput!]) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			logoFile {
 				id
 				presignedURL
@@ -133,6 +135,7 @@ query GetSubprocessorByID ($subprocessorId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		logoFile {
 			id
 			presignedURL
@@ -192,6 +195,7 @@ mutation UpdateBulkSubprocessor ($ids: [ID!]!, $input: UpdateSubprocessorInput!)
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			logoFile {
 				presignedURL
 			}

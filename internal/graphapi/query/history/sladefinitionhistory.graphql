@@ -22,6 +22,7 @@ query GetAllSLADefinitionHistories ($first: Int, $last: Int, $after: Cursor, $be
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 			}
 		}
 	}
@@ -50,6 +51,7 @@ query GetSLADefinitionHistories ($first: Int, $last: Int, $after: Cursor, $befor
 				tags
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 			}
 		}
 	}

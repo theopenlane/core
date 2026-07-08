@@ -15,6 +15,7 @@ mutation CreateBulkCSVNarrative ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -35,6 +36,7 @@ mutation CreateBulkNarrative ($input: [CreateNarrativeInput!]) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -55,6 +57,7 @@ mutation CreateNarrative ($input: CreateNarrativeInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			programs {
 				edges {
 					node {
@@ -161,6 +164,7 @@ query GetNarrativeByID ($narrativeId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		programs {
 			edges {
 				node {
@@ -262,6 +266,7 @@ mutation UpdateNarrative ($updateNarrativeId: ID!, $input: UpdateNarrativeInput!
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			programs {
 				edges {
 					node {

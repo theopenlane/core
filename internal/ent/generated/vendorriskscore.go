@@ -31,6 +31,8 @@ type VendorRiskScore struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -144,7 +146,7 @@ func (*VendorRiskScore) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case vendorriskscore.FieldScore:
 			values[i] = new(sql.NullFloat64)
-		case vendorriskscore.FieldID, vendorriskscore.FieldCreatedBy, vendorriskscore.FieldUpdatedBy, vendorriskscore.FieldDeletedBy, vendorriskscore.FieldOwnerID, vendorriskscore.FieldQuestionKey, vendorriskscore.FieldQuestionName, vendorriskscore.FieldQuestionDescription, vendorriskscore.FieldQuestionCategory, vendorriskscore.FieldAnswerType, vendorriskscore.FieldImpact, vendorriskscore.FieldLikelihood, vendorriskscore.FieldAnswer, vendorriskscore.FieldNotes, vendorriskscore.FieldVendorScoringConfigID, vendorriskscore.FieldEntityID, vendorriskscore.FieldAssessmentResponseID:
+		case vendorriskscore.FieldID, vendorriskscore.FieldCreatedBy, vendorriskscore.FieldUpdatedBy, vendorriskscore.FieldUpdatedByImpersonator, vendorriskscore.FieldDeletedBy, vendorriskscore.FieldOwnerID, vendorriskscore.FieldQuestionKey, vendorriskscore.FieldQuestionName, vendorriskscore.FieldQuestionDescription, vendorriskscore.FieldQuestionCategory, vendorriskscore.FieldAnswerType, vendorriskscore.FieldImpact, vendorriskscore.FieldLikelihood, vendorriskscore.FieldAnswer, vendorriskscore.FieldNotes, vendorriskscore.FieldVendorScoringConfigID, vendorriskscore.FieldEntityID, vendorriskscore.FieldAssessmentResponseID:
 			values[i] = new(sql.NullString)
 		case vendorriskscore.FieldCreatedAt, vendorriskscore.FieldUpdatedAt, vendorriskscore.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -198,6 +200,13 @@ func (_m *VendorRiskScore) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case vendorriskscore.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case vendorriskscore.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -394,6 +403,11 @@ func (_m *VendorRiskScore) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))

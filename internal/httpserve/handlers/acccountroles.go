@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/iam/fgax"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -33,7 +32,6 @@ func (h *Handler) AccountRolesHandler(ctx echo.Context, openapi *OpenAPIContext)
 					ObjectID:    id,
 					ObjectType:  fgax.Kind(in.ObjectType),
 					Relations:   in.Relations,
-					Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 				}
 
 				roles, err := h.DBClient.Authz.ListRelations(reqCtx, req)

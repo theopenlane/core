@@ -34,7 +34,7 @@ const ManagedByValue = "module-manager"
 // Catalog wraps models.Catalog
 type Catalog struct {
 	// embed the base catalog model
-	models.Catalog
+	models.Catalog `yaml:",inline"`
 }
 
 type (

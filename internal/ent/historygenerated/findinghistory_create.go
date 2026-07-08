@@ -115,6 +115,20 @@ func (_c *FindingHistoryCreate) SetNillableUpdatedBy(v *string) *FindingHistoryC
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *FindingHistoryCreate) SetUpdatedByImpersonator(v string) *FindingHistoryCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableUpdatedByImpersonator(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *FindingHistoryCreate) SetDeletedAt(v time.Time) *FindingHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -165,6 +179,90 @@ func (_c *FindingHistoryCreate) SetOwnerID(v string) *FindingHistoryCreate {
 func (_c *FindingHistoryCreate) SetNillableOwnerID(v *string) *FindingHistoryCreate {
 	if v != nil {
 		_c.SetOwnerID(*v)
+	}
+	return _c
+}
+
+// SetReviewedBy sets the "reviewed_by" field.
+func (_c *FindingHistoryCreate) SetReviewedBy(v string) *FindingHistoryCreate {
+	_c.mutation.SetReviewedBy(v)
+	return _c
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableReviewedBy(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetReviewedBy(*v)
+	}
+	return _c
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_c *FindingHistoryCreate) SetReviewedByUserID(v string) *FindingHistoryCreate {
+	_c.mutation.SetReviewedByUserID(v)
+	return _c
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableReviewedByUserID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetReviewedByUserID(*v)
+	}
+	return _c
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_c *FindingHistoryCreate) SetReviewedByGroupID(v string) *FindingHistoryCreate {
+	_c.mutation.SetReviewedByGroupID(v)
+	return _c
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableReviewedByGroupID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetReviewedByGroupID(*v)
+	}
+	return _c
+}
+
+// SetAssignedTo sets the "assigned_to" field.
+func (_c *FindingHistoryCreate) SetAssignedTo(v string) *FindingHistoryCreate {
+	_c.mutation.SetAssignedTo(v)
+	return _c
+}
+
+// SetNillableAssignedTo sets the "assigned_to" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableAssignedTo(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetAssignedTo(*v)
+	}
+	return _c
+}
+
+// SetAssignedToUserID sets the "assigned_to_user_id" field.
+func (_c *FindingHistoryCreate) SetAssignedToUserID(v string) *FindingHistoryCreate {
+	_c.mutation.SetAssignedToUserID(v)
+	return _c
+}
+
+// SetNillableAssignedToUserID sets the "assigned_to_user_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableAssignedToUserID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetAssignedToUserID(*v)
+	}
+	return _c
+}
+
+// SetAssignedToGroupID sets the "assigned_to_group_id" field.
+func (_c *FindingHistoryCreate) SetAssignedToGroupID(v string) *FindingHistoryCreate {
+	_c.mutation.SetAssignedToGroupID(v)
+	return _c
+}
+
+// SetNillableAssignedToGroupID sets the "assigned_to_group_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableAssignedToGroupID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetAssignedToGroupID(*v)
 	}
 	return _c
 }
@@ -956,6 +1054,10 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 		_spec.SetField(findinghistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(findinghistory.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
+	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(findinghistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -975,6 +1077,30 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(findinghistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.ReviewedBy(); ok {
+		_spec.SetField(findinghistory.FieldReviewedBy, field.TypeString, value)
+		_node.ReviewedBy = value
+	}
+	if value, ok := _c.mutation.ReviewedByUserID(); ok {
+		_spec.SetField(findinghistory.FieldReviewedByUserID, field.TypeString, value)
+		_node.ReviewedByUserID = value
+	}
+	if value, ok := _c.mutation.ReviewedByGroupID(); ok {
+		_spec.SetField(findinghistory.FieldReviewedByGroupID, field.TypeString, value)
+		_node.ReviewedByGroupID = value
+	}
+	if value, ok := _c.mutation.AssignedTo(); ok {
+		_spec.SetField(findinghistory.FieldAssignedTo, field.TypeString, value)
+		_node.AssignedTo = value
+	}
+	if value, ok := _c.mutation.AssignedToUserID(); ok {
+		_spec.SetField(findinghistory.FieldAssignedToUserID, field.TypeString, value)
+		_node.AssignedToUserID = value
+	}
+	if value, ok := _c.mutation.AssignedToGroupID(); ok {
+		_spec.SetField(findinghistory.FieldAssignedToGroupID, field.TypeString, value)
+		_node.AssignedToGroupID = value
 	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(findinghistory.FieldSystemOwned, field.TypeBool, value)

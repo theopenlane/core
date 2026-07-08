@@ -17,6 +17,7 @@ func registerResendEmailHandler(router *Router) error {
 		OperationID: "ResendEmail",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   emailRateLimit,
 		Handler:     router.Handler.ResendEmail,
 	}
 

@@ -79,6 +79,20 @@ func (_c *SLADefinitionCreate) SetNillableUpdatedBy(v *string) *SLADefinitionCre
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *SLADefinitionCreate) SetUpdatedByImpersonator(v string) *SLADefinitionCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *SLADefinitionCreate) SetNillableUpdatedByImpersonator(v *string) *SLADefinitionCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *SLADefinitionCreate) SetDeletedAt(v time.Time) *SLADefinitionCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -200,21 +214,6 @@ func (_c *SLADefinitionCreate) AddEditors(v ...*Group) *SLADefinitionCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddEditorIDs(ids...)
-}
-
-// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (_c *SLADefinitionCreate) AddViewerIDs(ids ...string) *SLADefinitionCreate {
-	_c.mutation.AddViewerIDs(ids...)
-	return _c
-}
-
-// AddViewers adds the "viewers" edges to the Group entity.
-func (_c *SLADefinitionCreate) AddViewers(v ...*Group) *SLADefinitionCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddViewerIDs(ids...)
 }
 
 // Mutation returns the SLADefinitionMutation object of the builder.
@@ -369,6 +368,10 @@ func (_c *SLADefinitionCreate) createSpec() (*SLADefinition, *sqlgraph.CreateSpe
 		_spec.SetField(sladefinition.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(sladefinition.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
+	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(sladefinition.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -434,23 +437,6 @@ func (_c *SLADefinitionCreate) createSpec() (*SLADefinition, *sqlgraph.CreateSpe
 			Inverse: false,
 			Table:   sladefinition.EditorsTable,
 			Columns: []string{sladefinition.EditorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.ViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   sladefinition.ViewersTable,
-			Columns: []string{sladefinition.ViewersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),

@@ -82,6 +82,26 @@ func (_u *WorkflowInstanceUpdate) ClearUpdatedBy() *WorkflowInstanceUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *WorkflowInstanceUpdate) SetUpdatedByImpersonator(v string) *WorkflowInstanceUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdate) SetNillableUpdatedByImpersonator(v *string) *WorkflowInstanceUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *WorkflowInstanceUpdate) ClearUpdatedByImpersonator() *WorkflowInstanceUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_u *WorkflowInstanceUpdate) SetDeletedAt(v time.Time) *WorkflowInstanceUpdate {
 	_u.mutation.SetDeletedAt(v)
@@ -851,6 +871,12 @@ func (_u *WorkflowInstanceUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowinstance.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(workflowinstance.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(workflowinstance.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(workflowinstance.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -1518,6 +1544,26 @@ func (_u *WorkflowInstanceUpdateOne) SetNillableUpdatedBy(v *string) *WorkflowIn
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *WorkflowInstanceUpdateOne) ClearUpdatedBy() *WorkflowInstanceUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *WorkflowInstanceUpdateOne) SetUpdatedByImpersonator(v string) *WorkflowInstanceUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdateOne) SetNillableUpdatedByImpersonator(v *string) *WorkflowInstanceUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *WorkflowInstanceUpdateOne) ClearUpdatedByImpersonator() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -2319,6 +2365,12 @@ func (_u *WorkflowInstanceUpdateOne) sqlSave(ctx context.Context) (_node *Workfl
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowinstance.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(workflowinstance.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(workflowinstance.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(workflowinstance.FieldDeletedAt, field.TypeTime, value)

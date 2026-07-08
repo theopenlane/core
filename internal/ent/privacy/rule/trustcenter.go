@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/anon"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -28,6 +29,19 @@ func AllowIfTrustCenterEditor() privacy.MutationRule {
 		}
 
 		return checkTrustCenterAccess(ctx, fgax.CanEdit, trustCenterID)
+	})
+}
+
+// AllowIfTrustCenterAnonRequest returns a privacy allow for anon trust center context
+func AllowIfTrustCenterAnonRequest() privacy.MutationRule {
+	return privacy.MutationRuleFunc(func(ctx context.Context, _ ent.Mutation) error {
+		logx.FromContext(ctx).Debug().Msg("checking for trust center anon context")
+
+		if anon.IsTrustCenter(ctx) {
+			return privacy.Allow
+		}
+
+		return privacy.Skip
 	})
 }
 
@@ -96,7 +110,6 @@ func checkTrustCenterAccess(ctx context.Context, relation string, trustCenterID 
 		Relation:    relation,
 		ObjectType:  fgax.Kind(strcase.SnakeCase(generated.TypeTrustCenter)),
 		ObjectID:    trustCenterID,
-		Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 	}
 
 	access, err := utils.AuthzClientFromContext(ctx).CheckAccess(ctx, ac)

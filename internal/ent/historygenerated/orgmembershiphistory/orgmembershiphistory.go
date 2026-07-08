@@ -34,12 +34,22 @@ const (
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
+	// FieldUpdatedByImpersonator holds the string denoting the updated_by_impersonator field in the database.
+	FieldUpdatedByImpersonator = "updated_by_impersonator"
 	// FieldRole holds the string denoting the role field in the database.
 	FieldRole = "role"
 	// FieldOrganizationID holds the string denoting the organization_id field in the database.
 	FieldOrganizationID = "organization_id"
 	// FieldUserID holds the string denoting the user_id field in the database.
 	FieldUserID = "user_id"
+	// FieldSSOExempt holds the string denoting the sso_exempt field in the database.
+	FieldSSOExempt = "sso_exempt"
+	// FieldSSOExemptReason holds the string denoting the sso_exempt_reason field in the database.
+	FieldSSOExemptReason = "sso_exempt_reason"
+	// FieldSSOExemptGrantedBy holds the string denoting the sso_exempt_granted_by field in the database.
+	FieldSSOExemptGrantedBy = "sso_exempt_granted_by"
+	// FieldSSOExemptGrantedAt holds the string denoting the sso_exempt_granted_at field in the database.
+	FieldSSOExemptGrantedAt = "sso_exempt_granted_at"
 	// Table holds the table name of the orgmembershiphistory in the database.
 	Table = "org_membership_history"
 )
@@ -54,9 +64,14 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldCreatedBy,
 	FieldUpdatedBy,
+	FieldUpdatedByImpersonator,
 	FieldRole,
 	FieldOrganizationID,
 	FieldUserID,
+	FieldSSOExempt,
+	FieldSSOExemptReason,
+	FieldSSOExemptGrantedBy,
+	FieldSSOExemptGrantedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -86,6 +101,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultSSOExempt holds the default value on creation for the "sso_exempt" field.
+	DefaultSSOExempt bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -155,6 +172,11 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
+// ByUpdatedByImpersonator orders the results by the updated_by_impersonator field.
+func ByUpdatedByImpersonator(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedByImpersonator, opts...).ToFunc()
+}
+
 // ByRole orders the results by the role field.
 func ByRole(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRole, opts...).ToFunc()
@@ -168,6 +190,26 @@ func ByOrganizationID(opts ...sql.OrderTermOption) OrderOption {
 // ByUserID orders the results by the user_id field.
 func ByUserID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUserID, opts...).ToFunc()
+}
+
+// BySSOExempt orders the results by the sso_exempt field.
+func BySSOExempt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSSOExempt, opts...).ToFunc()
+}
+
+// BySSOExemptReason orders the results by the sso_exempt_reason field.
+func BySSOExemptReason(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSSOExemptReason, opts...).ToFunc()
+}
+
+// BySSOExemptGrantedBy orders the results by the sso_exempt_granted_by field.
+func BySSOExemptGrantedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSSOExemptGrantedBy, opts...).ToFunc()
+}
+
+// BySSOExemptGrantedAt orders the results by the sso_exempt_granted_at field.
+func BySSOExemptGrantedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSSOExemptGrantedAt, opts...).ToFunc()
 }
 
 var (

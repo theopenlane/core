@@ -65,6 +65,7 @@ func serve(ctx context.Context) error {
 		serveropts.WithHTTPS(),
 		serveropts.WithMiddleware(),
 		serveropts.WithRateLimiter(),
+		serveropts.WithGraphRateLimiter(),
 		serveropts.WithSecureMW(),
 		serveropts.WithCacheHeaders(),
 		serveropts.WithCORS(),
@@ -211,6 +212,10 @@ func serve(ctx context.Context) error {
 	}
 
 	so.AddServerOptions(serveropts.WithCloudflareConfig())
+
+	so.AddServerOptions(serveropts.WithSupportAccessConfig())
+
+	so.AddServerOptions(serveropts.WithBackfill(ctx, dbClient))
 
 	// closeDB ensures the database client is closed exactly once; both the shutdown
 	// goroutine and the defer call this, and sync.Once guarantees only one executes

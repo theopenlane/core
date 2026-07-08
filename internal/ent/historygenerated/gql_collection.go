@@ -146,6 +146,11 @@ func (_q *ActionPlanHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, actionplanhistory.FieldUpdatedBy)
 				fieldSeen[actionplanhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[actionplanhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldUpdatedByImpersonator)
+				fieldSeen[actionplanhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[actionplanhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, actionplanhistory.FieldTags)
@@ -470,6 +475,11 @@ func (_q *AssessmentHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, assessmenthistory.FieldUpdatedBy)
 				fieldSeen[assessmenthistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[assessmenthistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, assessmenthistory.FieldUpdatedByImpersonator)
+				fieldSeen[assessmenthistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[assessmenthistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, assessmenthistory.FieldTags)
@@ -643,6 +653,11 @@ func (_q *AssessmentResponseHistoryQuery) collectField(ctx context.Context, oneN
 			if _, ok := fieldSeen[assessmentresponsehistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, assessmentresponsehistory.FieldUpdatedBy)
 				fieldSeen[assessmentresponsehistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[assessmentresponsehistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, assessmentresponsehistory.FieldUpdatedByImpersonator)
+				fieldSeen[assessmentresponsehistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[assessmentresponsehistory.FieldOwnerID]; !ok {
@@ -877,6 +892,11 @@ func (_q *AssetHistoryQuery) collectField(ctx context.Context, oneNode bool, opC
 			if _, ok := fieldSeen[assethistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, assethistory.FieldUpdatedBy)
 				fieldSeen[assethistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[assethistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, assethistory.FieldUpdatedByImpersonator)
+				fieldSeen[assethistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[assethistory.FieldTags]; !ok {
@@ -1212,6 +1232,11 @@ func (_q *CampaignHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, campaignhistory.FieldUpdatedBy)
 				fieldSeen[campaignhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[campaignhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, campaignhistory.FieldUpdatedByImpersonator)
+				fieldSeen[campaignhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "displayID":
 			if _, ok := fieldSeen[campaignhistory.FieldDisplayID]; !ok {
 				selectedFields = append(selectedFields, campaignhistory.FieldDisplayID)
@@ -1506,6 +1531,11 @@ func (_q *CampaignTargetHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, campaigntargethistory.FieldUpdatedBy)
 				fieldSeen[campaigntargethistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[campaigntargethistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, campaigntargethistory.FieldUpdatedByImpersonator)
+				fieldSeen[campaigntargethistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[campaigntargethistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, campaigntargethistory.FieldOwnerID)
@@ -1690,6 +1720,11 @@ func (_q *CheckResultHistoryQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, checkresulthistory.FieldUpdatedBy)
 				fieldSeen[checkresulthistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[checkresulthistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, checkresulthistory.FieldUpdatedByImpersonator)
+				fieldSeen[checkresulthistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[checkresulthistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, checkresulthistory.FieldTags)
@@ -1848,6 +1883,11 @@ func (_q *ContactHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[contacthistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, contacthistory.FieldUpdatedBy)
 				fieldSeen[contacthistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[contacthistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, contacthistory.FieldUpdatedByImpersonator)
+				fieldSeen[contacthistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[contacthistory.FieldTags]; !ok {
@@ -2027,6 +2067,11 @@ func (_q *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[controlhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldUpdatedBy)
 				fieldSeen[controlhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[controlhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldUpdatedByImpersonator)
+				fieldSeen[controlhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "displayID":
 			if _, ok := fieldSeen[controlhistory.FieldDisplayID]; !ok {
@@ -2382,6 +2427,11 @@ func (_q *ControlImplementationHistoryQuery) collectField(ctx context.Context, o
 				selectedFields = append(selectedFields, controlimplementationhistory.FieldUpdatedBy)
 				fieldSeen[controlimplementationhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldUpdatedByImpersonator)
+				fieldSeen[controlimplementationhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[controlimplementationhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, controlimplementationhistory.FieldTags)
@@ -2555,6 +2605,11 @@ func (_q *ControlObjectiveHistoryQuery) collectField(ctx context.Context, oneNod
 			if _, ok := fieldSeen[controlobjectivehistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, controlobjectivehistory.FieldUpdatedBy)
 				fieldSeen[controlobjectivehistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[controlobjectivehistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, controlobjectivehistory.FieldUpdatedByImpersonator)
+				fieldSeen[controlobjectivehistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "displayID":
 			if _, ok := fieldSeen[controlobjectivehistory.FieldDisplayID]; !ok {
@@ -2750,6 +2805,11 @@ func (_q *CustomDomainHistoryQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, customdomainhistory.FieldUpdatedBy)
 				fieldSeen[customdomainhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[customdomainhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldUpdatedByImpersonator)
+				fieldSeen[customdomainhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[customdomainhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, customdomainhistory.FieldTags)
@@ -2918,6 +2978,11 @@ func (_q *DNSVerificationHistoryQuery) collectField(ctx context.Context, oneNode
 			if _, ok := fieldSeen[dnsverificationhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, dnsverificationhistory.FieldUpdatedBy)
 				fieldSeen[dnsverificationhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldUpdatedByImpersonator)
+				fieldSeen[dnsverificationhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[dnsverificationhistory.FieldTags]; !ok {
@@ -3092,6 +3157,11 @@ func (_q *DirectoryAccountHistoryQuery) collectField(ctx context.Context, oneNod
 			if _, ok := fieldSeen[directoryaccounthistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, directoryaccounthistory.FieldUpdatedBy)
 				fieldSeen[directoryaccounthistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldUpdatedByImpersonator)
+				fieldSeen[directoryaccounthistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "displayID":
 			if _, ok := fieldSeen[directoryaccounthistory.FieldDisplayID]; !ok {
@@ -3427,6 +3497,11 @@ func (_q *DirectoryGroupHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, directorygrouphistory.FieldUpdatedBy)
 				fieldSeen[directorygrouphistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[directorygrouphistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldUpdatedByImpersonator)
+				fieldSeen[directorygrouphistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "displayID":
 			if _, ok := fieldSeen[directorygrouphistory.FieldDisplayID]; !ok {
 				selectedFields = append(selectedFields, directorygrouphistory.FieldDisplayID)
@@ -3696,6 +3771,11 @@ func (_q *DirectoryMembershipHistoryQuery) collectField(ctx context.Context, one
 				selectedFields = append(selectedFields, directorymembershiphistory.FieldUpdatedBy)
 				fieldSeen[directorymembershiphistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldUpdatedByImpersonator)
+				fieldSeen[directorymembershiphistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "displayID":
 			if _, ok := fieldSeen[directorymembershiphistory.FieldDisplayID]; !ok {
 				selectedFields = append(selectedFields, directorymembershiphistory.FieldDisplayID)
@@ -3925,6 +4005,11 @@ func (_q *DiscussionHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, discussionhistory.FieldUpdatedBy)
 				fieldSeen[discussionhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[discussionhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, discussionhistory.FieldUpdatedByImpersonator)
+				fieldSeen[discussionhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[discussionhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, discussionhistory.FieldOwnerID)
@@ -4058,6 +4143,11 @@ func (_q *DocumentDataHistoryQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[documentdatahistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, documentdatahistory.FieldUpdatedBy)
 				fieldSeen[documentdatahistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[documentdatahistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, documentdatahistory.FieldUpdatedByImpersonator)
+				fieldSeen[documentdatahistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[documentdatahistory.FieldTags]; !ok {
@@ -4217,6 +4307,11 @@ func (_q *EmailTemplateHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[emailtemplatehistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, emailtemplatehistory.FieldUpdatedBy)
 				fieldSeen[emailtemplatehistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[emailtemplatehistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, emailtemplatehistory.FieldUpdatedByImpersonator)
+				fieldSeen[emailtemplatehistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "revision":
 			if _, ok := fieldSeen[emailtemplatehistory.FieldRevision]; !ok {
@@ -4431,6 +4526,11 @@ func (_q *EntityHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 			if _, ok := fieldSeen[entityhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, entityhistory.FieldUpdatedBy)
 				fieldSeen[entityhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[entityhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldUpdatedByImpersonator)
+				fieldSeen[entityhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[entityhistory.FieldTags]; !ok {
@@ -4841,6 +4941,11 @@ func (_q *EntityTypeHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, entitytypehistory.FieldUpdatedBy)
 				fieldSeen[entitytypehistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[entitytypehistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, entitytypehistory.FieldUpdatedByImpersonator)
+				fieldSeen[entitytypehistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[entitytypehistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, entitytypehistory.FieldTags)
@@ -4989,6 +5094,11 @@ func (_q *EvidenceHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[evidencehistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, evidencehistory.FieldUpdatedBy)
 				fieldSeen[evidencehistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[evidencehistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldUpdatedByImpersonator)
+				fieldSeen[evidencehistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "displayID":
 			if _, ok := fieldSeen[evidencehistory.FieldDisplayID]; !ok {
@@ -5203,6 +5313,11 @@ func (_q *FileHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[filehistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, filehistory.FieldUpdatedBy)
 				fieldSeen[filehistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[filehistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldUpdatedByImpersonator)
+				fieldSeen[filehistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[filehistory.FieldTags]; !ok {
@@ -5463,6 +5578,11 @@ func (_q *FindingControlHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, findingcontrolhistory.FieldUpdatedBy)
 				fieldSeen[findingcontrolhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[findingcontrolhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, findingcontrolhistory.FieldUpdatedByImpersonator)
+				fieldSeen[findingcontrolhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "findingID":
 			if _, ok := fieldSeen[findingcontrolhistory.FieldFindingID]; !ok {
 				selectedFields = append(selectedFields, findingcontrolhistory.FieldFindingID)
@@ -5627,6 +5747,11 @@ func (_q *FindingHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, findinghistory.FieldUpdatedBy)
 				fieldSeen[findinghistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[findinghistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldUpdatedByImpersonator)
+				fieldSeen[findinghistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "displayID":
 			if _, ok := fieldSeen[findinghistory.FieldDisplayID]; !ok {
 				selectedFields = append(selectedFields, findinghistory.FieldDisplayID)
@@ -5641,6 +5766,36 @@ func (_q *FindingHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[findinghistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, findinghistory.FieldOwnerID)
 				fieldSeen[findinghistory.FieldOwnerID] = struct{}{}
+			}
+		case "reviewedBy":
+			if _, ok := fieldSeen[findinghistory.FieldReviewedBy]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldReviewedBy)
+				fieldSeen[findinghistory.FieldReviewedBy] = struct{}{}
+			}
+		case "reviewedByUserID":
+			if _, ok := fieldSeen[findinghistory.FieldReviewedByUserID]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldReviewedByUserID)
+				fieldSeen[findinghistory.FieldReviewedByUserID] = struct{}{}
+			}
+		case "reviewedByGroupID":
+			if _, ok := fieldSeen[findinghistory.FieldReviewedByGroupID]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldReviewedByGroupID)
+				fieldSeen[findinghistory.FieldReviewedByGroupID] = struct{}{}
+			}
+		case "assignedTo":
+			if _, ok := fieldSeen[findinghistory.FieldAssignedTo]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldAssignedTo)
+				fieldSeen[findinghistory.FieldAssignedTo] = struct{}{}
+			}
+		case "assignedToUserID":
+			if _, ok := fieldSeen[findinghistory.FieldAssignedToUserID]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldAssignedToUserID)
+				fieldSeen[findinghistory.FieldAssignedToUserID] = struct{}{}
+			}
+		case "assignedToGroupID":
+			if _, ok := fieldSeen[findinghistory.FieldAssignedToGroupID]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldAssignedToGroupID)
+				fieldSeen[findinghistory.FieldAssignedToGroupID] = struct{}{}
 			}
 		case "systemOwned":
 			if _, ok := fieldSeen[findinghistory.FieldSystemOwned]; !ok {
@@ -5991,6 +6146,11 @@ func (_q *GroupHistoryQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, grouphistory.FieldUpdatedBy)
 				fieldSeen[grouphistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[grouphistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldUpdatedByImpersonator)
+				fieldSeen[grouphistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "displayID":
 			if _, ok := fieldSeen[grouphistory.FieldDisplayID]; !ok {
 				selectedFields = append(selectedFields, grouphistory.FieldDisplayID)
@@ -6195,6 +6355,11 @@ func (_q *GroupMembershipHistoryQuery) collectField(ctx context.Context, oneNode
 				selectedFields = append(selectedFields, groupmembershiphistory.FieldUpdatedBy)
 				fieldSeen[groupmembershiphistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[groupmembershiphistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, groupmembershiphistory.FieldUpdatedByImpersonator)
+				fieldSeen[groupmembershiphistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "role":
 			if _, ok := fieldSeen[groupmembershiphistory.FieldRole]; !ok {
 				selectedFields = append(selectedFields, groupmembershiphistory.FieldRole)
@@ -6328,6 +6493,11 @@ func (_q *GroupSettingHistoryQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[groupsettinghistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, groupsettinghistory.FieldUpdatedBy)
 				fieldSeen[groupsettinghistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[groupsettinghistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, groupsettinghistory.FieldUpdatedByImpersonator)
+				fieldSeen[groupsettinghistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "visibility":
 			if _, ok := fieldSeen[groupsettinghistory.FieldVisibility]; !ok {
@@ -6472,6 +6642,11 @@ func (_q *HushHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[hushhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, hushhistory.FieldUpdatedBy)
 				fieldSeen[hushhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[hushhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, hushhistory.FieldUpdatedByImpersonator)
+				fieldSeen[hushhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[hushhistory.FieldOwnerID]; !ok {
@@ -6651,6 +6826,11 @@ func (_q *IdentityHolderHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[identityholderhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, identityholderhistory.FieldUpdatedBy)
 				fieldSeen[identityholderhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[identityholderhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, identityholderhistory.FieldUpdatedByImpersonator)
+				fieldSeen[identityholderhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "displayID":
 			if _, ok := fieldSeen[identityholderhistory.FieldDisplayID]; !ok {
@@ -6931,6 +7111,11 @@ func (_q *IntegrationHistoryQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, integrationhistory.FieldUpdatedBy)
 				fieldSeen[integrationhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[integrationhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldUpdatedByImpersonator)
+				fieldSeen[integrationhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[integrationhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, integrationhistory.FieldTags)
@@ -7164,6 +7349,11 @@ func (_q *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[internalpolicyhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldUpdatedBy)
 				fieldSeen[internalpolicyhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldUpdatedByImpersonator)
+				fieldSeen[internalpolicyhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "displayID":
 			if _, ok := fieldSeen[internalpolicyhistory.FieldDisplayID]; !ok {
@@ -7464,6 +7654,11 @@ func (_q *JobTemplateHistoryQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, jobtemplatehistory.FieldUpdatedBy)
 				fieldSeen[jobtemplatehistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldUpdatedByImpersonator)
+				fieldSeen[jobtemplatehistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "displayID":
 			if _, ok := fieldSeen[jobtemplatehistory.FieldDisplayID]; !ok {
 				selectedFields = append(selectedFields, jobtemplatehistory.FieldDisplayID)
@@ -7643,6 +7838,11 @@ func (_q *MappableDomainHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, mappabledomainhistory.FieldUpdatedBy)
 				fieldSeen[mappabledomainhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[mappabledomainhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, mappabledomainhistory.FieldUpdatedByImpersonator)
+				fieldSeen[mappabledomainhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[mappabledomainhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, mappabledomainhistory.FieldTags)
@@ -7776,6 +7976,11 @@ func (_q *MappedControlHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[mappedcontrolhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, mappedcontrolhistory.FieldUpdatedBy)
 				fieldSeen[mappedcontrolhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldUpdatedByImpersonator)
+				fieldSeen[mappedcontrolhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[mappedcontrolhistory.FieldTags]; !ok {
@@ -7941,6 +8146,11 @@ func (_q *NarrativeHistoryQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, narrativehistory.FieldUpdatedBy)
 				fieldSeen[narrativehistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[narrativehistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, narrativehistory.FieldUpdatedByImpersonator)
+				fieldSeen[narrativehistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "displayID":
 			if _, ok := fieldSeen[narrativehistory.FieldDisplayID]; !ok {
 				selectedFields = append(selectedFields, narrativehistory.FieldDisplayID)
@@ -8104,6 +8314,11 @@ func (_q *NoteHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[notehistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, notehistory.FieldUpdatedBy)
 				fieldSeen[notehistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[notehistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, notehistory.FieldUpdatedByImpersonator)
+				fieldSeen[notehistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "displayID":
 			if _, ok := fieldSeen[notehistory.FieldDisplayID]; !ok {
@@ -8278,6 +8493,11 @@ func (_q *NotificationPreferenceHistoryQuery) collectField(ctx context.Context, 
 			if _, ok := fieldSeen[notificationpreferencehistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, notificationpreferencehistory.FieldUpdatedBy)
 				fieldSeen[notificationpreferencehistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[notificationpreferencehistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, notificationpreferencehistory.FieldUpdatedByImpersonator)
+				fieldSeen[notificationpreferencehistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[notificationpreferencehistory.FieldOwnerID]; !ok {
@@ -8507,6 +8727,11 @@ func (_q *NotificationTemplateHistoryQuery) collectField(ctx context.Context, on
 			if _, ok := fieldSeen[notificationtemplatehistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, notificationtemplatehistory.FieldUpdatedBy)
 				fieldSeen[notificationtemplatehistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[notificationtemplatehistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, notificationtemplatehistory.FieldUpdatedByImpersonator)
+				fieldSeen[notificationtemplatehistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "revision":
 			if _, ok := fieldSeen[notificationtemplatehistory.FieldRevision]; !ok {
@@ -8762,6 +8987,11 @@ func (_q *OrgMembershipHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, orgmembershiphistory.FieldUpdatedBy)
 				fieldSeen[orgmembershiphistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[orgmembershiphistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, orgmembershiphistory.FieldUpdatedByImpersonator)
+				fieldSeen[orgmembershiphistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "role":
 			if _, ok := fieldSeen[orgmembershiphistory.FieldRole]; !ok {
 				selectedFields = append(selectedFields, orgmembershiphistory.FieldRole)
@@ -8776,6 +9006,26 @@ func (_q *OrgMembershipHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[orgmembershiphistory.FieldUserID]; !ok {
 				selectedFields = append(selectedFields, orgmembershiphistory.FieldUserID)
 				fieldSeen[orgmembershiphistory.FieldUserID] = struct{}{}
+			}
+		case "ssoExempt":
+			if _, ok := fieldSeen[orgmembershiphistory.FieldSSOExempt]; !ok {
+				selectedFields = append(selectedFields, orgmembershiphistory.FieldSSOExempt)
+				fieldSeen[orgmembershiphistory.FieldSSOExempt] = struct{}{}
+			}
+		case "ssoExemptReason":
+			if _, ok := fieldSeen[orgmembershiphistory.FieldSSOExemptReason]; !ok {
+				selectedFields = append(selectedFields, orgmembershiphistory.FieldSSOExemptReason)
+				fieldSeen[orgmembershiphistory.FieldSSOExemptReason] = struct{}{}
+			}
+		case "ssoExemptGrantedBy":
+			if _, ok := fieldSeen[orgmembershiphistory.FieldSSOExemptGrantedBy]; !ok {
+				selectedFields = append(selectedFields, orgmembershiphistory.FieldSSOExemptGrantedBy)
+				fieldSeen[orgmembershiphistory.FieldSSOExemptGrantedBy] = struct{}{}
+			}
+		case "ssoExemptGrantedAt":
+			if _, ok := fieldSeen[orgmembershiphistory.FieldSSOExemptGrantedAt]; !ok {
+				selectedFields = append(selectedFields, orgmembershiphistory.FieldSSOExemptGrantedAt)
+				fieldSeen[orgmembershiphistory.FieldSSOExemptGrantedAt] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -8895,6 +9145,11 @@ func (_q *OrgSubscriptionHistoryQuery) collectField(ctx context.Context, oneNode
 			if _, ok := fieldSeen[orgsubscriptionhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldUpdatedBy)
 				fieldSeen[orgsubscriptionhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[orgsubscriptionhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, orgsubscriptionhistory.FieldUpdatedByImpersonator)
+				fieldSeen[orgsubscriptionhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[orgsubscriptionhistory.FieldTags]; !ok {
@@ -9055,6 +9310,11 @@ func (_q *OrganizationHistoryQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, organizationhistory.FieldUpdatedBy)
 				fieldSeen[organizationhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[organizationhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, organizationhistory.FieldUpdatedByImpersonator)
+				fieldSeen[organizationhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[organizationhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, organizationhistory.FieldTags)
@@ -9099,6 +9359,11 @@ func (_q *OrganizationHistoryQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[organizationhistory.FieldStripeCustomerID]; !ok {
 				selectedFields = append(selectedFields, organizationhistory.FieldStripeCustomerID)
 				fieldSeen[organizationhistory.FieldStripeCustomerID] = struct{}{}
+			}
+		case "slugName":
+			if _, ok := fieldSeen[organizationhistory.FieldSlugName]; !ok {
+				selectedFields = append(selectedFields, organizationhistory.FieldSlugName)
+				fieldSeen[organizationhistory.FieldSlugName] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -9219,6 +9484,11 @@ func (_q *OrganizationSettingHistoryQuery) collectField(ctx context.Context, one
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldUpdatedBy)
 				fieldSeen[organizationsettinghistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldUpdatedByImpersonator)
+				fieldSeen[organizationsettinghistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[organizationsettinghistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldTags)
@@ -9334,10 +9604,30 @@ func (_q *OrganizationSettingHistoryQuery) collectField(ctx context.Context, one
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProviderLoginEnforced)
 				fieldSeen[organizationsettinghistory.FieldIdentityProviderLoginEnforced] = struct{}{}
 			}
+		case "identityProviderJitProvisioning":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProviderJitProvisioning]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProviderJitProvisioning)
+				fieldSeen[organizationsettinghistory.FieldIdentityProviderJitProvisioning] = struct{}{}
+			}
+		case "jitAllowedEmailDomains":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldJitAllowedEmailDomains]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldJitAllowedEmailDomains)
+				fieldSeen[organizationsettinghistory.FieldJitAllowedEmailDomains] = struct{}{}
+			}
 		case "multifactorAuthEnforced":
 			if _, ok := fieldSeen[organizationsettinghistory.FieldMultifactorAuthEnforced]; !ok {
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldMultifactorAuthEnforced)
 				fieldSeen[organizationsettinghistory.FieldMultifactorAuthEnforced] = struct{}{}
+			}
+		case "ssoExemptDomains":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldSSOExemptDomains]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldSSOExemptDomains)
+				fieldSeen[organizationsettinghistory.FieldSSOExemptDomains] = struct{}{}
+			}
+		case "allowSupportAccess":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldAllowSupportAccess]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldAllowSupportAccess)
+				fieldSeen[organizationsettinghistory.FieldAllowSupportAccess] = struct{}{}
 			}
 		case "complianceWebhookToken":
 			if _, ok := fieldSeen[organizationsettinghistory.FieldComplianceWebhookToken]; !ok {
@@ -9472,6 +9762,11 @@ func (_q *PlatformHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[platformhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, platformhistory.FieldUpdatedBy)
 				fieldSeen[platformhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[platformhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, platformhistory.FieldUpdatedByImpersonator)
+				fieldSeen[platformhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "displayID":
 			if _, ok := fieldSeen[platformhistory.FieldDisplayID]; !ok {
@@ -9847,6 +10142,11 @@ func (_q *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, procedurehistory.FieldUpdatedBy)
 				fieldSeen[procedurehistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[procedurehistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldUpdatedByImpersonator)
+				fieldSeen[procedurehistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "displayID":
 			if _, ok := fieldSeen[procedurehistory.FieldDisplayID]; !ok {
 				selectedFields = append(selectedFields, procedurehistory.FieldDisplayID)
@@ -10141,6 +10441,11 @@ func (_q *ProgramHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, programhistory.FieldUpdatedBy)
 				fieldSeen[programhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[programhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldUpdatedByImpersonator)
+				fieldSeen[programhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "displayID":
 			if _, ok := fieldSeen[programhistory.FieldDisplayID]; !ok {
 				selectedFields = append(selectedFields, programhistory.FieldDisplayID)
@@ -10355,6 +10660,11 @@ func (_q *ProgramMembershipHistoryQuery) collectField(ctx context.Context, oneNo
 				selectedFields = append(selectedFields, programmembershiphistory.FieldUpdatedBy)
 				fieldSeen[programmembershiphistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[programmembershiphistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, programmembershiphistory.FieldUpdatedByImpersonator)
+				fieldSeen[programmembershiphistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "role":
 			if _, ok := fieldSeen[programmembershiphistory.FieldRole]; !ok {
 				selectedFields = append(selectedFields, programmembershiphistory.FieldRole)
@@ -10488,6 +10798,11 @@ func (_q *RemediationHistoryQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[remediationhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, remediationhistory.FieldUpdatedBy)
 				fieldSeen[remediationhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[remediationhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, remediationhistory.FieldUpdatedByImpersonator)
+				fieldSeen[remediationhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "displayID":
 			if _, ok := fieldSeen[remediationhistory.FieldDisplayID]; !ok {
@@ -10758,6 +11073,11 @@ func (_q *ReviewHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, reviewhistory.FieldUpdatedBy)
 				fieldSeen[reviewhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[reviewhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldUpdatedByImpersonator)
+				fieldSeen[reviewhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[reviewhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, reviewhistory.FieldTags)
@@ -11016,6 +11336,11 @@ func (_q *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[riskhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, riskhistory.FieldUpdatedBy)
 				fieldSeen[riskhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[riskhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldUpdatedByImpersonator)
+				fieldSeen[riskhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "displayID":
 			if _, ok := fieldSeen[riskhistory.FieldDisplayID]; !ok {
@@ -11316,6 +11641,11 @@ func (_q *SLADefinitionHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, sladefinitionhistory.FieldUpdatedBy)
 				fieldSeen[sladefinitionhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[sladefinitionhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, sladefinitionhistory.FieldUpdatedByImpersonator)
+				fieldSeen[sladefinitionhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "displayID":
 			if _, ok := fieldSeen[sladefinitionhistory.FieldDisplayID]; !ok {
 				selectedFields = append(selectedFields, sladefinitionhistory.FieldDisplayID)
@@ -11459,6 +11789,11 @@ func (_q *ScanHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[scanhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, scanhistory.FieldUpdatedBy)
 				fieldSeen[scanhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[scanhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, scanhistory.FieldUpdatedByImpersonator)
+				fieldSeen[scanhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[scanhistory.FieldTags]; !ok {
@@ -11699,6 +12034,11 @@ func (_q *ScheduledJobHistoryQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, scheduledjobhistory.FieldUpdatedBy)
 				fieldSeen[scheduledjobhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldUpdatedByImpersonator)
+				fieldSeen[scheduledjobhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "displayID":
 			if _, ok := fieldSeen[scheduledjobhistory.FieldDisplayID]; !ok {
 				selectedFields = append(selectedFields, scheduledjobhistory.FieldDisplayID)
@@ -11852,6 +12192,11 @@ func (_q *StandardHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[standardhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, standardhistory.FieldUpdatedBy)
 				fieldSeen[standardhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[standardhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldUpdatedByImpersonator)
+				fieldSeen[standardhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[standardhistory.FieldTags]; !ok {
@@ -12071,6 +12416,11 @@ func (_q *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 			if _, ok := fieldSeen[subcontrolhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldUpdatedBy)
 				fieldSeen[subcontrolhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[subcontrolhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldUpdatedByImpersonator)
+				fieldSeen[subcontrolhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "displayID":
 			if _, ok := fieldSeen[subcontrolhistory.FieldDisplayID]; !ok {
@@ -12396,6 +12746,11 @@ func (_q *SubprocessorHistoryQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, subprocessorhistory.FieldUpdatedBy)
 				fieldSeen[subprocessorhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[subprocessorhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, subprocessorhistory.FieldUpdatedByImpersonator)
+				fieldSeen[subprocessorhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[subprocessorhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, subprocessorhistory.FieldTags)
@@ -12559,6 +12914,11 @@ func (_q *SystemDetailHistoryQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[systemdetailhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, systemdetailhistory.FieldUpdatedBy)
 				fieldSeen[systemdetailhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[systemdetailhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldUpdatedByImpersonator)
+				fieldSeen[systemdetailhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "displayID":
 			if _, ok := fieldSeen[systemdetailhistory.FieldDisplayID]; !ok {
@@ -12743,6 +13103,11 @@ func (_q *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[taskhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, taskhistory.FieldUpdatedBy)
 				fieldSeen[taskhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[taskhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldUpdatedByImpersonator)
+				fieldSeen[taskhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "displayID":
 			if _, ok := fieldSeen[taskhistory.FieldDisplayID]; !ok {
@@ -12978,6 +13343,11 @@ func (_q *TemplateHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, templatehistory.FieldUpdatedBy)
 				fieldSeen[templatehistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[templatehistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, templatehistory.FieldUpdatedByImpersonator)
+				fieldSeen[templatehistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[templatehistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, templatehistory.FieldTags)
@@ -13182,6 +13552,11 @@ func (_q *TrustCenterComplianceHistoryQuery) collectField(ctx context.Context, o
 				selectedFields = append(selectedFields, trustcentercompliancehistory.FieldUpdatedBy)
 				fieldSeen[trustcentercompliancehistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[trustcentercompliancehistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, trustcentercompliancehistory.FieldUpdatedByImpersonator)
+				fieldSeen[trustcentercompliancehistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[trustcentercompliancehistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, trustcentercompliancehistory.FieldTags)
@@ -13315,6 +13690,11 @@ func (_q *TrustCenterDocHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[trustcenterdochistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, trustcenterdochistory.FieldUpdatedBy)
 				fieldSeen[trustcenterdochistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[trustcenterdochistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, trustcenterdochistory.FieldUpdatedByImpersonator)
+				fieldSeen[trustcenterdochistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[trustcenterdochistory.FieldTags]; !ok {
@@ -13490,6 +13870,11 @@ func (_q *TrustCenterEntityHistoryQuery) collectField(ctx context.Context, oneNo
 				selectedFields = append(selectedFields, trustcenterentityhistory.FieldUpdatedBy)
 				fieldSeen[trustcenterentityhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[trustcenterentityhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, trustcenterentityhistory.FieldUpdatedByImpersonator)
+				fieldSeen[trustcenterentityhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "logoFileID":
 			if _, ok := fieldSeen[trustcenterentityhistory.FieldLogoFileID]; !ok {
 				selectedFields = append(selectedFields, trustcenterentityhistory.FieldLogoFileID)
@@ -13633,6 +14018,11 @@ func (_q *TrustCenterFAQHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[trustcenterfaqhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, trustcenterfaqhistory.FieldUpdatedBy)
 				fieldSeen[trustcenterfaqhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[trustcenterfaqhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, trustcenterfaqhistory.FieldUpdatedByImpersonator)
+				fieldSeen[trustcenterfaqhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "trustCenterFaqKindName":
 			if _, ok := fieldSeen[trustcenterfaqhistory.FieldTrustCenterFaqKindName]; !ok {
@@ -13782,6 +14172,11 @@ func (_q *TrustCenterHistoryQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[trustcenterhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, trustcenterhistory.FieldUpdatedBy)
 				fieldSeen[trustcenterhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[trustcenterhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, trustcenterhistory.FieldUpdatedByImpersonator)
+				fieldSeen[trustcenterhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[trustcenterhistory.FieldTags]; !ok {
@@ -13951,6 +14346,11 @@ func (_q *TrustCenterNDARequestHistoryQuery) collectField(ctx context.Context, o
 			if _, ok := fieldSeen[trustcenterndarequesthistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, trustcenterndarequesthistory.FieldUpdatedBy)
 				fieldSeen[trustcenterndarequesthistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[trustcenterndarequesthistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequesthistory.FieldUpdatedByImpersonator)
+				fieldSeen[trustcenterndarequesthistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[trustcenterndarequesthistory.FieldTags]; !ok {
@@ -14140,6 +14540,11 @@ func (_q *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneN
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldUpdatedBy)
 				fieldSeen[trustcentersettinghistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldUpdatedByImpersonator)
+				fieldSeen[trustcentersettinghistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "trustCenterID":
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldTrustCenterID]; !ok {
@@ -14395,6 +14800,11 @@ func (_q *TrustCenterSubprocessorHistoryQuery) collectField(ctx context.Context,
 				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldUpdatedBy)
 				fieldSeen[trustcentersubprocessorhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldUpdatedByImpersonator)
+				fieldSeen[trustcentersubprocessorhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "trustCenterSubprocessorKindName":
 			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindName]; !ok {
 				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindName)
@@ -14538,6 +14948,11 @@ func (_q *TrustCenterWatermarkConfigHistoryQuery) collectField(ctx context.Conte
 			if _, ok := fieldSeen[trustcenterwatermarkconfighistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, trustcenterwatermarkconfighistory.FieldUpdatedBy)
 				fieldSeen[trustcenterwatermarkconfighistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[trustcenterwatermarkconfighistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, trustcenterwatermarkconfighistory.FieldUpdatedByImpersonator)
+				fieldSeen[trustcenterwatermarkconfighistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[trustcenterwatermarkconfighistory.FieldOwnerID]; !ok {
@@ -14922,6 +15337,11 @@ func (_q *UserSettingHistoryQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, usersettinghistory.FieldUpdatedBy)
 				fieldSeen[usersettinghistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[usersettinghistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, usersettinghistory.FieldUpdatedByImpersonator)
+				fieldSeen[usersettinghistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[usersettinghistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, usersettinghistory.FieldTags)
@@ -15100,6 +15520,11 @@ func (_q *VendorRiskScoreHistoryQuery) collectField(ctx context.Context, oneNode
 			if _, ok := fieldSeen[vendorriskscorehistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, vendorriskscorehistory.FieldUpdatedBy)
 				fieldSeen[vendorriskscorehistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[vendorriskscorehistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, vendorriskscorehistory.FieldUpdatedByImpersonator)
+				fieldSeen[vendorriskscorehistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "tags":
 			if _, ok := fieldSeen[vendorriskscorehistory.FieldTags]; !ok {
@@ -15295,6 +15720,11 @@ func (_q *VendorScoringConfigHistoryQuery) collectField(ctx context.Context, one
 				selectedFields = append(selectedFields, vendorscoringconfighistory.FieldUpdatedBy)
 				fieldSeen[vendorscoringconfighistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[vendorscoringconfighistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, vendorscoringconfighistory.FieldUpdatedByImpersonator)
+				fieldSeen[vendorscoringconfighistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "tags":
 			if _, ok := fieldSeen[vendorscoringconfighistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, vendorscoringconfighistory.FieldTags)
@@ -15439,6 +15869,11 @@ func (_q *VulnerabilityHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, vulnerabilityhistory.FieldUpdatedBy)
 				fieldSeen[vulnerabilityhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldUpdatedByImpersonator)
+				fieldSeen[vulnerabilityhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "displayID":
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldDisplayID]; !ok {
 				selectedFields = append(selectedFields, vulnerabilityhistory.FieldDisplayID)
@@ -15453,6 +15888,36 @@ func (_q *VulnerabilityHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, vulnerabilityhistory.FieldOwnerID)
 				fieldSeen[vulnerabilityhistory.FieldOwnerID] = struct{}{}
+			}
+		case "reviewedBy":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldReviewedBy]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldReviewedBy)
+				fieldSeen[vulnerabilityhistory.FieldReviewedBy] = struct{}{}
+			}
+		case "reviewedByUserID":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldReviewedByUserID]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldReviewedByUserID)
+				fieldSeen[vulnerabilityhistory.FieldReviewedByUserID] = struct{}{}
+			}
+		case "reviewedByGroupID":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldReviewedByGroupID]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldReviewedByGroupID)
+				fieldSeen[vulnerabilityhistory.FieldReviewedByGroupID] = struct{}{}
+			}
+		case "assignedTo":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldAssignedTo]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldAssignedTo)
+				fieldSeen[vulnerabilityhistory.FieldAssignedTo] = struct{}{}
+			}
+		case "assignedToUserID":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldAssignedToUserID]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldAssignedToUserID)
+				fieldSeen[vulnerabilityhistory.FieldAssignedToUserID] = struct{}{}
+			}
+		case "assignedToGroupID":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldAssignedToGroupID]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldAssignedToGroupID)
+				fieldSeen[vulnerabilityhistory.FieldAssignedToGroupID] = struct{}{}
 			}
 		case "systemOwned":
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldSystemOwned]; !ok {
@@ -15828,6 +16293,11 @@ func (_q *WorkflowAssignmentHistoryQuery) collectField(ctx context.Context, oneN
 				selectedFields = append(selectedFields, workflowassignmenthistory.FieldUpdatedBy)
 				fieldSeen[workflowassignmenthistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldUpdatedByImpersonator)
+				fieldSeen[workflowassignmenthistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "displayID":
 			if _, ok := fieldSeen[workflowassignmenthistory.FieldDisplayID]; !ok {
 				selectedFields = append(selectedFields, workflowassignmenthistory.FieldDisplayID)
@@ -16037,6 +16507,11 @@ func (_q *WorkflowAssignmentTargetHistoryQuery) collectField(ctx context.Context
 				selectedFields = append(selectedFields, workflowassignmenttargethistory.FieldUpdatedBy)
 				fieldSeen[workflowassignmenttargethistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[workflowassignmenttargethistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttargethistory.FieldUpdatedByImpersonator)
+				fieldSeen[workflowassignmenttargethistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "displayID":
 			if _, ok := fieldSeen[workflowassignmenttargethistory.FieldDisplayID]; !ok {
 				selectedFields = append(selectedFields, workflowassignmenttargethistory.FieldDisplayID)
@@ -16195,6 +16670,11 @@ func (_q *WorkflowDefinitionHistoryQuery) collectField(ctx context.Context, oneN
 			if _, ok := fieldSeen[workflowdefinitionhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldUpdatedBy)
 				fieldSeen[workflowdefinitionhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldUpdatedByImpersonator)
+				fieldSeen[workflowdefinitionhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "displayID":
 			if _, ok := fieldSeen[workflowdefinitionhistory.FieldDisplayID]; !ok {
@@ -16405,6 +16885,11 @@ func (_q *WorkflowEventHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, workfloweventhistory.FieldUpdatedBy)
 				fieldSeen[workfloweventhistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[workfloweventhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, workfloweventhistory.FieldUpdatedByImpersonator)
+				fieldSeen[workfloweventhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
 		case "displayID":
 			if _, ok := fieldSeen[workfloweventhistory.FieldDisplayID]; !ok {
 				selectedFields = append(selectedFields, workfloweventhistory.FieldDisplayID)
@@ -16553,6 +17038,11 @@ func (_q *WorkflowInstanceHistoryQuery) collectField(ctx context.Context, oneNod
 			if _, ok := fieldSeen[workflowinstancehistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, workflowinstancehistory.FieldUpdatedBy)
 				fieldSeen[workflowinstancehistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldUpdatedByImpersonator)
+				fieldSeen[workflowinstancehistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "displayID":
 			if _, ok := fieldSeen[workflowinstancehistory.FieldDisplayID]; !ok {
@@ -16772,6 +17262,11 @@ func (_q *WorkflowObjectRefHistoryQuery) collectField(ctx context.Context, oneNo
 			if _, ok := fieldSeen[workflowobjectrefhistory.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldUpdatedBy)
 				fieldSeen[workflowobjectrefhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldUpdatedByImpersonator)
+				fieldSeen[workflowobjectrefhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
 		case "displayID":
 			if _, ok := fieldSeen[workflowobjectrefhistory.FieldDisplayID]; !ok {

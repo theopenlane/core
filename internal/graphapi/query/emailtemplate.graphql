@@ -19,8 +19,10 @@ mutation CreateBulkCSVEmailTemplate ($input: Upload!) {
 			systemInternalID
 			systemOwned
 			templateContext
+			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 			workflowDefinitionID
 			workflowInstanceID
@@ -48,8 +50,10 @@ mutation CreateBulkEmailTemplate ($input: [CreateEmailTemplateInput!]) {
 			systemInternalID
 			systemOwned
 			templateContext
+			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 			workflowDefinitionID
 			workflowInstanceID
@@ -77,8 +81,10 @@ mutation CreateEmailTemplate ($input: CreateEmailTemplateInput!) {
 			systemInternalID
 			systemOwned
 			templateContext
+			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 			workflowDefinitionID
 			workflowInstanceID
@@ -124,8 +130,10 @@ query GetAllEmailTemplates ($first: Int, $last: Int, $after: Cursor, $before: Cu
 				systemInternalID
 				systemOwned
 				templateContext
+				trustCenterID
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				version
 				workflowDefinitionID
 				workflowInstanceID
@@ -153,8 +161,10 @@ query GetEmailTemplateByID ($emailTemplateId: ID!) {
 		systemInternalID
 		systemOwned
 		templateContext
+		trustCenterID
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		version
 		workflowDefinitionID
 		workflowInstanceID
@@ -189,8 +199,10 @@ query GetEmailTemplates ($first: Int, $last: Int, $after: Cursor, $before: Curso
 				systemInternalID
 				systemOwned
 				templateContext
+				trustCenterID
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				version
 				workflowDefinitionID
 				workflowInstanceID
@@ -222,8 +234,10 @@ mutation UpdateBulkCSVEmailTemplate ($input: Upload!) {
 			systemInternalID
 			systemOwned
 			templateContext
+			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 			workflowDefinitionID
 			workflowInstanceID
@@ -252,8 +266,10 @@ mutation UpdateBulkEmailTemplate ($ids: [ID!]!, $input: UpdateEmailTemplateInput
 			systemInternalID
 			systemOwned
 			templateContext
+			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 			workflowDefinitionID
 			workflowInstanceID
@@ -282,8 +298,10 @@ mutation UpdateEmailTemplate ($updateEmailTemplateId: ID!, $input: UpdateEmailTe
 			systemInternalID
 			systemOwned
 			templateContext
+			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			version
 			workflowDefinitionID
 			workflowInstanceID

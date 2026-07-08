@@ -10,13 +10,15 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
 const (
-	// AdminsGroup is the group name for all organization admins and owner, these users have full read and write access in the organization
+	// AdminsGroup is the group name for all organization admins, super admins, and owners.
+	// These users have full read and write access in the organization.
 	AdminsGroup = "Admins"
 	// ViewersGroup is the group name for all organization members that only have view access in the organization
 	ViewersGroup = "Viewers"
@@ -26,7 +28,7 @@ const (
 
 // defaultGroups are the default groups created for an organization that are managed by the system
 var defaultGroups = map[string]string{
-	AdminsGroup:     "Openlane managed group containing all organization admins with full access",
+	AdminsGroup:     "Openlane managed group containing all organization admins, super admins, and owners with full access",
 	ViewersGroup:    "Openlane managed group containing all organization members with only view access",
 	AllMembersGroup: "Openlane managed group containing all members of the organization",
 }
@@ -106,14 +108,22 @@ func generateOrganizationGroups(ctx context.Context, m *generated.OrganizationMu
 type OrgMember struct {
 	// UserID is the user ID of the org member
 	UserID string
-	// Role is the role of the org member
-	Role enums.Role
+	// NewRole is the role of the org member
+	NewRole enums.Role
+	// OldRow is the old role of the org member
+	OldRole enums.Role
 	// OrgID is the organization ID of the org member
 	OrgID string
 }
 
 // updateManagedGroupMembers groups adds or removes the org members to the managed system groups
+// all deletes are handled by the cascade delete hook and are not managed here
 func updateManagedGroupMembers(ctx context.Context, m *generated.OrgMembershipMutation) error {
+	// deletes are handled by the cascade delete hook, exit early
+	if isDeleteOp(ctx, m) {
+		return nil
+	}
+
 	// add managed group bypass capability to the caller for downstream hook checks
 	const managedCaps = auth.CapBypassOrgFilter | auth.CapBypassManagedGroup
 	var managedCtx context.Context
@@ -123,70 +133,75 @@ func updateManagedGroupMembers(ctx context.Context, m *generated.OrgMembershipMu
 		managedCtx = auth.WithCaller(ctx, &auth.Caller{Capabilities: managedCaps})
 	}
 
-	op := m.Op()
+	orgMemberRole, ok := m.Role()
+	if !ok {
+		if !m.Op().Is(ent.OpCreate) {
+			// role didn't change, nothing to update
+			return nil
+		}
 
-	var (
-		orgMember OrgMember
-		ok        bool
-	)
-
-	orgMember.Role, ok = m.Role()
-	if !ok && op.Is(ent.OpCreate) {
 		// default to member role for new org members
-		orgMember.Role = enums.RoleMember
+		orgMemberRole = enums.RoleMember
 	}
 
-	orgMember.UserID, _ = m.UserID()
-	orgMember.OrgID, _ = m.OrganizationID()
+	orgMemberUserID, _ := m.UserID()
+	orgMemberOrgID, _ := m.OrganizationID()
 
-	// if role or user is empty, get the org membership details
-	if orgMember.Role == "" || orgMember.UserID == "" {
+	var omIDs []string
+
+	switch m.Op() {
+	case ent.OpCreate:
+		orgMember := OrgMember{
+			UserID:  orgMemberUserID,
+			OrgID:   orgMemberOrgID,
+			NewRole: orgMemberRole,
+		}
+
+		return addToManagedGroups(managedCtx, m, orgMember)
+	case ent.OpUpdateOne:
 		mID, _ := m.ID()
-
-		om, err := m.Client().OrgMembership.Get(ctx, mID)
+		omIDs = []string{mID}
+	default:
+		var err error
+		omIDs, err = m.IDs(ctx)
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error getting org membership")
+			logx.FromContext(ctx).Error().Err(err).Msg("error getting org member updated ids")
 			return err
 		}
-
-		if orgMember.Role == "" {
-			orgMember.Role = om.Role
-		}
-
-		if orgMember.UserID == "" {
-			orgMember.UserID = om.UserID
-		}
-
-		orgMember.OrgID = om.OrganizationID
 	}
 
-	switch op {
-	case ent.OpCreate:
-		return addToManagedGroups(managedCtx, m, orgMember)
-	default:
-		// deletes are handled by the cascade delete hook
-		// which will delete the group memberships when the org membership is deleted
-		if !isDeleteOp(ctx, m) {
-			return updateManagedGroups(managedCtx, m, orgMember)
-		}
+	updatedOrgMembers, err := m.Client().OrgMembership.Query().Where(
+		orgmembership.IDIn(omIDs...),
+	).Select(orgmembership.FieldID, orgmembership.FieldRole, orgmembership.FieldUserID, orgmembership.FieldOrganizationID).All(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting org membership")
+		return err
 	}
 
-	return nil
+	orgMembers := make([]OrgMember, 0, len(updatedOrgMembers))
+
+	for _, om := range updatedOrgMembers {
+		orgMembers = append(orgMembers, OrgMember{
+			UserID:  om.UserID,
+			NewRole: orgMemberRole,
+			OldRole: om.Role,
+			OrgID:   om.OrganizationID,
+		})
+	}
+
+	return updateManagedGroups(managedCtx, m, orgMembers)
 }
 
 // updateManagedGroups updates the managed groups based on the role of the user for update requests
-func updateManagedGroups(ctx context.Context, m *generated.OrgMembershipMutation, om OrgMember) error {
-	oldRole, _ := m.OldRole(ctx)
+func updateManagedGroups(ctx context.Context, m *generated.OrgMembershipMutation, oms []OrgMember) error {
+	for _, om := range oms {
+		if om.OldRole != om.NewRole {
+			if err := removeFromManagedGroups(ctx, m, om); err != nil {
+				return err
+			}
 
-	if oldRole != om.Role {
-		removeOm := om
-		removeOm.Role = oldRole
-
-		if err := removeFromManagedGroups(ctx, m, removeOm); err != nil {
-			return err
+			return addToManagedGroups(ctx, m, om)
 		}
-
-		return addToManagedGroups(ctx, m, om)
 	}
 
 	// if the role has not changed, do nothing
@@ -195,12 +210,12 @@ func updateManagedGroups(ctx context.Context, m *generated.OrgMembershipMutation
 
 // addToManagedGroups adds the user to the system managed groups based on their role on creation or update
 func addToManagedGroups(ctx context.Context, m *generated.OrgMembershipMutation, om OrgMember) error {
-	switch om.Role {
+	switch om.NewRole {
 	case enums.RoleMember:
 		if err := addMemberToManagedGroup(ctx, m, om, ViewersGroup); err != nil {
 			return err
 		}
-	case enums.RoleAdmin:
+	case enums.RoleAdmin, enums.RoleSuperAdmin, enums.RoleOwner:
 		if err := addMemberToManagedGroup(ctx, m, om, AdminsGroup); err != nil {
 			return err
 		}
@@ -217,12 +232,12 @@ func addToManagedGroups(ctx context.Context, m *generated.OrgMembershipMutation,
 // removeFromManagedGroups removes the user from the system managed groups when their role changes
 // users that are removed from the organization are handled by the cascade delete
 func removeFromManagedGroups(ctx context.Context, m *generated.OrgMembershipMutation, om OrgMember) error {
-	switch om.Role {
+	switch om.OldRole {
 	case enums.RoleMember:
 		if err := removeMemberFromManagedGroup(ctx, m, om, ViewersGroup); err != nil {
 			return err
 		}
-	case enums.RoleAdmin:
+	case enums.RoleAdmin, enums.RoleSuperAdmin, enums.RoleOwner:
 		if err := removeMemberFromManagedGroup(ctx, m, om, AdminsGroup); err != nil {
 			return err
 		}

@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -330,8 +331,10 @@ func (f Finding) Mixin() []ent.Mixin {
 				),
 				withOrganizationOwner(),
 				withSkipForSystemAdmin(),
+				withSkipFilterInterceptor(interceptors.SkipAllQuery|interceptors.SkipIDsQuery),
 			),
-			newGroupPermissionsMixin(),
+			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor()),
+			newResponsibilityMixin(f, withReviewedBy(), withAssignedTo()),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(f, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(f, withEnumFieldName("scope"), withGlobalEnum()),
@@ -372,6 +375,7 @@ func (Finding) Annotations() []schema.Annotation {
 func (f Finding) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			policy.CanCreateObjectsUnderParents([]string{Control{}.PluralName(), Review{}.PluralName()}),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.FindingMutation](),
 		),

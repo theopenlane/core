@@ -43,28 +43,38 @@ func (ImpersonationEvent) Fields() []ent.Field {
 	return []ent.Field{
 		field.Enum("impersonation_type").
 			Comment("Type of impersonation: SUPPORT, ADMIN, JOB").
+			Immutable().
 			GoType(enums.ImpersonationType("")),
 		field.Enum("action").
+			Immutable().
 			Comment("Action for the impersonation event").
 			GoType(enums.ImpersonationAction("")),
 		field.String("reason").
+			Immutable().
 			Optional().
 			Comment("Reason for impersonation"),
 		field.String("ip_address").
+			Immutable().
 			Optional().
 			Comment("IP address of the impersonator").
 			Validate(validator.ValidateIPAddress()),
 		field.String("user_agent").
+			Immutable().
 			Optional().
 			Comment("User-Agent of the impersonator"),
 		field.Strings("scopes").
+			Immutable().
 			Optional().
 			Comment("Granted scopes during impersonation"),
 		field.String("user_id").
+			Immutable().
 			Comment("Impersonator user id"),
 		field.String("organization_id").
+			Immutable().
 			Comment("id of the organization that is being impersonated"),
 		field.String("target_user_id").
+			Immutable().
+			Optional().
 			Comment("id of the user that is being impersonated"),
 	}
 }
@@ -83,20 +93,23 @@ func (i ImpersonationEvent) Edges() []ent.Edge {
 			edgeSchema: User{},
 			field:      "user_id",
 			required:   true,
+			immutable:  true,
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: i,
 			name:       "target_user",
 			t:          User.Type,
 			field:      "target_user_id",
-			required:   true,
+			required:   false,
 			ref:        "targeted_impersonations",
+			immutable:  true,
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: i,
 			edgeSchema: Organization{},
 			field:      "organization_id",
 			required:   true,
+			immutable:  true,
 		}),
 	}
 }

@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	controlgen "github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/testutils"
@@ -1028,6 +1029,77 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolID2s}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+}
+
+func TestMutationCreateControlsByCloneOpenlaneControls(t *testing.T) {
+
+	standard := (&StandardBuilder{
+		client:    suite.client,
+		Name:      "Openlane Baseline",
+		Framework: "openlane-standard",
+		IsPublic:  true,
+	}).MustNew(sharedSystemAdminUser.UserCtx, t)
+
+	ctrl := (&ControlBuilder{
+		client:     suite.client,
+		StandardID: standard.ID,
+		RefCode:    "OL-" + ulids.New().String(),
+		AllFields:  true,
+	}).MustNew(sharedSystemAdminUser.UserCtx, t)
+
+	// link a subcontrol
+	(&SubcontrolBuilder{
+		client:    suite.client,
+		ControlID: ctrl.ID,
+		Name:      ctrl.RefCode + "-1",
+	}).MustNew(sharedSystemAdminUser.UserCtx, t)
+
+	resp, err := suite.client.api.CreateControlsByClone(sharedTestUser1.UserCtx, testclient.CloneControlInput{
+		StandardID: &standard.ID,
+	})
+	assert.NilError(t, err)
+	assert.Check(t, resp != nil)
+	assert.Check(t, is.Len(resp.CreateControlsByClone.Controls, 1))
+
+	clonedControlID := resp.CreateControlsByClone.Controls[0].ID
+
+	dbCtx := setContext(sharedTestUser1.UserCtx, suite.client.db)
+
+	control, err := suite.client.db.Control.Query().
+		Where(controlgen.ID(clonedControlID)).
+		WithSubcontrols().
+		Only(dbCtx)
+	assert.NilError(t, err)
+
+	assert.Check(t, is.Equal(ctrl.RefCode, control.RefCode))
+	assert.Check(t, is.Equal("", control.StandardID))
+	assert.Check(t, control.ReferenceFramework == nil)
+	assert.Check(t, control.ReferenceFrameworkRevision == nil)
+	assert.Check(t, is.Equal(enums.ControlStatusDraft, control.Status))
+	assert.Check(t, is.Equal(enums.ControlSourceTemplate, control.Source))
+	assert.Check(t, control.SourceName != nil)
+	assert.Check(t, is.Equal(standard.Name, *control.SourceName))
+	assert.Check(t, is.Len(control.Edges.Subcontrols, 1))
+
+	subcontrol := control.Edges.Subcontrols[0]
+	assert.Check(t, is.Equal(enums.ControlStatusDraft, subcontrol.Status))
+	assert.Check(t, is.Equal(enums.ControlSourceTemplate, subcontrol.Source))
+	assert.Check(t, subcontrol.SourceName != nil)
+	assert.Check(t, is.Equal(standard.Name, *subcontrol.SourceName))
+	assert.Check(t, subcontrol.ReferenceFramework == nil)
+	assert.Check(t, subcontrol.ReferenceFrameworkRevision == nil)
+
+	resp, err = suite.client.api.CreateControlsByClone(sharedTestUser1.UserCtx, testclient.CloneControlInput{
+		StandardID: &standard.ID,
+	})
+	assert.NilError(t, err)
+	assert.Check(t, resp != nil)
+	assert.Check(t, is.Len(resp.CreateControlsByClone.Controls, 1))
+	assert.Check(t, is.Equal(clonedControlID, resp.CreateControlsByClone.Controls[0].ID))
+
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: clonedControlID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: ctrl.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 }
 
 func TestMutationCreateControlsByCloneCSV(t *testing.T) {
@@ -3037,7 +3109,7 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			resp, err := tc.client.GetControlByID(tc.ctx, tc.queryID)
+			resp, err := tc.client.GetTrustCenterControlByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
@@ -3052,7 +3124,7 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 
 	// test list query: anonymous user should only see the publicly visible trust center control
 	t.Run("anonymous user list query returns only public trust center controls", func(t *testing.T) {
-		resp, err := suite.client.api.GetAllControls(anonCtx)
+		resp, err := suite.client.api.GetTrustCenterControls(anonCtx)
 		assert.NilError(t, err)
 		assert.Check(t, resp != nil)
 		assert.Check(t, is.Equal(1, len(resp.Controls.Edges)))
@@ -3062,4 +3134,57 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 	// cleanup
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{publicControl.ID, hiddenControl.ID, regularControl.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+}
+
+func TestControlRelatedControlsInheritedFromSubcontrols(t *testing.T) {
+	t.Parallel()
+
+	org := suite.seedOrgOwner(t)
+	ctx := org.owner.UserCtx
+
+	parent := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
+	sub := (&SubcontrolBuilder{client: suite.client, ControlID: parent.ID}).MustNew(ctx, t)
+
+	// inheritedTarget is mapped only through the subcontrol
+	// directTarget is mapped directly to the parent and also through the subcontrol
+	inheritedTarget := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
+	directTarget := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
+
+	(&MappedControlBuilder{
+		client:            suite.client,
+		FromSubcontrolIDs: []string{sub.ID},
+		ToControlIDs:      []string{inheritedTarget.ID},
+	}).MustNew(ctx, t)
+
+	(&MappedControlBuilder{
+		client:         suite.client,
+		FromControlIDs: []string{parent.ID},
+		ToControlIDs:   []string{directTarget.ID},
+	}).MustNew(ctx, t)
+
+	// subcontrol mapping to the same directTarget,the direct mapping must suppress inheritance
+	(&MappedControlBuilder{
+		client:            suite.client,
+		FromSubcontrolIDs: []string{sub.ID},
+		ToControlIDs:      []string{directTarget.ID},
+	}).MustNew(ctx, t)
+
+	resp, err := suite.client.api.GetControlByID(ctx, parent.ID)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+
+	assert.Check(t, is.Len(resp.Control.RelatedControls, 2))
+
+	related := map[string]*testclient.GetControlByID_Control_RelatedControls{}
+	for _, rc := range resp.Control.RelatedControls {
+		related[rc.ID] = rc
+	}
+
+	assert.Assert(t, related[inheritedTarget.ID] != nil)
+	assert.Check(t, is.DeepEqual([]string{sub.ID}, related[inheritedTarget.ID].InheritedFromSubcontrolIDs))
+
+	assert.Assert(t, related[directTarget.ID] != nil)
+	assert.Check(t, is.Len(related[directTarget.ID].InheritedFromSubcontrolIDs, 0))
+
+	cleanupOrganizationDataWithContext(ctx, t)
 }

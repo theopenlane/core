@@ -15,6 +15,7 @@ mutation CreateBulkCSVControlImplementation ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			verificationDate
 			verified
 			controls {
@@ -55,6 +56,7 @@ mutation CreateBulkControlImplementation ($input: [CreateControlImplementationIn
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			verificationDate
 			verified
 			controls {
@@ -95,6 +97,7 @@ mutation CreateControlImplementation ($input: CreateControlImplementationInput!)
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			verificationDate
 			verified
 			controls {
@@ -183,6 +186,7 @@ query GetControlImplementationByID ($controlImplementationId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		verificationDate
 		verified
 		controls {
@@ -266,6 +270,7 @@ mutation UpdateControlImplementation ($updateControlImplementationId: ID!, $inpu
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			verificationDate
 			verified
 			controls {

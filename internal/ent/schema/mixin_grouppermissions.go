@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	access "github.com/theopenlane/core/internal/ent/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/pkg/anon"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/entx/accessmap"
 )
@@ -191,7 +192,7 @@ func (g GroupPermissionsMixin) Interceptors() []ent.Interceptor {
 	// except for blocked groups (e.g. controls)
 	return []ent.Interceptor{intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
 		// anonymous trust center users don't belong to groups, skip group filtering
-		if _, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok {
+		if anon.IsTrustCenter(ctx) {
 			return nil
 		}
 
@@ -205,7 +206,14 @@ func (g GroupPermissionsMixin) Interceptors() []ent.Interceptor {
 			return nil
 		}
 
-		groupIDs, err := generated.FromContext(ctx).Group.Query().Where(
+		// skip when the request is coming from a REST endpoint, e.g. create integration
+		// will attempt to add vendor which falls in this path
+		client := generated.FromContext(ctx)
+		if client == nil {
+			return nil
+		}
+
+		groupIDs, err := client.Group.Query().Where(
 			group.HasMembersWith(
 				groupmembership.UserID(caller.SubjectID),
 			),
@@ -296,6 +304,22 @@ func (g GroupPermissionsMixin) Hooks() (hooks []ent.Hook) {
 	}
 
 	return
+}
+
+// SkipFGAOverfetchAnnotationName is the annotation key used to signal that list queries
+// use SQL-level filtering (blocked groups) instead of per-object FGA BatchCheck,
+// so pagination should not apply the 10x overfetch multiplier
+const SkipFGAOverfetchAnnotationName = "OPENLANE_SKIP_FGA_OVERFETCH"
+
+// SkipFGAOverfetch marks a schema as not needing the FGA overfetch multiplier
+// because SQL-level filtering handles result restriction at query time
+type SkipFGAOverfetch struct {
+	Enabled bool `json:"enabled"`
+}
+
+// Name returns the annotation name
+func (SkipFGAOverfetch) Name() string {
+	return SkipFGAOverfetchAnnotationName
 }
 
 // Annotations of the GroupPermissionsMixin

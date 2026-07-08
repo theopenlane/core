@@ -19,6 +19,7 @@ Config contains the configuration for the core server
 |[**sessions**](#sessions)|`object`|||
 |[**totp**](#totp)|`object`|||
 |[**ratelimit**](#ratelimit)|`object`|Config defines the configuration settings for the rate limiter middleware.<br/>||
+|[**ratelimitunmatched**](#ratelimitunmatched)|`object`|Config defines the configuration settings for the rate limiter middleware.<br/>||
 |[**objectstorage**](#objectstorage)|`object`|ProviderConfig contains configuration for object storage providers<br/>||
 |[**subscription**](#subscription)|`object`|||
 |[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
@@ -26,6 +27,7 @@ Config contains the configuration for the core server
 |[**workflows**](#workflows)|`object`|||
 |[**cloudflare**](#cloudflare)|`object`|CloudflareConfig contains configuration for Cloudflare integration.<br/>||
 |[**shortlinks**](#shortlinks)|`object`|||
+|[**backfill**](#backfill)|`object`|Backfill configures one-time startup data backfill routines that populate fields introduced by recent migrations for organizations and memberships that pre-date them<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -74,7 +76,8 @@ Config contains the configuration for the core server
             "github": {},
             "google": {},
             "webauthn": {}
-        }
+        },
+        "supportaccess": {}
     },
     "authz": {
         "credentials": {},
@@ -101,6 +104,11 @@ Config contains the configuration for the core server
     "sessions": {},
     "totp": {},
     "ratelimit": {
+        "options": [
+            {}
+        ]
+    },
+    "ratelimitunmatched": {
         "options": [
             {}
         ]
@@ -147,7 +155,8 @@ Config contains the configuration for the core server
         "gala": {}
     },
     "cloudflare": {},
-    "shortlinks": {}
+    "shortlinks": {},
+    "backfill": {}
 }
 ```
 
@@ -624,6 +633,7 @@ Auth settings including oauth2 providers and token configuration
 |[**token**](#authtoken)|`object`||yes|
 |[**supportedproviders**](#authsupportedproviders)|`string[]`||no|
 |[**providers**](#authproviders)|`object`|OauthProviderConfig represents the configuration for OAuth providers such as Github and Google<br/>|no|
+|[**supportaccess**](#authsupportaccess)|`object`|SupportAccessConfig contains configuration for the Openlane support access flow.<br/>|no|
 
 **Additional Properties:** not allowed  
 **Example**
@@ -643,7 +653,8 @@ Auth settings including oauth2 providers and token configuration
         "github": {},
         "google": {},
         "webauthn": {}
-    }
+    },
+    "supportaccess": {}
 }
 ```
 
@@ -874,6 +885,29 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 **Items**
 
 **Item Type:** `string`  
+<a name="authsupportaccess"></a>
+### auth\.supportaccess: object
+
+SupportAccessConfig contains configuration for the Openlane support access flow.
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled toggles the support access endpoints<br/>||
+|**email**|`string`|Email is the email of the virtual support identity, used as the first factor username<br/>||
+|**displayname**|`string`|DisplayName is the display name of the virtual support identity, used for record attribution<br/>||
+|**subjectid**|`string`|SubjectID is the stable subject id of the virtual support identity used for created_by/updated_by<br/>attribution. It must be a valid ULID and is consistent without a backing user row<br/>||
+|**password**|`string`|Password is the shared password for the virtual support identity, validated against this value<br/>||
+|**clientid**|`string`|ClientID is the client ID for the second factor identity provider<br/>||
+|**clientsecret**|`string`|ClientSecret is the client secret for the second factor identity provider<br/>||
+|**issuerurl**|`string`|IssuerURL is the issuer URL of the second factor identity provider<br/>||
+|**discoveryendpoint**|`string`|DiscoveryEndpoint is the optional OIDC discovery endpoint of the second factor identity provider<br/>||
+|**redirecturl**|`string`|RedirectURL is the callback URL registered with the second factor identity provider<br/>||
+|**alloweddomain**|`string`|AllowedDomain restricts which email domain may complete the second factor (e.g. theopenlane.io)<br/>||
+
+**Additional Properties:** not allowed  
 <a name="authz"></a>
 ## authz: object
 
@@ -1251,6 +1285,58 @@ Config defines the configuration settings for the rate limiter middleware.
 **Items**
 
 **Item Type:** `string`  
+<a name="ratelimitunmatched"></a>
+## ratelimitunmatched: object
+
+Config defines the configuration settings for the rate limiter middleware.
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|||
+|[**options**](#ratelimitunmatchedoptions)|`array`|||
+|[**headers**](#ratelimitunmatchedheaders)|`string[]`|||
+|**forwardedindexfrombehind**|`integer`|ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.<br/>0 means the closest client, 1 the proxy behind it, etc.<br/>||
+|**includepath**|`boolean`|IncludePath appends the request path to the limiter key when true.<br/>||
+|**includemethod**|`boolean`|IncludeMethod appends the request method to the limiter key when true.<br/>||
+|**keyprefix**|`string`|KeyPrefix allows scoping the limiter key space with a static prefix.<br/>||
+|**denystatus**|`integer`|DenyStatus overrides the HTTP status code returned when a rate limit is exceeded.<br/>||
+|**denymessage**|`string`|DenyMessage customises the error payload when a rate limit is exceeded.<br/>||
+|**sendretryafterheader**|`boolean`|SendRetryAfterHeader toggles whether the Retry-After header should be added when available.<br/>||
+|**dryrun**|`boolean`|DryRun enables logging rate limit decisions without blocking requests.<br/>||
+
+**Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "options": [
+        {}
+    ]
+}
+```
+
+<a name="ratelimitunmatchedoptions"></a>
+### ratelimitunmatched\.options: array
+
+**Items**
+
+**Example**
+
+```json
+[
+    {}
+]
+```
+
+<a name="ratelimitunmatchedheaders"></a>
+### ratelimitunmatched\.headers: array
+
+**Items**
+
+**Item Type:** `string`  
 <a name="objectstorage"></a>
 ## objectstorage: object
 
@@ -1571,6 +1657,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|**consoleintegrationpath**|`string`|||
 |[**awssecurityhub**](#integrationsawssecurityhub)|`object`|||
 |[**githubapp**](#integrationsgithubapp)|`object`|||
 |[**slack**](#integrationsslack)|`object`|||
@@ -1883,6 +1970,19 @@ CloudflareConfig contains configuration for Cloudflare integration.
 |**clientid**|`string`|||
 |**clientsecret**|`string`|||
 |**endpointurl**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="backfill"></a>
+## backfill: object
+
+Backfill configures one-time startup data backfill routines that populate fields introduced by recent migrations for organizations and memberships that pre-date them
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled runs the backfill routines on server startup<br/>||
 
 **Additional Properties:** not allowed  
 

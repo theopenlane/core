@@ -9,6 +9,7 @@ mutation CreateBulkCSVTrustCenterCompliance ($input: Upload!) {
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			standard {
 				governingBody
 				governingBodyLogoURL
@@ -34,6 +35,7 @@ mutation CreateBulkTrustCenterCompliance ($input: [CreateTrustCenterComplianceIn
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			standard {
 				governingBody
 				governingBodyLogoURL
@@ -59,6 +61,7 @@ mutation CreateTrustCenterCompliance ($input: CreateTrustCenterComplianceInput!)
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			standard {
 				governingBody
 				governingBodyLogoURL
@@ -120,6 +123,7 @@ query GetTrustCenterComplianceByID ($trustCenterComplianceId: ID!) {
 		trustCenterID
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		standard {
 			governingBody
 			governingBodyLogoURL
@@ -176,6 +180,7 @@ mutation UpdateTrustCenterCompliance ($updateTrustCenterComplianceId: ID!, $inpu
 			trustCenterID
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			standard {
 				governingBody
 				governingBodyLogoURL

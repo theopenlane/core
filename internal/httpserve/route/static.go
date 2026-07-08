@@ -22,6 +22,7 @@ func registerOpenAPIHandler(router *Router) (err error) {
 		OperationID: "APIDocs",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   publicStaticRateLimit,
 		SimpleHandler: func(ctx echo.Context) error {
 			if len(specs.OpenlaneSpec) == 0 {
 				return ctx.NoContent(http.StatusInternalServerError)
@@ -49,6 +50,7 @@ func registerRobotsHandler(router *Router) (err error) {
 		OperationID: "Robots",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   publicStaticRateLimit,
 		SimpleHandler: func(ctx echo.Context) error {
 			return echo.StaticFileHandler("robots.txt", robotsTxt)(ctx)
 		},
@@ -71,6 +73,7 @@ func registerFaviconHandler(router *Router) (err error) {
 		OperationID: "Favicon",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   publicStaticRateLimit,
 		SimpleHandler: func(ctx echo.Context) error {
 			return echo.StaticFileHandler("assets/favicon.ico", assets)(ctx)
 		},

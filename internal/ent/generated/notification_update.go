@@ -66,6 +66,26 @@ func (_u *NotificationUpdate) ClearUpdatedBy() *NotificationUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *NotificationUpdate) SetUpdatedByImpersonator(v string) *NotificationUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *NotificationUpdate) SetNillableUpdatedByImpersonator(v *string) *NotificationUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *NotificationUpdate) ClearUpdatedByImpersonator() *NotificationUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetTags sets the "tags" field.
 func (_u *NotificationUpdate) SetTags(v []string) *NotificationUpdate {
 	_u.mutation.SetTags(v)
@@ -228,6 +248,12 @@ func (_u *NotificationUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(notification.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(notification.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(notification.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(notification.FieldTags, field.TypeJSON, value)
 	}
@@ -338,6 +364,26 @@ func (_u *NotificationUpdateOne) SetNillableUpdatedBy(v *string) *NotificationUp
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *NotificationUpdateOne) ClearUpdatedBy() *NotificationUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *NotificationUpdateOne) SetUpdatedByImpersonator(v string) *NotificationUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *NotificationUpdateOne) SetNillableUpdatedByImpersonator(v *string) *NotificationUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *NotificationUpdateOne) ClearUpdatedByImpersonator() *NotificationUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -532,6 +578,12 @@ func (_u *NotificationUpdateOne) sqlSave(ctx context.Context) (_node *Notificati
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(notification.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(notification.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(notification.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(notification.FieldTags, field.TypeJSON, value)

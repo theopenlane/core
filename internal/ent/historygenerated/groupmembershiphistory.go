@@ -35,6 +35,8 @@ type GroupMembershipHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// Role holds the value of the "role" field.
 	Role enums.Role `json:"role,omitempty"`
 	// GroupID holds the value of the "group_id" field.
@@ -51,7 +53,7 @@ func (*GroupMembershipHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case groupmembershiphistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case groupmembershiphistory.FieldID, groupmembershiphistory.FieldRef, groupmembershiphistory.FieldCreatedBy, groupmembershiphistory.FieldUpdatedBy, groupmembershiphistory.FieldRole, groupmembershiphistory.FieldGroupID, groupmembershiphistory.FieldUserID:
+		case groupmembershiphistory.FieldID, groupmembershiphistory.FieldRef, groupmembershiphistory.FieldCreatedBy, groupmembershiphistory.FieldUpdatedBy, groupmembershiphistory.FieldUpdatedByImpersonator, groupmembershiphistory.FieldRole, groupmembershiphistory.FieldGroupID, groupmembershiphistory.FieldUserID:
 			values[i] = new(sql.NullString)
 		case groupmembershiphistory.FieldHistoryTime, groupmembershiphistory.FieldCreatedAt, groupmembershiphistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -117,6 +119,13 @@ func (_m *GroupMembershipHistory) assignValues(columns []string, values []any) e
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case groupmembershiphistory.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case groupmembershiphistory.FieldRole:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -192,6 +201,11 @@ func (_m *GroupMembershipHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("role=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Role))

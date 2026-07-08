@@ -80,6 +80,20 @@ func (_c *TrustCenterWatermarkConfigCreate) SetNillableUpdatedBy(v *string) *Tru
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *TrustCenterWatermarkConfigCreate) SetUpdatedByImpersonator(v string) *TrustCenterWatermarkConfigCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *TrustCenterWatermarkConfigCreate) SetNillableUpdatedByImpersonator(v *string) *TrustCenterWatermarkConfigCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *TrustCenterWatermarkConfigCreate) SetDeletedAt(v time.Time) *TrustCenterWatermarkConfigCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -504,6 +518,10 @@ func (_c *TrustCenterWatermarkConfigCreate) createSpec() (*TrustCenterWatermarkC
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(trustcenterwatermarkconfig.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(trustcenterwatermarkconfig.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(trustcenterwatermarkconfig.FieldDeletedAt, field.TypeTime, value)

@@ -86,6 +86,20 @@ func (_c *EmailTemplateCreate) SetNillableUpdatedBy(v *string) *EmailTemplateCre
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *EmailTemplateCreate) SetUpdatedByImpersonator(v string) *EmailTemplateCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *EmailTemplateCreate) SetNillableUpdatedByImpersonator(v *string) *EmailTemplateCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *EmailTemplateCreate) SetDeletedAt(v time.Time) *EmailTemplateCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -728,6 +742,10 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(emailtemplate.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(emailtemplate.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(emailtemplate.FieldDeletedAt, field.TypeTime, value)

@@ -81,6 +81,20 @@ func (_c *GroupMembershipCreate) SetNillableUpdatedBy(v *string) *GroupMembershi
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *GroupMembershipCreate) SetUpdatedByImpersonator(v string) *GroupMembershipCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *GroupMembershipCreate) SetNillableUpdatedByImpersonator(v *string) *GroupMembershipCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetRole sets the "role" field.
 func (_c *GroupMembershipCreate) SetRole(v enums.Role) *GroupMembershipCreate {
 	_c.mutation.SetRole(v)
@@ -303,6 +317,10 @@ func (_c *GroupMembershipCreate) createSpec() (*GroupMembership, *sqlgraph.Creat
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(groupmembership.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(groupmembership.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(groupmembership.FieldRole, field.TypeEnum, value)

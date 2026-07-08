@@ -154,6 +154,28 @@ var DefaultCatalog = models.Catalog{
 			MarketingDescription: "Confidently assess vendor risk and enforce security standards across your third-party ecosystem",
 			ProductID:            "prod_SeI59AdH137li3",
 		},
+		string(models.CatalogRegistryModule): models.Feature{
+			Audience: "public",
+			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
+				Interval:   "month",
+				LookupKey:  "price_registry_monthly",
+				Nickname:   "price_registry_monthly",
+				PriceID:    "price_1Tm5QOBvxky1R7Sv0kBn3HCZ",
+				UnitAmount: int64(0),
+			}, models.ItemPrice{
+				Interval:   "year",
+				LookupKey:  "price_registry_annually",
+				Nickname:   "price_registry_annually",
+				PriceID:    "price_1Tm5QPBvxky1R7Sv1ZJwq41b",
+				UnitAmount: int64(0),
+			}}},
+			Description:          "Registry",
+			DisplayName:          "Registry",
+			IncludeWithTrial:     true,
+			LookupKey:            "registry_module",
+			MarketingDescription: "A complete, always-current record of your organization platforms, systems and their owners, assets, vendors, personnel, and contacts",
+			ProductID:            "prod_Ulcf3iUMbFB4R4",
+		},
 		string(models.CatalogTrustCenterModule): models.Feature{
 			Audience: "public",
 			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
@@ -198,6 +220,6 @@ var DefaultCatalog = models.Catalog{
 			ProductID:            "prod_SeI46ZmXn9BpA1",
 		},
 	},
-	SHA:     "d10bc42ff7f4d2dfbab7e9460d87e79aed1950f6734faf1636ad352f3ac5354b",
-	Version: "v0.0.7",
+	SHA:     "337ee7f61cf30b2f1b137f45b1cf1fbbf9453060b714de51de856f427d853895",
+	Version: "v0.0.8",
 }

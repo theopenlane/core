@@ -276,6 +276,25 @@ coreConfiguration:
         enforcetimeout: true  # @schema type:boolean; default:true
         timeout: "1m0s"  # @schema type:integer; default:60s
         debug: false  # @schema type:boolean; default:false
+    # -- SupportAccess contains the configuration for the Openlane support access flow
+    supportaccess:
+      # -- Enabled toggles the support access endpoints
+      enabled: false  # @schema type:boolean; default:false
+      # -- Email is the email of the virtual support identity, used as the first factor username
+      email: "support@theopenlane.io"  # @schema type:string; default:support@theopenlane.io
+      # -- DisplayName is the display name of the virtual support identity, used for record attribution
+      displayname: "Openlane Support"  # @schema type:string; default:Openlane Support
+      # -- SubjectID is the stable subject id of the virtual support identity used for created_by/updated_by
+      # attribution. It must be a valid ULID and is consistent without a backing user row
+      subjectid: "01JSPPRT000000000000000000"  # @schema type:string; default:01JSPPRT000000000000000000
+      # -- IssuerURL is the issuer URL of the second factor identity provider
+      issuerurl: ""  # @schema type:string
+      # -- DiscoveryEndpoint is the optional OIDC discovery endpoint of the second factor identity provider
+      discoveryendpoint: ""  # @schema type:string
+      # -- RedirectURL is the callback URL registered with the second factor identity provider
+      redirecturl: ""  # @schema type:string
+      # -- AllowedDomain restricts which email domain may complete the second factor (e.g. theopenlane.io)
+      alloweddomain: ""  # @schema type:string
   # -- Authz contains the authorization settings for fine grained access control
   authz:
     # -- enables authorization checks with openFGA
@@ -372,7 +391,7 @@ coreConfiguration:
     redis: true  # @schema type:boolean; default:true
     recoverycodecount: 16  # @schema type:integer; default:16
     recoverycodelength: 8  # @schema type:integer; default:8
-  # -- Ratelimit contains the configuration for the rate limiter
+  # -- Ratelimit contains the configuration for the global rate limiter applied to all requests
   ratelimit:
     enabled: false  # @schema type:boolean; default:false
     # -- Options enables configuring multiple concurrent rate windows that must all pass.
@@ -382,9 +401,11 @@ coreConfiguration:
         requests: 500
         window: 1m0s
     # -- Headers determines which headers are inspected to determine the origin IP.
-    # Defaults to X-Forwarded-For, True-Client-IP, RemoteAddr.
+    # Defaults to CF-Connecting-IP, True-Client-IP, RemoteAddr.
     headers:
+        - CF-Connecting-IP
         - True-Client-IP
+        - RemoteAddr
     # -- ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.
     # 0 means the closest client, 1 the proxy behind it, etc.
     forwardedindexfrombehind: 0  # @schema type:integer; default:0
@@ -400,6 +421,38 @@ coreConfiguration:
     denymessage: "Too many requests"  # @schema type:string; default:Too many requests
     # -- SendRetryAfterHeader toggles whether the Retry-After header should be added when available.
     sendretryafterheader: true  # @schema type:boolean; default:true
+    # -- DryRun enables logging rate limit decisions without blocking requests.
+    dryrun: true  # @schema type:boolean; default:true
+  # -- RatelimitUnmatched contains the rate limiter configuration applied only to requests that do not match a registered route
+  ratelimitunmatched:
+    enabled: false  # @schema type:boolean; default:false
+    # -- Options enables configuring multiple concurrent rate windows that must all pass.
+    options:
+      - expiration: 0s
+        flushinterval: 0s
+        requests: 500
+        window: 1m0s
+    # -- Headers determines which headers are inspected to determine the origin IP.
+    # Defaults to CF-Connecting-IP, True-Client-IP, RemoteAddr.
+    headers:
+        - CF-Connecting-IP
+        - True-Client-IP
+        - RemoteAddr
+    # -- ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.
+    # 0 means the closest client, 1 the proxy behind it, etc.
+    forwardedindexfrombehind: 0  # @schema type:integer; default:0
+    # -- IncludePath appends the request path to the limiter key when true.
+    includepath: false  # @schema type:boolean; default:false
+    # -- IncludeMethod appends the request method to the limiter key when true.
+    includemethod: false  # @schema type:boolean; default:false
+    # -- KeyPrefix allows scoping the limiter key space with a static prefix.
+    keyprefix: ""  # @schema type:string
+    # -- DenyStatus overrides the HTTP status code returned when a rate limit is exceeded.
+    denystatus: 429  # @schema type:integer; default:429
+    # -- DenyMessage customises the error payload when a rate limit is exceeded.
+    denymessage: "Too many requests"  # @schema type:string; default:Too many requests
+    # -- SendRetryAfterHeader toggles whether the Retry-After header should be added when available.
+    sendretryafterheader: false  # @schema type:boolean; default:true
     # -- DryRun enables logging rate limit decisions without blocking requests.
     dryrun: true  # @schema type:boolean; default:true
   # -- ObjectStorage contains the configuration for the object storage backend
@@ -513,6 +566,7 @@ coreConfiguration:
     keydir: "./keys"  # @schema type:string; default:./keys
   # -- Integrations contains operator-level credentials for all v2 integration definitions
   integrations:
+    consoleintegrationpath: "/organization-settings/integrations"  # @schema type:string; default:/organization-settings/integrations
     awssecurityhub:
       arn: ""  # @schema type:string
     githubapp:
@@ -611,6 +665,10 @@ coreConfiguration:
     enabled: false  # @schema type:boolean; default:false
     clientid: "d5d5babbdd4ba64d59ae543ac3b6a74d.access"  # @schema type:string; default:d5d5babbdd4ba64d59ae543ac3b6a74d.access
     endpointurl: "https://admin.s.theopenlane.io/api/links"  # @schema type:string; default:https://admin.s.theopenlane.io/api/links
+  # -- Backfill contains configuration for one-time startup data backfill routines
+  backfill:
+    # -- Enabled runs the backfill routines on server startup
+    enabled: false  # @schema type:boolean; default:false
 
 # -- External Secrets configuration
 externalSecrets:
@@ -642,6 +700,30 @@ externalSecrets:
       secretKey: "CORE_AUTH_PROVIDERS_GOOGLE_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-auth-providers-google-clientsecret"  # @schema type:string
+    # -- core-auth-supportaccess-password secret configuration
+    core-auth-supportaccess-password:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for auth.supportaccess.password
+      secretKey: "CORE_AUTH_SUPPORTACCESS_PASSWORD"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-auth-supportaccess-password"  # @schema type:string
+    # -- core-auth-supportaccess-clientid secret configuration
+    core-auth-supportaccess-clientid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for auth.supportaccess.clientid
+      secretKey: "CORE_AUTH_SUPPORTACCESS_CLIENTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-auth-supportaccess-clientid"  # @schema type:string
+    # -- core-auth-supportaccess-clientsecret secret configuration
+    core-auth-supportaccess-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for auth.supportaccess.clientsecret
+      secretKey: "CORE_AUTH_SUPPORTACCESS_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-auth-supportaccess-clientsecret"  # @schema type:string
     # -- core-authz-credentials-apitoken secret configuration
     core-authz-credentials-apitoken:
       # -- Enable this external secret

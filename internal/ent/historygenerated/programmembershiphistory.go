@@ -35,6 +35,8 @@ type ProgramMembershipHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// Role holds the value of the "role" field.
 	Role enums.Role `json:"role,omitempty"`
 	// ProgramID holds the value of the "program_id" field.
@@ -51,7 +53,7 @@ func (*ProgramMembershipHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case programmembershiphistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case programmembershiphistory.FieldID, programmembershiphistory.FieldRef, programmembershiphistory.FieldCreatedBy, programmembershiphistory.FieldUpdatedBy, programmembershiphistory.FieldRole, programmembershiphistory.FieldProgramID, programmembershiphistory.FieldUserID:
+		case programmembershiphistory.FieldID, programmembershiphistory.FieldRef, programmembershiphistory.FieldCreatedBy, programmembershiphistory.FieldUpdatedBy, programmembershiphistory.FieldUpdatedByImpersonator, programmembershiphistory.FieldRole, programmembershiphistory.FieldProgramID, programmembershiphistory.FieldUserID:
 			values[i] = new(sql.NullString)
 		case programmembershiphistory.FieldHistoryTime, programmembershiphistory.FieldCreatedAt, programmembershiphistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -117,6 +119,13 @@ func (_m *ProgramMembershipHistory) assignValues(columns []string, values []any)
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case programmembershiphistory.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case programmembershiphistory.FieldRole:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -192,6 +201,11 @@ func (_m *ProgramMembershipHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("role=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Role))

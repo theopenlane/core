@@ -78,28 +78,6 @@ func HookOrgMembers() ent.Hook {
 				return nil, ErrPersonalOrgsNoMembers
 			}
 
-			// allow the request, which is for a user other than the authenticated user
-			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-			// ensure user email can be added to the org
-			user, err := m.Client().User.Get(allowCtx, userID)
-			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("failed to get user")
-
-				if generated.IsNotFound(err) {
-					// use a different error message for user not found
-					// so our error parsing can differentiate between the two
-					return nil, ErrUserNotFound
-				}
-
-				return nil, err
-			}
-
-			if err := checkAllowedEmailDomain(user.Email, org.Edges.Setting); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("email", user.Email).Msg("error adding user to organization")
-				return nil, err
-			}
-
 			retValue, err := next.Mutate(ctx, m)
 			if err != nil {
 				return nil, err
@@ -129,17 +107,15 @@ func HookOrgMembers() ent.Hook {
 func HookUpdateManagedGroups() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.OrgMembershipFunc(func(ctx context.Context, m *generated.OrgMembershipMutation) (generated.Value, error) {
-			if !isDeleteOp(ctx, m) {
-				// update the managed group members when members are added
-				// before the mutation has been executed
-				if err := updateManagedGroupMembers(ctx, m); err != nil {
-					return nil, err
-				}
+			// update the managed group members when members are added
+			// before the mutation has been executed
+			if err := updateManagedGroupMembers(ctx, m); err != nil {
+				return nil, err
 			}
 
 			return next.Mutate(ctx, m)
 		})
-	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne) // handle soft deletes as well as hard deletes
+	}, ent.OpUpdate|ent.OpUpdateOne)
 }
 
 // HookBlockOwnerRoleChange blocks direct owner role changes and enforces it goes through the transfer route
@@ -223,7 +199,7 @@ func HookOrgMembersDelete() ent.Hook {
 			// deleteOrganization will be handled by the organization hook
 			rootFieldCtx := graphql.GetRootFieldContext(ctx)
 			if rootFieldCtx == nil || rootFieldCtx.Object != "deleteOrgMembership" {
-				logx.FromContext(ctx).Info().Msg("skipping org membership delete hook")
+				logx.FromContext(ctx).Debug().Msg("skipping org membership delete hook")
 
 				return next.Mutate(ctx, m)
 			}

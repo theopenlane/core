@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/redis/go-redis/v9"
 
@@ -186,18 +187,23 @@ func WithTokenManager() ServerOption {
 // WithAuth supplies the authn and jwt config for the server
 func WithAuth() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		// add oauth providers for social login
+		// add oauth providers for social login and integrations
 		s.Config.Handler.OauthProvider = s.Config.Settings.Auth.Providers
 		s.Config.Handler.ConsoleURL = s.Config.Settings.EntConfig.Notifications.ConsoleURL
 
 		// add auth middleware
 		opts := getAuthOptions(s)
 
+		if !s.Config.Handler.TokenManager.RevocationEnabled() {
+			log.Warn().Msg("token revocation is inoperative: no Redis blacklist configured; logout and token or user revocation will not invalidate issued JWTs")
+		}
+
 		conf := authmw.NewAuthOptions(opts...)
 
 		s.Config.Handler.WebAuthn = webauthn.NewWithConfig(s.Config.Settings.Auth.Providers.Webauthn)
 
-		s.Config.GraphMiddleware = append(s.Config.GraphMiddleware, authmw.Authenticate(&conf), impersonation.SystemAdminUserContextMiddleware())
+		impersonationMW := impersonation.New(s.Config.Handler.TokenManager, s.Config.Handler.SupportAccessConfig.SubjectID, s.Config.Handler.SupportAccessConfig.DisplayName)
+		s.Config.GraphMiddleware = append(s.Config.GraphMiddleware, impersonationMW.Process, authmw.Authenticate(&conf), impersonation.SystemAdminUserContextMiddleware(), authmw.BlockNonTrustCenterAnonymous())
 		s.Config.Handler.AuthMiddleware = append(s.Config.Handler.AuthMiddleware, authmw.Authenticate(&conf))
 	})
 }
@@ -227,6 +233,12 @@ func getAuthOptions(s *ServerOptions) []authmw.Option {
 
 	if s.Config.Handler.RedisClient != nil {
 		opts = append(opts, authmw.WithRedisClient(s.Config.Handler.RedisClient))
+		// share a single Redis-backed blacklist between the token manager (used for refresh
+		// verification and impersonation) and the request-path JWKS validator, so revocations
+		// written on logout are honored on every subsequent request
+		blacklist := tokens.NewRedisTokenBlacklist(s.Config.Handler.RedisClient, s.Config.Settings.Auth.Token.Redis.BlacklistPrefix)
+		s.Config.Handler.TokenManager.WithBlacklist(blacklist)
+		opts = append(opts, authmw.WithBlacklist(blacklist))
 	}
 
 	return opts
@@ -448,11 +460,45 @@ func WithOTP() ServerOption {
 	})
 }
 
-// WithRateLimiter sets up the rate limiter for the server
+// WithRateLimiter sets up the global and unmatched-route rate limiters for the server
 func WithRateLimiter() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		if s.Config.Settings.Ratelimit.Enabled || s.Config.Settings.Ratelimit.DryRun {
 			s.Config.DefaultMiddleware = append(s.Config.DefaultMiddleware, ratelimit.RateLimiterWithConfig(&s.Config.Settings.Ratelimit))
+		}
+
+		if s.Config.Settings.RatelimitUnmatched.Enabled || s.Config.Settings.RatelimitUnmatched.DryRun {
+			s.Config.DefaultMiddleware = append(s.Config.DefaultMiddleware, ratelimit.UnmatchedRouteLimiterWithConfig(&s.Config.Settings.RatelimitUnmatched))
+		}
+	})
+}
+
+const (
+	// graphRateLimitRequests caps GraphQL API requests per window; sized generously since a single UI interaction fans out across many queries
+	graphRateLimitRequests = int64(1200)
+	// graphRateLimitWindow is the sliding window applied to the GraphQL rate limiter
+	graphRateLimitWindow = time.Minute
+)
+
+// graphRateLimitConfig builds the dedicated limiter applied to the GraphQL endpoints, keyed on the real client IP
+// (Cloudflare's CF-Connecting-IP, falling back to the socket peer) to match the other per-route limiters
+func graphRateLimitConfig(cfg ratelimit.Config) *ratelimit.Config {
+	return &ratelimit.Config{
+		Enabled:              cfg.Enabled,
+		Headers:              ratelimit.DefaultClientIPHeaders,
+		Options:              []ratelimit.RateOption{{Requests: graphRateLimitRequests, Window: graphRateLimitWindow}},
+		SendRetryAfterHeader: cfg.SendRetryAfterHeader,
+		DryRun:               cfg.DryRun,
+	}
+}
+
+// WithGraphRateLimiter prepends a dedicated rate limiter to the GraphQL middleware chain so the primary API surface is
+// throttled ahead of authentication and resolver work
+func WithGraphRateLimiter() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		if s.Config.Settings.Ratelimit.Enabled || s.Config.Settings.Ratelimit.DryRun {
+			limiter := ratelimit.RateLimiterWithConfig(graphRateLimitConfig(s.Config.Settings.Ratelimit))
+			s.Config.GraphMiddleware = append([]echo.MiddlewareFunc{limiter}, s.Config.GraphMiddleware...)
 		}
 	})
 }
@@ -591,6 +637,13 @@ func WithWorkflows(wf *engine.WorkflowEngine) ServerOption {
 func WithCloudflareConfig() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		s.Config.Handler.CloudflareConfig = s.Config.Settings.Cloudflare
+	})
+}
+
+// WithSupportAccessConfig sets up the Openlane support access configuration for the server
+func WithSupportAccessConfig() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		s.Config.Handler.SupportAccessConfig = s.Config.Settings.Auth.SupportAccess
 	})
 }
 

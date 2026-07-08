@@ -71,7 +71,6 @@ type SchemaConfig struct {
 	Entity                             string // Entity table.
 	EntityBlockedGroups                string // Entity-blocked_groups->Group table.
 	EntityEditors                      string // Entity-editors->Group table.
-	EntityViewers                      string // Entity-viewers->Group table.
 	EntityContacts                     string // Entity-contacts->Contact table.
 	EntityDocuments                    string // Entity-documents->DocumentData table.
 	EntityFiles                        string // Entity-files->File table.
@@ -91,6 +90,8 @@ type SchemaConfig struct {
 	FileSecrets                        string // File-secrets->Hush table.
 	FileDownloadToken                  string // FileDownloadToken table.
 	Finding                            string // Finding table.
+	FindingBlockedGroups               string // Finding-blocked_groups->Group table.
+	FindingEditors                     string // Finding-editors->Group table.
 	FindingVulnerabilities             string // Finding-vulnerabilities->Vulnerability table.
 	FindingActionPlans                 string // Finding-action_plans->ActionPlan table.
 	FindingControls                    string // Finding-controls->Control table.
@@ -224,6 +225,8 @@ type SchemaConfig struct {
 	ProgramActionPlans                 string // Program-action_plans->ActionPlan table.
 	ProgramMembership                  string // ProgramMembership table.
 	Remediation                        string // Remediation table.
+	RemediationBlockedGroups           string // Remediation-blocked_groups->Group table.
+	RemediationEditors                 string // Remediation-editors->Group table.
 	RemediationFindings                string // Remediation-findings->Finding table.
 	RemediationVulnerabilities         string // Remediation-vulnerabilities->Vulnerability table.
 	RemediationActionPlans             string // Remediation-action_plans->ActionPlan table.
@@ -231,6 +234,8 @@ type SchemaConfig struct {
 	RemediationSubcontrols             string // Remediation-subcontrols->Subcontrol table.
 	RemediationRisks                   string // Remediation-risks->Risk table.
 	Review                             string // Review table.
+	ReviewBlockedGroups                string // Review-blocked_groups->Group table.
+	ReviewEditors                      string // Review-editors->Group table.
 	ReviewFindings                     string // Review-findings->Finding table.
 	ReviewVulnerabilities              string // Review-vulnerabilities->Vulnerability table.
 	ReviewActionPlans                  string // Review-action_plans->ActionPlan table.
@@ -249,7 +254,6 @@ type SchemaConfig struct {
 	Scan                               string // Scan table.
 	ScanBlockedGroups                  string // Scan-blocked_groups->Group table.
 	ScanEditors                        string // Scan-editors->Group table.
-	ScanViewers                        string // Scan-viewers->Group table.
 	ScanAssets                         string // Scan-assets->Asset table.
 	ScanEvidence                       string // Scan-evidence->Evidence table.
 	ScanFiles                          string // Scan-files->File table.

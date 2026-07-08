@@ -52,6 +52,7 @@ mutation CreateBulkCSVControl ($input: Upload!) {
 			trustCenterVisibility
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			workflowEligibleMarker
 		}
 	}
@@ -110,6 +111,7 @@ mutation CreateBulkControl ($input: [CreateControlInput!]) {
 			trustCenterVisibility
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			workflowEligibleMarker
 		}
 	}
@@ -168,6 +170,7 @@ mutation CreateControl ($input: CreateControlInput!) {
 			trustCenterVisibility
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			workflowEligibleMarker
 			controlOwner {
 				id
@@ -378,7 +381,17 @@ query GetControlByID ($controlId: ID!) {
 		trustCenterVisibility
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		workflowEligibleMarker
+		relatedControls {
+			id
+			refCode
+			referenceFramework
+			isSubcontrol
+			parentControlID
+			mappedControlReferenceIDs
+			inheritedFromSubcontrolIDs
+		}
 		controlOwner {
 			id
 			name
@@ -500,6 +513,7 @@ query GetControls ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				trustCenterVisibility
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				workflowEligibleMarker
 				controlOwner {
 					id
@@ -562,6 +576,43 @@ query GetControls ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 		}
 	}
 }
+query GetTrustCenterControlByID ($controlId: ID!) {
+	control(id: $controlId) {
+		id
+		refCode
+		title
+		description
+		source
+		category
+		isTrustCenterControl
+		trustCenterVisibility
+		ownerID
+	}
+}
+query GetTrustCenterControls {
+	controls {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				id
+				refCode
+				title
+				description
+				source
+				category
+				isTrustCenterControl
+				trustCenterVisibility
+				ownerID
+			}
+		}
+	}
+}
 mutation UpdateBulkControl ($ids: [ID!]!, $input: UpdateControlInput!) {
 	updateBulkControl(ids: $ids, input: $input) {
 		controls {
@@ -616,6 +667,7 @@ mutation UpdateBulkControl ($ids: [ID!]!, $input: UpdateControlInput!) {
 			trustCenterVisibility
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			workflowEligibleMarker
 			controlOwner {
 				id
@@ -717,6 +769,7 @@ mutation UpdateControl ($updateControlId: ID!, $input: UpdateControlInput!) {
 			trustCenterVisibility
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			workflowEligibleMarker
 			controlOwner {
 				id

@@ -46,8 +46,9 @@ func HookProgramAuthz() ent.Hook {
 func programCreateHook(ctx context.Context, m *generated.ProgramMutation) error {
 	objID, exists := m.ID()
 	if exists {
-		// create the admin program member if not using an API token (which is not associated with a user)
-		if !auth.IsAPITokenAuthentication(ctx) {
+		// create the admin program member if not using an API token (which is not associated with a user) or support
+		caller, _ := auth.CallerFromContext(ctx)
+		if !auth.IsAPITokenAuthentication(ctx) && !caller.Has(auth.CapOrgSupport) {
 			if err := createProgramMemberAdmin(ctx, objID, m); err != nil {
 				return err
 			}

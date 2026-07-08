@@ -78,6 +78,20 @@ func (_c *JobRunnerTokenCreate) SetNillableUpdatedBy(v *string) *JobRunnerTokenC
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *JobRunnerTokenCreate) SetUpdatedByImpersonator(v string) *JobRunnerTokenCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *JobRunnerTokenCreate) SetNillableUpdatedByImpersonator(v *string) *JobRunnerTokenCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *JobRunnerTokenCreate) SetDeletedAt(v time.Time) *JobRunnerTokenCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -395,6 +409,10 @@ func (_c *JobRunnerTokenCreate) createSpec() (*JobRunnerToken, *sqlgraph.CreateS
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(jobrunnertoken.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(jobrunnertoken.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(jobrunnertoken.FieldDeletedAt, field.TypeTime, value)

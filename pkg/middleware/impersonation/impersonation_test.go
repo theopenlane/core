@@ -43,7 +43,7 @@ func setupTestTokenManager(t *testing.T) *tokens.TokenManager {
 
 func TestNew(t *testing.T) {
 	tokenManager := setupTestTokenManager(t)
-	middleware := New(tokenManager)
+	middleware := New(tokenManager, "", "")
 
 	assert.NotNil(t, middleware)
 	assert.Equal(t, tokenManager, middleware.tokenManager)
@@ -52,7 +52,7 @@ func TestNew(t *testing.T) {
 func TestMiddlewareProcessNoToken(t *testing.T) {
 	e := echo.New()
 	tokenManager := setupTestTokenManager(t)
-	middleware := New(tokenManager)
+	middleware := New(tokenManager, "", "")
 
 	req := httptest.NewRequest(http.MethodGet, "/test", nil)
 	rec := httptest.NewRecorder()
@@ -75,7 +75,7 @@ func TestMiddlewareProcessNoToken(t *testing.T) {
 func TestMiddlewareProcessInvalidToken(t *testing.T) {
 	e := echo.New()
 	tokenManager := setupTestTokenManager(t)
-	middleware := New(tokenManager)
+	middleware := New(tokenManager, "", "")
 
 	req := httptest.NewRequest(http.MethodGet, "/test", nil)
 	req.Header.Set("Authorization", "Impersonation eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.invalid.token")
@@ -111,14 +111,13 @@ func TestMiddlewareProcessValidToken(t *testing.T) {
 		OrganizationID:    "org-123",
 		Type:              "support",
 		Reason:            "debugging issue",
-		Scopes:            []string{"read", "debug"},
 		Duration:          time.Hour,
 	}
 
 	token, err := tokenManager.CreateImpersonationToken(ctx, opts)
 	assert.NoError(t, err)
 
-	middleware := New(tokenManager)
+	middleware := New(tokenManager, "", "")
 
 	req := httptest.NewRequest(http.MethodGet, "/test", nil)
 	req.Header.Set("Authorization", "Impersonation "+token)
@@ -136,7 +135,6 @@ func TestMiddlewareProcessValidToken(t *testing.T) {
 		assert.Equal(t, "target-user-123", caller.SubjectID)
 		assert.Equal(t, "target@example.com", caller.SubjectEmail)
 		assert.Equal(t, "admin-123", caller.Impersonation.ImpersonatorID)
-		assert.Equal(t, []string{"read", "debug"}, caller.Impersonation.Scopes)
 
 		return c.String(http.StatusOK, "OK")
 	}
@@ -164,7 +162,6 @@ func TestCreateImpersonatedCaller(t *testing.T) {
 		Type:              "support",
 		Reason:            "investigating issue",
 		SessionID:         "session-123",
-		Scopes:            []string{"read", "debug"},
 	}
 
 	caller, err := middleware.createImpersonatedCaller(claims)
@@ -179,90 +176,6 @@ func TestCreateImpersonatedCaller(t *testing.T) {
 	assert.Equal(t, auth.ImpersonationType("support"), caller.Impersonation.Type)
 	assert.Equal(t, "admin-789", caller.Impersonation.ImpersonatorID)
 	assert.Equal(t, "session-123", caller.Impersonation.SessionID)
-	assert.Equal(t, []string{"read", "debug"}, caller.Impersonation.Scopes)
-}
-
-func TestRequireImpersonationScope(t *testing.T) {
-	tests := []struct {
-		name           string
-		requiredScope  string
-		setupContext   func() context.Context
-		expectedStatus int
-	}{
-		{
-			name:           "not impersonated passes through",
-			requiredScope:  "admin:write",
-			setupContext:   context.Background,
-			expectedStatus: http.StatusOK,
-		},
-		{
-			name:          "has required scope allows access",
-			requiredScope: "read",
-			setupContext: func() context.Context {
-				return auth.WithCaller(context.Background(), &auth.Caller{
-					SubjectID: "user123",
-					Impersonation: &auth.ImpersonationContext{
-						Scopes:    []string{"read", "debug"},
-						ExpiresAt: time.Now().Add(time.Hour),
-					},
-				})
-			},
-			expectedStatus: http.StatusOK,
-		},
-		{
-			name:          "missing required scope denies access",
-			requiredScope: "write",
-			setupContext: func() context.Context {
-				return auth.WithCaller(context.Background(), &auth.Caller{
-					SubjectID: "user123",
-					Impersonation: &auth.ImpersonationContext{
-						Scopes:    []string{"read", "debug"},
-						ExpiresAt: time.Now().Add(time.Hour),
-					},
-				})
-			},
-			expectedStatus: http.StatusForbidden,
-		},
-		{
-			name:          "wildcard scope allows all",
-			requiredScope: "admin:write",
-			setupContext: func() context.Context {
-				return auth.WithCaller(context.Background(), &auth.Caller{
-					SubjectID: "user123",
-					Impersonation: &auth.ImpersonationContext{
-						Scopes:    []string{"*"},
-						ExpiresAt: time.Now().Add(time.Hour),
-					},
-				})
-			},
-			expectedStatus: http.StatusOK,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			e := echo.New()
-			middleware := RequireImpersonationScope(tt.requiredScope)
-
-			req := httptest.NewRequest(http.MethodGet, "/test", nil)
-			req = req.WithContext(tt.setupContext())
-			rec := httptest.NewRecorder()
-			c := e.NewContext(req, rec)
-
-			handler := func(c echo.Context) error {
-				return c.String(http.StatusOK, "OK")
-			}
-
-			err := middleware(handler)(c)
-			if tt.expectedStatus == http.StatusOK {
-				assert.NoError(t, err)
-			} else {
-				httpErr, ok := err.(*echo.HTTPError)
-				assert.True(t, ok)
-				assert.Equal(t, tt.expectedStatus, httpErr.Code)
-			}
-		})
-	}
 }
 
 func TestBlockImpersonation(t *testing.T) {

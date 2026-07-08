@@ -162,6 +162,20 @@ func (_c *OrganizationCreate) SetNillableUpdatedBy(v *string) *OrganizationCreat
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *OrganizationCreate) SetUpdatedByImpersonator(v string) *OrganizationCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *OrganizationCreate) SetNillableUpdatedByImpersonator(v *string) *OrganizationCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *OrganizationCreate) SetDeletedAt(v time.Time) *OrganizationCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -310,6 +324,20 @@ func (_c *OrganizationCreate) SetStripeCustomerID(v string) *OrganizationCreate 
 func (_c *OrganizationCreate) SetNillableStripeCustomerID(v *string) *OrganizationCreate {
 	if v != nil {
 		_c.SetStripeCustomerID(*v)
+	}
+	return _c
+}
+
+// SetSlugName sets the "slug_name" field.
+func (_c *OrganizationCreate) SetSlugName(v string) *OrganizationCreate {
+	_c.mutation.SetSlugName(v)
+	return _c
+}
+
+// SetNillableSlugName sets the "slug_name" field if the given value is not nil.
+func (_c *OrganizationCreate) SetNillableSlugName(v *string) *OrganizationCreate {
+	if v != nil {
+		_c.SetSlugName(*v)
 	}
 	return _c
 }
@@ -2993,6 +3021,11 @@ func (_c *OrganizationCreate) check() error {
 			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "Organization.avatar_remote_url": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.SlugName(); ok {
+		if err := organization.SlugNameValidator(v); err != nil {
+			return &ValidationError{Name: "slug_name", err: fmt.Errorf(`generated: validator failed for field "Organization.slug_name": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -3045,6 +3078,10 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		_spec.SetField(organization.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(organization.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
+	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(organization.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
@@ -3084,6 +3121,10 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.StripeCustomerID(); ok {
 		_spec.SetField(organization.FieldStripeCustomerID, field.TypeString, value)
 		_node.StripeCustomerID = &value
+	}
+	if value, ok := _c.mutation.SlugName(); ok {
+		_spec.SetField(organization.FieldSlugName, field.TypeString, value)
+		_node.SlugName = value
 	}
 	if nodes := _c.mutation.ActionPlanCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

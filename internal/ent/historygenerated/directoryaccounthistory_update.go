@@ -67,6 +67,26 @@ func (_u *DirectoryAccountHistoryUpdate) ClearUpdatedBy() *DirectoryAccountHisto
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *DirectoryAccountHistoryUpdate) SetUpdatedByImpersonator(v string) *DirectoryAccountHistoryUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *DirectoryAccountHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *DirectoryAccountHistoryUpdate) ClearUpdatedByImpersonator() *DirectoryAccountHistoryUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetTags sets the "tags" field.
 func (_u *DirectoryAccountHistoryUpdate) SetTags(v []string) *DirectoryAccountHistoryUpdate {
 	_u.mutation.SetTags(v)
@@ -849,6 +869,12 @@ func (_u *DirectoryAccountHistoryUpdate) sqlSave(ctx context.Context) (_node int
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(directoryaccounthistory.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(directoryaccounthistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(directoryaccounthistory.FieldTags, field.TypeJSON, value)
 	}
@@ -1128,6 +1154,26 @@ func (_u *DirectoryAccountHistoryUpdateOne) SetNillableUpdatedBy(v *string) *Dir
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *DirectoryAccountHistoryUpdateOne) ClearUpdatedBy() *DirectoryAccountHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *DirectoryAccountHistoryUpdateOne) SetUpdatedByImpersonator(v string) *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *DirectoryAccountHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *DirectoryAccountHistoryUpdateOne) ClearUpdatedByImpersonator() *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -1942,6 +1988,12 @@ func (_u *DirectoryAccountHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(directoryaccounthistory.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(directoryaccounthistory.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(directoryaccounthistory.FieldTags, field.TypeJSON, value)

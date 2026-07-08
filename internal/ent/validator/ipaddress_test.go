@@ -50,11 +50,6 @@ func TestValidateIPAddress(t *testing.T) {
 		"hello.world",
 		"192.168.1.a",
 		"gggg::1",
-		// Loopback addresses (not allowed)
-		"127.0.0.1",
-		"127.0.0.2",
-		"127.255.255.255",
-		"::1", // IPv6 loopback
 		// Unspecified addresses (not allowed)
 		"0.0.0.0",
 		"::", // IPv6 unspecified

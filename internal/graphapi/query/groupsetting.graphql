@@ -30,6 +30,7 @@ query GetGroupSettingByID ($groupSettingId: ID!) {
 		syncToSlack
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 		visibility
 		group {
 			id
@@ -70,6 +71,7 @@ mutation UpdateGroupSetting ($updateGroupSettingId: ID!, $input: UpdateGroupSett
 			syncToSlack
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 			visibility
 			group {
 				id

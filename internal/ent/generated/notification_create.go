@@ -81,6 +81,20 @@ func (_c *NotificationCreate) SetNillableUpdatedBy(v *string) *NotificationCreat
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *NotificationCreate) SetUpdatedByImpersonator(v string) *NotificationCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *NotificationCreate) SetNillableUpdatedByImpersonator(v *string) *NotificationCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetTags sets the "tags" field.
 func (_c *NotificationCreate) SetTags(v []string) *NotificationCreate {
 	_c.mutation.SetTags(v)
@@ -396,6 +410,10 @@ func (_c *NotificationCreate) createSpec() (*Notification, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(notification.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(notification.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(notification.FieldTags, field.TypeJSON, value)

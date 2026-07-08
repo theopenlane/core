@@ -42,6 +42,7 @@ query GetAllNotificationTemplateHistories ($first: Int, $last: Int, $after: Curs
 				uischema
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				version
 				workflowDefinitionID
 			}
@@ -92,6 +93,7 @@ query GetNotificationTemplateHistories ($first: Int, $last: Int, $after: Cursor,
 				uischema
 				updatedAt
 				updatedBy
+				updatedByImpersonator
 				version
 				workflowDefinitionID
 			}

@@ -41,7 +41,21 @@ func (r *controlResolver) RelatedControls(ctx context.Context, obj *generated.Co
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "relatedcontrol"})
 	}
 
-	return processMappedControlResults(ctx, res, obj.ID, obj.RefCode, obj.ReferenceFramework, frameworksInOrg)
+	direct, err := processMappedControlResults(ctx, res, obj.ID, obj.RefCode, obj.ReferenceFramework, frameworksInOrg)
+	if err != nil {
+		return nil, err
+	}
+
+	// related controls reached only through the control's subcontrols are inherited onto the control
+	// with the mapped subcontrol ID it came from
+	subRelated, err := relatedControlsFromSubcontrols(ctx, obj.ID, frameworksInOrg)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting subcontrol related controls")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "relatedcontrol"})
+	}
+
+	return mergeInheritedRelatedControls(direct, subRelated), nil
 }
 
 // CreateControlsByClone is the resolver for the createControlsByClone field.

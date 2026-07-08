@@ -64,6 +64,26 @@ func (_u *ProgramMembershipUpdate) ClearUpdatedBy() *ProgramMembershipUpdate {
 	return _u
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *ProgramMembershipUpdate) SetUpdatedByImpersonator(v string) *ProgramMembershipUpdate {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *ProgramMembershipUpdate) SetNillableUpdatedByImpersonator(v *string) *ProgramMembershipUpdate {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *ProgramMembershipUpdate) ClearUpdatedByImpersonator() *ProgramMembershipUpdate {
+	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
 // SetRole sets the "role" field.
 func (_u *ProgramMembershipUpdate) SetRole(v enums.Role) *ProgramMembershipUpdate {
 	_u.mutation.SetRole(v)
@@ -177,6 +197,12 @@ func (_u *ProgramMembershipUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(programmembership.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(programmembership.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(programmembership.FieldUpdatedByImpersonator, field.TypeString)
+	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(programmembership.FieldRole, field.TypeEnum, value)
 	}
@@ -233,6 +259,26 @@ func (_u *ProgramMembershipUpdateOne) SetNillableUpdatedBy(v *string) *ProgramMe
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *ProgramMembershipUpdateOne) ClearUpdatedBy() *ProgramMembershipUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_u *ProgramMembershipUpdateOne) SetUpdatedByImpersonator(v string) *ProgramMembershipUpdateOne {
+	_u.mutation.SetUpdatedByImpersonator(v)
+	return _u
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_u *ProgramMembershipUpdateOne) SetNillableUpdatedByImpersonator(v *string) *ProgramMembershipUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByImpersonator(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (_u *ProgramMembershipUpdateOne) ClearUpdatedByImpersonator() *ProgramMembershipUpdateOne {
+	_u.mutation.ClearUpdatedByImpersonator()
 	return _u
 }
 
@@ -378,6 +424,12 @@ func (_u *ProgramMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Progr
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(programmembership.FieldUpdatedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(programmembership.FieldUpdatedByImpersonator, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByImpersonatorCleared() {
+		_spec.ClearField(programmembership.FieldUpdatedByImpersonator, field.TypeString)
 	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(programmembership.FieldRole, field.TypeEnum, value)

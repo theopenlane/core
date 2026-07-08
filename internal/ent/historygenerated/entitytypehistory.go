@@ -35,6 +35,8 @@ type EntityTypeHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
@@ -65,7 +67,7 @@ func (*EntityTypeHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case entitytypehistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case entitytypehistory.FieldID, entitytypehistory.FieldRef, entitytypehistory.FieldCreatedBy, entitytypehistory.FieldUpdatedBy, entitytypehistory.FieldDeletedBy, entitytypehistory.FieldOwnerID, entitytypehistory.FieldInternalNotes, entitytypehistory.FieldSystemInternalID, entitytypehistory.FieldName:
+		case entitytypehistory.FieldID, entitytypehistory.FieldRef, entitytypehistory.FieldCreatedBy, entitytypehistory.FieldUpdatedBy, entitytypehistory.FieldUpdatedByImpersonator, entitytypehistory.FieldDeletedBy, entitytypehistory.FieldOwnerID, entitytypehistory.FieldInternalNotes, entitytypehistory.FieldSystemInternalID, entitytypehistory.FieldName:
 			values[i] = new(sql.NullString)
 		case entitytypehistory.FieldHistoryTime, entitytypehistory.FieldCreatedAt, entitytypehistory.FieldUpdatedAt, entitytypehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -131,6 +133,13 @@ func (_m *EntityTypeHistory) assignValues(columns []string, values []any) error 
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
+			}
+		case entitytypehistory.FieldUpdatedByImpersonator:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_impersonator", values[i])
+			} else if value.Valid {
+				_m.UpdatedByImpersonator = new(string)
+				*_m.UpdatedByImpersonator = value.String
 			}
 		case entitytypehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -240,6 +249,11 @@ func (_m *EntityTypeHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
+	builder.WriteString(", ")
+	if v := _m.UpdatedByImpersonator; v != nil {
+		builder.WriteString("updated_by_impersonator=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))

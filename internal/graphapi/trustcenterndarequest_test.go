@@ -602,6 +602,7 @@ func TestMutationTrustCenterNDARequestApprovalEmailsFallBackToApproverRoles(t *t
 func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 	tcOrg := createFreshOrgWithTrustCenter(t, withNDATemplate())
 	trustCenter := tcOrg.trustCenter
+	pdfHash := getMD5Hash(t, pdfFilePath)
 
 	tcOrg2 := createFreshOrgWithTrustCenter(t, withNDATemplate())
 	otherTrustCenter := tcOrg2.trustCenter
@@ -714,17 +715,17 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 						"signature_metadata": map[string]any{
 							"ip_address": "192.168.1.100",
 							"timestamp":  "2025-09-22T19:37:59.988Z",
-							"pdf_hash":   "a1b2c3d4e5f6789012345678901234567890abcd",
+							"pdf_hash":   pdfHash,
 							"user_id":    anonUser.SubjectID,
 						},
-						"pdf_file_id":     "some-pdf-file-id",
+						"pdf_file_id":     *tcOrg.ndaFileID,
 						"trust_center_id": trustCenter.ID,
 					},
 				})
 				assert.NilError(t, err)
 
-				// Fetch the updated request to verify status
-				updatedReq, err := suite.client.api.GetTrustCenterNDARequestByID(tc.ctx, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
+				// Fetch the updated request as org owner to verify status — anon TC users cannot read NDA requests
+				updatedReq, err := suite.client.api.GetTrustCenterNDARequestByID(tcOrg.owner.UserCtx, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
 				assert.NilError(t, err)
 				assert.Equal(t, enums.TrustCenterNDARequestStatusSigned, *updatedReq.TrustCenterNDARequest.Status)
 			}
@@ -1079,8 +1080,7 @@ func TestMutationRevokeNDARequestsRemovesDocAccess(t *testing.T) {
 		subjectID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, id)
 
 		anonCaller := auth.NewTrustCenterCaller(trustCenter.OwnerID, subjectID, "Anonymous User", "")
-		anonCtx := auth.WithCaller(context.Background(), anonCaller)
-		anonCtx = auth.ActiveTrustCenterIDKey.Set(anonCtx, trustCenter.ID)
+		anonCtx := newAnonTrustCenterCtxFromCaller(anonCaller, trustCenter.ID)
 
 		anonCtxs = append(anonCtxs, anonCtx)
 

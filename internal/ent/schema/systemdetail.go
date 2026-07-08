@@ -155,6 +155,7 @@ func (SystemDetail) Indexes() []ent.Index {
 func (SystemDetail) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
+		models.CatalogRegistryModule,
 	}
 }
 

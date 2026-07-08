@@ -36,6 +36,7 @@ mutation CreateBulkCSVDirectoryGroup ($input: Upload!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -77,6 +78,7 @@ mutation CreateBulkDirectoryGroup ($input: [CreateDirectoryGroupInput!]) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -118,6 +120,7 @@ mutation CreateDirectoryGroup ($input: CreateDirectoryGroupInput!) {
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -201,6 +204,7 @@ query GetDirectoryGroupByID ($directoryGroupId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 	}
 }
 query GetDirectoryGroups ($first: Int, $last: Int, $where: DirectoryGroupWhereInput) {
@@ -279,6 +283,7 @@ mutation UpdateDirectoryGroup ($updateDirectoryGroupId: ID!, $input: UpdateDirec
 			tags
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }

@@ -82,6 +82,20 @@ func (_c *IntegrationRunCreate) SetNillableUpdatedBy(v *string) *IntegrationRunC
 	return _c
 }
 
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (_c *IntegrationRunCreate) SetUpdatedByImpersonator(v string) *IntegrationRunCreate {
+	_c.mutation.SetUpdatedByImpersonator(v)
+	return _c
+}
+
+// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
+func (_c *IntegrationRunCreate) SetNillableUpdatedByImpersonator(v *string) *IntegrationRunCreate {
+	if v != nil {
+		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
 // SetDeletedAt sets the "deleted_at" field.
 func (_c *IntegrationRunCreate) SetDeletedAt(v time.Time) *IntegrationRunCreate {
 	_c.mutation.SetDeletedAt(v)
@@ -541,6 +555,10 @@ func (_c *IntegrationRunCreate) createSpec() (*IntegrationRun, *sqlgraph.CreateS
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(integrationrun.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
+		_spec.SetField(integrationrun.FieldUpdatedByImpersonator, field.TypeString, value)
+		_node.UpdatedByImpersonator = &value
 	}
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(integrationrun.FieldDeletedAt, field.TypeTime, value)

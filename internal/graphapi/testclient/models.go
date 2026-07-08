@@ -20,6 +20,8 @@ type APIToken struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -187,6 +189,22 @@ type APITokenWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -308,6 +326,8 @@ type ActionPlan struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
@@ -561,6 +581,22 @@ type ActionPlanWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// revision field predicates
 	Revision             *string  `json:"revision,omitempty"`
 	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
@@ -1012,6 +1048,8 @@ type Assessment struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -1101,6 +1139,8 @@ type AssessmentResponse struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the assessment this response is for
@@ -1268,6 +1308,22 @@ type AssessmentResponseWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -1604,6 +1660,22 @@ type AssessmentWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -1740,6 +1812,8 @@ type Asset struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -1995,6 +2069,22 @@ type AssetWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -2670,6 +2760,8 @@ type Campaign struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -2840,6 +2932,8 @@ type CampaignTarget struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
@@ -3006,6 +3100,22 @@ type CampaignTargetWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -3272,6 +3382,22 @@ type CampaignWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -3727,6 +3853,8 @@ type CheckResult struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// current status of the control
@@ -3893,6 +4021,22 @@ type CheckResultWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// status field predicates
 	Status      *enums.CheckStatus  `json:"status,omitempty"`
 	StatusNeq   *enums.CheckStatus  `json:"statusNEQ,omitempty"`
@@ -4066,6 +4210,8 @@ type Contact struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -4239,6 +4385,22 @@ type ContactWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -4427,6 +4589,8 @@ type Control struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -4693,6 +4857,9 @@ type ControlEdge struct {
 type ControlEvidence struct {
 	// total number of evidence items linked to the control
 	TotalCount int64 `json:"totalCount"`
+	// from the total number, the amount inherited from linked controls instead of directly
+	// linked to this control
+	InheritedCount int64 `json:"inheritedCount"`
 	// the most severe evidence status among all linked evidence items
 	WorstStatus *enums.EvidenceStatus `json:"worstStatus,omitempty"`
 	// number of evidence items with auditor-approved status
@@ -4733,6 +4900,8 @@ type ControlImplementation struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -4905,6 +5074,22 @@ type ControlImplementationWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -5037,6 +5222,10 @@ type ControlImplementationWhereInput struct {
 type ControlInfo struct {
 	// unique identifier of the control
 	ID string `json:"id"`
+	// id(s) of the mapped_control this related control from if the mapping is org owned
+	MappedControlReferenceIDs []string `json:"mappedControlReferenceIDs,omitempty"`
+	// id(s) of the subcontrol the mapping was inherited from, this is null if the control was directly mapped, if it was inherited from a subcontrol it will have the subcontrol IDs that are providing the mapping
+	InheritedFromSubcontrolIDs []string `json:"inheritedFromSubcontrolIDs,omitempty"`
 	// the unique reference code for the control
 	RefCode string `json:"refCode"`
 	// description of what the control is supposed to accomplish
@@ -5055,6 +5244,8 @@ type ControlInfo struct {
 	Subcategory *string `json:"subcategory,omitempty"`
 	// whether this entry is a subcontrol rather than a top-level control
 	IsSubcontrol bool `json:"isSubcontrol"`
+	// the id of the parent control if this is a subcontrol, empty if isSubcontrol is false
+	ParentControlID *string `json:"parentControlID,omitempty"`
 }
 
 type ControlObjective struct {
@@ -5063,6 +5254,8 @@ type ControlObjective struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -5249,6 +5442,22 @@ type ControlObjectiveWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -5488,6 +5697,8 @@ type ControlPolicies struct {
 type ControlReport struct {
 	// unique identifier of the control
 	ID string `json:"id"`
+	// the id of the parent control, only populated when the object is a subcontrol
+	ParentControlID *string `json:"parentControlID,omitempty"`
 	// the unique reference code for the control
 	RefCode string `json:"refCode"`
 	// description of what the control is supposed to accomplish
@@ -5629,6 +5840,22 @@ type ControlWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -7331,7 +7558,6 @@ type CreateEntityInput struct {
 	OwnerID                             *string          `json:"ownerID,omitempty"`
 	BlockedGroupIDs                     []string         `json:"blockedGroupIDs,omitempty"`
 	EditorIDs                           []string         `json:"editorIDs,omitempty"`
-	ViewerIDs                           []string         `json:"viewerIDs,omitempty"`
 	InternalOwnerUserID                 *string          `json:"internalOwnerUserID,omitempty"`
 	InternalOwnerGroupID                *string          `json:"internalOwnerGroupID,omitempty"`
 	ReviewedByUserID                    *string          `json:"reviewedByUserID,omitempty"`
@@ -7568,6 +7794,10 @@ type CreateFindingControlInput struct {
 type CreateFindingInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// who reviewed the finding when no user or group is linked
+	ReviewedBy *string `json:"reviewedBy,omitempty"`
+	// who the finding is assigned to when no user or group is linked
+	AssignedTo *string `json:"assignedTo,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
@@ -7653,7 +7883,10 @@ type CreateFindingInput struct {
 	OwnerID              *string        `json:"ownerID,omitempty"`
 	BlockedGroupIDs      []string       `json:"blockedGroupIDs,omitempty"`
 	EditorIDs            []string       `json:"editorIDs,omitempty"`
-	ViewerIDs            []string       `json:"viewerIDs,omitempty"`
+	ReviewedByUserID     *string        `json:"reviewedByUserID,omitempty"`
+	ReviewedByGroupID    *string        `json:"reviewedByGroupID,omitempty"`
+	AssignedToUserID     *string        `json:"assignedToUserID,omitempty"`
+	AssignedToGroupID    *string        `json:"assignedToGroupID,omitempty"`
 	EnvironmentID        *string        `json:"environmentID,omitempty"`
 	ScopeID              *string        `json:"scopeID,omitempty"`
 	FindingStatusID      *string        `json:"findingStatusID,omitempty"`
@@ -7731,12 +7964,6 @@ type CreateGroupInput struct {
 	ControlImplementationEditorIDs       []string                 `json:"controlImplementationEditorIDs,omitempty"`
 	ControlImplementationBlockedGroupIDs []string                 `json:"controlImplementationBlockedGroupIDs,omitempty"`
 	ControlImplementationViewerIDs       []string                 `json:"controlImplementationViewerIDs,omitempty"`
-	ScanEditorIDs                        []string                 `json:"scanEditorIDs,omitempty"`
-	ScanBlockedGroupIDs                  []string                 `json:"scanBlockedGroupIDs,omitempty"`
-	ScanViewerIDs                        []string                 `json:"scanViewerIDs,omitempty"`
-	EntityEditorIDs                      []string                 `json:"entityEditorIDs,omitempty"`
-	EntityBlockedGroupIDs                []string                 `json:"entityBlockedGroupIDs,omitempty"`
-	EntityViewerIDs                      []string                 `json:"entityViewerIDs,omitempty"`
 	ActionPlanEditorIDs                  []string                 `json:"actionPlanEditorIDs,omitempty"`
 	ActionPlanBlockedGroupIDs            []string                 `json:"actionPlanBlockedGroupIDs,omitempty"`
 	ActionPlanViewerIDs                  []string                 `json:"actionPlanViewerIDs,omitempty"`
@@ -7754,6 +7981,16 @@ type CreateGroupInput struct {
 	ControlBlockedGroupIDs               []string                 `json:"controlBlockedGroupIDs,omitempty"`
 	MappedControlEditorIDs               []string                 `json:"mappedControlEditorIDs,omitempty"`
 	MappedControlBlockedGroupIDs         []string                 `json:"mappedControlBlockedGroupIDs,omitempty"`
+	ScanEditorIDs                        []string                 `json:"scanEditorIDs,omitempty"`
+	ScanBlockedGroupIDs                  []string                 `json:"scanBlockedGroupIDs,omitempty"`
+	EntityEditorIDs                      []string                 `json:"entityEditorIDs,omitempty"`
+	EntityBlockedGroupIDs                []string                 `json:"entityBlockedGroupIDs,omitempty"`
+	FindingEditorIDs                     []string                 `json:"findingEditorIDs,omitempty"`
+	FindingBlockedGroupIDs               []string                 `json:"findingBlockedGroupIDs,omitempty"`
+	ReviewEditorIDs                      []string                 `json:"reviewEditorIDs,omitempty"`
+	ReviewBlockedGroupIDs                []string                 `json:"reviewBlockedGroupIDs,omitempty"`
+	RemediationEditorIDs                 []string                 `json:"remediationEditorIDs,omitempty"`
+	RemediationBlockedGroupIDs           []string                 `json:"remediationBlockedGroupIDs,omitempty"`
 	SettingID                            *string                  `json:"settingID,omitempty"`
 	EventIDs                             []string                 `json:"eventIDs,omitempty"`
 	IntegrationIDs                       []string                 `json:"integrationIDs,omitempty"`
@@ -7993,10 +8230,12 @@ type CreateInviteInput struct {
 	// the number of attempts made to perform email send of the invitation, maximum of 5
 	SendAttempts *int64 `json:"sendAttempts,omitempty"`
 	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes super admin and invitee becomes owner
-	OwnershipTransfer *bool    `json:"ownershipTransfer,omitempty"`
-	OwnerID           *string  `json:"ownerID,omitempty"`
-	EventIDs          []string `json:"eventIDs,omitempty"`
-	GroupIDs          []string `json:"groupIDs,omitempty"`
+	OwnershipTransfer *bool `json:"ownershipTransfer,omitempty"`
+	// when accepted, grants the member an SSO exemption so they are not redirected through the organization's SSO login flow
+	SsoExempt *bool    `json:"ssoExempt,omitempty"`
+	OwnerID   *string  `json:"ownerID,omitempty"`
+	EventIDs  []string `json:"eventIDs,omitempty"`
+	GroupIDs  []string `json:"groupIDs,omitempty"`
 }
 
 // CreateJobResultInput is used for create JobResult object.
@@ -8342,10 +8581,14 @@ type CreateOnboardingInput struct {
 // CreateOrgMembershipInput is used for create OrgMembership object.
 // Input was generated by ent.
 type CreateOrgMembershipInput struct {
-	Role           *enums.Role `json:"role,omitempty"`
-	OrganizationID string      `json:"organizationID"`
-	UserID         string      `json:"userID"`
-	EventIDs       []string    `json:"eventIDs,omitempty"`
+	Role *enums.Role `json:"role,omitempty"`
+	// member is exempt from the SSO login redirect for this organization; TFA enforcement still applies. Who may set this is gated by the org membership mutation policy
+	SsoExempt *bool `json:"ssoExempt,omitempty"`
+	// reason the member was granted an SSO exemption
+	SsoExemptReason *string  `json:"ssoExemptReason,omitempty"`
+	OrganizationID  string   `json:"organizationID"`
+	UserID          string   `json:"userID"`
+	EventIDs        []string `json:"eventIDs,omitempty"`
 }
 
 // CreateOrganizationInput is used for create Organization object.
@@ -8548,7 +8791,7 @@ type CreateOrganizationSettingInput struct {
 	GeoLocation *enums.Region `json:"geoLocation,omitempty"`
 	// should we send email notifications related to billing
 	BillingNotificationsEnabled *bool `json:"billingNotificationsEnabled,omitempty"`
-	// domains allowed to access the organization, if empty all domains are allowed
+	// domains allowed to access the organization via autojoin
 	AllowedEmailDomains []string `json:"allowedEmailDomains,omitempty"`
 	// allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
 	AllowMatchingDomainsAutojoin *bool `json:"allowMatchingDomainsAutojoin,omitempty"`
@@ -8572,8 +8815,16 @@ type CreateOrganizationSettingInput struct {
 	SamlCert *string `json:"samlCert,omitempty"`
 	// enforce SSO authentication for organization members
 	IdentityProviderLoginEnforced *bool `json:"identityProviderLoginEnforced,omitempty"`
+	// when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider
+	IdentityProviderJitProvisioning *bool `json:"identityProviderJitProvisioning,omitempty"`
+	// when set, restricts just-in-time provisioning to users whose authenticated email domain is in this list; when empty, any user who authenticates against the identity provider is provisioned
+	JitAllowedEmailDomains []string `json:"jitAllowedEmailDomains,omitempty"`
 	// enforce 2fa / multifactor authentication for organization members
 	MultifactorAuthEnforced *bool `json:"multifactorAuthEnforced,omitempty"`
+	// email domains whose existing members skip the SSO redirect even when SSO is enforced; TFA enforcement still applies
+	SsoExemptDomains []string `json:"ssoExemptDomains,omitempty"`
+	// allow Openlane support to access this organization without a directory account
+	AllowSupportAccess *bool `json:"allowSupportAccess,omitempty"`
 	// unique token used to receive compliance webhook events
 	ComplianceWebhookToken *string  `json:"complianceWebhookToken,omitempty"`
 	OrganizationID         *string  `json:"organizationID,omitempty"`
@@ -8921,7 +9172,6 @@ type CreateRemediationInput struct {
 	OwnerID          *string        `json:"ownerID,omitempty"`
 	BlockedGroupIDs  []string       `json:"blockedGroupIDs,omitempty"`
 	EditorIDs        []string       `json:"editorIDs,omitempty"`
-	ViewerIDs        []string       `json:"viewerIDs,omitempty"`
 	EnvironmentID    *string        `json:"environmentID,omitempty"`
 	ScopeID          *string        `json:"scopeID,omitempty"`
 	IntegrationIDs   []string       `json:"integrationIDs,omitempty"`
@@ -8993,7 +9243,6 @@ type CreateReviewInput struct {
 	OwnerID           *string        `json:"ownerID,omitempty"`
 	BlockedGroupIDs   []string       `json:"blockedGroupIDs,omitempty"`
 	EditorIDs         []string       `json:"editorIDs,omitempty"`
-	ViewerIDs         []string       `json:"viewerIDs,omitempty"`
 	EnvironmentID     *string        `json:"environmentID,omitempty"`
 	ScopeID           *string        `json:"scopeID,omitempty"`
 	IntegrationIDs    []string       `json:"integrationIDs,omitempty"`
@@ -9109,7 +9358,6 @@ type CreateSLADefinitionInput struct {
 	OwnerID         *string  `json:"ownerID,omitempty"`
 	BlockedGroupIDs []string `json:"blockedGroupIDs,omitempty"`
 	EditorIDs       []string `json:"editorIDs,omitempty"`
-	ViewerIDs       []string `json:"viewerIDs,omitempty"`
 }
 
 // CreateScanInput is used for create Scan object.
@@ -9146,7 +9394,6 @@ type CreateScanInput struct {
 	OwnerID               *string           `json:"ownerID,omitempty"`
 	BlockedGroupIDs       []string          `json:"blockedGroupIDs,omitempty"`
 	EditorIDs             []string          `json:"editorIDs,omitempty"`
-	ViewerIDs             []string          `json:"viewerIDs,omitempty"`
 	ReviewedByUserID      *string           `json:"reviewedByUserID,omitempty"`
 	ReviewedByGroupID     *string           `json:"reviewedByGroupID,omitempty"`
 	AssignedToUserID      *string           `json:"assignedToUserID,omitempty"`
@@ -9933,6 +10180,10 @@ type CreateVendorScoringConfigInput struct {
 type CreateVulnerabilityInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// who reviewed the vulnerability when no user or group is linked
+	ReviewedBy *string `json:"reviewedBy,omitempty"`
+	// who the vulnerability is assigned to when no user or group is linked
+	AssignedTo *string `json:"assignedTo,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
@@ -10029,6 +10280,10 @@ type CreateVulnerabilityInput struct {
 	BlockedGroupIDs       []string       `json:"blockedGroupIDs,omitempty"`
 	EditorIDs             []string       `json:"editorIDs,omitempty"`
 	ViewerIDs             []string       `json:"viewerIDs,omitempty"`
+	ReviewedByUserID      *string        `json:"reviewedByUserID,omitempty"`
+	ReviewedByGroupID     *string        `json:"reviewedByGroupID,omitempty"`
+	AssignedToUserID      *string        `json:"assignedToUserID,omitempty"`
+	AssignedToGroupID     *string        `json:"assignedToGroupID,omitempty"`
 	EnvironmentID         *string        `json:"environmentID,omitempty"`
 	ScopeID               *string        `json:"scopeID,omitempty"`
 	VulnerabilityStatusID *string        `json:"vulnerabilityStatusID,omitempty"`
@@ -10098,6 +10353,8 @@ type CustomDomain struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -10270,6 +10527,22 @@ type CustomDomainWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -10407,6 +10680,8 @@ type CustomTypeEnum struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -10563,6 +10838,22 @@ type CustomTypeEnumWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -10747,6 +11038,8 @@ type DNSVerification struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -10914,6 +11207,22 @@ type DNSVerificationWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -11062,6 +11371,8 @@ type DirectoryAccount struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -11290,6 +11601,22 @@ type DirectoryAccountWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -11859,6 +12186,8 @@ type DirectoryGroup struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -12056,6 +12385,22 @@ type DirectoryGroupWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -12418,6 +12763,8 @@ type DirectoryMembership struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// the organization id that owns the object
@@ -12600,6 +12947,22 @@ type DirectoryMembershipWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -12778,6 +13141,8 @@ type DirectorySyncRun struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// the organization id that owns the object
@@ -12949,6 +13314,22 @@ type DirectorySyncRunWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -13212,6 +13593,8 @@ type Discussion struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the unique discussion identifier from external system, e.g. plate discussion id, only required if synced from external system
@@ -13350,6 +13733,22 @@ type DiscussionWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -13414,6 +13813,8 @@ type DocumentData struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -13579,6 +13980,22 @@ type DocumentDataWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -13703,6 +14120,8 @@ type EmailTemplate struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	Revision *string `json:"revision,omitempty"`
 	// the ID of the organization owner of the object
@@ -13931,6 +14350,22 @@ type EmailTemplateWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// revision field predicates
 	Revision             *string  `json:"revision,omitempty"`
 	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
@@ -14253,6 +14688,8 @@ type Entity struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -14372,7 +14809,6 @@ type Entity struct {
 	Owner                             *Organization                 `json:"owner,omitempty"`
 	BlockedGroups                     *GroupConnection              `json:"blockedGroups"`
 	Editors                           *GroupConnection              `json:"editors"`
-	Viewers                           *GroupConnection              `json:"viewers"`
 	InternalOwnerUser                 *User                         `json:"internalOwnerUser,omitempty"`
 	InternalOwnerGroup                *Group                        `json:"internalOwnerGroup,omitempty"`
 	ReviewedByUser                    *User                         `json:"reviewedByUser,omitempty"`
@@ -14476,6 +14912,8 @@ type EntityType struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -14633,6 +15071,22 @@ type EntityTypeWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -14787,6 +15241,22 @@ type EntityWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -15469,9 +15939,6 @@ type EntityWhereInput struct {
 	// editors edge predicates
 	HasEditors     *bool              `json:"hasEditors,omitempty"`
 	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
-	// viewers edge predicates
-	HasViewers     *bool              `json:"hasViewers,omitempty"`
-	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 	// internal_owner_user edge predicates
 	HasInternalOwnerUser     *bool             `json:"hasInternalOwnerUser,omitempty"`
 	HasInternalOwnerUserWith []*UserWhereInput `json:"hasInternalOwnerUserWith,omitempty"`
@@ -15836,6 +16303,8 @@ type Evidence struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -16047,6 +16516,22 @@ type EvidenceWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -16331,6 +16816,8 @@ type Export struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// the user who initiated the request
 	RequestorID *string `json:"requestorID,omitempty"`
 	// the organization id that owns the object
@@ -16489,6 +16976,22 @@ type ExportWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// requestor_id field predicates
 	RequestorID             *string  `json:"requestorID,omitempty"`
 	RequestorIdneq          *string  `json:"requestorIDNEQ,omitempty"`
@@ -16592,6 +17095,8 @@ type File struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -16783,6 +17288,22 @@ type FileWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// system_owned field predicates
 	SystemOwned       *bool `json:"systemOwned,omitempty"`
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
@@ -17240,12 +17761,26 @@ type Finding struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// who reviewed the finding when no user or group is linked
+	ReviewedBy *string `json:"reviewedBy,omitempty"`
+	// the user id that reviewed the finding
+	ReviewedByUserID *string `json:"reviewedByUserID,omitempty"`
+	// the group id that reviewed the finding
+	ReviewedByGroupID *string `json:"reviewedByGroupID,omitempty"`
+	// who the finding is assigned to when no user or group is linked
+	AssignedTo *string `json:"assignedTo,omitempty"`
+	// the user id assigned to the finding
+	AssignedToUserID *string `json:"assignedToUserID,omitempty"`
+	// the group id assigned to the finding
+	AssignedToGroupID *string `json:"assignedToGroupID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
@@ -17341,7 +17876,10 @@ type Finding struct {
 	Owner              *Organization                `json:"owner,omitempty"`
 	BlockedGroups      *GroupConnection             `json:"blockedGroups"`
 	Editors            *GroupConnection             `json:"editors"`
-	Viewers            *GroupConnection             `json:"viewers"`
+	ReviewedByUser     *User                        `json:"reviewedByUser,omitempty"`
+	ReviewedByGroup    *Group                       `json:"reviewedByGroup,omitempty"`
+	AssignedToUser     *User                        `json:"assignedToUser,omitempty"`
+	AssignedToGroup    *Group                       `json:"assignedToGroup,omitempty"`
 	Environment        *CustomTypeEnum              `json:"environment,omitempty"`
 	Scope              *CustomTypeEnum              `json:"scope,omitempty"`
 	FindingStatus      *CustomTypeEnum              `json:"findingStatus,omitempty"`
@@ -17409,6 +17947,8 @@ type FindingControl struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// the id of the finding associated with the control
 	FindingID string `json:"findingID"`
 	// the id of the control mapped to the finding when it exists in the catalog
@@ -17555,6 +18095,22 @@ type FindingControlWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// external_standard field predicates
 	ExternalStandard             *string  `json:"externalStandard,omitempty"`
 	ExternalStandardNeq          *string  `json:"externalStandardNEQ,omitempty"`
@@ -17737,6 +18293,22 @@ type FindingWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -17767,6 +18339,102 @@ type FindingWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// reviewed_by field predicates
+	ReviewedBy             *string  `json:"reviewedBy,omitempty"`
+	ReviewedByNeq          *string  `json:"reviewedByNEQ,omitempty"`
+	ReviewedByIn           []string `json:"reviewedByIn,omitempty"`
+	ReviewedByNotIn        []string `json:"reviewedByNotIn,omitempty"`
+	ReviewedByGt           *string  `json:"reviewedByGT,omitempty"`
+	ReviewedByGte          *string  `json:"reviewedByGTE,omitempty"`
+	ReviewedByLt           *string  `json:"reviewedByLT,omitempty"`
+	ReviewedByLte          *string  `json:"reviewedByLTE,omitempty"`
+	ReviewedByContains     *string  `json:"reviewedByContains,omitempty"`
+	ReviewedByHasPrefix    *string  `json:"reviewedByHasPrefix,omitempty"`
+	ReviewedByHasSuffix    *string  `json:"reviewedByHasSuffix,omitempty"`
+	ReviewedByIsNil        *bool    `json:"reviewedByIsNil,omitempty"`
+	ReviewedByNotNil       *bool    `json:"reviewedByNotNil,omitempty"`
+	ReviewedByEqualFold    *string  `json:"reviewedByEqualFold,omitempty"`
+	ReviewedByContainsFold *string  `json:"reviewedByContainsFold,omitempty"`
+	// reviewed_by_user_id field predicates
+	ReviewedByUserID             *string  `json:"reviewedByUserID,omitempty"`
+	ReviewedByUserIdneq          *string  `json:"reviewedByUserIDNEQ,omitempty"`
+	ReviewedByUserIDIn           []string `json:"reviewedByUserIDIn,omitempty"`
+	ReviewedByUserIDNotIn        []string `json:"reviewedByUserIDNotIn,omitempty"`
+	ReviewedByUserIdgt           *string  `json:"reviewedByUserIDGT,omitempty"`
+	ReviewedByUserIdgte          *string  `json:"reviewedByUserIDGTE,omitempty"`
+	ReviewedByUserIdlt           *string  `json:"reviewedByUserIDLT,omitempty"`
+	ReviewedByUserIdlte          *string  `json:"reviewedByUserIDLTE,omitempty"`
+	ReviewedByUserIDContains     *string  `json:"reviewedByUserIDContains,omitempty"`
+	ReviewedByUserIDHasPrefix    *string  `json:"reviewedByUserIDHasPrefix,omitempty"`
+	ReviewedByUserIDHasSuffix    *string  `json:"reviewedByUserIDHasSuffix,omitempty"`
+	ReviewedByUserIDIsNil        *bool    `json:"reviewedByUserIDIsNil,omitempty"`
+	ReviewedByUserIDNotNil       *bool    `json:"reviewedByUserIDNotNil,omitempty"`
+	ReviewedByUserIDEqualFold    *string  `json:"reviewedByUserIDEqualFold,omitempty"`
+	ReviewedByUserIDContainsFold *string  `json:"reviewedByUserIDContainsFold,omitempty"`
+	// reviewed_by_group_id field predicates
+	ReviewedByGroupID             *string  `json:"reviewedByGroupID,omitempty"`
+	ReviewedByGroupIdneq          *string  `json:"reviewedByGroupIDNEQ,omitempty"`
+	ReviewedByGroupIDIn           []string `json:"reviewedByGroupIDIn,omitempty"`
+	ReviewedByGroupIDNotIn        []string `json:"reviewedByGroupIDNotIn,omitempty"`
+	ReviewedByGroupIdgt           *string  `json:"reviewedByGroupIDGT,omitempty"`
+	ReviewedByGroupIdgte          *string  `json:"reviewedByGroupIDGTE,omitempty"`
+	ReviewedByGroupIdlt           *string  `json:"reviewedByGroupIDLT,omitempty"`
+	ReviewedByGroupIdlte          *string  `json:"reviewedByGroupIDLTE,omitempty"`
+	ReviewedByGroupIDContains     *string  `json:"reviewedByGroupIDContains,omitempty"`
+	ReviewedByGroupIDHasPrefix    *string  `json:"reviewedByGroupIDHasPrefix,omitempty"`
+	ReviewedByGroupIDHasSuffix    *string  `json:"reviewedByGroupIDHasSuffix,omitempty"`
+	ReviewedByGroupIDIsNil        *bool    `json:"reviewedByGroupIDIsNil,omitempty"`
+	ReviewedByGroupIDNotNil       *bool    `json:"reviewedByGroupIDNotNil,omitempty"`
+	ReviewedByGroupIDEqualFold    *string  `json:"reviewedByGroupIDEqualFold,omitempty"`
+	ReviewedByGroupIDContainsFold *string  `json:"reviewedByGroupIDContainsFold,omitempty"`
+	// assigned_to field predicates
+	AssignedTo             *string  `json:"assignedTo,omitempty"`
+	AssignedToNeq          *string  `json:"assignedToNEQ,omitempty"`
+	AssignedToIn           []string `json:"assignedToIn,omitempty"`
+	AssignedToNotIn        []string `json:"assignedToNotIn,omitempty"`
+	AssignedToGt           *string  `json:"assignedToGT,omitempty"`
+	AssignedToGte          *string  `json:"assignedToGTE,omitempty"`
+	AssignedToLt           *string  `json:"assignedToLT,omitempty"`
+	AssignedToLte          *string  `json:"assignedToLTE,omitempty"`
+	AssignedToContains     *string  `json:"assignedToContains,omitempty"`
+	AssignedToHasPrefix    *string  `json:"assignedToHasPrefix,omitempty"`
+	AssignedToHasSuffix    *string  `json:"assignedToHasSuffix,omitempty"`
+	AssignedToIsNil        *bool    `json:"assignedToIsNil,omitempty"`
+	AssignedToNotNil       *bool    `json:"assignedToNotNil,omitempty"`
+	AssignedToEqualFold    *string  `json:"assignedToEqualFold,omitempty"`
+	AssignedToContainsFold *string  `json:"assignedToContainsFold,omitempty"`
+	// assigned_to_user_id field predicates
+	AssignedToUserID             *string  `json:"assignedToUserID,omitempty"`
+	AssignedToUserIdneq          *string  `json:"assignedToUserIDNEQ,omitempty"`
+	AssignedToUserIDIn           []string `json:"assignedToUserIDIn,omitempty"`
+	AssignedToUserIDNotIn        []string `json:"assignedToUserIDNotIn,omitempty"`
+	AssignedToUserIdgt           *string  `json:"assignedToUserIDGT,omitempty"`
+	AssignedToUserIdgte          *string  `json:"assignedToUserIDGTE,omitempty"`
+	AssignedToUserIdlt           *string  `json:"assignedToUserIDLT,omitempty"`
+	AssignedToUserIdlte          *string  `json:"assignedToUserIDLTE,omitempty"`
+	AssignedToUserIDContains     *string  `json:"assignedToUserIDContains,omitempty"`
+	AssignedToUserIDHasPrefix    *string  `json:"assignedToUserIDHasPrefix,omitempty"`
+	AssignedToUserIDHasSuffix    *string  `json:"assignedToUserIDHasSuffix,omitempty"`
+	AssignedToUserIDIsNil        *bool    `json:"assignedToUserIDIsNil,omitempty"`
+	AssignedToUserIDNotNil       *bool    `json:"assignedToUserIDNotNil,omitempty"`
+	AssignedToUserIDEqualFold    *string  `json:"assignedToUserIDEqualFold,omitempty"`
+	AssignedToUserIDContainsFold *string  `json:"assignedToUserIDContainsFold,omitempty"`
+	// assigned_to_group_id field predicates
+	AssignedToGroupID             *string  `json:"assignedToGroupID,omitempty"`
+	AssignedToGroupIdneq          *string  `json:"assignedToGroupIDNEQ,omitempty"`
+	AssignedToGroupIDIn           []string `json:"assignedToGroupIDIn,omitempty"`
+	AssignedToGroupIDNotIn        []string `json:"assignedToGroupIDNotIn,omitempty"`
+	AssignedToGroupIdgt           *string  `json:"assignedToGroupIDGT,omitempty"`
+	AssignedToGroupIdgte          *string  `json:"assignedToGroupIDGTE,omitempty"`
+	AssignedToGroupIdlt           *string  `json:"assignedToGroupIDLT,omitempty"`
+	AssignedToGroupIdlte          *string  `json:"assignedToGroupIDLTE,omitempty"`
+	AssignedToGroupIDContains     *string  `json:"assignedToGroupIDContains,omitempty"`
+	AssignedToGroupIDHasPrefix    *string  `json:"assignedToGroupIDHasPrefix,omitempty"`
+	AssignedToGroupIDHasSuffix    *string  `json:"assignedToGroupIDHasSuffix,omitempty"`
+	AssignedToGroupIDIsNil        *bool    `json:"assignedToGroupIDIsNil,omitempty"`
+	AssignedToGroupIDNotNil       *bool    `json:"assignedToGroupIDNotNil,omitempty"`
+	AssignedToGroupIDEqualFold    *string  `json:"assignedToGroupIDEqualFold,omitempty"`
+	AssignedToGroupIDContainsFold *string  `json:"assignedToGroupIDContainsFold,omitempty"`
 	// system_owned field predicates
 	SystemOwned       *bool `json:"systemOwned,omitempty"`
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
@@ -18285,9 +18953,18 @@ type FindingWhereInput struct {
 	// editors edge predicates
 	HasEditors     *bool              `json:"hasEditors,omitempty"`
 	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
-	// viewers edge predicates
-	HasViewers     *bool              `json:"hasViewers,omitempty"`
-	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
+	// reviewed_by_user edge predicates
+	HasReviewedByUser     *bool             `json:"hasReviewedByUser,omitempty"`
+	HasReviewedByUserWith []*UserWhereInput `json:"hasReviewedByUserWith,omitempty"`
+	// reviewed_by_group edge predicates
+	HasReviewedByGroup     *bool              `json:"hasReviewedByGroup,omitempty"`
+	HasReviewedByGroupWith []*GroupWhereInput `json:"hasReviewedByGroupWith,omitempty"`
+	// assigned_to_user edge predicates
+	HasAssignedToUser     *bool             `json:"hasAssignedToUser,omitempty"`
+	HasAssignedToUserWith []*UserWhereInput `json:"hasAssignedToUserWith,omitempty"`
+	// assigned_to_group edge predicates
+	HasAssignedToGroup     *bool              `json:"hasAssignedToGroup,omitempty"`
+	HasAssignedToGroupWith []*GroupWhereInput `json:"hasAssignedToGroupWith,omitempty"`
 	// environment edge predicates
 	HasEnvironment     *bool                       `json:"hasEnvironment,omitempty"`
 	HasEnvironmentWith []*CustomTypeEnumWhereInput `json:"hasEnvironmentWith,omitempty"`
@@ -18375,6 +19052,8 @@ type Group struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -18425,12 +19104,6 @@ type Group struct {
 	ControlImplementationEditors       *ControlImplementationConnection `json:"controlImplementationEditors"`
 	ControlImplementationBlockedGroups *ControlImplementationConnection `json:"controlImplementationBlockedGroups"`
 	ControlImplementationViewers       *ControlImplementationConnection `json:"controlImplementationViewers"`
-	ScanEditors                        *ScanConnection                  `json:"scanEditors"`
-	ScanBlockedGroups                  *ScanConnection                  `json:"scanBlockedGroups"`
-	ScanViewers                        *ScanConnection                  `json:"scanViewers"`
-	EntityEditors                      *EntityConnection                `json:"entityEditors"`
-	EntityBlockedGroups                *EntityConnection                `json:"entityBlockedGroups"`
-	EntityViewers                      *EntityConnection                `json:"entityViewers"`
 	ActionPlanEditors                  *ActionPlanConnection            `json:"actionPlanEditors"`
 	ActionPlanBlockedGroups            *ActionPlanConnection            `json:"actionPlanBlockedGroups"`
 	ActionPlanViewers                  *ActionPlanConnection            `json:"actionPlanViewers"`
@@ -18448,6 +19121,16 @@ type Group struct {
 	ControlBlockedGroups               *ControlConnection               `json:"controlBlockedGroups"`
 	MappedControlEditors               *MappedControlConnection         `json:"mappedControlEditors"`
 	MappedControlBlockedGroups         *MappedControlConnection         `json:"mappedControlBlockedGroups"`
+	ScanEditors                        *ScanConnection                  `json:"scanEditors"`
+	ScanBlockedGroups                  *ScanConnection                  `json:"scanBlockedGroups"`
+	EntityEditors                      *EntityConnection                `json:"entityEditors"`
+	EntityBlockedGroups                *EntityConnection                `json:"entityBlockedGroups"`
+	FindingEditors                     *FindingConnection               `json:"findingEditors"`
+	FindingBlockedGroups               *FindingConnection               `json:"findingBlockedGroups"`
+	ReviewEditors                      *ReviewConnection                `json:"reviewEditors"`
+	ReviewBlockedGroups                *ReviewConnection                `json:"reviewBlockedGroups"`
+	RemediationEditors                 *RemediationConnection           `json:"remediationEditors"`
+	RemediationBlockedGroups           *RemediationConnection           `json:"remediationBlockedGroups"`
 	Setting                            *GroupSetting                    `json:"setting,omitempty"`
 	Users                              *UserConnection                  `json:"users"`
 	Events                             *EventConnection                 `json:"events"`
@@ -18528,17 +19211,19 @@ type GroupMembersInput struct {
 }
 
 type GroupMembership struct {
-	ID        string           `json:"id"`
-	CreatedAt *time.Time       `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time       `json:"updatedAt,omitempty"`
-	CreatedBy *string          `json:"createdBy,omitempty"`
-	UpdatedBy *string          `json:"updatedBy,omitempty"`
-	Role      enums.Role       `json:"role"`
-	GroupID   string           `json:"groupID"`
-	UserID    string           `json:"userID"`
-	Group     *Group           `json:"group"`
-	User      *User            `json:"user"`
-	Events    *EventConnection `json:"events"`
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string          `json:"updatedByImpersonator,omitempty"`
+	Role                  enums.Role       `json:"role"`
+	GroupID               string           `json:"groupID"`
+	UserID                string           `json:"userID"`
+	Group                 *Group           `json:"group"`
+	User                  *User            `json:"user"`
+	Events                *EventConnection `json:"events"`
 }
 
 func (GroupMembership) IsNode() {}
@@ -18682,6 +19367,22 @@ type GroupMembershipWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// role field predicates
 	Role      *enums.Role  `json:"role,omitempty"`
 	RoleNeq   *enums.Role  `json:"roleNEQ,omitempty"`
@@ -18802,6 +19503,8 @@ type GroupSetting struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// whether the group is visible to it's members / owners only or if it's searchable by anyone within the organization
 	Visibility enums.Visibility `json:"visibility"`
 	// the policy governing ability to freely join a group, whether it requires an invitation, application, or either
@@ -18956,6 +19659,22 @@ type GroupSettingWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// visibility field predicates
 	Visibility      *enums.Visibility  `json:"visibility,omitempty"`
 	VisibilityNeq   *enums.Visibility  `json:"visibilityNEQ,omitempty"`
@@ -19074,6 +19793,22 @@ type GroupWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -19286,24 +20021,6 @@ type GroupWhereInput struct {
 	// control_implementation_viewers edge predicates
 	HasControlImplementationViewers     *bool                              `json:"hasControlImplementationViewers,omitempty"`
 	HasControlImplementationViewersWith []*ControlImplementationWhereInput `json:"hasControlImplementationViewersWith,omitempty"`
-	// scan_editors edge predicates
-	HasScanEditors     *bool             `json:"hasScanEditors,omitempty"`
-	HasScanEditorsWith []*ScanWhereInput `json:"hasScanEditorsWith,omitempty"`
-	// scan_blocked_groups edge predicates
-	HasScanBlockedGroups     *bool             `json:"hasScanBlockedGroups,omitempty"`
-	HasScanBlockedGroupsWith []*ScanWhereInput `json:"hasScanBlockedGroupsWith,omitempty"`
-	// scan_viewers edge predicates
-	HasScanViewers     *bool             `json:"hasScanViewers,omitempty"`
-	HasScanViewersWith []*ScanWhereInput `json:"hasScanViewersWith,omitempty"`
-	// entity_editors edge predicates
-	HasEntityEditors     *bool               `json:"hasEntityEditors,omitempty"`
-	HasEntityEditorsWith []*EntityWhereInput `json:"hasEntityEditorsWith,omitempty"`
-	// entity_blocked_groups edge predicates
-	HasEntityBlockedGroups     *bool               `json:"hasEntityBlockedGroups,omitempty"`
-	HasEntityBlockedGroupsWith []*EntityWhereInput `json:"hasEntityBlockedGroupsWith,omitempty"`
-	// entity_viewers edge predicates
-	HasEntityViewers     *bool               `json:"hasEntityViewers,omitempty"`
-	HasEntityViewersWith []*EntityWhereInput `json:"hasEntityViewersWith,omitempty"`
 	// action_plan_editors edge predicates
 	HasActionPlanEditors     *bool                   `json:"hasActionPlanEditors,omitempty"`
 	HasActionPlanEditorsWith []*ActionPlanWhereInput `json:"hasActionPlanEditorsWith,omitempty"`
@@ -19355,6 +20072,36 @@ type GroupWhereInput struct {
 	// mapped_control_blocked_groups edge predicates
 	HasMappedControlBlockedGroups     *bool                      `json:"hasMappedControlBlockedGroups,omitempty"`
 	HasMappedControlBlockedGroupsWith []*MappedControlWhereInput `json:"hasMappedControlBlockedGroupsWith,omitempty"`
+	// scan_editors edge predicates
+	HasScanEditors     *bool             `json:"hasScanEditors,omitempty"`
+	HasScanEditorsWith []*ScanWhereInput `json:"hasScanEditorsWith,omitempty"`
+	// scan_blocked_groups edge predicates
+	HasScanBlockedGroups     *bool             `json:"hasScanBlockedGroups,omitempty"`
+	HasScanBlockedGroupsWith []*ScanWhereInput `json:"hasScanBlockedGroupsWith,omitempty"`
+	// entity_editors edge predicates
+	HasEntityEditors     *bool               `json:"hasEntityEditors,omitempty"`
+	HasEntityEditorsWith []*EntityWhereInput `json:"hasEntityEditorsWith,omitempty"`
+	// entity_blocked_groups edge predicates
+	HasEntityBlockedGroups     *bool               `json:"hasEntityBlockedGroups,omitempty"`
+	HasEntityBlockedGroupsWith []*EntityWhereInput `json:"hasEntityBlockedGroupsWith,omitempty"`
+	// finding_editors edge predicates
+	HasFindingEditors     *bool                `json:"hasFindingEditors,omitempty"`
+	HasFindingEditorsWith []*FindingWhereInput `json:"hasFindingEditorsWith,omitempty"`
+	// finding_blocked_groups edge predicates
+	HasFindingBlockedGroups     *bool                `json:"hasFindingBlockedGroups,omitempty"`
+	HasFindingBlockedGroupsWith []*FindingWhereInput `json:"hasFindingBlockedGroupsWith,omitempty"`
+	// review_editors edge predicates
+	HasReviewEditors     *bool               `json:"hasReviewEditors,omitempty"`
+	HasReviewEditorsWith []*ReviewWhereInput `json:"hasReviewEditorsWith,omitempty"`
+	// review_blocked_groups edge predicates
+	HasReviewBlockedGroups     *bool               `json:"hasReviewBlockedGroups,omitempty"`
+	HasReviewBlockedGroupsWith []*ReviewWhereInput `json:"hasReviewBlockedGroupsWith,omitempty"`
+	// remediation_editors edge predicates
+	HasRemediationEditors     *bool                    `json:"hasRemediationEditors,omitempty"`
+	HasRemediationEditorsWith []*RemediationWhereInput `json:"hasRemediationEditorsWith,omitempty"`
+	// remediation_blocked_groups edge predicates
+	HasRemediationBlockedGroups     *bool                    `json:"hasRemediationBlockedGroups,omitempty"`
+	HasRemediationBlockedGroupsWith []*RemediationWhereInput `json:"hasRemediationBlockedGroupsWith,omitempty"`
 	// setting edge predicates
 	HasSetting     *bool                     `json:"hasSetting,omitempty"`
 	HasSettingWith []*GroupSettingWhereInput `json:"hasSettingWith,omitempty"`
@@ -19397,6 +20144,8 @@ type Hush struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -19567,6 +20316,22 @@ type HushWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -19708,6 +20473,8 @@ type IdentityHolder struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -19949,6 +20716,22 @@ type IdentityHolderWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -20430,6 +21213,8 @@ type Integration struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -20611,6 +21396,22 @@ type IntegrationWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -20947,6 +21748,8 @@ type InternalPolicy struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -21200,6 +22003,22 @@ type InternalPolicyWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -21663,6 +22482,8 @@ type Invite struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// the user who initiated the request
 	RequestorID *string `json:"requestorID,omitempty"`
 	// the organization id that owns the object
@@ -21677,10 +22498,12 @@ type Invite struct {
 	// the number of attempts made to perform email send of the invitation, maximum of 5
 	SendAttempts int64 `json:"sendAttempts"`
 	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes super admin and invitee becomes owner
-	OwnershipTransfer *bool            `json:"ownershipTransfer,omitempty"`
-	Owner             *Organization    `json:"owner,omitempty"`
-	Events            *EventConnection `json:"events"`
-	Groups            *GroupConnection `json:"groups"`
+	OwnershipTransfer *bool `json:"ownershipTransfer,omitempty"`
+	// when accepted, grants the member an SSO exemption so they are not redirected through the organization's SSO login flow
+	SsoExempt *bool            `json:"ssoExempt,omitempty"`
+	Owner     *Organization    `json:"owner,omitempty"`
+	Events    *EventConnection `json:"events"`
+	Groups    *GroupConnection `json:"groups"`
 }
 
 func (Invite) IsNode() {}
@@ -21824,6 +22647,22 @@ type InviteWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// requestor_id field predicates
 	RequestorID             *string  `json:"requestorID,omitempty"`
 	RequestorIdneq          *string  `json:"requestorIDNEQ,omitempty"`
@@ -21905,6 +22744,11 @@ type InviteWhereInput struct {
 	OwnershipTransferNeq    *bool `json:"ownershipTransferNEQ,omitempty"`
 	OwnershipTransferIsNil  *bool `json:"ownershipTransferIsNil,omitempty"`
 	OwnershipTransferNotNil *bool `json:"ownershipTransferNotNil,omitempty"`
+	// sso_exempt field predicates
+	SsoExempt       *bool `json:"ssoExempt,omitempty"`
+	SsoExemptNeq    *bool `json:"ssoExemptNEQ,omitempty"`
+	SsoExemptIsNil  *bool `json:"ssoExemptIsNil,omitempty"`
+	SsoExemptNotNil *bool `json:"ssoExemptNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -21922,6 +22766,8 @@ type JobResult struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the job this result belongs to
@@ -22059,6 +22905,22 @@ type JobResultWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -22168,6 +23030,8 @@ type JobRunner struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -22242,6 +23106,8 @@ type JobRunnerRegistrationToken struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -22373,6 +23239,22 @@ type JobRunnerRegistrationTokenWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -22432,6 +23314,8 @@ type JobRunnerToken struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -22569,6 +23453,22 @@ type JobRunnerTokenWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -22742,6 +23642,22 @@ type JobRunnerWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -22903,6 +23819,8 @@ type JobTemplate struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -23072,6 +23990,22 @@ type JobTemplateWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -23200,6 +24134,8 @@ type MappableDomain struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// Name of the mappable domain
@@ -23350,6 +24286,22 @@ type MappableDomainWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -23391,6 +24343,8 @@ type MappedControl struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -23559,6 +24513,22 @@ type MappedControlWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// system_owned field predicates
 	SystemOwned       *bool `json:"systemOwned,omitempty"`
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
@@ -23685,6 +24655,8 @@ type Narrative struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -23854,6 +24826,22 @@ type NarrativeWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -24001,6 +24989,8 @@ type Note struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// the ID of the organization owner of the object
@@ -24142,6 +25132,22 @@ type NoteWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -24313,6 +25319,8 @@ type Notification struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -24381,6 +25389,8 @@ type NotificationPreference struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the user this preference applies to
@@ -24571,6 +25581,22 @@ type NotificationPreferenceWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -24793,6 +25819,8 @@ type NotificationTemplate struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	Revision *string `json:"revision,omitempty"`
 	// the ID of the organization owner of the object
@@ -24995,6 +26023,22 @@ type NotificationTemplateWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// revision field predicates
 	Revision             *string  `json:"revision,omitempty"`
 	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
@@ -25375,18 +26419,28 @@ type OrgMembersInput struct {
 }
 
 type OrgMembership struct {
-	ID              string           `json:"id"`
-	CreatedAt       *time.Time       `json:"createdAt,omitempty"`
-	UpdatedAt       *time.Time       `json:"updatedAt,omitempty"`
-	CreatedBy       *string          `json:"createdBy,omitempty"`
-	UpdatedBy       *string          `json:"updatedBy,omitempty"`
-	Role            enums.Role       `json:"role"`
-	OrganizationID  string           `json:"organizationID"`
-	UserID          string           `json:"userID"`
-	Organization    *Organization    `json:"organization"`
-	User            *User            `json:"user"`
-	Events          *EventConnection `json:"events"`
-	AdditionalRoles []string         `json:"additionalRoles,omitempty"`
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string    `json:"updatedByImpersonator,omitempty"`
+	Role                  enums.Role `json:"role"`
+	OrganizationID        string     `json:"organizationID"`
+	UserID                string     `json:"userID"`
+	// member is exempt from the SSO login redirect for this organization; TFA enforcement still applies. Who may set this is gated by the org membership mutation policy
+	SsoExempt *bool `json:"ssoExempt,omitempty"`
+	// reason the member was granted an SSO exemption
+	SsoExemptReason *string `json:"ssoExemptReason,omitempty"`
+	// id of the user that granted the SSO exemption; stamped server-side, not settable via the API
+	SsoExemptGrantedBy *string `json:"ssoExemptGrantedBy,omitempty"`
+	// when the SSO exemption was granted; stamped server-side, not settable via the API
+	SsoExemptGrantedAt *models.DateTime `json:"ssoExemptGrantedAt,omitempty"`
+	Organization       *Organization    `json:"organization"`
+	User               *User            `json:"user"`
+	Events             *EventConnection `json:"events"`
+	AdditionalRoles    []string         `json:"additionalRoles,omitempty"`
 }
 
 func (OrgMembership) IsNode() {}
@@ -25530,14 +26584,78 @@ type OrgMembershipWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// role field predicates
-	Role           *enums.Role       `json:"role,omitempty"`
-	RoleNeq        *enums.Role       `json:"roleNEQ,omitempty"`
-	RoleIn         []enums.Role      `json:"roleIn,omitempty"`
-	RoleNotIn      []enums.Role      `json:"roleNotIn,omitempty"`
-	OrganizationID *string           `json:"organizationID,omitempty"`
-	UserID         *string           `json:"userID,omitempty"`
-	HasUserWith    []*UserWhereInput `json:"hasUserWith,omitempty"`
+	Role      *enums.Role  `json:"role,omitempty"`
+	RoleNeq   *enums.Role  `json:"roleNEQ,omitempty"`
+	RoleIn    []enums.Role `json:"roleIn,omitempty"`
+	RoleNotIn []enums.Role `json:"roleNotIn,omitempty"`
+	// sso_exempt field predicates
+	SsoExempt       *bool `json:"ssoExempt,omitempty"`
+	SsoExemptNeq    *bool `json:"ssoExemptNEQ,omitempty"`
+	SsoExemptIsNil  *bool `json:"ssoExemptIsNil,omitempty"`
+	SsoExemptNotNil *bool `json:"ssoExemptNotNil,omitempty"`
+	// sso_exempt_reason field predicates
+	SsoExemptReason             *string  `json:"ssoExemptReason,omitempty"`
+	SsoExemptReasonNeq          *string  `json:"ssoExemptReasonNEQ,omitempty"`
+	SsoExemptReasonIn           []string `json:"ssoExemptReasonIn,omitempty"`
+	SsoExemptReasonNotIn        []string `json:"ssoExemptReasonNotIn,omitempty"`
+	SsoExemptReasonGt           *string  `json:"ssoExemptReasonGT,omitempty"`
+	SsoExemptReasonGte          *string  `json:"ssoExemptReasonGTE,omitempty"`
+	SsoExemptReasonLt           *string  `json:"ssoExemptReasonLT,omitempty"`
+	SsoExemptReasonLte          *string  `json:"ssoExemptReasonLTE,omitempty"`
+	SsoExemptReasonContains     *string  `json:"ssoExemptReasonContains,omitempty"`
+	SsoExemptReasonHasPrefix    *string  `json:"ssoExemptReasonHasPrefix,omitempty"`
+	SsoExemptReasonHasSuffix    *string  `json:"ssoExemptReasonHasSuffix,omitempty"`
+	SsoExemptReasonIsNil        *bool    `json:"ssoExemptReasonIsNil,omitempty"`
+	SsoExemptReasonNotNil       *bool    `json:"ssoExemptReasonNotNil,omitempty"`
+	SsoExemptReasonEqualFold    *string  `json:"ssoExemptReasonEqualFold,omitempty"`
+	SsoExemptReasonContainsFold *string  `json:"ssoExemptReasonContainsFold,omitempty"`
+	// sso_exempt_granted_by field predicates
+	SsoExemptGrantedBy             *string  `json:"ssoExemptGrantedBy,omitempty"`
+	SsoExemptGrantedByNeq          *string  `json:"ssoExemptGrantedByNEQ,omitempty"`
+	SsoExemptGrantedByIn           []string `json:"ssoExemptGrantedByIn,omitempty"`
+	SsoExemptGrantedByNotIn        []string `json:"ssoExemptGrantedByNotIn,omitempty"`
+	SsoExemptGrantedByGt           *string  `json:"ssoExemptGrantedByGT,omitempty"`
+	SsoExemptGrantedByGte          *string  `json:"ssoExemptGrantedByGTE,omitempty"`
+	SsoExemptGrantedByLt           *string  `json:"ssoExemptGrantedByLT,omitempty"`
+	SsoExemptGrantedByLte          *string  `json:"ssoExemptGrantedByLTE,omitempty"`
+	SsoExemptGrantedByContains     *string  `json:"ssoExemptGrantedByContains,omitempty"`
+	SsoExemptGrantedByHasPrefix    *string  `json:"ssoExemptGrantedByHasPrefix,omitempty"`
+	SsoExemptGrantedByHasSuffix    *string  `json:"ssoExemptGrantedByHasSuffix,omitempty"`
+	SsoExemptGrantedByIsNil        *bool    `json:"ssoExemptGrantedByIsNil,omitempty"`
+	SsoExemptGrantedByNotNil       *bool    `json:"ssoExemptGrantedByNotNil,omitempty"`
+	SsoExemptGrantedByEqualFold    *string  `json:"ssoExemptGrantedByEqualFold,omitempty"`
+	SsoExemptGrantedByContainsFold *string  `json:"ssoExemptGrantedByContainsFold,omitempty"`
+	// sso_exempt_granted_at field predicates
+	SsoExemptGrantedAt       *models.DateTime   `json:"ssoExemptGrantedAt,omitempty"`
+	SsoExemptGrantedAtNeq    *models.DateTime   `json:"ssoExemptGrantedAtNEQ,omitempty"`
+	SsoExemptGrantedAtIn     []*models.DateTime `json:"ssoExemptGrantedAtIn,omitempty"`
+	SsoExemptGrantedAtNotIn  []*models.DateTime `json:"ssoExemptGrantedAtNotIn,omitempty"`
+	SsoExemptGrantedAtGt     *models.DateTime   `json:"ssoExemptGrantedAtGT,omitempty"`
+	SsoExemptGrantedAtGte    *models.DateTime   `json:"ssoExemptGrantedAtGTE,omitempty"`
+	SsoExemptGrantedAtLt     *models.DateTime   `json:"ssoExemptGrantedAtLT,omitempty"`
+	SsoExemptGrantedAtLte    *models.DateTime   `json:"ssoExemptGrantedAtLTE,omitempty"`
+	SsoExemptGrantedAtIsNil  *bool              `json:"ssoExemptGrantedAtIsNil,omitempty"`
+	SsoExemptGrantedAtNotNil *bool              `json:"ssoExemptGrantedAtNotNil,omitempty"`
+	OrganizationID           *string            `json:"organizationID,omitempty"`
+	UserID                   *string            `json:"userID,omitempty"`
+	HasUserWith              []*UserWhereInput  `json:"hasUserWith,omitempty"`
 }
 
 type OrgSubscription struct {
@@ -25546,6 +26664,8 @@ type OrgSubscription struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -25666,6 +26786,22 @@ type OrgSubscriptionWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -25771,6 +26907,8 @@ type Organization struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the name of the organization
@@ -25788,7 +26926,9 @@ type Organization struct {
 	// The time the user's (local) avatar was last updated
 	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
 	// the stripe customer ID this organization is associated to
-	StripeCustomerID                   *string                               `json:"stripeCustomerID,omitempty"`
+	StripeCustomerID *string `json:"stripeCustomerID,omitempty"`
+	// a stable slug identifying the organization in its public SSO initiation URL, e.g. /orgs/<sso_slug>/sso
+	SlugName                           *string                               `json:"slugName,omitempty"`
 	ActionPlanCreators                 *GroupConnection                      `json:"actionPlanCreators"`
 	APITokenCreators                   *GroupConnection                      `json:"apiTokenCreators"`
 	AssessmentCreators                 *GroupConnection                      `json:"assessmentCreators"`
@@ -26005,6 +27145,8 @@ type OrganizationSetting struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// domains associated with the organization
@@ -26025,7 +27167,7 @@ type OrganizationSetting struct {
 	OrganizationID *string `json:"organizationID,omitempty"`
 	// should we send email notifications related to billing
 	BillingNotificationsEnabled bool `json:"billingNotificationsEnabled"`
-	// domains allowed to access the organization, if empty all domains are allowed
+	// domains allowed to access the organization via autojoin
 	AllowedEmailDomains []string `json:"allowedEmailDomains,omitempty"`
 	// allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
 	AllowMatchingDomainsAutojoin *bool `json:"allowMatchingDomainsAutojoin,omitempty"`
@@ -26051,8 +27193,16 @@ type OrganizationSetting struct {
 	SamlCert *string `json:"samlCert,omitempty"`
 	// enforce SSO authentication for organization members
 	IdentityProviderLoginEnforced bool `json:"identityProviderLoginEnforced"`
+	// when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider
+	IdentityProviderJitProvisioning bool `json:"identityProviderJitProvisioning"`
+	// when set, restricts just-in-time provisioning to users whose authenticated email domain is in this list; when empty, any user who authenticates against the identity provider is provisioned
+	JitAllowedEmailDomains []string `json:"jitAllowedEmailDomains,omitempty"`
 	// enforce 2fa / multifactor authentication for organization members
 	MultifactorAuthEnforced *bool `json:"multifactorAuthEnforced,omitempty"`
+	// email domains whose existing members skip the SSO redirect even when SSO is enforced; TFA enforcement still applies
+	SsoExemptDomains []string `json:"ssoExemptDomains,omitempty"`
+	// allow Openlane support to access this organization without a directory account
+	AllowSupportAccess *bool `json:"allowSupportAccess,omitempty"`
 	// unique token used to receive compliance webhook events
 	ComplianceWebhookToken *string `json:"complianceWebhookToken,omitempty"`
 	// whether or not a payment method has been added to the account
@@ -26204,6 +27354,22 @@ type OrganizationSettingWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// billing_contact field predicates
 	BillingContact             *string  `json:"billingContact,omitempty"`
 	BillingContactNeq          *string  `json:"billingContactNEQ,omitempty"`
@@ -26440,11 +27606,19 @@ type OrganizationSettingWhereInput struct {
 	// identity_provider_login_enforced field predicates
 	IdentityProviderLoginEnforced    *bool `json:"identityProviderLoginEnforced,omitempty"`
 	IdentityProviderLoginEnforcedNeq *bool `json:"identityProviderLoginEnforcedNEQ,omitempty"`
+	// identity_provider_jit_provisioning field predicates
+	IdentityProviderJitProvisioning    *bool `json:"identityProviderJitProvisioning,omitempty"`
+	IdentityProviderJitProvisioningNeq *bool `json:"identityProviderJitProvisioningNEQ,omitempty"`
 	// multifactor_auth_enforced field predicates
 	MultifactorAuthEnforced       *bool `json:"multifactorAuthEnforced,omitempty"`
 	MultifactorAuthEnforcedNeq    *bool `json:"multifactorAuthEnforcedNEQ,omitempty"`
 	MultifactorAuthEnforcedIsNil  *bool `json:"multifactorAuthEnforcedIsNil,omitempty"`
 	MultifactorAuthEnforcedNotNil *bool `json:"multifactorAuthEnforcedNotNil,omitempty"`
+	// allow_support_access field predicates
+	AllowSupportAccess       *bool `json:"allowSupportAccess,omitempty"`
+	AllowSupportAccessNeq    *bool `json:"allowSupportAccessNEQ,omitempty"`
+	AllowSupportAccessIsNil  *bool `json:"allowSupportAccessIsNil,omitempty"`
+	AllowSupportAccessNotNil *bool `json:"allowSupportAccessNotNil,omitempty"`
 	// compliance_webhook_token field predicates
 	ComplianceWebhookToken             *string  `json:"complianceWebhookToken,omitempty"`
 	ComplianceWebhookTokenNeq          *string  `json:"complianceWebhookTokenNEQ,omitempty"`
@@ -26487,6 +27661,10 @@ type OrganizationSettingWhereInput struct {
 	DomainsHas *string `json:"domainsHas,omitempty"`
 	// Filter for allowedEmailDomainsHas to contain a specific value
 	AllowedEmailDomainsHas *string `json:"allowedEmailDomainsHas,omitempty"`
+	// Filter for jitAllowedEmailDomainsHas to contain a specific value
+	JitAllowedEmailDomainsHas *string `json:"jitAllowedEmailDomainsHas,omitempty"`
+	// Filter for ssoExemptDomainsHas to contain a specific value
+	SsoExemptDomainsHas *string `json:"ssoExemptDomainsHas,omitempty"`
 }
 
 // Return response for transferOrganizationOwnership mutation
@@ -26574,6 +27752,22 @@ type OrganizationWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_name field predicates
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNeq          *string  `json:"displayNameNEQ,omitempty"`
@@ -26652,6 +27846,22 @@ type OrganizationWhereInput struct {
 	AvatarUpdatedAtLte    *time.Time   `json:"avatarUpdatedAtLTE,omitempty"`
 	AvatarUpdatedAtIsNil  *bool        `json:"avatarUpdatedAtIsNil,omitempty"`
 	AvatarUpdatedAtNotNil *bool        `json:"avatarUpdatedAtNotNil,omitempty"`
+	// slug_name field predicates
+	SlugName             *string  `json:"slugName,omitempty"`
+	SlugNameNeq          *string  `json:"slugNameNEQ,omitempty"`
+	SlugNameIn           []string `json:"slugNameIn,omitempty"`
+	SlugNameNotIn        []string `json:"slugNameNotIn,omitempty"`
+	SlugNameGt           *string  `json:"slugNameGT,omitempty"`
+	SlugNameGte          *string  `json:"slugNameGTE,omitempty"`
+	SlugNameLt           *string  `json:"slugNameLT,omitempty"`
+	SlugNameLte          *string  `json:"slugNameLTE,omitempty"`
+	SlugNameContains     *string  `json:"slugNameContains,omitempty"`
+	SlugNameHasPrefix    *string  `json:"slugNameHasPrefix,omitempty"`
+	SlugNameHasSuffix    *string  `json:"slugNameHasSuffix,omitempty"`
+	SlugNameIsNil        *bool    `json:"slugNameIsNil,omitempty"`
+	SlugNameNotNil       *bool    `json:"slugNameNotNil,omitempty"`
+	SlugNameEqualFold    *string  `json:"slugNameEqualFold,omitempty"`
+	SlugNameContainsFold *string  `json:"slugNameContainsFold,omitempty"`
 	// action_plan_creators edge predicates
 	HasActionPlanCreators     *bool              `json:"hasActionPlanCreators,omitempty"`
 	HasActionPlanCreatorsWith []*GroupWhereInput `json:"hasActionPlanCreatorsWith,omitempty"`
@@ -27161,6 +28371,8 @@ type PersonalAccessToken struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the name associated with the token
@@ -27310,6 +28522,22 @@ type PersonalAccessTokenWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -27415,6 +28643,8 @@ type Platform struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -27697,6 +28927,22 @@ type PlatformWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -28528,6 +29774,8 @@ type PolicySummary struct {
 	Name string `json:"name"`
 	// status of the policy, e.g. draft, published, archived, etc.
 	Status enums.DocumentStatus `json:"status"`
+	// empty when linked directly to the control; otherwise the related/mapped control IDs that contributed it
+	InheritedFromIDs []string `json:"inheritedFromIDs,omitempty"`
 }
 
 func (PolicySummary) IsNode() {}
@@ -28538,6 +29786,8 @@ type Procedure struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -28779,6 +30029,22 @@ type ProcedureWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -29205,6 +30471,8 @@ type Program struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -29328,11 +30596,13 @@ type ProgramMembership struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	Role      enums.Role `json:"role"`
-	ProgramID string     `json:"programID"`
-	UserID    string     `json:"userID"`
-	Program   *Program   `json:"program"`
-	User      *User      `json:"user"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string    `json:"updatedByImpersonator,omitempty"`
+	Role                  enums.Role `json:"role"`
+	ProgramID             string     `json:"programID"`
+	UserID                string     `json:"userID"`
+	Program               *Program   `json:"program"`
+	User                  *User      `json:"user"`
 }
 
 func (ProgramMembership) IsNode() {}
@@ -29476,6 +30746,22 @@ type ProgramMembershipWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// role field predicates
 	Role      *enums.Role  `json:"role,omitempty"`
 	RoleNeq   *enums.Role  `json:"roleNEQ,omitempty"`
@@ -29570,6 +30856,22 @@ type ProgramWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -29906,6 +31208,8 @@ type Remediation struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -29969,7 +31273,6 @@ type Remediation struct {
 	Owner           *Organization            `json:"owner,omitempty"`
 	BlockedGroups   *GroupConnection         `json:"blockedGroups"`
 	Editors         *GroupConnection         `json:"editors"`
-	Viewers         *GroupConnection         `json:"viewers"`
 	Environment     *CustomTypeEnum          `json:"environment,omitempty"`
 	Scope           *CustomTypeEnum          `json:"scope,omitempty"`
 	Integrations    *IntegrationConnection   `json:"integrations"`
@@ -30130,6 +31433,22 @@ type RemediationWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -30550,9 +31869,6 @@ type RemediationWhereInput struct {
 	// editors edge predicates
 	HasEditors     *bool              `json:"hasEditors,omitempty"`
 	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
-	// viewers edge predicates
-	HasViewers     *bool              `json:"hasViewers,omitempty"`
-	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 	// environment edge predicates
 	HasEnvironment     *bool                       `json:"hasEnvironment,omitempty"`
 	HasEnvironmentWith []*CustomTypeEnumWhereInput `json:"hasEnvironmentWith,omitempty"`
@@ -30640,6 +31956,8 @@ type Review struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -30699,7 +32017,6 @@ type Review struct {
 	Owner           *Organization            `json:"owner,omitempty"`
 	BlockedGroups   *GroupConnection         `json:"blockedGroups"`
 	Editors         *GroupConnection         `json:"editors"`
-	Viewers         *GroupConnection         `json:"viewers"`
 	Environment     *CustomTypeEnum          `json:"environment,omitempty"`
 	Scope           *CustomTypeEnum          `json:"scope,omitempty"`
 	Integrations    *IntegrationConnection   `json:"integrations"`
@@ -30862,6 +32179,22 @@ type ReviewWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -31223,9 +32556,6 @@ type ReviewWhereInput struct {
 	// editors edge predicates
 	HasEditors     *bool              `json:"hasEditors,omitempty"`
 	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
-	// viewers edge predicates
-	HasViewers     *bool              `json:"hasViewers,omitempty"`
-	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 	// environment edge predicates
 	HasEnvironment     *bool                       `json:"hasEnvironment,omitempty"`
 	HasEnvironmentWith []*CustomTypeEnumWhereInput `json:"hasEnvironmentWith,omitempty"`
@@ -31290,6 +32620,8 @@ type Risk struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -31531,6 +32863,22 @@ type RiskWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -32033,6 +33381,8 @@ type SLADefinition struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -32046,7 +33396,6 @@ type SLADefinition struct {
 	Owner         *Organization       `json:"owner,omitempty"`
 	BlockedGroups *GroupConnection    `json:"blockedGroups"`
 	Editors       *GroupConnection    `json:"editors"`
-	Viewers       *GroupConnection    `json:"viewers"`
 }
 
 func (SLADefinition) IsNode() {}
@@ -32190,6 +33539,22 @@ type SLADefinitionWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -32243,9 +33608,6 @@ type SLADefinitionWhereInput struct {
 	// editors edge predicates
 	HasEditors     *bool              `json:"hasEditors,omitempty"`
 	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
-	// viewers edge predicates
-	HasViewers     *bool              `json:"hasViewers,omitempty"`
-	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -32256,6 +33618,8 @@ type Scan struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -32307,7 +33671,6 @@ type Scan struct {
 	Owner               *Organization            `json:"owner,omitempty"`
 	BlockedGroups       *GroupConnection         `json:"blockedGroups"`
 	Editors             *GroupConnection         `json:"editors"`
-	Viewers             *GroupConnection         `json:"viewers"`
 	ReviewedByUser      *User                    `json:"reviewedByUser,omitempty"`
 	ReviewedByGroup     *Group                   `json:"reviewedByGroup,omitempty"`
 	AssignedToUser      *User                    `json:"assignedToUser,omitempty"`
@@ -32471,6 +33834,22 @@ type ScanWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -32766,9 +34145,6 @@ type ScanWhereInput struct {
 	// editors edge predicates
 	HasEditors     *bool              `json:"hasEditors,omitempty"`
 	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
-	// viewers edge predicates
-	HasViewers     *bool              `json:"hasViewers,omitempty"`
-	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 	// reviewed_by_user edge predicates
 	HasReviewedByUser     *bool             `json:"hasReviewedByUser,omitempty"`
 	HasReviewedByUserWith []*UserWhereInput `json:"hasReviewedByUserWith,omitempty"`
@@ -32841,6 +34217,8 @@ type ScheduledJob struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// the ID of the organization owner of the object
@@ -32932,6 +34310,8 @@ type ScheduledJobRun struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// The runner that this job will be executed on. Useful to know because of self hosted runners
@@ -33068,6 +34448,22 @@ type ScheduledJobRunWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -33228,6 +34624,22 @@ type ScheduledJobWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -33391,6 +34803,8 @@ type Standard struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
@@ -33562,6 +34976,22 @@ type StandardWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// revision field predicates
 	Revision             *string  `json:"revision,omitempty"`
 	RevisionNeq          *string  `json:"revisionNEQ,omitempty"`
@@ -33836,6 +35266,8 @@ type Subcontrol struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -34099,6 +35531,22 @@ type SubcontrolWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -34610,6 +36058,8 @@ type Subprocessor struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -34775,6 +36225,22 @@ type SubprocessorWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -34912,6 +36378,8 @@ type Subscriber struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -35067,6 +36535,22 @@ type SubscriberWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -35213,6 +36697,8 @@ type SystemDetail struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -35387,6 +36873,22 @@ type SystemDetailWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -35548,6 +37050,8 @@ type TFASetting struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// specifies if the TFA device has been verified
 	Verified bool `json:"verified"`
 	// specifies a user may complete authentication by verifying a TOTP code delivered through an authenticator app
@@ -35671,6 +37175,22 @@ type TFASettingWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// verified field predicates
 	Verified    *bool `json:"verified,omitempty"`
 	VerifiedNeq *bool `json:"verifiedNEQ,omitempty"`
@@ -35690,6 +37210,8 @@ type TagDefinition struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -35834,6 +37356,22 @@ type TagDefinitionWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -35962,6 +37500,8 @@ type Task struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -36177,6 +37717,22 @@ type TaskWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -36536,6 +38092,8 @@ type Template struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -36754,6 +38312,22 @@ type TemplateWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -36966,6 +38540,8 @@ type TrustCenter struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -37020,6 +38596,8 @@ type TrustCenterCompliance struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// ID of the standard
@@ -37173,6 +38751,22 @@ type TrustCenterComplianceWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// standard_id field predicates
 	StandardID             *string  `json:"standardID,omitempty"`
 	StandardIdneq          *string  `json:"standardIDNEQ,omitempty"`
@@ -37247,6 +38841,8 @@ type TrustCenterDoc struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the kind of the trust_center_doc
@@ -37421,6 +39017,22 @@ type TrustCenterDocWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// trust_center_doc_kind_name field predicates
 	TrustCenterDocKindName             *string  `json:"trustCenterDocKindName,omitempty"`
 	TrustCenterDocKindNameNeq          *string  `json:"trustCenterDocKindNameNEQ,omitempty"`
@@ -37594,6 +39206,8 @@ type TrustCenterEntity struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// The local logo file id
 	LogoFileID *string `json:"logoFileID,omitempty"`
 	// URL of customer's website
@@ -37734,6 +39348,22 @@ type TrustCenterEntityWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// logo_file_id field predicates
 	LogoFileID             *string  `json:"logoFileID,omitempty"`
 	LogoFileIdneq          *string  `json:"logoFileIDNEQ,omitempty"`
@@ -37819,6 +39449,8 @@ type TrustCenterFaq struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// the kind of the trust_center_faq
 	TrustCenterFaqKindName *string `json:"trustCenterFaqKindName,omitempty"`
 	// the kind of the trust_center_faq
@@ -37979,6 +39611,22 @@ type TrustCenterFAQWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// trust_center_faq_kind_name field predicates
 	TrustCenterFaqKindName             *string  `json:"trustCenterFaqKindName,omitempty"`
 	TrustCenterFaqKindNameNeq          *string  `json:"trustCenterFaqKindNameNEQ,omitempty"`
@@ -38095,6 +39743,8 @@ type TrustCenterNDARequest struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// ID of the trust center
@@ -38266,6 +39916,22 @@ type TrustCenterNDARequestWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// trust_center_id field predicates
 	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
 	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
@@ -38486,6 +40152,8 @@ type TrustCenterSetting struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// the ID of the trust center the settings belong to
 	TrustCenterID *string `json:"trustCenterID,omitempty"`
 	// title of the trust center
@@ -38671,6 +40339,22 @@ type TrustCenterSettingWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// trust_center_id field predicates
 	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
 	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
@@ -39073,6 +40757,8 @@ type TrustCenterSubprocessor struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// the kind of the trust_center_subprocessor
 	TrustCenterSubprocessorKindName *string `json:"trustCenterSubprocessorKindName,omitempty"`
 	// the kind of the trust_center_subprocessor
@@ -39231,6 +40917,22 @@ type TrustCenterSubprocessorWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// trust_center_subprocessor_kind_name field predicates
 	TrustCenterSubprocessorKindName             *string  `json:"trustCenterSubprocessorKindName,omitempty"`
 	TrustCenterSubprocessorKindNameNeq          *string  `json:"trustCenterSubprocessorKindNameNEQ,omitempty"`
@@ -39324,6 +41026,8 @@ type TrustCenterWatermarkConfig struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// ID of the trust center
@@ -39475,6 +41179,22 @@ type TrustCenterWatermarkConfigWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -39688,6 +41408,22 @@ type TrustCenterWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -41575,9 +43311,6 @@ type UpdateEntityInput struct {
 	AddEditorIDs                           []string         `json:"addEditorIDs,omitempty"`
 	RemoveEditorIDs                        []string         `json:"removeEditorIDs,omitempty"`
 	ClearEditors                           *bool            `json:"clearEditors,omitempty"`
-	AddViewerIDs                           []string         `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs                        []string         `json:"removeViewerIDs,omitempty"`
-	ClearViewers                           *bool            `json:"clearViewers,omitempty"`
 	InternalOwnerUserID                    *string          `json:"internalOwnerUserID,omitempty"`
 	ClearInternalOwnerUser                 *bool            `json:"clearInternalOwnerUser,omitempty"`
 	InternalOwnerGroupID                   *string          `json:"internalOwnerGroupID,omitempty"`
@@ -42003,6 +43736,12 @@ type UpdateFindingInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// who reviewed the finding when no user or group is linked
+	ReviewedBy      *string `json:"reviewedBy,omitempty"`
+	ClearReviewedBy *bool   `json:"clearReviewedBy,omitempty"`
+	// who the finding is assigned to when no user or group is linked
+	AssignedTo      *string `json:"assignedTo,omitempty"`
+	ClearAssignedTo *bool   `json:"clearAssignedTo,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes      *string `json:"internalNotes,omitempty"`
 	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
@@ -42136,9 +43875,14 @@ type UpdateFindingInput struct {
 	AddEditorIDs               []string       `json:"addEditorIDs,omitempty"`
 	RemoveEditorIDs            []string       `json:"removeEditorIDs,omitempty"`
 	ClearEditors               *bool          `json:"clearEditors,omitempty"`
-	AddViewerIDs               []string       `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs            []string       `json:"removeViewerIDs,omitempty"`
-	ClearViewers               *bool          `json:"clearViewers,omitempty"`
+	ReviewedByUserID           *string        `json:"reviewedByUserID,omitempty"`
+	ClearReviewedByUser        *bool          `json:"clearReviewedByUser,omitempty"`
+	ReviewedByGroupID          *string        `json:"reviewedByGroupID,omitempty"`
+	ClearReviewedByGroup       *bool          `json:"clearReviewedByGroup,omitempty"`
+	AssignedToUserID           *string        `json:"assignedToUserID,omitempty"`
+	ClearAssignedToUser        *bool          `json:"clearAssignedToUser,omitempty"`
+	AssignedToGroupID          *string        `json:"assignedToGroupID,omitempty"`
+	ClearAssignedToGroup       *bool          `json:"clearAssignedToGroup,omitempty"`
 	EnvironmentID              *string        `json:"environmentID,omitempty"`
 	ClearEnvironment           *bool          `json:"clearEnvironment,omitempty"`
 	ScopeID                    *string        `json:"scopeID,omitempty"`
@@ -42290,24 +44034,6 @@ type UpdateGroupInput struct {
 	AddControlImplementationViewerIDs          []string                      `json:"addControlImplementationViewerIDs,omitempty"`
 	RemoveControlImplementationViewerIDs       []string                      `json:"removeControlImplementationViewerIDs,omitempty"`
 	ClearControlImplementationViewers          *bool                         `json:"clearControlImplementationViewers,omitempty"`
-	AddScanEditorIDs                           []string                      `json:"addScanEditorIDs,omitempty"`
-	RemoveScanEditorIDs                        []string                      `json:"removeScanEditorIDs,omitempty"`
-	ClearScanEditors                           *bool                         `json:"clearScanEditors,omitempty"`
-	AddScanBlockedGroupIDs                     []string                      `json:"addScanBlockedGroupIDs,omitempty"`
-	RemoveScanBlockedGroupIDs                  []string                      `json:"removeScanBlockedGroupIDs,omitempty"`
-	ClearScanBlockedGroups                     *bool                         `json:"clearScanBlockedGroups,omitempty"`
-	AddScanViewerIDs                           []string                      `json:"addScanViewerIDs,omitempty"`
-	RemoveScanViewerIDs                        []string                      `json:"removeScanViewerIDs,omitempty"`
-	ClearScanViewers                           *bool                         `json:"clearScanViewers,omitempty"`
-	AddEntityEditorIDs                         []string                      `json:"addEntityEditorIDs,omitempty"`
-	RemoveEntityEditorIDs                      []string                      `json:"removeEntityEditorIDs,omitempty"`
-	ClearEntityEditors                         *bool                         `json:"clearEntityEditors,omitempty"`
-	AddEntityBlockedGroupIDs                   []string                      `json:"addEntityBlockedGroupIDs,omitempty"`
-	RemoveEntityBlockedGroupIDs                []string                      `json:"removeEntityBlockedGroupIDs,omitempty"`
-	ClearEntityBlockedGroups                   *bool                         `json:"clearEntityBlockedGroups,omitempty"`
-	AddEntityViewerIDs                         []string                      `json:"addEntityViewerIDs,omitempty"`
-	RemoveEntityViewerIDs                      []string                      `json:"removeEntityViewerIDs,omitempty"`
-	ClearEntityViewers                         *bool                         `json:"clearEntityViewers,omitempty"`
 	AddActionPlanEditorIDs                     []string                      `json:"addActionPlanEditorIDs,omitempty"`
 	RemoveActionPlanEditorIDs                  []string                      `json:"removeActionPlanEditorIDs,omitempty"`
 	ClearActionPlanEditors                     *bool                         `json:"clearActionPlanEditors,omitempty"`
@@ -42359,6 +44085,36 @@ type UpdateGroupInput struct {
 	AddMappedControlBlockedGroupIDs            []string                      `json:"addMappedControlBlockedGroupIDs,omitempty"`
 	RemoveMappedControlBlockedGroupIDs         []string                      `json:"removeMappedControlBlockedGroupIDs,omitempty"`
 	ClearMappedControlBlockedGroups            *bool                         `json:"clearMappedControlBlockedGroups,omitempty"`
+	AddScanEditorIDs                           []string                      `json:"addScanEditorIDs,omitempty"`
+	RemoveScanEditorIDs                        []string                      `json:"removeScanEditorIDs,omitempty"`
+	ClearScanEditors                           *bool                         `json:"clearScanEditors,omitempty"`
+	AddScanBlockedGroupIDs                     []string                      `json:"addScanBlockedGroupIDs,omitempty"`
+	RemoveScanBlockedGroupIDs                  []string                      `json:"removeScanBlockedGroupIDs,omitempty"`
+	ClearScanBlockedGroups                     *bool                         `json:"clearScanBlockedGroups,omitempty"`
+	AddEntityEditorIDs                         []string                      `json:"addEntityEditorIDs,omitempty"`
+	RemoveEntityEditorIDs                      []string                      `json:"removeEntityEditorIDs,omitempty"`
+	ClearEntityEditors                         *bool                         `json:"clearEntityEditors,omitempty"`
+	AddEntityBlockedGroupIDs                   []string                      `json:"addEntityBlockedGroupIDs,omitempty"`
+	RemoveEntityBlockedGroupIDs                []string                      `json:"removeEntityBlockedGroupIDs,omitempty"`
+	ClearEntityBlockedGroups                   *bool                         `json:"clearEntityBlockedGroups,omitempty"`
+	AddFindingEditorIDs                        []string                      `json:"addFindingEditorIDs,omitempty"`
+	RemoveFindingEditorIDs                     []string                      `json:"removeFindingEditorIDs,omitempty"`
+	ClearFindingEditors                        *bool                         `json:"clearFindingEditors,omitempty"`
+	AddFindingBlockedGroupIDs                  []string                      `json:"addFindingBlockedGroupIDs,omitempty"`
+	RemoveFindingBlockedGroupIDs               []string                      `json:"removeFindingBlockedGroupIDs,omitempty"`
+	ClearFindingBlockedGroups                  *bool                         `json:"clearFindingBlockedGroups,omitempty"`
+	AddReviewEditorIDs                         []string                      `json:"addReviewEditorIDs,omitempty"`
+	RemoveReviewEditorIDs                      []string                      `json:"removeReviewEditorIDs,omitempty"`
+	ClearReviewEditors                         *bool                         `json:"clearReviewEditors,omitempty"`
+	AddReviewBlockedGroupIDs                   []string                      `json:"addReviewBlockedGroupIDs,omitempty"`
+	RemoveReviewBlockedGroupIDs                []string                      `json:"removeReviewBlockedGroupIDs,omitempty"`
+	ClearReviewBlockedGroups                   *bool                         `json:"clearReviewBlockedGroups,omitempty"`
+	AddRemediationEditorIDs                    []string                      `json:"addRemediationEditorIDs,omitempty"`
+	RemoveRemediationEditorIDs                 []string                      `json:"removeRemediationEditorIDs,omitempty"`
+	ClearRemediationEditors                    *bool                         `json:"clearRemediationEditors,omitempty"`
+	AddRemediationBlockedGroupIDs              []string                      `json:"addRemediationBlockedGroupIDs,omitempty"`
+	RemoveRemediationBlockedGroupIDs           []string                      `json:"removeRemediationBlockedGroupIDs,omitempty"`
+	ClearRemediationBlockedGroups              *bool                         `json:"clearRemediationBlockedGroups,omitempty"`
 	SettingID                                  *string                       `json:"settingID,omitempty"`
 	ClearSetting                               *bool                         `json:"clearSetting,omitempty"`
 	AddEventIDs                                []string                      `json:"addEventIDs,omitempty"`
@@ -42778,16 +44534,19 @@ type UpdateInviteInput struct {
 	// the number of attempts made to perform email send of the invitation, maximum of 5
 	SendAttempts *int64 `json:"sendAttempts,omitempty"`
 	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes super admin and invitee becomes owner
-	OwnershipTransfer      *bool    `json:"ownershipTransfer,omitempty"`
-	ClearOwnershipTransfer *bool    `json:"clearOwnershipTransfer,omitempty"`
-	OwnerID                *string  `json:"ownerID,omitempty"`
-	ClearOwner             *bool    `json:"clearOwner,omitempty"`
-	AddEventIDs            []string `json:"addEventIDs,omitempty"`
-	RemoveEventIDs         []string `json:"removeEventIDs,omitempty"`
-	ClearEvents            *bool    `json:"clearEvents,omitempty"`
-	AddGroupIDs            []string `json:"addGroupIDs,omitempty"`
-	RemoveGroupIDs         []string `json:"removeGroupIDs,omitempty"`
-	ClearGroups            *bool    `json:"clearGroups,omitempty"`
+	OwnershipTransfer      *bool `json:"ownershipTransfer,omitempty"`
+	ClearOwnershipTransfer *bool `json:"clearOwnershipTransfer,omitempty"`
+	// when accepted, grants the member an SSO exemption so they are not redirected through the organization's SSO login flow
+	SsoExempt      *bool    `json:"ssoExempt,omitempty"`
+	ClearSSOExempt *bool    `json:"clearSSOExempt,omitempty"`
+	OwnerID        *string  `json:"ownerID,omitempty"`
+	ClearOwner     *bool    `json:"clearOwner,omitempty"`
+	AddEventIDs    []string `json:"addEventIDs,omitempty"`
+	RemoveEventIDs []string `json:"removeEventIDs,omitempty"`
+	ClearEvents    *bool    `json:"clearEvents,omitempty"`
+	AddGroupIDs    []string `json:"addGroupIDs,omitempty"`
+	RemoveGroupIDs []string `json:"removeGroupIDs,omitempty"`
+	ClearGroups    *bool    `json:"clearGroups,omitempty"`
 }
 
 // UpdateJobResultInput is used for update JobResult object.
@@ -43213,10 +44972,16 @@ type UpdateNotificationTemplateInput struct {
 // UpdateOrgMembershipInput is used for update OrgMembership object.
 // Input was generated by ent.
 type UpdateOrgMembershipInput struct {
-	Role           *enums.Role `json:"role,omitempty"`
-	AddEventIDs    []string    `json:"addEventIDs,omitempty"`
-	RemoveEventIDs []string    `json:"removeEventIDs,omitempty"`
-	ClearEvents    *bool       `json:"clearEvents,omitempty"`
+	Role *enums.Role `json:"role,omitempty"`
+	// member is exempt from the SSO login redirect for this organization; TFA enforcement still applies. Who may set this is gated by the org membership mutation policy
+	SsoExempt      *bool `json:"ssoExempt,omitempty"`
+	ClearSSOExempt *bool `json:"clearSSOExempt,omitempty"`
+	// reason the member was granted an SSO exemption
+	SsoExemptReason      *string  `json:"ssoExemptReason,omitempty"`
+	ClearSSOExemptReason *bool    `json:"clearSSOExemptReason,omitempty"`
+	AddEventIDs          []string `json:"addEventIDs,omitempty"`
+	RemoveEventIDs       []string `json:"removeEventIDs,omitempty"`
+	ClearEvents          *bool    `json:"clearEvents,omitempty"`
 }
 
 // UpdateOrganizationInput is used for update Organization object.
@@ -43745,7 +45510,7 @@ type UpdateOrganizationSettingInput struct {
 	ClearGeoLocation *bool         `json:"clearGeoLocation,omitempty"`
 	// should we send email notifications related to billing
 	BillingNotificationsEnabled *bool `json:"billingNotificationsEnabled,omitempty"`
-	// domains allowed to access the organization, if empty all domains are allowed
+	// domains allowed to access the organization via autojoin
 	AllowedEmailDomains       []string `json:"allowedEmailDomains,omitempty"`
 	AppendAllowedEmailDomains []string `json:"appendAllowedEmailDomains,omitempty"`
 	ClearAllowedEmailDomains  *bool    `json:"clearAllowedEmailDomains,omitempty"`
@@ -43781,9 +45546,22 @@ type UpdateOrganizationSettingInput struct {
 	ClearSamlCert *bool   `json:"clearSamlCert,omitempty"`
 	// enforce SSO authentication for organization members
 	IdentityProviderLoginEnforced *bool `json:"identityProviderLoginEnforced,omitempty"`
+	// when SSO login is enforced, automatically provision organization membership for users who successfully authenticate against the configured identity provider
+	IdentityProviderJitProvisioning *bool `json:"identityProviderJitProvisioning,omitempty"`
+	// when set, restricts just-in-time provisioning to users whose authenticated email domain is in this list; when empty, any user who authenticates against the identity provider is provisioned
+	JitAllowedEmailDomains       []string `json:"jitAllowedEmailDomains,omitempty"`
+	AppendJitAllowedEmailDomains []string `json:"appendJitAllowedEmailDomains,omitempty"`
+	ClearJitAllowedEmailDomains  *bool    `json:"clearJitAllowedEmailDomains,omitempty"`
 	// enforce 2fa / multifactor authentication for organization members
 	MultifactorAuthEnforced      *bool `json:"multifactorAuthEnforced,omitempty"`
 	ClearMultifactorAuthEnforced *bool `json:"clearMultifactorAuthEnforced,omitempty"`
+	// email domains whose existing members skip the SSO redirect even when SSO is enforced; TFA enforcement still applies
+	SsoExemptDomains       []string `json:"ssoExemptDomains,omitempty"`
+	AppendSSOExemptDomains []string `json:"appendSSOExemptDomains,omitempty"`
+	ClearSSOExemptDomains  *bool    `json:"clearSSOExemptDomains,omitempty"`
+	// allow Openlane support to access this organization without a directory account
+	AllowSupportAccess      *bool `json:"allowSupportAccess,omitempty"`
+	ClearAllowSupportAccess *bool `json:"clearAllowSupportAccess,omitempty"`
 	// unique token used to receive compliance webhook events
 	ComplianceWebhookToken      *string `json:"complianceWebhookToken,omitempty"`
 	ClearComplianceWebhookToken *bool   `json:"clearComplianceWebhookToken,omitempty"`
@@ -44379,9 +46157,6 @@ type UpdateRemediationInput struct {
 	AddEditorIDs           []string       `json:"addEditorIDs,omitempty"`
 	RemoveEditorIDs        []string       `json:"removeEditorIDs,omitempty"`
 	ClearEditors           *bool          `json:"clearEditors,omitempty"`
-	AddViewerIDs           []string       `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs        []string       `json:"removeViewerIDs,omitempty"`
-	ClearViewers           *bool          `json:"clearViewers,omitempty"`
 	EnvironmentID          *string        `json:"environmentID,omitempty"`
 	ClearEnvironment       *bool          `json:"clearEnvironment,omitempty"`
 	ScopeID                *string        `json:"scopeID,omitempty"`
@@ -44511,9 +46286,6 @@ type UpdateReviewInput struct {
 	AddEditorIDs            []string       `json:"addEditorIDs,omitempty"`
 	RemoveEditorIDs         []string       `json:"removeEditorIDs,omitempty"`
 	ClearEditors            *bool          `json:"clearEditors,omitempty"`
-	AddViewerIDs            []string       `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs         []string       `json:"removeViewerIDs,omitempty"`
-	ClearViewers            *bool          `json:"clearViewers,omitempty"`
 	EnvironmentID           *string        `json:"environmentID,omitempty"`
 	ClearEnvironment        *bool          `json:"clearEnvironment,omitempty"`
 	ScopeID                 *string        `json:"scopeID,omitempty"`
@@ -44746,9 +46518,6 @@ type UpdateSLADefinitionInput struct {
 	AddEditorIDs          []string `json:"addEditorIDs,omitempty"`
 	RemoveEditorIDs       []string `json:"removeEditorIDs,omitempty"`
 	ClearEditors          *bool    `json:"clearEditors,omitempty"`
-	AddViewerIDs          []string `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs       []string `json:"removeViewerIDs,omitempty"`
-	ClearViewers          *bool    `json:"clearViewers,omitempty"`
 }
 
 // UpdateScanInput is used for update Scan object.
@@ -44801,9 +46570,6 @@ type UpdateScanInput struct {
 	AddEditorIDs             []string          `json:"addEditorIDs,omitempty"`
 	RemoveEditorIDs          []string          `json:"removeEditorIDs,omitempty"`
 	ClearEditors             *bool             `json:"clearEditors,omitempty"`
-	AddViewerIDs             []string          `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs          []string          `json:"removeViewerIDs,omitempty"`
-	ClearViewers             *bool             `json:"clearViewers,omitempty"`
 	ReviewedByUserID         *string           `json:"reviewedByUserID,omitempty"`
 	ClearReviewedByUser      *bool             `json:"clearReviewedByUser,omitempty"`
 	ReviewedByGroupID        *string           `json:"reviewedByGroupID,omitempty"`
@@ -46026,6 +47792,12 @@ type UpdateVulnerabilityInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// who reviewed the vulnerability when no user or group is linked
+	ReviewedBy      *string `json:"reviewedBy,omitempty"`
+	ClearReviewedBy *bool   `json:"clearReviewedBy,omitempty"`
+	// who the vulnerability is assigned to when no user or group is linked
+	AssignedTo      *string `json:"assignedTo,omitempty"`
+	ClearAssignedTo *bool   `json:"clearAssignedTo,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes      *string `json:"internalNotes,omitempty"`
 	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
@@ -46175,6 +47947,14 @@ type UpdateVulnerabilityInput struct {
 	AddViewerIDs             []string       `json:"addViewerIDs,omitempty"`
 	RemoveViewerIDs          []string       `json:"removeViewerIDs,omitempty"`
 	ClearViewers             *bool          `json:"clearViewers,omitempty"`
+	ReviewedByUserID         *string        `json:"reviewedByUserID,omitempty"`
+	ClearReviewedByUser      *bool          `json:"clearReviewedByUser,omitempty"`
+	ReviewedByGroupID        *string        `json:"reviewedByGroupID,omitempty"`
+	ClearReviewedByGroup     *bool          `json:"clearReviewedByGroup,omitempty"`
+	AssignedToUserID         *string        `json:"assignedToUserID,omitempty"`
+	ClearAssignedToUser      *bool          `json:"clearAssignedToUser,omitempty"`
+	AssignedToGroupID        *string        `json:"assignedToGroupID,omitempty"`
+	ClearAssignedToGroup     *bool          `json:"clearAssignedToGroup,omitempty"`
 	EnvironmentID            *string        `json:"environmentID,omitempty"`
 	ClearEnvironment         *bool          `json:"clearEnvironment,omitempty"`
 	ScopeID                  *string        `json:"scopeID,omitempty"`
@@ -46418,6 +48198,8 @@ type UserSetting struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags   []string `json:"tags,omitempty"`
 	UserID *string  `json:"userID,omitempty"`
@@ -46581,6 +48363,22 @@ type UserSettingWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// user_id field predicates
 	UserID             *string  `json:"userID,omitempty"`
 	UserIdneq          *string  `json:"userIDNEQ,omitempty"`
@@ -47068,6 +48866,8 @@ type VendorRiskScore struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -47245,6 +49045,22 @@ type VendorRiskScoreWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -47434,6 +49250,8 @@ type VendorScoringConfig struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -47589,6 +49407,22 @@ type VendorScoringConfigWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -47626,12 +49460,26 @@ type Vulnerability struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// who reviewed the vulnerability when no user or group is linked
+	ReviewedBy *string `json:"reviewedBy,omitempty"`
+	// the user id that reviewed the vulnerability
+	ReviewedByUserID *string `json:"reviewedByUserID,omitempty"`
+	// the group id that reviewed the vulnerability
+	ReviewedByGroupID *string `json:"reviewedByGroupID,omitempty"`
+	// who the vulnerability is assigned to when no user or group is linked
+	AssignedTo *string `json:"assignedTo,omitempty"`
+	// the user id assigned to the vulnerability
+	AssignedToUserID *string `json:"assignedToUserID,omitempty"`
+	// the group id assigned to the vulnerability
+	AssignedToGroupID *string `json:"assignedToGroupID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
@@ -47738,6 +49586,10 @@ type Vulnerability struct {
 	BlockedGroups       *GroupConnection       `json:"blockedGroups"`
 	Editors             *GroupConnection       `json:"editors"`
 	Viewers             *GroupConnection       `json:"viewers"`
+	ReviewedByUser      *User                  `json:"reviewedByUser,omitempty"`
+	ReviewedByGroup     *Group                 `json:"reviewedByGroup,omitempty"`
+	AssignedToUser      *User                  `json:"assignedToUser,omitempty"`
+	AssignedToGroup     *Group                 `json:"assignedToGroup,omitempty"`
 	Environment         *CustomTypeEnum        `json:"environment,omitempty"`
 	Scope               *CustomTypeEnum        `json:"scope,omitempty"`
 	VulnerabilityStatus *CustomTypeEnum        `json:"vulnerabilityStatus,omitempty"`
@@ -47927,6 +49779,22 @@ type VulnerabilityWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -47957,6 +49825,102 @@ type VulnerabilityWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// reviewed_by field predicates
+	ReviewedBy             *string  `json:"reviewedBy,omitempty"`
+	ReviewedByNeq          *string  `json:"reviewedByNEQ,omitempty"`
+	ReviewedByIn           []string `json:"reviewedByIn,omitempty"`
+	ReviewedByNotIn        []string `json:"reviewedByNotIn,omitempty"`
+	ReviewedByGt           *string  `json:"reviewedByGT,omitempty"`
+	ReviewedByGte          *string  `json:"reviewedByGTE,omitempty"`
+	ReviewedByLt           *string  `json:"reviewedByLT,omitempty"`
+	ReviewedByLte          *string  `json:"reviewedByLTE,omitempty"`
+	ReviewedByContains     *string  `json:"reviewedByContains,omitempty"`
+	ReviewedByHasPrefix    *string  `json:"reviewedByHasPrefix,omitempty"`
+	ReviewedByHasSuffix    *string  `json:"reviewedByHasSuffix,omitempty"`
+	ReviewedByIsNil        *bool    `json:"reviewedByIsNil,omitempty"`
+	ReviewedByNotNil       *bool    `json:"reviewedByNotNil,omitempty"`
+	ReviewedByEqualFold    *string  `json:"reviewedByEqualFold,omitempty"`
+	ReviewedByContainsFold *string  `json:"reviewedByContainsFold,omitempty"`
+	// reviewed_by_user_id field predicates
+	ReviewedByUserID             *string  `json:"reviewedByUserID,omitempty"`
+	ReviewedByUserIdneq          *string  `json:"reviewedByUserIDNEQ,omitempty"`
+	ReviewedByUserIDIn           []string `json:"reviewedByUserIDIn,omitempty"`
+	ReviewedByUserIDNotIn        []string `json:"reviewedByUserIDNotIn,omitempty"`
+	ReviewedByUserIdgt           *string  `json:"reviewedByUserIDGT,omitempty"`
+	ReviewedByUserIdgte          *string  `json:"reviewedByUserIDGTE,omitempty"`
+	ReviewedByUserIdlt           *string  `json:"reviewedByUserIDLT,omitempty"`
+	ReviewedByUserIdlte          *string  `json:"reviewedByUserIDLTE,omitempty"`
+	ReviewedByUserIDContains     *string  `json:"reviewedByUserIDContains,omitempty"`
+	ReviewedByUserIDHasPrefix    *string  `json:"reviewedByUserIDHasPrefix,omitempty"`
+	ReviewedByUserIDHasSuffix    *string  `json:"reviewedByUserIDHasSuffix,omitempty"`
+	ReviewedByUserIDIsNil        *bool    `json:"reviewedByUserIDIsNil,omitempty"`
+	ReviewedByUserIDNotNil       *bool    `json:"reviewedByUserIDNotNil,omitempty"`
+	ReviewedByUserIDEqualFold    *string  `json:"reviewedByUserIDEqualFold,omitempty"`
+	ReviewedByUserIDContainsFold *string  `json:"reviewedByUserIDContainsFold,omitempty"`
+	// reviewed_by_group_id field predicates
+	ReviewedByGroupID             *string  `json:"reviewedByGroupID,omitempty"`
+	ReviewedByGroupIdneq          *string  `json:"reviewedByGroupIDNEQ,omitempty"`
+	ReviewedByGroupIDIn           []string `json:"reviewedByGroupIDIn,omitempty"`
+	ReviewedByGroupIDNotIn        []string `json:"reviewedByGroupIDNotIn,omitempty"`
+	ReviewedByGroupIdgt           *string  `json:"reviewedByGroupIDGT,omitempty"`
+	ReviewedByGroupIdgte          *string  `json:"reviewedByGroupIDGTE,omitempty"`
+	ReviewedByGroupIdlt           *string  `json:"reviewedByGroupIDLT,omitempty"`
+	ReviewedByGroupIdlte          *string  `json:"reviewedByGroupIDLTE,omitempty"`
+	ReviewedByGroupIDContains     *string  `json:"reviewedByGroupIDContains,omitempty"`
+	ReviewedByGroupIDHasPrefix    *string  `json:"reviewedByGroupIDHasPrefix,omitempty"`
+	ReviewedByGroupIDHasSuffix    *string  `json:"reviewedByGroupIDHasSuffix,omitempty"`
+	ReviewedByGroupIDIsNil        *bool    `json:"reviewedByGroupIDIsNil,omitempty"`
+	ReviewedByGroupIDNotNil       *bool    `json:"reviewedByGroupIDNotNil,omitempty"`
+	ReviewedByGroupIDEqualFold    *string  `json:"reviewedByGroupIDEqualFold,omitempty"`
+	ReviewedByGroupIDContainsFold *string  `json:"reviewedByGroupIDContainsFold,omitempty"`
+	// assigned_to field predicates
+	AssignedTo             *string  `json:"assignedTo,omitempty"`
+	AssignedToNeq          *string  `json:"assignedToNEQ,omitempty"`
+	AssignedToIn           []string `json:"assignedToIn,omitempty"`
+	AssignedToNotIn        []string `json:"assignedToNotIn,omitempty"`
+	AssignedToGt           *string  `json:"assignedToGT,omitempty"`
+	AssignedToGte          *string  `json:"assignedToGTE,omitempty"`
+	AssignedToLt           *string  `json:"assignedToLT,omitempty"`
+	AssignedToLte          *string  `json:"assignedToLTE,omitempty"`
+	AssignedToContains     *string  `json:"assignedToContains,omitempty"`
+	AssignedToHasPrefix    *string  `json:"assignedToHasPrefix,omitempty"`
+	AssignedToHasSuffix    *string  `json:"assignedToHasSuffix,omitempty"`
+	AssignedToIsNil        *bool    `json:"assignedToIsNil,omitempty"`
+	AssignedToNotNil       *bool    `json:"assignedToNotNil,omitempty"`
+	AssignedToEqualFold    *string  `json:"assignedToEqualFold,omitempty"`
+	AssignedToContainsFold *string  `json:"assignedToContainsFold,omitempty"`
+	// assigned_to_user_id field predicates
+	AssignedToUserID             *string  `json:"assignedToUserID,omitempty"`
+	AssignedToUserIdneq          *string  `json:"assignedToUserIDNEQ,omitempty"`
+	AssignedToUserIDIn           []string `json:"assignedToUserIDIn,omitempty"`
+	AssignedToUserIDNotIn        []string `json:"assignedToUserIDNotIn,omitempty"`
+	AssignedToUserIdgt           *string  `json:"assignedToUserIDGT,omitempty"`
+	AssignedToUserIdgte          *string  `json:"assignedToUserIDGTE,omitempty"`
+	AssignedToUserIdlt           *string  `json:"assignedToUserIDLT,omitempty"`
+	AssignedToUserIdlte          *string  `json:"assignedToUserIDLTE,omitempty"`
+	AssignedToUserIDContains     *string  `json:"assignedToUserIDContains,omitempty"`
+	AssignedToUserIDHasPrefix    *string  `json:"assignedToUserIDHasPrefix,omitempty"`
+	AssignedToUserIDHasSuffix    *string  `json:"assignedToUserIDHasSuffix,omitempty"`
+	AssignedToUserIDIsNil        *bool    `json:"assignedToUserIDIsNil,omitempty"`
+	AssignedToUserIDNotNil       *bool    `json:"assignedToUserIDNotNil,omitempty"`
+	AssignedToUserIDEqualFold    *string  `json:"assignedToUserIDEqualFold,omitempty"`
+	AssignedToUserIDContainsFold *string  `json:"assignedToUserIDContainsFold,omitempty"`
+	// assigned_to_group_id field predicates
+	AssignedToGroupID             *string  `json:"assignedToGroupID,omitempty"`
+	AssignedToGroupIdneq          *string  `json:"assignedToGroupIDNEQ,omitempty"`
+	AssignedToGroupIDIn           []string `json:"assignedToGroupIDIn,omitempty"`
+	AssignedToGroupIDNotIn        []string `json:"assignedToGroupIDNotIn,omitempty"`
+	AssignedToGroupIdgt           *string  `json:"assignedToGroupIDGT,omitempty"`
+	AssignedToGroupIdgte          *string  `json:"assignedToGroupIDGTE,omitempty"`
+	AssignedToGroupIdlt           *string  `json:"assignedToGroupIDLT,omitempty"`
+	AssignedToGroupIdlte          *string  `json:"assignedToGroupIDLTE,omitempty"`
+	AssignedToGroupIDContains     *string  `json:"assignedToGroupIDContains,omitempty"`
+	AssignedToGroupIDHasPrefix    *string  `json:"assignedToGroupIDHasPrefix,omitempty"`
+	AssignedToGroupIDHasSuffix    *string  `json:"assignedToGroupIDHasSuffix,omitempty"`
+	AssignedToGroupIDIsNil        *bool    `json:"assignedToGroupIDIsNil,omitempty"`
+	AssignedToGroupIDNotNil       *bool    `json:"assignedToGroupIDNotNil,omitempty"`
+	AssignedToGroupIDEqualFold    *string  `json:"assignedToGroupIDEqualFold,omitempty"`
+	AssignedToGroupIDContainsFold *string  `json:"assignedToGroupIDContainsFold,omitempty"`
 	// system_owned field predicates
 	SystemOwned       *bool `json:"systemOwned,omitempty"`
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
@@ -48567,6 +50531,18 @@ type VulnerabilityWhereInput struct {
 	// viewers edge predicates
 	HasViewers     *bool              `json:"hasViewers,omitempty"`
 	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
+	// reviewed_by_user edge predicates
+	HasReviewedByUser     *bool             `json:"hasReviewedByUser,omitempty"`
+	HasReviewedByUserWith []*UserWhereInput `json:"hasReviewedByUserWith,omitempty"`
+	// reviewed_by_group edge predicates
+	HasReviewedByGroup     *bool              `json:"hasReviewedByGroup,omitempty"`
+	HasReviewedByGroupWith []*GroupWhereInput `json:"hasReviewedByGroupWith,omitempty"`
+	// assigned_to_user edge predicates
+	HasAssignedToUser     *bool             `json:"hasAssignedToUser,omitempty"`
+	HasAssignedToUserWith []*UserWhereInput `json:"hasAssignedToUserWith,omitempty"`
+	// assigned_to_group edge predicates
+	HasAssignedToGroup     *bool              `json:"hasAssignedToGroup,omitempty"`
+	HasAssignedToGroupWith []*GroupWhereInput `json:"hasAssignedToGroupWith,omitempty"`
 	// environment edge predicates
 	HasEnvironment     *bool                       `json:"hasEnvironment,omitempty"`
 	HasEnvironmentWith []*CustomTypeEnumWhereInput `json:"hasEnvironmentWith,omitempty"`
@@ -48766,6 +50742,8 @@ type WorkflowAssignment struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -48864,6 +50842,8 @@ type WorkflowAssignmentTarget struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -48998,6 +50978,22 @@ type WorkflowAssignmentTargetWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -49182,6 +51178,22 @@ type WorkflowAssignmentWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -49373,6 +51385,8 @@ type WorkflowDefinition struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -49542,6 +51556,22 @@ type WorkflowDefinitionWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -49732,6 +51762,8 @@ type WorkflowEvent struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -49847,6 +51879,22 @@ type WorkflowEventWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -49938,6 +51986,8 @@ type WorkflowInstance struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
@@ -50121,6 +52171,22 @@ type WorkflowInstanceWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -50432,6 +52498,8 @@ type WorkflowObjectRef struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"displayID"`
 	// the ID of the organization owner of the object
@@ -50602,6 +52670,22 @@ type WorkflowObjectRefWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 	// display_id field predicates
 	DisplayID             *string  `json:"displayID,omitempty"`
 	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
@@ -50961,6 +53045,8 @@ type WorkflowProposal struct {
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	CreatedBy *string    `json:"createdBy,omitempty"`
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
@@ -56916,6 +59002,7 @@ const (
 	VulnerabilityOrderFieldCveID           VulnerabilityOrderField = "cve_id"
 	VulnerabilityOrderFieldCategory        VulnerabilityOrderField = "category"
 	VulnerabilityOrderFieldSeverity        VulnerabilityOrderField = "severity"
+	VulnerabilityOrderFieldScore           VulnerabilityOrderField = "score"
 )
 
 var AllVulnerabilityOrderField = []VulnerabilityOrderField{
@@ -56927,11 +59014,12 @@ var AllVulnerabilityOrderField = []VulnerabilityOrderField{
 	VulnerabilityOrderFieldCveID,
 	VulnerabilityOrderFieldCategory,
 	VulnerabilityOrderFieldSeverity,
+	VulnerabilityOrderFieldScore,
 }
 
 func (e VulnerabilityOrderField) IsValid() bool {
 	switch e {
-	case VulnerabilityOrderFieldCreatedAt, VulnerabilityOrderFieldUpdatedAt, VulnerabilityOrderFieldExternalOwnerID, VulnerabilityOrderFieldSecurityLevel, VulnerabilityOrderFieldExternalID, VulnerabilityOrderFieldCveID, VulnerabilityOrderFieldCategory, VulnerabilityOrderFieldSeverity:
+	case VulnerabilityOrderFieldCreatedAt, VulnerabilityOrderFieldUpdatedAt, VulnerabilityOrderFieldExternalOwnerID, VulnerabilityOrderFieldSecurityLevel, VulnerabilityOrderFieldExternalID, VulnerabilityOrderFieldCveID, VulnerabilityOrderFieldCategory, VulnerabilityOrderFieldSeverity, VulnerabilityOrderFieldScore:
 		return true
 	}
 	return false

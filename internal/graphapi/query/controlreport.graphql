@@ -10,6 +10,7 @@ query GetAllControlReports {
     edges {
       node {
         id
+        parentControlID
         refCode
         status
         referenceFramework
@@ -23,9 +24,13 @@ query GetAllControlReports {
           refCode
           referenceFramework
           isSubcontrol
+          parentControlID
+          mappedControlReferenceIDs
+          inheritedFromSubcontrolIDs
         }
         evidenceStatus {
           totalCount
+          inheritedCount
           worstStatus
           approvedCount
           countByStatus {
@@ -39,6 +44,7 @@ query GetAllControlReports {
             id
             name
             status
+            inheritedFromIDs
           }
         }
         subcontrols {
@@ -46,14 +52,18 @@ query GetAllControlReports {
           refCode
           status
           referenceFramework
+          parentControlID
           relatedControls {
             id
             refCode
             referenceFramework
             isSubcontrol
+            parentControlID
+            mappedControlReferenceIDs
           }
           evidenceStatus {
             totalCount
+            inheritedCount
             worstStatus
           }
           linkedPolicies {
@@ -62,6 +72,7 @@ query GetAllControlReports {
               id
               name
               status
+              inheritedFromIDs
             }
           }
         }
@@ -89,6 +100,7 @@ query GetControlReports($first: Int, $last: Int, $after: Cursor, $before: Cursor
     edges {
       node {
         id
+        parentControlID
         refCode
         status
         referenceFramework
@@ -102,9 +114,13 @@ query GetControlReports($first: Int, $last: Int, $after: Cursor, $before: Cursor
           refCode
           referenceFramework
           isSubcontrol
+          parentControlID
+          mappedControlReferenceIDs
+          inheritedFromSubcontrolIDs
         }
         evidenceStatus {
           totalCount
+          inheritedCount
           worstStatus
           approvedCount
           countByStatus {
@@ -118,6 +134,7 @@ query GetControlReports($first: Int, $last: Int, $after: Cursor, $before: Cursor
             id
             name
             status
+            inheritedFromIDs
           }
         }
         subcontrols {
@@ -125,14 +142,18 @@ query GetControlReports($first: Int, $last: Int, $after: Cursor, $before: Cursor
           refCode
           status
           referenceFramework
+          parentControlID
           relatedControls {
             id
             refCode
             referenceFramework
             isSubcontrol
+            parentControlID
+            mappedControlReferenceIDs
           }
           evidenceStatus {
             totalCount
+            inheritedCount
             worstStatus
           }
           linkedPolicies {
@@ -141,6 +162,7 @@ query GetControlReports($first: Int, $last: Int, $after: Cursor, $before: Cursor
               id
               name
               status
+              inheritedFromIDs
             }
           }
         }
@@ -155,6 +177,7 @@ query GetControlReportsByCategory($where: ControlWhereInput) {
     totalCount
     controls {
       id
+      parentControlID
       refCode
       status
       referenceFramework
@@ -167,9 +190,13 @@ query GetControlReportsByCategory($where: ControlWhereInput) {
         refCode
         referenceFramework
         isSubcontrol
+        parentControlID
+        mappedControlReferenceIDs
+        inheritedFromSubcontrolIDs
       }
       evidenceStatus {
         totalCount
+        inheritedCount
         worstStatus
         approvedCount
         countByStatus {
@@ -183,6 +210,7 @@ query GetControlReportsByCategory($where: ControlWhereInput) {
           id
           name
           status
+          inheritedFromIDs
         }
       }
       subcontrols {
@@ -190,14 +218,18 @@ query GetControlReportsByCategory($where: ControlWhereInput) {
         refCode
         status
         referenceFramework
+        parentControlID
         relatedControls {
           id
           refCode
           referenceFramework
           isSubcontrol
+          parentControlID
+          mappedControlReferenceIDs
         }
         evidenceStatus {
           totalCount
+          inheritedCount
           worstStatus
           approvedCount
           countByStatus {
@@ -211,6 +243,7 @@ query GetControlReportsByCategory($where: ControlWhereInput) {
             id
             name
             status
+            inheritedFromIDs
           }
         }
       }

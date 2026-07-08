@@ -17,6 +17,7 @@ func registerWebauthnRegistrationHandler(router *Router) (err error) {
 		OperationID: "WebauthnRegistration",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.BeginWebauthnRegistration,
 	}
 
@@ -34,6 +35,7 @@ func registerWebauthnVerificationsHandler(router *Router) (err error) {
 		OperationID: "WebauthnRegistrationVerification",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.FinishWebauthnRegistration,
 	}
 
@@ -51,6 +53,7 @@ func registerWebauthnAuthenticationHandler(router *Router) (err error) {
 		OperationID: "WebauthnAuthentication",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.BeginWebauthnLogin,
 	}
 
@@ -68,6 +71,7 @@ func registerWebauthnAuthVerificationHandler(router *Router) (err error) {
 		OperationID: "WebauthnAuthenticationVerification",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
+		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.FinishWebauthnLogin,
 	}
 

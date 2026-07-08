@@ -12,6 +12,7 @@ mutation CreateScheduledJobRun ($input: CreateScheduledJobRunInput!) {
 			status
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
@@ -57,6 +58,7 @@ query GetScheduledJobRunByID ($scheduledJobRunId: ID!) {
 		status
 		updatedAt
 		updatedBy
+		updatedByImpersonator
 	}
 }
 query GetScheduledJobRuns ($first: Int, $last: Int, $where: ScheduledJobRunWhereInput) {
@@ -97,6 +99,7 @@ mutation UpdateScheduledJobRun ($updateScheduledJobRunId: ID!, $input: UpdateSch
 			status
 			updatedAt
 			updatedBy
+			updatedByImpersonator
 		}
 	}
 }
