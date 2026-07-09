@@ -663,25 +663,17 @@ func (h *Handler) subscriberTrustCenterDomain(ctx context.Context, sub *ent.Subs
 	return customDomain, tc.Slug, true
 }
 
-// subscriberUnsubscribeURL builds the tokenized trust center unsubscribe link for a subscriber, so the link
-// lands on the trust center rather than the app console. Returns empty when the trust center cannot resolve
-func (h *Handler) subscriberUnsubscribeURL(ctx context.Context, sub *ent.Subscriber) string {
+// subscriberTrustCenterLinks builds the tokenized trust center verify and unsubscribe links for a
+// subscriber, so the links land on the trust center rather than the app console; both empty when the
+// trust center cannot resolve
+func (h *Handler) subscriberTrustCenterLinks(ctx context.Context, sub *ent.Subscriber, token string) (verifyURL, unsubscribeURL string) {
 	customDomain, slug, ok := h.subscriberTrustCenterDomain(ctx, sub)
 	if !ok {
-		return ""
+		return "", ""
 	}
 
-	return trustcenterurl.UnsubscribeURLWithToken(customDomain, slug, sub.Token)
-}
-
-// subscriberVerifyURL builds the trust-center-domain confirmation link; empty when no trust center resolves
-func (h *Handler) subscriberVerifyURL(ctx context.Context, sub *ent.Subscriber) string {
-	customDomain, slug, ok := h.subscriberTrustCenterDomain(ctx, sub)
-	if !ok {
-		return ""
-	}
-
-	return trustcenterurl.SubscribeVerifyURLWithToken(customDomain, slug, sub.Token)
+	return trustcenterurl.SubscribeVerifyURLWithToken(customDomain, slug, token),
+		trustcenterurl.UnsubscribeURLWithToken(customDomain, slug, token)
 }
 
 // createEvent creates a new event in the database but requires mapped input

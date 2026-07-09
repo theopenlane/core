@@ -72,6 +72,8 @@ var (
 	ErrSubscriberNotFound = errors.New("subscriber not found")
 	// ErrSubscriptionTokenAlreadyUsed is returned when a single-use subscription verify token is replayed
 	ErrSubscriptionTokenAlreadyUsed = errors.New("subscription verification token has already been used")
+	// ErrSubscriberUnsubscribed is returned when a verify link is replayed for a contact who unsubscribed
+	ErrSubscriberUnsubscribed = errors.New("this subscription has been cancelled, please re-subscribe to receive updates")
 	// ErrEmailAlreadyConfirmed is returned when a single-use email verify token is replayed
 	ErrEmailAlreadyConfirmed = errors.New("email address has already been verified")
 	// ErrExpiredToken is returned when the token has expired

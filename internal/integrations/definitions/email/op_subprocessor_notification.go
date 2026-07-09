@@ -3,6 +3,7 @@ package email
 import (
 	"html/template"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/newman/render"
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
@@ -140,13 +141,10 @@ var _ = RegisterEmailOperation(Operation[SubprocessorNotificationRequest]{
 // just the name and the kind of change (e.g. "Acme — Added"). render.Bold escapes the text, so no HTML is
 // hand-assembled. The callout is rendered by the base theme
 func subprocessorCallout(entries []SubprocessorEntry) *render.Callout {
-	items := make([]template.HTML, 0, len(entries))
-	for _, entry := range entries {
-		items = append(items, render.Bold(entry.Name+" — "+entry.Change))
-	}
-
 	return &render.Callout{
 		Title: "Subprocessors",
-		Items: items,
+		Items: lo.Map(entries, func(entry SubprocessorEntry, _ int) template.HTML {
+			return render.Bold(entry.Name + " — " + entry.Change)
+		}),
 	}
 }

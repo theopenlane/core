@@ -169,6 +169,12 @@ func setAuthenticatedContext(ctx context.Context, user *ent.User) context.Contex
 	return ctx
 }
 
+// queryParamBinder opts a request model into query-param binding on any HTTP method; echo's binder
+// only binds query params on GET/DELETE/HEAD
+type queryParamBinder interface {
+	BindsQueryParams() bool
+}
+
 // BindAndValidate binds the context payload into T and runs Validate if present.
 func BindAndValidate[T any](ctx echo.Context) (*T, error) {
 	var obj T
@@ -182,11 +188,11 @@ func BindAndValidate[T any](ctx echo.Context) (*T, error) {
 		return nil, err
 	}
 
-	// echo's binder only binds query params on GET/DELETE/HEAD; bind them for every method so request
-	// models can rely on the query:"..." tag regardless of HTTP method (e.g. a token in a POST email link)
-	if err := echo.BindQueryParams(ctx, &obj); err != nil {
-		metrics.RequestValidations.WithLabelValues(reqType, "false").Inc()
-		return nil, err
+	if qb, ok := any(&obj).(queryParamBinder); ok && qb.BindsQueryParams() {
+		if err := echo.BindQueryParams(ctx, &obj); err != nil {
+			metrics.RequestValidations.WithLabelValues(reqType, "false").Inc()
+			return nil, err
+		}
 	}
 
 	if v, ok := any(&obj).(validator); ok {

@@ -133,6 +133,8 @@ func checkTrustCenterAllowsSubscribers(ctx context.Context, m *generated.Subscri
 		).
 		Only(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", tcID).Msg("unable to load trust center setting for subscriber gate")
+
 		return err
 	}
 

@@ -140,6 +140,7 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff tim
 		Where(
 			trustcentersetting.NotifySubscribersOnSubprocessorChange(true),
 			trustcentersetting.TrustCenterIDNEQ(""),
+			trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentLive),
 		).
 		All(ctx)
 	if err != nil {
@@ -172,12 +173,9 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff tim
 			continue
 		}
 
-		latest := floor
-		for _, sp := range changed {
-			if sp.UpdatedAt.After(latest) {
-				latest = sp.UpdatedAt
-			}
-		}
+		latest := lo.MaxBy(changed, func(a, b *ent.TrustCenterSubprocessor) bool {
+			return a.UpdatedAt.After(b.UpdatedAt)
+		}).UpdatedAt
 
 		tc, customDomain, err := r.loadTrustCenter(ctx, setting.TrustCenterID)
 		if err != nil {
@@ -206,6 +204,8 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff tim
 			base.LogoURL = ""
 		}
 
+		failedSends := 0
+
 		for _, sub := range subscribers {
 			req := base
 			req.RecipientInfo = emaildef.RecipientInfo{
@@ -218,7 +218,17 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff tim
 
 			if err := r.sendSubprocessorNotification(ctx, req); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", setting.TrustCenterID).Str("subscriber_id", sub.ID).Msg("failed sending subprocessor notification")
+
+				failedSends++
 			}
+		}
+
+		// a total send failure keeps the watermark so the window retries next poll; partial failures
+		// advance it to avoid re-sending to recipients that succeeded
+		if len(subscribers) > 0 && failedSends == len(subscribers) {
+			logx.FromContext(ctx).Error().Str("trust_center_id", setting.TrustCenterID).Int("failed_sends", failedSends).Msg("all subprocessor notification sends failed, keeping watermark for retry")
+
+			continue
 		}
 
 		if err := r.DB().TrustCenterSetting.UpdateOneID(setting.ID).SetSubprocessorsNotifiedAt(latest).Exec(ctx); err != nil {
@@ -369,21 +379,17 @@ func (r *Runtime) ensureTrustCenterUpdateTemplate(ctx context.Context, ownerID, 
 // entries rendered by the notification, reading the vendor name from each row's eager-loaded subprocessor
 // edge and labeling the kind of change
 func subprocessorEntries(changed []*ent.TrustCenterSubprocessor, floor time.Time) []emaildef.SubprocessorEntry {
-	entries := make([]emaildef.SubprocessorEntry, 0, len(changed))
-
-	for _, sp := range changed {
+	return lo.FilterMap(changed, func(sp *ent.TrustCenterSubprocessor, _ int) (emaildef.SubprocessorEntry, bool) {
 		vendor := sp.Edges.Subprocessor
 		if vendor == nil {
-			continue
+			return emaildef.SubprocessorEntry{}, false
 		}
 
-		entries = append(entries, emaildef.SubprocessorEntry{
+		return emaildef.SubprocessorEntry{
 			Name:   vendor.Name,
 			Change: subprocessorChange(sp, floor),
-		})
-	}
-
-	return entries
+		}, true
+	})
 }
 
 // subprocessorChange classifies a changed subprocessor join row relative to the last notification floor:

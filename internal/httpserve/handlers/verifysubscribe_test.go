@@ -108,8 +108,8 @@ func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
 }
 
 // TestVerifySubscribeDoesNotResurrectUnsubscribed verifies that replaying a verify link for a contact
-// who unsubscribed does NOT re-subscribe them: they stay unsubscribed and inactive. Re-subscription must
-// go through the createSubscriber mutation (covered in the graphapi tests), not the verify endpoint
+// who unsubscribed is rejected and does NOT re-subscribe them. Re-subscription must go through the
+// createSubscriber mutation (covered in the graphapi tests), not the verify endpoint
 func (suite *HandlerTestSuite) TestVerifySubscribeDoesNotResurrectUnsubscribed() {
 	t := suite.T()
 
@@ -129,7 +129,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeDoesNotResurrectUnsubscribed()
 	recorder := httptest.NewRecorder()
 	suite.e.ServeHTTP(recorder, req)
 
-	assert.Equal(t, http.StatusOK, recorder.Code)
+	assert.Equal(t, http.StatusBadRequest, recorder.Code)
 
 	// no resurrection: still unsubscribed, inactive, and unverified
 	updated := suite.db.Subscriber.GetX(allowCtx, sub.ID)
@@ -230,6 +230,46 @@ func (suite *HandlerTestSuite) TestVerifySubscribeTokenSingleUse() {
 	assert.Equal(t, confirmed.SendAttempts, after.SendAttempts)
 }
 
+// TestVerifySubscribeTrustCenterExpiredResend confirms the auto-resent verification email for a trust
+// center subscriber carries the rotated token in its links, not the token it just replaced
+func (suite *HandlerTestSuite) TestVerifySubscribeTrustCenterExpiredResend() {
+	t := suite.T()
+
+	operation := suite.createImpersonationOperation("VerifySubscriptionHandler", "Verify subscription")
+	suite.registerTestHandler("POST", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
+
+	suite.ClearTestData()
+
+	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+
+	tc := suite.db.TrustCenter.Create().
+		SetSlug("expired-resend").
+		SetOwnerID(testUser1.OrganizationID).
+		SaveX(testUser1.UserCtx)
+	t.Cleanup(func() { _ = suite.db.TrustCenter.DeleteOneID(tc.ID).Exec(allowCtx) })
+
+	expiredTTL := time.Now().AddDate(0, 0, -1).Format(time.RFC3339Nano)
+	sub := suite.createTestSubscriber(t, tc.ID, gofakeit.Email(), expiredTTL)
+
+	req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/subscribe/verify?token=%s", sub.Token), nil)
+	recorder := httptest.NewRecorder()
+	suite.e.ServeHTTP(recorder, req)
+
+	assert.Equal(t, http.StatusOK, recorder.Code)
+
+	updated := suite.db.Subscriber.GetX(allowCtx, sub.ID)
+	require.NotEqual(t, sub.Token, updated.Token)
+
+	suite.WaitForEvents()
+
+	msgs := suite.mockEmailSender().Messages()
+	require.NotEmpty(t, msgs)
+
+	resent := msgs[len(msgs)-1]
+	assert.Contains(t, resent.HTML, updated.Token)
+	assert.NotContains(t, resent.HTML, sub.Token)
+}
+
 // createTestSubscriber is a helper to create a test subscriber. When trustCenterID is non-empty the
 // subscriber is scoped to that trust center, otherwise it is an organization-level subscriber
 func (suite *HandlerTestSuite) createTestSubscriber(t *testing.T, trustCenterID, email, ttl string) *ent.Subscriber {
@@ -263,5 +303,12 @@ func (suite *HandlerTestSuite) createTestSubscriber(t *testing.T, trustCenterID,
 		builder = builder.SetTrustCenterID(trustCenterID)
 	}
 
-	return builder.SaveX(reqCtx)
+	sub := builder.SaveX(reqCtx)
+
+	// the create hook rotates token/ttl/secret, so an explicit ttl must be re-applied after the save
+	if ttl != "" {
+		sub = suite.db.Subscriber.UpdateOneID(sub.ID).SetTTL(expires).SaveX(reqCtx)
+	}
+
+	return sub
 }

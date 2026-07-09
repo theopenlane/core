@@ -60,20 +60,35 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context, openapi *OpenAPICo
 	}
 
 	// never resurrect an unsubscribed contact; re-subscription goes through createSubscriber
-	if !entSubscriber.Unsubscribed {
-		if err := h.verifySubscriberToken(ctxWithToken, entSubscriber); err != nil {
-			// an expired link (a fresh one was already sent) or a capped retry still lands the subscriber on
-			// the trust center; only a genuine failure is surfaced as an error
-			if !errors.Is(err, ErrExpiredToken) && !errors.Is(err, ErrMaxAttempts) {
-				logx.FromContext(reqCtx).Error().Err(err).Msg("error verifying subscriber token")
+	if entSubscriber.Unsubscribed {
+		logx.FromContext(reqCtx).Warn().Str("subscriber_id", entSubscriber.ID).Msg("verify link replayed for unsubscribed contact")
 
-				return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
-			}
-		} else if err := h.updateSubscriberVerifiedEmail(ctxWithToken, entSubscriber.ID, generated.UpdateSubscriberInput{Email: &entSubscriber.Email}); err != nil {
-			logx.FromContext(reqCtx).Error().Err(err).Msg("error updating subscriber")
+		return h.BadRequest(ctx, ErrSubscriberUnsubscribed, openapi)
+	}
+
+	if err := h.verifySubscriberToken(ctxWithToken, entSubscriber); err != nil {
+		switch {
+		case errors.Is(err, ErrExpiredToken):
+			// a fresh link was already emailed; confirmation is still pending on that link
+			return h.Success(ctx, &models.VerifySubscribeReply{
+				Reply:   rout.Reply{Success: true},
+				Message: "The verification link has expired, a new one has been sent - check your inbox to confirm.",
+			}, openapi)
+		case errors.Is(err, ErrMaxAttempts):
+			logx.FromContext(reqCtx).Error().Err(err).Str("subscriber_id", entSubscriber.ID).Msg("subscriber exceeded verification attempts")
+
+			return h.BadRequest(ctx, ErrMaxAttempts, openapi)
+		default:
+			logx.FromContext(reqCtx).Error().Err(err).Msg("error verifying subscriber token")
 
 			return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 		}
+	}
+
+	if err := h.updateSubscriberVerifiedEmail(ctxWithToken, entSubscriber.ID, generated.UpdateSubscriberInput{Email: &entSubscriber.Email}); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error updating subscriber")
+
+		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 	}
 
 	// the confirmation UX lives on the trust center's own domain (the page that called this endpoint), so
@@ -105,6 +120,8 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 		// a non-expired verification failure (tampered/mismatched secret) is not recoverable by a resend;
 		// reject it rather than masquerading as an expired link that "sent a new email"
 		if !errors.Is(err, tokens.ErrTokenExpired) {
+			logx.FromContext(ctx).Error().Err(err).Msg("subscriber verification token failed validation")
+
 			return ErrUnableToVerifyEmail
 		}
 
@@ -145,12 +162,14 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 			return err
 		}
 
+		verifyURL, unsubscribeURL := h.subscriberTrustCenterLinks(ctxWithToken, entSubscriber, tokenValue)
+
 		if err := h.sendEmail(ctxWithToken, email.SubscribeOp.Name(), email.SubscribeRequest{
 			RecipientInfo:  email.RecipientInfo{Email: entSubscriber.Email},
 			OrgName:        orgName,
 			Token:          tokenValue,
-			VerifyURL:      h.subscriberVerifyURL(ctxWithToken, entSubscriber),
-			UnsubscribeURL: h.subscriberUnsubscribeURL(ctxWithToken, entSubscriber),
+			VerifyURL:      verifyURL,
+			UnsubscribeURL: unsubscribeURL,
 		}); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("error sending subscriber email")
 
