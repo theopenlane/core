@@ -442,6 +442,20 @@ func (_c *TrustCenterSettingCreate) SetNillableNdaApprovalRequired(v *bool) *Tru
 	return _c
 }
 
+// SetAllowSubscribers sets the "allow_subscribers" field.
+func (_c *TrustCenterSettingCreate) SetAllowSubscribers(v bool) *TrustCenterSettingCreate {
+	_c.mutation.SetAllowSubscribers(v)
+	return _c
+}
+
+// SetNillableAllowSubscribers sets the "allow_subscribers" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableAllowSubscribers(v *bool) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetAllowSubscribers(*v)
+	}
+	return _c
+}
+
 // SetNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field.
 func (_c *TrustCenterSettingCreate) SetNotifySubscribersOnSubprocessorChange(v bool) *TrustCenterSettingCreate {
 	_c.mutation.SetNotifySubscribersOnSubprocessorChange(v)
@@ -670,6 +684,10 @@ func (_c *TrustCenterSettingCreate) defaults() error {
 	if _, ok := _c.mutation.NdaApprovalRequired(); !ok {
 		v := trustcentersetting.DefaultNdaApprovalRequired
 		_c.mutation.SetNdaApprovalRequired(v)
+	}
+	if _, ok := _c.mutation.AllowSubscribers(); !ok {
+		v := trustcentersetting.DefaultAllowSubscribers
+		_c.mutation.SetAllowSubscribers(v)
 	}
 	if _, ok := _c.mutation.NotifySubscribersOnSubprocessorChange(); !ok {
 		v := trustcentersetting.DefaultNotifySubscribersOnSubprocessorChange
@@ -915,6 +933,10 @@ func (_c *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph
 	if value, ok := _c.mutation.NdaApprovalRequired(); ok {
 		_spec.SetField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool, value)
 		_node.NdaApprovalRequired = value
+	}
+	if value, ok := _c.mutation.AllowSubscribers(); ok {
+		_spec.SetField(trustcentersetting.FieldAllowSubscribers, field.TypeBool, value)
+		_node.AllowSubscribers = value
 	}
 	if value, ok := _c.mutation.NotifySubscribersOnSubprocessorChange(); ok {
 		_spec.SetField(trustcentersetting.FieldNotifySubscribersOnSubprocessorChange, field.TypeBool, value)

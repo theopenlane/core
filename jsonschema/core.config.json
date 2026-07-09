@@ -492,6 +492,10 @@
           "type": "string",
           "description": "Documentation URL"
         },
+        "apiurl": {
+          "type": "string",
+          "description": "Public base URL of the API for email links that hit the API directly"
+        },
         "CompanyName": {
           "type": "string",
           "description": "Company display name"

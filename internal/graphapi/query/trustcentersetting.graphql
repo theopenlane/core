@@ -1,101 +1,109 @@
-mutation CreateTrustCenterSetting ($input: CreateTrustCenterSettingInput!, $logoFile: Upload, $logoFileMetadata: FileMetadataInput, $faviconFile: Upload, $faviconFileMetadata: FileMetadataInput) {
-	createTrustCenterSetting(input: $input, logoFile: $logoFile, logoFileMetadata: $logoFileMetadata, faviconFile: $faviconFile, faviconFileMetadata: $faviconFileMetadata) {
-		trustCenterSetting {
-			accentColor
-			backgroundColor
-			companyDescription
-			companyDomain
-			companyName
-			createdAt
-			createdBy
-			environment
-			faviconLocalFileID
-			faviconRemoteURL
-			font
-			foregroundColor
-			heroImageLocalFileID
-			id
-			logoLocalFileID
-			logoRemoteURL
-			ndaApprovalRequired
-			overview
-			primaryColor
-			removeBranding
-			secondaryBackgroundColor
-			secondaryForegroundColor
-			securityContact
-			statusPageURL
-			themeMode
-			title
-			trustCenterID
-			updatedAt
-			updatedBy
-			logoFile {
-				id
-				name
-				metadata
-				presignedURL
-			}
-			faviconFile {
-				id
-				name
-				metadata
-				presignedURL
-			}
-			heroImageFile {
-				presignedURL
-			}
-		}
-	}
+mutation CreateTrustCenterSetting($input: CreateTrustCenterSettingInput!, $logoFile: Upload, $logoFileMetadata: FileMetadataInput, $faviconFile: Upload, $faviconFileMetadata: FileMetadataInput) {
+  createTrustCenterSetting(
+    input: $input
+    logoFile: $logoFile
+    logoFileMetadata: $logoFileMetadata
+    faviconFile: $faviconFile
+    faviconFileMetadata: $faviconFileMetadata
+  ) {
+    trustCenterSetting {
+      accentColor
+      backgroundColor
+      companyDescription
+      companyDomain
+      companyName
+      createdAt
+      createdBy
+      environment
+      faviconLocalFileID
+      faviconRemoteURL
+      font
+      foregroundColor
+      heroImageLocalFileID
+      id
+      logoLocalFileID
+      logoRemoteURL
+      ndaApprovalRequired
+      overview
+      primaryColor
+      removeBranding
+      secondaryBackgroundColor
+      secondaryForegroundColor
+      securityContact
+      statusPageURL
+      themeMode
+      title
+      trustCenterID
+      updatedAt
+      updatedBy
+      logoFile {
+        id
+        name
+        metadata
+        presignedURL
+      }
+      faviconFile {
+        id
+        name
+        metadata
+        presignedURL
+      }
+      heroImageFile {
+        presignedURL
+      }
+    }
+  }
 }
-mutation DeleteTrustCenterSetting ($deleteTrustCenterSettingId: ID!) {
-	deleteTrustCenterSetting(id: $deleteTrustCenterSettingId) {
-		deletedID
-	}
+
+mutation DeleteTrustCenterSetting($deleteTrustCenterSettingId: ID!) {
+  deleteTrustCenterSetting(id: $deleteTrustCenterSettingId) {
+    deletedID
+  }
 }
+
 query GetAllTrustCenterSettings {
-	trustCenterSettings {
-		totalCount
-		pageInfo {
-			startCursor
-			endCursor
-			hasPreviousPage
-			hasNextPage
-		}
-		edges {
-			node {
-				createdAt
-				createdBy
-				id
-				overview
-				primaryColor
-				title
-				trustCenterID
-				updatedAt
-				updatedBy
-				logoFile {
-					presignedURL
-				}
-				logoRemoteURL
-				logoLocalFileID
-				faviconFile {
-					presignedURL
-				}
-				faviconRemoteURL
-				faviconLocalFileID
-				heroImageFile {
-					presignedURL
-				}
-				heroImageLocalFileID
-				themeMode
-				font
-				foregroundColor
-				backgroundColor
-				accentColor
-				environment
-			}
-		}
-	}
+  trustCenterSettings {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        overview
+        primaryColor
+        title
+        trustCenterID
+        updatedAt
+        updatedBy
+        logoFile {
+          presignedURL
+        }
+        logoRemoteURL
+        logoLocalFileID
+        faviconFile {
+          presignedURL
+        }
+        faviconRemoteURL
+        faviconLocalFileID
+        heroImageFile {
+          presignedURL
+        }
+        heroImageLocalFileID
+        themeMode
+        font
+        foregroundColor
+        backgroundColor
+        accentColor
+        environment
+      }
+    }
+  }
 }
 query GetTrustCenterSettingByID ($trustCenterSettingId: ID!) {
 	trustCenterSetting(id: $trustCenterSettingId) {
@@ -143,84 +151,95 @@ query GetTrustCenterSettingByID ($trustCenterSettingId: ID!) {
 		}
 	}
 }
-query GetTrustCenterSettings ($first: Int, $last: Int, $where: TrustCenterSettingWhereInput) {
-	trustCenterSettings(first: $first, last: $last, where: $where) {
-		totalCount
-		pageInfo {
-			startCursor
-			endCursor
-			hasPreviousPage
-			hasNextPage
-		}
-		edges {
-			node {
-				createdAt
-				createdBy
-				id
-				overview
-				primaryColor
-				title
-				trustCenterID
-				updatedAt
-				updatedBy
-				logoFile {
-					presignedURL
-				}
-				logoRemoteURL
-				logoLocalFileID
-				faviconFile {
-					presignedURL
-				}
-				faviconRemoteURL
-				faviconLocalFileID
-				heroImageFile {
-					presignedURL
-				}
-				heroImageLocalFileID
-				themeMode
-				font
-				foregroundColor
-				backgroundColor
-				accentColor
-				environment
-			}
-		}
-	}
+
+query GetTrustCenterSettings($first: Int, $last: Int, $where: TrustCenterSettingWhereInput) {
+  trustCenterSettings(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        overview
+        primaryColor
+        title
+        trustCenterID
+        updatedAt
+        updatedBy
+        logoFile {
+          presignedURL
+        }
+        logoRemoteURL
+        logoLocalFileID
+        faviconFile {
+          presignedURL
+        }
+        faviconRemoteURL
+        faviconLocalFileID
+        heroImageFile {
+          presignedURL
+        }
+        heroImageLocalFileID
+        themeMode
+        font
+        foregroundColor
+        backgroundColor
+        accentColor
+        environment
+      }
+    }
+  }
 }
-mutation UpdateTrustCenterSetting ($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!, $logoFile: Upload, $logoFileMetadata: FileMetadataInput, $faviconFile: Upload, $faviconFileMetadata: FileMetadataInput, $heroImageFile: Upload, $heroImageFileMetadata: FileMetadataInput) {
-	updateTrustCenterSetting(id: $updateTrustCenterSettingId, input: $input, logoFile: $logoFile, logoFileMetadata: $logoFileMetadata, faviconFile: $faviconFile, faviconFileMetadata: $faviconFileMetadata, heroImageFile: $heroImageFile, heroImageFileMetadata: $heroImageFileMetadata) {
-		trustCenterSetting {
-			createdAt
-			createdBy
-			id
-			overview
-			primaryColor
-			title
-			trustCenterID
-			updatedAt
-			updatedBy
-			logoFile {
-				id
-				name
-				metadata
-				presignedURL
-			}
-			logoRemoteURL
-			logoLocalFileID
-			faviconFile {
-				id
-				name
-				metadata
-				presignedURL
-			}
-			faviconRemoteURL
-			faviconLocalFileID
-			themeMode
-			font
-			foregroundColor
-			backgroundColor
-			accentColor
-			environment
-		}
-	}
+
+mutation UpdateTrustCenterSetting($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!, $logoFile: Upload, $logoFileMetadata: FileMetadataInput, $faviconFile: Upload, $faviconFileMetadata: FileMetadataInput, $heroImageFile: Upload, $heroImageFileMetadata: FileMetadataInput) {
+  updateTrustCenterSetting(
+    id: $updateTrustCenterSettingId
+    input: $input
+    logoFile: $logoFile
+    logoFileMetadata: $logoFileMetadata
+    faviconFile: $faviconFile
+    faviconFileMetadata: $faviconFileMetadata
+    heroImageFile: $heroImageFile
+    heroImageFileMetadata: $heroImageFileMetadata
+  ) {
+    trustCenterSetting {
+      createdAt
+      createdBy
+      id
+      overview
+      primaryColor
+      title
+      trustCenterID
+      updatedAt
+      updatedBy
+      logoFile {
+        id
+        name
+        metadata
+        presignedURL
+      }
+      logoRemoteURL
+      logoLocalFileID
+      faviconFile {
+        id
+        name
+        metadata
+        presignedURL
+      }
+      faviconRemoteURL
+      faviconLocalFileID
+      themeMode
+      font
+      foregroundColor
+      backgroundColor
+      accentColor
+      environment
+    }
+  }
 }

@@ -1847,6 +1847,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**rooturl**|`string`|Root application URL used to construct email action links<br/>|no|
 |**producturl**|`string`|Product home URL<br/>|no|
 |**docsurl**|`string`|Documentation URL<br/>|no|
+|**apiurl**|`string`|Public base URL of the API for email links that hit the API directly<br/>|no|
 |**CompanyName**|`string`|Company display name<br/>|no|
 |**CompanyAddress**|`string`|Company mailing address<br/>|no|
 |**Corporation**|`string`|Legal corporation name<br/>|no|

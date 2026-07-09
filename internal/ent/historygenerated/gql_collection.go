@@ -14661,6 +14661,11 @@ func (_q *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneN
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldNdaApprovalRequired)
 				fieldSeen[trustcentersettinghistory.FieldNdaApprovalRequired] = struct{}{}
 			}
+		case "allowSubscribers":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldAllowSubscribers]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldAllowSubscribers)
+				fieldSeen[trustcentersettinghistory.FieldAllowSubscribers] = struct{}{}
+			}
 		case "notifySubscribersOnSubprocessorChange":
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange]; !ok {
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange)

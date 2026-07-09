@@ -2890,6 +2890,7 @@ type ComplexityRoot struct {
 
 	TrustCenterSettingHistory struct {
 		AccentColor                           func(childComplexity int) int
+		AllowSubscribers                      func(childComplexity int) int
 		BackgroundColor                       func(childComplexity int) int
 		CompanyDescription                    func(childComplexity int) int
 		CompanyDomain                         func(childComplexity int) int
@@ -17646,6 +17647,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.AccentColor(childComplexity), true
+	case "TrustCenterSettingHistory.allowSubscribers":
+		if e.ComplexityRoot.TrustCenterSettingHistory.AllowSubscribers == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSettingHistory.AllowSubscribers(childComplexity), true
 	case "TrustCenterSettingHistory.backgroundColor":
 		if e.ComplexityRoot.TrustCenterSettingHistory.BackgroundColor == nil {
 			break
@@ -59819,6 +59826,10 @@ type TrustCenterSettingHistory implements Node {
   """
   ndaApprovalRequired: Boolean
   """
+  whether the trust center accepts new subscriber registrations; when false, subscriber creation for the trust center is blocked
+  """
+  allowSubscribers: Boolean
+  """
   whether to email trust center subscribers when subprocessors are added, updated, or removed
   """
   notifySubscribersOnSubprocessorChange: Boolean
@@ -60419,6 +60430,13 @@ input TrustCenterSettingHistoryWhereInput {
   ndaApprovalRequiredNEQ: Boolean
   ndaApprovalRequiredIsNil: Boolean
   ndaApprovalRequiredNotNil: Boolean
+  """
+  allow_subscribers field predicates
+  """
+  allowSubscribers: Boolean
+  allowSubscribersNEQ: Boolean
+  allowSubscribersIsNil: Boolean
+  allowSubscribersNotNil: Boolean
   """
   notify_subscribers_on_subprocessor_change field predicates
   """
@@ -72635,6 +72653,8 @@ func (ec *executionContext) childFields_TrustCenterSettingHistory(ctx context.Co
 		return ec.fieldContext_TrustCenterSettingHistory_securityContact(ctx, field)
 	case "ndaApprovalRequired":
 		return ec.fieldContext_TrustCenterSettingHistory_ndaApprovalRequired(ctx, field)
+	case "allowSubscribers":
+		return ec.fieldContext_TrustCenterSettingHistory_allowSubscribers(ctx, field)
 	case "notifySubscribersOnSubprocessorChange":
 		return ec.fieldContext_TrustCenterSettingHistory_notifySubscribersOnSubprocessorChange(ctx, field)
 	case "subprocessorsNotifiedAt":

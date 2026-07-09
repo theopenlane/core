@@ -86180,6 +86180,11 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, trustcentersetting.FieldNdaApprovalRequired)
 				fieldSeen[trustcentersetting.FieldNdaApprovalRequired] = struct{}{}
 			}
+		case "allowSubscribers":
+			if _, ok := fieldSeen[trustcentersetting.FieldAllowSubscribers]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldAllowSubscribers)
+				fieldSeen[trustcentersetting.FieldAllowSubscribers] = struct{}{}
+			}
 		case "notifySubscribersOnSubprocessorChange":
 			if _, ok := fieldSeen[trustcentersetting.FieldNotifySubscribersOnSubprocessorChange]; !ok {
 				selectedFields = append(selectedFields, trustcentersetting.FieldNotifySubscribersOnSubprocessorChange)

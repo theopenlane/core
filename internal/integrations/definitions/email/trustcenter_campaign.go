@@ -95,8 +95,8 @@ func renderMessagesForCampaign(ctx context.Context, client *Client, dispatcher D
 
 // renderTrustCenterCampaignMessages builds a branded message per recipient. Content is the email
 // template defaults overlaid with the campaign's per-send metadata (so automated triggers supply the
-// post or subprocessor content via metadata over a shared template); branding comes from the trust
-// center setting; the per-recipient unsubscribe token is resolved from each target's metadata
+// post content via metadata over a shared template); branding comes from the trust center setting; the
+// per-recipient unsubscribe token is resolved from each target's metadata
 func renderTrustCenterCampaignMessages(ctx context.Context, client *Client, dispatcher Dispatcher, template *generated.EmailTemplate, setting *generated.TrustCenterSetting, metadata map[string]any, overlay CampaignContext, targets []*generated.CampaignTarget) ([]*newman.EmailMessage, []string, int) {
 	overlays := make([]any, 0, 1)
 	if len(metadata) > 0 {

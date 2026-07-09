@@ -1,6 +1,8 @@
 package email
 
 import (
+	"context"
+	"encoding/json"
 	"strings"
 	"testing"
 	"time"
@@ -92,7 +94,7 @@ func TestSystemEmailSubjects(t *testing.T) {
 				Token:   "tok",
 				OrgName: "OrgY",
 			}),
-			contains: []string{"subscribed", "Acme"},
+			contains: []string{"subscription", "OrgY"},
 		},
 		{
 			name: "verify billing",
@@ -199,7 +201,7 @@ func TestInviteEmailURLConstruction(t *testing.T) {
 	assert.Equal(t, "Accept Invite", body.Actions[0].Button.Text)
 }
 
-// TestInviteEmailRoleInIntro verifies the role is uppercased in the intro
+// TestInviteEmailRoleInIntro verifies the role appears in the intro
 func TestInviteEmailRoleInIntro(t *testing.T) {
 	cfg := RuntimeEmailConfig{
 		CompanyName: "TestCo",
@@ -215,39 +217,44 @@ func TestInviteEmailRoleInIntro(t *testing.T) {
 
 	body := testDispatcher[InviteRequest](t, "InviteRequest").Build(cfg, req)
 
-	require.NotEmpty(t, body.Intros.Unsafe)
+	require.NotEmpty(t, body.Intros.Paragraphs)
 	found := false
 
-	for _, intro := range body.Intros.Unsafe {
-		if strings.Contains(string(intro), "ADMIN") {
+	for _, intro := range body.Intros.Paragraphs {
+		if strings.Contains(intro, "role of admin") {
 			found = true
 		}
 	}
 
-	assert.True(t, found, "expected uppercased role in intro")
+	assert.True(t, found, "expected role in intro")
 }
 
+// TestInviteIntroEscapesUnsafeInputs verifies user-controlled fields are HTML-escaped in the rendered
+// email, so the plain-text intro paragraphs cannot inject markup
 func TestInviteIntroEscapesUnsafeInputs(t *testing.T) {
-	body := testDispatcher[InviteRequest](t, "InviteRequest").Build(RuntimeEmailConfig{
-		CompanyName: "TestCo <script>",
-		ProductURL:  "https://app.testco.com",
-	}, InviteRequest{
+	dispatcher, ok := DispatcherByKey(InviteOp.Name())
+	require.True(t, ok)
+
+	client := &Client{Config: RuntimeEmailConfig{CompanyName: "TestCo <script>", ProductURL: "https://app.testco.com"}}
+
+	payload, err := json.Marshal(InviteRequest{
 		InviterName: `Alice <img src=x onerror=alert(1)>`,
 		OrgName:     "Eng & <Ops>",
 		Role:        "admin<script>",
 		Token:       "tok",
 	})
+	require.NoError(t, err)
 
-	require.NotEmpty(t, body.Intros.Unsafe)
-	intro := string(body.Intros.Unsafe[0])
+	msg, err := dispatcher.RenderMessage(context.Background(), client, payload)
+	require.NoError(t, err)
 
-	assert.NotContains(t, intro, "<script>")
-	assert.NotContains(t, intro, "<img")
-	assert.Contains(t, intro, "TestCo &lt;script&gt;")
-	assert.Contains(t, intro, "Alice &lt;img src=x onerror=alert(1)&gt;")
-	assert.Contains(t, intro, "<strong>Eng &amp; &lt;Ops&gt;</strong>")
-	assert.Contains(t, intro, "ADMIN&lt;SCRIPT&gt;")
-	assert.NotContains(t, intro, "&amp;amp;")
+	html := msg.GetHTML()
+
+	assert.NotContains(t, html, "<img src=x onerror=alert(1)>")
+	assert.NotContains(t, html, "admin<script>")
+	assert.Contains(t, html, "Alice &lt;img src=x onerror=alert(1)&gt;")
+	assert.Contains(t, html, "Eng &amp; &lt;Ops&gt;")
+	assert.Contains(t, html, "admin&lt;script&gt;")
 }
 
 // TestInviteEmailNoRole verifies the intro omits role text when empty
@@ -265,9 +272,9 @@ func TestInviteEmailNoRole(t *testing.T) {
 
 	body := testDispatcher[InviteRequest](t, "InviteRequest").Build(cfg, req)
 
-	require.NotEmpty(t, body.Intros.Unsafe)
-	for _, intro := range body.Intros.Unsafe {
-		assert.NotContains(t, string(intro), "role of")
+	require.NotEmpty(t, body.Intros.Paragraphs)
+	for _, intro := range body.Intros.Paragraphs {
+		assert.NotContains(t, intro, "role of")
 	}
 }
 
@@ -289,11 +296,35 @@ func TestPasswordResetURLConstruction(t *testing.T) {
 	assert.Equal(t, "https://app.testco.com/password-reset?token=reset-xyz", body.Actions[0].Button.Link)
 }
 
-// TestSubscribeVerifyURLConstruction verifies the subscribe verification URL
-func TestSubscribeVerifyURLConstruction(t *testing.T) {
+// TestSubscribeVerifyURLTrustCenterDomain verifies the confirm button uses the caller-supplied trust
+// center domain link when present, so subscribers land on the trust center rather than the API host
+func TestSubscribeVerifyURLTrustCenterDomain(t *testing.T) {
 	cfg := RuntimeEmailConfig{
 		CompanyName: "TestCo",
 		ProductURL:  "https://app.testco.com",
+		APIURL:      "https://api.testco.com",
+	}
+
+	req := SubscribeRequest{
+		RecipientInfo: RecipientInfo{FirstName: "Dana"},
+		OrgName:       "SubOrg",
+		Token:         "sub-tok",
+		VerifyURL:     "https://trust.suborg.com/subscribe/verify?token=sub-tok",
+	}
+
+	body := testDispatcher[SubscribeRequest](t, "SubscribeRequest").Build(cfg, req)
+
+	require.Len(t, body.Actions, 1)
+	assert.Equal(t, "https://trust.suborg.com/subscribe/verify?token=sub-tok", body.Actions[0].Button.Link)
+}
+
+// TestSubscribeVerifyURLFallback verifies that an organization-level subscriber with no trust center to
+// land on falls back to the API-direct verify endpoint
+func TestSubscribeVerifyURLFallback(t *testing.T) {
+	cfg := RuntimeEmailConfig{
+		CompanyName: "TestCo",
+		ProductURL:  "https://app.testco.com",
+		APIURL:      "https://api.testco.com",
 	}
 
 	req := SubscribeRequest{
@@ -305,7 +336,7 @@ func TestSubscribeVerifyURLConstruction(t *testing.T) {
 	body := testDispatcher[SubscribeRequest](t, "SubscribeRequest").Build(cfg, req)
 
 	require.Len(t, body.Actions, 1)
-	assert.Equal(t, "https://app.testco.com/subscribe/verify?token=sub-tok", body.Actions[0].Button.Link)
+	assert.Equal(t, "https://api.testco.com/v1/subscribe/verify?token=sub-tok", body.Actions[0].Button.Link)
 }
 
 // TestVerifyBillingURLConstruction verifies the billing verification URL
@@ -464,6 +495,9 @@ func TestOrgDeletionNoticeContent(t *testing.T) {
 	require.Len(t, body.Actions, 1)
 	assert.Equal(t, "https://app.testco.com/billing", body.Actions[0].Button.Link)
 	assert.Equal(t, "Add Payment Method", body.Actions[0].Button.Text)
+	// matches the questionnaire email treatment: trust center teal button on the base theme
+	assert.Equal(t, tcButtonColor, body.Actions[0].Button.Color)
+	assert.Equal(t, tcButtonTextColor, body.Actions[0].Button.TextColor)
 }
 
 // TestAllEmailOperationsCount verifies every dispatcher surfaces exactly one registration

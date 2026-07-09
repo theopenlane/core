@@ -11,10 +11,48 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/utils/ulids"
 )
+
+// TestSeededTrustCenterUpdateTemplate confirms the trust center create hook seeds a message-updates
+// template that functions with no authored defaults (post/subprocessor notifications supply content via
+// campaign metadata at send time) and that an org editor can customize it
+func TestSeededTrustCenterUpdateTemplate(t *testing.T) {
+	tcOrg := createFreshOrgWithTrustCenter(t)
+
+	dbCtx := privacy.DecisionContext(setContext(tcOrg.owner.UserCtx, suite.client.db), privacy.Allow)
+
+	seeded, err := suite.client.db.EmailTemplate.Query().
+		Where(
+			emailtemplate.TrustCenterID(tcOrg.trustCenter.ID),
+			emailtemplate.Key(emaildef.BrandedMessageOp.Name()),
+		).
+		Only(dbCtx)
+	assert.NilError(t, err)
+
+	// works out of the box: seeded with no authored defaults, so notifications render from the campaign
+	// metadata supplied at send time rather than requiring the editor to fill anything in first
+	assert.Check(t, is.Len(seeded.Defaults, 0))
+
+	// customizable: an org editor authors the template defaults through the API, and it persists
+	resp, err := suite.client.api.UpdateEmailTemplate(tcOrg.owner.UserCtx, seeded.ID, testclient.UpdateEmailTemplateInput{
+		Defaults: map[string]any{
+			"subject": "{{ .companyName }} update",
+			"title":   "Hi {{ .firstName }}",
+			"intros":  []any{"We have news to share."},
+		},
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+
+	updated, err := suite.client.db.EmailTemplate.Get(dbCtx, seeded.ID)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(updated.Defaults, 3))
+}
 
 func validEmailTemplateDefaults() map[string]any {
 	return map[string]any{

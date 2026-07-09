@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/consts"
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
@@ -2030,6 +2031,13 @@ func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Tr
 
 	trustCenter, err := mutation.Save(ctx)
 	requireNoError(t, err)
+
+	// the trust center create hook seeds a customizable message-updates email template; remove it when
+	// the test ends so it does not leak into shared-org email template assertions
+	t.Cleanup(func() {
+		cleanupCtx := privacy.DecisionContext(setContext(ctx, tc.client.db), privacy.Allow)
+		_, _ = tc.client.db.EmailTemplate.Delete().Where(emailtemplate.TrustCenterID(trustCenter.ID)).Exec(cleanupCtx)
+	})
 
 	return trustCenter
 }

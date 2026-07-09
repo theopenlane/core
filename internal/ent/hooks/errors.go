@@ -38,6 +38,8 @@ var (
 	ErrMaxAttemptsAssessments = errors.New("too many attempts to resend assessment invitation")
 	// ErrMaxSubscriptionAttempts is returned when a user has reached the max attempts to subscribe to an org
 	ErrMaxSubscriptionAttempts = errors.New("too many attempts to resend org subscription email")
+	// ErrSubscribersNotAllowed is returned when a trust center is not accepting new subscribers
+	ErrSubscribersNotAllowed = errors.New("trust center is not accepting new subscribers")
 	// ErrAssessmentInCompleted is returned when attempting to resend an email for an assessment that is already completed
 	ErrAssessmentInCompleted = errors.New("assessment is already completed")
 	// ErrMissingRecipientEmail is returned when an email is required but not provided

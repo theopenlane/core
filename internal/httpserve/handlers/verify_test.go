@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/utils/ulids"
@@ -57,12 +56,12 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 			expectedSubject: "Welcome to",
 		},
 		{
-			name:            "happy path, already confirmed user",
+			name:            "already confirmed user is rejected as single-use",
 			userConfirmed:   true,
 			email:           "sitb@theopenlane.io",
 			tokenSet:        true,
-			expectedMessage: "success",
-			expectedStatus:  http.StatusOK,
+			expectedMessage: "already been verified",
+			expectedStatus:  http.StatusBadRequest,
 		},
 		{
 			name:            "missing token",
@@ -166,23 +165,12 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 			if tc.expectedStatus >= http.StatusOK && tc.expectedStatus <= http.StatusCreated {
 				assert.Contains(t, out.Message, tc.expectedMessage)
 
-				if tc.userConfirmed {
-					// check the claims to ensure the the claims are set correctly
-					token, _, err := new(jwt.Parser).ParseUnverified(out.AccessToken, jwt.MapClaims{})
-					require.NoError(t, err)
+				suite.WaitForEvents()
 
-					claims, ok := token.Claims.(jwt.MapClaims)
-					require.True(t, ok)
-
-					assert.NotEmpty(t, claims["org"])
-				} else {
-					suite.WaitForEvents()
-
-					msgs := suite.mockEmailSender().Messages()
-					require.NotEmpty(t, msgs)
-					assert.Contains(t, msgs[0].Subject, tc.expectedSubject)
-					assert.Equal(t, []string{tc.email}, msgs[0].To)
-				}
+				msgs := suite.mockEmailSender().Messages()
+				require.NotEmpty(t, msgs)
+				assert.Contains(t, msgs[0].Subject, tc.expectedSubject)
+				assert.Equal(t, []string{tc.email}, msgs[0].To)
 			} else {
 				assert.Contains(t, out.Error, tc.expectedMessage)
 			}
