@@ -148,7 +148,8 @@ Config contains the configuration for the core server
         "paymentreminder": {
             "paymentmethodinterval": 30,
             "deletiondays": 7,
-            "enabled": true
+            "enabled": false,
+            "dryrun": true
         },
         "organizationdelete": {
             "maxdeletesperrun": 25
@@ -1695,7 +1696,8 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
     "paymentreminder": {
         "paymentmethodinterval": 30,
         "deletiondays": 7,
-        "enabled": true
+        "enabled": false,
+        "dryrun": true
     },
     "organizationdelete": {
         "maxdeletesperrun": 25
@@ -1882,8 +1884,8 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |----|----|-----------|--------|
 |**paymentmethodinterval**|`integer`|Days after org creation before marking for deletion<br/>Default: `30`<br/>||
 |**deletiondays**|`integer`|Days between marking and actual deletion<br/>Default: `7`<br/>||
-|**enabled**|`boolean`|Whether the payment reminder listener is enabled<br/>Default: `true`<br/>||
-|**dryrun**|`boolean`|If true only log organization IDs that would be processed<br/>||
+|**enabled**|`boolean`|Whether the payment reminder listener is enabled<br/>Default: `false`<br/>||
+|**dryrun**|`boolean`|If true only log organization IDs that would be processed<br/>Default: `true`<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1892,7 +1894,8 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 {
     "paymentmethodinterval": 30,
     "deletiondays": 7,
-    "enabled": true
+    "enabled": false,
+    "dryrun": true
 }
 ```
 

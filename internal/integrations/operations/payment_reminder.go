@@ -30,9 +30,9 @@ type PaymentReminderConfig struct {
 	// and the actual deletion date set on pending_deletion_at
 	DeletionDays uint8 `json:"deletiondays" koanf:"deletiondays" jsonschema:"default=7,description=Days between marking and actual deletion"`
 	// Enabled controls whether the payment reminder polling loop is seeded at startup
-	Enabled bool `json:"enabled" koanf:"enabled" jsonschema:"default=true,description=Whether the payment reminder listener is enabled"`
+	Enabled bool `json:"enabled" koanf:"enabled" jsonschema:"default=false,description=Whether the payment reminder listener is enabled"`
 	// DryRun logs matching organization IDs without mutating state or dispatching emails
-	DryRun bool `json:"dryrun" koanf:"dryrun" jsonschema:"description=If true only log organization IDs that would be processed"`
+	DryRun bool `json:"dryrun" koanf:"dryrun" jsonschema:"default=true,description=If true only log organization IDs that would be processed"`
 }
 
 // PaymentReminderEnvelope is the durable payload for a payment reminder polling cycle
