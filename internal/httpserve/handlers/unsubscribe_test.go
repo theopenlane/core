@@ -29,7 +29,7 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 		suite.ClearTestData()
 
 		sub := suite.createTestSubscriber(t, "", gofakeit.Email(), "")
-		suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).ExecX(allowCtx)
+		require.NoError(t, suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).Exec(allowCtx))
 
 		target := fmt.Sprintf("/unsubscribe?token=%s", sub.Token)
 		req := httptest.NewRequest(http.MethodPost, target, nil)
@@ -45,7 +45,8 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 		assert.Equal(t, http.StatusOK, recorder.Code)
 		assert.NotEmpty(t, out.Message)
 
-		updated := suite.db.Subscriber.GetX(allowCtx, sub.ID)
+		updated, err := suite.db.Subscriber.Get(allowCtx, sub.ID)
+		require.NoError(t, err)
 		assert.True(t, updated.Unsubscribed)
 		assert.False(t, updated.Active)
 	})
@@ -54,14 +55,15 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 		suite.ClearTestData()
 
 		// the create hook provisions the trust center's live setting (allow_subscribers defaults true)
-		tc := suite.db.TrustCenter.Create().
+		tc, err := suite.db.TrustCenter.Create().
 			SetSlug("audit-unsub").
 			SetOwnerID(testUser1.OrganizationID).
-			SaveX(testUser1.UserCtx)
+			Save(testUser1.UserCtx)
+		require.NoError(t, err)
 		t.Cleanup(func() { _ = suite.db.TrustCenter.DeleteOneID(tc.ID).Exec(allowCtx) })
 
 		sub := suite.createTestSubscriber(t, tc.ID, gofakeit.Email(), "")
-		suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).ExecX(allowCtx)
+		require.NoError(t, suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).Exec(allowCtx))
 
 		target := fmt.Sprintf("/unsubscribe?token=%s", sub.Token)
 		req := httptest.NewRequest(http.MethodPost, target, nil)
@@ -70,7 +72,8 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 
 		assert.Equal(t, http.StatusOK, recorder.Code)
 
-		updated := suite.db.Subscriber.GetX(allowCtx, sub.ID)
+		updated, err := suite.db.Subscriber.Get(allowCtx, sub.ID)
+		require.NoError(t, err)
 		assert.True(t, updated.Unsubscribed)
 		assert.False(t, updated.Active)
 		require.NotNil(t, updated.TrustCenterID)
@@ -101,7 +104,7 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 		suite.ClearTestData()
 
 		sub := suite.createTestSubscriber(t, "", gofakeit.Email(), "")
-		suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).ExecX(allowCtx)
+		require.NoError(t, suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).Exec(allowCtx))
 
 		target := fmt.Sprintf("/unsubscribe?token=%s", sub.Token)
 
@@ -125,7 +128,8 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 		require.NoError(t, json.NewDecoder(res2.Body).Decode(&out2))
 		assert.Contains(t, out2.Message, "already unsubscribed")
 
-		updated := suite.db.Subscriber.GetX(allowCtx, sub.ID)
+		updated, err := suite.db.Subscriber.Get(allowCtx, sub.ID)
+		require.NoError(t, err)
 		assert.True(t, updated.Unsubscribed)
 		assert.False(t, updated.Active)
 	})

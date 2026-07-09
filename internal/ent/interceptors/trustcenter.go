@@ -10,6 +10,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gertd/go-pluralize"
+	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/vektah/gqlparser/v2/ast"
 	"github.com/vektah/gqlparser/v2/gqlerror"
@@ -101,12 +102,9 @@ func trustCenterInterceptor(applyToAllRequests, allowAnonAccess bool) ent.Interc
 }
 
 func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query, applyToAllRequests, allowAnonAccess bool) error {
-	if hasOpCtx := graphql.HasOperationContext(ctx); hasOpCtx {
-		// skip if we are creating an object, no need to filter
-		opCtx := graphql.GetOperationContext(ctx)
-		if opCtx.Operation.Operation == ast.Mutation {
-			return nil
-		}
+	// skip if we are creating an object, no need to filter
+	if isMutationRequest(ctx) {
+		return nil
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -120,18 +118,8 @@ func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query, applyT
 		return nil
 	}
 
-	// get the trust center key from the context
-	tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx)
-	if ok && tcID != "" {
-		_, allowRequest := privacy.DecisionFromContext(ctx)
-		if !allowAnonAccess && !allowRequest {
-			return privacy.Denyf("anonymous trust center access not allowed for this resource: %s", q.Type())
-		}
-
-		// filter the request by trust center
-		q.WhereP(sql.FieldEQ("trust_center_id", tcID))
-
-		return nil
+	if tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok && tcID != "" {
+		return applyAnonTrustCenterFilter(ctx, q, tcID, allowAnonAccess)
 	}
 
 	// deny all trust center requests that did not have a trust center key
@@ -146,27 +134,46 @@ func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query, applyT
 	}
 
 	// filter by trust centers owned by the organization in the caller context
-	orgIDs := caller.OrgIDs()
+	q.WhereP(trustCenterOwnedByOrgsP(caller.OrgIDs()))
 
-	q.WhereP(func(s *sql.Selector) {
+	return nil
+}
+
+// isMutationRequest reports whether the current graphql operation is a mutation
+func isMutationRequest(ctx context.Context) bool {
+	if !graphql.HasOperationContext(ctx) {
+		return false
+	}
+
+	return graphql.GetOperationContext(ctx).Operation.Operation == ast.Mutation
+}
+
+// applyAnonTrustCenterFilter scopes the query to the active trust center key, denying resources
+// that do not permit anonymous access
+func applyAnonTrustCenterFilter(ctx context.Context, q intercept.Query, tcID string, allowAnonAccess bool) error {
+	_, allowRequest := privacy.DecisionFromContext(ctx)
+	if !allowAnonAccess && !allowRequest {
+		return privacy.Denyf("anonymous trust center access not allowed for this resource: %s", q.Type())
+	}
+
+	// filter the request by trust center
+	q.WhereP(sql.FieldEQ("trust_center_id", tcID))
+
+	return nil
+}
+
+// trustCenterOwnedByOrgsP restricts trust_center_id to trust centers owned by any of the given organizations
+func trustCenterOwnedByOrgsP(orgIDs []string) func(*sql.Selector) {
+	return func(s *sql.Selector) {
 		t := sql.Table(trustcenter.Table)
-
-		anys := make([]any, len(orgIDs))
-		for i, s := range orgIDs {
-			anys[i] = s
-		}
 
 		s.Where(
 			sql.In(
 				s.C("trust_center_id"),
 				sql.Select(t.C(trustcenter.FieldID)).From(t).Where(
-					sql.In(
-						t.C(trustcenter.FieldOwnerID), anys...,
-					),
+					sql.In(t.C(trustcenter.FieldOwnerID), lo.ToAnySlice(orgIDs)...),
 				),
 			),
 		)
-	})
-
-	return nil
+	}
 }

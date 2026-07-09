@@ -122,7 +122,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeDoesNotResurrectUnsubscribed()
 	sub := suite.createTestSubscriber(t, "", gofakeit.Email(), "")
 
 	// opted out before confirming: token unused, but the unsubscribed guard still refuses to activate them
-	suite.db.Subscriber.UpdateOneID(sub.ID).SetUnsubscribed(true).SetActive(false).ExecX(allowCtx)
+	require.NoError(t, suite.db.Subscriber.UpdateOneID(sub.ID).SetUnsubscribed(true).SetActive(false).Exec(allowCtx))
 
 	target := fmt.Sprintf("/subscribe/verify?token=%s", sub.Token)
 	req := httptest.NewRequest(http.MethodPost, target, nil)
@@ -132,7 +132,8 @@ func (suite *HandlerTestSuite) TestVerifySubscribeDoesNotResurrectUnsubscribed()
 	assert.Equal(t, http.StatusBadRequest, recorder.Code)
 
 	// no resurrection: still unsubscribed, inactive, and unverified
-	updated := suite.db.Subscriber.GetX(allowCtx, sub.ID)
+	updated, err := suite.db.Subscriber.Get(allowCtx, sub.ID)
+	require.NoError(t, err)
 	assert.True(t, updated.Unsubscribed)
 	assert.False(t, updated.Active)
 	assert.False(t, updated.VerifiedEmail)
@@ -153,10 +154,11 @@ func (suite *HandlerTestSuite) TestVerifySubscribeTrustCenterSubscriber() {
 
 	// creating the trust center provisions its live setting (allow_subscribers defaults true), so a
 	// subscriber scoped to it is permitted
-	tc := suite.db.TrustCenter.Create().
+	tc, err := suite.db.TrustCenter.Create().
 		SetSlug("audit-verify").
 		SetOwnerID(testUser1.OrganizationID).
-		SaveX(testUser1.UserCtx)
+		Save(testUser1.UserCtx)
+	require.NoError(t, err)
 	t.Cleanup(func() { _ = suite.db.TrustCenter.DeleteOneID(tc.ID).Exec(allowCtx) })
 
 	sub := suite.createTestSubscriber(t, tc.ID, gofakeit.Email(), "")
@@ -168,7 +170,8 @@ func (suite *HandlerTestSuite) TestVerifySubscribeTrustCenterSubscriber() {
 
 	assert.Equal(t, http.StatusOK, recorder.Code)
 
-	updated := suite.db.Subscriber.GetX(allowCtx, sub.ID)
+	updated, err := suite.db.Subscriber.Get(allowCtx, sub.ID)
+	require.NoError(t, err)
 	assert.True(t, updated.VerifiedEmail)
 	assert.True(t, updated.Active)
 	require.NotNil(t, updated.TrustCenterID)
@@ -212,7 +215,8 @@ func (suite *HandlerTestSuite) TestVerifySubscribeTokenSingleUse() {
 	suite.e.ServeHTTP(firstRec, firstReq)
 	assert.Equal(t, http.StatusOK, firstRec.Code)
 
-	confirmed := suite.db.Subscriber.GetX(allowCtx, sub.ID)
+	confirmed, err := suite.db.Subscriber.Get(allowCtx, sub.ID)
+	require.NoError(t, err)
 	require.True(t, confirmed.VerifiedEmail)
 	require.True(t, confirmed.Active)
 
@@ -223,7 +227,8 @@ func (suite *HandlerTestSuite) TestVerifySubscribeTokenSingleUse() {
 	assert.Equal(t, http.StatusBadRequest, secondRec.Code)
 
 	// the replay changed nothing
-	after := suite.db.Subscriber.GetX(allowCtx, sub.ID)
+	after, err := suite.db.Subscriber.Get(allowCtx, sub.ID)
+	require.NoError(t, err)
 	assert.True(t, after.VerifiedEmail)
 	assert.True(t, after.Active)
 	assert.False(t, after.Unsubscribed)
@@ -242,10 +247,11 @@ func (suite *HandlerTestSuite) TestVerifySubscribeTrustCenterExpiredResend() {
 
 	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
-	tc := suite.db.TrustCenter.Create().
+	tc, err := suite.db.TrustCenter.Create().
 		SetSlug("expired-resend").
 		SetOwnerID(testUser1.OrganizationID).
-		SaveX(testUser1.UserCtx)
+		Save(testUser1.UserCtx)
+	require.NoError(t, err)
 	t.Cleanup(func() { _ = suite.db.TrustCenter.DeleteOneID(tc.ID).Exec(allowCtx) })
 
 	expiredTTL := time.Now().AddDate(0, 0, -1).Format(time.RFC3339Nano)
@@ -257,7 +263,8 @@ func (suite *HandlerTestSuite) TestVerifySubscribeTrustCenterExpiredResend() {
 
 	assert.Equal(t, http.StatusOK, recorder.Code)
 
-	updated := suite.db.Subscriber.GetX(allowCtx, sub.ID)
+	updated, err := suite.db.Subscriber.Get(allowCtx, sub.ID)
+	require.NoError(t, err)
 	require.NotEqual(t, sub.Token, updated.Token)
 
 	suite.WaitForEvents()
@@ -303,11 +310,13 @@ func (suite *HandlerTestSuite) createTestSubscriber(t *testing.T, trustCenterID,
 		builder = builder.SetTrustCenterID(trustCenterID)
 	}
 
-	sub := builder.SaveX(reqCtx)
+	sub, err := builder.Save(reqCtx)
+	require.NoError(t, err)
 
 	// the create hook rotates token/ttl/secret, so an explicit ttl must be re-applied after the save
 	if ttl != "" {
-		sub = suite.db.Subscriber.UpdateOneID(sub.ID).SetTTL(expires).SaveX(reqCtx)
+		sub, err = suite.db.Subscriber.UpdateOneID(sub.ID).SetTTL(expires).Save(reqCtx)
+		require.NoError(t, err)
 	}
 
 	return sub

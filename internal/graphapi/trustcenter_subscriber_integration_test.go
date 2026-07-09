@@ -68,17 +68,20 @@ func TestTrustCenterSubscriberGate(t *testing.T) {
 
 	dbCtx := privacy.DecisionContext(setContext(tc.owner.UserCtx, suite.client.db), privacy.Allow)
 
-	setting := suite.client.db.TrustCenter.Query().
+	tcLoaded, err := suite.client.db.TrustCenter.Query().
 		Where(trustcenter.IDEQ(tc.trustCenter.ID)).
 		WithSetting().
-		OnlyX(dbCtx).Edges.Setting
+		Only(dbCtx)
+	assert.NilError(t, err)
+
+	setting := tcLoaded.Edges.Setting
 	assert.Assert(t, setting != nil)
 
 	subscriberEmail := gofakeit.Email()
 	anonCtx, _ := createAnonymousTrustCenterContextWithEmail(tc.trustCenter.ID, tc.trustCenter.OwnerID, subscriberEmail)
 
 	t.Run("blocked when disabled", func(t *testing.T) {
-		suite.client.db.TrustCenterSetting.UpdateOneID(setting.ID).SetAllowSubscribers(false).SaveX(dbCtx)
+		assert.NilError(t, suite.client.db.TrustCenterSetting.UpdateOneID(setting.ID).SetAllowSubscribers(false).Exec(dbCtx))
 
 		_, err := suite.client.api.CreateSubscriber(anonCtx, testclient.CreateSubscriberInput{
 			Email:         subscriberEmail,
@@ -88,7 +91,7 @@ func TestTrustCenterSubscriberGate(t *testing.T) {
 	})
 
 	t.Run("allowed when enabled", func(t *testing.T) {
-		suite.client.db.TrustCenterSetting.UpdateOneID(setting.ID).SetAllowSubscribers(true).SaveX(dbCtx)
+		assert.NilError(t, suite.client.db.TrustCenterSetting.UpdateOneID(setting.ID).SetAllowSubscribers(true).Exec(dbCtx))
 
 		resp, err := suite.client.api.CreateSubscriber(anonCtx, testclient.CreateSubscriberInput{
 			Email:         subscriberEmail,
@@ -149,22 +152,24 @@ func TestTrustCenterCampaignDispatchBranding(t *testing.T) {
 	dbCtx := privacy.DecisionContext(setContext(tc.owner.UserCtx, suite.client.db), privacy.Allow)
 
 	// ensure the trust center has a branded setting linked via the setting edge
-	tcLoaded := suite.client.db.TrustCenter.Query().Where(trustcenter.IDEQ(tc.trustCenter.ID)).WithSetting().OnlyX(dbCtx)
+	tcLoaded, err := suite.client.db.TrustCenter.Query().Where(trustcenter.IDEQ(tc.trustCenter.ID)).WithSetting().Only(dbCtx)
+	assert.NilError(t, err)
 
 	setting := tcLoaded.Edges.Setting
 	if setting == nil {
-		setting = suite.client.db.TrustCenterSetting.Create().SetTrustCenterID(tc.trustCenter.ID).SaveX(dbCtx)
-		suite.client.db.TrustCenter.UpdateOneID(tc.trustCenter.ID).SetSettingID(setting.ID).SaveX(dbCtx)
+		setting, err = suite.client.db.TrustCenterSetting.Create().SetTrustCenterID(tc.trustCenter.ID).Save(dbCtx)
+		assert.NilError(t, err)
+		assert.NilError(t, suite.client.db.TrustCenter.UpdateOneID(tc.trustCenter.ID).SetSettingID(setting.ID).Exec(dbCtx))
 	}
 
-	suite.client.db.TrustCenterSetting.UpdateOneID(setting.ID).
+	assert.NilError(t, suite.client.db.TrustCenterSetting.UpdateOneID(setting.ID).
 		SetCompanyName("SecureCorp").
 		SetPrimaryColor("#0f3d3a").
 		SetAccentColor("#3fc2b4").
 		SetLogoRemoteURL("https://securecorp.example.com/logo.png").
-		SaveX(dbCtx)
+		Exec(dbCtx))
 
-	emailTemplate := suite.client.db.EmailTemplate.Create().
+	emailTemplate, err := suite.client.db.EmailTemplate.Create().
 		SetName("Trust Center Update Template").
 		SetKey(email.BrandedMessageOp.Name()).
 		SetTemplateContext(enums.TemplateContextCampaignRecipient).
@@ -175,32 +180,36 @@ func TestTrustCenterCampaignDispatchBranding(t *testing.T) {
 			"intros":         []any{"We updated our subprocessors."},
 			"unsubscribeURL": "https://securecorp.example.com/unsubscribe?token={{ .unsubscribeToken }}",
 		}).
-		SaveX(dbCtx)
+		Save(dbCtx)
+	assert.NilError(t, err)
 
-	campaignObj := suite.client.db.Campaign.Create().
+	campaignObj, err := suite.client.db.Campaign.Create().
 		SetName("June Subprocessor Update").
 		SetOwnerID(tc.organizationID).
 		SetCampaignType(enums.CampaignTypeTrustCenterUpdate).
 		SetTrustCenterID(tc.trustCenter.ID).
 		SetEmailTemplateID(emailTemplate.ID).
 		SetRecurrenceFrequency(enums.FrequencyNone).
-		SaveX(dbCtx)
+		Save(dbCtx)
+	assert.NilError(t, err)
 
-	targetA := suite.client.db.CampaignTarget.Create().
+	targetA, err := suite.client.db.CampaignTarget.Create().
 		SetCampaignID(campaignObj.ID).
 		SetOwnerID(tc.organizationID).
 		SetEmail("ada@example.com").
 		SetFullName("Ada Lovelace").
 		SetMetadata(map[string]any{email.MetadataUnsubscribeTokenKey: "tok_ada"}).
-		SaveX(dbCtx)
+		Save(dbCtx)
+	assert.NilError(t, err)
 
-	targetGrace := suite.client.db.CampaignTarget.Create().
+	targetGrace, err := suite.client.db.CampaignTarget.Create().
 		SetCampaignID(campaignObj.ID).
 		SetOwnerID(tc.organizationID).
 		SetEmail("grace@example.com").
 		SetFullName("Grace Hopper").
 		SetMetadata(map[string]any{email.MetadataUnsubscribeTokenKey: "tok_grace"}).
-		SaveX(dbCtx)
+		Save(dbCtx)
+	assert.NilError(t, err)
 
 	defer func() {
 		(&Cleanup[*generated.CampaignTargetDeleteOne]{client: suite.client.db.CampaignTarget, IDs: []string{targetA.ID, targetGrace.ID}}).MustDelete(tc.owner.UserCtx, t)
@@ -242,20 +251,17 @@ func TestTrustCenterCampaignDispatchBranding(t *testing.T) {
 	combinedHTML := strings.Join(allHTML, "\n")
 	combinedTo := strings.Join(allTo, " ")
 
-	t.Run("each subscriber receives a message", func(t *testing.T) {
-		assert.Assert(t, strings.Contains(combinedTo, "ada@example.com"))
-		assert.Assert(t, strings.Contains(combinedTo, "grace@example.com"))
-	})
+	// each subscriber receives a message
+	assert.Assert(t, strings.Contains(combinedTo, "ada@example.com"))
+	assert.Assert(t, strings.Contains(combinedTo, "grace@example.com"))
 
-	t.Run("branding sourced from trust center setting", func(t *testing.T) {
-		assert.Assert(t, strings.Contains(combinedHTML, "SecureCorp"))
-		assert.Assert(t, strings.Contains(combinedHTML, "https://securecorp.example.com/logo.png"))
-	})
+	// branding sourced from trust center setting
+	assert.Assert(t, strings.Contains(combinedHTML, "SecureCorp"))
+	assert.Assert(t, strings.Contains(combinedHTML, "https://securecorp.example.com/logo.png"))
 
-	t.Run("per-recipient unsubscribe link", func(t *testing.T) {
-		assert.Assert(t, strings.Contains(combinedHTML, "https://securecorp.example.com/unsubscribe?token=tok_ada"))
-		assert.Assert(t, strings.Contains(combinedHTML, "https://securecorp.example.com/unsubscribe?token=tok_grace"))
-	})
+	// per-recipient unsubscribe link
+	assert.Assert(t, strings.Contains(combinedHTML, "https://securecorp.example.com/unsubscribe?token=tok_ada"))
+	assert.Assert(t, strings.Contains(combinedHTML, "https://securecorp.example.com/unsubscribe?token=tok_grace"))
 }
 
 // TestTrustCenterPostNotificationEmail verifies that publishing a trust center post flagged for
@@ -267,42 +273,44 @@ func TestTrustCenterPostNotificationEmail(t *testing.T) {
 	dbCtx := privacy.DecisionContext(setContext(tc.owner.UserCtx, suite.client.db), privacy.Allow)
 
 	// brand the live trust center setting so the email pulls trust center branding
-	tcLoaded := suite.client.db.TrustCenter.Query().Where(trustcenter.IDEQ(tc.trustCenter.ID)).WithSetting().OnlyX(dbCtx)
+	tcLoaded, err := suite.client.db.TrustCenter.Query().Where(trustcenter.IDEQ(tc.trustCenter.ID)).WithSetting().Only(dbCtx)
+	assert.NilError(t, err)
 
 	setting := tcLoaded.Edges.Setting
 	assert.Assert(t, setting != nil)
 
-	suite.client.db.TrustCenterSetting.UpdateOneID(setting.ID).
+	assert.NilError(t, suite.client.db.TrustCenterSetting.UpdateOneID(setting.ID).
 		SetCompanyName("SecureCorp").
 		SetLogoRemoteURL("https://securecorp.example.com/logo.png").
-		SaveX(dbCtx)
+		Exec(dbCtx))
 
 	// an active, verified subscriber to the trust center
-	sub := suite.client.db.Subscriber.Create().
+	sub, err := suite.client.db.Subscriber.Create().
 		SetOwnerID(tc.trustCenter.OwnerID).
 		SetTrustCenterID(tc.trustCenter.ID).
 		SetEmail("ada@example.com").
 		SetActive(true).
 		SetVerifiedEmail(true).
-		SaveX(dbCtx)
+		Save(dbCtx)
+	assert.NilError(t, err)
 
 	// a published post flagged for notification, back-dated so it is stable past the grace window
 	stale := time.Now().Add(-2 * time.Hour)
-	suite.client.db.Note.Create().
+	assert.NilError(t, suite.client.db.Note.Create().
 		SetOwnerID(tc.trustCenter.OwnerID).
 		SetTrustCenterID(tc.trustCenter.ID).
 		SetTitle("June trust center update").
 		SetText("We added a new subprocessor and refreshed our security documentation.").
 		SetNotifySubscribers(true).
 		SetUpdatedAt(stale).
-		SaveX(dbCtx)
+		Exec(dbCtx))
 
 	// let the subscriber create hook's confirmation email settle, then clear it so only the post
 	// notification remains
 	suite.WaitForEvents()
 	suite.mockEmailSender().Reset()
 
-	_, err := suite.integrationsRT.HandleTrustCenterNotifications(context.Background(), operations.TrustCenterNotificationEnvelope{})
+	_, err = suite.integrationsRT.HandleTrustCenterNotifications(context.Background(), operations.TrustCenterNotificationEnvelope{})
 	assert.NilError(t, err)
 
 	suite.WaitForEvents()
@@ -319,20 +327,17 @@ func TestTrustCenterPostNotificationEmail(t *testing.T) {
 	combinedHTML := strings.Join(allHTML, "\n")
 	combinedTo := strings.Join(allTo, " ")
 
-	t.Run("subscriber receives the post notification", func(t *testing.T) {
-		assert.Assert(t, strings.Contains(combinedTo, "ada@example.com"))
-	})
+	// subscriber receives the post notification
+	assert.Assert(t, strings.Contains(combinedTo, "ada@example.com"))
 
-	t.Run("post content and trust center branding render", func(t *testing.T) {
-		assert.Assert(t, strings.Contains(combinedHTML, "June trust center update"))
-		assert.Assert(t, strings.Contains(combinedHTML, "We added a new subprocessor"))
-		assert.Assert(t, strings.Contains(combinedHTML, "SecureCorp"))
-	})
+	// post content and trust center branding render
+	assert.Assert(t, strings.Contains(combinedHTML, "June trust center update"))
+	assert.Assert(t, strings.Contains(combinedHTML, "We added a new subprocessor"))
+	assert.Assert(t, strings.Contains(combinedHTML, "SecureCorp"))
 
-	t.Run("per-recipient unsubscribe link", func(t *testing.T) {
-		assert.Assert(t, strings.Contains(combinedHTML, "/unsubscribe?token="))
-		assert.Assert(t, strings.Contains(combinedHTML, sub.Token))
-	})
+	// per-recipient unsubscribe link
+	assert.Assert(t, strings.Contains(combinedHTML, "/unsubscribe?token="))
+	assert.Assert(t, strings.Contains(combinedHTML, sub.Token))
 }
 
 // TestTrustCenterSubprocessorNotificationEmail verifies that a subprocessor change on a trust center
@@ -343,47 +348,50 @@ func TestTrustCenterSubprocessorNotificationEmail(t *testing.T) {
 
 	dbCtx := privacy.DecisionContext(setContext(tc.owner.UserCtx, suite.client.db), privacy.Allow)
 
-	tcLoaded := suite.client.db.TrustCenter.Query().Where(trustcenter.IDEQ(tc.trustCenter.ID)).WithSetting().OnlyX(dbCtx)
+	tcLoaded, err := suite.client.db.TrustCenter.Query().Where(trustcenter.IDEQ(tc.trustCenter.ID)).WithSetting().Only(dbCtx)
+	assert.NilError(t, err)
 
 	setting := tcLoaded.Edges.Setting
 	assert.Assert(t, setting != nil)
 
 	// opt the trust center into subprocessor notifications and brand it
-	suite.client.db.TrustCenterSetting.UpdateOneID(setting.ID).
+	assert.NilError(t, suite.client.db.TrustCenterSetting.UpdateOneID(setting.ID).
 		SetNotifySubscribersOnSubprocessorChange(true).
 		SetCompanyName("SecureCorp").
 		SetLogoRemoteURL("https://securecorp.example.com/logo.png").
-		SaveX(dbCtx)
+		Exec(dbCtx))
 
 	// an active, verified subscriber to the trust center
-	sub := suite.client.db.Subscriber.Create().
+	sub, err := suite.client.db.Subscriber.Create().
 		SetOwnerID(tc.trustCenter.OwnerID).
 		SetTrustCenterID(tc.trustCenter.ID).
 		SetEmail("ada@example.com").
 		SetActive(true).
 		SetVerifiedEmail(true).
-		SaveX(dbCtx)
+		Save(dbCtx)
+	assert.NilError(t, err)
 
-	vendor := suite.client.db.Subprocessor.Create().
+	vendor, err := suite.client.db.Subprocessor.Create().
 		SetOwnerID(tc.trustCenter.OwnerID).
 		SetName("Amazon Web Services").
 		SetLogoRemoteURL("https://securecorp.example.com/logos/aws.png").
-		SaveX(dbCtx)
+		Save(dbCtx)
+	assert.NilError(t, err)
 
 	// create the change already stable past the grace window (set on create, since the audit mixin
 	// resets updated_at to now on any update)
 	stale := time.Now().Add(-2 * time.Hour)
-	suite.client.db.TrustCenterSubprocessor.Create().
+	assert.NilError(t, suite.client.db.TrustCenterSubprocessor.Create().
 		SetTrustCenterID(tc.trustCenter.ID).
 		SetSubprocessorID(vendor.ID).
 		SetCountries([]string{"US", "DE"}).
 		SetUpdatedAt(stale).
-		SaveX(dbCtx)
+		Exec(dbCtx))
 
 	suite.WaitForEvents()
 	suite.mockEmailSender().Reset()
 
-	_, err := suite.integrationsRT.HandleTrustCenterNotifications(context.Background(), operations.TrustCenterNotificationEnvelope{})
+	_, err = suite.integrationsRT.HandleTrustCenterNotifications(context.Background(), operations.TrustCenterNotificationEnvelope{})
 	assert.NilError(t, err)
 
 	suite.WaitForEvents()
@@ -400,17 +408,14 @@ func TestTrustCenterSubprocessorNotificationEmail(t *testing.T) {
 	combinedHTML := strings.Join(allHTML, "\n")
 	combinedTo := strings.Join(allTo, " ")
 
-	t.Run("subscriber receives the subprocessor notification", func(t *testing.T) {
-		assert.Assert(t, strings.Contains(combinedTo, "ada@example.com"))
-	})
+	// subscriber receives the subprocessor notification
+	assert.Assert(t, strings.Contains(combinedTo, "ada@example.com"))
 
-	t.Run("changed vendor and trust center branding render", func(t *testing.T) {
-		assert.Assert(t, strings.Contains(combinedHTML, "Amazon Web Services"))
-		assert.Assert(t, strings.Contains(combinedHTML, "SecureCorp"))
-	})
+	// changed vendor and trust center branding render
+	assert.Assert(t, strings.Contains(combinedHTML, "Amazon Web Services"))
+	assert.Assert(t, strings.Contains(combinedHTML, "SecureCorp"))
 
-	t.Run("per-recipient unsubscribe link", func(t *testing.T) {
-		assert.Assert(t, strings.Contains(combinedHTML, "/unsubscribe?token="))
-		assert.Assert(t, strings.Contains(combinedHTML, sub.Token))
-	})
+	// per-recipient unsubscribe link
+	assert.Assert(t, strings.Contains(combinedHTML, "/unsubscribe?token="))
+	assert.Assert(t, strings.Contains(combinedHTML, sub.Token))
 }

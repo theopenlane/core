@@ -26,12 +26,13 @@ func TestSeededTrustCenterUpdateTemplate(t *testing.T) {
 
 	dbCtx := privacy.DecisionContext(setContext(tcOrg.owner.UserCtx, suite.client.db), privacy.Allow)
 
-	seeded := suite.client.db.EmailTemplate.Query().
+	seeded, err := suite.client.db.EmailTemplate.Query().
 		Where(
 			emailtemplate.TrustCenterID(tcOrg.trustCenter.ID),
 			emailtemplate.Key(emaildef.BrandedMessageOp.Name()),
 		).
-		OnlyX(dbCtx)
+		Only(dbCtx)
+	assert.NilError(t, err)
 
 	// works out of the box: seeded with no authored defaults, so notifications render from the campaign
 	// metadata supplied at send time rather than requiring the editor to fill anything in first
@@ -48,7 +49,8 @@ func TestSeededTrustCenterUpdateTemplate(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)
 
-	updated := suite.client.db.EmailTemplate.GetX(dbCtx, seeded.ID)
+	updated, err := suite.client.db.EmailTemplate.Get(dbCtx, seeded.ID)
+	assert.NilError(t, err)
 	assert.Check(t, is.Len(updated.Defaults, 3))
 }
 

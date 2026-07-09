@@ -48,10 +48,13 @@ const (
 // mint brand tints while keeping ~10:1 contrast on brandDarkGreen
 const heroBodyTextColor = "#e8f0ee"
 
+// white is used for heading and callout text on the dark green backgrounds
+const white = "#ffffff"
+
 // applySystemBranding applies the default Openlane system email color treatment
 func applySystemBranding(cfg RuntimeEmailConfig) RuntimeEmailConfig {
 	cfg.HeroBackgroundColor = brandDarkGreen
-	cfg.HeadingColor = "#ffffff"
+	cfg.HeadingColor = white
 	cfg.TextColor = heroBodyTextColor
 	cfg.FooterTextColor = "#14171e"
 	cfg.ButtonColor = tcButtonColor
@@ -72,8 +75,8 @@ func applyCalloutBranding(cfg RuntimeEmailConfig) RuntimeEmailConfig {
 func calloutStyle() render.Style {
 	return render.Style{
 		BackgroundColor: brandDarkGreen,
-		PrimaryColor:    "#ffffff",
-		TextColor:       "#ffffff",
+		PrimaryColor:    white,
+		TextColor:       white,
 	}
 }
 

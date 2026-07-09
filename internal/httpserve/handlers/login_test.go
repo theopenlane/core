@@ -325,7 +325,8 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
-	setting := suite.db.OrganizationSetting.Create().SaveX(ownerCtx)
+	setting, err := suite.db.OrganizationSetting.Create().Save(ownerCtx)
+	require.NoError(t, err)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
@@ -382,7 +383,8 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOwnerBypass() {
 	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
-	setting := suite.db.OrganizationSetting.Create().SaveX(ownerCtx)
+	setting, err := suite.db.OrganizationSetting.Create().Save(ownerCtx)
+	require.NoError(t, err)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
