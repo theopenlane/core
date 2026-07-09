@@ -208,7 +208,7 @@ func TestFixture(name, toEmail string, defaultBranding bool) json.RawMessage {
 			Subject:   "SecureCorp subprocessor update",
 			Preheader: "Review the latest changes to our subprocessor list",
 			Title:     "We've updated our subprocessors",
-			Intros:    []string{"The subprocessors we use have changed. The updates are listed below - review the full list anytime in our trust center."},
+			Intros:    []string{"The subprocessors we use have changed. You can review the full list anytime in our trust center."},
 			Subprocessors: []SubprocessorEntry{
 				{Name: "Amazon Web Services", Change: "Added"},
 				{Name: "Stripe", Change: "Updated"},

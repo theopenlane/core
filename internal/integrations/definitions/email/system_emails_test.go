@@ -201,7 +201,7 @@ func TestInviteEmailURLConstruction(t *testing.T) {
 	assert.Equal(t, "Accept Invite", body.Actions[0].Button.Text)
 }
 
-// TestInviteEmailRoleInIntro verifies the role is uppercased in the intro
+// TestInviteEmailRoleInIntro verifies the role appears in the intro
 func TestInviteEmailRoleInIntro(t *testing.T) {
 	cfg := RuntimeEmailConfig{
 		CompanyName: "TestCo",
@@ -221,12 +221,12 @@ func TestInviteEmailRoleInIntro(t *testing.T) {
 	found := false
 
 	for _, intro := range body.Intros.Paragraphs {
-		if strings.Contains(intro, "ADMIN") {
+		if strings.Contains(intro, "role of admin") {
 			found = true
 		}
 	}
 
-	assert.True(t, found, "expected uppercased role in intro")
+	assert.True(t, found, "expected role in intro")
 }
 
 // TestInviteIntroEscapesUnsafeInputs verifies user-controlled fields are HTML-escaped in the rendered
@@ -251,10 +251,10 @@ func TestInviteIntroEscapesUnsafeInputs(t *testing.T) {
 	html := msg.GetHTML()
 
 	assert.NotContains(t, html, "<img src=x onerror=alert(1)>")
-	assert.NotContains(t, html, "ADMIN<SCRIPT>")
+	assert.NotContains(t, html, "admin<script>")
 	assert.Contains(t, html, "Alice &lt;img src=x onerror=alert(1)&gt;")
 	assert.Contains(t, html, "Eng &amp; &lt;Ops&gt;")
-	assert.Contains(t, html, "ADMIN&lt;SCRIPT&gt;")
+	assert.Contains(t, html, "admin&lt;script&gt;")
 }
 
 // TestInviteEmailNoRole verifies the intro omits role text when empty

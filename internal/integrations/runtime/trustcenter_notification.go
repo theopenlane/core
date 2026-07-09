@@ -7,6 +7,8 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/httpsling/httpclient"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
@@ -36,7 +38,7 @@ const (
 	subprocessorNotificationSubject    = "Subprocessor update"
 	subprocessorNotificationPreheader  = "Review the latest changes to our subprocessor list"
 	subprocessorNotificationTitle      = "We've updated our subprocessors"
-	subprocessorNotificationIntro      = "The subprocessors we use have changed. The updates are listed below - review the full list anytime in our trust center."
+	subprocessorNotificationIntro      = "The subprocessors we use have changed. You can review the full list anytime in our trust center."
 	subprocessorNotificationButtonText = "View subprocessors"
 )
 
@@ -196,6 +198,13 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff tim
 		}
 
 		base := subprocessorNotificationRequest(setting, customDomain, tc.Slug, entries)
+
+		// a dead logo URL renders a broken image, so fall back to the default logo when it does not load
+		if base.LogoURL != "" && !logoURLReachable(ctx, base.LogoURL) {
+			logx.FromContext(ctx).Warn().Str("trust_center_id", setting.TrustCenterID).Str("logo_url", base.LogoURL).Msg("trust center logo URL unreachable, using default logo")
+
+			base.LogoURL = ""
+		}
 
 		for _, sub := range subscribers {
 			req := base
@@ -443,4 +452,24 @@ func (r *Runtime) sendSubprocessorNotification(ctx context.Context, req emaildef
 	})
 
 	return err
+}
+
+const logoCheckTimeout = 5 * time.Second
+
+// logoURLReachable reports whether a logo URL currently serves a successful response. Only the status is
+// inspected (the body is discarded), so a dead URL can fall back to the default logo instead of rendering
+// a broken image
+func logoURLReachable(ctx context.Context, rawURL string) bool {
+	resp, err := httpsling.SendWithContext(ctx,
+		httpsling.Get(),
+		httpsling.URL(rawURL),
+		httpsling.Client(httpclient.Timeout(logoCheckTimeout)),
+	)
+	if err != nil {
+		return false
+	}
+
+	defer resp.Body.Close()
+
+	return httpsling.IsSuccess(resp)
 }
