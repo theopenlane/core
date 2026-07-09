@@ -274,6 +274,18 @@ func WithReadyChecks(c *entx.EntClientConfig, f *fgax.Client, r *redis.Client, j
 // WithGraphRoute adds the graph handler to the server
 func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
+		// only pass the redis client through to subscriptions when redis itself is enabled
+		var subscriptionRedisClient *redis.Client
+		if s.Config.Settings.Redis.Enabled {
+			subscriptionRedisClient = s.Config.Handler.RedisClient
+		}
+
+		log.Debug().
+			Bool("subscriptions_enabled", s.Config.Settings.Server.EnableGraphSubscriptions).
+			Bool("redis_enabled", s.Config.Settings.Redis.Enabled).
+			Bool("redis_client_set", subscriptionRedisClient != nil).
+			Msg("graphsubscriptions: server bootstrap config")
+
 		// Setup Graph API Handlers
 		r := graphapi.NewResolver(c, s.Config.StorageService).
 			WithExtensions(s.Config.Settings.Server.EnableGraphExtensions).
@@ -283,7 +295,7 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 			WithWorkflowsConfig(s.Config.Settings.Workflows).
 			WithTrustCenterCnameTarget(s.Config.Settings.Server.TrustCenterCnameTarget).
 			WithTrustCenterDefaultDomain(s.Config.Settings.Server.DefaultTrustCenterDomain).
-			WithSubscriptions(s.Config.Settings.Server.EnableGraphSubscriptions).
+			WithSubscriptions(s.Config.Settings.Server.EnableGraphSubscriptions, subscriptionRedisClient).
 			WithAllowedOrigins(s.Config.Settings.Server.CORS.AllowOrigins).
 			WithAuthOptions(getAuthOptions(s)...).
 			WithNotificationLookbackDays(s.Config.Settings.Server.NotificationLookbackDays)

@@ -197,7 +197,7 @@ func testGraphServer(c *ent.Client, u *objects.Service) *handler.Server {
 		WithMaxResultLimit(MaxResultLimit).
 		WithTrustCenterCnameTarget(TrustCenterCnameTarget).
 		WithTrustCenterDefaultDomain(TrustCenterDefaultDomain).
-		WithSubscriptions(true)
+		WithSubscriptions(true, nil)
 
 	// add the pool to the resolver
 	r.WithPool(100) //nolint:mnd
