@@ -630,7 +630,7 @@ coreConfiguration:
       # -- Days after org creation before marking for deletion
       paymentmethodinterval: 0
       # -- Days between marking and actual deletion
-      deletion_days: 0
+      deletiondays: 0
       # -- Whether the payment reminder listener is enabled
       enabled: false  # @schema type:boolean
       # -- If true only log organization IDs that would be processed

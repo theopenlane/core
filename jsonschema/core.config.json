@@ -1231,11 +1231,13 @@
         },
         "enabled": {
           "type": "boolean",
-          "description": "Whether the payment reminder listener is enabled"
+          "description": "Whether the payment reminder listener is enabled",
+          "default": false
         },
         "dryrun": {
           "type": "boolean",
-          "description": "If true only log organization IDs that would be processed"
+          "description": "If true only log organization IDs that would be processed",
+          "default": true
         }
       },
       "additionalProperties": false,
