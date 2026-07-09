@@ -10,11 +10,76 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/integrations/templatekit"
 	"github.com/theopenlane/core/pkg/logx"
 )
+
+// EnsureTrustCenterUpdateTemplate returns the id of the trust center's customizable update template,
+// identified by TrustCenterUpdateTemplate, creating it when the trust center does not have one yet.
+// Trust center creation and the startup backfill seed the template ahead of time; campaign creation
+// calls this as the final guarantee since a campaign cannot send without its template
+func EnsureTrustCenterUpdateTemplate(ctx context.Context, db *generated.Client, ownerID, trustCenterID string) (string, error) {
+	existingID, err := db.EmailTemplate.Query().
+		Where(
+			emailtemplate.OwnerID(ownerID),
+			emailtemplate.TrustCenterID(trustCenterID),
+			emailtemplate.KeyEQ(TrustCenterUpdateTemplate),
+		).
+		FirstID(ctx)
+	if err == nil {
+		return existingID, nil
+	}
+
+	if !generated.IsNotFound(err) {
+		logx.FromContext(ctx).Error().Err(err).Str("owner_id", ownerID).Str("trust_center_id", trustCenterID).Msg("failed querying for trust center update template")
+
+		return "", err
+	}
+
+	created, err := db.EmailTemplate.Create().
+		SetOwnerID(ownerID).
+		SetTrustCenterID(trustCenterID).
+		SetName(TrustCenterUpdateTemplate).
+		SetKey(TrustCenterUpdateTemplate).
+		SetTemplateContext(enums.TemplateContextCampaignRecipient).
+		Save(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("owner_id", ownerID).Str("trust_center_id", trustCenterID).Msg("failed creating trust center update template")
+
+		return "", err
+	}
+
+	return created.ID, nil
+}
+
+// EnsureAllTrustCenterUpdateTemplates ensures every trust center has its update template, continuing
+// past per-trust-center failures, and returns the number successfully ensured. Used by the startup
+// backfill so organizations that pre-date template seeding get one ahead of any campaign send
+func EnsureAllTrustCenterUpdateTemplates(ctx context.Context, db *generated.Client) (int, error) {
+	trustCenters, err := db.TrustCenter.Query().All(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed querying trust centers for update templates")
+
+		return 0, err
+	}
+
+	ensured := 0
+
+	// per-trust-center failures are logged inside the ensure and skipped so one broken trust
+	// center does not block the rest of the backfill
+	for _, tc := range trustCenters {
+		if _, err := EnsureTrustCenterUpdateTemplate(ctx, db, tc.OwnerID, tc.ID); err != nil {
+			continue
+		}
+
+		ensured++
+	}
+
+	return ensured, nil
+}
 
 // snapshotTrustCenterSubscribers materializes campaign targets from the trust center's active,
 // verified, subscribed subscribers. It is idempotent: subscribers already represented by a target on

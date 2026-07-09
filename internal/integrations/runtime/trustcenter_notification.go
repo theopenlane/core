@@ -13,7 +13,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
@@ -31,9 +30,6 @@ const (
 	// trustCenterNotificationGrace is the debounce window a post or subprocessor change must be stable
 	// for before subscribers are notified, giving authors time to make further edits
 	trustCenterNotificationGrace = time.Hour
-	// trustCenterUpdateTemplateName is the display name of the reusable per-trust-center branded
-	// template used to render automated subscriber notifications
-	trustCenterUpdateTemplateName = "Trust Center Update"
 	// subprocessorNotificationSubject and the related copy back the subprocessor change system email
 	subprocessorNotificationSubject    = "Subprocessor update"
 	subprocessorNotificationPreheader  = "Review the latest changes to our subprocessor list"
@@ -89,7 +85,7 @@ func (r *Runtime) dispatchDuePosts(ctx context.Context, cutoff, now time.Time) i
 		Where(
 			note.NotifySubscribers(true),
 			note.NotifiedAtIsNil(),
-			note.TrustCenterIDNEQ(""),
+			note.TrustCenterIDNotNil(),
 			note.UpdatedAtLTE(cutoff),
 		).
 		All(ctx)
@@ -139,7 +135,7 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff tim
 	settings, err := r.DB().TrustCenterSetting.Query().
 		Where(
 			trustcentersetting.NotifySubscribersOnSubprocessorChange(true),
-			trustcentersetting.TrustCenterIDNEQ(""),
+			trustcentersetting.TrustCenterIDNotNil(),
 			trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentLive),
 		).
 		All(ctx)
@@ -286,9 +282,12 @@ func trustCenterNotificationContent(subject, title string, intros []string, cust
 // createAndDispatchTrustCenterCampaign creates a trust center update campaign carrying the supplied
 // content and dispatches it through the campaign send, which materializes subscriber targets
 func (r *Runtime) createAndDispatchTrustCenterCampaign(ctx context.Context, ownerID, trustCenterID, name string, content map[string]any) error {
-	templateID, err := r.ensureTrustCenterUpdateTemplate(ctx, ownerID, trustCenterID)
+	// the template is seeded at trust center creation and backfilled for existing organizations;
+	// this resolves it by its dedicated key and only recreates it if it went missing, since the
+	// campaign cannot send without its template
+	templateID, err := emaildef.EnsureTrustCenterUpdateTemplate(ctx, r.DB(), ownerID, trustCenterID)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("owner_id", ownerID).Str("trust_center_id", trustCenterID).Msg("failed ensuring trust center update template")
+		logx.FromContext(ctx).Error().Err(err).Str("owner_id", ownerID).Str("trust_center_id", trustCenterID).Msg("failed resolving trust center update template")
 
 		return err
 	}
@@ -336,43 +335,6 @@ func (r *Runtime) createAndDispatchTrustCenterCampaign(ctx context.Context, owne
 	})
 
 	return err
-}
-
-// ensureTrustCenterUpdateTemplate returns the id of the trust center's reusable branded update
-// template (the customizable message-updates template), creating it on first use. Per-send content is
-// supplied via campaign metadata
-func (r *Runtime) ensureTrustCenterUpdateTemplate(ctx context.Context, ownerID, trustCenterID string) (string, error) {
-	existing, err := r.DB().EmailTemplate.Query().
-		Where(
-			emailtemplate.OwnerID(ownerID),
-			emailtemplate.TrustCenterID(trustCenterID),
-			emailtemplate.Key(emaildef.BrandedMessageOp.Name()),
-		).
-		First(ctx)
-	if err == nil {
-		return existing.ID, nil
-	}
-
-	if !ent.IsNotFound(err) {
-		logx.FromContext(ctx).Error().Err(err).Str("owner_id", ownerID).Str("trust_center_id", trustCenterID).Msg("failed querying for existing trust center update template")
-
-		return "", err
-	}
-
-	created, err := r.DB().EmailTemplate.Create().
-		SetOwnerID(ownerID).
-		SetTrustCenterID(trustCenterID).
-		SetName(trustCenterUpdateTemplateName).
-		SetKey(emaildef.BrandedMessageOp.Name()).
-		SetTemplateContext(enums.TemplateContextCampaignRecipient).
-		Save(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("owner_id", ownerID).Str("trust_center_id", trustCenterID).Msg("failed creating trust center update template")
-
-		return "", err
-	}
-
-	return created.ID, nil
 }
 
 // subprocessorEntries maps the changed trust center subprocessor join rows into the structured change

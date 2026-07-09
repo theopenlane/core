@@ -12,13 +12,14 @@ import (
 // TestRenderTrustCenterCampaignMessages verifies a trust center update renders with branding pulled
 // from the trust center setting, per-recipient content interpolation, and a tokenized unsubscribe link
 func TestRenderTrustCenterCampaignMessages(t *testing.T) {
-	dispatcher, ok := DispatcherByKey(brandedMessageKey)
-	assert.True(t, ok)
-
 	client := &Client{Config: *MockRuntimeConfig()}
 
 	setting := TrustCenterSettingFixture()
 	template := TrustCenterUpdateTemplateFixture()
+
+	// resolve the dispatcher from the template key, mirroring the campaign dispatch path
+	dispatcher, ok := DispatcherByKey(template.Key)
+	assert.True(t, ok)
 
 	targets := []*generated.CampaignTarget{
 		{

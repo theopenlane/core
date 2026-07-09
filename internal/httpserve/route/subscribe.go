@@ -19,6 +19,7 @@ func registerVerifySubscribeHandler(router *Router) error {
 		Middlewares: *unauthenticatedEndpoint,
 		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.VerifySubscriptionHandler,
+		PublicCORS:  true,
 	}
 
 	return router.AddV1HandlerRoute(config)
@@ -37,6 +38,7 @@ func registerUnsubscribeHandler(router *Router) error {
 		Middlewares: *unauthenticatedEndpoint,
 		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.UnsubscribeHandler,
+		PublicCORS:  true,
 	}
 
 	return router.AddV1HandlerRoute(config)
