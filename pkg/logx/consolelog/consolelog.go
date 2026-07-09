@@ -253,7 +253,7 @@ func (w *ConsoleWriter) setDefaultFormatters() {
 	// field value
 	w.SetFormatter(
 		"field_value", func(i any) string {
-			return fmt.Sprintf("%s", i)
+			return fmt.Sprintf("%v", i)
 		})
 	// errors
 	w.SetFormatter(

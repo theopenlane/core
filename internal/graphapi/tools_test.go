@@ -839,7 +839,7 @@ func newTestGraphServer(t *testing.T) http.Handler {
 	r := graphapi.NewResolver(suite.client.db, nil).
 		WithExtensions(true).
 		WithDevelopment(true).
-		WithSubscriptions(true).
+		WithSubscriptions(true, nil).
 		WithAuthOptions(
 			authmw.WithSkipperFunc(
 				func(c echo.Context) bool {
