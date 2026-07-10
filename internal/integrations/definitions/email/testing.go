@@ -74,7 +74,7 @@ func TrustCenterSettingFixture() *generated.TrustCenterSetting {
 // update, with branded message content and a tokenized unsubscribe link
 func TrustCenterUpdateTemplateFixture() *generated.EmailTemplate {
 	return &generated.EmailTemplate{
-		Key: "BrandedMessageRequest",
+		Key: TrustCenterUpdateTemplate,
 		Defaults: map[string]any{
 			"subject":        "{{ .companyName }} trust center update",
 			"title":          "Hi {{ .firstName }}, an update from {{ .companyName }}",

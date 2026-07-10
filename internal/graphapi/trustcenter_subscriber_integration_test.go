@@ -171,7 +171,7 @@ func TestTrustCenterCampaignDispatchBranding(t *testing.T) {
 
 	emailTemplate, err := suite.client.db.EmailTemplate.Create().
 		SetName("Trust Center Update Template").
-		SetKey(email.BrandedMessageOp.Name()).
+		SetKey(email.TrustCenterUpdateTemplate).
 		SetTemplateContext(enums.TemplateContextCampaignRecipient).
 		SetTrustCenterID(tc.trustCenter.ID).
 		SetDefaults(map[string]any{
@@ -354,9 +354,11 @@ func TestTrustCenterSubprocessorNotificationEmail(t *testing.T) {
 	setting := tcLoaded.Edges.Setting
 	assert.Assert(t, setting != nil)
 
-	// opt the trust center into subprocessor notifications and brand it
+	// opt the trust center into subprocessor notifications and brand it; the watermark is backdated
+	// past the change created below, since enabling the flag stamps it to now otherwise
 	assert.NilError(t, suite.client.db.TrustCenterSetting.UpdateOneID(setting.ID).
 		SetNotifySubscribersOnSubprocessorChange(true).
+		SetSubprocessorsNotifiedAt(time.Now().Add(-3*time.Hour)).
 		SetCompanyName("SecureCorp").
 		SetLogoRemoteURL("https://securecorp.example.com/logo.png").
 		Exec(dbCtx))
