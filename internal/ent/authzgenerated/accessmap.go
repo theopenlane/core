@@ -1739,8 +1739,8 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: true,
 }, "controls": {
 	ObjectType:          "control",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "subcontrols": {
 	ObjectType:          "subcontrol",
@@ -1818,10 +1818,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "control_mappings": {
-	ObjectType:          "control_mapping",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
+	ObjectType:          "control",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
 },
 }, "finding_control": {"finding": {
 	ObjectType:          "finding",
