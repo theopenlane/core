@@ -266,6 +266,7 @@ func (f Finding) Edges() []ent.Edge {
 				entgql.RelayConnection(),
 				entgql.QueryField(),
 				entgql.MultiOrder(),
+				accessmap.EdgeViewCheck(Control{}.Name()),
 				entx.IntegrationMappingField(),
 			).
 			Through("control_mappings", FindingControl.Type),
@@ -321,6 +322,7 @@ func (f Finding) Mixin() []ent.Mixin {
 				withParents(
 					Program{},
 					Control{},
+					Review{},
 					Subcontrol{},
 					Risk{},
 					Asset{},
