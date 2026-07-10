@@ -2,7 +2,7 @@
 Override of entgql's built-in gql_mutation_input template. The ONLY change from upstream is the
 scalar field line, which now emits a snake_case `json` struct tag sourced from the ent field name
 ($f.Name), matching the entity struct's json tags. This lets a snake_case payload json.Unmarshal
-directly into Create/Update inputs, eliminating the snake<->Pascal re-key maps in entityops.
+directly into Create/Update inputs.
 Registered after entgql.AllTemplates so this define overrides the built-in. Upstream:
 https://github.com/ent/contrib/tree/master/entgql/template/mutation_input.tmpl
 */}}
