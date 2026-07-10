@@ -3,6 +3,7 @@ package runtime
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"strings"
 	"time"
 
@@ -19,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
@@ -106,6 +108,7 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 
 	dispatched := 0
 	emailQueueOffset := 0
+	markedOrgs := make([]string, 0, len(settings))
 
 	for _, setting := range settings {
 		org := setting.Edges.Organization
@@ -128,6 +131,8 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 			logger.Error().Err(err).Str("organization_id", org.ID).Str("setting_id", setting.ID).Msg("failed to set pending_deletion_at")
 			continue
 		}
+
+		markedOrgs = append(markedOrgs, fmt.Sprintf("%s (%s)", org.Name, org.ID))
 
 		members, err := db.OrgMembership.Query().
 			Where(
@@ -205,6 +210,27 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 		}
 
 		logger.Info().Str("organization_id", org.ID).Int("recipients", len(recipients)).Msg("payment reminder dispatched")
+	}
+
+	if len(markedOrgs) > 0 {
+		config, err := json.Marshal(slackdef.OrganizationsPendingDeletionMessage{
+			Count:         len(markedOrgs),
+			Organizations: markedOrgs,
+		})
+		if err != nil {
+			logger.Error().Err(err).Msg("failed to marshal org deletion reminder slack notification")
+			return dispatched, err
+		}
+
+		if _, err := r.Dispatch(systemCtx, operations.DispatchRequest{
+			DefinitionID: slackdef.DefinitionID.ID(),
+			Operation:    slackdef.OrganizationsPendingDeletionOp.Name(),
+			Config:       config,
+			RunType:      enums.IntegrationRunTypeEvent,
+			Runtime:      true,
+		}); err != nil {
+			logger.Error().Err(err).Int("count", len(markedOrgs)).Msg("failed to dispatch org deletion reminder slack notification")
+		}
 	}
 
 	return dispatched, nil

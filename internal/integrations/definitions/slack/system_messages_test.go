@@ -56,10 +56,10 @@ func TestDemoRequestTemplateRender(t *testing.T) {
 	require.Contains(t, out, "Demo requested")
 }
 
-func TestOrganizationsDeletedTemplateRender(t *testing.T) {
+func TestOrganizationsPendingDeletionTemplateRender(t *testing.T) {
 	t.Parallel()
 
-	input := OrganizationsDeletedMessage{
+	input := OrganizationsPendingDeletionMessage{
 		Count: 3,
 		Organizations: []string{
 			"Openlane Inc (openlane-1)",
@@ -72,7 +72,8 @@ func TestOrganizationsDeletedTemplateRender(t *testing.T) {
 	require.NoError(t, orgDeletionReminderTemplate.Execute(&buf, input))
 
 	out := buf.String()
-	require.Contains(t, out, "Number of organizations: 3")
+	require.Contains(t, out, "Organization deletion reminders scheduled")
+	require.Contains(t, out, "Organizations marked for deletion: 3")
 	require.Contains(t, out, "- Github Inc")
 	require.Contains(t, out, "- Openlane Inc")
 }
