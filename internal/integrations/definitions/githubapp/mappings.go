@@ -138,6 +138,7 @@ var mapExprRepositoryAsset = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountExternalID, Expr: `payload.DatabaseID != 0 ? string(payload.DatabaseID) : payload.Login`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountCanonicalEmail, Expr: `payload.CanonicalEmail != "" ? payload.CanonicalEmail : payload.Login`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountEmailAliases, Expr: `'EmailAliases' in payload && payload.EmailAliases != null ? payload.EmailAliases : []`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDisplayName, Expr: `payload.Name != "" ? payload.Name : payload.Login`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountAvatarRemoteURL, Expr: `payload.AvatarURL`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDirectoryInstanceID, Expr: `payload.Org`},

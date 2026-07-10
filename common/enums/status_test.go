@@ -36,7 +36,7 @@ func TestToUserStatus(t *testing.T) {
 		},
 		{
 			input:    "UNKNOWN",
-			expected: enums.UserStatusInvalid,
+			expected: enums.UserStatusUnknown,
 		},
 	}
 

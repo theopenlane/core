@@ -3,7 +3,9 @@ package githubapp
 import (
 	"context"
 	"fmt"
+	"strings"
 
+	"github.com/samber/lo"
 	"github.com/shurcooL/githubv4"
 
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
@@ -46,6 +48,8 @@ type orgMemberNode struct {
 	Org string
 	// CanonicalEmail is the best-resolved email, populated after query
 	CanonicalEmail string
+	// EmailAliases are the remaining confirmed emails for the member beyond the canonical email
+	EmailAliases []string
 	// GivenName is the user's first name from SAML identity when available
 	GivenName string
 	// FamilyName is the user's last name from SAML identity when available
@@ -236,7 +240,8 @@ func (d DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.I
 }
 
 // resolveCanonicalEmail sets the best email for a member using the priority chain:
-// SAML nameId > organization verified domain email > public profile email
+// SAML nameId > organization verified domain email > public profile email, and collects
+// every remaining confirmed email as an alias for identity resolution
 func resolveCanonicalEmail(member *orgMemberNode, samlMap map[string]samlIdentity) {
 	if samlMap != nil {
 		if saml, ok := samlMap[member.Login]; ok {
@@ -253,6 +258,11 @@ func resolveCanonicalEmail(member *orgMemberNode, samlMap map[string]samlIdentit
 	if member.CanonicalEmail == "" {
 		member.CanonicalEmail = member.Email
 	}
+
+	candidates := append([]string{member.Email}, member.OrganizationVerifiedDomainEmails...)
+	member.EmailAliases = lo.Uniq(lo.Filter(candidates, func(email string, _ int) bool {
+		return email != "" && !strings.EqualFold(email, member.CanonicalEmail)
+	}))
 }
 
 // queryViewerOrganizations discovers organizations accessible to the GitHub App installation

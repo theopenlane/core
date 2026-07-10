@@ -645,7 +645,7 @@ func TestProcessPayloadSets_MappingNotFound(t *testing.T) {
 		return nil
 	})
 
-	assert.ErrorIs(t, err, ErrIngestMappingNotFound)
+	assert.ErrorIs(t, err, ErrIngestRecordsFailed)
 }
 
 func TestProcessPayloadSets_InvalidInstallationFilterConfig(t *testing.T) {
@@ -786,18 +786,26 @@ func TestProcessPayloadSets_HandleError(t *testing.T) {
 		{
 			Schema: integrationgenerated.IntegrationMappingSchemaAsset,
 			Envelopes: []types.MappingEnvelope{
-				{Payload: json.RawMessage(`{"name":"test"}`)},
+				{Payload: json.RawMessage(`{"name":"first"}`)},
+				{Payload: json.RawMessage(`{"name":"second"}`)},
 			},
 		},
 	}
 
 	handleErr := errors.New("persist failed")
+	handled := 0
 
 	err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
-		return handleErr
+		handled++
+		if handled == 1 {
+			return handleErr
+		}
+
+		return nil
 	})
 
-	assert.ErrorIs(t, err, handleErr)
+	assert.ErrorIs(t, err, ErrIngestRecordsFailed)
+	assert.Equal(t, 2, handled, "a failing record must not abort the remaining records")
 }
 
 // TestProcessPayloadSets_NestedInstallationFilter verifies that a filterExpr stored inside a

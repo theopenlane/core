@@ -165,13 +165,14 @@ func (r *DirectoryGroupStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r
 type DirectoryMembershipRole string
 
 var (
-	DirectoryMembershipRoleMember  DirectoryMembershipRole = "MEMBER"
-	DirectoryMembershipRoleManager DirectoryMembershipRole = "MANAGER"
-	DirectoryMembershipRoleOwner   DirectoryMembershipRole = "OWNER"
+	DirectoryMembershipRoleMember     DirectoryMembershipRole = "MEMBER"
+	DirectoryMembershipRoleMaintainer DirectoryMembershipRole = "MAINTAINER"
+	DirectoryMembershipRoleManager    DirectoryMembershipRole = "MANAGER"
+	DirectoryMembershipRoleOwner      DirectoryMembershipRole = "OWNER"
 )
 
 var directoryMembershipRoleValues = []DirectoryMembershipRole{
-	DirectoryMembershipRoleMember, DirectoryMembershipRoleManager, DirectoryMembershipRoleOwner,
+	DirectoryMembershipRoleMember, DirectoryMembershipRoleMaintainer, DirectoryMembershipRoleManager, DirectoryMembershipRoleOwner,
 }
 
 // Values returns all values as strings.
