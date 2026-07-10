@@ -49,24 +49,44 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 	return api, nil
 }
 
-// parseHost normalizes the configured domain into a bare host and, when an explicit
-// port is present (e.g. self-hosted "zitadel.example.com:8443"), a WithPort option.
-// TLS is always required; plaintext HTTP instances are not supported.
+// parseHost normalizes the configured domain into a bare host plus connection options.
+// TLS is the default: a bare host ("zitadel.example.com") or an https:// URL always uses
+// TLS, honoring an explicit port (e.g. self-hosted "zitadel.example.com:8443") via WithPort.
+// Only an explicit http:// scheme opts into a plaintext, non-TLS connection via WithInsecure,
+// which is intended for self-hosted or local development instances without TLS.
 func parseHost(domain string) (string, []zitadel.Option) {
-	host := strings.TrimSpace(domain)
-	host = strings.TrimPrefix(host, "https://")
-	host = strings.TrimPrefix(host, "http://")
-	host = strings.TrimRight(host, "/")
+	raw := strings.TrimSpace(domain)
+
+	insecure := strings.HasPrefix(raw, "http://")
+
+	raw = strings.TrimPrefix(raw, "https://")
+	raw = strings.TrimPrefix(raw, "http://")
+	raw = strings.TrimRight(raw, "/")
 
 	// drop any trailing path so only host[:port] remains
-	if i := strings.IndexByte(host, '/'); i >= 0 {
-		host = host[:i]
+	if i := strings.IndexByte(raw, '/'); i >= 0 {
+		raw = raw[:i]
 	}
 
+	host := raw
+	port := ""
+
 	// SplitHostPort errors when no port is present, in which case the default port is used
-	if h, p, err := net.SplitHostPort(host); err == nil {
-		if port, perr := strconv.ParseUint(p, 10, 16); perr == nil {
-			return h, []zitadel.Option{zitadel.WithPort(uint16(port))}
+	if h, p, err := net.SplitHostPort(raw); err == nil {
+		host, port = h, p
+	}
+
+	switch {
+	case insecure:
+		// WithInsecure requires a port; fall back to the HTTP default when none is given
+		if port == "" {
+			port = "80"
+		}
+
+		return host, []zitadel.Option{zitadel.WithInsecure(port)}
+	case port != "":
+		if p, err := strconv.ParseUint(port, 10, 16); err == nil {
+			return host, []zitadel.Option{zitadel.WithPort(uint16(p))}
 		}
 	}
 

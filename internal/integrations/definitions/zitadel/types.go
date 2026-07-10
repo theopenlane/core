@@ -25,8 +25,9 @@ var (
 
 // CredentialSchema holds the Zitadel instance credentials for one installation
 type CredentialSchema struct {
-	// Domain is the Zitadel instance domain (e.g. https://my-instance.zitadel.cloud)
-	Domain string `json:"domain" jsonschema:"required,title=Domain"`
+	// Domain is the Zitadel instance domain (e.g. my-instance.zitadel.cloud). It connects over
+	// TLS by default; prefix with http:// for a self-hosted or local instance without TLS.
+	Domain string `json:"domain" jsonschema:"required,title=Domain,description=Zitadel instance domain (e.g. my-instance.zitadel.cloud). Uses TLS by default; prefix with http:// for a non-TLS self-hosted instance."`
 	// Token is the Zitadel Personal Access Token
 	Token string `json:"token" jsonschema:"required,title=Personal Access Token"`
 }
