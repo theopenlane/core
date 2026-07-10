@@ -52,6 +52,8 @@ const (
 	FieldScopeName = "scope_name"
 	// FieldScopeID holds the string denoting the scope_id field in the database.
 	FieldScopeID = "scope_id"
+	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
+	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
 	// FieldExternalOwnerID holds the string denoting the external_owner_id field in the database.
@@ -132,6 +134,8 @@ const (
 	EdgeComments = "comments"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
+	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
+	EdgeWorkflowObjectRefs = "workflow_object_refs"
 	// Table holds the table name of the remediation in the database.
 	Table = "remediations"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -252,6 +256,13 @@ const (
 	FilesInverseTable = "files"
 	// FilesColumn is the table column denoting the files relation/edge.
 	FilesColumn = "remediation_files"
+	// WorkflowObjectRefsTable is the table that holds the workflow_object_refs relation/edge.
+	WorkflowObjectRefsTable = "workflow_object_refs"
+	// WorkflowObjectRefsInverseTable is the table name for the WorkflowObjectRef entity.
+	// It exists in this package in order to avoid circular dependency with the "workflowobjectref" package.
+	WorkflowObjectRefsInverseTable = "workflow_object_refs"
+	// WorkflowObjectRefsColumn is the table column denoting the workflow_object_refs relation/edge.
+	WorkflowObjectRefsColumn = "remediation_id"
 )
 
 // Columns holds all SQL columns for remediation fields.
@@ -274,6 +285,7 @@ var Columns = []string{
 	FieldEnvironmentID,
 	FieldScopeName,
 	FieldScopeID,
+	FieldWorkflowEligibleMarker,
 	FieldExternalID,
 	FieldExternalOwnerID,
 	FieldTitle,
@@ -348,7 +360,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [13]ent.Hook
+	Hooks        [14]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -365,6 +377,8 @@ var (
 	OwnerIDValidator func(string) error
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
+	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
+	DefaultWorkflowEligibleMarker bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -467,6 +481,11 @@ func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
 // ByScopeID orders the results by the scope_id field.
 func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
+}
+
+// ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
+func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
 }
 
 // ByExternalID orders the results by the external_id field.
@@ -822,6 +841,20 @@ func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByWorkflowObjectRefsCount orders the results by workflow_object_refs count.
+func ByWorkflowObjectRefsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newWorkflowObjectRefsStep(), opts...)
+	}
+}
+
+// ByWorkflowObjectRefs orders the results by workflow_object_refs terms.
+func ByWorkflowObjectRefs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWorkflowObjectRefsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -960,6 +993,13 @@ func newFilesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FilesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, FilesTable, FilesColumn),
+	)
+}
+func newWorkflowObjectRefsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WorkflowObjectRefsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
 	)
 }
 

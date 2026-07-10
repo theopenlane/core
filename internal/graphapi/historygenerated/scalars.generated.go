@@ -292,6 +292,16 @@ func (ec *executionContext) marshalOAssessmentObjective2ᚕgithubᚗcomᚋtheope
 	return ret
 }
 
+func (ec *executionContext) unmarshalOAssignmentOutcome2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐAssignmentOutcome(ctx context.Context, v any) (models.AssignmentOutcome, error) {
+	var res models.AssignmentOutcome
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOAssignmentOutcome2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐAssignmentOutcome(ctx context.Context, sel ast.SelectionSet, v models.AssignmentOutcome) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalOCredentialSet2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐCredentialSet(ctx context.Context, v any) (models.CredentialSet, error) {
 	var res models.CredentialSet
 	err := res.UnmarshalGQL(v)

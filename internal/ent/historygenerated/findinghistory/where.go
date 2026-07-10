@@ -199,6 +199,11 @@ func FindingStatusID(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldEQ(FieldFindingStatusID, v))
 }
 
+// WorkflowEligibleMarker applies equality check predicate on the "workflow_eligible_marker" field. It's identical to WorkflowEligibleMarkerEQ.
+func WorkflowEligibleMarker(v bool) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
+}
+
 // ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
 func ExternalID(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldEQ(FieldExternalID, v))
@@ -2147,6 +2152,26 @@ func FindingStatusIDEqualFold(v string) predicate.FindingHistory {
 // FindingStatusIDContainsFold applies the ContainsFold predicate on the "finding_status_id" field.
 func FindingStatusIDContainsFold(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldContainsFold(FieldFindingStatusID, v))
+}
+
+// WorkflowEligibleMarkerEQ applies the EQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerEQ(v bool) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerNEQ applies the NEQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNEQ(v bool) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerIsNil applies the IsNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerIsNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIsNull(FieldWorkflowEligibleMarker))
+}
+
+// WorkflowEligibleMarkerNotNil applies the NotNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNotNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotNull(FieldWorkflowEligibleMarker))
 }
 
 // ExternalIDEQ applies the EQ predicate on the "external_id" field.

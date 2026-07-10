@@ -1,3 +1,30 @@
+extend type Finding {
+    """
+    Indicates if this finding has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Indicates if this finding has any workflow history (completed or failed instances)
+    """
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this finding (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this finding across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
+}
+
 extend type Query {
     """
     Look up finding by ID

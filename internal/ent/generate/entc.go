@@ -193,7 +193,7 @@ func main() {
 // 12/18/2025 MKA - This was modified to remove the use of prepareQuery and withInterceptors to prevent duplicate query execution
 func WithGqlWithTemplates() entgql.ExtensionOption {
 	paginationTmpl := gen.MustParse(gen.NewTemplate("node").
-		Funcs(entgql.TemplateFuncs).ParseFS(_entqlTemplates, "templates/entgql/gql_where.tmpl", "templates/entgql/pagination.tmpl"))
+		Funcs(entgql.TemplateFuncs).ParseFS(_entqlTemplates, "templates/entgql/gql_where.tmpl", "templates/entgql/pagination.tmpl", "templates/entgql/gql_mutation_input.tmpl"))
 	return entgql.WithTemplates(append(entgql.AllTemplates, paginationTmpl)...)
 }
 

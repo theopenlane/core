@@ -67,6 +67,7 @@ func (Finding) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("security_level"),
 				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
+				entx.FieldWorkflowEligible(),
 			),
 		field.String("external_owner_id").
 			Comment("the owner of the finding").
@@ -99,6 +100,7 @@ func (Finding) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entx.IntegrationMappingField(),
+				entx.FieldWorkflowEligible(),
 			),
 		field.String("category").
 			Comment("primary category of the finding").
@@ -106,6 +108,7 @@ func (Finding) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("category"),
 				entx.IntegrationMappingField(),
+				entx.FieldWorkflowEligible(),
 			),
 		field.Strings("categories").
 			Comment("normalized categories for the finding").
@@ -127,13 +130,17 @@ func (Finding) Fields() []ent.Field {
 				entgql.OrderField("severity"),
 				entx.FieldSearchable(),
 				entx.IntegrationMappingField(),
+				entx.FieldWorkflowEligible(),
 			),
 		field.Float("numeric_severity").
 			Comment("numeric severity score for the finding if provided").
 			Optional(),
 		field.Float("score").
 			Comment("aggregated score such as CVSS for the finding").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.FieldWorkflowEligible(),
+			),
 		field.Float("impact").
 			Comment("impact score or rating for the finding").
 			Optional(),
@@ -142,26 +149,42 @@ func (Finding) Fields() []ent.Field {
 			Optional(),
 		field.String("priority").
 			Comment("priority assigned to the finding").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.FieldWorkflowEligible(),
+			),
 		field.Bool("open").
 			Comment("indicates if the finding is still open").
 			Default(true).
 			Optional().
 			Annotations(
 				entx.IntegrationMappingField(),
+				entx.FieldWorkflowEligible(),
 			),
 		field.Bool("blocks_production").
 			Comment("true when the finding blocks production changes").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.FieldWorkflowEligible(),
+			),
 		field.Bool("production").
 			Comment("true when the finding affects production systems").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.FieldWorkflowEligible(),
+			),
 		field.Bool("public").
 			Comment("true when the finding is publicly disclosed").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.FieldWorkflowEligible(),
+			),
 		field.Bool("validated").
 			Comment("true when the finding has been validated by the security team").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.FieldWorkflowEligible(),
+			),
 		field.String("assessment_id").
 			Comment("identifier for the assessment that generated the finding").
 			Optional(),
@@ -203,7 +226,10 @@ func (Finding) Fields() []ent.Field {
 			Optional(),
 		field.Int("remediation_sla").
 			Comment("remediation service level agreement in days").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.FieldWorkflowEligible(),
+			),
 		field.Time("event_time").
 			Comment("timestamp when the finding was last observed by the source").
 			GoType(models.DateTime{}).
@@ -212,6 +238,7 @@ func (Finding) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("event_time"),
 				entx.IntegrationMappingField(),
+				entx.FieldWorkflowEligible(),
 			),
 		field.Time("reported_at").
 			Comment("timestamp when the finding was first reported by the source").
@@ -221,6 +248,7 @@ func (Finding) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("reported_at"),
 				entx.IntegrationMappingField(),
+				entx.FieldWorkflowEligible(),
 			),
 		field.Time("source_updated_at").
 			Comment("timestamp when the source last updated the finding").
@@ -340,6 +368,7 @@ func (f Finding) Mixin() []ent.Mixin {
 			newCustomEnumMixin(f, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(f, withEnumFieldName("scope"), withGlobalEnum()),
 			newCustomEnumMixin(f, withEnumFieldName("status")),
+			WorkflowApprovalMixin{},
 		},
 	}.getMixins(f)
 }

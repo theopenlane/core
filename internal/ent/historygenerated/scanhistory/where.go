@@ -2214,14 +2214,14 @@ func GeneratedByPlatformIDContainsFold(v string) predicate.ScanHistory {
 	return predicate.ScanHistory(sql.FieldContainsFold(FieldGeneratedByPlatformID, v))
 }
 
-// VulnerabilityIdsIsNil applies the IsNil predicate on the "vulnerability_ids" field.
-func VulnerabilityIdsIsNil() predicate.ScanHistory {
-	return predicate.ScanHistory(sql.FieldIsNull(FieldVulnerabilityIds))
+// DiscoveredVulnerabilityIdsIsNil applies the IsNil predicate on the "discovered_vulnerability_ids" field.
+func DiscoveredVulnerabilityIdsIsNil() predicate.ScanHistory {
+	return predicate.ScanHistory(sql.FieldIsNull(FieldDiscoveredVulnerabilityIds))
 }
 
-// VulnerabilityIdsNotNil applies the NotNil predicate on the "vulnerability_ids" field.
-func VulnerabilityIdsNotNil() predicate.ScanHistory {
-	return predicate.ScanHistory(sql.FieldNotNull(FieldVulnerabilityIds))
+// DiscoveredVulnerabilityIdsNotNil applies the NotNil predicate on the "discovered_vulnerability_ids" field.
+func DiscoveredVulnerabilityIdsNotNil() predicate.ScanHistory {
+	return predicate.ScanHistory(sql.FieldNotNull(FieldDiscoveredVulnerabilityIds))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.

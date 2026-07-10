@@ -100,6 +100,30 @@ func (WorkflowInstance) Fields() []ent.Field {
 		field.String("platform_id").
 			Comment("ID of the platform this workflow instance is associated with").
 			Optional(),
+		field.String("assessment_id").
+			Comment("ID of the assessment this workflow instance is associated with").
+			Optional(),
+		field.String("assessment_response_id").
+			Comment("ID of the assessment response this workflow instance is associated with").
+			Optional(),
+		field.String("finding_id").
+			Comment("ID of the finding this workflow instance is associated with").
+			Optional(),
+		field.String("integration_id").
+			Comment("ID of the integration this workflow instance is associated with").
+			Optional(),
+		field.String("remediation_id").
+			Comment("ID of the remediation this workflow instance is associated with").
+			Optional(),
+		field.String("risk_id").
+			Comment("ID of the risk this workflow instance is associated with").
+			Optional(),
+		field.String("task_id").
+			Comment("ID of the task this workflow instance is associated with").
+			Optional(),
+		field.String("vulnerability_id").
+			Comment("ID of the vulnerability this workflow instance is associated with").
+			Optional(),
 	}
 }
 
@@ -175,6 +199,54 @@ func (w WorkflowInstance) Edges() []ent.Edge {
 			edgeSchema: Platform{},
 			field:      "platform_id",
 			comment:    "Platform this workflow instance is associated with",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Assessment{},
+			field:      "assessment_id",
+			comment:    "Assessment this workflow instance is associated with",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: AssessmentResponse{},
+			field:      "assessment_response_id",
+			comment:    "Assessment response this workflow instance is associated with",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Finding{},
+			field:      "finding_id",
+			comment:    "Finding this workflow instance is associated with",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Integration{},
+			field:      "integration_id",
+			comment:    "Integration this workflow instance is associated with",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Remediation{},
+			field:      "remediation_id",
+			comment:    "Remediation this workflow instance is associated with",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Risk{},
+			field:      "risk_id",
+			comment:    "Risk this workflow instance is associated with",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Task{},
+			field:      "task_id",
+			comment:    "Task this workflow instance is associated with",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Vulnerability{},
+			field:      "vulnerability_id",
+			comment:    "Vulnerability this workflow instance is associated with",
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,

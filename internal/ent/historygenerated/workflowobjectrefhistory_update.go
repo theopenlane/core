@@ -222,6 +222,21 @@ func (_u *WorkflowObjectRefHistoryUpdate) sqlSave(ctx context.Context) (_node in
 	if _u.mutation.PlatformIDCleared() {
 		_spec.ClearField(workflowobjectrefhistory.FieldPlatformID, field.TypeString)
 	}
+	if _u.mutation.VulnerabilityIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldVulnerabilityID, field.TypeString)
+	}
+	if _u.mutation.RiskIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldRiskID, field.TypeString)
+	}
+	if _u.mutation.AssessmentIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldAssessmentID, field.TypeString)
+	}
+	if _u.mutation.AssessmentResponseIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldAssessmentResponseID, field.TypeString)
+	}
+	if _u.mutation.RemediationIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldRemediationID, field.TypeString)
+	}
 	_spec.Node.Schema = _u.schemaConfig.WorkflowObjectRefHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -464,6 +479,21 @@ func (_u *WorkflowObjectRefHistoryUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if _u.mutation.PlatformIDCleared() {
 		_spec.ClearField(workflowobjectrefhistory.FieldPlatformID, field.TypeString)
+	}
+	if _u.mutation.VulnerabilityIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldVulnerabilityID, field.TypeString)
+	}
+	if _u.mutation.RiskIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldRiskID, field.TypeString)
+	}
+	if _u.mutation.AssessmentIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldAssessmentID, field.TypeString)
+	}
+	if _u.mutation.AssessmentResponseIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldAssessmentResponseID, field.TypeString)
+	}
+	if _u.mutation.RemediationIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldRemediationID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.WorkflowObjectRefHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

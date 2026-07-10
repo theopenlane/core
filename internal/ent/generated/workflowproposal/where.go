@@ -753,6 +753,16 @@ func ChangesNotNil() predicate.WorkflowProposal {
 	return predicate.WorkflowProposal(sql.FieldNotNull(FieldChanges))
 }
 
+// ProposedChangesIsNil applies the IsNil predicate on the "proposed_changes" field.
+func ProposedChangesIsNil() predicate.WorkflowProposal {
+	return predicate.WorkflowProposal(sql.FieldIsNull(FieldProposedChanges))
+}
+
+// ProposedChangesNotNil applies the NotNil predicate on the "proposed_changes" field.
+func ProposedChangesNotNil() predicate.WorkflowProposal {
+	return predicate.WorkflowProposal(sql.FieldNotNull(FieldProposedChanges))
+}
+
 // ProposedHashEQ applies the EQ predicate on the "proposed_hash" field.
 func ProposedHashEQ(v string) predicate.WorkflowProposal {
 	return predicate.WorkflowProposal(sql.FieldEQ(FieldProposedHash, v))

@@ -31,6 +31,8 @@ query GetAllWorkflowObjectRefs {
 query GetWorkflowObjectRefByID ($workflowObjectRefId: ID!) {
 	workflowObjectRef(id: $workflowObjectRefId) {
 		actionPlanID
+		assessmentID
+		assessmentResponseID
 		campaignID
 		campaignTargetID
 		controlID
@@ -48,11 +50,14 @@ query GetWorkflowObjectRefByID ($workflowObjectRefId: ID!) {
 		ownerID
 		platformID
 		procedureID
+		remediationID
+		riskID
 		subcontrolID
 		taskID
 		updatedAt
 		updatedBy
 		updatedByImpersonator
+		vulnerabilityID
 		workflowInstanceID
 	}
 }

@@ -84,7 +84,7 @@ type Scan struct {
 	// the platform that generated the scan
 	GeneratedByPlatformID string `json:"generated_by_platform_id,omitempty"`
 	// identifiers of vulnerabilities discovered during the scan
-	VulnerabilityIds []string `json:"vulnerability_ids,omitempty"`
+	DiscoveredVulnerabilityIds []string `json:"discovered_vulnerability_ids,omitempty"`
 	// the status of the scan, e.g., processing, completed, failed
 	Status enums.ScanStatus `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -411,7 +411,7 @@ func (*Scan) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.Cron)}
 		case scan.FieldScanDate, scan.FieldNextScanRunAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
-		case scan.FieldTags, scan.FieldMetadata, scan.FieldVulnerabilityIds:
+		case scan.FieldTags, scan.FieldMetadata, scan.FieldDiscoveredVulnerabilityIds:
 			values[i] = new([]byte)
 		case scan.FieldID, scan.FieldCreatedBy, scan.FieldUpdatedBy, scan.FieldUpdatedByImpersonator, scan.FieldDeletedBy, scan.FieldOwnerID, scan.FieldReviewedBy, scan.FieldReviewedByUserID, scan.FieldReviewedByGroupID, scan.FieldAssignedTo, scan.FieldAssignedToUserID, scan.FieldAssignedToGroupID, scan.FieldEnvironmentName, scan.FieldEnvironmentID, scan.FieldScopeName, scan.FieldScopeID, scan.FieldTarget, scan.FieldScanType, scan.FieldPerformedBy, scan.FieldPerformedByUserID, scan.FieldPerformedByGroupID, scan.FieldGeneratedByPlatformID, scan.FieldStatus:
 			values[i] = new(sql.NullString)
@@ -622,12 +622,12 @@ func (_m *Scan) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.GeneratedByPlatformID = value.String
 			}
-		case scan.FieldVulnerabilityIds:
+		case scan.FieldDiscoveredVulnerabilityIds:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field vulnerability_ids", values[i])
+				return fmt.Errorf("unexpected type %T for field discovered_vulnerability_ids", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &_m.VulnerabilityIds); err != nil {
-					return fmt.Errorf("unmarshal field vulnerability_ids: %w", err)
+				if err := json.Unmarshal(*value, &_m.DiscoveredVulnerabilityIds); err != nil {
+					return fmt.Errorf("unmarshal field discovered_vulnerability_ids: %w", err)
 				}
 			}
 		case scan.FieldStatus:
@@ -894,8 +894,8 @@ func (_m *Scan) String() string {
 	builder.WriteString("generated_by_platform_id=")
 	builder.WriteString(_m.GeneratedByPlatformID)
 	builder.WriteString(", ")
-	builder.WriteString("vulnerability_ids=")
-	builder.WriteString(fmt.Sprintf("%v", _m.VulnerabilityIds))
+	builder.WriteString("discovered_vulnerability_ids=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DiscoveredVulnerabilityIds))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))

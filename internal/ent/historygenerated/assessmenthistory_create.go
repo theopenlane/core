@@ -218,6 +218,20 @@ func (_c *AssessmentHistoryCreate) SetNillableSystemInternalID(v *string) *Asses
 	return _c
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *AssessmentHistoryCreate) SetWorkflowEligibleMarker(v bool) *AssessmentHistoryCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *AssessmentHistoryCreate) SetNillableWorkflowEligibleMarker(v *bool) *AssessmentHistoryCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *AssessmentHistoryCreate) SetName(v string) *AssessmentHistoryCreate {
 	_c.mutation.SetName(v)
@@ -358,6 +372,10 @@ func (_c *AssessmentHistoryCreate) defaults() error {
 		v := assessmenthistory.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := assessmenthistory.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
+	}
 	if _, ok := _c.mutation.AssessmentType(); !ok {
 		v := assessmenthistory.DefaultAssessmentType
 		_c.mutation.SetAssessmentType(v)
@@ -491,6 +509,10 @@ func (_c *AssessmentHistoryCreate) createSpec() (*AssessmentHistory, *sqlgraph.C
 	if value, ok := _c.mutation.SystemInternalID(); ok {
 		_spec.SetField(assessmenthistory.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
+	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(assessmenthistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(assessmenthistory.FieldName, field.TypeString, value)

@@ -11,16 +11,16 @@ import (
 
 // CreateAPITokenInput represents a mutation input for creating apitokens.
 type CreateAPITokenInput struct {
-	Tags          []string
-	Name          string
-	ExpiresAt     *time.Time
-	Description   *string
-	Scopes        []string
-	LastUsedAt    *time.Time
-	IsActive      *bool
-	RevokedReason *string
-	RevokedBy     *string
-	RevokedAt     *time.Time
+	Tags          []string   `json:"tags,omitempty"`
+	Name          string     `json:"name,omitempty"`
+	ExpiresAt     *time.Time `json:"expires_at,omitempty"`
+	Description   *string    `json:"description,omitempty"`
+	Scopes        []string   `json:"scopes,omitempty"`
+	LastUsedAt    *time.Time `json:"last_used_at,omitempty"`
+	IsActive      *bool      `json:"is_active,omitempty"`
+	RevokedReason *string    `json:"revoked_reason,omitempty"`
+	RevokedBy     *string    `json:"revoked_by,omitempty"`
+	RevokedAt     *time.Time `json:"revoked_at,omitempty"`
 	OwnerID       *string
 }
 
@@ -68,26 +68,26 @@ func (c *APITokenCreate) SetInput(i CreateAPITokenInput) *APITokenCreate {
 // UpdateAPITokenInput represents a mutation input for updating apitokens.
 type UpdateAPITokenInput struct {
 	ClearTags          bool
-	Tags               []string
+	Tags               []string `json:"tags,omitempty"`
 	AppendTags         []string
-	Name               *string
+	Name               *string `json:"name,omitempty"`
 	ClearExpiresAt     bool
-	ExpiresAt          *time.Time
+	ExpiresAt          *time.Time `json:"expires_at,omitempty"`
 	ClearDescription   bool
-	Description        *string
+	Description        *string `json:"description,omitempty"`
 	ClearScopes        bool
-	Scopes             []string
+	Scopes             []string `json:"scopes,omitempty"`
 	AppendScopes       []string
 	ClearLastUsedAt    bool
-	LastUsedAt         *time.Time
+	LastUsedAt         *time.Time `json:"last_used_at,omitempty"`
 	ClearIsActive      bool
-	IsActive           *bool
+	IsActive           *bool `json:"is_active,omitempty"`
 	ClearRevokedReason bool
-	RevokedReason      *string
+	RevokedReason      *string `json:"revoked_reason,omitempty"`
 	ClearRevokedBy     bool
-	RevokedBy          *string
+	RevokedBy          *string `json:"revoked_by,omitempty"`
 	ClearRevokedAt     bool
-	RevokedAt          *time.Time
+	RevokedAt          *time.Time `json:"revoked_at,omitempty"`
 	ClearOwner         bool
 	OwnerID            *string
 }
@@ -179,40 +179,40 @@ func (c *APITokenUpdateOne) SetInput(i UpdateAPITokenInput) *APITokenUpdateOne {
 
 // CreateActionPlanInput represents a mutation input for creating actionplans.
 type CreateActionPlanInput struct {
-	Tags                            []string
-	Revision                        *string
-	Name                            string
-	Status                          *enums.DocumentStatus
-	ManagementMode                  *enums.DocumentManagementMode
-	Details                         *string
-	DetailsJSON                     []interface{}
-	ApprovalRequired                *bool
-	ReviewDue                       *time.Time
-	ReviewFrequency                 *enums.Frequency
-	TagSuggestions                  []string
-	DismissedTagSuggestions         []string
-	ControlSuggestions              []string
-	DismissedControlSuggestions     []string
-	ImprovementSuggestions          []string
-	DismissedImprovementSuggestions []string
-	URL                             *string
-	ExternalFileID                  *string
-	ExternalContents                *string
-	InternalNotes                   *string
-	SystemInternalID                *string
-	ActionPlanKindName              *string
-	WorkflowEligibleMarker          *bool
-	Title                           string
-	Description                     *string
-	DueDate                         *time.Time
-	CompletedAt                     *time.Time
-	Priority                        *enums.Priority
-	RequiresApproval                *bool
-	Blocked                         *bool
-	BlockerReason                   *string
-	Metadata                        map[string]interface{}
-	RawPayload                      map[string]interface{}
-	Source                          *string
+	Tags                            []string                      `json:"tags,omitempty"`
+	Revision                        *string                       `json:"revision,omitempty"`
+	Name                            string                        `json:"name,omitempty"`
+	Status                          *enums.DocumentStatus         `json:"status,omitempty"`
+	ManagementMode                  *enums.DocumentManagementMode `json:"management_mode,omitempty"`
+	Details                         *string                       `json:"details,omitempty"`
+	DetailsJSON                     []interface{}                 `json:"details_json,omitempty"`
+	ApprovalRequired                *bool                         `json:"approval_required,omitempty"`
+	ReviewDue                       *time.Time                    `json:"review_due,omitempty"`
+	ReviewFrequency                 *enums.Frequency              `json:"review_frequency,omitempty"`
+	TagSuggestions                  []string                      `json:"tag_suggestions,omitempty"`
+	DismissedTagSuggestions         []string                      `json:"dismissed_tag_suggestions,omitempty"`
+	ControlSuggestions              []string                      `json:"control_suggestions,omitempty"`
+	DismissedControlSuggestions     []string                      `json:"dismissed_control_suggestions,omitempty"`
+	ImprovementSuggestions          []string                      `json:"improvement_suggestions,omitempty"`
+	DismissedImprovementSuggestions []string                      `json:"dismissed_improvement_suggestions,omitempty"`
+	URL                             *string                       `json:"url,omitempty"`
+	ExternalFileID                  *string                       `json:"external_file_id,omitempty"`
+	ExternalContents                *string                       `json:"external_contents,omitempty"`
+	InternalNotes                   *string                       `json:"internal_notes,omitempty"`
+	SystemInternalID                *string                       `json:"system_internal_id,omitempty"`
+	ActionPlanKindName              *string                       `json:"action_plan_kind_name,omitempty"`
+	WorkflowEligibleMarker          *bool                         `json:"workflow_eligible_marker,omitempty"`
+	Title                           string                        `json:"title,omitempty"`
+	Description                     *string                       `json:"description,omitempty"`
+	DueDate                         *time.Time                    `json:"due_date,omitempty"`
+	CompletedAt                     *time.Time                    `json:"completed_at,omitempty"`
+	Priority                        *enums.Priority               `json:"priority,omitempty"`
+	RequiresApproval                *bool                         `json:"requires_approval,omitempty"`
+	Blocked                         *bool                         `json:"blocked,omitempty"`
+	BlockerReason                   *string                       `json:"blocker_reason,omitempty"`
+	Metadata                        map[string]interface{}        `json:"metadata,omitempty"`
+	RawPayload                      map[string]interface{}        `json:"raw_payload,omitempty"`
+	Source                          *string                       `json:"source,omitempty"`
 	ApproverID                      *string
 	DelegateID                      *string
 	OwnerID                         *string
@@ -402,77 +402,77 @@ func (c *ActionPlanCreate) SetInput(i CreateActionPlanInput) *ActionPlanCreate {
 // UpdateActionPlanInput represents a mutation input for updating actionplans.
 type UpdateActionPlanInput struct {
 	ClearTags                             bool
-	Tags                                  []string
+	Tags                                  []string `json:"tags,omitempty"`
 	AppendTags                            []string
 	ClearRevision                         bool
-	Revision                              *string
-	Name                                  *string
+	Revision                              *string `json:"revision,omitempty"`
+	Name                                  *string `json:"name,omitempty"`
 	ClearStatus                           bool
-	Status                                *enums.DocumentStatus
+	Status                                *enums.DocumentStatus `json:"status,omitempty"`
 	ClearManagementMode                   bool
-	ManagementMode                        *enums.DocumentManagementMode
+	ManagementMode                        *enums.DocumentManagementMode `json:"management_mode,omitempty"`
 	ClearDetails                          bool
-	Details                               *string
+	Details                               *string `json:"details,omitempty"`
 	ClearDetailsJSON                      bool
-	DetailsJSON                           []interface{}
+	DetailsJSON                           []interface{} `json:"details_json,omitempty"`
 	AppendDetailsJSON                     []interface{}
 	ClearApprovalRequired                 bool
-	ApprovalRequired                      *bool
+	ApprovalRequired                      *bool `json:"approval_required,omitempty"`
 	ClearReviewDue                        bool
-	ReviewDue                             *time.Time
+	ReviewDue                             *time.Time `json:"review_due,omitempty"`
 	ClearReviewFrequency                  bool
-	ReviewFrequency                       *enums.Frequency
+	ReviewFrequency                       *enums.Frequency `json:"review_frequency,omitempty"`
 	ClearTagSuggestions                   bool
-	TagSuggestions                        []string
+	TagSuggestions                        []string `json:"tag_suggestions,omitempty"`
 	AppendTagSuggestions                  []string
 	ClearDismissedTagSuggestions          bool
-	DismissedTagSuggestions               []string
+	DismissedTagSuggestions               []string `json:"dismissed_tag_suggestions,omitempty"`
 	AppendDismissedTagSuggestions         []string
 	ClearControlSuggestions               bool
-	ControlSuggestions                    []string
+	ControlSuggestions                    []string `json:"control_suggestions,omitempty"`
 	AppendControlSuggestions              []string
 	ClearDismissedControlSuggestions      bool
-	DismissedControlSuggestions           []string
+	DismissedControlSuggestions           []string `json:"dismissed_control_suggestions,omitempty"`
 	AppendDismissedControlSuggestions     []string
 	ClearImprovementSuggestions           bool
-	ImprovementSuggestions                []string
+	ImprovementSuggestions                []string `json:"improvement_suggestions,omitempty"`
 	AppendImprovementSuggestions          []string
 	ClearDismissedImprovementSuggestions  bool
-	DismissedImprovementSuggestions       []string
+	DismissedImprovementSuggestions       []string `json:"dismissed_improvement_suggestions,omitempty"`
 	AppendDismissedImprovementSuggestions []string
 	ClearURL                              bool
-	URL                                   *string
+	URL                                   *string `json:"url,omitempty"`
 	ClearExternalFileID                   bool
-	ExternalFileID                        *string
+	ExternalFileID                        *string `json:"external_file_id,omitempty"`
 	ClearExternalContents                 bool
-	ExternalContents                      *string
+	ExternalContents                      *string `json:"external_contents,omitempty"`
 	ClearInternalNotes                    bool
-	InternalNotes                         *string
+	InternalNotes                         *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID                 bool
-	SystemInternalID                      *string
+	SystemInternalID                      *string `json:"system_internal_id,omitempty"`
 	ClearActionPlanKindName               bool
-	ActionPlanKindName                    *string
+	ActionPlanKindName                    *string `json:"action_plan_kind_name,omitempty"`
 	ClearWorkflowEligibleMarker           bool
-	WorkflowEligibleMarker                *bool
-	Title                                 *string
+	WorkflowEligibleMarker                *bool   `json:"workflow_eligible_marker,omitempty"`
+	Title                                 *string `json:"title,omitempty"`
 	ClearDescription                      bool
-	Description                           *string
+	Description                           *string `json:"description,omitempty"`
 	ClearDueDate                          bool
-	DueDate                               *time.Time
+	DueDate                               *time.Time `json:"due_date,omitempty"`
 	ClearCompletedAt                      bool
-	CompletedAt                           *time.Time
+	CompletedAt                           *time.Time `json:"completed_at,omitempty"`
 	ClearPriority                         bool
-	Priority                              *enums.Priority
-	RequiresApproval                      *bool
-	Blocked                               *bool
+	Priority                              *enums.Priority `json:"priority,omitempty"`
+	RequiresApproval                      *bool           `json:"requires_approval,omitempty"`
+	Blocked                               *bool           `json:"blocked,omitempty"`
 	ClearBlockerReason                    bool
-	BlockerReason                         *string
+	BlockerReason                         *string `json:"blocker_reason,omitempty"`
 	ClearMetadata                         bool
-	Metadata                              map[string]interface{}
+	Metadata                              map[string]interface{} `json:"metadata,omitempty"`
 	ClearRawPayload                       bool
-	RawPayload                            map[string]interface{}
+	RawPayload                            map[string]interface{} `json:"raw_payload,omitempty"`
 	ClearSource                           bool
-	Source                                *string
+	Source                                *string `json:"source,omitempty"`
 	ClearApprover                         bool
 	ApproverID                            *string
 	ClearDelegate                         bool
@@ -909,23 +909,25 @@ func (c *ActionPlanUpdateOne) SetInput(i UpdateActionPlanInput) *ActionPlanUpdat
 
 // CreateAssessmentInput represents a mutation input for creating assessments.
 type CreateAssessmentInput struct {
-	Tags                  []string
-	InternalNotes         *string
-	SystemInternalID      *string
-	Name                  string
-	AssessmentType        *enums.AssessmentType
-	Jsonconfig            map[string]interface{}
-	Uischema              map[string]interface{}
-	ResponseDueDuration   *int64
-	OwnerID               *string
-	BlockedGroupIDs       []string
-	EditorIDs             []string
-	ViewerIDs             []string
-	TemplateID            *string
-	PlatformIDs           []string
-	IdentityHolderIDs     []string
-	AssessmentResponseIDs []string
-	CampaignIDs           []string
+	Tags                   []string               `json:"tags,omitempty"`
+	InternalNotes          *string                `json:"internal_notes,omitempty"`
+	SystemInternalID       *string                `json:"system_internal_id,omitempty"`
+	WorkflowEligibleMarker *bool                  `json:"workflow_eligible_marker,omitempty"`
+	Name                   string                 `json:"name,omitempty"`
+	AssessmentType         *enums.AssessmentType  `json:"assessment_type,omitempty"`
+	Jsonconfig             map[string]interface{} `json:"jsonconfig,omitempty"`
+	Uischema               map[string]interface{} `json:"uischema,omitempty"`
+	ResponseDueDuration    *int64                 `json:"response_due_duration,omitempty"`
+	OwnerID                *string
+	BlockedGroupIDs        []string
+	EditorIDs              []string
+	ViewerIDs              []string
+	TemplateID             *string
+	PlatformIDs            []string
+	IdentityHolderIDs      []string
+	AssessmentResponseIDs  []string
+	CampaignIDs            []string
+	WorkflowObjectRefIDs   []string
 }
 
 // Mutate applies the CreateAssessmentInput on the AssessmentMutation builder.
@@ -938,6 +940,9 @@ func (i *CreateAssessmentInput) Mutate(m *AssessmentMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.AssessmentType; v != nil {
@@ -979,6 +984,9 @@ func (i *CreateAssessmentInput) Mutate(m *AssessmentMutation) {
 	if v := i.CampaignIDs; len(v) > 0 {
 		m.AddCampaignIDs(v...)
 	}
+	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateAssessmentInput on the AssessmentCreate builder.
@@ -990,19 +998,21 @@ func (c *AssessmentCreate) SetInput(i CreateAssessmentInput) *AssessmentCreate {
 // UpdateAssessmentInput represents a mutation input for updating assessments.
 type UpdateAssessmentInput struct {
 	ClearTags                   bool
-	Tags                        []string
+	Tags                        []string `json:"tags,omitempty"`
 	AppendTags                  []string
 	ClearInternalNotes          bool
-	InternalNotes               *string
+	InternalNotes               *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID       bool
-	SystemInternalID            *string
-	Name                        *string
+	SystemInternalID            *string `json:"system_internal_id,omitempty"`
+	ClearWorkflowEligibleMarker bool
+	WorkflowEligibleMarker      *bool   `json:"workflow_eligible_marker,omitempty"`
+	Name                        *string `json:"name,omitempty"`
 	ClearJsonconfig             bool
-	Jsonconfig                  map[string]interface{}
+	Jsonconfig                  map[string]interface{} `json:"jsonconfig,omitempty"`
 	ClearUischema               bool
-	Uischema                    map[string]interface{}
+	Uischema                    map[string]interface{} `json:"uischema,omitempty"`
 	ClearResponseDueDuration    bool
-	ResponseDueDuration         *int64
+	ResponseDueDuration         *int64 `json:"response_due_duration,omitempty"`
 	ClearBlockedGroups          bool
 	AddBlockedGroupIDs          []string
 	RemoveBlockedGroupIDs       []string
@@ -1026,6 +1036,9 @@ type UpdateAssessmentInput struct {
 	ClearCampaigns              bool
 	AddCampaignIDs              []string
 	RemoveCampaignIDs           []string
+	ClearWorkflowObjectRefs     bool
+	AddWorkflowObjectRefIDs     []string
+	RemoveWorkflowObjectRefIDs  []string
 }
 
 // Mutate applies the UpdateAssessmentInput on the AssessmentMutation builder.
@@ -1050,6 +1063,12 @@ func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if i.ClearWorkflowEligibleMarker {
+		m.ClearWorkflowEligibleMarker()
+	}
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -1141,6 +1160,15 @@ func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
 	if v := i.RemoveCampaignIDs; len(v) > 0 {
 		m.RemoveCampaignIDs(v...)
 	}
+	if i.ClearWorkflowObjectRefs {
+		m.ClearWorkflowObjectRefs()
+	}
+	if v := i.AddWorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
+		m.RemoveWorkflowObjectRefIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateAssessmentInput on the AssessmentUpdate builder.
@@ -1157,27 +1185,32 @@ func (c *AssessmentUpdateOne) SetInput(i UpdateAssessmentInput) *AssessmentUpdat
 
 // CreateAssessmentResponseInput represents a mutation input for creating assessmentresponses.
 type CreateAssessmentResponseInput struct {
-	DisplayName        *string
-	Email              *string
-	EmailDeliveredAt   *time.Time
-	EmailOpenedAt      *time.Time
-	EmailClickedAt     *time.Time
-	EmailOpenCount     *int
-	EmailClickCount    *int
-	LastEmailEventAt   *time.Time
-	EmailMetadata      map[string]interface{}
-	DueDate            *time.Time
-	OwnerID            *string
-	AssessmentID       string
-	CampaignID         *string
-	IdentityHolderID   *string
-	EntityID           *string
-	DocumentID         *string
-	VendorRiskScoreIDs []string
+	WorkflowEligibleMarker *bool                  `json:"workflow_eligible_marker,omitempty"`
+	DisplayName            *string                `json:"display_name,omitempty"`
+	Email                  *string                `json:"email,omitempty"`
+	EmailDeliveredAt       *time.Time             `json:"email_delivered_at,omitempty"`
+	EmailOpenedAt          *time.Time             `json:"email_opened_at,omitempty"`
+	EmailClickedAt         *time.Time             `json:"email_clicked_at,omitempty"`
+	EmailOpenCount         *int                   `json:"email_open_count,omitempty"`
+	EmailClickCount        *int                   `json:"email_click_count,omitempty"`
+	LastEmailEventAt       *time.Time             `json:"last_email_event_at,omitempty"`
+	EmailMetadata          map[string]interface{} `json:"email_metadata,omitempty"`
+	DueDate                *time.Time             `json:"due_date,omitempty"`
+	OwnerID                *string
+	AssessmentID           string
+	CampaignID             *string
+	IdentityHolderID       *string
+	EntityID               *string
+	DocumentID             *string
+	VendorRiskScoreIDs     []string
+	WorkflowObjectRefIDs   []string
 }
 
 // Mutate applies the CreateAssessmentResponseInput on the AssessmentResponseMutation builder.
 func (i *CreateAssessmentResponseInput) Mutate(m *AssessmentResponseMutation) {
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
+	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
 	}
@@ -1227,6 +1260,9 @@ func (i *CreateAssessmentResponseInput) Mutate(m *AssessmentResponseMutation) {
 	if v := i.VendorRiskScoreIDs; len(v) > 0 {
 		m.AddVendorRiskScoreIDs(v...)
 	}
+	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateAssessmentResponseInput on the AssessmentResponseCreate builder.
@@ -1237,35 +1273,35 @@ func (c *AssessmentResponseCreate) SetInput(i CreateAssessmentResponseInput) *As
 
 // CreateAssetInput represents a mutation input for creating assets.
 type CreateAssetInput struct {
-	Tags                        []string
-	InternalOwner               *string
-	AssetSubtypeName            *string
-	AssetDataClassificationName *string
-	EnvironmentName             *string
-	ScopeName                   *string
-	AccessModelName             *string
-	EncryptionStatusName        *string
-	SecurityTierName            *string
-	CriticalityName             *string
-	InternalNotes               *string
-	SystemInternalID            *string
-	AssetType                   *enums.AssetType
-	Name                        string
-	DisplayName                 *string
-	Description                 *string
-	Identifier                  *string
-	Website                     *string
-	PhysicalLocation            *string
-	Region                      *string
-	ContainsPii                 *bool
-	SourceType                  *enums.SourceType
-	SourceIdentifier            *string
-	CostCenter                  *string
-	EstimatedMonthlyCost        *float64
-	PurchaseDate                *models.DateTime
-	Cpe                         *string
-	Categories                  []string
-	ObservedAt                  *models.DateTime
+	Tags                        []string          `json:"tags,omitempty"`
+	InternalOwner               *string           `json:"internal_owner,omitempty"`
+	AssetSubtypeName            *string           `json:"asset_subtype_name,omitempty"`
+	AssetDataClassificationName *string           `json:"asset_data_classification_name,omitempty"`
+	EnvironmentName             *string           `json:"environment_name,omitempty"`
+	ScopeName                   *string           `json:"scope_name,omitempty"`
+	AccessModelName             *string           `json:"access_model_name,omitempty"`
+	EncryptionStatusName        *string           `json:"encryption_status_name,omitempty"`
+	SecurityTierName            *string           `json:"security_tier_name,omitempty"`
+	CriticalityName             *string           `json:"criticality_name,omitempty"`
+	InternalNotes               *string           `json:"internal_notes,omitempty"`
+	SystemInternalID            *string           `json:"system_internal_id,omitempty"`
+	AssetType                   *enums.AssetType  `json:"asset_type,omitempty"`
+	Name                        string            `json:"name,omitempty"`
+	DisplayName                 *string           `json:"display_name,omitempty"`
+	Description                 *string           `json:"description,omitempty"`
+	Identifier                  *string           `json:"identifier,omitempty"`
+	Website                     *string           `json:"website,omitempty"`
+	PhysicalLocation            *string           `json:"physical_location,omitempty"`
+	Region                      *string           `json:"region,omitempty"`
+	ContainsPii                 *bool             `json:"contains_pii,omitempty"`
+	SourceType                  *enums.SourceType `json:"source_type,omitempty"`
+	SourceIdentifier            *string           `json:"source_identifier,omitempty"`
+	CostCenter                  *string           `json:"cost_center,omitempty"`
+	EstimatedMonthlyCost        *float64          `json:"estimated_monthly_cost,omitempty"`
+	PurchaseDate                *models.DateTime  `json:"purchase_date,omitempty"`
+	Cpe                         *string           `json:"cpe,omitempty"`
+	Categories                  []string          `json:"categories,omitempty"`
+	ObservedAt                  *models.DateTime  `json:"observed_at,omitempty"`
 	OwnerID                     *string
 	BlockedGroupIDs             []string
 	EditorIDs                   []string
@@ -1474,62 +1510,62 @@ func (c *AssetCreate) SetInput(i CreateAssetInput) *AssetCreate {
 // UpdateAssetInput represents a mutation input for updating assets.
 type UpdateAssetInput struct {
 	ClearTags                        bool
-	Tags                             []string
+	Tags                             []string `json:"tags,omitempty"`
 	AppendTags                       []string
 	ClearInternalOwner               bool
-	InternalOwner                    *string
+	InternalOwner                    *string `json:"internal_owner,omitempty"`
 	ClearAssetSubtypeName            bool
-	AssetSubtypeName                 *string
+	AssetSubtypeName                 *string `json:"asset_subtype_name,omitempty"`
 	ClearAssetDataClassificationName bool
-	AssetDataClassificationName      *string
+	AssetDataClassificationName      *string `json:"asset_data_classification_name,omitempty"`
 	ClearEnvironmentName             bool
-	EnvironmentName                  *string
+	EnvironmentName                  *string `json:"environment_name,omitempty"`
 	ClearScopeName                   bool
-	ScopeName                        *string
+	ScopeName                        *string `json:"scope_name,omitempty"`
 	ClearAccessModelName             bool
-	AccessModelName                  *string
+	AccessModelName                  *string `json:"access_model_name,omitempty"`
 	ClearEncryptionStatusName        bool
-	EncryptionStatusName             *string
+	EncryptionStatusName             *string `json:"encryption_status_name,omitempty"`
 	ClearSecurityTierName            bool
-	SecurityTierName                 *string
+	SecurityTierName                 *string `json:"security_tier_name,omitempty"`
 	ClearCriticalityName             bool
-	CriticalityName                  *string
+	CriticalityName                  *string `json:"criticality_name,omitempty"`
 	ClearInternalNotes               bool
-	InternalNotes                    *string
+	InternalNotes                    *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID            bool
-	SystemInternalID                 *string
-	AssetType                        *enums.AssetType
-	Name                             *string
+	SystemInternalID                 *string          `json:"system_internal_id,omitempty"`
+	AssetType                        *enums.AssetType `json:"asset_type,omitempty"`
+	Name                             *string          `json:"name,omitempty"`
 	ClearDisplayName                 bool
-	DisplayName                      *string
+	DisplayName                      *string `json:"display_name,omitempty"`
 	ClearDescription                 bool
-	Description                      *string
+	Description                      *string `json:"description,omitempty"`
 	ClearIdentifier                  bool
-	Identifier                       *string
+	Identifier                       *string `json:"identifier,omitempty"`
 	ClearWebsite                     bool
-	Website                          *string
+	Website                          *string `json:"website,omitempty"`
 	ClearPhysicalLocation            bool
-	PhysicalLocation                 *string
+	PhysicalLocation                 *string `json:"physical_location,omitempty"`
 	ClearRegion                      bool
-	Region                           *string
+	Region                           *string `json:"region,omitempty"`
 	ClearContainsPii                 bool
-	ContainsPii                      *bool
-	SourceType                       *enums.SourceType
+	ContainsPii                      *bool             `json:"contains_pii,omitempty"`
+	SourceType                       *enums.SourceType `json:"source_type,omitempty"`
 	ClearSourceIdentifier            bool
-	SourceIdentifier                 *string
+	SourceIdentifier                 *string `json:"source_identifier,omitempty"`
 	ClearCostCenter                  bool
-	CostCenter                       *string
+	CostCenter                       *string `json:"cost_center,omitempty"`
 	ClearEstimatedMonthlyCost        bool
-	EstimatedMonthlyCost             *float64
+	EstimatedMonthlyCost             *float64 `json:"estimated_monthly_cost,omitempty"`
 	ClearPurchaseDate                bool
-	PurchaseDate                     *models.DateTime
+	PurchaseDate                     *models.DateTime `json:"purchase_date,omitempty"`
 	ClearCpe                         bool
-	Cpe                              *string
+	Cpe                              *string `json:"cpe,omitempty"`
 	ClearCategories                  bool
-	Categories                       []string
+	Categories                       []string `json:"categories,omitempty"`
 	AppendCategories                 []string
 	ClearObservedAt                  bool
-	ObservedAt                       *models.DateTime
+	ObservedAt                       *models.DateTime `json:"observed_at,omitempty"`
 	ClearBlockedGroups               bool
 	AddBlockedGroupIDs               []string
 	RemoveBlockedGroupIDs            []string
@@ -1977,31 +2013,31 @@ func (c *AssetUpdateOne) SetInput(i UpdateAssetInput) *AssetUpdateOne {
 
 // CreateCampaignInput represents a mutation input for creating campaigns.
 type CreateCampaignInput struct {
-	Tags                   []string
-	InternalOwner          *string
-	WorkflowEligibleMarker *bool
-	Name                   string
-	Description            *string
-	CampaignType           *enums.CampaignType
-	Status                 *enums.CampaignStatus
-	IsActive               *bool
-	ScheduledAt            *models.DateTime
-	LaunchedAt             *models.DateTime
-	CompletedAt            *models.DateTime
-	DueDate                *models.DateTime
-	IsRecurring            *bool
-	RecurrenceFrequency    *enums.Frequency
-	RecurrenceInterval     *int
-	RecurrenceTimezone     *string
-	RecurrenceCron         *models.Cron
-	LastRunAt              *models.DateTime
-	NextRunAt              *models.DateTime
-	RecurrenceEndAt        *models.DateTime
-	RecipientCount         *int
-	ResendCount            *int
-	LastResentAt           *models.DateTime
-	Metadata               map[string]interface{}
-	EmailBrandingID        *string
+	Tags                   []string               `json:"tags,omitempty"`
+	InternalOwner          *string                `json:"internal_owner,omitempty"`
+	WorkflowEligibleMarker *bool                  `json:"workflow_eligible_marker,omitempty"`
+	Name                   string                 `json:"name,omitempty"`
+	Description            *string                `json:"description,omitempty"`
+	CampaignType           *enums.CampaignType    `json:"campaign_type,omitempty"`
+	Status                 *enums.CampaignStatus  `json:"status,omitempty"`
+	IsActive               *bool                  `json:"is_active,omitempty"`
+	ScheduledAt            *models.DateTime       `json:"scheduled_at,omitempty"`
+	LaunchedAt             *models.DateTime       `json:"launched_at,omitempty"`
+	CompletedAt            *models.DateTime       `json:"completed_at,omitempty"`
+	DueDate                *models.DateTime       `json:"due_date,omitempty"`
+	IsRecurring            *bool                  `json:"is_recurring,omitempty"`
+	RecurrenceFrequency    *enums.Frequency       `json:"recurrence_frequency,omitempty"`
+	RecurrenceInterval     *int                   `json:"recurrence_interval,omitempty"`
+	RecurrenceTimezone     *string                `json:"recurrence_timezone,omitempty"`
+	RecurrenceCron         *models.Cron           `json:"recurrence_cron,omitempty"`
+	LastRunAt              *models.DateTime       `json:"last_run_at,omitempty"`
+	NextRunAt              *models.DateTime       `json:"next_run_at,omitempty"`
+	RecurrenceEndAt        *models.DateTime       `json:"recurrence_end_at,omitempty"`
+	RecipientCount         *int                   `json:"recipient_count,omitempty"`
+	ResendCount            *int                   `json:"resend_count,omitempty"`
+	LastResentAt           *models.DateTime       `json:"last_resent_at,omitempty"`
+	Metadata               map[string]interface{} `json:"metadata,omitempty"`
+	EmailBrandingID        *string                `json:"email_branding_id,omitempty"`
 	OwnerID                *string
 	BlockedGroupIDs        []string
 	EditorIDs              []string
@@ -2170,51 +2206,51 @@ func (c *CampaignCreate) SetInput(i CreateCampaignInput) *CampaignCreate {
 // UpdateCampaignInput represents a mutation input for updating campaigns.
 type UpdateCampaignInput struct {
 	ClearTags                   bool
-	Tags                        []string
+	Tags                        []string `json:"tags,omitempty"`
 	AppendTags                  []string
 	ClearInternalOwner          bool
-	InternalOwner               *string
+	InternalOwner               *string `json:"internal_owner,omitempty"`
 	ClearWorkflowEligibleMarker bool
-	WorkflowEligibleMarker      *bool
-	Name                        *string
+	WorkflowEligibleMarker      *bool   `json:"workflow_eligible_marker,omitempty"`
+	Name                        *string `json:"name,omitempty"`
 	ClearDescription            bool
-	Description                 *string
-	CampaignType                *enums.CampaignType
-	Status                      *enums.CampaignStatus
-	IsActive                    *bool
+	Description                 *string               `json:"description,omitempty"`
+	CampaignType                *enums.CampaignType   `json:"campaign_type,omitempty"`
+	Status                      *enums.CampaignStatus `json:"status,omitempty"`
+	IsActive                    *bool                 `json:"is_active,omitempty"`
 	ClearScheduledAt            bool
-	ScheduledAt                 *models.DateTime
+	ScheduledAt                 *models.DateTime `json:"scheduled_at,omitempty"`
 	ClearLaunchedAt             bool
-	LaunchedAt                  *models.DateTime
+	LaunchedAt                  *models.DateTime `json:"launched_at,omitempty"`
 	ClearCompletedAt            bool
-	CompletedAt                 *models.DateTime
+	CompletedAt                 *models.DateTime `json:"completed_at,omitempty"`
 	ClearDueDate                bool
-	DueDate                     *models.DateTime
-	IsRecurring                 *bool
+	DueDate                     *models.DateTime `json:"due_date,omitempty"`
+	IsRecurring                 *bool            `json:"is_recurring,omitempty"`
 	ClearRecurrenceFrequency    bool
-	RecurrenceFrequency         *enums.Frequency
+	RecurrenceFrequency         *enums.Frequency `json:"recurrence_frequency,omitempty"`
 	ClearRecurrenceInterval     bool
-	RecurrenceInterval          *int
+	RecurrenceInterval          *int `json:"recurrence_interval,omitempty"`
 	ClearRecurrenceTimezone     bool
-	RecurrenceTimezone          *string
+	RecurrenceTimezone          *string `json:"recurrence_timezone,omitempty"`
 	ClearRecurrenceCron         bool
-	RecurrenceCron              *models.Cron
+	RecurrenceCron              *models.Cron `json:"recurrence_cron,omitempty"`
 	ClearLastRunAt              bool
-	LastRunAt                   *models.DateTime
+	LastRunAt                   *models.DateTime `json:"last_run_at,omitempty"`
 	ClearNextRunAt              bool
-	NextRunAt                   *models.DateTime
+	NextRunAt                   *models.DateTime `json:"next_run_at,omitempty"`
 	ClearRecurrenceEndAt        bool
-	RecurrenceEndAt             *models.DateTime
+	RecurrenceEndAt             *models.DateTime `json:"recurrence_end_at,omitempty"`
 	ClearRecipientCount         bool
-	RecipientCount              *int
+	RecipientCount              *int `json:"recipient_count,omitempty"`
 	ClearResendCount            bool
-	ResendCount                 *int
+	ResendCount                 *int `json:"resend_count,omitempty"`
 	ClearLastResentAt           bool
-	LastResentAt                *models.DateTime
+	LastResentAt                *models.DateTime `json:"last_resent_at,omitempty"`
 	ClearMetadata               bool
-	Metadata                    map[string]interface{}
+	Metadata                    map[string]interface{} `json:"metadata,omitempty"`
 	ClearEmailBrandingID        bool
-	EmailBrandingID             *string
+	EmailBrandingID             *string `json:"email_branding_id,omitempty"`
 	ClearBlockedGroups          bool
 	AddBlockedGroupIDs          []string
 	RemoveBlockedGroupIDs       []string
@@ -2569,13 +2605,13 @@ func (c *CampaignUpdateOne) SetInput(i UpdateCampaignInput) *CampaignUpdateOne {
 
 // CreateCampaignTargetInput represents a mutation input for creating campaigntargets.
 type CreateCampaignTargetInput struct {
-	WorkflowEligibleMarker *bool
-	Email                  string
-	FullName               *string
-	Status                 *enums.AssessmentResponseStatus
-	SentAt                 *models.DateTime
-	CompletedAt            *models.DateTime
-	Metadata               map[string]interface{}
+	WorkflowEligibleMarker *bool                           `json:"workflow_eligible_marker,omitempty"`
+	Email                  string                          `json:"email,omitempty"`
+	FullName               *string                         `json:"full_name,omitempty"`
+	Status                 *enums.AssessmentResponseStatus `json:"status,omitempty"`
+	SentAt                 *models.DateTime                `json:"sent_at,omitempty"`
+	CompletedAt            *models.DateTime                `json:"completed_at,omitempty"`
+	Metadata               map[string]interface{}          `json:"metadata,omitempty"`
 	OwnerID                *string
 	CampaignID             string
 	ContactID              *string
@@ -2636,17 +2672,17 @@ func (c *CampaignTargetCreate) SetInput(i CreateCampaignTargetInput) *CampaignTa
 // UpdateCampaignTargetInput represents a mutation input for updating campaigntargets.
 type UpdateCampaignTargetInput struct {
 	ClearWorkflowEligibleMarker bool
-	WorkflowEligibleMarker      *bool
-	Email                       *string
+	WorkflowEligibleMarker      *bool   `json:"workflow_eligible_marker,omitempty"`
+	Email                       *string `json:"email,omitempty"`
 	ClearFullName               bool
-	FullName                    *string
-	Status                      *enums.AssessmentResponseStatus
+	FullName                    *string                         `json:"full_name,omitempty"`
+	Status                      *enums.AssessmentResponseStatus `json:"status,omitempty"`
 	ClearSentAt                 bool
-	SentAt                      *models.DateTime
+	SentAt                      *models.DateTime `json:"sent_at,omitempty"`
 	ClearCompletedAt            bool
-	CompletedAt                 *models.DateTime
+	CompletedAt                 *models.DateTime `json:"completed_at,omitempty"`
 	ClearMetadata               bool
-	Metadata                    map[string]interface{}
+	Metadata                    map[string]interface{} `json:"metadata,omitempty"`
 	CampaignID                  *string
 	ClearContact                bool
 	ContactID                   *string
@@ -2751,13 +2787,13 @@ func (c *CampaignTargetUpdateOne) SetInput(i UpdateCampaignTargetInput) *Campaig
 
 // CreateCheckResultInput represents a mutation input for creating checkresults.
 type CreateCheckResultInput struct {
-	Tags             []string
-	Status           *enums.CheckStatus
-	Source           string
-	LastObservedAt   *models.DateTime
-	ExternalURI      *string
-	Details          *string
-	ParentExternalID *string
+	Tags             []string           `json:"tags,omitempty"`
+	Status           *enums.CheckStatus `json:"status,omitempty"`
+	Source           string             `json:"source,omitempty"`
+	LastObservedAt   *models.DateTime   `json:"last_observed_at,omitempty"`
+	ExternalURI      *string            `json:"external_uri,omitempty"`
+	Details          *string            `json:"details,omitempty"`
+	ParentExternalID *string            `json:"parent_external_id,omitempty"`
 	BlockedGroupIDs  []string
 	EditorIDs        []string
 	ViewerIDs        []string
@@ -2816,18 +2852,18 @@ func (c *CheckResultCreate) SetInput(i CreateCheckResultInput) *CheckResultCreat
 // UpdateCheckResultInput represents a mutation input for updating checkresults.
 type UpdateCheckResultInput struct {
 	ClearTags             bool
-	Tags                  []string
+	Tags                  []string `json:"tags,omitempty"`
 	AppendTags            []string
-	Status                *enums.CheckStatus
-	Source                *string
+	Status                *enums.CheckStatus `json:"status,omitempty"`
+	Source                *string            `json:"source,omitempty"`
 	ClearLastObservedAt   bool
-	LastObservedAt        *models.DateTime
+	LastObservedAt        *models.DateTime `json:"last_observed_at,omitempty"`
 	ClearExternalURI      bool
-	ExternalURI           *string
+	ExternalURI           *string `json:"external_uri,omitempty"`
 	ClearDetails          bool
-	Details               *string
+	Details               *string `json:"details,omitempty"`
 	ClearParentExternalID bool
-	ParentExternalID      *string
+	ParentExternalID      *string `json:"parent_external_id,omitempty"`
 	ClearBlockedGroups    bool
 	AddBlockedGroupIDs    []string
 	RemoveBlockedGroupIDs []string
@@ -2947,17 +2983,17 @@ func (c *CheckResultUpdateOne) SetInput(i UpdateCheckResultInput) *CheckResultUp
 
 // CreateContactInput represents a mutation input for creating contacts.
 type CreateContactInput struct {
-	Tags              []string
-	FullName          *string
-	Title             *string
-	Company           *string
-	Email             *string
-	PhoneNumber       *string
-	Address           *string
-	Status            *enums.UserStatus
-	ExternalID        *string
-	IntegrationID     *string
-	ObservedAt        *models.DateTime
+	Tags              []string          `json:"tags,omitempty"`
+	FullName          *string           `json:"full_name,omitempty"`
+	Title             *string           `json:"title,omitempty"`
+	Company           *string           `json:"company,omitempty"`
+	Email             *string           `json:"email,omitempty"`
+	PhoneNumber       *string           `json:"phone_number,omitempty"`
+	Address           *string           `json:"address,omitempty"`
+	Status            *enums.UserStatus `json:"status,omitempty"`
+	ExternalID        *string           `json:"external_id,omitempty"`
+	IntegrationID     *string           `json:"integration_id,omitempty"`
+	ObservedAt        *models.DateTime  `json:"observed_at,omitempty"`
 	OwnerID           *string
 	EntityIDs         []string
 	CampaignIDs       []string
@@ -3030,27 +3066,27 @@ func (c *ContactCreate) SetInput(i CreateContactInput) *ContactCreate {
 // UpdateContactInput represents a mutation input for updating contacts.
 type UpdateContactInput struct {
 	ClearTags               bool
-	Tags                    []string
+	Tags                    []string `json:"tags,omitempty"`
 	AppendTags              []string
 	ClearFullName           bool
-	FullName                *string
+	FullName                *string `json:"full_name,omitempty"`
 	ClearTitle              bool
-	Title                   *string
+	Title                   *string `json:"title,omitempty"`
 	ClearCompany            bool
-	Company                 *string
+	Company                 *string `json:"company,omitempty"`
 	ClearEmail              bool
-	Email                   *string
+	Email                   *string `json:"email,omitempty"`
 	ClearPhoneNumber        bool
-	PhoneNumber             *string
+	PhoneNumber             *string `json:"phone_number,omitempty"`
 	ClearAddress            bool
-	Address                 *string
-	Status                  *enums.UserStatus
+	Address                 *string           `json:"address,omitempty"`
+	Status                  *enums.UserStatus `json:"status,omitempty"`
 	ClearExternalID         bool
-	ExternalID              *string
+	ExternalID              *string `json:"external_id,omitempty"`
 	ClearIntegrationID      bool
-	IntegrationID           *string
+	IntegrationID           *string `json:"integration_id,omitempty"`
 	ClearObservedAt         bool
-	ObservedAt              *models.DateTime
+	ObservedAt              *models.DateTime `json:"observed_at,omitempty"`
 	ClearOwner              bool
 	OwnerID                 *string
 	ClearEntities           bool
@@ -3205,42 +3241,42 @@ func (c *ContactUpdateOne) SetInput(i UpdateContactInput) *ContactUpdateOne {
 
 // CreateControlInput represents a mutation input for creating controls.
 type CreateControlInput struct {
-	Tags                       []string
-	ExternalUUID               *string
-	Title                      *string
-	Description                *string
-	DescriptionJSON            []interface{}
-	Aliases                    []string
-	ReferenceID                *string
-	AuditorReferenceID         *string
-	Status                     *enums.ControlStatus
-	ImplementationStatus       *enums.ControlImplementationStatus
-	ImplementationDescription  *string
-	PublicRepresentation       *string
-	Source                     *enums.ControlSource
-	SourceName                 *string
-	ReferenceFramework         *string
-	ReferenceFrameworkRevision *string
-	Category                   *string
-	CategoryID                 *string
-	Subcategory                *string
-	MappedCategories           []string
-	AssessmentObjectives       []models.AssessmentObjective
-	AssessmentMethods          []models.AssessmentMethod
-	ControlQuestions           []string
-	ImplementationGuidance     []models.ImplementationGuidance
-	ExampleEvidence            []models.ExampleEvidence
-	References                 []models.Reference
-	TestingProcedures          []models.TestingProcedures
-	EvidenceRequests           []models.EvidenceRequests
-	InternalNotes              *string
-	SystemInternalID           *string
-	ControlKindName            *string
-	EnvironmentName            *string
-	ScopeName                  *string
-	WorkflowEligibleMarker     *bool
-	RefCode                    string
-	TrustCenterVisibility      *enums.TrustCenterControlVisibility
+	Tags                       []string                            `json:"tags,omitempty"`
+	ExternalUUID               *string                             `json:"external_uuid,omitempty"`
+	Title                      *string                             `json:"title,omitempty"`
+	Description                *string                             `json:"description,omitempty"`
+	DescriptionJSON            []interface{}                       `json:"description_json,omitempty"`
+	Aliases                    []string                            `json:"aliases,omitempty"`
+	ReferenceID                *string                             `json:"reference_id,omitempty"`
+	AuditorReferenceID         *string                             `json:"auditor_reference_id,omitempty"`
+	Status                     *enums.ControlStatus                `json:"status,omitempty"`
+	ImplementationStatus       *enums.ControlImplementationStatus  `json:"implementation_status,omitempty"`
+	ImplementationDescription  *string                             `json:"implementation_description,omitempty"`
+	PublicRepresentation       *string                             `json:"public_representation,omitempty"`
+	Source                     *enums.ControlSource                `json:"source,omitempty"`
+	SourceName                 *string                             `json:"source_name,omitempty"`
+	ReferenceFramework         *string                             `json:"reference_framework,omitempty"`
+	ReferenceFrameworkRevision *string                             `json:"reference_framework_revision,omitempty"`
+	Category                   *string                             `json:"category,omitempty"`
+	CategoryID                 *string                             `json:"category_id,omitempty"`
+	Subcategory                *string                             `json:"subcategory,omitempty"`
+	MappedCategories           []string                            `json:"mapped_categories,omitempty"`
+	AssessmentObjectives       []models.AssessmentObjective        `json:"assessment_objectives,omitempty"`
+	AssessmentMethods          []models.AssessmentMethod           `json:"assessment_methods,omitempty"`
+	ControlQuestions           []string                            `json:"control_questions,omitempty"`
+	ImplementationGuidance     []models.ImplementationGuidance     `json:"implementation_guidance,omitempty"`
+	ExampleEvidence            []models.ExampleEvidence            `json:"example_evidence,omitempty"`
+	References                 []models.Reference                  `json:"references,omitempty"`
+	TestingProcedures          []models.TestingProcedures          `json:"testing_procedures,omitempty"`
+	EvidenceRequests           []models.EvidenceRequests           `json:"evidence_requests,omitempty"`
+	InternalNotes              *string                             `json:"internal_notes,omitempty"`
+	SystemInternalID           *string                             `json:"system_internal_id,omitempty"`
+	ControlKindName            *string                             `json:"control_kind_name,omitempty"`
+	EnvironmentName            *string                             `json:"environment_name,omitempty"`
+	ScopeName                  *string                             `json:"scope_name,omitempty"`
+	WorkflowEligibleMarker     *bool                               `json:"workflow_eligible_marker,omitempty"`
+	RefCode                    string                              `json:"ref_code,omitempty"`
+	TrustCenterVisibility      *enums.TrustCenterControlVisibility `json:"trust_center_visibility,omitempty"`
 	EvidenceIDs                []string
 	ControlObjectiveIDs        []string
 	TaskIDs                    []string
@@ -3502,86 +3538,86 @@ func (c *ControlCreate) SetInput(i CreateControlInput) *ControlCreate {
 // UpdateControlInput represents a mutation input for updating controls.
 type UpdateControlInput struct {
 	ClearTags                       bool
-	Tags                            []string
+	Tags                            []string `json:"tags,omitempty"`
 	AppendTags                      []string
 	ClearExternalUUID               bool
-	ExternalUUID                    *string
+	ExternalUUID                    *string `json:"external_uuid,omitempty"`
 	ClearTitle                      bool
-	Title                           *string
+	Title                           *string `json:"title,omitempty"`
 	ClearDescription                bool
-	Description                     *string
+	Description                     *string `json:"description,omitempty"`
 	ClearDescriptionJSON            bool
-	DescriptionJSON                 []interface{}
+	DescriptionJSON                 []interface{} `json:"description_json,omitempty"`
 	AppendDescriptionJSON           []interface{}
 	ClearAliases                    bool
-	Aliases                         []string
+	Aliases                         []string `json:"aliases,omitempty"`
 	AppendAliases                   []string
 	ClearReferenceID                bool
-	ReferenceID                     *string
+	ReferenceID                     *string `json:"reference_id,omitempty"`
 	ClearAuditorReferenceID         bool
-	AuditorReferenceID              *string
+	AuditorReferenceID              *string `json:"auditor_reference_id,omitempty"`
 	ClearStatus                     bool
-	Status                          *enums.ControlStatus
+	Status                          *enums.ControlStatus `json:"status,omitempty"`
 	ClearImplementationStatus       bool
-	ImplementationStatus            *enums.ControlImplementationStatus
+	ImplementationStatus            *enums.ControlImplementationStatus `json:"implementation_status,omitempty"`
 	ClearImplementationDescription  bool
-	ImplementationDescription       *string
+	ImplementationDescription       *string `json:"implementation_description,omitempty"`
 	ClearPublicRepresentation       bool
-	PublicRepresentation            *string
+	PublicRepresentation            *string `json:"public_representation,omitempty"`
 	ClearSource                     bool
-	Source                          *enums.ControlSource
+	Source                          *enums.ControlSource `json:"source,omitempty"`
 	ClearSourceName                 bool
-	SourceName                      *string
+	SourceName                      *string `json:"source_name,omitempty"`
 	ClearReferenceFrameworkRevision bool
-	ReferenceFrameworkRevision      *string
+	ReferenceFrameworkRevision      *string `json:"reference_framework_revision,omitempty"`
 	ClearCategory                   bool
-	Category                        *string
+	Category                        *string `json:"category,omitempty"`
 	ClearCategoryID                 bool
-	CategoryID                      *string
+	CategoryID                      *string `json:"category_id,omitempty"`
 	ClearSubcategory                bool
-	Subcategory                     *string
+	Subcategory                     *string `json:"subcategory,omitempty"`
 	ClearMappedCategories           bool
-	MappedCategories                []string
+	MappedCategories                []string `json:"mapped_categories,omitempty"`
 	AppendMappedCategories          []string
 	ClearAssessmentObjectives       bool
-	AssessmentObjectives            []models.AssessmentObjective
+	AssessmentObjectives            []models.AssessmentObjective `json:"assessment_objectives,omitempty"`
 	AppendAssessmentObjectives      []models.AssessmentObjective
 	ClearAssessmentMethods          bool
-	AssessmentMethods               []models.AssessmentMethod
+	AssessmentMethods               []models.AssessmentMethod `json:"assessment_methods,omitempty"`
 	AppendAssessmentMethods         []models.AssessmentMethod
 	ClearControlQuestions           bool
-	ControlQuestions                []string
+	ControlQuestions                []string `json:"control_questions,omitempty"`
 	AppendControlQuestions          []string
 	ClearImplementationGuidance     bool
-	ImplementationGuidance          []models.ImplementationGuidance
+	ImplementationGuidance          []models.ImplementationGuidance `json:"implementation_guidance,omitempty"`
 	AppendImplementationGuidance    []models.ImplementationGuidance
 	ClearExampleEvidence            bool
-	ExampleEvidence                 []models.ExampleEvidence
+	ExampleEvidence                 []models.ExampleEvidence `json:"example_evidence,omitempty"`
 	AppendExampleEvidence           []models.ExampleEvidence
 	ClearReferences                 bool
-	References                      []models.Reference
+	References                      []models.Reference `json:"references,omitempty"`
 	AppendReferences                []models.Reference
 	ClearTestingProcedures          bool
-	TestingProcedures               []models.TestingProcedures
+	TestingProcedures               []models.TestingProcedures `json:"testing_procedures,omitempty"`
 	AppendTestingProcedures         []models.TestingProcedures
 	ClearEvidenceRequests           bool
-	EvidenceRequests                []models.EvidenceRequests
+	EvidenceRequests                []models.EvidenceRequests `json:"evidence_requests,omitempty"`
 	AppendEvidenceRequests          []models.EvidenceRequests
 	ClearInternalNotes              bool
-	InternalNotes                   *string
+	InternalNotes                   *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID           bool
-	SystemInternalID                *string
+	SystemInternalID                *string `json:"system_internal_id,omitempty"`
 	ClearControlKindName            bool
-	ControlKindName                 *string
+	ControlKindName                 *string `json:"control_kind_name,omitempty"`
 	ClearEnvironmentName            bool
-	EnvironmentName                 *string
+	EnvironmentName                 *string `json:"environment_name,omitempty"`
 	ClearScopeName                  bool
-	ScopeName                       *string
+	ScopeName                       *string `json:"scope_name,omitempty"`
 	ClearWorkflowEligibleMarker     bool
-	WorkflowEligibleMarker          *bool
-	RefCode                         *string
+	WorkflowEligibleMarker          *bool   `json:"workflow_eligible_marker,omitempty"`
+	RefCode                         *string `json:"ref_code,omitempty"`
 	ClearTrustCenterVisibility      bool
-	TrustCenterVisibility           *enums.TrustCenterControlVisibility
+	TrustCenterVisibility           *enums.TrustCenterControlVisibility `json:"trust_center_visibility,omitempty"`
 	ClearEvidence                   bool
 	AddEvidenceIDs                  []string
 	RemoveEvidenceIDs               []string
@@ -4225,15 +4261,15 @@ func (c *ControlUpdateOne) SetInput(i UpdateControlInput) *ControlUpdateOne {
 
 // CreateControlImplementationInput represents a mutation input for creating controlimplementations.
 type CreateControlImplementationInput struct {
-	Tags               []string
-	InternalNotes      *string
-	SystemInternalID   *string
-	Status             *enums.DocumentStatus
-	ImplementationDate *time.Time
-	Verified           *bool
-	VerificationDate   *time.Time
-	Details            *string
-	DetailsJSON        []interface{}
+	Tags               []string              `json:"tags,omitempty"`
+	InternalNotes      *string               `json:"internal_notes,omitempty"`
+	SystemInternalID   *string               `json:"system_internal_id,omitempty"`
+	Status             *enums.DocumentStatus `json:"status,omitempty"`
+	ImplementationDate *time.Time            `json:"implementation_date,omitempty"`
+	Verified           *bool                 `json:"verified,omitempty"`
+	VerificationDate   *time.Time            `json:"verification_date,omitempty"`
+	Details            *string               `json:"details,omitempty"`
+	DetailsJSON        []interface{}         `json:"details_json,omitempty"`
 	OwnerID            *string
 	BlockedGroupIDs    []string
 	EditorIDs          []string
@@ -4304,24 +4340,24 @@ func (c *ControlImplementationCreate) SetInput(i CreateControlImplementationInpu
 // UpdateControlImplementationInput represents a mutation input for updating controlimplementations.
 type UpdateControlImplementationInput struct {
 	ClearTags               bool
-	Tags                    []string
+	Tags                    []string `json:"tags,omitempty"`
 	AppendTags              []string
 	ClearInternalNotes      bool
-	InternalNotes           *string
+	InternalNotes           *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID   bool
-	SystemInternalID        *string
+	SystemInternalID        *string `json:"system_internal_id,omitempty"`
 	ClearStatus             bool
-	Status                  *enums.DocumentStatus
+	Status                  *enums.DocumentStatus `json:"status,omitempty"`
 	ClearImplementationDate bool
-	ImplementationDate      *time.Time
+	ImplementationDate      *time.Time `json:"implementation_date,omitempty"`
 	ClearVerified           bool
-	Verified                *bool
+	Verified                *bool `json:"verified,omitempty"`
 	ClearVerificationDate   bool
-	VerificationDate        *time.Time
+	VerificationDate        *time.Time `json:"verification_date,omitempty"`
 	ClearDetails            bool
-	Details                 *string
+	Details                 *string `json:"details,omitempty"`
 	ClearDetailsJSON        bool
-	DetailsJSON             []interface{}
+	DetailsJSON             []interface{} `json:"details_json,omitempty"`
 	AppendDetailsJSON       []interface{}
 	ClearBlockedGroups      bool
 	AddBlockedGroupIDs      []string
@@ -4475,18 +4511,18 @@ func (c *ControlImplementationUpdateOne) SetInput(i UpdateControlImplementationI
 
 // CreateControlObjectiveInput represents a mutation input for creating controlobjectives.
 type CreateControlObjectiveInput struct {
-	Tags                 []string
-	Revision             *string
-	InternalNotes        *string
-	SystemInternalID     *string
-	Name                 string
-	DesiredOutcome       *string
-	DesiredOutcomeJSON   []interface{}
-	Status               *enums.ObjectiveStatus
-	Source               *enums.ControlSource
-	ControlObjectiveType *string
-	Category             *string
-	Subcategory          *string
+	Tags                 []string               `json:"tags,omitempty"`
+	Revision             *string                `json:"revision,omitempty"`
+	InternalNotes        *string                `json:"internal_notes,omitempty"`
+	SystemInternalID     *string                `json:"system_internal_id,omitempty"`
+	Name                 string                 `json:"name,omitempty"`
+	DesiredOutcome       *string                `json:"desired_outcome,omitempty"`
+	DesiredOutcomeJSON   []interface{}          `json:"desired_outcome_json,omitempty"`
+	Status               *enums.ObjectiveStatus `json:"status,omitempty"`
+	Source               *enums.ControlSource   `json:"source,omitempty"`
+	ControlObjectiveType *string                `json:"control_objective_type,omitempty"`
+	Category             *string                `json:"category,omitempty"`
+	Subcategory          *string                `json:"subcategory,omitempty"`
 	OwnerID              *string
 	BlockedGroupIDs      []string
 	EditorIDs            []string
@@ -4588,30 +4624,30 @@ func (c *ControlObjectiveCreate) SetInput(i CreateControlObjectiveInput) *Contro
 // UpdateControlObjectiveInput represents a mutation input for updating controlobjectives.
 type UpdateControlObjectiveInput struct {
 	ClearTags                 bool
-	Tags                      []string
+	Tags                      []string `json:"tags,omitempty"`
 	AppendTags                []string
 	ClearRevision             bool
-	Revision                  *string
+	Revision                  *string `json:"revision,omitempty"`
 	ClearInternalNotes        bool
-	InternalNotes             *string
+	InternalNotes             *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID     bool
-	SystemInternalID          *string
-	Name                      *string
+	SystemInternalID          *string `json:"system_internal_id,omitempty"`
+	Name                      *string `json:"name,omitempty"`
 	ClearDesiredOutcome       bool
-	DesiredOutcome            *string
+	DesiredOutcome            *string `json:"desired_outcome,omitempty"`
 	ClearDesiredOutcomeJSON   bool
-	DesiredOutcomeJSON        []interface{}
+	DesiredOutcomeJSON        []interface{} `json:"desired_outcome_json,omitempty"`
 	AppendDesiredOutcomeJSON  []interface{}
 	ClearStatus               bool
-	Status                    *enums.ObjectiveStatus
+	Status                    *enums.ObjectiveStatus `json:"status,omitempty"`
 	ClearSource               bool
-	Source                    *enums.ControlSource
+	Source                    *enums.ControlSource `json:"source,omitempty"`
 	ClearControlObjectiveType bool
-	ControlObjectiveType      *string
+	ControlObjectiveType      *string `json:"control_objective_type,omitempty"`
 	ClearCategory             bool
-	Category                  *string
+	Category                  *string `json:"category,omitempty"`
 	ClearSubcategory          bool
-	Subcategory               *string
+	Subcategory               *string `json:"subcategory,omitempty"`
 	ClearBlockedGroups        bool
 	AddBlockedGroupIDs        []string
 	RemoveBlockedGroupIDs     []string
@@ -4851,12 +4887,12 @@ func (c *ControlObjectiveUpdateOne) SetInput(i UpdateControlObjectiveInput) *Con
 
 // CreateCustomDomainInput represents a mutation input for creating customdomains.
 type CreateCustomDomainInput struct {
-	Tags              []string
-	InternalNotes     *string
-	SystemInternalID  *string
-	CnameRecord       string
-	TrustCenterID     *string
-	DomainType        *enums.CustomDomainType
+	Tags              []string                `json:"tags,omitempty"`
+	InternalNotes     *string                 `json:"internal_notes,omitempty"`
+	SystemInternalID  *string                 `json:"system_internal_id,omitempty"`
+	CnameRecord       string                  `json:"cname_record,omitempty"`
+	TrustCenterID     *string                 `json:"trust_center_id,omitempty"`
+	DomainType        *enums.CustomDomainType `json:"domain_type,omitempty"`
 	OwnerID           *string
 	MappableDomainID  string
 	DNSVerificationID *string
@@ -4898,14 +4934,14 @@ func (c *CustomDomainCreate) SetInput(i CreateCustomDomainInput) *CustomDomainCr
 // UpdateCustomDomainInput represents a mutation input for updating customdomains.
 type UpdateCustomDomainInput struct {
 	ClearTags             bool
-	Tags                  []string
+	Tags                  []string `json:"tags,omitempty"`
 	AppendTags            []string
 	ClearInternalNotes    bool
-	InternalNotes         *string
+	InternalNotes         *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID bool
-	SystemInternalID      *string
+	SystemInternalID      *string `json:"system_internal_id,omitempty"`
 	ClearTrustCenterID    bool
-	TrustCenterID         *string
+	TrustCenterID         *string `json:"trust_center_id,omitempty"`
 	ClearOwner            bool
 	OwnerID               *string
 	ClearDNSVerification  bool
@@ -4969,14 +5005,14 @@ func (c *CustomDomainUpdateOne) SetInput(i UpdateCustomDomainInput) *CustomDomai
 
 // CreateCustomTypeEnumInput represents a mutation input for creating customtypeenums.
 type CreateCustomTypeEnumInput struct {
-	InternalNotes     *string
-	SystemInternalID  *string
-	ObjectType        string
-	Field             *string
-	Name              string
-	Description       *string
-	Color             *string
-	Icon              *string
+	InternalNotes     *string `json:"internal_notes,omitempty"`
+	SystemInternalID  *string `json:"system_internal_id,omitempty"`
+	ObjectType        string  `json:"object_type,omitempty"`
+	Field             *string `json:"field,omitempty"`
+	Name              string  `json:"name,omitempty"`
+	Description       *string `json:"description,omitempty"`
+	Color             *string `json:"color,omitempty"`
+	Icon              *string `json:"icon,omitempty"`
 	OwnerID           *string
 	TaskIDs           []string
 	ControlIDs        []string
@@ -5056,15 +5092,15 @@ func (c *CustomTypeEnumCreate) SetInput(i CreateCustomTypeEnumInput) *CustomType
 // UpdateCustomTypeEnumInput represents a mutation input for updating customtypeenums.
 type UpdateCustomTypeEnumInput struct {
 	ClearInternalNotes      bool
-	InternalNotes           *string
+	InternalNotes           *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID   bool
-	SystemInternalID        *string
+	SystemInternalID        *string `json:"system_internal_id,omitempty"`
 	ClearDescription        bool
-	Description             *string
+	Description             *string `json:"description,omitempty"`
 	ClearColor              bool
-	Color                   *string
+	Color                   *string `json:"color,omitempty"`
 	ClearIcon               bool
-	Icon                    *string
+	Icon                    *string `json:"icon,omitempty"`
 	ClearOwner              bool
 	OwnerID                 *string
 	ClearTasks              bool
@@ -5243,15 +5279,15 @@ func (c *CustomTypeEnumUpdateOne) SetInput(i UpdateCustomTypeEnumInput) *CustomT
 
 // CreateDNSVerificationInput represents a mutation input for creating dnsverifications.
 type CreateDNSVerificationInput struct {
-	Tags                        []string
-	CloudflareHostnameID        string
-	DNSTxtRecord                string
-	DNSTxtValue                 string
-	DNSVerificationStatus       *enums.DNSVerificationStatus
-	DNSVerificationStatusReason *string
-	AcmeChallengePath           *string
-	ExpectedAcmeChallengeValue  *string
-	AcmeChallengeStatus         *enums.SSLVerificationStatus
+	Tags                        []string                     `json:"tags,omitempty"`
+	CloudflareHostnameID        string                       `json:"cloudflare_hostname_id,omitempty"`
+	DNSTxtRecord                string                       `json:"dns_txt_record,omitempty"`
+	DNSTxtValue                 string                       `json:"dns_txt_value,omitempty"`
+	DNSVerificationStatus       *enums.DNSVerificationStatus `json:"dns_verification_status,omitempty"`
+	DNSVerificationStatusReason *string                      `json:"dns_verification_status_reason,omitempty"`
+	AcmeChallengePath           *string                      `json:"acme_challenge_path,omitempty"`
+	ExpectedAcmeChallengeValue  *string                      `json:"expected_acme_challenge_value,omitempty"`
+	AcmeChallengeStatus         *enums.SSLVerificationStatus `json:"acme_challenge_status,omitempty"`
 	OwnerID                     *string
 	CustomDomainIDs             []string
 }
@@ -5296,20 +5332,20 @@ func (c *DNSVerificationCreate) SetInput(i CreateDNSVerificationInput) *DNSVerif
 // UpdateDNSVerificationInput represents a mutation input for updating dnsverifications.
 type UpdateDNSVerificationInput struct {
 	ClearTags                        bool
-	Tags                             []string
+	Tags                             []string `json:"tags,omitempty"`
 	AppendTags                       []string
-	DNSTxtRecord                     *string
-	DNSTxtValue                      *string
-	DNSVerificationStatus            *enums.DNSVerificationStatus
+	DNSTxtRecord                     *string                      `json:"dns_txt_record,omitempty"`
+	DNSTxtValue                      *string                      `json:"dns_txt_value,omitempty"`
+	DNSVerificationStatus            *enums.DNSVerificationStatus `json:"dns_verification_status,omitempty"`
 	ClearDNSVerificationStatusReason bool
-	DNSVerificationStatusReason      *string
+	DNSVerificationStatusReason      *string `json:"dns_verification_status_reason,omitempty"`
 	ClearAcmeChallengePath           bool
-	AcmeChallengePath                *string
+	AcmeChallengePath                *string `json:"acme_challenge_path,omitempty"`
 	ClearExpectedAcmeChallengeValue  bool
-	ExpectedAcmeChallengeValue       *string
-	AcmeChallengeStatus              *enums.SSLVerificationStatus
+	ExpectedAcmeChallengeValue       *string                      `json:"expected_acme_challenge_value,omitempty"`
+	AcmeChallengeStatus              *enums.SSLVerificationStatus `json:"acme_challenge_status,omitempty"`
 	ClearAcmeChallengeStatusReason   bool
-	AcmeChallengeStatusReason        *string
+	AcmeChallengeStatusReason        *string `json:"acme_challenge_status_reason,omitempty"`
 	ClearOwner                       bool
 	OwnerID                          *string
 	ClearCustomDomains               bool
@@ -5395,39 +5431,39 @@ func (c *DNSVerificationUpdateOne) SetInput(i UpdateDNSVerificationInput) *DNSVe
 
 // CreateDirectoryAccountInput represents a mutation input for creating directoryaccounts.
 type CreateDirectoryAccountInput struct {
-	Tags                 []string
-	EnvironmentName      *string
-	ScopeName            *string
-	DirectoryInstanceID  *string
-	DirectoryName        *string
-	ExternalID           string
-	SecondaryKey         *string
-	CanonicalEmail       *string
-	EmailAliases         []string
-	PhoneNumber          *string
-	DisplayName          *string
-	AvatarRemoteURL      *string
-	AvatarUpdatedAt      *time.Time
-	GivenName            *string
-	FamilyName           *string
-	JobTitle             *string
-	Department           *string
-	OrganizationUnit     *string
-	AccountType          *enums.DirectoryAccountType
-	Status               *enums.DirectoryAccountStatus
-	MfaState             *enums.DirectoryAccountMFAState
-	LastSeenIP           *string
-	LastLoginAt          *time.Time
-	FirstSeenAt          *time.Time
-	LastSeenAt           *time.Time
-	AddedAt              *time.Time
-	RemovedAt            *time.Time
-	ObservedAt           *time.Time
-	ProfileHash          *string
-	Profile              map[string]interface{}
-	Metadata             map[string]interface{}
-	SourceVersion        *string
-	PrimarySource        *bool
+	Tags                 []string                        `json:"tags,omitempty"`
+	EnvironmentName      *string                         `json:"environment_name,omitempty"`
+	ScopeName            *string                         `json:"scope_name,omitempty"`
+	DirectoryInstanceID  *string                         `json:"directory_instance_id,omitempty"`
+	DirectoryName        *string                         `json:"directory_name,omitempty"`
+	ExternalID           string                          `json:"external_id,omitempty"`
+	SecondaryKey         *string                         `json:"secondary_key,omitempty"`
+	CanonicalEmail       *string                         `json:"canonical_email,omitempty"`
+	EmailAliases         []string                        `json:"email_aliases,omitempty"`
+	PhoneNumber          *string                         `json:"phone_number,omitempty"`
+	DisplayName          *string                         `json:"display_name,omitempty"`
+	AvatarRemoteURL      *string                         `json:"avatar_remote_url,omitempty"`
+	AvatarUpdatedAt      *time.Time                      `json:"avatar_updated_at,omitempty"`
+	GivenName            *string                         `json:"given_name,omitempty"`
+	FamilyName           *string                         `json:"family_name,omitempty"`
+	JobTitle             *string                         `json:"job_title,omitempty"`
+	Department           *string                         `json:"department,omitempty"`
+	OrganizationUnit     *string                         `json:"organization_unit,omitempty"`
+	AccountType          *enums.DirectoryAccountType     `json:"account_type,omitempty"`
+	Status               *enums.DirectoryAccountStatus   `json:"status,omitempty"`
+	MfaState             *enums.DirectoryAccountMFAState `json:"mfa_state,omitempty"`
+	LastSeenIP           *string                         `json:"last_seen_ip,omitempty"`
+	LastLoginAt          *time.Time                      `json:"last_login_at,omitempty"`
+	FirstSeenAt          *time.Time                      `json:"first_seen_at,omitempty"`
+	LastSeenAt           *time.Time                      `json:"last_seen_at,omitempty"`
+	AddedAt              *time.Time                      `json:"added_at,omitempty"`
+	RemovedAt            *time.Time                      `json:"removed_at,omitempty"`
+	ObservedAt           *time.Time                      `json:"observed_at,omitempty"`
+	ProfileHash          *string                         `json:"profile_hash,omitempty"`
+	Profile              map[string]interface{}          `json:"profile,omitempty"`
+	Metadata             map[string]interface{}          `json:"metadata,omitempty"`
+	SourceVersion        *string                         `json:"source_version,omitempty"`
+	PrimarySource        *bool                           `json:"primary_source,omitempty"`
 	OwnerID              *string
 	EnvironmentID        *string
 	ScopeID              *string
@@ -5584,65 +5620,65 @@ func (c *DirectoryAccountCreate) SetInput(i CreateDirectoryAccountInput) *Direct
 // UpdateDirectoryAccountInput represents a mutation input for updating directoryaccounts.
 type UpdateDirectoryAccountInput struct {
 	ClearTags                  bool
-	Tags                       []string
+	Tags                       []string `json:"tags,omitempty"`
 	AppendTags                 []string
 	ClearEnvironmentName       bool
-	EnvironmentName            *string
+	EnvironmentName            *string `json:"environment_name,omitempty"`
 	ClearScopeName             bool
-	ScopeName                  *string
+	ScopeName                  *string `json:"scope_name,omitempty"`
 	ClearDirectoryInstanceID   bool
-	DirectoryInstanceID        *string
+	DirectoryInstanceID        *string `json:"directory_instance_id,omitempty"`
 	ClearDirectoryName         bool
-	DirectoryName              *string
+	DirectoryName              *string `json:"directory_name,omitempty"`
 	ClearSecondaryKey          bool
-	SecondaryKey               *string
+	SecondaryKey               *string `json:"secondary_key,omitempty"`
 	ClearCanonicalEmail        bool
-	CanonicalEmail             *string
+	CanonicalEmail             *string `json:"canonical_email,omitempty"`
 	ClearEmailAliases          bool
-	EmailAliases               []string
+	EmailAliases               []string `json:"email_aliases,omitempty"`
 	AppendEmailAliases         []string
 	ClearPhoneNumber           bool
-	PhoneNumber                *string
+	PhoneNumber                *string `json:"phone_number,omitempty"`
 	ClearDisplayName           bool
-	DisplayName                *string
+	DisplayName                *string `json:"display_name,omitempty"`
 	ClearAvatarRemoteURL       bool
-	AvatarRemoteURL            *string
+	AvatarRemoteURL            *string `json:"avatar_remote_url,omitempty"`
 	ClearAvatarUpdatedAt       bool
-	AvatarUpdatedAt            *time.Time
+	AvatarUpdatedAt            *time.Time `json:"avatar_updated_at,omitempty"`
 	ClearGivenName             bool
-	GivenName                  *string
+	GivenName                  *string `json:"given_name,omitempty"`
 	ClearFamilyName            bool
-	FamilyName                 *string
+	FamilyName                 *string `json:"family_name,omitempty"`
 	ClearJobTitle              bool
-	JobTitle                   *string
+	JobTitle                   *string `json:"job_title,omitempty"`
 	ClearDepartment            bool
-	Department                 *string
+	Department                 *string `json:"department,omitempty"`
 	ClearOrganizationUnit      bool
-	OrganizationUnit           *string
+	OrganizationUnit           *string `json:"organization_unit,omitempty"`
 	ClearAccountType           bool
-	AccountType                *enums.DirectoryAccountType
-	Status                     *enums.DirectoryAccountStatus
-	MfaState                   *enums.DirectoryAccountMFAState
+	AccountType                *enums.DirectoryAccountType     `json:"account_type,omitempty"`
+	Status                     *enums.DirectoryAccountStatus   `json:"status,omitempty"`
+	MfaState                   *enums.DirectoryAccountMFAState `json:"mfa_state,omitempty"`
 	ClearLastSeenIP            bool
-	LastSeenIP                 *string
+	LastSeenIP                 *string `json:"last_seen_ip,omitempty"`
 	ClearLastLoginAt           bool
-	LastLoginAt                *time.Time
+	LastLoginAt                *time.Time `json:"last_login_at,omitempty"`
 	ClearFirstSeenAt           bool
-	FirstSeenAt                *time.Time
+	FirstSeenAt                *time.Time `json:"first_seen_at,omitempty"`
 	ClearLastSeenAt            bool
-	LastSeenAt                 *time.Time
+	LastSeenAt                 *time.Time `json:"last_seen_at,omitempty"`
 	ClearAddedAt               bool
-	AddedAt                    *time.Time
+	AddedAt                    *time.Time `json:"added_at,omitempty"`
 	ClearRemovedAt             bool
-	RemovedAt                  *time.Time
-	ProfileHash                *string
+	RemovedAt                  *time.Time `json:"removed_at,omitempty"`
+	ProfileHash                *string    `json:"profile_hash,omitempty"`
 	ClearProfile               bool
-	Profile                    map[string]interface{}
+	Profile                    map[string]interface{} `json:"profile,omitempty"`
 	ClearMetadata              bool
-	Metadata                   map[string]interface{}
+	Metadata                   map[string]interface{} `json:"metadata,omitempty"`
 	ClearSourceVersion         bool
-	SourceVersion              *string
-	PrimarySource              *bool
+	SourceVersion              *string `json:"source_version,omitempty"`
+	PrimarySource              *bool   `json:"primary_source,omitempty"`
 	ClearEnvironment           bool
 	EnvironmentID              *string
 	ClearScope                 bool
@@ -5911,28 +5947,28 @@ func (c *DirectoryAccountUpdateOne) SetInput(i UpdateDirectoryAccountInput) *Dir
 
 // CreateDirectoryGroupInput represents a mutation input for creating directorygroups.
 type CreateDirectoryGroupInput struct {
-	Tags                   []string
-	EnvironmentName        *string
-	ScopeName              *string
-	DirectoryInstanceID    *string
-	ExternalID             string
-	Email                  *string
-	DisplayName            *string
-	Description            *string
-	Classification         *enums.DirectoryGroupClassification
-	Status                 *enums.DirectoryGroupStatus
-	ExternalSharingAllowed *bool
-	MemberCount            *int
-	FirstSeenAt            *time.Time
-	LastSeenAt             *time.Time
-	AddedAt                *time.Time
-	RemovedAt              *time.Time
-	ObservedAt             *time.Time
-	ProfileHash            *string
-	Profile                map[string]interface{}
-	Metadata               map[string]interface{}
-	SourceVersion          *string
-	DirectoryName          *string
+	Tags                   []string                            `json:"tags,omitempty"`
+	EnvironmentName        *string                             `json:"environment_name,omitempty"`
+	ScopeName              *string                             `json:"scope_name,omitempty"`
+	DirectoryInstanceID    *string                             `json:"directory_instance_id,omitempty"`
+	ExternalID             string                              `json:"external_id,omitempty"`
+	Email                  *string                             `json:"email,omitempty"`
+	DisplayName            *string                             `json:"display_name,omitempty"`
+	Description            *string                             `json:"description,omitempty"`
+	Classification         *enums.DirectoryGroupClassification `json:"classification,omitempty"`
+	Status                 *enums.DirectoryGroupStatus         `json:"status,omitempty"`
+	ExternalSharingAllowed *bool                               `json:"external_sharing_allowed,omitempty"`
+	MemberCount            *int                                `json:"member_count,omitempty"`
+	FirstSeenAt            *time.Time                          `json:"first_seen_at,omitempty"`
+	LastSeenAt             *time.Time                          `json:"last_seen_at,omitempty"`
+	AddedAt                *time.Time                          `json:"added_at,omitempty"`
+	RemovedAt              *time.Time                          `json:"removed_at,omitempty"`
+	ObservedAt             *time.Time                          `json:"observed_at,omitempty"`
+	ProfileHash            *string                             `json:"profile_hash,omitempty"`
+	Profile                map[string]interface{}              `json:"profile,omitempty"`
+	Metadata               map[string]interface{}              `json:"metadata,omitempty"`
+	SourceVersion          *string                             `json:"source_version,omitempty"`
+	DirectoryName          *string                             `json:"directory_name,omitempty"`
 	OwnerID                *string
 	EnvironmentID          *string
 	ScopeID                *string
@@ -6036,43 +6072,43 @@ func (c *DirectoryGroupCreate) SetInput(i CreateDirectoryGroupInput) *DirectoryG
 // UpdateDirectoryGroupInput represents a mutation input for updating directorygroups.
 type UpdateDirectoryGroupInput struct {
 	ClearTags                   bool
-	Tags                        []string
+	Tags                        []string `json:"tags,omitempty"`
 	AppendTags                  []string
 	ClearEnvironmentName        bool
-	EnvironmentName             *string
+	EnvironmentName             *string `json:"environment_name,omitempty"`
 	ClearScopeName              bool
-	ScopeName                   *string
+	ScopeName                   *string `json:"scope_name,omitempty"`
 	ClearDirectoryInstanceID    bool
-	DirectoryInstanceID         *string
+	DirectoryInstanceID         *string `json:"directory_instance_id,omitempty"`
 	ClearEmail                  bool
-	Email                       *string
+	Email                       *string `json:"email,omitempty"`
 	ClearDisplayName            bool
-	DisplayName                 *string
+	DisplayName                 *string `json:"display_name,omitempty"`
 	ClearDescription            bool
-	Description                 *string
-	Classification              *enums.DirectoryGroupClassification
-	Status                      *enums.DirectoryGroupStatus
+	Description                 *string                             `json:"description,omitempty"`
+	Classification              *enums.DirectoryGroupClassification `json:"classification,omitempty"`
+	Status                      *enums.DirectoryGroupStatus         `json:"status,omitempty"`
 	ClearExternalSharingAllowed bool
-	ExternalSharingAllowed      *bool
+	ExternalSharingAllowed      *bool `json:"external_sharing_allowed,omitempty"`
 	ClearMemberCount            bool
-	MemberCount                 *int
+	MemberCount                 *int `json:"member_count,omitempty"`
 	ClearFirstSeenAt            bool
-	FirstSeenAt                 *time.Time
+	FirstSeenAt                 *time.Time `json:"first_seen_at,omitempty"`
 	ClearLastSeenAt             bool
-	LastSeenAt                  *time.Time
+	LastSeenAt                  *time.Time `json:"last_seen_at,omitempty"`
 	ClearAddedAt                bool
-	AddedAt                     *time.Time
+	AddedAt                     *time.Time `json:"added_at,omitempty"`
 	ClearRemovedAt              bool
-	RemovedAt                   *time.Time
-	ProfileHash                 *string
+	RemovedAt                   *time.Time `json:"removed_at,omitempty"`
+	ProfileHash                 *string    `json:"profile_hash,omitempty"`
 	ClearProfile                bool
-	Profile                     map[string]interface{}
+	Profile                     map[string]interface{} `json:"profile,omitempty"`
 	ClearMetadata               bool
-	Metadata                    map[string]interface{}
+	Metadata                    map[string]interface{} `json:"metadata,omitempty"`
 	ClearSourceVersion          bool
-	SourceVersion               *string
+	SourceVersion               *string `json:"source_version,omitempty"`
 	ClearDirectoryName          bool
-	DirectoryName               *string
+	DirectoryName               *string `json:"directory_name,omitempty"`
 	ClearOwner                  bool
 	OwnerID                     *string
 	ClearEnvironment            bool
@@ -6243,19 +6279,19 @@ func (c *DirectoryGroupUpdateOne) SetInput(i UpdateDirectoryGroupInput) *Directo
 
 // CreateDirectoryMembershipInput represents a mutation input for creating directorymemberships.
 type CreateDirectoryMembershipInput struct {
-	EnvironmentName      *string
-	ScopeName            *string
-	DirectoryInstanceID  *string
-	Role                 *enums.DirectoryMembershipRole
-	Source               *string
-	DirectoryName        *string
-	FirstSeenAt          *time.Time
-	LastSeenAt           *time.Time
-	AddedAt              *time.Time
-	RemovedAt            *time.Time
-	ObservedAt           *time.Time
-	LastConfirmedRunID   *string
-	Metadata             map[string]interface{}
+	EnvironmentName      *string                        `json:"environment_name,omitempty"`
+	ScopeName            *string                        `json:"scope_name,omitempty"`
+	DirectoryInstanceID  *string                        `json:"directory_instance_id,omitempty"`
+	Role                 *enums.DirectoryMembershipRole `json:"role,omitempty"`
+	Source               *string                        `json:"source,omitempty"`
+	DirectoryName        *string                        `json:"directory_name,omitempty"`
+	FirstSeenAt          *time.Time                     `json:"first_seen_at,omitempty"`
+	LastSeenAt           *time.Time                     `json:"last_seen_at,omitempty"`
+	AddedAt              *time.Time                     `json:"added_at,omitempty"`
+	RemovedAt            *time.Time                     `json:"removed_at,omitempty"`
+	ObservedAt           *time.Time                     `json:"observed_at,omitempty"`
+	LastConfirmedRunID   *string                        `json:"last_confirmed_run_id,omitempty"`
+	Metadata             map[string]interface{}         `json:"metadata,omitempty"`
 	OwnerID              *string
 	EnvironmentID        *string
 	ScopeID              *string
@@ -6342,29 +6378,29 @@ func (c *DirectoryMembershipCreate) SetInput(i CreateDirectoryMembershipInput) *
 // UpdateDirectoryMembershipInput represents a mutation input for updating directorymemberships.
 type UpdateDirectoryMembershipInput struct {
 	ClearEnvironmentName       bool
-	EnvironmentName            *string
+	EnvironmentName            *string `json:"environment_name,omitempty"`
 	ClearScopeName             bool
-	ScopeName                  *string
+	ScopeName                  *string `json:"scope_name,omitempty"`
 	ClearDirectoryInstanceID   bool
-	DirectoryInstanceID        *string
+	DirectoryInstanceID        *string `json:"directory_instance_id,omitempty"`
 	ClearRole                  bool
-	Role                       *enums.DirectoryMembershipRole
+	Role                       *enums.DirectoryMembershipRole `json:"role,omitempty"`
 	ClearSource                bool
-	Source                     *string
+	Source                     *string `json:"source,omitempty"`
 	ClearDirectoryName         bool
-	DirectoryName              *string
+	DirectoryName              *string `json:"directory_name,omitempty"`
 	ClearFirstSeenAt           bool
-	FirstSeenAt                *time.Time
+	FirstSeenAt                *time.Time `json:"first_seen_at,omitempty"`
 	ClearLastSeenAt            bool
-	LastSeenAt                 *time.Time
+	LastSeenAt                 *time.Time `json:"last_seen_at,omitempty"`
 	ClearAddedAt               bool
-	AddedAt                    *time.Time
+	AddedAt                    *time.Time `json:"added_at,omitempty"`
 	ClearRemovedAt             bool
-	RemovedAt                  *time.Time
+	RemovedAt                  *time.Time `json:"removed_at,omitempty"`
 	ClearLastConfirmedRunID    bool
-	LastConfirmedRunID         *string
+	LastConfirmedRunID         *string `json:"last_confirmed_run_id,omitempty"`
 	ClearMetadata              bool
-	Metadata                   map[string]interface{}
+	Metadata                   map[string]interface{} `json:"metadata,omitempty"`
 	ClearOwner                 bool
 	OwnerID                    *string
 	ClearEnvironment           bool
@@ -6505,18 +6541,18 @@ func (c *DirectoryMembershipUpdateOne) SetInput(i UpdateDirectoryMembershipInput
 
 // CreateDirectorySyncRunInput represents a mutation input for creating directorysyncruns.
 type CreateDirectorySyncRunInput struct {
-	EnvironmentName     *string
-	ScopeName           *string
-	DirectoryInstanceID *string
-	Status              *enums.DirectorySyncRunStatus
-	StartedAt           *time.Time
-	CompletedAt         *time.Time
-	SourceCursor        *string
-	FullCount           *int
-	DeltaCount          *int
-	Error               *string
-	RawManifestFileID   *string
-	Stats               map[string]interface{}
+	EnvironmentName     *string                       `json:"environment_name,omitempty"`
+	ScopeName           *string                       `json:"scope_name,omitempty"`
+	DirectoryInstanceID *string                       `json:"directory_instance_id,omitempty"`
+	Status              *enums.DirectorySyncRunStatus `json:"status,omitempty"`
+	StartedAt           *time.Time                    `json:"started_at,omitempty"`
+	CompletedAt         *time.Time                    `json:"completed_at,omitempty"`
+	SourceCursor        *string                       `json:"source_cursor,omitempty"`
+	FullCount           *int                          `json:"full_count,omitempty"`
+	DeltaCount          *int                          `json:"delta_count,omitempty"`
+	Error               *string                       `json:"error,omitempty"`
+	RawManifestFileID   *string                       `json:"raw_manifest_file_id,omitempty"`
+	Stats               map[string]interface{}        `json:"stats,omitempty"`
 	OwnerID             *string
 	EnvironmentID       *string
 	ScopeID             *string
@@ -6594,25 +6630,25 @@ func (c *DirectorySyncRunCreate) SetInput(i CreateDirectorySyncRunInput) *Direct
 // UpdateDirectorySyncRunInput represents a mutation input for updating directorysyncruns.
 type UpdateDirectorySyncRunInput struct {
 	ClearEnvironmentName      bool
-	EnvironmentName           *string
+	EnvironmentName           *string `json:"environment_name,omitempty"`
 	ClearScopeName            bool
-	ScopeName                 *string
+	ScopeName                 *string `json:"scope_name,omitempty"`
 	ClearDirectoryInstanceID  bool
-	DirectoryInstanceID       *string
-	Status                    *enums.DirectorySyncRunStatus
-	StartedAt                 *time.Time
+	DirectoryInstanceID       *string                       `json:"directory_instance_id,omitempty"`
+	Status                    *enums.DirectorySyncRunStatus `json:"status,omitempty"`
+	StartedAt                 *time.Time                    `json:"started_at,omitempty"`
 	ClearCompletedAt          bool
-	CompletedAt               *time.Time
+	CompletedAt               *time.Time `json:"completed_at,omitempty"`
 	ClearSourceCursor         bool
-	SourceCursor              *string
-	FullCount                 *int
-	DeltaCount                *int
+	SourceCursor              *string `json:"source_cursor,omitempty"`
+	FullCount                 *int    `json:"full_count,omitempty"`
+	DeltaCount                *int    `json:"delta_count,omitempty"`
 	ClearError                bool
-	Error                     *string
+	Error                     *string `json:"error,omitempty"`
 	ClearRawManifestFileID    bool
-	RawManifestFileID         *string
+	RawManifestFileID         *string `json:"raw_manifest_file_id,omitempty"`
 	ClearStats                bool
-	Stats                     map[string]interface{}
+	Stats                     map[string]interface{} `json:"stats,omitempty"`
 	ClearOwner                bool
 	OwnerID                   *string
 	ClearEnvironment          bool
@@ -6741,8 +6777,8 @@ func (c *DirectorySyncRunUpdateOne) SetInput(i UpdateDirectorySyncRunInput) *Dir
 
 // CreateDiscussionInput represents a mutation input for creating discussions.
 type CreateDiscussionInput struct {
-	ExternalID       *string
-	IsResolved       *bool
+	ExternalID       *string `json:"external_id,omitempty"`
+	IsResolved       *bool   `json:"is_resolved,omitempty"`
 	OwnerID          *string
 	CommentIDs       []string
 	ControlID        *string
@@ -6792,8 +6828,8 @@ func (c *DiscussionCreate) SetInput(i CreateDiscussionInput) *DiscussionCreate {
 // UpdateDiscussionInput represents a mutation input for updating discussions.
 type UpdateDiscussionInput struct {
 	ClearExternalID     bool
-	ExternalID          *string
-	IsResolved          *bool
+	ExternalID          *string `json:"external_id,omitempty"`
+	IsResolved          *bool   `json:"is_resolved,omitempty"`
 	ClearComments       bool
 	AddCommentIDs       []string
 	RemoveCommentIDs    []string
@@ -6875,10 +6911,10 @@ func (c *DiscussionUpdateOne) SetInput(i UpdateDiscussionInput) *DiscussionUpdat
 
 // CreateDocumentDataInput represents a mutation input for creating documentdataslice.
 type CreateDocumentDataInput struct {
-	Tags            []string
-	EnvironmentName *string
-	ScopeName       *string
-	Data            map[string]interface{}
+	Tags            []string               `json:"tags,omitempty"`
+	EnvironmentName *string                `json:"environment_name,omitempty"`
+	ScopeName       *string                `json:"scope_name,omitempty"`
+	Data            map[string]interface{} `json:"data,omitempty"`
 	OwnerID         *string
 	EnvironmentID   *string
 	ScopeID         *string
@@ -6930,13 +6966,13 @@ func (c *DocumentDataCreate) SetInput(i CreateDocumentDataInput) *DocumentDataCr
 // UpdateDocumentDataInput represents a mutation input for updating documentdataslice.
 type UpdateDocumentDataInput struct {
 	ClearTags            bool
-	Tags                 []string
+	Tags                 []string `json:"tags,omitempty"`
 	AppendTags           []string
 	ClearEnvironmentName bool
-	EnvironmentName      *string
+	EnvironmentName      *string `json:"environment_name,omitempty"`
 	ClearScopeName       bool
-	ScopeName            *string
-	Data                 map[string]interface{}
+	ScopeName            *string                `json:"scope_name,omitempty"`
+	Data                 map[string]interface{} `json:"data,omitempty"`
 	ClearEnvironment     bool
 	EnvironmentID        *string
 	ClearScope           bool
@@ -7029,25 +7065,25 @@ func (c *DocumentDataUpdateOne) SetInput(i UpdateDocumentDataInput) *DocumentDat
 
 // CreateEmailTemplateInput represents a mutation input for creating emailtemplates.
 type CreateEmailTemplateInput struct {
-	Revision                *string
-	InternalNotes           *string
-	SystemInternalID        *string
-	Key                     string
-	Name                    string
-	Description             *string
-	Format                  *enums.NotificationTemplateFormat
-	Locale                  *string
-	SubjectTemplate         *string
-	PreheaderTemplate       *string
-	BodyTemplate            *string
-	TextTemplate            *string
-	Jsonconfig              map[string]interface{}
-	Uischema                map[string]interface{}
-	Metadata                map[string]interface{}
-	Active                  *bool
-	Version                 *int
-	TemplateContext         *enums.TemplateContext
-	Defaults                map[string]interface{}
+	Revision                *string                           `json:"revision,omitempty"`
+	InternalNotes           *string                           `json:"internal_notes,omitempty"`
+	SystemInternalID        *string                           `json:"system_internal_id,omitempty"`
+	Key                     string                            `json:"key,omitempty"`
+	Name                    string                            `json:"name,omitempty"`
+	Description             *string                           `json:"description,omitempty"`
+	Format                  *enums.NotificationTemplateFormat `json:"format,omitempty"`
+	Locale                  *string                           `json:"locale,omitempty"`
+	SubjectTemplate         *string                           `json:"subject_template,omitempty"`
+	PreheaderTemplate       *string                           `json:"preheader_template,omitempty"`
+	BodyTemplate            *string                           `json:"body_template,omitempty"`
+	TextTemplate            *string                           `json:"text_template,omitempty"`
+	Jsonconfig              map[string]interface{}            `json:"jsonconfig,omitempty"`
+	Uischema                map[string]interface{}            `json:"uischema,omitempty"`
+	Metadata                map[string]interface{}            `json:"metadata,omitempty"`
+	Active                  *bool                             `json:"active,omitempty"`
+	Version                 *int                              `json:"version,omitempty"`
+	TemplateContext         *enums.TemplateContext            `json:"template_context,omitempty"`
+	Defaults                map[string]interface{}            `json:"defaults,omitempty"`
 	OwnerID                 *string
 	BlockedGroupIDs         []string
 	EditorIDs               []string
@@ -7160,38 +7196,38 @@ func (c *EmailTemplateCreate) SetInput(i CreateEmailTemplateInput) *EmailTemplat
 // UpdateEmailTemplateInput represents a mutation input for updating emailtemplates.
 type UpdateEmailTemplateInput struct {
 	ClearRevision                 bool
-	Revision                      *string
+	Revision                      *string `json:"revision,omitempty"`
 	ClearInternalNotes            bool
-	InternalNotes                 *string
+	InternalNotes                 *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID         bool
-	SystemInternalID              *string
-	Key                           *string
-	Name                          *string
+	SystemInternalID              *string `json:"system_internal_id,omitempty"`
+	Key                           *string `json:"key,omitempty"`
+	Name                          *string `json:"name,omitempty"`
 	ClearDescription              bool
-	Description                   *string
+	Description                   *string `json:"description,omitempty"`
 	ClearFormat                   bool
-	Format                        *enums.NotificationTemplateFormat
-	Locale                        *string
+	Format                        *enums.NotificationTemplateFormat `json:"format,omitempty"`
+	Locale                        *string                           `json:"locale,omitempty"`
 	ClearSubjectTemplate          bool
-	SubjectTemplate               *string
+	SubjectTemplate               *string `json:"subject_template,omitempty"`
 	ClearPreheaderTemplate        bool
-	PreheaderTemplate             *string
+	PreheaderTemplate             *string `json:"preheader_template,omitempty"`
 	ClearBodyTemplate             bool
-	BodyTemplate                  *string
+	BodyTemplate                  *string `json:"body_template,omitempty"`
 	ClearTextTemplate             bool
-	TextTemplate                  *string
+	TextTemplate                  *string `json:"text_template,omitempty"`
 	ClearJsonconfig               bool
-	Jsonconfig                    map[string]interface{}
+	Jsonconfig                    map[string]interface{} `json:"jsonconfig,omitempty"`
 	ClearUischema                 bool
-	Uischema                      map[string]interface{}
+	Uischema                      map[string]interface{} `json:"uischema,omitempty"`
 	ClearMetadata                 bool
-	Metadata                      map[string]interface{}
-	Active                        *bool
-	Version                       *int
+	Metadata                      map[string]interface{} `json:"metadata,omitempty"`
+	Active                        *bool                  `json:"active,omitempty"`
+	Version                       *int                   `json:"version,omitempty"`
 	ClearTemplateContext          bool
-	TemplateContext               *enums.TemplateContext
+	TemplateContext               *enums.TemplateContext `json:"template_context,omitempty"`
 	ClearDefaults                 bool
-	Defaults                      map[string]interface{}
+	Defaults                      map[string]interface{} `json:"defaults,omitempty"`
 	ClearBlockedGroups            bool
 	AddBlockedGroupIDs            []string
 	RemoveBlockedGroupIDs         []string
@@ -7415,50 +7451,50 @@ func (c *EmailTemplateUpdateOne) SetInput(i UpdateEmailTemplateInput) *EmailTemp
 
 // CreateEntityInput represents a mutation input for creating entities.
 type CreateEntityInput struct {
-	Tags                                  []string
-	InternalOwner                         *string
-	ReviewedBy                            *string
-	LastReviewedAt                        *models.DateTime
-	InternalNotes                         *string
-	SystemInternalID                      *string
-	EntityRelationshipStateName           *string
-	EntitySecurityQuestionnaireStatusName *string
-	EntitySourceTypeName                  *string
-	EnvironmentName                       *string
-	ScopeName                             *string
-	Name                                  *string
-	DisplayName                           *string
-	Description                           *string
-	Domains                               []string
-	Status                                *enums.EntityStatus
-	ApprovedForUse                        *bool
-	LinkedAssetIds                        []string
-	HasSoc2                               *bool
-	Soc2PeriodEnd                         *models.DateTime
-	ContractStartDate                     *models.DateTime
-	ContractEndDate                       *models.DateTime
-	AutoRenews                            *bool
-	TerminationNoticeDays                 *int
-	AnnualSpend                           *float64
-	SpendCurrency                         *string
-	BillingModel                          *string
-	RenewalRisk                           *string
-	SSOEnforced                           *bool
-	MfaSupported                          *bool
-	MfaEnforced                           *bool
-	StatusPageURL                         *string
-	ProvidedServices                      []string
-	Links                                 []string
-	RiskRating                            *string
-	RiskScore                             *int
-	Tier                                  *enums.VendorTier
-	ReviewFrequency                       *enums.Frequency
-	NextReviewAt                          *models.DateTime
-	ContractRenewalAt                     *models.DateTime
-	VendorMetadata                        map[string]interface{}
-	LogoRemoteURL                         *string
-	ExternalID                            *string
-	ObservedAt                            *models.DateTime
+	Tags                                  []string               `json:"tags,omitempty"`
+	InternalOwner                         *string                `json:"internal_owner,omitempty"`
+	ReviewedBy                            *string                `json:"reviewed_by,omitempty"`
+	LastReviewedAt                        *models.DateTime       `json:"last_reviewed_at,omitempty"`
+	InternalNotes                         *string                `json:"internal_notes,omitempty"`
+	SystemInternalID                      *string                `json:"system_internal_id,omitempty"`
+	EntityRelationshipStateName           *string                `json:"entity_relationship_state_name,omitempty"`
+	EntitySecurityQuestionnaireStatusName *string                `json:"entity_security_questionnaire_status_name,omitempty"`
+	EntitySourceTypeName                  *string                `json:"entity_source_type_name,omitempty"`
+	EnvironmentName                       *string                `json:"environment_name,omitempty"`
+	ScopeName                             *string                `json:"scope_name,omitempty"`
+	Name                                  *string                `json:"name,omitempty"`
+	DisplayName                           *string                `json:"display_name,omitempty"`
+	Description                           *string                `json:"description,omitempty"`
+	Domains                               []string               `json:"domains,omitempty"`
+	Status                                *enums.EntityStatus    `json:"status,omitempty"`
+	ApprovedForUse                        *bool                  `json:"approved_for_use,omitempty"`
+	LinkedAssetIds                        []string               `json:"linked_asset_ids,omitempty"`
+	HasSoc2                               *bool                  `json:"has_soc2,omitempty"`
+	Soc2PeriodEnd                         *models.DateTime       `json:"soc2_period_end,omitempty"`
+	ContractStartDate                     *models.DateTime       `json:"contract_start_date,omitempty"`
+	ContractEndDate                       *models.DateTime       `json:"contract_end_date,omitempty"`
+	AutoRenews                            *bool                  `json:"auto_renews,omitempty"`
+	TerminationNoticeDays                 *int                   `json:"termination_notice_days,omitempty"`
+	AnnualSpend                           *float64               `json:"annual_spend,omitempty"`
+	SpendCurrency                         *string                `json:"spend_currency,omitempty"`
+	BillingModel                          *string                `json:"billing_model,omitempty"`
+	RenewalRisk                           *string                `json:"renewal_risk,omitempty"`
+	SSOEnforced                           *bool                  `json:"sso_enforced,omitempty"`
+	MfaSupported                          *bool                  `json:"mfa_supported,omitempty"`
+	MfaEnforced                           *bool                  `json:"mfa_enforced,omitempty"`
+	StatusPageURL                         *string                `json:"status_page_url,omitempty"`
+	ProvidedServices                      []string               `json:"provided_services,omitempty"`
+	Links                                 []string               `json:"links,omitempty"`
+	RiskRating                            *string                `json:"risk_rating,omitempty"`
+	RiskScore                             *int                   `json:"risk_score,omitempty"`
+	Tier                                  *enums.VendorTier      `json:"tier,omitempty"`
+	ReviewFrequency                       *enums.Frequency       `json:"review_frequency,omitempty"`
+	NextReviewAt                          *models.DateTime       `json:"next_review_at,omitempty"`
+	ContractRenewalAt                     *models.DateTime       `json:"contract_renewal_at,omitempty"`
+	VendorMetadata                        map[string]interface{} `json:"vendor_metadata,omitempty"`
+	LogoRemoteURL                         *string                `json:"logo_remote_url,omitempty"`
+	ExternalID                            *string                `json:"external_id,omitempty"`
+	ObservedAt                            *models.DateTime       `json:"observed_at,omitempty"`
 	OwnerID                               *string
 	BlockedGroupIDs                       []string
 	EditorIDs                             []string
@@ -7746,98 +7782,98 @@ func (c *EntityCreate) SetInput(i CreateEntityInput) *EntityCreate {
 // UpdateEntityInput represents a mutation input for updating entities.
 type UpdateEntityInput struct {
 	ClearTags                                  bool
-	Tags                                       []string
+	Tags                                       []string `json:"tags,omitempty"`
 	AppendTags                                 []string
 	ClearInternalOwner                         bool
-	InternalOwner                              *string
+	InternalOwner                              *string `json:"internal_owner,omitempty"`
 	ClearReviewedBy                            bool
-	ReviewedBy                                 *string
+	ReviewedBy                                 *string `json:"reviewed_by,omitempty"`
 	ClearLastReviewedAt                        bool
-	LastReviewedAt                             *models.DateTime
+	LastReviewedAt                             *models.DateTime `json:"last_reviewed_at,omitempty"`
 	ClearInternalNotes                         bool
-	InternalNotes                              *string
+	InternalNotes                              *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID                      bool
-	SystemInternalID                           *string
+	SystemInternalID                           *string `json:"system_internal_id,omitempty"`
 	ClearEntityRelationshipStateName           bool
-	EntityRelationshipStateName                *string
+	EntityRelationshipStateName                *string `json:"entity_relationship_state_name,omitempty"`
 	ClearEntitySecurityQuestionnaireStatusName bool
-	EntitySecurityQuestionnaireStatusName      *string
+	EntitySecurityQuestionnaireStatusName      *string `json:"entity_security_questionnaire_status_name,omitempty"`
 	ClearEntitySourceTypeName                  bool
-	EntitySourceTypeName                       *string
+	EntitySourceTypeName                       *string `json:"entity_source_type_name,omitempty"`
 	ClearEnvironmentName                       bool
-	EnvironmentName                            *string
+	EnvironmentName                            *string `json:"environment_name,omitempty"`
 	ClearScopeName                             bool
-	ScopeName                                  *string
+	ScopeName                                  *string `json:"scope_name,omitempty"`
 	ClearName                                  bool
-	Name                                       *string
+	Name                                       *string `json:"name,omitempty"`
 	ClearDisplayName                           bool
-	DisplayName                                *string
+	DisplayName                                *string `json:"display_name,omitempty"`
 	ClearDescription                           bool
-	Description                                *string
+	Description                                *string `json:"description,omitempty"`
 	ClearDomains                               bool
-	Domains                                    []string
+	Domains                                    []string `json:"domains,omitempty"`
 	AppendDomains                              []string
 	ClearStatus                                bool
-	Status                                     *enums.EntityStatus
+	Status                                     *enums.EntityStatus `json:"status,omitempty"`
 	ClearApprovedForUse                        bool
-	ApprovedForUse                             *bool
+	ApprovedForUse                             *bool `json:"approved_for_use,omitempty"`
 	ClearLinkedAssetIds                        bool
-	LinkedAssetIds                             []string
+	LinkedAssetIds                             []string `json:"linked_asset_ids,omitempty"`
 	AppendLinkedAssetIds                       []string
 	ClearHasSoc2                               bool
-	HasSoc2                                    *bool
+	HasSoc2                                    *bool `json:"has_soc2,omitempty"`
 	ClearSoc2PeriodEnd                         bool
-	Soc2PeriodEnd                              *models.DateTime
+	Soc2PeriodEnd                              *models.DateTime `json:"soc2_period_end,omitempty"`
 	ClearContractStartDate                     bool
-	ContractStartDate                          *models.DateTime
+	ContractStartDate                          *models.DateTime `json:"contract_start_date,omitempty"`
 	ClearContractEndDate                       bool
-	ContractEndDate                            *models.DateTime
+	ContractEndDate                            *models.DateTime `json:"contract_end_date,omitempty"`
 	ClearAutoRenews                            bool
-	AutoRenews                                 *bool
+	AutoRenews                                 *bool `json:"auto_renews,omitempty"`
 	ClearTerminationNoticeDays                 bool
-	TerminationNoticeDays                      *int
+	TerminationNoticeDays                      *int `json:"termination_notice_days,omitempty"`
 	ClearAnnualSpend                           bool
-	AnnualSpend                                *float64
+	AnnualSpend                                *float64 `json:"annual_spend,omitempty"`
 	ClearSpendCurrency                         bool
-	SpendCurrency                              *string
+	SpendCurrency                              *string `json:"spend_currency,omitempty"`
 	ClearBillingModel                          bool
-	BillingModel                               *string
+	BillingModel                               *string `json:"billing_model,omitempty"`
 	ClearRenewalRisk                           bool
-	RenewalRisk                                *string
+	RenewalRisk                                *string `json:"renewal_risk,omitempty"`
 	ClearSSOEnforced                           bool
-	SSOEnforced                                *bool
+	SSOEnforced                                *bool `json:"sso_enforced,omitempty"`
 	ClearMfaSupported                          bool
-	MfaSupported                               *bool
+	MfaSupported                               *bool `json:"mfa_supported,omitempty"`
 	ClearMfaEnforced                           bool
-	MfaEnforced                                *bool
+	MfaEnforced                                *bool `json:"mfa_enforced,omitempty"`
 	ClearStatusPageURL                         bool
-	StatusPageURL                              *string
+	StatusPageURL                              *string `json:"status_page_url,omitempty"`
 	ClearProvidedServices                      bool
-	ProvidedServices                           []string
+	ProvidedServices                           []string `json:"provided_services,omitempty"`
 	AppendProvidedServices                     []string
 	ClearLinks                                 bool
-	Links                                      []string
+	Links                                      []string `json:"links,omitempty"`
 	AppendLinks                                []string
 	ClearRiskRating                            bool
-	RiskRating                                 *string
+	RiskRating                                 *string `json:"risk_rating,omitempty"`
 	ClearRiskScore                             bool
-	RiskScore                                  *int
+	RiskScore                                  *int `json:"risk_score,omitempty"`
 	ClearTier                                  bool
-	Tier                                       *enums.VendorTier
+	Tier                                       *enums.VendorTier `json:"tier,omitempty"`
 	ClearReviewFrequency                       bool
-	ReviewFrequency                            *enums.Frequency
+	ReviewFrequency                            *enums.Frequency `json:"review_frequency,omitempty"`
 	ClearNextReviewAt                          bool
-	NextReviewAt                               *models.DateTime
+	NextReviewAt                               *models.DateTime `json:"next_review_at,omitempty"`
 	ClearContractRenewalAt                     bool
-	ContractRenewalAt                          *models.DateTime
+	ContractRenewalAt                          *models.DateTime `json:"contract_renewal_at,omitempty"`
 	ClearVendorMetadata                        bool
-	VendorMetadata                             map[string]interface{}
+	VendorMetadata                             map[string]interface{} `json:"vendor_metadata,omitempty"`
 	ClearLogoRemoteURL                         bool
-	LogoRemoteURL                              *string
+	LogoRemoteURL                              *string `json:"logo_remote_url,omitempty"`
 	ClearExternalID                            bool
-	ExternalID                                 *string
+	ExternalID                                 *string `json:"external_id,omitempty"`
 	ClearObservedAt                            bool
-	ObservedAt                                 *models.DateTime
+	ObservedAt                                 *models.DateTime `json:"observed_at,omitempty"`
 	ClearBlockedGroups                         bool
 	AddBlockedGroupIDs                         []string
 	RemoveBlockedGroupIDs                      []string
@@ -8501,10 +8537,10 @@ func (c *EntityUpdateOne) SetInput(i UpdateEntityInput) *EntityUpdateOne {
 
 // CreateEntityTypeInput represents a mutation input for creating entitytypes.
 type CreateEntityTypeInput struct {
-	Tags             []string
-	InternalNotes    *string
-	SystemInternalID *string
-	Name             string
+	Tags             []string `json:"tags,omitempty"`
+	InternalNotes    *string  `json:"internal_notes,omitempty"`
+	SystemInternalID *string  `json:"system_internal_id,omitempty"`
+	Name             string   `json:"name,omitempty"`
 	OwnerID          *string
 	EntityIDs        []string
 }
@@ -8538,13 +8574,13 @@ func (c *EntityTypeCreate) SetInput(i CreateEntityTypeInput) *EntityTypeCreate {
 // UpdateEntityTypeInput represents a mutation input for updating entitytypes.
 type UpdateEntityTypeInput struct {
 	ClearTags             bool
-	Tags                  []string
+	Tags                  []string `json:"tags,omitempty"`
 	AppendTags            []string
 	ClearInternalNotes    bool
-	InternalNotes         *string
+	InternalNotes         *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID bool
-	SystemInternalID      *string
-	Name                  *string
+	SystemInternalID      *string `json:"system_internal_id,omitempty"`
+	Name                  *string `json:"name,omitempty"`
 	ClearOwner            bool
 	OwnerID               *string
 	ClearEntities         bool
@@ -8609,11 +8645,11 @@ func (c *EntityTypeUpdateOne) SetInput(i UpdateEntityTypeInput) *EntityTypeUpdat
 
 // CreateEventInput represents a mutation input for creating events.
 type CreateEventInput struct {
-	Tags                   []string
-	EventID                *string
-	CorrelationID          *string
-	EventType              string
-	Metadata               map[string]interface{}
+	Tags                   []string               `json:"tags,omitempty"`
+	EventID                *string                `json:"event_id,omitempty"`
+	CorrelationID          *string                `json:"correlation_id,omitempty"`
+	EventType              string                 `json:"event_type,omitempty"`
+	Metadata               map[string]interface{} `json:"metadata,omitempty"`
 	UserIDs                []string
 	GroupIDs               []string
 	IntegrationIDs         []string
@@ -8682,15 +8718,15 @@ func (c *EventCreate) SetInput(i CreateEventInput) *EventCreate {
 // UpdateEventInput represents a mutation input for updating events.
 type UpdateEventInput struct {
 	ClearTags                    bool
-	Tags                         []string
+	Tags                         []string `json:"tags,omitempty"`
 	AppendTags                   []string
 	ClearEventID                 bool
-	EventID                      *string
+	EventID                      *string `json:"event_id,omitempty"`
 	ClearCorrelationID           bool
-	CorrelationID                *string
-	EventType                    *string
+	CorrelationID                *string `json:"correlation_id,omitempty"`
+	EventType                    *string `json:"event_type,omitempty"`
 	ClearMetadata                bool
-	Metadata                     map[string]interface{}
+	Metadata                     map[string]interface{} `json:"metadata,omitempty"`
 	ClearUsers                   bool
 	AddUserIDs                   []string
 	RemoveUserIDs                []string
@@ -8861,21 +8897,21 @@ func (c *EventUpdateOne) SetInput(i UpdateEventInput) *EventUpdateOne {
 
 // CreateEvidenceInput represents a mutation input for creating evidences.
 type CreateEvidenceInput struct {
-	Tags                     []string
-	EnvironmentName          *string
-	ScopeName                *string
-	WorkflowEligibleMarker   *bool
-	ExternalUUID             *string
-	Name                     string
-	Description              *string
-	CollectionProcedure      *string
-	CreationDate             *models.DateTime
-	RenewalDate              *models.DateTime
-	Source                   *string
-	IsAutomated              *bool
-	URL                      *string
-	Status                   *enums.EvidenceStatus
-	ReviewFrequency          *enums.Frequency
+	Tags                     []string              `json:"tags,omitempty"`
+	EnvironmentName          *string               `json:"environment_name,omitempty"`
+	ScopeName                *string               `json:"scope_name,omitempty"`
+	WorkflowEligibleMarker   *bool                 `json:"workflow_eligible_marker,omitempty"`
+	ExternalUUID             *string               `json:"external_uuid,omitempty"`
+	Name                     string                `json:"name,omitempty"`
+	Description              *string               `json:"description,omitempty"`
+	CollectionProcedure      *string               `json:"collection_procedure,omitempty"`
+	CreationDate             *models.DateTime      `json:"creation_date,omitempty"`
+	RenewalDate              *models.DateTime      `json:"renewal_date,omitempty"`
+	Source                   *string               `json:"source,omitempty"`
+	IsAutomated              *bool                 `json:"is_automated,omitempty"`
+	URL                      *string               `json:"url,omitempty"`
+	Status                   *enums.EvidenceStatus `json:"status,omitempty"`
+	ReviewFrequency          *enums.Frequency      `json:"review_frequency,omitempty"`
 	OwnerID                  *string
 	EnvironmentID            *string
 	ScopeID                  *string
@@ -8990,34 +9026,34 @@ func (c *EvidenceCreate) SetInput(i CreateEvidenceInput) *EvidenceCreate {
 // UpdateEvidenceInput represents a mutation input for updating evidences.
 type UpdateEvidenceInput struct {
 	ClearTags                      bool
-	Tags                           []string
+	Tags                           []string `json:"tags,omitempty"`
 	AppendTags                     []string
 	ClearEnvironmentName           bool
-	EnvironmentName                *string
+	EnvironmentName                *string `json:"environment_name,omitempty"`
 	ClearScopeName                 bool
-	ScopeName                      *string
+	ScopeName                      *string `json:"scope_name,omitempty"`
 	ClearWorkflowEligibleMarker    bool
-	WorkflowEligibleMarker         *bool
+	WorkflowEligibleMarker         *bool `json:"workflow_eligible_marker,omitempty"`
 	ClearExternalUUID              bool
-	ExternalUUID                   *string
-	Name                           *string
+	ExternalUUID                   *string `json:"external_uuid,omitempty"`
+	Name                           *string `json:"name,omitempty"`
 	ClearDescription               bool
-	Description                    *string
+	Description                    *string `json:"description,omitempty"`
 	ClearCollectionProcedure       bool
-	CollectionProcedure            *string
-	CreationDate                   *models.DateTime
+	CollectionProcedure            *string          `json:"collection_procedure,omitempty"`
+	CreationDate                   *models.DateTime `json:"creation_date,omitempty"`
 	ClearRenewalDate               bool
-	RenewalDate                    *models.DateTime
+	RenewalDate                    *models.DateTime `json:"renewal_date,omitempty"`
 	ClearSource                    bool
-	Source                         *string
+	Source                         *string `json:"source,omitempty"`
 	ClearIsAutomated               bool
-	IsAutomated                    *bool
+	IsAutomated                    *bool `json:"is_automated,omitempty"`
 	ClearURL                       bool
-	URL                            *string
+	URL                            *string `json:"url,omitempty"`
 	ClearStatus                    bool
-	Status                         *enums.EvidenceStatus
+	Status                         *enums.EvidenceStatus `json:"status,omitempty"`
 	ClearReviewFrequency           bool
-	ReviewFrequency                *enums.Frequency
+	ReviewFrequency                *enums.Frequency `json:"review_frequency,omitempty"`
 	ClearEnvironment               bool
 	EnvironmentID                  *string
 	ClearScope                     bool
@@ -9273,12 +9309,12 @@ func (c *EvidenceUpdateOne) SetInput(i UpdateEvidenceInput) *EvidenceUpdateOne {
 
 // CreateExportInput represents a mutation input for creating exports.
 type CreateExportInput struct {
-	ExportType     enums.ExportType
-	Format         *enums.ExportFormat
-	Fields         []string
-	Filters        *string
-	Mode           *enums.ExportMode
-	ExportMetadata *models.ExportMetadata
+	ExportType     enums.ExportType       `json:"export_type,omitempty"`
+	Format         *enums.ExportFormat    `json:"format,omitempty"`
+	Fields         []string               `json:"fields,omitempty"`
+	Filters        *string                `json:"filters,omitempty"`
+	Mode           *enums.ExportMode      `json:"mode,omitempty"`
+	ExportMetadata *models.ExportMetadata `json:"export_metadata,omitempty"`
 	OwnerID        *string
 	EventIDs       []string
 	FileIDs        []string
@@ -9321,11 +9357,11 @@ func (c *ExportCreate) SetInput(i CreateExportInput) *ExportCreate {
 
 // UpdateExportInput represents a mutation input for updating exports.
 type UpdateExportInput struct {
-	Status              *enums.ExportStatus
+	Status              *enums.ExportStatus `json:"status,omitempty"`
 	ClearErrorMessage   bool
-	ErrorMessage        *string
+	ErrorMessage        *string `json:"error_message,omitempty"`
 	ClearExportMetadata bool
-	ExportMetadata      *models.ExportMetadata
+	ExportMetadata      *models.ExportMetadata `json:"export_metadata,omitempty"`
 	ClearOwner          bool
 	OwnerID             *string
 	ClearEvents         bool
@@ -9393,30 +9429,30 @@ func (c *ExportUpdateOne) SetInput(i UpdateExportInput) *ExportUpdateOne {
 
 // CreateFileInput represents a mutation input for creating files.
 type CreateFileInput struct {
-	Tags                      []string
-	InternalNotes             *string
-	SystemInternalID          *string
-	EnvironmentName           *string
-	ScopeName                 *string
-	CategoryName              *string
-	Name                      *string
-	ProvidedFileName          string
-	ProvidedFileExtension     string
-	ProvidedFileSize          *int64
-	PersistedFileSize         *int64
-	DetectedMimeType          *string
-	Md5Hash                   *string
-	DetectedContentType       string
-	StoreKey                  *string
-	CategoryType              *string
-	URI                       *string
-	StorageScheme             *string
-	StorageVolume             *string
-	StoragePath               *string
-	Metadata                  map[string]interface{}
-	StorageRegion             *string
-	StorageProvider           *string
-	LastAccessedAt            *time.Time
+	Tags                      []string               `json:"tags,omitempty"`
+	InternalNotes             *string                `json:"internal_notes,omitempty"`
+	SystemInternalID          *string                `json:"system_internal_id,omitempty"`
+	EnvironmentName           *string                `json:"environment_name,omitempty"`
+	ScopeName                 *string                `json:"scope_name,omitempty"`
+	CategoryName              *string                `json:"category_name,omitempty"`
+	Name                      *string                `json:"name,omitempty"`
+	ProvidedFileName          string                 `json:"provided_file_name,omitempty"`
+	ProvidedFileExtension     string                 `json:"provided_file_extension,omitempty"`
+	ProvidedFileSize          *int64                 `json:"provided_file_size,omitempty"`
+	PersistedFileSize         *int64                 `json:"persisted_file_size,omitempty"`
+	DetectedMimeType          *string                `json:"detected_mime_type,omitempty"`
+	Md5Hash                   *string                `json:"md5_hash,omitempty"`
+	DetectedContentType       string                 `json:"detected_content_type,omitempty"`
+	StoreKey                  *string                `json:"store_key,omitempty"`
+	CategoryType              *string                `json:"category_type,omitempty"`
+	URI                       *string                `json:"uri,omitempty"`
+	StorageScheme             *string                `json:"storage_scheme,omitempty"`
+	StorageVolume             *string                `json:"storage_volume,omitempty"`
+	StoragePath               *string                `json:"storage_path,omitempty"`
+	Metadata                  map[string]interface{} `json:"metadata,omitempty"`
+	StorageRegion             *string                `json:"storage_region,omitempty"`
+	StorageProvider           *string                `json:"storage_provider,omitempty"`
+	LastAccessedAt            *time.Time             `json:"last_accessed_at,omitempty"`
 	EnvironmentID             *string
 	ScopeID                   *string
 	CategoryID                *string
@@ -9582,51 +9618,51 @@ func (c *FileCreate) SetInput(i CreateFileInput) *FileCreate {
 // UpdateFileInput represents a mutation input for updating files.
 type UpdateFileInput struct {
 	ClearTags                       bool
-	Tags                            []string
+	Tags                            []string `json:"tags,omitempty"`
 	AppendTags                      []string
 	ClearInternalNotes              bool
-	InternalNotes                   *string
+	InternalNotes                   *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID           bool
-	SystemInternalID                *string
+	SystemInternalID                *string `json:"system_internal_id,omitempty"`
 	ClearEnvironmentName            bool
-	EnvironmentName                 *string
+	EnvironmentName                 *string `json:"environment_name,omitempty"`
 	ClearScopeName                  bool
-	ScopeName                       *string
+	ScopeName                       *string `json:"scope_name,omitempty"`
 	ClearCategoryName               bool
-	CategoryName                    *string
+	CategoryName                    *string `json:"category_name,omitempty"`
 	ClearName                       bool
-	Name                            *string
-	ProvidedFileName                *string
-	ProvidedFileExtension           *string
+	Name                            *string `json:"name,omitempty"`
+	ProvidedFileName                *string `json:"provided_file_name,omitempty"`
+	ProvidedFileExtension           *string `json:"provided_file_extension,omitempty"`
 	ClearProvidedFileSize           bool
-	ProvidedFileSize                *int64
+	ProvidedFileSize                *int64 `json:"provided_file_size,omitempty"`
 	ClearPersistedFileSize          bool
-	PersistedFileSize               *int64
+	PersistedFileSize               *int64 `json:"persisted_file_size,omitempty"`
 	ClearDetectedMimeType           bool
-	DetectedMimeType                *string
+	DetectedMimeType                *string `json:"detected_mime_type,omitempty"`
 	ClearMd5Hash                    bool
-	Md5Hash                         *string
-	DetectedContentType             *string
+	Md5Hash                         *string `json:"md5_hash,omitempty"`
+	DetectedContentType             *string `json:"detected_content_type,omitempty"`
 	ClearStoreKey                   bool
-	StoreKey                        *string
+	StoreKey                        *string `json:"store_key,omitempty"`
 	ClearCategoryType               bool
-	CategoryType                    *string
+	CategoryType                    *string `json:"category_type,omitempty"`
 	ClearURI                        bool
-	URI                             *string
+	URI                             *string `json:"uri,omitempty"`
 	ClearStorageScheme              bool
-	StorageScheme                   *string
+	StorageScheme                   *string `json:"storage_scheme,omitempty"`
 	ClearStorageVolume              bool
-	StorageVolume                   *string
+	StorageVolume                   *string `json:"storage_volume,omitempty"`
 	ClearStoragePath                bool
-	StoragePath                     *string
+	StoragePath                     *string `json:"storage_path,omitempty"`
 	ClearMetadata                   bool
-	Metadata                        map[string]interface{}
+	Metadata                        map[string]interface{} `json:"metadata,omitempty"`
 	ClearStorageRegion              bool
-	StorageRegion                   *string
+	StorageRegion                   *string `json:"storage_region,omitempty"`
 	ClearStorageProvider            bool
-	StorageProvider                 *string
+	StorageProvider                 *string `json:"storage_provider,omitempty"`
 	ClearLastAccessedAt             bool
-	LastAccessedAt                  *time.Time
+	LastAccessedAt                  *time.Time `json:"last_accessed_at,omitempty"`
 	ClearEnvironment                bool
 	EnvironmentID                   *string
 	ClearScope                      bool
@@ -10025,79 +10061,80 @@ func (c *FileUpdateOne) SetInput(i UpdateFileInput) *FileUpdateOne {
 
 // CreateFindingInput represents a mutation input for creating findings.
 type CreateFindingInput struct {
-	Tags                 []string
-	ReviewedBy           *string
-	AssignedTo           *string
-	InternalNotes        *string
-	SystemInternalID     *string
-	EnvironmentName      *string
-	ScopeName            *string
-	FindingStatusName    *string
-	ExternalID           *string
-	ExternalOwnerID      *string
-	Source               *string
-	ResourceName         *string
-	DisplayName          *string
-	State                *string
-	Category             *string
-	Categories           []string
-	FindingClass         *string
-	Severity             *string
-	NumericSeverity      *float64
-	Score                *float64
-	Impact               *float64
-	Exploitability       *float64
-	Priority             *string
-	Open                 *bool
-	BlocksProduction     *bool
-	Production           *bool
-	Public               *bool
-	Validated            *bool
-	AssessmentID         *string
-	Description          *string
-	Recommendation       *string
-	RecommendedActions   *string
-	References           []string
-	StepsToReproduce     []string
-	Targets              []string
-	TargetDetails        map[string]interface{}
-	Vector               *string
-	RemediationSLA       *int
-	EventTime            *models.DateTime
-	ReportedAt           *models.DateTime
-	SourceUpdatedAt      *models.DateTime
-	ExternalURI          *string
-	Metadata             map[string]interface{}
-	RawPayload           map[string]interface{}
-	OwnerID              *string
-	BlockedGroupIDs      []string
-	EditorIDs            []string
-	ReviewedByUserID     *string
-	ReviewedByGroupID    *string
-	AssignedToUserID     *string
-	AssignedToGroupID    *string
-	EnvironmentID        *string
-	ScopeID              *string
-	FindingStatusID      *string
-	IntegrationIDs       []string
-	VulnerabilityIDs     []string
-	ActionPlanIDs        []string
-	ControlIDs           []string
-	SubcontrolIDs        []string
-	RiskIDs              []string
-	ProgramIDs           []string
-	AssetIDs             []string
-	EntityIDs            []string
-	ScanIDs              []string
-	TaskIDs              []string
-	DirectoryAccountIDs  []string
-	IdentityHolderIDs    []string
-	RemediationIDs       []string
-	ReviewIDs            []string
-	CommentIDs           []string
-	FileIDs              []string
-	WorkflowObjectRefIDs []string
-	CheckResultIDs       []string
+	Tags                   []string               `json:"tags,omitempty"`
+	ReviewedBy             *string                `json:"reviewed_by,omitempty"`
+	AssignedTo             *string                `json:"assigned_to,omitempty"`
+	InternalNotes          *string                `json:"internal_notes,omitempty"`
+	SystemInternalID       *string                `json:"system_internal_id,omitempty"`
+	EnvironmentName        *string                `json:"environment_name,omitempty"`
+	ScopeName              *string                `json:"scope_name,omitempty"`
+	FindingStatusName      *string                `json:"finding_status_name,omitempty"`
+	WorkflowEligibleMarker *bool                  `json:"workflow_eligible_marker,omitempty"`
+	ExternalID             *string                `json:"external_id,omitempty"`
+	ExternalOwnerID        *string                `json:"external_owner_id,omitempty"`
+	Source                 *string                `json:"source,omitempty"`
+	ResourceName           *string                `json:"resource_name,omitempty"`
+	DisplayName            *string                `json:"display_name,omitempty"`
+	State                  *string                `json:"state,omitempty"`
+	Category               *string                `json:"category,omitempty"`
+	Categories             []string               `json:"categories,omitempty"`
+	FindingClass           *string                `json:"finding_class,omitempty"`
+	Severity               *string                `json:"severity,omitempty"`
+	NumericSeverity        *float64               `json:"numeric_severity,omitempty"`
+	Score                  *float64               `json:"score,omitempty"`
+	Impact                 *float64               `json:"impact,omitempty"`
+	Exploitability         *float64               `json:"exploitability,omitempty"`
+	Priority               *string                `json:"priority,omitempty"`
+	Open                   *bool                  `json:"open,omitempty"`
+	BlocksProduction       *bool                  `json:"blocks_production,omitempty"`
+	Production             *bool                  `json:"production,omitempty"`
+	Public                 *bool                  `json:"public,omitempty"`
+	Validated              *bool                  `json:"validated,omitempty"`
+	AssessmentID           *string                `json:"assessment_id,omitempty"`
+	Description            *string                `json:"description,omitempty"`
+	Recommendation         *string                `json:"recommendation,omitempty"`
+	RecommendedActions     *string                `json:"recommended_actions,omitempty"`
+	References             []string               `json:"references,omitempty"`
+	StepsToReproduce       []string               `json:"steps_to_reproduce,omitempty"`
+	Targets                []string               `json:"targets,omitempty"`
+	TargetDetails          map[string]interface{} `json:"target_details,omitempty"`
+	Vector                 *string                `json:"vector,omitempty"`
+	RemediationSLA         *int                   `json:"remediation_sla,omitempty"`
+	EventTime              *models.DateTime       `json:"event_time,omitempty"`
+	ReportedAt             *models.DateTime       `json:"reported_at,omitempty"`
+	SourceUpdatedAt        *models.DateTime       `json:"source_updated_at,omitempty"`
+	ExternalURI            *string                `json:"external_uri,omitempty"`
+	Metadata               map[string]interface{} `json:"metadata,omitempty"`
+	RawPayload             map[string]interface{} `json:"raw_payload,omitempty"`
+	OwnerID                *string
+	BlockedGroupIDs        []string
+	EditorIDs              []string
+	ReviewedByUserID       *string
+	ReviewedByGroupID      *string
+	AssignedToUserID       *string
+	AssignedToGroupID      *string
+	EnvironmentID          *string
+	ScopeID                *string
+	FindingStatusID        *string
+	IntegrationIDs         []string
+	VulnerabilityIDs       []string
+	ActionPlanIDs          []string
+	ControlIDs             []string
+	SubcontrolIDs          []string
+	RiskIDs                []string
+	ProgramIDs             []string
+	AssetIDs               []string
+	EntityIDs              []string
+	ScanIDs                []string
+	TaskIDs                []string
+	DirectoryAccountIDs    []string
+	IdentityHolderIDs      []string
+	RemediationIDs         []string
+	ReviewIDs              []string
+	CommentIDs             []string
+	FileIDs                []string
+	WorkflowObjectRefIDs   []string
+	CheckResultIDs         []string
 }
 
 // Mutate applies the CreateFindingInput on the FindingMutation builder.
@@ -10125,6 +10162,9 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.FindingStatusName; v != nil {
 		m.SetFindingStatusName(*v)
+	}
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
@@ -10331,176 +10371,178 @@ func (c *FindingCreate) SetInput(i CreateFindingInput) *FindingCreate {
 
 // UpdateFindingInput represents a mutation input for updating findings.
 type UpdateFindingInput struct {
-	ClearTags                  bool
-	Tags                       []string
-	AppendTags                 []string
-	ClearReviewedBy            bool
-	ReviewedBy                 *string
-	ClearAssignedTo            bool
-	AssignedTo                 *string
-	ClearInternalNotes         bool
-	InternalNotes              *string
-	ClearSystemInternalID      bool
-	SystemInternalID           *string
-	ClearEnvironmentName       bool
-	EnvironmentName            *string
-	ClearScopeName             bool
-	ScopeName                  *string
-	ClearFindingStatusName     bool
-	FindingStatusName          *string
-	ClearExternalID            bool
-	ExternalID                 *string
-	ClearExternalOwnerID       bool
-	ExternalOwnerID            *string
-	ClearSource                bool
-	Source                     *string
-	ClearResourceName          bool
-	ResourceName               *string
-	ClearDisplayName           bool
-	DisplayName                *string
-	ClearState                 bool
-	State                      *string
-	ClearCategory              bool
-	Category                   *string
-	ClearCategories            bool
-	Categories                 []string
-	AppendCategories           []string
-	ClearFindingClass          bool
-	FindingClass               *string
-	ClearSeverity              bool
-	Severity                   *string
-	ClearNumericSeverity       bool
-	NumericSeverity            *float64
-	ClearScore                 bool
-	Score                      *float64
-	ClearImpact                bool
-	Impact                     *float64
-	ClearExploitability        bool
-	Exploitability             *float64
-	ClearPriority              bool
-	Priority                   *string
-	ClearOpen                  bool
-	Open                       *bool
-	ClearBlocksProduction      bool
-	BlocksProduction           *bool
-	ClearProduction            bool
-	Production                 *bool
-	ClearPublic                bool
-	Public                     *bool
-	ClearValidated             bool
-	Validated                  *bool
-	ClearAssessmentID          bool
-	AssessmentID               *string
-	ClearDescription           bool
-	Description                *string
-	ClearRecommendation        bool
-	Recommendation             *string
-	ClearRecommendedActions    bool
-	RecommendedActions         *string
-	ClearReferences            bool
-	References                 []string
-	AppendReferences           []string
-	ClearStepsToReproduce      bool
-	StepsToReproduce           []string
-	AppendStepsToReproduce     []string
-	ClearTargets               bool
-	Targets                    []string
-	AppendTargets              []string
-	ClearTargetDetails         bool
-	TargetDetails              map[string]interface{}
-	ClearVector                bool
-	Vector                     *string
-	ClearRemediationSLA        bool
-	RemediationSLA             *int
-	ClearEventTime             bool
-	EventTime                  *models.DateTime
-	ClearReportedAt            bool
-	ReportedAt                 *models.DateTime
-	ClearSourceUpdatedAt       bool
-	SourceUpdatedAt            *models.DateTime
-	ClearExternalURI           bool
-	ExternalURI                *string
-	ClearMetadata              bool
-	Metadata                   map[string]interface{}
-	ClearRawPayload            bool
-	RawPayload                 map[string]interface{}
-	ClearBlockedGroups         bool
-	AddBlockedGroupIDs         []string
-	RemoveBlockedGroupIDs      []string
-	ClearEditors               bool
-	AddEditorIDs               []string
-	RemoveEditorIDs            []string
-	ClearReviewedByUser        bool
-	ReviewedByUserID           *string
-	ClearReviewedByGroup       bool
-	ReviewedByGroupID          *string
-	ClearAssignedToUser        bool
-	AssignedToUserID           *string
-	ClearAssignedToGroup       bool
-	AssignedToGroupID          *string
-	ClearEnvironment           bool
-	EnvironmentID              *string
-	ClearScope                 bool
-	ScopeID                    *string
-	ClearFindingStatus         bool
-	FindingStatusID            *string
-	ClearIntegrations          bool
-	AddIntegrationIDs          []string
-	RemoveIntegrationIDs       []string
-	ClearVulnerabilities       bool
-	AddVulnerabilityIDs        []string
-	RemoveVulnerabilityIDs     []string
-	ClearActionPlans           bool
-	AddActionPlanIDs           []string
-	RemoveActionPlanIDs        []string
-	ClearControls              bool
-	AddControlIDs              []string
-	RemoveControlIDs           []string
-	ClearSubcontrols           bool
-	AddSubcontrolIDs           []string
-	RemoveSubcontrolIDs        []string
-	ClearRisks                 bool
-	AddRiskIDs                 []string
-	RemoveRiskIDs              []string
-	ClearPrograms              bool
-	AddProgramIDs              []string
-	RemoveProgramIDs           []string
-	ClearAssets                bool
-	AddAssetIDs                []string
-	RemoveAssetIDs             []string
-	ClearEntities              bool
-	AddEntityIDs               []string
-	RemoveEntityIDs            []string
-	ClearScans                 bool
-	AddScanIDs                 []string
-	RemoveScanIDs              []string
-	ClearTasks                 bool
-	AddTaskIDs                 []string
-	RemoveTaskIDs              []string
-	ClearDirectoryAccounts     bool
-	AddDirectoryAccountIDs     []string
-	RemoveDirectoryAccountIDs  []string
-	ClearIdentityHolders       bool
-	AddIdentityHolderIDs       []string
-	RemoveIdentityHolderIDs    []string
-	ClearRemediations          bool
-	AddRemediationIDs          []string
-	RemoveRemediationIDs       []string
-	ClearReviews               bool
-	AddReviewIDs               []string
-	RemoveReviewIDs            []string
-	ClearComments              bool
-	AddCommentIDs              []string
-	RemoveCommentIDs           []string
-	ClearFiles                 bool
-	AddFileIDs                 []string
-	RemoveFileIDs              []string
-	ClearWorkflowObjectRefs    bool
-	AddWorkflowObjectRefIDs    []string
-	RemoveWorkflowObjectRefIDs []string
-	ClearCheckResults          bool
-	AddCheckResultIDs          []string
-	RemoveCheckResultIDs       []string
+	ClearTags                   bool
+	Tags                        []string `json:"tags,omitempty"`
+	AppendTags                  []string
+	ClearReviewedBy             bool
+	ReviewedBy                  *string `json:"reviewed_by,omitempty"`
+	ClearAssignedTo             bool
+	AssignedTo                  *string `json:"assigned_to,omitempty"`
+	ClearInternalNotes          bool
+	InternalNotes               *string `json:"internal_notes,omitempty"`
+	ClearSystemInternalID       bool
+	SystemInternalID            *string `json:"system_internal_id,omitempty"`
+	ClearEnvironmentName        bool
+	EnvironmentName             *string `json:"environment_name,omitempty"`
+	ClearScopeName              bool
+	ScopeName                   *string `json:"scope_name,omitempty"`
+	ClearFindingStatusName      bool
+	FindingStatusName           *string `json:"finding_status_name,omitempty"`
+	ClearWorkflowEligibleMarker bool
+	WorkflowEligibleMarker      *bool `json:"workflow_eligible_marker,omitempty"`
+	ClearExternalID             bool
+	ExternalID                  *string `json:"external_id,omitempty"`
+	ClearExternalOwnerID        bool
+	ExternalOwnerID             *string `json:"external_owner_id,omitempty"`
+	ClearSource                 bool
+	Source                      *string `json:"source,omitempty"`
+	ClearResourceName           bool
+	ResourceName                *string `json:"resource_name,omitempty"`
+	ClearDisplayName            bool
+	DisplayName                 *string `json:"display_name,omitempty"`
+	ClearState                  bool
+	State                       *string `json:"state,omitempty"`
+	ClearCategory               bool
+	Category                    *string `json:"category,omitempty"`
+	ClearCategories             bool
+	Categories                  []string `json:"categories,omitempty"`
+	AppendCategories            []string
+	ClearFindingClass           bool
+	FindingClass                *string `json:"finding_class,omitempty"`
+	ClearSeverity               bool
+	Severity                    *string `json:"severity,omitempty"`
+	ClearNumericSeverity        bool
+	NumericSeverity             *float64 `json:"numeric_severity,omitempty"`
+	ClearScore                  bool
+	Score                       *float64 `json:"score,omitempty"`
+	ClearImpact                 bool
+	Impact                      *float64 `json:"impact,omitempty"`
+	ClearExploitability         bool
+	Exploitability              *float64 `json:"exploitability,omitempty"`
+	ClearPriority               bool
+	Priority                    *string `json:"priority,omitempty"`
+	ClearOpen                   bool
+	Open                        *bool `json:"open,omitempty"`
+	ClearBlocksProduction       bool
+	BlocksProduction            *bool `json:"blocks_production,omitempty"`
+	ClearProduction             bool
+	Production                  *bool `json:"production,omitempty"`
+	ClearPublic                 bool
+	Public                      *bool `json:"public,omitempty"`
+	ClearValidated              bool
+	Validated                   *bool `json:"validated,omitempty"`
+	ClearAssessmentID           bool
+	AssessmentID                *string `json:"assessment_id,omitempty"`
+	ClearDescription            bool
+	Description                 *string `json:"description,omitempty"`
+	ClearRecommendation         bool
+	Recommendation              *string `json:"recommendation,omitempty"`
+	ClearRecommendedActions     bool
+	RecommendedActions          *string `json:"recommended_actions,omitempty"`
+	ClearReferences             bool
+	References                  []string `json:"references,omitempty"`
+	AppendReferences            []string
+	ClearStepsToReproduce       bool
+	StepsToReproduce            []string `json:"steps_to_reproduce,omitempty"`
+	AppendStepsToReproduce      []string
+	ClearTargets                bool
+	Targets                     []string `json:"targets,omitempty"`
+	AppendTargets               []string
+	ClearTargetDetails          bool
+	TargetDetails               map[string]interface{} `json:"target_details,omitempty"`
+	ClearVector                 bool
+	Vector                      *string `json:"vector,omitempty"`
+	ClearRemediationSLA         bool
+	RemediationSLA              *int `json:"remediation_sla,omitempty"`
+	ClearEventTime              bool
+	EventTime                   *models.DateTime `json:"event_time,omitempty"`
+	ClearReportedAt             bool
+	ReportedAt                  *models.DateTime `json:"reported_at,omitempty"`
+	ClearSourceUpdatedAt        bool
+	SourceUpdatedAt             *models.DateTime `json:"source_updated_at,omitempty"`
+	ClearExternalURI            bool
+	ExternalURI                 *string `json:"external_uri,omitempty"`
+	ClearMetadata               bool
+	Metadata                    map[string]interface{} `json:"metadata,omitempty"`
+	ClearRawPayload             bool
+	RawPayload                  map[string]interface{} `json:"raw_payload,omitempty"`
+	ClearBlockedGroups          bool
+	AddBlockedGroupIDs          []string
+	RemoveBlockedGroupIDs       []string
+	ClearEditors                bool
+	AddEditorIDs                []string
+	RemoveEditorIDs             []string
+	ClearReviewedByUser         bool
+	ReviewedByUserID            *string
+	ClearReviewedByGroup        bool
+	ReviewedByGroupID           *string
+	ClearAssignedToUser         bool
+	AssignedToUserID            *string
+	ClearAssignedToGroup        bool
+	AssignedToGroupID           *string
+	ClearEnvironment            bool
+	EnvironmentID               *string
+	ClearScope                  bool
+	ScopeID                     *string
+	ClearFindingStatus          bool
+	FindingStatusID             *string
+	ClearIntegrations           bool
+	AddIntegrationIDs           []string
+	RemoveIntegrationIDs        []string
+	ClearVulnerabilities        bool
+	AddVulnerabilityIDs         []string
+	RemoveVulnerabilityIDs      []string
+	ClearActionPlans            bool
+	AddActionPlanIDs            []string
+	RemoveActionPlanIDs         []string
+	ClearControls               bool
+	AddControlIDs               []string
+	RemoveControlIDs            []string
+	ClearSubcontrols            bool
+	AddSubcontrolIDs            []string
+	RemoveSubcontrolIDs         []string
+	ClearRisks                  bool
+	AddRiskIDs                  []string
+	RemoveRiskIDs               []string
+	ClearPrograms               bool
+	AddProgramIDs               []string
+	RemoveProgramIDs            []string
+	ClearAssets                 bool
+	AddAssetIDs                 []string
+	RemoveAssetIDs              []string
+	ClearEntities               bool
+	AddEntityIDs                []string
+	RemoveEntityIDs             []string
+	ClearScans                  bool
+	AddScanIDs                  []string
+	RemoveScanIDs               []string
+	ClearTasks                  bool
+	AddTaskIDs                  []string
+	RemoveTaskIDs               []string
+	ClearDirectoryAccounts      bool
+	AddDirectoryAccountIDs      []string
+	RemoveDirectoryAccountIDs   []string
+	ClearIdentityHolders        bool
+	AddIdentityHolderIDs        []string
+	RemoveIdentityHolderIDs     []string
+	ClearRemediations           bool
+	AddRemediationIDs           []string
+	RemoveRemediationIDs        []string
+	ClearReviews                bool
+	AddReviewIDs                []string
+	RemoveReviewIDs             []string
+	ClearComments               bool
+	AddCommentIDs               []string
+	RemoveCommentIDs            []string
+	ClearFiles                  bool
+	AddFileIDs                  []string
+	RemoveFileIDs               []string
+	ClearWorkflowObjectRefs     bool
+	AddWorkflowObjectRefIDs     []string
+	RemoveWorkflowObjectRefIDs  []string
+	ClearCheckResults           bool
+	AddCheckResultIDs           []string
+	RemoveCheckResultIDs        []string
 }
 
 // Mutate applies the UpdateFindingInput on the FindingMutation builder.
@@ -10555,6 +10597,12 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.FindingStatusName; v != nil {
 		m.SetFindingStatusName(*v)
+	}
+	if i.ClearWorkflowEligibleMarker {
+		m.ClearWorkflowEligibleMarker()
+	}
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
 	}
 	if i.ClearExternalID {
 		m.ClearExternalID()
@@ -11031,12 +11079,12 @@ func (c *FindingUpdateOne) SetInput(i UpdateFindingInput) *FindingUpdateOne {
 
 // CreateFindingControlInput represents a mutation input for creating findingcontrols.
 type CreateFindingControlInput struct {
-	ExternalStandard        *string
-	ExternalStandardVersion *string
-	ExternalControlID       *string
-	Source                  *string
-	Metadata                map[string]interface{}
-	DiscoveredAt            *models.DateTime
+	ExternalStandard        *string                `json:"external_standard,omitempty"`
+	ExternalStandardVersion *string                `json:"external_standard_version,omitempty"`
+	ExternalControlID       *string                `json:"external_control_id,omitempty"`
+	Source                  *string                `json:"source,omitempty"`
+	Metadata                map[string]interface{} `json:"metadata,omitempty"`
+	DiscoveredAt            *models.DateTime       `json:"discovered_at,omitempty"`
 	FindingID               string
 	ControlID               string
 	StandardID              *string
@@ -11078,17 +11126,17 @@ func (c *FindingControlCreate) SetInput(i CreateFindingControlInput) *FindingCon
 // UpdateFindingControlInput represents a mutation input for updating findingcontrols.
 type UpdateFindingControlInput struct {
 	ClearExternalStandard        bool
-	ExternalStandard             *string
+	ExternalStandard             *string `json:"external_standard,omitempty"`
 	ClearExternalStandardVersion bool
-	ExternalStandardVersion      *string
+	ExternalStandardVersion      *string `json:"external_standard_version,omitempty"`
 	ClearExternalControlID       bool
-	ExternalControlID            *string
+	ExternalControlID            *string `json:"external_control_id,omitempty"`
 	ClearSource                  bool
-	Source                       *string
+	Source                       *string `json:"source,omitempty"`
 	ClearMetadata                bool
-	Metadata                     map[string]interface{}
+	Metadata                     map[string]interface{} `json:"metadata,omitempty"`
 	ClearDiscoveredAt            bool
-	DiscoveredAt                 *models.DateTime
+	DiscoveredAt                 *models.DateTime `json:"discovered_at,omitempty"`
 }
 
 // Mutate applies the UpdateFindingControlInput on the FindingControlMutation builder.
@@ -11145,18 +11193,18 @@ func (c *FindingControlUpdateOne) SetInput(i UpdateFindingControlInput) *Finding
 
 // CreateGroupInput represents a mutation input for creating groups.
 type CreateGroupInput struct {
-	Tags                                 []string
-	Name                                 string
-	Description                          *string
-	LogoURL                              *string
-	DisplayName                          *string
-	OscalRole                            *string
-	OscalPartyUUID                       *string
-	OscalContactUuids                    []string
-	ScimExternalID                       *string
-	ScimDisplayName                      *string
-	ScimActive                           *bool
-	ScimGroupMailing                     *string
+	Tags                                 []string `json:"tags,omitempty"`
+	Name                                 string   `json:"name,omitempty"`
+	Description                          *string  `json:"description,omitempty"`
+	LogoURL                              *string  `json:"logo_url,omitempty"`
+	DisplayName                          *string  `json:"display_name,omitempty"`
+	OscalRole                            *string  `json:"oscal_role,omitempty"`
+	OscalPartyUUID                       *string  `json:"oscal_party_uuid,omitempty"`
+	OscalContactUuids                    []string `json:"oscal_contact_uuids,omitempty"`
+	ScimExternalID                       *string  `json:"scim_external_id,omitempty"`
+	ScimDisplayName                      *string  `json:"scim_display_name,omitempty"`
+	ScimActive                           *bool    `json:"scim_active,omitempty"`
+	ScimGroupMailing                     *string  `json:"scim_group_mailing,omitempty"`
 	OwnerID                              *string
 	ProgramEditorIDs                     []string
 	ProgramBlockedGroupIDs               []string
@@ -11410,29 +11458,29 @@ func (c *GroupCreate) SetInput(i CreateGroupInput) *GroupCreate {
 // UpdateGroupInput represents a mutation input for updating groups.
 type UpdateGroupInput struct {
 	ClearTags                                  bool
-	Tags                                       []string
+	Tags                                       []string `json:"tags,omitempty"`
 	AppendTags                                 []string
-	Name                                       *string
+	Name                                       *string `json:"name,omitempty"`
 	ClearDescription                           bool
-	Description                                *string
+	Description                                *string `json:"description,omitempty"`
 	ClearLogoURL                               bool
-	LogoURL                                    *string
-	DisplayName                                *string
+	LogoURL                                    *string `json:"logo_url,omitempty"`
+	DisplayName                                *string `json:"display_name,omitempty"`
 	ClearOscalRole                             bool
-	OscalRole                                  *string
+	OscalRole                                  *string `json:"oscal_role,omitempty"`
 	ClearOscalPartyUUID                        bool
-	OscalPartyUUID                             *string
+	OscalPartyUUID                             *string `json:"oscal_party_uuid,omitempty"`
 	ClearOscalContactUuids                     bool
-	OscalContactUuids                          []string
+	OscalContactUuids                          []string `json:"oscal_contact_uuids,omitempty"`
 	AppendOscalContactUuids                    []string
 	ClearScimExternalID                        bool
-	ScimExternalID                             *string
+	ScimExternalID                             *string `json:"scim_external_id,omitempty"`
 	ClearScimDisplayName                       bool
-	ScimDisplayName                            *string
+	ScimDisplayName                            *string `json:"scim_display_name,omitempty"`
 	ClearScimActive                            bool
-	ScimActive                                 *bool
+	ScimActive                                 *bool `json:"scim_active,omitempty"`
 	ClearScimGroupMailing                      bool
-	ScimGroupMailing                           *string
+	ScimGroupMailing                           *string `json:"scim_group_mailing,omitempty"`
 	ClearOwner                                 bool
 	OwnerID                                    *string
 	ClearProgramEditors                        bool
@@ -12125,7 +12173,7 @@ func (c *GroupUpdateOne) SetInput(i UpdateGroupInput) *GroupUpdateOne {
 
 // CreateGroupMembershipInput represents a mutation input for creating groupmemberships.
 type CreateGroupMembershipInput struct {
-	Role     *enums.Role
+	Role     *enums.Role `json:"role,omitempty"`
 	GroupID  string
 	UserID   string
 	EventIDs []string
@@ -12151,7 +12199,7 @@ func (c *GroupMembershipCreate) SetInput(i CreateGroupMembershipInput) *GroupMem
 
 // UpdateGroupMembershipInput represents a mutation input for updating groupmemberships.
 type UpdateGroupMembershipInput struct {
-	Role           *enums.Role
+	Role           *enums.Role `json:"role,omitempty"`
 	ClearEvents    bool
 	AddEventIDs    []string
 	RemoveEventIDs []string
@@ -12187,10 +12235,10 @@ func (c *GroupMembershipUpdateOne) SetInput(i UpdateGroupMembershipInput) *Group
 
 // CreateGroupSettingInput represents a mutation input for creating groupsettings.
 type CreateGroupSettingInput struct {
-	Visibility   *enums.Visibility
-	JoinPolicy   *enums.JoinPolicy
-	SyncToSlack  *bool
-	SyncToGithub *bool
+	Visibility   *enums.Visibility `json:"visibility,omitempty"`
+	JoinPolicy   *enums.JoinPolicy `json:"join_policy,omitempty"`
+	SyncToSlack  *bool             `json:"sync_to_slack,omitempty"`
+	SyncToGithub *bool             `json:"sync_to_github,omitempty"`
 	GroupID      *string
 }
 
@@ -12221,12 +12269,12 @@ func (c *GroupSettingCreate) SetInput(i CreateGroupSettingInput) *GroupSettingCr
 
 // UpdateGroupSettingInput represents a mutation input for updating groupsettings.
 type UpdateGroupSettingInput struct {
-	Visibility        *enums.Visibility
-	JoinPolicy        *enums.JoinPolicy
+	Visibility        *enums.Visibility `json:"visibility,omitempty"`
+	JoinPolicy        *enums.JoinPolicy `json:"join_policy,omitempty"`
 	ClearSyncToSlack  bool
-	SyncToSlack       *bool
+	SyncToSlack       *bool `json:"sync_to_slack,omitempty"`
 	ClearSyncToGithub bool
-	SyncToGithub      *bool
+	SyncToGithub      *bool `json:"sync_to_github,omitempty"`
 	ClearGroup        bool
 	GroupID           *string
 }
@@ -12273,17 +12321,17 @@ func (c *GroupSettingUpdateOne) SetInput(i UpdateGroupSettingInput) *GroupSettin
 
 // CreateHushInput represents a mutation input for creating hushes.
 type CreateHushInput struct {
-	InternalNotes    *string
-	SystemInternalID *string
-	Name             string
-	Description      *string
-	Kind             *string
-	SecretName       *string
-	SecretValue      *string
-	CredentialSet    *models.CredentialSet
-	Metadata         map[string]interface{}
-	LastUsedAt       *time.Time
-	ExpiresAt        *time.Time
+	InternalNotes    *string                `json:"internal_notes,omitempty"`
+	SystemInternalID *string                `json:"system_internal_id,omitempty"`
+	Name             string                 `json:"name,omitempty"`
+	Description      *string                `json:"description,omitempty"`
+	Kind             *string                `json:"kind,omitempty"`
+	SecretName       *string                `json:"secret_name,omitempty"`
+	SecretValue      *string                `json:"secret_value,omitempty"`
+	CredentialSet    *models.CredentialSet  `json:"credential_set,omitempty"`
+	Metadata         map[string]interface{} `json:"metadata,omitempty"`
+	LastUsedAt       *time.Time             `json:"last_used_at,omitempty"`
+	ExpiresAt        *time.Time             `json:"expires_at,omitempty"`
 	OwnerID          *string
 	IntegrationIDs   []string
 	FileIDs          []string
@@ -12346,22 +12394,22 @@ func (c *HushCreate) SetInput(i CreateHushInput) *HushCreate {
 // UpdateHushInput represents a mutation input for updating hushes.
 type UpdateHushInput struct {
 	ClearInternalNotes    bool
-	InternalNotes         *string
+	InternalNotes         *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID bool
-	SystemInternalID      *string
-	Name                  *string
+	SystemInternalID      *string `json:"system_internal_id,omitempty"`
+	Name                  *string `json:"name,omitempty"`
 	ClearDescription      bool
-	Description           *string
+	Description           *string `json:"description,omitempty"`
 	ClearKind             bool
-	Kind                  *string
+	Kind                  *string `json:"kind,omitempty"`
 	ClearCredentialSet    bool
-	CredentialSet         *models.CredentialSet
+	CredentialSet         *models.CredentialSet `json:"credential_set,omitempty"`
 	ClearMetadata         bool
-	Metadata              map[string]interface{}
+	Metadata              map[string]interface{} `json:"metadata,omitempty"`
 	ClearLastUsedAt       bool
-	LastUsedAt            *time.Time
+	LastUsedAt            *time.Time `json:"last_used_at,omitempty"`
 	ClearExpiresAt        bool
-	ExpiresAt             *time.Time
+	ExpiresAt             *time.Time `json:"expires_at,omitempty"`
 	ClearOwner            bool
 	OwnerID               *string
 	ClearIntegrations     bool
@@ -12477,30 +12525,30 @@ func (c *HushUpdateOne) SetInput(i UpdateHushInput) *HushUpdateOne {
 
 // CreateIdentityHolderInput represents a mutation input for creating identityholders.
 type CreateIdentityHolderInput struct {
-	Tags                   []string
-	InternalOwner          *string
-	EnvironmentName        *string
-	ScopeName              *string
-	WorkflowEligibleMarker *bool
-	FullName               string
-	Email                  string
-	AlternateEmail         *string
-	EmailAliases           []string
-	PhoneNumber            *string
-	IsOpenlaneUser         *bool
-	IdentityHolderType     *enums.IdentityHolderType
-	Status                 *enums.UserStatus
-	IsActive               *bool
-	Title                  *string
-	Department             *string
-	Team                   *string
-	Location               *string
-	StartDate              *models.DateTime
-	EndDate                *models.DateTime
-	ExternalUserID         *string
-	ExternalReferenceID    *string
-	Metadata               map[string]interface{}
-	AvatarRemoteURL        *string
+	Tags                   []string                  `json:"tags,omitempty"`
+	InternalOwner          *string                   `json:"internal_owner,omitempty"`
+	EnvironmentName        *string                   `json:"environment_name,omitempty"`
+	ScopeName              *string                   `json:"scope_name,omitempty"`
+	WorkflowEligibleMarker *bool                     `json:"workflow_eligible_marker,omitempty"`
+	FullName               string                    `json:"full_name,omitempty"`
+	Email                  string                    `json:"email,omitempty"`
+	AlternateEmail         *string                   `json:"alternate_email,omitempty"`
+	EmailAliases           []string                  `json:"email_aliases,omitempty"`
+	PhoneNumber            *string                   `json:"phone_number,omitempty"`
+	IsOpenlaneUser         *bool                     `json:"is_openlane_user,omitempty"`
+	IdentityHolderType     *enums.IdentityHolderType `json:"identity_holder_type,omitempty"`
+	Status                 *enums.UserStatus         `json:"status,omitempty"`
+	IsActive               *bool                     `json:"is_active,omitempty"`
+	Title                  *string                   `json:"title,omitempty"`
+	Department             *string                   `json:"department,omitempty"`
+	Team                   *string                   `json:"team,omitempty"`
+	Location               *string                   `json:"location,omitempty"`
+	StartDate              *models.DateTime          `json:"start_date,omitempty"`
+	EndDate                *models.DateTime          `json:"end_date,omitempty"`
+	ExternalUserID         *string                   `json:"external_user_id,omitempty"`
+	ExternalReferenceID    *string                   `json:"external_reference_id,omitempty"`
+	Metadata               map[string]interface{}    `json:"metadata,omitempty"`
+	AvatarRemoteURL        *string                   `json:"avatar_remote_url,omitempty"`
 	OwnerID                *string
 	BlockedGroupIDs        []string
 	EditorIDs              []string
@@ -12688,50 +12736,50 @@ func (c *IdentityHolderCreate) SetInput(i CreateIdentityHolderInput) *IdentityHo
 // UpdateIdentityHolderInput represents a mutation input for updating identityholders.
 type UpdateIdentityHolderInput struct {
 	ClearTags                   bool
-	Tags                        []string
+	Tags                        []string `json:"tags,omitempty"`
 	AppendTags                  []string
 	ClearInternalOwner          bool
-	InternalOwner               *string
+	InternalOwner               *string `json:"internal_owner,omitempty"`
 	ClearEnvironmentName        bool
-	EnvironmentName             *string
+	EnvironmentName             *string `json:"environment_name,omitempty"`
 	ClearScopeName              bool
-	ScopeName                   *string
+	ScopeName                   *string `json:"scope_name,omitempty"`
 	ClearWorkflowEligibleMarker bool
-	WorkflowEligibleMarker      *bool
-	FullName                    *string
-	Email                       *string
+	WorkflowEligibleMarker      *bool   `json:"workflow_eligible_marker,omitempty"`
+	FullName                    *string `json:"full_name,omitempty"`
+	Email                       *string `json:"email,omitempty"`
 	ClearAlternateEmail         bool
-	AlternateEmail              *string
+	AlternateEmail              *string `json:"alternate_email,omitempty"`
 	ClearEmailAliases           bool
-	EmailAliases                []string
+	EmailAliases                []string `json:"email_aliases,omitempty"`
 	AppendEmailAliases          []string
 	ClearPhoneNumber            bool
-	PhoneNumber                 *string
+	PhoneNumber                 *string `json:"phone_number,omitempty"`
 	ClearIsOpenlaneUser         bool
-	IsOpenlaneUser              *bool
-	IdentityHolderType          *enums.IdentityHolderType
-	Status                      *enums.UserStatus
-	IsActive                    *bool
+	IsOpenlaneUser              *bool                     `json:"is_openlane_user,omitempty"`
+	IdentityHolderType          *enums.IdentityHolderType `json:"identity_holder_type,omitempty"`
+	Status                      *enums.UserStatus         `json:"status,omitempty"`
+	IsActive                    *bool                     `json:"is_active,omitempty"`
 	ClearTitle                  bool
-	Title                       *string
+	Title                       *string `json:"title,omitempty"`
 	ClearDepartment             bool
-	Department                  *string
+	Department                  *string `json:"department,omitempty"`
 	ClearTeam                   bool
-	Team                        *string
+	Team                        *string `json:"team,omitempty"`
 	ClearLocation               bool
-	Location                    *string
+	Location                    *string `json:"location,omitempty"`
 	ClearStartDate              bool
-	StartDate                   *models.DateTime
+	StartDate                   *models.DateTime `json:"start_date,omitempty"`
 	ClearEndDate                bool
-	EndDate                     *models.DateTime
+	EndDate                     *models.DateTime `json:"end_date,omitempty"`
 	ClearExternalUserID         bool
-	ExternalUserID              *string
+	ExternalUserID              *string `json:"external_user_id,omitempty"`
 	ClearExternalReferenceID    bool
-	ExternalReferenceID         *string
+	ExternalReferenceID         *string `json:"external_reference_id,omitempty"`
 	ClearMetadata               bool
-	Metadata                    map[string]interface{}
+	Metadata                    map[string]interface{} `json:"metadata,omitempty"`
 	ClearAvatarRemoteURL        bool
-	AvatarRemoteURL             *string
+	AvatarRemoteURL             *string `json:"avatar_remote_url,omitempty"`
 	ClearBlockedGroups          bool
 	AddBlockedGroupIDs          []string
 	RemoveBlockedGroupIDs       []string
@@ -13163,32 +13211,32 @@ func (c *IdentityHolderUpdateOne) SetInput(i UpdateIdentityHolderInput) *Identit
 
 // CreateInternalPolicyInput represents a mutation input for creating internalpolicies.
 type CreateInternalPolicyInput struct {
-	Tags                            []string
-	Revision                        *string
-	InternalNotes                   *string
-	SystemInternalID                *string
-	Name                            string
-	Status                          *enums.DocumentStatus
-	ManagementMode                  *enums.DocumentManagementMode
-	Details                         *string
-	DetailsJSON                     []interface{}
-	ApprovalRequired                *bool
-	ReviewDue                       *time.Time
-	ReviewFrequency                 *enums.Frequency
-	TagSuggestions                  []string
-	DismissedTagSuggestions         []string
-	ControlSuggestions              []string
-	DismissedControlSuggestions     []string
-	ImprovementSuggestions          []string
-	DismissedImprovementSuggestions []string
-	URL                             *string
-	ExternalFileID                  *string
-	ExternalContents                *string
-	InternalPolicyKindName          *string
-	EnvironmentName                 *string
-	ScopeName                       *string
-	WorkflowEligibleMarker          *bool
-	ExternalUUID                    *string
+	Tags                            []string                      `json:"tags,omitempty"`
+	Revision                        *string                       `json:"revision,omitempty"`
+	InternalNotes                   *string                       `json:"internal_notes,omitempty"`
+	SystemInternalID                *string                       `json:"system_internal_id,omitempty"`
+	Name                            string                        `json:"name,omitempty"`
+	Status                          *enums.DocumentStatus         `json:"status,omitempty"`
+	ManagementMode                  *enums.DocumentManagementMode `json:"management_mode,omitempty"`
+	Details                         *string                       `json:"details,omitempty"`
+	DetailsJSON                     []interface{}                 `json:"details_json,omitempty"`
+	ApprovalRequired                *bool                         `json:"approval_required,omitempty"`
+	ReviewDue                       *time.Time                    `json:"review_due,omitempty"`
+	ReviewFrequency                 *enums.Frequency              `json:"review_frequency,omitempty"`
+	TagSuggestions                  []string                      `json:"tag_suggestions,omitempty"`
+	DismissedTagSuggestions         []string                      `json:"dismissed_tag_suggestions,omitempty"`
+	ControlSuggestions              []string                      `json:"control_suggestions,omitempty"`
+	DismissedControlSuggestions     []string                      `json:"dismissed_control_suggestions,omitempty"`
+	ImprovementSuggestions          []string                      `json:"improvement_suggestions,omitempty"`
+	DismissedImprovementSuggestions []string                      `json:"dismissed_improvement_suggestions,omitempty"`
+	URL                             *string                       `json:"url,omitempty"`
+	ExternalFileID                  *string                       `json:"external_file_id,omitempty"`
+	ExternalContents                *string                       `json:"external_contents,omitempty"`
+	InternalPolicyKindName          *string                       `json:"internal_policy_kind_name,omitempty"`
+	EnvironmentName                 *string                       `json:"environment_name,omitempty"`
+	ScopeName                       *string                       `json:"scope_name,omitempty"`
+	WorkflowEligibleMarker          *bool                         `json:"workflow_eligible_marker,omitempty"`
+	ExternalUUID                    *string                       `json:"external_uuid,omitempty"`
 	OwnerID                         *string
 	BlockedGroupIDs                 []string
 	EditorIDs                       []string
@@ -13384,64 +13432,64 @@ func (c *InternalPolicyCreate) SetInput(i CreateInternalPolicyInput) *InternalPo
 // UpdateInternalPolicyInput represents a mutation input for updating internalpolicies.
 type UpdateInternalPolicyInput struct {
 	ClearTags                             bool
-	Tags                                  []string
+	Tags                                  []string `json:"tags,omitempty"`
 	AppendTags                            []string
 	ClearRevision                         bool
-	Revision                              *string
+	Revision                              *string `json:"revision,omitempty"`
 	ClearInternalNotes                    bool
-	InternalNotes                         *string
+	InternalNotes                         *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID                 bool
-	SystemInternalID                      *string
-	Name                                  *string
+	SystemInternalID                      *string `json:"system_internal_id,omitempty"`
+	Name                                  *string `json:"name,omitempty"`
 	ClearStatus                           bool
-	Status                                *enums.DocumentStatus
+	Status                                *enums.DocumentStatus `json:"status,omitempty"`
 	ClearManagementMode                   bool
-	ManagementMode                        *enums.DocumentManagementMode
+	ManagementMode                        *enums.DocumentManagementMode `json:"management_mode,omitempty"`
 	ClearDetails                          bool
-	Details                               *string
+	Details                               *string `json:"details,omitempty"`
 	ClearDetailsJSON                      bool
-	DetailsJSON                           []interface{}
+	DetailsJSON                           []interface{} `json:"details_json,omitempty"`
 	AppendDetailsJSON                     []interface{}
 	ClearApprovalRequired                 bool
-	ApprovalRequired                      *bool
+	ApprovalRequired                      *bool `json:"approval_required,omitempty"`
 	ClearReviewDue                        bool
-	ReviewDue                             *time.Time
+	ReviewDue                             *time.Time `json:"review_due,omitempty"`
 	ClearReviewFrequency                  bool
-	ReviewFrequency                       *enums.Frequency
+	ReviewFrequency                       *enums.Frequency `json:"review_frequency,omitempty"`
 	ClearTagSuggestions                   bool
-	TagSuggestions                        []string
+	TagSuggestions                        []string `json:"tag_suggestions,omitempty"`
 	AppendTagSuggestions                  []string
 	ClearDismissedTagSuggestions          bool
-	DismissedTagSuggestions               []string
+	DismissedTagSuggestions               []string `json:"dismissed_tag_suggestions,omitempty"`
 	AppendDismissedTagSuggestions         []string
 	ClearControlSuggestions               bool
-	ControlSuggestions                    []string
+	ControlSuggestions                    []string `json:"control_suggestions,omitempty"`
 	AppendControlSuggestions              []string
 	ClearDismissedControlSuggestions      bool
-	DismissedControlSuggestions           []string
+	DismissedControlSuggestions           []string `json:"dismissed_control_suggestions,omitempty"`
 	AppendDismissedControlSuggestions     []string
 	ClearImprovementSuggestions           bool
-	ImprovementSuggestions                []string
+	ImprovementSuggestions                []string `json:"improvement_suggestions,omitempty"`
 	AppendImprovementSuggestions          []string
 	ClearDismissedImprovementSuggestions  bool
-	DismissedImprovementSuggestions       []string
+	DismissedImprovementSuggestions       []string `json:"dismissed_improvement_suggestions,omitempty"`
 	AppendDismissedImprovementSuggestions []string
 	ClearURL                              bool
-	URL                                   *string
+	URL                                   *string `json:"url,omitempty"`
 	ClearExternalFileID                   bool
-	ExternalFileID                        *string
+	ExternalFileID                        *string `json:"external_file_id,omitempty"`
 	ClearExternalContents                 bool
-	ExternalContents                      *string
+	ExternalContents                      *string `json:"external_contents,omitempty"`
 	ClearInternalPolicyKindName           bool
-	InternalPolicyKindName                *string
+	InternalPolicyKindName                *string `json:"internal_policy_kind_name,omitempty"`
 	ClearEnvironmentName                  bool
-	EnvironmentName                       *string
+	EnvironmentName                       *string `json:"environment_name,omitempty"`
 	ClearScopeName                        bool
-	ScopeName                             *string
+	ScopeName                             *string `json:"scope_name,omitempty"`
 	ClearWorkflowEligibleMarker           bool
-	WorkflowEligibleMarker                *bool
+	WorkflowEligibleMarker                *bool `json:"workflow_eligible_marker,omitempty"`
 	ClearExternalUUID                     bool
-	ExternalUUID                          *string
+	ExternalUUID                          *string `json:"external_uuid,omitempty"`
 	ClearOwner                            bool
 	OwnerID                               *string
 	ClearBlockedGroups                    bool
@@ -13923,13 +13971,13 @@ func (c *InternalPolicyUpdateOne) SetInput(i UpdateInternalPolicyInput) *Interna
 
 // CreateInviteInput represents a mutation input for creating invites.
 type CreateInviteInput struct {
-	Expires           *time.Time
-	Recipient         string
-	Status            *enums.InviteStatus
-	Role              *enums.Role
-	SendAttempts      *int
-	OwnershipTransfer *bool
-	SSOExempt         *bool
+	Expires           *time.Time          `json:"expires,omitempty"`
+	Recipient         string              `json:"recipient,omitempty"`
+	Status            *enums.InviteStatus `json:"status,omitempty"`
+	Role              *enums.Role         `json:"role,omitempty"`
+	SendAttempts      *int                `json:"send_attempts,omitempty"`
+	OwnershipTransfer *bool               `json:"ownership_transfer,omitempty"`
+	SSOExempt         *bool               `json:"sso_exempt,omitempty"`
 	OwnerID           *string
 	EventIDs          []string
 	GroupIDs          []string
@@ -13976,14 +14024,14 @@ func (c *InviteCreate) SetInput(i CreateInviteInput) *InviteCreate {
 // UpdateInviteInput represents a mutation input for updating invites.
 type UpdateInviteInput struct {
 	ClearExpires           bool
-	Expires                *time.Time
-	Status                 *enums.InviteStatus
-	Role                   *enums.Role
-	SendAttempts           *int
+	Expires                *time.Time          `json:"expires,omitempty"`
+	Status                 *enums.InviteStatus `json:"status,omitempty"`
+	Role                   *enums.Role         `json:"role,omitempty"`
+	SendAttempts           *int                `json:"send_attempts,omitempty"`
 	ClearOwnershipTransfer bool
-	OwnershipTransfer      *bool
+	OwnershipTransfer      *bool `json:"ownership_transfer,omitempty"`
 	ClearSSOExempt         bool
-	SSOExempt              *bool
+	SSOExempt              *bool `json:"sso_exempt,omitempty"`
 	ClearOwner             bool
 	OwnerID                *string
 	ClearEvents            bool
@@ -14063,11 +14111,11 @@ func (c *InviteUpdateOne) SetInput(i UpdateInviteInput) *InviteUpdateOne {
 
 // CreateJobResultInput represents a mutation input for creating jobresults.
 type CreateJobResultInput struct {
-	Status         enums.JobExecutionStatus
-	ExitCode       int
-	FinishedAt     *time.Time
-	StartedAt      *time.Time
-	Log            *string
+	Status         enums.JobExecutionStatus `json:"status,omitempty"`
+	ExitCode       int                      `json:"exit_code,omitempty"`
+	FinishedAt     *time.Time               `json:"finished_at,omitempty"`
+	StartedAt      *time.Time               `json:"started_at,omitempty"`
+	Log            *string                  `json:"log,omitempty"`
 	OwnerID        *string
 	ScheduledJobID string
 	FileID         string
@@ -14101,9 +14149,9 @@ func (c *JobResultCreate) SetInput(i CreateJobResultInput) *JobResultCreate {
 
 // UpdateJobResultInput represents a mutation input for updating jobresults.
 type UpdateJobResultInput struct {
-	Status         *enums.JobExecutionStatus
+	Status         *enums.JobExecutionStatus `json:"status,omitempty"`
 	ClearLog       bool
-	Log            *string
+	Log            *string `json:"log,omitempty"`
 	ClearOwner     bool
 	OwnerID        *string
 	ScheduledJobID *string
@@ -14149,14 +14197,14 @@ func (c *JobResultUpdateOne) SetInput(i UpdateJobResultInput) *JobResultUpdateOn
 
 // CreateJobRunnerInput represents a mutation input for creating jobrunners.
 type CreateJobRunnerInput struct {
-	Tags              []string
-	InternalNotes     *string
-	SystemInternalID  *string
-	Name              string
-	IPAddress         *string
-	LastSeen          *time.Time
-	Version           *string
-	Os                *string
+	Tags              []string   `json:"tags,omitempty"`
+	InternalNotes     *string    `json:"internal_notes,omitempty"`
+	SystemInternalID  *string    `json:"system_internal_id,omitempty"`
+	Name              string     `json:"name,omitempty"`
+	IPAddress         *string    `json:"ip_address,omitempty"`
+	LastSeen          *time.Time `json:"last_seen,omitempty"`
+	Version           *string    `json:"version,omitempty"`
+	Os                *string    `json:"os,omitempty"`
 	OwnerID           *string
 	JobRunnerTokenIDs []string
 }
@@ -14202,21 +14250,21 @@ func (c *JobRunnerCreate) SetInput(i CreateJobRunnerInput) *JobRunnerCreate {
 // UpdateJobRunnerInput represents a mutation input for updating jobrunners.
 type UpdateJobRunnerInput struct {
 	ClearTags               bool
-	Tags                    []string
+	Tags                    []string `json:"tags,omitempty"`
 	AppendTags              []string
 	ClearInternalNotes      bool
-	InternalNotes           *string
+	InternalNotes           *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID   bool
-	SystemInternalID        *string
-	Name                    *string
+	SystemInternalID        *string `json:"system_internal_id,omitempty"`
+	Name                    *string `json:"name,omitempty"`
 	ClearIPAddress          bool
-	IPAddress               *string
+	IPAddress               *string `json:"ip_address,omitempty"`
 	ClearLastSeen           bool
-	LastSeen                *time.Time
+	LastSeen                *time.Time `json:"last_seen,omitempty"`
 	ClearVersion            bool
-	Version                 *string
+	Version                 *string `json:"version,omitempty"`
 	ClearOs                 bool
-	Os                      *string
+	Os                      *string `json:"os,omitempty"`
 	ClearOwner              bool
 	OwnerID                 *string
 	ClearJobRunnerTokens    bool
@@ -14305,8 +14353,8 @@ func (c *JobRunnerUpdateOne) SetInput(i UpdateJobRunnerInput) *JobRunnerUpdateOn
 
 // CreateJobRunnerRegistrationTokenInput represents a mutation input for creating jobrunnerregistrationtokens.
 type CreateJobRunnerRegistrationTokenInput struct {
-	Tags        []string
-	LastUsedAt  *time.Time
+	Tags        []string   `json:"tags,omitempty"`
+	LastUsedAt  *time.Time `json:"last_used_at,omitempty"`
 	OwnerID     *string
 	JobRunnerID *string
 }
@@ -14336,10 +14384,10 @@ func (c *JobRunnerRegistrationTokenCreate) SetInput(i CreateJobRunnerRegistratio
 // UpdateJobRunnerRegistrationTokenInput represents a mutation input for updating jobrunnerregistrationtokens.
 type UpdateJobRunnerRegistrationTokenInput struct {
 	ClearTags       bool
-	Tags            []string
+	Tags            []string `json:"tags,omitempty"`
 	AppendTags      []string
 	ClearLastUsedAt bool
-	LastUsedAt      *time.Time
+	LastUsedAt      *time.Time `json:"last_used_at,omitempty"`
 	ClearOwner      bool
 	OwnerID         *string
 	ClearJobRunner  bool
@@ -14391,13 +14439,13 @@ func (c *JobRunnerRegistrationTokenUpdateOne) SetInput(i UpdateJobRunnerRegistra
 
 // CreateJobRunnerTokenInput represents a mutation input for creating jobrunnertokens.
 type CreateJobRunnerTokenInput struct {
-	Tags          []string
-	ExpiresAt     *time.Time
-	LastUsedAt    *time.Time
-	IsActive      *bool
-	RevokedReason *string
-	RevokedBy     *string
-	RevokedAt     *time.Time
+	Tags          []string   `json:"tags,omitempty"`
+	ExpiresAt     *time.Time `json:"expires_at,omitempty"`
+	LastUsedAt    *time.Time `json:"last_used_at,omitempty"`
+	IsActive      *bool      `json:"is_active,omitempty"`
+	RevokedReason *string    `json:"revoked_reason,omitempty"`
+	RevokedBy     *string    `json:"revoked_by,omitempty"`
+	RevokedAt     *time.Time `json:"revoked_at,omitempty"`
 	OwnerID       *string
 	JobRunnerIDs  []string
 }
@@ -14442,18 +14490,18 @@ func (c *JobRunnerTokenCreate) SetInput(i CreateJobRunnerTokenInput) *JobRunnerT
 // UpdateJobRunnerTokenInput represents a mutation input for updating jobrunnertokens.
 type UpdateJobRunnerTokenInput struct {
 	ClearTags          bool
-	Tags               []string
+	Tags               []string `json:"tags,omitempty"`
 	AppendTags         []string
 	ClearLastUsedAt    bool
-	LastUsedAt         *time.Time
+	LastUsedAt         *time.Time `json:"last_used_at,omitempty"`
 	ClearIsActive      bool
-	IsActive           *bool
+	IsActive           *bool `json:"is_active,omitempty"`
 	ClearRevokedReason bool
-	RevokedReason      *string
+	RevokedReason      *string `json:"revoked_reason,omitempty"`
 	ClearRevokedBy     bool
-	RevokedBy          *string
+	RevokedBy          *string `json:"revoked_by,omitempty"`
 	ClearRevokedAt     bool
-	RevokedAt          *time.Time
+	RevokedAt          *time.Time `json:"revoked_at,omitempty"`
 	ClearOwner         bool
 	OwnerID            *string
 	ClearJobRunners    bool
@@ -14533,15 +14581,15 @@ func (c *JobRunnerTokenUpdateOne) SetInput(i UpdateJobRunnerTokenInput) *JobRunn
 
 // CreateJobTemplateInput represents a mutation input for creating jobtemplates.
 type CreateJobTemplateInput struct {
-	Tags             []string
-	InternalNotes    *string
-	SystemInternalID *string
-	Title            string
-	Description      *string
-	Platform         enums.JobPlatformType
-	DownloadURL      string
-	Configuration    models.JobConfiguration
-	Cron             *models.Cron
+	Tags             []string                `json:"tags,omitempty"`
+	InternalNotes    *string                 `json:"internal_notes,omitempty"`
+	SystemInternalID *string                 `json:"system_internal_id,omitempty"`
+	Title            string                  `json:"title,omitempty"`
+	Description      *string                 `json:"description,omitempty"`
+	Platform         enums.JobPlatformType   `json:"platform,omitempty"`
+	DownloadURL      string                  `json:"download_url,omitempty"`
+	Configuration    models.JobConfiguration `json:"configuration,omitempty"`
+	Cron             *models.Cron            `json:"cron,omitempty"`
 	OwnerID          *string
 }
 
@@ -14582,21 +14630,21 @@ func (c *JobTemplateCreate) SetInput(i CreateJobTemplateInput) *JobTemplateCreat
 // UpdateJobTemplateInput represents a mutation input for updating jobtemplates.
 type UpdateJobTemplateInput struct {
 	ClearTags             bool
-	Tags                  []string
+	Tags                  []string `json:"tags,omitempty"`
 	AppendTags            []string
 	ClearInternalNotes    bool
-	InternalNotes         *string
+	InternalNotes         *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID bool
-	SystemInternalID      *string
-	Title                 *string
+	SystemInternalID      *string `json:"system_internal_id,omitempty"`
+	Title                 *string `json:"title,omitempty"`
 	ClearDescription      bool
-	Description           *string
-	DownloadURL           *string
+	Description           *string `json:"description,omitempty"`
+	DownloadURL           *string `json:"download_url,omitempty"`
 	ClearConfiguration    bool
-	Configuration         models.JobConfiguration
+	Configuration         models.JobConfiguration `json:"configuration,omitempty"`
 	AppendConfiguration   models.JobConfiguration
 	ClearCron             bool
-	Cron                  *models.Cron
+	Cron                  *models.Cron `json:"cron,omitempty"`
 	ClearOwner            bool
 	OwnerID               *string
 	ClearScheduledJobs    bool
@@ -14685,9 +14733,9 @@ func (c *JobTemplateUpdateOne) SetInput(i UpdateJobTemplateInput) *JobTemplateUp
 
 // CreateMappableDomainInput represents a mutation input for creating mappabledomains.
 type CreateMappableDomainInput struct {
-	Tags            []string
-	Name            string
-	ZoneID          string
+	Tags            []string `json:"tags,omitempty"`
+	Name            string   `json:"name,omitempty"`
+	ZoneID          string   `json:"zone_id,omitempty"`
 	CustomDomainIDs []string
 }
 
@@ -14712,7 +14760,7 @@ func (c *MappableDomainCreate) SetInput(i CreateMappableDomainInput) *MappableDo
 // UpdateMappableDomainInput represents a mutation input for updating mappabledomains.
 type UpdateMappableDomainInput struct {
 	ClearTags             bool
-	Tags                  []string
+	Tags                  []string `json:"tags,omitempty"`
 	AppendTags            []string
 	ClearCustomDomains    bool
 	AddCustomDomainIDs    []string
@@ -14755,13 +14803,13 @@ func (c *MappableDomainUpdateOne) SetInput(i UpdateMappableDomainInput) *Mappabl
 
 // CreateMappedControlInput represents a mutation input for creating mappedcontrols.
 type CreateMappedControlInput struct {
-	Tags              []string
-	InternalNotes     *string
-	SystemInternalID  *string
-	MappingType       *enums.MappingType
-	Relation          *string
-	Confidence        *int
-	Source            *enums.MappingSource
+	Tags              []string             `json:"tags,omitempty"`
+	InternalNotes     *string              `json:"internal_notes,omitempty"`
+	SystemInternalID  *string              `json:"system_internal_id,omitempty"`
+	MappingType       *enums.MappingType   `json:"mapping_type,omitempty"`
+	Relation          *string              `json:"relation,omitempty"`
+	Confidence        *int                 `json:"confidence,omitempty"`
+	Source            *enums.MappingSource `json:"source,omitempty"`
 	OwnerID           *string
 	BlockedGroupIDs   []string
 	EditorIDs         []string
@@ -14826,19 +14874,19 @@ func (c *MappedControlCreate) SetInput(i CreateMappedControlInput) *MappedContro
 // UpdateMappedControlInput represents a mutation input for updating mappedcontrols.
 type UpdateMappedControlInput struct {
 	ClearTags               bool
-	Tags                    []string
+	Tags                    []string `json:"tags,omitempty"`
 	AppendTags              []string
 	ClearInternalNotes      bool
-	InternalNotes           *string
+	InternalNotes           *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID   bool
-	SystemInternalID        *string
-	MappingType             *enums.MappingType
+	SystemInternalID        *string            `json:"system_internal_id,omitempty"`
+	MappingType             *enums.MappingType `json:"mapping_type,omitempty"`
 	ClearRelation           bool
-	Relation                *string
+	Relation                *string `json:"relation,omitempty"`
 	ClearConfidence         bool
-	Confidence              *int
+	Confidence              *int `json:"confidence,omitempty"`
 	ClearSource             bool
-	Source                  *enums.MappingSource
+	Source                  *enums.MappingSource `json:"source,omitempty"`
 	ClearOwner              bool
 	OwnerID                 *string
 	ClearBlockedGroups      bool
@@ -14981,12 +15029,12 @@ func (c *MappedControlUpdateOne) SetInput(i UpdateMappedControlInput) *MappedCon
 
 // CreateNarrativeInput represents a mutation input for creating narratives.
 type CreateNarrativeInput struct {
-	Tags              []string
-	InternalNotes     *string
-	SystemInternalID  *string
-	Name              string
-	Description       *string
-	Details           *string
+	Tags              []string `json:"tags,omitempty"`
+	InternalNotes     *string  `json:"internal_notes,omitempty"`
+	SystemInternalID  *string  `json:"system_internal_id,omitempty"`
+	Name              string   `json:"name,omitempty"`
+	Description       *string  `json:"description,omitempty"`
+	Details           *string  `json:"details,omitempty"`
 	OwnerID           *string
 	BlockedGroupIDs   []string
 	EditorIDs         []string
@@ -15050,17 +15098,17 @@ func (c *NarrativeCreate) SetInput(i CreateNarrativeInput) *NarrativeCreate {
 // UpdateNarrativeInput represents a mutation input for updating narratives.
 type UpdateNarrativeInput struct {
 	ClearTags               bool
-	Tags                    []string
+	Tags                    []string `json:"tags,omitempty"`
 	AppendTags              []string
 	ClearInternalNotes      bool
-	InternalNotes           *string
+	InternalNotes           *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID   bool
-	SystemInternalID        *string
-	Name                    *string
+	SystemInternalID        *string `json:"system_internal_id,omitempty"`
+	Name                    *string `json:"name,omitempty"`
 	ClearDescription        bool
-	Description             *string
+	Description             *string `json:"description,omitempty"`
 	ClearDetails            bool
-	Details                 *string
+	Details                 *string `json:"details,omitempty"`
 	ClearBlockedGroups      bool
 	AddBlockedGroupIDs      []string
 	RemoveBlockedGroupIDs   []string
@@ -15201,12 +15249,12 @@ func (c *NarrativeUpdateOne) SetInput(i UpdateNarrativeInput) *NarrativeUpdateOn
 
 // CreateNoteInput represents a mutation input for creating notes.
 type CreateNoteInput struct {
-	Title             *string
-	Text              string
-	TextJSON          []interface{}
-	NoteRef           *string
-	IsEdited          *bool
-	NotifySubscribers *bool
+	Title             *string       `json:"title,omitempty"`
+	Text              string        `json:"text,omitempty"`
+	TextJSON          []interface{} `json:"text_json,omitempty"`
+	NoteRef           *string       `json:"note_ref,omitempty"`
+	IsEdited          *bool         `json:"is_edited,omitempty"`
+	NotifySubscribers *bool         `json:"notify_subscribers,omitempty"`
 	OwnerID           *string
 	TaskID            *string
 	ControlID         *string
@@ -15290,14 +15338,14 @@ func (c *NoteCreate) SetInput(i CreateNoteInput) *NoteCreate {
 // UpdateNoteInput represents a mutation input for updating notes.
 type UpdateNoteInput struct {
 	ClearTitle              bool
-	Title                   *string
-	Text                    *string
+	Title                   *string `json:"title,omitempty"`
+	Text                    *string `json:"text,omitempty"`
 	ClearTextJSON           bool
-	TextJSON                []interface{}
+	TextJSON                []interface{} `json:"text_json,omitempty"`
 	AppendTextJSON          []interface{}
 	ClearNoteRef            bool
-	NoteRef                 *string
-	IsEdited                *bool
+	NoteRef                 *string `json:"note_ref,omitempty"`
+	IsEdited                *bool   `json:"is_edited,omitempty"`
 	ClearTask               bool
 	TaskID                  *string
 	ClearControl            bool
@@ -15449,14 +15497,14 @@ func (c *NoteUpdateOne) SetInput(i UpdateNoteInput) *NoteUpdateOne {
 
 // CreateNotificationInput represents a mutation input for creating notifications.
 type CreateNotificationInput struct {
-	Tags                   []string
-	NotificationType       enums.NotificationType
-	ObjectType             string
-	Title                  string
-	Body                   string
-	Data                   map[string]interface{}
-	Channels               []enums.Channel
-	Topic                  *enums.NotificationTopic
+	Tags                   []string                 `json:"tags,omitempty"`
+	NotificationType       enums.NotificationType   `json:"notification_type,omitempty"`
+	ObjectType             string                   `json:"object_type,omitempty"`
+	Title                  string                   `json:"title,omitempty"`
+	Body                   string                   `json:"body,omitempty"`
+	Data                   map[string]interface{}   `json:"data,omitempty"`
+	Channels               []enums.Channel          `json:"channels,omitempty"`
+	Topic                  *enums.NotificationTopic `json:"topic,omitempty"`
 	OwnerID                *string
 	NotificationTemplateID *string
 }
@@ -15496,10 +15544,10 @@ func (c *NotificationCreate) SetInput(i CreateNotificationInput) *NotificationCr
 // UpdateNotificationInput represents a mutation input for updating notifications.
 type UpdateNotificationInput struct {
 	ClearTags   bool
-	Tags        []string
+	Tags        []string `json:"tags,omitempty"`
 	AppendTags  []string
 	ClearReadAt bool
-	ReadAt      *models.DateTime
+	ReadAt      *models.DateTime `json:"read_at,omitempty"`
 	ClearOwner  bool
 	OwnerID     *string
 }
@@ -15543,25 +15591,25 @@ func (c *NotificationUpdateOne) SetInput(i UpdateNotificationInput) *Notificatio
 
 // CreateNotificationPreferenceInput represents a mutation input for creating notificationpreferences.
 type CreateNotificationPreferenceInput struct {
-	Channel                enums.Channel
-	Status                 *enums.NotificationChannelStatus
-	Provider               *string
-	Destination            *string
-	Config                 map[string]interface{}
-	Enabled                *bool
-	Cadence                *enums.NotificationCadence
-	Priority               *enums.Priority
-	TopicPatterns          []string
-	TopicOverrides         map[string]interface{}
-	MuteUntil              *time.Time
-	QuietHoursStart        *string
-	QuietHoursEnd          *string
-	Timezone               *string
-	IsDefault              *bool
-	VerifiedAt             *time.Time
-	LastUsedAt             *time.Time
-	LastError              *string
-	Metadata               map[string]interface{}
+	Channel                enums.Channel                    `json:"channel,omitempty"`
+	Status                 *enums.NotificationChannelStatus `json:"status,omitempty"`
+	Provider               *string                          `json:"provider,omitempty"`
+	Destination            *string                          `json:"destination,omitempty"`
+	Config                 map[string]interface{}           `json:"config,omitempty"`
+	Enabled                *bool                            `json:"enabled,omitempty"`
+	Cadence                *enums.NotificationCadence       `json:"cadence,omitempty"`
+	Priority               *enums.Priority                  `json:"priority,omitempty"`
+	TopicPatterns          []string                         `json:"topic_patterns,omitempty"`
+	TopicOverrides         map[string]interface{}           `json:"topic_overrides,omitempty"`
+	MuteUntil              *time.Time                       `json:"mute_until,omitempty"`
+	QuietHoursStart        *string                          `json:"quiet_hours_start,omitempty"`
+	QuietHoursEnd          *string                          `json:"quiet_hours_end,omitempty"`
+	Timezone               *string                          `json:"timezone,omitempty"`
+	IsDefault              *bool                            `json:"is_default,omitempty"`
+	VerifiedAt             *time.Time                       `json:"verified_at,omitempty"`
+	LastUsedAt             *time.Time                       `json:"last_used_at,omitempty"`
+	LastError              *string                          `json:"last_error,omitempty"`
+	Metadata               map[string]interface{}           `json:"metadata,omitempty"`
 	OwnerID                *string
 	UserID                 string
 	NotificationTemplateID *string
@@ -15641,40 +15689,40 @@ func (c *NotificationPreferenceCreate) SetInput(i CreateNotificationPreferenceIn
 
 // UpdateNotificationPreferenceInput represents a mutation input for updating notificationpreferences.
 type UpdateNotificationPreferenceInput struct {
-	Channel                   *enums.Channel
-	Status                    *enums.NotificationChannelStatus
+	Channel                   *enums.Channel                   `json:"channel,omitempty"`
+	Status                    *enums.NotificationChannelStatus `json:"status,omitempty"`
 	ClearProvider             bool
-	Provider                  *string
+	Provider                  *string `json:"provider,omitempty"`
 	ClearDestination          bool
-	Destination               *string
+	Destination               *string `json:"destination,omitempty"`
 	ClearConfig               bool
-	Config                    map[string]interface{}
-	Enabled                   *bool
-	Cadence                   *enums.NotificationCadence
+	Config                    map[string]interface{}     `json:"config,omitempty"`
+	Enabled                   *bool                      `json:"enabled,omitempty"`
+	Cadence                   *enums.NotificationCadence `json:"cadence,omitempty"`
 	ClearPriority             bool
-	Priority                  *enums.Priority
+	Priority                  *enums.Priority `json:"priority,omitempty"`
 	ClearTopicPatterns        bool
-	TopicPatterns             []string
+	TopicPatterns             []string `json:"topic_patterns,omitempty"`
 	AppendTopicPatterns       []string
 	ClearTopicOverrides       bool
-	TopicOverrides            map[string]interface{}
+	TopicOverrides            map[string]interface{} `json:"topic_overrides,omitempty"`
 	ClearMuteUntil            bool
-	MuteUntil                 *time.Time
+	MuteUntil                 *time.Time `json:"mute_until,omitempty"`
 	ClearQuietHoursStart      bool
-	QuietHoursStart           *string
+	QuietHoursStart           *string `json:"quiet_hours_start,omitempty"`
 	ClearQuietHoursEnd        bool
-	QuietHoursEnd             *string
+	QuietHoursEnd             *string `json:"quiet_hours_end,omitempty"`
 	ClearTimezone             bool
-	Timezone                  *string
-	IsDefault                 *bool
+	Timezone                  *string `json:"timezone,omitempty"`
+	IsDefault                 *bool   `json:"is_default,omitempty"`
 	ClearVerifiedAt           bool
-	VerifiedAt                *time.Time
+	VerifiedAt                *time.Time `json:"verified_at,omitempty"`
 	ClearLastUsedAt           bool
-	LastUsedAt                *time.Time
+	LastUsedAt                *time.Time `json:"last_used_at,omitempty"`
 	ClearLastError            bool
-	LastError                 *string
+	LastError                 *string `json:"last_error,omitempty"`
 	ClearMetadata             bool
-	Metadata                  map[string]interface{}
+	Metadata                  map[string]interface{} `json:"metadata,omitempty"`
 	ClearOwner                bool
 	OwnerID                   *string
 	ClearNotificationTemplate bool
@@ -15813,28 +15861,28 @@ func (c *NotificationPreferenceUpdateOne) SetInput(i UpdateNotificationPreferenc
 
 // CreateNotificationTemplateInput represents a mutation input for creating notificationtemplates.
 type CreateNotificationTemplateInput struct {
-	Revision             *string
-	InternalNotes        *string
-	SystemInternalID     *string
-	Key                  string
-	Name                 string
-	Description          *string
-	Channel              *enums.Channel
-	Format               *enums.NotificationTemplateFormat
-	Locale               *string
-	TopicPattern         string
-	Destinations         []string
-	TitleTemplate        *string
-	SubjectTemplate      *string
-	BodyTemplate         *string
-	Blocks               map[string]interface{}
-	Jsonconfig           map[string]interface{}
-	Uischema             map[string]interface{}
-	Metadata             map[string]interface{}
-	Active               *bool
-	Version              *int
-	TemplateContext      *enums.TemplateContext
-	Defaults             map[string]interface{}
+	Revision             *string                           `json:"revision,omitempty"`
+	InternalNotes        *string                           `json:"internal_notes,omitempty"`
+	SystemInternalID     *string                           `json:"system_internal_id,omitempty"`
+	Key                  string                            `json:"key,omitempty"`
+	Name                 string                            `json:"name,omitempty"`
+	Description          *string                           `json:"description,omitempty"`
+	Channel              *enums.Channel                    `json:"channel,omitempty"`
+	Format               *enums.NotificationTemplateFormat `json:"format,omitempty"`
+	Locale               *string                           `json:"locale,omitempty"`
+	TopicPattern         string                            `json:"topic_pattern,omitempty"`
+	Destinations         []string                          `json:"destinations,omitempty"`
+	TitleTemplate        *string                           `json:"title_template,omitempty"`
+	SubjectTemplate      *string                           `json:"subject_template,omitempty"`
+	BodyTemplate         *string                           `json:"body_template,omitempty"`
+	Blocks               map[string]interface{}            `json:"blocks,omitempty"`
+	Jsonconfig           map[string]interface{}            `json:"jsonconfig,omitempty"`
+	Uischema             map[string]interface{}            `json:"uischema,omitempty"`
+	Metadata             map[string]interface{}            `json:"metadata,omitempty"`
+	Active               *bool                             `json:"active,omitempty"`
+	Version              *int                              `json:"version,omitempty"`
+	TemplateContext      *enums.TemplateContext            `json:"template_context,omitempty"`
+	Defaults             map[string]interface{}            `json:"defaults,omitempty"`
 	OwnerID              *string
 	IntegrationID        *string
 	WorkflowDefinitionID *string
@@ -15930,43 +15978,43 @@ func (c *NotificationTemplateCreate) SetInput(i CreateNotificationTemplateInput)
 // UpdateNotificationTemplateInput represents a mutation input for updating notificationtemplates.
 type UpdateNotificationTemplateInput struct {
 	ClearRevision           bool
-	Revision                *string
+	Revision                *string `json:"revision,omitempty"`
 	ClearInternalNotes      bool
-	InternalNotes           *string
+	InternalNotes           *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID   bool
-	SystemInternalID        *string
-	Key                     *string
-	Name                    *string
+	SystemInternalID        *string `json:"system_internal_id,omitempty"`
+	Key                     *string `json:"key,omitempty"`
+	Name                    *string `json:"name,omitempty"`
 	ClearDescription        bool
-	Description             *string
+	Description             *string `json:"description,omitempty"`
 	ClearChannel            bool
-	Channel                 *enums.Channel
-	Format                  *enums.NotificationTemplateFormat
-	Locale                  *string
-	TopicPattern            *string
+	Channel                 *enums.Channel                    `json:"channel,omitempty"`
+	Format                  *enums.NotificationTemplateFormat `json:"format,omitempty"`
+	Locale                  *string                           `json:"locale,omitempty"`
+	TopicPattern            *string                           `json:"topic_pattern,omitempty"`
 	ClearDestinations       bool
-	Destinations            []string
+	Destinations            []string `json:"destinations,omitempty"`
 	AppendDestinations      []string
 	ClearTitleTemplate      bool
-	TitleTemplate           *string
+	TitleTemplate           *string `json:"title_template,omitempty"`
 	ClearSubjectTemplate    bool
-	SubjectTemplate         *string
+	SubjectTemplate         *string `json:"subject_template,omitempty"`
 	ClearBodyTemplate       bool
-	BodyTemplate            *string
+	BodyTemplate            *string `json:"body_template,omitempty"`
 	ClearBlocks             bool
-	Blocks                  map[string]interface{}
+	Blocks                  map[string]interface{} `json:"blocks,omitempty"`
 	ClearJsonconfig         bool
-	Jsonconfig              map[string]interface{}
+	Jsonconfig              map[string]interface{} `json:"jsonconfig,omitempty"`
 	ClearUischema           bool
-	Uischema                map[string]interface{}
+	Uischema                map[string]interface{} `json:"uischema,omitempty"`
 	ClearMetadata           bool
-	Metadata                map[string]interface{}
-	Active                  *bool
-	Version                 *int
+	Metadata                map[string]interface{} `json:"metadata,omitempty"`
+	Active                  *bool                  `json:"active,omitempty"`
+	Version                 *int                   `json:"version,omitempty"`
 	ClearTemplateContext    bool
-	TemplateContext         *enums.TemplateContext
+	TemplateContext         *enums.TemplateContext `json:"template_context,omitempty"`
 	ClearDefaults           bool
-	Defaults                map[string]interface{}
+	Defaults                map[string]interface{} `json:"defaults,omitempty"`
 	ClearIntegration        bool
 	IntegrationID           *string
 	ClearWorkflowDefinition bool
@@ -16137,12 +16185,12 @@ func (c *NotificationTemplateUpdateOne) SetInput(i UpdateNotificationTemplateInp
 
 // CreateOnboardingInput represents a mutation input for creating onboardings.
 type CreateOnboardingInput struct {
-	CompanyName    string
-	Domains        []string
-	CompanyDetails map[string]interface{}
-	UserDetails    map[string]interface{}
-	Compliance     map[string]interface{}
-	DemoRequested  *bool
+	CompanyName    string                 `json:"company_name,omitempty"`
+	Domains        []string               `json:"domains,omitempty"`
+	CompanyDetails map[string]interface{} `json:"company_details,omitempty"`
+	UserDetails    map[string]interface{} `json:"user_details,omitempty"`
+	Compliance     map[string]interface{} `json:"compliance,omitempty"`
+	DemoRequested  *bool                  `json:"demo_requested,omitempty"`
 	OrganizationID *string
 }
 
@@ -16177,9 +16225,9 @@ func (c *OnboardingCreate) SetInput(i CreateOnboardingInput) *OnboardingCreate {
 
 // CreateOrgMembershipInput represents a mutation input for creating orgmemberships.
 type CreateOrgMembershipInput struct {
-	Role            *enums.Role
-	SSOExempt       *bool
-	SSOExemptReason *string
+	Role            *enums.Role `json:"role,omitempty"`
+	SSOExempt       *bool       `json:"sso_exempt,omitempty"`
+	SSOExemptReason *string     `json:"sso_exempt_reason,omitempty"`
 	OrganizationID  string
 	UserID          string
 	EventIDs        []string
@@ -16211,11 +16259,11 @@ func (c *OrgMembershipCreate) SetInput(i CreateOrgMembershipInput) *OrgMembershi
 
 // UpdateOrgMembershipInput represents a mutation input for updating orgmemberships.
 type UpdateOrgMembershipInput struct {
-	Role                 *enums.Role
+	Role                 *enums.Role `json:"role,omitempty"`
 	ClearSSOExempt       bool
-	SSOExempt            *bool
+	SSOExempt            *bool `json:"sso_exempt,omitempty"`
 	ClearSSOExemptReason bool
-	SSOExemptReason      *string
+	SSOExemptReason      *string `json:"sso_exempt_reason,omitempty"`
 	ClearEvents          bool
 	AddEventIDs          []string
 	RemoveEventIDs       []string
@@ -16263,13 +16311,13 @@ func (c *OrgMembershipUpdateOne) SetInput(i UpdateOrgMembershipInput) *OrgMember
 
 // CreateOrganizationInput represents a mutation input for creating organizations.
 type CreateOrganizationInput struct {
-	Tags                                 []string
-	Name                                 string
-	DisplayName                          *string
-	Description                          *string
-	PersonalOrg                          *bool
-	AvatarRemoteURL                      *string
-	AvatarUpdatedAt                      *time.Time
+	Tags                                 []string   `json:"tags,omitempty"`
+	Name                                 string     `json:"name,omitempty"`
+	DisplayName                          *string    `json:"display_name,omitempty"`
+	Description                          *string    `json:"description,omitempty"`
+	PersonalOrg                          *bool      `json:"personal_org,omitempty"`
+	AvatarRemoteURL                      *string    `json:"avatar_remote_url,omitempty"`
+	AvatarUpdatedAt                      *time.Time `json:"avatar_updated_at,omitempty"`
 	ActionPlanCreatorIDs                 []string
 	APITokenCreatorIDs                   []string
 	AssessmentCreatorIDs                 []string
@@ -16940,15 +16988,15 @@ func (c *OrganizationCreate) SetInput(i CreateOrganizationInput) *OrganizationCr
 // UpdateOrganizationInput represents a mutation input for updating organizations.
 type UpdateOrganizationInput struct {
 	ClearTags                                  bool
-	Tags                                       []string
+	Tags                                       []string `json:"tags,omitempty"`
 	AppendTags                                 []string
-	DisplayName                                *string
+	DisplayName                                *string `json:"display_name,omitempty"`
 	ClearDescription                           bool
-	Description                                *string
+	Description                                *string `json:"description,omitempty"`
 	ClearAvatarRemoteURL                       bool
-	AvatarRemoteURL                            *string
+	AvatarRemoteURL                            *string `json:"avatar_remote_url,omitempty"`
 	ClearAvatarUpdatedAt                       bool
-	AvatarUpdatedAt                            *time.Time
+	AvatarUpdatedAt                            *time.Time `json:"avatar_updated_at,omitempty"`
 	ClearActionPlanCreators                    bool
 	AddActionPlanCreatorIDs                    []string
 	RemoveActionPlanCreatorIDs                 []string
@@ -18887,33 +18935,33 @@ func (c *OrganizationUpdateOne) SetInput(i UpdateOrganizationInput) *Organizatio
 
 // CreateOrganizationSettingInput represents a mutation input for creating organizationsettings.
 type CreateOrganizationSettingInput struct {
-	Tags                             []string
-	Domains                          []string
-	BillingContact                   *string
-	BillingEmail                     *string
-	BillingPhone                     *string
-	BillingAddress                   *models.Address
-	TaxIdentifier                    *string
-	GeoLocation                      *enums.Region
-	BillingNotificationsEnabled      *bool
-	AllowedEmailDomains              []string
-	AllowMatchingDomainsAutojoin     *bool
-	IdentityProvider                 *enums.SSOProvider
-	IdentityProviderClientID         *string
-	IdentityProviderClientSecret     *string
-	IdentityProviderMetadataEndpoint *string
-	IdentityProviderEntityID         *string
-	OidcDiscoveryEndpoint            *string
-	SamlSigninURL                    *string
-	SamlIssuer                       *string
-	SamlCert                         *string
-	IdentityProviderLoginEnforced    *bool
-	IdentityProviderJitProvisioning  *bool
-	JitAllowedEmailDomains           []string
-	MultifactorAuthEnforced          *bool
-	SSOExemptDomains                 []string
-	AllowSupportAccess               *bool
-	ComplianceWebhookToken           *string
+	Tags                             []string           `json:"tags,omitempty"`
+	Domains                          []string           `json:"domains,omitempty"`
+	BillingContact                   *string            `json:"billing_contact,omitempty"`
+	BillingEmail                     *string            `json:"billing_email,omitempty"`
+	BillingPhone                     *string            `json:"billing_phone,omitempty"`
+	BillingAddress                   *models.Address    `json:"billing_address,omitempty"`
+	TaxIdentifier                    *string            `json:"tax_identifier,omitempty"`
+	GeoLocation                      *enums.Region      `json:"geo_location,omitempty"`
+	BillingNotificationsEnabled      *bool              `json:"billing_notifications_enabled,omitempty"`
+	AllowedEmailDomains              []string           `json:"allowed_email_domains,omitempty"`
+	AllowMatchingDomainsAutojoin     *bool              `json:"allow_matching_domains_autojoin,omitempty"`
+	IdentityProvider                 *enums.SSOProvider `json:"identity_provider,omitempty"`
+	IdentityProviderClientID         *string            `json:"identity_provider_client_id,omitempty"`
+	IdentityProviderClientSecret     *string            `json:"identity_provider_client_secret,omitempty"`
+	IdentityProviderMetadataEndpoint *string            `json:"identity_provider_metadata_endpoint,omitempty"`
+	IdentityProviderEntityID         *string            `json:"identity_provider_entity_id,omitempty"`
+	OidcDiscoveryEndpoint            *string            `json:"oidc_discovery_endpoint,omitempty"`
+	SamlSigninURL                    *string            `json:"saml_signin_url,omitempty"`
+	SamlIssuer                       *string            `json:"saml_issuer,omitempty"`
+	SamlCert                         *string            `json:"saml_cert,omitempty"`
+	IdentityProviderLoginEnforced    *bool              `json:"identity_provider_login_enforced,omitempty"`
+	IdentityProviderJitProvisioning  *bool              `json:"identity_provider_jit_provisioning,omitempty"`
+	JitAllowedEmailDomains           []string           `json:"jit_allowed_email_domains,omitempty"`
+	MultifactorAuthEnforced          *bool              `json:"multifactor_auth_enforced,omitempty"`
+	SSOExemptDomains                 []string           `json:"sso_exempt_domains,omitempty"`
+	AllowSupportAccess               *bool              `json:"allow_support_access,omitempty"`
+	ComplianceWebhookToken           *string            `json:"compliance_webhook_token,omitempty"`
 	OrganizationID                   *string
 	FileIDs                          []string
 }
@@ -19018,63 +19066,63 @@ func (c *OrganizationSettingCreate) SetInput(i CreateOrganizationSettingInput) *
 // UpdateOrganizationSettingInput represents a mutation input for updating organizationsettings.
 type UpdateOrganizationSettingInput struct {
 	ClearTags                             bool
-	Tags                                  []string
+	Tags                                  []string `json:"tags,omitempty"`
 	AppendTags                            []string
 	ClearDomains                          bool
-	Domains                               []string
+	Domains                               []string `json:"domains,omitempty"`
 	AppendDomains                         []string
 	ClearBillingContact                   bool
-	BillingContact                        *string
+	BillingContact                        *string `json:"billing_contact,omitempty"`
 	ClearBillingEmail                     bool
-	BillingEmail                          *string
+	BillingEmail                          *string `json:"billing_email,omitempty"`
 	ClearBillingPhone                     bool
-	BillingPhone                          *string
+	BillingPhone                          *string `json:"billing_phone,omitempty"`
 	ClearBillingAddress                   bool
-	BillingAddress                        *models.Address
+	BillingAddress                        *models.Address `json:"billing_address,omitempty"`
 	ClearTaxIdentifier                    bool
-	TaxIdentifier                         *string
+	TaxIdentifier                         *string `json:"tax_identifier,omitempty"`
 	ClearGeoLocation                      bool
-	GeoLocation                           *enums.Region
-	BillingNotificationsEnabled           *bool
+	GeoLocation                           *enums.Region `json:"geo_location,omitempty"`
+	BillingNotificationsEnabled           *bool         `json:"billing_notifications_enabled,omitempty"`
 	ClearAllowedEmailDomains              bool
-	AllowedEmailDomains                   []string
+	AllowedEmailDomains                   []string `json:"allowed_email_domains,omitempty"`
 	AppendAllowedEmailDomains             []string
 	ClearAllowMatchingDomainsAutojoin     bool
-	AllowMatchingDomainsAutojoin          *bool
+	AllowMatchingDomainsAutojoin          *bool `json:"allow_matching_domains_autojoin,omitempty"`
 	ClearIdentityProvider                 bool
-	IdentityProvider                      *enums.SSOProvider
+	IdentityProvider                      *enums.SSOProvider `json:"identity_provider,omitempty"`
 	ClearIdentityProviderClientID         bool
-	IdentityProviderClientID              *string
+	IdentityProviderClientID              *string `json:"identity_provider_client_id,omitempty"`
 	ClearIdentityProviderClientSecret     bool
-	IdentityProviderClientSecret          *string
+	IdentityProviderClientSecret          *string `json:"identity_provider_client_secret,omitempty"`
 	ClearIdentityProviderMetadataEndpoint bool
-	IdentityProviderMetadataEndpoint      *string
+	IdentityProviderMetadataEndpoint      *string `json:"identity_provider_metadata_endpoint,omitempty"`
 	ClearIdentityProviderEntityID         bool
-	IdentityProviderEntityID              *string
+	IdentityProviderEntityID              *string `json:"identity_provider_entity_id,omitempty"`
 	ClearOidcDiscoveryEndpoint            bool
-	OidcDiscoveryEndpoint                 *string
+	OidcDiscoveryEndpoint                 *string `json:"oidc_discovery_endpoint,omitempty"`
 	ClearSamlSigninURL                    bool
-	SamlSigninURL                         *string
+	SamlSigninURL                         *string `json:"saml_signin_url,omitempty"`
 	ClearSamlIssuer                       bool
-	SamlIssuer                            *string
+	SamlIssuer                            *string `json:"saml_issuer,omitempty"`
 	ClearSamlCert                         bool
-	SamlCert                              *string
-	IdentityProviderLoginEnforced         *bool
-	IdentityProviderJitProvisioning       *bool
+	SamlCert                              *string `json:"saml_cert,omitempty"`
+	IdentityProviderLoginEnforced         *bool   `json:"identity_provider_login_enforced,omitempty"`
+	IdentityProviderJitProvisioning       *bool   `json:"identity_provider_jit_provisioning,omitempty"`
 	ClearJitAllowedEmailDomains           bool
-	JitAllowedEmailDomains                []string
+	JitAllowedEmailDomains                []string `json:"jit_allowed_email_domains,omitempty"`
 	AppendJitAllowedEmailDomains          []string
 	ClearMultifactorAuthEnforced          bool
-	MultifactorAuthEnforced               *bool
+	MultifactorAuthEnforced               *bool `json:"multifactor_auth_enforced,omitempty"`
 	ClearSSOExemptDomains                 bool
-	SSOExemptDomains                      []string
+	SSOExemptDomains                      []string `json:"sso_exempt_domains,omitempty"`
 	AppendSSOExemptDomains                []string
 	ClearAllowSupportAccess               bool
-	AllowSupportAccess                    *bool
+	AllowSupportAccess                    *bool `json:"allow_support_access,omitempty"`
 	ClearComplianceWebhookToken           bool
-	ComplianceWebhookToken                *string
+	ComplianceWebhookToken                *string `json:"compliance_webhook_token,omitempty"`
 	ClearPendingDeletionAt                bool
-	PendingDeletionAt                     *models.DateTime
+	PendingDeletionAt                     *models.DateTime `json:"pending_deletion_at,omitempty"`
 	ClearOrganization                     bool
 	OrganizationID                        *string
 	ClearFiles                            bool
@@ -19289,13 +19337,13 @@ func (c *OrganizationSettingUpdateOne) SetInput(i UpdateOrganizationSettingInput
 
 // CreatePersonalAccessTokenInput represents a mutation input for creating personalaccesstokens.
 type CreatePersonalAccessTokenInput struct {
-	Tags            []string
-	Name            string
-	ExpiresAt       *time.Time
-	Description     *string
-	Scopes          []string
-	LastUsedAt      *time.Time
-	IsActive        *bool
+	Tags            []string   `json:"tags,omitempty"`
+	Name            string     `json:"name,omitempty"`
+	ExpiresAt       *time.Time `json:"expires_at,omitempty"`
+	Description     *string    `json:"description,omitempty"`
+	Scopes          []string   `json:"scopes,omitempty"`
+	LastUsedAt      *time.Time `json:"last_used_at,omitempty"`
+	IsActive        *bool      `json:"is_active,omitempty"`
 	OrganizationIDs []string
 	EventIDs        []string
 }
@@ -19338,20 +19386,20 @@ func (c *PersonalAccessTokenCreate) SetInput(i CreatePersonalAccessTokenInput) *
 // UpdatePersonalAccessTokenInput represents a mutation input for updating personalaccesstokens.
 type UpdatePersonalAccessTokenInput struct {
 	ClearTags             bool
-	Tags                  []string
+	Tags                  []string `json:"tags,omitempty"`
 	AppendTags            []string
-	Name                  *string
+	Name                  *string `json:"name,omitempty"`
 	ClearExpiresAt        bool
-	ExpiresAt             *time.Time
+	ExpiresAt             *time.Time `json:"expires_at,omitempty"`
 	ClearDescription      bool
-	Description           *string
+	Description           *string `json:"description,omitempty"`
 	ClearScopes           bool
-	Scopes                []string
+	Scopes                []string `json:"scopes,omitempty"`
 	AppendScopes          []string
 	ClearLastUsedAt       bool
-	LastUsedAt            *time.Time
+	LastUsedAt            *time.Time `json:"last_used_at,omitempty"`
 	ClearIsActive         bool
-	IsActive              *bool
+	IsActive              *bool `json:"is_active,omitempty"`
 	ClearOrganizations    bool
 	AddOrganizationIDs    []string
 	RemoveOrganizationIDs []string
@@ -19441,38 +19489,38 @@ func (c *PersonalAccessTokenUpdateOne) SetInput(i UpdatePersonalAccessTokenInput
 
 // CreatePlatformInput represents a mutation input for creating platforms.
 type CreatePlatformInput struct {
-	Tags                           []string
-	InternalOwner                  *string
-	BusinessOwner                  *string
-	TechnicalOwner                 *string
-	SecurityOwner                  *string
-	PlatformKindName               *string
-	PlatformDataClassificationName *string
-	EnvironmentName                *string
-	ScopeName                      *string
-	AccessModelName                *string
-	EncryptionStatusName           *string
-	SecurityTierName               *string
-	CriticalityName                *string
-	WorkflowEligibleMarker         *bool
-	ExternalUUID                   *string
-	Name                           string
-	Description                    *string
-	BusinessPurpose                *string
-	ScopeStatement                 *string
-	TrustBoundaryDescription       *string
-	DataFlowSummary                *string
-	Status                         *enums.PlatformStatus
-	PhysicalLocation               *string
-	Region                         *string
-	ContainsPii                    *bool
-	SourceType                     *enums.SourceType
-	SourceIdentifier               *string
-	CostCenter                     *string
-	EstimatedMonthlyCost           *float64
-	PurchaseDate                   *models.DateTime
-	ExternalReferenceID            *string
-	Metadata                       map[string]interface{}
+	Tags                           []string               `json:"tags,omitempty"`
+	InternalOwner                  *string                `json:"internal_owner,omitempty"`
+	BusinessOwner                  *string                `json:"business_owner,omitempty"`
+	TechnicalOwner                 *string                `json:"technical_owner,omitempty"`
+	SecurityOwner                  *string                `json:"security_owner,omitempty"`
+	PlatformKindName               *string                `json:"platform_kind_name,omitempty"`
+	PlatformDataClassificationName *string                `json:"platform_data_classification_name,omitempty"`
+	EnvironmentName                *string                `json:"environment_name,omitempty"`
+	ScopeName                      *string                `json:"scope_name,omitempty"`
+	AccessModelName                *string                `json:"access_model_name,omitempty"`
+	EncryptionStatusName           *string                `json:"encryption_status_name,omitempty"`
+	SecurityTierName               *string                `json:"security_tier_name,omitempty"`
+	CriticalityName                *string                `json:"criticality_name,omitempty"`
+	WorkflowEligibleMarker         *bool                  `json:"workflow_eligible_marker,omitempty"`
+	ExternalUUID                   *string                `json:"external_uuid,omitempty"`
+	Name                           string                 `json:"name,omitempty"`
+	Description                    *string                `json:"description,omitempty"`
+	BusinessPurpose                *string                `json:"business_purpose,omitempty"`
+	ScopeStatement                 *string                `json:"scope_statement,omitempty"`
+	TrustBoundaryDescription       *string                `json:"trust_boundary_description,omitempty"`
+	DataFlowSummary                *string                `json:"data_flow_summary,omitempty"`
+	Status                         *enums.PlatformStatus  `json:"status,omitempty"`
+	PhysicalLocation               *string                `json:"physical_location,omitempty"`
+	Region                         *string                `json:"region,omitempty"`
+	ContainsPii                    *bool                  `json:"contains_pii,omitempty"`
+	SourceType                     *enums.SourceType      `json:"source_type,omitempty"`
+	SourceIdentifier               *string                `json:"source_identifier,omitempty"`
+	CostCenter                     *string                `json:"cost_center,omitempty"`
+	EstimatedMonthlyCost           *float64               `json:"estimated_monthly_cost,omitempty"`
+	PurchaseDate                   *models.DateTime       `json:"purchase_date,omitempty"`
+	ExternalReferenceID            *string                `json:"external_reference_id,omitempty"`
+	Metadata                       map[string]interface{} `json:"metadata,omitempty"`
 	OwnerID                        *string
 	BlockedGroupIDs                []string
 	EditorIDs                      []string
@@ -19766,67 +19814,67 @@ func (c *PlatformCreate) SetInput(i CreatePlatformInput) *PlatformCreate {
 // UpdatePlatformInput represents a mutation input for updating platforms.
 type UpdatePlatformInput struct {
 	ClearTags                           bool
-	Tags                                []string
+	Tags                                []string `json:"tags,omitempty"`
 	AppendTags                          []string
 	ClearInternalOwner                  bool
-	InternalOwner                       *string
+	InternalOwner                       *string `json:"internal_owner,omitempty"`
 	ClearBusinessOwner                  bool
-	BusinessOwner                       *string
+	BusinessOwner                       *string `json:"business_owner,omitempty"`
 	ClearTechnicalOwner                 bool
-	TechnicalOwner                      *string
+	TechnicalOwner                      *string `json:"technical_owner,omitempty"`
 	ClearSecurityOwner                  bool
-	SecurityOwner                       *string
+	SecurityOwner                       *string `json:"security_owner,omitempty"`
 	ClearPlatformKindName               bool
-	PlatformKindName                    *string
+	PlatformKindName                    *string `json:"platform_kind_name,omitempty"`
 	ClearPlatformDataClassificationName bool
-	PlatformDataClassificationName      *string
+	PlatformDataClassificationName      *string `json:"platform_data_classification_name,omitempty"`
 	ClearEnvironmentName                bool
-	EnvironmentName                     *string
+	EnvironmentName                     *string `json:"environment_name,omitempty"`
 	ClearScopeName                      bool
-	ScopeName                           *string
+	ScopeName                           *string `json:"scope_name,omitempty"`
 	ClearAccessModelName                bool
-	AccessModelName                     *string
+	AccessModelName                     *string `json:"access_model_name,omitempty"`
 	ClearEncryptionStatusName           bool
-	EncryptionStatusName                *string
+	EncryptionStatusName                *string `json:"encryption_status_name,omitempty"`
 	ClearSecurityTierName               bool
-	SecurityTierName                    *string
+	SecurityTierName                    *string `json:"security_tier_name,omitempty"`
 	ClearCriticalityName                bool
-	CriticalityName                     *string
+	CriticalityName                     *string `json:"criticality_name,omitempty"`
 	ClearWorkflowEligibleMarker         bool
-	WorkflowEligibleMarker              *bool
+	WorkflowEligibleMarker              *bool `json:"workflow_eligible_marker,omitempty"`
 	ClearExternalUUID                   bool
-	ExternalUUID                        *string
-	Name                                *string
+	ExternalUUID                        *string `json:"external_uuid,omitempty"`
+	Name                                *string `json:"name,omitempty"`
 	ClearDescription                    bool
-	Description                         *string
+	Description                         *string `json:"description,omitempty"`
 	ClearBusinessPurpose                bool
-	BusinessPurpose                     *string
+	BusinessPurpose                     *string `json:"business_purpose,omitempty"`
 	ClearScopeStatement                 bool
-	ScopeStatement                      *string
+	ScopeStatement                      *string `json:"scope_statement,omitempty"`
 	ClearTrustBoundaryDescription       bool
-	TrustBoundaryDescription            *string
+	TrustBoundaryDescription            *string `json:"trust_boundary_description,omitempty"`
 	ClearDataFlowSummary                bool
-	DataFlowSummary                     *string
-	Status                              *enums.PlatformStatus
+	DataFlowSummary                     *string               `json:"data_flow_summary,omitempty"`
+	Status                              *enums.PlatformStatus `json:"status,omitempty"`
 	ClearPhysicalLocation               bool
-	PhysicalLocation                    *string
+	PhysicalLocation                    *string `json:"physical_location,omitempty"`
 	ClearRegion                         bool
-	Region                              *string
+	Region                              *string `json:"region,omitempty"`
 	ClearContainsPii                    bool
-	ContainsPii                         *bool
-	SourceType                          *enums.SourceType
+	ContainsPii                         *bool             `json:"contains_pii,omitempty"`
+	SourceType                          *enums.SourceType `json:"source_type,omitempty"`
 	ClearSourceIdentifier               bool
-	SourceIdentifier                    *string
+	SourceIdentifier                    *string `json:"source_identifier,omitempty"`
 	ClearCostCenter                     bool
-	CostCenter                          *string
+	CostCenter                          *string `json:"cost_center,omitempty"`
 	ClearEstimatedMonthlyCost           bool
-	EstimatedMonthlyCost                *float64
+	EstimatedMonthlyCost                *float64 `json:"estimated_monthly_cost,omitempty"`
 	ClearPurchaseDate                   bool
-	PurchaseDate                        *models.DateTime
+	PurchaseDate                        *models.DateTime `json:"purchase_date,omitempty"`
 	ClearExternalReferenceID            bool
-	ExternalReferenceID                 *string
+	ExternalReferenceID                 *string `json:"external_reference_id,omitempty"`
 	ClearMetadata                       bool
-	Metadata                            map[string]interface{}
+	Metadata                            map[string]interface{} `json:"metadata,omitempty"`
 	ClearBlockedGroups                  bool
 	AddBlockedGroupIDs                  []string
 	RemoveBlockedGroupIDs               []string
@@ -20505,31 +20553,31 @@ func (c *PlatformUpdateOne) SetInput(i UpdatePlatformInput) *PlatformUpdateOne {
 
 // CreateProcedureInput represents a mutation input for creating procedures.
 type CreateProcedureInput struct {
-	Tags                            []string
-	Revision                        *string
-	Name                            string
-	Status                          *enums.DocumentStatus
-	ManagementMode                  *enums.DocumentManagementMode
-	Details                         *string
-	DetailsJSON                     []interface{}
-	ApprovalRequired                *bool
-	ReviewDue                       *time.Time
-	ReviewFrequency                 *enums.Frequency
-	TagSuggestions                  []string
-	DismissedTagSuggestions         []string
-	ControlSuggestions              []string
-	DismissedControlSuggestions     []string
-	ImprovementSuggestions          []string
-	DismissedImprovementSuggestions []string
-	URL                             *string
-	ExternalFileID                  *string
-	ExternalContents                *string
-	InternalNotes                   *string
-	SystemInternalID                *string
-	ProcedureKindName               *string
-	EnvironmentName                 *string
-	ScopeName                       *string
-	WorkflowEligibleMarker          *bool
+	Tags                            []string                      `json:"tags,omitempty"`
+	Revision                        *string                       `json:"revision,omitempty"`
+	Name                            string                        `json:"name,omitempty"`
+	Status                          *enums.DocumentStatus         `json:"status,omitempty"`
+	ManagementMode                  *enums.DocumentManagementMode `json:"management_mode,omitempty"`
+	Details                         *string                       `json:"details,omitempty"`
+	DetailsJSON                     []interface{}                 `json:"details_json,omitempty"`
+	ApprovalRequired                *bool                         `json:"approval_required,omitempty"`
+	ReviewDue                       *time.Time                    `json:"review_due,omitempty"`
+	ReviewFrequency                 *enums.Frequency              `json:"review_frequency,omitempty"`
+	TagSuggestions                  []string                      `json:"tag_suggestions,omitempty"`
+	DismissedTagSuggestions         []string                      `json:"dismissed_tag_suggestions,omitempty"`
+	ControlSuggestions              []string                      `json:"control_suggestions,omitempty"`
+	DismissedControlSuggestions     []string                      `json:"dismissed_control_suggestions,omitempty"`
+	ImprovementSuggestions          []string                      `json:"improvement_suggestions,omitempty"`
+	DismissedImprovementSuggestions []string                      `json:"dismissed_improvement_suggestions,omitempty"`
+	URL                             *string                       `json:"url,omitempty"`
+	ExternalFileID                  *string                       `json:"external_file_id,omitempty"`
+	ExternalContents                *string                       `json:"external_contents,omitempty"`
+	InternalNotes                   *string                       `json:"internal_notes,omitempty"`
+	SystemInternalID                *string                       `json:"system_internal_id,omitempty"`
+	ProcedureKindName               *string                       `json:"procedure_kind_name,omitempty"`
+	EnvironmentName                 *string                       `json:"environment_name,omitempty"`
+	ScopeName                       *string                       `json:"scope_name,omitempty"`
+	WorkflowEligibleMarker          *bool                         `json:"workflow_eligible_marker,omitempty"`
 	OwnerID                         *string
 	BlockedGroupIDs                 []string
 	EditorIDs                       []string
@@ -20694,62 +20742,62 @@ func (c *ProcedureCreate) SetInput(i CreateProcedureInput) *ProcedureCreate {
 // UpdateProcedureInput represents a mutation input for updating procedures.
 type UpdateProcedureInput struct {
 	ClearTags                             bool
-	Tags                                  []string
+	Tags                                  []string `json:"tags,omitempty"`
 	AppendTags                            []string
 	ClearRevision                         bool
-	Revision                              *string
-	Name                                  *string
+	Revision                              *string `json:"revision,omitempty"`
+	Name                                  *string `json:"name,omitempty"`
 	ClearStatus                           bool
-	Status                                *enums.DocumentStatus
+	Status                                *enums.DocumentStatus `json:"status,omitempty"`
 	ClearManagementMode                   bool
-	ManagementMode                        *enums.DocumentManagementMode
+	ManagementMode                        *enums.DocumentManagementMode `json:"management_mode,omitempty"`
 	ClearDetails                          bool
-	Details                               *string
+	Details                               *string `json:"details,omitempty"`
 	ClearDetailsJSON                      bool
-	DetailsJSON                           []interface{}
+	DetailsJSON                           []interface{} `json:"details_json,omitempty"`
 	AppendDetailsJSON                     []interface{}
 	ClearApprovalRequired                 bool
-	ApprovalRequired                      *bool
+	ApprovalRequired                      *bool `json:"approval_required,omitempty"`
 	ClearReviewDue                        bool
-	ReviewDue                             *time.Time
+	ReviewDue                             *time.Time `json:"review_due,omitempty"`
 	ClearReviewFrequency                  bool
-	ReviewFrequency                       *enums.Frequency
+	ReviewFrequency                       *enums.Frequency `json:"review_frequency,omitempty"`
 	ClearTagSuggestions                   bool
-	TagSuggestions                        []string
+	TagSuggestions                        []string `json:"tag_suggestions,omitempty"`
 	AppendTagSuggestions                  []string
 	ClearDismissedTagSuggestions          bool
-	DismissedTagSuggestions               []string
+	DismissedTagSuggestions               []string `json:"dismissed_tag_suggestions,omitempty"`
 	AppendDismissedTagSuggestions         []string
 	ClearControlSuggestions               bool
-	ControlSuggestions                    []string
+	ControlSuggestions                    []string `json:"control_suggestions,omitempty"`
 	AppendControlSuggestions              []string
 	ClearDismissedControlSuggestions      bool
-	DismissedControlSuggestions           []string
+	DismissedControlSuggestions           []string `json:"dismissed_control_suggestions,omitempty"`
 	AppendDismissedControlSuggestions     []string
 	ClearImprovementSuggestions           bool
-	ImprovementSuggestions                []string
+	ImprovementSuggestions                []string `json:"improvement_suggestions,omitempty"`
 	AppendImprovementSuggestions          []string
 	ClearDismissedImprovementSuggestions  bool
-	DismissedImprovementSuggestions       []string
+	DismissedImprovementSuggestions       []string `json:"dismissed_improvement_suggestions,omitempty"`
 	AppendDismissedImprovementSuggestions []string
 	ClearURL                              bool
-	URL                                   *string
+	URL                                   *string `json:"url,omitempty"`
 	ClearExternalFileID                   bool
-	ExternalFileID                        *string
+	ExternalFileID                        *string `json:"external_file_id,omitempty"`
 	ClearExternalContents                 bool
-	ExternalContents                      *string
+	ExternalContents                      *string `json:"external_contents,omitempty"`
 	ClearInternalNotes                    bool
-	InternalNotes                         *string
+	InternalNotes                         *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID                 bool
-	SystemInternalID                      *string
+	SystemInternalID                      *string `json:"system_internal_id,omitempty"`
 	ClearProcedureKindName                bool
-	ProcedureKindName                     *string
+	ProcedureKindName                     *string `json:"procedure_kind_name,omitempty"`
 	ClearEnvironmentName                  bool
-	EnvironmentName                       *string
+	EnvironmentName                       *string `json:"environment_name,omitempty"`
 	ClearScopeName                        bool
-	ScopeName                             *string
+	ScopeName                             *string `json:"scope_name,omitempty"`
 	ClearWorkflowEligibleMarker           bool
-	WorkflowEligibleMarker                *bool
+	WorkflowEligibleMarker                *bool `json:"workflow_eligible_marker,omitempty"`
 	ClearOwner                            bool
 	OwnerID                               *string
 	ClearBlockedGroups                    bool
@@ -21141,21 +21189,21 @@ func (c *ProcedureUpdateOne) SetInput(i UpdateProcedureInput) *ProcedureUpdateOn
 
 // CreateProgramInput represents a mutation input for creating programs.
 type CreateProgramInput struct {
-	Tags                 []string
-	ProgramKindName      *string
-	ExternalUUID         *string
-	Name                 string
-	Description          *string
-	Status               *enums.ProgramStatus
-	FrameworkName        *string
-	StartDate            *time.Time
-	EndDate              *time.Time
-	AuditorReady         *bool
-	AuditorWriteComments *bool
-	AuditorReadComments  *bool
-	AuditFirm            *string
-	Auditor              *string
-	AuditorEmail         *string
+	Tags                 []string             `json:"tags,omitempty"`
+	ProgramKindName      *string              `json:"program_kind_name,omitempty"`
+	ExternalUUID         *string              `json:"external_uuid,omitempty"`
+	Name                 string               `json:"name,omitempty"`
+	Description          *string              `json:"description,omitempty"`
+	Status               *enums.ProgramStatus `json:"status,omitempty"`
+	FrameworkName        *string              `json:"framework_name,omitempty"`
+	StartDate            *time.Time           `json:"start_date,omitempty"`
+	EndDate              *time.Time           `json:"end_date,omitempty"`
+	AuditorReady         *bool                `json:"auditor_ready,omitempty"`
+	AuditorWriteComments *bool                `json:"auditor_write_comments,omitempty"`
+	AuditorReadComments  *bool                `json:"auditor_read_comments,omitempty"`
+	AuditFirm            *string              `json:"audit_firm,omitempty"`
+	Auditor              *string              `json:"auditor,omitempty"`
+	AuditorEmail         *string              `json:"auditor_email,omitempty"`
 	OwnerID              *string
 	BlockedGroupIDs      []string
 	EditorIDs            []string
@@ -21290,31 +21338,31 @@ func (c *ProgramCreate) SetInput(i CreateProgramInput) *ProgramCreate {
 // UpdateProgramInput represents a mutation input for updating programs.
 type UpdateProgramInput struct {
 	ClearTags                 bool
-	Tags                      []string
+	Tags                      []string `json:"tags,omitempty"`
 	AppendTags                []string
 	ClearProgramKindName      bool
-	ProgramKindName           *string
+	ProgramKindName           *string `json:"program_kind_name,omitempty"`
 	ClearExternalUUID         bool
-	ExternalUUID              *string
-	Name                      *string
+	ExternalUUID              *string `json:"external_uuid,omitempty"`
+	Name                      *string `json:"name,omitempty"`
 	ClearDescription          bool
-	Description               *string
-	Status                    *enums.ProgramStatus
+	Description               *string              `json:"description,omitempty"`
+	Status                    *enums.ProgramStatus `json:"status,omitempty"`
 	ClearFrameworkName        bool
-	FrameworkName             *string
+	FrameworkName             *string `json:"framework_name,omitempty"`
 	ClearStartDate            bool
-	StartDate                 *time.Time
+	StartDate                 *time.Time `json:"start_date,omitempty"`
 	ClearEndDate              bool
-	EndDate                   *time.Time
-	AuditorReady              *bool
-	AuditorWriteComments      *bool
-	AuditorReadComments       *bool
+	EndDate                   *time.Time `json:"end_date,omitempty"`
+	AuditorReady              *bool      `json:"auditor_ready,omitempty"`
+	AuditorWriteComments      *bool      `json:"auditor_write_comments,omitempty"`
+	AuditorReadComments       *bool      `json:"auditor_read_comments,omitempty"`
 	ClearAuditFirm            bool
-	AuditFirm                 *string
+	AuditFirm                 *string `json:"audit_firm,omitempty"`
 	ClearAuditor              bool
-	Auditor                   *string
+	Auditor                   *string `json:"auditor,omitempty"`
 	ClearAuditorEmail         bool
-	AuditorEmail              *string
+	AuditorEmail              *string `json:"auditor_email,omitempty"`
 	ClearOwner                bool
 	OwnerID                   *string
 	ClearBlockedGroups        bool
@@ -21629,7 +21677,7 @@ func (c *ProgramUpdateOne) SetInput(i UpdateProgramInput) *ProgramUpdateOne {
 
 // CreateProgramMembershipInput represents a mutation input for creating programmemberships.
 type CreateProgramMembershipInput struct {
-	Role      *enums.Role
+	Role      *enums.Role `json:"role,omitempty"`
 	ProgramID string
 	UserID    string
 }
@@ -21651,7 +21699,7 @@ func (c *ProgramMembershipCreate) SetInput(i CreateProgramMembershipInput) *Prog
 
 // UpdateProgramMembershipInput represents a mutation input for updating programmemberships.
 type UpdateProgramMembershipInput struct {
-	Role *enums.Role
+	Role *enums.Role `json:"role,omitempty"`
 }
 
 // Mutate applies the UpdateProgramMembershipInput on the ProgramMembershipMutation builder.
@@ -21675,51 +21723,53 @@ func (c *ProgramMembershipUpdateOne) SetInput(i UpdateProgramMembershipInput) *P
 
 // CreateRemediationInput represents a mutation input for creating remediations.
 type CreateRemediationInput struct {
-	Tags             []string
-	InternalNotes    *string
-	SystemInternalID *string
-	EnvironmentName  *string
-	ScopeName        *string
-	ExternalID       *string
-	ExternalOwnerID  *string
-	Title            *string
-	Status           *enums.RemediationStatus
-	State            *string
-	Intent           *string
-	Summary          *string
-	Explanation      *string
-	Instructions     *string
-	OwnerReference   *string
-	RepositoryURI    *string
-	PullRequestURI   *string
-	TicketReference  *string
-	DueAt            *models.DateTime
-	CompletedAt      *models.DateTime
-	PrGeneratedAt    *models.DateTime
-	Error            *string
-	Source           *string
-	ExternalURI      *string
-	Metadata         map[string]interface{}
-	OwnerID          *string
-	BlockedGroupIDs  []string
-	EditorIDs        []string
-	EnvironmentID    *string
-	ScopeID          *string
-	IntegrationIDs   []string
-	ScanIDs          []string
-	FindingIDs       []string
-	VulnerabilityIDs []string
-	ActionPlanIDs    []string
-	TaskIDs          []string
-	ControlIDs       []string
-	SubcontrolIDs    []string
-	RiskIDs          []string
-	ProgramIDs       []string
-	AssetIDs         []string
-	EntityIDs        []string
-	ReviewIDs        []string
-	CommentIDs       []string
-	FileIDs          []string
+	Tags                   []string                 `json:"tags,omitempty"`
+	InternalNotes          *string                  `json:"internal_notes,omitempty"`
+	SystemInternalID       *string                  `json:"system_internal_id,omitempty"`
+	EnvironmentName        *string                  `json:"environment_name,omitempty"`
+	ScopeName              *string                  `json:"scope_name,omitempty"`
+	WorkflowEligibleMarker *bool                    `json:"workflow_eligible_marker,omitempty"`
+	ExternalID             *string                  `json:"external_id,omitempty"`
+	ExternalOwnerID        *string                  `json:"external_owner_id,omitempty"`
+	Title                  *string                  `json:"title,omitempty"`
+	Status                 *enums.RemediationStatus `json:"status,omitempty"`
+	State                  *string                  `json:"state,omitempty"`
+	Intent                 *string                  `json:"intent,omitempty"`
+	Summary                *string                  `json:"summary,omitempty"`
+	Explanation            *string                  `json:"explanation,omitempty"`
+	Instructions           *string                  `json:"instructions,omitempty"`
+	OwnerReference         *string                  `json:"owner_reference,omitempty"`
+	RepositoryURI          *string                  `json:"repository_uri,omitempty"`
+	PullRequestURI         *string                  `json:"pull_request_uri,omitempty"`
+	TicketReference        *string                  `json:"ticket_reference,omitempty"`
+	DueAt                  *models.DateTime         `json:"due_at,omitempty"`
+	CompletedAt            *models.DateTime         `json:"completed_at,omitempty"`
+	PrGeneratedAt          *models.DateTime         `json:"pr_generated_at,omitempty"`
+	Error                  *string                  `json:"error,omitempty"`
+	Source                 *string                  `json:"source,omitempty"`
+	ExternalURI            *string                  `json:"external_uri,omitempty"`
+	Metadata               map[string]interface{}   `json:"metadata,omitempty"`
+	OwnerID                *string
+	BlockedGroupIDs        []string
+	EditorIDs              []string
+	EnvironmentID          *string
+	ScopeID                *string
+	IntegrationIDs         []string
+	ScanIDs                []string
+	FindingIDs             []string
+	VulnerabilityIDs       []string
+	ActionPlanIDs          []string
+	TaskIDs                []string
+	ControlIDs             []string
+	SubcontrolIDs          []string
+	RiskIDs                []string
+	ProgramIDs             []string
+	AssetIDs               []string
+	EntityIDs              []string
+	ReviewIDs              []string
+	CommentIDs             []string
+	FileIDs                []string
+	WorkflowObjectRefIDs   []string
 }
 
 // Mutate applies the CreateRemediationInput on the RemediationMutation builder.
@@ -21738,6 +21788,9 @@ func (i *CreateRemediationInput) Mutate(m *RemediationMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
@@ -21859,6 +21912,9 @@ func (i *CreateRemediationInput) Mutate(m *RemediationMutation) {
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
+	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateRemediationInput on the RemediationCreate builder.
@@ -21869,112 +21925,117 @@ func (c *RemediationCreate) SetInput(i CreateRemediationInput) *RemediationCreat
 
 // UpdateRemediationInput represents a mutation input for updating remediations.
 type UpdateRemediationInput struct {
-	ClearTags              bool
-	Tags                   []string
-	AppendTags             []string
-	ClearInternalNotes     bool
-	InternalNotes          *string
-	ClearSystemInternalID  bool
-	SystemInternalID       *string
-	ClearEnvironmentName   bool
-	EnvironmentName        *string
-	ClearScopeName         bool
-	ScopeName              *string
-	ClearExternalID        bool
-	ExternalID             *string
-	ClearExternalOwnerID   bool
-	ExternalOwnerID        *string
-	ClearTitle             bool
-	Title                  *string
-	ClearStatus            bool
-	Status                 *enums.RemediationStatus
-	ClearState             bool
-	State                  *string
-	ClearIntent            bool
-	Intent                 *string
-	ClearSummary           bool
-	Summary                *string
-	ClearExplanation       bool
-	Explanation            *string
-	ClearInstructions      bool
-	Instructions           *string
-	ClearOwnerReference    bool
-	OwnerReference         *string
-	ClearRepositoryURI     bool
-	RepositoryURI          *string
-	ClearPullRequestURI    bool
-	PullRequestURI         *string
-	ClearTicketReference   bool
-	TicketReference        *string
-	ClearDueAt             bool
-	DueAt                  *models.DateTime
-	ClearCompletedAt       bool
-	CompletedAt            *models.DateTime
-	ClearPrGeneratedAt     bool
-	PrGeneratedAt          *models.DateTime
-	ClearError             bool
-	Error                  *string
-	ClearSource            bool
-	Source                 *string
-	ClearExternalURI       bool
-	ExternalURI            *string
-	ClearMetadata          bool
-	Metadata               map[string]interface{}
-	ClearBlockedGroups     bool
-	AddBlockedGroupIDs     []string
-	RemoveBlockedGroupIDs  []string
-	ClearEditors           bool
-	AddEditorIDs           []string
-	RemoveEditorIDs        []string
-	ClearEnvironment       bool
-	EnvironmentID          *string
-	ClearScope             bool
-	ScopeID                *string
-	ClearIntegrations      bool
-	AddIntegrationIDs      []string
-	RemoveIntegrationIDs   []string
-	ClearScans             bool
-	AddScanIDs             []string
-	RemoveScanIDs          []string
-	ClearFindings          bool
-	AddFindingIDs          []string
-	RemoveFindingIDs       []string
-	ClearVulnerabilities   bool
-	AddVulnerabilityIDs    []string
-	RemoveVulnerabilityIDs []string
-	ClearActionPlans       bool
-	AddActionPlanIDs       []string
-	RemoveActionPlanIDs    []string
-	ClearTasks             bool
-	AddTaskIDs             []string
-	RemoveTaskIDs          []string
-	ClearControls          bool
-	AddControlIDs          []string
-	RemoveControlIDs       []string
-	ClearSubcontrols       bool
-	AddSubcontrolIDs       []string
-	RemoveSubcontrolIDs    []string
-	ClearRisks             bool
-	AddRiskIDs             []string
-	RemoveRiskIDs          []string
-	ClearPrograms          bool
-	AddProgramIDs          []string
-	RemoveProgramIDs       []string
-	ClearAssets            bool
-	AddAssetIDs            []string
-	RemoveAssetIDs         []string
-	ClearEntities          bool
-	AddEntityIDs           []string
-	RemoveEntityIDs        []string
-	ClearReviews           bool
-	AddReviewIDs           []string
-	RemoveReviewIDs        []string
-	ClearComments          bool
-	AddCommentIDs          []string
-	RemoveCommentIDs       []string
-	ClearFiles             bool
-	AddFileIDs             []string
-	RemoveFileIDs          []string
+	ClearTags                   bool
+	Tags                        []string `json:"tags,omitempty"`
+	AppendTags                  []string
+	ClearInternalNotes          bool
+	InternalNotes               *string `json:"internal_notes,omitempty"`
+	ClearSystemInternalID       bool
+	SystemInternalID            *string `json:"system_internal_id,omitempty"`
+	ClearEnvironmentName        bool
+	EnvironmentName             *string `json:"environment_name,omitempty"`
+	ClearScopeName              bool
+	ScopeName                   *string `json:"scope_name,omitempty"`
+	ClearWorkflowEligibleMarker bool
+	WorkflowEligibleMarker      *bool `json:"workflow_eligible_marker,omitempty"`
+	ClearExternalID             bool
+	ExternalID                  *string `json:"external_id,omitempty"`
+	ClearExternalOwnerID        bool
+	ExternalOwnerID             *string `json:"external_owner_id,omitempty"`
+	ClearTitle                  bool
+	Title                       *string `json:"title,omitempty"`
+	ClearStatus                 bool
+	Status                      *enums.RemediationStatus `json:"status,omitempty"`
+	ClearState                  bool
+	State                       *string `json:"state,omitempty"`
+	ClearIntent                 bool
+	Intent                      *string `json:"intent,omitempty"`
+	ClearSummary                bool
+	Summary                     *string `json:"summary,omitempty"`
+	ClearExplanation            bool
+	Explanation                 *string `json:"explanation,omitempty"`
+	ClearInstructions           bool
+	Instructions                *string `json:"instructions,omitempty"`
+	ClearOwnerReference         bool
+	OwnerReference              *string `json:"owner_reference,omitempty"`
+	ClearRepositoryURI          bool
+	RepositoryURI               *string `json:"repository_uri,omitempty"`
+	ClearPullRequestURI         bool
+	PullRequestURI              *string `json:"pull_request_uri,omitempty"`
+	ClearTicketReference        bool
+	TicketReference             *string `json:"ticket_reference,omitempty"`
+	ClearDueAt                  bool
+	DueAt                       *models.DateTime `json:"due_at,omitempty"`
+	ClearCompletedAt            bool
+	CompletedAt                 *models.DateTime `json:"completed_at,omitempty"`
+	ClearPrGeneratedAt          bool
+	PrGeneratedAt               *models.DateTime `json:"pr_generated_at,omitempty"`
+	ClearError                  bool
+	Error                       *string `json:"error,omitempty"`
+	ClearSource                 bool
+	Source                      *string `json:"source,omitempty"`
+	ClearExternalURI            bool
+	ExternalURI                 *string `json:"external_uri,omitempty"`
+	ClearMetadata               bool
+	Metadata                    map[string]interface{} `json:"metadata,omitempty"`
+	ClearBlockedGroups          bool
+	AddBlockedGroupIDs          []string
+	RemoveBlockedGroupIDs       []string
+	ClearEditors                bool
+	AddEditorIDs                []string
+	RemoveEditorIDs             []string
+	ClearEnvironment            bool
+	EnvironmentID               *string
+	ClearScope                  bool
+	ScopeID                     *string
+	ClearIntegrations           bool
+	AddIntegrationIDs           []string
+	RemoveIntegrationIDs        []string
+	ClearScans                  bool
+	AddScanIDs                  []string
+	RemoveScanIDs               []string
+	ClearFindings               bool
+	AddFindingIDs               []string
+	RemoveFindingIDs            []string
+	ClearVulnerabilities        bool
+	AddVulnerabilityIDs         []string
+	RemoveVulnerabilityIDs      []string
+	ClearActionPlans            bool
+	AddActionPlanIDs            []string
+	RemoveActionPlanIDs         []string
+	ClearTasks                  bool
+	AddTaskIDs                  []string
+	RemoveTaskIDs               []string
+	ClearControls               bool
+	AddControlIDs               []string
+	RemoveControlIDs            []string
+	ClearSubcontrols            bool
+	AddSubcontrolIDs            []string
+	RemoveSubcontrolIDs         []string
+	ClearRisks                  bool
+	AddRiskIDs                  []string
+	RemoveRiskIDs               []string
+	ClearPrograms               bool
+	AddProgramIDs               []string
+	RemoveProgramIDs            []string
+	ClearAssets                 bool
+	AddAssetIDs                 []string
+	RemoveAssetIDs              []string
+	ClearEntities               bool
+	AddEntityIDs                []string
+	RemoveEntityIDs             []string
+	ClearReviews                bool
+	AddReviewIDs                []string
+	RemoveReviewIDs             []string
+	ClearComments               bool
+	AddCommentIDs               []string
+	RemoveCommentIDs            []string
+	ClearFiles                  bool
+	AddFileIDs                  []string
+	RemoveFileIDs               []string
+	ClearWorkflowObjectRefs     bool
+	AddWorkflowObjectRefIDs     []string
+	RemoveWorkflowObjectRefIDs  []string
 }
 
 // Mutate applies the UpdateRemediationInput on the RemediationMutation builder.
@@ -22011,6 +22072,12 @@ func (i *UpdateRemediationInput) Mutate(m *RemediationMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if i.ClearWorkflowEligibleMarker {
+		m.ClearWorkflowEligibleMarker()
+	}
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
 	}
 	if i.ClearExternalID {
 		m.ClearExternalID()
@@ -22297,6 +22364,15 @@ func (i *UpdateRemediationInput) Mutate(m *RemediationMutation) {
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
 	}
+	if i.ClearWorkflowObjectRefs {
+		m.ClearWorkflowObjectRefs()
+	}
+	if v := i.AddWorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
+		m.RemoveWorkflowObjectRefIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateRemediationInput on the RemediationUpdate builder.
@@ -22313,29 +22389,29 @@ func (c *RemediationUpdateOne) SetInput(i UpdateRemediationInput) *RemediationUp
 
 // CreateReviewInput represents a mutation input for creating reviews.
 type CreateReviewInput struct {
-	Tags              []string
-	InternalNotes     *string
-	SystemInternalID  *string
-	EnvironmentName   *string
-	ScopeName         *string
-	ExternalID        *string
-	ExternalOwnerID   *string
-	Title             string
-	State             *string
-	Status            *enums.ReviewStatus
-	Category          *string
-	Classification    *string
-	Summary           *string
-	Details           *string
-	Reporter          *string
-	Approved          *bool
-	ReviewedAt        *models.DateTime
-	ReportedAt        *models.DateTime
-	ApprovedAt        *models.DateTime
-	Source            *string
-	ExternalURI       *string
-	Metadata          map[string]interface{}
-	RawPayload        map[string]interface{}
+	Tags              []string               `json:"tags,omitempty"`
+	InternalNotes     *string                `json:"internal_notes,omitempty"`
+	SystemInternalID  *string                `json:"system_internal_id,omitempty"`
+	EnvironmentName   *string                `json:"environment_name,omitempty"`
+	ScopeName         *string                `json:"scope_name,omitempty"`
+	ExternalID        *string                `json:"external_id,omitempty"`
+	ExternalOwnerID   *string                `json:"external_owner_id,omitempty"`
+	Title             string                 `json:"title,omitempty"`
+	State             *string                `json:"state,omitempty"`
+	Status            *enums.ReviewStatus    `json:"status,omitempty"`
+	Category          *string                `json:"category,omitempty"`
+	Classification    *string                `json:"classification,omitempty"`
+	Summary           *string                `json:"summary,omitempty"`
+	Details           *string                `json:"details,omitempty"`
+	Reporter          *string                `json:"reporter,omitempty"`
+	Approved          *bool                  `json:"approved,omitempty"`
+	ReviewedAt        *models.DateTime       `json:"reviewed_at,omitempty"`
+	ReportedAt        *models.DateTime       `json:"reported_at,omitempty"`
+	ApprovedAt        *models.DateTime       `json:"approved_at,omitempty"`
+	Source            *string                `json:"source,omitempty"`
+	ExternalURI       *string                `json:"external_uri,omitempty"`
+	Metadata          map[string]interface{} `json:"metadata,omitempty"`
+	RawPayload        map[string]interface{} `json:"raw_payload,omitempty"`
 	OwnerID           *string
 	BlockedGroupIDs   []string
 	EditorIDs         []string
@@ -22502,51 +22578,51 @@ func (c *ReviewCreate) SetInput(i CreateReviewInput) *ReviewCreate {
 // UpdateReviewInput represents a mutation input for updating reviews.
 type UpdateReviewInput struct {
 	ClearTags               bool
-	Tags                    []string
+	Tags                    []string `json:"tags,omitempty"`
 	AppendTags              []string
 	ClearInternalNotes      bool
-	InternalNotes           *string
+	InternalNotes           *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID   bool
-	SystemInternalID        *string
+	SystemInternalID        *string `json:"system_internal_id,omitempty"`
 	ClearEnvironmentName    bool
-	EnvironmentName         *string
+	EnvironmentName         *string `json:"environment_name,omitempty"`
 	ClearScopeName          bool
-	ScopeName               *string
+	ScopeName               *string `json:"scope_name,omitempty"`
 	ClearExternalID         bool
-	ExternalID              *string
+	ExternalID              *string `json:"external_id,omitempty"`
 	ClearExternalOwnerID    bool
-	ExternalOwnerID         *string
-	Title                   *string
+	ExternalOwnerID         *string `json:"external_owner_id,omitempty"`
+	Title                   *string `json:"title,omitempty"`
 	ClearState              bool
-	State                   *string
+	State                   *string `json:"state,omitempty"`
 	ClearStatus             bool
-	Status                  *enums.ReviewStatus
+	Status                  *enums.ReviewStatus `json:"status,omitempty"`
 	ClearCategory           bool
-	Category                *string
+	Category                *string `json:"category,omitempty"`
 	ClearClassification     bool
-	Classification          *string
+	Classification          *string `json:"classification,omitempty"`
 	ClearSummary            bool
-	Summary                 *string
+	Summary                 *string `json:"summary,omitempty"`
 	ClearDetails            bool
-	Details                 *string
+	Details                 *string `json:"details,omitempty"`
 	ClearReporter           bool
-	Reporter                *string
+	Reporter                *string `json:"reporter,omitempty"`
 	ClearApproved           bool
-	Approved                *bool
+	Approved                *bool `json:"approved,omitempty"`
 	ClearReviewedAt         bool
-	ReviewedAt              *models.DateTime
+	ReviewedAt              *models.DateTime `json:"reviewed_at,omitempty"`
 	ClearReportedAt         bool
-	ReportedAt              *models.DateTime
+	ReportedAt              *models.DateTime `json:"reported_at,omitempty"`
 	ClearApprovedAt         bool
-	ApprovedAt              *models.DateTime
+	ApprovedAt              *models.DateTime `json:"approved_at,omitempty"`
 	ClearSource             bool
-	Source                  *string
+	Source                  *string `json:"source,omitempty"`
 	ClearExternalURI        bool
-	ExternalURI             *string
+	ExternalURI             *string `json:"external_uri,omitempty"`
 	ClearMetadata           bool
-	Metadata                map[string]interface{}
+	Metadata                map[string]interface{} `json:"metadata,omitempty"`
 	ClearRawPayload         bool
-	RawPayload              map[string]interface{}
+	RawPayload              map[string]interface{} `json:"raw_payload,omitempty"`
 	ClearBlockedGroups      bool
 	AddBlockedGroupIDs      []string
 	RemoveBlockedGroupIDs   []string
@@ -22933,59 +23009,61 @@ func (c *ReviewUpdateOne) SetInput(i UpdateReviewInput) *ReviewUpdateOne {
 
 // CreateRiskInput represents a mutation input for creating risks.
 type CreateRiskInput struct {
-	Tags              []string
-	RiskKindName      *string
-	RiskCategoryName  *string
-	EnvironmentName   *string
-	ScopeName         *string
-	ExternalID        *string
-	IntegrationID     *string
-	ObservedAt        *models.DateTime
-	ExternalUUID      *string
-	Name              string
-	Status            *enums.RiskStatus
-	Impact            *enums.RiskImpact
-	Likelihood        *enums.RiskLikelihood
-	Score             *int
-	Mitigation        *string
-	MitigationJSON    []interface{}
-	Details           *string
-	DetailsJSON       []interface{}
-	BusinessCosts     *string
-	BusinessCostsJSON []interface{}
-	MitigatedAt       *models.DateTime
-	ReviewRequired    *bool
-	LastReviewedAt    *models.DateTime
-	ReviewFrequency   *enums.Frequency
-	DueDate           *models.DateTime
-	NextReviewDueAt   *models.DateTime
-	ResidualScore     *int
-	RiskDecision      *enums.RiskDecision
-	OwnerID           *string
-	BlockedGroupIDs   []string
-	EditorIDs         []string
-	ViewerIDs         []string
-	RiskKindID        *string
-	RiskCategoryID    *string
-	EnvironmentID     *string
-	ScopeID           *string
-	ControlIDs        []string
-	SubcontrolIDs     []string
-	ProcedureIDs      []string
-	InternalPolicyIDs []string
-	ProgramIDs        []string
-	PlatformIDs       []string
-	ActionPlanIDs     []string
-	TaskIDs           []string
-	AssetIDs          []string
-	EntityIDs         []string
-	ScanIDs           []string
-	StakeholderID     *string
-	DelegateID        *string
-	CommentIDs        []string
-	DiscussionIDs     []string
-	ReviewIDs         []string
-	RemediationIDs    []string
+	Tags                   []string              `json:"tags,omitempty"`
+	RiskKindName           *string               `json:"risk_kind_name,omitempty"`
+	RiskCategoryName       *string               `json:"risk_category_name,omitempty"`
+	EnvironmentName        *string               `json:"environment_name,omitempty"`
+	ScopeName              *string               `json:"scope_name,omitempty"`
+	WorkflowEligibleMarker *bool                 `json:"workflow_eligible_marker,omitempty"`
+	ExternalID             *string               `json:"external_id,omitempty"`
+	IntegrationID          *string               `json:"integration_id,omitempty"`
+	ObservedAt             *models.DateTime      `json:"observed_at,omitempty"`
+	ExternalUUID           *string               `json:"external_uuid,omitempty"`
+	Name                   string                `json:"name,omitempty"`
+	Status                 *enums.RiskStatus     `json:"status,omitempty"`
+	Impact                 *enums.RiskImpact     `json:"impact,omitempty"`
+	Likelihood             *enums.RiskLikelihood `json:"likelihood,omitempty"`
+	Score                  *int                  `json:"score,omitempty"`
+	Mitigation             *string               `json:"mitigation,omitempty"`
+	MitigationJSON         []interface{}         `json:"mitigation_json,omitempty"`
+	Details                *string               `json:"details,omitempty"`
+	DetailsJSON            []interface{}         `json:"details_json,omitempty"`
+	BusinessCosts          *string               `json:"business_costs,omitempty"`
+	BusinessCostsJSON      []interface{}         `json:"business_costs_json,omitempty"`
+	MitigatedAt            *models.DateTime      `json:"mitigated_at,omitempty"`
+	ReviewRequired         *bool                 `json:"review_required,omitempty"`
+	LastReviewedAt         *models.DateTime      `json:"last_reviewed_at,omitempty"`
+	ReviewFrequency        *enums.Frequency      `json:"review_frequency,omitempty"`
+	DueDate                *models.DateTime      `json:"due_date,omitempty"`
+	NextReviewDueAt        *models.DateTime      `json:"next_review_due_at,omitempty"`
+	ResidualScore          *int                  `json:"residual_score,omitempty"`
+	RiskDecision           *enums.RiskDecision   `json:"risk_decision,omitempty"`
+	OwnerID                *string
+	BlockedGroupIDs        []string
+	EditorIDs              []string
+	ViewerIDs              []string
+	RiskKindID             *string
+	RiskCategoryID         *string
+	EnvironmentID          *string
+	ScopeID                *string
+	ControlIDs             []string
+	SubcontrolIDs          []string
+	ProcedureIDs           []string
+	InternalPolicyIDs      []string
+	ProgramIDs             []string
+	PlatformIDs            []string
+	ActionPlanIDs          []string
+	TaskIDs                []string
+	AssetIDs               []string
+	EntityIDs              []string
+	ScanIDs                []string
+	StakeholderID          *string
+	DelegateID             *string
+	CommentIDs             []string
+	DiscussionIDs          []string
+	ReviewIDs              []string
+	RemediationIDs         []string
+	WorkflowObjectRefIDs   []string
 }
 
 // Mutate applies the CreateRiskInput on the RiskMutation builder.
@@ -23004,6 +23082,9 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
@@ -23147,6 +23228,9 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.RemediationIDs; len(v) > 0 {
 		m.AddRemediationIDs(v...)
 	}
+	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateRiskInput on the RiskCreate builder.
@@ -23157,131 +23241,136 @@ func (c *RiskCreate) SetInput(i CreateRiskInput) *RiskCreate {
 
 // UpdateRiskInput represents a mutation input for updating risks.
 type UpdateRiskInput struct {
-	ClearTags               bool
-	Tags                    []string
-	AppendTags              []string
-	ClearRiskKindName       bool
-	RiskKindName            *string
-	ClearRiskCategoryName   bool
-	RiskCategoryName        *string
-	ClearEnvironmentName    bool
-	EnvironmentName         *string
-	ClearScopeName          bool
-	ScopeName               *string
-	ClearExternalID         bool
-	ExternalID              *string
-	ClearIntegrationID      bool
-	IntegrationID           *string
-	ClearObservedAt         bool
-	ObservedAt              *models.DateTime
-	ClearExternalUUID       bool
-	ExternalUUID            *string
-	Name                    *string
-	ClearStatus             bool
-	Status                  *enums.RiskStatus
-	ClearImpact             bool
-	Impact                  *enums.RiskImpact
-	ClearLikelihood         bool
-	Likelihood              *enums.RiskLikelihood
-	ClearScore              bool
-	Score                   *int
-	ClearMitigation         bool
-	Mitigation              *string
-	ClearMitigationJSON     bool
-	MitigationJSON          []interface{}
-	AppendMitigationJSON    []interface{}
-	ClearDetails            bool
-	Details                 *string
-	ClearDetailsJSON        bool
-	DetailsJSON             []interface{}
-	AppendDetailsJSON       []interface{}
-	ClearBusinessCosts      bool
-	BusinessCosts           *string
-	ClearBusinessCostsJSON  bool
-	BusinessCostsJSON       []interface{}
-	AppendBusinessCostsJSON []interface{}
-	ClearMitigatedAt        bool
-	MitigatedAt             *models.DateTime
-	ClearReviewRequired     bool
-	ReviewRequired          *bool
-	ClearLastReviewedAt     bool
-	LastReviewedAt          *models.DateTime
-	ClearReviewFrequency    bool
-	ReviewFrequency         *enums.Frequency
-	ClearDueDate            bool
-	DueDate                 *models.DateTime
-	ClearNextReviewDueAt    bool
-	NextReviewDueAt         *models.DateTime
-	ClearResidualScore      bool
-	ResidualScore           *int
-	ClearRiskDecision       bool
-	RiskDecision            *enums.RiskDecision
-	ClearBlockedGroups      bool
-	AddBlockedGroupIDs      []string
-	RemoveBlockedGroupIDs   []string
-	ClearEditors            bool
-	AddEditorIDs            []string
-	RemoveEditorIDs         []string
-	ClearViewers            bool
-	AddViewerIDs            []string
-	RemoveViewerIDs         []string
-	ClearRiskKind           bool
-	RiskKindID              *string
-	ClearRiskCategory       bool
-	RiskCategoryID          *string
-	ClearEnvironment        bool
-	EnvironmentID           *string
-	ClearScope              bool
-	ScopeID                 *string
-	ClearControls           bool
-	AddControlIDs           []string
-	RemoveControlIDs        []string
-	ClearSubcontrols        bool
-	AddSubcontrolIDs        []string
-	RemoveSubcontrolIDs     []string
-	ClearProcedures         bool
-	AddProcedureIDs         []string
-	RemoveProcedureIDs      []string
-	ClearInternalPolicies   bool
-	AddInternalPolicyIDs    []string
-	RemoveInternalPolicyIDs []string
-	ClearPrograms           bool
-	AddProgramIDs           []string
-	RemoveProgramIDs        []string
-	ClearPlatforms          bool
-	AddPlatformIDs          []string
-	RemovePlatformIDs       []string
-	ClearActionPlans        bool
-	AddActionPlanIDs        []string
-	RemoveActionPlanIDs     []string
-	ClearTasks              bool
-	AddTaskIDs              []string
-	RemoveTaskIDs           []string
-	ClearAssets             bool
-	AddAssetIDs             []string
-	RemoveAssetIDs          []string
-	ClearEntities           bool
-	AddEntityIDs            []string
-	RemoveEntityIDs         []string
-	ClearScans              bool
-	AddScanIDs              []string
-	RemoveScanIDs           []string
-	ClearStakeholder        bool
-	StakeholderID           *string
-	ClearDelegate           bool
-	DelegateID              *string
-	ClearComments           bool
-	AddCommentIDs           []string
-	RemoveCommentIDs        []string
-	ClearDiscussions        bool
-	AddDiscussionIDs        []string
-	RemoveDiscussionIDs     []string
-	ClearReviews            bool
-	AddReviewIDs            []string
-	RemoveReviewIDs         []string
-	ClearRemediations       bool
-	AddRemediationIDs       []string
-	RemoveRemediationIDs    []string
+	ClearTags                   bool
+	Tags                        []string `json:"tags,omitempty"`
+	AppendTags                  []string
+	ClearRiskKindName           bool
+	RiskKindName                *string `json:"risk_kind_name,omitempty"`
+	ClearRiskCategoryName       bool
+	RiskCategoryName            *string `json:"risk_category_name,omitempty"`
+	ClearEnvironmentName        bool
+	EnvironmentName             *string `json:"environment_name,omitempty"`
+	ClearScopeName              bool
+	ScopeName                   *string `json:"scope_name,omitempty"`
+	ClearWorkflowEligibleMarker bool
+	WorkflowEligibleMarker      *bool `json:"workflow_eligible_marker,omitempty"`
+	ClearExternalID             bool
+	ExternalID                  *string `json:"external_id,omitempty"`
+	ClearIntegrationID          bool
+	IntegrationID               *string `json:"integration_id,omitempty"`
+	ClearObservedAt             bool
+	ObservedAt                  *models.DateTime `json:"observed_at,omitempty"`
+	ClearExternalUUID           bool
+	ExternalUUID                *string `json:"external_uuid,omitempty"`
+	Name                        *string `json:"name,omitempty"`
+	ClearStatus                 bool
+	Status                      *enums.RiskStatus `json:"status,omitempty"`
+	ClearImpact                 bool
+	Impact                      *enums.RiskImpact `json:"impact,omitempty"`
+	ClearLikelihood             bool
+	Likelihood                  *enums.RiskLikelihood `json:"likelihood,omitempty"`
+	ClearScore                  bool
+	Score                       *int `json:"score,omitempty"`
+	ClearMitigation             bool
+	Mitigation                  *string `json:"mitigation,omitempty"`
+	ClearMitigationJSON         bool
+	MitigationJSON              []interface{} `json:"mitigation_json,omitempty"`
+	AppendMitigationJSON        []interface{}
+	ClearDetails                bool
+	Details                     *string `json:"details,omitempty"`
+	ClearDetailsJSON            bool
+	DetailsJSON                 []interface{} `json:"details_json,omitempty"`
+	AppendDetailsJSON           []interface{}
+	ClearBusinessCosts          bool
+	BusinessCosts               *string `json:"business_costs,omitempty"`
+	ClearBusinessCostsJSON      bool
+	BusinessCostsJSON           []interface{} `json:"business_costs_json,omitempty"`
+	AppendBusinessCostsJSON     []interface{}
+	ClearMitigatedAt            bool
+	MitigatedAt                 *models.DateTime `json:"mitigated_at,omitempty"`
+	ClearReviewRequired         bool
+	ReviewRequired              *bool `json:"review_required,omitempty"`
+	ClearLastReviewedAt         bool
+	LastReviewedAt              *models.DateTime `json:"last_reviewed_at,omitempty"`
+	ClearReviewFrequency        bool
+	ReviewFrequency             *enums.Frequency `json:"review_frequency,omitempty"`
+	ClearDueDate                bool
+	DueDate                     *models.DateTime `json:"due_date,omitempty"`
+	ClearNextReviewDueAt        bool
+	NextReviewDueAt             *models.DateTime `json:"next_review_due_at,omitempty"`
+	ClearResidualScore          bool
+	ResidualScore               *int `json:"residual_score,omitempty"`
+	ClearRiskDecision           bool
+	RiskDecision                *enums.RiskDecision `json:"risk_decision,omitempty"`
+	ClearBlockedGroups          bool
+	AddBlockedGroupIDs          []string
+	RemoveBlockedGroupIDs       []string
+	ClearEditors                bool
+	AddEditorIDs                []string
+	RemoveEditorIDs             []string
+	ClearViewers                bool
+	AddViewerIDs                []string
+	RemoveViewerIDs             []string
+	ClearRiskKind               bool
+	RiskKindID                  *string
+	ClearRiskCategory           bool
+	RiskCategoryID              *string
+	ClearEnvironment            bool
+	EnvironmentID               *string
+	ClearScope                  bool
+	ScopeID                     *string
+	ClearControls               bool
+	AddControlIDs               []string
+	RemoveControlIDs            []string
+	ClearSubcontrols            bool
+	AddSubcontrolIDs            []string
+	RemoveSubcontrolIDs         []string
+	ClearProcedures             bool
+	AddProcedureIDs             []string
+	RemoveProcedureIDs          []string
+	ClearInternalPolicies       bool
+	AddInternalPolicyIDs        []string
+	RemoveInternalPolicyIDs     []string
+	ClearPrograms               bool
+	AddProgramIDs               []string
+	RemoveProgramIDs            []string
+	ClearPlatforms              bool
+	AddPlatformIDs              []string
+	RemovePlatformIDs           []string
+	ClearActionPlans            bool
+	AddActionPlanIDs            []string
+	RemoveActionPlanIDs         []string
+	ClearTasks                  bool
+	AddTaskIDs                  []string
+	RemoveTaskIDs               []string
+	ClearAssets                 bool
+	AddAssetIDs                 []string
+	RemoveAssetIDs              []string
+	ClearEntities               bool
+	AddEntityIDs                []string
+	RemoveEntityIDs             []string
+	ClearScans                  bool
+	AddScanIDs                  []string
+	RemoveScanIDs               []string
+	ClearStakeholder            bool
+	StakeholderID               *string
+	ClearDelegate               bool
+	DelegateID                  *string
+	ClearComments               bool
+	AddCommentIDs               []string
+	RemoveCommentIDs            []string
+	ClearDiscussions            bool
+	AddDiscussionIDs            []string
+	RemoveDiscussionIDs         []string
+	ClearReviews                bool
+	AddReviewIDs                []string
+	RemoveReviewIDs             []string
+	ClearRemediations           bool
+	AddRemediationIDs           []string
+	RemoveRemediationIDs        []string
+	ClearWorkflowObjectRefs     bool
+	AddWorkflowObjectRefIDs     []string
+	RemoveWorkflowObjectRefIDs  []string
 }
 
 // Mutate applies the UpdateRiskInput on the RiskMutation builder.
@@ -23318,6 +23407,12 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if i.ClearWorkflowEligibleMarker {
+		m.ClearWorkflowEligibleMarker()
+	}
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
 	}
 	if i.ClearExternalID {
 		m.ClearExternalID()
@@ -23661,6 +23756,15 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.RemoveRemediationIDs; len(v) > 0 {
 		m.RemoveRemediationIDs(v...)
 	}
+	if i.ClearWorkflowObjectRefs {
+		m.ClearWorkflowObjectRefs()
+	}
+	if v := i.AddWorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
+		m.RemoveWorkflowObjectRefIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateRiskInput on the RiskUpdate builder.
@@ -23677,8 +23781,8 @@ func (c *RiskUpdateOne) SetInput(i UpdateRiskInput) *RiskUpdateOne {
 
 // CreateSLADefinitionInput represents a mutation input for creating sladefinitions.
 type CreateSLADefinitionInput struct {
-	Tags            []string
-	SLADays         int
+	Tags            []string `json:"tags,omitempty"`
+	SLADays         int      `json:"sla_days,omitempty"`
 	OwnerID         *string
 	BlockedGroupIDs []string
 	EditorIDs       []string
@@ -23710,9 +23814,9 @@ func (c *SLADefinitionCreate) SetInput(i CreateSLADefinitionInput) *SLADefinitio
 // UpdateSLADefinitionInput represents a mutation input for updating sladefinitions.
 type UpdateSLADefinitionInput struct {
 	ClearTags             bool
-	Tags                  []string
+	Tags                  []string `json:"tags,omitempty"`
 	AppendTags            []string
-	SLADays               *int
+	SLADays               *int `json:"sla_days,omitempty"`
 	ClearOwner            bool
 	OwnerID               *string
 	ClearBlockedGroups    bool
@@ -23777,44 +23881,44 @@ func (c *SLADefinitionUpdateOne) SetInput(i UpdateSLADefinitionInput) *SLADefini
 
 // CreateScanInput represents a mutation input for creating scans.
 type CreateScanInput struct {
-	Tags                  []string
-	ReviewedBy            *string
-	AssignedTo            *string
-	EnvironmentName       *string
-	ScopeName             *string
-	Target                string
-	ScanType              *enums.ScanType
-	Metadata              map[string]interface{}
-	ScanDate              *models.DateTime
-	ScanSchedule          *models.Cron
-	NextScanRunAt         *models.DateTime
-	PerformedBy           *string
-	VulnerabilityIds      []string
-	Status                *enums.ScanStatus
-	OwnerID               *string
-	BlockedGroupIDs       []string
-	EditorIDs             []string
-	ReviewedByUserID      *string
-	ReviewedByGroupID     *string
-	AssignedToUserID      *string
-	AssignedToGroupID     *string
-	EnvironmentID         *string
-	ScopeID               *string
-	AssetIDs              []string
-	EntityIDs             []string
-	EvidenceIDs           []string
-	FileIDs               []string
-	RemediationIDs        []string
-	ActionPlanIDs         []string
-	TaskIDs               []string
-	PlatformIDs           []string
-	VulnerabilityIDs      []string
-	ControlIDs            []string
-	SubcontrolIDs         []string
-	FindingIDs            []string
-	GeneratedByPlatformID *string
-	PerformedByUserID     *string
-	PerformedByGroupID    *string
+	Tags                       []string               `json:"tags,omitempty"`
+	ReviewedBy                 *string                `json:"reviewed_by,omitempty"`
+	AssignedTo                 *string                `json:"assigned_to,omitempty"`
+	EnvironmentName            *string                `json:"environment_name,omitempty"`
+	ScopeName                  *string                `json:"scope_name,omitempty"`
+	Target                     string                 `json:"target,omitempty"`
+	ScanType                   *enums.ScanType        `json:"scan_type,omitempty"`
+	Metadata                   map[string]interface{} `json:"metadata,omitempty"`
+	ScanDate                   *models.DateTime       `json:"scan_date,omitempty"`
+	ScanSchedule               *models.Cron           `json:"scan_schedule,omitempty"`
+	NextScanRunAt              *models.DateTime       `json:"next_scan_run_at,omitempty"`
+	PerformedBy                *string                `json:"performed_by,omitempty"`
+	DiscoveredVulnerabilityIds []string               `json:"discovered_vulnerability_ids,omitempty"`
+	Status                     *enums.ScanStatus      `json:"status,omitempty"`
+	OwnerID                    *string
+	BlockedGroupIDs            []string
+	EditorIDs                  []string
+	ReviewedByUserID           *string
+	ReviewedByGroupID          *string
+	AssignedToUserID           *string
+	AssignedToGroupID          *string
+	EnvironmentID              *string
+	ScopeID                    *string
+	AssetIDs                   []string
+	EntityIDs                  []string
+	EvidenceIDs                []string
+	FileIDs                    []string
+	RemediationIDs             []string
+	ActionPlanIDs              []string
+	TaskIDs                    []string
+	PlatformIDs                []string
+	VulnerabilityIDs           []string
+	ControlIDs                 []string
+	SubcontrolIDs              []string
+	FindingIDs                 []string
+	GeneratedByPlatformID      *string
+	PerformedByUserID          *string
+	PerformedByGroupID         *string
 }
 
 // Mutate applies the CreateScanInput on the ScanMutation builder.
@@ -23853,8 +23957,8 @@ func (i *CreateScanInput) Mutate(m *ScanMutation) {
 	if v := i.PerformedBy; v != nil {
 		m.SetPerformedBy(*v)
 	}
-	if v := i.VulnerabilityIds; v != nil {
-		m.SetVulnerabilityIds(v)
+	if v := i.DiscoveredVulnerabilityIds; v != nil {
+		m.SetDiscoveredVulnerabilityIds(v)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
@@ -23941,93 +24045,93 @@ func (c *ScanCreate) SetInput(i CreateScanInput) *ScanCreate {
 
 // UpdateScanInput represents a mutation input for updating scans.
 type UpdateScanInput struct {
-	ClearTags                bool
-	Tags                     []string
-	AppendTags               []string
-	ClearReviewedBy          bool
-	ReviewedBy               *string
-	ClearAssignedTo          bool
-	AssignedTo               *string
-	ClearEnvironmentName     bool
-	EnvironmentName          *string
-	ClearScopeName           bool
-	ScopeName                *string
-	Target                   *string
-	ScanType                 *enums.ScanType
-	ClearMetadata            bool
-	Metadata                 map[string]interface{}
-	ClearScanDate            bool
-	ScanDate                 *models.DateTime
-	ClearScanSchedule        bool
-	ScanSchedule             *models.Cron
-	ClearNextScanRunAt       bool
-	NextScanRunAt            *models.DateTime
-	ClearPerformedBy         bool
-	PerformedBy              *string
-	ClearVulnerabilityIds    bool
-	VulnerabilityIds         []string
-	AppendVulnerabilityIds   []string
-	Status                   *enums.ScanStatus
-	ClearBlockedGroups       bool
-	AddBlockedGroupIDs       []string
-	RemoveBlockedGroupIDs    []string
-	ClearEditors             bool
-	AddEditorIDs             []string
-	RemoveEditorIDs          []string
-	ClearReviewedByUser      bool
-	ReviewedByUserID         *string
-	ClearReviewedByGroup     bool
-	ReviewedByGroupID        *string
-	ClearAssignedToUser      bool
-	AssignedToUserID         *string
-	ClearAssignedToGroup     bool
-	AssignedToGroupID        *string
-	ClearEnvironment         bool
-	EnvironmentID            *string
-	ClearScope               bool
-	ScopeID                  *string
-	ClearAssets              bool
-	AddAssetIDs              []string
-	RemoveAssetIDs           []string
-	ClearEntities            bool
-	AddEntityIDs             []string
-	RemoveEntityIDs          []string
-	ClearEvidence            bool
-	AddEvidenceIDs           []string
-	RemoveEvidenceIDs        []string
-	ClearFiles               bool
-	AddFileIDs               []string
-	RemoveFileIDs            []string
-	ClearRemediations        bool
-	AddRemediationIDs        []string
-	RemoveRemediationIDs     []string
-	ClearActionPlans         bool
-	AddActionPlanIDs         []string
-	RemoveActionPlanIDs      []string
-	ClearTasks               bool
-	AddTaskIDs               []string
-	RemoveTaskIDs            []string
-	ClearPlatforms           bool
-	AddPlatformIDs           []string
-	RemovePlatformIDs        []string
-	ClearVulnerabilities     bool
-	AddVulnerabilityIDs      []string
-	RemoveVulnerabilityIDs   []string
-	ClearControls            bool
-	AddControlIDs            []string
-	RemoveControlIDs         []string
-	ClearSubcontrols         bool
-	AddSubcontrolIDs         []string
-	RemoveSubcontrolIDs      []string
-	ClearFindings            bool
-	AddFindingIDs            []string
-	RemoveFindingIDs         []string
-	ClearGeneratedByPlatform bool
-	GeneratedByPlatformID    *string
-	ClearPerformedByUser     bool
-	PerformedByUserID        *string
-	ClearPerformedByGroup    bool
-	PerformedByGroupID       *string
+	ClearTags                        bool
+	Tags                             []string `json:"tags,omitempty"`
+	AppendTags                       []string
+	ClearReviewedBy                  bool
+	ReviewedBy                       *string `json:"reviewed_by,omitempty"`
+	ClearAssignedTo                  bool
+	AssignedTo                       *string `json:"assigned_to,omitempty"`
+	ClearEnvironmentName             bool
+	EnvironmentName                  *string `json:"environment_name,omitempty"`
+	ClearScopeName                   bool
+	ScopeName                        *string         `json:"scope_name,omitempty"`
+	Target                           *string         `json:"target,omitempty"`
+	ScanType                         *enums.ScanType `json:"scan_type,omitempty"`
+	ClearMetadata                    bool
+	Metadata                         map[string]interface{} `json:"metadata,omitempty"`
+	ClearScanDate                    bool
+	ScanDate                         *models.DateTime `json:"scan_date,omitempty"`
+	ClearScanSchedule                bool
+	ScanSchedule                     *models.Cron `json:"scan_schedule,omitempty"`
+	ClearNextScanRunAt               bool
+	NextScanRunAt                    *models.DateTime `json:"next_scan_run_at,omitempty"`
+	ClearPerformedBy                 bool
+	PerformedBy                      *string `json:"performed_by,omitempty"`
+	ClearDiscoveredVulnerabilityIds  bool
+	DiscoveredVulnerabilityIds       []string `json:"discovered_vulnerability_ids,omitempty"`
+	AppendDiscoveredVulnerabilityIds []string
+	Status                           *enums.ScanStatus `json:"status,omitempty"`
+	ClearBlockedGroups               bool
+	AddBlockedGroupIDs               []string
+	RemoveBlockedGroupIDs            []string
+	ClearEditors                     bool
+	AddEditorIDs                     []string
+	RemoveEditorIDs                  []string
+	ClearReviewedByUser              bool
+	ReviewedByUserID                 *string
+	ClearReviewedByGroup             bool
+	ReviewedByGroupID                *string
+	ClearAssignedToUser              bool
+	AssignedToUserID                 *string
+	ClearAssignedToGroup             bool
+	AssignedToGroupID                *string
+	ClearEnvironment                 bool
+	EnvironmentID                    *string
+	ClearScope                       bool
+	ScopeID                          *string
+	ClearAssets                      bool
+	AddAssetIDs                      []string
+	RemoveAssetIDs                   []string
+	ClearEntities                    bool
+	AddEntityIDs                     []string
+	RemoveEntityIDs                  []string
+	ClearEvidence                    bool
+	AddEvidenceIDs                   []string
+	RemoveEvidenceIDs                []string
+	ClearFiles                       bool
+	AddFileIDs                       []string
+	RemoveFileIDs                    []string
+	ClearRemediations                bool
+	AddRemediationIDs                []string
+	RemoveRemediationIDs             []string
+	ClearActionPlans                 bool
+	AddActionPlanIDs                 []string
+	RemoveActionPlanIDs              []string
+	ClearTasks                       bool
+	AddTaskIDs                       []string
+	RemoveTaskIDs                    []string
+	ClearPlatforms                   bool
+	AddPlatformIDs                   []string
+	RemovePlatformIDs                []string
+	ClearVulnerabilities             bool
+	AddVulnerabilityIDs              []string
+	RemoveVulnerabilityIDs           []string
+	ClearControls                    bool
+	AddControlIDs                    []string
+	RemoveControlIDs                 []string
+	ClearSubcontrols                 bool
+	AddSubcontrolIDs                 []string
+	RemoveSubcontrolIDs              []string
+	ClearFindings                    bool
+	AddFindingIDs                    []string
+	RemoveFindingIDs                 []string
+	ClearGeneratedByPlatform         bool
+	GeneratedByPlatformID            *string
+	ClearPerformedByUser             bool
+	PerformedByUserID                *string
+	ClearPerformedByGroup            bool
+	PerformedByGroupID               *string
 }
 
 // Mutate applies the UpdateScanInput on the ScanMutation builder.
@@ -24101,14 +24205,14 @@ func (i *UpdateScanInput) Mutate(m *ScanMutation) {
 	if v := i.PerformedBy; v != nil {
 		m.SetPerformedBy(*v)
 	}
-	if i.ClearVulnerabilityIds {
-		m.ClearVulnerabilityIds()
+	if i.ClearDiscoveredVulnerabilityIds {
+		m.ClearDiscoveredVulnerabilityIds()
 	}
-	if v := i.VulnerabilityIds; v != nil {
-		m.SetVulnerabilityIds(v)
+	if v := i.DiscoveredVulnerabilityIds; v != nil {
+		m.SetDiscoveredVulnerabilityIds(v)
 	}
-	if i.AppendVulnerabilityIds != nil {
-		m.AppendVulnerabilityIds(i.VulnerabilityIds)
+	if i.AppendDiscoveredVulnerabilityIds != nil {
+		m.AppendDiscoveredVulnerabilityIds(i.DiscoveredVulnerabilityIds)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
@@ -24309,9 +24413,9 @@ func (c *ScanUpdateOne) SetInput(i UpdateScanInput) *ScanUpdateOne {
 
 // CreateScheduledJobInput represents a mutation input for creating scheduledjobs.
 type CreateScheduledJobInput struct {
-	Active        *bool
-	Configuration models.JobConfiguration
-	Cron          *models.Cron
+	Active        *bool                   `json:"active,omitempty"`
+	Configuration models.JobConfiguration `json:"configuration,omitempty"`
+	Cron          *models.Cron            `json:"cron,omitempty"`
 	OwnerID       *string
 	JobTemplateID string
 	ControlIDs    []string
@@ -24353,12 +24457,12 @@ func (c *ScheduledJobCreate) SetInput(i CreateScheduledJobInput) *ScheduledJobCr
 
 // UpdateScheduledJobInput represents a mutation input for updating scheduledjobs.
 type UpdateScheduledJobInput struct {
-	Active              *bool
+	Active              *bool `json:"active,omitempty"`
 	ClearConfiguration  bool
-	Configuration       models.JobConfiguration
+	Configuration       models.JobConfiguration `json:"configuration,omitempty"`
 	AppendConfiguration models.JobConfiguration
 	ClearCron           bool
-	Cron                *models.Cron
+	Cron                *models.Cron `json:"cron,omitempty"`
 	JobTemplateID       *string
 	ClearControls       bool
 	AddControlIDs       []string
@@ -24433,9 +24537,9 @@ func (c *ScheduledJobUpdateOne) SetInput(i UpdateScheduledJobInput) *ScheduledJo
 
 // CreateScheduledJobRunInput represents a mutation input for creating scheduledjobruns.
 type CreateScheduledJobRunInput struct {
-	Status                *enums.ScheduledJobRunStatus
-	ExpectedExecutionTime time.Time
-	Script                string
+	Status                *enums.ScheduledJobRunStatus `json:"status,omitempty"`
+	ExpectedExecutionTime time.Time                    `json:"expected_execution_time,omitempty"`
+	Script                string                       `json:"script,omitempty"`
 	OwnerID               *string
 	ScheduledJobID        string
 	JobRunnerID           string
@@ -24463,7 +24567,7 @@ func (c *ScheduledJobRunCreate) SetInput(i CreateScheduledJobRunInput) *Schedule
 
 // UpdateScheduledJobRunInput represents a mutation input for updating scheduledjobruns.
 type UpdateScheduledJobRunInput struct {
-	Status         *enums.ScheduledJobRunStatus
+	Status         *enums.ScheduledJobRunStatus `json:"status,omitempty"`
 	ClearOwner     bool
 	OwnerID        *string
 	ScheduledJobID *string
@@ -24503,23 +24607,23 @@ func (c *ScheduledJobRunUpdateOne) SetInput(i UpdateScheduledJobRunInput) *Sched
 
 // CreateStandardInput represents a mutation input for creating standards.
 type CreateStandardInput struct {
-	Tags                     []string
-	Revision                 *string
-	InternalNotes            *string
-	SystemInternalID         *string
-	Name                     string
-	ShortName                *string
-	Framework                *string
-	Description              *string
-	GoverningBodyLogoURL     *string
-	GoverningBody            *string
-	Domains                  []string
-	Link                     *string
-	Status                   *enums.StandardStatus
-	IsPublic                 *bool
-	FreeToUse                *bool
-	StandardType             *string
-	Version                  *string
+	Tags                     []string              `json:"tags,omitempty"`
+	Revision                 *string               `json:"revision,omitempty"`
+	InternalNotes            *string               `json:"internal_notes,omitempty"`
+	SystemInternalID         *string               `json:"system_internal_id,omitempty"`
+	Name                     string                `json:"name,omitempty"`
+	ShortName                *string               `json:"short_name,omitempty"`
+	Framework                *string               `json:"framework,omitempty"`
+	Description              *string               `json:"description,omitempty"`
+	GoverningBodyLogoURL     *string               `json:"governing_body_logo_url,omitempty"`
+	GoverningBody            *string               `json:"governing_body,omitempty"`
+	Domains                  []string              `json:"domains,omitempty"`
+	Link                     *string               `json:"link,omitempty"`
+	Status                   *enums.StandardStatus `json:"status,omitempty"`
+	IsPublic                 *bool                 `json:"is_public,omitempty"`
+	FreeToUse                *bool                 `json:"free_to_use,omitempty"`
+	StandardType             *string               `json:"standard_type,omitempty"`
+	Version                  *string               `json:"version,omitempty"`
 	OwnerID                  *string
 	ControlIDs               []string
 	TrustCenterComplianceIDs []string
@@ -24608,40 +24712,40 @@ func (c *StandardCreate) SetInput(i CreateStandardInput) *StandardCreate {
 // UpdateStandardInput represents a mutation input for updating standards.
 type UpdateStandardInput struct {
 	ClearTags                      bool
-	Tags                           []string
+	Tags                           []string `json:"tags,omitempty"`
 	AppendTags                     []string
 	ClearRevision                  bool
-	Revision                       *string
+	Revision                       *string `json:"revision,omitempty"`
 	ClearInternalNotes             bool
-	InternalNotes                  *string
+	InternalNotes                  *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID          bool
-	SystemInternalID               *string
-	Name                           *string
+	SystemInternalID               *string `json:"system_internal_id,omitempty"`
+	Name                           *string `json:"name,omitempty"`
 	ClearShortName                 bool
-	ShortName                      *string
+	ShortName                      *string `json:"short_name,omitempty"`
 	ClearFramework                 bool
-	Framework                      *string
+	Framework                      *string `json:"framework,omitempty"`
 	ClearDescription               bool
-	Description                    *string
+	Description                    *string `json:"description,omitempty"`
 	ClearGoverningBodyLogoURL      bool
-	GoverningBodyLogoURL           *string
+	GoverningBodyLogoURL           *string `json:"governing_body_logo_url,omitempty"`
 	ClearGoverningBody             bool
-	GoverningBody                  *string
+	GoverningBody                  *string `json:"governing_body,omitempty"`
 	ClearDomains                   bool
-	Domains                        []string
+	Domains                        []string `json:"domains,omitempty"`
 	AppendDomains                  []string
 	ClearLink                      bool
-	Link                           *string
+	Link                           *string `json:"link,omitempty"`
 	ClearStatus                    bool
-	Status                         *enums.StandardStatus
+	Status                         *enums.StandardStatus `json:"status,omitempty"`
 	ClearIsPublic                  bool
-	IsPublic                       *bool
+	IsPublic                       *bool `json:"is_public,omitempty"`
 	ClearFreeToUse                 bool
-	FreeToUse                      *bool
+	FreeToUse                      *bool `json:"free_to_use,omitempty"`
 	ClearStandardType              bool
-	StandardType                   *string
+	StandardType                   *string `json:"standard_type,omitempty"`
 	ClearVersion                   bool
-	Version                        *string
+	Version                        *string `json:"version,omitempty"`
 	ClearOwner                     bool
 	OwnerID                        *string
 	ClearControls                  bool
@@ -24831,39 +24935,39 @@ func (c *StandardUpdateOne) SetInput(i UpdateStandardInput) *StandardUpdateOne {
 
 // CreateSubcontrolInput represents a mutation input for creating subcontrols.
 type CreateSubcontrolInput struct {
-	Tags                       []string
-	ExternalUUID               *string
-	Title                      *string
-	Description                *string
-	DescriptionJSON            []interface{}
-	Aliases                    []string
-	ReferenceID                *string
-	AuditorReferenceID         *string
-	Status                     *enums.ControlStatus
-	ImplementationStatus       *enums.ControlImplementationStatus
-	ImplementationDescription  *string
-	PublicRepresentation       *string
-	Source                     *enums.ControlSource
-	SourceName                 *string
-	ReferenceFramework         *string
-	ReferenceFrameworkRevision *string
-	Category                   *string
-	CategoryID                 *string
-	Subcategory                *string
-	MappedCategories           []string
-	AssessmentObjectives       []models.AssessmentObjective
-	AssessmentMethods          []models.AssessmentMethod
-	ControlQuestions           []string
-	ImplementationGuidance     []models.ImplementationGuidance
-	ExampleEvidence            []models.ExampleEvidence
-	References                 []models.Reference
-	TestingProcedures          []models.TestingProcedures
-	EvidenceRequests           []models.EvidenceRequests
-	InternalNotes              *string
-	SystemInternalID           *string
-	SubcontrolKindName         *string
-	WorkflowEligibleMarker     *bool
-	RefCode                    string
+	Tags                       []string                           `json:"tags,omitempty"`
+	ExternalUUID               *string                            `json:"external_uuid,omitempty"`
+	Title                      *string                            `json:"title,omitempty"`
+	Description                *string                            `json:"description,omitempty"`
+	DescriptionJSON            []interface{}                      `json:"description_json,omitempty"`
+	Aliases                    []string                           `json:"aliases,omitempty"`
+	ReferenceID                *string                            `json:"reference_id,omitempty"`
+	AuditorReferenceID         *string                            `json:"auditor_reference_id,omitempty"`
+	Status                     *enums.ControlStatus               `json:"status,omitempty"`
+	ImplementationStatus       *enums.ControlImplementationStatus `json:"implementation_status,omitempty"`
+	ImplementationDescription  *string                            `json:"implementation_description,omitempty"`
+	PublicRepresentation       *string                            `json:"public_representation,omitempty"`
+	Source                     *enums.ControlSource               `json:"source,omitempty"`
+	SourceName                 *string                            `json:"source_name,omitempty"`
+	ReferenceFramework         *string                            `json:"reference_framework,omitempty"`
+	ReferenceFrameworkRevision *string                            `json:"reference_framework_revision,omitempty"`
+	Category                   *string                            `json:"category,omitempty"`
+	CategoryID                 *string                            `json:"category_id,omitempty"`
+	Subcategory                *string                            `json:"subcategory,omitempty"`
+	MappedCategories           []string                           `json:"mapped_categories,omitempty"`
+	AssessmentObjectives       []models.AssessmentObjective       `json:"assessment_objectives,omitempty"`
+	AssessmentMethods          []models.AssessmentMethod          `json:"assessment_methods,omitempty"`
+	ControlQuestions           []string                           `json:"control_questions,omitempty"`
+	ImplementationGuidance     []models.ImplementationGuidance    `json:"implementation_guidance,omitempty"`
+	ExampleEvidence            []models.ExampleEvidence           `json:"example_evidence,omitempty"`
+	References                 []models.Reference                 `json:"references,omitempty"`
+	TestingProcedures          []models.TestingProcedures         `json:"testing_procedures,omitempty"`
+	EvidenceRequests           []models.EvidenceRequests          `json:"evidence_requests,omitempty"`
+	InternalNotes              *string                            `json:"internal_notes,omitempty"`
+	SystemInternalID           *string                            `json:"system_internal_id,omitempty"`
+	SubcontrolKindName         *string                            `json:"subcontrol_kind_name,omitempty"`
+	WorkflowEligibleMarker     *bool                              `json:"workflow_eligible_marker,omitempty"`
+	RefCode                    string                             `json:"ref_code,omitempty"`
 	EvidenceIDs                []string
 	ControlObjectiveIDs        []string
 	TaskIDs                    []string
@@ -25074,80 +25178,80 @@ func (c *SubcontrolCreate) SetInput(i CreateSubcontrolInput) *SubcontrolCreate {
 // UpdateSubcontrolInput represents a mutation input for updating subcontrols.
 type UpdateSubcontrolInput struct {
 	ClearTags                       bool
-	Tags                            []string
+	Tags                            []string `json:"tags,omitempty"`
 	AppendTags                      []string
 	ClearExternalUUID               bool
-	ExternalUUID                    *string
+	ExternalUUID                    *string `json:"external_uuid,omitempty"`
 	ClearTitle                      bool
-	Title                           *string
+	Title                           *string `json:"title,omitempty"`
 	ClearDescription                bool
-	Description                     *string
+	Description                     *string `json:"description,omitempty"`
 	ClearDescriptionJSON            bool
-	DescriptionJSON                 []interface{}
+	DescriptionJSON                 []interface{} `json:"description_json,omitempty"`
 	AppendDescriptionJSON           []interface{}
 	ClearAliases                    bool
-	Aliases                         []string
+	Aliases                         []string `json:"aliases,omitempty"`
 	AppendAliases                   []string
 	ClearReferenceID                bool
-	ReferenceID                     *string
+	ReferenceID                     *string `json:"reference_id,omitempty"`
 	ClearAuditorReferenceID         bool
-	AuditorReferenceID              *string
+	AuditorReferenceID              *string `json:"auditor_reference_id,omitempty"`
 	ClearStatus                     bool
-	Status                          *enums.ControlStatus
+	Status                          *enums.ControlStatus `json:"status,omitempty"`
 	ClearImplementationStatus       bool
-	ImplementationStatus            *enums.ControlImplementationStatus
+	ImplementationStatus            *enums.ControlImplementationStatus `json:"implementation_status,omitempty"`
 	ClearImplementationDescription  bool
-	ImplementationDescription       *string
+	ImplementationDescription       *string `json:"implementation_description,omitempty"`
 	ClearPublicRepresentation       bool
-	PublicRepresentation            *string
+	PublicRepresentation            *string `json:"public_representation,omitempty"`
 	ClearSource                     bool
-	Source                          *enums.ControlSource
+	Source                          *enums.ControlSource `json:"source,omitempty"`
 	ClearSourceName                 bool
-	SourceName                      *string
+	SourceName                      *string `json:"source_name,omitempty"`
 	ClearReferenceFrameworkRevision bool
-	ReferenceFrameworkRevision      *string
+	ReferenceFrameworkRevision      *string `json:"reference_framework_revision,omitempty"`
 	ClearCategory                   bool
-	Category                        *string
+	Category                        *string `json:"category,omitempty"`
 	ClearCategoryID                 bool
-	CategoryID                      *string
+	CategoryID                      *string `json:"category_id,omitempty"`
 	ClearSubcategory                bool
-	Subcategory                     *string
+	Subcategory                     *string `json:"subcategory,omitempty"`
 	ClearMappedCategories           bool
-	MappedCategories                []string
+	MappedCategories                []string `json:"mapped_categories,omitempty"`
 	AppendMappedCategories          []string
 	ClearAssessmentObjectives       bool
-	AssessmentObjectives            []models.AssessmentObjective
+	AssessmentObjectives            []models.AssessmentObjective `json:"assessment_objectives,omitempty"`
 	AppendAssessmentObjectives      []models.AssessmentObjective
 	ClearAssessmentMethods          bool
-	AssessmentMethods               []models.AssessmentMethod
+	AssessmentMethods               []models.AssessmentMethod `json:"assessment_methods,omitempty"`
 	AppendAssessmentMethods         []models.AssessmentMethod
 	ClearControlQuestions           bool
-	ControlQuestions                []string
+	ControlQuestions                []string `json:"control_questions,omitempty"`
 	AppendControlQuestions          []string
 	ClearImplementationGuidance     bool
-	ImplementationGuidance          []models.ImplementationGuidance
+	ImplementationGuidance          []models.ImplementationGuidance `json:"implementation_guidance,omitempty"`
 	AppendImplementationGuidance    []models.ImplementationGuidance
 	ClearExampleEvidence            bool
-	ExampleEvidence                 []models.ExampleEvidence
+	ExampleEvidence                 []models.ExampleEvidence `json:"example_evidence,omitempty"`
 	AppendExampleEvidence           []models.ExampleEvidence
 	ClearReferences                 bool
-	References                      []models.Reference
+	References                      []models.Reference `json:"references,omitempty"`
 	AppendReferences                []models.Reference
 	ClearTestingProcedures          bool
-	TestingProcedures               []models.TestingProcedures
+	TestingProcedures               []models.TestingProcedures `json:"testing_procedures,omitempty"`
 	AppendTestingProcedures         []models.TestingProcedures
 	ClearEvidenceRequests           bool
-	EvidenceRequests                []models.EvidenceRequests
+	EvidenceRequests                []models.EvidenceRequests `json:"evidence_requests,omitempty"`
 	AppendEvidenceRequests          []models.EvidenceRequests
 	ClearInternalNotes              bool
-	InternalNotes                   *string
+	InternalNotes                   *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID           bool
-	SystemInternalID                *string
+	SystemInternalID                *string `json:"system_internal_id,omitempty"`
 	ClearSubcontrolKindName         bool
-	SubcontrolKindName              *string
+	SubcontrolKindName              *string `json:"subcontrol_kind_name,omitempty"`
 	ClearWorkflowEligibleMarker     bool
-	WorkflowEligibleMarker          *bool
-	RefCode                         *string
+	WorkflowEligibleMarker          *bool   `json:"workflow_eligible_marker,omitempty"`
+	RefCode                         *string `json:"ref_code,omitempty"`
 	ClearEvidence                   bool
 	AddEvidenceIDs                  []string
 	RemoveEvidenceIDs               []string
@@ -25657,12 +25761,12 @@ func (c *SubcontrolUpdateOne) SetInput(i UpdateSubcontrolInput) *SubcontrolUpdat
 
 // CreateSubprocessorInput represents a mutation input for creating subprocessors.
 type CreateSubprocessorInput struct {
-	Tags                       []string
-	InternalNotes              *string
-	SystemInternalID           *string
-	Name                       string
-	Description                *string
-	LogoRemoteURL              *string
+	Tags                       []string `json:"tags,omitempty"`
+	InternalNotes              *string  `json:"internal_notes,omitempty"`
+	SystemInternalID           *string  `json:"system_internal_id,omitempty"`
+	Name                       string   `json:"name,omitempty"`
+	Description                *string  `json:"description,omitempty"`
+	LogoRemoteURL              *string  `json:"logo_remote_url,omitempty"`
 	OwnerID                    *string
 	LogoFileID                 *string
 	TrustCenterSubprocessorIDs []string
@@ -25710,17 +25814,17 @@ func (c *SubprocessorCreate) SetInput(i CreateSubprocessorInput) *SubprocessorCr
 // UpdateSubprocessorInput represents a mutation input for updating subprocessors.
 type UpdateSubprocessorInput struct {
 	ClearTags                        bool
-	Tags                             []string
+	Tags                             []string `json:"tags,omitempty"`
 	AppendTags                       []string
 	ClearInternalNotes               bool
-	InternalNotes                    *string
+	InternalNotes                    *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID            bool
-	SystemInternalID                 *string
-	Name                             *string
+	SystemInternalID                 *string `json:"system_internal_id,omitempty"`
+	Name                             *string `json:"name,omitempty"`
 	ClearDescription                 bool
-	Description                      *string
+	Description                      *string `json:"description,omitempty"`
 	ClearLogoRemoteURL               bool
-	LogoRemoteURL                    *string
+	LogoRemoteURL                    *string `json:"logo_remote_url,omitempty"`
 	ClearLogoFile                    bool
 	LogoFileID                       *string
 	ClearTrustCenterSubprocessors    bool
@@ -25809,9 +25913,9 @@ func (c *SubprocessorUpdateOne) SetInput(i UpdateSubprocessorInput) *Subprocesso
 
 // CreateSubscriberInput represents a mutation input for creating subscribers.
 type CreateSubscriberInput struct {
-	Tags              []string
-	Email             string
-	PhoneNumber       *string
+	Tags              []string `json:"tags,omitempty"`
+	Email             string   `json:"email,omitempty"`
+	PhoneNumber       *string  `json:"phone_number,omitempty"`
 	OwnerID           *string
 	EventIDs          []string
 	TrustCenterID     *string
@@ -25858,12 +25962,12 @@ func (c *SubscriberCreate) SetInput(i CreateSubscriberInput) *SubscriberCreate {
 // UpdateSubscriberInput represents a mutation input for updating subscribers.
 type UpdateSubscriberInput struct {
 	ClearTags               bool
-	Tags                    []string
+	Tags                    []string `json:"tags,omitempty"`
 	AppendTags              []string
-	Email                   *string
+	Email                   *string `json:"email,omitempty"`
 	ClearPhoneNumber        bool
-	PhoneNumber             *string
-	Unsubscribed            *bool
+	PhoneNumber             *string `json:"phone_number,omitempty"`
+	Unsubscribed            *bool   `json:"unsubscribed,omitempty"`
 	ClearOwner              bool
 	OwnerID                 *string
 	ClearEvents             bool
@@ -25953,15 +26057,15 @@ func (c *SubscriberUpdateOne) SetInput(i UpdateSubscriberInput) *SubscriberUpdat
 
 // CreateSystemDetailInput represents a mutation input for creating systemdetails.
 type CreateSystemDetailInput struct {
-	Tags                  []string
-	SystemName            string
-	Version               *string
-	Description           *string
-	AuthorizationBoundary *string
-	SensitivityLevel      *enums.SystemSensitivityLevel
-	LastReviewed          *models.DateTime
-	RevisionHistory       []interface{}
-	OscalMetadataJSON     map[string]interface{}
+	Tags                  []string                      `json:"tags,omitempty"`
+	SystemName            string                        `json:"system_name,omitempty"`
+	Version               *string                       `json:"version,omitempty"`
+	Description           *string                       `json:"description,omitempty"`
+	AuthorizationBoundary *string                       `json:"authorization_boundary,omitempty"`
+	SensitivityLevel      *enums.SystemSensitivityLevel `json:"sensitivity_level,omitempty"`
+	LastReviewed          *models.DateTime              `json:"last_reviewed,omitempty"`
+	RevisionHistory       []interface{}                 `json:"revision_history,omitempty"`
+	OscalMetadataJSON     map[string]interface{}        `json:"oscal_metadata_json,omitempty"`
 	OwnerID               *string
 	ProgramIDs            []string
 	PlatformIDs           []string
@@ -26022,24 +26126,24 @@ func (c *SystemDetailCreate) SetInput(i CreateSystemDetailInput) *SystemDetailCr
 // UpdateSystemDetailInput represents a mutation input for updating systemdetails.
 type UpdateSystemDetailInput struct {
 	ClearTags                  bool
-	Tags                       []string
+	Tags                       []string `json:"tags,omitempty"`
 	AppendTags                 []string
-	SystemName                 *string
+	SystemName                 *string `json:"system_name,omitempty"`
 	ClearVersion               bool
-	Version                    *string
+	Version                    *string `json:"version,omitempty"`
 	ClearDescription           bool
-	Description                *string
+	Description                *string `json:"description,omitempty"`
 	ClearAuthorizationBoundary bool
-	AuthorizationBoundary      *string
+	AuthorizationBoundary      *string `json:"authorization_boundary,omitempty"`
 	ClearSensitivityLevel      bool
-	SensitivityLevel           *enums.SystemSensitivityLevel
+	SensitivityLevel           *enums.SystemSensitivityLevel `json:"sensitivity_level,omitempty"`
 	ClearLastReviewed          bool
-	LastReviewed               *models.DateTime
+	LastReviewed               *models.DateTime `json:"last_reviewed,omitempty"`
 	ClearRevisionHistory       bool
-	RevisionHistory            []interface{}
+	RevisionHistory            []interface{} `json:"revision_history,omitempty"`
 	AppendRevisionHistory      []interface{}
 	ClearOscalMetadataJSON     bool
-	OscalMetadataJSON          map[string]interface{}
+	OscalMetadataJSON          map[string]interface{} `json:"oscal_metadata_json,omitempty"`
 	ClearPrograms              bool
 	AddProgramIDs              []string
 	RemoveProgramIDs           []string
@@ -26165,7 +26269,7 @@ func (c *SystemDetailUpdateOne) SetInput(i UpdateSystemDetailInput) *SystemDetai
 
 // CreateTFASettingInput represents a mutation input for creating tfasettings.
 type CreateTFASettingInput struct {
-	TotpAllowed *bool
+	TotpAllowed *bool `json:"totp_allowed,omitempty"`
 }
 
 // Mutate applies the CreateTFASettingInput on the TFASettingMutation builder.
@@ -26183,9 +26287,9 @@ func (c *TFASettingCreate) SetInput(i CreateTFASettingInput) *TFASettingCreate {
 
 // UpdateTFASettingInput represents a mutation input for updating tfasettings.
 type UpdateTFASettingInput struct {
-	Verified         *bool
+	Verified         *bool `json:"verified,omitempty"`
 	ClearTotpAllowed bool
-	TotpAllowed      *bool
+	TotpAllowed      *bool `json:"totp_allowed,omitempty"`
 }
 
 // Mutate applies the UpdateTFASettingInput on the TFASettingMutation builder.
@@ -26215,12 +26319,12 @@ func (c *TFASettingUpdateOne) SetInput(i UpdateTFASettingInput) *TFASettingUpdat
 
 // CreateTagDefinitionInput represents a mutation input for creating tagdefinitions.
 type CreateTagDefinitionInput struct {
-	InternalNotes    *string
-	SystemInternalID *string
-	Name             string
-	Aliases          []string
-	Description      *string
-	Color            *string
+	InternalNotes    *string  `json:"internal_notes,omitempty"`
+	SystemInternalID *string  `json:"system_internal_id,omitempty"`
+	Name             string   `json:"name,omitempty"`
+	Aliases          []string `json:"aliases,omitempty"`
+	Description      *string  `json:"description,omitempty"`
+	Color            *string  `json:"color,omitempty"`
 	OwnerID          *string
 }
 
@@ -26256,16 +26360,16 @@ func (c *TagDefinitionCreate) SetInput(i CreateTagDefinitionInput) *TagDefinitio
 // UpdateTagDefinitionInput represents a mutation input for updating tagdefinitions.
 type UpdateTagDefinitionInput struct {
 	ClearInternalNotes    bool
-	InternalNotes         *string
+	InternalNotes         *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID bool
-	SystemInternalID      *string
+	SystemInternalID      *string `json:"system_internal_id,omitempty"`
 	ClearAliases          bool
-	Aliases               []string
+	Aliases               []string `json:"aliases,omitempty"`
 	AppendAliases         []string
 	ClearDescription      bool
-	Description           *string
+	Description           *string `json:"description,omitempty"`
 	ClearColor            bool
-	Color                 *string
+	Color                 *string `json:"color,omitempty"`
 	ClearOwner            bool
 	OwnerID               *string
 }
@@ -26327,20 +26431,21 @@ func (c *TagDefinitionUpdateOne) SetInput(i UpdateTagDefinitionInput) *TagDefini
 
 // CreateTaskInput represents a mutation input for creating tasks.
 type CreateTaskInput struct {
-	Tags                     []string
-	TaskKindName             *string
-	EnvironmentName          *string
-	ScopeName                *string
-	ExternalUUID             *string
-	Title                    string
-	Details                  *string
-	DetailsJSON              []interface{}
-	Status                   *enums.TaskStatus
-	Due                      *models.DateTime
-	Completed                *models.DateTime
-	SystemGenerated          *bool
-	IsTemplate               *bool
-	ExternalReferenceURL     []string
+	Tags                     []string          `json:"tags,omitempty"`
+	TaskKindName             *string           `json:"task_kind_name,omitempty"`
+	EnvironmentName          *string           `json:"environment_name,omitempty"`
+	ScopeName                *string           `json:"scope_name,omitempty"`
+	WorkflowEligibleMarker   *bool             `json:"workflow_eligible_marker,omitempty"`
+	ExternalUUID             *string           `json:"external_uuid,omitempty"`
+	Title                    string            `json:"title,omitempty"`
+	Details                  *string           `json:"details,omitempty"`
+	DetailsJSON              []interface{}     `json:"details_json,omitempty"`
+	Status                   *enums.TaskStatus `json:"status,omitempty"`
+	Due                      *models.DateTime  `json:"due,omitempty"`
+	Completed                *models.DateTime  `json:"completed,omitempty"`
+	SystemGenerated          *bool             `json:"system_generated,omitempty"`
+	IsTemplate               *bool             `json:"is_template,omitempty"`
+	ExternalReferenceURL     []string          `json:"external_reference_url,omitempty"`
 	OwnerID                  *string
 	TaskKindID               *string
 	EnvironmentID            *string
@@ -26382,6 +26487,9 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
 	}
 	if v := i.ExternalUUID; v != nil {
 		m.SetExternalUUID(*v)
@@ -26500,31 +26608,33 @@ func (c *TaskCreate) SetInput(i CreateTaskInput) *TaskCreate {
 // UpdateTaskInput represents a mutation input for updating tasks.
 type UpdateTaskInput struct {
 	ClearTags                      bool
-	Tags                           []string
+	Tags                           []string `json:"tags,omitempty"`
 	AppendTags                     []string
 	ClearTaskKindName              bool
-	TaskKindName                   *string
+	TaskKindName                   *string `json:"task_kind_name,omitempty"`
 	ClearEnvironmentName           bool
-	EnvironmentName                *string
+	EnvironmentName                *string `json:"environment_name,omitempty"`
 	ClearScopeName                 bool
-	ScopeName                      *string
+	ScopeName                      *string `json:"scope_name,omitempty"`
+	ClearWorkflowEligibleMarker    bool
+	WorkflowEligibleMarker         *bool `json:"workflow_eligible_marker,omitempty"`
 	ClearExternalUUID              bool
-	ExternalUUID                   *string
-	Title                          *string
+	ExternalUUID                   *string `json:"external_uuid,omitempty"`
+	Title                          *string `json:"title,omitempty"`
 	ClearDetails                   bool
-	Details                        *string
+	Details                        *string `json:"details,omitempty"`
 	ClearDetailsJSON               bool
-	DetailsJSON                    []interface{}
+	DetailsJSON                    []interface{} `json:"details_json,omitempty"`
 	AppendDetailsJSON              []interface{}
-	Status                         *enums.TaskStatus
+	Status                         *enums.TaskStatus `json:"status,omitempty"`
 	ClearDue                       bool
-	Due                            *models.DateTime
+	Due                            *models.DateTime `json:"due,omitempty"`
 	ClearCompleted                 bool
-	Completed                      *models.DateTime
-	SystemGenerated                *bool
-	IsTemplate                     *bool
+	Completed                      *models.DateTime `json:"completed,omitempty"`
+	SystemGenerated                *bool            `json:"system_generated,omitempty"`
+	IsTemplate                     *bool            `json:"is_template,omitempty"`
 	ClearExternalReferenceURL      bool
-	ExternalReferenceURL           []string
+	ExternalReferenceURL           []string `json:"external_reference_url,omitempty"`
 	AppendExternalReferenceURL     []string
 	ClearTaskKind                  bool
 	TaskKindID                     *string
@@ -26625,6 +26735,12 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if i.ClearWorkflowEligibleMarker {
+		m.ClearWorkflowEligibleMarker()
+	}
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
 	}
 	if i.ClearExternalUUID {
 		m.ClearExternalUUID()
@@ -26903,18 +27019,18 @@ func (c *TaskUpdateOne) SetInput(i UpdateTaskInput) *TaskUpdateOne {
 
 // CreateTemplateInput represents a mutation input for creating templates.
 type CreateTemplateInput struct {
-	Tags                   []string
-	InternalNotes          *string
-	SystemInternalID       *string
-	EnvironmentName        *string
-	ScopeName              *string
-	Name                   string
-	TemplateType           *enums.DocumentType
-	Description            *string
-	Kind                   *enums.TemplateKind
-	Jsonconfig             map[string]interface{}
-	Uischema               map[string]interface{}
-	TransformConfiguration *models.TemplateProjectionConfig
+	Tags                   []string                         `json:"tags,omitempty"`
+	InternalNotes          *string                          `json:"internal_notes,omitempty"`
+	SystemInternalID       *string                          `json:"system_internal_id,omitempty"`
+	EnvironmentName        *string                          `json:"environment_name,omitempty"`
+	ScopeName              *string                          `json:"scope_name,omitempty"`
+	Name                   string                           `json:"name,omitempty"`
+	TemplateType           *enums.DocumentType              `json:"template_type,omitempty"`
+	Description            *string                          `json:"description,omitempty"`
+	Kind                   *enums.TemplateKind              `json:"kind,omitempty"`
+	Jsonconfig             map[string]interface{}           `json:"jsonconfig,omitempty"`
+	Uischema               map[string]interface{}           `json:"uischema,omitempty"`
+	TransformConfiguration *models.TemplateProjectionConfig `json:"transform_configuration,omitempty"`
 	OwnerID                *string
 	EnvironmentID          *string
 	ScopeID                *string
@@ -27000,27 +27116,27 @@ func (c *TemplateCreate) SetInput(i CreateTemplateInput) *TemplateCreate {
 // UpdateTemplateInput represents a mutation input for updating templates.
 type UpdateTemplateInput struct {
 	ClearTags                   bool
-	Tags                        []string
+	Tags                        []string `json:"tags,omitempty"`
 	AppendTags                  []string
 	ClearInternalNotes          bool
-	InternalNotes               *string
+	InternalNotes               *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID       bool
-	SystemInternalID            *string
+	SystemInternalID            *string `json:"system_internal_id,omitempty"`
 	ClearEnvironmentName        bool
-	EnvironmentName             *string
+	EnvironmentName             *string `json:"environment_name,omitempty"`
 	ClearScopeName              bool
-	ScopeName                   *string
-	Name                        *string
-	TemplateType                *enums.DocumentType
+	ScopeName                   *string             `json:"scope_name,omitempty"`
+	Name                        *string             `json:"name,omitempty"`
+	TemplateType                *enums.DocumentType `json:"template_type,omitempty"`
 	ClearDescription            bool
-	Description                 *string
+	Description                 *string `json:"description,omitempty"`
 	ClearKind                   bool
-	Kind                        *enums.TemplateKind
-	Jsonconfig                  map[string]interface{}
+	Kind                        *enums.TemplateKind    `json:"kind,omitempty"`
+	Jsonconfig                  map[string]interface{} `json:"jsonconfig,omitempty"`
 	ClearUischema               bool
-	Uischema                    map[string]interface{}
+	Uischema                    map[string]interface{} `json:"uischema,omitempty"`
 	ClearTransformConfiguration bool
-	TransformConfiguration      *models.TemplateProjectionConfig
+	TransformConfiguration      *models.TemplateProjectionConfig `json:"transform_configuration,omitempty"`
 	ClearEnvironment            bool
 	EnvironmentID               *string
 	ClearScope                  bool
@@ -27191,12 +27307,12 @@ func (c *TemplateUpdateOne) SetInput(i UpdateTemplateInput) *TemplateUpdateOne {
 
 // CreateTrustCenterInput represents a mutation input for creating trustcenters.
 type CreateTrustCenterInput struct {
-	Tags                       []string
-	PirschDomainID             *string
-	PirschIdentificationCode   *string
-	PirschAccessLink           *string
-	PreviewStatus              *enums.TrustCenterPreviewStatus
-	SubprocessorURL            *string
+	Tags                       []string                        `json:"tags,omitempty"`
+	PirschDomainID             *string                         `json:"pirsch_domain_id,omitempty"`
+	PirschIdentificationCode   *string                         `json:"pirsch_identification_code,omitempty"`
+	PirschAccessLink           *string                         `json:"pirsch_access_link,omitempty"`
+	PreviewStatus              *enums.TrustCenterPreviewStatus `json:"preview_status,omitempty"`
+	SubprocessorURL            *string                         `json:"subprocessor_url,omitempty"`
 	OwnerID                    *string
 	BlockedGroupIDs            []string
 	EditorIDs                  []string
@@ -27306,18 +27422,18 @@ func (c *TrustCenterCreate) SetInput(i CreateTrustCenterInput) *TrustCenterCreat
 // UpdateTrustCenterInput represents a mutation input for updating trustcenters.
 type UpdateTrustCenterInput struct {
 	ClearTags                        bool
-	Tags                             []string
+	Tags                             []string `json:"tags,omitempty"`
 	AppendTags                       []string
 	ClearPirschDomainID              bool
-	PirschDomainID                   *string
+	PirschDomainID                   *string `json:"pirsch_domain_id,omitempty"`
 	ClearPirschIdentificationCode    bool
-	PirschIdentificationCode         *string
+	PirschIdentificationCode         *string `json:"pirsch_identification_code,omitempty"`
 	ClearPirschAccessLink            bool
-	PirschAccessLink                 *string
+	PirschAccessLink                 *string `json:"pirsch_access_link,omitempty"`
 	ClearPreviewStatus               bool
-	PreviewStatus                    *enums.TrustCenterPreviewStatus
+	PreviewStatus                    *enums.TrustCenterPreviewStatus `json:"preview_status,omitempty"`
 	ClearSubprocessorURL             bool
-	SubprocessorURL                  *string
+	SubprocessorURL                  *string `json:"subprocessor_url,omitempty"`
 	ClearOwner                       bool
 	OwnerID                          *string
 	ClearBlockedGroups               bool
@@ -27581,7 +27697,7 @@ func (c *TrustCenterUpdateOne) SetInput(i UpdateTrustCenterInput) *TrustCenterUp
 
 // CreateTrustCenterComplianceInput represents a mutation input for creating trustcentercompliances.
 type CreateTrustCenterComplianceInput struct {
-	Tags            []string
+	Tags            []string `json:"tags,omitempty"`
 	BlockedGroupIDs []string
 	EditorIDs       []string
 	TrustCenterID   *string
@@ -27614,7 +27730,7 @@ func (c *TrustCenterComplianceCreate) SetInput(i CreateTrustCenterComplianceInpu
 // UpdateTrustCenterComplianceInput represents a mutation input for updating trustcentercompliances.
 type UpdateTrustCenterComplianceInput struct {
 	ClearTags             bool
-	Tags                  []string
+	Tags                  []string `json:"tags,omitempty"`
 	AppendTags            []string
 	ClearBlockedGroups    bool
 	AddBlockedGroupIDs    []string
@@ -27673,12 +27789,12 @@ func (c *TrustCenterComplianceUpdateOne) SetInput(i UpdateTrustCenterComplianceI
 
 // CreateTrustCenterDocInput represents a mutation input for creating trustcenterdocs.
 type CreateTrustCenterDocInput struct {
-	Tags                   []string
-	TrustCenterDocKindName *string
-	Title                  string
-	WatermarkingEnabled    *bool
-	WatermarkStatus        *enums.WatermarkStatus
-	Visibility             *enums.TrustCenterDocumentVisibility
+	Tags                   []string                             `json:"tags,omitempty"`
+	TrustCenterDocKindName *string                              `json:"trust_center_doc_kind_name,omitempty"`
+	Title                  string                               `json:"title,omitempty"`
+	WatermarkingEnabled    *bool                                `json:"watermarking_enabled,omitempty"`
+	WatermarkStatus        *enums.WatermarkStatus               `json:"watermark_status,omitempty"`
+	Visibility             *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
 	TrustCenterDocKindID   *string
 	BlockedGroupIDs        []string
 	EditorIDs              []string
@@ -27738,17 +27854,17 @@ func (c *TrustCenterDocCreate) SetInput(i CreateTrustCenterDocInput) *TrustCente
 // UpdateTrustCenterDocInput represents a mutation input for updating trustcenterdocs.
 type UpdateTrustCenterDocInput struct {
 	ClearTags                   bool
-	Tags                        []string
+	Tags                        []string `json:"tags,omitempty"`
 	AppendTags                  []string
 	ClearTrustCenterDocKindName bool
-	TrustCenterDocKindName      *string
-	Title                       *string
+	TrustCenterDocKindName      *string `json:"trust_center_doc_kind_name,omitempty"`
+	Title                       *string `json:"title,omitempty"`
 	ClearWatermarkingEnabled    bool
-	WatermarkingEnabled         *bool
+	WatermarkingEnabled         *bool `json:"watermarking_enabled,omitempty"`
 	ClearWatermarkStatus        bool
-	WatermarkStatus             *enums.WatermarkStatus
+	WatermarkStatus             *enums.WatermarkStatus `json:"watermark_status,omitempty"`
 	ClearVisibility             bool
-	Visibility                  *enums.TrustCenterDocumentVisibility
+	Visibility                  *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
 	ClearTrustCenterDocKind     bool
 	TrustCenterDocKindID        *string
 	ClearBlockedGroups          bool
@@ -27861,8 +27977,8 @@ func (c *TrustCenterDocUpdateOne) SetInput(i UpdateTrustCenterDocInput) *TrustCe
 
 // CreateTrustCenterEntityInput represents a mutation input for creating trustcenterentities.
 type CreateTrustCenterEntityInput struct {
-	URL             *string
-	Name            string
+	URL             *string `json:"url,omitempty"`
+	Name            string  `json:"name,omitempty"`
 	BlockedGroupIDs []string
 	EditorIDs       []string
 	LogoFileID      *string
@@ -27902,7 +28018,7 @@ func (c *TrustCenterEntityCreate) SetInput(i CreateTrustCenterEntityInput) *Trus
 // UpdateTrustCenterEntityInput represents a mutation input for updating trustcenterentities.
 type UpdateTrustCenterEntityInput struct {
 	ClearURL              bool
-	URL                   *string
+	URL                   *string `json:"url,omitempty"`
 	ClearBlockedGroups    bool
 	AddBlockedGroupIDs    []string
 	RemoveBlockedGroupIDs []string
@@ -27961,9 +28077,9 @@ func (c *TrustCenterEntityUpdateOne) SetInput(i UpdateTrustCenterEntityInput) *T
 
 // CreateTrustCenterFAQInput represents a mutation input for creating trustcenterfaqs.
 type CreateTrustCenterFAQInput struct {
-	TrustCenterFaqKindName *string
-	ReferenceLink          *string
-	DisplayOrder           *int
+	TrustCenterFaqKindName *string `json:"trust_center_faq_kind_name,omitempty"`
+	ReferenceLink          *string `json:"reference_link,omitempty"`
+	DisplayOrder           *int    `json:"display_order,omitempty"`
 	TrustCenterFaqKindID   *string
 	BlockedGroupIDs        []string
 	EditorIDs              []string
@@ -28006,11 +28122,11 @@ func (c *TrustCenterFAQCreate) SetInput(i CreateTrustCenterFAQInput) *TrustCente
 // UpdateTrustCenterFAQInput represents a mutation input for updating trustcenterfaqs.
 type UpdateTrustCenterFAQInput struct {
 	ClearTrustCenterFaqKindName bool
-	TrustCenterFaqKindName      *string
+	TrustCenterFaqKindName      *string `json:"trust_center_faq_kind_name,omitempty"`
 	ClearReferenceLink          bool
-	ReferenceLink               *string
+	ReferenceLink               *string `json:"reference_link,omitempty"`
 	ClearDisplayOrder           bool
-	DisplayOrder                *int
+	DisplayOrder                *int `json:"display_order,omitempty"`
 	ClearTrustCenterFaqKind     bool
 	TrustCenterFaqKindID        *string
 	ClearBlockedGroups          bool
@@ -28081,16 +28197,16 @@ func (c *TrustCenterFAQUpdateOne) SetInput(i UpdateTrustCenterFAQInput) *TrustCe
 
 // CreateTrustCenterNDARequestInput represents a mutation input for creating trustcenterndarequests.
 type CreateTrustCenterNDARequestInput struct {
-	Tags              []string
-	FirstName         string
-	LastName          string
-	Email             string
-	CompanyName       *string
-	Reason            *string
-	AccessLevel       *enums.TrustCenterNDARequestAccessLevel
-	ApprovedAt        *models.DateTime
-	ApprovedByUserID  *string
-	SignedAt          *models.DateTime
+	Tags              []string                                `json:"tags,omitempty"`
+	FirstName         string                                  `json:"first_name,omitempty"`
+	LastName          string                                  `json:"last_name,omitempty"`
+	Email             string                                  `json:"email,omitempty"`
+	CompanyName       *string                                 `json:"company_name,omitempty"`
+	Reason            *string                                 `json:"reason,omitempty"`
+	AccessLevel       *enums.TrustCenterNDARequestAccessLevel `json:"access_level,omitempty"`
+	ApprovedAt        *models.DateTime                        `json:"approved_at,omitempty"`
+	ApprovedByUserID  *string                                 `json:"approved_by_user_id,omitempty"`
+	SignedAt          *models.DateTime                        `json:"signed_at,omitempty"`
 	BlockedGroupIDs   []string
 	EditorIDs         []string
 	TrustCenterID     *string
@@ -28154,25 +28270,25 @@ func (c *TrustCenterNDARequestCreate) SetInput(i CreateTrustCenterNDARequestInpu
 // UpdateTrustCenterNDARequestInput represents a mutation input for updating trustcenterndarequests.
 type UpdateTrustCenterNDARequestInput struct {
 	ClearTags               bool
-	Tags                    []string
+	Tags                    []string `json:"tags,omitempty"`
 	AppendTags              []string
-	FirstName               *string
-	LastName                *string
-	Email                   *string
+	FirstName               *string `json:"first_name,omitempty"`
+	LastName                *string `json:"last_name,omitempty"`
+	Email                   *string `json:"email,omitempty"`
 	ClearCompanyName        bool
-	CompanyName             *string
+	CompanyName             *string `json:"company_name,omitempty"`
 	ClearReason             bool
-	Reason                  *string
+	Reason                  *string `json:"reason,omitempty"`
 	ClearAccessLevel        bool
-	AccessLevel             *enums.TrustCenterNDARequestAccessLevel
+	AccessLevel             *enums.TrustCenterNDARequestAccessLevel `json:"access_level,omitempty"`
 	ClearStatus             bool
-	Status                  *enums.TrustCenterNDARequestStatus
+	Status                  *enums.TrustCenterNDARequestStatus `json:"status,omitempty"`
 	ClearApprovedAt         bool
-	ApprovedAt              *models.DateTime
+	ApprovedAt              *models.DateTime `json:"approved_at,omitempty"`
 	ClearApprovedByUserID   bool
-	ApprovedByUserID        *string
+	ApprovedByUserID        *string `json:"approved_by_user_id,omitempty"`
 	ClearSignedAt           bool
-	SignedAt                *models.DateTime
+	SignedAt                *models.DateTime `json:"signed_at,omitempty"`
 	ClearBlockedGroups      bool
 	AddBlockedGroupIDs      []string
 	RemoveBlockedGroupIDs   []string
@@ -28305,28 +28421,27 @@ func (c *TrustCenterNDARequestUpdateOne) SetInput(i UpdateTrustCenterNDARequestI
 
 // CreateTrustCenterSettingInput represents a mutation input for creating trustcentersettings.
 type CreateTrustCenterSettingInput struct {
-	TrustCenterID                         *string
-	Title                                 *string
-	CompanyName                           *string
-	CompanyDescription                    *string
-	Overview                              *string
-	LogoRemoteURL                         *string
-	FaviconRemoteURL                      *string
-	ThemeMode                             *enums.TrustCenterThemeMode
-	PrimaryColor                          *string
-	Font                                  *string
-	ForegroundColor                       *string
-	BackgroundColor                       *string
-	AccentColor                           *string
-	SecondaryBackgroundColor              *string
-	SecondaryForegroundColor              *string
-	Environment                           *enums.TrustCenterEnvironment
-	CompanyDomain                         *string
-	SecurityContact                       *string
-	NdaApprovalRequired                   *bool
-	AllowSubscribers                      *bool
-	NotifySubscribersOnSubprocessorChange *bool
-	StatusPageURL                         *string
+	TrustCenterID                         *string                       `json:"trust_center_id,omitempty"`
+	Title                                 *string                       `json:"title,omitempty"`
+	CompanyName                           *string                       `json:"company_name,omitempty"`
+	CompanyDescription                    *string                       `json:"company_description,omitempty"`
+	Overview                              *string                       `json:"overview,omitempty"`
+	LogoRemoteURL                         *string                       `json:"logo_remote_url,omitempty"`
+	FaviconRemoteURL                      *string                       `json:"favicon_remote_url,omitempty"`
+	ThemeMode                             *enums.TrustCenterThemeMode   `json:"theme_mode,omitempty"`
+	PrimaryColor                          *string                       `json:"primary_color,omitempty"`
+	Font                                  *string                       `json:"font,omitempty"`
+	ForegroundColor                       *string                       `json:"foreground_color,omitempty"`
+	BackgroundColor                       *string                       `json:"background_color,omitempty"`
+	AccentColor                           *string                       `json:"accent_color,omitempty"`
+	SecondaryBackgroundColor              *string                       `json:"secondary_background_color,omitempty"`
+	SecondaryForegroundColor              *string                       `json:"secondary_foreground_color,omitempty"`
+	Environment                           *enums.TrustCenterEnvironment `json:"environment,omitempty"`
+	CompanyDomain                         *string                       `json:"company_domain,omitempty"`
+	SecurityContact                       *string                       `json:"security_contact,omitempty"`
+	NdaApprovalRequired                   *bool                         `json:"nda_approval_required,omitempty"`
+	NotifySubscribersOnSubprocessorChange *bool                         `json:"notify_subscribers_on_subprocessor_change,omitempty"`
+	StatusPageURL                         *string                       `json:"status_page_url,omitempty"`
 	BlockedGroupIDs                       []string
 	EditorIDs                             []string
 	LogoFileID                            *string
@@ -28432,47 +28547,45 @@ func (c *TrustCenterSettingCreate) SetInput(i CreateTrustCenterSettingInput) *Tr
 // UpdateTrustCenterSettingInput represents a mutation input for updating trustcentersettings.
 type UpdateTrustCenterSettingInput struct {
 	ClearTrustCenterID                         bool
-	TrustCenterID                              *string
+	TrustCenterID                              *string `json:"trust_center_id,omitempty"`
 	ClearTitle                                 bool
-	Title                                      *string
+	Title                                      *string `json:"title,omitempty"`
 	ClearCompanyName                           bool
-	CompanyName                                *string
+	CompanyName                                *string `json:"company_name,omitempty"`
 	ClearCompanyDescription                    bool
-	CompanyDescription                         *string
+	CompanyDescription                         *string `json:"company_description,omitempty"`
 	ClearOverview                              bool
-	Overview                                   *string
+	Overview                                   *string `json:"overview,omitempty"`
 	ClearLogoRemoteURL                         bool
-	LogoRemoteURL                              *string
+	LogoRemoteURL                              *string `json:"logo_remote_url,omitempty"`
 	ClearFaviconRemoteURL                      bool
-	FaviconRemoteURL                           *string
+	FaviconRemoteURL                           *string `json:"favicon_remote_url,omitempty"`
 	ClearThemeMode                             bool
-	ThemeMode                                  *enums.TrustCenterThemeMode
+	ThemeMode                                  *enums.TrustCenterThemeMode `json:"theme_mode,omitempty"`
 	ClearPrimaryColor                          bool
-	PrimaryColor                               *string
+	PrimaryColor                               *string `json:"primary_color,omitempty"`
 	ClearFont                                  bool
-	Font                                       *string
+	Font                                       *string `json:"font,omitempty"`
 	ClearForegroundColor                       bool
-	ForegroundColor                            *string
+	ForegroundColor                            *string `json:"foreground_color,omitempty"`
 	ClearBackgroundColor                       bool
-	BackgroundColor                            *string
+	BackgroundColor                            *string `json:"background_color,omitempty"`
 	ClearAccentColor                           bool
-	AccentColor                                *string
+	AccentColor                                *string `json:"accent_color,omitempty"`
 	ClearSecondaryBackgroundColor              bool
-	SecondaryBackgroundColor                   *string
+	SecondaryBackgroundColor                   *string `json:"secondary_background_color,omitempty"`
 	ClearSecondaryForegroundColor              bool
-	SecondaryForegroundColor                   *string
+	SecondaryForegroundColor                   *string `json:"secondary_foreground_color,omitempty"`
 	ClearCompanyDomain                         bool
-	CompanyDomain                              *string
+	CompanyDomain                              *string `json:"company_domain,omitempty"`
 	ClearSecurityContact                       bool
-	SecurityContact                            *string
+	SecurityContact                            *string `json:"security_contact,omitempty"`
 	ClearNdaApprovalRequired                   bool
-	NdaApprovalRequired                        *bool
-	ClearAllowSubscribers                      bool
-	AllowSubscribers                           *bool
+	NdaApprovalRequired                        *bool `json:"nda_approval_required,omitempty"`
 	ClearNotifySubscribersOnSubprocessorChange bool
-	NotifySubscribersOnSubprocessorChange      *bool
+	NotifySubscribersOnSubprocessorChange      *bool `json:"notify_subscribers_on_subprocessor_change,omitempty"`
 	ClearStatusPageURL                         bool
-	StatusPageURL                              *string
+	StatusPageURL                              *string `json:"status_page_url,omitempty"`
 	ClearBlockedGroups                         bool
 	AddBlockedGroupIDs                         []string
 	RemoveBlockedGroupIDs                      []string
@@ -28675,8 +28788,8 @@ func (c *TrustCenterSettingUpdateOne) SetInput(i UpdateTrustCenterSettingInput) 
 
 // CreateTrustCenterSubprocessorInput represents a mutation input for creating trustcentersubprocessors.
 type CreateTrustCenterSubprocessorInput struct {
-	TrustCenterSubprocessorKindName *string
-	Countries                       []string
+	TrustCenterSubprocessorKindName *string  `json:"trust_center_subprocessor_kind_name,omitempty"`
+	Countries                       []string `json:"countries,omitempty"`
 	TrustCenterSubprocessorKindID   *string
 	BlockedGroupIDs                 []string
 	EditorIDs                       []string
@@ -28716,9 +28829,9 @@ func (c *TrustCenterSubprocessorCreate) SetInput(i CreateTrustCenterSubprocessor
 // UpdateTrustCenterSubprocessorInput represents a mutation input for updating trustcentersubprocessors.
 type UpdateTrustCenterSubprocessorInput struct {
 	ClearTrustCenterSubprocessorKindName bool
-	TrustCenterSubprocessorKindName      *string
+	TrustCenterSubprocessorKindName      *string `json:"trust_center_subprocessor_kind_name,omitempty"`
 	ClearCountries                       bool
-	Countries                            []string
+	Countries                            []string `json:"countries,omitempty"`
 	AppendCountries                      []string
 	ClearTrustCenterSubprocessorKind     bool
 	TrustCenterSubprocessorKindID        *string
@@ -28787,14 +28900,14 @@ func (c *TrustCenterSubprocessorUpdateOne) SetInput(i UpdateTrustCenterSubproces
 
 // CreateTrustCenterWatermarkConfigInput represents a mutation input for creating trustcenterwatermarkconfigs.
 type CreateTrustCenterWatermarkConfigInput struct {
-	TrustCenterID   *string
-	IsEnabled       *bool
-	Text            *string
-	FontSize        *float64
-	Opacity         *float64
-	Rotation        *float64
-	Color           *string
-	Font            *enums.Font
+	TrustCenterID   *string     `json:"trust_center_id,omitempty"`
+	IsEnabled       *bool       `json:"is_enabled,omitempty"`
+	Text            *string     `json:"text,omitempty"`
+	FontSize        *float64    `json:"font_size,omitempty"`
+	Opacity         *float64    `json:"opacity,omitempty"`
+	Rotation        *float64    `json:"rotation,omitempty"`
+	Color           *string     `json:"color,omitempty"`
+	Font            *enums.Font `json:"font,omitempty"`
 	OwnerID         *string
 	BlockedGroupIDs []string
 	EditorIDs       []string
@@ -28854,19 +28967,19 @@ func (c *TrustCenterWatermarkConfigCreate) SetInput(i CreateTrustCenterWatermark
 // UpdateTrustCenterWatermarkConfigInput represents a mutation input for updating trustcenterwatermarkconfigs.
 type UpdateTrustCenterWatermarkConfigInput struct {
 	ClearIsEnabled        bool
-	IsEnabled             *bool
+	IsEnabled             *bool `json:"is_enabled,omitempty"`
 	ClearText             bool
-	Text                  *string
+	Text                  *string `json:"text,omitempty"`
 	ClearFontSize         bool
-	FontSize              *float64
+	FontSize              *float64 `json:"font_size,omitempty"`
 	ClearOpacity          bool
-	Opacity               *float64
+	Opacity               *float64 `json:"opacity,omitempty"`
 	ClearRotation         bool
-	Rotation              *float64
+	Rotation              *float64 `json:"rotation,omitempty"`
 	ClearColor            bool
-	Color                 *string
+	Color                 *string `json:"color,omitempty"`
 	ClearFont             bool
-	Font                  *enums.Font
+	Font                  *enums.Font `json:"font,omitempty"`
 	ClearBlockedGroups    bool
 	AddBlockedGroupIDs    []string
 	RemoveBlockedGroupIDs []string
@@ -28973,24 +29086,24 @@ func (c *TrustCenterWatermarkConfigUpdateOne) SetInput(i UpdateTrustCenterWaterm
 
 // CreateUserInput represents a mutation input for creating users.
 type CreateUserInput struct {
-	Tags                     []string
-	Email                    string
-	FirstName                *string
-	LastName                 *string
-	DisplayName              string
-	AvatarRemoteURL          *string
-	AvatarUpdatedAt          *time.Time
-	LastSeen                 *time.Time
-	LastLoginProvider        *enums.AuthProvider
-	Password                 *string
-	Sub                      *string
-	AuthProvider             *enums.AuthProvider
-	Role                     *enums.Role
-	ScimExternalID           *string
-	ScimUsername             *string
-	ScimActive               *bool
-	ScimPreferredLanguage    *string
-	ScimLocale               *string
+	Tags                     []string            `json:"tags,omitempty"`
+	Email                    string              `json:"email,omitempty"`
+	FirstName                *string             `json:"first_name,omitempty"`
+	LastName                 *string             `json:"last_name,omitempty"`
+	DisplayName              string              `json:"display_name,omitempty"`
+	AvatarRemoteURL          *string             `json:"avatar_remote_url,omitempty"`
+	AvatarUpdatedAt          *time.Time          `json:"avatar_updated_at,omitempty"`
+	LastSeen                 *time.Time          `json:"last_seen,omitempty"`
+	LastLoginProvider        *enums.AuthProvider `json:"last_login_provider,omitempty"`
+	Password                 *string             `json:"password,omitempty"`
+	Sub                      *string             `json:"sub,omitempty"`
+	AuthProvider             *enums.AuthProvider `json:"auth_provider,omitempty"`
+	Role                     *enums.Role         `json:"role,omitempty"`
+	ScimExternalID           *string             `json:"scim_external_id,omitempty"`
+	ScimUsername             *string             `json:"scim_username,omitempty"`
+	ScimActive               *bool               `json:"scim_active,omitempty"`
+	ScimPreferredLanguage    *string             `json:"scim_preferred_language,omitempty"`
+	ScimLocale               *string             `json:"scim_locale,omitempty"`
 	PersonalAccessTokenIDs   []string
 	TfaSettingIDs            []string
 	SettingID                string
@@ -29138,39 +29251,39 @@ func (c *UserCreate) SetInput(i CreateUserInput) *UserCreate {
 // UpdateUserInput represents a mutation input for updating users.
 type UpdateUserInput struct {
 	ClearTags                      bool
-	Tags                           []string
+	Tags                           []string `json:"tags,omitempty"`
 	AppendTags                     []string
-	Email                          *string
+	Email                          *string `json:"email,omitempty"`
 	ClearFirstName                 bool
-	FirstName                      *string
+	FirstName                      *string `json:"first_name,omitempty"`
 	ClearLastName                  bool
-	LastName                       *string
-	DisplayName                    *string
+	LastName                       *string `json:"last_name,omitempty"`
+	DisplayName                    *string `json:"display_name,omitempty"`
 	ClearAvatarRemoteURL           bool
-	AvatarRemoteURL                *string
+	AvatarRemoteURL                *string `json:"avatar_remote_url,omitempty"`
 	ClearAvatarUpdatedAt           bool
-	AvatarUpdatedAt                *time.Time
+	AvatarUpdatedAt                *time.Time `json:"avatar_updated_at,omitempty"`
 	ClearLastSeen                  bool
-	LastSeen                       *time.Time
+	LastSeen                       *time.Time `json:"last_seen,omitempty"`
 	ClearLastLoginProvider         bool
-	LastLoginProvider              *enums.AuthProvider
+	LastLoginProvider              *enums.AuthProvider `json:"last_login_provider,omitempty"`
 	ClearPassword                  bool
-	Password                       *string
+	Password                       *string `json:"password,omitempty"`
 	ClearSub                       bool
-	Sub                            *string
-	AuthProvider                   *enums.AuthProvider
+	Sub                            *string             `json:"sub,omitempty"`
+	AuthProvider                   *enums.AuthProvider `json:"auth_provider,omitempty"`
 	ClearRole                      bool
-	Role                           *enums.Role
+	Role                           *enums.Role `json:"role,omitempty"`
 	ClearScimExternalID            bool
-	ScimExternalID                 *string
+	ScimExternalID                 *string `json:"scim_external_id,omitempty"`
 	ClearScimUsername              bool
-	ScimUsername                   *string
+	ScimUsername                   *string `json:"scim_username,omitempty"`
 	ClearScimActive                bool
-	ScimActive                     *bool
+	ScimActive                     *bool `json:"scim_active,omitempty"`
 	ClearScimPreferredLanguage     bool
-	ScimPreferredLanguage          *string
+	ScimPreferredLanguage          *string `json:"scim_preferred_language,omitempty"`
 	ClearScimLocale                bool
-	ScimLocale                     *string
+	ScimLocale                     *string `json:"scim_locale,omitempty"`
 	ClearPersonalAccessTokens      bool
 	AddPersonalAccessTokenIDs      []string
 	RemovePersonalAccessTokenIDs   []string
@@ -29533,16 +29646,16 @@ func (c *UserUpdateOne) SetInput(i UpdateUserInput) *UserUpdateOne {
 
 // CreateUserSettingInput represents a mutation input for creating usersettings.
 type CreateUserSettingInput struct {
-	Tags            []string
-	DelegateUserID  *string
-	DelegateStartAt *time.Time
-	DelegateEndAt   *time.Time
-	Locked          *bool
-	SilencedAt      *time.Time
-	SuspendedAt     *time.Time
-	Status          *enums.UserStatus
-	EmailConfirmed  *bool
-	IsTfaEnabled    *bool
+	Tags            []string          `json:"tags,omitempty"`
+	DelegateUserID  *string           `json:"delegate_user_id,omitempty"`
+	DelegateStartAt *time.Time        `json:"delegate_start_at,omitempty"`
+	DelegateEndAt   *time.Time        `json:"delegate_end_at,omitempty"`
+	Locked          *bool             `json:"locked,omitempty"`
+	SilencedAt      *time.Time        `json:"silenced_at,omitempty"`
+	SuspendedAt     *time.Time        `json:"suspended_at,omitempty"`
+	Status          *enums.UserStatus `json:"status,omitempty"`
+	EmailConfirmed  *bool             `json:"email_confirmed,omitempty"`
+	IsTfaEnabled    *bool             `json:"is_tfa_enabled,omitempty"`
 	UserID          *string
 	DefaultOrgID    *string
 }
@@ -29596,23 +29709,23 @@ func (c *UserSettingCreate) SetInput(i CreateUserSettingInput) *UserSettingCreat
 // UpdateUserSettingInput represents a mutation input for updating usersettings.
 type UpdateUserSettingInput struct {
 	ClearTags            bool
-	Tags                 []string
+	Tags                 []string `json:"tags,omitempty"`
 	AppendTags           []string
 	ClearDelegateUserID  bool
-	DelegateUserID       *string
+	DelegateUserID       *string `json:"delegate_user_id,omitempty"`
 	ClearDelegateStartAt bool
-	DelegateStartAt      *time.Time
+	DelegateStartAt      *time.Time `json:"delegate_start_at,omitempty"`
 	ClearDelegateEndAt   bool
-	DelegateEndAt        *time.Time
-	Locked               *bool
+	DelegateEndAt        *time.Time `json:"delegate_end_at,omitempty"`
+	Locked               *bool      `json:"locked,omitempty"`
 	ClearSilencedAt      bool
-	SilencedAt           *time.Time
+	SilencedAt           *time.Time `json:"silenced_at,omitempty"`
 	ClearSuspendedAt     bool
-	SuspendedAt          *time.Time
-	Status               *enums.UserStatus
-	EmailConfirmed       *bool
+	SuspendedAt          *time.Time        `json:"suspended_at,omitempty"`
+	Status               *enums.UserStatus `json:"status,omitempty"`
+	EmailConfirmed       *bool             `json:"email_confirmed,omitempty"`
 	ClearIsTfaEnabled    bool
-	IsTfaEnabled         *bool
+	IsTfaEnabled         *bool `json:"is_tfa_enabled,omitempty"`
 	ClearUser            bool
 	UserID               *string
 	ClearDefaultOrg      bool
@@ -29703,15 +29816,15 @@ func (c *UserSettingUpdateOne) SetInput(i UpdateUserSettingInput) *UserSettingUp
 
 // CreateVendorRiskScoreInput represents a mutation input for creating vendorriskscores.
 type CreateVendorRiskScoreInput struct {
-	Tags                  []string
-	QuestionKey           string
-	QuestionName          string
-	QuestionDescription   *string
-	QuestionCategory      enums.VendorScoringCategory
-	Impact                enums.VendorRiskImpact
-	Likelihood            enums.VendorRiskLikelihood
-	Answer                *string
-	Notes                 *string
+	Tags                  []string                    `json:"tags,omitempty"`
+	QuestionKey           string                      `json:"question_key,omitempty"`
+	QuestionName          string                      `json:"question_name,omitempty"`
+	QuestionDescription   *string                     `json:"question_description,omitempty"`
+	QuestionCategory      enums.VendorScoringCategory `json:"question_category,omitempty"`
+	Impact                enums.VendorRiskImpact      `json:"impact,omitempty"`
+	Likelihood            enums.VendorRiskLikelihood  `json:"likelihood,omitempty"`
+	Answer                *string                     `json:"answer,omitempty"`
+	Notes                 *string                     `json:"notes,omitempty"`
 	OwnerID               *string
 	VendorScoringConfigID *string
 	EntityID              string
@@ -29758,19 +29871,19 @@ func (c *VendorRiskScoreCreate) SetInput(i CreateVendorRiskScoreInput) *VendorRi
 // UpdateVendorRiskScoreInput represents a mutation input for updating vendorriskscores.
 type UpdateVendorRiskScoreInput struct {
 	ClearTags                bool
-	Tags                     []string
+	Tags                     []string `json:"tags,omitempty"`
 	AppendTags               []string
-	QuestionKey              *string
-	QuestionName             *string
+	QuestionKey              *string `json:"question_key,omitempty"`
+	QuestionName             *string `json:"question_name,omitempty"`
 	ClearQuestionDescription bool
-	QuestionDescription      *string
-	QuestionCategory         *enums.VendorScoringCategory
-	Impact                   *enums.VendorRiskImpact
-	Likelihood               *enums.VendorRiskLikelihood
+	QuestionDescription      *string                      `json:"question_description,omitempty"`
+	QuestionCategory         *enums.VendorScoringCategory `json:"question_category,omitempty"`
+	Impact                   *enums.VendorRiskImpact      `json:"impact,omitempty"`
+	Likelihood               *enums.VendorRiskLikelihood  `json:"likelihood,omitempty"`
 	ClearAnswer              bool
-	Answer                   *string
+	Answer                   *string `json:"answer,omitempty"`
 	ClearNotes               bool
-	Notes                    *string
+	Notes                    *string `json:"notes,omitempty"`
 	ClearVendorScoringConfig bool
 	VendorScoringConfigID    *string
 	EntityID                 *string
@@ -29853,10 +29966,10 @@ func (c *VendorRiskScoreUpdateOne) SetInput(i UpdateVendorRiskScoreInput) *Vendo
 
 // CreateVendorScoringConfigInput represents a mutation input for creating vendorscoringconfigs.
 type CreateVendorScoringConfigInput struct {
-	Tags               []string
-	Questions          *models.VendorScoringQuestionsConfig
-	ScoringMode        *enums.VendorScoringMode
-	RiskThresholds     *models.RiskThresholdsConfig
+	Tags               []string                             `json:"tags,omitempty"`
+	Questions          *models.VendorScoringQuestionsConfig `json:"questions,omitempty"`
+	ScoringMode        *enums.VendorScoringMode             `json:"scoring_mode,omitempty"`
+	RiskThresholds     *models.RiskThresholdsConfig         `json:"risk_thresholds,omitempty"`
 	OwnerID            *string
 	VendorRiskScoreIDs []string
 }
@@ -29892,11 +30005,11 @@ func (c *VendorScoringConfigCreate) SetInput(i CreateVendorScoringConfigInput) *
 // UpdateVendorScoringConfigInput represents a mutation input for updating vendorscoringconfigs.
 type UpdateVendorScoringConfigInput struct {
 	ClearTags                bool
-	Tags                     []string
+	Tags                     []string `json:"tags,omitempty"`
 	AppendTags               []string
-	Questions                *models.VendorScoringQuestionsConfig
-	ScoringMode              *enums.VendorScoringMode
-	RiskThresholds           *models.RiskThresholdsConfig
+	Questions                *models.VendorScoringQuestionsConfig `json:"questions,omitempty"`
+	ScoringMode              *enums.VendorScoringMode             `json:"scoring_mode,omitempty"`
+	RiskThresholds           *models.RiskThresholdsConfig         `json:"risk_thresholds,omitempty"`
 	ClearOwner               bool
 	OwnerID                  *string
 	ClearVendorRiskScores    bool
@@ -29955,55 +30068,56 @@ func (c *VendorScoringConfigUpdateOne) SetInput(i UpdateVendorScoringConfigInput
 
 // CreateVulnerabilityInput represents a mutation input for creating vulnerabilities.
 type CreateVulnerabilityInput struct {
-	Tags                    []string
-	ReviewedBy              *string
-	AssignedTo              *string
-	InternalNotes           *string
-	SystemInternalID        *string
-	EnvironmentName         *string
-	ScopeName               *string
-	VulnerabilityStatusName *string
-	ExternalOwnerID         *string
-	ExternalID              string
-	CveID                   *string
-	Source                  *string
-	DisplayName             *string
-	Category                *string
-	Severity                *string
-	Score                   *float64
-	Impact                  *float64
-	Exploitability          *float64
-	Priority                *string
-	Summary                 *string
-	Description             *string
-	Vector                  *string
-	RemediationSLA          *int
-	Open                    *bool
-	Blocking                *bool
-	Production              *bool
-	Public                  *bool
-	Validated               *bool
-	References              []string
-	Impacts                 []string
-	CweIds                  []string
-	VulnerableVersionRange  *string
-	FirstPatchedVersion     *string
-	FixAvailable            *bool
-	PackageName             *string
-	PackageEcosystem        *string
-	ManifestPath            *string
-	DependencyScope         *string
-	PublishedAt             *models.DateTime
-	DiscoveredAt            *models.DateTime
-	SourceUpdatedAt         *models.DateTime
-	DismissedAt             *models.DateTime
-	DismissedReason         *string
-	DismissedComment        *string
-	FixedAt                 *models.DateTime
-	AutoDismissedAt         *models.DateTime
-	ExternalURI             *string
-	Metadata                map[string]interface{}
-	RawPayload              map[string]interface{}
+	Tags                    []string               `json:"tags,omitempty"`
+	ReviewedBy              *string                `json:"reviewed_by,omitempty"`
+	AssignedTo              *string                `json:"assigned_to,omitempty"`
+	InternalNotes           *string                `json:"internal_notes,omitempty"`
+	SystemInternalID        *string                `json:"system_internal_id,omitempty"`
+	EnvironmentName         *string                `json:"environment_name,omitempty"`
+	ScopeName               *string                `json:"scope_name,omitempty"`
+	VulnerabilityStatusName *string                `json:"vulnerability_status_name,omitempty"`
+	WorkflowEligibleMarker  *bool                  `json:"workflow_eligible_marker,omitempty"`
+	ExternalOwnerID         *string                `json:"external_owner_id,omitempty"`
+	ExternalID              string                 `json:"external_id,omitempty"`
+	CveID                   *string                `json:"cve_id,omitempty"`
+	Source                  *string                `json:"source,omitempty"`
+	DisplayName             *string                `json:"display_name,omitempty"`
+	Category                *string                `json:"category,omitempty"`
+	Severity                *string                `json:"severity,omitempty"`
+	Score                   *float64               `json:"score,omitempty"`
+	Impact                  *float64               `json:"impact,omitempty"`
+	Exploitability          *float64               `json:"exploitability,omitempty"`
+	Priority                *string                `json:"priority,omitempty"`
+	Summary                 *string                `json:"summary,omitempty"`
+	Description             *string                `json:"description,omitempty"`
+	Vector                  *string                `json:"vector,omitempty"`
+	RemediationSLA          *int                   `json:"remediation_sla,omitempty"`
+	Open                    *bool                  `json:"open,omitempty"`
+	Blocking                *bool                  `json:"blocking,omitempty"`
+	Production              *bool                  `json:"production,omitempty"`
+	Public                  *bool                  `json:"public,omitempty"`
+	Validated               *bool                  `json:"validated,omitempty"`
+	References              []string               `json:"references,omitempty"`
+	Impacts                 []string               `json:"impacts,omitempty"`
+	CweIds                  []string               `json:"cwe_ids,omitempty"`
+	VulnerableVersionRange  *string                `json:"vulnerable_version_range,omitempty"`
+	FirstPatchedVersion     *string                `json:"first_patched_version,omitempty"`
+	FixAvailable            *bool                  `json:"fix_available,omitempty"`
+	PackageName             *string                `json:"package_name,omitempty"`
+	PackageEcosystem        *string                `json:"package_ecosystem,omitempty"`
+	ManifestPath            *string                `json:"manifest_path,omitempty"`
+	DependencyScope         *string                `json:"dependency_scope,omitempty"`
+	PublishedAt             *models.DateTime       `json:"published_at,omitempty"`
+	DiscoveredAt            *models.DateTime       `json:"discovered_at,omitempty"`
+	SourceUpdatedAt         *models.DateTime       `json:"source_updated_at,omitempty"`
+	DismissedAt             *models.DateTime       `json:"dismissed_at,omitempty"`
+	DismissedReason         *string                `json:"dismissed_reason,omitempty"`
+	DismissedComment        *string                `json:"dismissed_comment,omitempty"`
+	FixedAt                 *models.DateTime       `json:"fixed_at,omitempty"`
+	AutoDismissedAt         *models.DateTime       `json:"auto_dismissed_at,omitempty"`
+	ExternalURI             *string                `json:"external_uri,omitempty"`
+	Metadata                map[string]interface{} `json:"metadata,omitempty"`
+	RawPayload              map[string]interface{} `json:"raw_payload,omitempty"`
 	OwnerID                 *string
 	BlockedGroupIDs         []string
 	EditorIDs               []string
@@ -30030,6 +30144,7 @@ type CreateVulnerabilityInput struct {
 	ReviewIDs               []string
 	CommentIDs              []string
 	FileIDs                 []string
+	WorkflowObjectRefIDs    []string
 }
 
 // Mutate applies the CreateVulnerabilityInput on the VulnerabilityMutation builder.
@@ -30057,6 +30172,9 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.VulnerabilityStatusName; v != nil {
 		m.SetVulnerabilityStatusName(*v)
+	}
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
@@ -30257,6 +30375,9 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
+	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateVulnerabilityInput on the VulnerabilityCreate builder.
@@ -30268,106 +30389,108 @@ func (c *VulnerabilityCreate) SetInput(i CreateVulnerabilityInput) *Vulnerabilit
 // UpdateVulnerabilityInput represents a mutation input for updating vulnerabilities.
 type UpdateVulnerabilityInput struct {
 	ClearTags                    bool
-	Tags                         []string
+	Tags                         []string `json:"tags,omitempty"`
 	AppendTags                   []string
 	ClearReviewedBy              bool
-	ReviewedBy                   *string
+	ReviewedBy                   *string `json:"reviewed_by,omitempty"`
 	ClearAssignedTo              bool
-	AssignedTo                   *string
+	AssignedTo                   *string `json:"assigned_to,omitempty"`
 	ClearInternalNotes           bool
-	InternalNotes                *string
+	InternalNotes                *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID        bool
-	SystemInternalID             *string
+	SystemInternalID             *string `json:"system_internal_id,omitempty"`
 	ClearEnvironmentName         bool
-	EnvironmentName              *string
+	EnvironmentName              *string `json:"environment_name,omitempty"`
 	ClearScopeName               bool
-	ScopeName                    *string
+	ScopeName                    *string `json:"scope_name,omitempty"`
 	ClearVulnerabilityStatusName bool
-	VulnerabilityStatusName      *string
+	VulnerabilityStatusName      *string `json:"vulnerability_status_name,omitempty"`
+	ClearWorkflowEligibleMarker  bool
+	WorkflowEligibleMarker       *bool `json:"workflow_eligible_marker,omitempty"`
 	ClearExternalOwnerID         bool
-	ExternalOwnerID              *string
-	ExternalID                   *string
+	ExternalOwnerID              *string `json:"external_owner_id,omitempty"`
+	ExternalID                   *string `json:"external_id,omitempty"`
 	ClearCveID                   bool
-	CveID                        *string
+	CveID                        *string `json:"cve_id,omitempty"`
 	ClearSource                  bool
-	Source                       *string
+	Source                       *string `json:"source,omitempty"`
 	ClearDisplayName             bool
-	DisplayName                  *string
+	DisplayName                  *string `json:"display_name,omitempty"`
 	ClearCategory                bool
-	Category                     *string
+	Category                     *string `json:"category,omitempty"`
 	ClearSeverity                bool
-	Severity                     *string
+	Severity                     *string `json:"severity,omitempty"`
 	ClearScore                   bool
-	Score                        *float64
+	Score                        *float64 `json:"score,omitempty"`
 	ClearImpact                  bool
-	Impact                       *float64
+	Impact                       *float64 `json:"impact,omitempty"`
 	ClearExploitability          bool
-	Exploitability               *float64
+	Exploitability               *float64 `json:"exploitability,omitempty"`
 	ClearPriority                bool
-	Priority                     *string
+	Priority                     *string `json:"priority,omitempty"`
 	ClearSummary                 bool
-	Summary                      *string
+	Summary                      *string `json:"summary,omitempty"`
 	ClearDescription             bool
-	Description                  *string
+	Description                  *string `json:"description,omitempty"`
 	ClearVector                  bool
-	Vector                       *string
+	Vector                       *string `json:"vector,omitempty"`
 	ClearRemediationSLA          bool
-	RemediationSLA               *int
+	RemediationSLA               *int `json:"remediation_sla,omitempty"`
 	ClearOpen                    bool
-	Open                         *bool
+	Open                         *bool `json:"open,omitempty"`
 	ClearBlocking                bool
-	Blocking                     *bool
+	Blocking                     *bool `json:"blocking,omitempty"`
 	ClearProduction              bool
-	Production                   *bool
+	Production                   *bool `json:"production,omitempty"`
 	ClearPublic                  bool
-	Public                       *bool
+	Public                       *bool `json:"public,omitempty"`
 	ClearValidated               bool
-	Validated                    *bool
+	Validated                    *bool `json:"validated,omitempty"`
 	ClearReferences              bool
-	References                   []string
+	References                   []string `json:"references,omitempty"`
 	AppendReferences             []string
 	ClearImpacts                 bool
-	Impacts                      []string
+	Impacts                      []string `json:"impacts,omitempty"`
 	AppendImpacts                []string
 	ClearCweIds                  bool
-	CweIds                       []string
+	CweIds                       []string `json:"cwe_ids,omitempty"`
 	AppendCweIds                 []string
 	ClearVulnerableVersionRange  bool
-	VulnerableVersionRange       *string
+	VulnerableVersionRange       *string `json:"vulnerable_version_range,omitempty"`
 	ClearFirstPatchedVersion     bool
-	FirstPatchedVersion          *string
+	FirstPatchedVersion          *string `json:"first_patched_version,omitempty"`
 	ClearFixAvailable            bool
-	FixAvailable                 *bool
+	FixAvailable                 *bool `json:"fix_available,omitempty"`
 	ClearPackageName             bool
-	PackageName                  *string
+	PackageName                  *string `json:"package_name,omitempty"`
 	ClearPackageEcosystem        bool
-	PackageEcosystem             *string
+	PackageEcosystem             *string `json:"package_ecosystem,omitempty"`
 	ClearManifestPath            bool
-	ManifestPath                 *string
+	ManifestPath                 *string `json:"manifest_path,omitempty"`
 	ClearDependencyScope         bool
-	DependencyScope              *string
+	DependencyScope              *string `json:"dependency_scope,omitempty"`
 	ClearPublishedAt             bool
-	PublishedAt                  *models.DateTime
+	PublishedAt                  *models.DateTime `json:"published_at,omitempty"`
 	ClearDiscoveredAt            bool
-	DiscoveredAt                 *models.DateTime
+	DiscoveredAt                 *models.DateTime `json:"discovered_at,omitempty"`
 	ClearSourceUpdatedAt         bool
-	SourceUpdatedAt              *models.DateTime
+	SourceUpdatedAt              *models.DateTime `json:"source_updated_at,omitempty"`
 	ClearDismissedAt             bool
-	DismissedAt                  *models.DateTime
+	DismissedAt                  *models.DateTime `json:"dismissed_at,omitempty"`
 	ClearDismissedReason         bool
-	DismissedReason              *string
+	DismissedReason              *string `json:"dismissed_reason,omitempty"`
 	ClearDismissedComment        bool
-	DismissedComment             *string
+	DismissedComment             *string `json:"dismissed_comment,omitempty"`
 	ClearFixedAt                 bool
-	FixedAt                      *models.DateTime
+	FixedAt                      *models.DateTime `json:"fixed_at,omitempty"`
 	ClearAutoDismissedAt         bool
-	AutoDismissedAt              *models.DateTime
+	AutoDismissedAt              *models.DateTime `json:"auto_dismissed_at,omitempty"`
 	ClearExternalURI             bool
-	ExternalURI                  *string
+	ExternalURI                  *string `json:"external_uri,omitempty"`
 	ClearMetadata                bool
-	Metadata                     map[string]interface{}
+	Metadata                     map[string]interface{} `json:"metadata,omitempty"`
 	ClearRawPayload              bool
-	RawPayload                   map[string]interface{}
+	RawPayload                   map[string]interface{} `json:"raw_payload,omitempty"`
 	ClearBlockedGroups           bool
 	AddBlockedGroupIDs           []string
 	RemoveBlockedGroupIDs        []string
@@ -30436,6 +30559,9 @@ type UpdateVulnerabilityInput struct {
 	ClearFiles                   bool
 	AddFileIDs                   []string
 	RemoveFileIDs                []string
+	ClearWorkflowObjectRefs      bool
+	AddWorkflowObjectRefIDs      []string
+	RemoveWorkflowObjectRefIDs   []string
 }
 
 // Mutate applies the UpdateVulnerabilityInput on the VulnerabilityMutation builder.
@@ -30490,6 +30616,12 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.VulnerabilityStatusName; v != nil {
 		m.SetVulnerabilityStatusName(*v)
+	}
+	if i.ClearWorkflowEligibleMarker {
+		m.ClearWorkflowEligibleMarker()
+	}
+	if v := i.WorkflowEligibleMarker; v != nil {
+		m.SetWorkflowEligibleMarker(*v)
 	}
 	if i.ClearExternalOwnerID {
 		m.ClearExternalOwnerID()
@@ -30947,6 +31079,15 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
 	}
+	if i.ClearWorkflowObjectRefs {
+		m.ClearWorkflowObjectRefs()
+	}
+	if v := i.AddWorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
+		m.RemoveWorkflowObjectRefIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateVulnerabilityInput on the VulnerabilityUpdate builder.
@@ -30963,21 +31104,21 @@ func (c *VulnerabilityUpdateOne) SetInput(i UpdateVulnerabilityInput) *Vulnerabi
 
 // CreateWorkflowDefinitionInput represents a mutation input for creating workflowdefinitions.
 type CreateWorkflowDefinitionInput struct {
-	Tags                    []string
-	InternalNotes           *string
-	SystemInternalID        *string
-	Name                    string
-	Description             *string
-	WorkflowKind            enums.WorkflowKind
-	SchemaType              string
-	Revision                *int
-	Draft                   *bool
-	PublishedAt             *time.Time
-	CooldownSeconds         *int
-	IsDefault               *bool
-	Active                  *bool
-	DefinitionJSON          *models.WorkflowDefinitionDocument
-	TrackedFields           []string
+	Tags                    []string                           `json:"tags,omitempty"`
+	InternalNotes           *string                            `json:"internal_notes,omitempty"`
+	SystemInternalID        *string                            `json:"system_internal_id,omitempty"`
+	Name                    string                             `json:"name,omitempty"`
+	Description             *string                            `json:"description,omitempty"`
+	WorkflowKind            enums.WorkflowKind                 `json:"workflow_kind,omitempty"`
+	SchemaType              string                             `json:"schema_type,omitempty"`
+	Revision                *int                               `json:"revision,omitempty"`
+	Draft                   *bool                              `json:"draft,omitempty"`
+	PublishedAt             *time.Time                         `json:"published_at,omitempty"`
+	CooldownSeconds         *int                               `json:"cooldown_seconds,omitempty"`
+	IsDefault               *bool                              `json:"is_default,omitempty"`
+	Active                  *bool                              `json:"active,omitempty"`
+	DefinitionJSON          *models.WorkflowDefinitionDocument `json:"definition_json,omitempty"`
+	TrackedFields           []string                           `json:"tracked_fields,omitempty"`
 	OwnerID                 *string
 	BlockedGroupIDs         []string
 	EditorIDs               []string
@@ -31064,28 +31205,28 @@ func (c *WorkflowDefinitionCreate) SetInput(i CreateWorkflowDefinitionInput) *Wo
 // UpdateWorkflowDefinitionInput represents a mutation input for updating workflowdefinitions.
 type UpdateWorkflowDefinitionInput struct {
 	ClearTags                     bool
-	Tags                          []string
+	Tags                          []string `json:"tags,omitempty"`
 	AppendTags                    []string
 	ClearInternalNotes            bool
-	InternalNotes                 *string
+	InternalNotes                 *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID         bool
-	SystemInternalID              *string
-	Name                          *string
+	SystemInternalID              *string `json:"system_internal_id,omitempty"`
+	Name                          *string `json:"name,omitempty"`
 	ClearDescription              bool
-	Description                   *string
-	WorkflowKind                  *enums.WorkflowKind
-	SchemaType                    *string
-	Revision                      *int
-	Draft                         *bool
+	Description                   *string             `json:"description,omitempty"`
+	WorkflowKind                  *enums.WorkflowKind `json:"workflow_kind,omitempty"`
+	SchemaType                    *string             `json:"schema_type,omitempty"`
+	Revision                      *int                `json:"revision,omitempty"`
+	Draft                         *bool               `json:"draft,omitempty"`
 	ClearPublishedAt              bool
-	PublishedAt                   *time.Time
-	CooldownSeconds               *int
-	IsDefault                     *bool
-	Active                        *bool
+	PublishedAt                   *time.Time `json:"published_at,omitempty"`
+	CooldownSeconds               *int       `json:"cooldown_seconds,omitempty"`
+	IsDefault                     *bool      `json:"is_default,omitempty"`
+	Active                        *bool      `json:"active,omitempty"`
 	ClearDefinitionJSON           bool
-	DefinitionJSON                *models.WorkflowDefinitionDocument
+	DefinitionJSON                *models.WorkflowDefinitionDocument `json:"definition_json,omitempty"`
 	ClearTrackedFields            bool
-	TrackedFields                 []string
+	TrackedFields                 []string `json:"tracked_fields,omitempty"`
 	AppendTrackedFields           []string
 	ClearBlockedGroups            bool
 	AddBlockedGroupIDs            []string

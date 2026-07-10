@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
@@ -46,6 +47,8 @@ type WorkflowProposal struct {
 	Revision int `json:"revision,omitempty"`
 	// Staged field updates for this domain; applied only after approval
 	Changes map[string]interface{} `json:"changes,omitempty"`
+	// Staged field updates as opaque JSON; preferred over changes field
+	ProposedChanges models.WorkflowProposedChanges `json:"proposed_changes,omitempty"`
 	// Hash of the current proposed changes for approval verification
 	ProposedHash string `json:"proposed_hash,omitempty"`
 	// Hash of the proposed changes that satisfied approvals (what was approved)
@@ -126,7 +129,7 @@ func (*WorkflowProposal) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case workflowproposal.FieldTags, workflowproposal.FieldChanges:
+		case workflowproposal.FieldTags, workflowproposal.FieldChanges, workflowproposal.FieldProposedChanges:
 			values[i] = new([]byte)
 		case workflowproposal.FieldRevision:
 			values[i] = new(sql.NullInt64)
@@ -230,6 +233,14 @@ func (_m *WorkflowProposal) assignValues(columns []string, values []any) error {
 			} else if value != nil && len(*value) > 0 {
 				if err := json.Unmarshal(*value, &_m.Changes); err != nil {
 					return fmt.Errorf("unmarshal field changes: %w", err)
+				}
+			}
+		case workflowproposal.FieldProposedChanges:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field proposed_changes", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.ProposedChanges); err != nil {
+					return fmt.Errorf("unmarshal field proposed_changes: %w", err)
 				}
 			}
 		case workflowproposal.FieldProposedHash:
@@ -350,6 +361,9 @@ func (_m *WorkflowProposal) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("changes=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Changes))
+	builder.WriteString(", ")
+	builder.WriteString("proposed_changes=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ProposedChanges))
 	builder.WriteString(", ")
 	builder.WriteString("proposed_hash=")
 	builder.WriteString(_m.ProposedHash)

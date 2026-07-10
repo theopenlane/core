@@ -192,6 +192,31 @@ func PlatformID(v string) predicate.WorkflowObjectRefHistory {
 	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldPlatformID, v))
 }
 
+// VulnerabilityID applies equality check predicate on the "vulnerability_id" field. It's identical to VulnerabilityIDEQ.
+func VulnerabilityID(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldVulnerabilityID, v))
+}
+
+// RiskID applies equality check predicate on the "risk_id" field. It's identical to RiskIDEQ.
+func RiskID(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldRiskID, v))
+}
+
+// AssessmentID applies equality check predicate on the "assessment_id" field. It's identical to AssessmentIDEQ.
+func AssessmentID(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldAssessmentID, v))
+}
+
+// AssessmentResponseID applies equality check predicate on the "assessment_response_id" field. It's identical to AssessmentResponseIDEQ.
+func AssessmentResponseID(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldAssessmentResponseID, v))
+}
+
+// RemediationID applies equality check predicate on the "remediation_id" field. It's identical to RemediationIDEQ.
+func RemediationID(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldRemediationID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.WorkflowObjectRefHistory {
 	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1980,6 +2005,381 @@ func PlatformIDEqualFold(v string) predicate.WorkflowObjectRefHistory {
 // PlatformIDContainsFold applies the ContainsFold predicate on the "platform_id" field.
 func PlatformIDContainsFold(v string) predicate.WorkflowObjectRefHistory {
 	return predicate.WorkflowObjectRefHistory(sql.FieldContainsFold(FieldPlatformID, v))
+}
+
+// VulnerabilityIDEQ applies the EQ predicate on the "vulnerability_id" field.
+func VulnerabilityIDEQ(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldVulnerabilityID, v))
+}
+
+// VulnerabilityIDNEQ applies the NEQ predicate on the "vulnerability_id" field.
+func VulnerabilityIDNEQ(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNEQ(FieldVulnerabilityID, v))
+}
+
+// VulnerabilityIDIn applies the In predicate on the "vulnerability_id" field.
+func VulnerabilityIDIn(vs ...string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldIn(FieldVulnerabilityID, vs...))
+}
+
+// VulnerabilityIDNotIn applies the NotIn predicate on the "vulnerability_id" field.
+func VulnerabilityIDNotIn(vs ...string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNotIn(FieldVulnerabilityID, vs...))
+}
+
+// VulnerabilityIDGT applies the GT predicate on the "vulnerability_id" field.
+func VulnerabilityIDGT(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldGT(FieldVulnerabilityID, v))
+}
+
+// VulnerabilityIDGTE applies the GTE predicate on the "vulnerability_id" field.
+func VulnerabilityIDGTE(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldGTE(FieldVulnerabilityID, v))
+}
+
+// VulnerabilityIDLT applies the LT predicate on the "vulnerability_id" field.
+func VulnerabilityIDLT(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldLT(FieldVulnerabilityID, v))
+}
+
+// VulnerabilityIDLTE applies the LTE predicate on the "vulnerability_id" field.
+func VulnerabilityIDLTE(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldLTE(FieldVulnerabilityID, v))
+}
+
+// VulnerabilityIDContains applies the Contains predicate on the "vulnerability_id" field.
+func VulnerabilityIDContains(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldContains(FieldVulnerabilityID, v))
+}
+
+// VulnerabilityIDHasPrefix applies the HasPrefix predicate on the "vulnerability_id" field.
+func VulnerabilityIDHasPrefix(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldHasPrefix(FieldVulnerabilityID, v))
+}
+
+// VulnerabilityIDHasSuffix applies the HasSuffix predicate on the "vulnerability_id" field.
+func VulnerabilityIDHasSuffix(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldHasSuffix(FieldVulnerabilityID, v))
+}
+
+// VulnerabilityIDIsNil applies the IsNil predicate on the "vulnerability_id" field.
+func VulnerabilityIDIsNil() predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldIsNull(FieldVulnerabilityID))
+}
+
+// VulnerabilityIDNotNil applies the NotNil predicate on the "vulnerability_id" field.
+func VulnerabilityIDNotNil() predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNotNull(FieldVulnerabilityID))
+}
+
+// VulnerabilityIDEqualFold applies the EqualFold predicate on the "vulnerability_id" field.
+func VulnerabilityIDEqualFold(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEqualFold(FieldVulnerabilityID, v))
+}
+
+// VulnerabilityIDContainsFold applies the ContainsFold predicate on the "vulnerability_id" field.
+func VulnerabilityIDContainsFold(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldContainsFold(FieldVulnerabilityID, v))
+}
+
+// RiskIDEQ applies the EQ predicate on the "risk_id" field.
+func RiskIDEQ(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldRiskID, v))
+}
+
+// RiskIDNEQ applies the NEQ predicate on the "risk_id" field.
+func RiskIDNEQ(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNEQ(FieldRiskID, v))
+}
+
+// RiskIDIn applies the In predicate on the "risk_id" field.
+func RiskIDIn(vs ...string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldIn(FieldRiskID, vs...))
+}
+
+// RiskIDNotIn applies the NotIn predicate on the "risk_id" field.
+func RiskIDNotIn(vs ...string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNotIn(FieldRiskID, vs...))
+}
+
+// RiskIDGT applies the GT predicate on the "risk_id" field.
+func RiskIDGT(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldGT(FieldRiskID, v))
+}
+
+// RiskIDGTE applies the GTE predicate on the "risk_id" field.
+func RiskIDGTE(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldGTE(FieldRiskID, v))
+}
+
+// RiskIDLT applies the LT predicate on the "risk_id" field.
+func RiskIDLT(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldLT(FieldRiskID, v))
+}
+
+// RiskIDLTE applies the LTE predicate on the "risk_id" field.
+func RiskIDLTE(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldLTE(FieldRiskID, v))
+}
+
+// RiskIDContains applies the Contains predicate on the "risk_id" field.
+func RiskIDContains(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldContains(FieldRiskID, v))
+}
+
+// RiskIDHasPrefix applies the HasPrefix predicate on the "risk_id" field.
+func RiskIDHasPrefix(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldHasPrefix(FieldRiskID, v))
+}
+
+// RiskIDHasSuffix applies the HasSuffix predicate on the "risk_id" field.
+func RiskIDHasSuffix(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldHasSuffix(FieldRiskID, v))
+}
+
+// RiskIDIsNil applies the IsNil predicate on the "risk_id" field.
+func RiskIDIsNil() predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldIsNull(FieldRiskID))
+}
+
+// RiskIDNotNil applies the NotNil predicate on the "risk_id" field.
+func RiskIDNotNil() predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNotNull(FieldRiskID))
+}
+
+// RiskIDEqualFold applies the EqualFold predicate on the "risk_id" field.
+func RiskIDEqualFold(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEqualFold(FieldRiskID, v))
+}
+
+// RiskIDContainsFold applies the ContainsFold predicate on the "risk_id" field.
+func RiskIDContainsFold(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldContainsFold(FieldRiskID, v))
+}
+
+// AssessmentIDEQ applies the EQ predicate on the "assessment_id" field.
+func AssessmentIDEQ(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldAssessmentID, v))
+}
+
+// AssessmentIDNEQ applies the NEQ predicate on the "assessment_id" field.
+func AssessmentIDNEQ(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNEQ(FieldAssessmentID, v))
+}
+
+// AssessmentIDIn applies the In predicate on the "assessment_id" field.
+func AssessmentIDIn(vs ...string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldIn(FieldAssessmentID, vs...))
+}
+
+// AssessmentIDNotIn applies the NotIn predicate on the "assessment_id" field.
+func AssessmentIDNotIn(vs ...string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNotIn(FieldAssessmentID, vs...))
+}
+
+// AssessmentIDGT applies the GT predicate on the "assessment_id" field.
+func AssessmentIDGT(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldGT(FieldAssessmentID, v))
+}
+
+// AssessmentIDGTE applies the GTE predicate on the "assessment_id" field.
+func AssessmentIDGTE(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldGTE(FieldAssessmentID, v))
+}
+
+// AssessmentIDLT applies the LT predicate on the "assessment_id" field.
+func AssessmentIDLT(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldLT(FieldAssessmentID, v))
+}
+
+// AssessmentIDLTE applies the LTE predicate on the "assessment_id" field.
+func AssessmentIDLTE(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldLTE(FieldAssessmentID, v))
+}
+
+// AssessmentIDContains applies the Contains predicate on the "assessment_id" field.
+func AssessmentIDContains(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldContains(FieldAssessmentID, v))
+}
+
+// AssessmentIDHasPrefix applies the HasPrefix predicate on the "assessment_id" field.
+func AssessmentIDHasPrefix(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldHasPrefix(FieldAssessmentID, v))
+}
+
+// AssessmentIDHasSuffix applies the HasSuffix predicate on the "assessment_id" field.
+func AssessmentIDHasSuffix(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldHasSuffix(FieldAssessmentID, v))
+}
+
+// AssessmentIDIsNil applies the IsNil predicate on the "assessment_id" field.
+func AssessmentIDIsNil() predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldIsNull(FieldAssessmentID))
+}
+
+// AssessmentIDNotNil applies the NotNil predicate on the "assessment_id" field.
+func AssessmentIDNotNil() predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNotNull(FieldAssessmentID))
+}
+
+// AssessmentIDEqualFold applies the EqualFold predicate on the "assessment_id" field.
+func AssessmentIDEqualFold(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEqualFold(FieldAssessmentID, v))
+}
+
+// AssessmentIDContainsFold applies the ContainsFold predicate on the "assessment_id" field.
+func AssessmentIDContainsFold(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldContainsFold(FieldAssessmentID, v))
+}
+
+// AssessmentResponseIDEQ applies the EQ predicate on the "assessment_response_id" field.
+func AssessmentResponseIDEQ(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDNEQ applies the NEQ predicate on the "assessment_response_id" field.
+func AssessmentResponseIDNEQ(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNEQ(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDIn applies the In predicate on the "assessment_response_id" field.
+func AssessmentResponseIDIn(vs ...string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldIn(FieldAssessmentResponseID, vs...))
+}
+
+// AssessmentResponseIDNotIn applies the NotIn predicate on the "assessment_response_id" field.
+func AssessmentResponseIDNotIn(vs ...string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNotIn(FieldAssessmentResponseID, vs...))
+}
+
+// AssessmentResponseIDGT applies the GT predicate on the "assessment_response_id" field.
+func AssessmentResponseIDGT(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldGT(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDGTE applies the GTE predicate on the "assessment_response_id" field.
+func AssessmentResponseIDGTE(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldGTE(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDLT applies the LT predicate on the "assessment_response_id" field.
+func AssessmentResponseIDLT(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldLT(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDLTE applies the LTE predicate on the "assessment_response_id" field.
+func AssessmentResponseIDLTE(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldLTE(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDContains applies the Contains predicate on the "assessment_response_id" field.
+func AssessmentResponseIDContains(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldContains(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDHasPrefix applies the HasPrefix predicate on the "assessment_response_id" field.
+func AssessmentResponseIDHasPrefix(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldHasPrefix(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDHasSuffix applies the HasSuffix predicate on the "assessment_response_id" field.
+func AssessmentResponseIDHasSuffix(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldHasSuffix(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDIsNil applies the IsNil predicate on the "assessment_response_id" field.
+func AssessmentResponseIDIsNil() predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldIsNull(FieldAssessmentResponseID))
+}
+
+// AssessmentResponseIDNotNil applies the NotNil predicate on the "assessment_response_id" field.
+func AssessmentResponseIDNotNil() predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNotNull(FieldAssessmentResponseID))
+}
+
+// AssessmentResponseIDEqualFold applies the EqualFold predicate on the "assessment_response_id" field.
+func AssessmentResponseIDEqualFold(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEqualFold(FieldAssessmentResponseID, v))
+}
+
+// AssessmentResponseIDContainsFold applies the ContainsFold predicate on the "assessment_response_id" field.
+func AssessmentResponseIDContainsFold(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldContainsFold(FieldAssessmentResponseID, v))
+}
+
+// RemediationIDEQ applies the EQ predicate on the "remediation_id" field.
+func RemediationIDEQ(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldRemediationID, v))
+}
+
+// RemediationIDNEQ applies the NEQ predicate on the "remediation_id" field.
+func RemediationIDNEQ(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNEQ(FieldRemediationID, v))
+}
+
+// RemediationIDIn applies the In predicate on the "remediation_id" field.
+func RemediationIDIn(vs ...string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldIn(FieldRemediationID, vs...))
+}
+
+// RemediationIDNotIn applies the NotIn predicate on the "remediation_id" field.
+func RemediationIDNotIn(vs ...string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNotIn(FieldRemediationID, vs...))
+}
+
+// RemediationIDGT applies the GT predicate on the "remediation_id" field.
+func RemediationIDGT(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldGT(FieldRemediationID, v))
+}
+
+// RemediationIDGTE applies the GTE predicate on the "remediation_id" field.
+func RemediationIDGTE(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldGTE(FieldRemediationID, v))
+}
+
+// RemediationIDLT applies the LT predicate on the "remediation_id" field.
+func RemediationIDLT(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldLT(FieldRemediationID, v))
+}
+
+// RemediationIDLTE applies the LTE predicate on the "remediation_id" field.
+func RemediationIDLTE(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldLTE(FieldRemediationID, v))
+}
+
+// RemediationIDContains applies the Contains predicate on the "remediation_id" field.
+func RemediationIDContains(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldContains(FieldRemediationID, v))
+}
+
+// RemediationIDHasPrefix applies the HasPrefix predicate on the "remediation_id" field.
+func RemediationIDHasPrefix(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldHasPrefix(FieldRemediationID, v))
+}
+
+// RemediationIDHasSuffix applies the HasSuffix predicate on the "remediation_id" field.
+func RemediationIDHasSuffix(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldHasSuffix(FieldRemediationID, v))
+}
+
+// RemediationIDIsNil applies the IsNil predicate on the "remediation_id" field.
+func RemediationIDIsNil() predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldIsNull(FieldRemediationID))
+}
+
+// RemediationIDNotNil applies the NotNil predicate on the "remediation_id" field.
+func RemediationIDNotNil() predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNotNull(FieldRemediationID))
+}
+
+// RemediationIDEqualFold applies the EqualFold predicate on the "remediation_id" field.
+func RemediationIDEqualFold(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEqualFold(FieldRemediationID, v))
+}
+
+// RemediationIDContainsFold applies the ContainsFold predicate on the "remediation_id" field.
+func RemediationIDContainsFold(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldContainsFold(FieldRemediationID, v))
 }
 
 // And groups predicates with the AND operator between them.

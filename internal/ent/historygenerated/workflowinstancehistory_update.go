@@ -475,6 +475,166 @@ func (_u *WorkflowInstanceHistoryUpdate) ClearPlatformID() *WorkflowInstanceHist
 	return _u
 }
 
+// SetAssessmentID sets the "assessment_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) SetAssessmentID(v string) *WorkflowInstanceHistoryUpdate {
+	_u.mutation.SetAssessmentID(v)
+	return _u
+}
+
+// SetNillableAssessmentID sets the "assessment_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdate) SetNillableAssessmentID(v *string) *WorkflowInstanceHistoryUpdate {
+	if v != nil {
+		_u.SetAssessmentID(*v)
+	}
+	return _u
+}
+
+// ClearAssessmentID clears the value of the "assessment_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) ClearAssessmentID() *WorkflowInstanceHistoryUpdate {
+	_u.mutation.ClearAssessmentID()
+	return _u
+}
+
+// SetAssessmentResponseID sets the "assessment_response_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) SetAssessmentResponseID(v string) *WorkflowInstanceHistoryUpdate {
+	_u.mutation.SetAssessmentResponseID(v)
+	return _u
+}
+
+// SetNillableAssessmentResponseID sets the "assessment_response_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdate) SetNillableAssessmentResponseID(v *string) *WorkflowInstanceHistoryUpdate {
+	if v != nil {
+		_u.SetAssessmentResponseID(*v)
+	}
+	return _u
+}
+
+// ClearAssessmentResponseID clears the value of the "assessment_response_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) ClearAssessmentResponseID() *WorkflowInstanceHistoryUpdate {
+	_u.mutation.ClearAssessmentResponseID()
+	return _u
+}
+
+// SetFindingID sets the "finding_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) SetFindingID(v string) *WorkflowInstanceHistoryUpdate {
+	_u.mutation.SetFindingID(v)
+	return _u
+}
+
+// SetNillableFindingID sets the "finding_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdate) SetNillableFindingID(v *string) *WorkflowInstanceHistoryUpdate {
+	if v != nil {
+		_u.SetFindingID(*v)
+	}
+	return _u
+}
+
+// ClearFindingID clears the value of the "finding_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) ClearFindingID() *WorkflowInstanceHistoryUpdate {
+	_u.mutation.ClearFindingID()
+	return _u
+}
+
+// SetIntegrationID sets the "integration_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) SetIntegrationID(v string) *WorkflowInstanceHistoryUpdate {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdate) SetNillableIntegrationID(v *string) *WorkflowInstanceHistoryUpdate {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) ClearIntegrationID() *WorkflowInstanceHistoryUpdate {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
+// SetRemediationID sets the "remediation_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) SetRemediationID(v string) *WorkflowInstanceHistoryUpdate {
+	_u.mutation.SetRemediationID(v)
+	return _u
+}
+
+// SetNillableRemediationID sets the "remediation_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdate) SetNillableRemediationID(v *string) *WorkflowInstanceHistoryUpdate {
+	if v != nil {
+		_u.SetRemediationID(*v)
+	}
+	return _u
+}
+
+// ClearRemediationID clears the value of the "remediation_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) ClearRemediationID() *WorkflowInstanceHistoryUpdate {
+	_u.mutation.ClearRemediationID()
+	return _u
+}
+
+// SetRiskID sets the "risk_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) SetRiskID(v string) *WorkflowInstanceHistoryUpdate {
+	_u.mutation.SetRiskID(v)
+	return _u
+}
+
+// SetNillableRiskID sets the "risk_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdate) SetNillableRiskID(v *string) *WorkflowInstanceHistoryUpdate {
+	if v != nil {
+		_u.SetRiskID(*v)
+	}
+	return _u
+}
+
+// ClearRiskID clears the value of the "risk_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) ClearRiskID() *WorkflowInstanceHistoryUpdate {
+	_u.mutation.ClearRiskID()
+	return _u
+}
+
+// SetTaskID sets the "task_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) SetTaskID(v string) *WorkflowInstanceHistoryUpdate {
+	_u.mutation.SetTaskID(v)
+	return _u
+}
+
+// SetNillableTaskID sets the "task_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdate) SetNillableTaskID(v *string) *WorkflowInstanceHistoryUpdate {
+	if v != nil {
+		_u.SetTaskID(*v)
+	}
+	return _u
+}
+
+// ClearTaskID clears the value of the "task_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) ClearTaskID() *WorkflowInstanceHistoryUpdate {
+	_u.mutation.ClearTaskID()
+	return _u
+}
+
+// SetVulnerabilityID sets the "vulnerability_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) SetVulnerabilityID(v string) *WorkflowInstanceHistoryUpdate {
+	_u.mutation.SetVulnerabilityID(v)
+	return _u
+}
+
+// SetNillableVulnerabilityID sets the "vulnerability_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdate) SetNillableVulnerabilityID(v *string) *WorkflowInstanceHistoryUpdate {
+	if v != nil {
+		_u.SetVulnerabilityID(*v)
+	}
+	return _u
+}
+
+// ClearVulnerabilityID clears the value of the "vulnerability_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) ClearVulnerabilityID() *WorkflowInstanceHistoryUpdate {
+	_u.mutation.ClearVulnerabilityID()
+	return _u
+}
+
 // Mutation returns the WorkflowInstanceHistoryMutation object of the builder.
 func (_u *WorkflowInstanceHistoryUpdate) Mutation() *WorkflowInstanceHistoryMutation {
 	return _u.mutation
@@ -698,6 +858,54 @@ func (_u *WorkflowInstanceHistoryUpdate) sqlSave(ctx context.Context) (_node int
 	}
 	if _u.mutation.PlatformIDCleared() {
 		_spec.ClearField(workflowinstancehistory.FieldPlatformID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssessmentID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldAssessmentID, field.TypeString, value)
+	}
+	if _u.mutation.AssessmentIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldAssessmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssessmentResponseID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldAssessmentResponseID, field.TypeString, value)
+	}
+	if _u.mutation.AssessmentResponseIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldAssessmentResponseID, field.TypeString)
+	}
+	if value, ok := _u.mutation.FindingID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldFindingID, field.TypeString, value)
+	}
+	if _u.mutation.FindingIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldFindingID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldIntegrationID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldIntegrationID, field.TypeString)
+	}
+	if value, ok := _u.mutation.RemediationID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldRemediationID, field.TypeString, value)
+	}
+	if _u.mutation.RemediationIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldRemediationID, field.TypeString)
+	}
+	if value, ok := _u.mutation.RiskID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldRiskID, field.TypeString, value)
+	}
+	if _u.mutation.RiskIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldRiskID, field.TypeString)
+	}
+	if value, ok := _u.mutation.TaskID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldTaskID, field.TypeString, value)
+	}
+	if _u.mutation.TaskIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldTaskID, field.TypeString)
+	}
+	if value, ok := _u.mutation.VulnerabilityID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldVulnerabilityID, field.TypeString, value)
+	}
+	if _u.mutation.VulnerabilityIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldVulnerabilityID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.WorkflowInstanceHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1162,6 +1370,166 @@ func (_u *WorkflowInstanceHistoryUpdateOne) ClearPlatformID() *WorkflowInstanceH
 	return _u
 }
 
+// SetAssessmentID sets the "assessment_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetAssessmentID(v string) *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.SetAssessmentID(v)
+	return _u
+}
+
+// SetNillableAssessmentID sets the "assessment_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetNillableAssessmentID(v *string) *WorkflowInstanceHistoryUpdateOne {
+	if v != nil {
+		_u.SetAssessmentID(*v)
+	}
+	return _u
+}
+
+// ClearAssessmentID clears the value of the "assessment_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) ClearAssessmentID() *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.ClearAssessmentID()
+	return _u
+}
+
+// SetAssessmentResponseID sets the "assessment_response_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetAssessmentResponseID(v string) *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.SetAssessmentResponseID(v)
+	return _u
+}
+
+// SetNillableAssessmentResponseID sets the "assessment_response_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetNillableAssessmentResponseID(v *string) *WorkflowInstanceHistoryUpdateOne {
+	if v != nil {
+		_u.SetAssessmentResponseID(*v)
+	}
+	return _u
+}
+
+// ClearAssessmentResponseID clears the value of the "assessment_response_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) ClearAssessmentResponseID() *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.ClearAssessmentResponseID()
+	return _u
+}
+
+// SetFindingID sets the "finding_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetFindingID(v string) *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.SetFindingID(v)
+	return _u
+}
+
+// SetNillableFindingID sets the "finding_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetNillableFindingID(v *string) *WorkflowInstanceHistoryUpdateOne {
+	if v != nil {
+		_u.SetFindingID(*v)
+	}
+	return _u
+}
+
+// ClearFindingID clears the value of the "finding_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) ClearFindingID() *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.ClearFindingID()
+	return _u
+}
+
+// SetIntegrationID sets the "integration_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetIntegrationID(v string) *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetNillableIntegrationID(v *string) *WorkflowInstanceHistoryUpdateOne {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) ClearIntegrationID() *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
+// SetRemediationID sets the "remediation_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetRemediationID(v string) *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.SetRemediationID(v)
+	return _u
+}
+
+// SetNillableRemediationID sets the "remediation_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetNillableRemediationID(v *string) *WorkflowInstanceHistoryUpdateOne {
+	if v != nil {
+		_u.SetRemediationID(*v)
+	}
+	return _u
+}
+
+// ClearRemediationID clears the value of the "remediation_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) ClearRemediationID() *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.ClearRemediationID()
+	return _u
+}
+
+// SetRiskID sets the "risk_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetRiskID(v string) *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.SetRiskID(v)
+	return _u
+}
+
+// SetNillableRiskID sets the "risk_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetNillableRiskID(v *string) *WorkflowInstanceHistoryUpdateOne {
+	if v != nil {
+		_u.SetRiskID(*v)
+	}
+	return _u
+}
+
+// ClearRiskID clears the value of the "risk_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) ClearRiskID() *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.ClearRiskID()
+	return _u
+}
+
+// SetTaskID sets the "task_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetTaskID(v string) *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.SetTaskID(v)
+	return _u
+}
+
+// SetNillableTaskID sets the "task_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetNillableTaskID(v *string) *WorkflowInstanceHistoryUpdateOne {
+	if v != nil {
+		_u.SetTaskID(*v)
+	}
+	return _u
+}
+
+// ClearTaskID clears the value of the "task_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) ClearTaskID() *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.ClearTaskID()
+	return _u
+}
+
+// SetVulnerabilityID sets the "vulnerability_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetVulnerabilityID(v string) *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.SetVulnerabilityID(v)
+	return _u
+}
+
+// SetNillableVulnerabilityID sets the "vulnerability_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetNillableVulnerabilityID(v *string) *WorkflowInstanceHistoryUpdateOne {
+	if v != nil {
+		_u.SetVulnerabilityID(*v)
+	}
+	return _u
+}
+
+// ClearVulnerabilityID clears the value of the "vulnerability_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) ClearVulnerabilityID() *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.ClearVulnerabilityID()
+	return _u
+}
+
 // Mutation returns the WorkflowInstanceHistoryMutation object of the builder.
 func (_u *WorkflowInstanceHistoryUpdateOne) Mutation() *WorkflowInstanceHistoryMutation {
 	return _u.mutation
@@ -1415,6 +1783,54 @@ func (_u *WorkflowInstanceHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if _u.mutation.PlatformIDCleared() {
 		_spec.ClearField(workflowinstancehistory.FieldPlatformID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssessmentID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldAssessmentID, field.TypeString, value)
+	}
+	if _u.mutation.AssessmentIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldAssessmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssessmentResponseID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldAssessmentResponseID, field.TypeString, value)
+	}
+	if _u.mutation.AssessmentResponseIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldAssessmentResponseID, field.TypeString)
+	}
+	if value, ok := _u.mutation.FindingID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldFindingID, field.TypeString, value)
+	}
+	if _u.mutation.FindingIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldFindingID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldIntegrationID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldIntegrationID, field.TypeString)
+	}
+	if value, ok := _u.mutation.RemediationID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldRemediationID, field.TypeString, value)
+	}
+	if _u.mutation.RemediationIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldRemediationID, field.TypeString)
+	}
+	if value, ok := _u.mutation.RiskID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldRiskID, field.TypeString, value)
+	}
+	if _u.mutation.RiskIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldRiskID, field.TypeString)
+	}
+	if value, ok := _u.mutation.TaskID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldTaskID, field.TypeString, value)
+	}
+	if _u.mutation.TaskIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldTaskID, field.TypeString)
+	}
+	if value, ok := _u.mutation.VulnerabilityID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldVulnerabilityID, field.TypeString, value)
+	}
+	if _u.mutation.VulnerabilityIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldVulnerabilityID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.WorkflowInstanceHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

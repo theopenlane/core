@@ -8,6 +8,7 @@ package graphapi
 import (
 	"context"
 
+	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -15,6 +16,26 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
+
+// HasPendingWorkflow is the resolver for the hasPendingWorkflow field.
+func (r *assessmentResolver) HasPendingWorkflow(ctx context.Context, obj *generated.Assessment) (bool, error) {
+	return workflowResolverHasPending(ctx, generated.TypeAssessment, obj.ID)
+}
+
+// HasWorkflowHistory is the resolver for the hasWorkflowHistory field.
+func (r *assessmentResolver) HasWorkflowHistory(ctx context.Context, obj *generated.Assessment) (bool, error) {
+	return workflowResolverHasHistory(ctx, generated.TypeAssessment, obj.ID)
+}
+
+// ActiveWorkflowInstances is the resolver for the activeWorkflowInstances field.
+func (r *assessmentResolver) ActiveWorkflowInstances(ctx context.Context, obj *generated.Assessment) ([]*generated.WorkflowInstance, error) {
+	return workflowResolverActiveInstances(ctx, generated.TypeAssessment, obj.ID)
+}
+
+// WorkflowTimeline is the resolver for the workflowTimeline field.
+func (r *assessmentResolver) WorkflowTimeline(ctx context.Context, obj *generated.Assessment, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) (*generated.WorkflowEventConnection, error) {
+	return workflowResolverTimeline(ctx, generated.TypeAssessment, obj.ID, after, first, before, last, orderBy, where, includeEmitFailures)
+}
 
 // CreateAssessment is the resolver for the createAssessment field.
 func (r *mutationResolver) CreateAssessment(ctx context.Context, input generated.CreateAssessmentInput) (*model.AssessmentCreatePayload, error) {

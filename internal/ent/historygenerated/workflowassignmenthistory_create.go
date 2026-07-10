@@ -299,6 +299,20 @@ func (_c *WorkflowAssignmentHistoryCreate) SetNillableInvalidationMetadata(v *mo
 	return _c
 }
 
+// SetOutcomeMetadata sets the "outcome_metadata" field.
+func (_c *WorkflowAssignmentHistoryCreate) SetOutcomeMetadata(v models.AssignmentOutcome) *WorkflowAssignmentHistoryCreate {
+	_c.mutation.SetOutcomeMetadata(v)
+	return _c
+}
+
+// SetNillableOutcomeMetadata sets the "outcome_metadata" field if the given value is not nil.
+func (_c *WorkflowAssignmentHistoryCreate) SetNillableOutcomeMetadata(v *models.AssignmentOutcome) *WorkflowAssignmentHistoryCreate {
+	if v != nil {
+		_c.SetOutcomeMetadata(*v)
+	}
+	return _c
+}
+
 // SetDecidedAt sets the "decided_at" field.
 func (_c *WorkflowAssignmentHistoryCreate) SetDecidedAt(v time.Time) *WorkflowAssignmentHistoryCreate {
 	_c.mutation.SetDecidedAt(v)
@@ -630,6 +644,10 @@ func (_c *WorkflowAssignmentHistoryCreate) createSpec() (*WorkflowAssignmentHist
 	if value, ok := _c.mutation.InvalidationMetadata(); ok {
 		_spec.SetField(workflowassignmenthistory.FieldInvalidationMetadata, field.TypeJSON, value)
 		_node.InvalidationMetadata = value
+	}
+	if value, ok := _c.mutation.OutcomeMetadata(); ok {
+		_spec.SetField(workflowassignmenthistory.FieldOutcomeMetadata, field.TypeJSON, value)
+		_node.OutcomeMetadata = value
 	}
 	if value, ok := _c.mutation.DecidedAt(); ok {
 		_spec.SetField(workflowassignmenthistory.FieldDecidedAt, field.TypeTime, value)

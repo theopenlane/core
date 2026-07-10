@@ -10,6 +10,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -23,8 +25,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 )
@@ -80,6 +85,16 @@ type WorkflowObjectRef struct {
 	IdentityHolderID string `json:"identity_holder_id,omitempty"`
 	// Platform referenced by this workflow instance
 	PlatformID string `json:"platform_id,omitempty"`
+	// Vulnerability referenced by this workflow instance
+	VulnerabilityID string `json:"vulnerability_id,omitempty"`
+	// Risk referenced by this workflow instance
+	RiskID string `json:"risk_id,omitempty"`
+	// Assessment referenced by this workflow instance
+	AssessmentID string `json:"assessment_id,omitempty"`
+	// Assessment response referenced by this workflow instance
+	AssessmentResponseID string `json:"assessment_response_id,omitempty"`
+	// Remediation referenced by this workflow instance
+	RemediationID string `json:"remediation_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the WorkflowObjectRefQuery when eager-loading is set.
 	Edges                                  WorkflowObjectRefEdges `json:"edges"`
@@ -125,11 +140,21 @@ type WorkflowObjectRefEdges struct {
 	IdentityHolder *IdentityHolder `json:"identity_holder,omitempty"`
 	// Platform referenced by this workflow instance
 	Platform *Platform `json:"platform,omitempty"`
+	// Vulnerability referenced by this workflow instance
+	Vulnerability *Vulnerability `json:"vulnerability,omitempty"`
+	// Risk referenced by this workflow instance
+	Risk *Risk `json:"risk,omitempty"`
+	// Assessment referenced by this workflow instance
+	Assessment *Assessment `json:"assessment,omitempty"`
+	// Assessment response referenced by this workflow instance
+	AssessmentResponse *AssessmentResponse `json:"assessment_response,omitempty"`
+	// Remediation referenced by this workflow instance
+	Remediation *Remediation `json:"remediation,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [18]bool
+	loadedTypes [23]bool
 	// totalCount holds the count of the edges above.
-	totalCount [17]map[string]int
+	totalCount [22]map[string]int
 
 	namedWorkflowProposals map[string][]*WorkflowProposal
 }
@@ -330,12 +355,67 @@ func (e WorkflowObjectRefEdges) PlatformOrErr() (*Platform, error) {
 	return nil, &NotLoadedError{edge: "platform"}
 }
 
+// VulnerabilityOrErr returns the Vulnerability value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowObjectRefEdges) VulnerabilityOrErr() (*Vulnerability, error) {
+	if e.Vulnerability != nil {
+		return e.Vulnerability, nil
+	} else if e.loadedTypes[18] {
+		return nil, &NotFoundError{label: vulnerability.Label}
+	}
+	return nil, &NotLoadedError{edge: "vulnerability"}
+}
+
+// RiskOrErr returns the Risk value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowObjectRefEdges) RiskOrErr() (*Risk, error) {
+	if e.Risk != nil {
+		return e.Risk, nil
+	} else if e.loadedTypes[19] {
+		return nil, &NotFoundError{label: risk.Label}
+	}
+	return nil, &NotLoadedError{edge: "risk"}
+}
+
+// AssessmentOrErr returns the Assessment value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowObjectRefEdges) AssessmentOrErr() (*Assessment, error) {
+	if e.Assessment != nil {
+		return e.Assessment, nil
+	} else if e.loadedTypes[20] {
+		return nil, &NotFoundError{label: assessment.Label}
+	}
+	return nil, &NotLoadedError{edge: "assessment"}
+}
+
+// AssessmentResponseOrErr returns the AssessmentResponse value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowObjectRefEdges) AssessmentResponseOrErr() (*AssessmentResponse, error) {
+	if e.AssessmentResponse != nil {
+		return e.AssessmentResponse, nil
+	} else if e.loadedTypes[21] {
+		return nil, &NotFoundError{label: assessmentresponse.Label}
+	}
+	return nil, &NotLoadedError{edge: "assessment_response"}
+}
+
+// RemediationOrErr returns the Remediation value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowObjectRefEdges) RemediationOrErr() (*Remediation, error) {
+	if e.Remediation != nil {
+		return e.Remediation, nil
+	} else if e.loadedTypes[22] {
+		return nil, &NotFoundError{label: remediation.Label}
+	}
+	return nil, &NotLoadedError{edge: "remediation"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*WorkflowObjectRef) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case workflowobjectref.FieldID, workflowobjectref.FieldCreatedBy, workflowobjectref.FieldUpdatedBy, workflowobjectref.FieldUpdatedByImpersonator, workflowobjectref.FieldDisplayID, workflowobjectref.FieldOwnerID, workflowobjectref.FieldWorkflowInstanceID, workflowobjectref.FieldControlID, workflowobjectref.FieldTaskID, workflowobjectref.FieldInternalPolicyID, workflowobjectref.FieldFindingID, workflowobjectref.FieldDirectoryAccountID, workflowobjectref.FieldDirectoryGroupID, workflowobjectref.FieldDirectoryMembershipID, workflowobjectref.FieldEvidenceID, workflowobjectref.FieldSubcontrolID, workflowobjectref.FieldActionPlanID, workflowobjectref.FieldProcedureID, workflowobjectref.FieldCampaignID, workflowobjectref.FieldCampaignTargetID, workflowobjectref.FieldIdentityHolderID, workflowobjectref.FieldPlatformID:
+		case workflowobjectref.FieldID, workflowobjectref.FieldCreatedBy, workflowobjectref.FieldUpdatedBy, workflowobjectref.FieldUpdatedByImpersonator, workflowobjectref.FieldDisplayID, workflowobjectref.FieldOwnerID, workflowobjectref.FieldWorkflowInstanceID, workflowobjectref.FieldControlID, workflowobjectref.FieldTaskID, workflowobjectref.FieldInternalPolicyID, workflowobjectref.FieldFindingID, workflowobjectref.FieldDirectoryAccountID, workflowobjectref.FieldDirectoryGroupID, workflowobjectref.FieldDirectoryMembershipID, workflowobjectref.FieldEvidenceID, workflowobjectref.FieldSubcontrolID, workflowobjectref.FieldActionPlanID, workflowobjectref.FieldProcedureID, workflowobjectref.FieldCampaignID, workflowobjectref.FieldCampaignTargetID, workflowobjectref.FieldIdentityHolderID, workflowobjectref.FieldPlatformID, workflowobjectref.FieldVulnerabilityID, workflowobjectref.FieldRiskID, workflowobjectref.FieldAssessmentID, workflowobjectref.FieldAssessmentResponseID, workflowobjectref.FieldRemediationID:
 			values[i] = new(sql.NullString)
 		case workflowobjectref.FieldCreatedAt, workflowobjectref.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -501,6 +581,36 @@ func (_m *WorkflowObjectRef) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				_m.PlatformID = value.String
 			}
+		case workflowobjectref.FieldVulnerabilityID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field vulnerability_id", values[i])
+			} else if value.Valid {
+				_m.VulnerabilityID = value.String
+			}
+		case workflowobjectref.FieldRiskID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_id", values[i])
+			} else if value.Valid {
+				_m.RiskID = value.String
+			}
+		case workflowobjectref.FieldAssessmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assessment_id", values[i])
+			} else if value.Valid {
+				_m.AssessmentID = value.String
+			}
+		case workflowobjectref.FieldAssessmentResponseID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assessment_response_id", values[i])
+			} else if value.Valid {
+				_m.AssessmentResponseID = value.String
+			}
+		case workflowobjectref.FieldRemediationID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field remediation_id", values[i])
+			} else if value.Valid {
+				_m.RemediationID = value.String
+			}
 		case workflowobjectref.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field workflow_instance_workflow_object_refs", values[i])
@@ -611,6 +721,31 @@ func (_m *WorkflowObjectRef) QueryPlatform() *PlatformQuery {
 	return NewWorkflowObjectRefClient(_m.config).QueryPlatform(_m)
 }
 
+// QueryVulnerability queries the "vulnerability" edge of the WorkflowObjectRef entity.
+func (_m *WorkflowObjectRef) QueryVulnerability() *VulnerabilityQuery {
+	return NewWorkflowObjectRefClient(_m.config).QueryVulnerability(_m)
+}
+
+// QueryRisk queries the "risk" edge of the WorkflowObjectRef entity.
+func (_m *WorkflowObjectRef) QueryRisk() *RiskQuery {
+	return NewWorkflowObjectRefClient(_m.config).QueryRisk(_m)
+}
+
+// QueryAssessment queries the "assessment" edge of the WorkflowObjectRef entity.
+func (_m *WorkflowObjectRef) QueryAssessment() *AssessmentQuery {
+	return NewWorkflowObjectRefClient(_m.config).QueryAssessment(_m)
+}
+
+// QueryAssessmentResponse queries the "assessment_response" edge of the WorkflowObjectRef entity.
+func (_m *WorkflowObjectRef) QueryAssessmentResponse() *AssessmentResponseQuery {
+	return NewWorkflowObjectRefClient(_m.config).QueryAssessmentResponse(_m)
+}
+
+// QueryRemediation queries the "remediation" edge of the WorkflowObjectRef entity.
+func (_m *WorkflowObjectRef) QueryRemediation() *RemediationQuery {
+	return NewWorkflowObjectRefClient(_m.config).QueryRemediation(_m)
+}
+
 // Update returns a builder for updating this WorkflowObjectRef.
 // Note that you need to call WorkflowObjectRef.Unwrap() before calling this method if this WorkflowObjectRef
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -704,6 +839,21 @@ func (_m *WorkflowObjectRef) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("platform_id=")
 	builder.WriteString(_m.PlatformID)
+	builder.WriteString(", ")
+	builder.WriteString("vulnerability_id=")
+	builder.WriteString(_m.VulnerabilityID)
+	builder.WriteString(", ")
+	builder.WriteString("risk_id=")
+	builder.WriteString(_m.RiskID)
+	builder.WriteString(", ")
+	builder.WriteString("assessment_id=")
+	builder.WriteString(_m.AssessmentID)
+	builder.WriteString(", ")
+	builder.WriteString("assessment_response_id=")
+	builder.WriteString(_m.AssessmentResponseID)
+	builder.WriteString(", ")
+	builder.WriteString("remediation_id=")
+	builder.WriteString(_m.RemediationID)
 	builder.WriteByte(')')
 	return builder.String()
 }

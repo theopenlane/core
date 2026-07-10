@@ -72,6 +72,22 @@ const (
 	FieldIdentityHolderID = "identity_holder_id"
 	// FieldPlatformID holds the string denoting the platform_id field in the database.
 	FieldPlatformID = "platform_id"
+	// FieldAssessmentID holds the string denoting the assessment_id field in the database.
+	FieldAssessmentID = "assessment_id"
+	// FieldAssessmentResponseID holds the string denoting the assessment_response_id field in the database.
+	FieldAssessmentResponseID = "assessment_response_id"
+	// FieldFindingID holds the string denoting the finding_id field in the database.
+	FieldFindingID = "finding_id"
+	// FieldIntegrationID holds the string denoting the integration_id field in the database.
+	FieldIntegrationID = "integration_id"
+	// FieldRemediationID holds the string denoting the remediation_id field in the database.
+	FieldRemediationID = "remediation_id"
+	// FieldRiskID holds the string denoting the risk_id field in the database.
+	FieldRiskID = "risk_id"
+	// FieldTaskID holds the string denoting the task_id field in the database.
+	FieldTaskID = "task_id"
+	// FieldVulnerabilityID holds the string denoting the vulnerability_id field in the database.
+	FieldVulnerabilityID = "vulnerability_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeWorkflowDefinition holds the string denoting the workflow_definition edge name in mutations.
@@ -96,6 +112,22 @@ const (
 	EdgeIdentityHolder = "identity_holder"
 	// EdgePlatform holds the string denoting the platform edge name in mutations.
 	EdgePlatform = "platform"
+	// EdgeAssessment holds the string denoting the assessment edge name in mutations.
+	EdgeAssessment = "assessment"
+	// EdgeAssessmentResponse holds the string denoting the assessment_response edge name in mutations.
+	EdgeAssessmentResponse = "assessment_response"
+	// EdgeFinding holds the string denoting the finding edge name in mutations.
+	EdgeFinding = "finding"
+	// EdgeIntegration holds the string denoting the integration edge name in mutations.
+	EdgeIntegration = "integration"
+	// EdgeRemediation holds the string denoting the remediation edge name in mutations.
+	EdgeRemediation = "remediation"
+	// EdgeRisk holds the string denoting the risk edge name in mutations.
+	EdgeRisk = "risk"
+	// EdgeTask holds the string denoting the task edge name in mutations.
+	EdgeTask = "task"
+	// EdgeVulnerability holds the string denoting the vulnerability edge name in mutations.
+	EdgeVulnerability = "vulnerability"
 	// EdgeWorkflowProposal holds the string denoting the workflow_proposal edge name in mutations.
 	EdgeWorkflowProposal = "workflow_proposal"
 	// EdgeWorkflowAssignments holds the string denoting the workflow_assignments edge name in mutations.
@@ -192,6 +224,62 @@ const (
 	PlatformInverseTable = "platforms"
 	// PlatformColumn is the table column denoting the platform relation/edge.
 	PlatformColumn = "platform_id"
+	// AssessmentTable is the table that holds the assessment relation/edge.
+	AssessmentTable = "workflow_instances"
+	// AssessmentInverseTable is the table name for the Assessment entity.
+	// It exists in this package in order to avoid circular dependency with the "assessment" package.
+	AssessmentInverseTable = "assessments"
+	// AssessmentColumn is the table column denoting the assessment relation/edge.
+	AssessmentColumn = "assessment_id"
+	// AssessmentResponseTable is the table that holds the assessment_response relation/edge.
+	AssessmentResponseTable = "workflow_instances"
+	// AssessmentResponseInverseTable is the table name for the AssessmentResponse entity.
+	// It exists in this package in order to avoid circular dependency with the "assessmentresponse" package.
+	AssessmentResponseInverseTable = "assessment_responses"
+	// AssessmentResponseColumn is the table column denoting the assessment_response relation/edge.
+	AssessmentResponseColumn = "assessment_response_id"
+	// FindingTable is the table that holds the finding relation/edge.
+	FindingTable = "workflow_instances"
+	// FindingInverseTable is the table name for the Finding entity.
+	// It exists in this package in order to avoid circular dependency with the "finding" package.
+	FindingInverseTable = "findings"
+	// FindingColumn is the table column denoting the finding relation/edge.
+	FindingColumn = "finding_id"
+	// IntegrationTable is the table that holds the integration relation/edge.
+	IntegrationTable = "workflow_instances"
+	// IntegrationInverseTable is the table name for the Integration entity.
+	// It exists in this package in order to avoid circular dependency with the "integration" package.
+	IntegrationInverseTable = "integrations"
+	// IntegrationColumn is the table column denoting the integration relation/edge.
+	IntegrationColumn = "integration_id"
+	// RemediationTable is the table that holds the remediation relation/edge.
+	RemediationTable = "workflow_instances"
+	// RemediationInverseTable is the table name for the Remediation entity.
+	// It exists in this package in order to avoid circular dependency with the "remediation" package.
+	RemediationInverseTable = "remediations"
+	// RemediationColumn is the table column denoting the remediation relation/edge.
+	RemediationColumn = "remediation_id"
+	// RiskTable is the table that holds the risk relation/edge.
+	RiskTable = "workflow_instances"
+	// RiskInverseTable is the table name for the Risk entity.
+	// It exists in this package in order to avoid circular dependency with the "risk" package.
+	RiskInverseTable = "risks"
+	// RiskColumn is the table column denoting the risk relation/edge.
+	RiskColumn = "risk_id"
+	// TaskTable is the table that holds the task relation/edge.
+	TaskTable = "workflow_instances"
+	// TaskInverseTable is the table name for the Task entity.
+	// It exists in this package in order to avoid circular dependency with the "task" package.
+	TaskInverseTable = "tasks"
+	// TaskColumn is the table column denoting the task relation/edge.
+	TaskColumn = "task_id"
+	// VulnerabilityTable is the table that holds the vulnerability relation/edge.
+	VulnerabilityTable = "workflow_instances"
+	// VulnerabilityInverseTable is the table name for the Vulnerability entity.
+	// It exists in this package in order to avoid circular dependency with the "vulnerability" package.
+	VulnerabilityInverseTable = "vulnerabilities"
+	// VulnerabilityColumn is the table column denoting the vulnerability relation/edge.
+	VulnerabilityColumn = "vulnerability_id"
 	// WorkflowProposalTable is the table that holds the workflow_proposal relation/edge.
 	WorkflowProposalTable = "workflow_instances"
 	// WorkflowProposalInverseTable is the table name for the WorkflowProposal entity.
@@ -259,6 +347,14 @@ var Columns = []string{
 	FieldCampaignTargetID,
 	FieldIdentityHolderID,
 	FieldPlatformID,
+	FieldAssessmentID,
+	FieldAssessmentResponseID,
+	FieldFindingID,
+	FieldIntegrationID,
+	FieldRemediationID,
+	FieldRiskID,
+	FieldTaskID,
+	FieldVulnerabilityID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -442,6 +538,46 @@ func ByPlatformID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPlatformID, opts...).ToFunc()
 }
 
+// ByAssessmentID orders the results by the assessment_id field.
+func ByAssessmentID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssessmentID, opts...).ToFunc()
+}
+
+// ByAssessmentResponseID orders the results by the assessment_response_id field.
+func ByAssessmentResponseID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssessmentResponseID, opts...).ToFunc()
+}
+
+// ByFindingID orders the results by the finding_id field.
+func ByFindingID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFindingID, opts...).ToFunc()
+}
+
+// ByIntegrationID orders the results by the integration_id field.
+func ByIntegrationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrationID, opts...).ToFunc()
+}
+
+// ByRemediationID orders the results by the remediation_id field.
+func ByRemediationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRemediationID, opts...).ToFunc()
+}
+
+// ByRiskID orders the results by the risk_id field.
+func ByRiskID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskID, opts...).ToFunc()
+}
+
+// ByTaskID orders the results by the task_id field.
+func ByTaskID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTaskID, opts...).ToFunc()
+}
+
+// ByVulnerabilityID orders the results by the vulnerability_id field.
+func ByVulnerabilityID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVulnerabilityID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -523,6 +659,62 @@ func ByIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOptio
 func ByPlatformField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newPlatformStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByAssessmentField orders the results by assessment field.
+func ByAssessmentField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssessmentStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByAssessmentResponseField orders the results by assessment_response field.
+func ByAssessmentResponseField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssessmentResponseStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByFindingField orders the results by finding field.
+func ByFindingField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFindingStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByIntegrationField orders the results by integration field.
+func ByIntegrationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByRemediationField orders the results by remediation field.
+func ByRemediationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRemediationStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByRiskField orders the results by risk field.
+func ByRiskField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRiskStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByTaskField orders the results by task field.
+func ByTaskField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTaskStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByVulnerabilityField orders the results by vulnerability field.
+func ByVulnerabilityField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVulnerabilityStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -670,6 +862,62 @@ func newPlatformStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PlatformInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, PlatformTable, PlatformColumn),
+	)
+}
+func newAssessmentStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssessmentInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, AssessmentTable, AssessmentColumn),
+	)
+}
+func newAssessmentResponseStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssessmentResponseInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, AssessmentResponseTable, AssessmentResponseColumn),
+	)
+}
+func newFindingStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FindingInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, FindingTable, FindingColumn),
+	)
+}
+func newIntegrationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, IntegrationTable, IntegrationColumn),
+	)
+}
+func newRemediationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RemediationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, RemediationTable, RemediationColumn),
+	)
+}
+func newRiskStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RiskInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, RiskTable, RiskColumn),
+	)
+}
+func newTaskStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TaskInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, TaskTable, TaskColumn),
+	)
+}
+func newVulnerabilityStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VulnerabilityInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, VulnerabilityTable, VulnerabilityColumn),
 	)
 }
 func newWorkflowProposalStep() *sqlgraph.Step {

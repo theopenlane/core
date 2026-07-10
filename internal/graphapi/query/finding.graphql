@@ -62,6 +62,7 @@ mutation CreateBulkCSVFinding ($input: Upload!) {
 			updatedByImpersonator
 			validated
 			vector
+			workflowEligibleMarker
 		}
 	}
 }
@@ -129,6 +130,7 @@ mutation CreateBulkFinding ($input: [CreateFindingInput!]) {
 			updatedByImpersonator
 			validated
 			vector
+			workflowEligibleMarker
 		}
 	}
 }
@@ -196,6 +198,7 @@ mutation CreateFinding ($input: CreateFindingInput!) {
 			updatedByImpersonator
 			validated
 			vector
+			workflowEligibleMarker
 		}
 	}
 }
@@ -350,6 +353,7 @@ query GetFindingByID ($findingId: ID!) {
 		updatedByImpersonator
 		validated
 		vector
+		workflowEligibleMarker
 		remediations {
 			edges {
 				node {
@@ -514,6 +518,7 @@ mutation UpdateBulkCSVFinding ($input: Upload!) {
 			updatedByImpersonator
 			validated
 			vector
+			workflowEligibleMarker
 		}
 		updatedIDs
 	}
@@ -582,6 +587,7 @@ mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
 			updatedByImpersonator
 			validated
 			vector
+			workflowEligibleMarker
 		}
 		updatedIDs
 	}
@@ -650,6 +656,7 @@ mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {
 			updatedByImpersonator
 			validated
 			vector
+			workflowEligibleMarker
 		}
 	}
 }

@@ -68,6 +68,8 @@ const (
 	FieldFindingStatusName = "finding_status_name"
 	// FieldFindingStatusID holds the string denoting the finding_status_id field in the database.
 	FieldFindingStatusID = "finding_status_id"
+	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
+	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
 	// FieldSecurityLevel holds the string denoting the security_level field in the database.
@@ -418,6 +420,7 @@ var Columns = []string{
 	FieldScopeID,
 	FieldFindingStatusName,
 	FieldFindingStatusID,
+	FieldWorkflowEligibleMarker,
 	FieldExternalID,
 	FieldSecurityLevel,
 	FieldExternalOwnerID,
@@ -515,7 +518,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [15]ent.Hook
+	Hooks        [16]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -532,6 +535,8 @@ var (
 	OwnerIDValidator func(string) error
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
+	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
+	DefaultWorkflowEligibleMarker bool
 	// DefaultCategories holds the default value on creation for the "categories" field.
 	DefaultCategories []string
 	// DefaultOpen holds the default value on creation for the "open" field.
@@ -684,6 +689,11 @@ func ByFindingStatusName(opts ...sql.OrderTermOption) OrderOption {
 // ByFindingStatusID orders the results by the finding_status_id field.
 func ByFindingStatusID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFindingStatusID, opts...).ToFunc()
+}
+
+// ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
+func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
 }
 
 // ByExternalID orders the results by the external_id field.

@@ -71,6 +71,16 @@ const (
 	FieldIdentityHolderID = "identity_holder_id"
 	// FieldPlatformID holds the string denoting the platform_id field in the database.
 	FieldPlatformID = "platform_id"
+	// FieldVulnerabilityID holds the string denoting the vulnerability_id field in the database.
+	FieldVulnerabilityID = "vulnerability_id"
+	// FieldRiskID holds the string denoting the risk_id field in the database.
+	FieldRiskID = "risk_id"
+	// FieldAssessmentID holds the string denoting the assessment_id field in the database.
+	FieldAssessmentID = "assessment_id"
+	// FieldAssessmentResponseID holds the string denoting the assessment_response_id field in the database.
+	FieldAssessmentResponseID = "assessment_response_id"
+	// FieldRemediationID holds the string denoting the remediation_id field in the database.
+	FieldRemediationID = "remediation_id"
 	// Table holds the table name of the workflowobjectrefhistory in the database.
 	Table = "workflow_object_ref_history"
 )
@@ -104,6 +114,11 @@ var Columns = []string{
 	FieldCampaignTargetID,
 	FieldIdentityHolderID,
 	FieldPlatformID,
+	FieldVulnerabilityID,
+	FieldRiskID,
+	FieldAssessmentID,
+	FieldAssessmentResponseID,
+	FieldRemediationID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -283,6 +298,31 @@ func ByIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
 // ByPlatformID orders the results by the platform_id field.
 func ByPlatformID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPlatformID, opts...).ToFunc()
+}
+
+// ByVulnerabilityID orders the results by the vulnerability_id field.
+func ByVulnerabilityID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVulnerabilityID, opts...).ToFunc()
+}
+
+// ByRiskID orders the results by the risk_id field.
+func ByRiskID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskID, opts...).ToFunc()
+}
+
+// ByAssessmentID orders the results by the assessment_id field.
+func ByAssessmentID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssessmentID, opts...).ToFunc()
+}
+
+// ByAssessmentResponseID orders the results by the assessment_response_id field.
+func ByAssessmentResponseID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssessmentResponseID, opts...).ToFunc()
+}
+
+// ByRemediationID orders the results by the remediation_id field.
+func ByRemediationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRemediationID, opts...).ToFunc()
 }
 
 var (

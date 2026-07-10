@@ -1,3 +1,30 @@
+extend type Remediation {
+    """
+    Indicates if this remediation has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Indicates if this remediation has any workflow history (completed or failed instances)
+    """
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this remediation (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this remediation across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
+}
+
 extend type Query {
     """
     Look up remediation by ID

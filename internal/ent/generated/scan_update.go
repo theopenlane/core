@@ -539,21 +539,21 @@ func (_u *ScanUpdate) ClearGeneratedByPlatformID() *ScanUpdate {
 	return _u
 }
 
-// SetVulnerabilityIds sets the "vulnerability_ids" field.
-func (_u *ScanUpdate) SetVulnerabilityIds(v []string) *ScanUpdate {
-	_u.mutation.SetVulnerabilityIds(v)
+// SetDiscoveredVulnerabilityIds sets the "discovered_vulnerability_ids" field.
+func (_u *ScanUpdate) SetDiscoveredVulnerabilityIds(v []string) *ScanUpdate {
+	_u.mutation.SetDiscoveredVulnerabilityIds(v)
 	return _u
 }
 
-// AppendVulnerabilityIds appends value to the "vulnerability_ids" field.
-func (_u *ScanUpdate) AppendVulnerabilityIds(v []string) *ScanUpdate {
-	_u.mutation.AppendVulnerabilityIds(v)
+// AppendDiscoveredVulnerabilityIds appends value to the "discovered_vulnerability_ids" field.
+func (_u *ScanUpdate) AppendDiscoveredVulnerabilityIds(v []string) *ScanUpdate {
+	_u.mutation.AppendDiscoveredVulnerabilityIds(v)
 	return _u
 }
 
-// ClearVulnerabilityIds clears the value of the "vulnerability_ids" field.
-func (_u *ScanUpdate) ClearVulnerabilityIds() *ScanUpdate {
-	_u.mutation.ClearVulnerabilityIds()
+// ClearDiscoveredVulnerabilityIds clears the value of the "discovered_vulnerability_ids" field.
+func (_u *ScanUpdate) ClearDiscoveredVulnerabilityIds() *ScanUpdate {
+	_u.mutation.ClearDiscoveredVulnerabilityIds()
 	return _u
 }
 
@@ -1371,16 +1371,16 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.PerformedByCleared() {
 		_spec.ClearField(scan.FieldPerformedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.VulnerabilityIds(); ok {
-		_spec.SetField(scan.FieldVulnerabilityIds, field.TypeJSON, value)
+	if value, ok := _u.mutation.DiscoveredVulnerabilityIds(); ok {
+		_spec.SetField(scan.FieldDiscoveredVulnerabilityIds, field.TypeJSON, value)
 	}
-	if value, ok := _u.mutation.AppendedVulnerabilityIds(); ok {
+	if value, ok := _u.mutation.AppendedDiscoveredVulnerabilityIds(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, scan.FieldVulnerabilityIds, value)
+			sqljson.Append(u, scan.FieldDiscoveredVulnerabilityIds, value)
 		})
 	}
-	if _u.mutation.VulnerabilityIdsCleared() {
-		_spec.ClearField(scan.FieldVulnerabilityIds, field.TypeJSON)
+	if _u.mutation.DiscoveredVulnerabilityIdsCleared() {
+		_spec.ClearField(scan.FieldDiscoveredVulnerabilityIds, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(scan.FieldStatus, field.TypeEnum, value)
@@ -2850,21 +2850,21 @@ func (_u *ScanUpdateOne) ClearGeneratedByPlatformID() *ScanUpdateOne {
 	return _u
 }
 
-// SetVulnerabilityIds sets the "vulnerability_ids" field.
-func (_u *ScanUpdateOne) SetVulnerabilityIds(v []string) *ScanUpdateOne {
-	_u.mutation.SetVulnerabilityIds(v)
+// SetDiscoveredVulnerabilityIds sets the "discovered_vulnerability_ids" field.
+func (_u *ScanUpdateOne) SetDiscoveredVulnerabilityIds(v []string) *ScanUpdateOne {
+	_u.mutation.SetDiscoveredVulnerabilityIds(v)
 	return _u
 }
 
-// AppendVulnerabilityIds appends value to the "vulnerability_ids" field.
-func (_u *ScanUpdateOne) AppendVulnerabilityIds(v []string) *ScanUpdateOne {
-	_u.mutation.AppendVulnerabilityIds(v)
+// AppendDiscoveredVulnerabilityIds appends value to the "discovered_vulnerability_ids" field.
+func (_u *ScanUpdateOne) AppendDiscoveredVulnerabilityIds(v []string) *ScanUpdateOne {
+	_u.mutation.AppendDiscoveredVulnerabilityIds(v)
 	return _u
 }
 
-// ClearVulnerabilityIds clears the value of the "vulnerability_ids" field.
-func (_u *ScanUpdateOne) ClearVulnerabilityIds() *ScanUpdateOne {
-	_u.mutation.ClearVulnerabilityIds()
+// ClearDiscoveredVulnerabilityIds clears the value of the "discovered_vulnerability_ids" field.
+func (_u *ScanUpdateOne) ClearDiscoveredVulnerabilityIds() *ScanUpdateOne {
+	_u.mutation.ClearDiscoveredVulnerabilityIds()
 	return _u
 }
 
@@ -3712,16 +3712,16 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 	if _u.mutation.PerformedByCleared() {
 		_spec.ClearField(scan.FieldPerformedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.VulnerabilityIds(); ok {
-		_spec.SetField(scan.FieldVulnerabilityIds, field.TypeJSON, value)
+	if value, ok := _u.mutation.DiscoveredVulnerabilityIds(); ok {
+		_spec.SetField(scan.FieldDiscoveredVulnerabilityIds, field.TypeJSON, value)
 	}
-	if value, ok := _u.mutation.AppendedVulnerabilityIds(); ok {
+	if value, ok := _u.mutation.AppendedDiscoveredVulnerabilityIds(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, scan.FieldVulnerabilityIds, value)
+			sqljson.Append(u, scan.FieldDiscoveredVulnerabilityIds, value)
 		})
 	}
-	if _u.mutation.VulnerabilityIdsCleared() {
-		_spec.ClearField(scan.FieldVulnerabilityIds, field.TypeJSON)
+	if _u.mutation.DiscoveredVulnerabilityIdsCleared() {
+		_spec.ClearField(scan.FieldDiscoveredVulnerabilityIds, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(scan.FieldStatus, field.TypeEnum, value)
