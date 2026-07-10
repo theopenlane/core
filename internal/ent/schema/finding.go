@@ -322,7 +322,6 @@ func (f Finding) Mixin() []ent.Mixin {
 				withParents(
 					Program{},
 					Control{},
-					Review{},
 					Subcontrol{},
 					Risk{},
 					Asset{},
