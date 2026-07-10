@@ -58,11 +58,18 @@ type DemoRequestMessage struct {
 	DemoRequested bool `json:"demoRequested,omitempty" jsonschema:"description=Requester asked for a personalized demo"`
 }
 
+// OrganizationsDeletedMessage renders the summary for orgs that will be deleted soon
+type OrganizationsDeletedMessage struct {
+	Count         int      `json:"count" jsonschema:"required,description=Number of organizations deleted in this run"`
+	Organizations []string `json:"organizations" jsonschema:"required,description=Deleted organizations"`
+}
+
 // System message operation schemas and refs
 var (
 	newUserSchema, NewUserOp                           = providerkit.OperationSchema[NewUserMessage]()              //nolint:revive
 	integrationInstalledSchema, IntegrationInstalledOp = providerkit.OperationSchema[IntegrationInstalledMessage]() //nolint:revive
 	demoRequestSchema, DemoRequestOp                   = providerkit.OperationSchema[DemoRequestMessage]()          //nolint:revive
+	orgDeletionReminderSchema, OrganizationsDeletedOp  = providerkit.OperationSchema[OrganizationsDeletedMessage]() //nolint:revive
 )
 
 // Inline system message templates
@@ -99,6 +106,12 @@ Compliance:
 
 *Demo requested - user would like a personalized demo. Reach out to them at {{ .Email }}*
 {{- end }}`)
+
+	orgDeletionReminderTemplate = newSystemTemplate("organizations_deleted",
+		`These organizations will be marked for deletion shortly
+Number of organizations: {{ .Count }}
+{{ range .Organizations }}- {{ . }}
+{{ end -}}`)
 )
 
 // systemMessageRegistration builds an OperationRegistration for a fire-and-forget Slack system
@@ -136,5 +149,6 @@ func AllSlackSystemMessages() []types.OperationRegistration {
 		systemMessageRegistration(NewUserOp, newUserSchema, "Notify the platform Slack workspace that a new user registered", newUserTemplate),
 		systemMessageRegistration(IntegrationInstalledOp, integrationInstalledSchema, "Notify the platform Slack workspace that an integration was installed", integrationInstalledTemplate),
 		systemMessageRegistration(DemoRequestOp, demoRequestSchema, "Notify the platform Slack workspace of an inbound demo request", demoRequestTemplate),
+		systemMessageRegistration(OrganizationsDeletedOp, orgDeletionReminderSchema, "Notify the platform Slack workspace of organizations that will be deleted", orgDeletionReminderTemplate),
 	}
 }

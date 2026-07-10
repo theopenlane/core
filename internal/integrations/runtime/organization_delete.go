@@ -2,13 +2,14 @@ package runtime
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/stripe/stripe-go/v84"
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/consts"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -16,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
@@ -108,10 +110,27 @@ func (r *Runtime) HandleOrganizationDeletes(ctx context.Context, _ operations.Or
 		orgLogger.Info().Msg("successfully deleted organization")
 	}
 
-	logger.Info().
-		Int("count", len(deletedOrgs)).
-		Str("organizations", strings.Join(deletedOrgs, ", ")).
-		Msg("organization deletion summary")
+	if len(deletedOrgs) > 0 {
+		config, err := json.Marshal(slackdef.OrganizationsDeletedMessage{
+			Count:         len(deletedOrgs),
+			Organizations: deletedOrgs,
+		})
+		if err != nil {
+			logger.Error().Err(err).Msg("failed to marshal org deletion reminder slack notification")
+			return len(deletedOrgs), err
+		}
+
+		if _, err := r.Dispatch(systemCtx, operations.DispatchRequest{
+			DefinitionID: slackdef.DefinitionID.ID(),
+			Operation:    slackdef.OrganizationsDeletedOp.Name(),
+			Config:       config,
+			RunType:      enums.IntegrationRunTypeEvent,
+			Runtime:      true,
+		}); err != nil {
+			logger.Error().Err(err).Int("count", len(deletedOrgs)).
+				Msg("failed to dispatch org deletion notification")
+		}
+	}
 
 	return len(deletedOrgs), nil
 }

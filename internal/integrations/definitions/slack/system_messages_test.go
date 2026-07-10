@@ -56,6 +56,27 @@ func TestDemoRequestTemplateRender(t *testing.T) {
 	require.Contains(t, out, "Demo requested")
 }
 
+func TestOrganizationsDeletedTemplateRender(t *testing.T) {
+	t.Parallel()
+
+	input := OrganizationsDeletedMessage{
+		Count: 3,
+		Organizations: []string{
+			"Openlane Inc (openlane-1)",
+			"Github Inc (github)",
+			"Google (google)",
+		},
+	}
+
+	var buf bytes.Buffer
+	require.NoError(t, orgDeletionReminderTemplate.Execute(&buf, input))
+
+	out := buf.String()
+	require.Contains(t, out, "Deleted organizations: 3")
+	require.Contains(t, out, "- Github Inc")
+	require.Contains(t, out, "- Openlane Inc")
+}
+
 func TestSlackClientSendTextEmpty(t *testing.T) {
 	t.Parallel()
 
