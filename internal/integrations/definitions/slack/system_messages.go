@@ -58,11 +58,19 @@ type DemoRequestMessage struct {
 	DemoRequested bool `json:"demoRequested,omitempty" jsonschema:"description=Requester asked for a personalized demo"`
 }
 
+// OrganizationsPendingDeletionMessage renders the deletion-reminder summary sent to Slack.
+type OrganizationsPendingDeletionMessage struct {
+	Count         int      `json:"count" jsonschema:"required,description=Number of organizations marked for deletion in this run"`
+	Organizations []string `json:"organizations" jsonschema:"required,description=Organizations marked for deletion"`
+	DryRun        bool     `json:"dryRun,omitempty" jsonschema:"description=Whether this was a dry-run reminder pass"`
+}
+
 // System message operation schemas and refs
 var (
-	newUserSchema, NewUserOp                           = providerkit.OperationSchema[NewUserMessage]()              //nolint:revive
-	integrationInstalledSchema, IntegrationInstalledOp = providerkit.OperationSchema[IntegrationInstalledMessage]() //nolint:revive
-	demoRequestSchema, DemoRequestOp                   = providerkit.OperationSchema[DemoRequestMessage]()          //nolint:revive
+	newUserSchema, NewUserOp                                  = providerkit.OperationSchema[NewUserMessage]()                      //nolint:revive
+	integrationInstalledSchema, IntegrationInstalledOp        = providerkit.OperationSchema[IntegrationInstalledMessage]()         //nolint:revive
+	demoRequestSchema, DemoRequestOp                          = providerkit.OperationSchema[DemoRequestMessage]()                  //nolint:revive
+	orgDeletionReminderSchema, OrganizationsPendingDeletionOp = providerkit.OperationSchema[OrganizationsPendingDeletionMessage]() //nolint:revive
 )
 
 // Inline system message templates
@@ -99,6 +107,12 @@ Compliance:
 
 *Demo requested - user would like a personalized demo. Reach out to them at {{ .Email }}*
 {{- end }}`)
+
+	orgDeletionReminderTemplate = newSystemTemplate("organizations_pending_deletion",
+		`{{ if .DryRun }}[Dry run] {{ end }}Organization deletion reminders scheduled
+Organizations marked for deletion: {{ .Count }}
+{{ range .Organizations }}- {{ . }}
+{{ end -}}`)
 )
 
 // systemMessageRegistration builds an OperationRegistration for a fire-and-forget Slack system
@@ -136,5 +150,6 @@ func AllSlackSystemMessages() []types.OperationRegistration {
 		systemMessageRegistration(NewUserOp, newUserSchema, "Notify the platform Slack workspace that a new user registered", newUserTemplate),
 		systemMessageRegistration(IntegrationInstalledOp, integrationInstalledSchema, "Notify the platform Slack workspace that an integration was installed", integrationInstalledTemplate),
 		systemMessageRegistration(DemoRequestOp, demoRequestSchema, "Notify the platform Slack workspace of an inbound demo request", demoRequestTemplate),
+		systemMessageRegistration(OrganizationsPendingDeletionOp, orgDeletionReminderSchema, "Notify the platform Slack workspace of organizations that have been marked for deletion", orgDeletionReminderTemplate),
 	}
 }
