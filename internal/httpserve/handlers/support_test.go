@@ -45,16 +45,20 @@ func supportTestConfig(issuer string) handlers.SupportAccessConfig {
 
 // createConsentingOrg creates an organization whose setting consents to support access
 func (suite *HandlerTestSuite) createConsentingOrg(ctx context.Context) *ent.Organization {
-	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		AllowSupportAccess: lo.ToPtr(true),
-	}).SaveX(ctx)
+	t := suite.T()
 
-	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+		AllowSupportAccess: lo.ToPtr(true),
+	}).Save(ctx)
+	require.NoError(t, err)
+
+	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
-	}).SaveX(ctx)
+	}).Save(ctx)
+	require.NoError(t, err)
 
-	suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).ExecX(ctx)
+	require.NoError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).Exec(ctx))
 
 	return org
 }
@@ -194,12 +198,16 @@ func (suite *HandlerTestSuite) TestSupportAccessRejectsNonConsentingOrg() {
 	ctx = ent.NewContext(ctx, suite.db)
 
 	// org that has NOT consented to support access
-	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{}).SaveX(ctx)
-	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{}).Save(ctx)
+	require.NoError(t, err)
+
+	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
-	}).SaveX(ctx)
-	suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).ExecX(ctx)
+	}).Save(ctx)
+	require.NoError(t, err)
+
+	require.NoError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).Exec(ctx))
 
 	body, _ := json.Marshal(models.LoginRequest{
 		Username:             "support@theopenlane.io",

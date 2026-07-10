@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/url"
+	"strings"
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/newman"
@@ -315,6 +317,21 @@ func renderMessage(client *Client, theme *render.Theme, recipient RecipientInfo,
 		newman.WithText(textBody),
 	}
 	opts = append(opts, extraOpts...)
+
+	// RFC 8058 one-click unsubscribe: emit List-Unsubscribe (and the One-Click POST marker) so mail clients
+	// surface a native one-click control. The footer link (cfg.UnsubscribeURL) targets the trust center
+	// page; the header must hit the POST one-click API route instead, derived from the same per-recipient
+	// URL — its origin + token, pointed at /api/unsubscribe (the token alone identifies the subscriber, so
+	// the page slug is dropped). A still-templated URL is skipped so a placeholder is never sent
+	if cfg, ok := content.Config.(RuntimeEmailConfig); ok && cfg.UnsubscribeURL != "" && !strings.Contains(cfg.UnsubscribeURL, "{{") {
+		if u, err := url.Parse(cfg.UnsubscribeURL); err == nil && u.Host != "" {
+			oneClickURL := fmt.Sprintf("%s://%s/api/unsubscribe?%s", u.Scheme, u.Host, u.RawQuery)
+			opts = append(opts,
+				newman.WithHeader("List-Unsubscribe", "<"+oneClickURL+">"),
+				newman.WithHeader("List-Unsubscribe-Post", "List-Unsubscribe=One-Click"),
+			)
+		}
+	}
 
 	return newman.NewEmailMessageWithOptions(opts...), nil
 }

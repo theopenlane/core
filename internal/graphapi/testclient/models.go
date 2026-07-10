@@ -9995,6 +9995,8 @@ type CreateTrustCenterSettingInput struct {
 	SecurityContact *string `json:"securityContact,omitempty"`
 	// whether NDA requests require approval before being processed
 	NdaApprovalRequired *bool `json:"ndaApprovalRequired,omitempty"`
+	// whether the trust center accepts new subscriber registrations; when false, subscriber creation for the trust center is blocked
+	AllowSubscribers *bool `json:"allowSubscribers,omitempty"`
 	// whether to email trust center subscribers when subprocessors are added, updated, or removed
 	NotifySubscribersOnSubprocessorChange *bool `json:"notifySubscribersOnSubprocessorChange,omitempty"`
 	// URL to the company's status page
@@ -40200,6 +40202,8 @@ type TrustCenterSetting struct {
 	SecurityContact *string `json:"securityContact,omitempty"`
 	// whether NDA requests require approval before being processed
 	NdaApprovalRequired *bool `json:"ndaApprovalRequired,omitempty"`
+	// whether the trust center accepts new subscriber registrations; when false, subscriber creation for the trust center is blocked
+	AllowSubscribers *bool `json:"allowSubscribers,omitempty"`
 	// whether to email trust center subscribers when subprocessors are added, updated, or removed
 	NotifySubscribersOnSubprocessorChange *bool `json:"notifySubscribersOnSubprocessorChange,omitempty"`
 	// watermark of the most recent subprocessor change subscribers have been notified about
@@ -40683,6 +40687,11 @@ type TrustCenterSettingWhereInput struct {
 	NdaApprovalRequiredNeq    *bool `json:"ndaApprovalRequiredNEQ,omitempty"`
 	NdaApprovalRequiredIsNil  *bool `json:"ndaApprovalRequiredIsNil,omitempty"`
 	NdaApprovalRequiredNotNil *bool `json:"ndaApprovalRequiredNotNil,omitempty"`
+	// allow_subscribers field predicates
+	AllowSubscribers       *bool `json:"allowSubscribers,omitempty"`
+	AllowSubscribersNeq    *bool `json:"allowSubscribersNEQ,omitempty"`
+	AllowSubscribersIsNil  *bool `json:"allowSubscribersIsNil,omitempty"`
+	AllowSubscribersNotNil *bool `json:"allowSubscribersNotNil,omitempty"`
 	// notify_subscribers_on_subprocessor_change field predicates
 	NotifySubscribersOnSubprocessorChange       *bool `json:"notifySubscribersOnSubprocessorChange,omitempty"`
 	NotifySubscribersOnSubprocessorChangeNeq    *bool `json:"notifySubscribersOnSubprocessorChangeNEQ,omitempty"`
@@ -47502,6 +47511,9 @@ type UpdateTrustCenterSettingInput struct {
 	// whether NDA requests require approval before being processed
 	NdaApprovalRequired      *bool `json:"ndaApprovalRequired,omitempty"`
 	ClearNdaApprovalRequired *bool `json:"clearNdaApprovalRequired,omitempty"`
+	// whether the trust center accepts new subscriber registrations; when false, subscriber creation for the trust center is blocked
+	AllowSubscribers      *bool `json:"allowSubscribers,omitempty"`
+	ClearAllowSubscribers *bool `json:"clearAllowSubscribers,omitempty"`
 	// whether to email trust center subscribers when subprocessors are added, updated, or removed
 	NotifySubscribersOnSubprocessorChange      *bool `json:"notifySubscribersOnSubprocessorChange,omitempty"`
 	ClearNotifySubscribersOnSubprocessorChange *bool `json:"clearNotifySubscribersOnSubprocessorChange,omitempty"`

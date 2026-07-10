@@ -3069,6 +3069,7 @@ var (
 		{Name: "company_domain", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "security_contact", Type: field.TypeString, Nullable: true},
 		{Name: "nda_approval_required", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "allow_subscribers", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "notify_subscribers_on_subprocessor_change", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "subprocessors_notified_at", Type: field.TypeTime, Nullable: true},
 		{Name: "nda_approver_group_id", Type: field.TypeString, Nullable: true},

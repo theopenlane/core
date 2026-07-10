@@ -52,54 +52,58 @@ func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 
 	userCtx := setAuthenticatedContext(ctxWithToken, entUser)
 
-	// check to see if user is already confirmed
-	if !entUser.Edges.Setting.EmailConfirmed {
-		// set tokens for request
-		if err := user.setUserTokens(entUser, in.Token); err != nil {
-			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to set user tokens for request")
+	// single-use: reject a replay instead of re-issuing a session
+	if entUser.Edges.Setting.EmailConfirmed {
+		logx.FromContext(reqCtx).Error().Err(ErrEmailAlreadyConfirmed).Msg("email verify token replayed")
 
-			return h.BadRequest(ctx, err, openapi)
-		}
+		return h.BadRequest(ctx, ErrEmailAlreadyConfirmed, openapi)
+	}
 
-		// Construct the user token from the database fields
-		t := &tokens.VerificationToken{
-			Email: entUser.Email,
-		}
+	// set tokens for request
+	if err := user.setUserTokens(entUser, in.Token); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to set user tokens for request")
 
-		if t.ExpiresAt, err = user.GetVerificationExpires(); err != nil {
-			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to parse expiration")
+		return h.BadRequest(ctx, err, openapi)
+	}
 
-			return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
-		}
+	// Construct the user token from the database fields
+	t := &tokens.VerificationToken{
+		Email: entUser.Email,
+	}
 
-		// Verify the token with the stored secret
-		if err = t.Verify(user.GetVerificationToken(), user.EmailVerificationSecret); err != nil {
-			if errors.Is(err, tokens.ErrTokenExpired) {
-				userCtx = token.NewContextWithSignUpToken(userCtx, user.Email)
+	if t.ExpiresAt, err = user.GetVerificationExpires(); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to parse expiration")
 
-				meowtoken, err := h.storeAndSendEmailVerificationToken(userCtx, user)
-				if err != nil {
-					logx.FromContext(reqCtx).Error().Err(err).Msg("unable to resend verification token")
+		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
+	}
 
-					return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
-				}
+	// Verify the token with the stored secret
+	if err = t.Verify(user.GetVerificationToken(), user.EmailVerificationSecret); err != nil {
+		if errors.Is(err, tokens.ErrTokenExpired) {
+			userCtx = token.NewContextWithSignUpToken(userCtx, user.Email)
 
-				out := &models.VerifyReply{
-					Reply:   rout.Reply{Success: false},
-					ID:      meowtoken.ID,
-					Email:   user.Email,
-					Message: "Token expired, a new token has been issued. Please check your email and try again.",
-				}
+			meowtoken, err := h.storeAndSendEmailVerificationToken(userCtx, user)
+			if err != nil {
+				logx.FromContext(reqCtx).Error().Err(err).Msg("unable to resend verification token")
 
-				return h.Created(ctx, out)
+				return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 			}
 
-			return h.BadRequest(ctx, err, openapi)
+			out := &models.VerifyReply{
+				Reply:   rout.Reply{Success: false},
+				ID:      meowtoken.ID,
+				Email:   user.Email,
+				Message: "Token expired, a new token has been issued. Please check your email and try again.",
+			}
+
+			return h.Created(ctx, out)
 		}
 
-		if err := h.setEmailConfirmed(userCtx, entUser); err != nil {
-			return h.BadRequest(ctx, err, openapi)
-		}
+		return h.BadRequest(ctx, err, openapi)
+	}
+
+	if err := h.setEmailConfirmed(userCtx, entUser); err != nil {
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	// create new claims for the user

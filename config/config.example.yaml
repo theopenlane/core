@@ -168,6 +168,7 @@ integrations:
     consoleintegrationpath: /organization-settings/integrations
     email:
         apikey: ""
+        apiurl: https://api.theopenlane.io
         docsurl: https://docs.theopenlane.io
         fromemail: support@mail.theopenlane.io
         producturl: https://console.theopenlane.io

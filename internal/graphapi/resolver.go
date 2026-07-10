@@ -8,6 +8,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
+	"github.com/redis/go-redis/v9"
 	echo "github.com/theopenlane/echox"
 	"github.com/vektah/gqlparser/v2/ast"
 
@@ -94,11 +95,16 @@ func NewResolver(db *ent.Client, u *objects.Service) *Resolver {
 	}
 }
 
-// WithSubscriptions enables graphql subscriptions to the server using websockets or sse
-func (r Resolver) WithSubscriptions(enabled bool) *Resolver {
+// WithSubscriptions enables graphql subscriptions to the server using websockets or sse. When
+// redisClient is non-nil, notifications are also distributed across processes via redis pub/sub
+func (r Resolver) WithSubscriptions(enabled bool, redisClient *redis.Client) *Resolver {
 	if enabled {
 		r.subscriptionManager = graphsubscriptions.NewManager()
 		r.subscriptionsEnabled = true
+
+		if redisClient != nil {
+			r.subscriptionManager.WithRedis(redisClient)
+		}
 	}
 
 	return &r

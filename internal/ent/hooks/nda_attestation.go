@@ -525,7 +525,8 @@ func wrapText(s, fontName string, fontSize int, maxWidth float64) string {
 	for word := range strings.FieldsSeq(s) {
 		if line.Len() > 0 {
 			if font.TextWidth(line.String()+" "+word, fontName, fontSize) <= maxWidth {
-				line.WriteString(" " + word)
+				line.WriteString(" ")
+				line.WriteString(word)
 
 				continue
 			}

@@ -514,10 +514,12 @@ func TestGetAllSubprocessors(t *testing.T) {
 			expectedResults: 2, // Should see only subprocessors owned by testUser2
 		},
 		{
-			name:            "happy path - sysadmin",
-			client:          suite.client.api,
-			ctx:             sharedSystemAdminUser.UserCtx,
-			expectedResults: 1,
+			name:   "happy path - sysadmin",
+			client: suite.client.api,
+			ctx:    sharedSystemAdminUser.UserCtx,
+			// a system admin holds CapBypassOrgFilter, which the subprocessor interceptor honors, so it
+			// sees every organization's subprocessors (all four created above), not just system-owned ones
+			expectedResults: 4,
 		},
 	}
 
