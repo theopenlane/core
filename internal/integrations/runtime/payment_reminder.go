@@ -108,7 +108,7 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 
 	dispatched := 0
 	emailQueueOffset := 0
-	markedOrgs := make([]string, 0, len(settings))
+	orgsToDelete := make([]string, 0, len(settings))
 
 	for _, setting := range settings {
 		org := setting.Edges.Organization
@@ -118,6 +118,7 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 
 		if cfg.DryRun {
 			logger.Info().Str("organization_id", org.ID).Str("organization_name", org.Name).Msg("dry run: would schedule for deletion")
+			orgsToDelete = append(orgsToDelete, fmt.Sprintf("%s (%s)", org.Name, org.ID))
 			dispatched++
 
 			continue
@@ -132,7 +133,7 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 			continue
 		}
 
-		markedOrgs = append(markedOrgs, fmt.Sprintf("%s (%s)", org.Name, org.ID))
+		orgsToDelete = append(orgsToDelete, fmt.Sprintf("%s (%s)", org.Name, org.ID))
 
 		members, err := db.OrgMembership.Query().
 			Where(
@@ -212,10 +213,11 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 		logger.Info().Str("organization_id", org.ID).Int("recipients", len(recipients)).Msg("payment reminder dispatched")
 	}
 
-	if len(markedOrgs) > 0 {
+	if len(orgsToDelete) > 0 {
 		config, err := json.Marshal(slackdef.OrganizationsPendingDeletionMessage{
-			Count:         len(markedOrgs),
-			Organizations: markedOrgs,
+			Count:         len(orgsToDelete),
+			Organizations: orgsToDelete,
+			DryRun:        cfg.DryRun,
 		})
 		if err != nil {
 			logger.Error().Err(err).Msg("failed to marshal org deletion reminder slack notification")
@@ -229,7 +231,7 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 			RunType:      enums.IntegrationRunTypeEvent,
 			Runtime:      true,
 		}); err != nil {
-			logger.Error().Err(err).Int("count", len(markedOrgs)).Msg("failed to dispatch org deletion reminder slack notification")
+			logger.Error().Err(err).Int("count", len(orgsToDelete)).Msg("failed to dispatch org deletion reminder slack notification")
 		}
 	}
 

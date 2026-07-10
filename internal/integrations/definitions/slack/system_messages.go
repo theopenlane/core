@@ -62,6 +62,7 @@ type DemoRequestMessage struct {
 type OrganizationsPendingDeletionMessage struct {
 	Count         int      `json:"count" jsonschema:"required,description=Number of organizations marked for deletion in this run"`
 	Organizations []string `json:"organizations" jsonschema:"required,description=Organizations marked for deletion"`
+	DryRun        bool     `json:"dryRun,omitempty" jsonschema:"description=Whether this was a dry-run reminder pass"`
 }
 
 // System message operation schemas and refs
@@ -108,7 +109,7 @@ Compliance:
 {{- end }}`)
 
 	orgDeletionReminderTemplate = newSystemTemplate("organizations_pending_deletion",
-		`Organization deletion reminders scheduled
+		`{{ if .DryRun }}[Dry run] {{ end }}Organization deletion reminders scheduled
 Organizations marked for deletion: {{ .Count }}
 {{ range .Organizations }}- {{ . }}
 {{ end -}}`)
