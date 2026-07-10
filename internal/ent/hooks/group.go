@@ -138,16 +138,17 @@ func checkOnlyDefaultFields(m *generated.GroupMutation) error {
 		return nil
 	}
 
-	// default fields are updatedAt, updatedBy
+	// default fields are the audit bookkeeping fields set or cleared on every mutation
 	defaultFields := []string{
 		"updated_at",
 		"updated_by",
+		"updated_by_impersonator",
 		// TODO: see why this is sent in the mutation, added a test to confirm it doesn't actually change
 		"display_id",
 	}
 
-	// check if any of the fields are not default fields
-	for _, field := range fields {
+	// check if any of the set, numeric, or cleared fields are not default fields
+	for _, field := range slices.Concat(fields, numericFields, clearedFields) {
 		if !slices.Contains(defaultFields, field) {
 			return ErrManagedGroup
 		}

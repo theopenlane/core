@@ -10,6 +10,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -129,6 +130,9 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 		}()
 	}
 
+	var attempted, failed int
+	var membershipSetSeen bool
+
 	for _, payloadSet := range payloadSets {
 		if !contractIncludesSchema(contracts, payloadSet.Schema) {
 			return ErrIngestSchemaNotDeclared
@@ -138,22 +142,70 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 			return ErrIngestSchemaNotFound
 		}
 
+		if payloadSet.Schema == integrationgenerated.IntegrationMappingSchemaDirectoryMembership {
+			membershipSetSeen = true
+		}
+
 		for _, envelope := range payloadSet.Envelopes {
-			record, include, err := mapIngestRecord(ctx, definition, payloadSet.Schema, envelope, installationFilterExpr)
-			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("schema", payloadSet.Schema).Msg("error mapping ingest record")
-				return err
+			record, include, mapErr := mapIngestRecord(ctx, definition, payloadSet.Schema, envelope, installationFilterExpr)
+			if mapErr != nil {
+				logx.FromContext(ctx).Error().Err(mapErr).Str("schema", payloadSet.Schema).Str("resource", envelope.Resource).Msg("error mapping ingest record")
+
+				attempted++
+				failed++
+
+				continue
 			}
 
 			if !include {
 				continue
 			}
 
-			if err = handle(ctx, record); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("schema", payloadSet.Schema).Msg("ingest persist failed")
-				return err
+			attempted++
+
+			if handleErr := handle(ctx, record); handleErr != nil {
+				logx.FromContext(ctx).Error().Err(handleErr).Str("schema", payloadSet.Schema).Str("resource", envelope.Resource).Msg("ingest persist failed")
+
+				failed++
 			}
 		}
+	}
+
+	if failed > 0 {
+		return fmt.Errorf("%w: %d of %d records failed", ErrIngestRecordsFailed, failed, attempted)
+	}
+
+	// operation-run directory syncs carry the complete membership snapshot, so any active
+	// membership the run did not confirm was removed upstream; partial sources (scim, webhooks)
+	// and runs finalized elsewhere never authorize removal inference
+	if directorySync && membershipSetSeen && !options.SkipDirectorySyncRunFinalization && options.Source == integrationgenerated.IntegrationIngestSourceOperation {
+		if err := markUnconfirmedDirectoryMembershipsRemoved(ctx, ic.DB, ic.Integration.ID, directorySyncRunID); err != nil {
+			return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
+		}
+	}
+
+	return nil
+}
+
+// markUnconfirmedDirectoryMembershipsRemoved records the removal side of the sync delta by
+// stamping removed_at on active memberships for the integration that were not confirmed by
+// the completed sync run
+func markUnconfirmedDirectoryMembershipsRemoved(ctx context.Context, db *ent.Client, integrationID string, runID string) error {
+	removed, err := db.DirectoryMembership.Update().
+		Where(directorymembership.IntegrationID(integrationID),
+			directorymembership.RemovedAtIsNil(),
+			directorymembership.Or(
+				directorymembership.LastConfirmedRunIDIsNil(),
+				directorymembership.LastConfirmedRunIDNEQ(runID),
+			)).
+		SetRemovedAt(time.Now()).
+		Save(ctx)
+	if err != nil {
+		return err
+	}
+
+	if removed > 0 {
+		logx.FromContext(ctx).Info().Int("removed_count", removed).Str("directory_sync_run_id", runID).Msg("marked directory memberships removed after sync run comparison")
 	}
 
 	return nil

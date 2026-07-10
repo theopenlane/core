@@ -1048,7 +1048,7 @@ func TestMutationCreateControlsByCloneOpenlaneControls(t *testing.T) {
 	}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	// link a subcontrol
-	(&SubcontrolBuilder{
+	systemSubcontrol := (&SubcontrolBuilder{
 		client:    suite.client,
 		ControlID: ctrl.ID,
 		Name:      ctrl.RefCode + "-1",
@@ -1097,6 +1097,10 @@ func TestMutationCreateControlsByCloneOpenlaneControls(t *testing.T) {
 	assert.Check(t, is.Len(resp.CreateControlsByClone.Controls, 1))
 	assert.Check(t, is.Equal(clonedControlID, resp.CreateControlsByClone.Controls[0].ID))
 
+	// subcontrols do not cascade with control deletion; remove them explicitly so
+	// they don't linger as orphans visible to later subcontrol queries
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subcontrol.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: systemSubcontrol.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: clonedControlID}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: ctrl.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
