@@ -24,9 +24,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
+	"github.com/theopenlane/core/internal/trustcenterurl"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
@@ -65,12 +68,16 @@ func (h *Handler) createUser(ctx context.Context, input ent.CreateUserInput) (*e
 	return meowuser, nil
 }
 
-// updateSubscriberVerifiedEmail updates a subscriber by in the database based on the input and sets to active with verified email
+// updateSubscriberVerifiedEmail updates a subscriber in the database based on the input and sets it to
+// active with a verified email. It does NOT clear the unsubscribed flag — an unsubscribed contact can
+// only re-subscribe through the createSubscriber mutation, not by replaying a verify link. The token is
+// expired (ttl set to now) so it is single-use and cannot be replayed
 func (h *Handler) updateSubscriberVerifiedEmail(ctx context.Context, id string, input ent.UpdateSubscriberInput) error {
 	err := transaction.FromContext(ctx).Subscriber.UpdateOneID(id).
 		SetInput(input).
 		SetActive(true).
 		SetVerifiedEmail(true).
+		SetTTL(time.Now()).
 		Exec(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error updating subscriber verified")
@@ -80,12 +87,14 @@ func (h *Handler) updateSubscriberVerifiedEmail(ctx context.Context, id string, 
 	return nil
 }
 
-// updateSubscriberVerificationToken updates subscriber token fields in the database.
+// updateSubscriberVerificationToken rotates the subscriber's token fields and counts the resend against
+// the send-attempt budget so repeated expired-link hits cannot send unbounded verification emails
 func (h *Handler) updateSubscriberVerificationToken(ctx context.Context, subscriberID, token string, ttl time.Time, secret []byte) error {
 	err := transaction.FromContext(ctx).Subscriber.UpdateOneID(subscriberID).
 		SetToken(token).
 		SetSecret(secret).
 		SetTTL(ttl).
+		AddSendAttempts(1).
 		Exec(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error updating subscriber tokens")
@@ -96,11 +105,13 @@ func (h *Handler) updateSubscriberVerificationToken(ctx context.Context, subscri
 	return nil
 }
 
-// setSubscriberUnsubscribed marks the subscriber as unsubscribed; the HookSubscriberUpdated
-// hook clears the active flag and resets send attempts
+// setSubscriberUnsubscribed marks the subscriber as unsubscribed; the HookSubscriberUpdated hook clears
+// the active flag and resets send attempts. The token is expired (ttl set to now) so the link is
+// single-use; re-presenting it is a harmless no-op via the unsubscribed flag
 func (h *Handler) setSubscriberUnsubscribed(ctx context.Context, id string) error {
 	err := transaction.FromContext(ctx).Subscriber.UpdateOneID(id).
 		SetUnsubscribed(true).
+		SetTTL(time.Now()).
 		Exec(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error unsubscribing subscriber")
@@ -579,6 +590,90 @@ func (h *Handler) getOrgByID(ctx context.Context, id string) (*ent.Organization,
 	}
 
 	return org, nil
+}
+
+// subscriberNotificationOrgName returns the display name identifying the source of a subscriber email:
+// the trust center's configured company name, falling back to the owning organization's display name
+// when the trust center has no company name set
+func (h *Handler) subscriberNotificationOrgName(ctx context.Context, sub *ent.Subscriber) (string, error) {
+	if name := h.trustCenterCompanyName(ctx, sub); name != "" {
+		return name, nil
+	}
+
+	org, err := h.getOrgByID(ctx, sub.OwnerID)
+	if err != nil {
+		return "", err
+	}
+
+	return org.DisplayName, nil
+}
+
+// trustCenterCompanyName returns the configured company name for the subscriber's trust center, read
+// through the anonymous trust center scope the public site uses: an anon trust center caller plus the
+// active trust center id, which the trust center child interceptor scopes the query to. It is best
+// effort and returns empty when the subscriber has no trust center, the name is unset, or the read fails
+func (h *Handler) trustCenterCompanyName(ctx context.Context, sub *ent.Subscriber) string {
+	if sub.TrustCenterID == nil || *sub.TrustCenterID == "" {
+		return ""
+	}
+
+	tcCtx := auth.WithCaller(ctx, auth.NewTrustCenterBootstrapCaller(sub.OwnerID))
+	tcCtx = auth.ActiveTrustCenterIDKey.Set(tcCtx, *sub.TrustCenterID)
+
+	setting, err := transaction.FromContext(tcCtx).TrustCenterSetting.Query().
+		Where(
+			trustcentersetting.TrustCenterID(*sub.TrustCenterID),
+			trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentLive),
+		).
+		First(tcCtx)
+	if err != nil {
+		logx.FromContext(ctx).Debug().Err(err).Msg("could not resolve trust center company name for subscriber, falling back to organization name")
+
+		return ""
+	}
+
+	return setting.CompanyName
+}
+
+// subscriberTrustCenterDomain resolves the custom domain + slug of a subscriber's trust center, read
+// through the anonymous trust center scope, for composing public trust center links. ok is false when the
+// subscriber has no trust center or it cannot be resolved
+func (h *Handler) subscriberTrustCenterDomain(ctx context.Context, sub *ent.Subscriber) (customDomain, slug string, ok bool) {
+	if sub.TrustCenterID == nil || *sub.TrustCenterID == "" {
+		return "", "", false
+	}
+
+	tcCtx := auth.WithCaller(ctx, auth.NewTrustCenterBootstrapCaller(sub.OwnerID))
+	tcCtx = auth.ActiveTrustCenterIDKey.Set(tcCtx, *sub.TrustCenterID)
+
+	tc, err := transaction.FromContext(tcCtx).TrustCenter.Query().
+		Where(trustcenter.ID(*sub.TrustCenterID)).
+		WithCustomDomain().
+		Only(tcCtx)
+	if err != nil {
+		logx.FromContext(ctx).Debug().Err(err).Msg("could not resolve trust center for subscriber link")
+
+		return "", "", false
+	}
+
+	if tc.Edges.CustomDomain != nil {
+		customDomain = tc.Edges.CustomDomain.CnameRecord
+	}
+
+	return customDomain, tc.Slug, true
+}
+
+// subscriberTrustCenterLinks builds the tokenized trust center verify and unsubscribe links for a
+// subscriber, so the links land on the trust center rather than the app console; both empty when the
+// trust center cannot resolve
+func (h *Handler) subscriberTrustCenterLinks(ctx context.Context, sub *ent.Subscriber, token string) (verifyURL, unsubscribeURL string) {
+	customDomain, slug, ok := h.subscriberTrustCenterDomain(ctx, sub)
+	if !ok {
+		return "", ""
+	}
+
+	return trustcenterurl.SubscribeVerifyURLWithToken(customDomain, slug, token),
+		trustcenterurl.UnsubscribeURLWithToken(customDomain, slug, token)
 }
 
 // createEvent creates a new event in the database but requires mapped input

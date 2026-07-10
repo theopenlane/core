@@ -2,10 +2,8 @@ package email
 
 import (
 	"fmt"
-	"html"
 	"html/template"
 	"net/url"
-	"strings"
 	"time"
 
 	"github.com/samber/lo"
@@ -29,10 +27,11 @@ func defaultHeader(cfg RuntimeEmailConfig) render.HeaderBlock {
 // baseTheme is the shared theme used by all email operations
 var baseTheme = themes.Base
 
-// Trust center / questionnaire button colors matching the original teal theme
+// Trust center / questionnaire button colors: dark green on brand teal is 5.5:1 (WCAG AA);
+// re-verify contrast if the palette changes
 const (
-	tcButtonColor     = "#3fc2b4"
-	tcButtonTextColor = "#ffffff"
+	tcButtonColor     = brandTeal
+	tcButtonTextColor = brandDarkGreen
 )
 
 // ndaApprovalRequestPath is the console path where an approver reviews pending NDA requests
@@ -45,22 +44,29 @@ const (
 	brandLight100  = "#d1f6ee" // --color-brand-100
 )
 
+// heroBodyTextColor is a desaturated light tint for body text on the dark hero; softer than the
+// mint brand tints while keeping ~10:1 contrast on brandDarkGreen
+const heroBodyTextColor = "#e8f0ee"
+
+// white is used for heading and callout text on the dark green backgrounds
+const white = "#ffffff"
+
 // applySystemBranding applies the default Openlane system email color treatment
 func applySystemBranding(cfg RuntimeEmailConfig) RuntimeEmailConfig {
 	cfg.HeroBackgroundColor = brandDarkGreen
-	cfg.HeadingColor = "#ffffff"
-	cfg.TextColor = brandLight100
+	cfg.HeadingColor = white
+	cfg.TextColor = heroBodyTextColor
 	cfg.FooterTextColor = "#14171e"
-	cfg.ButtonColor = brandTeal
-	cfg.ButtonTextColor = brandDarkGreen
+	cfg.ButtonColor = tcButtonColor
+	cfg.ButtonTextColor = tcButtonTextColor
 
 	return cfg
 }
 
 // applyCalloutBranding applies the Openlane system email treatment for emails with a callout section
 func applyCalloutBranding(cfg RuntimeEmailConfig) RuntimeEmailConfig {
-	cfg.ButtonColor = brandTeal
-	cfg.ButtonTextColor = brandDarkGreen
+	cfg.ButtonColor = tcButtonColor
+	cfg.ButtonTextColor = tcButtonTextColor
 
 	return cfg
 }
@@ -69,14 +75,20 @@ func applyCalloutBranding(cfg RuntimeEmailConfig) RuntimeEmailConfig {
 func calloutStyle() render.Style {
 	return render.Style{
 		BackgroundColor: brandDarkGreen,
-		PrimaryColor:    "#ffffff",
-		TextColor:       "#ffffff",
+		PrimaryColor:    white,
+		TextColor:       white,
 	}
 }
 
 // tokenURL constructs a product URL with a query-encoded token parameter
 func tokenURL(base, path, token string) string {
 	return base + path + "?token=" + url.QueryEscape(token)
+}
+
+// supportEmailLink renders the support address as an explicitly styled mailto link; left as plain
+// text, mail clients auto-link it with their default blue, which clashes on the dark hero
+func supportEmailLink(cfg RuntimeEmailConfig) template.HTML {
+	return template.HTML(`<a href="mailto:` + cfg.SupportEmail + `" style="color:` + brandLight100 + `;text-decoration-line:underline" target="_blank">` + cfg.SupportEmail + `</a>`) //nolint:gosec // SupportEmail is a system config value, not user input
 }
 
 // VerifyEmailRequest is the input for the email verification operation
@@ -132,6 +144,12 @@ type SubscribeRequest struct {
 	OrgName string `json:"org_name" jsonschema:"required,description=Organization display name"`
 	// Token is the subscriber verification token appended to the verify URL
 	Token string `json:"token" jsonschema:"required,description=Subscriber verification token"`
+	// VerifyURL is the trust-center-domain confirmation link the button points at; empty falls back to the
+	// API-direct verify endpoint (organization-level subscribers with no trust center)
+	VerifyURL string `json:"verifyURL,omitempty" jsonschema:"description=Trust center subscription confirmation link the button points at"`
+	// UnsubscribeURL is the trust center's tokenized unsubscribe link shown in the footer; built by the
+	// caller from the trust center domain since the operation has no access to it
+	UnsubscribeURL string `json:"unsubscribeURL,omitempty" jsonschema:"description=Trust center unsubscribe link shown in the footer"`
 }
 
 // VerifyBillingRequest is the input for the billing email verification operation
@@ -276,18 +294,12 @@ var _ = RegisterEmailOperation(Operation[VerifyEmailRequest]{
 			Title:     "Verify Your Email Address",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
-					"Welcome to " + cfg.CompanyName + " - where compliance isn't just a checkbox.",
-					"Before you get started, let's make sure it's really you. Click below to verify your email:",
+					"Before you get started, let's make sure it's really you.",
 				},
 			},
 			Actions: []render.Action{{
 				Button: render.Button{Text: "Confirm Email", Link: verifyURL},
 			}},
-			Outros: render.OutrosBlock{
-				Paragraphs: []string{
-					"This link expires in 7 days - but don't worry, if it does, you'll get a fresh one when you try to verify later.",
-				},
-			},
 		}
 	},
 	Config: func(cfg RuntimeEmailConfig, _ VerifyEmailRequest) RuntimeEmailConfig {
@@ -307,11 +319,6 @@ var _ = RegisterEmailOperation(Operation[WelcomeRequest]{
 			Header:    defaultHeader(cfg),
 			Name:      req.FirstName,
 			Title:     "Ready to get started?",
-			Intros: render.IntrosBlock{
-				Paragraphs: []string{
-					"At " + cfg.CompanyName + ", we're working to develop a cutting-edge cybersecurity and compliance automation solution to help organizations of all sizes and industries secure their systems, navigate the increasingly complex web of privacy laws and regulations, ensure continuous compliance, manage risks, and get ahead of evolving cyber threats.",
-				},
-			},
 			Callout: &render.Callout{
 				Title: "Here's how to get started:",
 				Style: calloutStyle(),
@@ -343,10 +350,9 @@ var _ = RegisterEmailOperation(Operation[InviteRequest]{
 		if req.NewUser {
 			inviteURL += "&new=true"
 		}
-		inviteIntro := template.HTML("You're in - let's build trust without the busywork. "+html.EscapeString(req.InviterName)+" has invited you to collaborate in "+html.EscapeString(cfg.CompanyName)+", as part of the ") + //nolint:gosec // all user input is escaped via html.EscapeString
-			render.Bold(req.OrgName) + " organization"
+		inviteIntro := req.InviterName + " has invited you to collaborate in " + cfg.CompanyName + ", as part of the " + req.OrgName + " organization"
 		if req.Role != "" {
-			inviteIntro += template.HTML(" with the role of " + html.EscapeString(strings.ToUpper(req.Role))) //nolint:gosec // role is escaped
+			inviteIntro += " with the role of " + req.Role
 		}
 		inviteIntro += "."
 
@@ -356,19 +362,11 @@ var _ = RegisterEmailOperation(Operation[InviteRequest]{
 			Name:      req.FirstName,
 			Title:     "You've been invited to join " + cfg.CompanyName + "!",
 			Intros: render.IntrosBlock{
-				Unsafe: []template.HTML{
-					inviteIntro,
-					"To get started (and verify your email), click the link below:",
-				},
+				Paragraphs: []string{inviteIntro},
 			},
 			Actions: []render.Action{{
 				Button: render.Button{Text: "Accept Invite", Link: inviteURL},
 			}},
-			Outros: render.OutrosBlock{
-				Paragraphs: []string{
-					"This link expires in 7 days - but don't worry, if it does, you'll get a fresh one when you try to verify later.",
-				},
-			},
 		}
 	},
 	Config: func(cfg RuntimeEmailConfig, _ InviteRequest) RuntimeEmailConfig {
@@ -384,29 +382,17 @@ var _ = RegisterEmailOperation(Operation[InviteJoinedRequest]{
 	},
 	Build: func(cfg RuntimeEmailConfig, req InviteJoinedRequest) render.ContentBody {
 		return render.ContentBody{
-			Preheader: "You're in - welcome to " + req.OrgName + " on " + cfg.CompanyName + "!",
+			Preheader: "You're now a part of the " + req.OrgName + " organization on " + cfg.CompanyName,
 			Header:    defaultHeader(cfg),
 			Name:      req.FirstName,
-			Title:     "You're in - welcome to " + req.OrgName + " on " + cfg.CompanyName + "!",
-			Intros: render.IntrosBlock{
-				Paragraphs: []string{
-					"Welcome to " + cfg.CompanyName + " - we're excited to have you on board with " + req.OrgName + "!",
-					"Ditch the spreadsheets, and embrace the pipeline with a faster, cleaner way to automate compliance, manage risk, and stay ahead of security threats - without the manual overhead.",
-				},
-			},
+			Title:     "You're now a part of the " + req.OrgName + " organization",
 			Callout: &render.Callout{
-				Title:   "Here's how to get started:",
-				Ordered: true,
-				Style:   calloutStyle(),
+				Title: "Some tips:",
+				Style: calloutStyle(),
 				Items: []template.HTML{
-					"Complete the onboarding flow to tailor your experience",
-					"Explore any active " + render.LinkWithColor(cfg.ProductURL+"/programs", "programs", brandLight100) + " your team is running",
+					"You can switch between organizations by clicking the avatar in the lower left hand menu",
+					"You can change which organization you're logged into by default by going to User Settings, also in the left-side nav of the console",
 					"Checkout our " + render.LinkWithColor(cfg.DocsURL, "quickstart guide", brandLight100) + " for helpful resources",
-				},
-			},
-			Outros: render.OutrosBlock{
-				Paragraphs: []string{
-					"When you're ready, hop into the platform and start exploring:",
 				},
 			},
 			Actions: []render.Action{{
@@ -436,18 +422,11 @@ var _ = RegisterEmailOperation(Operation[PasswordResetEmailRequest]{
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
 					"We received a request to reset your " + cfg.CompanyName + " password.",
-					"If that was you, no problem - just click the button below to set a new one:",
 				},
 			},
 			Actions: []render.Action{{
 				Button: render.Button{Text: "Password Reset", Link: resetURL},
 			}},
-			Outros: render.OutrosBlock{
-				Paragraphs: []string{
-					"This link will expire in 15 minutes to keep things secure.",
-					"If you didn't request a password reset, you can safely ignore this email.",
-				},
-			},
 		}
 	},
 	Config: func(cfg RuntimeEmailConfig, _ PasswordResetEmailRequest) RuntimeEmailConfig {
@@ -468,9 +447,8 @@ var _ = RegisterEmailOperation(Operation[PasswordResetSuccessRequest]{
 			Name:      req.FirstName,
 			Title:     "Your " + cfg.CompanyName + " password has been reset",
 			Intros: render.IntrosBlock{
-				Paragraphs: []string{
-					"Your password was successfully updated. If you made this change, you're all set - no further action needed.",
-					"If you didn't request a password reset, please contact our support team right away at " + cfg.SupportEmail + ". Keeping your account secure is our top priority.",
+				Unsafe: []template.HTML{
+					"If you didn't request a password reset, please contact our support team right away at " + supportEmailLink(cfg) + ". Keeping your account secure is our top priority.",
 				},
 			},
 		}
@@ -482,47 +460,58 @@ var _ = RegisterEmailOperation(Operation[PasswordResetSuccessRequest]{
 
 var _ = RegisterEmailOperation(Operation[SubscribeRequest]{
 	Op: SubscribeOp, Schema: subscribeSchema, Theme: baseTheme,
-	Description: "System email confirming a subscriber's early access signup",
-	Subject: func(cfg RuntimeEmailConfig, _ SubscribeRequest) string {
-		return "You've been subscribed to " + cfg.CompanyName
+	Description: "System email asking a trust center subscriber to confirm their email address",
+	Subject: func(cfg RuntimeEmailConfig, req SubscribeRequest) string {
+		return "Confirm your subscription to " + subscribeOrgName(cfg, req) + " updates"
 	},
 	Build: func(cfg RuntimeEmailConfig, req SubscribeRequest) render.ContentBody {
-		verifyURL := tokenURL(cfg.ProductURL, "/subscribe/verify", req.Token)
+		// fall back to the API-direct endpoint for subscribers with no trust center domain
+		verifyURL := req.VerifyURL
+		if verifyURL == "" {
+			verifyURL = tokenURL(cfg.APIURL, "/v1/subscribe/verify", req.Token)
+		}
+		orgName := subscribeOrgName(cfg, req)
 
 		return render.ContentBody{
-			Preheader: "You're In - Early Access Secured! Thanks for your interest in our beta program.",
+			Preheader: "Confirm your email to start receiving " + orgName + " trust center updates.",
 			Header:    defaultHeader(cfg),
 			Name:      req.FirstName,
-			Title:     "You're In - Early Access Secured!",
+			Title:     "Confirm your subscription",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
-					"We're thrilled to have you as part of our early community. Your interest means the world to us as we work to build a cutting-edge solution. We can't wait to share it with you!",
-					"Please confirm your email address to ensure you receive all important updates about your early access.",
+					"Once confirmed, we'll let you know whenever the trust center is updated - new posts, document changes, and subprocessor updates.",
 				},
 			},
 			Actions: []render.Action{{
-				Button: render.Button{Text: "Confirm Email", Link: verifyURL},
+				Button: render.Button{Text: "Confirm subscription", Link: verifyURL, Color: tcButtonColor, TextColor: tcButtonTextColor},
 			}},
-			Callout: &render.Callout{
-				Title: "What to Expect Next:",
-				Style: calloutStyle(),
-				Items: []template.HTML{
-					"You'll hear from us soon - We'll email you as soon as your spot is ready.",
-					"Early access to beta features - Get a first look at everything we're building.",
-					"Help shape the future - Your feedback will directly influence the product.",
-				},
-			},
 			Outros: render.OutrosBlock{
 				Paragraphs: []string{
-					"Thank you for being part of this journey - we're excited to have you on board!",
+					"If you didn't request this subscription, you won't receive any further messages.",
 				},
 			},
 		}
 	},
-	Config: func(cfg RuntimeEmailConfig, _ SubscribeRequest) RuntimeEmailConfig {
-		return applyCalloutBranding(cfg)
+	Config: func(cfg RuntimeEmailConfig, req SubscribeRequest) RuntimeEmailConfig {
+		// the unsubscribe link is the trust center's tokenized unsubscribe, built by the caller from the
+		// trust center domain (not the product URL, which points at the app console). The token is what
+		// actually resolves and unsubscribes the subscriber, unlike the theme's generic footer fallback
+		if req.UnsubscribeURL != "" {
+			cfg.UnsubscribeURL = req.UnsubscribeURL
+		}
+		return cfg
 	},
 })
+
+// subscribeOrgName returns the display name of the trust center the recipient subscribed to,
+// falling back to the system company name when the caller did not supply one
+func subscribeOrgName(cfg RuntimeEmailConfig, req SubscribeRequest) string {
+	if req.OrgName != "" {
+		return req.OrgName
+	}
+
+	return cfg.CompanyName
+}
 
 var _ = RegisterEmailOperation(Operation[VerifyBillingRequest]{
 	Op: VerifyBillingOp, Schema: verifyBillingSchema, Theme: baseTheme,
@@ -534,22 +523,21 @@ var _ = RegisterEmailOperation(Operation[VerifyBillingRequest]{
 		verifyURL := tokenURL(cfg.ProductURL, "/billing/verify", req.Token)
 
 		return render.ContentBody{
-			Preheader: "Verify Your Email Address",
+			Preheader: "Verify Your Billing Email Address",
 			Header:    defaultHeader(cfg),
 			Name:      req.FirstName,
 			Title:     "Verify Your Billing Email Address",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
 					"You're receiving this because the billing contact for your " + cfg.CompanyName + " account was just updated.",
-					"To help keep your account secure, please verify your email address by clicking the button below:",
 				},
 			},
 			Actions: []render.Action{{
 				Button: render.Button{Text: "Confirm Billing Email", Link: verifyURL},
 			}},
 			Outros: render.OutrosBlock{
-				Paragraphs: []string{
-					"If you run into any issues, feel free to reach out at " + cfg.SupportEmail + ".",
+				Unsafe: []template.HTML{
+					"If you run into any issues, feel free to reach out at " + supportEmailLink(cfg) + ".",
 				},
 			},
 		}
@@ -573,7 +561,7 @@ var _ = RegisterEmailOperation(Operation[TrustCenterNDARequestEmail]{
 			Title:     "You requested access to " + req.OrgName + "'s Trust Center",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
-					"To continue, please review and sign the Non-Disclosure Agreement (NDA). Once signed, you'll be granted access to protected Trust Center documents.",
+					"Once you've signed the Non-Disclosure Agreement (NDA), you'll have access to protected Trust Center documents.",
 				},
 			},
 			Actions: []render.Action{{
@@ -597,7 +585,7 @@ var _ = RegisterEmailOperation(Operation[TrustCenterNDASignedEmail]{
 			Title:     "Your NDA with " + req.OrgName + " has been signed",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
-					"Thank you for signing the Non-Disclosure Agreement (NDA). You now have access to " + req.OrgName + "'s protected Trust Center documents.",
+					"You now have access to " + req.OrgName + "'s protected Trust Center documents.",
 				},
 			},
 			Actions: []render.Action{{
@@ -630,17 +618,12 @@ var _ = RegisterEmailOperation(Operation[TrustCenterAuthEmail]{
 			Title:     "Access " + req.OrgName + "'s Trust Center",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
-					"You've been granted access to " + req.OrgName + "'s Trust Center. Click the button below to authenticate and view the available resources.",
+					"You requested access to " + req.OrgName + "'s protected Trust Center documents. You've already signed the NDA, so no new signature is needed.",
 				},
 			},
 			Actions: []render.Action{{
 				Button: render.Button{Text: "Access Trust Center", Link: req.AuthURL, Color: tcButtonColor, TextColor: tcButtonTextColor},
 			}},
-			Outros: render.OutrosBlock{
-				Paragraphs: []string{
-					"This authentication link provides secure, time-limited access and will expire after a short period for your security.",
-				},
-			},
 		}
 	},
 })
@@ -664,7 +647,6 @@ var _ = RegisterEmailOperation(Operation[TrustCenterNDAApprovalRequestEmail]{
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
 					"A new request to access protected Trust Center materials is pending your approval.",
-					"Please review the NDA request and approve or deny access as appropriate.",
 				},
 			},
 			Dictionary: render.Dictionary{
@@ -699,17 +681,12 @@ var questionnaireAuthEmail = RegisterEmailOperation(Operation[QuestionnaireAuthE
 			Title:     req.OrgName + " sent you an assessment to complete",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
-					req.OrgName + " has shared a form (" + req.AssessmentName + ") for you to complete. Click the button below to access it.",
+					req.OrgName + " has shared a form (" + req.AssessmentName + ") for you to complete.",
 				},
 			},
 			Actions: []render.Action{{
 				Button: render.Button{Text: "Access Questionnaire", Link: req.AuthURL, Color: tcButtonColor, TextColor: tcButtonTextColor},
 			}},
-			Outros: render.OutrosBlock{
-				Paragraphs: []string{
-					"This authentication link provides secure, time-limited access and will expire after a short period for your security.",
-				},
-			},
 		}
 	},
 	MessageOptions: func(cfg RuntimeEmailConfig, _ QuestionnaireAuthEmail) []newman.MessageOption {
@@ -736,7 +713,7 @@ var _ = RegisterEmailOperation(Operation[BillingEmailChangedEmail]{
 			Title:     "Billing Email Changed",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
-					"This email is to confirm that the billing email for " + req.OrgName + " has been changed.",
+					"The billing email for " + req.OrgName + " has been changed.",
 				},
 			},
 			Dictionary: render.Dictionary{
@@ -748,8 +725,7 @@ var _ = RegisterEmailOperation(Operation[BillingEmailChangedEmail]{
 			},
 			Outros: render.OutrosBlock{
 				Unsafe: []template.HTML{
-					"If you made this change, no further action is required.",
-					template.HTML(`If you did not make this change, please contact our support team immediately at <a href="mailto:` + cfg.SupportEmail + `" style="color:rgb(63,118,255);text-decoration-line:none" target="_blank">` + cfg.SupportEmail + `</a>.`), //nolint:gosec // SupportEmail is a system config value, not user input
+					"If you did not make this change, please contact our support team immediately at " + supportEmailLink(cfg) + ".",
 				},
 			},
 		}
@@ -772,7 +748,7 @@ var _ = RegisterEmailOperation(Operation[OrgDeletionNoticeEmail]{
 			Title:     "Organization Deletion Notice",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
-					"This email is to notify you that your organization " + req.OrgName + " has been scheduled for deletion.",
+					"Your organization " + req.OrgName + " has been scheduled for deletion.",
 				},
 			},
 			Dictionary: render.Dictionary{
@@ -781,18 +757,15 @@ var _ = RegisterEmailOperation(Operation[OrgDeletionNoticeEmail]{
 				},
 			},
 			Actions: []render.Action{{
-				Button: render.Button{Text: "Add Payment Method", Link: cfg.ProductURL + "/billing"},
+				Button: render.Button{Text: "Add Payment Method", Link: cfg.ProductURL + "/billing", Color: tcButtonColor, TextColor: tcButtonTextColor},
 			}},
 			Outros: render.OutrosBlock{
 				Paragraphs: []string{
-					"If you want to keep your account, please add a payment method before the scheduled deletion date.",
+					"To keep your organization, add a payment method before the scheduled deletion date.",
 					"If you believe this was done in error, please contact our support team immediately at " + cfg.SupportEmail + ".",
 				},
 			},
 		}
-	},
-	Config: func(cfg RuntimeEmailConfig, _ OrgDeletionNoticeEmail) RuntimeEmailConfig {
-		return applySystemBranding(cfg)
 	},
 })
 

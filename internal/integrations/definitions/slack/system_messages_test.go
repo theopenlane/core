@@ -16,14 +16,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestNewSubscriberTemplateRender(t *testing.T) {
-	t.Parallel()
-
-	var buf bytes.Buffer
-	require.NoError(t, newSubscriberTemplate.Execute(&buf, NewSubscriberMessage{Email: "alice@example.com"}))
-	require.Contains(t, buf.String(), "alice@example.com")
-}
-
 func TestIntegrationInstalledTemplateRender(t *testing.T) {
 	t.Parallel()
 

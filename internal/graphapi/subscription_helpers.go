@@ -2,6 +2,7 @@ package graphapi
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -31,6 +32,8 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 	if userID == "" {
 		return nil, fmt.Errorf("failed to get user ID from context: %w", auth.ErrNoAuthUser)
 	}
+
+	logx.FromContext(ctx).Debug().Str("user_id", userID).Bool("redis_enabled", r.subscriptionManager.HasRedis()).Msg("notification subscription: subscribing")
 
 	// Create a channel with the interface type for the subscription manager
 	internalChan := make(chan graphsubscriptions.Notification, graphsubscriptions.NotificationChannelBufferSize)
@@ -97,14 +100,31 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 				if !ok {
 					return
 				}
-				// Cast back to concrete type
-				if concreteNotif, ok := notif.(*generated.Notification); ok {
-					select {
-					case notifChan <- concreteNotif:
-					case <-ctx.Done():
-						r.subscriptionManager.Unsubscribe(userID, internalChan)
-						return
+
+				var concreteNotif *generated.Notification
+
+				switch v := notif.(type) {
+				case *generated.Notification:
+					// delivered directly by a local Publish() call
+					concreteNotif = v
+				case graphsubscriptions.RawNotification:
+					// delivered via redis from another process, still needs unmarshaling
+					var n generated.Notification
+					if err := json.Unmarshal(v.Payload, &n); err != nil {
+						logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal redis-delivered notification")
+						continue
 					}
+					concreteNotif = &n
+				default:
+					logx.FromContext(ctx).Warn().Msg("received notification of unexpected type, skipping")
+					continue
+				}
+
+				select {
+				case notifChan <- concreteNotif:
+				case <-ctx.Done():
+					r.subscriptionManager.Unsubscribe(userID, internalChan)
+					return
 				}
 			}
 		}

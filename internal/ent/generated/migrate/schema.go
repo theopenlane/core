@@ -8246,6 +8246,7 @@ var (
 		{Name: "company_domain", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "security_contact", Type: field.TypeString, Nullable: true},
 		{Name: "nda_approval_required", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "allow_subscribers", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "notify_subscribers_on_subprocessor_change", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "subprocessors_notified_at", Type: field.TypeTime, Nullable: true},
 		{Name: "status_page_url", Type: field.TypeString, Nullable: true, Size: 2048},
@@ -8262,25 +8263,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_center_settings_files_logo_file",
-				Columns:    []*schema.Column{TrustCenterSettingsColumns[31]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "trust_center_settings_files_favicon_file",
 				Columns:    []*schema.Column{TrustCenterSettingsColumns[32]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "trust_center_settings_files_hero_image_file",
+				Symbol:     "trust_center_settings_files_favicon_file",
 				Columns:    []*schema.Column{TrustCenterSettingsColumns[33]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "trust_center_settings_groups_nda_approver_group",
+				Symbol:     "trust_center_settings_files_hero_image_file",
 				Columns:    []*schema.Column{TrustCenterSettingsColumns[34]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_settings_groups_nda_approver_group",
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[35]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

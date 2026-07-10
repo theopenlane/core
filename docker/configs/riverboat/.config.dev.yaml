@@ -35,6 +35,16 @@ river:
     openlaneconfig:
       openlaneapihost: "http://host.docker.internal:17608"
       openlaneapitoken: "tolp_REDACTED"
+    createdomainscanworker:
+      config:
+        cloudflareaccountid: ""
+        cloudflareapikey: ""
+        enabled: false
+    retrievedomainscanworker:
+      config:
+        cloudflareaccountid: ""
+        cloudflareapikey: ""
+        enabled: false
     cleartrustcentercacheworker:
       config:
         enabled: false

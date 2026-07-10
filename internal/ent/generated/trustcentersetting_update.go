@@ -566,6 +566,26 @@ func (_u *TrustCenterSettingUpdate) ClearNdaApprovalRequired() *TrustCenterSetti
 	return _u
 }
 
+// SetAllowSubscribers sets the "allow_subscribers" field.
+func (_u *TrustCenterSettingUpdate) SetAllowSubscribers(v bool) *TrustCenterSettingUpdate {
+	_u.mutation.SetAllowSubscribers(v)
+	return _u
+}
+
+// SetNillableAllowSubscribers sets the "allow_subscribers" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableAllowSubscribers(v *bool) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetAllowSubscribers(*v)
+	}
+	return _u
+}
+
+// ClearAllowSubscribers clears the value of the "allow_subscribers" field.
+func (_u *TrustCenterSettingUpdate) ClearAllowSubscribers() *TrustCenterSettingUpdate {
+	_u.mutation.ClearAllowSubscribers()
+	return _u
+}
+
 // SetNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field.
 func (_u *TrustCenterSettingUpdate) SetNotifySubscribersOnSubprocessorChange(v bool) *TrustCenterSettingUpdate {
 	_u.mutation.SetNotifySubscribersOnSubprocessorChange(v)
@@ -1106,6 +1126,12 @@ func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.NdaApprovalRequiredCleared() {
 		_spec.ClearField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool)
+	}
+	if value, ok := _u.mutation.AllowSubscribers(); ok {
+		_spec.SetField(trustcentersetting.FieldAllowSubscribers, field.TypeBool, value)
+	}
+	if _u.mutation.AllowSubscribersCleared() {
+		_spec.ClearField(trustcentersetting.FieldAllowSubscribers, field.TypeBool)
 	}
 	if value, ok := _u.mutation.NotifySubscribersOnSubprocessorChange(); ok {
 		_spec.SetField(trustcentersetting.FieldNotifySubscribersOnSubprocessorChange, field.TypeBool, value)
@@ -1901,6 +1927,26 @@ func (_u *TrustCenterSettingUpdateOne) ClearNdaApprovalRequired() *TrustCenterSe
 	return _u
 }
 
+// SetAllowSubscribers sets the "allow_subscribers" field.
+func (_u *TrustCenterSettingUpdateOne) SetAllowSubscribers(v bool) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetAllowSubscribers(v)
+	return _u
+}
+
+// SetNillableAllowSubscribers sets the "allow_subscribers" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableAllowSubscribers(v *bool) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetAllowSubscribers(*v)
+	}
+	return _u
+}
+
+// ClearAllowSubscribers clears the value of the "allow_subscribers" field.
+func (_u *TrustCenterSettingUpdateOne) ClearAllowSubscribers() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearAllowSubscribers()
+	return _u
+}
+
 // SetNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field.
 func (_u *TrustCenterSettingUpdateOne) SetNotifySubscribersOnSubprocessorChange(v bool) *TrustCenterSettingUpdateOne {
 	_u.mutation.SetNotifySubscribersOnSubprocessorChange(v)
@@ -2471,6 +2517,12 @@ func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	}
 	if _u.mutation.NdaApprovalRequiredCleared() {
 		_spec.ClearField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool)
+	}
+	if value, ok := _u.mutation.AllowSubscribers(); ok {
+		_spec.SetField(trustcentersetting.FieldAllowSubscribers, field.TypeBool, value)
+	}
+	if _u.mutation.AllowSubscribersCleared() {
+		_spec.ClearField(trustcentersetting.FieldAllowSubscribers, field.TypeBool)
 	}
 	if value, ok := _u.mutation.NotifySubscribersOnSubprocessorChange(); ok {
 		_spec.SetField(trustcentersetting.FieldNotifySubscribersOnSubprocessorChange, field.TypeBool, value)

@@ -1,4 +1,4 @@
-h1:b1LLMhdaRDjXwjx0PazN9m5Q4XwBlPa1zAkZp0FKRsU=
+h1:h9kjmWsId/NDKfzFZ6zmb25LPoXWdosebPRts6g+I5E=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -151,3 +151,5 @@ h1:b1LLMhdaRDjXwjx0PazN9m5Q4XwBlPa1zAkZp0FKRsU=
 20260701043824_impersonation_event_target_user.sql h1:foXrbzAnmwksolPhz0eI5iX586FOu379c4btXA95OUk=
 20260706222051_add_responsibility_mixin_vuln_finding.sql h1:9sjCfZMFoLTbMfdwEax7kaulo26iDt3loioYp6v7nZg=
 20260706222055_add_responsibility_mixin_vuln_finding_history.sql h1:/73jIZlqDfP+kRuvgkWhqHseXWVa++UhXh7YlX9Uscg=
+20260709061742_tssubscriberupdates.sql h1:JtHbFCOOChDmimqpnGcM6yVpZjkSWDT4XNu0f8nzp4I=
+20260709061745_tssubscriberupdates_history.sql h1:sqSZr+yhAcU+SKA/pGqySe8EPaeS1a+nH083JbnNoys=

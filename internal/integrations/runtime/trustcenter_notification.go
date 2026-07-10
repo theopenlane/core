@@ -7,6 +7,8 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/httpsling/httpclient"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
@@ -14,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
@@ -31,6 +34,12 @@ const (
 	// trustCenterUpdateTemplateName is the display name of the reusable per-trust-center branded
 	// template used to render automated subscriber notifications
 	trustCenterUpdateTemplateName = "Trust Center Update"
+	// subprocessorNotificationSubject and the related copy back the subprocessor change system email
+	subprocessorNotificationSubject    = "Subprocessor update"
+	subprocessorNotificationPreheader  = "Review the latest changes to our subprocessor list"
+	subprocessorNotificationTitle      = "We've updated our subprocessors"
+	subprocessorNotificationIntro      = "The subprocessors we use have changed. You can review the full list anytime in our trust center."
+	subprocessorNotificationButtonText = "View subprocessors"
 )
 
 // SeedTrustCenterNotifications starts the durable trust center notification polling loop after runtime
@@ -62,6 +71,10 @@ func (r *Runtime) SeedTrustCenterNotifications(ctx context.Context) error {
 func (r *Runtime) HandleTrustCenterNotifications(ctx context.Context, _ operations.TrustCenterNotificationEnvelope) (int, error) {
 	now := time.Now()
 	cutoff := now.Add(-trustCenterNotificationGrace)
+	// the poller scans trust center settings and subprocessors across every organization, and the
+	// per-trust-center sends it dispatches must load branding from the trust center setting. The
+	// cross-org bypass rides on the caller (which gala persists across the durable dispatch boundary,
+	// unlike the privacy decision), matching the other scheduled pollers' system caller
 	systemCtx := auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), &auth.Caller{
 		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
 	})
@@ -127,6 +140,7 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff tim
 		Where(
 			trustcentersetting.NotifySubscribersOnSubprocessorChange(true),
 			trustcentersetting.TrustCenterIDNEQ(""),
+			trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentLive),
 		).
 		All(ctx)
 	if err != nil {
@@ -139,13 +153,15 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff tim
 	for _, setting := range settings {
 		floor := lo.FromPtr(setting.SubprocessorsNotifiedAt)
 
-		// include soft-deleted rows so subprocessor removals are detected via their bumped updated_at
+		// include soft-deleted rows so subprocessor removals are detected via their bumped updated_at, and
+		// eager-load each row's subprocessor for the vendor name and logo
 		changed, err := r.DB().TrustCenterSubprocessor.Query().
 			Where(
 				trustcentersubprocessor.TrustCenterID(setting.TrustCenterID),
 				trustcentersubprocessor.UpdatedAtGT(floor),
 				trustcentersubprocessor.UpdatedAtLTE(cutoff),
 			).
+			WithSubprocessor().
 			All(entx.SkipSoftDelete(ctx))
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", setting.TrustCenterID).Msg("failed querying changed subprocessors")
@@ -157,16 +173,9 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff tim
 			continue
 		}
 
-		latest := floor
-		ids := make([]string, 0, len(changed))
-
-		for _, sp := range changed {
-			ids = append(ids, sp.ID)
-
-			if sp.UpdatedAt.After(latest) {
-				latest = sp.UpdatedAt
-			}
-		}
+		latest := lo.MaxBy(changed, func(a, b *ent.TrustCenterSubprocessor) bool {
+			return a.UpdatedAt.After(b.UpdatedAt)
+		}).UpdatedAt
 
 		tc, customDomain, err := r.loadTrustCenter(ctx, setting.TrustCenterID)
 		if err != nil {
@@ -175,17 +184,49 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff tim
 			continue
 		}
 
-		content := trustCenterNotificationContent(
-			"Subprocessor update",
-			"We've updated our subprocessors",
-			[]string{"Our subprocessor list has changed. Review the latest information in our trust center."},
-			customDomain,
-			tc.Slug,
-		)
-		content["subprocessorIDs"] = ids
+		entries := subprocessorEntries(changed, floor)
 
-		if err := r.createAndDispatchTrustCenterCampaign(ctx, tc.OwnerID, setting.TrustCenterID, "Subprocessor update", content); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", setting.TrustCenterID).Msg("failed dispatching subprocessor notification")
+		// the subprocessor notification is a system email, not a customizable campaign template: send it
+		// directly to each active subscriber with their unsubscribe token, like every other system email
+		subscribers, err := r.activeTrustCenterSubscribers(ctx, setting.TrustCenterID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", setting.TrustCenterID).Msg("failed loading subscribers for subprocessor notification")
+
+			continue
+		}
+
+		base := subprocessorNotificationRequest(setting, customDomain, tc.Slug, entries)
+
+		// a dead logo URL renders a broken image, so fall back to the default logo when it does not load
+		if base.LogoURL != "" && !logoURLReachable(ctx, base.LogoURL) {
+			logx.FromContext(ctx).Warn().Str("trust_center_id", setting.TrustCenterID).Str("logo_url", base.LogoURL).Msg("trust center logo URL unreachable, using default logo")
+
+			base.LogoURL = ""
+		}
+
+		failedSends := 0
+
+		for _, sub := range subscribers {
+			req := base
+			req.RecipientInfo = emaildef.RecipientInfo{
+				Email:            sub.Email,
+				UnsubscribeToken: sub.Token,
+			}
+			// the direct system dispatch does not run template interpolation, so resolve the per-recipient
+			// unsubscribe link here with the subscriber's actual token
+			req.UnsubscribeURL = trustcenterurl.UnsubscribeURLWithToken(customDomain, tc.Slug, sub.Token)
+
+			if err := r.sendSubprocessorNotification(ctx, req); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", setting.TrustCenterID).Str("subscriber_id", sub.ID).Msg("failed sending subprocessor notification")
+
+				failedSends++
+			}
+		}
+
+		// a total send failure keeps the watermark so the window retries next poll; partial failures
+		// advance it to avoid re-sending to recipients that succeeded
+		if len(subscribers) > 0 && failedSends == len(subscribers) {
+			logx.FromContext(ctx).Error().Str("trust_center_id", setting.TrustCenterID).Int("failed_sends", failedSends).Msg("all subprocessor notification sends failed, keeping watermark for retry")
 
 			continue
 		}
@@ -298,7 +339,8 @@ func (r *Runtime) createAndDispatchTrustCenterCampaign(ctx context.Context, owne
 }
 
 // ensureTrustCenterUpdateTemplate returns the id of the trust center's reusable branded update
-// template, creating it on first use. Per-send content is supplied via campaign metadata
+// template (the customizable message-updates template), creating it on first use. Per-send content is
+// supplied via campaign metadata
 func (r *Runtime) ensureTrustCenterUpdateTemplate(ctx context.Context, ownerID, trustCenterID string) (string, error) {
 	existing, err := r.DB().EmailTemplate.Query().
 		Where(
@@ -331,4 +373,109 @@ func (r *Runtime) ensureTrustCenterUpdateTemplate(ctx context.Context, ownerID, 
 	}
 
 	return created.ID, nil
+}
+
+// subprocessorEntries maps the changed trust center subprocessor join rows into the structured change
+// entries rendered by the notification, reading the vendor name from each row's eager-loaded subprocessor
+// edge and labeling the kind of change
+func subprocessorEntries(changed []*ent.TrustCenterSubprocessor, floor time.Time) []emaildef.SubprocessorEntry {
+	return lo.FilterMap(changed, func(sp *ent.TrustCenterSubprocessor, _ int) (emaildef.SubprocessorEntry, bool) {
+		vendor := sp.Edges.Subprocessor
+		if vendor == nil {
+			return emaildef.SubprocessorEntry{}, false
+		}
+
+		return emaildef.SubprocessorEntry{
+			Name:   vendor.Name,
+			Change: subprocessorChange(sp, floor),
+		}, true
+	})
+}
+
+// subprocessorChange classifies a changed subprocessor join row relative to the last notification floor:
+// a soft-deleted row is a removal, a row created after the floor is an addition, otherwise an update
+func subprocessorChange(sp *ent.TrustCenterSubprocessor, floor time.Time) string {
+	switch {
+	case !sp.DeletedAt.IsZero():
+		return "Removed"
+	case sp.CreatedAt.After(floor):
+		return "Added"
+	default:
+		return "Updated"
+	}
+}
+
+// activeTrustCenterSubscribers returns the trust center's subscribers eligible for notifications:
+// active, email-verified, and not unsubscribed
+func (r *Runtime) activeTrustCenterSubscribers(ctx context.Context, trustCenterID string) ([]*ent.Subscriber, error) {
+	return r.DB().Subscriber.Query().
+		Where(
+			subscriber.TrustCenterID(trustCenterID),
+			subscriber.Active(true),
+			subscriber.VerifiedEmail(true),
+			subscriber.Unsubscribed(false),
+		).
+		All(ctx)
+}
+
+// subprocessorNotificationRequest builds the shared subprocessor notification body for a trust center:
+// the controlled content plus the trust center branding overlay (logo, colors, company name) sourced
+// from the setting. Empty branding values fall through to the Openlane system defaults at render time.
+// RecipientInfo is set per subscriber by the caller
+func subprocessorNotificationRequest(setting *ent.TrustCenterSetting, customDomain, slug string, entries []emaildef.SubprocessorEntry) emaildef.SubprocessorNotificationRequest {
+	return emaildef.SubprocessorNotificationRequest{
+		Subject:             subprocessorNotificationSubject,
+		Preheader:           subprocessorNotificationPreheader,
+		Title:               subprocessorNotificationTitle,
+		Intros:              []string{subprocessorNotificationIntro},
+		Subprocessors:       entries,
+		ButtonText:          subprocessorNotificationButtonText,
+		ButtonLink:          trustcenterurl.BuildURL(customDomain, slug),
+		CompanyName:         setting.CompanyName,
+		LogoURL:             lo.FromPtr(setting.LogoRemoteURL),
+		PrimaryColor:        setting.PrimaryColor,
+		ButtonColor:         setting.AccentColor,
+		BodyBackgroundColor: setting.BackgroundColor,
+		CardBackgroundColor: setting.SecondaryBackgroundColor,
+		TextColor:           setting.ForegroundColor,
+	}
+}
+
+// sendSubprocessorNotification dispatches the subprocessor notification to a single recipient as a
+// runtime system email, mirroring how subscribe and other system emails are sent
+func (r *Runtime) sendSubprocessorNotification(ctx context.Context, req emaildef.SubprocessorNotificationRequest) error {
+	config, err := json.Marshal(req)
+	if err != nil {
+		return err
+	}
+
+	_, err = r.Dispatch(ctx, operations.DispatchRequest{
+		DefinitionID: emaildef.DefinitionID.ID(),
+		Operation:    emaildef.SubprocessorNotificationOp.Name(),
+		Config:       config,
+		RunType:      enums.IntegrationRunTypeScheduled,
+		Runtime:      true,
+	})
+
+	return err
+}
+
+const logoCheckTimeout = 5 * time.Second
+
+// logoURLReachable reports whether a logo URL currently serves a successful response. Only the status is
+// inspected (the body is discarded), so a dead URL can fall back to the default logo instead of rendering
+// a broken image
+func logoURLReachable(ctx context.Context, rawURL string) bool {
+	resp, err := httpsling.SendWithContext(ctx,
+		httpsling.Get(),
+		httpsling.URL(rawURL),
+		httpsling.Client(httpclient.Timeout(logoCheckTimeout)),
+	)
+	if err != nil {
+		return false
+	}
+
+	defer resp.Body.Close()
+
+	return httpsling.IsSuccess(resp)
 }

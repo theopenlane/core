@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
@@ -37,7 +38,8 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
 	ownerCtx := privacy.DecisionContext(owner.UserCtx, privacy.Allow)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
-	setting := suite.db.OrganizationSetting.Create().SaveX(ownerCtx)
+	setting, err := suite.db.OrganizationSetting.Create().Save(ownerCtx)
+	require.NoError(t, err)
 
 	org := suite.db.Organization.Create().SetInput(ent.CreateOrganizationInput{
 		Name:      ulids.New().String(),

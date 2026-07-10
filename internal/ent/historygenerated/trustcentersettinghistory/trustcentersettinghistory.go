@@ -86,6 +86,8 @@ const (
 	FieldSecurityContact = "security_contact"
 	// FieldNdaApprovalRequired holds the string denoting the nda_approval_required field in the database.
 	FieldNdaApprovalRequired = "nda_approval_required"
+	// FieldAllowSubscribers holds the string denoting the allow_subscribers field in the database.
+	FieldAllowSubscribers = "allow_subscribers"
 	// FieldNotifySubscribersOnSubprocessorChange holds the string denoting the notify_subscribers_on_subprocessor_change field in the database.
 	FieldNotifySubscribersOnSubprocessorChange = "notify_subscribers_on_subprocessor_change"
 	// FieldSubprocessorsNotifiedAt holds the string denoting the subprocessors_notified_at field in the database.
@@ -134,6 +136,7 @@ var Columns = []string{
 	FieldCompanyDomain,
 	FieldSecurityContact,
 	FieldNdaApprovalRequired,
+	FieldAllowSubscribers,
 	FieldNotifySubscribersOnSubprocessorChange,
 	FieldSubprocessorsNotifiedAt,
 	FieldNdaApproverGroupID,
@@ -171,6 +174,8 @@ var (
 	DefaultRemoveBranding bool
 	// DefaultNdaApprovalRequired holds the default value on creation for the "nda_approval_required" field.
 	DefaultNdaApprovalRequired bool
+	// DefaultAllowSubscribers holds the default value on creation for the "allow_subscribers" field.
+	DefaultAllowSubscribers bool
 	// DefaultNotifySubscribersOnSubprocessorChange holds the default value on creation for the "notify_subscribers_on_subprocessor_change" field.
 	DefaultNotifySubscribersOnSubprocessorChange bool
 	// DefaultID holds the default value on creation for the "id" field.
@@ -382,6 +387,11 @@ func BySecurityContact(opts ...sql.OrderTermOption) OrderOption {
 // ByNdaApprovalRequired orders the results by the nda_approval_required field.
 func ByNdaApprovalRequired(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNdaApprovalRequired, opts...).ToFunc()
+}
+
+// ByAllowSubscribers orders the results by the allow_subscribers field.
+func ByAllowSubscribers(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAllowSubscribers, opts...).ToFunc()
 }
 
 // ByNotifySubscribersOnSubprocessorChange orders the results by the notify_subscribers_on_subprocessor_change field.

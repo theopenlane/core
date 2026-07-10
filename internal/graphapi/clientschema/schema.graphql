@@ -17881,6 +17881,10 @@ input CreateTrustCenterSettingInput {
 	"""
 	ndaApprovalRequired: Boolean
 	"""
+	whether the trust center accepts new subscriber registrations; when false, subscriber creation for the trust center is blocked
+	"""
+	allowSubscribers: Boolean
+	"""
 	whether to email trust center subscribers when subprocessors are added, updated, or removed
 	"""
 	notifySubscribersOnSubprocessorChange: Boolean
@@ -89403,6 +89407,10 @@ type TrustCenterSetting implements Node {
 	"""
 	ndaApprovalRequired: Boolean
 	"""
+	whether the trust center accepts new subscriber registrations; when false, subscriber creation for the trust center is blocked
+	"""
+	allowSubscribers: Boolean
+	"""
 	whether to email trust center subscribers when subprocessors are added, updated, or removed
 	"""
 	notifySubscribersOnSubprocessorChange: Boolean
@@ -90060,6 +90068,13 @@ input TrustCenterSettingWhereInput {
 	ndaApprovalRequiredNEQ: Boolean
 	ndaApprovalRequiredIsNil: Boolean
 	ndaApprovalRequiredNotNil: Boolean
+	"""
+	allow_subscribers field predicates
+	"""
+	allowSubscribers: Boolean
+	allowSubscribersNEQ: Boolean
+	allowSubscribersIsNil: Boolean
+	allowSubscribersNotNil: Boolean
 	"""
 	notify_subscribers_on_subprocessor_change field predicates
 	"""
@@ -99319,6 +99334,11 @@ input UpdateTrustCenterSettingInput {
 	"""
 	ndaApprovalRequired: Boolean
 	clearNdaApprovalRequired: Boolean
+	"""
+	whether the trust center accepts new subscriber registrations; when false, subscriber creation for the trust center is blocked
+	"""
+	allowSubscribers: Boolean
+	clearAllowSubscribers: Boolean
 	"""
 	whether to email trust center subscribers when subprocessors are added, updated, or removed
 	"""

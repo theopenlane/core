@@ -3,7 +3,10 @@
 // (e.g. tokenized unsubscribe links) without an import cycle
 package trustcenterurl
 
-import "fmt"
+import (
+	"fmt"
+	"net/url"
+)
 
 // Config holds the trust center URL-building configuration, set once at server startup
 type Config struct {
@@ -16,9 +19,6 @@ type Config struct {
 	// CacheRefreshScheme is the URL scheme (http in tests, https otherwise)
 	CacheRefreshScheme string
 }
-
-// unsubscribePath is the trust center page where subscribers manage unsubscribes
-const unsubscribePath = "/unsubscribe"
 
 var config Config
 
@@ -56,14 +56,39 @@ func BuildURL(customDomain, slug string) string {
 	return ""
 }
 
-// UnsubscribeURL builds the tokenized unsubscribe link for a trust center. The {{ .unsubscribeToken }}
-// placeholder is interpolated per recipient at email render time. Returns empty when the trust center
-// URL cannot be resolved
-func UnsubscribeURL(customDomain, slug string) string {
+// unsubscribePath and subscribeVerifyPath are the trust center frontend routes tokenized links land on
+const (
+	unsubscribePath     = "/unsubscribe"
+	subscribeVerifyPath = "/subscribe/verify"
+)
+
+// tokenizedURL appends a tokenized path to the trust center base URL; the token value must already be
+// encoded. Returns empty when the trust center URL cannot resolve
+func tokenizedURL(customDomain, slug, path, token string) string {
 	base := BuildURL(customDomain, slug)
 	if base == "" {
 		return ""
 	}
 
-	return fmt.Sprintf("%s%s?token={{ .unsubscribeToken }}", base, unsubscribePath)
+	return fmt.Sprintf("%s%s?token=%s", base, path, token)
+}
+
+// UnsubscribeURL builds the tokenized unsubscribe link for a trust center. The {{ .unsubscribeToken }}
+// placeholder is interpolated per recipient at email render time. Returns empty when the trust center
+// URL cannot be resolved
+func UnsubscribeURL(customDomain, slug string) string {
+	return tokenizedURL(customDomain, slug, unsubscribePath, "{{ .unsubscribeToken }}")
+}
+
+// UnsubscribeURLWithToken builds the unsubscribe link for a trust center with a concrete per-recipient
+// token. It is used by direct system sends that do not run template interpolation (unlike campaign
+// sends, which carry the {{ .unsubscribeToken }} placeholder). Returns empty when the URL cannot resolve
+func UnsubscribeURLWithToken(customDomain, slug, token string) string {
+	return tokenizedURL(customDomain, slug, unsubscribePath, url.QueryEscape(token))
+}
+
+// SubscribeVerifyURLWithToken builds the trust-center-domain subscription confirmation link for a concrete
+// per-recipient token; empty when the trust center URL cannot resolve
+func SubscribeVerifyURLWithToken(customDomain, slug, token string) string {
+	return tokenizedURL(customDomain, slug, subscribeVerifyPath, url.QueryEscape(token))
 }
