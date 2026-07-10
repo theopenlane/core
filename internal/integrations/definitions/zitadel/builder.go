@@ -20,7 +20,7 @@ func Builder() registry.Builder {
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/zitadel/overview",
 				Tags:        []string{"directory"},
 				Active:      false,
-				Visible:     false,
+				Visible:     true,
 			},
 			UserInput: &types.UserInputRegistration{
 				Schema: jsonx.SchemaFrom[UserInput](),
