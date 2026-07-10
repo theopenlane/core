@@ -72,7 +72,7 @@ func TestOrganizationsDeletedTemplateRender(t *testing.T) {
 	require.NoError(t, orgDeletionReminderTemplate.Execute(&buf, input))
 
 	out := buf.String()
-	require.Contains(t, out, "Deleted organizations: 3")
+	require.Contains(t, out, "Number of organizations: 3")
 	require.Contains(t, out, "- Github Inc")
 	require.Contains(t, out, "- Openlane Inc")
 }
