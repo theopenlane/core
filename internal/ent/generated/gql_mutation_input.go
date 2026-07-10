@@ -28440,6 +28440,7 @@ type CreateTrustCenterSettingInput struct {
 	CompanyDomain                         *string                       `json:"company_domain,omitempty"`
 	SecurityContact                       *string                       `json:"security_contact,omitempty"`
 	NdaApprovalRequired                   *bool                         `json:"nda_approval_required,omitempty"`
+	AllowSubscribers                      *bool                         `json:"allow_subscribers,omitempty"`
 	NotifySubscribersOnSubprocessorChange *bool                         `json:"notify_subscribers_on_subprocessor_change,omitempty"`
 	StatusPageURL                         *string                       `json:"status_page_url,omitempty"`
 	BlockedGroupIDs                       []string
@@ -28582,6 +28583,8 @@ type UpdateTrustCenterSettingInput struct {
 	SecurityContact                            *string `json:"security_contact,omitempty"`
 	ClearNdaApprovalRequired                   bool
 	NdaApprovalRequired                        *bool `json:"nda_approval_required,omitempty"`
+	ClearAllowSubscribers                      bool
+	AllowSubscribers                           *bool `json:"allow_subscribers,omitempty"`
 	ClearNotifySubscribersOnSubprocessorChange bool
 	NotifySubscribersOnSubprocessorChange      *bool `json:"notify_subscribers_on_subprocessor_change,omitempty"`
 	ClearStatusPageURL                         bool
