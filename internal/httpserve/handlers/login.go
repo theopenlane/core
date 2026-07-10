@@ -27,6 +27,8 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleLoginSuccessRequest, models.ExampleLoginSuccessResponse, openapi.Registry)
 	if err != nil {
 		metrics.RecordLogin(false)
+		logx.FromContext(ctx.Request().Context()).Warn().Err(err).Msg("invalid login request")
+
 		return h.InvalidInput(ctx, err, openapi)
 	}
 

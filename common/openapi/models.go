@@ -141,6 +141,15 @@ func (r *LoginReply) ExampleResponse() any {
 func (r *LoginRequest) Validate() error {
 	r.Username = strings.TrimSpace(r.Username)
 	r.Password = strings.TrimSpace(r.Password)
+	r.Reason = strings.TrimSpace(r.Reason)
+	if r.Reason != "" {
+		reason, err := url.QueryUnescape(r.Reason)
+		if err != nil {
+			return err
+		}
+
+		r.Reason = reason
+	}
 
 	switch {
 	case r.Username == "":
