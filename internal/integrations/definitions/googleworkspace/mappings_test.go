@@ -121,6 +121,28 @@ func TestGoogleWorkspaceMappingsFallbacks(t *testing.T) {
 	assert.Equal(t, "", accountMapped["organizationUnit"])
 	assert.Equal(t, "ACTIVE", accountMapped["status"])
 	assert.Equal(t, "DISABLED", accountMapped["mfaState"])
+
+	membershipRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, integrationgenerated.IntegrationMappingSchemaDirectoryMembership).MapExpr, types.MappingEnvelope{
+		Resource: "eng@example.com",
+		Payload:  json.RawMessage(`{"email":"norole@example.com","type":"USER","id":"member-norole"}`),
+	})
+	require.NoError(t, err)
+
+	membershipMapped, err := jsonx.ToMap(membershipRaw)
+	require.NoError(t, err)
+
+	assert.Equal(t, "MEMBER", membershipMapped["role"], "missing role must fall back to MEMBER so the row survives enum validation")
+
+	emptyRoleRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, integrationgenerated.IntegrationMappingSchemaDirectoryMembership).MapExpr, types.MappingEnvelope{
+		Resource: "eng@example.com",
+		Payload:  json.RawMessage(`{"email":"emptyrole@example.com","role":"","type":"USER","id":"member-emptyrole"}`),
+	})
+	require.NoError(t, err)
+
+	emptyRoleMapped, err := jsonx.ToMap(emptyRoleRaw)
+	require.NoError(t, err)
+
+	assert.Equal(t, "MEMBER", emptyRoleMapped["role"], "empty role must fall back to MEMBER so the row survives enum validation")
 }
 
 // mappingSpecForSchema returns the mapping override for one schema from the Google Workspace defaults

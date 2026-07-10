@@ -59,8 +59,8 @@ func TestIdentityResolution(t *testing.T) {
 		assert.Check(t, is.Equal("800-867-5309", holder.PhoneNumber))
 		assert.Check(t, is.Equal("1234871001", holder.ExternalUserID))
 
-		// we do not sync email aliases from directory accounts, this should be empty
-		assert.Check(t, is.Len(holder.EmailAliases, 0))
+		// confirmed aliases from the directory account are synced onto the holder
+		assert.Check(t, is.Contains(holder.EmailAliases, "single-create@mail.testresolution.io"))
 
 		(&Cleanup[*generated.DirectoryAccountDeleteOne]{client: suite.client.db.DirectoryAccount, ID: da.ID}).MustDelete(ctx, t)
 		(&Cleanup[*generated.IdentityHolderDeleteOne]{client: suite.client.db.IdentityHolder, ID: holder.ID}).MustDelete(ctx, t)
@@ -110,11 +110,60 @@ func TestIdentityResolution(t *testing.T) {
 
 		holder, err := suite.client.db.IdentityHolder.Get(ctx, holderID)
 		assert.NilError(t, err)
-		assert.Check(t, is.Len(holder.EmailAliases, 0))
+		assert.Check(t, is.Contains(holder.EmailAliases, "single-create@mail.testresolution.io"))
 
 		// ensure phone number, external id are not set from the non-primary record
 		assert.Check(t, holder.PhoneNumber == "")
 		assert.Check(t, holder.ExternalUserID == da1.ExternalID)
+
+		(&Cleanup[*generated.DirectoryAccountDeleteOne]{client: suite.client.db.DirectoryAccount, IDs: []string{da1.ID, da2.ID}}).MustDelete(ctx, t)
+		(&Cleanup[*generated.IdentityHolderDeleteOne]{client: suite.client.db.IdentityHolder, ID: holderID}).MustDelete(ctx, t)
+	})
+
+	t.Run("alias email match links to existing holder", func(t *testing.T) {
+		primaryEmail := "alias-primary@testresolution.io"
+		aliasEmail := "alias-confirmed@testresolution.io"
+
+		da1 := (&DirectoryAccountBuilder{
+			client:         suite.client,
+			CanonicalEmail: &primaryEmail,
+			DisplayName:    "Alias Match User",
+			DirectoryName:  lo.ToPtr("googleworkspace"),
+			PrimarySource:  true,
+			Status:         enums.DirectoryAccountStatusActive,
+			OwnerID:        sharedTestUser1.OrganizationID,
+		}).MustNew(ctx, t)
+
+		irSetup.Runtime.WaitIdle()
+
+		linked1, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da1.ID)
+		assert.NilError(t, err)
+
+		holderID := *linked1.IdentityHolderID
+
+		// second account has a different canonical email but carries the first
+		// account's canonical email as a confirmed alias, so the cascade should
+		// match through the alias instead of creating a new holder
+		da2 := (&DirectoryAccountBuilder{
+			client:         suite.client,
+			CanonicalEmail: &aliasEmail,
+			DisplayName:    "Alias Match User (GitHub)",
+			DirectoryName:  lo.ToPtr("github"),
+			Status:         enums.DirectoryAccountStatusActive,
+			EmailAliases:   []string{primaryEmail},
+			OwnerID:        sharedTestUser1.OrganizationID,
+		}).MustNew(ctx, t)
+
+		irSetup.Runtime.WaitIdle()
+
+		linked2, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da2.ID)
+		assert.NilError(t, err)
+		assert.Assert(t, linked2.IdentityHolderID != nil)
+		assert.Check(t, is.Equal(holderID, *linked2.IdentityHolderID))
+
+		holder, err := suite.client.db.IdentityHolder.Get(ctx, holderID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Contains(holder.EmailAliases, aliasEmail))
 
 		(&Cleanup[*generated.DirectoryAccountDeleteOne]{client: suite.client.db.DirectoryAccount, IDs: []string{da1.ID, da2.ID}}).MustDelete(ctx, t)
 		(&Cleanup[*generated.IdentityHolderDeleteOne]{client: suite.client.db.IdentityHolder, ID: holderID}).MustDelete(ctx, t)

@@ -788,7 +788,7 @@ var (
 		{Name: "directory_sync_run_id", Type: field.TypeString},
 		{Name: "directory_account_id", Type: field.TypeString},
 		{Name: "directory_group_id", Type: field.TypeString},
-		{Name: "role", Type: field.TypeEnum, Nullable: true, Enums: []string{"MEMBER", "MANAGER", "OWNER"}, Default: "MEMBER"},
+		{Name: "role", Type: field.TypeEnum, Nullable: true, Enums: []string{"MEMBER", "MAINTAINER", "MANAGER", "OWNER"}, Default: "MEMBER"},
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "directory_name", Type: field.TypeString, Nullable: true},
 		{Name: "first_seen_at", Type: field.TypeTime, Nullable: true},

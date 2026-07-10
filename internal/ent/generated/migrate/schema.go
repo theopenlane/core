@@ -1732,7 +1732,7 @@ var (
 		{Name: "environment_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
 		{Name: "directory_instance_id", Type: field.TypeString, Nullable: true},
-		{Name: "role", Type: field.TypeEnum, Nullable: true, Enums: []string{"MEMBER", "MANAGER", "OWNER"}, Default: "MEMBER"},
+		{Name: "role", Type: field.TypeEnum, Nullable: true, Enums: []string{"MEMBER", "MAINTAINER", "MANAGER", "OWNER"}, Default: "MEMBER"},
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "directory_name", Type: field.TypeString, Nullable: true},
 		{Name: "first_seen_at", Type: field.TypeTime, Nullable: true},

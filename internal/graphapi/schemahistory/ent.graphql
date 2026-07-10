@@ -9641,6 +9641,7 @@ DirectoryMembershipHistoryDirectoryMembershipRole is enum for the field role
 """
 enum DirectoryMembershipHistoryDirectoryMembershipRole @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryMembershipRole") {
   MEMBER
+  MAINTAINER
   MANAGER
   OWNER
 }

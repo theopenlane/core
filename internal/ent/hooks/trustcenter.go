@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/controls"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
@@ -179,10 +178,10 @@ func HookTrustCenter() ent.Hook {
 				return nil, ErrInternalServerError
 			}
 
-			// seed the customizable message-updates email template so every trust center presents a
-			// base template editors can customize; subscriber and subprocessor messages remain fixed
-			// system sends and are not seeded here
-			if err := seedTrustCenterUpdateTemplate(ctx, m.Client(), orgID, id); err != nil {
+			// seed the customizable update email template so every trust center presents a
+			// base template editors can customize before the first send; subscriber and
+			// subprocessor messages remain fixed system sends and are not seeded here
+			if _, err := emaildef.EnsureTrustCenterUpdateTemplate(privacy.DecisionContext(ctx, privacy.Allow), m.Client(), orgID, id); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("failed seeding trust center update email template")
 
 				return nil, err
@@ -246,39 +245,6 @@ This is the default overview for your Trust Center. You can customize this by ed
 var (
 	defaultWatermarkText = "Controlled Copy — Watermark Required"
 )
-
-// trustCenterUpdateTemplateName is the display name of the seeded customizable message-updates template
-const trustCenterUpdateTemplateName = "Trust Center Update"
-
-// seedTrustCenterUpdateTemplate creates the customizable branded message-updates template for a new
-// trust center if one does not already exist, so editors can customize it before the first send. The
-// template is keyed by the branded message catalog operation and reused by automated update campaigns
-func seedTrustCenterUpdateTemplate(ctx context.Context, client *generated.Client, ownerID, trustCenterID string) error {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	exists, err := client.EmailTemplate.Query().
-		Where(
-			emailtemplate.OwnerID(ownerID),
-			emailtemplate.TrustCenterID(trustCenterID),
-			emailtemplate.Key(emaildef.BrandedMessageOp.Name()),
-		).
-		Exist(allowCtx)
-	if err != nil {
-		return err
-	}
-
-	if exists {
-		return nil
-	}
-
-	return client.EmailTemplate.Create().
-		SetOwnerID(ownerID).
-		SetTrustCenterID(trustCenterID).
-		SetName(trustCenterUpdateTemplateName).
-		SetKey(emaildef.BrandedMessageOp.Name()).
-		SetTemplateContext(enums.TemplateContextCampaignRecipient).
-		Exec(allowCtx)
-}
 
 // HookTrustCenterDelete runs on trust center delete mutations
 func HookTrustCenterDelete() ent.Hook {

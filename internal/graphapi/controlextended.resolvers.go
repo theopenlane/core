@@ -75,7 +75,7 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 	if controls.FilterByStandard(filters) {
 		res, err := r.cloneControlsFromStandard(ctx, filters, input.ProgramID)
 		if err != nil {
-			return nil, parseRequestError(ctx, generated.ErrPermissionDenied, common.Action{Action: common.ActionCreate, Object: "control"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
 		}
 
 		return &model.ControlBulkCreatePayload{

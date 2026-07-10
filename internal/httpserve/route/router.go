@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/internal/httpserve/common"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/pkg/middleware/cors"
 	"github.com/theopenlane/core/pkg/middleware/impersonation"
 	"github.com/theopenlane/core/pkg/middleware/mime"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
@@ -335,6 +336,10 @@ type Config struct {
 	SimpleHandler func(echo.Context) error // For handlers that don't need OpenAPI context
 	// ExcludeFromOAS skips publishing this route in the OpenAPI specification.
 	ExcludeFromOAS bool
+	// PublicCORS serves the route with a wildcard, credential-less CORS policy, for fully public
+	// token-authorized endpoints called cross-origin from arbitrary domains (e.g. trust centers);
+	// only supported for static paths (no path parameters)
+	PublicCORS bool
 }
 
 // registrationContext is a special echo.Context implementation used during OpenAPI registration
@@ -455,6 +460,10 @@ func (r *Router) AddV1HandlerRoute(config Config) error {
 		return err
 	}
 
+	if config.PublicCORS {
+		cors.RegisterPublicPath("/v1" + config.Path)
+	}
+
 	if !config.ExcludeFromOAS {
 		// Add operation to OpenAPI schema (convert Echo path syntax to OpenAPI syntax)
 		openAPIPath := convertEchoPathToOpenAPI("/v1" + config.Path)
@@ -530,6 +539,10 @@ func (r *Router) AddUnversionedHandlerRoute(config Config) error {
 	_, err := grp.AddRoute(route)
 	if err != nil {
 		return err
+	}
+
+	if config.PublicCORS {
+		cors.RegisterPublicPath(config.Path)
 	}
 
 	// Add operation to OpenAPI schema (convert Echo path syntax to OpenAPI syntax)
