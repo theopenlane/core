@@ -145,17 +145,17 @@ func TestPreviewEmailTemplateGate(t *testing.T) {
 	tcOrg := createFreshOrgWithTrustCenter(t)
 
 	// the seeded trust center update template is previewable so editors can see their customizations
-	resp, err := suite.client.api.PreviewEmailTemplate(tcOrg.owner.UserCtx, emaildef.TrustCenterUpdateTemplate, nil)
+	resp, err := suite.client.api.PreviewEmailTemplate(tcOrg.owner.UserCtx, emaildef.TrustCenterUpdateTemplate, map[string]any{})
 	assert.NilError(t, err)
 	assert.Check(t, resp.PreviewEmailTemplate != "")
 
 	// customer-selectable catalog entries remain previewable
-	resp, err = suite.client.api.PreviewEmailTemplate(tcOrg.owner.UserCtx, emaildef.BrandedMessageOp.Name(), nil)
+	resp, err = suite.client.api.PreviewEmailTemplate(tcOrg.owner.UserCtx, emaildef.BrandedMessageOp.Name(), map[string]any{})
 	assert.NilError(t, err)
 	assert.Check(t, resp.PreviewEmailTemplate != "")
 
 	// internal system emails are not previewable
-	_, err = suite.client.api.PreviewEmailTemplate(tcOrg.owner.UserCtx, emaildef.SubprocessorNotificationOp.Name(), nil)
+	_, err = suite.client.api.PreviewEmailTemplate(tcOrg.owner.UserCtx, emaildef.SubprocessorNotificationOp.Name(), map[string]any{})
 	assert.ErrorContains(t, err, "not a customer-selectable")
 }
 
