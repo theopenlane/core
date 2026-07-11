@@ -209,6 +209,7 @@ func (a Asset) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(a, Scan{}),
 		defaultEdgeFromWithPagination(a, Entity{}),
 		defaultEdgeFromWithPagination(a, Platform{}),
+		defaultEdgeFromWithPagination(a, SystemDetail{}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: a,
 			name:       "out_of_scope_platforms",

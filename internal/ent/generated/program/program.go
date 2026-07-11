@@ -104,8 +104,8 @@ const (
 	EdgeNarratives = "narratives"
 	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
 	EdgeActionPlans = "action_plans"
-	// EdgeSystemDetail holds the string denoting the system_detail edge name in mutations.
-	EdgeSystemDetail = "system_detail"
+	// EdgeSystemDetails holds the string denoting the system_details edge name in mutations.
+	EdgeSystemDetails = "system_details"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
 	EdgeUsers = "users"
 	// EdgeProgramOwner holds the string denoting the program_owner edge name in mutations.
@@ -207,13 +207,11 @@ const (
 	// ActionPlansInverseTable is the table name for the ActionPlan entity.
 	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
 	ActionPlansInverseTable = "action_plans"
-	// SystemDetailTable is the table that holds the system_detail relation/edge.
-	SystemDetailTable = "system_details"
-	// SystemDetailInverseTable is the table name for the SystemDetail entity.
+	// SystemDetailsTable is the table that holds the system_details relation/edge. The primary key declared below.
+	SystemDetailsTable = "program_system_details"
+	// SystemDetailsInverseTable is the table name for the SystemDetail entity.
 	// It exists in this package in order to avoid circular dependency with the "systemdetail" package.
-	SystemDetailInverseTable = "system_details"
-	// SystemDetailColumn is the table column denoting the system_detail relation/edge.
-	SystemDetailColumn = "program_id"
+	SystemDetailsInverseTable = "system_details"
 	// UsersTable is the table that holds the users relation/edge. The primary key declared below.
 	UsersTable = "program_memberships"
 	// UsersInverseTable is the table name for the User entity.
@@ -316,6 +314,9 @@ var (
 	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
 	// primary key for the action_plans relation (M2M).
 	ActionPlansPrimaryKey = []string{"program_id", "action_plan_id"}
+	// SystemDetailsPrimaryKey and SystemDetailsColumn2 are the table columns denoting the
+	// primary key for the system_details relation (M2M).
+	SystemDetailsPrimaryKey = []string{"program_id", "system_detail_id"}
 	// UsersPrimaryKey and UsersColumn2 are the table columns denoting the
 	// primary key for the users relation (M2M).
 	UsersPrimaryKey = []string{"user_id", "program_id"}
@@ -740,10 +741,17 @@ func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// BySystemDetailField orders the results by system_detail field.
-func BySystemDetailField(field string, opts ...sql.OrderTermOption) OrderOption {
+// BySystemDetailsCount orders the results by system_details count.
+func BySystemDetailsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newSystemDetailStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborsCount(s, newSystemDetailsStep(), opts...)
+	}
+}
+
+// BySystemDetails orders the results by system_details terms.
+func BySystemDetails(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSystemDetailsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -900,11 +908,11 @@ func newActionPlansStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, ActionPlansTable, ActionPlansPrimaryKey...),
 	)
 }
-func newSystemDetailStep() *sqlgraph.Step {
+func newSystemDetailsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(SystemDetailInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2O, false, SystemDetailTable, SystemDetailColumn),
+		sqlgraph.To(SystemDetailsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, SystemDetailsTable, SystemDetailsPrimaryKey...),
 	)
 }
 func newUsersStep() *sqlgraph.Step {

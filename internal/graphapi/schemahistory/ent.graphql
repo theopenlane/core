@@ -35278,14 +35278,6 @@ type SystemDetailHistory implements Node {
   """
   ownerID: String
   """
-  optional program anchor for this system detail
-  """
-  programID: String
-  """
-  optional platform anchor for this system detail
-  """
-  platformID: String
-  """
   system name used in OSCAL metadata
   """
   systemName: String!
@@ -35558,42 +35550,6 @@ input SystemDetailHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  program_id field predicates
-  """
-  programID: String
-  programIDNEQ: String
-  programIDIn: [String!]
-  programIDNotIn: [String!]
-  programIDGT: String
-  programIDGTE: String
-  programIDLT: String
-  programIDLTE: String
-  programIDContains: String
-  programIDHasPrefix: String
-  programIDHasSuffix: String
-  programIDIsNil: Boolean
-  programIDNotNil: Boolean
-  programIDEqualFold: String
-  programIDContainsFold: String
-  """
-  platform_id field predicates
-  """
-  platformID: String
-  platformIDNEQ: String
-  platformIDIn: [String!]
-  platformIDNotIn: [String!]
-  platformIDGT: String
-  platformIDGTE: String
-  platformIDLT: String
-  platformIDLTE: String
-  platformIDContains: String
-  platformIDHasPrefix: String
-  platformIDHasSuffix: String
-  platformIDIsNil: Boolean
-  platformIDNotNil: Boolean
-  platformIDEqualFold: String
-  platformIDContainsFold: String
   """
   system_name field predicates
   """

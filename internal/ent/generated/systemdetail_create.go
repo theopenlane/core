@@ -12,6 +12,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -149,34 +151,6 @@ func (_c *SystemDetailCreate) SetNillableOwnerID(v *string) *SystemDetailCreate 
 	return _c
 }
 
-// SetProgramID sets the "program_id" field.
-func (_c *SystemDetailCreate) SetProgramID(v string) *SystemDetailCreate {
-	_c.mutation.SetProgramID(v)
-	return _c
-}
-
-// SetNillableProgramID sets the "program_id" field if the given value is not nil.
-func (_c *SystemDetailCreate) SetNillableProgramID(v *string) *SystemDetailCreate {
-	if v != nil {
-		_c.SetProgramID(*v)
-	}
-	return _c
-}
-
-// SetPlatformID sets the "platform_id" field.
-func (_c *SystemDetailCreate) SetPlatformID(v string) *SystemDetailCreate {
-	_c.mutation.SetPlatformID(v)
-	return _c
-}
-
-// SetNillablePlatformID sets the "platform_id" field if the given value is not nil.
-func (_c *SystemDetailCreate) SetNillablePlatformID(v *string) *SystemDetailCreate {
-	if v != nil {
-		_c.SetPlatformID(*v)
-	}
-	return _c
-}
-
 // SetSystemName sets the "system_name" field.
 func (_c *SystemDetailCreate) SetSystemName(v string) *SystemDetailCreate {
 	_c.mutation.SetSystemName(v)
@@ -284,14 +258,64 @@ func (_c *SystemDetailCreate) SetOwner(v *Organization) *SystemDetailCreate {
 	return _c.SetOwnerID(v.ID)
 }
 
-// SetProgram sets the "program" edge to the Program entity.
-func (_c *SystemDetailCreate) SetProgram(v *Program) *SystemDetailCreate {
-	return _c.SetProgramID(v.ID)
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (_c *SystemDetailCreate) AddProgramIDs(ids ...string) *SystemDetailCreate {
+	_c.mutation.AddProgramIDs(ids...)
+	return _c
 }
 
-// SetPlatform sets the "platform" edge to the Platform entity.
-func (_c *SystemDetailCreate) SetPlatform(v *Platform) *SystemDetailCreate {
-	return _c.SetPlatformID(v.ID)
+// AddPrograms adds the "programs" edges to the Program entity.
+func (_c *SystemDetailCreate) AddPrograms(v ...*Program) *SystemDetailCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddProgramIDs(ids...)
+}
+
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_c *SystemDetailCreate) AddPlatformIDs(ids ...string) *SystemDetailCreate {
+	_c.mutation.AddPlatformIDs(ids...)
+	return _c
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_c *SystemDetailCreate) AddPlatforms(v ...*Platform) *SystemDetailCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPlatformIDs(ids...)
+}
+
+// AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
+func (_c *SystemDetailCreate) AddEntityIDs(ids ...string) *SystemDetailCreate {
+	_c.mutation.AddEntityIDs(ids...)
+	return _c
+}
+
+// AddEntities adds the "entities" edges to the Entity entity.
+func (_c *SystemDetailCreate) AddEntities(v ...*Entity) *SystemDetailCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEntityIDs(ids...)
+}
+
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (_c *SystemDetailCreate) AddAssetIDs(ids ...string) *SystemDetailCreate {
+	_c.mutation.AddAssetIDs(ids...)
+	return _c
+}
+
+// AddAssets adds the "assets" edges to the Asset entity.
+func (_c *SystemDetailCreate) AddAssets(v ...*Asset) *SystemDetailCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAssetIDs(ids...)
 }
 
 // Mutation returns the SystemDetailMutation object of the builder.
@@ -513,40 +537,72 @@ func (_c *SystemDetailCreate) createSpec() (*SystemDetail, *sqlgraph.CreateSpec)
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.ProgramIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   systemdetail.ProgramTable,
-			Columns: []string{systemdetail.ProgramColumn},
+			Table:   systemdetail.ProgramsTable,
+			Columns: systemdetail.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.SystemDetail
+		edge.Schema = _c.schemaConfig.ProgramSystemDetails
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.ProgramID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.PlatformIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.PlatformsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   systemdetail.PlatformTable,
-			Columns: []string{systemdetail.PlatformColumn},
+			Table:   systemdetail.PlatformsTable,
+			Columns: systemdetail.PlatformsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.SystemDetail
+		edge.Schema = _c.schemaConfig.PlatformSystemDetails
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.PlatformID = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   systemdetail.EntitiesTable,
+			Columns: systemdetail.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.EntitySystemDetails
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   systemdetail.AssetsTable,
+			Columns: systemdetail.AssetsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.SystemDetailAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

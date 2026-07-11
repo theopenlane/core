@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
@@ -122,8 +121,8 @@ type ProgramEdges struct {
 	Narratives []*Narrative `json:"narratives,omitempty"`
 	// ActionPlans holds the value of the action_plans edge.
 	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
-	// SystemDetail holds the value of the system_detail edge.
-	SystemDetail *SystemDetail `json:"system_detail,omitempty"`
+	// SystemDetails holds the value of the system_details edge.
+	SystemDetails []*SystemDetail `json:"system_details,omitempty"`
 	// Users holds the value of the users edge.
 	Users []*User `json:"users,omitempty"`
 	// ProgramOwner holds the value of the program_owner edge.
@@ -151,6 +150,7 @@ type ProgramEdges struct {
 	namedEvidence          map[string][]*Evidence
 	namedNarratives        map[string][]*Narrative
 	namedActionPlans       map[string][]*ActionPlan
+	namedSystemDetails     map[string][]*SystemDetail
 	namedUsers             map[string][]*User
 	namedMembers           map[string][]*ProgramMembership
 }
@@ -312,15 +312,13 @@ func (e ProgramEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 	return nil, &NotLoadedError{edge: "action_plans"}
 }
 
-// SystemDetailOrErr returns the SystemDetail value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e ProgramEdges) SystemDetailOrErr() (*SystemDetail, error) {
-	if e.SystemDetail != nil {
-		return e.SystemDetail, nil
-	} else if e.loadedTypes[17] {
-		return nil, &NotFoundError{label: systemdetail.Label}
+// SystemDetailsOrErr returns the SystemDetails value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProgramEdges) SystemDetailsOrErr() ([]*SystemDetail, error) {
+	if e.loadedTypes[17] {
+		return e.SystemDetails, nil
 	}
-	return nil, &NotLoadedError{edge: "system_detail"}
+	return nil, &NotLoadedError{edge: "system_details"}
 }
 
 // UsersOrErr returns the Users value or an error if the edge
@@ -689,9 +687,9 @@ func (_m *Program) QueryActionPlans() *ActionPlanQuery {
 	return NewProgramClient(_m.config).QueryActionPlans(_m)
 }
 
-// QuerySystemDetail queries the "system_detail" edge of the Program entity.
-func (_m *Program) QuerySystemDetail() *SystemDetailQuery {
-	return NewProgramClient(_m.config).QuerySystemDetail(_m)
+// QuerySystemDetails queries the "system_details" edge of the Program entity.
+func (_m *Program) QuerySystemDetails() *SystemDetailQuery {
+	return NewProgramClient(_m.config).QuerySystemDetails(_m)
 }
 
 // QueryUsers queries the "users" edge of the Program entity.
@@ -1174,6 +1172,30 @@ func (_m *Program) appendNamedActionPlans(name string, edges ...*ActionPlan) {
 		_m.Edges.namedActionPlans[name] = []*ActionPlan{}
 	} else {
 		_m.Edges.namedActionPlans[name] = append(_m.Edges.namedActionPlans[name], edges...)
+	}
+}
+
+// NamedSystemDetails returns the SystemDetails named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Program) NamedSystemDetails(name string) ([]*SystemDetail, error) {
+	if _m.Edges.namedSystemDetails == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedSystemDetails[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Program) appendNamedSystemDetails(name string, edges ...*SystemDetail) {
+	if _m.Edges.namedSystemDetails == nil {
+		_m.Edges.namedSystemDetails = make(map[string][]*SystemDetail)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedSystemDetails[name] = []*SystemDetail{}
+	} else {
+		_m.Edges.namedSystemDetails[name] = append(_m.Edges.namedSystemDetails[name], edges...)
 	}
 }
 

@@ -38,10 +38,6 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
-	// FieldProgramID holds the string denoting the program_id field in the database.
-	FieldProgramID = "program_id"
-	// FieldPlatformID holds the string denoting the platform_id field in the database.
-	FieldPlatformID = "platform_id"
 	// FieldSystemName holds the string denoting the system_name field in the database.
 	FieldSystemName = "system_name"
 	// FieldVersion holds the string denoting the version field in the database.
@@ -60,10 +56,14 @@ const (
 	FieldOscalMetadataJSON = "oscal_metadata_json"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
-	// EdgeProgram holds the string denoting the program edge name in mutations.
-	EdgeProgram = "program"
-	// EdgePlatform holds the string denoting the platform edge name in mutations.
-	EdgePlatform = "platform"
+	// EdgePrograms holds the string denoting the programs edge name in mutations.
+	EdgePrograms = "programs"
+	// EdgePlatforms holds the string denoting the platforms edge name in mutations.
+	EdgePlatforms = "platforms"
+	// EdgeEntities holds the string denoting the entities edge name in mutations.
+	EdgeEntities = "entities"
+	// EdgeAssets holds the string denoting the assets edge name in mutations.
+	EdgeAssets = "assets"
 	// Table holds the table name of the systemdetail in the database.
 	Table = "system_details"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -73,20 +73,26 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
-	// ProgramTable is the table that holds the program relation/edge.
-	ProgramTable = "system_details"
-	// ProgramInverseTable is the table name for the Program entity.
+	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
+	ProgramsTable = "program_system_details"
+	// ProgramsInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
-	ProgramInverseTable = "programs"
-	// ProgramColumn is the table column denoting the program relation/edge.
-	ProgramColumn = "program_id"
-	// PlatformTable is the table that holds the platform relation/edge.
-	PlatformTable = "system_details"
-	// PlatformInverseTable is the table name for the Platform entity.
+	ProgramsInverseTable = "programs"
+	// PlatformsTable is the table that holds the platforms relation/edge. The primary key declared below.
+	PlatformsTable = "platform_system_details"
+	// PlatformsInverseTable is the table name for the Platform entity.
 	// It exists in this package in order to avoid circular dependency with the "platform" package.
-	PlatformInverseTable = "platforms"
-	// PlatformColumn is the table column denoting the platform relation/edge.
-	PlatformColumn = "platform_id"
+	PlatformsInverseTable = "platforms"
+	// EntitiesTable is the table that holds the entities relation/edge. The primary key declared below.
+	EntitiesTable = "entity_system_details"
+	// EntitiesInverseTable is the table name for the Entity entity.
+	// It exists in this package in order to avoid circular dependency with the "entity" package.
+	EntitiesInverseTable = "entities"
+	// AssetsTable is the table that holds the assets relation/edge. The primary key declared below.
+	AssetsTable = "system_detail_assets"
+	// AssetsInverseTable is the table name for the Asset entity.
+	// It exists in this package in order to avoid circular dependency with the "asset" package.
+	AssetsInverseTable = "assets"
 )
 
 // Columns holds all SQL columns for systemdetail fields.
@@ -102,8 +108,6 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldTags,
 	FieldOwnerID,
-	FieldProgramID,
-	FieldPlatformID,
 	FieldSystemName,
 	FieldVersion,
 	FieldDescription,
@@ -113,6 +117,21 @@ var Columns = []string{
 	FieldRevisionHistory,
 	FieldOscalMetadataJSON,
 }
+
+var (
+	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
+	// primary key for the programs relation (M2M).
+	ProgramsPrimaryKey = []string{"program_id", "system_detail_id"}
+	// PlatformsPrimaryKey and PlatformsColumn2 are the table columns denoting the
+	// primary key for the platforms relation (M2M).
+	PlatformsPrimaryKey = []string{"platform_id", "system_detail_id"}
+	// EntitiesPrimaryKey and EntitiesColumn2 are the table columns denoting the
+	// primary key for the entities relation (M2M).
+	EntitiesPrimaryKey = []string{"entity_id", "system_detail_id"}
+	// AssetsPrimaryKey and AssetsColumn2 are the table columns denoting the
+	// primary key for the assets relation (M2M).
+	AssetsPrimaryKey = []string{"system_detail_id", "asset_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -216,16 +235,6 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
-// ByProgramID orders the results by the program_id field.
-func ByProgramID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldProgramID, opts...).ToFunc()
-}
-
-// ByPlatformID orders the results by the platform_id field.
-func ByPlatformID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPlatformID, opts...).ToFunc()
-}
-
 // BySystemName orders the results by the system_name field.
 func BySystemName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemName, opts...).ToFunc()
@@ -263,17 +272,59 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByProgramField orders the results by program field.
-func ByProgramField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByProgramsCount orders the results by programs count.
+func ByProgramsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProgramStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborsCount(s, newProgramsStep(), opts...)
 	}
 }
 
-// ByPlatformField orders the results by platform field.
-func ByPlatformField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByPrograms orders the results by programs terms.
+func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newPlatformStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPlatformsCount orders the results by platforms count.
+func ByPlatformsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPlatformsStep(), opts...)
+	}
+}
+
+// ByPlatforms orders the results by platforms terms.
+func ByPlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEntitiesCount orders the results by entities count.
+func ByEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEntitiesStep(), opts...)
+	}
+}
+
+// ByEntities orders the results by entities terms.
+func ByEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByAssetsCount orders the results by assets count.
+func ByAssetsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAssetsStep(), opts...)
+	}
+}
+
+// ByAssets orders the results by assets terms.
+func ByAssets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssetsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -283,18 +334,32 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 	)
 }
-func newProgramStep() *sqlgraph.Step {
+func newProgramsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProgramInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2O, true, ProgramTable, ProgramColumn),
+		sqlgraph.To(ProgramsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
 	)
 }
-func newPlatformStep() *sqlgraph.Step {
+func newPlatformsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(PlatformInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2O, true, PlatformTable, PlatformColumn),
+		sqlgraph.To(PlatformsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, PlatformsTable, PlatformsPrimaryKey...),
+	)
+}
+func newEntitiesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EntitiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, EntitiesTable, EntitiesPrimaryKey...),
+	)
+}
+func newAssetsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssetsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, AssetsTable, AssetsPrimaryKey...),
 	)
 }
 

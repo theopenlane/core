@@ -120,6 +120,8 @@ const (
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
 	EdgeSubcontrols = "subcontrols"
+	// EdgeFindings holds the string denoting the findings edge name in mutations.
+	EdgeFindings = "findings"
 	// EdgeGeneratedByPlatform holds the string denoting the generated_by_platform edge name in mutations.
 	EdgeGeneratedByPlatform = "generated_by_platform"
 	// EdgePerformedByUser holds the string denoting the performed_by_user edge name in mutations.
@@ -192,13 +194,11 @@ const (
 	// AssetsInverseTable is the table name for the Asset entity.
 	// It exists in this package in order to avoid circular dependency with the "asset" package.
 	AssetsInverseTable = "assets"
-	// EntitiesTable is the table that holds the entities relation/edge.
-	EntitiesTable = "entities"
+	// EntitiesTable is the table that holds the entities relation/edge. The primary key declared below.
+	EntitiesTable = "scan_entities"
 	// EntitiesInverseTable is the table name for the Entity entity.
 	// It exists in this package in order to avoid circular dependency with the "entity" package.
 	EntitiesInverseTable = "entities"
-	// EntitiesColumn is the table column denoting the entities relation/edge.
-	EntitiesColumn = "scan_entities"
 	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
 	EvidenceTable = "scan_evidence"
 	// EvidenceInverseTable is the table name for the Evidence entity.
@@ -244,6 +244,11 @@ const (
 	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
 	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
 	SubcontrolsInverseTable = "subcontrols"
+	// FindingsTable is the table that holds the findings relation/edge. The primary key declared below.
+	FindingsTable = "finding_scans"
+	// FindingsInverseTable is the table name for the Finding entity.
+	// It exists in this package in order to avoid circular dependency with the "finding" package.
+	FindingsInverseTable = "findings"
 	// GeneratedByPlatformTable is the table that holds the generated_by_platform relation/edge.
 	GeneratedByPlatformTable = "scans"
 	// GeneratedByPlatformInverseTable is the table name for the Platform entity.
@@ -306,8 +311,6 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "scans"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"entity_scans",
-	"finding_scans",
 	"risk_scans",
 }
 
@@ -321,6 +324,9 @@ var (
 	// AssetsPrimaryKey and AssetsColumn2 are the table columns denoting the
 	// primary key for the assets relation (M2M).
 	AssetsPrimaryKey = []string{"scan_id", "asset_id"}
+	// EntitiesPrimaryKey and EntitiesColumn2 are the table columns denoting the
+	// primary key for the entities relation (M2M).
+	EntitiesPrimaryKey = []string{"scan_id", "entity_id"}
 	// EvidencePrimaryKey and EvidenceColumn2 are the table columns denoting the
 	// primary key for the evidence relation (M2M).
 	EvidencePrimaryKey = []string{"scan_id", "evidence_id"}
@@ -348,6 +354,9 @@ var (
 	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
 	// primary key for the subcontrols relation (M2M).
 	SubcontrolsPrimaryKey = []string{"subcontrol_id", "scan_id"}
+	// FindingsPrimaryKey and FindingsColumn2 are the table columns denoting the
+	// primary key for the findings relation (M2M).
+	FindingsPrimaryKey = []string{"finding_id", "scan_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -797,6 +806,20 @@ func BySubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByFindingsCount orders the results by findings count.
+func ByFindingsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFindingsStep(), opts...)
+	}
+}
+
+// ByFindings orders the results by findings terms.
+func ByFindings(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFindingsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByGeneratedByPlatformField orders the results by generated_by_platform field.
 func ByGeneratedByPlatformField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -891,7 +914,7 @@ func newEntitiesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EntitiesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, EntitiesTable, EntitiesColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, EntitiesTable, EntitiesPrimaryKey...),
 	)
 }
 func newEvidenceStep() *sqlgraph.Step {
@@ -955,6 +978,13 @@ func newSubcontrolsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubcontrolsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, SubcontrolsTable, SubcontrolsPrimaryKey...),
+	)
+}
+func newFindingsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FindingsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, FindingsTable, FindingsPrimaryKey...),
 	)
 }
 func newGeneratedByPlatformStep() *sqlgraph.Step {

@@ -2704,8 +2704,6 @@ var (
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "program_id", Type: field.TypeString, Nullable: true},
-		{Name: "platform_id", Type: field.TypeString, Nullable: true},
 		{Name: "system_name", Type: field.TypeString},
 		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},

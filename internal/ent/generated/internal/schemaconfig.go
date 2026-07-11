@@ -75,6 +75,7 @@ type SchemaConfig struct {
 	EntityDocuments                    string // Entity-documents->DocumentData table.
 	EntityFiles                        string // Entity-files->File table.
 	EntityAssets                       string // Entity-assets->Asset table.
+	EntitySystemDetails                string // Entity-system_details->SystemDetail table.
 	EntityIntegrations                 string // Entity-integrations->Integration table.
 	EntitySubprocessors                string // Entity-subprocessors->Subprocessor table.
 	EntityType                         string // EntityType table.
@@ -95,6 +96,7 @@ type SchemaConfig struct {
 	FindingVulnerabilities             string // Finding-vulnerabilities->Vulnerability table.
 	FindingActionPlans                 string // Finding-action_plans->ActionPlan table.
 	FindingControls                    string // Finding-controls->Control table.
+	FindingScans                       string // Finding-scans->Scan table.
 	FindingTasks                       string // Finding-tasks->Task table.
 	FindingDirectoryAccounts           string // Finding-directory_accounts->DirectoryAccount table.
 	FindingIdentityHolders             string // Finding-identity_holders->IdentityHolder table.
@@ -203,6 +205,7 @@ type SchemaConfig struct {
 	PlatformOutOfScopeAssets           string // Platform-out_of_scope_assets->Asset table.
 	PlatformOutOfScopeVendors          string // Platform-out_of_scope_vendors->Entity table.
 	PlatformApplicableFrameworks       string // Platform-applicable_frameworks->Standard table.
+	PlatformSystemDetails              string // Platform-system_details->SystemDetail table.
 	Procedure                          string // Procedure table.
 	ProcedureBlockedGroups             string // Procedure-blocked_groups->Group table.
 	ProcedureEditors                   string // Procedure-editors->Group table.
@@ -223,6 +226,7 @@ type SchemaConfig struct {
 	ProgramEvidence                    string // Program-evidence->Evidence table.
 	ProgramNarratives                  string // Program-narratives->Narrative table.
 	ProgramActionPlans                 string // Program-action_plans->ActionPlan table.
+	ProgramSystemDetails               string // Program-system_details->SystemDetail table.
 	ProgramMembership                  string // ProgramMembership table.
 	Remediation                        string // Remediation table.
 	RemediationBlockedGroups           string // Remediation-blocked_groups->Group table.
@@ -255,6 +259,7 @@ type SchemaConfig struct {
 	ScanBlockedGroups                  string // Scan-blocked_groups->Group table.
 	ScanEditors                        string // Scan-editors->Group table.
 	ScanAssets                         string // Scan-assets->Asset table.
+	ScanEntities                       string // Scan-entities->Entity table.
 	ScanEvidence                       string // Scan-evidence->Evidence table.
 	ScanFiles                          string // Scan-files->File table.
 	ScanRemediations                   string // Scan-remediations->Remediation table.
@@ -279,6 +284,7 @@ type SchemaConfig struct {
 	Subscriber                         string // Subscriber table.
 	SubscriberEvents                   string // Subscriber-events->Event table.
 	SystemDetail                       string // SystemDetail table.
+	SystemDetailAssets                 string // SystemDetail-assets->Asset table.
 	TFASetting                         string // TFASetting table.
 	TagDefinition                      string // TagDefinition table.
 	Task                               string // Task table.
