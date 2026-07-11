@@ -140,6 +140,9 @@ type PasswordResetSuccessRequest struct {
 // SubscribeRequest is the input for the subscription verification operation
 type SubscribeRequest struct {
 	RecipientInfo
+	// TrustCenterBranding is the trust center's visual identity overlay; empty values fall back to the
+	// trust center button treatment on the Openlane system branding
+	TrustCenterBranding
 	// OrgName is the display name of the subscribing organization
 	OrgName string `json:"org_name" jsonschema:"required,description=Organization display name"`
 	// Token is the subscriber verification token appended to the verify URL
@@ -472,9 +475,11 @@ var _ = RegisterEmailOperation(Operation[SubscribeRequest]{
 		}
 		orgName := subscribeOrgName(cfg, req)
 
+		// no explicit header block: the theme resolves the header logo from the rendered config,
+		// which carries the trust center branding applied by the Config hook (Build only sees the
+		// base config), matching the other trust center subscriber emails
 		return render.ContentBody{
 			Preheader: "Confirm your email to start receiving " + orgName + " trust center updates.",
-			Header:    defaultHeader(cfg),
 			Name:      req.FirstName,
 			Title:     "Confirm your subscription",
 			Intros: render.IntrosBlock{
@@ -483,7 +488,7 @@ var _ = RegisterEmailOperation(Operation[SubscribeRequest]{
 				},
 			},
 			Actions: []render.Action{{
-				Button: render.Button{Text: "Confirm subscription", Link: verifyURL, Color: tcButtonColor, TextColor: tcButtonTextColor},
+				Button: render.Button{Text: "Confirm subscription", Link: verifyURL},
 			}},
 			Outros: render.OutrosBlock{
 				Paragraphs: []string{
@@ -493,13 +498,14 @@ var _ = RegisterEmailOperation(Operation[SubscribeRequest]{
 		}
 	},
 	Config: func(cfg RuntimeEmailConfig, req SubscribeRequest) RuntimeEmailConfig {
-		// the unsubscribe link is the trust center's tokenized unsubscribe, built by the caller from the
-		// trust center domain (not the product URL, which points at the app console). The token is what
-		// actually resolves and unsubscribes the subscriber, unlike the theme's generic footer fallback
-		if req.UnsubscribeURL != "" {
-			cfg.UnsubscribeURL = req.UnsubscribeURL
-		}
-		return cfg
+		// the trust center button treatment is the defined fallback, overlaid with the trust center's
+		// own branding when configured. The unsubscribe link is the trust center's tokenized unsubscribe,
+		// built by the caller from the trust center domain (not the product URL, which points at the app
+		// console) — the token is what actually resolves and unsubscribes the subscriber
+		cfg.ButtonColor = tcButtonColor
+		cfg.ButtonTextColor = tcButtonTextColor
+
+		return trustCenterEmailConfig(cfg, req.TrustCenterBranding, req.UnsubscribeURL)
 	},
 })
 

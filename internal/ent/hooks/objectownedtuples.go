@@ -46,16 +46,21 @@ func HookObjectOwnedTuples(parents []string, ownerRelation string) ent.Hook {
 					return nil, auth.ErrNoAuthUser
 				}
 
-				// add user permissions to the object as the parent on creation
-				userTuple := fgax.GetTupleKey(fgax.TupleRequest{
-					SubjectID:   objCaller.SubjectID,
-					SubjectType: objCaller.SubjectType(),
-					ObjectID:    objectID,   // this is the object id being created
-					ObjectType:  objectType, // this is the object type being created
-					Relation:    ownerRelation,
-				})
+				// system and internal callers (e.g. the trust center notification poller) carry no
+				// subject; skip the user owner tuple rather than writing a malformed tuple with an
+				// empty user
+				if objCaller.SubjectID != "" {
+					// add user permissions to the object as the parent on creation
+					userTuple := fgax.GetTupleKey(fgax.TupleRequest{
+						SubjectID:   objCaller.SubjectID,
+						SubjectType: objCaller.SubjectType(),
+						ObjectID:    objectID,   // this is the object id being created
+						ObjectType:  objectType, // this is the object type being created
+						Relation:    ownerRelation,
+					})
 
-				addTuples = append(addTuples, userTuple)
+					addTuples = append(addTuples, userTuple)
+				}
 			}
 
 			additionalAddTuples, err := createParentTuples(ctx, m, objectID, parents)

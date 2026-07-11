@@ -70,19 +70,14 @@ func TrustCenterSettingFixture() *generated.TrustCenterSetting {
 	}
 }
 
-// TrustCenterUpdateTemplateFixture returns a sample email template configured for a trust center
-// update, with branded message content and a tokenized unsubscribe link
-func TrustCenterUpdateTemplateFixture() *generated.EmailTemplate {
-	return &generated.EmailTemplate{
-		Key: TrustCenterUpdateTemplate,
-		Defaults: map[string]any{
-			"subject":        "{{ .companyName }} trust center update",
-			"title":          "Hi {{ .firstName }}, an update from {{ .companyName }}",
-			"intros":         []any{"We've updated our subprocessor list.", "Review the changes in our trust center."},
-			"buttonText":     "View Trust Center",
-			"buttonLink":     "https://securecorp.example.com/trust",
-			"unsubscribeURL": "https://securecorp.example.com/unsubscribe?token={{ .unsubscribeToken }}",
-		},
+// cloudflareTrustCenterBranding returns a production-like trust center branding overlay for the
+// trust center email fixtures, using Cloudflare's real logo and brand orange so test sends preview
+// how an actual branded customer email renders (logo resolves, accent border shows a real palette)
+func cloudflareTrustCenterBranding() TrustCenterBranding {
+	return TrustCenterBranding{
+		CompanyName: "Cloudflare",
+		LogoURL:     "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Cloudflare_Logo.svg/330px-Cloudflare_Logo.svg.png",
+		AccentColor: "#f6821f",
 	}
 }
 
@@ -133,11 +128,12 @@ func TestFixture(name, toEmail string, defaultBranding bool) json.RawMessage {
 			RecipientInfo: r,
 		},
 		"SubscribeRequest": SubscribeRequest{
-			RecipientInfo:  r,
-			OrgName:        "Acme Corp",
-			Token:          "test-subscribe-token-12345",
-			VerifyURL:      "https://trustcenter.example.com/acme/subscribe/verify?token=test-subscribe-token-12345",
-			UnsubscribeURL: "https://trustcenter.example.com/acme/unsubscribe?token=test-subscribe-token-12345",
+			RecipientInfo:       r,
+			TrustCenterBranding: cloudflareTrustCenterBranding(),
+			OrgName:             "Cloudflare",
+			Token:               "test-subscribe-token-12345",
+			VerifyURL:           "https://www.cloudflare.com/trust-hub/subscribe/verify?token=test-subscribe-token-12345",
+			UnsubscribeURL:      "https://www.cloudflare.com/trust-hub/unsubscribe?token=test-subscribe-token-12345",
 		},
 		"VerifyBillingRequest": VerifyBillingRequest{
 			RecipientInfo: r,
@@ -205,25 +201,27 @@ func TestFixture(name, toEmail string, defaultBranding bool) json.RawMessage {
 				LastName:         r.LastName,
 				UnsubscribeToken: "test-unsubscribe-token-12345",
 			},
-			Subject:   "SecureCorp subprocessor update",
-			Preheader: "Review the latest changes to our subprocessor list",
-			Title:     "We've updated our subprocessors",
-			Intros:    []string{"The subprocessors we use have changed. You can review the full list anytime in our trust center."},
+			TrustCenterBranding: cloudflareTrustCenterBranding(),
 			Subprocessors: []SubprocessorEntry{
 				{Name: "Amazon Web Services", Change: "Added"},
 				{Name: "Stripe", Change: "Updated"},
 				{Name: "Twilio", Change: "Removed"},
 			},
-			ButtonText:          "View subprocessors",
-			ButtonLink:          "https://securecorp.example.com/trust",
-			UnsubscribeURL:      "https://securecorp.example.com/unsubscribe?token={{ .unsubscribeToken }}",
-			CompanyName:         "SecureCorp",
-			LogoURL:             "https://securecorp.example.com/logo.png",
-			PrimaryColor:        "#0f3d3a",
-			ButtonColor:         "#3fc2b4",
-			BodyBackgroundColor: "#e8eaed",
-			CardBackgroundColor: "#ffffff",
-			TextColor:           "#14171e",
+			TrustCenterURL: "https://www.cloudflare.com/trust-hub/",
+			UnsubscribeURL: "https://www.cloudflare.com/trust-hub/unsubscribe?token={{ .unsubscribeToken }}",
+		},
+		TrustCenterUpdateTemplate: TrustCenterUpdateRequest{
+			RecipientInfo: RecipientInfo{
+				Email:            toEmail,
+				FirstName:        r.FirstName,
+				LastName:         r.LastName,
+				UnsubscribeToken: "test-unsubscribe-token-12345",
+			},
+			TrustCenterBranding: cloudflareTrustCenterBranding(),
+			PostTitle:           "SOC 2 Type II report published",
+			PostText:            "Our latest SOC 2 Type II report is now available in the trust center.\nRequest access to review the full report.",
+			TrustCenterURL:      "https://www.cloudflare.com/trust-hub/",
+			UnsubscribeURL:      "https://www.cloudflare.com/trust-hub/unsubscribe?token={{ .unsubscribeToken }}",
 		},
 	}
 
@@ -234,16 +232,17 @@ func TestFixture(name, toEmail string, defaultBranding bool) json.RawMessage {
 
 	// preview the Openlane fallback by clearing the trust center branding overlay
 	if defaultBranding {
-		if sub, ok := fixture.(SubprocessorNotificationRequest); ok {
-			sub.CompanyName = ""
-			sub.Corporation = ""
-			sub.LogoURL = ""
-			sub.PrimaryColor = ""
-			sub.ButtonColor = ""
-			sub.BodyBackgroundColor = ""
-			sub.CardBackgroundColor = ""
-			sub.TextColor = ""
-			fixture = sub
+		switch req := fixture.(type) {
+		case SubprocessorNotificationRequest:
+			req.TrustCenterBranding = TrustCenterBranding{}
+			fixture = req
+		case TrustCenterUpdateRequest:
+			req.TrustCenterBranding = TrustCenterBranding{}
+			fixture = req
+		case SubscribeRequest:
+			req.TrustCenterBranding = TrustCenterBranding{}
+			req.OrgName = ""
+			fixture = req
 		}
 	}
 

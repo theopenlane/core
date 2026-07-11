@@ -9,142 +9,20 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/samber/lo"
-	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/utils/ulids"
 )
 
-// TestSeededTrustCenterUpdateTemplate confirms the trust center create hook seeds a message-updates
-// template that functions with no authored defaults (post/subprocessor notifications supply content via
-// campaign metadata at send time) and that an org editor can customize it
-func TestSeededTrustCenterUpdateTemplate(t *testing.T) {
-	tcOrg := createFreshOrgWithTrustCenter(t)
-
-	dbCtx := privacy.DecisionContext(setContext(tcOrg.owner.UserCtx, suite.client.db), privacy.Allow)
-
-	seeded, err := suite.client.db.EmailTemplate.Query().
-		Where(
-			emailtemplate.TrustCenterID(tcOrg.trustCenter.ID),
-			emailtemplate.Key(emaildef.TrustCenterUpdateTemplate),
-		).
-		Only(dbCtx)
-	assert.NilError(t, err)
-
-	// works out of the box: seeded with no authored defaults, so notifications render from the campaign
-	// metadata supplied at send time rather than requiring the editor to fill anything in first
-	assert.Check(t, is.Len(seeded.Defaults, 0))
-
-	// customizable: an org editor authors the template defaults through the API, and it persists
-	resp, err := suite.client.api.UpdateEmailTemplate(tcOrg.owner.UserCtx, seeded.ID, testclient.UpdateEmailTemplateInput{
-		Defaults: map[string]any{
-			"subject": "{{ .companyName }} update",
-			"title":   "Hi {{ .firstName }}",
-			"intros":  []any{"We have news to share."},
-		},
-	})
-	assert.NilError(t, err)
-	assert.Assert(t, resp != nil)
-
-	updated, err := suite.client.db.EmailTemplate.Get(dbCtx, seeded.ID)
-	assert.NilError(t, err)
-	assert.Check(t, is.Len(updated.Defaults, 3))
-}
-
-// TestEnsureTrustCenterUpdateTemplate verifies the shared ensure helper resolves the seeded template
-// without creating a duplicate and recreates it with the dedicated key when it is missing
-func TestEnsureTrustCenterUpdateTemplate(t *testing.T) {
-	tcOrg := createFreshOrgWithTrustCenter(t)
-
-	dbCtx := privacy.DecisionContext(setContext(tcOrg.owner.UserCtx, suite.client.db), privacy.Allow)
-
-	seeded, err := suite.client.db.EmailTemplate.Query().
-		Where(
-			emailtemplate.TrustCenterID(tcOrg.trustCenter.ID),
-			emailtemplate.Key(emaildef.TrustCenterUpdateTemplate),
-		).
-		Only(dbCtx)
-	assert.NilError(t, err)
-
-	// idempotent: resolves the seeded template rather than creating another
-	id, err := emaildef.EnsureTrustCenterUpdateTemplate(dbCtx, suite.client.db, tcOrg.organizationID, tcOrg.trustCenter.ID)
-	assert.NilError(t, err)
-	assert.Equal(t, seeded.ID, id)
-
-	count, err := suite.client.db.EmailTemplate.Query().
-		Where(
-			emailtemplate.TrustCenterID(tcOrg.trustCenter.ID),
-			emailtemplate.Key(emaildef.TrustCenterUpdateTemplate),
-		).
-		Count(dbCtx)
-	assert.NilError(t, err)
-	assert.Equal(t, 1, count)
-
-	// recreates the template with the dedicated key, name, and context when it is missing
-	assert.NilError(t, suite.client.db.EmailTemplate.DeleteOneID(seeded.ID).Exec(dbCtx))
-
-	recreatedID, err := emaildef.EnsureTrustCenterUpdateTemplate(dbCtx, suite.client.db, tcOrg.organizationID, tcOrg.trustCenter.ID)
-	assert.NilError(t, err)
-	assert.Check(t, recreatedID != seeded.ID)
-
-	recreated, err := suite.client.db.EmailTemplate.Get(dbCtx, recreatedID)
-	assert.NilError(t, err)
-	assert.Equal(t, emaildef.TrustCenterUpdateTemplate, recreated.Key)
-	assert.Equal(t, emaildef.TrustCenterUpdateTemplate, recreated.Name)
-	assert.Equal(t, enums.TemplateContextCampaignRecipient, recreated.TemplateContext)
-}
-
-// TestEnsureAllTrustCenterUpdateTemplates verifies the startup backfill body creates the update
-// template for trust centers missing one and leaves already-seeded trust centers with exactly one
-func TestEnsureAllTrustCenterUpdateTemplates(t *testing.T) {
-	tcOrg1 := createFreshOrgWithTrustCenter(t)
-	tcOrg2 := createFreshOrgWithTrustCenter(t)
-
-	dbCtx1 := privacy.DecisionContext(setContext(tcOrg1.owner.UserCtx, suite.client.db), privacy.Allow)
-
-	// remove one seeded template to simulate a trust center that pre-dates seeding
-	seeded, err := suite.client.db.EmailTemplate.Query().
-		Where(
-			emailtemplate.TrustCenterID(tcOrg1.trustCenter.ID),
-			emailtemplate.Key(emaildef.TrustCenterUpdateTemplate),
-		).
-		Only(dbCtx1)
-	assert.NilError(t, err)
-	assert.NilError(t, suite.client.db.EmailTemplate.DeleteOneID(seeded.ID).Exec(dbCtx1))
-
-	// mirror the backfill's cross-org system caller
-	systemCtx := auth.WithCaller(privacy.DecisionContext(context.Background(), privacy.Allow), &auth.Caller{
-		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
-	})
-
-	ensured, err := emaildef.EnsureAllTrustCenterUpdateTemplates(systemCtx, suite.client.db)
-	assert.NilError(t, err)
-	assert.Check(t, ensured >= 2)
-
-	// the deleted template is recreated and the untouched trust center is not duplicated
-	for _, tcOrg := range []*trustCenterOrg{tcOrg1, tcOrg2} {
-		count, err := suite.client.db.EmailTemplate.Query().
-			Where(
-				emailtemplate.TrustCenterID(tcOrg.trustCenter.ID),
-				emailtemplate.Key(emaildef.TrustCenterUpdateTemplate),
-			).
-			Count(systemCtx)
-		assert.NilError(t, err)
-		assert.Equal(t, 1, count)
-	}
-}
-
 // TestPreviewEmailTemplateGate verifies the preview resolver admits customer-selectable catalog
-// entries and the seeded trust center update template while rejecting internal system emails
+// entries and the system trust center update message while rejecting internal system emails
 func TestPreviewEmailTemplateGate(t *testing.T) {
 	tcOrg := createFreshOrgWithTrustCenter(t)
 
-	// the seeded trust center update template is previewable so editors can see their customizations
+	// the system trust center update message is previewable so editors can see what subscribers receive
 	resp, err := suite.client.api.PreviewEmailTemplate(tcOrg.owner.UserCtx, emaildef.TrustCenterUpdateTemplate, map[string]any{})
 	assert.NilError(t, err)
 	assert.Check(t, resp.PreviewEmailTemplate != "")

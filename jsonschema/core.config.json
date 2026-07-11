@@ -580,6 +580,10 @@
           "type": "string",
           "description": "Muted text color for headers footers and secondary content"
         },
+        "AccentBorderColor": {
+          "type": "string",
+          "description": "Decorative accent color applied to borders only"
+        },
         "Tagline": {
           "type": "string",
           "description": "Short descriptive footer line rendered above the social row in modern themes"

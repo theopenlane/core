@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/objects/upload"
 	"github.com/theopenlane/core/pkg/objects/storage"
 )
@@ -41,7 +40,6 @@ func WithBackfill(ctx context.Context, dbClient *ent.Client) ServerOption {
 
 			backfillOrganizationSlugs(backfillCtx, dbClient)
 			backfillOwnerSSOExemptions(backfillCtx, dbClient)
-			backfillTrustCenterUpdateTemplates(backfillCtx, dbClient)
 			backfillFileMD5Hashes(backfillCtx, dbClient)
 		}()
 	})
@@ -89,18 +87,6 @@ func backfillOwnerSSOExemptions(ctx context.Context, dbClient *ent.Client) {
 	}
 
 	log.Info().Int("updated", updated).Msg("backfill: owner SSO exemptions populated")
-}
-
-// backfillTrustCenterUpdateTemplates creates the trust center update template for any trust center
-// that does not have one so campaigns never create templates at dispatch time
-func backfillTrustCenterUpdateTemplates(ctx context.Context, dbClient *ent.Client) {
-	ensured, err := emaildef.EnsureAllTrustCenterUpdateTemplates(ctx, dbClient)
-	if err != nil {
-		log.Error().Err(err).Msg("backfill: failed to ensure trust center update templates")
-		return
-	}
-
-	log.Info().Int("ensured", ensured).Msg("backfill: trust center update templates populated")
 }
 
 func backfillFileMD5Hashes(ctx context.Context, dbClient *ent.Client) {

@@ -126,12 +126,10 @@ func (r *mutationResolver) validateCampaignDispatch(ctx context.Context, campaig
 			return ErrCampaignMissingAssessmentID
 		}
 	case enums.CampaignTypeTrustCenterUpdate:
+		// trust center update campaigns render through the system trust center update
+		// operation with content from the campaign metadata, so no template is required
 		if campaignObj.TrustCenterID == "" {
 			return ErrCampaignMissingTrustCenter
-		}
-
-		if campaignObj.EmailTemplateID == "" {
-			return ErrCampaignMissingEmailTemplate
 		}
 	default:
 		if campaignObj.EmailTemplateID == "" {
