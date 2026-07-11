@@ -2571,8 +2571,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			systemdetailhistory.FieldDisplayID:             {Type: field.TypeString, Column: systemdetailhistory.FieldDisplayID},
 			systemdetailhistory.FieldTags:                  {Type: field.TypeJSON, Column: systemdetailhistory.FieldTags},
 			systemdetailhistory.FieldOwnerID:               {Type: field.TypeString, Column: systemdetailhistory.FieldOwnerID},
-			systemdetailhistory.FieldProgramID:             {Type: field.TypeString, Column: systemdetailhistory.FieldProgramID},
-			systemdetailhistory.FieldPlatformID:            {Type: field.TypeString, Column: systemdetailhistory.FieldPlatformID},
 			systemdetailhistory.FieldSystemName:            {Type: field.TypeString, Column: systemdetailhistory.FieldSystemName},
 			systemdetailhistory.FieldVersion:               {Type: field.TypeString, Column: systemdetailhistory.FieldVersion},
 			systemdetailhistory.FieldDescription:           {Type: field.TypeString, Column: systemdetailhistory.FieldDescription},
@@ -14401,16 +14399,6 @@ func (f *SystemDetailHistoryFilter) WhereTags(p entql.BytesP) {
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *SystemDetailHistoryFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(systemdetailhistory.FieldOwnerID))
-}
-
-// WhereProgramID applies the entql string predicate on the program_id field.
-func (f *SystemDetailHistoryFilter) WhereProgramID(p entql.StringP) {
-	f.Where(p.Field(systemdetailhistory.FieldProgramID))
-}
-
-// WherePlatformID applies the entql string predicate on the platform_id field.
-func (f *SystemDetailHistoryFilter) WherePlatformID(p entql.StringP) {
-	f.Where(p.Field(systemdetailhistory.FieldPlatformID))
 }
 
 // WhereSystemName applies the entql string predicate on the system_name field.

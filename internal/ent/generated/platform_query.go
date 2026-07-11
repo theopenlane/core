@@ -95,7 +95,7 @@ type PlatformQuery struct {
 	withApplicableFrameworks       *StandardQuery
 	withGeneratedScans             *ScanQuery
 	withPlatformOwner              *UserQuery
-	withSystemDetail               *SystemDetailQuery
+	withSystemDetails              *SystemDetailQuery
 	withFKs                        bool
 	loadTotal                      []func(context.Context, []*Platform) error
 	modifiers                      []func(*sql.Selector)
@@ -127,6 +127,7 @@ type PlatformQuery struct {
 	withNamedOutOfScopeVendors     map[string]*EntityQuery
 	withNamedApplicableFrameworks  map[string]*StandardQuery
 	withNamedGeneratedScans        map[string]*ScanQuery
+	withNamedSystemDetails         map[string]*SystemDetailQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -1313,8 +1314,8 @@ func (_q *PlatformQuery) QueryPlatformOwner() *UserQuery {
 	return query
 }
 
-// QuerySystemDetail chains the current query on the "system_detail" edge.
-func (_q *PlatformQuery) QuerySystemDetail() *SystemDetailQuery {
+// QuerySystemDetails chains the current query on the "system_details" edge.
+func (_q *PlatformQuery) QuerySystemDetails() *SystemDetailQuery {
 	query := (&SystemDetailClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
@@ -1327,11 +1328,11 @@ func (_q *PlatformQuery) QuerySystemDetail() *SystemDetailQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(platform.Table, platform.FieldID, selector),
 			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, platform.SystemDetailTable, platform.SystemDetailColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.SystemDetailsTable, platform.SystemDetailsPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.SystemDetail
-		step.Edge.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.PlatformSystemDetails
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1576,7 +1577,7 @@ func (_q *PlatformQuery) Clone() *PlatformQuery {
 		withApplicableFrameworks:       _q.withApplicableFrameworks.Clone(),
 		withGeneratedScans:             _q.withGeneratedScans.Clone(),
 		withPlatformOwner:              _q.withPlatformOwner.Clone(),
-		withSystemDetail:               _q.withSystemDetail.Clone(),
+		withSystemDetails:              _q.withSystemDetails.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -2090,14 +2091,14 @@ func (_q *PlatformQuery) WithPlatformOwner(opts ...func(*UserQuery)) *PlatformQu
 	return _q
 }
 
-// WithSystemDetail tells the query-builder to eager-load the nodes that are connected to
-// the "system_detail" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *PlatformQuery) WithSystemDetail(opts ...func(*SystemDetailQuery)) *PlatformQuery {
+// WithSystemDetails tells the query-builder to eager-load the nodes that are connected to
+// the "system_details" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithSystemDetails(opts ...func(*SystemDetailQuery)) *PlatformQuery {
 	query := (&SystemDetailClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	_q.withSystemDetail = query
+	_q.withSystemDetails = query
 	return _q
 }
 
@@ -2233,7 +2234,7 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 			_q.withApplicableFrameworks != nil,
 			_q.withGeneratedScans != nil,
 			_q.withPlatformOwner != nil,
-			_q.withSystemDetail != nil,
+			_q.withSystemDetails != nil,
 		}
 	)
 	if withFKs {
@@ -2574,9 +2575,10 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 			return nil, err
 		}
 	}
-	if query := _q.withSystemDetail; query != nil {
-		if err := _q.loadSystemDetail(ctx, query, nodes, nil,
-			func(n *Platform, e *SystemDetail) { n.Edges.SystemDetail = e }); err != nil {
+	if query := _q.withSystemDetails; query != nil {
+		if err := _q.loadSystemDetails(ctx, query, nodes,
+			func(n *Platform) { n.Edges.SystemDetails = []*SystemDetail{} },
+			func(n *Platform, e *SystemDetail) { n.Edges.SystemDetails = append(n.Edges.SystemDetails, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2773,6 +2775,13 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 		if err := _q.loadGeneratedScans(ctx, query, nodes,
 			func(n *Platform) { n.appendNamedGeneratedScans(name) },
 			func(n *Platform, e *Scan) { n.appendNamedGeneratedScans(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedSystemDetails {
+		if err := _q.loadSystemDetails(ctx, query, nodes,
+			func(n *Platform) { n.appendNamedSystemDetails(name) },
+			func(n *Platform, e *SystemDetail) { n.appendNamedSystemDetails(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -4697,33 +4706,65 @@ func (_q *PlatformQuery) loadPlatformOwner(ctx context.Context, query *UserQuery
 	}
 	return nil
 }
-func (_q *PlatformQuery) loadSystemDetail(ctx context.Context, query *SystemDetailQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *SystemDetail)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Platform)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+func (_q *PlatformQuery) loadSystemDetails(ctx context.Context, query *SystemDetailQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *SystemDetail)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Platform)
+	nids := make(map[string]map[*Platform]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
 	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(systemdetail.FieldPlatformID)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(platform.SystemDetailsTable)
+		joinT.Schema(_q.schemaConfig.PlatformSystemDetails)
+		s.Join(joinT).On(s.C(systemdetail.FieldID), joinT.C(platform.SystemDetailsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(platform.SystemDetailsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(platform.SystemDetailsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
 	}
-	query.Where(predicate.SystemDetail(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(platform.SystemDetailColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Platform]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*SystemDetail](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.PlatformID
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "platform_id" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "platform_id" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "system_details" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -5269,6 +5310,20 @@ func (_q *PlatformQuery) WithNamedGeneratedScans(name string, opts ...func(*Scan
 		_q.withNamedGeneratedScans = make(map[string]*ScanQuery)
 	}
 	_q.withNamedGeneratedScans[name] = query
+	return _q
+}
+
+// WithNamedSystemDetails tells the query-builder to eager-load the nodes that are connected to the "system_details"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithNamedSystemDetails(name string, opts ...func(*SystemDetailQuery)) *PlatformQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSystemDetails == nil {
+		_q.withNamedSystemDetails = make(map[string]*SystemDetailQuery)
+	}
+	_q.withNamedSystemDetails[name] = query
 	return _q
 }
 

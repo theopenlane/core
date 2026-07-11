@@ -226,8 +226,8 @@ const (
 	EdgeGeneratedScans = "generated_scans"
 	// EdgePlatformOwner holds the string denoting the platform_owner edge name in mutations.
 	EdgePlatformOwner = "platform_owner"
-	// EdgeSystemDetail holds the string denoting the system_detail edge name in mutations.
-	EdgeSystemDetail = "system_detail"
+	// EdgeSystemDetails holds the string denoting the system_details edge name in mutations.
+	EdgeSystemDetails = "system_details"
 	// Table holds the table name of the platform in the database.
 	Table = "platforms"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -518,13 +518,11 @@ const (
 	PlatformOwnerInverseTable = "users"
 	// PlatformOwnerColumn is the table column denoting the platform_owner relation/edge.
 	PlatformOwnerColumn = "platform_owner_id"
-	// SystemDetailTable is the table that holds the system_detail relation/edge.
-	SystemDetailTable = "system_details"
-	// SystemDetailInverseTable is the table name for the SystemDetail entity.
+	// SystemDetailsTable is the table that holds the system_details relation/edge. The primary key declared below.
+	SystemDetailsTable = "platform_system_details"
+	// SystemDetailsInverseTable is the table name for the SystemDetail entity.
 	// It exists in this package in order to avoid circular dependency with the "systemdetail" package.
-	SystemDetailInverseTable = "system_details"
-	// SystemDetailColumn is the table column denoting the system_detail relation/edge.
-	SystemDetailColumn = "platform_id"
+	SystemDetailsInverseTable = "system_details"
 )
 
 // Columns holds all SQL columns for platform fields.
@@ -649,6 +647,9 @@ var (
 	// ApplicableFrameworksPrimaryKey and ApplicableFrameworksColumn2 are the table columns denoting the
 	// primary key for the applicable_frameworks relation (M2M).
 	ApplicableFrameworksPrimaryKey = []string{"platform_id", "standard_id"}
+	// SystemDetailsPrimaryKey and SystemDetailsColumn2 are the table columns denoting the
+	// primary key for the system_details relation (M2M).
+	SystemDetailsPrimaryKey = []string{"platform_id", "system_detail_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -1527,10 +1528,17 @@ func ByPlatformOwnerField(field string, opts ...sql.OrderTermOption) OrderOption
 	}
 }
 
-// BySystemDetailField orders the results by system_detail field.
-func BySystemDetailField(field string, opts ...sql.OrderTermOption) OrderOption {
+// BySystemDetailsCount orders the results by system_details count.
+func BySystemDetailsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newSystemDetailStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborsCount(s, newSystemDetailsStep(), opts...)
+	}
+}
+
+// BySystemDetails orders the results by system_details terms.
+func BySystemDetails(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSystemDetailsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -1855,11 +1863,11 @@ func newPlatformOwnerStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, PlatformOwnerTable, PlatformOwnerColumn),
 	)
 }
-func newSystemDetailStep() *sqlgraph.Step {
+func newSystemDetailsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(SystemDetailInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2O, false, SystemDetailTable, SystemDetailColumn),
+		sqlgraph.To(SystemDetailsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, SystemDetailsTable, SystemDetailsPrimaryKey...),
 	)
 }
 

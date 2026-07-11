@@ -31,6 +31,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
 )
@@ -1073,6 +1074,21 @@ func (_c *EntityCreate) AddAssets(v ...*Asset) *EntityCreate {
 	return _c.AddAssetIDs(ids...)
 }
 
+// AddSystemDetailIDs adds the "system_details" edge to the SystemDetail entity by IDs.
+func (_c *EntityCreate) AddSystemDetailIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddSystemDetailIDs(ids...)
+	return _c
+}
+
+// AddSystemDetails adds the "system_details" edges to the SystemDetail entity.
+func (_c *EntityCreate) AddSystemDetails(v ...*SystemDetail) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddSystemDetailIDs(ids...)
+}
+
 // AddScanIDs adds the "scans" edge to the Scan entity by IDs.
 func (_c *EntityCreate) AddScanIDs(ids ...string) *EntityCreate {
 	_c.mutation.AddScanIDs(ids...)
@@ -2028,18 +2044,35 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.SystemDetailsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.SystemDetailsTable,
+			Columns: entity.SystemDetailsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.EntitySystemDetails
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.ScansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   entity.ScansTable,
-			Columns: []string{entity.ScansColumn},
+			Columns: entity.ScansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Scan
+		edge.Schema = _c.schemaConfig.ScanEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

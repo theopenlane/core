@@ -2404,11 +2404,11 @@ func HasEntities() predicate.Scan {
 	return predicate.Scan(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, EntitiesTable, EntitiesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, EntitiesTable, EntitiesPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.ScanEntities
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2419,7 +2419,7 @@ func HasEntitiesWith(preds ...predicate.Entity) predicate.Scan {
 		step := newEntitiesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.ScanEntities
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2681,6 +2681,35 @@ func HasSubcontrolsWith(preds ...predicate.Subcontrol) predicate.Scan {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Subcontrol
 		step.Edge.Schema = schemaConfig.SubcontrolScans
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFindings applies the HasEdge predicate on the "findings" edge.
+func HasFindings() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, FindingsTable, FindingsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingScans
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFindingsWith applies the HasEdge predicate on the "findings" edge with a given conditions (other predicates).
+func HasFindingsWith(preds ...predicate.Finding) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newFindingsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingScans
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

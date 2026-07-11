@@ -214,10 +214,7 @@ func (p Program) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(p, Narrative{}),
 		// programs can have 1:many associated action plans
 		defaultEdgeToWithPagination(p, ActionPlan{}),
-		uniqueEdgeTo(&edgeDefinition{
-			fromSchema: p,
-			edgeSchema: SystemDetail{},
-		}),
+		defaultEdgeToWithPagination(p, SystemDetail{}),
 		edge.From("users", User.Type).
 			Ref("programs").
 			// Skip the mutation input for the users edge

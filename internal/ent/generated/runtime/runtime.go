@@ -7502,7 +7502,7 @@ func init() {
 	// systemdetail.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	systemdetail.OwnerIDValidator = systemdetailDescOwnerID.Validators[0].(func(string) error)
 	// systemdetailDescSystemName is the schema descriptor for system_name field.
-	systemdetailDescSystemName := systemdetailFields[2].Descriptor()
+	systemdetailDescSystemName := systemdetailFields[0].Descriptor()
 	// systemdetail.SystemNameValidator is a validator for the "system_name" field. It is called by the builders before save.
 	systemdetail.SystemNameValidator = systemdetailDescSystemName.Validators[0].(func(string) error)
 	// systemdetailDescID is the schema descriptor for id field.

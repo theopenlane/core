@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
@@ -243,8 +242,8 @@ type PlatformEdges struct {
 	GeneratedScans []*Scan `json:"generated_scans,omitempty"`
 	// PlatformOwner holds the value of the platform_owner edge.
 	PlatformOwner *User `json:"platform_owner,omitempty"`
-	// SystemDetail holds the value of the system_detail edge.
-	SystemDetail *SystemDetail `json:"system_detail,omitempty"`
+	// SystemDetails holds the value of the system_details edge.
+	SystemDetails []*SystemDetail `json:"system_details,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [47]bool
@@ -279,6 +278,7 @@ type PlatformEdges struct {
 	namedOutOfScopeVendors     map[string][]*Entity
 	namedApplicableFrameworks  map[string][]*Standard
 	namedGeneratedScans        map[string][]*Scan
+	namedSystemDetails         map[string][]*SystemDetail
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -731,15 +731,13 @@ func (e PlatformEdges) PlatformOwnerOrErr() (*User, error) {
 	return nil, &NotLoadedError{edge: "platform_owner"}
 }
 
-// SystemDetailOrErr returns the SystemDetail value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e PlatformEdges) SystemDetailOrErr() (*SystemDetail, error) {
-	if e.SystemDetail != nil {
-		return e.SystemDetail, nil
-	} else if e.loadedTypes[46] {
-		return nil, &NotFoundError{label: systemdetail.Label}
+// SystemDetailsOrErr returns the SystemDetails value or an error if the edge
+// was not loaded in eager-loading.
+func (e PlatformEdges) SystemDetailsOrErr() ([]*SystemDetail, error) {
+	if e.loadedTypes[46] {
+		return e.SystemDetails, nil
 	}
-	return nil, &NotLoadedError{edge: "system_detail"}
+	return nil, &NotLoadedError{edge: "system_details"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -1396,9 +1394,9 @@ func (_m *Platform) QueryPlatformOwner() *UserQuery {
 	return NewPlatformClient(_m.config).QueryPlatformOwner(_m)
 }
 
-// QuerySystemDetail queries the "system_detail" edge of the Platform entity.
-func (_m *Platform) QuerySystemDetail() *SystemDetailQuery {
-	return NewPlatformClient(_m.config).QuerySystemDetail(_m)
+// QuerySystemDetails queries the "system_details" edge of the Platform entity.
+func (_m *Platform) QuerySystemDetails() *SystemDetailQuery {
+	return NewPlatformClient(_m.config).QuerySystemDetails(_m)
 }
 
 // Update returns a builder for updating this Platform.
@@ -2276,6 +2274,30 @@ func (_m *Platform) appendNamedGeneratedScans(name string, edges ...*Scan) {
 		_m.Edges.namedGeneratedScans[name] = []*Scan{}
 	} else {
 		_m.Edges.namedGeneratedScans[name] = append(_m.Edges.namedGeneratedScans[name], edges...)
+	}
+}
+
+// NamedSystemDetails returns the SystemDetails named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Platform) NamedSystemDetails(name string) ([]*SystemDetail, error) {
+	if _m.Edges.namedSystemDetails == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedSystemDetails[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Platform) appendNamedSystemDetails(name string, edges ...*SystemDetail) {
+	if _m.Edges.namedSystemDetails == nil {
+		_m.Edges.namedSystemDetails = make(map[string][]*SystemDetail)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedSystemDetails[name] = []*SystemDetail{}
+	} else {
+		_m.Edges.namedSystemDetails[name] = append(_m.Edges.namedSystemDetails[name], edges...)
 	}
 }
 

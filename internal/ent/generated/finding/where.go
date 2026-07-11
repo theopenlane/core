@@ -4370,11 +4370,11 @@ func HasScans() predicate.Finding {
 	return predicate.Finding(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, ScansTable, ScansColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, ScansTable, ScansPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.FindingScans
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4385,7 +4385,7 @@ func HasScansWith(preds ...predicate.Scan) predicate.Finding {
 		step := newScansStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.FindingScans
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

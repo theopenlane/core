@@ -4487,16 +4487,45 @@ func HasAssetsWith(preds ...predicate.Asset) predicate.Entity {
 	})
 }
 
+// HasSystemDetails applies the HasEdge predicate on the "system_details" edge.
+func HasSystemDetails() predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, SystemDetailsTable, SystemDetailsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.EntitySystemDetails
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSystemDetailsWith applies the HasEdge predicate on the "system_details" edge with a given conditions (other predicates).
+func HasSystemDetailsWith(preds ...predicate.SystemDetail) predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := newSystemDetailsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.EntitySystemDetails
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasScans applies the HasEdge predicate on the "scans" edge.
 func HasScans() predicate.Entity {
 	return predicate.Entity(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, ScansTable, ScansColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, ScansTable, ScansPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanEntities
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4507,7 +4536,7 @@ func HasScansWith(preds ...predicate.Scan) predicate.Entity {
 		step := newScansStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanEntities
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

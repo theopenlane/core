@@ -1611,23 +1611,19 @@ func (_u *PlatformUpdate) SetPlatformOwner(v *User) *PlatformUpdate {
 	return _u.SetPlatformOwnerID(v.ID)
 }
 
-// SetSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID.
-func (_u *PlatformUpdate) SetSystemDetailID(id string) *PlatformUpdate {
-	_u.mutation.SetSystemDetailID(id)
+// AddSystemDetailIDs adds the "system_details" edge to the SystemDetail entity by IDs.
+func (_u *PlatformUpdate) AddSystemDetailIDs(ids ...string) *PlatformUpdate {
+	_u.mutation.AddSystemDetailIDs(ids...)
 	return _u
 }
 
-// SetNillableSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID if the given value is not nil.
-func (_u *PlatformUpdate) SetNillableSystemDetailID(id *string) *PlatformUpdate {
-	if id != nil {
-		_u = _u.SetSystemDetailID(*id)
+// AddSystemDetails adds the "system_details" edges to the SystemDetail entity.
+func (_u *PlatformUpdate) AddSystemDetails(v ...*SystemDetail) *PlatformUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return _u
-}
-
-// SetSystemDetail sets the "system_detail" edge to the SystemDetail entity.
-func (_u *PlatformUpdate) SetSystemDetail(v *SystemDetail) *PlatformUpdate {
-	return _u.SetSystemDetailID(v.ID)
+	return _u.AddSystemDetailIDs(ids...)
 }
 
 // Mutation returns the PlatformMutation object of the builder.
@@ -2325,10 +2321,25 @@ func (_u *PlatformUpdate) ClearPlatformOwner() *PlatformUpdate {
 	return _u
 }
 
-// ClearSystemDetail clears the "system_detail" edge to the SystemDetail entity.
-func (_u *PlatformUpdate) ClearSystemDetail() *PlatformUpdate {
-	_u.mutation.ClearSystemDetail()
+// ClearSystemDetails clears all "system_details" edges to the SystemDetail entity.
+func (_u *PlatformUpdate) ClearSystemDetails() *PlatformUpdate {
+	_u.mutation.ClearSystemDetails()
 	return _u
+}
+
+// RemoveSystemDetailIDs removes the "system_details" edge to SystemDetail entities by IDs.
+func (_u *PlatformUpdate) RemoveSystemDetailIDs(ids ...string) *PlatformUpdate {
+	_u.mutation.RemoveSystemDetailIDs(ids...)
+	return _u
+}
+
+// RemoveSystemDetails removes "system_details" edges to SystemDetail entities.
+func (_u *PlatformUpdate) RemoveSystemDetails(v ...*SystemDetail) *PlatformUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSystemDetailIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -4509,32 +4520,49 @@ func (_u *PlatformUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.SystemDetailCleared() {
+	if _u.mutation.SystemDetailsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   platform.SystemDetailTable,
-			Columns: []string{platform.SystemDetailColumn},
+			Table:   platform.SystemDetailsTable,
+			Columns: platform.SystemDetailsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SystemDetail
+		edge.Schema = _u.schemaConfig.PlatformSystemDetails
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.SystemDetailIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RemovedSystemDetailsIDs(); len(nodes) > 0 && !_u.mutation.SystemDetailsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   platform.SystemDetailTable,
-			Columns: []string{platform.SystemDetailColumn},
+			Table:   platform.SystemDetailsTable,
+			Columns: platform.SystemDetailsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SystemDetail
+		edge.Schema = _u.schemaConfig.PlatformSystemDetails
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SystemDetailsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   platform.SystemDetailsTable,
+			Columns: platform.SystemDetailsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformSystemDetails
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6120,23 +6148,19 @@ func (_u *PlatformUpdateOne) SetPlatformOwner(v *User) *PlatformUpdateOne {
 	return _u.SetPlatformOwnerID(v.ID)
 }
 
-// SetSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID.
-func (_u *PlatformUpdateOne) SetSystemDetailID(id string) *PlatformUpdateOne {
-	_u.mutation.SetSystemDetailID(id)
+// AddSystemDetailIDs adds the "system_details" edge to the SystemDetail entity by IDs.
+func (_u *PlatformUpdateOne) AddSystemDetailIDs(ids ...string) *PlatformUpdateOne {
+	_u.mutation.AddSystemDetailIDs(ids...)
 	return _u
 }
 
-// SetNillableSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID if the given value is not nil.
-func (_u *PlatformUpdateOne) SetNillableSystemDetailID(id *string) *PlatformUpdateOne {
-	if id != nil {
-		_u = _u.SetSystemDetailID(*id)
+// AddSystemDetails adds the "system_details" edges to the SystemDetail entity.
+func (_u *PlatformUpdateOne) AddSystemDetails(v ...*SystemDetail) *PlatformUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return _u
-}
-
-// SetSystemDetail sets the "system_detail" edge to the SystemDetail entity.
-func (_u *PlatformUpdateOne) SetSystemDetail(v *SystemDetail) *PlatformUpdateOne {
-	return _u.SetSystemDetailID(v.ID)
+	return _u.AddSystemDetailIDs(ids...)
 }
 
 // Mutation returns the PlatformMutation object of the builder.
@@ -6834,10 +6858,25 @@ func (_u *PlatformUpdateOne) ClearPlatformOwner() *PlatformUpdateOne {
 	return _u
 }
 
-// ClearSystemDetail clears the "system_detail" edge to the SystemDetail entity.
-func (_u *PlatformUpdateOne) ClearSystemDetail() *PlatformUpdateOne {
-	_u.mutation.ClearSystemDetail()
+// ClearSystemDetails clears all "system_details" edges to the SystemDetail entity.
+func (_u *PlatformUpdateOne) ClearSystemDetails() *PlatformUpdateOne {
+	_u.mutation.ClearSystemDetails()
 	return _u
+}
+
+// RemoveSystemDetailIDs removes the "system_details" edge to SystemDetail entities by IDs.
+func (_u *PlatformUpdateOne) RemoveSystemDetailIDs(ids ...string) *PlatformUpdateOne {
+	_u.mutation.RemoveSystemDetailIDs(ids...)
+	return _u
+}
+
+// RemoveSystemDetails removes "system_details" edges to SystemDetail entities.
+func (_u *PlatformUpdateOne) RemoveSystemDetails(v ...*SystemDetail) *PlatformUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSystemDetailIDs(ids...)
 }
 
 // Where appends a list predicates to the PlatformUpdate builder.
@@ -9048,32 +9087,49 @@ func (_u *PlatformUpdateOne) sqlSave(ctx context.Context) (_node *Platform, err 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.SystemDetailCleared() {
+	if _u.mutation.SystemDetailsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   platform.SystemDetailTable,
-			Columns: []string{platform.SystemDetailColumn},
+			Table:   platform.SystemDetailsTable,
+			Columns: platform.SystemDetailsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SystemDetail
+		edge.Schema = _u.schemaConfig.PlatformSystemDetails
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.SystemDetailIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RemovedSystemDetailsIDs(); len(nodes) > 0 && !_u.mutation.SystemDetailsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   platform.SystemDetailTable,
-			Columns: []string{platform.SystemDetailColumn},
+			Table:   platform.SystemDetailsTable,
+			Columns: platform.SystemDetailsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SystemDetail
+		edge.Schema = _u.schemaConfig.PlatformSystemDetails
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SystemDetailsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   platform.SystemDetailsTable,
+			Columns: platform.SystemDetailsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformSystemDetails
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

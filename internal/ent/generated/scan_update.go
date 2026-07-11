@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -795,6 +796,21 @@ func (_u *ScanUpdate) AddSubcontrols(v ...*Subcontrol) *ScanUpdate {
 	return _u.AddSubcontrolIDs(ids...)
 }
 
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *ScanUpdate) AddFindingIDs(ids ...string) *ScanUpdate {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *ScanUpdate) AddFindings(v ...*Finding) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
+}
+
 // SetGeneratedByPlatform sets the "generated_by_platform" edge to the Platform entity.
 func (_u *ScanUpdate) SetGeneratedByPlatform(v *Platform) *ScanUpdate {
 	return _u.SetGeneratedByPlatformID(v.ID)
@@ -1122,6 +1138,27 @@ func (_u *ScanUpdate) RemoveSubcontrols(v ...*Subcontrol) *ScanUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveSubcontrolIDs(ids...)
+}
+
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *ScanUpdate) ClearFindings() *ScanUpdate {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *ScanUpdate) RemoveFindingIDs(ids ...string) *ScanUpdate {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *ScanUpdate) RemoveFindings(v ...*Finding) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
 }
 
 // ClearGeneratedByPlatform clears the "generated_by_platform" edge to the Platform entity.
@@ -1680,30 +1717,30 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   scan.EntitiesTable,
-			Columns: []string{scan.EntitiesColumn},
+			Columns: scan.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.ScanEntities
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   scan.EntitiesTable,
-			Columns: []string{scan.EntitiesColumn},
+			Columns: scan.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.ScanEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1711,16 +1748,16 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   scan.EntitiesTable,
-			Columns: []string{scan.EntitiesColumn},
+			Columns: scan.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.ScanEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2153,6 +2190,54 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.SubcontrolScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.FindingsTable,
+			Columns: scan.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingScans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.FindingsTable,
+			Columns: scan.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.FindingsTable,
+			Columns: scan.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingScans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3022,6 +3107,21 @@ func (_u *ScanUpdateOne) AddSubcontrols(v ...*Subcontrol) *ScanUpdateOne {
 	return _u.AddSubcontrolIDs(ids...)
 }
 
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *ScanUpdateOne) AddFindingIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *ScanUpdateOne) AddFindings(v ...*Finding) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
+}
+
 // SetGeneratedByPlatform sets the "generated_by_platform" edge to the Platform entity.
 func (_u *ScanUpdateOne) SetGeneratedByPlatform(v *Platform) *ScanUpdateOne {
 	return _u.SetGeneratedByPlatformID(v.ID)
@@ -3349,6 +3449,27 @@ func (_u *ScanUpdateOne) RemoveSubcontrols(v ...*Subcontrol) *ScanUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveSubcontrolIDs(ids...)
+}
+
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *ScanUpdateOne) ClearFindings() *ScanUpdateOne {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *ScanUpdateOne) RemoveFindingIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *ScanUpdateOne) RemoveFindings(v ...*Finding) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
 }
 
 // ClearGeneratedByPlatform clears the "generated_by_platform" edge to the Platform entity.
@@ -3937,30 +4058,30 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 	}
 	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   scan.EntitiesTable,
-			Columns: []string{scan.EntitiesColumn},
+			Columns: scan.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.ScanEntities
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   scan.EntitiesTable,
-			Columns: []string{scan.EntitiesColumn},
+			Columns: scan.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.ScanEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3968,16 +4089,16 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 	}
 	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   scan.EntitiesTable,
-			Columns: []string{scan.EntitiesColumn},
+			Columns: scan.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.ScanEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4410,6 +4531,54 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.SubcontrolScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.FindingsTable,
+			Columns: scan.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingScans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.FindingsTable,
+			Columns: scan.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.FindingsTable,
+			Columns: scan.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingScans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

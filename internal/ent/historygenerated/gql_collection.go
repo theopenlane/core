@@ -12935,16 +12935,6 @@ func (_q *SystemDetailHistoryQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, systemdetailhistory.FieldOwnerID)
 				fieldSeen[systemdetailhistory.FieldOwnerID] = struct{}{}
 			}
-		case "programID":
-			if _, ok := fieldSeen[systemdetailhistory.FieldProgramID]; !ok {
-				selectedFields = append(selectedFields, systemdetailhistory.FieldProgramID)
-				fieldSeen[systemdetailhistory.FieldProgramID] = struct{}{}
-			}
-		case "platformID":
-			if _, ok := fieldSeen[systemdetailhistory.FieldPlatformID]; !ok {
-				selectedFields = append(selectedFields, systemdetailhistory.FieldPlatformID)
-				fieldSeen[systemdetailhistory.FieldPlatformID] = struct{}{}
-			}
 		case "systemName":
 			if _, ok := fieldSeen[systemdetailhistory.FieldSystemName]; !ok {
 				selectedFields = append(selectedFields, systemdetailhistory.FieldSystemName)

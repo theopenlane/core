@@ -2172,19 +2172,17 @@ func adminSearchSystemDetails(ctx context.Context, query string, after *entgql.C
 					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
 				},
 				systemdetail.OwnerIDContainsFold(query),               // search by OwnerID
-				systemdetail.ProgramIDContainsFold(query),             // search by ProgramID
-				systemdetail.PlatformIDContainsFold(query),            // search by PlatformID
 				systemdetail.SystemNameContainsFold(query),            // search by SystemName
 				systemdetail.VersionContainsFold(query),               // search by Version
 				systemdetail.DescriptionContainsFold(query),           // search by Description
 				systemdetail.AuthorizationBoundaryContainsFold(query), // search by AuthorizationBoundary
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(revision_history)::text LIKE $12", likeQuery)) // search by RevisionHistory
+					s.Where(sql.ExprP("(revision_history)::text LIKE $10", likeQuery)) // search by RevisionHistory
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(oscal_metadata_json)::text LIKE $13", likeQuery)) // search by OscalMetadataJSON
+					s.Where(sql.ExprP("(oscal_metadata_json)::text LIKE $11", likeQuery)) // search by OscalMetadataJSON
 				},
 			),
 		)

@@ -146,46 +146,6 @@ func (_u *SystemDetailHistoryUpdate) ClearTags() *SystemDetailHistoryUpdate {
 	return _u
 }
 
-// SetProgramID sets the "program_id" field.
-func (_u *SystemDetailHistoryUpdate) SetProgramID(v string) *SystemDetailHistoryUpdate {
-	_u.mutation.SetProgramID(v)
-	return _u
-}
-
-// SetNillableProgramID sets the "program_id" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdate) SetNillableProgramID(v *string) *SystemDetailHistoryUpdate {
-	if v != nil {
-		_u.SetProgramID(*v)
-	}
-	return _u
-}
-
-// ClearProgramID clears the value of the "program_id" field.
-func (_u *SystemDetailHistoryUpdate) ClearProgramID() *SystemDetailHistoryUpdate {
-	_u.mutation.ClearProgramID()
-	return _u
-}
-
-// SetPlatformID sets the "platform_id" field.
-func (_u *SystemDetailHistoryUpdate) SetPlatformID(v string) *SystemDetailHistoryUpdate {
-	_u.mutation.SetPlatformID(v)
-	return _u
-}
-
-// SetNillablePlatformID sets the "platform_id" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdate) SetNillablePlatformID(v *string) *SystemDetailHistoryUpdate {
-	if v != nil {
-		_u.SetPlatformID(*v)
-	}
-	return _u
-}
-
-// ClearPlatformID clears the value of the "platform_id" field.
-func (_u *SystemDetailHistoryUpdate) ClearPlatformID() *SystemDetailHistoryUpdate {
-	_u.mutation.ClearPlatformID()
-	return _u
-}
-
 // SetSystemName sets the "system_name" field.
 func (_u *SystemDetailHistoryUpdate) SetSystemName(v string) *SystemDetailHistoryUpdate {
 	_u.mutation.SetSystemName(v)
@@ -458,18 +418,6 @@ func (_u *SystemDetailHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(systemdetailhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ProgramID(); ok {
-		_spec.SetField(systemdetailhistory.FieldProgramID, field.TypeString, value)
-	}
-	if _u.mutation.ProgramIDCleared() {
-		_spec.ClearField(systemdetailhistory.FieldProgramID, field.TypeString)
-	}
-	if value, ok := _u.mutation.PlatformID(); ok {
-		_spec.SetField(systemdetailhistory.FieldPlatformID, field.TypeString, value)
-	}
-	if _u.mutation.PlatformIDCleared() {
-		_spec.ClearField(systemdetailhistory.FieldPlatformID, field.TypeString)
-	}
 	if value, ok := _u.mutation.SystemName(); ok {
 		_spec.SetField(systemdetailhistory.FieldSystemName, field.TypeString, value)
 	}
@@ -651,46 +599,6 @@ func (_u *SystemDetailHistoryUpdateOne) AppendTags(v []string) *SystemDetailHist
 // ClearTags clears the value of the "tags" field.
 func (_u *SystemDetailHistoryUpdateOne) ClearTags() *SystemDetailHistoryUpdateOne {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetProgramID sets the "program_id" field.
-func (_u *SystemDetailHistoryUpdateOne) SetProgramID(v string) *SystemDetailHistoryUpdateOne {
-	_u.mutation.SetProgramID(v)
-	return _u
-}
-
-// SetNillableProgramID sets the "program_id" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdateOne) SetNillableProgramID(v *string) *SystemDetailHistoryUpdateOne {
-	if v != nil {
-		_u.SetProgramID(*v)
-	}
-	return _u
-}
-
-// ClearProgramID clears the value of the "program_id" field.
-func (_u *SystemDetailHistoryUpdateOne) ClearProgramID() *SystemDetailHistoryUpdateOne {
-	_u.mutation.ClearProgramID()
-	return _u
-}
-
-// SetPlatformID sets the "platform_id" field.
-func (_u *SystemDetailHistoryUpdateOne) SetPlatformID(v string) *SystemDetailHistoryUpdateOne {
-	_u.mutation.SetPlatformID(v)
-	return _u
-}
-
-// SetNillablePlatformID sets the "platform_id" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdateOne) SetNillablePlatformID(v *string) *SystemDetailHistoryUpdateOne {
-	if v != nil {
-		_u.SetPlatformID(*v)
-	}
-	return _u
-}
-
-// ClearPlatformID clears the value of the "platform_id" field.
-func (_u *SystemDetailHistoryUpdateOne) ClearPlatformID() *SystemDetailHistoryUpdateOne {
-	_u.mutation.ClearPlatformID()
 	return _u
 }
 
@@ -995,18 +903,6 @@ func (_u *SystemDetailHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sys
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(systemdetailhistory.FieldOwnerID, field.TypeString)
-	}
-	if value, ok := _u.mutation.ProgramID(); ok {
-		_spec.SetField(systemdetailhistory.FieldProgramID, field.TypeString, value)
-	}
-	if _u.mutation.ProgramIDCleared() {
-		_spec.ClearField(systemdetailhistory.FieldProgramID, field.TypeString)
-	}
-	if value, ok := _u.mutation.PlatformID(); ok {
-		_spec.SetField(systemdetailhistory.FieldPlatformID, field.TypeString, value)
-	}
-	if _u.mutation.PlatformIDCleared() {
-		_spec.ClearField(systemdetailhistory.FieldPlatformID, field.TypeString)
 	}
 	if value, ok := _u.mutation.SystemName(); ok {
 		_spec.SetField(systemdetailhistory.FieldSystemName, field.TypeString, value)

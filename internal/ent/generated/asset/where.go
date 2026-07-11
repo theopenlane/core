@@ -4052,6 +4052,35 @@ func HasPlatformsWith(preds ...predicate.Platform) predicate.Asset {
 	})
 }
 
+// HasSystemDetails applies the HasEdge predicate on the "system_details" edge.
+func HasSystemDetails() predicate.Asset {
+	return predicate.Asset(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, SystemDetailsTable, SystemDetailsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.SystemDetailAssets
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSystemDetailsWith applies the HasEdge predicate on the "system_details" edge with a given conditions (other predicates).
+func HasSystemDetailsWith(preds ...predicate.SystemDetail) predicate.Asset {
+	return predicate.Asset(func(s *sql.Selector) {
+		step := newSystemDetailsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.SystemDetailAssets
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasOutOfScopePlatforms applies the HasEdge predicate on the "out_of_scope_platforms" edge.
 func HasOutOfScopePlatforms() predicate.Asset {
 	return predicate.Asset(func(s *sql.Selector) {

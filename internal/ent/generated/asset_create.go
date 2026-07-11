@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
@@ -869,6 +870,21 @@ func (_c *AssetCreate) AddPlatforms(v ...*Platform) *AssetCreate {
 	return _c.AddPlatformIDs(ids...)
 }
 
+// AddSystemDetailIDs adds the "system_details" edge to the SystemDetail entity by IDs.
+func (_c *AssetCreate) AddSystemDetailIDs(ids ...string) *AssetCreate {
+	_c.mutation.AddSystemDetailIDs(ids...)
+	return _c
+}
+
+// AddSystemDetails adds the "system_details" edges to the SystemDetail entity.
+func (_c *AssetCreate) AddSystemDetails(v ...*SystemDetail) *AssetCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddSystemDetailIDs(ids...)
+}
+
 // AddOutOfScopePlatformIDs adds the "out_of_scope_platforms" edge to the Platform entity by IDs.
 func (_c *AssetCreate) AddOutOfScopePlatformIDs(ids ...string) *AssetCreate {
 	_c.mutation.AddOutOfScopePlatformIDs(ids...)
@@ -1580,6 +1596,23 @@ func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.PlatformAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SystemDetailsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.SystemDetailsTable,
+			Columns: asset.SystemDetailsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.SystemDetailAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

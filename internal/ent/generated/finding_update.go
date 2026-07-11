@@ -3251,30 +3251,30 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.ScansTable,
-			Columns: []string{finding.ScansColumn},
+			Columns: finding.ScansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.FindingScans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.ScansTable,
-			Columns: []string{finding.ScansColumn},
+			Columns: finding.ScansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.FindingScans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3282,16 +3282,16 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if nodes := _u.mutation.ScansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.ScansTable,
-			Columns: []string{finding.ScansColumn},
+			Columns: finding.ScansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.FindingScans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7025,30 +7025,30 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	}
 	if _u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.ScansTable,
-			Columns: []string{finding.ScansColumn},
+			Columns: finding.ScansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.FindingScans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.ScansTable,
-			Columns: []string{finding.ScansColumn},
+			Columns: finding.ScansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.FindingScans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7056,16 +7056,16 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	}
 	if nodes := _u.mutation.ScansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.ScansTable,
-			Columns: []string{finding.ScansColumn},
+			Columns: finding.ScansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.FindingScans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
