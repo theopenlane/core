@@ -7,7 +7,6 @@ import (
 	"github.com/theopenlane/newman/render"
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // BrandedMessageRequest is a customer-selectable catalog entry providing a flexible,
@@ -124,7 +123,7 @@ var brandedMessageUISchema = json.RawMessage(`{
   "outros": {"items": {"ui:widget": "textarea"}}
 }`)
 
-var brandedMessageOperation = RegisterEmailOperation(Operation[BrandedMessageRequest]{
+var _ = RegisterEmailOperation(Operation[BrandedMessageRequest]{
 	Op:                 BrandedMessageOp,
 	Schema:             brandedMessageSchema,
 	Theme:              baseTheme,
@@ -207,23 +206,4 @@ var brandedMessageOperation = RegisterEmailOperation(Operation[BrandedMessageReq
 
 		return cfg
 	},
-})
-
-// TrustCenterUpdateTemplate is the durable identifier for the per-trust-center subscriber update
-// email template, used as the template key and name and the dispatcher registration key
-const TrustCenterUpdateTemplate = "tmpl_trustcenter_update"
-
-// the trust center update entry reuses the branded message renderer under its own key so
-// per-trust-center update templates dispatch through a dedicated, unique template key instead
-// of sharing the customer-selectable branded message key
-var _ = RegisterEmailOperation(Operation[BrandedMessageRequest]{
-	Op:          types.NewOperationRef[BrandedMessageRequest](TrustCenterUpdateTemplate),
-	Schema:      brandedMessageSchema,
-	Theme:       baseTheme,
-	Description: "Trust center subscriber update rendered with the branded message layout",
-	Example:     brandedMessageExample,
-	UISchema:    brandedMessageUISchema,
-	Subject:     brandedMessageOperation.Subject,
-	Build:       brandedMessageOperation.Build,
-	Config:      brandedMessageOperation.Config,
 })

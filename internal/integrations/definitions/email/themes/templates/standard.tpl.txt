@@ -16,6 +16,9 @@
         <p>{{ $line }}</p>
     {{ end }}
 {{ end }}
+{{ range $block := .Body.ContentBlocks }}
+{{ $block }}
+{{ end }}
 {{ if ne .Body.FreeMarkdown "" }}
     {{ .Body.FreeMarkdown.ToHTML }}
 {{ else }}

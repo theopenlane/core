@@ -1,4 +1,4 @@
-FROM golang:1.26.4 as builder
+FROM golang:1.26.5 as builder
 
 WORKDIR /go/src/app
 COPY . .
@@ -21,7 +21,7 @@ COPY --from=ghcr.io/theopenlane/riverboat:amd64-latest /bin/riverboat /bin/river
 COPY --from=redis:7.4.9 /usr/local/bin/redis-server /bin/redis-server
 
 # Copy FGA binary
-COPY --from=openfga/openfga:v1.18.0 /openfga /bin/openfga
+COPY --from=openfga/openfga:v1.18.1 /openfga /bin/openfga
 
 # Copy default model into image
 COPY fga/model/ fga/model/

@@ -169,26 +169,17 @@ func TestTrustCenterCampaignDispatchBranding(t *testing.T) {
 		SetLogoRemoteURL("https://securecorp.example.com/logo.png").
 		Exec(dbCtx))
 
-	emailTemplate, err := suite.client.db.EmailTemplate.Create().
-		SetName("Trust Center Update Template").
-		SetKey(email.TrustCenterUpdateTemplate).
-		SetTemplateContext(enums.TemplateContextCampaignRecipient).
-		SetTrustCenterID(tc.trustCenter.ID).
-		SetDefaults(map[string]any{
-			"subject":        "{{ .companyName }} trust center update",
-			"title":          "Hi {{ .firstName }}",
-			"intros":         []any{"We updated our subprocessors."},
-			"unsubscribeURL": "https://securecorp.example.com/unsubscribe?token={{ .unsubscribeToken }}",
-		}).
-		Save(dbCtx)
-	assert.NilError(t, err)
-
+	// the campaign metadata carries the post data, as the automated triggers supply it
 	campaignObj, err := suite.client.db.Campaign.Create().
-		SetName("June Subprocessor Update").
+		SetName("June Update").
 		SetOwnerID(tc.organizationID).
 		SetCampaignType(enums.CampaignTypeTrustCenterUpdate).
 		SetTrustCenterID(tc.trustCenter.ID).
-		SetEmailTemplateID(emailTemplate.ID).
+		SetMetadata(map[string]any{
+			"postTitle":      "June update",
+			"postText":       "We updated our subprocessors.",
+			"unsubscribeURL": "https://securecorp.example.com/unsubscribe?token={{ .unsubscribeToken }}",
+		}).
 		SetRecurrenceFrequency(enums.FrequencyNone).
 		Save(dbCtx)
 	assert.NilError(t, err)
@@ -214,7 +205,6 @@ func TestTrustCenterCampaignDispatchBranding(t *testing.T) {
 	defer func() {
 		(&Cleanup[*generated.CampaignTargetDeleteOne]{client: suite.client.db.CampaignTarget, IDs: []string{targetA.ID, targetGrace.ID}}).MustDelete(tc.owner.UserCtx, t)
 		(&Cleanup[*generated.CampaignDeleteOne]{client: suite.client.db.Campaign, ID: campaignObj.ID}).MustDelete(tc.owner.UserCtx, t)
-		(&Cleanup[*generated.EmailTemplateDeleteOne]{client: suite.client.db.EmailTemplate, ID: emailTemplate.ID}).MustDelete(tc.owner.UserCtx, t)
 	}()
 
 	mockSender, err := mock.New("")

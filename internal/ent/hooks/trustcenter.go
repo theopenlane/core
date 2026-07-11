@@ -19,7 +19,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -176,15 +175,6 @@ func HookTrustCenter() ent.Hook {
 				logx.FromContext(ctx).Error().Err(err).Msg("failed to clone trust center controls")
 
 				return nil, ErrInternalServerError
-			}
-
-			// seed the customizable update email template so every trust center presents a
-			// base template editors can customize before the first send; subscriber and
-			// subprocessor messages remain fixed system sends and are not seeded here
-			if _, err := emaildef.EnsureTrustCenterUpdateTemplate(privacy.DecisionContext(ctx, privacy.Allow), m.Client(), orgID, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("failed seeding trust center update email template")
-
-				return nil, err
 			}
 
 			// create watermark config for trust center with default values

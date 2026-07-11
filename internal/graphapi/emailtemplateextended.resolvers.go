@@ -84,7 +84,7 @@ func (r *queryResolver) PreviewEmailTemplate(ctx context.Context, key string, de
 		return "", err
 	}
 
-	// customer-selectable catalog entries and the seeded trust center update template are
+	// customer-selectable catalog entries and the system trust center update message are
 	// previewable; internal system emails are not
 	d, ok := email.DispatcherByKey(key)
 	if !ok || (!lo.FromPtr(d.Registration().CustomerSelectable) && key != email.TrustCenterUpdateTemplate) {
