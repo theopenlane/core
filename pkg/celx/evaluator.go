@@ -70,6 +70,16 @@ func (e *Evaluator) EvaluateJSONMap(ctx context.Context, expression string, vars
 	return ToJSONMap(out)
 }
 
+// EvaluateBool evaluates a CEL expression and extracts a boolean result
+func (e *Evaluator) EvaluateBool(ctx context.Context, expression string, vars map[string]any) (bool, error) {
+	out, _, err := e.Evaluate(ctx, expression, vars)
+	if err != nil {
+		return false, err
+	}
+
+	return BoolResult(out)
+}
+
 // getOrCompileProgram returns a cached program or compiles a new one with evaluator options
 func (e *Evaluator) getOrCompileProgram(expression string) (cel.Program, error) {
 	if cached, ok := e.programCache.Load(expression); ok {
