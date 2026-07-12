@@ -732,8 +732,6 @@ github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rM
 github.com/theopenlane/echox v0.3.0/go.mod h1:yTrXnj7s3VNIg0FCvB7Dut2Elr+LqJKU/nruxx1E1cM=
 github.com/theopenlane/eddy v0.1.0 h1:mtsBL9COYCJWMkjxPOb7LefPaysyPVmYb4idy7kL4lY=
 github.com/theopenlane/eddy v0.1.0/go.mod h1:UvovGX5x0N9RdKk2Kb5CMbGziRUasARDy8xSEAT8aDs=
-github.com/theopenlane/entx v0.29.0 h1:KvpP78yuxk5p7NCjIZBFvgN5zIvSd/7tX4HQZbaxbZc=
-github.com/theopenlane/entx v0.29.0/go.mod h1:Lyp+YR7PCaye6B/QVTwHcGQ0cXgXLx2CeDgxsG8Do2Q=
 github.com/theopenlane/go-client v0.12.3 h1:gSuWscQiQhyTK21J9R7Hk7T5GYUakiai3XL9rxnTYVE=
 github.com/theopenlane/go-client v0.12.3/go.mod h1:Q4+MZWZVABWtySfRTLh7bTj2wQqJMohyPGgIK1F8UOs=
 github.com/theopenlane/gqlgen-plugins v0.14.7 h1:B9I6tpgevch3xQfV3qqRTpxHIlJvwtXg0WVvjd8bDmM=
