@@ -277,8 +277,8 @@ require (
 	github.com/onsi/gomega v1.38.2 // indirect
 	github.com/pkoukk/tiktoken-go v0.1.8 // indirect
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
-	github.com/shirou/gopsutil/v4 v4.26.4 // indirect
-	github.com/testcontainers/testcontainers-go v0.42.0
+	github.com/shirou/gopsutil/v4 v4.26.5 // indirect
+	github.com/testcontainers/testcontainers-go v0.43.0
 	github.com/testcontainers/testcontainers-go/modules/openfga v0.42.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.16 // indirect
 	github.com/tklauser/numcpus v0.11.0 // indirect
