@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/newman"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -76,13 +77,10 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 	}
 
 	template := camp.Edges.EmailTemplate
-	if template == nil {
-		return nil, fmt.Errorf("%w: no email template linked to campaign", ErrDispatcherNotFound)
-	}
 
-	dispatcher, ok := DispatcherByKey(template.Key)
-	if !ok {
-		return nil, fmt.Errorf("%w: %s", ErrDispatcherNotFound, template.Key)
+	dispatcher, err := campaignDispatcher(camp)
+	if err != nil {
+		return nil, err
 	}
 
 	overlay := CampaignContext{
@@ -93,7 +91,11 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 	}
 
 	messages, targetIDs, renderFailed := renderMessagesForCampaign(ctx, client, dispatcher, camp, template, overlay, dispatchable)
-	attachments := staticAttachmentsFromFiles(ctx, template.Edges.Files)
+
+	var attachments []*newman.Attachment
+	if template != nil {
+		attachments = staticAttachmentsFromFiles(ctx, template.Edges.Files)
+	}
 
 	sentCount, sendFailed := sendCampaignMessages(ctx, req.DB, client, messages, targetIDs, attachments)
 
@@ -104,6 +106,29 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 	}
 
 	return json.Marshal(result)
+}
+
+// campaignDispatcher resolves the message renderer for a campaign: trust center update campaigns
+// render through the system-registered trust center update operation and need no linked email
+// template, while every other campaign type resolves through its linked template's key
+func campaignDispatcher(camp *generated.Campaign) (Dispatcher, error) {
+	key := TrustCenterUpdateTemplate
+
+	if camp.CampaignType != enums.CampaignTypeTrustCenterUpdate {
+		template := camp.Edges.EmailTemplate
+		if template == nil {
+			return nil, fmt.Errorf("%w: no email template linked to campaign", ErrDispatcherNotFound)
+		}
+
+		key = template.Key
+	}
+
+	dispatcher, ok := DispatcherByKey(key)
+	if !ok {
+		return nil, fmt.Errorf("%w: %s", ErrDispatcherNotFound, key)
+	}
+
+	return dispatcher, nil
 }
 
 // filterCampaignTargets returns the subset of targets that are dispatchable based on status, sent history, and resend/overdue flags

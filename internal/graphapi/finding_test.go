@@ -146,6 +146,84 @@ func TestMutationCreateFinding(t *testing.T) {
 	(&Cleanup[*generated.ReviewDeleteOne]{client: suite.client.db.Review, ID: resp.CreateReview.Review.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
+func TestMutationCreateFindingUnderLinkedObject(t *testing.T) {
+
+	control := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	org2Control := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
+
+	resp, err := suite.client.api.CreateReview(sharedAuditorUser.UserCtx, testclient.CreateReviewInput{
+		Title: "Review for auditor",
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+
+	tt := []struct {
+		name        string
+		request     testclient.CreateFindingInput
+		expectedErr string
+	}{
+		{
+			name: "auditor can create under control",
+			request: testclient.CreateFindingInput{
+				DisplayName: lo.ToPtr("Finding control"),
+				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
+				ControlIDs:  []string{control.ID},
+				OwnerID:     &sharedTestUser1.OrganizationID,
+			},
+		},
+		{
+			name: "auditor can create under review",
+			request: testclient.CreateFindingInput{
+				DisplayName: lo.ToPtr("Finding review"),
+				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
+				ReviewIDs:   []string{resp.CreateReview.Review.ID},
+				OwnerID:     &sharedTestUser1.OrganizationID,
+			},
+		},
+		{
+			name: "auditor cannot create without linking to a parent object",
+			request: testclient.CreateFindingInput{
+				DisplayName: lo.ToPtr("finding not linked to an object"),
+				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
+				OwnerID:     &sharedTestUser1.OrganizationID,
+			},
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "auditor cannot create finding link to unauthorized control",
+			request: testclient.CreateFindingInput{
+				DisplayName: lo.ToPtr("finding linked to control from org 2"),
+				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
+				ControlIDs:  []string{org2Control.ID},
+				OwnerID:     &sharedTestUser1.OrganizationID,
+			},
+			expectedErr: notAuthorizedErrorMsg,
+		},
+	}
+
+	for _, tc := range tt {
+		t.Run(tc.name, func(t *testing.T) {
+			resp, err := suite.client.api.CreateFinding(sharedAuditorUser.UserCtx, tc.request)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, len(resp.CreateFinding.Finding.ID) != 0)
+			assert.Check(t, is.Equal(*tc.request.DisplayName, *resp.CreateFinding.Finding.DisplayName))
+
+			(&Cleanup[*generated.FindingDeleteOne]{client: suite.client.db.Finding, ID: resp.CreateFinding.Finding.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+		})
+	}
+
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: org2Control.ID}).MustDelete(sharedTestUser2.UserCtx, t)
+	(&Cleanup[*generated.ReviewDeleteOne]{client: suite.client.db.Review, ID: resp.CreateReview.Review.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+}
+
 func TestMutationCreateBulkFinding(t *testing.T) {
 
 	finding := createFinding(t, sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID, "Existing Bulk Finding")

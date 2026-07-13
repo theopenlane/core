@@ -54,14 +54,14 @@ func TestInjectorCodecRestoreResolvesFromInjector(t *testing.T) {
 	assert.Equal(t, "resolved", restored.Name)
 }
 
-func TestInjectorCodecRestoreReturnsContextUnchangedWhenNotProvided(t *testing.T) {
+func TestInjectorCodecRestoreFailsWhenNotProvided(t *testing.T) {
 	injector := do.New()
 	codec := NewInjectorCodec("test_service", injector, testServiceSetter)
 
 	ctx := context.Background()
 	restored, err := codec.Restore(ctx, nil)
 
-	require.NoError(t, err)
+	require.ErrorIs(t, err, ErrContextSnapshotRestoreFailed)
 
 	_, ok := testServiceKey.Get(restored)
 	assert.False(t, ok)

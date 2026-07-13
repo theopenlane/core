@@ -81,14 +81,15 @@ func HookSubscriberCreate() ent.Hook {
 				return nil, err
 			}
 
-			customDomain, slug := subscriberTrustCenterDomain(ctx, m.Client(), trustCenterID)
+			customDomain, slug, branding := subscriberTrustCenterDomain(ctx, m.Client(), trustCenterID)
 
 			if err := sendSystemEmail(ctx, m.Client(), emaildef.SubscribeOp.Name(), emaildef.SubscribeRequest{
-				RecipientInfo:  emaildef.RecipientInfo{Email: emailAddress},
-				OrgName:        orgName,
-				Token:          tokenValue,
-				VerifyURL:      trustcenterurl.SubscribeVerifyURLWithToken(customDomain, slug, tokenValue),
-				UnsubscribeURL: trustcenterurl.UnsubscribeURLWithToken(customDomain, slug, tokenValue),
+				RecipientInfo:       emaildef.RecipientInfo{Email: emailAddress},
+				TrustCenterBranding: branding,
+				OrgName:             orgName,
+				Token:               tokenValue,
+				VerifyURL:           trustcenterurl.SubscribeVerifyURLWithToken(customDomain, slug, tokenValue),
+				UnsubscribeURL:      trustcenterurl.UnsubscribeURLWithToken(customDomain, slug, tokenValue),
 			}); err != nil {
 				return nil, err
 			}
@@ -190,27 +191,29 @@ func getSubscriber(ctx context.Context, m *generated.SubscriberMutation) (*gener
 }
 
 // subscriberTrustCenterDomain resolves a subscriber's trust center custom domain and slug for link
-// building; empty strings when there is no trust center or it cannot be resolved
-func subscriberTrustCenterDomain(ctx context.Context, client *generated.Client, trustCenterID string) (customDomain, slug string) {
+// building along with the trust center branding for the confirmation email; zero values when there
+// is no trust center or it cannot be resolved
+func subscriberTrustCenterDomain(ctx context.Context, client *generated.Client, trustCenterID string) (customDomain, slug string, branding emaildef.TrustCenterBranding) {
 	if trustCenterID == "" {
-		return "", ""
+		return "", "", emaildef.TrustCenterBranding{}
 	}
 
 	tc, err := client.TrustCenter.Query().
 		Where(trustcenter.ID(trustCenterID)).
 		WithCustomDomain().
+		WithSetting().
 		Only(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("unable to resolve trust center for subscriber link")
 
-		return "", ""
+		return "", "", emaildef.TrustCenterBranding{}
 	}
 
 	if tc.Edges.CustomDomain != nil {
 		customDomain = tc.Edges.CustomDomain.CnameRecord
 	}
 
-	return customDomain, tc.Slug
+	return customDomain, tc.Slug, emaildef.TrustCenterBrandingFromSetting(tc.Edges.Setting)
 }
 
 // updateSubscriber updates an existing subscriber's send attempts and resets the verified email status

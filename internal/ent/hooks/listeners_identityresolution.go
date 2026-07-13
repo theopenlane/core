@@ -6,6 +6,8 @@ import (
 	"strings"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
@@ -168,15 +170,17 @@ func handleDirectoryAccountUpdated(ctx gala.HandlerContext, payload eventqueue.M
 }
 
 // resolveIdentityHolder runs a priority-ordered matching cascade to find or create
-// an identity holder for the given directory account
+// an identity holder for the given directory account, trying the canonical (SSO) email
+// first and then every confirmed alias before falling back to name matching or creation
 func resolveIdentityHolder(ctx context.Context, client *entgen.Client, account *entgen.DirectoryAccount) (*entgen.IdentityHolder, error) {
 	ownerID := account.OwnerID
-	hasEmail := account.CanonicalEmail != nil && *account.CanonicalEmail != ""
+	emails := confirmedAccountEmails(account)
+	hasEmail := len(emails) > 0
 	hasName := account.GivenName != nil && *account.GivenName != "" &&
 		account.FamilyName != nil && *account.FamilyName != ""
 
-	// exact email match on IdentityHolder
-	if hasEmail {
+	// exact canonical (SSO) email match on IdentityHolder
+	if account.CanonicalEmail != nil && *account.CanonicalEmail != "" {
 		holder, err := client.IdentityHolder.Query().
 			Where(identityholder.OwnerID(ownerID),
 				identityholder.Email(*account.CanonicalEmail)).Only(ctx)
@@ -189,13 +193,42 @@ func resolveIdentityHolder(ctx context.Context, client *entgen.Client, account *
 		}
 	}
 
-	// check directory accounts for any that might be linked to identity holder but didn't match on email
+	// any confirmed email match against identity holder primary email or aliases
+	if hasEmail {
+		holder, err := client.IdentityHolder.Query().
+			Where(identityholder.OwnerID(ownerID),
+				identityholder.Or(
+					identityholder.EmailIn(emails...),
+					func(s *sql.Selector) {
+						s.Where(sql.Or(lo.Map(emails, func(email string, _ int) *sql.Predicate {
+							return sqljson.ValueContains(identityholder.FieldEmailAliases, email)
+						})...))
+					},
+				)).First(ctx)
+		if err == nil {
+			return holder, nil
+		}
+
+		if !entgen.IsNotFound(err) {
+			return nil, err
+		}
+	}
+
+	// check directory accounts for any that might be linked to an identity holder
+	// through their canonical email or confirmed aliases
 	if hasEmail {
 		sibling, err := client.DirectoryAccount.Query().
 			Where(directoryaccount.OwnerID(ownerID),
-				directoryaccount.CanonicalEmail(*account.CanonicalEmail),
 				directoryaccount.IdentityHolderIDNotNil(),
-				directoryaccount.IDNEQ(account.ID)).First(ctx)
+				directoryaccount.IDNEQ(account.ID),
+				directoryaccount.Or(
+					directoryaccount.CanonicalEmailIn(emails...),
+					func(s *sql.Selector) {
+						s.Where(sql.Or(lo.Map(emails, func(email string, _ int) *sql.Predicate {
+							return sqljson.ValueContains(directoryaccount.FieldEmailAliases, email)
+						})...))
+					},
+				)).First(ctx)
 		if err == nil && sibling.IdentityHolderID != nil {
 			return client.IdentityHolder.Get(ctx, *sibling.IdentityHolderID)
 		}
@@ -230,11 +263,27 @@ func resolveIdentityHolder(ctx context.Context, client *entgen.Client, account *
 	}
 
 	// Step 4: create new identity holder (requires canonical email)
-	if !hasEmail {
+	if account.CanonicalEmail == nil || *account.CanonicalEmail == "" {
 		return nil, nil
 	}
 
 	return createIdentityHolder(ctx, client, account)
+}
+
+// confirmedAccountEmails returns the canonical email followed by every confirmed alias
+// for a directory account, deduplicated with empties removed
+func confirmedAccountEmails(account *entgen.DirectoryAccount) []string {
+	emails := make([]string, 0, len(account.EmailAliases)+1)
+
+	if account.CanonicalEmail != nil {
+		emails = append(emails, *account.CanonicalEmail)
+	}
+
+	emails = append(emails, account.EmailAliases...)
+
+	return lo.Uniq(lo.Filter(emails, func(email string, _ int) bool {
+		return email != ""
+	}))
 }
 
 // createIdentityHolder creates a new identity holder from a directory account with
@@ -344,22 +393,19 @@ func enrichFromPrimarySource(ctx context.Context, client *entgen.Client, holder 
 }
 
 // syncEmailAliases rebuilds the identity holder's email_aliases from all linked
-// directory accounts' canonical emails, excluding the primary email
+// directory accounts' canonical emails and confirmed aliases, excluding the primary email
 func syncEmailAliases(ctx context.Context, client *entgen.Client, holder *entgen.IdentityHolder) error {
 	accounts, err := client.DirectoryAccount.Query().
-		Where(directoryaccount.IdentityHolderID(holder.ID),
-			directoryaccount.CanonicalEmailNotNil()).
-		Select(directoryaccount.FieldCanonicalEmail).All(ctx)
+		Where(directoryaccount.IdentityHolderID(holder.ID)).
+		Select(directoryaccount.FieldCanonicalEmail, directoryaccount.FieldEmailAliases).All(ctx)
 	if err != nil {
 		return err
 	}
 
-	aliases := lo.Uniq(lo.FilterMap(accounts, func(a *entgen.DirectoryAccount, _ int) (string, bool) {
-		if a.CanonicalEmail == nil || *a.CanonicalEmail == "" || strings.EqualFold(*a.CanonicalEmail, holder.Email) {
-			return "", false
-		}
-
-		return *a.CanonicalEmail, true
+	aliases := lo.Uniq(lo.FlatMap(accounts, func(a *entgen.DirectoryAccount, _ int) []string {
+		return lo.Filter(confirmedAccountEmails(a), func(email string, _ int) bool {
+			return !strings.EqualFold(email, holder.Email)
+		})
 	}))
 
 	return client.IdentityHolder.UpdateOneID(holder.ID).

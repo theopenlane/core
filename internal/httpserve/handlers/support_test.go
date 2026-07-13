@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"testing"
 
@@ -71,82 +72,104 @@ func (suite *HandlerTestSuite) TestSupportAccessLoginAndCallback() {
 	suite.registerTestHandler("POST", "v1/login", loginOp, suite.h.LoginHandler)
 	suite.registerTestHandler("POST", "v1/support/callback", callbackOp, suite.h.SupportCallbackHandler)
 
-	oidc := newMockOIDCServer(t,
-		withExpectedCode("code123"),
-		withClientSecret("secret"),
-		withUserInfo("engineer@theopenlane.io", "Support Engineer", ""),
-	)
-	defer oidc.Close()
-
-	// configure support access on the handler and restore afterwards so other tests are unaffected
-	original := suite.h.SupportAccessConfig
-	suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
-	defer func() { suite.h.SupportAccessConfig = original }()
-
-	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
-	ctx = ent.NewContext(ctx, suite.db)
-
-	org := suite.createConsentingOrg(ctx)
-
-	// first factor: authenticate the support identity against the configured password
-	loginBody, _ := json.Marshal(models.LoginRequest{
-		Username:             "support@theopenlane.io",
-		Password:             "super-secret-support-password",
-		TargetOrganizationID: org.ID,
-		Reason:               "assisting customer with data import",
-	})
-
-	loginReq := httptest.NewRequest(http.MethodPost, "/v1/login", strings.NewReader(string(loginBody)))
-	loginReq.Header.Set("Content-Type", "application/json")
-	loginRec := httptest.NewRecorder()
-	suite.e.ServeHTTP(loginRec, loginReq)
-
-	require.Equal(t, http.StatusOK, loginRec.Code)
-
-	var loginOut models.LoginReply
-	require.NoError(t, json.NewDecoder(loginRec.Body).Decode(&loginOut))
-	assert.True(t, loginOut.Success)
-	assert.NotEmpty(t, loginOut.RedirectURI, "first factor should return the identity provider redirect")
-
-	// collect the support cookies set by the first factor
-	cookieParts := []string{}
-	var state string
-	for _, c := range loginRec.Result().Cookies() {
-		cookieParts = append(cookieParts, c.Name+"="+c.Value)
-		if c.Name == "support_state" {
-			state = c.Value
-		}
-		if c.Name == "support_nonce" {
-			oidc.nonce = c.Value
-		}
+	testCases := []struct {
+		name           string
+		reason         string
+		expectedReason string
+	}{
+		{
+			name:           "plain reason",
+			reason:         "assisting customer with data import",
+			expectedReason: "assisting customer with data import",
+		},
+		{
+			name:           "url escaped reason",
+			reason:         url.QueryEscape("this is an escaped text"),
+			expectedReason: "this is an escaped text",
+		},
 	}
 
-	require.NotEmpty(t, state, "support_state cookie should be set")
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			oidc := newMockOIDCServer(t,
+				withExpectedCode("code123"),
+				withClientSecret("secret"),
+				withUserInfo("engineer@theopenlane.io", "Support Engineer", ""),
+			)
+			defer oidc.Close()
 
-	// second factor: complete the identity provider exchange
-	cbBody, _ := json.Marshal(models.SupportCallbackRequest{Code: "code123", State: state})
-	cbReq := httptest.NewRequest(http.MethodPost, "/v1/support/callback", strings.NewReader(string(cbBody)))
-	cbReq.Header.Set("Content-Type", "application/json")
-	cbReq.Header.Set("Cookie", strings.Join(cookieParts, "; "))
-	cbRec := httptest.NewRecorder()
-	suite.e.ServeHTTP(cbRec, cbReq)
+			// configure support access on the handler and restore afterwards so other tests are unaffected
+			original := suite.h.SupportAccessConfig
+			suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
+			defer func() { suite.h.SupportAccessConfig = original }()
 
-	require.Equal(t, http.StatusOK, cbRec.Code)
+			ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+			ctx = ent.NewContext(ctx, suite.db)
 
-	var cbOut models.SupportAccessReply
-	require.NoError(t, json.NewDecoder(cbRec.Body).Decode(&cbOut))
-	assert.True(t, cbOut.Success)
-	assert.NotEmpty(t, cbOut.Token)
-	assert.Equal(t, org.ID, cbOut.OrganizationID)
-	assert.Equal(t, "engineer@theopenlane.io", cbOut.Impersonator)
+			org := suite.createConsentingOrg(ctx)
 
-	// the minted token must carry both identities: the virtual support user and the individual
-	claims, err := suite.h.TokenManager.ValidateImpersonationToken(context.Background(), cbOut.Token)
-	require.NoError(t, err)
-	assert.Equal(t, "01JSPPRT000000000000000000", claims.UserID, "target is the virtual support identity")
-	assert.Equal(t, "engineer@theopenlane.io", claims.ImpersonatorID, "impersonator is the individual from the IdP")
-	assert.Equal(t, "support", claims.Type)
-	assert.Equal(t, org.ID, claims.OrgID)
+			// first factor: authenticate the support identity against the configured password
+			loginBody, _ := json.Marshal(models.LoginRequest{
+				Username:             "support@theopenlane.io",
+				Password:             "super-secret-support-password",
+				TargetOrganizationID: org.ID,
+				Reason:               tc.reason,
+			})
+
+			loginReq := httptest.NewRequest(http.MethodPost, "/v1/login", strings.NewReader(string(loginBody)))
+			loginReq.Header.Set("Content-Type", "application/json")
+			loginRec := httptest.NewRecorder()
+			suite.e.ServeHTTP(loginRec, loginReq)
+
+			require.Equal(t, http.StatusOK, loginRec.Code)
+
+			var loginOut models.LoginReply
+			require.NoError(t, json.NewDecoder(loginRec.Body).Decode(&loginOut))
+			assert.True(t, loginOut.Success)
+			assert.NotEmpty(t, loginOut.RedirectURI, "first factor should return the identity provider redirect")
+
+			// collect the support cookies set by the first factor
+			cookieParts := []string{}
+			var state string
+			for _, c := range loginRec.Result().Cookies() {
+				cookieParts = append(cookieParts, c.Name+"="+c.Value)
+				if c.Name == "support_state" {
+					state = c.Value
+				}
+				if c.Name == "support_nonce" {
+					oidc.nonce = c.Value
+				}
+			}
+
+			require.NotEmpty(t, state, "support_state cookie should be set")
+
+			// second factor: complete the identity provider exchange
+			cbBody, _ := json.Marshal(models.SupportCallbackRequest{Code: "code123", State: state})
+			cbReq := httptest.NewRequest(http.MethodPost, "/v1/support/callback", strings.NewReader(string(cbBody)))
+			cbReq.Header.Set("Content-Type", "application/json")
+			cbReq.Header.Set("Cookie", strings.Join(cookieParts, "; "))
+			cbRec := httptest.NewRecorder()
+			suite.e.ServeHTTP(cbRec, cbReq)
+
+			require.Equal(t, http.StatusOK, cbRec.Code)
+
+			var cbOut models.SupportAccessReply
+			require.NoError(t, json.NewDecoder(cbRec.Body).Decode(&cbOut))
+			assert.True(t, cbOut.Success)
+			assert.NotEmpty(t, cbOut.Token)
+			assert.Equal(t, org.ID, cbOut.OrganizationID)
+			assert.Equal(t, "engineer@theopenlane.io", cbOut.Impersonator)
+
+			// the minted token must carry both identities: the virtual support user and the individual
+			claims, err := suite.h.TokenManager.ValidateImpersonationToken(context.Background(), cbOut.Token)
+			require.NoError(t, err)
+			assert.Equal(t, "01JSPPRT000000000000000000", claims.UserID, "target is the virtual support identity")
+			assert.Equal(t, "engineer@theopenlane.io", claims.ImpersonatorID, "impersonator is the individual from the IdP")
+			assert.Equal(t, "support", claims.Type)
+			assert.Equal(t, org.ID, claims.OrgID)
+			assert.Equal(t, tc.expectedReason, claims.Reason)
+		})
+	}
 }
 
 func (suite *HandlerTestSuite) TestSupportAccessRejectsWrongPassword() {

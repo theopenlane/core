@@ -1872,6 +1872,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**HeadingColor**|`string`|Heading and title text color<br/>|no|
 |**TextColor**|`string`|Body paragraph text color<br/>|no|
 |**FooterTextColor**|`string`|Muted text color for headers footers and secondary content<br/>|no|
+|**AccentBorderColor**|`string`|Decorative accent color applied to borders only<br/>|no|
 |**Tagline**|`string`|Short descriptive footer line rendered above the social row in modern themes<br/>|no|
 
 **Additional Properties:** not allowed  

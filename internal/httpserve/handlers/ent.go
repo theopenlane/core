@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
+	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/trustcenterurl"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
@@ -635,12 +636,13 @@ func (h *Handler) trustCenterCompanyName(ctx context.Context, sub *ent.Subscribe
 	return setting.CompanyName
 }
 
-// subscriberTrustCenterDomain resolves the custom domain + slug of a subscriber's trust center, read
-// through the anonymous trust center scope, for composing public trust center links. ok is false when the
-// subscriber has no trust center or it cannot be resolved
-func (h *Handler) subscriberTrustCenterDomain(ctx context.Context, sub *ent.Subscriber) (customDomain, slug string, ok bool) {
+// subscriberTrustCenterDomain resolves a subscriber's trust center with its custom domain and live
+// setting, read through the anonymous trust center scope, for composing public trust center links
+// and the confirmation email branding. ok is false when the subscriber has no trust center or it
+// cannot be resolved
+func (h *Handler) subscriberTrustCenterDomain(ctx context.Context, sub *ent.Subscriber) (tc *ent.TrustCenter, customDomain string, ok bool) {
 	if sub.TrustCenterID == nil || *sub.TrustCenterID == "" {
-		return "", "", false
+		return nil, "", false
 	}
 
 	tcCtx := auth.WithCaller(ctx, auth.NewTrustCenterBootstrapCaller(sub.OwnerID))
@@ -649,31 +651,33 @@ func (h *Handler) subscriberTrustCenterDomain(ctx context.Context, sub *ent.Subs
 	tc, err := transaction.FromContext(tcCtx).TrustCenter.Query().
 		Where(trustcenter.ID(*sub.TrustCenterID)).
 		WithCustomDomain().
+		WithSetting().
 		Only(tcCtx)
 	if err != nil {
 		logx.FromContext(ctx).Debug().Err(err).Msg("could not resolve trust center for subscriber link")
 
-		return "", "", false
+		return nil, "", false
 	}
 
 	if tc.Edges.CustomDomain != nil {
 		customDomain = tc.Edges.CustomDomain.CnameRecord
 	}
 
-	return customDomain, tc.Slug, true
+	return tc, customDomain, true
 }
 
 // subscriberTrustCenterLinks builds the tokenized trust center verify and unsubscribe links for a
-// subscriber, so the links land on the trust center rather than the app console; both empty when the
-// trust center cannot resolve
-func (h *Handler) subscriberTrustCenterLinks(ctx context.Context, sub *ent.Subscriber, token string) (verifyURL, unsubscribeURL string) {
-	customDomain, slug, ok := h.subscriberTrustCenterDomain(ctx, sub)
+// subscriber, so the links land on the trust center rather than the app console, along with the
+// trust center branding for the confirmation email; zero values when the trust center cannot resolve
+func (h *Handler) subscriberTrustCenterLinks(ctx context.Context, sub *ent.Subscriber, token string) (verifyURL, unsubscribeURL string, branding email.TrustCenterBranding) {
+	tc, customDomain, ok := h.subscriberTrustCenterDomain(ctx, sub)
 	if !ok {
-		return "", ""
+		return "", "", email.TrustCenterBranding{}
 	}
 
-	return trustcenterurl.SubscribeVerifyURLWithToken(customDomain, slug, token),
-		trustcenterurl.UnsubscribeURLWithToken(customDomain, slug, token)
+	return trustcenterurl.SubscribeVerifyURLWithToken(customDomain, tc.Slug, token),
+		trustcenterurl.UnsubscribeURLWithToken(customDomain, tc.Slug, token),
+		email.TrustCenterBrandingFromSetting(tc.Edges.Setting)
 }
 
 // createEvent creates a new event in the database but requires mapped input

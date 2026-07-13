@@ -114,16 +114,6 @@ func OwnerID(v string) predicate.SystemDetail {
 	return predicate.SystemDetail(sql.FieldEQ(FieldOwnerID, v))
 }
 
-// ProgramID applies equality check predicate on the "program_id" field. It's identical to ProgramIDEQ.
-func ProgramID(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldEQ(FieldProgramID, v))
-}
-
-// PlatformID applies equality check predicate on the "platform_id" field. It's identical to PlatformIDEQ.
-func PlatformID(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldEQ(FieldPlatformID, v))
-}
-
 // SystemName applies equality check predicate on the "system_name" field. It's identical to SystemNameEQ.
 func SystemName(v string) predicate.SystemDetail {
 	return predicate.SystemDetail(sql.FieldEQ(FieldSystemName, v))
@@ -749,156 +739,6 @@ func OwnerIDContainsFold(v string) predicate.SystemDetail {
 	return predicate.SystemDetail(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
-// ProgramIDEQ applies the EQ predicate on the "program_id" field.
-func ProgramIDEQ(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldEQ(FieldProgramID, v))
-}
-
-// ProgramIDNEQ applies the NEQ predicate on the "program_id" field.
-func ProgramIDNEQ(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldNEQ(FieldProgramID, v))
-}
-
-// ProgramIDIn applies the In predicate on the "program_id" field.
-func ProgramIDIn(vs ...string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldIn(FieldProgramID, vs...))
-}
-
-// ProgramIDNotIn applies the NotIn predicate on the "program_id" field.
-func ProgramIDNotIn(vs ...string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldNotIn(FieldProgramID, vs...))
-}
-
-// ProgramIDGT applies the GT predicate on the "program_id" field.
-func ProgramIDGT(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldGT(FieldProgramID, v))
-}
-
-// ProgramIDGTE applies the GTE predicate on the "program_id" field.
-func ProgramIDGTE(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldGTE(FieldProgramID, v))
-}
-
-// ProgramIDLT applies the LT predicate on the "program_id" field.
-func ProgramIDLT(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldLT(FieldProgramID, v))
-}
-
-// ProgramIDLTE applies the LTE predicate on the "program_id" field.
-func ProgramIDLTE(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldLTE(FieldProgramID, v))
-}
-
-// ProgramIDContains applies the Contains predicate on the "program_id" field.
-func ProgramIDContains(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldContains(FieldProgramID, v))
-}
-
-// ProgramIDHasPrefix applies the HasPrefix predicate on the "program_id" field.
-func ProgramIDHasPrefix(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldHasPrefix(FieldProgramID, v))
-}
-
-// ProgramIDHasSuffix applies the HasSuffix predicate on the "program_id" field.
-func ProgramIDHasSuffix(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldHasSuffix(FieldProgramID, v))
-}
-
-// ProgramIDIsNil applies the IsNil predicate on the "program_id" field.
-func ProgramIDIsNil() predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldIsNull(FieldProgramID))
-}
-
-// ProgramIDNotNil applies the NotNil predicate on the "program_id" field.
-func ProgramIDNotNil() predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldNotNull(FieldProgramID))
-}
-
-// ProgramIDEqualFold applies the EqualFold predicate on the "program_id" field.
-func ProgramIDEqualFold(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldEqualFold(FieldProgramID, v))
-}
-
-// ProgramIDContainsFold applies the ContainsFold predicate on the "program_id" field.
-func ProgramIDContainsFold(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldContainsFold(FieldProgramID, v))
-}
-
-// PlatformIDEQ applies the EQ predicate on the "platform_id" field.
-func PlatformIDEQ(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldEQ(FieldPlatformID, v))
-}
-
-// PlatformIDNEQ applies the NEQ predicate on the "platform_id" field.
-func PlatformIDNEQ(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldNEQ(FieldPlatformID, v))
-}
-
-// PlatformIDIn applies the In predicate on the "platform_id" field.
-func PlatformIDIn(vs ...string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldIn(FieldPlatformID, vs...))
-}
-
-// PlatformIDNotIn applies the NotIn predicate on the "platform_id" field.
-func PlatformIDNotIn(vs ...string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldNotIn(FieldPlatformID, vs...))
-}
-
-// PlatformIDGT applies the GT predicate on the "platform_id" field.
-func PlatformIDGT(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldGT(FieldPlatformID, v))
-}
-
-// PlatformIDGTE applies the GTE predicate on the "platform_id" field.
-func PlatformIDGTE(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldGTE(FieldPlatformID, v))
-}
-
-// PlatformIDLT applies the LT predicate on the "platform_id" field.
-func PlatformIDLT(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldLT(FieldPlatformID, v))
-}
-
-// PlatformIDLTE applies the LTE predicate on the "platform_id" field.
-func PlatformIDLTE(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldLTE(FieldPlatformID, v))
-}
-
-// PlatformIDContains applies the Contains predicate on the "platform_id" field.
-func PlatformIDContains(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldContains(FieldPlatformID, v))
-}
-
-// PlatformIDHasPrefix applies the HasPrefix predicate on the "platform_id" field.
-func PlatformIDHasPrefix(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldHasPrefix(FieldPlatformID, v))
-}
-
-// PlatformIDHasSuffix applies the HasSuffix predicate on the "platform_id" field.
-func PlatformIDHasSuffix(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldHasSuffix(FieldPlatformID, v))
-}
-
-// PlatformIDIsNil applies the IsNil predicate on the "platform_id" field.
-func PlatformIDIsNil() predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldIsNull(FieldPlatformID))
-}
-
-// PlatformIDNotNil applies the NotNil predicate on the "platform_id" field.
-func PlatformIDNotNil() predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldNotNull(FieldPlatformID))
-}
-
-// PlatformIDEqualFold applies the EqualFold predicate on the "platform_id" field.
-func PlatformIDEqualFold(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldEqualFold(FieldPlatformID, v))
-}
-
-// PlatformIDContainsFold applies the ContainsFold predicate on the "platform_id" field.
-func PlatformIDContainsFold(v string) predicate.SystemDetail {
-	return predicate.SystemDetail(sql.FieldContainsFold(FieldPlatformID, v))
-}
-
 // SystemNameEQ applies the EQ predicate on the "system_name" field.
 func SystemNameEQ(v string) predicate.SystemDetail {
 	return predicate.SystemDetail(sql.FieldEQ(FieldSystemName, v))
@@ -1328,27 +1168,27 @@ func HasOwnerWith(preds ...predicate.Organization) predicate.SystemDetail {
 	})
 }
 
-// HasProgram applies the HasEdge predicate on the "program" edge.
-func HasProgram() predicate.SystemDetail {
+// HasPrograms applies the HasEdge predicate on the "programs" edge.
+func HasPrograms() predicate.SystemDetail {
 	return predicate.SystemDetail(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, ProgramTable, ProgramColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.ProgramSystemDetails
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasProgramWith applies the HasEdge predicate on the "program" edge with a given conditions (other predicates).
-func HasProgramWith(preds ...predicate.Program) predicate.SystemDetail {
+// HasProgramsWith applies the HasEdge predicate on the "programs" edge with a given conditions (other predicates).
+func HasProgramsWith(preds ...predicate.Program) predicate.SystemDetail {
 	return predicate.SystemDetail(func(s *sql.Selector) {
-		step := newProgramStep()
+		step := newProgramsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.ProgramSystemDetails
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1357,27 +1197,85 @@ func HasProgramWith(preds ...predicate.Program) predicate.SystemDetail {
 	})
 }
 
-// HasPlatform applies the HasEdge predicate on the "platform" edge.
-func HasPlatform() predicate.SystemDetail {
+// HasPlatforms applies the HasEdge predicate on the "platforms" edge.
+func HasPlatforms() predicate.SystemDetail {
 	return predicate.SystemDetail(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, PlatformTable, PlatformColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, PlatformsTable, PlatformsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.PlatformSystemDetails
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasPlatformWith applies the HasEdge predicate on the "platform" edge with a given conditions (other predicates).
-func HasPlatformWith(preds ...predicate.Platform) predicate.SystemDetail {
+// HasPlatformsWith applies the HasEdge predicate on the "platforms" edge with a given conditions (other predicates).
+func HasPlatformsWith(preds ...predicate.Platform) predicate.SystemDetail {
 	return predicate.SystemDetail(func(s *sql.Selector) {
-		step := newPlatformStep()
+		step := newPlatformsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.PlatformSystemDetails
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEntities applies the HasEdge predicate on the "entities" edge.
+func HasEntities() predicate.SystemDetail {
+	return predicate.SystemDetail(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, EntitiesTable, EntitiesPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.EntitySystemDetails
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEntitiesWith applies the HasEdge predicate on the "entities" edge with a given conditions (other predicates).
+func HasEntitiesWith(preds ...predicate.Entity) predicate.SystemDetail {
+	return predicate.SystemDetail(func(s *sql.Selector) {
+		step := newEntitiesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.EntitySystemDetails
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAssets applies the HasEdge predicate on the "assets" edge.
+func HasAssets() predicate.SystemDetail {
+	return predicate.SystemDetail(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, AssetsTable, AssetsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.SystemDetailAssets
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAssetsWith applies the HasEdge predicate on the "assets" edge with a given conditions (other predicates).
+func HasAssetsWith(preds ...predicate.Asset) predicate.SystemDetail {
+	return predicate.SystemDetail(func(s *sql.Selector) {
+		step := newAssetsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.SystemDetailAssets
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/newman"
 
 	"github.com/theopenlane/core/common/enums"
@@ -78,8 +77,9 @@ func snapshotTrustCenterSubscribers(ctx context.Context, db *generated.Client, c
 	return db.CampaignTarget.CreateBulk(builders...).Exec(allowCtx)
 }
 
-// renderMessagesForCampaign routes campaign rendering: trust center update campaigns brand the
-// message from the trust center setting, all other campaigns render from the email template defaults
+// renderMessagesForCampaign routes campaign rendering: trust center update campaigns render the
+// system message from the campaign's per-send metadata branded from the trust center setting, all
+// other campaigns render from their email template defaults
 func renderMessagesForCampaign(ctx context.Context, client *Client, dispatcher Dispatcher, camp *generated.Campaign, template *generated.EmailTemplate, overlay CampaignContext, targets []*generated.CampaignTarget) ([]*newman.EmailMessage, []string, int) {
 	if camp.CampaignType == enums.CampaignTypeTrustCenterUpdate {
 		var setting *generated.TrustCenterSetting
@@ -87,37 +87,32 @@ func renderMessagesForCampaign(ctx context.Context, client *Client, dispatcher D
 			setting = camp.Edges.TrustCenter.Edges.Setting
 		}
 
-		return renderTrustCenterCampaignMessages(ctx, client, dispatcher, template, setting, camp.Metadata, overlay, targets)
+		return renderTrustCenterCampaignMessages(ctx, client, dispatcher, setting, camp.Metadata, overlay, targets)
 	}
 
 	return renderCampaignMessages(ctx, client, dispatcher, template.Defaults, camp.Metadata, overlay, targets)
 }
 
-// renderTrustCenterCampaignMessages builds a branded message per recipient. Content is the email
-// template defaults overlaid with the campaign's per-send metadata (so automated triggers supply the
-// post content via metadata over a shared template); branding comes from the trust center setting; the
-// per-recipient unsubscribe token is resolved from each target's metadata
-func renderTrustCenterCampaignMessages(ctx context.Context, client *Client, dispatcher Dispatcher, template *generated.EmailTemplate, setting *generated.TrustCenterSetting, metadata map[string]any, overlay CampaignContext, targets []*generated.CampaignTarget) ([]*newman.EmailMessage, []string, int) {
-	overlays := make([]any, 0, 1)
-	if len(metadata) > 0 {
-		overlays = append(overlays, metadata)
-	}
-
-	payload, err := templatekit.BuildDispatchPayload(template.Defaults, overlays...)
+// renderTrustCenterCampaignMessages builds an update message per recipient. The post content comes
+// from the campaign's per-send metadata (the automated triggers supply it when they create the
+// campaign); branding comes from the trust center setting with the system config as fallback at
+// render time; the per-recipient unsubscribe token is resolved from each target's metadata
+func renderTrustCenterCampaignMessages(ctx context.Context, client *Client, dispatcher Dispatcher, setting *generated.TrustCenterSetting, metadata map[string]any, overlay CampaignContext, targets []*generated.CampaignTarget) ([]*newman.EmailMessage, []string, int) {
+	payload, err := templatekit.BuildDispatchPayload(metadata)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed building trust center campaign content")
 
 		return nil, nil, len(targets)
 	}
 
-	var base BrandedMessageRequest
+	var base TrustCenterUpdateRequest
 	if err := json.Unmarshal(payload, &base); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed decoding trust center campaign content")
 
 		return nil, nil, len(targets)
 	}
 
-	applyTrustCenterBranding(&base, setting, client.Config)
+	base.TrustCenterBranding = TrustCenterBrandingFromSetting(setting)
 
 	messages := make([]*newman.EmailMessage, 0, len(targets))
 	targetIDs := make([]string, 0, len(targets))
@@ -156,37 +151,4 @@ func renderTrustCenterCampaignMessages(ctx context.Context, client *Client, disp
 	}
 
 	return messages, targetIDs, failed
-}
-
-// applyTrustCenterBranding sets the branding fields on a branded message request from the trust
-// center setting, falling back to the runtime email config for any value the trust center does not
-// define. Content fields authored on the email template are left untouched
-func applyTrustCenterBranding(req *BrandedMessageRequest, setting *generated.TrustCenterSetting, fallback RuntimeEmailConfig) {
-	companyName := fallback.CompanyName
-	logo := fallback.LogoURL
-	primaryColor := fallback.HeadingColor
-	buttonColor := fallback.ButtonColor
-	bodyBackground := fallback.BodyBackgroundColor
-	cardBackground := fallback.CardBackgroundColor
-	textColor := fallback.TextColor
-
-	if setting != nil {
-		companyName = lo.CoalesceOrEmpty(setting.CompanyName, companyName)
-		logo = lo.CoalesceOrEmpty(lo.FromPtr(setting.LogoRemoteURL), logo)
-		primaryColor = lo.CoalesceOrEmpty(setting.PrimaryColor, primaryColor)
-		buttonColor = lo.CoalesceOrEmpty(setting.AccentColor, buttonColor)
-		bodyBackground = lo.CoalesceOrEmpty(setting.BackgroundColor, bodyBackground)
-		cardBackground = lo.CoalesceOrEmpty(setting.SecondaryBackgroundColor, cardBackground)
-		textColor = lo.CoalesceOrEmpty(setting.ForegroundColor, textColor)
-	}
-
-	req.CompanyName = companyName
-	req.Corporation = lo.CoalesceOrEmpty(req.Corporation, fallback.Corporation)
-	req.LogoURL = logo
-	req.HeaderLogoURL = logo
-	req.PrimaryColor = primaryColor
-	req.ButtonColor = buttonColor
-	req.BodyBackgroundColor = bodyBackground
-	req.CardBackgroundColor = cardBackground
-	req.TextColor = textColor
 }

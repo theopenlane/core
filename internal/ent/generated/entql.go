@@ -3134,8 +3134,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			systemdetail.FieldDisplayID:             {Type: field.TypeString, Column: systemdetail.FieldDisplayID},
 			systemdetail.FieldTags:                  {Type: field.TypeJSON, Column: systemdetail.FieldTags},
 			systemdetail.FieldOwnerID:               {Type: field.TypeString, Column: systemdetail.FieldOwnerID},
-			systemdetail.FieldProgramID:             {Type: field.TypeString, Column: systemdetail.FieldProgramID},
-			systemdetail.FieldPlatformID:            {Type: field.TypeString, Column: systemdetail.FieldPlatformID},
 			systemdetail.FieldSystemName:            {Type: field.TypeString, Column: systemdetail.FieldSystemName},
 			systemdetail.FieldVersion:               {Type: field.TypeString, Column: systemdetail.FieldVersion},
 			systemdetail.FieldDescription:           {Type: field.TypeString, Column: systemdetail.FieldDescription},
@@ -4670,6 +4668,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Asset",
 		"Platform",
+	)
+	graph.MustAddE(
+		"system_details",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.SystemDetailsTable,
+			Columns: asset.SystemDetailsPrimaryKey,
+			Bidi:    false,
+		},
+		"Asset",
+		"SystemDetail",
 	)
 	graph.MustAddE(
 		"out_of_scope_platforms",
@@ -7108,12 +7118,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Asset",
 	)
 	graph.MustAddE(
+		"system_details",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.SystemDetailsTable,
+			Columns: entity.SystemDetailsPrimaryKey,
+			Bidi:    false,
+		},
+		"Entity",
+		"SystemDetail",
+	)
+	graph.MustAddE(
 		"scans",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   entity.ScansTable,
-			Columns: []string{entity.ScansColumn},
+			Columns: entity.ScansPrimaryKey,
 			Bidi:    false,
 		},
 		"Entity",
@@ -8178,10 +8200,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"scans",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.ScansTable,
-			Columns: []string{finding.ScansColumn},
+			Columns: finding.ScansPrimaryKey,
 			Bidi:    false,
 		},
 		"Finding",
@@ -13720,12 +13742,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"User",
 	)
 	graph.MustAddE(
-		"system_detail",
+		"system_details",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   platform.SystemDetailTable,
-			Columns: []string{platform.SystemDetailColumn},
+			Table:   platform.SystemDetailsTable,
+			Columns: platform.SystemDetailsPrimaryKey,
 			Bidi:    false,
 		},
 		"Platform",
@@ -14164,12 +14186,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"ActionPlan",
 	)
 	graph.MustAddE(
-		"system_detail",
+		"system_details",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.SystemDetailTable,
-			Columns: []string{program.SystemDetailColumn},
+			Table:   program.SystemDetailsTable,
+			Columns: program.SystemDetailsPrimaryKey,
 			Bidi:    false,
 		},
 		"Program",
@@ -15198,10 +15220,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"entities",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   scan.EntitiesTable,
-			Columns: []string{scan.EntitiesColumn},
+			Columns: scan.EntitiesPrimaryKey,
 			Bidi:    false,
 		},
 		"Scan",
@@ -15314,6 +15336,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Scan",
 		"Subcontrol",
+	)
+	graph.MustAddE(
+		"findings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.FindingsTable,
+			Columns: scan.FindingsPrimaryKey,
+			Bidi:    false,
+		},
+		"Scan",
+		"Finding",
 	)
 	graph.MustAddE(
 		"generated_by_platform",
@@ -15976,28 +16010,52 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
-		"program",
+		"programs",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   systemdetail.ProgramTable,
-			Columns: []string{systemdetail.ProgramColumn},
+			Table:   systemdetail.ProgramsTable,
+			Columns: systemdetail.ProgramsPrimaryKey,
 			Bidi:    false,
 		},
 		"SystemDetail",
 		"Program",
 	)
 	graph.MustAddE(
-		"platform",
+		"platforms",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   systemdetail.PlatformTable,
-			Columns: []string{systemdetail.PlatformColumn},
+			Table:   systemdetail.PlatformsTable,
+			Columns: systemdetail.PlatformsPrimaryKey,
 			Bidi:    false,
 		},
 		"SystemDetail",
 		"Platform",
+	)
+	graph.MustAddE(
+		"entities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   systemdetail.EntitiesTable,
+			Columns: systemdetail.EntitiesPrimaryKey,
+			Bidi:    false,
+		},
+		"SystemDetail",
+		"Entity",
+	)
+	graph.MustAddE(
+		"assets",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   systemdetail.AssetsTable,
+			Columns: systemdetail.AssetsPrimaryKey,
+			Bidi:    false,
+		},
+		"SystemDetail",
+		"Asset",
 	)
 	graph.MustAddE(
 		"owner",
@@ -20426,6 +20484,20 @@ func (f *AssetFilter) WhereHasPlatforms() {
 // WhereHasPlatformsWith applies a predicate to check if query has an edge platforms with a given conditions (other predicates).
 func (f *AssetFilter) WhereHasPlatformsWith(preds ...predicate.Platform) {
 	f.Where(entql.HasEdgeWith("platforms", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSystemDetails applies a predicate to check if query has an edge system_details.
+func (f *AssetFilter) WhereHasSystemDetails() {
+	f.Where(entql.HasEdge("system_details"))
+}
+
+// WhereHasSystemDetailsWith applies a predicate to check if query has an edge system_details with a given conditions (other predicates).
+func (f *AssetFilter) WhereHasSystemDetailsWith(preds ...predicate.SystemDetail) {
+	f.Where(entql.HasEdgeWith("system_details", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -26568,6 +26640,20 @@ func (f *EntityFilter) WhereHasAssets() {
 // WhereHasAssetsWith applies a predicate to check if query has an edge assets with a given conditions (other predicates).
 func (f *EntityFilter) WhereHasAssetsWith(preds ...predicate.Asset) {
 	f.Where(entql.HasEdgeWith("assets", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSystemDetails applies a predicate to check if query has an edge system_details.
+func (f *EntityFilter) WhereHasSystemDetails() {
+	f.Where(entql.HasEdge("system_details"))
+}
+
+// WhereHasSystemDetailsWith applies a predicate to check if query has an edge system_details with a given conditions (other predicates).
+func (f *EntityFilter) WhereHasSystemDetailsWith(preds ...predicate.SystemDetail) {
+	f.Where(entql.HasEdgeWith("system_details", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -40488,14 +40574,14 @@ func (f *PlatformFilter) WhereHasPlatformOwnerWith(preds ...predicate.User) {
 	})))
 }
 
-// WhereHasSystemDetail applies a predicate to check if query has an edge system_detail.
-func (f *PlatformFilter) WhereHasSystemDetail() {
-	f.Where(entql.HasEdge("system_detail"))
+// WhereHasSystemDetails applies a predicate to check if query has an edge system_details.
+func (f *PlatformFilter) WhereHasSystemDetails() {
+	f.Where(entql.HasEdge("system_details"))
 }
 
-// WhereHasSystemDetailWith applies a predicate to check if query has an edge system_detail with a given conditions (other predicates).
-func (f *PlatformFilter) WhereHasSystemDetailWith(preds ...predicate.SystemDetail) {
-	f.Where(entql.HasEdgeWith("system_detail", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasSystemDetailsWith applies a predicate to check if query has an edge system_details with a given conditions (other predicates).
+func (f *PlatformFilter) WhereHasSystemDetailsWith(preds ...predicate.SystemDetail) {
+	f.Where(entql.HasEdgeWith("system_details", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -41426,14 +41512,14 @@ func (f *ProgramFilter) WhereHasActionPlansWith(preds ...predicate.ActionPlan) {
 	})))
 }
 
-// WhereHasSystemDetail applies a predicate to check if query has an edge system_detail.
-func (f *ProgramFilter) WhereHasSystemDetail() {
-	f.Where(entql.HasEdge("system_detail"))
+// WhereHasSystemDetails applies a predicate to check if query has an edge system_details.
+func (f *ProgramFilter) WhereHasSystemDetails() {
+	f.Where(entql.HasEdge("system_details"))
 }
 
-// WhereHasSystemDetailWith applies a predicate to check if query has an edge system_detail with a given conditions (other predicates).
-func (f *ProgramFilter) WhereHasSystemDetailWith(preds ...predicate.SystemDetail) {
-	f.Where(entql.HasEdgeWith("system_detail", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasSystemDetailsWith applies a predicate to check if query has an edge system_details with a given conditions (other predicates).
+func (f *ProgramFilter) WhereHasSystemDetailsWith(preds ...predicate.SystemDetail) {
+	f.Where(entql.HasEdgeWith("system_details", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -43840,6 +43926,20 @@ func (f *ScanFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
 	})))
 }
 
+// WhereHasFindings applies a predicate to check if query has an edge findings.
+func (f *ScanFilter) WhereHasFindings() {
+	f.Where(entql.HasEdge("findings"))
+}
+
+// WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
+func (f *ScanFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasGeneratedByPlatform applies a predicate to check if query has an edge generated_by_platform.
 func (f *ScanFilter) WhereHasGeneratedByPlatform() {
 	f.Where(entql.HasEdge("generated_by_platform"))
@@ -45626,16 +45726,6 @@ func (f *SystemDetailFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(systemdetail.FieldOwnerID))
 }
 
-// WhereProgramID applies the entql string predicate on the program_id field.
-func (f *SystemDetailFilter) WhereProgramID(p entql.StringP) {
-	f.Where(p.Field(systemdetail.FieldProgramID))
-}
-
-// WherePlatformID applies the entql string predicate on the platform_id field.
-func (f *SystemDetailFilter) WherePlatformID(p entql.StringP) {
-	f.Where(p.Field(systemdetail.FieldPlatformID))
-}
-
 // WhereSystemName applies the entql string predicate on the system_name field.
 func (f *SystemDetailFilter) WhereSystemName(p entql.StringP) {
 	f.Where(p.Field(systemdetail.FieldSystemName))
@@ -45690,28 +45780,56 @@ func (f *SystemDetailFilter) WhereHasOwnerWith(preds ...predicate.Organization) 
 	})))
 }
 
-// WhereHasProgram applies a predicate to check if query has an edge program.
-func (f *SystemDetailFilter) WhereHasProgram() {
-	f.Where(entql.HasEdge("program"))
+// WhereHasPrograms applies a predicate to check if query has an edge programs.
+func (f *SystemDetailFilter) WhereHasPrograms() {
+	f.Where(entql.HasEdge("programs"))
 }
 
-// WhereHasProgramWith applies a predicate to check if query has an edge program with a given conditions (other predicates).
-func (f *SystemDetailFilter) WhereHasProgramWith(preds ...predicate.Program) {
-	f.Where(entql.HasEdgeWith("program", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasProgramsWith applies a predicate to check if query has an edge programs with a given conditions (other predicates).
+func (f *SystemDetailFilter) WhereHasProgramsWith(preds ...predicate.Program) {
+	f.Where(entql.HasEdgeWith("programs", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
 	})))
 }
 
-// WhereHasPlatform applies a predicate to check if query has an edge platform.
-func (f *SystemDetailFilter) WhereHasPlatform() {
-	f.Where(entql.HasEdge("platform"))
+// WhereHasPlatforms applies a predicate to check if query has an edge platforms.
+func (f *SystemDetailFilter) WhereHasPlatforms() {
+	f.Where(entql.HasEdge("platforms"))
 }
 
-// WhereHasPlatformWith applies a predicate to check if query has an edge platform with a given conditions (other predicates).
-func (f *SystemDetailFilter) WhereHasPlatformWith(preds ...predicate.Platform) {
-	f.Where(entql.HasEdgeWith("platform", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasPlatformsWith applies a predicate to check if query has an edge platforms with a given conditions (other predicates).
+func (f *SystemDetailFilter) WhereHasPlatformsWith(preds ...predicate.Platform) {
+	f.Where(entql.HasEdgeWith("platforms", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEntities applies a predicate to check if query has an edge entities.
+func (f *SystemDetailFilter) WhereHasEntities() {
+	f.Where(entql.HasEdge("entities"))
+}
+
+// WhereHasEntitiesWith applies a predicate to check if query has an edge entities with a given conditions (other predicates).
+func (f *SystemDetailFilter) WhereHasEntitiesWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("entities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssets applies a predicate to check if query has an edge assets.
+func (f *SystemDetailFilter) WhereHasAssets() {
+	f.Where(entql.HasEdge("assets"))
+}
+
+// WhereHasAssetsWith applies a predicate to check if query has an edge assets with a given conditions (other predicates).
+func (f *SystemDetailFilter) WhereHasAssetsWith(preds ...predicate.Asset) {
+	f.Where(entql.HasEdgeWith("assets", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

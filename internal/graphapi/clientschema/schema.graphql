@@ -3583,6 +3583,37 @@ type Asset implements Node {
 		"""
 		where: PlatformWhereInput
 	): PlatformConnection!
+	systemDetails(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for SystemDetails returned from the connection.
+		"""
+		orderBy: [SystemDetailOrder!]
+
+		"""
+		Filtering options for SystemDetails returned from the connection.
+		"""
+		where: SystemDetailWhereInput
+	): SystemDetailConnection!
 	outOfScopePlatforms(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -4799,6 +4830,11 @@ input AssetWhereInput {
 	"""
 	hasPlatforms: Boolean
 	hasPlatformsWith: [PlatformWhereInput!]
+	"""
+	system_details edge predicates
+	"""
+	hasSystemDetails: Boolean
+	hasSystemDetailsWith: [SystemDetailWhereInput!]
 	"""
 	out_of_scope_platforms edge predicates
 	"""
@@ -12624,6 +12660,7 @@ input CreateAssetInput {
 	scanIDs: [ID!]
 	entityIDs: [ID!]
 	platformIDs: [ID!]
+	systemDetailIDs: [ID!]
 	outOfScopePlatformIDs: [ID!]
 	identityHolderIDs: [ID!]
 	controlIDs: [ID!]
@@ -14061,6 +14098,7 @@ input CreateEntityInput {
 	noteIDs: [ID!]
 	fileIDs: [ID!]
 	assetIDs: [ID!]
+	systemDetailIDs: [ID!]
 	scanIDs: [ID!]
 	campaignIDs: [ID!]
 	assessmentResponseIDs: [ID!]
@@ -16205,7 +16243,7 @@ input CreatePlatformInput {
 	applicableFrameworkIDs: [ID!]
 	generatedScanIDs: [ID!]
 	platformOwnerID: ID
-	systemDetailID: ID
+	systemDetailIDs: [ID!]
 }
 """
 CreateProcedureInput is used for create Procedure object.
@@ -16414,7 +16452,7 @@ input CreateProgramInput {
 	evidenceIDs: [ID!]
 	narrativeIDs: [ID!]
 	actionPlanIDs: [ID!]
-	systemDetailID: ID
+	systemDetailIDs: [ID!]
 	programOwnerID: ID
 }
 """
@@ -16935,6 +16973,7 @@ input CreateScanInput {
 	vulnerabilityIDs: [ID!]
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
+	findingIDs: [ID!]
 	generatedByPlatformID: ID
 	performedByUserID: ID
 	performedByGroupID: ID
@@ -17328,8 +17367,10 @@ input CreateSystemDetailInput {
 	"""
 	oscalMetadataJSON: Map
 	ownerID: ID
-	programID: ID
-	platformID: ID
+	programIDs: [ID!]
+	platformIDs: [ID!]
+	entityIDs: [ID!]
+	assetIDs: [ID!]
 }
 """
 CreateTFASettingInput is used for create TFASetting object.
@@ -22533,6 +22574,7 @@ DirectoryMembershipDirectoryMembershipRole is enum for the field role
 """
 enum DirectoryMembershipDirectoryMembershipRole @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryMembershipRole") {
 	MEMBER
+	MAINTAINER
 	MANAGER
 	OWNER
 }
@@ -25782,6 +25824,37 @@ type Entity implements Node {
 		"""
 		where: AssetWhereInput
 	): AssetConnection!
+	systemDetails(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for SystemDetails returned from the connection.
+		"""
+		orderBy: [SystemDetailOrder!]
+
+		"""
+		Filtering options for SystemDetails returned from the connection.
+		"""
+		where: SystemDetailWhereInput
+	): SystemDetailConnection!
 	scans(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -27771,6 +27844,11 @@ input EntityWhereInput {
 	"""
 	hasAssets: Boolean
 	hasAssetsWith: [AssetWhereInput!]
+	"""
+	system_details edge predicates
+	"""
+	hasSystemDetails: Boolean
+	hasSystemDetailsWith: [SystemDetailWhereInput!]
 	"""
 	scans edge predicates
 	"""
@@ -63357,7 +63435,37 @@ type Platform implements Node {
 		where: ScanWhereInput
 	): ScanConnection!
 	platformOwner: User
-	systemDetail: SystemDetail
+	systemDetails(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for SystemDetails returned from the connection.
+		"""
+		orderBy: [SystemDetailOrder!]
+
+		"""
+		Filtering options for SystemDetails returned from the connection.
+		"""
+		where: SystemDetailWhereInput
+	): SystemDetailConnection!
 	"""
 	Indicates if this platform has pending changes awaiting workflow approval
 	"""
@@ -64596,10 +64704,10 @@ input PlatformWhereInput {
 	hasPlatformOwner: Boolean
 	hasPlatformOwnerWith: [UserWhereInput!]
 	"""
-	system_detail edge predicates
+	system_details edge predicates
 	"""
-	hasSystemDetail: Boolean
-	hasSystemDetailWith: [SystemDetailWhereInput!]
+	hasSystemDetails: Boolean
+	hasSystemDetailsWith: [SystemDetailWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -66509,7 +66617,37 @@ type Program implements Node {
 		"""
 		where: ActionPlanWhereInput
 	): ActionPlanConnection!
-	systemDetail: SystemDetail
+	systemDetails(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for SystemDetails returned from the connection.
+		"""
+		orderBy: [SystemDetailOrder!]
+
+		"""
+		Filtering options for SystemDetails returned from the connection.
+		"""
+		where: SystemDetailWhereInput
+	): SystemDetailConnection!
 	users(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -67405,10 +67543,10 @@ input ProgramWhereInput {
 	hasActionPlans: Boolean
 	hasActionPlansWith: [ActionPlanWhereInput!]
 	"""
-	system_detail edge predicates
+	system_details edge predicates
 	"""
-	hasSystemDetail: Boolean
-	hasSystemDetailWith: [SystemDetailWhereInput!]
+	hasSystemDetails: Boolean
+	hasSystemDetailsWith: [SystemDetailWhereInput!]
 	"""
 	users edge predicates
 	"""
@@ -78244,6 +78382,37 @@ type Scan implements Node {
 		"""
 		where: SubcontrolWhereInput
 	): SubcontrolConnection!
+	findings(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Findings returned from the connection.
+		"""
+		orderBy: [FindingOrder!]
+
+		"""
+		Filtering options for Findings returned from the connection.
+		"""
+		where: FindingWhereInput
+	): FindingConnection!
 	generatedByPlatform: Platform
 	performedByUser: User
 	performedByGroup: Group
@@ -78913,6 +79082,11 @@ input ScanWhereInput {
 	"""
 	hasSubcontrols: Boolean
 	hasSubcontrolsWith: [SubcontrolWhereInput!]
+	"""
+	findings edge predicates
+	"""
+	hasFindings: Boolean
+	hasFindingsWith: [FindingWhereInput!]
 	"""
 	generated_by_platform edge predicates
 	"""
@@ -83201,14 +83375,6 @@ type SystemDetail implements Node {
 	"""
 	ownerID: ID
 	"""
-	optional program anchor for this system detail
-	"""
-	programID: ID
-	"""
-	optional platform anchor for this system detail
-	"""
-	platformID: ID
-	"""
 	system name used in OSCAL metadata
 	"""
 	systemName: String!
@@ -83241,14 +83407,130 @@ type SystemDetail implements Node {
 	"""
 	oscalMetadataJSON: Map
 	owner: Organization
-	"""
-	optional program this detail belongs to
-	"""
-	program: Program
-	"""
-	optional platform this detail belongs to
-	"""
-	platform: Platform
+	programs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Programs returned from the connection.
+		"""
+		orderBy: [ProgramOrder!]
+
+		"""
+		Filtering options for Programs returned from the connection.
+		"""
+		where: ProgramWhereInput
+	): ProgramConnection!
+	platforms(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Platforms returned from the connection.
+		"""
+		orderBy: [PlatformOrder!]
+
+		"""
+		Filtering options for Platforms returned from the connection.
+		"""
+		where: PlatformWhereInput
+	): PlatformConnection!
+	entities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
+	assets(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Assets returned from the connection.
+		"""
+		orderBy: [AssetOrder!]
+
+		"""
+		Filtering options for Assets returned from the connection.
+		"""
+		where: AssetWhereInput
+	): AssetConnection!
 }
 """
 Return response for createBulkSystemDetail mutation
@@ -83512,42 +83794,6 @@ input SystemDetailWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
-	program_id field predicates
-	"""
-	programID: ID
-	programIDNEQ: ID
-	programIDIn: [ID!]
-	programIDNotIn: [ID!]
-	programIDGT: ID
-	programIDGTE: ID
-	programIDLT: ID
-	programIDLTE: ID
-	programIDContains: ID
-	programIDHasPrefix: ID
-	programIDHasSuffix: ID
-	programIDIsNil: Boolean
-	programIDNotNil: Boolean
-	programIDEqualFold: ID
-	programIDContainsFold: ID
-	"""
-	platform_id field predicates
-	"""
-	platformID: ID
-	platformIDNEQ: ID
-	platformIDIn: [ID!]
-	platformIDNotIn: [ID!]
-	platformIDGT: ID
-	platformIDGTE: ID
-	platformIDLT: ID
-	platformIDLTE: ID
-	platformIDContains: ID
-	platformIDHasPrefix: ID
-	platformIDHasSuffix: ID
-	platformIDIsNil: Boolean
-	platformIDNotNil: Boolean
-	platformIDEqualFold: ID
-	platformIDContainsFold: ID
-	"""
 	system_name field predicates
 	"""
 	systemName: String
@@ -83645,15 +83891,25 @@ input SystemDetailWhereInput {
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
 	"""
-	program edge predicates
+	programs edge predicates
 	"""
-	hasProgram: Boolean
-	hasProgramWith: [ProgramWhereInput!]
+	hasPrograms: Boolean
+	hasProgramsWith: [ProgramWhereInput!]
 	"""
-	platform edge predicates
+	platforms edge predicates
 	"""
-	hasPlatform: Boolean
-	hasPlatformWith: [PlatformWhereInput!]
+	hasPlatforms: Boolean
+	hasPlatformsWith: [PlatformWhereInput!]
+	"""
+	entities edge predicates
+	"""
+	hasEntities: Boolean
+	hasEntitiesWith: [EntityWhereInput!]
+	"""
+	assets edge predicates
+	"""
+	hasAssets: Boolean
+	hasAssetsWith: [AssetWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -91975,6 +92231,9 @@ input UpdateAssetInput {
 	addPlatformIDs: [ID!]
 	removePlatformIDs: [ID!]
 	clearPlatforms: Boolean
+	addSystemDetailIDs: [ID!]
+	removeSystemDetailIDs: [ID!]
+	clearSystemDetails: Boolean
 	addOutOfScopePlatformIDs: [ID!]
 	removeOutOfScopePlatformIDs: [ID!]
 	clearOutOfScopePlatforms: Boolean
@@ -93883,6 +94142,9 @@ input UpdateEntityInput {
 	addAssetIDs: [ID!]
 	removeAssetIDs: [ID!]
 	clearAssets: Boolean
+	addSystemDetailIDs: [ID!]
+	removeSystemDetailIDs: [ID!]
+	clearSystemDetails: Boolean
 	addScanIDs: [ID!]
 	removeScanIDs: [ID!]
 	clearScans: Boolean
@@ -97054,8 +97316,9 @@ input UpdatePlatformInput {
 	clearGeneratedScans: Boolean
 	platformOwnerID: ID
 	clearPlatformOwner: Boolean
-	systemDetailID: ID
-	clearSystemDetail: Boolean
+	addSystemDetailIDs: [ID!]
+	removeSystemDetailIDs: [ID!]
+	clearSystemDetails: Boolean
 }
 """
 UpdateProcedureInput is used for update Procedure object.
@@ -97376,8 +97639,9 @@ input UpdateProgramInput {
 	addActionPlanIDs: [ID!]
 	removeActionPlanIDs: [ID!]
 	clearActionPlans: Boolean
-	systemDetailID: ID
-	clearSystemDetail: Boolean
+	addSystemDetailIDs: [ID!]
+	removeSystemDetailIDs: [ID!]
+	clearSystemDetails: Boolean
 	programOwnerID: ID
 	clearProgramOwner: Boolean
 	addProgramMembers: [AddProgramMembershipInput!]
@@ -98121,6 +98385,9 @@ input UpdateScanInput {
 	addSubcontrolIDs: [ID!]
 	removeSubcontrolIDs: [ID!]
 	clearSubcontrols: Boolean
+	addFindingIDs: [ID!]
+	removeFindingIDs: [ID!]
+	clearFindings: Boolean
 	generatedByPlatformID: ID
 	clearGeneratedByPlatform: Boolean
 	performedByUserID: ID
@@ -98662,10 +98929,18 @@ input UpdateSystemDetailInput {
 	"""
 	oscalMetadataJSON: Map
 	clearOscalMetadataJSON: Boolean
-	programID: ID
-	clearProgram: Boolean
-	platformID: ID
-	clearPlatform: Boolean
+	addProgramIDs: [ID!]
+	removeProgramIDs: [ID!]
+	clearPrograms: Boolean
+	addPlatformIDs: [ID!]
+	removePlatformIDs: [ID!]
+	clearPlatforms: Boolean
+	addEntityIDs: [ID!]
+	removeEntityIDs: [ID!]
+	clearEntities: Boolean
+	addAssetIDs: [ID!]
+	removeAssetIDs: [ID!]
+	clearAssets: Boolean
 }
 """
 UpdateTFASettingInput is used for update TFASetting object.

@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 
@@ -26,6 +27,11 @@ func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 		return err
 	}
 
+	now := time.Now()
+	runID := directorySyncRunIDFromContext(ctx)
+
+	// removed memberships are excluded from the lookup so a re-added membership starts a
+	// new episode row attributed to the sync run that observed the re-add
 	return persistRoundTripUpsert(
 		ctx,
 		resolvedInput,
@@ -34,12 +40,24 @@ func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 				Where(directorymembership.IntegrationID(integration.ID)).
 				Where(directorymembership.DirectoryAccountID(resolvedInput.DirectoryAccountID)).
 				Where(directorymembership.DirectoryGroupID(resolvedInput.DirectoryGroupID)).
+				Where(directorymembership.RemovedAtIsNil()).
 				Only(ctx)
 		},
 		func(ctx context.Context, input ent.CreateDirectoryMembershipInput) error {
+			input.FirstSeenAt = &now
+			input.LastSeenAt = &now
+			if runID != "" {
+				input.LastConfirmedRunID = &runID
+			}
+
 			return db.DirectoryMembership.Create().SetInput(input).Exec(ctx)
 		},
 		func(ctx context.Context, existing *ent.DirectoryMembership, input ent.UpdateDirectoryMembershipInput) error {
+			input.LastSeenAt = &now
+			if runID != "" {
+				input.LastConfirmedRunID = &runID
+			}
+
 			return db.DirectoryMembership.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
 		},
 	)

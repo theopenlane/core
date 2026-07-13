@@ -99,7 +99,7 @@ func (DirectorySync) Run(ctx context.Context, client *iam.Client, cfg DirectoryS
 		},
 	}
 
-	if !cfg.DisableGroupSync {
+	if cfg.DisableGroupSync {
 		logx.FromContext(ctx).Info().Int("user_count", len(accountEnvelopes)).Msg("awsiam: collected IAM users")
 		return payloadSets, nil
 	}

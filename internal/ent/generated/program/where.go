@@ -2181,27 +2181,27 @@ func HasActionPlansWith(preds ...predicate.ActionPlan) predicate.Program {
 	})
 }
 
-// HasSystemDetail applies the HasEdge predicate on the "system_detail" edge.
-func HasSystemDetail() predicate.Program {
+// HasSystemDetails applies the HasEdge predicate on the "system_details" edge.
+func HasSystemDetails() predicate.Program {
 	return predicate.Program(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, SystemDetailTable, SystemDetailColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, SystemDetailsTable, SystemDetailsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.SystemDetail
-		step.Edge.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.ProgramSystemDetails
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasSystemDetailWith applies the HasEdge predicate on the "system_detail" edge with a given conditions (other predicates).
-func HasSystemDetailWith(preds ...predicate.SystemDetail) predicate.Program {
+// HasSystemDetailsWith applies the HasEdge predicate on the "system_details" edge with a given conditions (other predicates).
+func HasSystemDetailsWith(preds ...predicate.SystemDetail) predicate.Program {
 	return predicate.Program(func(s *sql.Selector) {
-		step := newSystemDetailStep()
+		step := newSystemDetailsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.SystemDetail
-		step.Edge.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.ProgramSystemDetails
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

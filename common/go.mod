@@ -1,6 +1,6 @@
 module github.com/theopenlane/core/common
 
-go 1.26.4
+go 1.26.5
 
 require (
 	entgo.io/ent v0.14.6
@@ -11,7 +11,7 @@ require (
 	github.com/rs/zerolog v1.35.1
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
-	github.com/theopenlane/core v1.23.6
+	github.com/theopenlane/core v1.26.1
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.29.0
 	github.com/theopenlane/utils v0.7.1
@@ -21,9 +21,9 @@ require (
 )
 
 require (
-	ariga.io/atlas v1.2.2 // indirect
+	ariga.io/atlas v1.2.3 // indirect
 	entgo.io/contrib v0.7.0 // indirect
-	github.com/99designs/gqlgen v0.17.91 // indirect
+	github.com/99designs/gqlgen v0.17.93 // indirect
 	github.com/XSAM/otelsql v0.42.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/agnivade/levenshtein v1.2.1 // indirect
@@ -51,7 +51,7 @@ require (
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/jackc/pgx/v5 v5.10.0 // indirect
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
-	github.com/mattn/go-colorable v0.1.14 // indirect
+	github.com/mattn/go-colorable v0.1.15 // indirect
 	github.com/mattn/go-isatty v0.0.22 // indirect
 	github.com/mattn/go-sqlite3 v1.14.32 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
@@ -72,7 +72,7 @@ require (
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tidwall/sjson v1.2.5 // indirect
 	github.com/tinylib/msgp v1.6.4 // indirect
-	github.com/vektah/gqlparser/v2 v2.5.34 // indirect
+	github.com/vektah/gqlparser/v2 v2.5.36 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
@@ -82,8 +82,6 @@ require (
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/otel v1.44.0 // indirect
 	go.opentelemetry.io/otel/metric v1.44.0 // indirect
-	go.opentelemetry.io/otel/sdk v1.44.0 // indirect
-	go.opentelemetry.io/otel/sdk/metric v1.44.0 // indirect
 	go.opentelemetry.io/otel/trace v1.44.0 // indirect
 	go.uber.org/goleak v1.3.0 // indirect
 	golang.org/x/crypto v0.53.0 // indirect

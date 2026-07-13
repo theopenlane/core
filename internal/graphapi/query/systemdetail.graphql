@@ -10,8 +10,6 @@ mutation CreateBulkCSVSystemDetail ($input: Upload!) {
 			lastReviewed
 			oscalMetadataJSON
 			ownerID
-			platformID
-			programID
 			revisionHistory
 			sensitivityLevel
 			systemName
@@ -35,8 +33,6 @@ mutation CreateBulkSystemDetail ($input: [CreateSystemDetailInput!]) {
 			lastReviewed
 			oscalMetadataJSON
 			ownerID
-			platformID
-			programID
 			revisionHistory
 			sensitivityLevel
 			systemName
@@ -60,8 +56,6 @@ mutation CreateSystemDetail ($input: CreateSystemDetailInput!) {
 			lastReviewed
 			oscalMetadataJSON
 			ownerID
-			platformID
-			programID
 			revisionHistory
 			sensitivityLevel
 			systemName
@@ -103,8 +97,6 @@ query GetAllSystemDetails ($first: Int, $last: Int, $after: Cursor, $before: Cur
 				lastReviewed
 				oscalMetadataJSON
 				ownerID
-				platformID
-				programID
 				revisionHistory
 				sensitivityLevel
 				systemName
@@ -128,8 +120,6 @@ query GetSystemDetailByID ($systemDetailId: ID!) {
 		lastReviewed
 		oscalMetadataJSON
 		ownerID
-		platformID
-		programID
 		revisionHistory
 		sensitivityLevel
 		systemName
@@ -160,8 +150,6 @@ query GetSystemDetails ($first: Int, $last: Int, $after: Cursor, $before: Cursor
 				lastReviewed
 				oscalMetadataJSON
 				ownerID
-				platformID
-				programID
 				revisionHistory
 				sensitivityLevel
 				systemName
@@ -186,8 +174,6 @@ mutation UpdateBulkCSVSystemDetail ($input: Upload!) {
 			lastReviewed
 			oscalMetadataJSON
 			ownerID
-			platformID
-			programID
 			revisionHistory
 			sensitivityLevel
 			systemName
@@ -212,8 +198,6 @@ mutation UpdateBulkSystemDetail ($ids: [ID!]!, $input: UpdateSystemDetailInput!)
 			lastReviewed
 			oscalMetadataJSON
 			ownerID
-			platformID
-			programID
 			revisionHistory
 			sensitivityLevel
 			systemName
@@ -238,8 +222,6 @@ mutation UpdateSystemDetail ($updateSystemDetailId: ID!, $input: UpdateSystemDet
 			lastReviewed
 			oscalMetadataJSON
 			ownerID
-			platformID
-			programID
 			revisionHistory
 			sensitivityLevel
 			systemName

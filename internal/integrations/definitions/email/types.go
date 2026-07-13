@@ -105,6 +105,9 @@ type RuntimeEmailConfig struct {
 	TextColor string `json:"textColor,omitempty" jsonschema:"description=Body paragraph text color" default:"#43454b"`
 	// FooterTextColor is the muted text color for headers, footers, and secondary content
 	FooterTextColor string `json:"footerTextColor,omitempty" jsonschema:"description=Muted text color for headers footers and secondary content" default:"#5f6165"`
+	// AccentBorderColor is an optional decorative accent applied to borders only (e.g. the card top
+	// bar and callout edge); it never drives container, text, or button colors
+	AccentBorderColor string `json:"accentBorderColor,omitempty" jsonschema:"description=Decorative accent color applied to borders only"`
 	// Tagline is a short descriptive footer line rendered in modern themes above the social row
 	Tagline string `json:"tagline,omitempty" jsonschema:"description=Short descriptive footer line rendered above the social row in modern themes"`
 	// Social is the ordered list of social footer entries rendered by modern themes

@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
@@ -62,6 +63,7 @@ type ScanQuery struct {
 	withVulnerabilities      *VulnerabilityQuery
 	withControls             *ControlQuery
 	withSubcontrols          *SubcontrolQuery
+	withFindings             *FindingQuery
 	withGeneratedByPlatform  *PlatformQuery
 	withPerformedByUser      *UserQuery
 	withPerformedByGroup     *GroupQuery
@@ -81,6 +83,7 @@ type ScanQuery struct {
 	withNamedVulnerabilities map[string]*VulnerabilityQuery
 	withNamedControls        map[string]*ControlQuery
 	withNamedSubcontrols     map[string]*SubcontrolQuery
+	withNamedFindings        map[string]*FindingQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -381,11 +384,11 @@ func (_q *ScanQuery) QueryEntities() *EntityQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(scan.Table, scan.FieldID, selector),
 			sqlgraph.To(entity.Table, entity.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, scan.EntitiesTable, scan.EntitiesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, scan.EntitiesTable, scan.EntitiesPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.ScanEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -611,6 +614,31 @@ func (_q *ScanQuery) QuerySubcontrols() *SubcontrolQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
 		step.Edge.Schema = schemaConfig.SubcontrolScans
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFindings chains the current query on the "findings" edge.
+func (_q *ScanQuery) QueryFindings() *FindingQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, scan.FindingsTable, scan.FindingsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingScans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -904,6 +932,7 @@ func (_q *ScanQuery) Clone() *ScanQuery {
 		withVulnerabilities:     _q.withVulnerabilities.Clone(),
 		withControls:            _q.withControls.Clone(),
 		withSubcontrols:         _q.withSubcontrols.Clone(),
+		withFindings:            _q.withFindings.Clone(),
 		withGeneratedByPlatform: _q.withGeneratedByPlatform.Clone(),
 		withPerformedByUser:     _q.withPerformedByUser.Clone(),
 		withPerformedByGroup:    _q.withPerformedByGroup.Clone(),
@@ -1134,6 +1163,17 @@ func (_q *ScanQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *ScanQuery 
 	return _q
 }
 
+// WithFindings tells the query-builder to eager-load the nodes that are connected to
+// the "findings" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithFindings(opts ...func(*FindingQuery)) *ScanQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFindings = query
+	return _q
+}
+
 // WithGeneratedByPlatform tells the query-builder to eager-load the nodes that are connected to
 // the "generated_by_platform" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *ScanQuery) WithGeneratedByPlatform(opts ...func(*PlatformQuery)) *ScanQuery {
@@ -1252,7 +1292,7 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 		nodes       = []*Scan{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [23]bool{
+		loadedTypes = [24]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1273,6 +1313,7 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 			_q.withVulnerabilities != nil,
 			_q.withControls != nil,
 			_q.withSubcontrols != nil,
+			_q.withFindings != nil,
 			_q.withGeneratedByPlatform != nil,
 			_q.withPerformedByUser != nil,
 			_q.withPerformedByGroup != nil,
@@ -1437,6 +1478,13 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 			return nil, err
 		}
 	}
+	if query := _q.withFindings; query != nil {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *Scan) { n.Edges.Findings = []*Finding{} },
+			func(n *Scan, e *Finding) { n.Edges.Findings = append(n.Edges.Findings, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withGeneratedByPlatform; query != nil {
 		if err := _q.loadGeneratedByPlatform(ctx, query, nodes, nil,
 			func(n *Scan, e *Platform) { n.Edges.GeneratedByPlatform = e }); err != nil {
@@ -1543,6 +1591,13 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *Scan) { n.appendNamedSubcontrols(name) },
 			func(n *Scan, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFindings {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *Scan) { n.appendNamedFindings(name) },
+			func(n *Scan, e *Finding) { n.appendNamedFindings(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1944,33 +1999,64 @@ func (_q *ScanQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []
 	return nil
 }
 func (_q *ScanQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Entity)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Scan)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Scan)
+	nids := make(map[string]map[*Scan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Entity(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(scan.EntitiesColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(scan.EntitiesTable)
+		joinT.Schema(_q.schemaConfig.ScanEntities)
+		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(scan.EntitiesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(scan.EntitiesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(scan.EntitiesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Scan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Entity](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.scan_entities
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "scan_entities" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "scan_entities" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "entities" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -2532,6 +2618,68 @@ func (_q *ScanQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery
 	}
 	return nil
 }
+func (_q *ScanQuery) loadFindings(ctx context.Context, query *FindingQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Finding)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Scan)
+	nids := make(map[string]map[*Scan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(scan.FindingsTable)
+		joinT.Schema(_q.schemaConfig.FindingScans)
+		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(scan.FindingsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(scan.FindingsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(scan.FindingsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Scan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Finding](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "findings" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *ScanQuery) loadGeneratedByPlatform(ctx context.Context, query *PlatformQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Platform)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Scan)
@@ -2927,6 +3075,20 @@ func (_q *ScanQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQ
 		_q.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
 	}
 	_q.withNamedSubcontrols[name] = query
+	return _q
+}
+
+// WithNamedFindings tells the query-builder to eager-load the nodes that are connected to the "findings"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithNamedFindings(name string, opts ...func(*FindingQuery)) *ScanQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFindings == nil {
+		_q.withNamedFindings = make(map[string]*FindingQuery)
+	}
+	_q.withNamedFindings[name] = query
 	return _q
 }
 

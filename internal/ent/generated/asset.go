@@ -173,6 +173,8 @@ type AssetEdges struct {
 	Entities []*Entity `json:"entities,omitempty"`
 	// Platforms holds the value of the platforms edge.
 	Platforms []*Platform `json:"platforms,omitempty"`
+	// SystemDetails holds the value of the system_details edge.
+	SystemDetails []*SystemDetail `json:"system_details,omitempty"`
 	// OutOfScopePlatforms holds the value of the out_of_scope_platforms edge.
 	OutOfScopePlatforms []*Platform `json:"out_of_scope_platforms,omitempty"`
 	// IdentityHolders holds the value of the identity_holders edge.
@@ -193,9 +195,9 @@ type AssetEdges struct {
 	ConnectedFrom []*Asset `json:"connected_from,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [26]bool
+	loadedTypes [27]bool
 	// totalCount holds the count of the edges above.
-	totalCount [26]map[string]int
+	totalCount [27]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
@@ -203,6 +205,7 @@ type AssetEdges struct {
 	namedScans               map[string][]*Scan
 	namedEntities            map[string][]*Entity
 	namedPlatforms           map[string][]*Platform
+	namedSystemDetails       map[string][]*SystemDetail
 	namedOutOfScopePlatforms map[string][]*Platform
 	namedIdentityHolders     map[string][]*IdentityHolder
 	namedControls            map[string][]*Control
@@ -387,10 +390,19 @@ func (e AssetEdges) PlatformsOrErr() ([]*Platform, error) {
 	return nil, &NotLoadedError{edge: "platforms"}
 }
 
+// SystemDetailsOrErr returns the SystemDetails value or an error if the edge
+// was not loaded in eager-loading.
+func (e AssetEdges) SystemDetailsOrErr() ([]*SystemDetail, error) {
+	if e.loadedTypes[17] {
+		return e.SystemDetails, nil
+	}
+	return nil, &NotLoadedError{edge: "system_details"}
+}
+
 // OutOfScopePlatformsOrErr returns the OutOfScopePlatforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) OutOfScopePlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.OutOfScopePlatforms, nil
 	}
 	return nil, &NotLoadedError{edge: "out_of_scope_platforms"}
@@ -399,7 +411,7 @@ func (e AssetEdges) OutOfScopePlatformsOrErr() ([]*Platform, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
@@ -408,7 +420,7 @@ func (e AssetEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -417,7 +429,7 @@ func (e AssetEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -426,7 +438,7 @@ func (e AssetEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -437,7 +449,7 @@ func (e AssetEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 func (e AssetEdges) SourcePlatformOrErr() (*Platform, error) {
 	if e.SourcePlatform != nil {
 		return e.SourcePlatform, nil
-	} else if e.loadedTypes[22] {
+	} else if e.loadedTypes[23] {
 		return nil, &NotFoundError{label: platform.Label}
 	}
 	return nil, &NotLoadedError{edge: "source_platform"}
@@ -448,7 +460,7 @@ func (e AssetEdges) SourcePlatformOrErr() (*Platform, error) {
 func (e AssetEdges) IntegrationOrErr() (*Integration, error) {
 	if e.Integration != nil {
 		return e.Integration, nil
-	} else if e.loadedTypes[23] {
+	} else if e.loadedTypes[24] {
 		return nil, &NotFoundError{label: integration.Label}
 	}
 	return nil, &NotLoadedError{edge: "integration"}
@@ -457,7 +469,7 @@ func (e AssetEdges) IntegrationOrErr() (*Integration, error) {
 // ConnectedAssetsOrErr returns the ConnectedAssets value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) ConnectedAssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[25] {
 		return e.ConnectedAssets, nil
 	}
 	return nil, &NotLoadedError{edge: "connected_assets"}
@@ -466,7 +478,7 @@ func (e AssetEdges) ConnectedAssetsOrErr() ([]*Asset, error) {
 // ConnectedFromOrErr returns the ConnectedFrom value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) ConnectedFromOrErr() ([]*Asset, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[26] {
 		return e.ConnectedFrom, nil
 	}
 	return nil, &NotLoadedError{edge: "connected_from"}
@@ -962,6 +974,11 @@ func (_m *Asset) QueryPlatforms() *PlatformQuery {
 	return NewAssetClient(_m.config).QueryPlatforms(_m)
 }
 
+// QuerySystemDetails queries the "system_details" edge of the Asset entity.
+func (_m *Asset) QuerySystemDetails() *SystemDetailQuery {
+	return NewAssetClient(_m.config).QuerySystemDetails(_m)
+}
+
 // QueryOutOfScopePlatforms queries the "out_of_scope_platforms" edge of the Asset entity.
 func (_m *Asset) QueryOutOfScopePlatforms() *PlatformQuery {
 	return NewAssetClient(_m.config).QueryOutOfScopePlatforms(_m)
@@ -1334,6 +1351,30 @@ func (_m *Asset) appendNamedPlatforms(name string, edges ...*Platform) {
 		_m.Edges.namedPlatforms[name] = []*Platform{}
 	} else {
 		_m.Edges.namedPlatforms[name] = append(_m.Edges.namedPlatforms[name], edges...)
+	}
+}
+
+// NamedSystemDetails returns the SystemDetails named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Asset) NamedSystemDetails(name string) ([]*SystemDetail, error) {
+	if _m.Edges.namedSystemDetails == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedSystemDetails[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Asset) appendNamedSystemDetails(name string, edges ...*SystemDetail) {
+	if _m.Edges.namedSystemDetails == nil {
+		_m.Edges.namedSystemDetails = make(map[string][]*SystemDetail)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedSystemDetails[name] = []*SystemDetail{}
+	} else {
+		_m.Edges.namedSystemDetails[name] = append(_m.Edges.namedSystemDetails[name], edges...)
 	}
 }
 

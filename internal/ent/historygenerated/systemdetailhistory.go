@@ -49,10 +49,6 @@ type SystemDetailHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// optional program anchor for this system detail
-	ProgramID *string `json:"program_id,omitempty"`
-	// optional platform anchor for this system detail
-	PlatformID *string `json:"platform_id,omitempty"`
 	// system name used in OSCAL metadata
 	SystemName string `json:"system_name,omitempty"`
 	// system version used in OSCAL metadata
@@ -83,7 +79,7 @@ func (*SystemDetailHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case systemdetailhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case systemdetailhistory.FieldID, systemdetailhistory.FieldRef, systemdetailhistory.FieldCreatedBy, systemdetailhistory.FieldUpdatedBy, systemdetailhistory.FieldUpdatedByImpersonator, systemdetailhistory.FieldDeletedBy, systemdetailhistory.FieldDisplayID, systemdetailhistory.FieldOwnerID, systemdetailhistory.FieldProgramID, systemdetailhistory.FieldPlatformID, systemdetailhistory.FieldSystemName, systemdetailhistory.FieldVersion, systemdetailhistory.FieldDescription, systemdetailhistory.FieldAuthorizationBoundary, systemdetailhistory.FieldSensitivityLevel:
+		case systemdetailhistory.FieldID, systemdetailhistory.FieldRef, systemdetailhistory.FieldCreatedBy, systemdetailhistory.FieldUpdatedBy, systemdetailhistory.FieldUpdatedByImpersonator, systemdetailhistory.FieldDeletedBy, systemdetailhistory.FieldDisplayID, systemdetailhistory.FieldOwnerID, systemdetailhistory.FieldSystemName, systemdetailhistory.FieldVersion, systemdetailhistory.FieldDescription, systemdetailhistory.FieldAuthorizationBoundary, systemdetailhistory.FieldSensitivityLevel:
 			values[i] = new(sql.NullString)
 		case systemdetailhistory.FieldHistoryTime, systemdetailhistory.FieldCreatedAt, systemdetailhistory.FieldUpdatedAt, systemdetailhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -188,20 +184,6 @@ func (_m *SystemDetailHistory) assignValues(columns []string, values []any) erro
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
-			}
-		case systemdetailhistory.FieldProgramID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field program_id", values[i])
-			} else if value.Valid {
-				_m.ProgramID = new(string)
-				*_m.ProgramID = value.String
-			}
-		case systemdetailhistory.FieldPlatformID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field platform_id", values[i])
-			} else if value.Valid {
-				_m.PlatformID = new(string)
-				*_m.PlatformID = value.String
 			}
 		case systemdetailhistory.FieldSystemName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -332,16 +314,6 @@ func (_m *SystemDetailHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
-	builder.WriteString(", ")
-	if v := _m.ProgramID; v != nil {
-		builder.WriteString("program_id=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := _m.PlatformID; v != nil {
-		builder.WriteString("platform_id=")
-		builder.WriteString(*v)
-	}
 	builder.WriteString(", ")
 	builder.WriteString("system_name=")
 	builder.WriteString(_m.SystemName)

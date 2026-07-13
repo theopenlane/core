@@ -37,6 +37,8 @@ var (
 	ErrIngestUnsupportedSchema = errors.New("integrations/operations: ingest schema unsupported")
 	// ErrIngestPersistFailed indicates the mapped record could not be persisted
 	ErrIngestPersistFailed = errors.New("integrations/operations: ingest persistence failed")
+	// ErrIngestRecordsFailed indicates one or more records in the batch failed to map or persist
+	ErrIngestRecordsFailed = errors.New("integrations/operations: ingest records failed")
 	// ErrOperationDisabled indicates the operation is disabled for this installation and the reconcile cycle should stop
 	ErrOperationDisabled = errors.New("integrations/operations: operation disabled")
 	// ErrExportFailed indicates the Drive file export request failed

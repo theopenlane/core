@@ -167,7 +167,7 @@ const DefaultRole enums.DirectoryMembershipRole = "MEMBER"
 // RoleValidator is a validator for the "role" field enum values. It is called by the builders before save.
 func RoleValidator(r enums.DirectoryMembershipRole) error {
 	switch r.String() {
-	case "MEMBER", "MANAGER", "OWNER":
+	case "MEMBER", "MAINTAINER", "MANAGER", "OWNER":
 		return nil
 	default:
 		return fmt.Errorf("directorymembershiphistory: invalid enum value for role field: %q", r)

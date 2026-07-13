@@ -3,7 +3,6 @@ package runtime
 import (
 	"context"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/stripe/stripe-go/v84"
@@ -110,7 +109,6 @@ func (r *Runtime) HandleOrganizationDeletes(ctx context.Context, _ operations.Or
 
 	logger.Info().
 		Int("count", len(deletedOrgs)).
-		Str("organizations", strings.Join(deletedOrgs, ", ")).
 		Msg("organization deletion summary")
 
 	return len(deletedOrgs), nil

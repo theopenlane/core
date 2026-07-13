@@ -2591,8 +2591,6 @@ type ComplexityRoot struct {
 		Operation             func(childComplexity int) int
 		OscalMetadataJSON     func(childComplexity int) int
 		OwnerID               func(childComplexity int) int
-		PlatformID            func(childComplexity int) int
-		ProgramID             func(childComplexity int) int
 		Ref                   func(childComplexity int) int
 		RevisionHistory       func(childComplexity int) int
 		SensitivityLevel      func(childComplexity int) int
@@ -16312,18 +16310,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SystemDetailHistory.OwnerID(childComplexity), true
-	case "SystemDetailHistory.platformID":
-		if e.ComplexityRoot.SystemDetailHistory.PlatformID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.SystemDetailHistory.PlatformID(childComplexity), true
-	case "SystemDetailHistory.programID":
-		if e.ComplexityRoot.SystemDetailHistory.ProgramID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.SystemDetailHistory.ProgramID(childComplexity), true
 	case "SystemDetailHistory.ref":
 		if e.ComplexityRoot.SystemDetailHistory.Ref == nil {
 			break
@@ -30330,6 +30316,7 @@ DirectoryMembershipHistoryDirectoryMembershipRole is enum for the field role
 """
 enum DirectoryMembershipHistoryDirectoryMembershipRole @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryMembershipRole") {
   MEMBER
+  MAINTAINER
   MANAGER
   OWNER
 }
@@ -55966,14 +55953,6 @@ type SystemDetailHistory implements Node {
   """
   ownerID: String
   """
-  optional program anchor for this system detail
-  """
-  programID: String
-  """
-  optional platform anchor for this system detail
-  """
-  platformID: String
-  """
   system name used in OSCAL metadata
   """
   systemName: String!
@@ -56246,42 +56225,6 @@ input SystemDetailHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  program_id field predicates
-  """
-  programID: String
-  programIDNEQ: String
-  programIDIn: [String!]
-  programIDNotIn: [String!]
-  programIDGT: String
-  programIDGTE: String
-  programIDLT: String
-  programIDLTE: String
-  programIDContains: String
-  programIDHasPrefix: String
-  programIDHasSuffix: String
-  programIDIsNil: Boolean
-  programIDNotNil: Boolean
-  programIDEqualFold: String
-  programIDContainsFold: String
-  """
-  platform_id field predicates
-  """
-  platformID: String
-  platformIDNEQ: String
-  platformIDIn: [String!]
-  platformIDNotIn: [String!]
-  platformIDGT: String
-  platformIDGTE: String
-  platformIDLT: String
-  platformIDLTE: String
-  platformIDContains: String
-  platformIDHasPrefix: String
-  platformIDHasSuffix: String
-  platformIDIsNil: Boolean
-  platformIDNotNil: Boolean
-  platformIDEqualFold: String
-  platformIDContainsFold: String
   """
   system_name field predicates
   """
@@ -71995,10 +71938,6 @@ func (ec *executionContext) childFields_SystemDetailHistory(ctx context.Context,
 		return ec.fieldContext_SystemDetailHistory_tags(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_SystemDetailHistory_ownerID(ctx, field)
-	case "programID":
-		return ec.fieldContext_SystemDetailHistory_programID(ctx, field)
-	case "platformID":
-		return ec.fieldContext_SystemDetailHistory_platformID(ctx, field)
 	case "systemName":
 		return ec.fieldContext_SystemDetailHistory_systemName(ctx, field)
 	case "version":

@@ -162,14 +162,15 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 			return err
 		}
 
-		verifyURL, unsubscribeURL := h.subscriberTrustCenterLinks(ctxWithToken, entSubscriber, tokenValue)
+		verifyURL, unsubscribeURL, branding := h.subscriberTrustCenterLinks(ctxWithToken, entSubscriber, tokenValue)
 
 		if err := h.sendEmail(ctxWithToken, email.SubscribeOp.Name(), email.SubscribeRequest{
-			RecipientInfo:  email.RecipientInfo{Email: entSubscriber.Email},
-			OrgName:        orgName,
-			Token:          tokenValue,
-			VerifyURL:      verifyURL,
-			UnsubscribeURL: unsubscribeURL,
+			RecipientInfo:       email.RecipientInfo{Email: entSubscriber.Email},
+			TrustCenterBranding: branding,
+			OrgName:             orgName,
+			Token:               tokenValue,
+			VerifyURL:           verifyURL,
+			UnsubscribeURL:      unsubscribeURL,
 		}); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("error sending subscriber email")
 
