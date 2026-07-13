@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/zitadel/oidc/v3/pkg/oidc"
 	"github.com/zitadel/zitadel-go/v3/pkg/client"
 	"github.com/zitadel/zitadel-go/v3/pkg/zitadel"
 
@@ -20,27 +21,21 @@ const (
 // Client builds Zitadel user service clients for one installation
 type Client struct{}
 
-// Build constructs the Zitadel user service client for one installation
+// Build constructs the Zitadel user service client for one installation. It supports both
+// Personal Access Token and OAuth2 client-credentials auth modes, selecting whichever
+// credential the installation was configured with.
 func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
-	cred, err := resolveCredential(req.Credentials)
+	domain, auth, err := resolveAuth(req.Credentials)
 	if err != nil {
 		return nil, err
 	}
 
-	if cred.Domain == "" {
-		return nil, ErrDomainMissing
-	}
-
-	if cred.Token == "" {
-		return nil, ErrTokenMissing
-	}
-
-	host, opts := parseHost(cred.Domain)
+	host, opts := parseHost(domain)
 
 	api, err := client.New(
 		ctx,
 		zitadel.New(host, opts...),
-		client.WithAuth(client.PAT(cred.Token)),
+		client.WithAuth(auth),
 	)
 	if err != nil {
 		return nil, ErrClientBuildFailed
@@ -93,16 +88,49 @@ func parseHost(domain string) (string, []zitadel.Option) {
 	return host, nil
 }
 
-// resolveCredential extracts the CredentialSchema from the provided credential bindings
-func resolveCredential(bindings types.CredentialBindings) (CredentialSchema, error) {
-	cred, ok, err := zitadelCredential.Resolve(bindings)
-	if err != nil {
-		return CredentialSchema{}, ErrCredentialDecode
+// resolveAuth selects the auth mode from the provided credential bindings, returning the
+// instance domain and the matching Zitadel SDK token source initializer. PAT credentials take
+// precedence when present, otherwise OAuth2 client-credentials are used.
+func resolveAuth(bindings types.CredentialBindings) (string, client.TokenSourceInitializer, error) {
+	if pat, ok, err := zitadelPATCredential.Resolve(bindings); err == nil && ok {
+		if pat.Domain == "" {
+			return "", nil, ErrDomainMissing
+		}
+
+		if pat.Token == "" {
+			return "", nil, ErrTokenMissing
+		}
+
+		return pat.Domain, client.PAT(pat.Token), nil
 	}
 
-	if !ok {
-		return CredentialSchema{}, ErrCredentialDecode
+	if oauth, ok, err := zitadelOAuthCredential.Resolve(bindings); err == nil && ok {
+		if oauth.Domain == "" {
+			return "", nil, ErrDomainMissing
+		}
+
+		if oauth.ClientID == "" || oauth.ClientSecret == "" {
+			return "", nil, ErrClientCredentialsMissing
+		}
+
+		auth := client.PasswordAuthentication(oauth.ClientID, oauth.ClientSecret, oidc.ScopeOpenID, client.ScopeZitadelAPI())
+
+		return oauth.Domain, auth, nil
 	}
 
-	return cred, nil
+	return "", nil, ErrCredentialDecode
+}
+
+// resolveDomain extracts the instance domain from whichever credential mode is configured,
+// without requiring the full auth material. It is used by call sites that only need the domain.
+func resolveDomain(bindings types.CredentialBindings) (string, bool) {
+	if pat, ok, err := zitadelPATCredential.Resolve(bindings); err == nil && ok && pat.Domain != "" {
+		return pat.Domain, true
+	}
+
+	if oauth, ok, err := zitadelOAuthCredential.Resolve(bindings); err == nil && ok && oauth.Domain != "" {
+		return oauth.Domain, true
+	}
+
+	return "", false
 }

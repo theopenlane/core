@@ -30,9 +30,9 @@ func (h HealthCheck) Handle() types.OperationHandler {
 
 // Run executes the Zitadel health check
 func (HealthCheck) Run(ctx context.Context, c *client.Client, req types.OperationRequest) (json.RawMessage, error) {
-	cred, err := resolveCredential(req.Credentials)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error resolving credentials")
+	domain, ok := resolveDomain(req.Credentials)
+	if !ok {
+		logx.FromContext(ctx).Error().Msg("missing domain in credentials")
 		return nil, ErrHealthCheckFailed
 	}
 
@@ -47,7 +47,7 @@ func (HealthCheck) Run(ctx context.Context, c *client.Client, req types.Operatio
 	}
 
 	return providerkit.EncodeResult(HealthCheck{
-		Domain:    cred.Domain,
+		Domain:    domain,
 		UserCount: resp.GetDetails().GetTotalResult(),
 	}, ErrResultEncode)
 }

@@ -5,6 +5,8 @@ import "errors"
 var (
 	// ErrTokenMissing indicates the personal access token is missing from the credential
 	ErrTokenMissing = errors.New("zitadel: token missing")
+	// ErrClientCredentialsMissing indicates the OAuth client ID or secret is missing from the credential
+	ErrClientCredentialsMissing = errors.New("zitadel: client id or secret missing")
 	// ErrDomainMissing indicates the Zitadel domain is missing from the credential
 	ErrDomainMissing = errors.New("zitadel: domain missing")
 	// ErrCredentialEncode indicates the credential could not be serialized

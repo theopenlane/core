@@ -4,15 +4,19 @@
 //
 // # Overview
 //
-// This integration connects a Zitadel instance to OpenLane using Personal
-// Access Token authentication, enabling directory sync of users for identity
-// posture and access governance workflows.
+// This integration connects a Zitadel instance to OpenLane, enabling directory
+// sync of users for identity posture and access governance workflows.
 //
 // # Authentication
 //
-// The integration authenticates using a Personal Access Token (PAT) generated
-// from the Zitadel admin console. The token is passed as a static OAuth2
-// bearer token on every API request via the Zitadel Go SDK.
+// The integration supports two authentication modes, selected at connect time:
+//
+//   - Personal Access Token (PAT): a token generated from the Zitadel admin
+//     console, passed as a static OAuth2 bearer token on every API request.
+//   - OAuth2 Client Credentials: a Zitadel service user Client ID and Client
+//     Secret, exchanged for an access token via the client-credentials grant.
+//
+// Both modes are handled through the Zitadel Go SDK's unified client.
 //
 // # Directory Sync
 //
@@ -29,8 +33,10 @@
 //
 // The following options are available when connecting a Zitadel instance:
 //
-//   - Domain: The Zitadel instance domain (e.g. https://my-instance.zitadel.cloud)
-//   - Token: A Personal Access Token generated from the Zitadel admin console
+//   - Domain: The Zitadel instance domain (e.g. my-instance.zitadel.cloud). Uses TLS by
+//     default; prefix with http:// for a non-TLS self-hosted instance.
+//   - Token: A Personal Access Token generated from the Zitadel admin console (PAT mode)
+//   - ClientID / ClientSecret: A service user's client credentials (OAuth mode)
 //   - PrimaryDirectory: Marks this installation as the authoritative source for identity holder enrichment
 //   - FilterExpr: An optional CEL expression applied to records before ingestion
 //
