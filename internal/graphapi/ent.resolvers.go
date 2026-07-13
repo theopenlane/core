@@ -3548,6 +3548,7 @@ type (
 	updateOrganizationInputResolver     struct{ *Resolver }
 	updateProcedureInputResolver        struct{ *Resolver }
 	updateProgramInputResolver          struct{ *Resolver }
+	updateReviewInputResolver           struct{ *Resolver }
 	updateRiskInputResolver             struct{ *Resolver }
 	updateStandardInputResolver         struct{ *Resolver }
 	updateSubcontrolInputResolver       struct{ *Resolver }
