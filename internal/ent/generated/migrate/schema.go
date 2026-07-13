@@ -698,7 +698,7 @@ var (
 			},
 			{
 				Name:    "campaign_name_owner_id",
-				Unique:  true,
+				Unique:  false,
 				Columns: []*schema.Column{CampaignsColumns[12], CampaignsColumns[40]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",

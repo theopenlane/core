@@ -1,4 +1,4 @@
-h1:63372PmXACFd9aKUrLm+etTdRd6dp9d557yDxuHy604=
+h1:P1xxBK1I0nixOy04JjpnNAwkqJCmGs74IPNXsqp2aG8=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -155,3 +155,4 @@ h1:63372PmXACFd9aKUrLm+etTdRd6dp9d557yDxuHy604=
 20260709061745_tssubscriberupdates_history.sql h1:sqSZr+yhAcU+SKA/pGqySe8EPaeS1a+nH083JbnNoys=
 20260711140816_registry_edges.sql h1:NLM7gSlik7ttpth+j6rmYvVB+ACe/XKxajxuQwCi2tA=
 20260711140820_registry_edges_history.sql h1:E6uJbwUoxB1lGoSCRgzLj2Wte8AIjUj/SQ9cdlxZ6CE=
+20260713215432_drop_campaign_name_uniqueness.sql h1:8rnkcyo2BGKxdaid6h2rIxx4xtMkHkIWtTkDj1Vt7pA=
