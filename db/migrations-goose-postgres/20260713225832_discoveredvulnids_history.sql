@@ -10,7 +10,7 @@ ALTER TABLE "remediation_history" ADD COLUMN "workflow_eligible_marker" boolean 
 -- modify "risk_history" table
 ALTER TABLE "risk_history" ADD COLUMN "workflow_eligible_marker" boolean NULL DEFAULT true;
 -- modify "scan_history" table
-ALTER TABLE "scan_history" DROP COLUMN "vulnerability_ids", ADD COLUMN "discovered_vulnerability_ids" jsonb NULL;
+ALTER TABLE "scan_history" RENAME COLUMN "vulnerability_ids" TO "discovered_vulnerability_ids";
 -- modify "task_history" table
 ALTER TABLE "task_history" ADD COLUMN "workflow_eligible_marker" boolean NULL DEFAULT true;
 -- modify "vulnerability_history" table
@@ -34,7 +34,7 @@ ALTER TABLE "vulnerability_history" DROP COLUMN "workflow_eligible_marker";
 -- reverse: modify "task_history" table
 ALTER TABLE "task_history" DROP COLUMN "workflow_eligible_marker";
 -- reverse: modify "scan_history" table
-ALTER TABLE "scan_history" DROP COLUMN "discovered_vulnerability_ids", ADD COLUMN "vulnerability_ids" jsonb NULL;
+ALTER TABLE "scan_history" RENAME COLUMN "discovered_vulnerability_ids" TO "vulnerability_ids";
 -- reverse: modify "risk_history" table
 ALTER TABLE "risk_history" DROP COLUMN "workflow_eligible_marker";
 -- reverse: modify "remediation_history" table

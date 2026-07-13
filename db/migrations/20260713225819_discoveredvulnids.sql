@@ -1,7 +1,7 @@
 -- Modify "assessment_responses" table
 ALTER TABLE "assessment_responses" ADD COLUMN "workflow_eligible_marker" boolean NULL DEFAULT true;
 -- Modify "scans" table
-ALTER TABLE "scans" DROP COLUMN "vulnerability_ids", ADD COLUMN "discovered_vulnerability_ids" jsonb NULL;
+ALTER TABLE "scans" RENAME COLUMN "vulnerability_ids" TO "discovered_vulnerability_ids";
 -- Modify "workflow_assignments" table
 ALTER TABLE "workflow_assignments" ADD COLUMN "outcome_metadata" jsonb NULL;
 -- Modify "workflow_proposals" table

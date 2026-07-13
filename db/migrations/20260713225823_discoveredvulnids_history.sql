@@ -9,7 +9,7 @@ ALTER TABLE "remediation_history" ADD COLUMN "workflow_eligible_marker" boolean 
 -- Modify "risk_history" table
 ALTER TABLE "risk_history" ADD COLUMN "workflow_eligible_marker" boolean NULL DEFAULT true;
 -- Modify "scan_history" table
-ALTER TABLE "scan_history" DROP COLUMN "vulnerability_ids", ADD COLUMN "discovered_vulnerability_ids" jsonb NULL;
+ALTER TABLE "scan_history" RENAME COLUMN "vulnerability_ids" TO "discovered_vulnerability_ids";
 -- Modify "task_history" table
 ALTER TABLE "task_history" ADD COLUMN "workflow_eligible_marker" boolean NULL DEFAULT true;
 -- Modify "vulnerability_history" table

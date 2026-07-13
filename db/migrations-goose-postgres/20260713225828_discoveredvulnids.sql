@@ -2,7 +2,7 @@
 -- modify "assessment_responses" table
 ALTER TABLE "assessment_responses" ADD COLUMN "workflow_eligible_marker" boolean NULL DEFAULT true;
 -- modify "scans" table
-ALTER TABLE "scans" DROP COLUMN "vulnerability_ids", ADD COLUMN "discovered_vulnerability_ids" jsonb NULL;
+ALTER TABLE "scans" RENAME COLUMN "vulnerability_ids" TO "discovered_vulnerability_ids";
 -- modify "workflow_assignments" table
 ALTER TABLE "workflow_assignments" ADD COLUMN "outcome_metadata" jsonb NULL;
 -- modify "workflow_proposals" table
@@ -66,6 +66,6 @@ ALTER TABLE "workflow_proposals" DROP COLUMN "proposed_changes";
 -- reverse: modify "workflow_assignments" table
 ALTER TABLE "workflow_assignments" DROP COLUMN "outcome_metadata";
 -- reverse: modify "scans" table
-ALTER TABLE "scans" DROP COLUMN "discovered_vulnerability_ids", ADD COLUMN "vulnerability_ids" jsonb NULL;
+ALTER TABLE "scans" RENAME COLUMN "discovered_vulnerability_ids" TO "vulnerability_ids";
 -- reverse: modify "assessment_responses" table
 ALTER TABLE "assessment_responses" DROP COLUMN "workflow_eligible_marker";
