@@ -18760,6 +18760,25 @@ func (c *NoteClient) QueryInternalPolicy(_m *Note) *InternalPolicyQuery {
 	return query
 }
 
+// QueryReview queries the review edge of a Note.
+func (c *NoteClient) QueryReview(_m *Note) *ReviewQuery {
+	query := (&ReviewClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(review.Table, review.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.ReviewTable, note.ReviewColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEvidence queries the evidence edge of a Note.
 func (c *NoteClient) QueryEvidence(_m *Note) *EvidenceQuery {
 	query := (&EvidenceClient{config: c.config}).Query()

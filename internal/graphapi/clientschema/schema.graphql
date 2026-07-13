@@ -15449,6 +15449,7 @@ input CreateNoteInput {
 	procedureID: ID
 	riskID: ID
 	internalPolicyID: ID
+	reviewID: ID
 	evidenceID: ID
 	trustCenterID: ID
 	discussionID: ID
@@ -48412,6 +48413,25 @@ type Mutation {
 		noteFiles: [Upload!]
 	noteFilesMetadata: [FileMetadataInput!]): EvidenceUpdatePayload!
 	"""
+	Update an existing review comment
+	"""
+	updateReviewComment(
+		"""
+		ID of the comment
+		"""
+		id: ID!
+
+		"""
+		New values for the comment
+		"""
+		input: UpdateNoteInput!
+
+		"""
+		Files to attach to the comment
+		"""
+		noteFiles: [Upload!]
+	noteFilesMetadata: [FileMetadataInput!]): ReviewUpdatePayload!
+	"""
 	Delete an existing note
 	"""
 	deleteNote(
@@ -52265,6 +52285,7 @@ type Note implements Node {
 	procedure: Procedure
 	risk: Risk
 	internalPolicy: InternalPolicy
+	review: Review
 	evidence: Evidence
 	trustCenter: TrustCenter
 	discussion: Discussion
@@ -52673,6 +52694,11 @@ input NoteWhereInput {
 	"""
 	hasInternalPolicy: Boolean
 	hasInternalPolicyWith: [InternalPolicyWhereInput!]
+	"""
+	review edge predicates
+	"""
+	hasReview: Boolean
+	hasReviewWith: [ReviewWhereInput!]
 	"""
 	evidence edge predicates
 	"""
@@ -96065,6 +96091,8 @@ input UpdateNoteInput {
 	clearRisk: Boolean
 	internalPolicyID: ID
 	clearInternalPolicy: Boolean
+	reviewID: ID
+	clearReview: Boolean
 	evidenceID: ID
 	clearEvidence: Boolean
 	trustCenterID: ID
@@ -98018,6 +98046,8 @@ input UpdateReviewInput {
 	addInternalPolicyIDs: [ID!]
 	removeInternalPolicyIDs: [ID!]
 	clearInternalPolicies: Boolean
+	addComment: CreateNoteInput
+	deleteComment: ID
 }
 """
 UpdateRiskInput is used for update Risk object.
