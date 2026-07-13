@@ -438,15 +438,22 @@
             "type": "string",
             "enum": [
               "ActionPlan",
+              "Assessment",
+              "AssessmentResponse",
               "Campaign",
               "CampaignTarget",
               "Control",
               "Evidence",
+              "Finding",
               "IdentityHolder",
               "InternalPolicy",
               "Platform",
               "Procedure",
-              "Subcontrol"
+              "Remediation",
+              "Risk",
+              "Subcontrol",
+              "Task",
+              "Vulnerability"
             ],
             "description": "The object type the workflow applies to"
           },
@@ -468,15 +475,22 @@
           "type": "string",
           "enum": [
             "ActionPlan",
+            "Assessment",
+            "AssessmentResponse",
             "Campaign",
             "CampaignTarget",
             "Control",
             "Evidence",
+            "Finding",
             "IdentityHolder",
             "InternalPolicy",
             "Platform",
             "Procedure",
-            "Subcontrol"
+            "Remediation",
+            "Risk",
+            "Subcontrol",
+            "Task",
+            "Vulnerability"
           ]
         },
         "fields": {
