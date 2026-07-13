@@ -8437,6 +8437,7 @@ type CreateNoteInput struct {
 	ProcedureID       *string  `json:"procedureID,omitempty"`
 	RiskID            *string  `json:"riskID,omitempty"`
 	InternalPolicyID  *string  `json:"internalPolicyID,omitempty"`
+	ReviewID          *string  `json:"reviewID,omitempty"`
 	EvidenceID        *string  `json:"evidenceID,omitempty"`
 	TrustCenterID     *string  `json:"trustCenterID,omitempty"`
 	DiscussionID      *string  `json:"discussionID,omitempty"`
@@ -25035,6 +25036,7 @@ type Note struct {
 	Procedure       *Procedure                `json:"procedure,omitempty"`
 	Risk            *Risk                     `json:"risk,omitempty"`
 	InternalPolicy  *InternalPolicy           `json:"internalPolicy,omitempty"`
+	Review          *Review                   `json:"review,omitempty"`
 	Evidence        *Evidence                 `json:"evidence,omitempty"`
 	TrustCenter     *TrustCenter              `json:"trustCenter,omitempty"`
 	Discussion      *Discussion               `json:"discussion,omitempty"`
@@ -25311,6 +25313,9 @@ type NoteWhereInput struct {
 	// internal_policy edge predicates
 	HasInternalPolicy     *bool                       `json:"hasInternalPolicy,omitempty"`
 	HasInternalPolicyWith []*InternalPolicyWhereInput `json:"hasInternalPolicyWith,omitempty"`
+	// review edge predicates
+	HasReview     *bool               `json:"hasReview,omitempty"`
+	HasReviewWith []*ReviewWhereInput `json:"hasReviewWith,omitempty"`
 	// evidence edge predicates
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
@@ -44807,6 +44812,8 @@ type UpdateNoteInput struct {
 	ClearRisk               *bool    `json:"clearRisk,omitempty"`
 	InternalPolicyID        *string  `json:"internalPolicyID,omitempty"`
 	ClearInternalPolicy     *bool    `json:"clearInternalPolicy,omitempty"`
+	ReviewID                *string  `json:"reviewID,omitempty"`
+	ClearReview             *bool    `json:"clearReview,omitempty"`
 	EvidenceID              *string  `json:"evidenceID,omitempty"`
 	ClearEvidence           *bool    `json:"clearEvidence,omitempty"`
 	TrustCenterID           *string  `json:"trustCenterID,omitempty"`
@@ -46282,65 +46289,67 @@ type UpdateReviewInput struct {
 	Metadata      map[string]any `json:"metadata,omitempty"`
 	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
 	// raw payload received from the integration for auditing and troubleshooting
-	RawPayload              map[string]any `json:"rawPayload,omitempty"`
-	ClearRawPayload         *bool          `json:"clearRawPayload,omitempty"`
-	AddBlockedGroupIDs      []string       `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs   []string       `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups      *bool          `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs            []string       `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs         []string       `json:"removeEditorIDs,omitempty"`
-	ClearEditors            *bool          `json:"clearEditors,omitempty"`
-	EnvironmentID           *string        `json:"environmentID,omitempty"`
-	ClearEnvironment        *bool          `json:"clearEnvironment,omitempty"`
-	ScopeID                 *string        `json:"scopeID,omitempty"`
-	ClearScope              *bool          `json:"clearScope,omitempty"`
-	AddIntegrationIDs       []string       `json:"addIntegrationIDs,omitempty"`
-	RemoveIntegrationIDs    []string       `json:"removeIntegrationIDs,omitempty"`
-	ClearIntegrations       *bool          `json:"clearIntegrations,omitempty"`
-	AddFindingIDs           []string       `json:"addFindingIDs,omitempty"`
-	RemoveFindingIDs        []string       `json:"removeFindingIDs,omitempty"`
-	ClearFindings           *bool          `json:"clearFindings,omitempty"`
-	AddVulnerabilityIDs     []string       `json:"addVulnerabilityIDs,omitempty"`
-	RemoveVulnerabilityIDs  []string       `json:"removeVulnerabilityIDs,omitempty"`
-	ClearVulnerabilities    *bool          `json:"clearVulnerabilities,omitempty"`
-	AddActionPlanIDs        []string       `json:"addActionPlanIDs,omitempty"`
-	RemoveActionPlanIDs     []string       `json:"removeActionPlanIDs,omitempty"`
-	ClearActionPlans        *bool          `json:"clearActionPlans,omitempty"`
-	AddRemediationIDs       []string       `json:"addRemediationIDs,omitempty"`
-	RemoveRemediationIDs    []string       `json:"removeRemediationIDs,omitempty"`
-	ClearRemediations       *bool          `json:"clearRemediations,omitempty"`
-	AddControlIDs           []string       `json:"addControlIDs,omitempty"`
-	RemoveControlIDs        []string       `json:"removeControlIDs,omitempty"`
-	ClearControls           *bool          `json:"clearControls,omitempty"`
-	AddSubcontrolIDs        []string       `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs     []string       `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols        *bool          `json:"clearSubcontrols,omitempty"`
-	AddRiskIDs              []string       `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs           []string       `json:"removeRiskIDs,omitempty"`
-	ClearRisks              *bool          `json:"clearRisks,omitempty"`
-	AddProgramIDs           []string       `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs        []string       `json:"removeProgramIDs,omitempty"`
-	ClearPrograms           *bool          `json:"clearPrograms,omitempty"`
-	AddAssetIDs             []string       `json:"addAssetIDs,omitempty"`
-	RemoveAssetIDs          []string       `json:"removeAssetIDs,omitempty"`
-	ClearAssets             *bool          `json:"clearAssets,omitempty"`
-	AddEntityIDs            []string       `json:"addEntityIDs,omitempty"`
-	RemoveEntityIDs         []string       `json:"removeEntityIDs,omitempty"`
-	ClearEntities           *bool          `json:"clearEntities,omitempty"`
-	AddTaskIDs              []string       `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs           []string       `json:"removeTaskIDs,omitempty"`
-	ClearTasks              *bool          `json:"clearTasks,omitempty"`
-	ReviewerID              *string        `json:"reviewerID,omitempty"`
-	ClearReviewer           *bool          `json:"clearReviewer,omitempty"`
-	AddCommentIDs           []string       `json:"addCommentIDs,omitempty"`
-	RemoveCommentIDs        []string       `json:"removeCommentIDs,omitempty"`
-	ClearComments           *bool          `json:"clearComments,omitempty"`
-	AddFileIDs              []string       `json:"addFileIDs,omitempty"`
-	RemoveFileIDs           []string       `json:"removeFileIDs,omitempty"`
-	ClearFiles              *bool          `json:"clearFiles,omitempty"`
-	AddInternalPolicyIDs    []string       `json:"addInternalPolicyIDs,omitempty"`
-	RemoveInternalPolicyIDs []string       `json:"removeInternalPolicyIDs,omitempty"`
-	ClearInternalPolicies   *bool          `json:"clearInternalPolicies,omitempty"`
+	RawPayload              map[string]any   `json:"rawPayload,omitempty"`
+	ClearRawPayload         *bool            `json:"clearRawPayload,omitempty"`
+	AddBlockedGroupIDs      []string         `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs   []string         `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups      *bool            `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs            []string         `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs         []string         `json:"removeEditorIDs,omitempty"`
+	ClearEditors            *bool            `json:"clearEditors,omitempty"`
+	EnvironmentID           *string          `json:"environmentID,omitempty"`
+	ClearEnvironment        *bool            `json:"clearEnvironment,omitempty"`
+	ScopeID                 *string          `json:"scopeID,omitempty"`
+	ClearScope              *bool            `json:"clearScope,omitempty"`
+	AddIntegrationIDs       []string         `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs    []string         `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations       *bool            `json:"clearIntegrations,omitempty"`
+	AddFindingIDs           []string         `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs        []string         `json:"removeFindingIDs,omitempty"`
+	ClearFindings           *bool            `json:"clearFindings,omitempty"`
+	AddVulnerabilityIDs     []string         `json:"addVulnerabilityIDs,omitempty"`
+	RemoveVulnerabilityIDs  []string         `json:"removeVulnerabilityIDs,omitempty"`
+	ClearVulnerabilities    *bool            `json:"clearVulnerabilities,omitempty"`
+	AddActionPlanIDs        []string         `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs     []string         `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans        *bool            `json:"clearActionPlans,omitempty"`
+	AddRemediationIDs       []string         `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs    []string         `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations       *bool            `json:"clearRemediations,omitempty"`
+	AddControlIDs           []string         `json:"addControlIDs,omitempty"`
+	RemoveControlIDs        []string         `json:"removeControlIDs,omitempty"`
+	ClearControls           *bool            `json:"clearControls,omitempty"`
+	AddSubcontrolIDs        []string         `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs     []string         `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols        *bool            `json:"clearSubcontrols,omitempty"`
+	AddRiskIDs              []string         `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs           []string         `json:"removeRiskIDs,omitempty"`
+	ClearRisks              *bool            `json:"clearRisks,omitempty"`
+	AddProgramIDs           []string         `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs        []string         `json:"removeProgramIDs,omitempty"`
+	ClearPrograms           *bool            `json:"clearPrograms,omitempty"`
+	AddAssetIDs             []string         `json:"addAssetIDs,omitempty"`
+	RemoveAssetIDs          []string         `json:"removeAssetIDs,omitempty"`
+	ClearAssets             *bool            `json:"clearAssets,omitempty"`
+	AddEntityIDs            []string         `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs         []string         `json:"removeEntityIDs,omitempty"`
+	ClearEntities           *bool            `json:"clearEntities,omitempty"`
+	AddTaskIDs              []string         `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs           []string         `json:"removeTaskIDs,omitempty"`
+	ClearTasks              *bool            `json:"clearTasks,omitempty"`
+	ReviewerID              *string          `json:"reviewerID,omitempty"`
+	ClearReviewer           *bool            `json:"clearReviewer,omitempty"`
+	AddCommentIDs           []string         `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs        []string         `json:"removeCommentIDs,omitempty"`
+	ClearComments           *bool            `json:"clearComments,omitempty"`
+	AddFileIDs              []string         `json:"addFileIDs,omitempty"`
+	RemoveFileIDs           []string         `json:"removeFileIDs,omitempty"`
+	ClearFiles              *bool            `json:"clearFiles,omitempty"`
+	AddInternalPolicyIDs    []string         `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs []string         `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies   *bool            `json:"clearInternalPolicies,omitempty"`
+	AddComment              *CreateNoteInput `json:"addComment,omitempty"`
+	DeleteComment           *string          `json:"deleteComment,omitempty"`
 }
 
 // UpdateRiskInput is used for update Risk object.

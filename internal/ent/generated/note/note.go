@@ -65,6 +65,8 @@ const (
 	EdgeRisk = "risk"
 	// EdgeInternalPolicy holds the string denoting the internal_policy edge name in mutations.
 	EdgeInternalPolicy = "internal_policy"
+	// EdgeReview holds the string denoting the review edge name in mutations.
+	EdgeReview = "review"
 	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
 	EdgeEvidence = "evidence"
 	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
@@ -126,6 +128,13 @@ const (
 	InternalPolicyInverseTable = "internal_policies"
 	// InternalPolicyColumn is the table column denoting the internal_policy relation/edge.
 	InternalPolicyColumn = "internal_policy_comments"
+	// ReviewTable is the table that holds the review relation/edge.
+	ReviewTable = "notes"
+	// ReviewInverseTable is the table name for the Review entity.
+	// It exists in this package in order to avoid circular dependency with the "review" package.
+	ReviewInverseTable = "reviews"
+	// ReviewColumn is the table column denoting the review relation/edge.
+	ReviewColumn = "review_comments"
 	// EvidenceTable is the table that holds the evidence relation/edge.
 	EvidenceTable = "notes"
 	// EvidenceInverseTable is the table name for the Evidence entity.
@@ -390,6 +399,13 @@ func ByInternalPolicyField(field string, opts ...sql.OrderTermOption) OrderOptio
 	}
 }
 
+// ByReviewField orders the results by review field.
+func ByReviewField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByEvidenceField orders the results by evidence field.
 func ByEvidenceField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -485,6 +501,13 @@ func newInternalPolicyStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(InternalPolicyInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, InternalPolicyTable, InternalPolicyColumn),
+	)
+}
+func newReviewStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ReviewTable, ReviewColumn),
 	)
 }
 func newEvidenceStep() *sqlgraph.Step {

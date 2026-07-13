@@ -356,3 +356,56 @@ mutation UpdateReview ($updateReviewId: ID!, $input: UpdateReviewInput!, $review
 		}
 	}
 }
+mutation UpdateReviewComment ($updateReviewCommentId: ID!, $input: UpdateNoteInput!, $noteFiles: [Upload!]) {
+	updateReviewComment(id: $updateReviewCommentId, input: $input, noteFiles: $noteFiles) {
+		review {
+			approved
+			approvedAt
+			category
+			classification
+			createdAt
+			createdBy
+			details
+			externalID
+			externalOwnerID
+			externalURI
+			id
+			metadata
+			rawPayload
+			reportedAt
+			reporter
+			reviewedAt
+			reviewerID
+			source
+			state
+			summary
+			tags
+			title
+			updatedAt
+			updatedBy
+			comments {
+				edges {
+					node {
+						id
+						displayID
+						text
+						createdAt
+						createdBy
+						updatedAt
+						updatedBy
+						files {
+							edges {
+								node {
+									id
+									storagePath
+									storageScheme
+									storageVolume
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

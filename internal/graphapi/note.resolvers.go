@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -265,6 +266,30 @@ func (r *mutationResolver) UpdateEvidenceComment(ctx context.Context, id string,
 
 	return &model.EvidenceUpdatePayload{
 		Evidence: objectRes,
+	}, nil
+}
+
+// UpdateReviewComment is the resolver for the updateReviewComment field.
+func (r *mutationResolver) UpdateReviewComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.ReviewUpdatePayload, error) {
+	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "review"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	if err = req.Exec(ctx); err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "review"})
+	}
+
+	objectRes, err := withTransactionalMutation(ctx).Review.Query().Where(review.HasCommentsWith(note.ID(id))).Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "review"})
+	}
+
+	return &model.ReviewUpdatePayload{
+		Review: objectRes,
 	}, nil
 }
 
@@ -671,6 +696,45 @@ func (r *updateProcedureInputResolver) AddComment(ctx context.Context, obj *gene
 
 // DeleteComment is the resolver for the deleteComment field.
 func (r *updateProcedureInputResolver) DeleteComment(ctx context.Context, obj *generated.UpdateProcedureInput, data *string) error {
+	if data == nil {
+		return nil
+	}
+
+	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "comment"})
+	}
+
+	return nil
+}
+
+// AddComment is the resolver for the addComment field.
+func (r *updateReviewInputResolver) AddComment(ctx context.Context, obj *generated.UpdateReviewInput, data *generated.CreateNoteInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	ctx, err := common.SetOrganizationInAuthContext(ctx, data.OwnerID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	data.ReviewID = graphutils.GetStringInputVariableByName(ctx, "id")
+	if data.ReviewID == nil {
+		return common.NewNotFoundError("review")
+	}
+
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
+	}
+
+	return nil
+}
+
+// DeleteComment is the resolver for the deleteComment field.
+func (r *updateReviewInputResolver) DeleteComment(ctx context.Context, obj *generated.UpdateReviewInput, data *string) error {
 	if data == nil {
 		return nil
 	}

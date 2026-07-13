@@ -8,6 +8,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
@@ -90,6 +91,59 @@ func TestMutationUpdateNoteForTask(t *testing.T) {
 
 	// clean up
 	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+}
+
+func TestMutationAddNoteForReview(t *testing.T) {
+	createResp, err := suite.client.api.CreateReview(sharedTestUser1.UserCtx, testclient.CreateReviewInput{
+		Title: "This is a review",
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, createResp != nil)
+
+	id := createResp.GetCreateReview().GetReview().ID
+
+	tt := []struct {
+		name    string
+		ctx     context.Context
+		comment string
+	}{
+		{
+			name:    "user can create comment",
+			ctx:     sharedViewOnlyUser.UserCtx,
+			comment: "This is a review comment from a user",
+		},
+		{
+			name:    "admin can create comment",
+			ctx:     sharedAdminUser.UserCtx,
+			comment: "This is a review comment from an admin",
+		},
+		{
+			name:    "owner can create comment",
+			ctx:     sharedTestUser1.UserCtx,
+			comment: "This is a review comment from an owner",
+		},
+		{
+			name:    "auditor can create comment",
+			ctx:     sharedAuditorUser.UserCtx,
+			comment: "This is a review comment from an auditor",
+		},
+	}
+
+	for _, tc := range tt {
+		t.Run(tc.name, func(t *testing.T) {
+			resp, err := suite.client.api.UpdateReview(tc.ctx, id, testclient.UpdateReviewInput{
+				AddComment: &testclient.CreateNoteInput{
+					Text: tc.comment,
+				},
+			}, nil)
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(id, resp.GetUpdateReview().GetReview().ID))
+		})
+	}
+
+	(&Cleanup[*generated.ReviewDeleteOne]{client: suite.client.db.Review, ID: id}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationAddNoteForControl(t *testing.T) {

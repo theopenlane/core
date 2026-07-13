@@ -10634,6 +10634,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"InternalPolicy",
 	)
 	graph.MustAddE(
+		"review",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ReviewTable,
+			Columns: []string{note.ReviewColumn},
+			Bidi:    false,
+		},
+		"Note",
+		"Review",
+	)
+	graph.MustAddE(
 		"evidence",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -34837,6 +34849,20 @@ func (f *NoteFilter) WhereHasInternalPolicy() {
 // WhereHasInternalPolicyWith applies a predicate to check if query has an edge internal_policy with a given conditions (other predicates).
 func (f *NoteFilter) WhereHasInternalPolicyWith(preds ...predicate.InternalPolicy) {
 	f.Where(entql.HasEdgeWith("internal_policy", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReview applies a predicate to check if query has an edge review.
+func (f *NoteFilter) WhereHasReview() {
+	f.Where(entql.HasEdge("review"))
+}
+
+// WhereHasReviewWith applies a predicate to check if query has an edge review with a given conditions (other predicates).
+func (f *NoteFilter) WhereHasReviewWith(preds ...predicate.Review) {
+	f.Where(entql.HasEdgeWith("review", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
