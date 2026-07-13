@@ -3,11 +3,15 @@
 package entityops
 
 import (
+	"context"
 	"slices"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
+
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // EdgeChange describes one mutated edge and the IDs added or removed
@@ -20,10 +24,14 @@ type EdgeChange struct {
 	RemovedIDs []string `json:"removedIds,omitempty" jsonschema:"description=IDs removed from the edge"`
 }
 
-// WorkflowEligible reports whether the schema participates in workflows via eligible fields or edges
+// WorkflowEligible reports whether the schema participates in workflows via an object-ref edge or
+// eligible fields or edges
 func (s *Schema) WorkflowEligible() bool {
-	return s.RefField != "" ||
-		slices.ContainsFunc(s.Fields, func(f FieldDescriptor) bool { return f.WorkflowEligible }) ||
+	if _, ok := workflowRefEdgeFor(s); ok {
+		return true
+	}
+
+	return slices.ContainsFunc(s.Fields, func(f FieldDescriptor) bool { return f.WorkflowEligible }) ||
 		slices.ContainsFunc(s.Edges, func(e EdgeDescriptor) bool { return e.WorkflowEligible })
 }
 
@@ -67,255 +75,61 @@ func (s *Schema) WorkflowEdgeNames() []string {
 	return out
 }
 
-// init wires workflow object-ref resolution onto each schema that has a WorkflowObjectRef edge
-func init() {
-	SchemaActionPlan.RefField = "ActionPlan"
-	SchemaActionPlan.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.ActionPlanID != "" {
-			return ref.ActionPlanID, true
-		}
-
-		return "", false
-	}
-	SchemaActionPlan.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.ActionPlanIDEQ(objectID))
-	}
-	SchemaAssessment.RefField = "Assessment"
-	SchemaAssessment.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.AssessmentID != "" {
-			return ref.AssessmentID, true
-		}
-
-		return "", false
-	}
-	SchemaAssessment.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.AssessmentIDEQ(objectID))
-	}
-	SchemaAssessmentResponse.RefField = "AssessmentResponse"
-	SchemaAssessmentResponse.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.AssessmentResponseID != "" {
-			return ref.AssessmentResponseID, true
-		}
-
-		return "", false
-	}
-	SchemaAssessmentResponse.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.AssessmentResponseIDEQ(objectID))
-	}
-	SchemaCampaign.RefField = "Campaign"
-	SchemaCampaign.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.CampaignID != "" {
-			return ref.CampaignID, true
-		}
-
-		return "", false
-	}
-	SchemaCampaign.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.CampaignIDEQ(objectID))
-	}
-	SchemaCampaignTarget.RefField = "CampaignTarget"
-	SchemaCampaignTarget.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.CampaignTargetID != "" {
-			return ref.CampaignTargetID, true
-		}
-
-		return "", false
-	}
-	SchemaCampaignTarget.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.CampaignTargetIDEQ(objectID))
-	}
-	SchemaControl.RefField = "Control"
-	SchemaControl.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.ControlID != "" {
-			return ref.ControlID, true
-		}
-
-		return "", false
-	}
-	SchemaControl.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.ControlIDEQ(objectID))
-	}
-	SchemaDirectoryAccount.RefField = "DirectoryAccount"
-	SchemaDirectoryAccount.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.DirectoryAccountID != "" {
-			return ref.DirectoryAccountID, true
-		}
-
-		return "", false
-	}
-	SchemaDirectoryAccount.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.DirectoryAccountIDEQ(objectID))
-	}
-	SchemaDirectoryGroup.RefField = "DirectoryGroup"
-	SchemaDirectoryGroup.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.DirectoryGroupID != "" {
-			return ref.DirectoryGroupID, true
-		}
-
-		return "", false
-	}
-	SchemaDirectoryGroup.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.DirectoryGroupIDEQ(objectID))
-	}
-	SchemaDirectoryMembership.RefField = "DirectoryMembership"
-	SchemaDirectoryMembership.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.DirectoryMembershipID != "" {
-			return ref.DirectoryMembershipID, true
-		}
-
-		return "", false
-	}
-	SchemaDirectoryMembership.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.DirectoryMembershipIDEQ(objectID))
-	}
-	SchemaEvidence.RefField = "Evidence"
-	SchemaEvidence.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.EvidenceID != "" {
-			return ref.EvidenceID, true
-		}
-
-		return "", false
-	}
-	SchemaEvidence.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.EvidenceIDEQ(objectID))
-	}
-	SchemaFinding.RefField = "Finding"
-	SchemaFinding.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.FindingID != "" {
-			return ref.FindingID, true
-		}
-
-		return "", false
-	}
-	SchemaFinding.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.FindingIDEQ(objectID))
-	}
-	SchemaIdentityHolder.RefField = "IdentityHolder"
-	SchemaIdentityHolder.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.IdentityHolderID != "" {
-			return ref.IdentityHolderID, true
-		}
-
-		return "", false
-	}
-	SchemaIdentityHolder.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.IdentityHolderIDEQ(objectID))
-	}
-	SchemaInternalPolicy.RefField = "InternalPolicy"
-	SchemaInternalPolicy.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.InternalPolicyID != "" {
-			return ref.InternalPolicyID, true
-		}
-
-		return "", false
-	}
-	SchemaInternalPolicy.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.InternalPolicyIDEQ(objectID))
-	}
-	SchemaPlatform.RefField = "Platform"
-	SchemaPlatform.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.PlatformID != "" {
-			return ref.PlatformID, true
-		}
-
-		return "", false
-	}
-	SchemaPlatform.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.PlatformIDEQ(objectID))
-	}
-	SchemaProcedure.RefField = "Procedure"
-	SchemaProcedure.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.ProcedureID != "" {
-			return ref.ProcedureID, true
-		}
-
-		return "", false
-	}
-	SchemaProcedure.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.ProcedureIDEQ(objectID))
-	}
-	SchemaRemediation.RefField = "Remediation"
-	SchemaRemediation.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.RemediationID != "" {
-			return ref.RemediationID, true
-		}
-
-		return "", false
-	}
-	SchemaRemediation.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.RemediationIDEQ(objectID))
-	}
-	SchemaRisk.RefField = "Risk"
-	SchemaRisk.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.RiskID != "" {
-			return ref.RiskID, true
-		}
-
-		return "", false
-	}
-	SchemaRisk.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.RiskIDEQ(objectID))
-	}
-	SchemaSubcontrol.RefField = "Subcontrol"
-	SchemaSubcontrol.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.SubcontrolID != "" {
-			return ref.SubcontrolID, true
-		}
-
-		return "", false
-	}
-	SchemaSubcontrol.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.SubcontrolIDEQ(objectID))
-	}
-	SchemaTask.RefField = "Task"
-	SchemaTask.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.TaskID != "" {
-			return ref.TaskID, true
-		}
-
-		return "", false
-	}
-	SchemaTask.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.TaskIDEQ(objectID))
-	}
-	SchemaVulnerability.RefField = "Vulnerability"
-	SchemaVulnerability.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.VulnerabilityID != "" {
-			return ref.VulnerabilityID, true
-		}
-
-		return "", false
-	}
-	SchemaVulnerability.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.VulnerabilityIDEQ(objectID))
-	}
-	SchemaWorkflowInstance.RefField = "WorkflowInstance"
-	SchemaWorkflowInstance.RefMatch = func(ref *generated.WorkflowObjectRef) (string, bool) {
-		if ref.WorkflowInstanceID != "" {
-			return ref.WorkflowInstanceID, true
-		}
-
-		return "", false
-	}
-	SchemaWorkflowInstance.RefFilter = func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery {
-		return query.Where(workflowobjectref.WorkflowInstanceIDEQ(objectID))
-	}
-}
-
-// ObjectFromWorkflowRef resolves the workflow object type and ID from a WorkflowObjectRef row by
-// dispatching to each schema's generated RefMatch closure
-func ObjectFromWorkflowRef(ref *generated.WorkflowObjectRef) (objectType string, objectID string, ok bool) {
-	for _, schema := range allSchemas {
-		if schema.RefMatch == nil {
+// workflowRefEdgeFor returns WorkflowObjectRef's unique owning edge targeting the given schema, or
+// false when the schema has no object-ref edge. The owning workflow_instance edge is excluded: it is
+// set on every ref row and does not identify the target object
+func workflowRefEdgeFor(schema *Schema) (EdgeDescriptor, bool) {
+	for _, edge := range SchemaWorkflowObjectRef.Edges {
+		if !edge.Unique || edge.Field == "" || edge.Target == SchemaWorkflowInstance {
 			continue
 		}
 
-		if id, matched := schema.RefMatch(ref); matched {
-			return schema.Name, id, true
+		if edge.Target == schema {
+			return edge, true
 		}
 	}
 
+	return EdgeDescriptor{}, false
+}
+
+// ObjectFromWorkflowRef resolves the workflow object type and ID from a WorkflowObjectRef row using
+// the object-ref edge catalog, replacing the per-type resolver switch
+func ObjectFromWorkflowRef(ctx context.Context, ref *generated.WorkflowObjectRef) (objectType string, objectID string, ok bool) {
+	row, err := jsonx.ToRawMap(ref)
+	if err != nil {
+		logError(ctx, SchemaRef{Schema: SchemaWorkflowObjectRef.Snake, Operation: OpLoad, EntityID: ref.ID}, ErrDecodeFailed, err)
+
+		return "", "", false
+	}
+
+	for _, edge := range SchemaWorkflowObjectRef.Edges {
+		if !edge.Unique || edge.Field == "" || edge.Target == SchemaWorkflowInstance {
+			continue
+		}
+
+		id, err := jsonx.Decode[string](row[edge.Field])
+		if err != nil || id == "" {
+			continue
+		}
+
+		return edge.Target.Name, id, true
+	}
+
 	return "", "", false
+}
+
+// RefsByObject narrows a WorkflowObjectRef query to rows referencing the given object, using the
+// object-ref edge catalog in place of per-type predicate switches; ok is false when the schema has
+// no object-ref edge
+func RefsByObject(query *generated.WorkflowObjectRefQuery, schema *Schema, objectID string) (*generated.WorkflowObjectRefQuery, bool) {
+	edge, ok := workflowRefEdgeFor(schema)
+	if !ok {
+		return query, false
+	}
+
+	return query.Where(predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(edge.Field), objectID))
+	})), true
 }
 
 // ExtractChangedEdges returns the workflow-eligible edges mutated by m, with the IDs added or removed

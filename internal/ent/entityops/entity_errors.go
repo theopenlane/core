@@ -10,6 +10,7 @@ import (
 	"github.com/rs/zerolog"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -30,8 +31,6 @@ var (
 	ErrLinkFailed = errors.New("entityops: link failed")
 	// ErrEdgeNotFound indicates the named edge does not exist or is not linkable on the source schema
 	ErrEdgeNotFound = errors.New("entityops: edge not found")
-	// ErrUnlinkFailed indicates an edge unlink operation failed
-	ErrUnlinkFailed = errors.New("entityops: unlink failed")
 	// ErrDecodeFailed indicates input JSON decoding failed
 	ErrDecodeFailed = errors.New("entityops: decode failed")
 	// ErrMarshalFailed indicates entity JSON marshaling failed
@@ -79,8 +78,6 @@ const (
 	OpUnlink = "unlink"
 	// OpEmit identifies event emission operations
 	OpEmit = "emit"
-	// OpUpsert identifies upsert operations
-	OpUpsert = "upsert"
 )
 
 // --- Log field keys ---
@@ -96,6 +93,17 @@ const (
 	FieldEdge = "edge"
 	// FieldOrgID is the log field key for the organization identifier
 	FieldOrgID = "org_id"
+	// FieldSourceOperation is the log field key for the originating mutation carried by the durable
+	// operation context (CREATE, UPDATE, DELETE)
+	FieldSourceOperation = "source_operation"
+	// FieldSourceEntityID is the log field key for the originating entity carried by the durable
+	// operation context
+	FieldSourceEntityID = "source_entity_id"
+	// FieldSourceEntityType is the log field key for the originating entity type carried by the
+	// durable operation context
+	FieldSourceEntityType = "source_entity_type"
+	// FieldExpression is the log field key for a CEL filter expression applied to target selection
+	FieldExpression = "expression"
 )
 
 // --- Schema log enrichment ---
@@ -155,7 +163,7 @@ func wrapPersistError(sentinel error, err error) error {
 
 // logError logs an error with schema context and returns a wrapped error
 func logError(ctx context.Context, ref SchemaRef, sentinel error, err error) error {
-	logx.FromContext(ctx).Error().Err(err).EmbedObject(ref).Msg(sentinel.Error())
+	errorEvent(ctx, ref, err).Msg(sentinel.Error())
 
 	return fmt.Errorf("%w: %w", sentinel, err)
 }
@@ -164,7 +172,38 @@ func logError(ctx context.Context, ref SchemaRef, sentinel error, err error) err
 func logPersistError(ctx context.Context, ref SchemaRef, sentinel error, err error) error {
 	wrapped := wrapPersistError(sentinel, err)
 
-	logx.FromContext(ctx).Error().Err(err).EmbedObject(ref).Msg(sentinel.Error())
+	errorEvent(ctx, ref, err).Msg(sentinel.Error())
 
 	return wrapped
+}
+
+// errorEvent builds an error log event carrying the schema ref plus, when present on the context,
+// the durable operation context provenance (owning org, originating mutation and entity). Fields
+// attached via logx.WithField travel on the context logger already, including across durable gala
+// hops, so only the operation context needs explicit embedding
+func errorEvent(ctx context.Context, ref SchemaRef, err error) *zerolog.Event {
+	event := logx.FromContext(ctx).Error().Err(err).EmbedObject(ref)
+
+	oc, ok := gala.OperationContextFromContext(ctx)
+	if !ok {
+		return event
+	}
+
+	if oc.OwnerID != "" {
+		event = event.Str(FieldOrgID, oc.OwnerID)
+	}
+
+	if oc.Operation != "" {
+		event = event.Str(FieldSourceOperation, oc.Operation)
+	}
+
+	if oc.EntityID != "" {
+		event = event.Str(FieldSourceEntityID, oc.EntityID)
+	}
+
+	if oc.EntityType != "" {
+		event = event.Str(FieldSourceEntityType, oc.EntityType)
+	}
+
+	return event
 }

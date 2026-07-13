@@ -12,9 +12,6 @@ tool (
 
 replace github.com/theopenlane/core/common => ./common
 
-// local entx during the entityops transition; drop once entx is released and bumped
-replace github.com/theopenlane/entx => /Users/manderson/entx
-
 require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/securitycenter v1.44.0
@@ -107,7 +104,7 @@ require (
 	github.com/theopenlane/core/common v1.0.24
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/entx v0.29.0
+	github.com/theopenlane/entx v0.30.0
 	github.com/theopenlane/go-client v0.12.3
 	github.com/theopenlane/gqlgen-plugins v0.14.7
 	github.com/theopenlane/httpsling v0.3.0

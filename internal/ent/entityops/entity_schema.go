@@ -3,11 +3,8 @@
 package entityops
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
-
-	"github.com/theopenlane/core/internal/ent/generated"
 )
 
 // SchemaDescriptor is the canonical identity for an entity schema
@@ -75,49 +72,47 @@ type FieldDescriptor struct {
 	Label string `json:"label"`
 	// Type is the ent field type string (e.g. "string", "bool", "time.Time")
 	Type string `json:"type"`
-	// Immutable reports whether the field is set only at create time (excluded from update re-keying)
-	Immutable bool `json:"immutable,omitempty"`
 	// WorkflowEligible reports whether the field may drive workflow conditions and triggers
 	WorkflowEligible bool `json:"workflowEligible,omitempty"`
 	// MatchKey reports whether the field is a plain-string indexed column usable as a cross-link match key
 	MatchKey bool `json:"matchKey,omitempty"`
 	// InputKey is the integration mapping create-input key (lowerCamel); empty for non-mapped fields
 	InputKey string `json:"inputKey,omitempty"`
-	// Required reports whether the field is required on the create input (integration mapping)
-	Required bool `json:"required,omitempty"`
-	// UpsertKey reports whether the field participates in integration dedupe/upsert matching
-	UpsertKey bool `json:"upsertKey,omitempty"`
-	// LookupKey reports whether the field participates in integration stock ingest lookup matching
-	LookupKey bool `json:"lookupKey,omitempty"`
 }
 
 // EdgeDescriptor describes an edge on a schema. It is the single edge-capability record shared by
-// runtime link operations, the workflow builder, and the integration cross-link inventory
+// create-time link injection, the workflow object-ref catalog, and the integration cross-link inventory
 type EdgeDescriptor struct {
 	// Name is the edge name (e.g., "controls")
 	Name string `json:"name"`
-	// Target is the target schema; nil for group-permission edges that do not resolve to an entityops schema
+	// Target is the target schema's registry entry
 	Target *Schema `json:"-"`
 	// TargetType is the PascalCase target schema name, surfaced for the cross-link target dropdown
 	TargetType string `json:"target,omitempty"`
 	// Label is the human-readable label (PascalCase of the edge name)
 	Label string `json:"label,omitempty"`
-	// Relationship is the edge relationship type ("M2M", "O2M", "M2O", or "O2O")
-	Relationship string `json:"relationship"`
 	// Unique reports whether this side references a single target (sets <edge>ID rather than <edge>IDs)
 	Unique bool `json:"unique,omitempty"`
-	// Immutable reports whether the edge is set only at create time; Link/Unlink are nil for immutable edges
+	// Field is the foreign-key storage column on this schema's table for unique owning edges
+	// (e.g. "control_id"); empty when the foreign key lives on the target table
+	Field string `json:"field,omitempty"`
+	// Immutable reports whether the edge is set only at create time; LinkTargets and UnlinkTargets
+	// reject immutable edges since the update input has no setters for them
 	Immutable bool `json:"immutable,omitempty"`
-	// CreateField is the create-input JSON key used to set this edge at create time (e.g. "controlIDs")
+	// CreateField is the create-input JSON key used to set this edge at create time (e.g. "controlIDs");
+	// for unique edges it doubles as the update-input key used by LinkTargets
 	CreateField string `json:"createField,omitempty"`
+	// AddField is the update-input key that adds targets to a to-many edge (e.g. "addControlIDs");
+	// empty for unique or immutable edges
+	AddField string `json:"addField,omitempty"`
+	// RemoveField is the update-input key that removes targets from a to-many edge (e.g. "removeControlIDs");
+	// empty for unique or immutable edges
+	RemoveField string `json:"removeField,omitempty"`
+	// ClearField is the update-input key that clears an optional unique edge (e.g. "clearControl");
+	// empty for to-many, required, or immutable edges
+	ClearField string `json:"clearField,omitempty"`
 	// WorkflowEligible reports whether the edge may drive workflow conditions and triggers
 	WorkflowEligible bool `json:"workflowEligible,omitempty"`
-	// Link adds edges between the source entity and target entities; nil for immutable edges
-	Link func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error `json:"-"`
-	// Unlink removes edges between the source entity and target entities; nil for immutable edges
-	Unlink func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error `json:"-"`
-	// Query returns the IDs of the entities currently linked to the source entity via this edge
-	Query func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) `json:"-"`
 }
 
 // KeyMatch describes a structured key-equality match between a target schema field and values

@@ -3,7 +3,6 @@
 package entityops
 
 import (
-	"reflect"
 	"time"
 
 	"github.com/theopenlane/core/common/enums"
@@ -1857,54 +1856,4 @@ type WorkflowObjectRefProjection struct {
 	UpdatedByImpersonator string    `json:"updated_by_impersonator,omitempty"`
 	VulnerabilityID       string    `json:"vulnerability_id,omitempty"`
 	WorkflowInstanceID    string    `json:"workflow_instance_id,omitempty"`
-}
-
-// init registers each schema's projection type on its Schema, so the CEL native type for a target or
-// source entity is reachable through the single Schema object rather than a separate lookup table
-func init() {
-	SchemaActionPlan.ProjectionType = reflect.TypeFor[ActionPlanProjection]()
-	SchemaAssessment.ProjectionType = reflect.TypeFor[AssessmentProjection]()
-	SchemaAssessmentResponse.ProjectionType = reflect.TypeFor[AssessmentResponseProjection]()
-	SchemaAsset.ProjectionType = reflect.TypeFor[AssetProjection]()
-	SchemaCampaign.ProjectionType = reflect.TypeFor[CampaignProjection]()
-	SchemaCampaignTarget.ProjectionType = reflect.TypeFor[CampaignTargetProjection]()
-	SchemaCheckResult.ProjectionType = reflect.TypeFor[CheckResultProjection]()
-	SchemaContact.ProjectionType = reflect.TypeFor[ContactProjection]()
-	SchemaControl.ProjectionType = reflect.TypeFor[ControlProjection]()
-	SchemaControlImplementation.ProjectionType = reflect.TypeFor[ControlImplementationProjection]()
-	SchemaControlObjective.ProjectionType = reflect.TypeFor[ControlObjectiveProjection]()
-	SchemaDirectoryAccount.ProjectionType = reflect.TypeFor[DirectoryAccountProjection]()
-	SchemaDirectoryGroup.ProjectionType = reflect.TypeFor[DirectoryGroupProjection]()
-	SchemaDirectoryMembership.ProjectionType = reflect.TypeFor[DirectoryMembershipProjection]()
-	SchemaDiscussion.ProjectionType = reflect.TypeFor[DiscussionProjection]()
-	SchemaDocumentData.ProjectionType = reflect.TypeFor[DocumentDataProjection]()
-	SchemaEmailTemplate.ProjectionType = reflect.TypeFor[EmailTemplateProjection]()
-	SchemaEntity.ProjectionType = reflect.TypeFor[EntityProjection]()
-	SchemaEvidence.ProjectionType = reflect.TypeFor[EvidenceProjection]()
-	SchemaFinding.ProjectionType = reflect.TypeFor[FindingProjection]()
-	SchemaIdentityHolder.ProjectionType = reflect.TypeFor[IdentityHolderProjection]()
-	SchemaInternalPolicy.ProjectionType = reflect.TypeFor[InternalPolicyProjection]()
-	SchemaNarrative.ProjectionType = reflect.TypeFor[NarrativeProjection]()
-	SchemaNotificationTemplate.ProjectionType = reflect.TypeFor[NotificationTemplateProjection]()
-	SchemaPlatform.ProjectionType = reflect.TypeFor[PlatformProjection]()
-	SchemaProcedure.ProjectionType = reflect.TypeFor[ProcedureProjection]()
-	SchemaRemediation.ProjectionType = reflect.TypeFor[RemediationProjection]()
-	SchemaReview.ProjectionType = reflect.TypeFor[ReviewProjection]()
-	SchemaRisk.ProjectionType = reflect.TypeFor[RiskProjection]()
-	SchemaScan.ProjectionType = reflect.TypeFor[ScanProjection]()
-	SchemaScheduledJob.ProjectionType = reflect.TypeFor[ScheduledJobProjection]()
-	SchemaSubcontrol.ProjectionType = reflect.TypeFor[SubcontrolProjection]()
-	SchemaSubprocessor.ProjectionType = reflect.TypeFor[SubprocessorProjection]()
-	SchemaSystemDetail.ProjectionType = reflect.TypeFor[SystemDetailProjection]()
-	SchemaTask.ProjectionType = reflect.TypeFor[TaskProjection]()
-	SchemaTemplate.ProjectionType = reflect.TypeFor[TemplateProjection]()
-	SchemaTrustCenterWatermarkConfig.ProjectionType = reflect.TypeFor[TrustCenterWatermarkConfigProjection]()
-	SchemaVendorRiskScore.ProjectionType = reflect.TypeFor[VendorRiskScoreProjection]()
-	SchemaVulnerability.ProjectionType = reflect.TypeFor[VulnerabilityProjection]()
-	SchemaWorkflowAssignment.ProjectionType = reflect.TypeFor[WorkflowAssignmentProjection]()
-	SchemaWorkflowAssignmentTarget.ProjectionType = reflect.TypeFor[WorkflowAssignmentTargetProjection]()
-	SchemaWorkflowDefinition.ProjectionType = reflect.TypeFor[WorkflowDefinitionProjection]()
-	SchemaWorkflowEvent.ProjectionType = reflect.TypeFor[WorkflowEventProjection]()
-	SchemaWorkflowInstance.ProjectionType = reflect.TypeFor[WorkflowInstanceProjection]()
-	SchemaWorkflowObjectRef.ProjectionType = reflect.TypeFor[WorkflowObjectRefProjection]()
 }

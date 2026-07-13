@@ -11,6 +11,7 @@ import (
 	"strings"
 	"sync"
 
+	"entgo.io/ent/dialect/sql"
 	"github.com/stoewer/go-strcase"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -38,6 +39,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/internal/ent/generated/review"
@@ -60,6 +62,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/pkg/celx"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // EntityRef is a lightweight reference to an entity
@@ -93,23 +96,14 @@ type Schema struct {
 	// SourceContext re-keys an ingest create-input payload into the snake_case source context that a
 	// cross-link rule's key-match and CEL expression read; set for every schema with a create input
 	SourceContext func(payload json.RawMessage) json.RawMessage
-	// AllowedKeys is the set of integration mapping input keys accepted for this schema; empty for
-	// schemas that do not participate in integration ingest mapping
+	// AllowedKeys is the set of integration mapping input keys accepted for this schema, derived at
+	// init from the unified field catalog; empty for schemas that do not participate in ingest mapping
 	AllowedKeys map[string]struct{}
 	// StockPersist reports whether the schema opts into the generated stock ingest persistence path
 	StockPersist bool
 	// ProjectionType is the reflect.Type of this schema's flat CEL/jsonschema projection struct
 	// ({Name}Projection); the registerable native-type view of the entity used for typed expressions
 	ProjectionType reflect.Type
-	// RefField is the WorkflowObjectRef struct field for this object type (e.g. "Control"); empty if
-	// the type has no workflow object-ref edge
-	RefField string
-	// RefMatch reports the object id and whether this schema owns the given WorkflowObjectRef row,
-	// replacing the per-type ObjectFromWorkflowRef switch; nil for non-workflow schemas
-	RefMatch func(ref *generated.WorkflowObjectRef) (string, bool)
-	// RefFilter adds this object type's predicate to a WorkflowObjectRef query, replacing the per-type
-	// ApplyWorkflowRefFilter switch; nil for non-workflow schemas
-	RefFilter func(query *generated.WorkflowObjectRefQuery, objectID string) *generated.WorkflowObjectRefQuery
 }
 
 // applyClears rewrites explicit null values in a snake_case payload to the generated Clear<Field>
@@ -146,6 +140,29 @@ func isJSONNull(raw json.RawMessage) bool {
 	return bytes.Equal(bytes.TrimSpace(raw), []byte("null"))
 }
 
+// MatchKeyField reports whether field is a declared match-key column for this schema
+func (s *Schema) MatchKeyField(field string) bool {
+	for _, f := range s.Fields {
+		if f.MatchKey && f.Name == field {
+			return true
+		}
+	}
+
+	return false
+}
+
+// matchKeyIn returns a selector predicate matching the given match-key column against any of values
+func matchKeyIn(field string, values []string) func(*sql.Selector) {
+	return func(s *sql.Selector) {
+		args := make([]any, 0, len(values))
+		for _, v := range values {
+			args = append(args, v)
+		}
+
+		s.Where(sql.In(s.C(field), args...))
+	}
+}
+
 // --- Per-schema registrations ---
 
 var (
@@ -159,6 +176,7 @@ var (
 			Table:  "action_plans",
 			Label:  "Action plan",
 		},
+		ProjectionType: reflect.TypeFor[ActionPlanProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "action_plan", Operation: OpCreate}
 
@@ -211,80 +229,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "action_plan", Operation: OpQuery}
-
-			query := client.ActionPlan.Query().Where(actionplan.OwnerID(orgID))
-
-			switch field {
-			case "action_plan_kind_id":
-				query = query.Where(actionplan.ActionPlanKindIDIn(values...))
-			case "action_plan_kind_name":
-				query = query.Where(actionplan.ActionPlanKindNameIn(values...))
-			case "approver_id":
-				query = query.Where(actionplan.ApproverIDIn(values...))
-			case "blocker_reason":
-				query = query.Where(actionplan.BlockerReasonIn(values...))
-			case "created_by":
-				query = query.Where(actionplan.CreatedByIn(values...))
-			case "delegate_id":
-				query = query.Where(actionplan.DelegateIDIn(values...))
-			case "deleted_by":
-				query = query.Where(actionplan.DeletedByIn(values...))
-			case "description":
-				query = query.Where(actionplan.DescriptionIn(values...))
-			case "details":
-				query = query.Where(actionplan.DetailsIn(values...))
-			case "external_contents":
-				query = query.Where(actionplan.ExternalContentsIn(values...))
-			case "external_file_id":
-				query = query.Where(actionplan.ExternalFileIDIn(values...))
-			case "file_id":
-				query = query.Where(actionplan.FileIDIn(values...))
-			case "internal_notes":
-				query = query.Where(actionplan.InternalNotesIn(values...))
-			case "name":
-				query = query.Where(actionplan.NameIn(values...))
-			case "owner_id":
-				query = query.Where(actionplan.OwnerIDIn(values...))
-			case "revision":
-				query = query.Where(actionplan.RevisionIn(values...))
-			case "source":
-				query = query.Where(actionplan.SourceIn(values...))
-			case "summary":
-				query = query.Where(actionplan.SummaryIn(values...))
-			case "system_internal_id":
-				query = query.Where(actionplan.SystemInternalIDIn(values...))
-			case "title":
-				query = query.Where(actionplan.TitleIn(values...))
-			case "updated_by":
-				query = query.Where(actionplan.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(actionplan.UpdatedByImpersonatorIn(values...))
-			case "url":
-				query = query.Where(actionplan.URLIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "action_plan", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "action_plan", Operation: OpLoad, EntityID: entityID}
 
@@ -311,6 +255,7 @@ var (
 			Table:  "assessments",
 			Label:  "Assessment",
 		},
+		ProjectionType: reflect.TypeFor[AssessmentProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "assessment", Operation: OpCreate}
 
@@ -363,52 +308,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "assessment", Operation: OpQuery}
-
-			query := client.Assessment.Query().Where(assessment.OwnerID(orgID))
-
-			switch field {
-			case "created_by":
-				query = query.Where(assessment.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(assessment.DeletedByIn(values...))
-			case "internal_notes":
-				query = query.Where(assessment.InternalNotesIn(values...))
-			case "name":
-				query = query.Where(assessment.NameIn(values...))
-			case "owner_id":
-				query = query.Where(assessment.OwnerIDIn(values...))
-			case "system_internal_id":
-				query = query.Where(assessment.SystemInternalIDIn(values...))
-			case "template_id":
-				query = query.Where(assessment.TemplateIDIn(values...))
-			case "updated_by":
-				query = query.Where(assessment.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(assessment.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "assessment", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "assessment", Operation: OpLoad, EntityID: entityID}
 
@@ -435,6 +334,7 @@ var (
 			Table:  "assessment_responses",
 			Label:  "Assessment response",
 		},
+		ProjectionType: reflect.TypeFor[AssessmentResponseProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "assessment_response", Operation: OpCreate}
 
@@ -456,58 +356,6 @@ var (
 			entities, err := client.AssessmentResponse.Query().
 				Where(assessmentresponse.OwnerID(orgID)).
 				All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "assessment_response", Operation: OpQuery}
-
-			query := client.AssessmentResponse.Query().Where(assessmentresponse.OwnerID(orgID))
-
-			switch field {
-			case "assessment_id":
-				query = query.Where(assessmentresponse.AssessmentIDIn(values...))
-			case "campaign_id":
-				query = query.Where(assessmentresponse.CampaignIDIn(values...))
-			case "created_by":
-				query = query.Where(assessmentresponse.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(assessmentresponse.DeletedByIn(values...))
-			case "display_name":
-				query = query.Where(assessmentresponse.DisplayNameIn(values...))
-			case "document_data_id":
-				query = query.Where(assessmentresponse.DocumentDataIDIn(values...))
-			case "email":
-				query = query.Where(assessmentresponse.EmailIn(values...))
-			case "entity_id":
-				query = query.Where(assessmentresponse.EntityIDIn(values...))
-			case "identity_holder_id":
-				query = query.Where(assessmentresponse.IdentityHolderIDIn(values...))
-			case "owner_id":
-				query = query.Where(assessmentresponse.OwnerIDIn(values...))
-			case "updated_by":
-				query = query.Where(assessmentresponse.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(assessmentresponse.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "assessment_response", field)
-			}
-
-			entities, err := query.All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
 			}
@@ -551,6 +399,8 @@ var (
 			Table:  "assets",
 			Label:  "Asset",
 		},
+		ProjectionType: reflect.TypeFor[AssetProjection](),
+		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "asset", Operation: OpCreate}
 
@@ -603,110 +453,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "asset", Operation: OpQuery}
-
-			query := client.Asset.Query().Where(asset.OwnerID(orgID))
-
-			switch field {
-			case "access_model_id":
-				query = query.Where(asset.AccessModelIDIn(values...))
-			case "access_model_name":
-				query = query.Where(asset.AccessModelNameIn(values...))
-			case "asset_data_classification_id":
-				query = query.Where(asset.AssetDataClassificationIDIn(values...))
-			case "asset_data_classification_name":
-				query = query.Where(asset.AssetDataClassificationNameIn(values...))
-			case "asset_subtype_id":
-				query = query.Where(asset.AssetSubtypeIDIn(values...))
-			case "asset_subtype_name":
-				query = query.Where(asset.AssetSubtypeNameIn(values...))
-			case "cost_center":
-				query = query.Where(asset.CostCenterIn(values...))
-			case "cpe":
-				query = query.Where(asset.CpeIn(values...))
-			case "created_by":
-				query = query.Where(asset.CreatedByIn(values...))
-			case "criticality_id":
-				query = query.Where(asset.CriticalityIDIn(values...))
-			case "criticality_name":
-				query = query.Where(asset.CriticalityNameIn(values...))
-			case "deleted_by":
-				query = query.Where(asset.DeletedByIn(values...))
-			case "description":
-				query = query.Where(asset.DescriptionIn(values...))
-			case "display_name":
-				query = query.Where(asset.DisplayNameIn(values...))
-			case "encryption_status_id":
-				query = query.Where(asset.EncryptionStatusIDIn(values...))
-			case "encryption_status_name":
-				query = query.Where(asset.EncryptionStatusNameIn(values...))
-			case "environment_id":
-				query = query.Where(asset.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(asset.EnvironmentNameIn(values...))
-			case "identifier":
-				query = query.Where(asset.IdentifierIn(values...))
-			case "integration_id":
-				query = query.Where(asset.IntegrationIDIn(values...))
-			case "internal_notes":
-				query = query.Where(asset.InternalNotesIn(values...))
-			case "internal_owner":
-				query = query.Where(asset.InternalOwnerIn(values...))
-			case "internal_owner_group_id":
-				query = query.Where(asset.InternalOwnerGroupIDIn(values...))
-			case "internal_owner_user_id":
-				query = query.Where(asset.InternalOwnerUserIDIn(values...))
-			case "name":
-				query = query.Where(asset.NameIn(values...))
-			case "owner_id":
-				query = query.Where(asset.OwnerIDIn(values...))
-			case "physical_location":
-				query = query.Where(asset.PhysicalLocationIn(values...))
-			case "region":
-				query = query.Where(asset.RegionIn(values...))
-			case "scope_id":
-				query = query.Where(asset.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(asset.ScopeNameIn(values...))
-			case "security_tier_id":
-				query = query.Where(asset.SecurityTierIDIn(values...))
-			case "security_tier_name":
-				query = query.Where(asset.SecurityTierNameIn(values...))
-			case "source_identifier":
-				query = query.Where(asset.SourceIdentifierIn(values...))
-			case "source_platform_id":
-				query = query.Where(asset.SourcePlatformIDIn(values...))
-			case "system_internal_id":
-				query = query.Where(asset.SystemInternalIDIn(values...))
-			case "updated_by":
-				query = query.Where(asset.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(asset.UpdatedByImpersonatorIn(values...))
-			case "website":
-				query = query.Where(asset.WebsiteIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "asset", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "asset", Operation: OpLoad, EntityID: entityID}
 
@@ -733,6 +479,7 @@ var (
 			Table:  "campaigns",
 			Label:  "Campaign",
 		},
+		ProjectionType: reflect.TypeFor[CampaignProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "campaign", Operation: OpCreate}
 
@@ -785,72 +532,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "campaign", Operation: OpQuery}
-
-			query := client.Campaign.Query().Where(campaign.OwnerID(orgID))
-
-			switch field {
-			case "assessment_id":
-				query = query.Where(campaign.AssessmentIDIn(values...))
-			case "created_by":
-				query = query.Where(campaign.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(campaign.DeletedByIn(values...))
-			case "description":
-				query = query.Where(campaign.DescriptionIn(values...))
-			case "display_id":
-				query = query.Where(campaign.DisplayIDIn(values...))
-			case "email_branding_id":
-				query = query.Where(campaign.EmailBrandingIDIn(values...))
-			case "email_template_id":
-				query = query.Where(campaign.EmailTemplateIDIn(values...))
-			case "entity_id":
-				query = query.Where(campaign.EntityIDIn(values...))
-			case "integration_id":
-				query = query.Where(campaign.IntegrationIDIn(values...))
-			case "internal_owner":
-				query = query.Where(campaign.InternalOwnerIn(values...))
-			case "internal_owner_group_id":
-				query = query.Where(campaign.InternalOwnerGroupIDIn(values...))
-			case "internal_owner_user_id":
-				query = query.Where(campaign.InternalOwnerUserIDIn(values...))
-			case "name":
-				query = query.Where(campaign.NameIn(values...))
-			case "owner_id":
-				query = query.Where(campaign.OwnerIDIn(values...))
-			case "recurrence_timezone":
-				query = query.Where(campaign.RecurrenceTimezoneIn(values...))
-			case "template_id":
-				query = query.Where(campaign.TemplateIDIn(values...))
-			case "trust_center_id":
-				query = query.Where(campaign.TrustCenterIDIn(values...))
-			case "updated_by":
-				query = query.Where(campaign.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(campaign.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "campaign", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "campaign", Operation: OpLoad, EntityID: entityID}
 
@@ -877,6 +558,7 @@ var (
 			Table:  "campaign_targets",
 			Label:  "Campaign target",
 		},
+		ProjectionType: reflect.TypeFor[CampaignTargetProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "campaign_target", Operation: OpCreate}
 
@@ -929,58 +611,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "campaign_target", Operation: OpQuery}
-
-			query := client.CampaignTarget.Query().Where(campaigntarget.OwnerID(orgID))
-
-			switch field {
-			case "campaign_id":
-				query = query.Where(campaigntarget.CampaignIDIn(values...))
-			case "contact_id":
-				query = query.Where(campaigntarget.ContactIDIn(values...))
-			case "created_by":
-				query = query.Where(campaigntarget.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(campaigntarget.DeletedByIn(values...))
-			case "email":
-				query = query.Where(campaigntarget.EmailIn(values...))
-			case "full_name":
-				query = query.Where(campaigntarget.FullNameIn(values...))
-			case "group_id":
-				query = query.Where(campaigntarget.GroupIDIn(values...))
-			case "owner_id":
-				query = query.Where(campaigntarget.OwnerIDIn(values...))
-			case "subscriber_id":
-				query = query.Where(campaigntarget.SubscriberIDIn(values...))
-			case "updated_by":
-				query = query.Where(campaigntarget.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(campaigntarget.UpdatedByImpersonatorIn(values...))
-			case "user_id":
-				query = query.Where(campaigntarget.UserIDIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "campaign_target", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "campaign_target", Operation: OpLoad, EntityID: entityID}
 
@@ -1007,6 +637,8 @@ var (
 			Table:  "check_results",
 			Label:  "Check result",
 		},
+		ProjectionType: reflect.TypeFor[CheckResultProjection](),
+		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "check_result", Operation: OpCreate}
 
@@ -1062,6 +694,8 @@ var (
 			Table:  "contacts",
 			Label:  "Contact",
 		},
+		ProjectionType: reflect.TypeFor[ContactProjection](),
+		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "contact", Operation: OpCreate}
 
@@ -1114,60 +748,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "contact", Operation: OpQuery}
-
-			query := client.Contact.Query().Where(contact.OwnerID(orgID))
-
-			switch field {
-			case "address":
-				query = query.Where(contact.AddressIn(values...))
-			case "company":
-				query = query.Where(contact.CompanyIn(values...))
-			case "created_by":
-				query = query.Where(contact.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(contact.DeletedByIn(values...))
-			case "email":
-				query = query.Where(contact.EmailIn(values...))
-			case "external_id":
-				query = query.Where(contact.ExternalIDIn(values...))
-			case "full_name":
-				query = query.Where(contact.FullNameIn(values...))
-			case "integration_id":
-				query = query.Where(contact.IntegrationIDIn(values...))
-			case "owner_id":
-				query = query.Where(contact.OwnerIDIn(values...))
-			case "phone_number":
-				query = query.Where(contact.PhoneNumberIn(values...))
-			case "title":
-				query = query.Where(contact.TitleIn(values...))
-			case "updated_by":
-				query = query.Where(contact.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(contact.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "contact", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "contact", Operation: OpLoad, EntityID: entityID}
 
@@ -1194,6 +774,7 @@ var (
 			Table:  "controls",
 			Label:  "Control",
 		},
+		ProjectionType: reflect.TypeFor[ControlProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "control", Operation: OpCreate}
 
@@ -1246,98 +827,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "control", Operation: OpQuery}
-
-			query := client.Control.Query().Where(control.OwnerID(orgID))
-
-			switch field {
-			case "auditor_reference_id":
-				query = query.Where(control.AuditorReferenceIDIn(values...))
-			case "category":
-				query = query.Where(control.CategoryIn(values...))
-			case "category_id":
-				query = query.Where(control.CategoryIDIn(values...))
-			case "control_kind_id":
-				query = query.Where(control.ControlKindIDIn(values...))
-			case "control_kind_name":
-				query = query.Where(control.ControlKindNameIn(values...))
-			case "control_owner_id":
-				query = query.Where(control.ControlOwnerIDIn(values...))
-			case "created_by":
-				query = query.Where(control.CreatedByIn(values...))
-			case "delegate_id":
-				query = query.Where(control.DelegateIDIn(values...))
-			case "deleted_by":
-				query = query.Where(control.DeletedByIn(values...))
-			case "description":
-				query = query.Where(control.DescriptionIn(values...))
-			case "display_id":
-				query = query.Where(control.DisplayIDIn(values...))
-			case "environment_id":
-				query = query.Where(control.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(control.EnvironmentNameIn(values...))
-			case "external_uuid":
-				query = query.Where(control.ExternalUUIDIn(values...))
-			case "implementation_description":
-				query = query.Where(control.ImplementationDescriptionIn(values...))
-			case "internal_notes":
-				query = query.Where(control.InternalNotesIn(values...))
-			case "owner_id":
-				query = query.Where(control.OwnerIDIn(values...))
-			case "public_representation":
-				query = query.Where(control.PublicRepresentationIn(values...))
-			case "ref_code":
-				query = query.Where(control.RefCodeIn(values...))
-			case "reference_framework":
-				query = query.Where(control.ReferenceFrameworkIn(values...))
-			case "reference_framework_revision":
-				query = query.Where(control.ReferenceFrameworkRevisionIn(values...))
-			case "reference_id":
-				query = query.Where(control.ReferenceIDIn(values...))
-			case "responsible_party_id":
-				query = query.Where(control.ResponsiblePartyIDIn(values...))
-			case "scope_id":
-				query = query.Where(control.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(control.ScopeNameIn(values...))
-			case "source_name":
-				query = query.Where(control.SourceNameIn(values...))
-			case "standard_id":
-				query = query.Where(control.StandardIDIn(values...))
-			case "subcategory":
-				query = query.Where(control.SubcategoryIn(values...))
-			case "system_internal_id":
-				query = query.Where(control.SystemInternalIDIn(values...))
-			case "title":
-				query = query.Where(control.TitleIn(values...))
-			case "updated_by":
-				query = query.Where(control.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(control.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "control", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "control", Operation: OpLoad, EntityID: entityID}
 
@@ -1364,6 +853,7 @@ var (
 			Table:  "control_implementations",
 			Label:  "Control implementation",
 		},
+		ProjectionType: reflect.TypeFor[ControlImplementationProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "control_implementation", Operation: OpCreate}
 
@@ -1416,50 +906,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "control_implementation", Operation: OpQuery}
-
-			query := client.ControlImplementation.Query().Where(controlimplementation.OwnerID(orgID))
-
-			switch field {
-			case "created_by":
-				query = query.Where(controlimplementation.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(controlimplementation.DeletedByIn(values...))
-			case "details":
-				query = query.Where(controlimplementation.DetailsIn(values...))
-			case "internal_notes":
-				query = query.Where(controlimplementation.InternalNotesIn(values...))
-			case "owner_id":
-				query = query.Where(controlimplementation.OwnerIDIn(values...))
-			case "system_internal_id":
-				query = query.Where(controlimplementation.SystemInternalIDIn(values...))
-			case "updated_by":
-				query = query.Where(controlimplementation.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(controlimplementation.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "control_implementation", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "control_implementation", Operation: OpLoad, EntityID: entityID}
 
@@ -1486,6 +932,7 @@ var (
 			Table:  "control_objectives",
 			Label:  "Control objective",
 		},
+		ProjectionType: reflect.TypeFor[ControlObjectiveProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "control_objective", Operation: OpCreate}
 
@@ -1538,62 +985,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "control_objective", Operation: OpQuery}
-
-			query := client.ControlObjective.Query().Where(controlobjective.OwnerID(orgID))
-
-			switch field {
-			case "category":
-				query = query.Where(controlobjective.CategoryIn(values...))
-			case "control_objective_type":
-				query = query.Where(controlobjective.ControlObjectiveTypeIn(values...))
-			case "created_by":
-				query = query.Where(controlobjective.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(controlobjective.DeletedByIn(values...))
-			case "desired_outcome":
-				query = query.Where(controlobjective.DesiredOutcomeIn(values...))
-			case "display_id":
-				query = query.Where(controlobjective.DisplayIDIn(values...))
-			case "internal_notes":
-				query = query.Where(controlobjective.InternalNotesIn(values...))
-			case "name":
-				query = query.Where(controlobjective.NameIn(values...))
-			case "owner_id":
-				query = query.Where(controlobjective.OwnerIDIn(values...))
-			case "revision":
-				query = query.Where(controlobjective.RevisionIn(values...))
-			case "subcategory":
-				query = query.Where(controlobjective.SubcategoryIn(values...))
-			case "system_internal_id":
-				query = query.Where(controlobjective.SystemInternalIDIn(values...))
-			case "updated_by":
-				query = query.Where(controlobjective.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(controlobjective.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "control_objective", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "control_objective", Operation: OpLoad, EntityID: entityID}
 
@@ -1620,6 +1011,8 @@ var (
 			Table:  "directory_accounts",
 			Label:  "Directory account",
 		},
+		ProjectionType: reflect.TypeFor[DirectoryAccountProjection](),
+		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "directory_account", Operation: OpCreate}
 
@@ -1672,96 +1065,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "directory_account", Operation: OpQuery}
-
-			query := client.DirectoryAccount.Query().Where(directoryaccount.OwnerID(orgID))
-
-			switch field {
-			case "avatar_local_file_id":
-				query = query.Where(directoryaccount.AvatarLocalFileIDIn(values...))
-			case "avatar_remote_url":
-				query = query.Where(directoryaccount.AvatarRemoteURLIn(values...))
-			case "canonical_email":
-				query = query.Where(directoryaccount.CanonicalEmailIn(values...))
-			case "created_by":
-				query = query.Where(directoryaccount.CreatedByIn(values...))
-			case "department":
-				query = query.Where(directoryaccount.DepartmentIn(values...))
-			case "directory_instance_id":
-				query = query.Where(directoryaccount.DirectoryInstanceIDIn(values...))
-			case "directory_name":
-				query = query.Where(directoryaccount.DirectoryNameIn(values...))
-			case "directory_sync_run_id":
-				query = query.Where(directoryaccount.DirectorySyncRunIDIn(values...))
-			case "display_id":
-				query = query.Where(directoryaccount.DisplayIDIn(values...))
-			case "display_name":
-				query = query.Where(directoryaccount.DisplayNameIn(values...))
-			case "environment_id":
-				query = query.Where(directoryaccount.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(directoryaccount.EnvironmentNameIn(values...))
-			case "external_id":
-				query = query.Where(directoryaccount.ExternalIDIn(values...))
-			case "family_name":
-				query = query.Where(directoryaccount.FamilyNameIn(values...))
-			case "given_name":
-				query = query.Where(directoryaccount.GivenNameIn(values...))
-			case "identity_holder_id":
-				query = query.Where(directoryaccount.IdentityHolderIDIn(values...))
-			case "integration_id":
-				query = query.Where(directoryaccount.IntegrationIDIn(values...))
-			case "job_title":
-				query = query.Where(directoryaccount.JobTitleIn(values...))
-			case "last_seen_ip":
-				query = query.Where(directoryaccount.LastSeenIPIn(values...))
-			case "organization_unit":
-				query = query.Where(directoryaccount.OrganizationUnitIn(values...))
-			case "owner_id":
-				query = query.Where(directoryaccount.OwnerIDIn(values...))
-			case "phone_number":
-				query = query.Where(directoryaccount.PhoneNumberIn(values...))
-			case "platform_id":
-				query = query.Where(directoryaccount.PlatformIDIn(values...))
-			case "profile_hash":
-				query = query.Where(directoryaccount.ProfileHashIn(values...))
-			case "raw_profile_file_id":
-				query = query.Where(directoryaccount.RawProfileFileIDIn(values...))
-			case "scope_id":
-				query = query.Where(directoryaccount.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(directoryaccount.ScopeNameIn(values...))
-			case "secondary_key":
-				query = query.Where(directoryaccount.SecondaryKeyIn(values...))
-			case "source_version":
-				query = query.Where(directoryaccount.SourceVersionIn(values...))
-			case "updated_by":
-				query = query.Where(directoryaccount.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(directoryaccount.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "directory_account", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "directory_account", Operation: OpLoad, EntityID: entityID}
 
@@ -1788,6 +1091,8 @@ var (
 			Table:  "directory_groups",
 			Label:  "Directory group",
 		},
+		ProjectionType: reflect.TypeFor[DirectoryGroupProjection](),
+		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "directory_group", Operation: OpCreate}
 
@@ -1840,76 +1145,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "directory_group", Operation: OpQuery}
-
-			query := client.DirectoryGroup.Query().Where(directorygroup.OwnerID(orgID))
-
-			switch field {
-			case "created_by":
-				query = query.Where(directorygroup.CreatedByIn(values...))
-			case "description":
-				query = query.Where(directorygroup.DescriptionIn(values...))
-			case "directory_instance_id":
-				query = query.Where(directorygroup.DirectoryInstanceIDIn(values...))
-			case "directory_name":
-				query = query.Where(directorygroup.DirectoryNameIn(values...))
-			case "directory_sync_run_id":
-				query = query.Where(directorygroup.DirectorySyncRunIDIn(values...))
-			case "display_id":
-				query = query.Where(directorygroup.DisplayIDIn(values...))
-			case "display_name":
-				query = query.Where(directorygroup.DisplayNameIn(values...))
-			case "email":
-				query = query.Where(directorygroup.EmailIn(values...))
-			case "environment_id":
-				query = query.Where(directorygroup.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(directorygroup.EnvironmentNameIn(values...))
-			case "external_id":
-				query = query.Where(directorygroup.ExternalIDIn(values...))
-			case "integration_id":
-				query = query.Where(directorygroup.IntegrationIDIn(values...))
-			case "owner_id":
-				query = query.Where(directorygroup.OwnerIDIn(values...))
-			case "platform_id":
-				query = query.Where(directorygroup.PlatformIDIn(values...))
-			case "profile_hash":
-				query = query.Where(directorygroup.ProfileHashIn(values...))
-			case "raw_profile_file_id":
-				query = query.Where(directorygroup.RawProfileFileIDIn(values...))
-			case "scope_id":
-				query = query.Where(directorygroup.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(directorygroup.ScopeNameIn(values...))
-			case "source_version":
-				query = query.Where(directorygroup.SourceVersionIn(values...))
-			case "updated_by":
-				query = query.Where(directorygroup.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(directorygroup.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "directory_group", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "directory_group", Operation: OpLoad, EntityID: entityID}
 
@@ -1936,6 +1171,8 @@ var (
 			Table:  "directory_memberships",
 			Label:  "Directory membership",
 		},
+		ProjectionType: reflect.TypeFor[DirectoryMembershipProjection](),
+		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "directory_membership", Operation: OpCreate}
 
@@ -1988,70 +1225,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "directory_membership", Operation: OpQuery}
-
-			query := client.DirectoryMembership.Query().Where(directorymembership.OwnerID(orgID))
-
-			switch field {
-			case "created_by":
-				query = query.Where(directorymembership.CreatedByIn(values...))
-			case "directory_account_id":
-				query = query.Where(directorymembership.DirectoryAccountIDIn(values...))
-			case "directory_group_id":
-				query = query.Where(directorymembership.DirectoryGroupIDIn(values...))
-			case "directory_instance_id":
-				query = query.Where(directorymembership.DirectoryInstanceIDIn(values...))
-			case "directory_name":
-				query = query.Where(directorymembership.DirectoryNameIn(values...))
-			case "directory_sync_run_id":
-				query = query.Where(directorymembership.DirectorySyncRunIDIn(values...))
-			case "display_id":
-				query = query.Where(directorymembership.DisplayIDIn(values...))
-			case "environment_id":
-				query = query.Where(directorymembership.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(directorymembership.EnvironmentNameIn(values...))
-			case "integration_id":
-				query = query.Where(directorymembership.IntegrationIDIn(values...))
-			case "last_confirmed_run_id":
-				query = query.Where(directorymembership.LastConfirmedRunIDIn(values...))
-			case "owner_id":
-				query = query.Where(directorymembership.OwnerIDIn(values...))
-			case "platform_id":
-				query = query.Where(directorymembership.PlatformIDIn(values...))
-			case "scope_id":
-				query = query.Where(directorymembership.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(directorymembership.ScopeNameIn(values...))
-			case "source":
-				query = query.Where(directorymembership.SourceIn(values...))
-			case "updated_by":
-				query = query.Where(directorymembership.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(directorymembership.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "directory_membership", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "directory_membership", Operation: OpLoad, EntityID: entityID}
 
@@ -2078,6 +1251,7 @@ var (
 			Table:  "discussions",
 			Label:  "Discussion",
 		},
+		ProjectionType: reflect.TypeFor[DiscussionProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "discussion", Operation: OpCreate}
 
@@ -2130,46 +1304,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "discussion", Operation: OpQuery}
-
-			query := client.Discussion.Query().Where(discussion.OwnerID(orgID))
-
-			switch field {
-			case "created_by":
-				query = query.Where(discussion.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(discussion.DeletedByIn(values...))
-			case "external_id":
-				query = query.Where(discussion.ExternalIDIn(values...))
-			case "owner_id":
-				query = query.Where(discussion.OwnerIDIn(values...))
-			case "updated_by":
-				query = query.Where(discussion.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(discussion.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "discussion", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "discussion", Operation: OpLoad, EntityID: entityID}
 
@@ -2196,6 +1330,7 @@ var (
 			Table:  "document_data",
 			Label:  "Document data",
 		},
+		ProjectionType: reflect.TypeFor[DocumentDataProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "document_data", Operation: OpCreate}
 
@@ -2248,54 +1383,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "document_data", Operation: OpQuery}
-
-			query := client.DocumentData.Query().Where(documentdata.OwnerID(orgID))
-
-			switch field {
-			case "created_by":
-				query = query.Where(documentdata.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(documentdata.DeletedByIn(values...))
-			case "environment_id":
-				query = query.Where(documentdata.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(documentdata.EnvironmentNameIn(values...))
-			case "owner_id":
-				query = query.Where(documentdata.OwnerIDIn(values...))
-			case "scope_id":
-				query = query.Where(documentdata.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(documentdata.ScopeNameIn(values...))
-			case "template_id":
-				query = query.Where(documentdata.TemplateIDIn(values...))
-			case "updated_by":
-				query = query.Where(documentdata.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(documentdata.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "document_data", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "document_data", Operation: OpLoad, EntityID: entityID}
 
@@ -2322,6 +1409,7 @@ var (
 			Table:  "email_templates",
 			Label:  "Email template",
 		},
+		ProjectionType: reflect.TypeFor[EmailTemplateProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "email_template", Operation: OpCreate}
 
@@ -2374,74 +1462,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "email_template", Operation: OpQuery}
-
-			query := client.EmailTemplate.Query().Where(emailtemplate.OwnerID(orgID))
-
-			switch field {
-			case "body_template":
-				query = query.Where(emailtemplate.BodyTemplateIn(values...))
-			case "created_by":
-				query = query.Where(emailtemplate.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(emailtemplate.DeletedByIn(values...))
-			case "description":
-				query = query.Where(emailtemplate.DescriptionIn(values...))
-			case "integration_id":
-				query = query.Where(emailtemplate.IntegrationIDIn(values...))
-			case "internal_notes":
-				query = query.Where(emailtemplate.InternalNotesIn(values...))
-			case "key":
-				query = query.Where(emailtemplate.KeyIn(values...))
-			case "locale":
-				query = query.Where(emailtemplate.LocaleIn(values...))
-			case "name":
-				query = query.Where(emailtemplate.NameIn(values...))
-			case "owner_id":
-				query = query.Where(emailtemplate.OwnerIDIn(values...))
-			case "preheader_template":
-				query = query.Where(emailtemplate.PreheaderTemplateIn(values...))
-			case "revision":
-				query = query.Where(emailtemplate.RevisionIn(values...))
-			case "subject_template":
-				query = query.Where(emailtemplate.SubjectTemplateIn(values...))
-			case "system_internal_id":
-				query = query.Where(emailtemplate.SystemInternalIDIn(values...))
-			case "text_template":
-				query = query.Where(emailtemplate.TextTemplateIn(values...))
-			case "trust_center_id":
-				query = query.Where(emailtemplate.TrustCenterIDIn(values...))
-			case "updated_by":
-				query = query.Where(emailtemplate.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(emailtemplate.UpdatedByImpersonatorIn(values...))
-			case "workflow_definition_id":
-				query = query.Where(emailtemplate.WorkflowDefinitionIDIn(values...))
-			case "workflow_instance_id":
-				query = query.Where(emailtemplate.WorkflowInstanceIDIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "email_template", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "email_template", Operation: OpLoad, EntityID: entityID}
 
@@ -2468,6 +1488,8 @@ var (
 			Table:  "entities",
 			Label:  "Entity",
 		},
+		ProjectionType: reflect.TypeFor[EntityProjection](),
+		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "entity", Operation: OpCreate}
 
@@ -2520,104 +1542,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "entity", Operation: OpQuery}
-
-			query := client.Entity.Query().Where(entity.OwnerID(orgID))
-
-			switch field {
-			case "billing_model":
-				query = query.Where(entity.BillingModelIn(values...))
-			case "created_by":
-				query = query.Where(entity.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(entity.DeletedByIn(values...))
-			case "description":
-				query = query.Where(entity.DescriptionIn(values...))
-			case "display_name":
-				query = query.Where(entity.DisplayNameIn(values...))
-			case "entity_relationship_state_id":
-				query = query.Where(entity.EntityRelationshipStateIDIn(values...))
-			case "entity_relationship_state_name":
-				query = query.Where(entity.EntityRelationshipStateNameIn(values...))
-			case "entity_security_questionnaire_status_id":
-				query = query.Where(entity.EntitySecurityQuestionnaireStatusIDIn(values...))
-			case "entity_security_questionnaire_status_name":
-				query = query.Where(entity.EntitySecurityQuestionnaireStatusNameIn(values...))
-			case "entity_source_type_id":
-				query = query.Where(entity.EntitySourceTypeIDIn(values...))
-			case "entity_source_type_name":
-				query = query.Where(entity.EntitySourceTypeNameIn(values...))
-			case "entity_type_id":
-				query = query.Where(entity.EntityTypeIDIn(values...))
-			case "environment_id":
-				query = query.Where(entity.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(entity.EnvironmentNameIn(values...))
-			case "external_id":
-				query = query.Where(entity.ExternalIDIn(values...))
-			case "internal_notes":
-				query = query.Where(entity.InternalNotesIn(values...))
-			case "internal_owner":
-				query = query.Where(entity.InternalOwnerIn(values...))
-			case "internal_owner_group_id":
-				query = query.Where(entity.InternalOwnerGroupIDIn(values...))
-			case "internal_owner_user_id":
-				query = query.Where(entity.InternalOwnerUserIDIn(values...))
-			case "logo_file_id":
-				query = query.Where(entity.LogoFileIDIn(values...))
-			case "logo_remote_url":
-				query = query.Where(entity.LogoRemoteURLIn(values...))
-			case "name":
-				query = query.Where(entity.NameIn(values...))
-			case "owner_id":
-				query = query.Where(entity.OwnerIDIn(values...))
-			case "renewal_risk":
-				query = query.Where(entity.RenewalRiskIn(values...))
-			case "reviewed_by":
-				query = query.Where(entity.ReviewedByIn(values...))
-			case "reviewed_by_group_id":
-				query = query.Where(entity.ReviewedByGroupIDIn(values...))
-			case "reviewed_by_user_id":
-				query = query.Where(entity.ReviewedByUserIDIn(values...))
-			case "risk_rating":
-				query = query.Where(entity.RiskRatingIn(values...))
-			case "scope_id":
-				query = query.Where(entity.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(entity.ScopeNameIn(values...))
-			case "spend_currency":
-				query = query.Where(entity.SpendCurrencyIn(values...))
-			case "status_page_url":
-				query = query.Where(entity.StatusPageURLIn(values...))
-			case "system_internal_id":
-				query = query.Where(entity.SystemInternalIDIn(values...))
-			case "updated_by":
-				query = query.Where(entity.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(entity.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "entity", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "entity", Operation: OpLoad, EntityID: entityID}
 
@@ -2644,6 +1568,7 @@ var (
 			Table:  "evidences",
 			Label:  "Evidence",
 		},
+		ProjectionType: reflect.TypeFor[EvidenceProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "evidence", Operation: OpCreate}
 
@@ -2696,66 +1621,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "evidence", Operation: OpQuery}
-
-			query := client.Evidence.Query().Where(evidence.OwnerID(orgID))
-
-			switch field {
-			case "collection_procedure":
-				query = query.Where(evidence.CollectionProcedureIn(values...))
-			case "created_by":
-				query = query.Where(evidence.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(evidence.DeletedByIn(values...))
-			case "description":
-				query = query.Where(evidence.DescriptionIn(values...))
-			case "display_id":
-				query = query.Where(evidence.DisplayIDIn(values...))
-			case "environment_id":
-				query = query.Where(evidence.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(evidence.EnvironmentNameIn(values...))
-			case "external_uuid":
-				query = query.Where(evidence.ExternalUUIDIn(values...))
-			case "name":
-				query = query.Where(evidence.NameIn(values...))
-			case "owner_id":
-				query = query.Where(evidence.OwnerIDIn(values...))
-			case "scope_id":
-				query = query.Where(evidence.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(evidence.ScopeNameIn(values...))
-			case "source":
-				query = query.Where(evidence.SourceIn(values...))
-			case "updated_by":
-				query = query.Where(evidence.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(evidence.UpdatedByImpersonatorIn(values...))
-			case "url":
-				query = query.Where(evidence.URLIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "evidence", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "evidence", Operation: OpLoad, EntityID: entityID}
 
@@ -2782,6 +1647,8 @@ var (
 			Table:  "findings",
 			Label:  "Finding",
 		},
+		ProjectionType: reflect.TypeFor[FindingProjection](),
+		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "finding", Operation: OpCreate}
 
@@ -2834,106 +1701,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "finding", Operation: OpQuery}
-
-			query := client.Finding.Query().Where(finding.OwnerID(orgID))
-
-			switch field {
-			case "assessment_id":
-				query = query.Where(finding.AssessmentIDIn(values...))
-			case "assigned_to":
-				query = query.Where(finding.AssignedToIn(values...))
-			case "assigned_to_group_id":
-				query = query.Where(finding.AssignedToGroupIDIn(values...))
-			case "assigned_to_user_id":
-				query = query.Where(finding.AssignedToUserIDIn(values...))
-			case "category":
-				query = query.Where(finding.CategoryIn(values...))
-			case "created_by":
-				query = query.Where(finding.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(finding.DeletedByIn(values...))
-			case "description":
-				query = query.Where(finding.DescriptionIn(values...))
-			case "display_id":
-				query = query.Where(finding.DisplayIDIn(values...))
-			case "display_name":
-				query = query.Where(finding.DisplayNameIn(values...))
-			case "environment_id":
-				query = query.Where(finding.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(finding.EnvironmentNameIn(values...))
-			case "external_id":
-				query = query.Where(finding.ExternalIDIn(values...))
-			case "external_owner_id":
-				query = query.Where(finding.ExternalOwnerIDIn(values...))
-			case "external_uri":
-				query = query.Where(finding.ExternalURIIn(values...))
-			case "finding_class":
-				query = query.Where(finding.FindingClassIn(values...))
-			case "finding_status_id":
-				query = query.Where(finding.FindingStatusIDIn(values...))
-			case "finding_status_name":
-				query = query.Where(finding.FindingStatusNameIn(values...))
-			case "internal_notes":
-				query = query.Where(finding.InternalNotesIn(values...))
-			case "owner_id":
-				query = query.Where(finding.OwnerIDIn(values...))
-			case "priority":
-				query = query.Where(finding.PriorityIn(values...))
-			case "recommendation":
-				query = query.Where(finding.RecommendationIn(values...))
-			case "recommended_actions":
-				query = query.Where(finding.RecommendedActionsIn(values...))
-			case "resource_name":
-				query = query.Where(finding.ResourceNameIn(values...))
-			case "reviewed_by":
-				query = query.Where(finding.ReviewedByIn(values...))
-			case "reviewed_by_group_id":
-				query = query.Where(finding.ReviewedByGroupIDIn(values...))
-			case "reviewed_by_user_id":
-				query = query.Where(finding.ReviewedByUserIDIn(values...))
-			case "scope_id":
-				query = query.Where(finding.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(finding.ScopeNameIn(values...))
-			case "severity":
-				query = query.Where(finding.SeverityIn(values...))
-			case "source":
-				query = query.Where(finding.SourceIn(values...))
-			case "state":
-				query = query.Where(finding.StateIn(values...))
-			case "system_internal_id":
-				query = query.Where(finding.SystemInternalIDIn(values...))
-			case "updated_by":
-				query = query.Where(finding.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(finding.UpdatedByImpersonatorIn(values...))
-			case "vector":
-				query = query.Where(finding.VectorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "finding", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "finding", Operation: OpLoad, EntityID: entityID}
 
@@ -2960,6 +1727,7 @@ var (
 			Table:  "identity_holders",
 			Label:  "Identity holder",
 		},
+		ProjectionType: reflect.TypeFor[IdentityHolderProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "identity_holder", Operation: OpCreate}
 
@@ -3012,86 +1780,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "identity_holder", Operation: OpQuery}
-
-			query := client.IdentityHolder.Query().Where(identityholder.OwnerID(orgID))
-
-			switch field {
-			case "alternate_email":
-				query = query.Where(identityholder.AlternateEmailIn(values...))
-			case "avatar_remote_url":
-				query = query.Where(identityholder.AvatarRemoteURLIn(values...))
-			case "created_by":
-				query = query.Where(identityholder.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(identityholder.DeletedByIn(values...))
-			case "department":
-				query = query.Where(identityholder.DepartmentIn(values...))
-			case "display_id":
-				query = query.Where(identityholder.DisplayIDIn(values...))
-			case "email":
-				query = query.Where(identityholder.EmailIn(values...))
-			case "employer_entity_id":
-				query = query.Where(identityholder.EmployerEntityIDIn(values...))
-			case "environment_id":
-				query = query.Where(identityholder.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(identityholder.EnvironmentNameIn(values...))
-			case "external_reference_id":
-				query = query.Where(identityholder.ExternalReferenceIDIn(values...))
-			case "external_user_id":
-				query = query.Where(identityholder.ExternalUserIDIn(values...))
-			case "full_name":
-				query = query.Where(identityholder.FullNameIn(values...))
-			case "internal_owner":
-				query = query.Where(identityholder.InternalOwnerIn(values...))
-			case "internal_owner_group_id":
-				query = query.Where(identityholder.InternalOwnerGroupIDIn(values...))
-			case "internal_owner_user_id":
-				query = query.Where(identityholder.InternalOwnerUserIDIn(values...))
-			case "location":
-				query = query.Where(identityholder.LocationIn(values...))
-			case "owner_id":
-				query = query.Where(identityholder.OwnerIDIn(values...))
-			case "phone_number":
-				query = query.Where(identityholder.PhoneNumberIn(values...))
-			case "scope_id":
-				query = query.Where(identityholder.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(identityholder.ScopeNameIn(values...))
-			case "team":
-				query = query.Where(identityholder.TeamIn(values...))
-			case "title":
-				query = query.Where(identityholder.TitleIn(values...))
-			case "updated_by":
-				query = query.Where(identityholder.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(identityholder.UpdatedByImpersonatorIn(values...))
-			case "user_id":
-				query = query.Where(identityholder.UserIDIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "identity_holder", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "identity_holder", Operation: OpLoad, EntityID: entityID}
 
@@ -3118,6 +1806,8 @@ var (
 			Table:  "internal_policies",
 			Label:  "Internal policy",
 		},
+		ProjectionType: reflect.TypeFor[InternalPolicyProjection](),
+		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "internal_policy", Operation: OpCreate}
 
@@ -3170,84 +1860,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "internal_policy", Operation: OpQuery}
-
-			query := client.InternalPolicy.Query().Where(internalpolicy.OwnerID(orgID))
-
-			switch field {
-			case "approver_id":
-				query = query.Where(internalpolicy.ApproverIDIn(values...))
-			case "created_by":
-				query = query.Where(internalpolicy.CreatedByIn(values...))
-			case "delegate_id":
-				query = query.Where(internalpolicy.DelegateIDIn(values...))
-			case "deleted_by":
-				query = query.Where(internalpolicy.DeletedByIn(values...))
-			case "details":
-				query = query.Where(internalpolicy.DetailsIn(values...))
-			case "display_id":
-				query = query.Where(internalpolicy.DisplayIDIn(values...))
-			case "environment_id":
-				query = query.Where(internalpolicy.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(internalpolicy.EnvironmentNameIn(values...))
-			case "external_contents":
-				query = query.Where(internalpolicy.ExternalContentsIn(values...))
-			case "external_file_id":
-				query = query.Where(internalpolicy.ExternalFileIDIn(values...))
-			case "external_uuid":
-				query = query.Where(internalpolicy.ExternalUUIDIn(values...))
-			case "file_id":
-				query = query.Where(internalpolicy.FileIDIn(values...))
-			case "internal_notes":
-				query = query.Where(internalpolicy.InternalNotesIn(values...))
-			case "internal_policy_kind_id":
-				query = query.Where(internalpolicy.InternalPolicyKindIDIn(values...))
-			case "internal_policy_kind_name":
-				query = query.Where(internalpolicy.InternalPolicyKindNameIn(values...))
-			case "name":
-				query = query.Where(internalpolicy.NameIn(values...))
-			case "owner_id":
-				query = query.Where(internalpolicy.OwnerIDIn(values...))
-			case "revision":
-				query = query.Where(internalpolicy.RevisionIn(values...))
-			case "scope_id":
-				query = query.Where(internalpolicy.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(internalpolicy.ScopeNameIn(values...))
-			case "summary":
-				query = query.Where(internalpolicy.SummaryIn(values...))
-			case "system_internal_id":
-				query = query.Where(internalpolicy.SystemInternalIDIn(values...))
-			case "updated_by":
-				query = query.Where(internalpolicy.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(internalpolicy.UpdatedByImpersonatorIn(values...))
-			case "url":
-				query = query.Where(internalpolicy.URLIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "internal_policy", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "internal_policy", Operation: OpLoad, EntityID: entityID}
 
@@ -3274,6 +1886,7 @@ var (
 			Table:  "narratives",
 			Label:  "Narrative",
 		},
+		ProjectionType: reflect.TypeFor[NarrativeProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "narrative", Operation: OpCreate}
 
@@ -3326,56 +1939,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "narrative", Operation: OpQuery}
-
-			query := client.Narrative.Query().Where(narrative.OwnerID(orgID))
-
-			switch field {
-			case "created_by":
-				query = query.Where(narrative.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(narrative.DeletedByIn(values...))
-			case "description":
-				query = query.Where(narrative.DescriptionIn(values...))
-			case "details":
-				query = query.Where(narrative.DetailsIn(values...))
-			case "display_id":
-				query = query.Where(narrative.DisplayIDIn(values...))
-			case "internal_notes":
-				query = query.Where(narrative.InternalNotesIn(values...))
-			case "name":
-				query = query.Where(narrative.NameIn(values...))
-			case "owner_id":
-				query = query.Where(narrative.OwnerIDIn(values...))
-			case "system_internal_id":
-				query = query.Where(narrative.SystemInternalIDIn(values...))
-			case "updated_by":
-				query = query.Where(narrative.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(narrative.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "narrative", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "narrative", Operation: OpLoad, EntityID: entityID}
 
@@ -3402,6 +1965,7 @@ var (
 			Table:  "notification_templates",
 			Label:  "Notification template",
 		},
+		ProjectionType: reflect.TypeFor[NotificationTemplateProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "notification_template", Operation: OpCreate}
 
@@ -3454,72 +2018,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "notification_template", Operation: OpQuery}
-
-			query := client.NotificationTemplate.Query().Where(notificationtemplate.OwnerID(orgID))
-
-			switch field {
-			case "body_template":
-				query = query.Where(notificationtemplate.BodyTemplateIn(values...))
-			case "created_by":
-				query = query.Where(notificationtemplate.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(notificationtemplate.DeletedByIn(values...))
-			case "description":
-				query = query.Where(notificationtemplate.DescriptionIn(values...))
-			case "email_template_id":
-				query = query.Where(notificationtemplate.EmailTemplateIDIn(values...))
-			case "integration_id":
-				query = query.Where(notificationtemplate.IntegrationIDIn(values...))
-			case "internal_notes":
-				query = query.Where(notificationtemplate.InternalNotesIn(values...))
-			case "key":
-				query = query.Where(notificationtemplate.KeyIn(values...))
-			case "locale":
-				query = query.Where(notificationtemplate.LocaleIn(values...))
-			case "name":
-				query = query.Where(notificationtemplate.NameIn(values...))
-			case "owner_id":
-				query = query.Where(notificationtemplate.OwnerIDIn(values...))
-			case "revision":
-				query = query.Where(notificationtemplate.RevisionIn(values...))
-			case "subject_template":
-				query = query.Where(notificationtemplate.SubjectTemplateIn(values...))
-			case "system_internal_id":
-				query = query.Where(notificationtemplate.SystemInternalIDIn(values...))
-			case "title_template":
-				query = query.Where(notificationtemplate.TitleTemplateIn(values...))
-			case "topic_pattern":
-				query = query.Where(notificationtemplate.TopicPatternIn(values...))
-			case "updated_by":
-				query = query.Where(notificationtemplate.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(notificationtemplate.UpdatedByImpersonatorIn(values...))
-			case "workflow_definition_id":
-				query = query.Where(notificationtemplate.WorkflowDefinitionIDIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "notification_template", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "notification_template", Operation: OpLoad, EntityID: entityID}
 
@@ -3546,6 +2044,7 @@ var (
 			Table:  "platforms",
 			Label:  "Platform",
 		},
+		ProjectionType: reflect.TypeFor[PlatformProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "platform", Operation: OpCreate}
 
@@ -3598,128 +2097,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "platform", Operation: OpQuery}
-
-			query := client.Platform.Query().Where(platform.OwnerID(orgID))
-
-			switch field {
-			case "access_model_id":
-				query = query.Where(platform.AccessModelIDIn(values...))
-			case "access_model_name":
-				query = query.Where(platform.AccessModelNameIn(values...))
-			case "business_owner":
-				query = query.Where(platform.BusinessOwnerIn(values...))
-			case "business_owner_group_id":
-				query = query.Where(platform.BusinessOwnerGroupIDIn(values...))
-			case "business_owner_user_id":
-				query = query.Where(platform.BusinessOwnerUserIDIn(values...))
-			case "business_purpose":
-				query = query.Where(platform.BusinessPurposeIn(values...))
-			case "cost_center":
-				query = query.Where(platform.CostCenterIn(values...))
-			case "created_by":
-				query = query.Where(platform.CreatedByIn(values...))
-			case "criticality_id":
-				query = query.Where(platform.CriticalityIDIn(values...))
-			case "criticality_name":
-				query = query.Where(platform.CriticalityNameIn(values...))
-			case "data_flow_summary":
-				query = query.Where(platform.DataFlowSummaryIn(values...))
-			case "deleted_by":
-				query = query.Where(platform.DeletedByIn(values...))
-			case "description":
-				query = query.Where(platform.DescriptionIn(values...))
-			case "display_id":
-				query = query.Where(platform.DisplayIDIn(values...))
-			case "encryption_status_id":
-				query = query.Where(platform.EncryptionStatusIDIn(values...))
-			case "encryption_status_name":
-				query = query.Where(platform.EncryptionStatusNameIn(values...))
-			case "environment_id":
-				query = query.Where(platform.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(platform.EnvironmentNameIn(values...))
-			case "external_reference_id":
-				query = query.Where(platform.ExternalReferenceIDIn(values...))
-			case "external_uuid":
-				query = query.Where(platform.ExternalUUIDIn(values...))
-			case "internal_owner":
-				query = query.Where(platform.InternalOwnerIn(values...))
-			case "internal_owner_group_id":
-				query = query.Where(platform.InternalOwnerGroupIDIn(values...))
-			case "internal_owner_user_id":
-				query = query.Where(platform.InternalOwnerUserIDIn(values...))
-			case "name":
-				query = query.Where(platform.NameIn(values...))
-			case "owner_id":
-				query = query.Where(platform.OwnerIDIn(values...))
-			case "physical_location":
-				query = query.Where(platform.PhysicalLocationIn(values...))
-			case "platform_data_classification_id":
-				query = query.Where(platform.PlatformDataClassificationIDIn(values...))
-			case "platform_data_classification_name":
-				query = query.Where(platform.PlatformDataClassificationNameIn(values...))
-			case "platform_kind_id":
-				query = query.Where(platform.PlatformKindIDIn(values...))
-			case "platform_kind_name":
-				query = query.Where(platform.PlatformKindNameIn(values...))
-			case "platform_owner_id":
-				query = query.Where(platform.PlatformOwnerIDIn(values...))
-			case "region":
-				query = query.Where(platform.RegionIn(values...))
-			case "scope_id":
-				query = query.Where(platform.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(platform.ScopeNameIn(values...))
-			case "scope_statement":
-				query = query.Where(platform.ScopeStatementIn(values...))
-			case "security_owner":
-				query = query.Where(platform.SecurityOwnerIn(values...))
-			case "security_owner_group_id":
-				query = query.Where(platform.SecurityOwnerGroupIDIn(values...))
-			case "security_owner_user_id":
-				query = query.Where(platform.SecurityOwnerUserIDIn(values...))
-			case "security_tier_id":
-				query = query.Where(platform.SecurityTierIDIn(values...))
-			case "security_tier_name":
-				query = query.Where(platform.SecurityTierNameIn(values...))
-			case "source_identifier":
-				query = query.Where(platform.SourceIdentifierIn(values...))
-			case "technical_owner":
-				query = query.Where(platform.TechnicalOwnerIn(values...))
-			case "technical_owner_group_id":
-				query = query.Where(platform.TechnicalOwnerGroupIDIn(values...))
-			case "technical_owner_user_id":
-				query = query.Where(platform.TechnicalOwnerUserIDIn(values...))
-			case "trust_boundary_description":
-				query = query.Where(platform.TrustBoundaryDescriptionIn(values...))
-			case "updated_by":
-				query = query.Where(platform.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(platform.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "platform", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "platform", Operation: OpLoad, EntityID: entityID}
 
@@ -3746,6 +2123,7 @@ var (
 			Table:  "procedures",
 			Label:  "Procedure",
 		},
+		ProjectionType: reflect.TypeFor[ProcedureProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "procedure", Operation: OpCreate}
 
@@ -3798,82 +2176,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "procedure", Operation: OpQuery}
-
-			query := client.Procedure.Query().Where(procedure.OwnerID(orgID))
-
-			switch field {
-			case "approver_id":
-				query = query.Where(procedure.ApproverIDIn(values...))
-			case "created_by":
-				query = query.Where(procedure.CreatedByIn(values...))
-			case "delegate_id":
-				query = query.Where(procedure.DelegateIDIn(values...))
-			case "deleted_by":
-				query = query.Where(procedure.DeletedByIn(values...))
-			case "details":
-				query = query.Where(procedure.DetailsIn(values...))
-			case "display_id":
-				query = query.Where(procedure.DisplayIDIn(values...))
-			case "environment_id":
-				query = query.Where(procedure.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(procedure.EnvironmentNameIn(values...))
-			case "external_contents":
-				query = query.Where(procedure.ExternalContentsIn(values...))
-			case "external_file_id":
-				query = query.Where(procedure.ExternalFileIDIn(values...))
-			case "file_id":
-				query = query.Where(procedure.FileIDIn(values...))
-			case "internal_notes":
-				query = query.Where(procedure.InternalNotesIn(values...))
-			case "name":
-				query = query.Where(procedure.NameIn(values...))
-			case "owner_id":
-				query = query.Where(procedure.OwnerIDIn(values...))
-			case "procedure_kind_id":
-				query = query.Where(procedure.ProcedureKindIDIn(values...))
-			case "procedure_kind_name":
-				query = query.Where(procedure.ProcedureKindNameIn(values...))
-			case "revision":
-				query = query.Where(procedure.RevisionIn(values...))
-			case "scope_id":
-				query = query.Where(procedure.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(procedure.ScopeNameIn(values...))
-			case "summary":
-				query = query.Where(procedure.SummaryIn(values...))
-			case "system_internal_id":
-				query = query.Where(procedure.SystemInternalIDIn(values...))
-			case "updated_by":
-				query = query.Where(procedure.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(procedure.UpdatedByImpersonatorIn(values...))
-			case "url":
-				query = query.Where(procedure.URLIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "procedure", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "procedure", Operation: OpLoad, EntityID: entityID}
 
@@ -3900,6 +2202,7 @@ var (
 			Table:  "remediations",
 			Label:  "Remediation",
 		},
+		ProjectionType: reflect.TypeFor[RemediationProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "remediation", Operation: OpCreate}
 
@@ -3952,88 +2255,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "remediation", Operation: OpQuery}
-
-			query := client.Remediation.Query().Where(remediation.OwnerID(orgID))
-
-			switch field {
-			case "created_by":
-				query = query.Where(remediation.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(remediation.DeletedByIn(values...))
-			case "display_id":
-				query = query.Where(remediation.DisplayIDIn(values...))
-			case "environment_id":
-				query = query.Where(remediation.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(remediation.EnvironmentNameIn(values...))
-			case "error":
-				query = query.Where(remediation.ErrorIn(values...))
-			case "explanation":
-				query = query.Where(remediation.ExplanationIn(values...))
-			case "external_id":
-				query = query.Where(remediation.ExternalIDIn(values...))
-			case "external_owner_id":
-				query = query.Where(remediation.ExternalOwnerIDIn(values...))
-			case "external_uri":
-				query = query.Where(remediation.ExternalURIIn(values...))
-			case "instructions":
-				query = query.Where(remediation.InstructionsIn(values...))
-			case "intent":
-				query = query.Where(remediation.IntentIn(values...))
-			case "internal_notes":
-				query = query.Where(remediation.InternalNotesIn(values...))
-			case "owner_id":
-				query = query.Where(remediation.OwnerIDIn(values...))
-			case "owner_reference":
-				query = query.Where(remediation.OwnerReferenceIn(values...))
-			case "pull_request_uri":
-				query = query.Where(remediation.PullRequestURIIn(values...))
-			case "repository_uri":
-				query = query.Where(remediation.RepositoryURIIn(values...))
-			case "scope_id":
-				query = query.Where(remediation.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(remediation.ScopeNameIn(values...))
-			case "source":
-				query = query.Where(remediation.SourceIn(values...))
-			case "state":
-				query = query.Where(remediation.StateIn(values...))
-			case "summary":
-				query = query.Where(remediation.SummaryIn(values...))
-			case "system_internal_id":
-				query = query.Where(remediation.SystemInternalIDIn(values...))
-			case "ticket_reference":
-				query = query.Where(remediation.TicketReferenceIn(values...))
-			case "title":
-				query = query.Where(remediation.TitleIn(values...))
-			case "updated_by":
-				query = query.Where(remediation.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(remediation.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "remediation", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "remediation", Operation: OpLoad, EntityID: entityID}
 
@@ -4060,6 +2281,7 @@ var (
 			Table:  "reviews",
 			Label:  "Review",
 		},
+		ProjectionType: reflect.TypeFor[ReviewProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "review", Operation: OpCreate}
 
@@ -4112,80 +2334,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "review", Operation: OpQuery}
-
-			query := client.Review.Query().Where(review.OwnerID(orgID))
-
-			switch field {
-			case "category":
-				query = query.Where(review.CategoryIn(values...))
-			case "classification":
-				query = query.Where(review.ClassificationIn(values...))
-			case "created_by":
-				query = query.Where(review.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(review.DeletedByIn(values...))
-			case "details":
-				query = query.Where(review.DetailsIn(values...))
-			case "environment_id":
-				query = query.Where(review.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(review.EnvironmentNameIn(values...))
-			case "external_id":
-				query = query.Where(review.ExternalIDIn(values...))
-			case "external_owner_id":
-				query = query.Where(review.ExternalOwnerIDIn(values...))
-			case "external_uri":
-				query = query.Where(review.ExternalURIIn(values...))
-			case "internal_notes":
-				query = query.Where(review.InternalNotesIn(values...))
-			case "owner_id":
-				query = query.Where(review.OwnerIDIn(values...))
-			case "reporter":
-				query = query.Where(review.ReporterIn(values...))
-			case "reviewer_id":
-				query = query.Where(review.ReviewerIDIn(values...))
-			case "scope_id":
-				query = query.Where(review.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(review.ScopeNameIn(values...))
-			case "source":
-				query = query.Where(review.SourceIn(values...))
-			case "state":
-				query = query.Where(review.StateIn(values...))
-			case "summary":
-				query = query.Where(review.SummaryIn(values...))
-			case "system_internal_id":
-				query = query.Where(review.SystemInternalIDIn(values...))
-			case "title":
-				query = query.Where(review.TitleIn(values...))
-			case "updated_by":
-				query = query.Where(review.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(review.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "review", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "review", Operation: OpLoad, EntityID: entityID}
 
@@ -4212,6 +2360,8 @@ var (
 			Table:  "risks",
 			Label:  "Risk",
 		},
+		ProjectionType: reflect.TypeFor[RiskProjection](),
+		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "risk", Operation: OpCreate}
 
@@ -4264,80 +2414,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "risk", Operation: OpQuery}
-
-			query := client.Risk.Query().Where(risk.OwnerID(orgID))
-
-			switch field {
-			case "business_costs":
-				query = query.Where(risk.BusinessCostsIn(values...))
-			case "created_by":
-				query = query.Where(risk.CreatedByIn(values...))
-			case "delegate_id":
-				query = query.Where(risk.DelegateIDIn(values...))
-			case "deleted_by":
-				query = query.Where(risk.DeletedByIn(values...))
-			case "details":
-				query = query.Where(risk.DetailsIn(values...))
-			case "display_id":
-				query = query.Where(risk.DisplayIDIn(values...))
-			case "environment_id":
-				query = query.Where(risk.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(risk.EnvironmentNameIn(values...))
-			case "external_id":
-				query = query.Where(risk.ExternalIDIn(values...))
-			case "external_uuid":
-				query = query.Where(risk.ExternalUUIDIn(values...))
-			case "integration_id":
-				query = query.Where(risk.IntegrationIDIn(values...))
-			case "mitigation":
-				query = query.Where(risk.MitigationIn(values...))
-			case "name":
-				query = query.Where(risk.NameIn(values...))
-			case "owner_id":
-				query = query.Where(risk.OwnerIDIn(values...))
-			case "risk_category_id":
-				query = query.Where(risk.RiskCategoryIDIn(values...))
-			case "risk_category_name":
-				query = query.Where(risk.RiskCategoryNameIn(values...))
-			case "risk_kind_id":
-				query = query.Where(risk.RiskKindIDIn(values...))
-			case "risk_kind_name":
-				query = query.Where(risk.RiskKindNameIn(values...))
-			case "scope_id":
-				query = query.Where(risk.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(risk.ScopeNameIn(values...))
-			case "stakeholder_id":
-				query = query.Where(risk.StakeholderIDIn(values...))
-			case "updated_by":
-				query = query.Where(risk.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(risk.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "risk", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "risk", Operation: OpLoad, EntityID: entityID}
 
@@ -4364,6 +2440,7 @@ var (
 			Table:  "scans",
 			Label:  "Scan",
 		},
+		ProjectionType: reflect.TypeFor[ScanProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "scan", Operation: OpCreate}
 
@@ -4416,74 +2493,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "scan", Operation: OpQuery}
-
-			query := client.Scan.Query().Where(scan.OwnerID(orgID))
-
-			switch field {
-			case "assigned_to":
-				query = query.Where(scan.AssignedToIn(values...))
-			case "assigned_to_group_id":
-				query = query.Where(scan.AssignedToGroupIDIn(values...))
-			case "assigned_to_user_id":
-				query = query.Where(scan.AssignedToUserIDIn(values...))
-			case "created_by":
-				query = query.Where(scan.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(scan.DeletedByIn(values...))
-			case "environment_id":
-				query = query.Where(scan.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(scan.EnvironmentNameIn(values...))
-			case "generated_by_platform_id":
-				query = query.Where(scan.GeneratedByPlatformIDIn(values...))
-			case "owner_id":
-				query = query.Where(scan.OwnerIDIn(values...))
-			case "performed_by":
-				query = query.Where(scan.PerformedByIn(values...))
-			case "performed_by_group_id":
-				query = query.Where(scan.PerformedByGroupIDIn(values...))
-			case "performed_by_user_id":
-				query = query.Where(scan.PerformedByUserIDIn(values...))
-			case "reviewed_by":
-				query = query.Where(scan.ReviewedByIn(values...))
-			case "reviewed_by_group_id":
-				query = query.Where(scan.ReviewedByGroupIDIn(values...))
-			case "reviewed_by_user_id":
-				query = query.Where(scan.ReviewedByUserIDIn(values...))
-			case "scope_id":
-				query = query.Where(scan.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(scan.ScopeNameIn(values...))
-			case "target":
-				query = query.Where(scan.TargetIn(values...))
-			case "updated_by":
-				query = query.Where(scan.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(scan.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "scan", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "scan", Operation: OpLoad, EntityID: entityID}
 
@@ -4510,6 +2519,7 @@ var (
 			Table:  "scheduled_jobs",
 			Label:  "Scheduled job",
 		},
+		ProjectionType: reflect.TypeFor[ScheduledJobProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "scheduled_job", Operation: OpCreate}
 
@@ -4562,50 +2572,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "scheduled_job", Operation: OpQuery}
-
-			query := client.ScheduledJob.Query().Where(scheduledjob.OwnerID(orgID))
-
-			switch field {
-			case "created_by":
-				query = query.Where(scheduledjob.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(scheduledjob.DeletedByIn(values...))
-			case "display_id":
-				query = query.Where(scheduledjob.DisplayIDIn(values...))
-			case "job_id":
-				query = query.Where(scheduledjob.JobIDIn(values...))
-			case "job_runner_id":
-				query = query.Where(scheduledjob.JobRunnerIDIn(values...))
-			case "owner_id":
-				query = query.Where(scheduledjob.OwnerIDIn(values...))
-			case "updated_by":
-				query = query.Where(scheduledjob.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(scheduledjob.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "scheduled_job", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "scheduled_job", Operation: OpLoad, EntityID: entityID}
 
@@ -4632,6 +2598,7 @@ var (
 			Table:  "subcontrols",
 			Label:  "Subcontrol",
 		},
+		ProjectionType: reflect.TypeFor[SubcontrolProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "subcontrol", Operation: OpCreate}
 
@@ -4684,90 +2651,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "subcontrol", Operation: OpQuery}
-
-			query := client.Subcontrol.Query().Where(subcontrol.OwnerID(orgID))
-
-			switch field {
-			case "auditor_reference_id":
-				query = query.Where(subcontrol.AuditorReferenceIDIn(values...))
-			case "category":
-				query = query.Where(subcontrol.CategoryIn(values...))
-			case "category_id":
-				query = query.Where(subcontrol.CategoryIDIn(values...))
-			case "control_id":
-				query = query.Where(subcontrol.ControlIDIn(values...))
-			case "control_owner_id":
-				query = query.Where(subcontrol.ControlOwnerIDIn(values...))
-			case "created_by":
-				query = query.Where(subcontrol.CreatedByIn(values...))
-			case "delegate_id":
-				query = query.Where(subcontrol.DelegateIDIn(values...))
-			case "deleted_by":
-				query = query.Where(subcontrol.DeletedByIn(values...))
-			case "description":
-				query = query.Where(subcontrol.DescriptionIn(values...))
-			case "display_id":
-				query = query.Where(subcontrol.DisplayIDIn(values...))
-			case "external_uuid":
-				query = query.Where(subcontrol.ExternalUUIDIn(values...))
-			case "implementation_description":
-				query = query.Where(subcontrol.ImplementationDescriptionIn(values...))
-			case "internal_notes":
-				query = query.Where(subcontrol.InternalNotesIn(values...))
-			case "owner_id":
-				query = query.Where(subcontrol.OwnerIDIn(values...))
-			case "public_representation":
-				query = query.Where(subcontrol.PublicRepresentationIn(values...))
-			case "ref_code":
-				query = query.Where(subcontrol.RefCodeIn(values...))
-			case "reference_framework":
-				query = query.Where(subcontrol.ReferenceFrameworkIn(values...))
-			case "reference_framework_revision":
-				query = query.Where(subcontrol.ReferenceFrameworkRevisionIn(values...))
-			case "reference_id":
-				query = query.Where(subcontrol.ReferenceIDIn(values...))
-			case "responsible_party_id":
-				query = query.Where(subcontrol.ResponsiblePartyIDIn(values...))
-			case "source_name":
-				query = query.Where(subcontrol.SourceNameIn(values...))
-			case "subcategory":
-				query = query.Where(subcontrol.SubcategoryIn(values...))
-			case "subcontrol_kind_id":
-				query = query.Where(subcontrol.SubcontrolKindIDIn(values...))
-			case "subcontrol_kind_name":
-				query = query.Where(subcontrol.SubcontrolKindNameIn(values...))
-			case "system_internal_id":
-				query = query.Where(subcontrol.SystemInternalIDIn(values...))
-			case "title":
-				query = query.Where(subcontrol.TitleIn(values...))
-			case "updated_by":
-				query = query.Where(subcontrol.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(subcontrol.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "subcontrol", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "subcontrol", Operation: OpLoad, EntityID: entityID}
 
@@ -4794,6 +2677,7 @@ var (
 			Table:  "subprocessors",
 			Label:  "Subprocessor",
 		},
+		ProjectionType: reflect.TypeFor[SubprocessorProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "subprocessor", Operation: OpCreate}
 
@@ -4846,56 +2730,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "subprocessor", Operation: OpQuery}
-
-			query := client.Subprocessor.Query().Where(subprocessor.OwnerID(orgID))
-
-			switch field {
-			case "created_by":
-				query = query.Where(subprocessor.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(subprocessor.DeletedByIn(values...))
-			case "description":
-				query = query.Where(subprocessor.DescriptionIn(values...))
-			case "internal_notes":
-				query = query.Where(subprocessor.InternalNotesIn(values...))
-			case "logo_file_id":
-				query = query.Where(subprocessor.LogoFileIDIn(values...))
-			case "logo_remote_url":
-				query = query.Where(subprocessor.LogoRemoteURLIn(values...))
-			case "name":
-				query = query.Where(subprocessor.NameIn(values...))
-			case "owner_id":
-				query = query.Where(subprocessor.OwnerIDIn(values...))
-			case "system_internal_id":
-				query = query.Where(subprocessor.SystemInternalIDIn(values...))
-			case "updated_by":
-				query = query.Where(subprocessor.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(subprocessor.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "subprocessor", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "subprocessor", Operation: OpLoad, EntityID: entityID}
 
@@ -4922,6 +2756,7 @@ var (
 			Table:  "system_details",
 			Label:  "System detail",
 		},
+		ProjectionType: reflect.TypeFor[SystemDetailProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "system_detail", Operation: OpCreate}
 
@@ -4974,54 +2809,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "system_detail", Operation: OpQuery}
-
-			query := client.SystemDetail.Query().Where(systemdetail.OwnerID(orgID))
-
-			switch field {
-			case "authorization_boundary":
-				query = query.Where(systemdetail.AuthorizationBoundaryIn(values...))
-			case "created_by":
-				query = query.Where(systemdetail.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(systemdetail.DeletedByIn(values...))
-			case "description":
-				query = query.Where(systemdetail.DescriptionIn(values...))
-			case "display_id":
-				query = query.Where(systemdetail.DisplayIDIn(values...))
-			case "owner_id":
-				query = query.Where(systemdetail.OwnerIDIn(values...))
-			case "system_name":
-				query = query.Where(systemdetail.SystemNameIn(values...))
-			case "updated_by":
-				query = query.Where(systemdetail.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(systemdetail.UpdatedByImpersonatorIn(values...))
-			case "version":
-				query = query.Where(systemdetail.VersionIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "system_detail", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "system_detail", Operation: OpLoad, EntityID: entityID}
 
@@ -5048,6 +2835,7 @@ var (
 			Table:  "tasks",
 			Label:  "Task",
 		},
+		ProjectionType: reflect.TypeFor[TaskProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "task", Operation: OpCreate}
 
@@ -5100,72 +2888,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "task", Operation: OpQuery}
-
-			query := client.Task.Query().Where(task.OwnerID(orgID))
-
-			switch field {
-			case "assignee_id":
-				query = query.Where(task.AssigneeIDIn(values...))
-			case "assigner_id":
-				query = query.Where(task.AssignerIDIn(values...))
-			case "created_by":
-				query = query.Where(task.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(task.DeletedByIn(values...))
-			case "details":
-				query = query.Where(task.DetailsIn(values...))
-			case "display_id":
-				query = query.Where(task.DisplayIDIn(values...))
-			case "environment_id":
-				query = query.Where(task.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(task.EnvironmentNameIn(values...))
-			case "external_uuid":
-				query = query.Where(task.ExternalUUIDIn(values...))
-			case "idempotency_key":
-				query = query.Where(task.IdempotencyKeyIn(values...))
-			case "owner_id":
-				query = query.Where(task.OwnerIDIn(values...))
-			case "parent_task_id":
-				query = query.Where(task.ParentTaskIDIn(values...))
-			case "scope_id":
-				query = query.Where(task.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(task.ScopeNameIn(values...))
-			case "task_kind_id":
-				query = query.Where(task.TaskKindIDIn(values...))
-			case "task_kind_name":
-				query = query.Where(task.TaskKindNameIn(values...))
-			case "title":
-				query = query.Where(task.TitleIn(values...))
-			case "updated_by":
-				query = query.Where(task.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(task.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "task", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "task", Operation: OpLoad, EntityID: entityID}
 
@@ -5192,6 +2914,7 @@ var (
 			Table:  "templates",
 			Label:  "Template",
 		},
+		ProjectionType: reflect.TypeFor[TemplateProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "template", Operation: OpCreate}
 
@@ -5244,62 +2967,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "template", Operation: OpQuery}
-
-			query := client.Template.Query().Where(template.OwnerID(orgID))
-
-			switch field {
-			case "created_by":
-				query = query.Where(template.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(template.DeletedByIn(values...))
-			case "description":
-				query = query.Where(template.DescriptionIn(values...))
-			case "environment_id":
-				query = query.Where(template.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(template.EnvironmentNameIn(values...))
-			case "internal_notes":
-				query = query.Where(template.InternalNotesIn(values...))
-			case "name":
-				query = query.Where(template.NameIn(values...))
-			case "owner_id":
-				query = query.Where(template.OwnerIDIn(values...))
-			case "scope_id":
-				query = query.Where(template.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(template.ScopeNameIn(values...))
-			case "system_internal_id":
-				query = query.Where(template.SystemInternalIDIn(values...))
-			case "trust_center_id":
-				query = query.Where(template.TrustCenterIDIn(values...))
-			case "updated_by":
-				query = query.Where(template.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(template.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "template", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "template", Operation: OpLoad, EntityID: entityID}
 
@@ -5326,6 +2993,7 @@ var (
 			Table:  "trust_center_watermark_configs",
 			Label:  "Trust center watermark config",
 		},
+		ProjectionType: reflect.TypeFor[TrustCenterWatermarkConfigProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "trust_center_watermark_config", Operation: OpCreate}
 
@@ -5378,52 +3046,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "trust_center_watermark_config", Operation: OpQuery}
-
-			query := client.TrustCenterWatermarkConfig.Query().Where(trustcenterwatermarkconfig.OwnerID(orgID))
-
-			switch field {
-			case "color":
-				query = query.Where(trustcenterwatermarkconfig.ColorIn(values...))
-			case "created_by":
-				query = query.Where(trustcenterwatermarkconfig.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(trustcenterwatermarkconfig.DeletedByIn(values...))
-			case "logo_id":
-				query = query.Where(trustcenterwatermarkconfig.LogoIDIn(values...))
-			case "owner_id":
-				query = query.Where(trustcenterwatermarkconfig.OwnerIDIn(values...))
-			case "text":
-				query = query.Where(trustcenterwatermarkconfig.TextIn(values...))
-			case "trust_center_id":
-				query = query.Where(trustcenterwatermarkconfig.TrustCenterIDIn(values...))
-			case "updated_by":
-				query = query.Where(trustcenterwatermarkconfig.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(trustcenterwatermarkconfig.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "trust_center_watermark_config", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "trust_center_watermark_config", Operation: OpLoad, EntityID: entityID}
 
@@ -5450,6 +3072,7 @@ var (
 			Table:  "vendor_risk_scores",
 			Label:  "Vendor risk score",
 		},
+		ProjectionType: reflect.TypeFor[VendorRiskScoreProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "vendor_risk_score", Operation: OpCreate}
 
@@ -5502,60 +3125,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "vendor_risk_score", Operation: OpQuery}
-
-			query := client.VendorRiskScore.Query().Where(vendorriskscore.OwnerID(orgID))
-
-			switch field {
-			case "answer":
-				query = query.Where(vendorriskscore.AnswerIn(values...))
-			case "assessment_response_id":
-				query = query.Where(vendorriskscore.AssessmentResponseIDIn(values...))
-			case "created_by":
-				query = query.Where(vendorriskscore.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(vendorriskscore.DeletedByIn(values...))
-			case "entity_id":
-				query = query.Where(vendorriskscore.EntityIDIn(values...))
-			case "notes":
-				query = query.Where(vendorriskscore.NotesIn(values...))
-			case "owner_id":
-				query = query.Where(vendorriskscore.OwnerIDIn(values...))
-			case "question_description":
-				query = query.Where(vendorriskscore.QuestionDescriptionIn(values...))
-			case "question_key":
-				query = query.Where(vendorriskscore.QuestionKeyIn(values...))
-			case "question_name":
-				query = query.Where(vendorriskscore.QuestionNameIn(values...))
-			case "updated_by":
-				query = query.Where(vendorriskscore.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(vendorriskscore.UpdatedByImpersonatorIn(values...))
-			case "vendor_scoring_config_id":
-				query = query.Where(vendorriskscore.VendorScoringConfigIDIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "vendor_risk_score", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "vendor_risk_score", Operation: OpLoad, EntityID: entityID}
 
@@ -5582,6 +3151,8 @@ var (
 			Table:  "vulnerabilities",
 			Label:  "Vulnerability",
 		},
+		ProjectionType: reflect.TypeFor[VulnerabilityProjection](),
+		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "vulnerability", Operation: OpCreate}
 
@@ -5634,114 +3205,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "vulnerability", Operation: OpQuery}
-
-			query := client.Vulnerability.Query().Where(vulnerability.OwnerID(orgID))
-
-			switch field {
-			case "assigned_to":
-				query = query.Where(vulnerability.AssignedToIn(values...))
-			case "assigned_to_group_id":
-				query = query.Where(vulnerability.AssignedToGroupIDIn(values...))
-			case "assigned_to_user_id":
-				query = query.Where(vulnerability.AssignedToUserIDIn(values...))
-			case "category":
-				query = query.Where(vulnerability.CategoryIn(values...))
-			case "created_by":
-				query = query.Where(vulnerability.CreatedByIn(values...))
-			case "cve_id":
-				query = query.Where(vulnerability.CveIDIn(values...))
-			case "deleted_by":
-				query = query.Where(vulnerability.DeletedByIn(values...))
-			case "dependency_scope":
-				query = query.Where(vulnerability.DependencyScopeIn(values...))
-			case "description":
-				query = query.Where(vulnerability.DescriptionIn(values...))
-			case "dismissed_comment":
-				query = query.Where(vulnerability.DismissedCommentIn(values...))
-			case "dismissed_reason":
-				query = query.Where(vulnerability.DismissedReasonIn(values...))
-			case "display_id":
-				query = query.Where(vulnerability.DisplayIDIn(values...))
-			case "display_name":
-				query = query.Where(vulnerability.DisplayNameIn(values...))
-			case "environment_id":
-				query = query.Where(vulnerability.EnvironmentIDIn(values...))
-			case "environment_name":
-				query = query.Where(vulnerability.EnvironmentNameIn(values...))
-			case "external_id":
-				query = query.Where(vulnerability.ExternalIDIn(values...))
-			case "external_owner_id":
-				query = query.Where(vulnerability.ExternalOwnerIDIn(values...))
-			case "external_uri":
-				query = query.Where(vulnerability.ExternalURIIn(values...))
-			case "first_patched_version":
-				query = query.Where(vulnerability.FirstPatchedVersionIn(values...))
-			case "internal_notes":
-				query = query.Where(vulnerability.InternalNotesIn(values...))
-			case "manifest_path":
-				query = query.Where(vulnerability.ManifestPathIn(values...))
-			case "owner_id":
-				query = query.Where(vulnerability.OwnerIDIn(values...))
-			case "package_ecosystem":
-				query = query.Where(vulnerability.PackageEcosystemIn(values...))
-			case "package_name":
-				query = query.Where(vulnerability.PackageNameIn(values...))
-			case "priority":
-				query = query.Where(vulnerability.PriorityIn(values...))
-			case "reviewed_by":
-				query = query.Where(vulnerability.ReviewedByIn(values...))
-			case "reviewed_by_group_id":
-				query = query.Where(vulnerability.ReviewedByGroupIDIn(values...))
-			case "reviewed_by_user_id":
-				query = query.Where(vulnerability.ReviewedByUserIDIn(values...))
-			case "scope_id":
-				query = query.Where(vulnerability.ScopeIDIn(values...))
-			case "scope_name":
-				query = query.Where(vulnerability.ScopeNameIn(values...))
-			case "severity":
-				query = query.Where(vulnerability.SeverityIn(values...))
-			case "source":
-				query = query.Where(vulnerability.SourceIn(values...))
-			case "summary":
-				query = query.Where(vulnerability.SummaryIn(values...))
-			case "system_internal_id":
-				query = query.Where(vulnerability.SystemInternalIDIn(values...))
-			case "updated_by":
-				query = query.Where(vulnerability.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(vulnerability.UpdatedByImpersonatorIn(values...))
-			case "vector":
-				query = query.Where(vulnerability.VectorIn(values...))
-			case "vulnerability_status_id":
-				query = query.Where(vulnerability.VulnerabilityStatusIDIn(values...))
-			case "vulnerability_status_name":
-				query = query.Where(vulnerability.VulnerabilityStatusNameIn(values...))
-			case "vulnerable_version_range":
-				query = query.Where(vulnerability.VulnerableVersionRangeIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "vulnerability", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "vulnerability", Operation: OpLoad, EntityID: entityID}
 
@@ -5768,66 +3231,13 @@ var (
 			Table:  "workflow_assignments",
 			Label:  "Workflow assignment",
 		},
+		ProjectionType: reflect.TypeFor[WorkflowAssignmentProjection](),
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "workflow_assignment", Operation: OpQuery}
 
 			entities, err := client.WorkflowAssignment.Query().
 				Where(workflowassignment.OwnerID(orgID)).
 				All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "workflow_assignment", Operation: OpQuery}
-
-			query := client.WorkflowAssignment.Query().Where(workflowassignment.OwnerID(orgID))
-
-			switch field {
-			case "actor_group_id":
-				query = query.Where(workflowassignment.ActorGroupIDIn(values...))
-			case "actor_user_id":
-				query = query.Where(workflowassignment.ActorUserIDIn(values...))
-			case "assignment_key":
-				query = query.Where(workflowassignment.AssignmentKeyIn(values...))
-			case "created_by":
-				query = query.Where(workflowassignment.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(workflowassignment.DeletedByIn(values...))
-			case "display_id":
-				query = query.Where(workflowassignment.DisplayIDIn(values...))
-			case "label":
-				query = query.Where(workflowassignment.LabelIn(values...))
-			case "notes":
-				query = query.Where(workflowassignment.NotesIn(values...))
-			case "owner_id":
-				query = query.Where(workflowassignment.OwnerIDIn(values...))
-			case "role":
-				query = query.Where(workflowassignment.RoleIn(values...))
-			case "updated_by":
-				query = query.Where(workflowassignment.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(workflowassignment.UpdatedByImpersonatorIn(values...))
-			case "workflow_instance_id":
-				query = query.Where(workflowassignment.WorkflowInstanceIDIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "workflow_assignment", field)
-			}
-
-			entities, err := query.All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
 			}
@@ -5871,60 +3281,13 @@ var (
 			Table:  "workflow_assignment_targets",
 			Label:  "Workflow assignment target",
 		},
+		ProjectionType: reflect.TypeFor[WorkflowAssignmentTargetProjection](),
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "workflow_assignment_target", Operation: OpQuery}
 
 			entities, err := client.WorkflowAssignmentTarget.Query().
 				Where(workflowassignmenttarget.OwnerID(orgID)).
 				All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "workflow_assignment_target", Operation: OpQuery}
-
-			query := client.WorkflowAssignmentTarget.Query().Where(workflowassignmenttarget.OwnerID(orgID))
-
-			switch field {
-			case "created_by":
-				query = query.Where(workflowassignmenttarget.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(workflowassignmenttarget.DeletedByIn(values...))
-			case "display_id":
-				query = query.Where(workflowassignmenttarget.DisplayIDIn(values...))
-			case "owner_id":
-				query = query.Where(workflowassignmenttarget.OwnerIDIn(values...))
-			case "resolver_key":
-				query = query.Where(workflowassignmenttarget.ResolverKeyIn(values...))
-			case "target_group_id":
-				query = query.Where(workflowassignmenttarget.TargetGroupIDIn(values...))
-			case "target_user_id":
-				query = query.Where(workflowassignmenttarget.TargetUserIDIn(values...))
-			case "updated_by":
-				query = query.Where(workflowassignmenttarget.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(workflowassignmenttarget.UpdatedByImpersonatorIn(values...))
-			case "workflow_assignment_id":
-				query = query.Where(workflowassignmenttarget.WorkflowAssignmentIDIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "workflow_assignment_target", field)
-			}
-
-			entities, err := query.All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
 			}
@@ -5968,6 +3331,7 @@ var (
 			Table:  "workflow_definitions",
 			Label:  "Workflow definition",
 		},
+		ProjectionType: reflect.TypeFor[WorkflowDefinitionProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "workflow_definition", Operation: OpCreate}
 
@@ -6020,56 +3384,6 @@ var (
 
 			return results, nil
 		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "workflow_definition", Operation: OpQuery}
-
-			query := client.WorkflowDefinition.Query().Where(workflowdefinition.OwnerID(orgID))
-
-			switch field {
-			case "created_by":
-				query = query.Where(workflowdefinition.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(workflowdefinition.DeletedByIn(values...))
-			case "description":
-				query = query.Where(workflowdefinition.DescriptionIn(values...))
-			case "display_id":
-				query = query.Where(workflowdefinition.DisplayIDIn(values...))
-			case "internal_notes":
-				query = query.Where(workflowdefinition.InternalNotesIn(values...))
-			case "name":
-				query = query.Where(workflowdefinition.NameIn(values...))
-			case "owner_id":
-				query = query.Where(workflowdefinition.OwnerIDIn(values...))
-			case "schema_type":
-				query = query.Where(workflowdefinition.SchemaTypeIn(values...))
-			case "system_internal_id":
-				query = query.Where(workflowdefinition.SystemInternalIDIn(values...))
-			case "updated_by":
-				query = query.Where(workflowdefinition.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(workflowdefinition.UpdatedByImpersonatorIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "workflow_definition", field)
-			}
-
-			entities, err := query.All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "workflow_definition", Operation: OpLoad, EntityID: entityID}
 
@@ -6096,54 +3410,13 @@ var (
 			Table:  "workflow_events",
 			Label:  "Workflow event",
 		},
+		ProjectionType: reflect.TypeFor[WorkflowEventProjection](),
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "workflow_event", Operation: OpQuery}
 
 			entities, err := client.WorkflowEvent.Query().
 				Where(workflowevent.OwnerID(orgID)).
 				All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "workflow_event", Operation: OpQuery}
-
-			query := client.WorkflowEvent.Query().Where(workflowevent.OwnerID(orgID))
-
-			switch field {
-			case "created_by":
-				query = query.Where(workflowevent.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(workflowevent.DeletedByIn(values...))
-			case "display_id":
-				query = query.Where(workflowevent.DisplayIDIn(values...))
-			case "owner_id":
-				query = query.Where(workflowevent.OwnerIDIn(values...))
-			case "updated_by":
-				query = query.Where(workflowevent.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(workflowevent.UpdatedByImpersonatorIn(values...))
-			case "workflow_instance_id":
-				query = query.Where(workflowevent.WorkflowInstanceIDIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "workflow_event", field)
-			}
-
-			entities, err := query.All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
 			}
@@ -6187,92 +3460,13 @@ var (
 			Table:  "workflow_instances",
 			Label:  "Workflow instance",
 		},
+		ProjectionType: reflect.TypeFor[WorkflowInstanceProjection](),
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "workflow_instance", Operation: OpQuery}
 
 			entities, err := client.WorkflowInstance.Query().
 				Where(workflowinstance.OwnerID(orgID)).
 				All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "workflow_instance", Operation: OpQuery}
-
-			query := client.WorkflowInstance.Query().Where(workflowinstance.OwnerID(orgID))
-
-			switch field {
-			case "action_plan_id":
-				query = query.Where(workflowinstance.ActionPlanIDIn(values...))
-			case "assessment_id":
-				query = query.Where(workflowinstance.AssessmentIDIn(values...))
-			case "assessment_response_id":
-				query = query.Where(workflowinstance.AssessmentResponseIDIn(values...))
-			case "campaign_id":
-				query = query.Where(workflowinstance.CampaignIDIn(values...))
-			case "campaign_target_id":
-				query = query.Where(workflowinstance.CampaignTargetIDIn(values...))
-			case "control_id":
-				query = query.Where(workflowinstance.ControlIDIn(values...))
-			case "created_by":
-				query = query.Where(workflowinstance.CreatedByIn(values...))
-			case "deleted_by":
-				query = query.Where(workflowinstance.DeletedByIn(values...))
-			case "display_id":
-				query = query.Where(workflowinstance.DisplayIDIn(values...))
-			case "evidence_id":
-				query = query.Where(workflowinstance.EvidenceIDIn(values...))
-			case "finding_id":
-				query = query.Where(workflowinstance.FindingIDIn(values...))
-			case "identity_holder_id":
-				query = query.Where(workflowinstance.IdentityHolderIDIn(values...))
-			case "integration_id":
-				query = query.Where(workflowinstance.IntegrationIDIn(values...))
-			case "internal_policy_id":
-				query = query.Where(workflowinstance.InternalPolicyIDIn(values...))
-			case "owner_id":
-				query = query.Where(workflowinstance.OwnerIDIn(values...))
-			case "platform_id":
-				query = query.Where(workflowinstance.PlatformIDIn(values...))
-			case "procedure_id":
-				query = query.Where(workflowinstance.ProcedureIDIn(values...))
-			case "remediation_id":
-				query = query.Where(workflowinstance.RemediationIDIn(values...))
-			case "risk_id":
-				query = query.Where(workflowinstance.RiskIDIn(values...))
-			case "subcontrol_id":
-				query = query.Where(workflowinstance.SubcontrolIDIn(values...))
-			case "task_id":
-				query = query.Where(workflowinstance.TaskIDIn(values...))
-			case "updated_by":
-				query = query.Where(workflowinstance.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(workflowinstance.UpdatedByImpersonatorIn(values...))
-			case "vulnerability_id":
-				query = query.Where(workflowinstance.VulnerabilityIDIn(values...))
-			case "workflow_definition_id":
-				query = query.Where(workflowinstance.WorkflowDefinitionIDIn(values...))
-			case "workflow_proposal_id":
-				query = query.Where(workflowinstance.WorkflowProposalIDIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "workflow_instance", field)
-			}
-
-			entities, err := query.All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
 			}
@@ -6316,92 +3510,13 @@ var (
 			Table:  "workflow_object_refs",
 			Label:  "Workflow object ref",
 		},
+		ProjectionType: reflect.TypeFor[WorkflowObjectRefProjection](),
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery}
 
 			entities, err := client.WorkflowObjectRef.Query().
 				Where(workflowobjectref.OwnerID(orgID)).
 				All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
-		QueryByKey: func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery}
-
-			query := client.WorkflowObjectRef.Query().Where(workflowobjectref.OwnerID(orgID))
-
-			switch field {
-			case "action_plan_id":
-				query = query.Where(workflowobjectref.ActionPlanIDIn(values...))
-			case "assessment_id":
-				query = query.Where(workflowobjectref.AssessmentIDIn(values...))
-			case "assessment_response_id":
-				query = query.Where(workflowobjectref.AssessmentResponseIDIn(values...))
-			case "campaign_id":
-				query = query.Where(workflowobjectref.CampaignIDIn(values...))
-			case "campaign_target_id":
-				query = query.Where(workflowobjectref.CampaignTargetIDIn(values...))
-			case "control_id":
-				query = query.Where(workflowobjectref.ControlIDIn(values...))
-			case "created_by":
-				query = query.Where(workflowobjectref.CreatedByIn(values...))
-			case "directory_account_id":
-				query = query.Where(workflowobjectref.DirectoryAccountIDIn(values...))
-			case "directory_group_id":
-				query = query.Where(workflowobjectref.DirectoryGroupIDIn(values...))
-			case "directory_membership_id":
-				query = query.Where(workflowobjectref.DirectoryMembershipIDIn(values...))
-			case "display_id":
-				query = query.Where(workflowobjectref.DisplayIDIn(values...))
-			case "evidence_id":
-				query = query.Where(workflowobjectref.EvidenceIDIn(values...))
-			case "finding_id":
-				query = query.Where(workflowobjectref.FindingIDIn(values...))
-			case "identity_holder_id":
-				query = query.Where(workflowobjectref.IdentityHolderIDIn(values...))
-			case "internal_policy_id":
-				query = query.Where(workflowobjectref.InternalPolicyIDIn(values...))
-			case "owner_id":
-				query = query.Where(workflowobjectref.OwnerIDIn(values...))
-			case "platform_id":
-				query = query.Where(workflowobjectref.PlatformIDIn(values...))
-			case "procedure_id":
-				query = query.Where(workflowobjectref.ProcedureIDIn(values...))
-			case "remediation_id":
-				query = query.Where(workflowobjectref.RemediationIDIn(values...))
-			case "risk_id":
-				query = query.Where(workflowobjectref.RiskIDIn(values...))
-			case "subcontrol_id":
-				query = query.Where(workflowobjectref.SubcontrolIDIn(values...))
-			case "task_id":
-				query = query.Where(workflowobjectref.TaskIDIn(values...))
-			case "updated_by":
-				query = query.Where(workflowobjectref.UpdatedByIn(values...))
-			case "updated_by_impersonator":
-				query = query.Where(workflowobjectref.UpdatedByImpersonatorIn(values...))
-			case "vulnerability_id":
-				query = query.Where(workflowobjectref.VulnerabilityIDIn(values...))
-			case "workflow_instance_id":
-				query = query.Where(workflowobjectref.WorkflowInstanceIDIn(values...))
-			default:
-				return nil, fmt.Errorf("%w: %s.%s", ErrInvalidKeyField, "workflow_object_ref", field)
-			}
-
-			entities, err := query.All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
 			}
@@ -6448,8 +3563,8 @@ func init() {
 		{Name: "blocker_reason", Label: "BlockerReason", Type: "string", MatchKey: true},
 		{Name: "completed_at", Label: "CompletedAt", Type: "time.Time"},
 		{Name: "control_suggestions", Label: "ControlSuggestions", Type: "[]string"},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
@@ -6460,15 +3575,15 @@ func init() {
 		{Name: "dismissed_improvement_suggestions", Label: "DismissedImprovementSuggestions", Type: "[]string"},
 		{Name: "dismissed_tag_suggestions", Label: "DismissedTagSuggestions", Type: "[]string"},
 		{Name: "due_date", Label: "DueDate", Type: "time.Time"},
-		{Name: "external_contents", Label: "ExternalContents", Type: "string", MatchKey: true, InputKey: "external_contents", Required: false},
-		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id", Required: false, UpsertKey: true, LookupKey: true},
+		{Name: "external_contents", Label: "ExternalContents", Type: "string", MatchKey: true, InputKey: "external_contents"},
+		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id"},
 		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true},
 		{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string"},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true},
-		{Name: "management_mode", Label: "ManagementMode", Type: "enums.DocumentManagementMode", InputKey: "management_mode", Required: false},
+		{Name: "management_mode", Label: "ManagementMode", Type: "enums.DocumentManagementMode", InputKey: "management_mode"},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}"},
-		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Required: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name"},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "priority", Label: "Priority", Type: "enums.Priority"},
 		{Name: "raw_payload", Label: "RawPayload", Type: "map[string]interface {}"},
 		{Name: "requires_approval", Label: "RequiresApproval", Type: "bool"},
@@ -6479,7 +3594,7 @@ func init() {
 		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", WorkflowEligible: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
 		{Name: "tag_suggestions", Label: "TagSuggestions", Type: "[]string"},
 		{Name: "tags", Label: "Tags", Type: "[]string"},
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true},
@@ -6490,18 +3605,18 @@ func init() {
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool"},
 	}
 	SchemaAssessment.Fields = []FieldDescriptor{
-		{Name: "assessment_type", Label: "AssessmentType", Type: "enums.AssessmentType", Immutable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "assessment_type", Label: "AssessmentType", Type: "enums.AssessmentType"},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true},
 		{Name: "jsonconfig", Label: "Jsonconfig", Type: "map[string]interface {}"},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "response_due_duration", Label: "ResponseDueDuration", Type: "int64", WorkflowEligible: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
 		{Name: "tags", Label: "Tags", Type: "[]string"},
 		{Name: "template_id", Label: "TemplateID", Type: "string", MatchKey: true},
 		{Name: "uischema", Label: "Uischema", Type: "map[string]interface {}"},
@@ -6512,17 +3627,17 @@ func init() {
 	}
 	SchemaAssessmentResponse.Fields = []FieldDescriptor{
 		{Name: "assessment_id", Label: "AssessmentID", Type: "string", MatchKey: true},
-		{Name: "assigned_at", Label: "AssignedAt", Type: "time.Time", Immutable: true},
+		{Name: "assigned_at", Label: "AssignedAt", Type: "time.Time"},
 		{Name: "campaign_id", Label: "CampaignID", Type: "string", MatchKey: true},
 		{Name: "completed_at", Label: "CompletedAt", Type: "time.Time", WorkflowEligible: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true},
 		{Name: "document_data_id", Label: "DocumentDataID", Type: "string", MatchKey: true},
 		{Name: "due_date", Label: "DueDate", Type: "time.Time", WorkflowEligible: true},
-		{Name: "email", Label: "Email", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "email", Label: "Email", Type: "string", MatchKey: true},
 		{Name: "email_click_count", Label: "EmailClickCount", Type: "int"},
 		{Name: "email_clicked_at", Label: "EmailClickedAt", Type: "time.Time"},
 		{Name: "email_delivered_at", Label: "EmailDeliveredAt", Type: "time.Time"},
@@ -6534,7 +3649,7 @@ func init() {
 		{Name: "is_draft", Label: "IsDraft", Type: "bool", WorkflowEligible: true},
 		{Name: "is_test", Label: "IsTest", Type: "bool"},
 		{Name: "last_email_event_at", Label: "LastEmailEventAt", Type: "time.Time"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "send_attempts", Label: "SendAttempts", Type: "int", WorkflowEligible: true},
 		{Name: "started_at", Label: "StartedAt", Type: "time.Time", WorkflowEligible: true},
 		{Name: "status", Label: "Status", Type: "enums.AssessmentResponseStatus", WorkflowEligible: true},
@@ -6544,67 +3659,67 @@ func init() {
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool"},
 	}
 	SchemaAsset.Fields = []FieldDescriptor{
-		{Name: "access_model_id", Label: "AccessModelID", Type: "string", MatchKey: true, InputKey: "access_model_id", Required: false},
-		{Name: "access_model_name", Label: "AccessModelName", Type: "string", MatchKey: true, InputKey: "access_model_name", Required: false},
-		{Name: "asset_data_classification_id", Label: "AssetDataClassificationID", Type: "string", MatchKey: true, InputKey: "asset_data_classification_id", Required: false},
-		{Name: "asset_data_classification_name", Label: "AssetDataClassificationName", Type: "string", MatchKey: true, InputKey: "asset_data_classification_name", Required: false},
-		{Name: "asset_subtype_id", Label: "AssetSubtypeID", Type: "string", MatchKey: true, InputKey: "asset_subtype_id", Required: false},
-		{Name: "asset_subtype_name", Label: "AssetSubtypeName", Type: "string", MatchKey: true, InputKey: "asset_subtype_name", Required: false},
-		{Name: "asset_type", Label: "AssetType", Type: "enums.AssetType", InputKey: "asset_type", Required: true},
-		{Name: "categories", Label: "Categories", Type: "[]string", InputKey: "categories", Required: false},
-		{Name: "contains_pii", Label: "ContainsPii", Type: "bool", InputKey: "contains_pii", Required: false},
-		{Name: "cost_center", Label: "CostCenter", Type: "string", MatchKey: true, InputKey: "cost_center", Required: false},
+		{Name: "access_model_id", Label: "AccessModelID", Type: "string", MatchKey: true, InputKey: "access_model_id"},
+		{Name: "access_model_name", Label: "AccessModelName", Type: "string", MatchKey: true, InputKey: "access_model_name"},
+		{Name: "asset_data_classification_id", Label: "AssetDataClassificationID", Type: "string", MatchKey: true, InputKey: "asset_data_classification_id"},
+		{Name: "asset_data_classification_name", Label: "AssetDataClassificationName", Type: "string", MatchKey: true, InputKey: "asset_data_classification_name"},
+		{Name: "asset_subtype_id", Label: "AssetSubtypeID", Type: "string", MatchKey: true, InputKey: "asset_subtype_id"},
+		{Name: "asset_subtype_name", Label: "AssetSubtypeName", Type: "string", MatchKey: true, InputKey: "asset_subtype_name"},
+		{Name: "asset_type", Label: "AssetType", Type: "enums.AssetType", InputKey: "asset_type"},
+		{Name: "categories", Label: "Categories", Type: "[]string", InputKey: "categories"},
+		{Name: "contains_pii", Label: "ContainsPii", Type: "bool", InputKey: "contains_pii"},
+		{Name: "cost_center", Label: "CostCenter", Type: "string", MatchKey: true, InputKey: "cost_center"},
 		{Name: "cpe", Label: "Cpe", Type: "string", MatchKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "criticality_id", Label: "CriticalityID", Type: "string", MatchKey: true, InputKey: "criticality_id", Required: false},
-		{Name: "criticality_name", Label: "CriticalityName", Type: "string", MatchKey: true, InputKey: "criticality_name", Required: false},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
+		{Name: "criticality_id", Label: "CriticalityID", Type: "string", MatchKey: true, InputKey: "criticality_id"},
+		{Name: "criticality_name", Label: "CriticalityName", Type: "string", MatchKey: true, InputKey: "criticality_name"},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
-		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Required: false},
-		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Required: false},
-		{Name: "encryption_status_id", Label: "EncryptionStatusID", Type: "string", MatchKey: true, InputKey: "encryption_status_id", Required: false},
-		{Name: "encryption_status_name", Label: "EncryptionStatusName", Type: "string", MatchKey: true, InputKey: "encryption_status_name", Required: false},
-		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Required: false},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Required: false},
-		{Name: "estimated_monthly_cost", Label: "EstimatedMonthlyCost", Type: "float64", InputKey: "estimated_monthly_cost", Required: false},
-		{Name: "identifier", Label: "Identifier", Type: "string", MatchKey: true, InputKey: "identifier", Required: false},
-		{Name: "integration_id", Label: "IntegrationID", Type: "string", Immutable: true, MatchKey: true, InputKey: "integration_id", Required: false},
-		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Required: false},
-		{Name: "internal_owner", Label: "InternalOwner", Type: "string", MatchKey: true, InputKey: "internal_owner", Required: false},
-		{Name: "internal_owner_group_id", Label: "InternalOwnerGroupID", Type: "string", MatchKey: true, InputKey: "internal_owner_group_id", Required: false},
-		{Name: "internal_owner_user_id", Label: "InternalOwnerUserID", Type: "string", MatchKey: true, InputKey: "internal_owner_user_id", Required: false},
-		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Required: true},
-		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at", Required: false},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true, InputKey: "owner_id", Required: false},
-		{Name: "physical_location", Label: "PhysicalLocation", Type: "string", MatchKey: true, InputKey: "physical_location", Required: false},
-		{Name: "purchase_date", Label: "PurchaseDate", Type: "models.DateTime", InputKey: "purchase_date", Required: false},
-		{Name: "region", Label: "Region", Type: "string", MatchKey: true, InputKey: "region", Required: false},
-		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Required: false},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Required: false},
-		{Name: "security_tier_id", Label: "SecurityTierID", Type: "string", MatchKey: true, InputKey: "security_tier_id", Required: false},
-		{Name: "security_tier_name", Label: "SecurityTierName", Type: "string", MatchKey: true, InputKey: "security_tier_name", Required: false},
-		{Name: "source_identifier", Label: "SourceIdentifier", Type: "string", MatchKey: true, InputKey: "source_identifier", Required: false, UpsertKey: true, LookupKey: true},
+		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description"},
+		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name"},
+		{Name: "encryption_status_id", Label: "EncryptionStatusID", Type: "string", MatchKey: true, InputKey: "encryption_status_id"},
+		{Name: "encryption_status_name", Label: "EncryptionStatusName", Type: "string", MatchKey: true, InputKey: "encryption_status_name"},
+		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id"},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name"},
+		{Name: "estimated_monthly_cost", Label: "EstimatedMonthlyCost", Type: "float64", InputKey: "estimated_monthly_cost"},
+		{Name: "identifier", Label: "Identifier", Type: "string", MatchKey: true, InputKey: "identifier"},
+		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id"},
+		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes"},
+		{Name: "internal_owner", Label: "InternalOwner", Type: "string", MatchKey: true, InputKey: "internal_owner"},
+		{Name: "internal_owner_group_id", Label: "InternalOwnerGroupID", Type: "string", MatchKey: true, InputKey: "internal_owner_group_id"},
+		{Name: "internal_owner_user_id", Label: "InternalOwnerUserID", Type: "string", MatchKey: true, InputKey: "internal_owner_user_id"},
+		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name"},
+		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at"},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, InputKey: "owner_id"},
+		{Name: "physical_location", Label: "PhysicalLocation", Type: "string", MatchKey: true, InputKey: "physical_location"},
+		{Name: "purchase_date", Label: "PurchaseDate", Type: "models.DateTime", InputKey: "purchase_date"},
+		{Name: "region", Label: "Region", Type: "string", MatchKey: true, InputKey: "region"},
+		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id"},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name"},
+		{Name: "security_tier_id", Label: "SecurityTierID", Type: "string", MatchKey: true, InputKey: "security_tier_id"},
+		{Name: "security_tier_name", Label: "SecurityTierName", Type: "string", MatchKey: true, InputKey: "security_tier_name"},
+		{Name: "source_identifier", Label: "SourceIdentifier", Type: "string", MatchKey: true, InputKey: "source_identifier"},
 		{Name: "source_platform_id", Label: "SourcePlatformID", Type: "string", MatchKey: true},
-		{Name: "source_type", Label: "SourceType", Type: "enums.SourceType", InputKey: "source_type", Required: true},
-		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Required: false},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Required: false},
+		{Name: "source_type", Label: "SourceType", Type: "enums.SourceType", InputKey: "source_type"},
+		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id"},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
-		{Name: "website", Label: "Website", Type: "string", MatchKey: true, InputKey: "website", Required: false},
+		{Name: "website", Label: "Website", Type: "string", MatchKey: true, InputKey: "website"},
 	}
 	SchemaCampaign.Fields = []FieldDescriptor{
 		{Name: "assessment_id", Label: "AssessmentID", Type: "string", MatchKey: true},
 		{Name: "campaign_type", Label: "CampaignType", Type: "enums.CampaignType"},
 		{Name: "completed_at", Label: "CompletedAt", Type: "models.DateTime"},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "due_date", Label: "DueDate", Type: "models.DateTime", WorkflowEligible: true},
 		{Name: "email_branding_id", Label: "EmailBrandingID", Type: "string", MatchKey: true},
 		{Name: "email_template_id", Label: "EmailTemplateID", Type: "string", MatchKey: true},
@@ -6621,7 +3736,7 @@ func init() {
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}"},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
 		{Name: "next_run_at", Label: "NextRunAt", Type: "models.DateTime"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "recipient_count", Label: "RecipientCount", Type: "int", WorkflowEligible: true},
 		{Name: "recurrence_cron", Label: "RecurrenceCron", Type: "models.Cron"},
 		{Name: "recurrence_end_at", Label: "RecurrenceEndAt", Type: "models.DateTime"},
@@ -6643,15 +3758,15 @@ func init() {
 		{Name: "campaign_id", Label: "CampaignID", Type: "string", MatchKey: true},
 		{Name: "completed_at", Label: "CompletedAt", Type: "models.DateTime", WorkflowEligible: true},
 		{Name: "contact_id", Label: "ContactID", Type: "string", MatchKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "email", Label: "Email", Type: "string", MatchKey: true},
 		{Name: "full_name", Label: "FullName", Type: "string", MatchKey: true},
 		{Name: "group_id", Label: "GroupID", Type: "string", MatchKey: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "sent_at", Label: "SentAt", Type: "models.DateTime", WorkflowEligible: true},
 		{Name: "status", Label: "Status", Type: "enums.AssessmentResponseStatus", WorkflowEligible: true},
 		{Name: "subscriber_id", Label: "SubscriberID", Type: "string", MatchKey: true},
@@ -6662,39 +3777,39 @@ func init() {
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool"},
 	}
 	SchemaCheckResult.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
-		{Name: "details", Label: "Details", Type: "string", MatchKey: true, InputKey: "details", Required: false},
-		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, InputKey: "external_uri", Required: false},
-		{Name: "integration_id", Label: "IntegrationID", Type: "string", Immutable: true, MatchKey: true, InputKey: "integration_id", Required: false, UpsertKey: true},
-		{Name: "last_observed_at", Label: "LastObservedAt", Type: "models.DateTime", InputKey: "last_observed_at", Required: false},
-		{Name: "parent_external_id", Label: "ParentExternalID", Type: "string", MatchKey: true, InputKey: "parent_external_id", Required: false, UpsertKey: true, LookupKey: true},
-		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source", Required: true},
-		{Name: "status", Label: "Status", Type: "enums.CheckStatus", InputKey: "status", Required: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Required: false},
+		{Name: "details", Label: "Details", Type: "string", MatchKey: true, InputKey: "details"},
+		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, InputKey: "external_uri"},
+		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id"},
+		{Name: "last_observed_at", Label: "LastObservedAt", Type: "models.DateTime", InputKey: "last_observed_at"},
+		{Name: "parent_external_id", Label: "ParentExternalID", Type: "string", MatchKey: true, InputKey: "parent_external_id"},
+		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source"},
+		{Name: "status", Label: "Status", Type: "enums.CheckStatus", InputKey: "status"},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
 	}
 	SchemaContact.Fields = []FieldDescriptor{
-		{Name: "address", Label: "Address", Type: "string", MatchKey: true, InputKey: "address", Required: false},
-		{Name: "company", Label: "Company", Type: "string", MatchKey: true, InputKey: "company", Required: false},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "address", Label: "Address", Type: "string", MatchKey: true, InputKey: "address"},
+		{Name: "company", Label: "Company", Type: "string", MatchKey: true, InputKey: "company"},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
-		{Name: "email", Label: "Email", Type: "string", MatchKey: true, InputKey: "email", Required: false, UpsertKey: true, LookupKey: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Required: false, UpsertKey: true, LookupKey: true},
-		{Name: "full_name", Label: "FullName", Type: "string", MatchKey: true, InputKey: "full_name", Required: false},
-		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id", Required: false},
-		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at", Required: false},
+		{Name: "email", Label: "Email", Type: "string", MatchKey: true, InputKey: "email"},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id"},
+		{Name: "full_name", Label: "FullName", Type: "string", MatchKey: true, InputKey: "full_name"},
+		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id"},
+		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at"},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
-		{Name: "phone_number", Label: "PhoneNumber", Type: "string", MatchKey: true, InputKey: "phone_number", Required: false},
-		{Name: "status", Label: "Status", Type: "enums.UserStatus", InputKey: "status", Required: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Required: false},
-		{Name: "title", Label: "Title", Type: "string", MatchKey: true, InputKey: "title", Required: false},
+		{Name: "phone_number", Label: "PhoneNumber", Type: "string", MatchKey: true, InputKey: "phone_number"},
+		{Name: "status", Label: "Status", Type: "enums.UserStatus", InputKey: "status"},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags"},
+		{Name: "title", Label: "Title", Type: "string", MatchKey: true, InputKey: "title"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
@@ -6710,14 +3825,14 @@ func init() {
 		{Name: "control_kind_name", Label: "ControlKindName", Type: "string", MatchKey: true},
 		{Name: "control_owner_id", Label: "ControlOwnerID", Type: "string", WorkflowEligible: true, MatchKey: true},
 		{Name: "control_questions", Label: "ControlQuestions", Type: "[]string"},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true},
 		{Name: "description_json", Label: "DescriptionJSON", Type: "[]interface {}"},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true},
 		{Name: "evidence_requests", Label: "EvidenceRequests", Type: "[]models.EvidenceRequests"},
@@ -6727,9 +3842,9 @@ func init() {
 		{Name: "implementation_guidance", Label: "ImplementationGuidance", Type: "[]models.ImplementationGuidance"},
 		{Name: "implementation_status", Label: "ImplementationStatus", Type: "enums.ControlImplementationStatus"},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true},
-		{Name: "is_trust_center_control", Label: "IsTrustCenterControl", Type: "bool", Immutable: true},
+		{Name: "is_trust_center_control", Label: "IsTrustCenterControl", Type: "bool"},
 		{Name: "mapped_categories", Label: "MappedCategories", Type: "[]string"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "public_representation", Label: "PublicRepresentation", Type: "string", MatchKey: true},
 		{Name: "ref_code", Label: "RefCode", Type: "string", MatchKey: true},
 		{Name: "reference_framework", Label: "ReferenceFramework", Type: "string", WorkflowEligible: true, MatchKey: true},
@@ -6745,7 +3860,7 @@ func init() {
 		{Name: "status", Label: "Status", Type: "enums.ControlStatus", WorkflowEligible: true},
 		{Name: "subcategory", Label: "Subcategory", Type: "string", WorkflowEligible: true, MatchKey: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
 		{Name: "tags", Label: "Tags", Type: "[]string"},
 		{Name: "testing_procedures", Label: "TestingProcedures", Type: "[]models.TestingProcedures"},
 		{Name: "title", Label: "Title", Type: "string", WorkflowEligible: true, MatchKey: true},
@@ -6756,18 +3871,18 @@ func init() {
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool"},
 	}
 	SchemaControlImplementation.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "details", Label: "Details", Type: "string", MatchKey: true},
 		{Name: "details_json", Label: "DetailsJSON", Type: "[]interface {}"},
 		{Name: "implementation_date", Label: "ImplementationDate", Type: "time.Time"},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "status", Label: "Status", Type: "enums.DocumentStatus"},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
 		{Name: "tags", Label: "Tags", Type: "[]string"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
@@ -6778,164 +3893,164 @@ func init() {
 	SchemaControlObjective.Fields = []FieldDescriptor{
 		{Name: "category", Label: "Category", Type: "string", MatchKey: true},
 		{Name: "control_objective_type", Label: "ControlObjectiveType", Type: "string", MatchKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "desired_outcome", Label: "DesiredOutcome", Type: "string", MatchKey: true},
 		{Name: "desired_outcome_json", Label: "DesiredOutcomeJSON", Type: "[]interface {}"},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true},
 		{Name: "source", Label: "Source", Type: "enums.ControlSource"},
 		{Name: "status", Label: "Status", Type: "enums.ObjectiveStatus"},
 		{Name: "subcategory", Label: "Subcategory", Type: "string", MatchKey: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
 		{Name: "tags", Label: "Tags", Type: "[]string"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
 	}
 	SchemaDirectoryAccount.Fields = []FieldDescriptor{
-		{Name: "account_type", Label: "AccountType", Type: "enums.DirectoryAccountType", InputKey: "account_type", Required: false},
-		{Name: "added_at", Label: "AddedAt", Type: "time.Time", InputKey: "added_at", Required: false},
+		{Name: "account_type", Label: "AccountType", Type: "enums.DirectoryAccountType", InputKey: "account_type"},
+		{Name: "added_at", Label: "AddedAt", Type: "time.Time", InputKey: "added_at"},
 		{Name: "avatar_local_file_id", Label: "AvatarLocalFileID", Type: "string", MatchKey: true},
-		{Name: "avatar_remote_url", Label: "AvatarRemoteURL", Type: "string", MatchKey: true, InputKey: "avatar_remote_url", Required: false},
-		{Name: "avatar_updated_at", Label: "AvatarUpdatedAt", Type: "time.Time", InputKey: "avatar_updated_at", Required: false},
-		{Name: "canonical_email", Label: "CanonicalEmail", Type: "string", MatchKey: true, InputKey: "canonical_email", Required: false, UpsertKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "department", Label: "Department", Type: "string", MatchKey: true, InputKey: "department", Required: false},
-		{Name: "directory_instance_id", Label: "DirectoryInstanceID", Type: "string", MatchKey: true, InputKey: "directory_instance_id", Required: false},
-		{Name: "directory_name", Label: "DirectoryName", Type: "string", MatchKey: true, InputKey: "directory_name", Required: false},
-		{Name: "directory_sync_run_id", Label: "DirectorySyncRunID", Type: "string", Immutable: true, MatchKey: true, InputKey: "directory_sync_run_id", Required: false, UpsertKey: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Required: false},
-		{Name: "email_aliases", Label: "EmailAliases", Type: "[]string", InputKey: "email_aliases", Required: false},
-		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Required: false},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Required: false},
-		{Name: "external_id", Label: "ExternalID", Type: "string", Immutable: true, MatchKey: true, InputKey: "external_id", Required: true, UpsertKey: true, LookupKey: true},
-		{Name: "family_name", Label: "FamilyName", Type: "string", MatchKey: true, InputKey: "family_name", Required: false},
-		{Name: "first_seen_at", Label: "FirstSeenAt", Type: "time.Time", InputKey: "first_seen_at", Required: false},
-		{Name: "given_name", Label: "GivenName", Type: "string", MatchKey: true, InputKey: "given_name", Required: false},
-		{Name: "identity_holder_id", Label: "IdentityHolderID", Type: "string", MatchKey: true, InputKey: "identity_holder_id", Required: false},
-		{Name: "integration_id", Label: "IntegrationID", Type: "string", Immutable: true, MatchKey: true, InputKey: "integration_id", Required: false, UpsertKey: true},
-		{Name: "job_title", Label: "JobTitle", Type: "string", MatchKey: true, InputKey: "job_title", Required: false},
-		{Name: "last_login_at", Label: "LastLoginAt", Type: "time.Time", InputKey: "last_login_at", Required: false},
-		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at", Required: false},
-		{Name: "last_seen_ip", Label: "LastSeenIP", Type: "string", MatchKey: true, InputKey: "last_seen_ip", Required: false},
-		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Required: false},
-		{Name: "mfa_state", Label: "MfaState", Type: "enums.DirectoryAccountMFAState", InputKey: "mfa_state", Required: true},
-		{Name: "observed_at", Label: "ObservedAt", Type: "time.Time", Immutable: true, InputKey: "observed_at", Required: true},
-		{Name: "organization_unit", Label: "OrganizationUnit", Type: "string", MatchKey: true, InputKey: "organization_unit", Required: false},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true, InputKey: "owner_id", Required: false},
-		{Name: "phone_number", Label: "PhoneNumber", Type: "string", MatchKey: true, InputKey: "phone_number", Required: false},
-		{Name: "platform_id", Label: "PlatformID", Type: "string", Immutable: true, MatchKey: true, InputKey: "platform_id", Required: false},
-		{Name: "primary_source", Label: "PrimarySource", Type: "bool", InputKey: "primary_source", Required: true},
-		{Name: "profile", Label: "Profile", Type: "map[string]interface {}", InputKey: "profile", Required: false},
-		{Name: "profile_hash", Label: "ProfileHash", Type: "string", MatchKey: true, InputKey: "profile_hash", Required: true},
+		{Name: "avatar_remote_url", Label: "AvatarRemoteURL", Type: "string", MatchKey: true, InputKey: "avatar_remote_url"},
+		{Name: "avatar_updated_at", Label: "AvatarUpdatedAt", Type: "time.Time", InputKey: "avatar_updated_at"},
+		{Name: "canonical_email", Label: "CanonicalEmail", Type: "string", MatchKey: true, InputKey: "canonical_email"},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
+		{Name: "department", Label: "Department", Type: "string", MatchKey: true, InputKey: "department"},
+		{Name: "directory_instance_id", Label: "DirectoryInstanceID", Type: "string", MatchKey: true, InputKey: "directory_instance_id"},
+		{Name: "directory_name", Label: "DirectoryName", Type: "string", MatchKey: true, InputKey: "directory_name"},
+		{Name: "directory_sync_run_id", Label: "DirectorySyncRunID", Type: "string", MatchKey: true, InputKey: "directory_sync_run_id"},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
+		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name"},
+		{Name: "email_aliases", Label: "EmailAliases", Type: "[]string", InputKey: "email_aliases"},
+		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id"},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name"},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id"},
+		{Name: "family_name", Label: "FamilyName", Type: "string", MatchKey: true, InputKey: "family_name"},
+		{Name: "first_seen_at", Label: "FirstSeenAt", Type: "time.Time", InputKey: "first_seen_at"},
+		{Name: "given_name", Label: "GivenName", Type: "string", MatchKey: true, InputKey: "given_name"},
+		{Name: "identity_holder_id", Label: "IdentityHolderID", Type: "string", MatchKey: true, InputKey: "identity_holder_id"},
+		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id"},
+		{Name: "job_title", Label: "JobTitle", Type: "string", MatchKey: true, InputKey: "job_title"},
+		{Name: "last_login_at", Label: "LastLoginAt", Type: "time.Time", InputKey: "last_login_at"},
+		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at"},
+		{Name: "last_seen_ip", Label: "LastSeenIP", Type: "string", MatchKey: true, InputKey: "last_seen_ip"},
+		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata"},
+		{Name: "mfa_state", Label: "MfaState", Type: "enums.DirectoryAccountMFAState", InputKey: "mfa_state"},
+		{Name: "observed_at", Label: "ObservedAt", Type: "time.Time", InputKey: "observed_at"},
+		{Name: "organization_unit", Label: "OrganizationUnit", Type: "string", MatchKey: true, InputKey: "organization_unit"},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, InputKey: "owner_id"},
+		{Name: "phone_number", Label: "PhoneNumber", Type: "string", MatchKey: true, InputKey: "phone_number"},
+		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, InputKey: "platform_id"},
+		{Name: "primary_source", Label: "PrimarySource", Type: "bool", InputKey: "primary_source"},
+		{Name: "profile", Label: "Profile", Type: "map[string]interface {}", InputKey: "profile"},
+		{Name: "profile_hash", Label: "ProfileHash", Type: "string", MatchKey: true, InputKey: "profile_hash"},
 		{Name: "raw_profile_file_id", Label: "RawProfileFileID", Type: "string", MatchKey: true},
-		{Name: "removed_at", Label: "RemovedAt", Type: "time.Time", InputKey: "removed_at", Required: false},
-		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Required: false},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Required: false},
-		{Name: "secondary_key", Label: "SecondaryKey", Type: "string", MatchKey: true, InputKey: "secondary_key", Required: false},
-		{Name: "source_version", Label: "SourceVersion", Type: "string", MatchKey: true, InputKey: "source_version", Required: false},
-		{Name: "status", Label: "Status", Type: "enums.DirectoryAccountStatus", InputKey: "status", Required: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Required: false},
+		{Name: "removed_at", Label: "RemovedAt", Type: "time.Time", InputKey: "removed_at"},
+		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id"},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name"},
+		{Name: "secondary_key", Label: "SecondaryKey", Type: "string", MatchKey: true, InputKey: "secondary_key"},
+		{Name: "source_version", Label: "SourceVersion", Type: "string", MatchKey: true, InputKey: "source_version"},
+		{Name: "status", Label: "Status", Type: "enums.DirectoryAccountStatus", InputKey: "status"},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
 	}
 	SchemaDirectoryGroup.Fields = []FieldDescriptor{
-		{Name: "added_at", Label: "AddedAt", Type: "time.Time", InputKey: "added_at", Required: false},
-		{Name: "classification", Label: "Classification", Type: "enums.DirectoryGroupClassification", InputKey: "classification", Required: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "added_at", Label: "AddedAt", Type: "time.Time", InputKey: "added_at"},
+		{Name: "classification", Label: "Classification", Type: "enums.DirectoryGroupClassification", InputKey: "classification"},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true},
-		{Name: "directory_instance_id", Label: "DirectoryInstanceID", Type: "string", MatchKey: true, InputKey: "directory_instance_id", Required: false},
-		{Name: "directory_name", Label: "DirectoryName", Type: "string", MatchKey: true, InputKey: "directory_name", Required: false},
-		{Name: "directory_sync_run_id", Label: "DirectorySyncRunID", Type: "string", Immutable: true, MatchKey: true, InputKey: "directory_sync_run_id", Required: true, UpsertKey: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Required: false},
-		{Name: "email", Label: "Email", Type: "string", MatchKey: true, InputKey: "email", Required: false},
-		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Required: false},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Required: false},
-		{Name: "external_id", Label: "ExternalID", Type: "string", Immutable: true, MatchKey: true, InputKey: "external_id", Required: true, LookupKey: true},
-		{Name: "external_sharing_allowed", Label: "ExternalSharingAllowed", Type: "bool", InputKey: "external_sharing_allowed", Required: false},
-		{Name: "first_seen_at", Label: "FirstSeenAt", Type: "time.Time", InputKey: "first_seen_at", Required: false},
-		{Name: "integration_id", Label: "IntegrationID", Type: "string", Immutable: true, MatchKey: true, InputKey: "integration_id", Required: true, UpsertKey: true},
-		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at", Required: false},
-		{Name: "member_count", Label: "MemberCount", Type: "int", InputKey: "member_count", Required: false},
-		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Required: false},
-		{Name: "observed_at", Label: "ObservedAt", Type: "time.Time", Immutable: true, InputKey: "observed_at", Required: true},
+		{Name: "directory_instance_id", Label: "DirectoryInstanceID", Type: "string", MatchKey: true, InputKey: "directory_instance_id"},
+		{Name: "directory_name", Label: "DirectoryName", Type: "string", MatchKey: true, InputKey: "directory_name"},
+		{Name: "directory_sync_run_id", Label: "DirectorySyncRunID", Type: "string", MatchKey: true, InputKey: "directory_sync_run_id"},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
+		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name"},
+		{Name: "email", Label: "Email", Type: "string", MatchKey: true, InputKey: "email"},
+		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id"},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name"},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id"},
+		{Name: "external_sharing_allowed", Label: "ExternalSharingAllowed", Type: "bool", InputKey: "external_sharing_allowed"},
+		{Name: "first_seen_at", Label: "FirstSeenAt", Type: "time.Time", InputKey: "first_seen_at"},
+		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id"},
+		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at"},
+		{Name: "member_count", Label: "MemberCount", Type: "int", InputKey: "member_count"},
+		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata"},
+		{Name: "observed_at", Label: "ObservedAt", Type: "time.Time", InputKey: "observed_at"},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
-		{Name: "platform_id", Label: "PlatformID", Type: "string", Immutable: true, MatchKey: true, InputKey: "platform_id", Required: false},
-		{Name: "profile", Label: "Profile", Type: "map[string]interface {}", InputKey: "profile", Required: false},
-		{Name: "profile_hash", Label: "ProfileHash", Type: "string", MatchKey: true, InputKey: "profile_hash", Required: true},
+		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, InputKey: "platform_id"},
+		{Name: "profile", Label: "Profile", Type: "map[string]interface {}", InputKey: "profile"},
+		{Name: "profile_hash", Label: "ProfileHash", Type: "string", MatchKey: true, InputKey: "profile_hash"},
 		{Name: "raw_profile_file_id", Label: "RawProfileFileID", Type: "string", MatchKey: true},
-		{Name: "removed_at", Label: "RemovedAt", Type: "time.Time", InputKey: "removed_at", Required: false},
-		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Required: false},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Required: false},
-		{Name: "source_version", Label: "SourceVersion", Type: "string", MatchKey: true, InputKey: "source_version", Required: false},
-		{Name: "status", Label: "Status", Type: "enums.DirectoryGroupStatus", InputKey: "status", Required: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Required: false},
+		{Name: "removed_at", Label: "RemovedAt", Type: "time.Time", InputKey: "removed_at"},
+		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id"},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name"},
+		{Name: "source_version", Label: "SourceVersion", Type: "string", MatchKey: true, InputKey: "source_version"},
+		{Name: "status", Label: "Status", Type: "enums.DirectoryGroupStatus", InputKey: "status"},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
 	}
 	SchemaDirectoryMembership.Fields = []FieldDescriptor{
-		{Name: "added_at", Label: "AddedAt", Type: "time.Time", InputKey: "added_at", Required: false},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "directory_account_id", Label: "DirectoryAccountID", Type: "string", Immutable: true, MatchKey: true, InputKey: "directory_account_id", Required: true, UpsertKey: true, LookupKey: true},
-		{Name: "directory_group_id", Label: "DirectoryGroupID", Type: "string", Immutable: true, MatchKey: true, InputKey: "directory_group_id", Required: true, UpsertKey: true, LookupKey: true},
-		{Name: "directory_instance_id", Label: "DirectoryInstanceID", Type: "string", MatchKey: true, InputKey: "directory_instance_id", Required: false},
-		{Name: "directory_name", Label: "DirectoryName", Type: "string", MatchKey: true, InputKey: "directory_name", Required: false},
-		{Name: "directory_sync_run_id", Label: "DirectorySyncRunID", Type: "string", Immutable: true, MatchKey: true, InputKey: "directory_sync_run_id", Required: true, UpsertKey: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Required: false},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Required: false},
-		{Name: "first_seen_at", Label: "FirstSeenAt", Type: "time.Time", InputKey: "first_seen_at", Required: false},
-		{Name: "integration_id", Label: "IntegrationID", Type: "string", Immutable: true, MatchKey: true, InputKey: "integration_id", Required: true, UpsertKey: true},
-		{Name: "last_confirmed_run_id", Label: "LastConfirmedRunID", Type: "string", MatchKey: true, InputKey: "last_confirmed_run_id", Required: false},
-		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at", Required: false},
-		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Required: false},
-		{Name: "observed_at", Label: "ObservedAt", Type: "time.Time", Immutable: true, InputKey: "observed_at", Required: true},
+		{Name: "added_at", Label: "AddedAt", Type: "time.Time", InputKey: "added_at"},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
+		{Name: "directory_account_id", Label: "DirectoryAccountID", Type: "string", MatchKey: true, InputKey: "directory_account_id"},
+		{Name: "directory_group_id", Label: "DirectoryGroupID", Type: "string", MatchKey: true, InputKey: "directory_group_id"},
+		{Name: "directory_instance_id", Label: "DirectoryInstanceID", Type: "string", MatchKey: true, InputKey: "directory_instance_id"},
+		{Name: "directory_name", Label: "DirectoryName", Type: "string", MatchKey: true, InputKey: "directory_name"},
+		{Name: "directory_sync_run_id", Label: "DirectorySyncRunID", Type: "string", MatchKey: true, InputKey: "directory_sync_run_id"},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
+		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id"},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name"},
+		{Name: "first_seen_at", Label: "FirstSeenAt", Type: "time.Time", InputKey: "first_seen_at"},
+		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id"},
+		{Name: "last_confirmed_run_id", Label: "LastConfirmedRunID", Type: "string", MatchKey: true, InputKey: "last_confirmed_run_id"},
+		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at"},
+		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata"},
+		{Name: "observed_at", Label: "ObservedAt", Type: "time.Time", InputKey: "observed_at"},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
-		{Name: "platform_id", Label: "PlatformID", Type: "string", Immutable: true, MatchKey: true, InputKey: "platform_id", Required: false},
-		{Name: "removed_at", Label: "RemovedAt", Type: "time.Time", InputKey: "removed_at", Required: false},
-		{Name: "role", Label: "Role", Type: "enums.DirectoryMembershipRole", InputKey: "role", Required: false},
-		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Required: false},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Required: false},
-		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source", Required: false},
+		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, InputKey: "platform_id"},
+		{Name: "removed_at", Label: "RemovedAt", Type: "time.Time", InputKey: "removed_at"},
+		{Name: "role", Label: "Role", Type: "enums.DirectoryMembershipRole", InputKey: "role"},
+		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id"},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name"},
+		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
 	}
 	SchemaDiscussion.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true},
 		{Name: "is_resolved", Label: "IsResolved", Type: "bool"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
 	}
 	SchemaDocumentData.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "data", Label: "Data", Type: "map[string]interface {}"},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true},
 		{Name: "tags", Label: "Tags", Type: "[]string"},
@@ -6947,8 +4062,8 @@ func init() {
 	SchemaEmailTemplate.Fields = []FieldDescriptor{
 		{Name: "active", Label: "Active", Type: "bool"},
 		{Name: "body_template", Label: "BodyTemplate", Type: "string", MatchKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "defaults", Label: "Defaults", Type: "map[string]interface {}"},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
@@ -6961,12 +4076,12 @@ func init() {
 		{Name: "locale", Label: "Locale", Type: "string", MatchKey: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}"},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "preheader_template", Label: "PreheaderTemplate", Type: "string", MatchKey: true},
 		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true},
 		{Name: "subject_template", Label: "SubjectTemplate", Type: "string", MatchKey: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
 		{Name: "template_context", Label: "TemplateContext", Type: "enums.TemplateContext"},
 		{Name: "text_template", Label: "TextTemplate", Type: "string", MatchKey: true},
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true},
@@ -6979,87 +4094,87 @@ func init() {
 		{Name: "workflow_instance_id", Label: "WorkflowInstanceID", Type: "string", MatchKey: true},
 	}
 	SchemaEntity.Fields = []FieldDescriptor{
-		{Name: "annual_spend", Label: "AnnualSpend", Type: "float64", InputKey: "annual_spend", Required: false},
-		{Name: "approved_for_use", Label: "ApprovedForUse", Type: "bool", InputKey: "approved_for_use", Required: false},
-		{Name: "auto_renews", Label: "AutoRenews", Type: "bool", InputKey: "auto_renews", Required: false},
-		{Name: "billing_model", Label: "BillingModel", Type: "string", MatchKey: true, InputKey: "billing_model", Required: false},
-		{Name: "contract_end_date", Label: "ContractEndDate", Type: "models.DateTime", InputKey: "contract_end_date", Required: false},
-		{Name: "contract_renewal_at", Label: "ContractRenewalAt", Type: "models.DateTime", InputKey: "contract_renewal_at", Required: false},
-		{Name: "contract_start_date", Label: "ContractStartDate", Type: "models.DateTime", InputKey: "contract_start_date", Required: false},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "annual_spend", Label: "AnnualSpend", Type: "float64", InputKey: "annual_spend"},
+		{Name: "approved_for_use", Label: "ApprovedForUse", Type: "bool", InputKey: "approved_for_use"},
+		{Name: "auto_renews", Label: "AutoRenews", Type: "bool", InputKey: "auto_renews"},
+		{Name: "billing_model", Label: "BillingModel", Type: "string", MatchKey: true, InputKey: "billing_model"},
+		{Name: "contract_end_date", Label: "ContractEndDate", Type: "models.DateTime", InputKey: "contract_end_date"},
+		{Name: "contract_renewal_at", Label: "ContractRenewalAt", Type: "models.DateTime", InputKey: "contract_renewal_at"},
+		{Name: "contract_start_date", Label: "ContractStartDate", Type: "models.DateTime", InputKey: "contract_start_date"},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
-		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Required: false},
-		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Required: false},
-		{Name: "domains", Label: "Domains", Type: "[]string", InputKey: "domains", Required: false},
-		{Name: "entity_relationship_state_id", Label: "EntityRelationshipStateID", Type: "string", MatchKey: true, InputKey: "entity_relationship_state_id", Required: false},
-		{Name: "entity_relationship_state_name", Label: "EntityRelationshipStateName", Type: "string", MatchKey: true, InputKey: "entity_relationship_state_name", Required: false},
-		{Name: "entity_security_questionnaire_status_id", Label: "EntitySecurityQuestionnaireStatusID", Type: "string", MatchKey: true, InputKey: "entity_security_questionnaire_status_id", Required: false},
-		{Name: "entity_security_questionnaire_status_name", Label: "EntitySecurityQuestionnaireStatusName", Type: "string", MatchKey: true, InputKey: "entity_security_questionnaire_status_name", Required: false},
-		{Name: "entity_source_type_id", Label: "EntitySourceTypeID", Type: "string", MatchKey: true, InputKey: "entity_source_type_id", Required: false},
-		{Name: "entity_source_type_name", Label: "EntitySourceTypeName", Type: "string", MatchKey: true, InputKey: "entity_source_type_name", Required: false},
+		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description"},
+		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name"},
+		{Name: "domains", Label: "Domains", Type: "[]string", InputKey: "domains"},
+		{Name: "entity_relationship_state_id", Label: "EntityRelationshipStateID", Type: "string", MatchKey: true, InputKey: "entity_relationship_state_id"},
+		{Name: "entity_relationship_state_name", Label: "EntityRelationshipStateName", Type: "string", MatchKey: true, InputKey: "entity_relationship_state_name"},
+		{Name: "entity_security_questionnaire_status_id", Label: "EntitySecurityQuestionnaireStatusID", Type: "string", MatchKey: true, InputKey: "entity_security_questionnaire_status_id"},
+		{Name: "entity_security_questionnaire_status_name", Label: "EntitySecurityQuestionnaireStatusName", Type: "string", MatchKey: true, InputKey: "entity_security_questionnaire_status_name"},
+		{Name: "entity_source_type_id", Label: "EntitySourceTypeID", Type: "string", MatchKey: true, InputKey: "entity_source_type_id"},
+		{Name: "entity_source_type_name", Label: "EntitySourceTypeName", Type: "string", MatchKey: true, InputKey: "entity_source_type_name"},
 		{Name: "entity_type_id", Label: "EntityTypeID", Type: "string", MatchKey: true},
-		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Required: false},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Required: false},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Required: false, UpsertKey: true, LookupKey: true},
-		{Name: "has_soc2", Label: "HasSoc2", Type: "bool", InputKey: "has_soc2", Required: false},
-		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Required: false},
-		{Name: "internal_owner", Label: "InternalOwner", Type: "string", MatchKey: true, InputKey: "internal_owner", Required: false},
-		{Name: "internal_owner_group_id", Label: "InternalOwnerGroupID", Type: "string", MatchKey: true, InputKey: "internal_owner_group_id", Required: false},
-		{Name: "internal_owner_user_id", Label: "InternalOwnerUserID", Type: "string", MatchKey: true, InputKey: "internal_owner_user_id", Required: false},
-		{Name: "last_reviewed_at", Label: "LastReviewedAt", Type: "models.DateTime", InputKey: "last_reviewed_at", Required: false},
+		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id"},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name"},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id"},
+		{Name: "has_soc2", Label: "HasSoc2", Type: "bool", InputKey: "has_soc2"},
+		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes"},
+		{Name: "internal_owner", Label: "InternalOwner", Type: "string", MatchKey: true, InputKey: "internal_owner"},
+		{Name: "internal_owner_group_id", Label: "InternalOwnerGroupID", Type: "string", MatchKey: true, InputKey: "internal_owner_group_id"},
+		{Name: "internal_owner_user_id", Label: "InternalOwnerUserID", Type: "string", MatchKey: true, InputKey: "internal_owner_user_id"},
+		{Name: "last_reviewed_at", Label: "LastReviewedAt", Type: "models.DateTime", InputKey: "last_reviewed_at"},
 		{Name: "linked_asset_ids", Label: "LinkedAssetIds", Type: "[]string"},
-		{Name: "links", Label: "Links", Type: "[]string", InputKey: "links", Required: false},
+		{Name: "links", Label: "Links", Type: "[]string", InputKey: "links"},
 		{Name: "logo_file_id", Label: "LogoFileID", Type: "string", MatchKey: true},
-		{Name: "logo_remote_url", Label: "LogoRemoteURL", Type: "string", MatchKey: true, InputKey: "logo_remote_url", Required: false},
-		{Name: "mfa_enforced", Label: "MfaEnforced", Type: "bool", InputKey: "mfa_enforced", Required: false},
-		{Name: "mfa_supported", Label: "MfaSupported", Type: "bool", InputKey: "mfa_supported", Required: false},
-		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Required: false, UpsertKey: true},
-		{Name: "next_review_at", Label: "NextReviewAt", Type: "models.DateTime", InputKey: "next_review_at", Required: false},
-		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at", Required: false},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true, InputKey: "owner_id", Required: false},
-		{Name: "provided_services", Label: "ProvidedServices", Type: "[]string", InputKey: "provided_services", Required: false},
-		{Name: "renewal_risk", Label: "RenewalRisk", Type: "string", MatchKey: true, InputKey: "renewal_risk", Required: false},
-		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", InputKey: "review_frequency", Required: false},
-		{Name: "reviewed_by", Label: "ReviewedBy", Type: "string", MatchKey: true, InputKey: "reviewed_by", Required: false},
-		{Name: "reviewed_by_group_id", Label: "ReviewedByGroupID", Type: "string", MatchKey: true, InputKey: "reviewed_by_group_id", Required: false},
-		{Name: "reviewed_by_user_id", Label: "ReviewedByUserID", Type: "string", MatchKey: true, InputKey: "reviewed_by_user_id", Required: false},
-		{Name: "risk_rating", Label: "RiskRating", Type: "string", MatchKey: true, InputKey: "risk_rating", Required: false},
-		{Name: "risk_score", Label: "RiskScore", Type: "int", InputKey: "risk_score", Required: false},
+		{Name: "logo_remote_url", Label: "LogoRemoteURL", Type: "string", MatchKey: true, InputKey: "logo_remote_url"},
+		{Name: "mfa_enforced", Label: "MfaEnforced", Type: "bool", InputKey: "mfa_enforced"},
+		{Name: "mfa_supported", Label: "MfaSupported", Type: "bool", InputKey: "mfa_supported"},
+		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name"},
+		{Name: "next_review_at", Label: "NextReviewAt", Type: "models.DateTime", InputKey: "next_review_at"},
+		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at"},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, InputKey: "owner_id"},
+		{Name: "provided_services", Label: "ProvidedServices", Type: "[]string", InputKey: "provided_services"},
+		{Name: "renewal_risk", Label: "RenewalRisk", Type: "string", MatchKey: true, InputKey: "renewal_risk"},
+		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", InputKey: "review_frequency"},
+		{Name: "reviewed_by", Label: "ReviewedBy", Type: "string", MatchKey: true, InputKey: "reviewed_by"},
+		{Name: "reviewed_by_group_id", Label: "ReviewedByGroupID", Type: "string", MatchKey: true, InputKey: "reviewed_by_group_id"},
+		{Name: "reviewed_by_user_id", Label: "ReviewedByUserID", Type: "string", MatchKey: true, InputKey: "reviewed_by_user_id"},
+		{Name: "risk_rating", Label: "RiskRating", Type: "string", MatchKey: true, InputKey: "risk_rating"},
+		{Name: "risk_score", Label: "RiskScore", Type: "int", InputKey: "risk_score"},
 		{Name: "risk_score_coverage", Label: "RiskScoreCoverage", Type: "int"},
-		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Required: false},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Required: false},
-		{Name: "soc2_period_end", Label: "Soc2PeriodEnd", Type: "models.DateTime", InputKey: "soc2_period_end", Required: false},
-		{Name: "spend_currency", Label: "SpendCurrency", Type: "string", MatchKey: true, InputKey: "spend_currency", Required: false},
-		{Name: "sso_enforced", Label: "SSOEnforced", Type: "bool", InputKey: "sso_enforced", Required: false},
-		{Name: "status", Label: "Status", Type: "enums.EntityStatus", InputKey: "status", Required: false},
-		{Name: "status_page_url", Label: "StatusPageURL", Type: "string", MatchKey: true, InputKey: "status_page_url", Required: false},
-		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Required: false},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Required: false},
-		{Name: "termination_notice_days", Label: "TerminationNoticeDays", Type: "int", InputKey: "termination_notice_days", Required: false},
-		{Name: "tier", Label: "Tier", Type: "enums.VendorTier", InputKey: "tier", Required: false},
+		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id"},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name"},
+		{Name: "soc2_period_end", Label: "Soc2PeriodEnd", Type: "models.DateTime", InputKey: "soc2_period_end"},
+		{Name: "spend_currency", Label: "SpendCurrency", Type: "string", MatchKey: true, InputKey: "spend_currency"},
+		{Name: "sso_enforced", Label: "SSOEnforced", Type: "bool", InputKey: "sso_enforced"},
+		{Name: "status", Label: "Status", Type: "enums.EntityStatus", InputKey: "status"},
+		{Name: "status_page_url", Label: "StatusPageURL", Type: "string", MatchKey: true, InputKey: "status_page_url"},
+		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id"},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags"},
+		{Name: "termination_notice_days", Label: "TerminationNoticeDays", Type: "int", InputKey: "termination_notice_days"},
+		{Name: "tier", Label: "Tier", Type: "enums.VendorTier", InputKey: "tier"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
-		{Name: "vendor_metadata", Label: "VendorMetadata", Type: "map[string]interface {}", InputKey: "vendor_metadata", Required: false},
+		{Name: "vendor_metadata", Label: "VendorMetadata", Type: "map[string]interface {}", InputKey: "vendor_metadata"},
 	}
 	SchemaEvidence.Fields = []FieldDescriptor{
 		{Name: "collection_procedure", Label: "CollectionProcedure", Type: "string", MatchKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "creation_date", Label: "CreationDate", Type: "models.DateTime"},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true},
 		{Name: "is_automated", Label: "IsAutomated", Type: "bool"},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "renewal_date", Label: "RenewalDate", Type: "models.DateTime"},
 		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency"},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true},
@@ -7074,79 +4189,79 @@ func init() {
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool"},
 	}
 	SchemaFinding.Fields = []FieldDescriptor{
-		{Name: "assessment_id", Label: "AssessmentID", Type: "string", MatchKey: true, InputKey: "assessment_id", Required: false},
-		{Name: "assigned_to", Label: "AssignedTo", Type: "string", MatchKey: true, InputKey: "assigned_to", Required: false},
-		{Name: "assigned_to_group_id", Label: "AssignedToGroupID", Type: "string", MatchKey: true, InputKey: "assigned_to_group_id", Required: false},
-		{Name: "assigned_to_user_id", Label: "AssignedToUserID", Type: "string", MatchKey: true, InputKey: "assigned_to_user_id", Required: false},
-		{Name: "blocks_production", Label: "BlocksProduction", Type: "bool", WorkflowEligible: true, InputKey: "blocks_production", Required: false},
-		{Name: "categories", Label: "Categories", Type: "[]string", InputKey: "categories", Required: false},
-		{Name: "category", Label: "Category", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "category", Required: false},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "assessment_id", Label: "AssessmentID", Type: "string", MatchKey: true, InputKey: "assessment_id"},
+		{Name: "assigned_to", Label: "AssignedTo", Type: "string", MatchKey: true, InputKey: "assigned_to"},
+		{Name: "assigned_to_group_id", Label: "AssignedToGroupID", Type: "string", MatchKey: true, InputKey: "assigned_to_group_id"},
+		{Name: "assigned_to_user_id", Label: "AssignedToUserID", Type: "string", MatchKey: true, InputKey: "assigned_to_user_id"},
+		{Name: "blocks_production", Label: "BlocksProduction", Type: "bool", WorkflowEligible: true, InputKey: "blocks_production"},
+		{Name: "categories", Label: "Categories", Type: "[]string", InputKey: "categories"},
+		{Name: "category", Label: "Category", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "category"},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
-		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Required: false},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Required: false},
-		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Required: false},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Required: false},
-		{Name: "event_time", Label: "EventTime", Type: "models.DateTime", WorkflowEligible: true, InputKey: "event_time", Required: false},
-		{Name: "exploitability", Label: "Exploitability", Type: "float64", InputKey: "exploitability", Required: false},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Required: false, UpsertKey: true, LookupKey: true},
-		{Name: "external_owner_id", Label: "ExternalOwnerID", Type: "string", MatchKey: true, InputKey: "external_owner_id", Required: false},
-		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, InputKey: "external_uri", Required: false},
-		{Name: "finding_class", Label: "FindingClass", Type: "string", MatchKey: true, InputKey: "finding_class", Required: false},
-		{Name: "finding_status_id", Label: "FindingStatusID", Type: "string", MatchKey: true, InputKey: "finding_status_id", Required: false},
-		{Name: "finding_status_name", Label: "FindingStatusName", Type: "string", MatchKey: true, InputKey: "finding_status_name", Required: false},
-		{Name: "impact", Label: "Impact", Type: "float64", InputKey: "impact", Required: false},
-		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Required: false},
-		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Required: false},
-		{Name: "numeric_severity", Label: "NumericSeverity", Type: "float64", InputKey: "numeric_severity", Required: false},
-		{Name: "open", Label: "Open", Type: "bool", WorkflowEligible: true, InputKey: "open", Required: false},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true, InputKey: "owner_id", Required: false},
-		{Name: "priority", Label: "Priority", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "priority", Required: false},
-		{Name: "production", Label: "Production", Type: "bool", WorkflowEligible: true, InputKey: "production", Required: false},
-		{Name: "public", Label: "Public", Type: "bool", WorkflowEligible: true, InputKey: "public", Required: false},
-		{Name: "raw_payload", Label: "RawPayload", Type: "map[string]interface {}", InputKey: "raw_payload", Required: false},
-		{Name: "recommendation", Label: "Recommendation", Type: "string", MatchKey: true, InputKey: "recommendation", Required: false},
-		{Name: "recommended_actions", Label: "RecommendedActions", Type: "string", MatchKey: true, InputKey: "recommended_actions", Required: false},
-		{Name: "references", Label: "References", Type: "[]string", InputKey: "references", Required: false},
-		{Name: "remediation_sla", Label: "RemediationSLA", Type: "int", WorkflowEligible: true, InputKey: "remediation_sla", Required: false},
-		{Name: "reported_at", Label: "ReportedAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "reported_at", Required: false},
-		{Name: "resource_name", Label: "ResourceName", Type: "string", MatchKey: true, InputKey: "resource_name", Required: false},
-		{Name: "reviewed_by", Label: "ReviewedBy", Type: "string", MatchKey: true, InputKey: "reviewed_by", Required: false},
-		{Name: "reviewed_by_group_id", Label: "ReviewedByGroupID", Type: "string", MatchKey: true, InputKey: "reviewed_by_group_id", Required: false},
-		{Name: "reviewed_by_user_id", Label: "ReviewedByUserID", Type: "string", MatchKey: true, InputKey: "reviewed_by_user_id", Required: false},
-		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Required: false},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Required: false},
-		{Name: "score", Label: "Score", Type: "float64", WorkflowEligible: true, InputKey: "score", Required: false},
+		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description"},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
+		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name"},
+		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id"},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name"},
+		{Name: "event_time", Label: "EventTime", Type: "models.DateTime", WorkflowEligible: true, InputKey: "event_time"},
+		{Name: "exploitability", Label: "Exploitability", Type: "float64", InputKey: "exploitability"},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id"},
+		{Name: "external_owner_id", Label: "ExternalOwnerID", Type: "string", MatchKey: true, InputKey: "external_owner_id"},
+		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, InputKey: "external_uri"},
+		{Name: "finding_class", Label: "FindingClass", Type: "string", MatchKey: true, InputKey: "finding_class"},
+		{Name: "finding_status_id", Label: "FindingStatusID", Type: "string", MatchKey: true, InputKey: "finding_status_id"},
+		{Name: "finding_status_name", Label: "FindingStatusName", Type: "string", MatchKey: true, InputKey: "finding_status_name"},
+		{Name: "impact", Label: "Impact", Type: "float64", InputKey: "impact"},
+		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes"},
+		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata"},
+		{Name: "numeric_severity", Label: "NumericSeverity", Type: "float64", InputKey: "numeric_severity"},
+		{Name: "open", Label: "Open", Type: "bool", WorkflowEligible: true, InputKey: "open"},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, InputKey: "owner_id"},
+		{Name: "priority", Label: "Priority", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "priority"},
+		{Name: "production", Label: "Production", Type: "bool", WorkflowEligible: true, InputKey: "production"},
+		{Name: "public", Label: "Public", Type: "bool", WorkflowEligible: true, InputKey: "public"},
+		{Name: "raw_payload", Label: "RawPayload", Type: "map[string]interface {}", InputKey: "raw_payload"},
+		{Name: "recommendation", Label: "Recommendation", Type: "string", MatchKey: true, InputKey: "recommendation"},
+		{Name: "recommended_actions", Label: "RecommendedActions", Type: "string", MatchKey: true, InputKey: "recommended_actions"},
+		{Name: "references", Label: "References", Type: "[]string", InputKey: "references"},
+		{Name: "remediation_sla", Label: "RemediationSLA", Type: "int", WorkflowEligible: true, InputKey: "remediation_sla"},
+		{Name: "reported_at", Label: "ReportedAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "reported_at"},
+		{Name: "resource_name", Label: "ResourceName", Type: "string", MatchKey: true, InputKey: "resource_name"},
+		{Name: "reviewed_by", Label: "ReviewedBy", Type: "string", MatchKey: true, InputKey: "reviewed_by"},
+		{Name: "reviewed_by_group_id", Label: "ReviewedByGroupID", Type: "string", MatchKey: true, InputKey: "reviewed_by_group_id"},
+		{Name: "reviewed_by_user_id", Label: "ReviewedByUserID", Type: "string", MatchKey: true, InputKey: "reviewed_by_user_id"},
+		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id"},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name"},
+		{Name: "score", Label: "Score", Type: "float64", WorkflowEligible: true, InputKey: "score"},
 		{Name: "security_level", Label: "SecurityLevel", Type: "enums.SecurityLevel", WorkflowEligible: true},
-		{Name: "severity", Label: "Severity", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "severity", Required: false},
-		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source", Required: false},
-		{Name: "source_updated_at", Label: "SourceUpdatedAt", Type: "models.DateTime", InputKey: "source_updated_at", Required: false},
-		{Name: "state", Label: "State", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "state", Required: false},
-		{Name: "steps_to_reproduce", Label: "StepsToReproduce", Type: "[]string", InputKey: "steps_to_reproduce", Required: false},
-		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Required: false},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Required: false},
-		{Name: "target_details", Label: "TargetDetails", Type: "map[string]interface {}", InputKey: "target_details", Required: false},
-		{Name: "targets", Label: "Targets", Type: "[]string", InputKey: "targets", Required: false},
+		{Name: "severity", Label: "Severity", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "severity"},
+		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source"},
+		{Name: "source_updated_at", Label: "SourceUpdatedAt", Type: "models.DateTime", InputKey: "source_updated_at"},
+		{Name: "state", Label: "State", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "state"},
+		{Name: "steps_to_reproduce", Label: "StepsToReproduce", Type: "[]string", InputKey: "steps_to_reproduce"},
+		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id"},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags"},
+		{Name: "target_details", Label: "TargetDetails", Type: "map[string]interface {}", InputKey: "target_details"},
+		{Name: "targets", Label: "Targets", Type: "[]string", InputKey: "targets"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
-		{Name: "validated", Label: "Validated", Type: "bool", WorkflowEligible: true, InputKey: "validated", Required: false},
-		{Name: "vector", Label: "Vector", Type: "string", MatchKey: true, InputKey: "vector", Required: false},
+		{Name: "validated", Label: "Validated", Type: "bool", WorkflowEligible: true, InputKey: "validated"},
+		{Name: "vector", Label: "Vector", Type: "string", MatchKey: true, InputKey: "vector"},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool"},
 	}
 	SchemaIdentityHolder.Fields = []FieldDescriptor{
 		{Name: "alternate_email", Label: "AlternateEmail", Type: "string", MatchKey: true},
 		{Name: "avatar_remote_url", Label: "AvatarRemoteURL", Type: "string", MatchKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "department", Label: "Department", Type: "string", MatchKey: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "email", Label: "Email", Type: "string", MatchKey: true},
 		{Name: "email_aliases", Label: "EmailAliases", Type: "[]string"},
 		{Name: "employer_entity_id", Label: "EmployerEntityID", Type: "string", MatchKey: true},
@@ -7164,7 +4279,7 @@ func init() {
 		{Name: "is_openlane_user", Label: "IsOpenlaneUser", Type: "bool"},
 		{Name: "location", Label: "Location", Type: "string", MatchKey: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "phone_number", Label: "PhoneNumber", Type: "string", MatchKey: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true},
@@ -7180,63 +4295,63 @@ func init() {
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool"},
 	}
 	SchemaInternalPolicy.Fields = []FieldDescriptor{
-		{Name: "approval_required", Label: "ApprovalRequired", Type: "bool", InputKey: "approval_required", Required: false},
-		{Name: "approver_id", Label: "ApproverID", Type: "string", MatchKey: true, InputKey: "approver_id", Required: false},
-		{Name: "control_suggestions", Label: "ControlSuggestions", Type: "[]string", InputKey: "control_suggestions", Required: false},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, InputKey: "delegate_id", Required: false},
+		{Name: "approval_required", Label: "ApprovalRequired", Type: "bool", InputKey: "approval_required"},
+		{Name: "approver_id", Label: "ApproverID", Type: "string", MatchKey: true, InputKey: "approver_id"},
+		{Name: "control_suggestions", Label: "ControlSuggestions", Type: "[]string", InputKey: "control_suggestions"},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
+		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, InputKey: "delegate_id"},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
-		{Name: "details", Label: "Details", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "details", Required: false},
-		{Name: "details_json", Label: "DetailsJSON", Type: "[]interface {}", WorkflowEligible: true, InputKey: "details_json", Required: false},
-		{Name: "dismissed_control_suggestions", Label: "DismissedControlSuggestions", Type: "[]string", InputKey: "dismissed_control_suggestions", Required: false},
-		{Name: "dismissed_improvement_suggestions", Label: "DismissedImprovementSuggestions", Type: "[]string", InputKey: "dismissed_improvement_suggestions", Required: false},
-		{Name: "dismissed_tag_suggestions", Label: "DismissedTagSuggestions", Type: "[]string", InputKey: "dismissed_tag_suggestions", Required: false},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Required: false},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Required: false},
-		{Name: "external_contents", Label: "ExternalContents", Type: "string", MatchKey: true, InputKey: "external_contents", Required: false},
-		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id", Required: false, UpsertKey: true, LookupKey: true},
-		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid", Required: false},
+		{Name: "details", Label: "Details", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "details"},
+		{Name: "details_json", Label: "DetailsJSON", Type: "[]interface {}", WorkflowEligible: true, InputKey: "details_json"},
+		{Name: "dismissed_control_suggestions", Label: "DismissedControlSuggestions", Type: "[]string", InputKey: "dismissed_control_suggestions"},
+		{Name: "dismissed_improvement_suggestions", Label: "DismissedImprovementSuggestions", Type: "[]string", InputKey: "dismissed_improvement_suggestions"},
+		{Name: "dismissed_tag_suggestions", Label: "DismissedTagSuggestions", Type: "[]string", InputKey: "dismissed_tag_suggestions"},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
+		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id"},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name"},
+		{Name: "external_contents", Label: "ExternalContents", Type: "string", MatchKey: true, InputKey: "external_contents"},
+		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id"},
+		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid"},
 		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true},
-		{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string", InputKey: "improvement_suggestions", Required: false},
-		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Required: false},
-		{Name: "internal_policy_kind_id", Label: "InternalPolicyKindID", Type: "string", MatchKey: true, InputKey: "internal_policy_kind_id", Required: false},
-		{Name: "internal_policy_kind_name", Label: "InternalPolicyKindName", Type: "string", MatchKey: true, InputKey: "internal_policy_kind_name", Required: false},
-		{Name: "management_mode", Label: "ManagementMode", Type: "enums.DocumentManagementMode", InputKey: "management_mode", Required: false},
-		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Required: true},
+		{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string", InputKey: "improvement_suggestions"},
+		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes"},
+		{Name: "internal_policy_kind_id", Label: "InternalPolicyKindID", Type: "string", MatchKey: true, InputKey: "internal_policy_kind_id"},
+		{Name: "internal_policy_kind_name", Label: "InternalPolicyKindName", Type: "string", MatchKey: true, InputKey: "internal_policy_kind_name"},
+		{Name: "management_mode", Label: "ManagementMode", Type: "enums.DocumentManagementMode", InputKey: "management_mode"},
+		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name"},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
-		{Name: "review_due", Label: "ReviewDue", Type: "time.Time", InputKey: "review_due", Required: false},
-		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", InputKey: "review_frequency", Required: false},
-		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true, InputKey: "revision", Required: false},
-		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Required: false},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Required: false},
-		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", WorkflowEligible: true, InputKey: "status", Required: false},
+		{Name: "review_due", Label: "ReviewDue", Type: "time.Time", InputKey: "review_due"},
+		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", InputKey: "review_frequency"},
+		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true, InputKey: "revision"},
+		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id"},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name"},
+		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", WorkflowEligible: true, InputKey: "status"},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true},
-		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Required: false},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
-		{Name: "tag_suggestions", Label: "TagSuggestions", Type: "[]string", InputKey: "tag_suggestions", Required: false},
-		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Required: false},
+		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id"},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
+		{Name: "tag_suggestions", Label: "TagSuggestions", Type: "[]string", InputKey: "tag_suggestions"},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
-		{Name: "url", Label: "URL", Type: "string", MatchKey: true, InputKey: "url", Required: false},
+		{Name: "url", Label: "URL", Type: "string", MatchKey: true, InputKey: "url"},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool"},
 	}
 	SchemaNarrative.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true},
 		{Name: "details", Label: "Details", Type: "string", MatchKey: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
 		{Name: "tags", Label: "Tags", Type: "[]string"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
@@ -7247,8 +4362,8 @@ func init() {
 		{Name: "blocks", Label: "Blocks", Type: "map[string]interface {}"},
 		{Name: "body_template", Label: "BodyTemplate", Type: "string", MatchKey: true},
 		{Name: "channel", Label: "Channel", Type: "enums.Channel"},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "defaults", Label: "Defaults", Type: "map[string]interface {}"},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
@@ -7263,11 +4378,11 @@ func init() {
 		{Name: "locale", Label: "Locale", Type: "string", MatchKey: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}"},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true},
 		{Name: "subject_template", Label: "SubjectTemplate", Type: "string", MatchKey: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
 		{Name: "template_context", Label: "TemplateContext", Type: "enums.TemplateContext"},
 		{Name: "title_template", Label: "TitleTemplate", Type: "string", MatchKey: true},
 		{Name: "topic_pattern", Label: "TopicPattern", Type: "string", MatchKey: true},
@@ -7287,15 +4402,15 @@ func init() {
 		{Name: "business_purpose", Label: "BusinessPurpose", Type: "string", WorkflowEligible: true, MatchKey: true},
 		{Name: "contains_pii", Label: "ContainsPii", Type: "bool", WorkflowEligible: true},
 		{Name: "cost_center", Label: "CostCenter", Type: "string", MatchKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "criticality_id", Label: "CriticalityID", Type: "string", MatchKey: true},
 		{Name: "criticality_name", Label: "CriticalityName", Type: "string", MatchKey: true},
 		{Name: "data_flow_summary", Label: "DataFlowSummary", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "encryption_status_id", Label: "EncryptionStatusID", Type: "string", MatchKey: true},
 		{Name: "encryption_status_name", Label: "EncryptionStatusName", Type: "string", MatchKey: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true},
@@ -7308,7 +4423,7 @@ func init() {
 		{Name: "internal_owner_user_id", Label: "InternalOwnerUserID", Type: "string", MatchKey: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}"},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "physical_location", Label: "PhysicalLocation", Type: "string", MatchKey: true},
 		{Name: "platform_data_classification_id", Label: "PlatformDataClassificationID", Type: "string", MatchKey: true},
 		{Name: "platform_data_classification_name", Label: "PlatformDataClassificationName", Type: "string", MatchKey: true},
@@ -7342,8 +4457,8 @@ func init() {
 		{Name: "approval_required", Label: "ApprovalRequired", Type: "bool"},
 		{Name: "approver_id", Label: "ApproverID", Type: "string", MatchKey: true},
 		{Name: "control_suggestions", Label: "ControlSuggestions", Type: "[]string"},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
@@ -7352,16 +4467,16 @@ func init() {
 		{Name: "dismissed_control_suggestions", Label: "DismissedControlSuggestions", Type: "[]string"},
 		{Name: "dismissed_improvement_suggestions", Label: "DismissedImprovementSuggestions", Type: "[]string"},
 		{Name: "dismissed_tag_suggestions", Label: "DismissedTagSuggestions", Type: "[]string"},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true},
-		{Name: "external_contents", Label: "ExternalContents", Type: "string", MatchKey: true, InputKey: "external_contents", Required: false},
-		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id", Required: false, UpsertKey: true, LookupKey: true},
+		{Name: "external_contents", Label: "ExternalContents", Type: "string", MatchKey: true, InputKey: "external_contents"},
+		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id"},
 		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true},
 		{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string"},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true},
-		{Name: "management_mode", Label: "ManagementMode", Type: "enums.DocumentManagementMode", InputKey: "management_mode", Required: false},
-		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Required: true},
+		{Name: "management_mode", Label: "ManagementMode", Type: "enums.DocumentManagementMode", InputKey: "management_mode"},
+		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name"},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "procedure_kind_id", Label: "ProcedureKindID", Type: "string", MatchKey: true},
 		{Name: "procedure_kind_name", Label: "ProcedureKindName", Type: "string", MatchKey: true},
@@ -7373,7 +4488,7 @@ func init() {
 		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", WorkflowEligible: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
 		{Name: "tag_suggestions", Label: "TagSuggestions", Type: "[]string"},
 		{Name: "tags", Label: "Tags", Type: "[]string"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
@@ -7384,11 +4499,11 @@ func init() {
 	}
 	SchemaRemediation.Fields = []FieldDescriptor{
 		{Name: "completed_at", Label: "CompletedAt", Type: "models.DateTime", WorkflowEligible: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "due_at", Label: "DueAt", Type: "models.DateTime", WorkflowEligible: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true},
@@ -7401,7 +4516,7 @@ func init() {
 		{Name: "intent", Label: "Intent", Type: "string", MatchKey: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "owner_reference", Label: "OwnerReference", Type: "string", MatchKey: true},
 		{Name: "pr_generated_at", Label: "PrGeneratedAt", Type: "models.DateTime"},
 		{Name: "pull_request_uri", Label: "PullRequestURI", Type: "string", MatchKey: true},
@@ -7413,7 +4528,7 @@ func init() {
 		{Name: "status", Label: "Status", Type: "enums.RemediationStatus", WorkflowEligible: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
 		{Name: "tags", Label: "Tags", Type: "[]string"},
 		{Name: "ticket_reference", Label: "TicketReference", Type: "string", MatchKey: true},
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true},
@@ -7427,8 +4542,8 @@ func init() {
 		{Name: "approved_at", Label: "ApprovedAt", Type: "models.DateTime"},
 		{Name: "category", Label: "Category", Type: "string", MatchKey: true},
 		{Name: "classification", Label: "Classification", Type: "string", MatchKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "details", Label: "Details", Type: "string", MatchKey: true},
@@ -7439,7 +4554,7 @@ func init() {
 		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "raw_payload", Label: "RawPayload", Type: "map[string]interface {}"},
 		{Name: "reported_at", Label: "ReportedAt", Type: "models.DateTime"},
 		{Name: "reporter", Label: "Reporter", Type: "string", MatchKey: true},
@@ -7452,7 +4567,7 @@ func init() {
 		{Name: "status", Label: "Status", Type: "enums.ReviewStatus"},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
 		{Name: "tags", Label: "Tags", Type: "[]string"},
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
@@ -7460,46 +4575,46 @@ func init() {
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
 	}
 	SchemaRisk.Fields = []FieldDescriptor{
-		{Name: "business_costs", Label: "BusinessCosts", Type: "string", MatchKey: true, InputKey: "business_costs", Required: false},
-		{Name: "business_costs_json", Label: "BusinessCostsJSON", Type: "[]interface {}", InputKey: "business_costs_json", Required: false},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "business_costs", Label: "BusinessCosts", Type: "string", MatchKey: true, InputKey: "business_costs"},
+		{Name: "business_costs_json", Label: "BusinessCostsJSON", Type: "[]interface {}", InputKey: "business_costs_json"},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
-		{Name: "details", Label: "Details", Type: "string", MatchKey: true, InputKey: "details", Required: false},
-		{Name: "details_json", Label: "DetailsJSON", Type: "[]interface {}", InputKey: "details_json", Required: false},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "due_date", Label: "DueDate", Type: "models.DateTime", WorkflowEligible: true, InputKey: "due_date", Required: false},
-		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Required: false},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Required: false},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Required: false, UpsertKey: true, LookupKey: true},
-		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid", Required: false},
-		{Name: "impact", Label: "Impact", Type: "enums.RiskImpact", WorkflowEligible: true, InputKey: "impact", Required: false},
-		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id", Required: false},
-		{Name: "last_reviewed_at", Label: "LastReviewedAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "last_reviewed_at", Required: false},
-		{Name: "likelihood", Label: "Likelihood", Type: "enums.RiskLikelihood", WorkflowEligible: true, InputKey: "likelihood", Required: false},
-		{Name: "mitigated_at", Label: "MitigatedAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "mitigated_at", Required: false},
-		{Name: "mitigation", Label: "Mitigation", Type: "string", MatchKey: true, InputKey: "mitigation", Required: false},
-		{Name: "mitigation_json", Label: "MitigationJSON", Type: "[]interface {}", InputKey: "mitigation_json", Required: false},
-		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Required: true, UpsertKey: true},
-		{Name: "next_review_due_at", Label: "NextReviewDueAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "next_review_due_at", Required: false},
-		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at", Required: false},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true, InputKey: "owner_id", Required: false},
-		{Name: "residual_score", Label: "ResidualScore", Type: "int", WorkflowEligible: true, InputKey: "residual_score", Required: false},
-		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", WorkflowEligible: true, InputKey: "review_frequency", Required: false},
-		{Name: "review_required", Label: "ReviewRequired", Type: "bool", WorkflowEligible: true, InputKey: "review_required", Required: false},
-		{Name: "risk_category_id", Label: "RiskCategoryID", Type: "string", MatchKey: true, InputKey: "risk_category_id", Required: false},
-		{Name: "risk_category_name", Label: "RiskCategoryName", Type: "string", MatchKey: true, InputKey: "risk_category_name", Required: false},
-		{Name: "risk_decision", Label: "RiskDecision", Type: "enums.RiskDecision", WorkflowEligible: true, InputKey: "risk_decision", Required: false},
-		{Name: "risk_kind_id", Label: "RiskKindID", Type: "string", MatchKey: true, InputKey: "risk_kind_id", Required: false},
-		{Name: "risk_kind_name", Label: "RiskKindName", Type: "string", MatchKey: true, InputKey: "risk_kind_name", Required: false},
-		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Required: false},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Required: false},
-		{Name: "score", Label: "Score", Type: "int", WorkflowEligible: true, InputKey: "score", Required: false},
+		{Name: "details", Label: "Details", Type: "string", MatchKey: true, InputKey: "details"},
+		{Name: "details_json", Label: "DetailsJSON", Type: "[]interface {}", InputKey: "details_json"},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
+		{Name: "due_date", Label: "DueDate", Type: "models.DateTime", WorkflowEligible: true, InputKey: "due_date"},
+		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id"},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name"},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id"},
+		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid"},
+		{Name: "impact", Label: "Impact", Type: "enums.RiskImpact", WorkflowEligible: true, InputKey: "impact"},
+		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id"},
+		{Name: "last_reviewed_at", Label: "LastReviewedAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "last_reviewed_at"},
+		{Name: "likelihood", Label: "Likelihood", Type: "enums.RiskLikelihood", WorkflowEligible: true, InputKey: "likelihood"},
+		{Name: "mitigated_at", Label: "MitigatedAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "mitigated_at"},
+		{Name: "mitigation", Label: "Mitigation", Type: "string", MatchKey: true, InputKey: "mitigation"},
+		{Name: "mitigation_json", Label: "MitigationJSON", Type: "[]interface {}", InputKey: "mitigation_json"},
+		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name"},
+		{Name: "next_review_due_at", Label: "NextReviewDueAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "next_review_due_at"},
+		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at"},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, InputKey: "owner_id"},
+		{Name: "residual_score", Label: "ResidualScore", Type: "int", WorkflowEligible: true, InputKey: "residual_score"},
+		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", WorkflowEligible: true, InputKey: "review_frequency"},
+		{Name: "review_required", Label: "ReviewRequired", Type: "bool", WorkflowEligible: true, InputKey: "review_required"},
+		{Name: "risk_category_id", Label: "RiskCategoryID", Type: "string", MatchKey: true, InputKey: "risk_category_id"},
+		{Name: "risk_category_name", Label: "RiskCategoryName", Type: "string", MatchKey: true, InputKey: "risk_category_name"},
+		{Name: "risk_decision", Label: "RiskDecision", Type: "enums.RiskDecision", WorkflowEligible: true, InputKey: "risk_decision"},
+		{Name: "risk_kind_id", Label: "RiskKindID", Type: "string", MatchKey: true, InputKey: "risk_kind_id"},
+		{Name: "risk_kind_name", Label: "RiskKindName", Type: "string", MatchKey: true, InputKey: "risk_kind_name"},
+		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id"},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name"},
+		{Name: "score", Label: "Score", Type: "int", WorkflowEligible: true, InputKey: "score"},
 		{Name: "stakeholder_id", Label: "StakeholderID", Type: "string", MatchKey: true},
-		{Name: "status", Label: "Status", Type: "enums.RiskStatus", WorkflowEligible: true, InputKey: "status", Required: false},
-		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Required: false},
+		{Name: "status", Label: "Status", Type: "enums.RiskStatus", WorkflowEligible: true, InputKey: "status"},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
@@ -7509,8 +4624,8 @@ func init() {
 		{Name: "assigned_to", Label: "AssignedTo", Type: "string", MatchKey: true},
 		{Name: "assigned_to_group_id", Label: "AssignedToGroupID", Type: "string", MatchKey: true},
 		{Name: "assigned_to_user_id", Label: "AssignedToUserID", Type: "string", MatchKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "discovered_vulnerability_ids", Label: "DiscoveredVulnerabilityIds", Type: "[]string"},
@@ -7519,7 +4634,7 @@ func init() {
 		{Name: "generated_by_platform_id", Label: "GeneratedByPlatformID", Type: "string", MatchKey: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}"},
 		{Name: "next_scan_run_at", Label: "NextScanRunAt", Type: "models.DateTime"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "performed_by", Label: "PerformedBy", Type: "string", MatchKey: true},
 		{Name: "performed_by_group_id", Label: "PerformedByGroupID", Type: "string", MatchKey: true},
 		{Name: "performed_by_user_id", Label: "PerformedByUserID", Type: "string", MatchKey: true},
@@ -7541,15 +4656,15 @@ func init() {
 	SchemaScheduledJob.Fields = []FieldDescriptor{
 		{Name: "active", Label: "Active", Type: "bool"},
 		{Name: "configuration", Label: "Configuration", Type: "models.JobConfiguration"},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "cron", Label: "Cron", Type: "models.Cron"},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "job_id", Label: "JobID", Type: "string", MatchKey: true},
 		{Name: "job_runner_id", Label: "JobRunnerID", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
@@ -7564,14 +4679,14 @@ func init() {
 		{Name: "control_id", Label: "ControlID", Type: "string", MatchKey: true},
 		{Name: "control_owner_id", Label: "ControlOwnerID", Type: "string", WorkflowEligible: true, MatchKey: true},
 		{Name: "control_questions", Label: "ControlQuestions", Type: "[]string"},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true},
 		{Name: "description_json", Label: "DescriptionJSON", Type: "[]interface {}"},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "evidence_requests", Label: "EvidenceRequests", Type: "[]models.EvidenceRequests"},
 		{Name: "example_evidence", Label: "ExampleEvidence", Type: "[]models.ExampleEvidence"},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true},
@@ -7580,7 +4695,7 @@ func init() {
 		{Name: "implementation_status", Label: "ImplementationStatus", Type: "enums.ControlImplementationStatus"},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true},
 		{Name: "mapped_categories", Label: "MappedCategories", Type: "[]string"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "public_representation", Label: "PublicRepresentation", Type: "string", MatchKey: true},
 		{Name: "ref_code", Label: "RefCode", Type: "string", MatchKey: true},
 		{Name: "reference_framework", Label: "ReferenceFramework", Type: "string", WorkflowEligible: true, MatchKey: true},
@@ -7595,7 +4710,7 @@ func init() {
 		{Name: "subcontrol_kind_id", Label: "SubcontrolKindID", Type: "string", MatchKey: true},
 		{Name: "subcontrol_kind_name", Label: "SubcontrolKindName", Type: "string", MatchKey: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
 		{Name: "tags", Label: "Tags", Type: "[]string"},
 		{Name: "testing_procedures", Label: "TestingProcedures", Type: "[]models.TestingProcedures"},
 		{Name: "title", Label: "Title", Type: "string", WorkflowEligible: true, MatchKey: true},
@@ -7605,8 +4720,8 @@ func init() {
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool"},
 	}
 	SchemaSubprocessor.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true},
@@ -7614,9 +4729,9 @@ func init() {
 		{Name: "logo_file_id", Label: "LogoFileID", Type: "string", MatchKey: true},
 		{Name: "logo_remote_url", Label: "LogoRemoteURL", Type: "string", MatchKey: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
 		{Name: "tags", Label: "Tags", Type: "[]string"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
@@ -7624,15 +4739,15 @@ func init() {
 	}
 	SchemaSystemDetail.Fields = []FieldDescriptor{
 		{Name: "authorization_boundary", Label: "AuthorizationBoundary", Type: "string", MatchKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "last_reviewed", Label: "LastReviewed", Type: "models.DateTime"},
 		{Name: "oscal_metadata_json", Label: "OscalMetadataJSON", Type: "map[string]interface {}"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "revision_history", Label: "RevisionHistory", Type: "[]interface {}"},
 		{Name: "sensitivity_level", Label: "SensitivityLevel", Type: "enums.SystemSensitivityLevel"},
 		{Name: "system_name", Label: "SystemName", Type: "string", MatchKey: true},
@@ -7646,13 +4761,13 @@ func init() {
 		{Name: "assignee_id", Label: "AssigneeID", Type: "string", MatchKey: true},
 		{Name: "assigner_id", Label: "AssignerID", Type: "string", MatchKey: true},
 		{Name: "completed", Label: "Completed", Type: "models.DateTime", WorkflowEligible: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "details", Label: "Details", Type: "string", MatchKey: true},
 		{Name: "details_json", Label: "DetailsJSON", Type: "[]interface {}"},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "due", Label: "Due", Type: "models.DateTime", WorkflowEligible: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true},
@@ -7660,7 +4775,7 @@ func init() {
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true},
 		{Name: "idempotency_key", Label: "IdempotencyKey", Type: "string", MatchKey: true},
 		{Name: "is_template", Label: "IsTemplate", Type: "bool"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "parent_task_id", Label: "ParentTaskID", Type: "string", MatchKey: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true},
@@ -7676,8 +4791,8 @@ func init() {
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool"},
 	}
 	SchemaTemplate.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true},
@@ -7687,11 +4802,11 @@ func init() {
 		{Name: "jsonconfig", Label: "Jsonconfig", Type: "map[string]interface {}"},
 		{Name: "kind", Label: "Kind", Type: "enums.TemplateKind"},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
 		{Name: "tags", Label: "Tags", Type: "[]string"},
 		{Name: "template_type", Label: "TemplateType", Type: "enums.DocumentType"},
 		{Name: "transform_configuration", Label: "TransformConfiguration", Type: "models.TemplateProjectionConfig"},
@@ -7703,8 +4818,8 @@ func init() {
 	}
 	SchemaTrustCenterWatermarkConfig.Fields = []FieldDescriptor{
 		{Name: "color", Label: "Color", Type: "string", MatchKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "font", Label: "Font", Type: "enums.Font"},
@@ -7712,10 +4827,10 @@ func init() {
 		{Name: "is_enabled", Label: "IsEnabled", Type: "bool"},
 		{Name: "logo_id", Label: "LogoID", Type: "string", MatchKey: true},
 		{Name: "opacity", Label: "Opacity", Type: "float64"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "rotation", Label: "Rotation", Type: "float64"},
 		{Name: "text", Label: "Text", Type: "string", MatchKey: true},
-		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
@@ -7724,15 +4839,15 @@ func init() {
 		{Name: "answer", Label: "Answer", Type: "string", MatchKey: true},
 		{Name: "answer_type", Label: "AnswerType", Type: "enums.VendorScoringAnswerType"},
 		{Name: "assessment_response_id", Label: "AssessmentResponseID", Type: "string", MatchKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "entity_id", Label: "EntityID", Type: "string", MatchKey: true},
 		{Name: "impact", Label: "Impact", Type: "enums.VendorRiskImpact"},
 		{Name: "likelihood", Label: "Likelihood", Type: "enums.VendorRiskLikelihood"},
 		{Name: "notes", Label: "Notes", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "question_category", Label: "QuestionCategory", Type: "enums.VendorScoringCategory"},
 		{Name: "question_description", Label: "QuestionDescription", Type: "string", MatchKey: true},
 		{Name: "question_key", Label: "QuestionKey", Type: "string", MatchKey: true},
@@ -7745,73 +4860,73 @@ func init() {
 		{Name: "vendor_scoring_config_id", Label: "VendorScoringConfigID", Type: "string", MatchKey: true},
 	}
 	SchemaVulnerability.Fields = []FieldDescriptor{
-		{Name: "assigned_to", Label: "AssignedTo", Type: "string", MatchKey: true, InputKey: "assigned_to", Required: false},
-		{Name: "assigned_to_group_id", Label: "AssignedToGroupID", Type: "string", MatchKey: true, InputKey: "assigned_to_group_id", Required: false},
-		{Name: "assigned_to_user_id", Label: "AssignedToUserID", Type: "string", MatchKey: true, InputKey: "assigned_to_user_id", Required: false},
-		{Name: "auto_dismissed_at", Label: "AutoDismissedAt", Type: "models.DateTime", InputKey: "auto_dismissed_at", Required: false},
-		{Name: "blocking", Label: "Blocking", Type: "bool", WorkflowEligible: true, InputKey: "blocking", Required: false},
-		{Name: "category", Label: "Category", Type: "string", MatchKey: true, InputKey: "category", Required: false},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "cve_id", Label: "CveID", Type: "string", MatchKey: true, InputKey: "cve_id", Required: false},
-		{Name: "cwe_ids", Label: "CweIds", Type: "[]string", InputKey: "cwe_ids", Required: false},
+		{Name: "assigned_to", Label: "AssignedTo", Type: "string", MatchKey: true, InputKey: "assigned_to"},
+		{Name: "assigned_to_group_id", Label: "AssignedToGroupID", Type: "string", MatchKey: true, InputKey: "assigned_to_group_id"},
+		{Name: "assigned_to_user_id", Label: "AssignedToUserID", Type: "string", MatchKey: true, InputKey: "assigned_to_user_id"},
+		{Name: "auto_dismissed_at", Label: "AutoDismissedAt", Type: "models.DateTime", InputKey: "auto_dismissed_at"},
+		{Name: "blocking", Label: "Blocking", Type: "bool", WorkflowEligible: true, InputKey: "blocking"},
+		{Name: "category", Label: "Category", Type: "string", MatchKey: true, InputKey: "category"},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
+		{Name: "cve_id", Label: "CveID", Type: "string", MatchKey: true, InputKey: "cve_id"},
+		{Name: "cwe_ids", Label: "CweIds", Type: "[]string", InputKey: "cwe_ids"},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
-		{Name: "dependency_scope", Label: "DependencyScope", Type: "string", MatchKey: true, InputKey: "dependency_scope", Required: false},
-		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Required: false},
-		{Name: "discovered_at", Label: "DiscoveredAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "discovered_at", Required: false},
-		{Name: "dismissed_at", Label: "DismissedAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "dismissed_at", Required: false},
-		{Name: "dismissed_comment", Label: "DismissedComment", Type: "string", MatchKey: true, InputKey: "dismissed_comment", Required: false},
-		{Name: "dismissed_reason", Label: "DismissedReason", Type: "string", MatchKey: true, InputKey: "dismissed_reason", Required: false},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Required: false},
-		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Required: false},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Required: false},
-		{Name: "exploitability", Label: "Exploitability", Type: "float64", InputKey: "exploitability", Required: false},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Required: true, UpsertKey: true, LookupKey: true},
-		{Name: "external_owner_id", Label: "ExternalOwnerID", Type: "string", MatchKey: true, InputKey: "external_owner_id", Required: false},
-		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, InputKey: "external_uri", Required: false},
-		{Name: "first_patched_version", Label: "FirstPatchedVersion", Type: "string", MatchKey: true, InputKey: "first_patched_version", Required: false},
-		{Name: "fix_available", Label: "FixAvailable", Type: "bool", WorkflowEligible: true, InputKey: "fix_available", Required: false},
-		{Name: "fixed_at", Label: "FixedAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "fixed_at", Required: false},
-		{Name: "impact", Label: "Impact", Type: "float64", InputKey: "impact", Required: false},
-		{Name: "impacts", Label: "Impacts", Type: "[]string", InputKey: "impacts", Required: false},
-		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Required: false},
-		{Name: "manifest_path", Label: "ManifestPath", Type: "string", MatchKey: true, InputKey: "manifest_path", Required: false},
-		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Required: false},
-		{Name: "open", Label: "Open", Type: "bool", WorkflowEligible: true, InputKey: "open", Required: false},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true, InputKey: "owner_id", Required: false},
-		{Name: "package_ecosystem", Label: "PackageEcosystem", Type: "string", MatchKey: true, InputKey: "package_ecosystem", Required: false},
-		{Name: "package_name", Label: "PackageName", Type: "string", MatchKey: true, InputKey: "package_name", Required: false},
-		{Name: "priority", Label: "Priority", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "priority", Required: false},
-		{Name: "production", Label: "Production", Type: "bool", WorkflowEligible: true, InputKey: "production", Required: false},
-		{Name: "public", Label: "Public", Type: "bool", WorkflowEligible: true, InputKey: "public", Required: false},
-		{Name: "published_at", Label: "PublishedAt", Type: "models.DateTime", InputKey: "published_at", Required: false},
-		{Name: "raw_payload", Label: "RawPayload", Type: "map[string]interface {}", InputKey: "raw_payload", Required: false},
-		{Name: "references", Label: "References", Type: "[]string", InputKey: "references", Required: false},
-		{Name: "remediation_sla", Label: "RemediationSLA", Type: "int", WorkflowEligible: true, InputKey: "remediation_sla", Required: false},
-		{Name: "reviewed_by", Label: "ReviewedBy", Type: "string", MatchKey: true, InputKey: "reviewed_by", Required: false},
-		{Name: "reviewed_by_group_id", Label: "ReviewedByGroupID", Type: "string", MatchKey: true, InputKey: "reviewed_by_group_id", Required: false},
-		{Name: "reviewed_by_user_id", Label: "ReviewedByUserID", Type: "string", MatchKey: true, InputKey: "reviewed_by_user_id", Required: false},
-		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Required: false},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Required: false},
-		{Name: "score", Label: "Score", Type: "float64", WorkflowEligible: true, InputKey: "score", Required: false},
+		{Name: "dependency_scope", Label: "DependencyScope", Type: "string", MatchKey: true, InputKey: "dependency_scope"},
+		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description"},
+		{Name: "discovered_at", Label: "DiscoveredAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "discovered_at"},
+		{Name: "dismissed_at", Label: "DismissedAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "dismissed_at"},
+		{Name: "dismissed_comment", Label: "DismissedComment", Type: "string", MatchKey: true, InputKey: "dismissed_comment"},
+		{Name: "dismissed_reason", Label: "DismissedReason", Type: "string", MatchKey: true, InputKey: "dismissed_reason"},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
+		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name"},
+		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id"},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name"},
+		{Name: "exploitability", Label: "Exploitability", Type: "float64", InputKey: "exploitability"},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id"},
+		{Name: "external_owner_id", Label: "ExternalOwnerID", Type: "string", MatchKey: true, InputKey: "external_owner_id"},
+		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, InputKey: "external_uri"},
+		{Name: "first_patched_version", Label: "FirstPatchedVersion", Type: "string", MatchKey: true, InputKey: "first_patched_version"},
+		{Name: "fix_available", Label: "FixAvailable", Type: "bool", WorkflowEligible: true, InputKey: "fix_available"},
+		{Name: "fixed_at", Label: "FixedAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "fixed_at"},
+		{Name: "impact", Label: "Impact", Type: "float64", InputKey: "impact"},
+		{Name: "impacts", Label: "Impacts", Type: "[]string", InputKey: "impacts"},
+		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes"},
+		{Name: "manifest_path", Label: "ManifestPath", Type: "string", MatchKey: true, InputKey: "manifest_path"},
+		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata"},
+		{Name: "open", Label: "Open", Type: "bool", WorkflowEligible: true, InputKey: "open"},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, InputKey: "owner_id"},
+		{Name: "package_ecosystem", Label: "PackageEcosystem", Type: "string", MatchKey: true, InputKey: "package_ecosystem"},
+		{Name: "package_name", Label: "PackageName", Type: "string", MatchKey: true, InputKey: "package_name"},
+		{Name: "priority", Label: "Priority", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "priority"},
+		{Name: "production", Label: "Production", Type: "bool", WorkflowEligible: true, InputKey: "production"},
+		{Name: "public", Label: "Public", Type: "bool", WorkflowEligible: true, InputKey: "public"},
+		{Name: "published_at", Label: "PublishedAt", Type: "models.DateTime", InputKey: "published_at"},
+		{Name: "raw_payload", Label: "RawPayload", Type: "map[string]interface {}", InputKey: "raw_payload"},
+		{Name: "references", Label: "References", Type: "[]string", InputKey: "references"},
+		{Name: "remediation_sla", Label: "RemediationSLA", Type: "int", WorkflowEligible: true, InputKey: "remediation_sla"},
+		{Name: "reviewed_by", Label: "ReviewedBy", Type: "string", MatchKey: true, InputKey: "reviewed_by"},
+		{Name: "reviewed_by_group_id", Label: "ReviewedByGroupID", Type: "string", MatchKey: true, InputKey: "reviewed_by_group_id"},
+		{Name: "reviewed_by_user_id", Label: "ReviewedByUserID", Type: "string", MatchKey: true, InputKey: "reviewed_by_user_id"},
+		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id"},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name"},
+		{Name: "score", Label: "Score", Type: "float64", WorkflowEligible: true, InputKey: "score"},
 		{Name: "security_level", Label: "SecurityLevel", Type: "enums.SecurityLevel", WorkflowEligible: true},
-		{Name: "severity", Label: "Severity", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "severity", Required: false},
-		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source", Required: false},
-		{Name: "source_updated_at", Label: "SourceUpdatedAt", Type: "models.DateTime", InputKey: "source_updated_at", Required: false},
-		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, InputKey: "summary", Required: false},
-		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Required: false},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Required: false},
+		{Name: "severity", Label: "Severity", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "severity"},
+		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source"},
+		{Name: "source_updated_at", Label: "SourceUpdatedAt", Type: "models.DateTime", InputKey: "source_updated_at"},
+		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, InputKey: "summary"},
+		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id"},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
-		{Name: "validated", Label: "Validated", Type: "bool", WorkflowEligible: true, InputKey: "validated", Required: false},
-		{Name: "vector", Label: "Vector", Type: "string", MatchKey: true, InputKey: "vector", Required: false},
-		{Name: "vulnerability_status_id", Label: "VulnerabilityStatusID", Type: "string", MatchKey: true, InputKey: "vulnerability_status_id", Required: false},
-		{Name: "vulnerability_status_name", Label: "VulnerabilityStatusName", Type: "string", MatchKey: true, InputKey: "vulnerability_status_name", Required: false},
-		{Name: "vulnerable_version_range", Label: "VulnerableVersionRange", Type: "string", MatchKey: true, InputKey: "vulnerable_version_range", Required: false},
+		{Name: "validated", Label: "Validated", Type: "bool", WorkflowEligible: true, InputKey: "validated"},
+		{Name: "vector", Label: "Vector", Type: "string", MatchKey: true, InputKey: "vector"},
+		{Name: "vulnerability_status_id", Label: "VulnerabilityStatusID", Type: "string", MatchKey: true, InputKey: "vulnerability_status_id"},
+		{Name: "vulnerability_status_name", Label: "VulnerabilityStatusName", Type: "string", MatchKey: true, InputKey: "vulnerability_status_name"},
+		{Name: "vulnerable_version_range", Label: "VulnerableVersionRange", Type: "string", MatchKey: true, InputKey: "vulnerable_version_range"},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool"},
 	}
 	SchemaWorkflowAssignment.Fields = []FieldDescriptor{
@@ -7819,19 +4934,19 @@ func init() {
 		{Name: "actor_user_id", Label: "ActorUserID", Type: "string", MatchKey: true},
 		{Name: "approval_metadata", Label: "ApprovalMetadata", Type: "models.WorkflowAssignmentApproval"},
 		{Name: "assignment_key", Label: "AssignmentKey", Type: "string", MatchKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "decided_at", Label: "DecidedAt", Type: "time.Time"},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "due_at", Label: "DueAt", Type: "time.Time"},
 		{Name: "invalidation_metadata", Label: "InvalidationMetadata", Type: "models.WorkflowAssignmentInvalidation"},
 		{Name: "label", Label: "Label", Type: "string", MatchKey: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}"},
 		{Name: "notes", Label: "Notes", Type: "string", MatchKey: true},
 		{Name: "outcome_metadata", Label: "OutcomeMetadata", Type: "models.AssignmentOutcome"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "rejection_metadata", Label: "RejectionMetadata", Type: "models.WorkflowAssignmentRejection"},
 		{Name: "required", Label: "Required", Type: "bool"},
 		{Name: "role", Label: "Role", Type: "string", MatchKey: true},
@@ -7843,12 +4958,12 @@ func init() {
 		{Name: "workflow_instance_id", Label: "WorkflowInstanceID", Type: "string", MatchKey: true},
 	}
 	SchemaWorkflowAssignmentTarget.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "resolver_key", Label: "ResolverKey", Type: "string", MatchKey: true},
 		{Name: "tags", Label: "Tags", Type: "[]string"},
 		{Name: "target_group_id", Label: "TargetGroupID", Type: "string", MatchKey: true},
@@ -7865,23 +4980,23 @@ func init() {
 		{Name: "approval_fields", Label: "ApprovalFields", Type: "[]string"},
 		{Name: "approval_submission_mode", Label: "ApprovalSubmissionMode", Type: "enums.WorkflowApprovalSubmissionMode"},
 		{Name: "cooldown_seconds", Label: "CooldownSeconds", Type: "int"},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "definition_json", Label: "DefinitionJSON", Type: "models.WorkflowDefinitionDocument"},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "draft", Label: "Draft", Type: "bool"},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true},
 		{Name: "is_default", Label: "IsDefault", Type: "bool"},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "published_at", Label: "PublishedAt", Type: "time.Time"},
 		{Name: "revision", Label: "Revision", Type: "int"},
 		{Name: "schema_type", Label: "SchemaType", Type: "string", MatchKey: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Immutable: true},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
 		{Name: "tags", Label: "Tags", Type: "[]string"},
 		{Name: "tracked_fields", Label: "TrackedFields", Type: "[]string"},
 		{Name: "trigger_fields", Label: "TriggerFields", Type: "[]string"},
@@ -7892,13 +5007,13 @@ func init() {
 		{Name: "workflow_kind", Label: "WorkflowKind", Type: "enums.WorkflowKind"},
 	}
 	SchemaWorkflowEvent.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "event_type", Label: "EventType", Type: "enums.WorkflowEventType"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "payload", Label: "Payload", Type: "models.WorkflowEventPayload"},
 		{Name: "tags", Label: "Tags", Type: "[]string"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
@@ -7914,20 +5029,20 @@ func init() {
 		{Name: "campaign_target_id", Label: "CampaignTargetID", Type: "string", MatchKey: true},
 		{Name: "context", Label: "Context", Type: "models.WorkflowInstanceContext"},
 		{Name: "control_id", Label: "ControlID", Type: "string", MatchKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "current_action_index", Label: "CurrentActionIndex", Type: "int"},
 		{Name: "definition_snapshot", Label: "DefinitionSnapshot", Type: "models.WorkflowDefinitionDocument"},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "evidence_id", Label: "EvidenceID", Type: "string", MatchKey: true},
 		{Name: "finding_id", Label: "FindingID", Type: "string", MatchKey: true},
 		{Name: "identity_holder_id", Label: "IdentityHolderID", Type: "string", MatchKey: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true},
 		{Name: "internal_policy_id", Label: "InternalPolicyID", Type: "string", MatchKey: true},
 		{Name: "last_evaluated_at", Label: "LastEvaluatedAt", Type: "time.Time"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true},
 		{Name: "procedure_id", Label: "ProcedureID", Type: "string", MatchKey: true},
 		{Name: "remediation_id", Label: "RemediationID", Type: "string", MatchKey: true},
@@ -7944,1669 +5059,529 @@ func init() {
 		{Name: "workflow_proposal_id", Label: "WorkflowProposalID", Type: "string", MatchKey: true},
 	}
 	SchemaWorkflowObjectRef.Fields = []FieldDescriptor{
-		{Name: "action_plan_id", Label: "ActionPlanID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "assessment_id", Label: "AssessmentID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "assessment_response_id", Label: "AssessmentResponseID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "campaign_id", Label: "CampaignID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "campaign_target_id", Label: "CampaignTargetID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "control_id", Label: "ControlID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Immutable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "directory_account_id", Label: "DirectoryAccountID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "directory_group_id", Label: "DirectoryGroupID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "directory_membership_id", Label: "DirectoryMembershipID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "evidence_id", Label: "EvidenceID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "finding_id", Label: "FindingID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "identity_holder_id", Label: "IdentityHolderID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "internal_policy_id", Label: "InternalPolicyID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "platform_id", Label: "PlatformID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "procedure_id", Label: "ProcedureID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "remediation_id", Label: "RemediationID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "risk_id", Label: "RiskID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "subcontrol_id", Label: "SubcontrolID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "task_id", Label: "TaskID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "action_plan_id", Label: "ActionPlanID", Type: "string", MatchKey: true},
+		{Name: "assessment_id", Label: "AssessmentID", Type: "string", MatchKey: true},
+		{Name: "assessment_response_id", Label: "AssessmentResponseID", Type: "string", MatchKey: true},
+		{Name: "campaign_id", Label: "CampaignID", Type: "string", MatchKey: true},
+		{Name: "campaign_target_id", Label: "CampaignTargetID", Type: "string", MatchKey: true},
+		{Name: "control_id", Label: "ControlID", Type: "string", MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
+		{Name: "directory_account_id", Label: "DirectoryAccountID", Type: "string", MatchKey: true},
+		{Name: "directory_group_id", Label: "DirectoryGroupID", Type: "string", MatchKey: true},
+		{Name: "directory_membership_id", Label: "DirectoryMembershipID", Type: "string", MatchKey: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
+		{Name: "evidence_id", Label: "EvidenceID", Type: "string", MatchKey: true},
+		{Name: "finding_id", Label: "FindingID", Type: "string", MatchKey: true},
+		{Name: "identity_holder_id", Label: "IdentityHolderID", Type: "string", MatchKey: true},
+		{Name: "internal_policy_id", Label: "InternalPolicyID", Type: "string", MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
+		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true},
+		{Name: "procedure_id", Label: "ProcedureID", Type: "string", MatchKey: true},
+		{Name: "remediation_id", Label: "RemediationID", Type: "string", MatchKey: true},
+		{Name: "risk_id", Label: "RiskID", Type: "string", MatchKey: true},
+		{Name: "subcontrol_id", Label: "SubcontrolID", Type: "string", MatchKey: true},
+		{Name: "task_id", Label: "TaskID", Type: "string", MatchKey: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
-		{Name: "vulnerability_id", Label: "VulnerabilityID", Type: "string", Immutable: true, MatchKey: true},
-		{Name: "workflow_instance_id", Label: "WorkflowInstanceID", Type: "string", Immutable: true, MatchKey: true},
+		{Name: "vulnerability_id", Label: "VulnerabilityID", Type: "string", MatchKey: true},
+		{Name: "workflow_instance_id", Label: "WorkflowInstanceID", Type: "string", MatchKey: true},
 	}
 	SchemaActionPlan.Edges = []EdgeDescriptor{
 		{
-			Name:         "controls",
-			Label:        "Controls",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2M",
-			CreateField:  "controlIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ActionPlan.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "action_plan", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ActionPlan.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "action_plan", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ActionPlan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "action_plan", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "controlIDs",
+			AddField:    "addControlIDs",
+			RemoveField: "removeControlIDs",
 		},
 		{
-			Name:         "findings",
-			Label:        "Findings",
-			Target:       SchemaFinding,
-			TargetType:   "Finding",
-			Relationship: "M2M",
-			CreateField:  "findingIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ActionPlan.UpdateOneID(entityID).AddFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "action_plan", Operation: OpLink, EntityID: entityID, Edge: "findings"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ActionPlan.UpdateOneID(entityID).RemoveFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "action_plan", Operation: OpUnlink, EntityID: entityID, Edge: "findings"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ActionPlan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "action_plan", Operation: OpQuery, EntityID: entityID, Edge: "findings"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryFindings().IDs(ctx)
-			},
+			Name:        "findings",
+			Label:       "Findings",
+			Target:      SchemaFinding,
+			TargetType:  "Finding",
+			CreateField: "findingIDs",
+			AddField:    "addFindingIDs",
+			RemoveField: "removeFindingIDs",
 		},
 		{
-			Name:         "remediations",
-			Label:        "Remediations",
-			Target:       SchemaRemediation,
-			TargetType:   "Remediation",
-			Relationship: "M2M",
-			CreateField:  "remediationIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ActionPlan.UpdateOneID(entityID).AddRemediationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "action_plan", Operation: OpLink, EntityID: entityID, Edge: "remediations"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ActionPlan.UpdateOneID(entityID).RemoveRemediationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "action_plan", Operation: OpUnlink, EntityID: entityID, Edge: "remediations"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ActionPlan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "action_plan", Operation: OpQuery, EntityID: entityID, Edge: "remediations"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRemediations().IDs(ctx)
-			},
+			Name:        "remediations",
+			Label:       "Remediations",
+			Target:      SchemaRemediation,
+			TargetType:  "Remediation",
+			CreateField: "remediationIDs",
+			AddField:    "addRemediationIDs",
+			RemoveField: "removeRemediationIDs",
 		},
 		{
-			Name:         "reviews",
-			Label:        "Reviews",
-			Target:       SchemaReview,
-			TargetType:   "Review",
-			Relationship: "M2M",
-			CreateField:  "reviewIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ActionPlan.UpdateOneID(entityID).AddReviewIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "action_plan", Operation: OpLink, EntityID: entityID, Edge: "reviews"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ActionPlan.UpdateOneID(entityID).RemoveReviewIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "action_plan", Operation: OpUnlink, EntityID: entityID, Edge: "reviews"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ActionPlan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "action_plan", Operation: OpQuery, EntityID: entityID, Edge: "reviews"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryReviews().IDs(ctx)
-			},
+			Name:        "reviews",
+			Label:       "Reviews",
+			Target:      SchemaReview,
+			TargetType:  "Review",
+			CreateField: "reviewIDs",
+			AddField:    "addReviewIDs",
+			RemoveField: "removeReviewIDs",
 		},
 		{
-			Name:         "risks",
-			Label:        "Risks",
-			Target:       SchemaRisk,
-			TargetType:   "Risk",
-			Relationship: "M2M",
-			CreateField:  "riskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ActionPlan.UpdateOneID(entityID).AddRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "action_plan", Operation: OpLink, EntityID: entityID, Edge: "risks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ActionPlan.UpdateOneID(entityID).RemoveRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "action_plan", Operation: OpUnlink, EntityID: entityID, Edge: "risks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ActionPlan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "action_plan", Operation: OpQuery, EntityID: entityID, Edge: "risks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRisks().IDs(ctx)
-			},
+			Name:        "risks",
+			Label:       "Risks",
+			Target:      SchemaRisk,
+			TargetType:  "Risk",
+			CreateField: "riskIDs",
+			AddField:    "addRiskIDs",
+			RemoveField: "removeRiskIDs",
 		},
 		{
-			Name:         "scans",
-			Label:        "Scans",
-			Target:       SchemaScan,
-			TargetType:   "Scan",
-			Relationship: "M2M",
-			CreateField:  "scanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ActionPlan.UpdateOneID(entityID).AddScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "action_plan", Operation: OpLink, EntityID: entityID, Edge: "scans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ActionPlan.UpdateOneID(entityID).RemoveScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "action_plan", Operation: OpUnlink, EntityID: entityID, Edge: "scans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ActionPlan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "action_plan", Operation: OpQuery, EntityID: entityID, Edge: "scans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryScans().IDs(ctx)
-			},
+			Name:        "scans",
+			Label:       "Scans",
+			Target:      SchemaScan,
+			TargetType:  "Scan",
+			CreateField: "scanIDs",
+			AddField:    "addScanIDs",
+			RemoveField: "removeScanIDs",
 		},
 		{
-			Name:         "tasks",
-			Label:        "Tasks",
-			Target:       SchemaTask,
-			TargetType:   "Task",
-			Relationship: "M2M",
-			CreateField:  "taskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ActionPlan.UpdateOneID(entityID).AddTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "action_plan", Operation: OpLink, EntityID: entityID, Edge: "tasks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ActionPlan.UpdateOneID(entityID).RemoveTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "action_plan", Operation: OpUnlink, EntityID: entityID, Edge: "tasks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ActionPlan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "action_plan", Operation: OpQuery, EntityID: entityID, Edge: "tasks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTasks().IDs(ctx)
-			},
+			Name:        "tasks",
+			Label:       "Tasks",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			CreateField: "taskIDs",
+			AddField:    "addTaskIDs",
+			RemoveField: "removeTaskIDs",
 		},
 		{
-			Name:         "vulnerabilities",
-			Label:        "Vulnerabilities",
-			Target:       SchemaVulnerability,
-			TargetType:   "Vulnerability",
-			Relationship: "M2M",
-			CreateField:  "vulnerabilityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ActionPlan.UpdateOneID(entityID).AddVulnerabilityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "action_plan", Operation: OpLink, EntityID: entityID, Edge: "vulnerabilities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ActionPlan.UpdateOneID(entityID).RemoveVulnerabilityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "action_plan", Operation: OpUnlink, EntityID: entityID, Edge: "vulnerabilities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ActionPlan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "action_plan", Operation: OpQuery, EntityID: entityID, Edge: "vulnerabilities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryVulnerabilities().IDs(ctx)
-			},
+			Name:        "vulnerabilities",
+			Label:       "Vulnerabilities",
+			Target:      SchemaVulnerability,
+			TargetType:  "Vulnerability",
+			CreateField: "vulnerabilityIDs",
+			AddField:    "addVulnerabilityIDs",
+			RemoveField: "removeVulnerabilityIDs",
 		},
 		{
 			Name:             "workflow_object_refs",
 			Label:            "WorkflowObjectRefs",
 			Target:           SchemaWorkflowObjectRef,
 			TargetType:       "WorkflowObjectRef",
-			Relationship:     "O2M",
 			CreateField:      "workflowobjectrefIDs",
+			AddField:         "addWorkflowObjectRefIDs",
+			RemoveField:      "removeWorkflowObjectRefIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ActionPlan.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "action_plan", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ActionPlan.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "action_plan", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ActionPlan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "action_plan", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
 		},
 	}
 	SchemaAssessment.Edges = []EdgeDescriptor{
 		{
-			Name:         "assessment_responses",
-			Label:        "AssessmentResponses",
-			Target:       SchemaAssessmentResponse,
-			TargetType:   "AssessmentResponse",
-			Relationship: "O2M",
-			CreateField:  "assessmentresponseIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Assessment.UpdateOneID(entityID).AddAssessmentResponseIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment", Operation: OpLink, EntityID: entityID, Edge: "assessment_responses"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Assessment.UpdateOneID(entityID).RemoveAssessmentResponseIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment", Operation: OpUnlink, EntityID: entityID, Edge: "assessment_responses"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Assessment.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "assessment", Operation: OpQuery, EntityID: entityID, Edge: "assessment_responses"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssessmentResponses().IDs(ctx)
-			},
+			Name:        "assessment_responses",
+			Label:       "AssessmentResponses",
+			Target:      SchemaAssessmentResponse,
+			TargetType:  "AssessmentResponse",
+			CreateField: "assessmentresponseIDs",
+			AddField:    "addAssessmentResponseIDs",
+			RemoveField: "removeAssessmentResponseIDs",
 		},
 		{
-			Name:         "campaigns",
-			Label:        "Campaigns",
-			Target:       SchemaCampaign,
-			TargetType:   "Campaign",
-			Relationship: "O2M",
-			CreateField:  "campaignIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Assessment.UpdateOneID(entityID).AddCampaignIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment", Operation: OpLink, EntityID: entityID, Edge: "campaigns"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Assessment.UpdateOneID(entityID).RemoveCampaignIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment", Operation: OpUnlink, EntityID: entityID, Edge: "campaigns"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Assessment.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "assessment", Operation: OpQuery, EntityID: entityID, Edge: "campaigns"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryCampaigns().IDs(ctx)
-			},
+			Name:        "campaigns",
+			Label:       "Campaigns",
+			Target:      SchemaCampaign,
+			TargetType:  "Campaign",
+			CreateField: "campaignIDs",
+			AddField:    "addCampaignIDs",
+			RemoveField: "removeCampaignIDs",
 		},
 		{
-			Name:         "identity_holders",
-			Label:        "IdentityHolders",
-			Target:       SchemaIdentityHolder,
-			TargetType:   "IdentityHolder",
-			Relationship: "M2M",
-			CreateField:  "identityholderIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Assessment.UpdateOneID(entityID).AddIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment", Operation: OpLink, EntityID: entityID, Edge: "identity_holders"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Assessment.UpdateOneID(entityID).RemoveIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment", Operation: OpUnlink, EntityID: entityID, Edge: "identity_holders"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Assessment.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "assessment", Operation: OpQuery, EntityID: entityID, Edge: "identity_holders"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryIdentityHolders().IDs(ctx)
-			},
+			Name:        "identity_holders",
+			Label:       "IdentityHolders",
+			Target:      SchemaIdentityHolder,
+			TargetType:  "IdentityHolder",
+			CreateField: "identityholderIDs",
+			AddField:    "addIdentityHolderIDs",
+			RemoveField: "removeIdentityHolderIDs",
 		},
 		{
-			Name:         "platforms",
-			Label:        "Platforms",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2M",
-			CreateField:  "platformIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Assessment.UpdateOneID(entityID).AddPlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment", Operation: OpLink, EntityID: entityID, Edge: "platforms"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Assessment.UpdateOneID(entityID).RemovePlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment", Operation: OpUnlink, EntityID: entityID, Edge: "platforms"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Assessment.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "assessment", Operation: OpQuery, EntityID: entityID, Edge: "platforms"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryPlatforms().IDs(ctx)
-			},
+			Name:        "platforms",
+			Label:       "Platforms",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			CreateField: "platformIDs",
+			AddField:    "addPlatformIDs",
+			RemoveField: "removePlatformIDs",
 		},
 		{
-			Name:         "template",
-			Label:        "Template",
-			Target:       SchemaTemplate,
-			TargetType:   "Template",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "templateID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.Assessment.UpdateOneID(entityID).SetTemplateID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment", Operation: OpLink, EntityID: entityID, Edge: "template"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Assessment.UpdateOneID(entityID).ClearTemplate().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment", Operation: OpUnlink, EntityID: entityID, Edge: "template"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Assessment.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "assessment", Operation: OpQuery, EntityID: entityID, Edge: "template"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTemplate().IDs(ctx)
-			},
+			Name:        "template",
+			Label:       "Template",
+			Target:      SchemaTemplate,
+			TargetType:  "Template",
+			Unique:      true,
+			CreateField: "templateID",
+			ClearField:  "clearTemplate",
+			Field:       "template_id",
 		},
 		{
-			Name:         "workflow_object_refs",
-			Label:        "WorkflowObjectRefs",
-			Target:       SchemaWorkflowObjectRef,
-			TargetType:   "WorkflowObjectRef",
-			Relationship: "O2M",
-			CreateField:  "workflowobjectrefIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Assessment.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Assessment.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Assessment.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "assessment", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflowobjectrefIDs",
+			AddField:    "addWorkflowObjectRefIDs",
+			RemoveField: "removeWorkflowObjectRefIDs",
 		},
 	}
 	SchemaAssessmentResponse.Edges = []EdgeDescriptor{
 		{
-			Name:         "assessment",
-			Label:        "Assessment",
-			Target:       SchemaAssessment,
-			TargetType:   "Assessment",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "assessmentID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.AssessmentResponse.UpdateOneID(entityID).SetAssessmentID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpLink, EntityID: entityID, Edge: "assessment"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.AssessmentResponse.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpQuery, EntityID: entityID, Edge: "assessment"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssessment().IDs(ctx)
-			},
+			Name:        "assessment",
+			Label:       "Assessment",
+			Target:      SchemaAssessment,
+			TargetType:  "Assessment",
+			Unique:      true,
+			CreateField: "assessmentID",
+			Field:       "assessment_id",
 		},
 		{
-			Name:         "campaign",
-			Label:        "Campaign",
-			Target:       SchemaCampaign,
-			TargetType:   "Campaign",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "campaignID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.AssessmentResponse.UpdateOneID(entityID).SetCampaignID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpLink, EntityID: entityID, Edge: "campaign"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.AssessmentResponse.UpdateOneID(entityID).ClearCampaign().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpUnlink, EntityID: entityID, Edge: "campaign"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.AssessmentResponse.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpQuery, EntityID: entityID, Edge: "campaign"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryCampaign().IDs(ctx)
-			},
+			Name:        "campaign",
+			Label:       "Campaign",
+			Target:      SchemaCampaign,
+			TargetType:  "Campaign",
+			Unique:      true,
+			CreateField: "campaignID",
+			ClearField:  "clearCampaign",
+			Field:       "campaign_id",
 		},
 		{
-			Name:         "document",
-			Label:        "Document",
-			Target:       SchemaDocumentData,
-			TargetType:   "DocumentData",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "documentID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.AssessmentResponse.UpdateOneID(entityID).SetDocumentID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpLink, EntityID: entityID, Edge: "document"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.AssessmentResponse.UpdateOneID(entityID).ClearDocument().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpUnlink, EntityID: entityID, Edge: "document"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.AssessmentResponse.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpQuery, EntityID: entityID, Edge: "document"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryDocument().IDs(ctx)
-			},
+			Name:        "document",
+			Label:       "Document",
+			Target:      SchemaDocumentData,
+			TargetType:  "DocumentData",
+			Unique:      true,
+			CreateField: "documentID",
+			ClearField:  "clearDocument",
+			Field:       "document_data_id",
 		},
 		{
-			Name:         "entity",
-			Label:        "Entity",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "entityID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.AssessmentResponse.UpdateOneID(entityID).SetEntityID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpLink, EntityID: entityID, Edge: "entity"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.AssessmentResponse.UpdateOneID(entityID).ClearEntity().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpUnlink, EntityID: entityID, Edge: "entity"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.AssessmentResponse.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpQuery, EntityID: entityID, Edge: "entity"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEntity().IDs(ctx)
-			},
+			Name:        "entity",
+			Label:       "Entity",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			Unique:      true,
+			CreateField: "entityID",
+			ClearField:  "clearEntity",
+			Field:       "entity_id",
 		},
 		{
-			Name:         "identity_holder",
-			Label:        "IdentityHolder",
-			Target:       SchemaIdentityHolder,
-			TargetType:   "IdentityHolder",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "identityHolderID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.AssessmentResponse.UpdateOneID(entityID).SetIdentityHolderID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpLink, EntityID: entityID, Edge: "identity_holder"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.AssessmentResponse.UpdateOneID(entityID).ClearIdentityHolder().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpUnlink, EntityID: entityID, Edge: "identity_holder"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.AssessmentResponse.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpQuery, EntityID: entityID, Edge: "identity_holder"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryIdentityHolder().IDs(ctx)
-			},
+			Name:        "identity_holder",
+			Label:       "IdentityHolder",
+			Target:      SchemaIdentityHolder,
+			TargetType:  "IdentityHolder",
+			Unique:      true,
+			CreateField: "identityHolderID",
+			ClearField:  "clearIdentityHolder",
+			Field:       "identity_holder_id",
 		},
 		{
-			Name:         "vendor_risk_scores",
-			Label:        "VendorRiskScores",
-			Target:       SchemaVendorRiskScore,
-			TargetType:   "VendorRiskScore",
-			Relationship: "O2M",
-			CreateField:  "vendorriskscoreIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.AssessmentResponse.UpdateOneID(entityID).AddVendorRiskScoreIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpLink, EntityID: entityID, Edge: "vendor_risk_scores"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.AssessmentResponse.UpdateOneID(entityID).RemoveVendorRiskScoreIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpUnlink, EntityID: entityID, Edge: "vendor_risk_scores"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.AssessmentResponse.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpQuery, EntityID: entityID, Edge: "vendor_risk_scores"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryVendorRiskScores().IDs(ctx)
-			},
+			Name:        "vendor_risk_scores",
+			Label:       "VendorRiskScores",
+			Target:      SchemaVendorRiskScore,
+			TargetType:  "VendorRiskScore",
+			CreateField: "vendorriskscoreIDs",
+			AddField:    "addVendorRiskScoreIDs",
+			RemoveField: "removeVendorRiskScoreIDs",
 		},
 		{
-			Name:         "workflow_object_refs",
-			Label:        "WorkflowObjectRefs",
-			Target:       SchemaWorkflowObjectRef,
-			TargetType:   "WorkflowObjectRef",
-			Relationship: "O2M",
-			CreateField:  "workflowobjectrefIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.AssessmentResponse.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.AssessmentResponse.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.AssessmentResponse.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "assessment_response", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflowobjectrefIDs",
+			AddField:    "addWorkflowObjectRefIDs",
+			RemoveField: "removeWorkflowObjectRefIDs",
 		},
 	}
 	SchemaAsset.Edges = []EdgeDescriptor{
 		{
-			Name:         "connected_assets",
-			Label:        "ConnectedAssets",
-			Target:       SchemaAsset,
-			TargetType:   "Asset",
-			Relationship: "M2M",
-			CreateField:  "connectedassetIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).AddConnectedAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpLink, EntityID: entityID, Edge: "connected_assets"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).RemoveConnectedAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpUnlink, EntityID: entityID, Edge: "connected_assets"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Asset.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "asset", Operation: OpQuery, EntityID: entityID, Edge: "connected_assets"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryConnectedAssets().IDs(ctx)
-			},
+			Name:        "connected_assets",
+			Label:       "ConnectedAssets",
+			Target:      SchemaAsset,
+			TargetType:  "Asset",
+			CreateField: "connectedassetIDs",
+			AddField:    "addConnectedAssetIDs",
+			RemoveField: "removeConnectedAssetIDs",
 		},
 		{
-			Name:         "connected_from",
-			Label:        "ConnectedFrom",
-			Target:       SchemaAsset,
-			TargetType:   "Asset",
-			Relationship: "M2M",
-			CreateField:  "connectedfromIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).AddConnectedFromIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpLink, EntityID: entityID, Edge: "connected_from"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).RemoveConnectedFromIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpUnlink, EntityID: entityID, Edge: "connected_from"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Asset.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "asset", Operation: OpQuery, EntityID: entityID, Edge: "connected_from"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryConnectedFrom().IDs(ctx)
-			},
+			Name:        "connected_from",
+			Label:       "ConnectedFrom",
+			Target:      SchemaAsset,
+			TargetType:  "Asset",
+			CreateField: "connectedfromIDs",
+			AddField:    "addConnectedFromIDs",
+			RemoveField: "removeConnectedFromIDs",
 		},
 		{
-			Name:         "controls",
-			Label:        "Controls",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2M",
-			CreateField:  "controlIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Asset.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "asset", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "controlIDs",
+			AddField:    "addControlIDs",
+			RemoveField: "removeControlIDs",
 		},
 		{
-			Name:         "entities",
-			Label:        "Entities",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "M2M",
-			CreateField:  "entityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).AddEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpLink, EntityID: entityID, Edge: "entities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).RemoveEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpUnlink, EntityID: entityID, Edge: "entities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Asset.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "asset", Operation: OpQuery, EntityID: entityID, Edge: "entities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEntities().IDs(ctx)
-			},
+			Name:        "entities",
+			Label:       "Entities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "entityIDs",
+			AddField:    "addEntityIDs",
+			RemoveField: "removeEntityIDs",
 		},
 		{
-			Name:         "identity_holders",
-			Label:        "IdentityHolders",
-			Target:       SchemaIdentityHolder,
-			TargetType:   "IdentityHolder",
-			Relationship: "M2M",
-			CreateField:  "identityholderIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).AddIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpLink, EntityID: entityID, Edge: "identity_holders"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).RemoveIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpUnlink, EntityID: entityID, Edge: "identity_holders"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Asset.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "asset", Operation: OpQuery, EntityID: entityID, Edge: "identity_holders"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryIdentityHolders().IDs(ctx)
-			},
+			Name:        "identity_holders",
+			Label:       "IdentityHolders",
+			Target:      SchemaIdentityHolder,
+			TargetType:  "IdentityHolder",
+			CreateField: "identityholderIDs",
+			AddField:    "addIdentityHolderIDs",
+			RemoveField: "removeIdentityHolderIDs",
 		},
 		{
-			Name:         "internal_policies",
-			Label:        "InternalPolicies",
-			Target:       SchemaInternalPolicy,
-			TargetType:   "InternalPolicy",
-			Relationship: "M2M",
-			CreateField:  "internalpolicyIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).AddInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpLink, EntityID: entityID, Edge: "internal_policies"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).RemoveInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpUnlink, EntityID: entityID, Edge: "internal_policies"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Asset.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "asset", Operation: OpQuery, EntityID: entityID, Edge: "internal_policies"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryInternalPolicies().IDs(ctx)
-			},
+			Name:        "internal_policies",
+			Label:       "InternalPolicies",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			CreateField: "internalpolicyIDs",
+			AddField:    "addInternalPolicyIDs",
+			RemoveField: "removeInternalPolicyIDs",
 		},
 		{
-			Name:         "out_of_scope_platforms",
-			Label:        "OutOfScopePlatforms",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2M",
-			CreateField:  "outofscopeplatformIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).AddOutOfScopePlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpLink, EntityID: entityID, Edge: "out_of_scope_platforms"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).RemoveOutOfScopePlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpUnlink, EntityID: entityID, Edge: "out_of_scope_platforms"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Asset.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "asset", Operation: OpQuery, EntityID: entityID, Edge: "out_of_scope_platforms"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryOutOfScopePlatforms().IDs(ctx)
-			},
+			Name:        "out_of_scope_platforms",
+			Label:       "OutOfScopePlatforms",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			CreateField: "outofscopeplatformIDs",
+			AddField:    "addOutOfScopePlatformIDs",
+			RemoveField: "removeOutOfScopePlatformIDs",
 		},
 		{
-			Name:         "platforms",
-			Label:        "Platforms",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2M",
-			CreateField:  "platformIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).AddPlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpLink, EntityID: entityID, Edge: "platforms"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).RemovePlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpUnlink, EntityID: entityID, Edge: "platforms"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Asset.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "asset", Operation: OpQuery, EntityID: entityID, Edge: "platforms"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryPlatforms().IDs(ctx)
-			},
+			Name:        "platforms",
+			Label:       "Platforms",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			CreateField: "platformIDs",
+			AddField:    "addPlatformIDs",
+			RemoveField: "removePlatformIDs",
 		},
 		{
-			Name:         "scans",
-			Label:        "Scans",
-			Target:       SchemaScan,
-			TargetType:   "Scan",
-			Relationship: "M2M",
-			CreateField:  "scanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).AddScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpLink, EntityID: entityID, Edge: "scans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).RemoveScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpUnlink, EntityID: entityID, Edge: "scans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Asset.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "asset", Operation: OpQuery, EntityID: entityID, Edge: "scans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryScans().IDs(ctx)
-			},
+			Name:        "scans",
+			Label:       "Scans",
+			Target:      SchemaScan,
+			TargetType:  "Scan",
+			CreateField: "scanIDs",
+			AddField:    "addScanIDs",
+			RemoveField: "removeScanIDs",
 		},
 		{
-			Name:         "source_platform",
-			Label:        "SourcePlatform",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "sourcePlatformID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.Asset.UpdateOneID(entityID).SetSourcePlatformID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpLink, EntityID: entityID, Edge: "source_platform"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).ClearSourcePlatform().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpUnlink, EntityID: entityID, Edge: "source_platform"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Asset.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "asset", Operation: OpQuery, EntityID: entityID, Edge: "source_platform"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySourcePlatform().IDs(ctx)
-			},
+			Name:        "source_platform",
+			Label:       "SourcePlatform",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			Unique:      true,
+			CreateField: "sourcePlatformID",
+			ClearField:  "clearSourcePlatform",
+			Field:       "source_platform_id",
 		},
 		{
-			Name:         "subcontrols",
-			Label:        "Subcontrols",
-			Target:       SchemaSubcontrol,
-			TargetType:   "Subcontrol",
-			Relationship: "M2M",
-			CreateField:  "subcontrolIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).AddSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpLink, EntityID: entityID, Edge: "subcontrols"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).RemoveSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpUnlink, EntityID: entityID, Edge: "subcontrols"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Asset.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "asset", Operation: OpQuery, EntityID: entityID, Edge: "subcontrols"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrols().IDs(ctx)
-			},
+			Name:        "subcontrols",
+			Label:       "Subcontrols",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			CreateField: "subcontrolIDs",
+			AddField:    "addSubcontrolIDs",
+			RemoveField: "removeSubcontrolIDs",
 		},
 		{
-			Name:         "system_details",
-			Label:        "SystemDetails",
-			Target:       SchemaSystemDetail,
-			TargetType:   "SystemDetail",
-			Relationship: "M2M",
-			CreateField:  "systemdetailIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).AddSystemDetailIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpLink, EntityID: entityID, Edge: "system_details"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Asset.UpdateOneID(entityID).RemoveSystemDetailIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "asset", Operation: OpUnlink, EntityID: entityID, Edge: "system_details"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Asset.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "asset", Operation: OpQuery, EntityID: entityID, Edge: "system_details"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySystemDetails().IDs(ctx)
-			},
+			Name:        "system_details",
+			Label:       "SystemDetails",
+			Target:      SchemaSystemDetail,
+			TargetType:  "SystemDetail",
+			CreateField: "systemdetailIDs",
+			AddField:    "addSystemDetailIDs",
+			RemoveField: "removeSystemDetailIDs",
 		},
 	}
 	SchemaCampaign.Edges = []EdgeDescriptor{
 		{
-			Name:         "assessment",
-			Label:        "Assessment",
-			Target:       SchemaAssessment,
-			TargetType:   "Assessment",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "assessmentID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.Campaign.UpdateOneID(entityID).SetAssessmentID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpLink, EntityID: entityID, Edge: "assessment"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Campaign.UpdateOneID(entityID).ClearAssessment().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpUnlink, EntityID: entityID, Edge: "assessment"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Campaign.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "campaign", Operation: OpQuery, EntityID: entityID, Edge: "assessment"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssessment().IDs(ctx)
-			},
+			Name:        "assessment",
+			Label:       "Assessment",
+			Target:      SchemaAssessment,
+			TargetType:  "Assessment",
+			Unique:      true,
+			CreateField: "assessmentID",
+			ClearField:  "clearAssessment",
+			Field:       "assessment_id",
 		},
 		{
-			Name:         "assessment_responses",
-			Label:        "AssessmentResponses",
-			Target:       SchemaAssessmentResponse,
-			TargetType:   "AssessmentResponse",
-			Relationship: "O2M",
-			CreateField:  "assessmentresponseIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Campaign.UpdateOneID(entityID).AddAssessmentResponseIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpLink, EntityID: entityID, Edge: "assessment_responses"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Campaign.UpdateOneID(entityID).RemoveAssessmentResponseIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpUnlink, EntityID: entityID, Edge: "assessment_responses"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Campaign.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "campaign", Operation: OpQuery, EntityID: entityID, Edge: "assessment_responses"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssessmentResponses().IDs(ctx)
-			},
+			Name:        "assessment_responses",
+			Label:       "AssessmentResponses",
+			Target:      SchemaAssessmentResponse,
+			TargetType:  "AssessmentResponse",
+			CreateField: "assessmentresponseIDs",
+			AddField:    "addAssessmentResponseIDs",
+			RemoveField: "removeAssessmentResponseIDs",
 		},
 		{
-			Name:         "campaign_targets",
-			Label:        "CampaignTargets",
-			Target:       SchemaCampaignTarget,
-			TargetType:   "CampaignTarget",
-			Relationship: "O2M",
-			CreateField:  "campaigntargetIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Campaign.UpdateOneID(entityID).AddCampaignTargetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpLink, EntityID: entityID, Edge: "campaign_targets"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Campaign.UpdateOneID(entityID).RemoveCampaignTargetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpUnlink, EntityID: entityID, Edge: "campaign_targets"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Campaign.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "campaign", Operation: OpQuery, EntityID: entityID, Edge: "campaign_targets"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryCampaignTargets().IDs(ctx)
-			},
+			Name:        "campaign_targets",
+			Label:       "CampaignTargets",
+			Target:      SchemaCampaignTarget,
+			TargetType:  "CampaignTarget",
+			CreateField: "campaigntargetIDs",
+			AddField:    "addCampaignTargetIDs",
+			RemoveField: "removeCampaignTargetIDs",
 		},
 		{
-			Name:         "contacts",
-			Label:        "Contacts",
-			Target:       SchemaContact,
-			TargetType:   "Contact",
-			Relationship: "M2M",
-			CreateField:  "contactIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Campaign.UpdateOneID(entityID).AddContactIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpLink, EntityID: entityID, Edge: "contacts"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Campaign.UpdateOneID(entityID).RemoveContactIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpUnlink, EntityID: entityID, Edge: "contacts"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Campaign.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "campaign", Operation: OpQuery, EntityID: entityID, Edge: "contacts"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryContacts().IDs(ctx)
-			},
+			Name:        "contacts",
+			Label:       "Contacts",
+			Target:      SchemaContact,
+			TargetType:  "Contact",
+			CreateField: "contactIDs",
+			AddField:    "addContactIDs",
+			RemoveField: "removeContactIDs",
 		},
 		{
-			Name:         "controls",
-			Label:        "Controls",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2M",
-			CreateField:  "controlIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Campaign.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Campaign.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Campaign.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "campaign", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "controlIDs",
+			AddField:    "addControlIDs",
+			RemoveField: "removeControlIDs",
 		},
 		{
-			Name:         "email_template",
-			Label:        "EmailTemplate",
-			Target:       SchemaEmailTemplate,
-			TargetType:   "EmailTemplate",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "emailTemplateID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.Campaign.UpdateOneID(entityID).SetEmailTemplateID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpLink, EntityID: entityID, Edge: "email_template"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Campaign.UpdateOneID(entityID).ClearEmailTemplate().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpUnlink, EntityID: entityID, Edge: "email_template"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Campaign.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "campaign", Operation: OpQuery, EntityID: entityID, Edge: "email_template"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEmailTemplate().IDs(ctx)
-			},
+			Name:        "email_template",
+			Label:       "EmailTemplate",
+			Target:      SchemaEmailTemplate,
+			TargetType:  "EmailTemplate",
+			Unique:      true,
+			CreateField: "emailTemplateID",
+			ClearField:  "clearEmailTemplate",
+			Field:       "email_template_id",
 		},
 		{
-			Name:         "entity",
-			Label:        "Entity",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "entityID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.Campaign.UpdateOneID(entityID).SetEntityID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpLink, EntityID: entityID, Edge: "entity"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Campaign.UpdateOneID(entityID).ClearEntity().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpUnlink, EntityID: entityID, Edge: "entity"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Campaign.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "campaign", Operation: OpQuery, EntityID: entityID, Edge: "entity"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEntity().IDs(ctx)
-			},
+			Name:        "entity",
+			Label:       "Entity",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			Unique:      true,
+			CreateField: "entityID",
+			ClearField:  "clearEntity",
+			Field:       "entity_id",
 		},
 		{
-			Name:         "identity_holders",
-			Label:        "IdentityHolders",
-			Target:       SchemaIdentityHolder,
-			TargetType:   "IdentityHolder",
-			Relationship: "M2M",
-			CreateField:  "identityholderIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Campaign.UpdateOneID(entityID).AddIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpLink, EntityID: entityID, Edge: "identity_holders"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Campaign.UpdateOneID(entityID).RemoveIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpUnlink, EntityID: entityID, Edge: "identity_holders"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Campaign.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "campaign", Operation: OpQuery, EntityID: entityID, Edge: "identity_holders"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryIdentityHolders().IDs(ctx)
-			},
+			Name:        "identity_holders",
+			Label:       "IdentityHolders",
+			Target:      SchemaIdentityHolder,
+			TargetType:  "IdentityHolder",
+			CreateField: "identityholderIDs",
+			AddField:    "addIdentityHolderIDs",
+			RemoveField: "removeIdentityHolderIDs",
 		},
 		{
-			Name:         "template",
-			Label:        "Template",
-			Target:       SchemaTemplate,
-			TargetType:   "Template",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "templateID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.Campaign.UpdateOneID(entityID).SetTemplateID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpLink, EntityID: entityID, Edge: "template"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Campaign.UpdateOneID(entityID).ClearTemplate().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpUnlink, EntityID: entityID, Edge: "template"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Campaign.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "campaign", Operation: OpQuery, EntityID: entityID, Edge: "template"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTemplate().IDs(ctx)
-			},
+			Name:        "template",
+			Label:       "Template",
+			Target:      SchemaTemplate,
+			TargetType:  "Template",
+			Unique:      true,
+			CreateField: "templateID",
+			ClearField:  "clearTemplate",
+			Field:       "template_id",
 		},
 		{
-			Name:         "workflow_object_refs",
-			Label:        "WorkflowObjectRefs",
-			Target:       SchemaWorkflowObjectRef,
-			TargetType:   "WorkflowObjectRef",
-			Relationship: "O2M",
-			CreateField:  "workflowobjectrefIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Campaign.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Campaign.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Campaign.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "campaign", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflowobjectrefIDs",
+			AddField:    "addWorkflowObjectRefIDs",
+			RemoveField: "removeWorkflowObjectRefIDs",
 		},
 	}
 	SchemaCampaignTarget.Edges = []EdgeDescriptor{
 		{
-			Name:         "campaign",
-			Label:        "Campaign",
-			Target:       SchemaCampaign,
-			TargetType:   "Campaign",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "campaignID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.CampaignTarget.UpdateOneID(entityID).SetCampaignID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign_target", Operation: OpLink, EntityID: entityID, Edge: "campaign"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.CampaignTarget.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "campaign_target", Operation: OpQuery, EntityID: entityID, Edge: "campaign"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryCampaign().IDs(ctx)
-			},
+			Name:        "campaign",
+			Label:       "Campaign",
+			Target:      SchemaCampaign,
+			TargetType:  "Campaign",
+			Unique:      true,
+			CreateField: "campaignID",
+			Field:       "campaign_id",
 		},
 		{
-			Name:         "contact",
-			Label:        "Contact",
-			Target:       SchemaContact,
-			TargetType:   "Contact",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "contactID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.CampaignTarget.UpdateOneID(entityID).SetContactID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign_target", Operation: OpLink, EntityID: entityID, Edge: "contact"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.CampaignTarget.UpdateOneID(entityID).ClearContact().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign_target", Operation: OpUnlink, EntityID: entityID, Edge: "contact"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.CampaignTarget.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "campaign_target", Operation: OpQuery, EntityID: entityID, Edge: "contact"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryContact().IDs(ctx)
-			},
+			Name:        "contact",
+			Label:       "Contact",
+			Target:      SchemaContact,
+			TargetType:  "Contact",
+			Unique:      true,
+			CreateField: "contactID",
+			ClearField:  "clearContact",
+			Field:       "contact_id",
 		},
 		{
-			Name:         "workflow_object_refs",
-			Label:        "WorkflowObjectRefs",
-			Target:       SchemaWorkflowObjectRef,
-			TargetType:   "WorkflowObjectRef",
-			Relationship: "O2M",
-			CreateField:  "workflowobjectrefIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.CampaignTarget.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign_target", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.CampaignTarget.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "campaign_target", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.CampaignTarget.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "campaign_target", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflowobjectrefIDs",
+			AddField:    "addWorkflowObjectRefIDs",
+			RemoveField: "removeWorkflowObjectRefIDs",
 		},
 	}
 	SchemaCheckResult.Edges = []EdgeDescriptor{
 		{
-			Name:         "controls",
-			Label:        "Controls",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2M",
-			CreateField:  "controlIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.CheckResult.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "check_result", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.CheckResult.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "check_result", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.CheckResult.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "check_result", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "controlIDs",
+			AddField:    "addControlIDs",
+			RemoveField: "removeControlIDs",
 		},
 		{
-			Name:         "findings",
-			Label:        "Findings",
-			Target:       SchemaFinding,
-			TargetType:   "Finding",
-			Relationship: "M2M",
-			CreateField:  "findingIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.CheckResult.UpdateOneID(entityID).AddFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "check_result", Operation: OpLink, EntityID: entityID, Edge: "findings"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.CheckResult.UpdateOneID(entityID).RemoveFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "check_result", Operation: OpUnlink, EntityID: entityID, Edge: "findings"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.CheckResult.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "check_result", Operation: OpQuery, EntityID: entityID, Edge: "findings"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryFindings().IDs(ctx)
-			},
+			Name:        "findings",
+			Label:       "Findings",
+			Target:      SchemaFinding,
+			TargetType:  "Finding",
+			CreateField: "findingIDs",
+			AddField:    "addFindingIDs",
+			RemoveField: "removeFindingIDs",
 		},
 	}
 	SchemaContact.Edges = []EdgeDescriptor{
 		{
-			Name:         "campaign_targets",
-			Label:        "CampaignTargets",
-			Target:       SchemaCampaignTarget,
-			TargetType:   "CampaignTarget",
-			Relationship: "O2M",
-			CreateField:  "campaigntargetIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Contact.UpdateOneID(entityID).AddCampaignTargetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "contact", Operation: OpLink, EntityID: entityID, Edge: "campaign_targets"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Contact.UpdateOneID(entityID).RemoveCampaignTargetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "contact", Operation: OpUnlink, EntityID: entityID, Edge: "campaign_targets"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Contact.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "contact", Operation: OpQuery, EntityID: entityID, Edge: "campaign_targets"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryCampaignTargets().IDs(ctx)
-			},
+			Name:        "campaign_targets",
+			Label:       "CampaignTargets",
+			Target:      SchemaCampaignTarget,
+			TargetType:  "CampaignTarget",
+			CreateField: "campaigntargetIDs",
+			AddField:    "addCampaignTargetIDs",
+			RemoveField: "removeCampaignTargetIDs",
 		},
 		{
-			Name:         "campaigns",
-			Label:        "Campaigns",
-			Target:       SchemaCampaign,
-			TargetType:   "Campaign",
-			Relationship: "M2M",
-			CreateField:  "campaignIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Contact.UpdateOneID(entityID).AddCampaignIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "contact", Operation: OpLink, EntityID: entityID, Edge: "campaigns"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Contact.UpdateOneID(entityID).RemoveCampaignIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "contact", Operation: OpUnlink, EntityID: entityID, Edge: "campaigns"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Contact.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "contact", Operation: OpQuery, EntityID: entityID, Edge: "campaigns"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryCampaigns().IDs(ctx)
-			},
+			Name:        "campaigns",
+			Label:       "Campaigns",
+			Target:      SchemaCampaign,
+			TargetType:  "Campaign",
+			CreateField: "campaignIDs",
+			AddField:    "addCampaignIDs",
+			RemoveField: "removeCampaignIDs",
 		},
 		{
-			Name:         "entities",
-			Label:        "Entities",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "M2M",
-			CreateField:  "entityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Contact.UpdateOneID(entityID).AddEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "contact", Operation: OpLink, EntityID: entityID, Edge: "entities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Contact.UpdateOneID(entityID).RemoveEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "contact", Operation: OpUnlink, EntityID: entityID, Edge: "entities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Contact.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "contact", Operation: OpQuery, EntityID: entityID, Edge: "entities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEntities().IDs(ctx)
-			},
+			Name:        "entities",
+			Label:       "Entities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "entityIDs",
+			AddField:    "addEntityIDs",
+			RemoveField: "removeEntityIDs",
 		},
 	}
 	SchemaControl.Edges = []EdgeDescriptor{
@@ -9615,4671 +5590,1450 @@ func init() {
 			Label:            "ActionPlans",
 			Target:           SchemaActionPlan,
 			TargetType:       "ActionPlan",
-			Relationship:     "M2M",
 			CreateField:      "actionplanIDs",
+			AddField:         "addActionPlanIDs",
+			RemoveField:      "removeActionPlanIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddActionPlanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "action_plans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveActionPlanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "action_plans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "action_plans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryActionPlans().IDs(ctx)
-			},
 		},
 		{
-			Name:         "assets",
-			Label:        "Assets",
-			Target:       SchemaAsset,
-			TargetType:   "Asset",
-			Relationship: "M2M",
-			CreateField:  "assetIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "assets"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "assets"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "assets"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssets().IDs(ctx)
-			},
+			Name:        "assets",
+			Label:       "Assets",
+			Target:      SchemaAsset,
+			TargetType:  "Asset",
+			CreateField: "assetIDs",
+			AddField:    "addAssetIDs",
+			RemoveField: "removeAssetIDs",
 		},
 		{
-			Name:         "campaigns",
-			Label:        "Campaigns",
-			Target:       SchemaCampaign,
-			TargetType:   "Campaign",
-			Relationship: "M2M",
-			CreateField:  "campaignIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddCampaignIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "campaigns"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveCampaignIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "campaigns"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "campaigns"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryCampaigns().IDs(ctx)
-			},
+			Name:        "campaigns",
+			Label:       "Campaigns",
+			Target:      SchemaCampaign,
+			TargetType:  "Campaign",
+			CreateField: "campaignIDs",
+			AddField:    "addCampaignIDs",
+			RemoveField: "removeCampaignIDs",
 		},
 		{
-			Name:         "check_results",
-			Label:        "CheckResults",
-			Target:       SchemaCheckResult,
-			TargetType:   "CheckResult",
-			Relationship: "M2M",
-			CreateField:  "checkresultIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddCheckResultIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "check_results"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveCheckResultIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "check_results"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "check_results"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryCheckResults().IDs(ctx)
-			},
+			Name:        "check_results",
+			Label:       "CheckResults",
+			Target:      SchemaCheckResult,
+			TargetType:  "CheckResult",
+			CreateField: "checkresultIDs",
+			AddField:    "addCheckResultIDs",
+			RemoveField: "removeCheckResultIDs",
 		},
 		{
-			Name:         "control_implementations",
-			Label:        "ControlImplementations",
-			Target:       SchemaControlImplementation,
-			TargetType:   "ControlImplementation",
-			Relationship: "M2M",
-			CreateField:  "controlimplementationIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddControlImplementationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "control_implementations"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveControlImplementationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "control_implementations"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "control_implementations"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControlImplementations().IDs(ctx)
-			},
+			Name:        "control_implementations",
+			Label:       "ControlImplementations",
+			Target:      SchemaControlImplementation,
+			TargetType:  "ControlImplementation",
+			CreateField: "controlimplementationIDs",
+			AddField:    "addControlImplementationIDs",
+			RemoveField: "removeControlImplementationIDs",
 		},
 		{
 			Name:             "control_objectives",
 			Label:            "ControlObjectives",
 			Target:           SchemaControlObjective,
 			TargetType:       "ControlObjective",
-			Relationship:     "M2M",
 			CreateField:      "controlobjectiveIDs",
+			AddField:         "addControlObjectiveIDs",
+			RemoveField:      "removeControlObjectiveIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddControlObjectiveIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "control_objectives"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveControlObjectiveIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "control_objectives"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "control_objectives"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControlObjectives().IDs(ctx)
-			},
 		},
 		{
 			Name:             "discussions",
 			Label:            "Discussions",
 			Target:           SchemaDiscussion,
 			TargetType:       "Discussion",
-			Relationship:     "O2M",
 			CreateField:      "discussionIDs",
+			AddField:         "addDiscussionIDs",
+			RemoveField:      "removeDiscussionIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddDiscussionIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "discussions"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveDiscussionIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "discussions"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "discussions"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryDiscussions().IDs(ctx)
-			},
 		},
 		{
-			Name:         "entities",
-			Label:        "Entities",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "M2M",
-			CreateField:  "entityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "entities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "entities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "entities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEntities().IDs(ctx)
-			},
+			Name:        "entities",
+			Label:       "Entities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "entityIDs",
+			AddField:    "addEntityIDs",
+			RemoveField: "removeEntityIDs",
 		},
 		{
 			Name:             "evidence",
 			Label:            "Evidence",
 			Target:           SchemaEvidence,
 			TargetType:       "Evidence",
-			Relationship:     "M2M",
 			CreateField:      "evidenceIDs",
+			AddField:         "addEvidenceIDs",
+			RemoveField:      "removeEvidenceIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddEvidenceIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "evidence"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveEvidenceIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "evidence"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "evidence"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEvidence().IDs(ctx)
-			},
 		},
 		{
-			Name:         "findings",
-			Label:        "Findings",
-			Target:       SchemaFinding,
-			TargetType:   "Finding",
-			Relationship: "M2M",
-			CreateField:  "findingIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "findings"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "findings"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "findings"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryFindings().IDs(ctx)
-			},
+			Name:        "findings",
+			Label:       "Findings",
+			Target:      SchemaFinding,
+			TargetType:  "Finding",
+			CreateField: "findingIDs",
+			AddField:    "addFindingIDs",
+			RemoveField: "removeFindingIDs",
 		},
 		{
-			Name:         "identity_holders",
-			Label:        "IdentityHolders",
-			Target:       SchemaIdentityHolder,
-			TargetType:   "IdentityHolder",
-			Relationship: "M2M",
-			CreateField:  "identityholderIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "identity_holders"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "identity_holders"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "identity_holders"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryIdentityHolders().IDs(ctx)
-			},
+			Name:        "identity_holders",
+			Label:       "IdentityHolders",
+			Target:      SchemaIdentityHolder,
+			TargetType:  "IdentityHolder",
+			CreateField: "identityholderIDs",
+			AddField:    "addIdentityHolderIDs",
+			RemoveField: "removeIdentityHolderIDs",
 		},
 		{
 			Name:             "internal_policies",
 			Label:            "InternalPolicies",
 			Target:           SchemaInternalPolicy,
 			TargetType:       "InternalPolicy",
-			Relationship:     "M2M",
 			CreateField:      "internalpolicyIDs",
+			AddField:         "addInternalPolicyIDs",
+			RemoveField:      "removeInternalPolicyIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "internal_policies"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "internal_policies"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "internal_policies"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryInternalPolicies().IDs(ctx)
-			},
 		},
 		{
 			Name:             "narratives",
 			Label:            "Narratives",
 			Target:           SchemaNarrative,
 			TargetType:       "Narrative",
-			Relationship:     "M2M",
 			CreateField:      "narrativeIDs",
+			AddField:         "addNarrativeIDs",
+			RemoveField:      "removeNarrativeIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddNarrativeIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "narratives"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveNarrativeIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "narratives"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "narratives"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryNarratives().IDs(ctx)
-			},
 		},
 		{
-			Name:         "platforms",
-			Label:        "Platforms",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2M",
-			CreateField:  "platformIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddPlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "platforms"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemovePlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "platforms"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "platforms"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryPlatforms().IDs(ctx)
-			},
+			Name:        "platforms",
+			Label:       "Platforms",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			CreateField: "platformIDs",
+			AddField:    "addPlatformIDs",
+			RemoveField: "removePlatformIDs",
 		},
 		{
 			Name:             "procedures",
 			Label:            "Procedures",
 			Target:           SchemaProcedure,
 			TargetType:       "Procedure",
-			Relationship:     "M2M",
 			CreateField:      "procedureIDs",
+			AddField:         "addProcedureIDs",
+			RemoveField:      "removeProcedureIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddProcedureIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "procedures"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveProcedureIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "procedures"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "procedures"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryProcedures().IDs(ctx)
-			},
 		},
 		{
-			Name:         "remediations",
-			Label:        "Remediations",
-			Target:       SchemaRemediation,
-			TargetType:   "Remediation",
-			Relationship: "M2M",
-			CreateField:  "remediationIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddRemediationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "remediations"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveRemediationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "remediations"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "remediations"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRemediations().IDs(ctx)
-			},
+			Name:        "remediations",
+			Label:       "Remediations",
+			Target:      SchemaRemediation,
+			TargetType:  "Remediation",
+			CreateField: "remediationIDs",
+			AddField:    "addRemediationIDs",
+			RemoveField: "removeRemediationIDs",
 		},
 		{
 			Name:             "responsible_party",
 			Label:            "ResponsibleParty",
 			Target:           SchemaEntity,
 			TargetType:       "Entity",
-			Relationship:     "M2O",
 			Unique:           true,
 			CreateField:      "responsiblePartyID",
+			ClearField:       "clearResponsibleParty",
+			Field:            "responsible_party_id",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.Control.UpdateOneID(entityID).SetResponsiblePartyID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "responsible_party"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).ClearResponsibleParty().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "responsible_party"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "responsible_party"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryResponsibleParty().IDs(ctx)
-			},
 		},
 		{
-			Name:         "reviews",
-			Label:        "Reviews",
-			Target:       SchemaReview,
-			TargetType:   "Review",
-			Relationship: "M2M",
-			CreateField:  "reviewIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddReviewIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "reviews"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveReviewIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "reviews"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "reviews"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryReviews().IDs(ctx)
-			},
+			Name:        "reviews",
+			Label:       "Reviews",
+			Target:      SchemaReview,
+			TargetType:  "Review",
+			CreateField: "reviewIDs",
+			AddField:    "addReviewIDs",
+			RemoveField: "removeReviewIDs",
 		},
 		{
 			Name:             "risks",
 			Label:            "Risks",
 			Target:           SchemaRisk,
 			TargetType:       "Risk",
-			Relationship:     "M2M",
 			CreateField:      "riskIDs",
+			AddField:         "addRiskIDs",
+			RemoveField:      "removeRiskIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "risks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "risks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "risks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRisks().IDs(ctx)
-			},
 		},
 		{
-			Name:         "scans",
-			Label:        "Scans",
-			Target:       SchemaScan,
-			TargetType:   "Scan",
-			Relationship: "M2M",
-			CreateField:  "scanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "scans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "scans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "scans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryScans().IDs(ctx)
-			},
+			Name:        "scans",
+			Label:       "Scans",
+			Target:      SchemaScan,
+			TargetType:  "Scan",
+			CreateField: "scanIDs",
+			AddField:    "addScanIDs",
+			RemoveField: "removeScanIDs",
 		},
 		{
-			Name:         "scheduled_jobs",
-			Label:        "ScheduledJobs",
-			Target:       SchemaScheduledJob,
-			TargetType:   "ScheduledJob",
-			Relationship: "M2M",
-			CreateField:  "scheduledjobIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddScheduledJobIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "scheduled_jobs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveScheduledJobIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "scheduled_jobs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "scheduled_jobs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryScheduledJobs().IDs(ctx)
-			},
+			Name:        "scheduled_jobs",
+			Label:       "ScheduledJobs",
+			Target:      SchemaScheduledJob,
+			TargetType:  "ScheduledJob",
+			CreateField: "scheduledjobIDs",
+			AddField:    "addScheduledJobIDs",
+			RemoveField: "removeScheduledJobIDs",
 		},
 		{
-			Name:         "subcontrols",
-			Label:        "Subcontrols",
-			Target:       SchemaSubcontrol,
-			TargetType:   "Subcontrol",
-			Relationship: "O2M",
-			CreateField:  "subcontrolIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "subcontrols"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "subcontrols"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "subcontrols"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrols().IDs(ctx)
-			},
+			Name:        "subcontrols",
+			Label:       "Subcontrols",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			CreateField: "subcontrolIDs",
+			AddField:    "addSubcontrolIDs",
+			RemoveField: "removeSubcontrolIDs",
 		},
 		{
 			Name:             "tasks",
 			Label:            "Tasks",
 			Target:           SchemaTask,
 			TargetType:       "Task",
-			Relationship:     "M2M",
 			CreateField:      "taskIDs",
+			AddField:         "addTaskIDs",
+			RemoveField:      "removeTaskIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "tasks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "tasks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "tasks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTasks().IDs(ctx)
-			},
 		},
 		{
 			Name:             "workflow_object_refs",
 			Label:            "WorkflowObjectRefs",
 			Target:           SchemaWorkflowObjectRef,
 			TargetType:       "WorkflowObjectRef",
-			Relationship:     "O2M",
 			CreateField:      "workflowobjectrefIDs",
+			AddField:         "addWorkflowObjectRefIDs",
+			RemoveField:      "removeWorkflowObjectRefIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Control.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Control.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
 		},
 	}
 	SchemaControlImplementation.Edges = []EdgeDescriptor{
 		{
-			Name:         "controls",
-			Label:        "Controls",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2M",
-			CreateField:  "controlIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlImplementation.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_implementation", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlImplementation.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_implementation", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ControlImplementation.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control_implementation", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "controlIDs",
+			AddField:    "addControlIDs",
+			RemoveField: "removeControlIDs",
 		},
 		{
-			Name:         "subcontrols",
-			Label:        "Subcontrols",
-			Target:       SchemaSubcontrol,
-			TargetType:   "Subcontrol",
-			Relationship: "M2M",
-			CreateField:  "subcontrolIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlImplementation.UpdateOneID(entityID).AddSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_implementation", Operation: OpLink, EntityID: entityID, Edge: "subcontrols"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlImplementation.UpdateOneID(entityID).RemoveSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_implementation", Operation: OpUnlink, EntityID: entityID, Edge: "subcontrols"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ControlImplementation.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control_implementation", Operation: OpQuery, EntityID: entityID, Edge: "subcontrols"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrols().IDs(ctx)
-			},
+			Name:        "subcontrols",
+			Label:       "Subcontrols",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			CreateField: "subcontrolIDs",
+			AddField:    "addSubcontrolIDs",
+			RemoveField: "removeSubcontrolIDs",
 		},
 		{
-			Name:         "tasks",
-			Label:        "Tasks",
-			Target:       SchemaTask,
-			TargetType:   "Task",
-			Relationship: "M2M",
-			CreateField:  "taskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlImplementation.UpdateOneID(entityID).AddTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_implementation", Operation: OpLink, EntityID: entityID, Edge: "tasks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlImplementation.UpdateOneID(entityID).RemoveTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_implementation", Operation: OpUnlink, EntityID: entityID, Edge: "tasks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ControlImplementation.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control_implementation", Operation: OpQuery, EntityID: entityID, Edge: "tasks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTasks().IDs(ctx)
-			},
+			Name:        "tasks",
+			Label:       "Tasks",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			CreateField: "taskIDs",
+			AddField:    "addTaskIDs",
+			RemoveField: "removeTaskIDs",
 		},
 	}
 	SchemaControlObjective.Edges = []EdgeDescriptor{
 		{
-			Name:         "controls",
-			Label:        "Controls",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2M",
-			CreateField:  "controlIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlObjective.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_objective", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlObjective.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_objective", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ControlObjective.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control_objective", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "controlIDs",
+			AddField:    "addControlIDs",
+			RemoveField: "removeControlIDs",
 		},
 		{
-			Name:         "evidence",
-			Label:        "Evidence",
-			Target:       SchemaEvidence,
-			TargetType:   "Evidence",
-			Relationship: "M2M",
-			CreateField:  "evidenceIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlObjective.UpdateOneID(entityID).AddEvidenceIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_objective", Operation: OpLink, EntityID: entityID, Edge: "evidence"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlObjective.UpdateOneID(entityID).RemoveEvidenceIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_objective", Operation: OpUnlink, EntityID: entityID, Edge: "evidence"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ControlObjective.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control_objective", Operation: OpQuery, EntityID: entityID, Edge: "evidence"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEvidence().IDs(ctx)
-			},
+			Name:        "evidence",
+			Label:       "Evidence",
+			Target:      SchemaEvidence,
+			TargetType:  "Evidence",
+			CreateField: "evidenceIDs",
+			AddField:    "addEvidenceIDs",
+			RemoveField: "removeEvidenceIDs",
 		},
 		{
-			Name:         "internal_policies",
-			Label:        "InternalPolicies",
-			Target:       SchemaInternalPolicy,
-			TargetType:   "InternalPolicy",
-			Relationship: "M2M",
-			CreateField:  "internalpolicyIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlObjective.UpdateOneID(entityID).AddInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_objective", Operation: OpLink, EntityID: entityID, Edge: "internal_policies"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlObjective.UpdateOneID(entityID).RemoveInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_objective", Operation: OpUnlink, EntityID: entityID, Edge: "internal_policies"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ControlObjective.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control_objective", Operation: OpQuery, EntityID: entityID, Edge: "internal_policies"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryInternalPolicies().IDs(ctx)
-			},
+			Name:        "internal_policies",
+			Label:       "InternalPolicies",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			CreateField: "internalpolicyIDs",
+			AddField:    "addInternalPolicyIDs",
+			RemoveField: "removeInternalPolicyIDs",
 		},
 		{
-			Name:         "narratives",
-			Label:        "Narratives",
-			Target:       SchemaNarrative,
-			TargetType:   "Narrative",
-			Relationship: "O2M",
-			CreateField:  "narrativeIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlObjective.UpdateOneID(entityID).AddNarrativeIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_objective", Operation: OpLink, EntityID: entityID, Edge: "narratives"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlObjective.UpdateOneID(entityID).RemoveNarrativeIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_objective", Operation: OpUnlink, EntityID: entityID, Edge: "narratives"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ControlObjective.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control_objective", Operation: OpQuery, EntityID: entityID, Edge: "narratives"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryNarratives().IDs(ctx)
-			},
+			Name:        "narratives",
+			Label:       "Narratives",
+			Target:      SchemaNarrative,
+			TargetType:  "Narrative",
+			CreateField: "narrativeIDs",
+			AddField:    "addNarrativeIDs",
+			RemoveField: "removeNarrativeIDs",
 		},
 		{
-			Name:         "procedures",
-			Label:        "Procedures",
-			Target:       SchemaProcedure,
-			TargetType:   "Procedure",
-			Relationship: "O2M",
-			CreateField:  "procedureIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlObjective.UpdateOneID(entityID).AddProcedureIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_objective", Operation: OpLink, EntityID: entityID, Edge: "procedures"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlObjective.UpdateOneID(entityID).RemoveProcedureIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_objective", Operation: OpUnlink, EntityID: entityID, Edge: "procedures"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ControlObjective.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control_objective", Operation: OpQuery, EntityID: entityID, Edge: "procedures"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryProcedures().IDs(ctx)
-			},
+			Name:        "procedures",
+			Label:       "Procedures",
+			Target:      SchemaProcedure,
+			TargetType:  "Procedure",
+			CreateField: "procedureIDs",
+			AddField:    "addProcedureIDs",
+			RemoveField: "removeProcedureIDs",
 		},
 		{
-			Name:         "risks",
-			Label:        "Risks",
-			Target:       SchemaRisk,
-			TargetType:   "Risk",
-			Relationship: "O2M",
-			CreateField:  "riskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlObjective.UpdateOneID(entityID).AddRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_objective", Operation: OpLink, EntityID: entityID, Edge: "risks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlObjective.UpdateOneID(entityID).RemoveRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_objective", Operation: OpUnlink, EntityID: entityID, Edge: "risks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ControlObjective.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control_objective", Operation: OpQuery, EntityID: entityID, Edge: "risks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRisks().IDs(ctx)
-			},
+			Name:        "risks",
+			Label:       "Risks",
+			Target:      SchemaRisk,
+			TargetType:  "Risk",
+			CreateField: "riskIDs",
+			AddField:    "addRiskIDs",
+			RemoveField: "removeRiskIDs",
 		},
 		{
-			Name:         "subcontrols",
-			Label:        "Subcontrols",
-			Target:       SchemaSubcontrol,
-			TargetType:   "Subcontrol",
-			Relationship: "M2M",
-			CreateField:  "subcontrolIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlObjective.UpdateOneID(entityID).AddSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_objective", Operation: OpLink, EntityID: entityID, Edge: "subcontrols"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlObjective.UpdateOneID(entityID).RemoveSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_objective", Operation: OpUnlink, EntityID: entityID, Edge: "subcontrols"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ControlObjective.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control_objective", Operation: OpQuery, EntityID: entityID, Edge: "subcontrols"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrols().IDs(ctx)
-			},
+			Name:        "subcontrols",
+			Label:       "Subcontrols",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			CreateField: "subcontrolIDs",
+			AddField:    "addSubcontrolIDs",
+			RemoveField: "removeSubcontrolIDs",
 		},
 		{
-			Name:         "tasks",
-			Label:        "Tasks",
-			Target:       SchemaTask,
-			TargetType:   "Task",
-			Relationship: "M2M",
-			CreateField:  "taskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlObjective.UpdateOneID(entityID).AddTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_objective", Operation: OpLink, EntityID: entityID, Edge: "tasks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ControlObjective.UpdateOneID(entityID).RemoveTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "control_objective", Operation: OpUnlink, EntityID: entityID, Edge: "tasks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ControlObjective.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "control_objective", Operation: OpQuery, EntityID: entityID, Edge: "tasks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTasks().IDs(ctx)
-			},
+			Name:        "tasks",
+			Label:       "Tasks",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			CreateField: "taskIDs",
+			AddField:    "addTaskIDs",
+			RemoveField: "removeTaskIDs",
 		},
 	}
 	SchemaDirectoryAccount.Edges = []EdgeDescriptor{
 		{
-			Name:         "findings",
-			Label:        "Findings",
-			Target:       SchemaFinding,
-			TargetType:   "Finding",
-			Relationship: "M2M",
-			CreateField:  "findingIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DirectoryAccount.UpdateOneID(entityID).AddFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "directory_account", Operation: OpLink, EntityID: entityID, Edge: "findings"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DirectoryAccount.UpdateOneID(entityID).RemoveFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "directory_account", Operation: OpUnlink, EntityID: entityID, Edge: "findings"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.DirectoryAccount.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "directory_account", Operation: OpQuery, EntityID: entityID, Edge: "findings"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryFindings().IDs(ctx)
-			},
+			Name:        "findings",
+			Label:       "Findings",
+			Target:      SchemaFinding,
+			TargetType:  "Finding",
+			CreateField: "findingIDs",
+			AddField:    "addFindingIDs",
+			RemoveField: "removeFindingIDs",
 		},
 		{
-			Name:         "groups",
-			Label:        "Groups",
-			Target:       SchemaDirectoryGroup,
-			TargetType:   "DirectoryGroup",
-			Relationship: "M2M",
-			CreateField:  "groupIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DirectoryAccount.UpdateOneID(entityID).AddGroupIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "directory_account", Operation: OpLink, EntityID: entityID, Edge: "groups"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DirectoryAccount.UpdateOneID(entityID).RemoveGroupIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "directory_account", Operation: OpUnlink, EntityID: entityID, Edge: "groups"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.DirectoryAccount.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "directory_account", Operation: OpQuery, EntityID: entityID, Edge: "groups"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryGroups().IDs(ctx)
-			},
+			Name:        "groups",
+			Label:       "Groups",
+			Target:      SchemaDirectoryGroup,
+			TargetType:  "DirectoryGroup",
+			CreateField: "groupIDs",
+			AddField:    "addGroupIDs",
+			RemoveField: "removeGroupIDs",
 		},
 		{
-			Name:         "identity_holder",
-			Label:        "IdentityHolder",
-			Target:       SchemaIdentityHolder,
-			TargetType:   "IdentityHolder",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "identityHolderID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.DirectoryAccount.UpdateOneID(entityID).SetIdentityHolderID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "directory_account", Operation: OpLink, EntityID: entityID, Edge: "identity_holder"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DirectoryAccount.UpdateOneID(entityID).ClearIdentityHolder().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "directory_account", Operation: OpUnlink, EntityID: entityID, Edge: "identity_holder"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.DirectoryAccount.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "directory_account", Operation: OpQuery, EntityID: entityID, Edge: "identity_holder"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryIdentityHolder().IDs(ctx)
-			},
+			Name:        "identity_holder",
+			Label:       "IdentityHolder",
+			Target:      SchemaIdentityHolder,
+			TargetType:  "IdentityHolder",
+			Unique:      true,
+			CreateField: "identityHolderID",
+			ClearField:  "clearIdentityHolder",
+			Field:       "identity_holder_id",
 		},
 		{
-			Name:         "memberships",
-			Label:        "Memberships",
-			Target:       SchemaDirectoryMembership,
-			TargetType:   "DirectoryMembership",
-			Relationship: "O2M",
-			CreateField:  "membershipIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DirectoryAccount.UpdateOneID(entityID).AddMembershipIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "directory_account", Operation: OpLink, EntityID: entityID, Edge: "memberships"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DirectoryAccount.UpdateOneID(entityID).RemoveMembershipIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "directory_account", Operation: OpUnlink, EntityID: entityID, Edge: "memberships"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.DirectoryAccount.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "directory_account", Operation: OpQuery, EntityID: entityID, Edge: "memberships"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryMemberships().IDs(ctx)
-			},
+			Name:        "memberships",
+			Label:       "Memberships",
+			Target:      SchemaDirectoryMembership,
+			TargetType:  "DirectoryMembership",
+			CreateField: "membershipIDs",
+			AddField:    "addMembershipIDs",
+			RemoveField: "removeMembershipIDs",
 		},
 		{
-			Name:         "platform",
-			Label:        "Platform",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "platformID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.DirectoryAccount.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "directory_account", Operation: OpQuery, EntityID: entityID, Edge: "platform"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryPlatform().IDs(ctx)
-			},
+			Name:        "platform",
+			Label:       "Platform",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "platformID",
+			Field:       "platform_id",
 		},
 		{
-			Name:         "workflow_object_refs",
-			Label:        "WorkflowObjectRefs",
-			Target:       SchemaWorkflowObjectRef,
-			TargetType:   "WorkflowObjectRef",
-			Relationship: "O2M",
-			CreateField:  "workflowobjectrefIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DirectoryAccount.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "directory_account", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DirectoryAccount.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "directory_account", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.DirectoryAccount.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "directory_account", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflowobjectrefIDs",
+			AddField:    "addWorkflowObjectRefIDs",
+			RemoveField: "removeWorkflowObjectRefIDs",
 		},
 	}
 	SchemaDirectoryGroup.Edges = []EdgeDescriptor{
 		{
-			Name:         "accounts",
-			Label:        "Accounts",
-			Target:       SchemaDirectoryAccount,
-			TargetType:   "DirectoryAccount",
-			Relationship: "M2M",
-			CreateField:  "accountIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DirectoryGroup.UpdateOneID(entityID).AddAccountIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "directory_group", Operation: OpLink, EntityID: entityID, Edge: "accounts"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DirectoryGroup.UpdateOneID(entityID).RemoveAccountIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "directory_group", Operation: OpUnlink, EntityID: entityID, Edge: "accounts"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.DirectoryGroup.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "directory_group", Operation: OpQuery, EntityID: entityID, Edge: "accounts"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAccounts().IDs(ctx)
-			},
+			Name:        "accounts",
+			Label:       "Accounts",
+			Target:      SchemaDirectoryAccount,
+			TargetType:  "DirectoryAccount",
+			CreateField: "accountIDs",
+			AddField:    "addAccountIDs",
+			RemoveField: "removeAccountIDs",
 		},
 		{
-			Name:         "members",
-			Label:        "Members",
-			Target:       SchemaDirectoryMembership,
-			TargetType:   "DirectoryMembership",
-			Relationship: "O2M",
-			CreateField:  "memberIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DirectoryGroup.UpdateOneID(entityID).AddMemberIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "directory_group", Operation: OpLink, EntityID: entityID, Edge: "members"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DirectoryGroup.UpdateOneID(entityID).RemoveMemberIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "directory_group", Operation: OpUnlink, EntityID: entityID, Edge: "members"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.DirectoryGroup.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "directory_group", Operation: OpQuery, EntityID: entityID, Edge: "members"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryMembers().IDs(ctx)
-			},
+			Name:        "members",
+			Label:       "Members",
+			Target:      SchemaDirectoryMembership,
+			TargetType:  "DirectoryMembership",
+			CreateField: "memberIDs",
+			AddField:    "addMemberIDs",
+			RemoveField: "removeMemberIDs",
 		},
 		{
-			Name:         "platform",
-			Label:        "Platform",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "platformID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.DirectoryGroup.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "directory_group", Operation: OpQuery, EntityID: entityID, Edge: "platform"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryPlatform().IDs(ctx)
-			},
+			Name:        "platform",
+			Label:       "Platform",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "platformID",
+			Field:       "platform_id",
 		},
 		{
-			Name:         "workflow_object_refs",
-			Label:        "WorkflowObjectRefs",
-			Target:       SchemaWorkflowObjectRef,
-			TargetType:   "WorkflowObjectRef",
-			Relationship: "O2M",
-			CreateField:  "workflowobjectrefIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DirectoryGroup.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "directory_group", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DirectoryGroup.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "directory_group", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.DirectoryGroup.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "directory_group", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflowobjectrefIDs",
+			AddField:    "addWorkflowObjectRefIDs",
+			RemoveField: "removeWorkflowObjectRefIDs",
 		},
 	}
 	SchemaDirectoryMembership.Edges = []EdgeDescriptor{
 		{
-			Name:         "directory_account",
-			Label:        "DirectoryAccount",
-			Target:       SchemaDirectoryAccount,
-			TargetType:   "DirectoryAccount",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "directoryAccountID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.DirectoryMembership.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "directory_membership", Operation: OpQuery, EntityID: entityID, Edge: "directory_account"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryDirectoryAccount().IDs(ctx)
-			},
+			Name:        "directory_account",
+			Label:       "DirectoryAccount",
+			Target:      SchemaDirectoryAccount,
+			TargetType:  "DirectoryAccount",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "directoryAccountID",
+			Field:       "directory_account_id",
 		},
 		{
-			Name:         "directory_group",
-			Label:        "DirectoryGroup",
-			Target:       SchemaDirectoryGroup,
-			TargetType:   "DirectoryGroup",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "directoryGroupID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.DirectoryMembership.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "directory_membership", Operation: OpQuery, EntityID: entityID, Edge: "directory_group"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryDirectoryGroup().IDs(ctx)
-			},
+			Name:        "directory_group",
+			Label:       "DirectoryGroup",
+			Target:      SchemaDirectoryGroup,
+			TargetType:  "DirectoryGroup",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "directoryGroupID",
+			Field:       "directory_group_id",
 		},
 		{
-			Name:         "platform",
-			Label:        "Platform",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "platformID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.DirectoryMembership.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "directory_membership", Operation: OpQuery, EntityID: entityID, Edge: "platform"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryPlatform().IDs(ctx)
-			},
+			Name:        "platform",
+			Label:       "Platform",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "platformID",
+			Field:       "platform_id",
 		},
 		{
-			Name:         "workflow_object_refs",
-			Label:        "WorkflowObjectRefs",
-			Target:       SchemaWorkflowObjectRef,
-			TargetType:   "WorkflowObjectRef",
-			Relationship: "O2M",
-			CreateField:  "workflowobjectrefIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DirectoryMembership.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "directory_membership", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DirectoryMembership.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "directory_membership", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.DirectoryMembership.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "directory_membership", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflowobjectrefIDs",
+			AddField:    "addWorkflowObjectRefIDs",
+			RemoveField: "removeWorkflowObjectRefIDs",
 		},
 	}
 	SchemaDiscussion.Edges = []EdgeDescriptor{
 		{
-			Name:         "control",
-			Label:        "Control",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "controlID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.Discussion.UpdateOneID(entityID).SetControlID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "discussion", Operation: OpLink, EntityID: entityID, Edge: "control"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Discussion.UpdateOneID(entityID).ClearControl().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "discussion", Operation: OpUnlink, EntityID: entityID, Edge: "control"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Discussion.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "discussion", Operation: OpQuery, EntityID: entityID, Edge: "control"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControl().IDs(ctx)
-			},
+			Name:        "control",
+			Label:       "Control",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			Unique:      true,
+			CreateField: "controlID",
+			ClearField:  "clearControl",
+			Field:       "control_discussions",
 		},
 		{
-			Name:         "internal_policy",
-			Label:        "InternalPolicy",
-			Target:       SchemaInternalPolicy,
-			TargetType:   "InternalPolicy",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "internalPolicyID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.Discussion.UpdateOneID(entityID).SetInternalPolicyID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "discussion", Operation: OpLink, EntityID: entityID, Edge: "internal_policy"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Discussion.UpdateOneID(entityID).ClearInternalPolicy().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "discussion", Operation: OpUnlink, EntityID: entityID, Edge: "internal_policy"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Discussion.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "discussion", Operation: OpQuery, EntityID: entityID, Edge: "internal_policy"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryInternalPolicy().IDs(ctx)
-			},
+			Name:        "internal_policy",
+			Label:       "InternalPolicy",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			Unique:      true,
+			CreateField: "internalPolicyID",
+			ClearField:  "clearInternalPolicy",
+			Field:       "internal_policy_discussions",
 		},
 		{
-			Name:         "procedure",
-			Label:        "Procedure",
-			Target:       SchemaProcedure,
-			TargetType:   "Procedure",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "procedureID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.Discussion.UpdateOneID(entityID).SetProcedureID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "discussion", Operation: OpLink, EntityID: entityID, Edge: "procedure"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Discussion.UpdateOneID(entityID).ClearProcedure().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "discussion", Operation: OpUnlink, EntityID: entityID, Edge: "procedure"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Discussion.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "discussion", Operation: OpQuery, EntityID: entityID, Edge: "procedure"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryProcedure().IDs(ctx)
-			},
+			Name:        "procedure",
+			Label:       "Procedure",
+			Target:      SchemaProcedure,
+			TargetType:  "Procedure",
+			Unique:      true,
+			CreateField: "procedureID",
+			ClearField:  "clearProcedure",
+			Field:       "procedure_discussions",
 		},
 		{
-			Name:         "risk",
-			Label:        "Risk",
-			Target:       SchemaRisk,
-			TargetType:   "Risk",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "riskID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.Discussion.UpdateOneID(entityID).SetRiskID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "discussion", Operation: OpLink, EntityID: entityID, Edge: "risk"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Discussion.UpdateOneID(entityID).ClearRisk().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "discussion", Operation: OpUnlink, EntityID: entityID, Edge: "risk"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Discussion.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "discussion", Operation: OpQuery, EntityID: entityID, Edge: "risk"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRisk().IDs(ctx)
-			},
+			Name:        "risk",
+			Label:       "Risk",
+			Target:      SchemaRisk,
+			TargetType:  "Risk",
+			Unique:      true,
+			CreateField: "riskID",
+			ClearField:  "clearRisk",
+			Field:       "risk_discussions",
 		},
 		{
-			Name:         "subcontrol",
-			Label:        "Subcontrol",
-			Target:       SchemaSubcontrol,
-			TargetType:   "Subcontrol",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "subcontrolID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.Discussion.UpdateOneID(entityID).SetSubcontrolID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "discussion", Operation: OpLink, EntityID: entityID, Edge: "subcontrol"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Discussion.UpdateOneID(entityID).ClearSubcontrol().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "discussion", Operation: OpUnlink, EntityID: entityID, Edge: "subcontrol"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Discussion.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "discussion", Operation: OpQuery, EntityID: entityID, Edge: "subcontrol"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrol().IDs(ctx)
-			},
+			Name:        "subcontrol",
+			Label:       "Subcontrol",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			Unique:      true,
+			CreateField: "subcontrolID",
+			ClearField:  "clearSubcontrol",
+			Field:       "subcontrol_discussions",
 		},
 	}
 	SchemaDocumentData.Edges = []EdgeDescriptor{
 		{
-			Name:         "entities",
-			Label:        "Entities",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "M2M",
-			CreateField:  "entityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DocumentData.UpdateOneID(entityID).AddEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "document_data", Operation: OpLink, EntityID: entityID, Edge: "entities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DocumentData.UpdateOneID(entityID).RemoveEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "document_data", Operation: OpUnlink, EntityID: entityID, Edge: "entities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.DocumentData.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "document_data", Operation: OpQuery, EntityID: entityID, Edge: "entities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEntities().IDs(ctx)
-			},
+			Name:        "entities",
+			Label:       "Entities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "entityIDs",
+			AddField:    "addEntityIDs",
+			RemoveField: "removeEntityIDs",
 		},
 		{
-			Name:         "template",
-			Label:        "Template",
-			Target:       SchemaTemplate,
-			TargetType:   "Template",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "templateID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.DocumentData.UpdateOneID(entityID).SetTemplateID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "document_data", Operation: OpLink, EntityID: entityID, Edge: "template"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.DocumentData.UpdateOneID(entityID).ClearTemplate().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "document_data", Operation: OpUnlink, EntityID: entityID, Edge: "template"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.DocumentData.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "document_data", Operation: OpQuery, EntityID: entityID, Edge: "template"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTemplate().IDs(ctx)
-			},
+			Name:        "template",
+			Label:       "Template",
+			Target:      SchemaTemplate,
+			TargetType:  "Template",
+			Unique:      true,
+			CreateField: "templateID",
+			ClearField:  "clearTemplate",
+			Field:       "template_id",
 		},
 	}
 	SchemaEmailTemplate.Edges = []EdgeDescriptor{
 		{
-			Name:         "campaigns",
-			Label:        "Campaigns",
-			Target:       SchemaCampaign,
-			TargetType:   "Campaign",
-			Relationship: "O2M",
-			CreateField:  "campaignIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.EmailTemplate.UpdateOneID(entityID).AddCampaignIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "email_template", Operation: OpLink, EntityID: entityID, Edge: "campaigns"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.EmailTemplate.UpdateOneID(entityID).RemoveCampaignIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "email_template", Operation: OpUnlink, EntityID: entityID, Edge: "campaigns"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.EmailTemplate.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "email_template", Operation: OpQuery, EntityID: entityID, Edge: "campaigns"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryCampaigns().IDs(ctx)
-			},
+			Name:        "campaigns",
+			Label:       "Campaigns",
+			Target:      SchemaCampaign,
+			TargetType:  "Campaign",
+			CreateField: "campaignIDs",
+			AddField:    "addCampaignIDs",
+			RemoveField: "removeCampaignIDs",
 		},
 		{
-			Name:         "notification_templates",
-			Label:        "NotificationTemplates",
-			Target:       SchemaNotificationTemplate,
-			TargetType:   "NotificationTemplate",
-			Relationship: "O2M",
-			CreateField:  "notificationtemplateIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.EmailTemplate.UpdateOneID(entityID).AddNotificationTemplateIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "email_template", Operation: OpLink, EntityID: entityID, Edge: "notification_templates"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.EmailTemplate.UpdateOneID(entityID).RemoveNotificationTemplateIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "email_template", Operation: OpUnlink, EntityID: entityID, Edge: "notification_templates"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.EmailTemplate.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "email_template", Operation: OpQuery, EntityID: entityID, Edge: "notification_templates"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryNotificationTemplates().IDs(ctx)
-			},
+			Name:        "notification_templates",
+			Label:       "NotificationTemplates",
+			Target:      SchemaNotificationTemplate,
+			TargetType:  "NotificationTemplate",
+			CreateField: "notificationtemplateIDs",
+			AddField:    "addNotificationTemplateIDs",
+			RemoveField: "removeNotificationTemplateIDs",
 		},
 		{
-			Name:         "workflow_definition",
-			Label:        "WorkflowDefinition",
-			Target:       SchemaWorkflowDefinition,
-			TargetType:   "WorkflowDefinition",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "workflowDefinitionID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.EmailTemplate.UpdateOneID(entityID).SetWorkflowDefinitionID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "email_template", Operation: OpLink, EntityID: entityID, Edge: "workflow_definition"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.EmailTemplate.UpdateOneID(entityID).ClearWorkflowDefinition().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "email_template", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_definition"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.EmailTemplate.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "email_template", Operation: OpQuery, EntityID: entityID, Edge: "workflow_definition"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowDefinition().IDs(ctx)
-			},
+			Name:        "workflow_definition",
+			Label:       "WorkflowDefinition",
+			Target:      SchemaWorkflowDefinition,
+			TargetType:  "WorkflowDefinition",
+			Unique:      true,
+			CreateField: "workflowDefinitionID",
+			ClearField:  "clearWorkflowDefinition",
+			Field:       "workflow_definition_id",
 		},
 		{
-			Name:         "workflow_instance",
-			Label:        "WorkflowInstance",
-			Target:       SchemaWorkflowInstance,
-			TargetType:   "WorkflowInstance",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "workflowInstanceID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.EmailTemplate.UpdateOneID(entityID).SetWorkflowInstanceID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "email_template", Operation: OpLink, EntityID: entityID, Edge: "workflow_instance"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.EmailTemplate.UpdateOneID(entityID).ClearWorkflowInstance().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "email_template", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_instance"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.EmailTemplate.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "email_template", Operation: OpQuery, EntityID: entityID, Edge: "workflow_instance"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowInstance().IDs(ctx)
-			},
+			Name:        "workflow_instance",
+			Label:       "WorkflowInstance",
+			Target:      SchemaWorkflowInstance,
+			TargetType:  "WorkflowInstance",
+			Unique:      true,
+			CreateField: "workflowInstanceID",
+			ClearField:  "clearWorkflowInstance",
+			Field:       "workflow_instance_id",
 		},
 	}
 	SchemaEntity.Edges = []EdgeDescriptor{
 		{
-			Name:         "assessment_responses",
-			Label:        "AssessmentResponses",
-			Target:       SchemaAssessmentResponse,
-			TargetType:   "AssessmentResponse",
-			Relationship: "O2M",
-			CreateField:  "assessmentresponseIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).AddAssessmentResponseIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpLink, EntityID: entityID, Edge: "assessment_responses"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).RemoveAssessmentResponseIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpUnlink, EntityID: entityID, Edge: "assessment_responses"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Entity.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "entity", Operation: OpQuery, EntityID: entityID, Edge: "assessment_responses"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssessmentResponses().IDs(ctx)
-			},
+			Name:        "assessment_responses",
+			Label:       "AssessmentResponses",
+			Target:      SchemaAssessmentResponse,
+			TargetType:  "AssessmentResponse",
+			CreateField: "assessmentresponseIDs",
+			AddField:    "addAssessmentResponseIDs",
+			RemoveField: "removeAssessmentResponseIDs",
 		},
 		{
-			Name:         "assets",
-			Label:        "Assets",
-			Target:       SchemaAsset,
-			TargetType:   "Asset",
-			Relationship: "M2M",
-			CreateField:  "assetIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).AddAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpLink, EntityID: entityID, Edge: "assets"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).RemoveAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpUnlink, EntityID: entityID, Edge: "assets"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Entity.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "entity", Operation: OpQuery, EntityID: entityID, Edge: "assets"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssets().IDs(ctx)
-			},
+			Name:        "assets",
+			Label:       "Assets",
+			Target:      SchemaAsset,
+			TargetType:  "Asset",
+			CreateField: "assetIDs",
+			AddField:    "addAssetIDs",
+			RemoveField: "removeAssetIDs",
 		},
 		{
-			Name:         "campaigns",
-			Label:        "Campaigns",
-			Target:       SchemaCampaign,
-			TargetType:   "Campaign",
-			Relationship: "O2M",
-			CreateField:  "campaignIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).AddCampaignIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpLink, EntityID: entityID, Edge: "campaigns"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).RemoveCampaignIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpUnlink, EntityID: entityID, Edge: "campaigns"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Entity.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "entity", Operation: OpQuery, EntityID: entityID, Edge: "campaigns"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryCampaigns().IDs(ctx)
-			},
+			Name:        "campaigns",
+			Label:       "Campaigns",
+			Target:      SchemaCampaign,
+			TargetType:  "Campaign",
+			CreateField: "campaignIDs",
+			AddField:    "addCampaignIDs",
+			RemoveField: "removeCampaignIDs",
 		},
 		{
-			Name:         "contacts",
-			Label:        "Contacts",
-			Target:       SchemaContact,
-			TargetType:   "Contact",
-			Relationship: "M2M",
-			CreateField:  "contactIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).AddContactIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpLink, EntityID: entityID, Edge: "contacts"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).RemoveContactIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpUnlink, EntityID: entityID, Edge: "contacts"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Entity.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "entity", Operation: OpQuery, EntityID: entityID, Edge: "contacts"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryContacts().IDs(ctx)
-			},
+			Name:        "contacts",
+			Label:       "Contacts",
+			Target:      SchemaContact,
+			TargetType:  "Contact",
+			CreateField: "contactIDs",
+			AddField:    "addContactIDs",
+			RemoveField: "removeContactIDs",
 		},
 		{
-			Name:         "controls",
-			Label:        "Controls",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2M",
-			CreateField:  "controlIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Entity.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "entity", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "controlIDs",
+			AddField:    "addControlIDs",
+			RemoveField: "removeControlIDs",
 		},
 		{
-			Name:         "documents",
-			Label:        "Documents",
-			Target:       SchemaDocumentData,
-			TargetType:   "DocumentData",
-			Relationship: "M2M",
-			CreateField:  "documentIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).AddDocumentIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpLink, EntityID: entityID, Edge: "documents"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).RemoveDocumentIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpUnlink, EntityID: entityID, Edge: "documents"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Entity.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "entity", Operation: OpQuery, EntityID: entityID, Edge: "documents"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryDocuments().IDs(ctx)
-			},
+			Name:        "documents",
+			Label:       "Documents",
+			Target:      SchemaDocumentData,
+			TargetType:  "DocumentData",
+			CreateField: "documentIDs",
+			AddField:    "addDocumentIDs",
+			RemoveField: "removeDocumentIDs",
 		},
 		{
-			Name:         "employer_identity_holders",
-			Label:        "EmployerIdentityHolders",
-			Target:       SchemaIdentityHolder,
-			TargetType:   "IdentityHolder",
-			Relationship: "O2M",
-			CreateField:  "employeridentityholderIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).AddEmployerIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpLink, EntityID: entityID, Edge: "employer_identity_holders"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).RemoveEmployerIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpUnlink, EntityID: entityID, Edge: "employer_identity_holders"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Entity.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "entity", Operation: OpQuery, EntityID: entityID, Edge: "employer_identity_holders"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEmployerIdentityHolders().IDs(ctx)
-			},
+			Name:        "employer_identity_holders",
+			Label:       "EmployerIdentityHolders",
+			Target:      SchemaIdentityHolder,
+			TargetType:  "IdentityHolder",
+			CreateField: "employeridentityholderIDs",
+			AddField:    "addEmployerIdentityHolderIDs",
+			RemoveField: "removeEmployerIdentityHolderIDs",
 		},
 		{
-			Name:         "identity_holders",
-			Label:        "IdentityHolders",
-			Target:       SchemaIdentityHolder,
-			TargetType:   "IdentityHolder",
-			Relationship: "M2M",
-			CreateField:  "identityholderIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).AddIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpLink, EntityID: entityID, Edge: "identity_holders"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).RemoveIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpUnlink, EntityID: entityID, Edge: "identity_holders"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Entity.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "entity", Operation: OpQuery, EntityID: entityID, Edge: "identity_holders"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryIdentityHolders().IDs(ctx)
-			},
+			Name:        "identity_holders",
+			Label:       "IdentityHolders",
+			Target:      SchemaIdentityHolder,
+			TargetType:  "IdentityHolder",
+			CreateField: "identityholderIDs",
+			AddField:    "addIdentityHolderIDs",
+			RemoveField: "removeIdentityHolderIDs",
 		},
 		{
-			Name:         "internal_policies",
-			Label:        "InternalPolicies",
-			Target:       SchemaInternalPolicy,
-			TargetType:   "InternalPolicy",
-			Relationship: "M2M",
-			CreateField:  "internalpolicyIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).AddInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpLink, EntityID: entityID, Edge: "internal_policies"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).RemoveInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpUnlink, EntityID: entityID, Edge: "internal_policies"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Entity.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "entity", Operation: OpQuery, EntityID: entityID, Edge: "internal_policies"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryInternalPolicies().IDs(ctx)
-			},
+			Name:        "internal_policies",
+			Label:       "InternalPolicies",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			CreateField: "internalpolicyIDs",
+			AddField:    "addInternalPolicyIDs",
+			RemoveField: "removeInternalPolicyIDs",
 		},
 		{
-			Name:         "out_of_scope_platforms",
-			Label:        "OutOfScopePlatforms",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2M",
-			CreateField:  "outofscopeplatformIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).AddOutOfScopePlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpLink, EntityID: entityID, Edge: "out_of_scope_platforms"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).RemoveOutOfScopePlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpUnlink, EntityID: entityID, Edge: "out_of_scope_platforms"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Entity.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "entity", Operation: OpQuery, EntityID: entityID, Edge: "out_of_scope_platforms"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryOutOfScopePlatforms().IDs(ctx)
-			},
+			Name:        "out_of_scope_platforms",
+			Label:       "OutOfScopePlatforms",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			CreateField: "outofscopeplatformIDs",
+			AddField:    "addOutOfScopePlatformIDs",
+			RemoveField: "removeOutOfScopePlatformIDs",
 		},
 		{
-			Name:         "platforms",
-			Label:        "Platforms",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2M",
-			CreateField:  "platformIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).AddPlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpLink, EntityID: entityID, Edge: "platforms"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).RemovePlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpUnlink, EntityID: entityID, Edge: "platforms"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Entity.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "entity", Operation: OpQuery, EntityID: entityID, Edge: "platforms"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryPlatforms().IDs(ctx)
-			},
+			Name:        "platforms",
+			Label:       "Platforms",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			CreateField: "platformIDs",
+			AddField:    "addPlatformIDs",
+			RemoveField: "removePlatformIDs",
 		},
 		{
-			Name:         "scans",
-			Label:        "Scans",
-			Target:       SchemaScan,
-			TargetType:   "Scan",
-			Relationship: "M2M",
-			CreateField:  "scanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).AddScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpLink, EntityID: entityID, Edge: "scans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).RemoveScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpUnlink, EntityID: entityID, Edge: "scans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Entity.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "entity", Operation: OpQuery, EntityID: entityID, Edge: "scans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryScans().IDs(ctx)
-			},
+			Name:        "scans",
+			Label:       "Scans",
+			Target:      SchemaScan,
+			TargetType:  "Scan",
+			CreateField: "scanIDs",
+			AddField:    "addScanIDs",
+			RemoveField: "removeScanIDs",
 		},
 		{
-			Name:         "source_platforms",
-			Label:        "SourcePlatforms",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2M",
-			CreateField:  "sourceplatformIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).AddSourcePlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpLink, EntityID: entityID, Edge: "source_platforms"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).RemoveSourcePlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpUnlink, EntityID: entityID, Edge: "source_platforms"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Entity.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "entity", Operation: OpQuery, EntityID: entityID, Edge: "source_platforms"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySourcePlatforms().IDs(ctx)
-			},
+			Name:        "source_platforms",
+			Label:       "SourcePlatforms",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			CreateField: "sourceplatformIDs",
+			AddField:    "addSourcePlatformIDs",
+			RemoveField: "removeSourcePlatformIDs",
 		},
 		{
-			Name:         "subcontrols",
-			Label:        "Subcontrols",
-			Target:       SchemaSubcontrol,
-			TargetType:   "Subcontrol",
-			Relationship: "M2M",
-			CreateField:  "subcontrolIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).AddSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpLink, EntityID: entityID, Edge: "subcontrols"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).RemoveSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpUnlink, EntityID: entityID, Edge: "subcontrols"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Entity.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "entity", Operation: OpQuery, EntityID: entityID, Edge: "subcontrols"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrols().IDs(ctx)
-			},
+			Name:        "subcontrols",
+			Label:       "Subcontrols",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			CreateField: "subcontrolIDs",
+			AddField:    "addSubcontrolIDs",
+			RemoveField: "removeSubcontrolIDs",
 		},
 		{
-			Name:         "subprocessors",
-			Label:        "Subprocessors",
-			Target:       SchemaSubprocessor,
-			TargetType:   "Subprocessor",
-			Relationship: "M2M",
-			CreateField:  "subprocessorIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).AddSubprocessorIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpLink, EntityID: entityID, Edge: "subprocessors"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).RemoveSubprocessorIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpUnlink, EntityID: entityID, Edge: "subprocessors"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Entity.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "entity", Operation: OpQuery, EntityID: entityID, Edge: "subprocessors"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubprocessors().IDs(ctx)
-			},
+			Name:        "subprocessors",
+			Label:       "Subprocessors",
+			Target:      SchemaSubprocessor,
+			TargetType:  "Subprocessor",
+			CreateField: "subprocessorIDs",
+			AddField:    "addSubprocessorIDs",
+			RemoveField: "removeSubprocessorIDs",
 		},
 		{
-			Name:         "system_details",
-			Label:        "SystemDetails",
-			Target:       SchemaSystemDetail,
-			TargetType:   "SystemDetail",
-			Relationship: "M2M",
-			CreateField:  "systemdetailIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).AddSystemDetailIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpLink, EntityID: entityID, Edge: "system_details"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).RemoveSystemDetailIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpUnlink, EntityID: entityID, Edge: "system_details"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Entity.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "entity", Operation: OpQuery, EntityID: entityID, Edge: "system_details"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySystemDetails().IDs(ctx)
-			},
+			Name:        "system_details",
+			Label:       "SystemDetails",
+			Target:      SchemaSystemDetail,
+			TargetType:  "SystemDetail",
+			CreateField: "systemdetailIDs",
+			AddField:    "addSystemDetailIDs",
+			RemoveField: "removeSystemDetailIDs",
 		},
 		{
-			Name:         "vendor_risk_scores",
-			Label:        "VendorRiskScores",
-			Target:       SchemaVendorRiskScore,
-			TargetType:   "VendorRiskScore",
-			Relationship: "O2M",
-			CreateField:  "vendorriskscoreIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).AddVendorRiskScoreIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpLink, EntityID: entityID, Edge: "vendor_risk_scores"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Entity.UpdateOneID(entityID).RemoveVendorRiskScoreIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: OpUnlink, EntityID: entityID, Edge: "vendor_risk_scores"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Entity.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "entity", Operation: OpQuery, EntityID: entityID, Edge: "vendor_risk_scores"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryVendorRiskScores().IDs(ctx)
-			},
+			Name:        "vendor_risk_scores",
+			Label:       "VendorRiskScores",
+			Target:      SchemaVendorRiskScore,
+			TargetType:  "VendorRiskScore",
+			CreateField: "vendorriskscoreIDs",
+			AddField:    "addVendorRiskScoreIDs",
+			RemoveField: "removeVendorRiskScoreIDs",
 		},
 	}
 	SchemaEvidence.Edges = []EdgeDescriptor{
 		{
-			Name:         "control_implementations",
-			Label:        "ControlImplementations",
-			Target:       SchemaControlImplementation,
-			TargetType:   "ControlImplementation",
-			Relationship: "O2M",
-			CreateField:  "controlimplementationIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Evidence.UpdateOneID(entityID).AddControlImplementationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "evidence", Operation: OpLink, EntityID: entityID, Edge: "control_implementations"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Evidence.UpdateOneID(entityID).RemoveControlImplementationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "evidence", Operation: OpUnlink, EntityID: entityID, Edge: "control_implementations"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Evidence.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "evidence", Operation: OpQuery, EntityID: entityID, Edge: "control_implementations"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControlImplementations().IDs(ctx)
-			},
+			Name:        "control_implementations",
+			Label:       "ControlImplementations",
+			Target:      SchemaControlImplementation,
+			TargetType:  "ControlImplementation",
+			CreateField: "controlimplementationIDs",
+			AddField:    "addControlImplementationIDs",
+			RemoveField: "removeControlImplementationIDs",
 		},
 		{
-			Name:         "control_objectives",
-			Label:        "ControlObjectives",
-			Target:       SchemaControlObjective,
-			TargetType:   "ControlObjective",
-			Relationship: "M2M",
-			CreateField:  "controlobjectiveIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Evidence.UpdateOneID(entityID).AddControlObjectiveIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "evidence", Operation: OpLink, EntityID: entityID, Edge: "control_objectives"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Evidence.UpdateOneID(entityID).RemoveControlObjectiveIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "evidence", Operation: OpUnlink, EntityID: entityID, Edge: "control_objectives"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Evidence.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "evidence", Operation: OpQuery, EntityID: entityID, Edge: "control_objectives"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControlObjectives().IDs(ctx)
-			},
+			Name:        "control_objectives",
+			Label:       "ControlObjectives",
+			Target:      SchemaControlObjective,
+			TargetType:  "ControlObjective",
+			CreateField: "controlobjectiveIDs",
+			AddField:    "addControlObjectiveIDs",
+			RemoveField: "removeControlObjectiveIDs",
 		},
 		{
-			Name:         "controls",
-			Label:        "Controls",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2M",
-			CreateField:  "controlIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Evidence.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "evidence", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Evidence.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "evidence", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Evidence.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "evidence", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "controlIDs",
+			AddField:    "addControlIDs",
+			RemoveField: "removeControlIDs",
 		},
 		{
-			Name:         "platforms",
-			Label:        "Platforms",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2M",
-			CreateField:  "platformIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Evidence.UpdateOneID(entityID).AddPlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "evidence", Operation: OpLink, EntityID: entityID, Edge: "platforms"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Evidence.UpdateOneID(entityID).RemovePlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "evidence", Operation: OpUnlink, EntityID: entityID, Edge: "platforms"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Evidence.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "evidence", Operation: OpQuery, EntityID: entityID, Edge: "platforms"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryPlatforms().IDs(ctx)
-			},
+			Name:        "platforms",
+			Label:       "Platforms",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			CreateField: "platformIDs",
+			AddField:    "addPlatformIDs",
+			RemoveField: "removePlatformIDs",
 		},
 		{
-			Name:         "scans",
-			Label:        "Scans",
-			Target:       SchemaScan,
-			TargetType:   "Scan",
-			Relationship: "M2M",
-			CreateField:  "scanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Evidence.UpdateOneID(entityID).AddScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "evidence", Operation: OpLink, EntityID: entityID, Edge: "scans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Evidence.UpdateOneID(entityID).RemoveScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "evidence", Operation: OpUnlink, EntityID: entityID, Edge: "scans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Evidence.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "evidence", Operation: OpQuery, EntityID: entityID, Edge: "scans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryScans().IDs(ctx)
-			},
+			Name:        "scans",
+			Label:       "Scans",
+			Target:      SchemaScan,
+			TargetType:  "Scan",
+			CreateField: "scanIDs",
+			AddField:    "addScanIDs",
+			RemoveField: "removeScanIDs",
 		},
 		{
-			Name:         "subcontrols",
-			Label:        "Subcontrols",
-			Target:       SchemaSubcontrol,
-			TargetType:   "Subcontrol",
-			Relationship: "M2M",
-			CreateField:  "subcontrolIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Evidence.UpdateOneID(entityID).AddSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "evidence", Operation: OpLink, EntityID: entityID, Edge: "subcontrols"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Evidence.UpdateOneID(entityID).RemoveSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "evidence", Operation: OpUnlink, EntityID: entityID, Edge: "subcontrols"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Evidence.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "evidence", Operation: OpQuery, EntityID: entityID, Edge: "subcontrols"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrols().IDs(ctx)
-			},
+			Name:        "subcontrols",
+			Label:       "Subcontrols",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			CreateField: "subcontrolIDs",
+			AddField:    "addSubcontrolIDs",
+			RemoveField: "removeSubcontrolIDs",
 		},
 		{
-			Name:         "tasks",
-			Label:        "Tasks",
-			Target:       SchemaTask,
-			TargetType:   "Task",
-			Relationship: "M2M",
-			CreateField:  "taskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Evidence.UpdateOneID(entityID).AddTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "evidence", Operation: OpLink, EntityID: entityID, Edge: "tasks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Evidence.UpdateOneID(entityID).RemoveTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "evidence", Operation: OpUnlink, EntityID: entityID, Edge: "tasks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Evidence.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "evidence", Operation: OpQuery, EntityID: entityID, Edge: "tasks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTasks().IDs(ctx)
-			},
+			Name:        "tasks",
+			Label:       "Tasks",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			CreateField: "taskIDs",
+			AddField:    "addTaskIDs",
+			RemoveField: "removeTaskIDs",
 		},
 		{
 			Name:             "workflow_object_refs",
 			Label:            "WorkflowObjectRefs",
 			Target:           SchemaWorkflowObjectRef,
 			TargetType:       "WorkflowObjectRef",
-			Relationship:     "O2M",
 			CreateField:      "workflowobjectrefIDs",
+			AddField:         "addWorkflowObjectRefIDs",
+			RemoveField:      "removeWorkflowObjectRefIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Evidence.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "evidence", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Evidence.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "evidence", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Evidence.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "evidence", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
 		},
 	}
 	SchemaFinding.Edges = []EdgeDescriptor{
 		{
-			Name:         "action_plans",
-			Label:        "ActionPlans",
-			Target:       SchemaActionPlan,
-			TargetType:   "ActionPlan",
-			Relationship: "M2M",
-			CreateField:  "actionplanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).AddActionPlanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpLink, EntityID: entityID, Edge: "action_plans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).RemoveActionPlanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpUnlink, EntityID: entityID, Edge: "action_plans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Finding.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "finding", Operation: OpQuery, EntityID: entityID, Edge: "action_plans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryActionPlans().IDs(ctx)
-			},
+			Name:        "action_plans",
+			Label:       "ActionPlans",
+			Target:      SchemaActionPlan,
+			TargetType:  "ActionPlan",
+			CreateField: "actionplanIDs",
+			AddField:    "addActionPlanIDs",
+			RemoveField: "removeActionPlanIDs",
 		},
 		{
-			Name:         "assets",
-			Label:        "Assets",
-			Target:       SchemaAsset,
-			TargetType:   "Asset",
-			Relationship: "O2M",
-			CreateField:  "assetIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).AddAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpLink, EntityID: entityID, Edge: "assets"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).RemoveAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpUnlink, EntityID: entityID, Edge: "assets"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Finding.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "finding", Operation: OpQuery, EntityID: entityID, Edge: "assets"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssets().IDs(ctx)
-			},
+			Name:        "assets",
+			Label:       "Assets",
+			Target:      SchemaAsset,
+			TargetType:  "Asset",
+			CreateField: "assetIDs",
+			AddField:    "addAssetIDs",
+			RemoveField: "removeAssetIDs",
 		},
 		{
-			Name:         "check_results",
-			Label:        "CheckResults",
-			Target:       SchemaCheckResult,
-			TargetType:   "CheckResult",
-			Relationship: "M2M",
-			CreateField:  "checkresultIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).AddCheckResultIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpLink, EntityID: entityID, Edge: "check_results"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).RemoveCheckResultIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpUnlink, EntityID: entityID, Edge: "check_results"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Finding.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "finding", Operation: OpQuery, EntityID: entityID, Edge: "check_results"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryCheckResults().IDs(ctx)
-			},
+			Name:        "check_results",
+			Label:       "CheckResults",
+			Target:      SchemaCheckResult,
+			TargetType:  "CheckResult",
+			CreateField: "checkresultIDs",
+			AddField:    "addCheckResultIDs",
+			RemoveField: "removeCheckResultIDs",
 		},
 		{
-			Name:         "controls",
-			Label:        "Controls",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2M",
-			CreateField:  "controlIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Finding.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "finding", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "controlIDs",
+			AddField:    "addControlIDs",
+			RemoveField: "removeControlIDs",
 		},
 		{
-			Name:         "directory_accounts",
-			Label:        "DirectoryAccounts",
-			Target:       SchemaDirectoryAccount,
-			TargetType:   "DirectoryAccount",
-			Relationship: "M2M",
-			CreateField:  "directoryaccountIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).AddDirectoryAccountIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpLink, EntityID: entityID, Edge: "directory_accounts"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).RemoveDirectoryAccountIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpUnlink, EntityID: entityID, Edge: "directory_accounts"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Finding.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "finding", Operation: OpQuery, EntityID: entityID, Edge: "directory_accounts"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryDirectoryAccounts().IDs(ctx)
-			},
+			Name:        "directory_accounts",
+			Label:       "DirectoryAccounts",
+			Target:      SchemaDirectoryAccount,
+			TargetType:  "DirectoryAccount",
+			CreateField: "directoryaccountIDs",
+			AddField:    "addDirectoryAccountIDs",
+			RemoveField: "removeDirectoryAccountIDs",
 		},
 		{
-			Name:         "entities",
-			Label:        "Entities",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "O2M",
-			CreateField:  "entityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).AddEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpLink, EntityID: entityID, Edge: "entities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).RemoveEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpUnlink, EntityID: entityID, Edge: "entities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Finding.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "finding", Operation: OpQuery, EntityID: entityID, Edge: "entities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEntities().IDs(ctx)
-			},
+			Name:        "entities",
+			Label:       "Entities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "entityIDs",
+			AddField:    "addEntityIDs",
+			RemoveField: "removeEntityIDs",
 		},
 		{
-			Name:         "identity_holders",
-			Label:        "IdentityHolders",
-			Target:       SchemaIdentityHolder,
-			TargetType:   "IdentityHolder",
-			Relationship: "M2M",
-			CreateField:  "identityholderIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).AddIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpLink, EntityID: entityID, Edge: "identity_holders"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).RemoveIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpUnlink, EntityID: entityID, Edge: "identity_holders"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Finding.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "finding", Operation: OpQuery, EntityID: entityID, Edge: "identity_holders"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryIdentityHolders().IDs(ctx)
-			},
+			Name:        "identity_holders",
+			Label:       "IdentityHolders",
+			Target:      SchemaIdentityHolder,
+			TargetType:  "IdentityHolder",
+			CreateField: "identityholderIDs",
+			AddField:    "addIdentityHolderIDs",
+			RemoveField: "removeIdentityHolderIDs",
 		},
 		{
-			Name:         "remediations",
-			Label:        "Remediations",
-			Target:       SchemaRemediation,
-			TargetType:   "Remediation",
-			Relationship: "M2M",
-			CreateField:  "remediationIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).AddRemediationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpLink, EntityID: entityID, Edge: "remediations"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).RemoveRemediationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpUnlink, EntityID: entityID, Edge: "remediations"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Finding.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "finding", Operation: OpQuery, EntityID: entityID, Edge: "remediations"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRemediations().IDs(ctx)
-			},
+			Name:        "remediations",
+			Label:       "Remediations",
+			Target:      SchemaRemediation,
+			TargetType:  "Remediation",
+			CreateField: "remediationIDs",
+			AddField:    "addRemediationIDs",
+			RemoveField: "removeRemediationIDs",
 		},
 		{
-			Name:         "reviews",
-			Label:        "Reviews",
-			Target:       SchemaReview,
-			TargetType:   "Review",
-			Relationship: "M2M",
-			CreateField:  "reviewIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).AddReviewIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpLink, EntityID: entityID, Edge: "reviews"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).RemoveReviewIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpUnlink, EntityID: entityID, Edge: "reviews"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Finding.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "finding", Operation: OpQuery, EntityID: entityID, Edge: "reviews"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryReviews().IDs(ctx)
-			},
+			Name:        "reviews",
+			Label:       "Reviews",
+			Target:      SchemaReview,
+			TargetType:  "Review",
+			CreateField: "reviewIDs",
+			AddField:    "addReviewIDs",
+			RemoveField: "removeReviewIDs",
 		},
 		{
-			Name:         "risks",
-			Label:        "Risks",
-			Target:       SchemaRisk,
-			TargetType:   "Risk",
-			Relationship: "O2M",
-			CreateField:  "riskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).AddRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpLink, EntityID: entityID, Edge: "risks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).RemoveRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpUnlink, EntityID: entityID, Edge: "risks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Finding.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "finding", Operation: OpQuery, EntityID: entityID, Edge: "risks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRisks().IDs(ctx)
-			},
+			Name:        "risks",
+			Label:       "Risks",
+			Target:      SchemaRisk,
+			TargetType:  "Risk",
+			CreateField: "riskIDs",
+			AddField:    "addRiskIDs",
+			RemoveField: "removeRiskIDs",
 		},
 		{
-			Name:         "scans",
-			Label:        "Scans",
-			Target:       SchemaScan,
-			TargetType:   "Scan",
-			Relationship: "M2M",
-			CreateField:  "scanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).AddScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpLink, EntityID: entityID, Edge: "scans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).RemoveScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpUnlink, EntityID: entityID, Edge: "scans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Finding.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "finding", Operation: OpQuery, EntityID: entityID, Edge: "scans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryScans().IDs(ctx)
-			},
+			Name:        "scans",
+			Label:       "Scans",
+			Target:      SchemaScan,
+			TargetType:  "Scan",
+			CreateField: "scanIDs",
+			AddField:    "addScanIDs",
+			RemoveField: "removeScanIDs",
 		},
 		{
-			Name:         "subcontrols",
-			Label:        "Subcontrols",
-			Target:       SchemaSubcontrol,
-			TargetType:   "Subcontrol",
-			Relationship: "O2M",
-			CreateField:  "subcontrolIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).AddSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpLink, EntityID: entityID, Edge: "subcontrols"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).RemoveSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpUnlink, EntityID: entityID, Edge: "subcontrols"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Finding.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "finding", Operation: OpQuery, EntityID: entityID, Edge: "subcontrols"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrols().IDs(ctx)
-			},
+			Name:        "subcontrols",
+			Label:       "Subcontrols",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			CreateField: "subcontrolIDs",
+			AddField:    "addSubcontrolIDs",
+			RemoveField: "removeSubcontrolIDs",
 		},
 		{
-			Name:         "tasks",
-			Label:        "Tasks",
-			Target:       SchemaTask,
-			TargetType:   "Task",
-			Relationship: "M2M",
-			CreateField:  "taskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).AddTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpLink, EntityID: entityID, Edge: "tasks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).RemoveTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpUnlink, EntityID: entityID, Edge: "tasks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Finding.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "finding", Operation: OpQuery, EntityID: entityID, Edge: "tasks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTasks().IDs(ctx)
-			},
+			Name:        "tasks",
+			Label:       "Tasks",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			CreateField: "taskIDs",
+			AddField:    "addTaskIDs",
+			RemoveField: "removeTaskIDs",
 		},
 		{
-			Name:         "vulnerabilities",
-			Label:        "Vulnerabilities",
-			Target:       SchemaVulnerability,
-			TargetType:   "Vulnerability",
-			Relationship: "M2M",
-			CreateField:  "vulnerabilityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).AddVulnerabilityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpLink, EntityID: entityID, Edge: "vulnerabilities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).RemoveVulnerabilityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpUnlink, EntityID: entityID, Edge: "vulnerabilities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Finding.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "finding", Operation: OpQuery, EntityID: entityID, Edge: "vulnerabilities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryVulnerabilities().IDs(ctx)
-			},
+			Name:        "vulnerabilities",
+			Label:       "Vulnerabilities",
+			Target:      SchemaVulnerability,
+			TargetType:  "Vulnerability",
+			CreateField: "vulnerabilityIDs",
+			AddField:    "addVulnerabilityIDs",
+			RemoveField: "removeVulnerabilityIDs",
 		},
 		{
-			Name:         "workflow_object_refs",
-			Label:        "WorkflowObjectRefs",
-			Target:       SchemaWorkflowObjectRef,
-			TargetType:   "WorkflowObjectRef",
-			Relationship: "O2M",
-			CreateField:  "workflowobjectrefIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Finding.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "finding", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Finding.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "finding", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflowobjectrefIDs",
+			AddField:    "addWorkflowObjectRefIDs",
+			RemoveField: "removeWorkflowObjectRefIDs",
 		},
 	}
 	SchemaIdentityHolder.Edges = []EdgeDescriptor{
 		{
-			Name:         "access_platforms",
-			Label:        "AccessPlatforms",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "O2M",
-			CreateField:  "accessplatformIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).AddAccessPlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpLink, EntityID: entityID, Edge: "access_platforms"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).RemoveAccessPlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpUnlink, EntityID: entityID, Edge: "access_platforms"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.IdentityHolder.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpQuery, EntityID: entityID, Edge: "access_platforms"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAccessPlatforms().IDs(ctx)
-			},
+			Name:        "access_platforms",
+			Label:       "AccessPlatforms",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			CreateField: "accessplatformIDs",
+			AddField:    "addAccessPlatformIDs",
+			RemoveField: "removeAccessPlatformIDs",
 		},
 		{
-			Name:         "assessment_responses",
-			Label:        "AssessmentResponses",
-			Target:       SchemaAssessmentResponse,
-			TargetType:   "AssessmentResponse",
-			Relationship: "O2M",
-			CreateField:  "assessmentresponseIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).AddAssessmentResponseIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpLink, EntityID: entityID, Edge: "assessment_responses"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).RemoveAssessmentResponseIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpUnlink, EntityID: entityID, Edge: "assessment_responses"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.IdentityHolder.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpQuery, EntityID: entityID, Edge: "assessment_responses"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssessmentResponses().IDs(ctx)
-			},
+			Name:        "assessment_responses",
+			Label:       "AssessmentResponses",
+			Target:      SchemaAssessmentResponse,
+			TargetType:  "AssessmentResponse",
+			CreateField: "assessmentresponseIDs",
+			AddField:    "addAssessmentResponseIDs",
+			RemoveField: "removeAssessmentResponseIDs",
 		},
 		{
-			Name:         "assessments",
-			Label:        "Assessments",
-			Target:       SchemaAssessment,
-			TargetType:   "Assessment",
-			Relationship: "M2M",
-			CreateField:  "assessmentIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).AddAssessmentIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpLink, EntityID: entityID, Edge: "assessments"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).RemoveAssessmentIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpUnlink, EntityID: entityID, Edge: "assessments"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.IdentityHolder.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpQuery, EntityID: entityID, Edge: "assessments"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssessments().IDs(ctx)
-			},
+			Name:        "assessments",
+			Label:       "Assessments",
+			Target:      SchemaAssessment,
+			TargetType:  "Assessment",
+			CreateField: "assessmentIDs",
+			AddField:    "addAssessmentIDs",
+			RemoveField: "removeAssessmentIDs",
 		},
 		{
-			Name:         "assets",
-			Label:        "Assets",
-			Target:       SchemaAsset,
-			TargetType:   "Asset",
-			Relationship: "M2M",
-			CreateField:  "assetIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).AddAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpLink, EntityID: entityID, Edge: "assets"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).RemoveAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpUnlink, EntityID: entityID, Edge: "assets"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.IdentityHolder.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpQuery, EntityID: entityID, Edge: "assets"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssets().IDs(ctx)
-			},
+			Name:        "assets",
+			Label:       "Assets",
+			Target:      SchemaAsset,
+			TargetType:  "Asset",
+			CreateField: "assetIDs",
+			AddField:    "addAssetIDs",
+			RemoveField: "removeAssetIDs",
 		},
 		{
-			Name:         "campaigns",
-			Label:        "Campaigns",
-			Target:       SchemaCampaign,
-			TargetType:   "Campaign",
-			Relationship: "M2M",
-			CreateField:  "campaignIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).AddCampaignIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpLink, EntityID: entityID, Edge: "campaigns"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).RemoveCampaignIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpUnlink, EntityID: entityID, Edge: "campaigns"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.IdentityHolder.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpQuery, EntityID: entityID, Edge: "campaigns"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryCampaigns().IDs(ctx)
-			},
+			Name:        "campaigns",
+			Label:       "Campaigns",
+			Target:      SchemaCampaign,
+			TargetType:  "Campaign",
+			CreateField: "campaignIDs",
+			AddField:    "addCampaignIDs",
+			RemoveField: "removeCampaignIDs",
 		},
 		{
-			Name:         "controls",
-			Label:        "Controls",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2M",
-			CreateField:  "controlIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.IdentityHolder.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "controlIDs",
+			AddField:    "addControlIDs",
+			RemoveField: "removeControlIDs",
 		},
 		{
-			Name:         "directory_accounts",
-			Label:        "DirectoryAccounts",
-			Target:       SchemaDirectoryAccount,
-			TargetType:   "DirectoryAccount",
-			Relationship: "O2M",
-			CreateField:  "directoryaccountIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).AddDirectoryAccountIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpLink, EntityID: entityID, Edge: "directory_accounts"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).RemoveDirectoryAccountIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpUnlink, EntityID: entityID, Edge: "directory_accounts"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.IdentityHolder.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpQuery, EntityID: entityID, Edge: "directory_accounts"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryDirectoryAccounts().IDs(ctx)
-			},
+			Name:        "directory_accounts",
+			Label:       "DirectoryAccounts",
+			Target:      SchemaDirectoryAccount,
+			TargetType:  "DirectoryAccount",
+			CreateField: "directoryaccountIDs",
+			AddField:    "addDirectoryAccountIDs",
+			RemoveField: "removeDirectoryAccountIDs",
 		},
 		{
-			Name:         "employer",
-			Label:        "Employer",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "employerID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.IdentityHolder.UpdateOneID(entityID).SetEmployerID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpLink, EntityID: entityID, Edge: "employer"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).ClearEmployer().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpUnlink, EntityID: entityID, Edge: "employer"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.IdentityHolder.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpQuery, EntityID: entityID, Edge: "employer"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEmployer().IDs(ctx)
-			},
+			Name:        "employer",
+			Label:       "Employer",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			Unique:      true,
+			CreateField: "employerID",
+			ClearField:  "clearEmployer",
+			Field:       "employer_entity_id",
 		},
 		{
-			Name:         "entities",
-			Label:        "Entities",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "M2M",
-			CreateField:  "entityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).AddEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpLink, EntityID: entityID, Edge: "entities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).RemoveEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpUnlink, EntityID: entityID, Edge: "entities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.IdentityHolder.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpQuery, EntityID: entityID, Edge: "entities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEntities().IDs(ctx)
-			},
+			Name:        "entities",
+			Label:       "Entities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "entityIDs",
+			AddField:    "addEntityIDs",
+			RemoveField: "removeEntityIDs",
 		},
 		{
-			Name:         "findings",
-			Label:        "Findings",
-			Target:       SchemaFinding,
-			TargetType:   "Finding",
-			Relationship: "M2M",
-			CreateField:  "findingIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).AddFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpLink, EntityID: entityID, Edge: "findings"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).RemoveFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpUnlink, EntityID: entityID, Edge: "findings"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.IdentityHolder.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpQuery, EntityID: entityID, Edge: "findings"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryFindings().IDs(ctx)
-			},
+			Name:        "findings",
+			Label:       "Findings",
+			Target:      SchemaFinding,
+			TargetType:  "Finding",
+			CreateField: "findingIDs",
+			AddField:    "addFindingIDs",
+			RemoveField: "removeFindingIDs",
 		},
 		{
-			Name:         "internal_policies",
-			Label:        "InternalPolicies",
-			Target:       SchemaInternalPolicy,
-			TargetType:   "InternalPolicy",
-			Relationship: "M2M",
-			CreateField:  "internalpolicyIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).AddInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpLink, EntityID: entityID, Edge: "internal_policies"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).RemoveInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpUnlink, EntityID: entityID, Edge: "internal_policies"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.IdentityHolder.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpQuery, EntityID: entityID, Edge: "internal_policies"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryInternalPolicies().IDs(ctx)
-			},
+			Name:        "internal_policies",
+			Label:       "InternalPolicies",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			CreateField: "internalpolicyIDs",
+			AddField:    "addInternalPolicyIDs",
+			RemoveField: "removeInternalPolicyIDs",
 		},
 		{
-			Name:         "platforms",
-			Label:        "Platforms",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2M",
-			CreateField:  "platformIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).AddPlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpLink, EntityID: entityID, Edge: "platforms"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).RemovePlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpUnlink, EntityID: entityID, Edge: "platforms"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.IdentityHolder.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpQuery, EntityID: entityID, Edge: "platforms"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryPlatforms().IDs(ctx)
-			},
+			Name:        "platforms",
+			Label:       "Platforms",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			CreateField: "platformIDs",
+			AddField:    "addPlatformIDs",
+			RemoveField: "removePlatformIDs",
 		},
 		{
-			Name:         "subcontrols",
-			Label:        "Subcontrols",
-			Target:       SchemaSubcontrol,
-			TargetType:   "Subcontrol",
-			Relationship: "M2M",
-			CreateField:  "subcontrolIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).AddSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpLink, EntityID: entityID, Edge: "subcontrols"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).RemoveSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpUnlink, EntityID: entityID, Edge: "subcontrols"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.IdentityHolder.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpQuery, EntityID: entityID, Edge: "subcontrols"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrols().IDs(ctx)
-			},
+			Name:        "subcontrols",
+			Label:       "Subcontrols",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			CreateField: "subcontrolIDs",
+			AddField:    "addSubcontrolIDs",
+			RemoveField: "removeSubcontrolIDs",
 		},
 		{
-			Name:         "tasks",
-			Label:        "Tasks",
-			Target:       SchemaTask,
-			TargetType:   "Task",
-			Relationship: "M2M",
-			CreateField:  "taskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).AddTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpLink, EntityID: entityID, Edge: "tasks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).RemoveTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpUnlink, EntityID: entityID, Edge: "tasks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.IdentityHolder.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpQuery, EntityID: entityID, Edge: "tasks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTasks().IDs(ctx)
-			},
+			Name:        "tasks",
+			Label:       "Tasks",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			CreateField: "taskIDs",
+			AddField:    "addTaskIDs",
+			RemoveField: "removeTaskIDs",
 		},
 		{
-			Name:         "templates",
-			Label:        "Templates",
-			Target:       SchemaTemplate,
-			TargetType:   "Template",
-			Relationship: "M2M",
-			CreateField:  "templateIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).AddTemplateIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpLink, EntityID: entityID, Edge: "templates"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).RemoveTemplateIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpUnlink, EntityID: entityID, Edge: "templates"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.IdentityHolder.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpQuery, EntityID: entityID, Edge: "templates"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTemplates().IDs(ctx)
-			},
+			Name:        "templates",
+			Label:       "Templates",
+			Target:      SchemaTemplate,
+			TargetType:  "Template",
+			CreateField: "templateIDs",
+			AddField:    "addTemplateIDs",
+			RemoveField: "removeTemplateIDs",
 		},
 		{
-			Name:         "workflow_object_refs",
-			Label:        "WorkflowObjectRefs",
-			Target:       SchemaWorkflowObjectRef,
-			TargetType:   "WorkflowObjectRef",
-			Relationship: "O2M",
-			CreateField:  "workflowobjectrefIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.IdentityHolder.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.IdentityHolder.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "identity_holder", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflowobjectrefIDs",
+			AddField:    "addWorkflowObjectRefIDs",
+			RemoveField: "removeWorkflowObjectRefIDs",
 		},
 	}
 	SchemaInternalPolicy.Edges = []EdgeDescriptor{
 		{
-			Name:         "assets",
-			Label:        "Assets",
-			Target:       SchemaAsset,
-			TargetType:   "Asset",
-			Relationship: "M2M",
-			CreateField:  "assetIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).AddAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpLink, EntityID: entityID, Edge: "assets"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).RemoveAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpUnlink, EntityID: entityID, Edge: "assets"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.InternalPolicy.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpQuery, EntityID: entityID, Edge: "assets"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssets().IDs(ctx)
-			},
+			Name:        "assets",
+			Label:       "Assets",
+			Target:      SchemaAsset,
+			TargetType:  "Asset",
+			CreateField: "assetIDs",
+			AddField:    "addAssetIDs",
+			RemoveField: "removeAssetIDs",
 		},
 		{
-			Name:         "control_implementations",
-			Label:        "ControlImplementations",
-			Target:       SchemaControlImplementation,
-			TargetType:   "ControlImplementation",
-			Relationship: "O2M",
-			CreateField:  "controlimplementationIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).AddControlImplementationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpLink, EntityID: entityID, Edge: "control_implementations"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).RemoveControlImplementationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpUnlink, EntityID: entityID, Edge: "control_implementations"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.InternalPolicy.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpQuery, EntityID: entityID, Edge: "control_implementations"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControlImplementations().IDs(ctx)
-			},
+			Name:        "control_implementations",
+			Label:       "ControlImplementations",
+			Target:      SchemaControlImplementation,
+			TargetType:  "ControlImplementation",
+			CreateField: "controlimplementationIDs",
+			AddField:    "addControlImplementationIDs",
+			RemoveField: "removeControlImplementationIDs",
 		},
 		{
-			Name:         "control_objectives",
-			Label:        "ControlObjectives",
-			Target:       SchemaControlObjective,
-			TargetType:   "ControlObjective",
-			Relationship: "M2M",
-			CreateField:  "controlobjectiveIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).AddControlObjectiveIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpLink, EntityID: entityID, Edge: "control_objectives"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).RemoveControlObjectiveIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpUnlink, EntityID: entityID, Edge: "control_objectives"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.InternalPolicy.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpQuery, EntityID: entityID, Edge: "control_objectives"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControlObjectives().IDs(ctx)
-			},
+			Name:        "control_objectives",
+			Label:       "ControlObjectives",
+			Target:      SchemaControlObjective,
+			TargetType:  "ControlObjective",
+			CreateField: "controlobjectiveIDs",
+			AddField:    "addControlObjectiveIDs",
+			RemoveField: "removeControlObjectiveIDs",
 		},
 		{
-			Name:         "controls",
-			Label:        "Controls",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2M",
-			CreateField:  "controlIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.InternalPolicy.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "controlIDs",
+			AddField:    "addControlIDs",
+			RemoveField: "removeControlIDs",
 		},
 		{
 			Name:             "discussions",
 			Label:            "Discussions",
 			Target:           SchemaDiscussion,
 			TargetType:       "Discussion",
-			Relationship:     "O2M",
 			CreateField:      "discussionIDs",
+			AddField:         "addDiscussionIDs",
+			RemoveField:      "removeDiscussionIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).AddDiscussionIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpLink, EntityID: entityID, Edge: "discussions"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).RemoveDiscussionIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpUnlink, EntityID: entityID, Edge: "discussions"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.InternalPolicy.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpQuery, EntityID: entityID, Edge: "discussions"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryDiscussions().IDs(ctx)
-			},
 		},
 		{
-			Name:         "entities",
-			Label:        "Entities",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "M2M",
-			CreateField:  "entityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).AddEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpLink, EntityID: entityID, Edge: "entities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).RemoveEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpUnlink, EntityID: entityID, Edge: "entities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.InternalPolicy.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpQuery, EntityID: entityID, Edge: "entities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEntities().IDs(ctx)
-			},
+			Name:        "entities",
+			Label:       "Entities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "entityIDs",
+			AddField:    "addEntityIDs",
+			RemoveField: "removeEntityIDs",
 		},
 		{
-			Name:         "identity_holders",
-			Label:        "IdentityHolders",
-			Target:       SchemaIdentityHolder,
-			TargetType:   "IdentityHolder",
-			Relationship: "M2M",
-			CreateField:  "identityholderIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).AddIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpLink, EntityID: entityID, Edge: "identity_holders"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).RemoveIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpUnlink, EntityID: entityID, Edge: "identity_holders"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.InternalPolicy.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpQuery, EntityID: entityID, Edge: "identity_holders"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryIdentityHolders().IDs(ctx)
-			},
+			Name:        "identity_holders",
+			Label:       "IdentityHolders",
+			Target:      SchemaIdentityHolder,
+			TargetType:  "IdentityHolder",
+			CreateField: "identityholderIDs",
+			AddField:    "addIdentityHolderIDs",
+			RemoveField: "removeIdentityHolderIDs",
 		},
 		{
-			Name:         "narratives",
-			Label:        "Narratives",
-			Target:       SchemaNarrative,
-			TargetType:   "Narrative",
-			Relationship: "M2M",
-			CreateField:  "narrativeIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).AddNarrativeIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpLink, EntityID: entityID, Edge: "narratives"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).RemoveNarrativeIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpUnlink, EntityID: entityID, Edge: "narratives"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.InternalPolicy.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpQuery, EntityID: entityID, Edge: "narratives"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryNarratives().IDs(ctx)
-			},
+			Name:        "narratives",
+			Label:       "Narratives",
+			Target:      SchemaNarrative,
+			TargetType:  "Narrative",
+			CreateField: "narrativeIDs",
+			AddField:    "addNarrativeIDs",
+			RemoveField: "removeNarrativeIDs",
 		},
 		{
-			Name:         "procedures",
-			Label:        "Procedures",
-			Target:       SchemaProcedure,
-			TargetType:   "Procedure",
-			Relationship: "M2M",
-			CreateField:  "procedureIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).AddProcedureIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpLink, EntityID: entityID, Edge: "procedures"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).RemoveProcedureIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpUnlink, EntityID: entityID, Edge: "procedures"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.InternalPolicy.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpQuery, EntityID: entityID, Edge: "procedures"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryProcedures().IDs(ctx)
-			},
+			Name:        "procedures",
+			Label:       "Procedures",
+			Target:      SchemaProcedure,
+			TargetType:  "Procedure",
+			CreateField: "procedureIDs",
+			AddField:    "addProcedureIDs",
+			RemoveField: "removeProcedureIDs",
 		},
 		{
-			Name:         "reviews",
-			Label:        "Reviews",
-			Target:       SchemaReview,
-			TargetType:   "Review",
-			Relationship: "M2M",
-			CreateField:  "reviewIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).AddReviewIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpLink, EntityID: entityID, Edge: "reviews"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).RemoveReviewIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpUnlink, EntityID: entityID, Edge: "reviews"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.InternalPolicy.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpQuery, EntityID: entityID, Edge: "reviews"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryReviews().IDs(ctx)
-			},
+			Name:        "reviews",
+			Label:       "Reviews",
+			Target:      SchemaReview,
+			TargetType:  "Review",
+			CreateField: "reviewIDs",
+			AddField:    "addReviewIDs",
+			RemoveField: "removeReviewIDs",
 		},
 		{
-			Name:         "risks",
-			Label:        "Risks",
-			Target:       SchemaRisk,
-			TargetType:   "Risk",
-			Relationship: "M2M",
-			CreateField:  "riskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).AddRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpLink, EntityID: entityID, Edge: "risks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).RemoveRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpUnlink, EntityID: entityID, Edge: "risks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.InternalPolicy.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpQuery, EntityID: entityID, Edge: "risks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRisks().IDs(ctx)
-			},
+			Name:        "risks",
+			Label:       "Risks",
+			Target:      SchemaRisk,
+			TargetType:  "Risk",
+			CreateField: "riskIDs",
+			AddField:    "addRiskIDs",
+			RemoveField: "removeRiskIDs",
 		},
 		{
-			Name:         "subcontrols",
-			Label:        "Subcontrols",
-			Target:       SchemaSubcontrol,
-			TargetType:   "Subcontrol",
-			Relationship: "M2M",
-			CreateField:  "subcontrolIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).AddSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpLink, EntityID: entityID, Edge: "subcontrols"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).RemoveSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpUnlink, EntityID: entityID, Edge: "subcontrols"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.InternalPolicy.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpQuery, EntityID: entityID, Edge: "subcontrols"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrols().IDs(ctx)
-			},
+			Name:        "subcontrols",
+			Label:       "Subcontrols",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			CreateField: "subcontrolIDs",
+			AddField:    "addSubcontrolIDs",
+			RemoveField: "removeSubcontrolIDs",
 		},
 		{
-			Name:         "tasks",
-			Label:        "Tasks",
-			Target:       SchemaTask,
-			TargetType:   "Task",
-			Relationship: "M2M",
-			CreateField:  "taskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).AddTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpLink, EntityID: entityID, Edge: "tasks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).RemoveTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpUnlink, EntityID: entityID, Edge: "tasks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.InternalPolicy.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpQuery, EntityID: entityID, Edge: "tasks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTasks().IDs(ctx)
-			},
+			Name:        "tasks",
+			Label:       "Tasks",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			CreateField: "taskIDs",
+			AddField:    "addTaskIDs",
+			RemoveField: "removeTaskIDs",
 		},
 		{
 			Name:             "workflow_object_refs",
 			Label:            "WorkflowObjectRefs",
 			Target:           SchemaWorkflowObjectRef,
 			TargetType:       "WorkflowObjectRef",
-			Relationship:     "O2M",
 			CreateField:      "workflowobjectrefIDs",
+			AddField:         "addWorkflowObjectRefIDs",
+			RemoveField:      "removeWorkflowObjectRefIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.InternalPolicy.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.InternalPolicy.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "internal_policy", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
 		},
 	}
 	SchemaNarrative.Edges = []EdgeDescriptor{
 		{
-			Name:         "internal_policies",
-			Label:        "InternalPolicies",
-			Target:       SchemaInternalPolicy,
-			TargetType:   "InternalPolicy",
-			Relationship: "M2M",
-			CreateField:  "internalpolicyIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Narrative.UpdateOneID(entityID).AddInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "narrative", Operation: OpLink, EntityID: entityID, Edge: "internal_policies"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Narrative.UpdateOneID(entityID).RemoveInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "narrative", Operation: OpUnlink, EntityID: entityID, Edge: "internal_policies"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Narrative.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "narrative", Operation: OpQuery, EntityID: entityID, Edge: "internal_policies"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryInternalPolicies().IDs(ctx)
-			},
+			Name:        "internal_policies",
+			Label:       "InternalPolicies",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			CreateField: "internalpolicyIDs",
+			AddField:    "addInternalPolicyIDs",
+			RemoveField: "removeInternalPolicyIDs",
 		},
 		{
-			Name:         "procedures",
-			Label:        "Procedures",
-			Target:       SchemaProcedure,
-			TargetType:   "Procedure",
-			Relationship: "M2M",
-			CreateField:  "procedureIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Narrative.UpdateOneID(entityID).AddProcedureIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "narrative", Operation: OpLink, EntityID: entityID, Edge: "procedures"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Narrative.UpdateOneID(entityID).RemoveProcedureIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "narrative", Operation: OpUnlink, EntityID: entityID, Edge: "procedures"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Narrative.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "narrative", Operation: OpQuery, EntityID: entityID, Edge: "procedures"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryProcedures().IDs(ctx)
-			},
+			Name:        "procedures",
+			Label:       "Procedures",
+			Target:      SchemaProcedure,
+			TargetType:  "Procedure",
+			CreateField: "procedureIDs",
+			AddField:    "addProcedureIDs",
+			RemoveField: "removeProcedureIDs",
 		},
 		{
-			Name:         "satisfies",
-			Label:        "Satisfies",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2M",
-			CreateField:  "satisfyIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Narrative.UpdateOneID(entityID).AddSatisfyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "narrative", Operation: OpLink, EntityID: entityID, Edge: "satisfies"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Narrative.UpdateOneID(entityID).RemoveSatisfyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "narrative", Operation: OpUnlink, EntityID: entityID, Edge: "satisfies"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Narrative.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "narrative", Operation: OpQuery, EntityID: entityID, Edge: "satisfies"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySatisfies().IDs(ctx)
-			},
+			Name:        "satisfies",
+			Label:       "Satisfies",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "satisfyIDs",
+			AddField:    "addSatisfyIDs",
+			RemoveField: "removeSatisfyIDs",
 		},
 	}
 	SchemaNotificationTemplate.Edges = []EdgeDescriptor{
 		{
-			Name:         "email_template",
-			Label:        "EmailTemplate",
-			Target:       SchemaEmailTemplate,
-			TargetType:   "EmailTemplate",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "emailTemplateID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.NotificationTemplate.UpdateOneID(entityID).SetEmailTemplateID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "notification_template", Operation: OpLink, EntityID: entityID, Edge: "email_template"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.NotificationTemplate.UpdateOneID(entityID).ClearEmailTemplate().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "notification_template", Operation: OpUnlink, EntityID: entityID, Edge: "email_template"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.NotificationTemplate.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "notification_template", Operation: OpQuery, EntityID: entityID, Edge: "email_template"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEmailTemplate().IDs(ctx)
-			},
+			Name:        "email_template",
+			Label:       "EmailTemplate",
+			Target:      SchemaEmailTemplate,
+			TargetType:  "EmailTemplate",
+			Unique:      true,
+			CreateField: "emailTemplateID",
+			ClearField:  "clearEmailTemplate",
+			Field:       "email_template_id",
 		},
 		{
-			Name:         "workflow_definition",
-			Label:        "WorkflowDefinition",
-			Target:       SchemaWorkflowDefinition,
-			TargetType:   "WorkflowDefinition",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "workflowDefinitionID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.NotificationTemplate.UpdateOneID(entityID).SetWorkflowDefinitionID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "notification_template", Operation: OpLink, EntityID: entityID, Edge: "workflow_definition"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.NotificationTemplate.UpdateOneID(entityID).ClearWorkflowDefinition().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "notification_template", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_definition"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.NotificationTemplate.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "notification_template", Operation: OpQuery, EntityID: entityID, Edge: "workflow_definition"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowDefinition().IDs(ctx)
-			},
+			Name:        "workflow_definition",
+			Label:       "WorkflowDefinition",
+			Target:      SchemaWorkflowDefinition,
+			TargetType:  "WorkflowDefinition",
+			Unique:      true,
+			CreateField: "workflowDefinitionID",
+			ClearField:  "clearWorkflowDefinition",
+			Field:       "workflow_definition_id",
 		},
 	}
 	SchemaPlatform.Edges = []EdgeDescriptor{
 		{
-			Name:         "assessments",
-			Label:        "Assessments",
-			Target:       SchemaAssessment,
-			TargetType:   "Assessment",
-			Relationship: "M2M",
-			CreateField:  "assessmentIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).AddAssessmentIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpLink, EntityID: entityID, Edge: "assessments"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).RemoveAssessmentIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpUnlink, EntityID: entityID, Edge: "assessments"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Platform.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "platform", Operation: OpQuery, EntityID: entityID, Edge: "assessments"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssessments().IDs(ctx)
-			},
+			Name:        "assessments",
+			Label:       "Assessments",
+			Target:      SchemaAssessment,
+			TargetType:  "Assessment",
+			CreateField: "assessmentIDs",
+			AddField:    "addAssessmentIDs",
+			RemoveField: "removeAssessmentIDs",
 		},
 		{
-			Name:         "assets",
-			Label:        "Assets",
-			Target:       SchemaAsset,
-			TargetType:   "Asset",
-			Relationship: "M2M",
-			CreateField:  "assetIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).AddAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpLink, EntityID: entityID, Edge: "assets"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).RemoveAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpUnlink, EntityID: entityID, Edge: "assets"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Platform.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "platform", Operation: OpQuery, EntityID: entityID, Edge: "assets"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssets().IDs(ctx)
-			},
+			Name:        "assets",
+			Label:       "Assets",
+			Target:      SchemaAsset,
+			TargetType:  "Asset",
+			CreateField: "assetIDs",
+			AddField:    "addAssetIDs",
+			RemoveField: "removeAssetIDs",
 		},
 		{
-			Name:         "controls",
-			Label:        "Controls",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2M",
-			CreateField:  "controlIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Platform.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "platform", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "controlIDs",
+			AddField:    "addControlIDs",
+			RemoveField: "removeControlIDs",
 		},
 		{
-			Name:         "directory_accounts",
-			Label:        "DirectoryAccounts",
-			Target:       SchemaDirectoryAccount,
-			TargetType:   "DirectoryAccount",
-			Relationship: "O2M",
-			CreateField:  "directoryaccountIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).AddDirectoryAccountIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpLink, EntityID: entityID, Edge: "directory_accounts"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).RemoveDirectoryAccountIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpUnlink, EntityID: entityID, Edge: "directory_accounts"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Platform.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "platform", Operation: OpQuery, EntityID: entityID, Edge: "directory_accounts"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryDirectoryAccounts().IDs(ctx)
-			},
+			Name:        "directory_accounts",
+			Label:       "DirectoryAccounts",
+			Target:      SchemaDirectoryAccount,
+			TargetType:  "DirectoryAccount",
+			CreateField: "directoryaccountIDs",
+			AddField:    "addDirectoryAccountIDs",
+			RemoveField: "removeDirectoryAccountIDs",
 		},
 		{
-			Name:         "directory_groups",
-			Label:        "DirectoryGroups",
-			Target:       SchemaDirectoryGroup,
-			TargetType:   "DirectoryGroup",
-			Relationship: "O2M",
-			CreateField:  "directorygroupIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).AddDirectoryGroupIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpLink, EntityID: entityID, Edge: "directory_groups"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).RemoveDirectoryGroupIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpUnlink, EntityID: entityID, Edge: "directory_groups"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Platform.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "platform", Operation: OpQuery, EntityID: entityID, Edge: "directory_groups"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryDirectoryGroups().IDs(ctx)
-			},
+			Name:        "directory_groups",
+			Label:       "DirectoryGroups",
+			Target:      SchemaDirectoryGroup,
+			TargetType:  "DirectoryGroup",
+			CreateField: "directorygroupIDs",
+			AddField:    "addDirectoryGroupIDs",
+			RemoveField: "removeDirectoryGroupIDs",
 		},
 		{
-			Name:         "directory_memberships",
-			Label:        "DirectoryMemberships",
-			Target:       SchemaDirectoryMembership,
-			TargetType:   "DirectoryMembership",
-			Relationship: "O2M",
-			CreateField:  "directorymembershipIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).AddDirectoryMembershipIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpLink, EntityID: entityID, Edge: "directory_memberships"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).RemoveDirectoryMembershipIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpUnlink, EntityID: entityID, Edge: "directory_memberships"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Platform.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "platform", Operation: OpQuery, EntityID: entityID, Edge: "directory_memberships"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryDirectoryMemberships().IDs(ctx)
-			},
+			Name:        "directory_memberships",
+			Label:       "DirectoryMemberships",
+			Target:      SchemaDirectoryMembership,
+			TargetType:  "DirectoryMembership",
+			CreateField: "directorymembershipIDs",
+			AddField:    "addDirectoryMembershipIDs",
+			RemoveField: "removeDirectoryMembershipIDs",
 		},
 		{
-			Name:         "entities",
-			Label:        "Entities",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "M2M",
-			CreateField:  "entityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).AddEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpLink, EntityID: entityID, Edge: "entities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).RemoveEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpUnlink, EntityID: entityID, Edge: "entities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Platform.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "platform", Operation: OpQuery, EntityID: entityID, Edge: "entities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEntities().IDs(ctx)
-			},
+			Name:        "entities",
+			Label:       "Entities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "entityIDs",
+			AddField:    "addEntityIDs",
+			RemoveField: "removeEntityIDs",
 		},
 		{
-			Name:         "evidence",
-			Label:        "Evidence",
-			Target:       SchemaEvidence,
-			TargetType:   "Evidence",
-			Relationship: "M2M",
-			CreateField:  "evidenceIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).AddEvidenceIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpLink, EntityID: entityID, Edge: "evidence"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).RemoveEvidenceIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpUnlink, EntityID: entityID, Edge: "evidence"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Platform.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "platform", Operation: OpQuery, EntityID: entityID, Edge: "evidence"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEvidence().IDs(ctx)
-			},
+			Name:        "evidence",
+			Label:       "Evidence",
+			Target:      SchemaEvidence,
+			TargetType:  "Evidence",
+			CreateField: "evidenceIDs",
+			AddField:    "addEvidenceIDs",
+			RemoveField: "removeEvidenceIDs",
 		},
 		{
-			Name:         "generated_scans",
-			Label:        "GeneratedScans",
-			Target:       SchemaScan,
-			TargetType:   "Scan",
-			Relationship: "O2M",
-			CreateField:  "generatedscanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).AddGeneratedScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpLink, EntityID: entityID, Edge: "generated_scans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).RemoveGeneratedScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpUnlink, EntityID: entityID, Edge: "generated_scans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Platform.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "platform", Operation: OpQuery, EntityID: entityID, Edge: "generated_scans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryGeneratedScans().IDs(ctx)
-			},
+			Name:        "generated_scans",
+			Label:       "GeneratedScans",
+			Target:      SchemaScan,
+			TargetType:  "Scan",
+			CreateField: "generatedscanIDs",
+			AddField:    "addGeneratedScanIDs",
+			RemoveField: "removeGeneratedScanIDs",
 		},
 		{
-			Name:         "identity_holders",
-			Label:        "IdentityHolders",
-			Target:       SchemaIdentityHolder,
-			TargetType:   "IdentityHolder",
-			Relationship: "M2M",
-			CreateField:  "identityholderIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).AddIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpLink, EntityID: entityID, Edge: "identity_holders"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).RemoveIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpUnlink, EntityID: entityID, Edge: "identity_holders"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Platform.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "platform", Operation: OpQuery, EntityID: entityID, Edge: "identity_holders"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryIdentityHolders().IDs(ctx)
-			},
+			Name:        "identity_holders",
+			Label:       "IdentityHolders",
+			Target:      SchemaIdentityHolder,
+			TargetType:  "IdentityHolder",
+			CreateField: "identityholderIDs",
+			AddField:    "addIdentityHolderIDs",
+			RemoveField: "removeIdentityHolderIDs",
 		},
 		{
-			Name:         "out_of_scope_assets",
-			Label:        "OutOfScopeAssets",
-			Target:       SchemaAsset,
-			TargetType:   "Asset",
-			Relationship: "M2M",
-			CreateField:  "outofscopeassetIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).AddOutOfScopeAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpLink, EntityID: entityID, Edge: "out_of_scope_assets"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).RemoveOutOfScopeAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpUnlink, EntityID: entityID, Edge: "out_of_scope_assets"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Platform.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "platform", Operation: OpQuery, EntityID: entityID, Edge: "out_of_scope_assets"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryOutOfScopeAssets().IDs(ctx)
-			},
+			Name:        "out_of_scope_assets",
+			Label:       "OutOfScopeAssets",
+			Target:      SchemaAsset,
+			TargetType:  "Asset",
+			CreateField: "outofscopeassetIDs",
+			AddField:    "addOutOfScopeAssetIDs",
+			RemoveField: "removeOutOfScopeAssetIDs",
 		},
 		{
-			Name:         "out_of_scope_vendors",
-			Label:        "OutOfScopeVendors",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "M2M",
-			CreateField:  "outofscopevendorIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).AddOutOfScopeVendorIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpLink, EntityID: entityID, Edge: "out_of_scope_vendors"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).RemoveOutOfScopeVendorIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpUnlink, EntityID: entityID, Edge: "out_of_scope_vendors"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Platform.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "platform", Operation: OpQuery, EntityID: entityID, Edge: "out_of_scope_vendors"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryOutOfScopeVendors().IDs(ctx)
-			},
+			Name:        "out_of_scope_vendors",
+			Label:       "OutOfScopeVendors",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "outofscopevendorIDs",
+			AddField:    "addOutOfScopeVendorIDs",
+			RemoveField: "removeOutOfScopeVendorIDs",
 		},
 		{
-			Name:         "risks",
-			Label:        "Risks",
-			Target:       SchemaRisk,
-			TargetType:   "Risk",
-			Relationship: "M2M",
-			CreateField:  "riskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).AddRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpLink, EntityID: entityID, Edge: "risks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).RemoveRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpUnlink, EntityID: entityID, Edge: "risks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Platform.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "platform", Operation: OpQuery, EntityID: entityID, Edge: "risks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRisks().IDs(ctx)
-			},
+			Name:        "risks",
+			Label:       "Risks",
+			Target:      SchemaRisk,
+			TargetType:  "Risk",
+			CreateField: "riskIDs",
+			AddField:    "addRiskIDs",
+			RemoveField: "removeRiskIDs",
 		},
 		{
-			Name:         "scans",
-			Label:        "Scans",
-			Target:       SchemaScan,
-			TargetType:   "Scan",
-			Relationship: "M2M",
-			CreateField:  "scanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).AddScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpLink, EntityID: entityID, Edge: "scans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).RemoveScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpUnlink, EntityID: entityID, Edge: "scans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Platform.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "platform", Operation: OpQuery, EntityID: entityID, Edge: "scans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryScans().IDs(ctx)
-			},
+			Name:        "scans",
+			Label:       "Scans",
+			Target:      SchemaScan,
+			TargetType:  "Scan",
+			CreateField: "scanIDs",
+			AddField:    "addScanIDs",
+			RemoveField: "removeScanIDs",
 		},
 		{
-			Name:         "source_assets",
-			Label:        "SourceAssets",
-			Target:       SchemaAsset,
-			TargetType:   "Asset",
-			Relationship: "O2M",
-			CreateField:  "sourceassetIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).AddSourceAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpLink, EntityID: entityID, Edge: "source_assets"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).RemoveSourceAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpUnlink, EntityID: entityID, Edge: "source_assets"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Platform.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "platform", Operation: OpQuery, EntityID: entityID, Edge: "source_assets"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySourceAssets().IDs(ctx)
-			},
+			Name:        "source_assets",
+			Label:       "SourceAssets",
+			Target:      SchemaAsset,
+			TargetType:  "Asset",
+			CreateField: "sourceassetIDs",
+			AddField:    "addSourceAssetIDs",
+			RemoveField: "removeSourceAssetIDs",
 		},
 		{
-			Name:         "source_entities",
-			Label:        "SourceEntities",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "M2M",
-			CreateField:  "sourceentityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).AddSourceEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpLink, EntityID: entityID, Edge: "source_entities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).RemoveSourceEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpUnlink, EntityID: entityID, Edge: "source_entities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Platform.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "platform", Operation: OpQuery, EntityID: entityID, Edge: "source_entities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySourceEntities().IDs(ctx)
-			},
+			Name:        "source_entities",
+			Label:       "SourceEntities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "sourceentityIDs",
+			AddField:    "addSourceEntityIDs",
+			RemoveField: "removeSourceEntityIDs",
 		},
 		{
-			Name:         "system_details",
-			Label:        "SystemDetails",
-			Target:       SchemaSystemDetail,
-			TargetType:   "SystemDetail",
-			Relationship: "M2M",
-			CreateField:  "systemdetailIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).AddSystemDetailIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpLink, EntityID: entityID, Edge: "system_details"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).RemoveSystemDetailIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpUnlink, EntityID: entityID, Edge: "system_details"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Platform.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "platform", Operation: OpQuery, EntityID: entityID, Edge: "system_details"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySystemDetails().IDs(ctx)
-			},
+			Name:        "system_details",
+			Label:       "SystemDetails",
+			Target:      SchemaSystemDetail,
+			TargetType:  "SystemDetail",
+			CreateField: "systemdetailIDs",
+			AddField:    "addSystemDetailIDs",
+			RemoveField: "removeSystemDetailIDs",
 		},
 		{
-			Name:         "tasks",
-			Label:        "Tasks",
-			Target:       SchemaTask,
-			TargetType:   "Task",
-			Relationship: "M2M",
-			CreateField:  "taskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).AddTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpLink, EntityID: entityID, Edge: "tasks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).RemoveTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpUnlink, EntityID: entityID, Edge: "tasks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Platform.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "platform", Operation: OpQuery, EntityID: entityID, Edge: "tasks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTasks().IDs(ctx)
-			},
+			Name:        "tasks",
+			Label:       "Tasks",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			CreateField: "taskIDs",
+			AddField:    "addTaskIDs",
+			RemoveField: "removeTaskIDs",
 		},
 		{
-			Name:         "workflow_object_refs",
-			Label:        "WorkflowObjectRefs",
-			Target:       SchemaWorkflowObjectRef,
-			TargetType:   "WorkflowObjectRef",
-			Relationship: "O2M",
-			CreateField:  "workflowobjectrefIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Platform.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "platform", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Platform.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "platform", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflowobjectrefIDs",
+			AddField:    "addWorkflowObjectRefIDs",
+			RemoveField: "removeWorkflowObjectRefIDs",
 		},
 	}
 	SchemaProcedure.Edges = []EdgeDescriptor{
@@ -14288,1793 +7042,550 @@ func init() {
 			Label:            "Controls",
 			Target:           SchemaControl,
 			TargetType:       "Control",
-			Relationship:     "M2M",
 			CreateField:      "controlIDs",
+			AddField:         "addControlIDs",
+			RemoveField:      "removeControlIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Procedure.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "procedure", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Procedure.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "procedure", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Procedure.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "procedure", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
 		},
 		{
 			Name:             "discussions",
 			Label:            "Discussions",
 			Target:           SchemaDiscussion,
 			TargetType:       "Discussion",
-			Relationship:     "O2M",
 			CreateField:      "discussionIDs",
+			AddField:         "addDiscussionIDs",
+			RemoveField:      "removeDiscussionIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Procedure.UpdateOneID(entityID).AddDiscussionIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "procedure", Operation: OpLink, EntityID: entityID, Edge: "discussions"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Procedure.UpdateOneID(entityID).RemoveDiscussionIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "procedure", Operation: OpUnlink, EntityID: entityID, Edge: "discussions"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Procedure.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "procedure", Operation: OpQuery, EntityID: entityID, Edge: "discussions"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryDiscussions().IDs(ctx)
-			},
 		},
 		{
 			Name:             "internal_policies",
 			Label:            "InternalPolicies",
 			Target:           SchemaInternalPolicy,
 			TargetType:       "InternalPolicy",
-			Relationship:     "M2M",
 			CreateField:      "internalpolicyIDs",
+			AddField:         "addInternalPolicyIDs",
+			RemoveField:      "removeInternalPolicyIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Procedure.UpdateOneID(entityID).AddInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "procedure", Operation: OpLink, EntityID: entityID, Edge: "internal_policies"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Procedure.UpdateOneID(entityID).RemoveInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "procedure", Operation: OpUnlink, EntityID: entityID, Edge: "internal_policies"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Procedure.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "procedure", Operation: OpQuery, EntityID: entityID, Edge: "internal_policies"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryInternalPolicies().IDs(ctx)
-			},
 		},
 		{
 			Name:             "narratives",
 			Label:            "Narratives",
 			Target:           SchemaNarrative,
 			TargetType:       "Narrative",
-			Relationship:     "M2M",
 			CreateField:      "narrativeIDs",
+			AddField:         "addNarrativeIDs",
+			RemoveField:      "removeNarrativeIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Procedure.UpdateOneID(entityID).AddNarrativeIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "procedure", Operation: OpLink, EntityID: entityID, Edge: "narratives"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Procedure.UpdateOneID(entityID).RemoveNarrativeIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "procedure", Operation: OpUnlink, EntityID: entityID, Edge: "narratives"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Procedure.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "procedure", Operation: OpQuery, EntityID: entityID, Edge: "narratives"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryNarratives().IDs(ctx)
-			},
 		},
 		{
 			Name:             "risks",
 			Label:            "Risks",
 			Target:           SchemaRisk,
 			TargetType:       "Risk",
-			Relationship:     "M2M",
 			CreateField:      "riskIDs",
+			AddField:         "addRiskIDs",
+			RemoveField:      "removeRiskIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Procedure.UpdateOneID(entityID).AddRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "procedure", Operation: OpLink, EntityID: entityID, Edge: "risks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Procedure.UpdateOneID(entityID).RemoveRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "procedure", Operation: OpUnlink, EntityID: entityID, Edge: "risks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Procedure.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "procedure", Operation: OpQuery, EntityID: entityID, Edge: "risks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRisks().IDs(ctx)
-			},
 		},
 		{
 			Name:             "subcontrols",
 			Label:            "Subcontrols",
 			Target:           SchemaSubcontrol,
 			TargetType:       "Subcontrol",
-			Relationship:     "M2M",
 			CreateField:      "subcontrolIDs",
+			AddField:         "addSubcontrolIDs",
+			RemoveField:      "removeSubcontrolIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Procedure.UpdateOneID(entityID).AddSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "procedure", Operation: OpLink, EntityID: entityID, Edge: "subcontrols"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Procedure.UpdateOneID(entityID).RemoveSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "procedure", Operation: OpUnlink, EntityID: entityID, Edge: "subcontrols"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Procedure.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "procedure", Operation: OpQuery, EntityID: entityID, Edge: "subcontrols"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrols().IDs(ctx)
-			},
 		},
 		{
 			Name:             "tasks",
 			Label:            "Tasks",
 			Target:           SchemaTask,
 			TargetType:       "Task",
-			Relationship:     "M2M",
 			CreateField:      "taskIDs",
+			AddField:         "addTaskIDs",
+			RemoveField:      "removeTaskIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Procedure.UpdateOneID(entityID).AddTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "procedure", Operation: OpLink, EntityID: entityID, Edge: "tasks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Procedure.UpdateOneID(entityID).RemoveTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "procedure", Operation: OpUnlink, EntityID: entityID, Edge: "tasks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Procedure.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "procedure", Operation: OpQuery, EntityID: entityID, Edge: "tasks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTasks().IDs(ctx)
-			},
 		},
 		{
 			Name:             "workflow_object_refs",
 			Label:            "WorkflowObjectRefs",
 			Target:           SchemaWorkflowObjectRef,
 			TargetType:       "WorkflowObjectRef",
-			Relationship:     "O2M",
 			CreateField:      "workflowobjectrefIDs",
+			AddField:         "addWorkflowObjectRefIDs",
+			RemoveField:      "removeWorkflowObjectRefIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Procedure.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "procedure", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Procedure.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "procedure", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Procedure.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "procedure", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
 		},
 	}
 	SchemaRemediation.Edges = []EdgeDescriptor{
 		{
-			Name:         "action_plans",
-			Label:        "ActionPlans",
-			Target:       SchemaActionPlan,
-			TargetType:   "ActionPlan",
-			Relationship: "M2M",
-			CreateField:  "actionplanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).AddActionPlanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpLink, EntityID: entityID, Edge: "action_plans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).RemoveActionPlanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpUnlink, EntityID: entityID, Edge: "action_plans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Remediation.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "remediation", Operation: OpQuery, EntityID: entityID, Edge: "action_plans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryActionPlans().IDs(ctx)
-			},
+			Name:        "action_plans",
+			Label:       "ActionPlans",
+			Target:      SchemaActionPlan,
+			TargetType:  "ActionPlan",
+			CreateField: "actionplanIDs",
+			AddField:    "addActionPlanIDs",
+			RemoveField: "removeActionPlanIDs",
 		},
 		{
-			Name:         "assets",
-			Label:        "Assets",
-			Target:       SchemaAsset,
-			TargetType:   "Asset",
-			Relationship: "O2M",
-			CreateField:  "assetIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).AddAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpLink, EntityID: entityID, Edge: "assets"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).RemoveAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpUnlink, EntityID: entityID, Edge: "assets"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Remediation.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "remediation", Operation: OpQuery, EntityID: entityID, Edge: "assets"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssets().IDs(ctx)
-			},
+			Name:        "assets",
+			Label:       "Assets",
+			Target:      SchemaAsset,
+			TargetType:  "Asset",
+			CreateField: "assetIDs",
+			AddField:    "addAssetIDs",
+			RemoveField: "removeAssetIDs",
 		},
 		{
-			Name:         "controls",
-			Label:        "Controls",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2M",
-			CreateField:  "controlIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Remediation.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "remediation", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "controlIDs",
+			AddField:    "addControlIDs",
+			RemoveField: "removeControlIDs",
 		},
 		{
-			Name:         "entities",
-			Label:        "Entities",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "O2M",
-			CreateField:  "entityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).AddEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpLink, EntityID: entityID, Edge: "entities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).RemoveEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpUnlink, EntityID: entityID, Edge: "entities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Remediation.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "remediation", Operation: OpQuery, EntityID: entityID, Edge: "entities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEntities().IDs(ctx)
-			},
+			Name:        "entities",
+			Label:       "Entities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "entityIDs",
+			AddField:    "addEntityIDs",
+			RemoveField: "removeEntityIDs",
 		},
 		{
-			Name:         "findings",
-			Label:        "Findings",
-			Target:       SchemaFinding,
-			TargetType:   "Finding",
-			Relationship: "M2M",
-			CreateField:  "findingIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).AddFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpLink, EntityID: entityID, Edge: "findings"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).RemoveFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpUnlink, EntityID: entityID, Edge: "findings"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Remediation.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "remediation", Operation: OpQuery, EntityID: entityID, Edge: "findings"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryFindings().IDs(ctx)
-			},
+			Name:        "findings",
+			Label:       "Findings",
+			Target:      SchemaFinding,
+			TargetType:  "Finding",
+			CreateField: "findingIDs",
+			AddField:    "addFindingIDs",
+			RemoveField: "removeFindingIDs",
 		},
 		{
-			Name:         "reviews",
-			Label:        "Reviews",
-			Target:       SchemaReview,
-			TargetType:   "Review",
-			Relationship: "M2M",
-			CreateField:  "reviewIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).AddReviewIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpLink, EntityID: entityID, Edge: "reviews"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).RemoveReviewIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpUnlink, EntityID: entityID, Edge: "reviews"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Remediation.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "remediation", Operation: OpQuery, EntityID: entityID, Edge: "reviews"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryReviews().IDs(ctx)
-			},
+			Name:        "reviews",
+			Label:       "Reviews",
+			Target:      SchemaReview,
+			TargetType:  "Review",
+			CreateField: "reviewIDs",
+			AddField:    "addReviewIDs",
+			RemoveField: "removeReviewIDs",
 		},
 		{
-			Name:         "risks",
-			Label:        "Risks",
-			Target:       SchemaRisk,
-			TargetType:   "Risk",
-			Relationship: "M2M",
-			CreateField:  "riskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).AddRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpLink, EntityID: entityID, Edge: "risks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).RemoveRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpUnlink, EntityID: entityID, Edge: "risks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Remediation.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "remediation", Operation: OpQuery, EntityID: entityID, Edge: "risks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRisks().IDs(ctx)
-			},
+			Name:        "risks",
+			Label:       "Risks",
+			Target:      SchemaRisk,
+			TargetType:  "Risk",
+			CreateField: "riskIDs",
+			AddField:    "addRiskIDs",
+			RemoveField: "removeRiskIDs",
 		},
 		{
-			Name:         "scans",
-			Label:        "Scans",
-			Target:       SchemaScan,
-			TargetType:   "Scan",
-			Relationship: "M2M",
-			CreateField:  "scanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).AddScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpLink, EntityID: entityID, Edge: "scans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).RemoveScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpUnlink, EntityID: entityID, Edge: "scans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Remediation.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "remediation", Operation: OpQuery, EntityID: entityID, Edge: "scans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryScans().IDs(ctx)
-			},
+			Name:        "scans",
+			Label:       "Scans",
+			Target:      SchemaScan,
+			TargetType:  "Scan",
+			CreateField: "scanIDs",
+			AddField:    "addScanIDs",
+			RemoveField: "removeScanIDs",
 		},
 		{
-			Name:         "subcontrols",
-			Label:        "Subcontrols",
-			Target:       SchemaSubcontrol,
-			TargetType:   "Subcontrol",
-			Relationship: "M2M",
-			CreateField:  "subcontrolIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).AddSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpLink, EntityID: entityID, Edge: "subcontrols"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).RemoveSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpUnlink, EntityID: entityID, Edge: "subcontrols"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Remediation.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "remediation", Operation: OpQuery, EntityID: entityID, Edge: "subcontrols"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrols().IDs(ctx)
-			},
+			Name:        "subcontrols",
+			Label:       "Subcontrols",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			CreateField: "subcontrolIDs",
+			AddField:    "addSubcontrolIDs",
+			RemoveField: "removeSubcontrolIDs",
 		},
 		{
-			Name:         "tasks",
-			Label:        "Tasks",
-			Target:       SchemaTask,
-			TargetType:   "Task",
-			Relationship: "O2M",
-			CreateField:  "taskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).AddTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpLink, EntityID: entityID, Edge: "tasks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).RemoveTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpUnlink, EntityID: entityID, Edge: "tasks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Remediation.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "remediation", Operation: OpQuery, EntityID: entityID, Edge: "tasks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTasks().IDs(ctx)
-			},
+			Name:        "tasks",
+			Label:       "Tasks",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			CreateField: "taskIDs",
+			AddField:    "addTaskIDs",
+			RemoveField: "removeTaskIDs",
 		},
 		{
-			Name:         "vulnerabilities",
-			Label:        "Vulnerabilities",
-			Target:       SchemaVulnerability,
-			TargetType:   "Vulnerability",
-			Relationship: "M2M",
-			CreateField:  "vulnerabilityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).AddVulnerabilityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpLink, EntityID: entityID, Edge: "vulnerabilities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).RemoveVulnerabilityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpUnlink, EntityID: entityID, Edge: "vulnerabilities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Remediation.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "remediation", Operation: OpQuery, EntityID: entityID, Edge: "vulnerabilities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryVulnerabilities().IDs(ctx)
-			},
+			Name:        "vulnerabilities",
+			Label:       "Vulnerabilities",
+			Target:      SchemaVulnerability,
+			TargetType:  "Vulnerability",
+			CreateField: "vulnerabilityIDs",
+			AddField:    "addVulnerabilityIDs",
+			RemoveField: "removeVulnerabilityIDs",
 		},
 		{
-			Name:         "workflow_object_refs",
-			Label:        "WorkflowObjectRefs",
-			Target:       SchemaWorkflowObjectRef,
-			TargetType:   "WorkflowObjectRef",
-			Relationship: "O2M",
-			CreateField:  "workflowobjectrefIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Remediation.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "remediation", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Remediation.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "remediation", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflowobjectrefIDs",
+			AddField:    "addWorkflowObjectRefIDs",
+			RemoveField: "removeWorkflowObjectRefIDs",
 		},
 	}
 	SchemaReview.Edges = []EdgeDescriptor{
 		{
-			Name:         "action_plans",
-			Label:        "ActionPlans",
-			Target:       SchemaActionPlan,
-			TargetType:   "ActionPlan",
-			Relationship: "M2M",
-			CreateField:  "actionplanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).AddActionPlanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpLink, EntityID: entityID, Edge: "action_plans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).RemoveActionPlanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpUnlink, EntityID: entityID, Edge: "action_plans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Review.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "review", Operation: OpQuery, EntityID: entityID, Edge: "action_plans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryActionPlans().IDs(ctx)
-			},
+			Name:        "action_plans",
+			Label:       "ActionPlans",
+			Target:      SchemaActionPlan,
+			TargetType:  "ActionPlan",
+			CreateField: "actionplanIDs",
+			AddField:    "addActionPlanIDs",
+			RemoveField: "removeActionPlanIDs",
 		},
 		{
-			Name:         "assets",
-			Label:        "Assets",
-			Target:       SchemaAsset,
-			TargetType:   "Asset",
-			Relationship: "O2M",
-			CreateField:  "assetIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).AddAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpLink, EntityID: entityID, Edge: "assets"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).RemoveAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpUnlink, EntityID: entityID, Edge: "assets"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Review.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "review", Operation: OpQuery, EntityID: entityID, Edge: "assets"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssets().IDs(ctx)
-			},
+			Name:        "assets",
+			Label:       "Assets",
+			Target:      SchemaAsset,
+			TargetType:  "Asset",
+			CreateField: "assetIDs",
+			AddField:    "addAssetIDs",
+			RemoveField: "removeAssetIDs",
 		},
 		{
-			Name:         "controls",
-			Label:        "Controls",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2M",
-			CreateField:  "controlIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Review.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "review", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "controlIDs",
+			AddField:    "addControlIDs",
+			RemoveField: "removeControlIDs",
 		},
 		{
-			Name:         "entities",
-			Label:        "Entities",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "O2M",
-			CreateField:  "entityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).AddEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpLink, EntityID: entityID, Edge: "entities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).RemoveEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpUnlink, EntityID: entityID, Edge: "entities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Review.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "review", Operation: OpQuery, EntityID: entityID, Edge: "entities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEntities().IDs(ctx)
-			},
+			Name:        "entities",
+			Label:       "Entities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "entityIDs",
+			AddField:    "addEntityIDs",
+			RemoveField: "removeEntityIDs",
 		},
 		{
-			Name:         "findings",
-			Label:        "Findings",
-			Target:       SchemaFinding,
-			TargetType:   "Finding",
-			Relationship: "M2M",
-			CreateField:  "findingIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).AddFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpLink, EntityID: entityID, Edge: "findings"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).RemoveFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpUnlink, EntityID: entityID, Edge: "findings"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Review.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "review", Operation: OpQuery, EntityID: entityID, Edge: "findings"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryFindings().IDs(ctx)
-			},
+			Name:        "findings",
+			Label:       "Findings",
+			Target:      SchemaFinding,
+			TargetType:  "Finding",
+			CreateField: "findingIDs",
+			AddField:    "addFindingIDs",
+			RemoveField: "removeFindingIDs",
 		},
 		{
-			Name:         "internal_policies",
-			Label:        "InternalPolicies",
-			Target:       SchemaInternalPolicy,
-			TargetType:   "InternalPolicy",
-			Relationship: "M2M",
-			CreateField:  "internalpolicyIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).AddInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpLink, EntityID: entityID, Edge: "internal_policies"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).RemoveInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpUnlink, EntityID: entityID, Edge: "internal_policies"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Review.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "review", Operation: OpQuery, EntityID: entityID, Edge: "internal_policies"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryInternalPolicies().IDs(ctx)
-			},
+			Name:        "internal_policies",
+			Label:       "InternalPolicies",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			CreateField: "internalpolicyIDs",
+			AddField:    "addInternalPolicyIDs",
+			RemoveField: "removeInternalPolicyIDs",
 		},
 		{
-			Name:         "remediations",
-			Label:        "Remediations",
-			Target:       SchemaRemediation,
-			TargetType:   "Remediation",
-			Relationship: "M2M",
-			CreateField:  "remediationIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).AddRemediationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpLink, EntityID: entityID, Edge: "remediations"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).RemoveRemediationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpUnlink, EntityID: entityID, Edge: "remediations"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Review.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "review", Operation: OpQuery, EntityID: entityID, Edge: "remediations"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRemediations().IDs(ctx)
-			},
+			Name:        "remediations",
+			Label:       "Remediations",
+			Target:      SchemaRemediation,
+			TargetType:  "Remediation",
+			CreateField: "remediationIDs",
+			AddField:    "addRemediationIDs",
+			RemoveField: "removeRemediationIDs",
 		},
 		{
-			Name:         "risks",
-			Label:        "Risks",
-			Target:       SchemaRisk,
-			TargetType:   "Risk",
-			Relationship: "M2M",
-			CreateField:  "riskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).AddRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpLink, EntityID: entityID, Edge: "risks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).RemoveRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpUnlink, EntityID: entityID, Edge: "risks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Review.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "review", Operation: OpQuery, EntityID: entityID, Edge: "risks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRisks().IDs(ctx)
-			},
+			Name:        "risks",
+			Label:       "Risks",
+			Target:      SchemaRisk,
+			TargetType:  "Risk",
+			CreateField: "riskIDs",
+			AddField:    "addRiskIDs",
+			RemoveField: "removeRiskIDs",
 		},
 		{
-			Name:         "subcontrols",
-			Label:        "Subcontrols",
-			Target:       SchemaSubcontrol,
-			TargetType:   "Subcontrol",
-			Relationship: "M2M",
-			CreateField:  "subcontrolIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).AddSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpLink, EntityID: entityID, Edge: "subcontrols"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).RemoveSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpUnlink, EntityID: entityID, Edge: "subcontrols"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Review.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "review", Operation: OpQuery, EntityID: entityID, Edge: "subcontrols"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrols().IDs(ctx)
-			},
+			Name:        "subcontrols",
+			Label:       "Subcontrols",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			CreateField: "subcontrolIDs",
+			AddField:    "addSubcontrolIDs",
+			RemoveField: "removeSubcontrolIDs",
 		},
 		{
-			Name:         "tasks",
-			Label:        "Tasks",
-			Target:       SchemaTask,
-			TargetType:   "Task",
-			Relationship: "O2M",
-			CreateField:  "taskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).AddTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpLink, EntityID: entityID, Edge: "tasks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).RemoveTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpUnlink, EntityID: entityID, Edge: "tasks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Review.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "review", Operation: OpQuery, EntityID: entityID, Edge: "tasks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTasks().IDs(ctx)
-			},
+			Name:        "tasks",
+			Label:       "Tasks",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			CreateField: "taskIDs",
+			AddField:    "addTaskIDs",
+			RemoveField: "removeTaskIDs",
 		},
 		{
-			Name:         "vulnerabilities",
-			Label:        "Vulnerabilities",
-			Target:       SchemaVulnerability,
-			TargetType:   "Vulnerability",
-			Relationship: "M2M",
-			CreateField:  "vulnerabilityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).AddVulnerabilityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpLink, EntityID: entityID, Edge: "vulnerabilities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Review.UpdateOneID(entityID).RemoveVulnerabilityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "review", Operation: OpUnlink, EntityID: entityID, Edge: "vulnerabilities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Review.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "review", Operation: OpQuery, EntityID: entityID, Edge: "vulnerabilities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryVulnerabilities().IDs(ctx)
-			},
+			Name:        "vulnerabilities",
+			Label:       "Vulnerabilities",
+			Target:      SchemaVulnerability,
+			TargetType:  "Vulnerability",
+			CreateField: "vulnerabilityIDs",
+			AddField:    "addVulnerabilityIDs",
+			RemoveField: "removeVulnerabilityIDs",
 		},
 	}
 	SchemaRisk.Edges = []EdgeDescriptor{
 		{
-			Name:         "action_plans",
-			Label:        "ActionPlans",
-			Target:       SchemaActionPlan,
-			TargetType:   "ActionPlan",
-			Relationship: "M2M",
-			CreateField:  "actionplanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).AddActionPlanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpLink, EntityID: entityID, Edge: "action_plans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).RemoveActionPlanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpUnlink, EntityID: entityID, Edge: "action_plans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Risk.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "risk", Operation: OpQuery, EntityID: entityID, Edge: "action_plans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryActionPlans().IDs(ctx)
-			},
+			Name:        "action_plans",
+			Label:       "ActionPlans",
+			Target:      SchemaActionPlan,
+			TargetType:  "ActionPlan",
+			CreateField: "actionplanIDs",
+			AddField:    "addActionPlanIDs",
+			RemoveField: "removeActionPlanIDs",
 		},
 		{
-			Name:         "assets",
-			Label:        "Assets",
-			Target:       SchemaAsset,
-			TargetType:   "Asset",
-			Relationship: "O2M",
-			CreateField:  "assetIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).AddAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpLink, EntityID: entityID, Edge: "assets"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).RemoveAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpUnlink, EntityID: entityID, Edge: "assets"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Risk.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "risk", Operation: OpQuery, EntityID: entityID, Edge: "assets"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssets().IDs(ctx)
-			},
+			Name:        "assets",
+			Label:       "Assets",
+			Target:      SchemaAsset,
+			TargetType:  "Asset",
+			CreateField: "assetIDs",
+			AddField:    "addAssetIDs",
+			RemoveField: "removeAssetIDs",
 		},
 		{
-			Name:         "controls",
-			Label:        "Controls",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2M",
-			CreateField:  "controlIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Risk.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "risk", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "controlIDs",
+			AddField:    "addControlIDs",
+			RemoveField: "removeControlIDs",
 		},
 		{
-			Name:         "discussions",
-			Label:        "Discussions",
-			Target:       SchemaDiscussion,
-			TargetType:   "Discussion",
-			Relationship: "O2M",
-			CreateField:  "discussionIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).AddDiscussionIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpLink, EntityID: entityID, Edge: "discussions"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).RemoveDiscussionIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpUnlink, EntityID: entityID, Edge: "discussions"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Risk.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "risk", Operation: OpQuery, EntityID: entityID, Edge: "discussions"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryDiscussions().IDs(ctx)
-			},
+			Name:        "discussions",
+			Label:       "Discussions",
+			Target:      SchemaDiscussion,
+			TargetType:  "Discussion",
+			CreateField: "discussionIDs",
+			AddField:    "addDiscussionIDs",
+			RemoveField: "removeDiscussionIDs",
 		},
 		{
-			Name:         "entities",
-			Label:        "Entities",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "O2M",
-			CreateField:  "entityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).AddEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpLink, EntityID: entityID, Edge: "entities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).RemoveEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpUnlink, EntityID: entityID, Edge: "entities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Risk.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "risk", Operation: OpQuery, EntityID: entityID, Edge: "entities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEntities().IDs(ctx)
-			},
+			Name:        "entities",
+			Label:       "Entities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "entityIDs",
+			AddField:    "addEntityIDs",
+			RemoveField: "removeEntityIDs",
 		},
 		{
-			Name:         "internal_policies",
-			Label:        "InternalPolicies",
-			Target:       SchemaInternalPolicy,
-			TargetType:   "InternalPolicy",
-			Relationship: "M2M",
-			CreateField:  "internalpolicyIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).AddInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpLink, EntityID: entityID, Edge: "internal_policies"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).RemoveInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpUnlink, EntityID: entityID, Edge: "internal_policies"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Risk.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "risk", Operation: OpQuery, EntityID: entityID, Edge: "internal_policies"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryInternalPolicies().IDs(ctx)
-			},
+			Name:        "internal_policies",
+			Label:       "InternalPolicies",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			CreateField: "internalpolicyIDs",
+			AddField:    "addInternalPolicyIDs",
+			RemoveField: "removeInternalPolicyIDs",
 		},
 		{
-			Name:         "platforms",
-			Label:        "Platforms",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2M",
-			CreateField:  "platformIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).AddPlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpLink, EntityID: entityID, Edge: "platforms"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).RemovePlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpUnlink, EntityID: entityID, Edge: "platforms"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Risk.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "risk", Operation: OpQuery, EntityID: entityID, Edge: "platforms"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryPlatforms().IDs(ctx)
-			},
+			Name:        "platforms",
+			Label:       "Platforms",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			CreateField: "platformIDs",
+			AddField:    "addPlatformIDs",
+			RemoveField: "removePlatformIDs",
 		},
 		{
-			Name:         "procedures",
-			Label:        "Procedures",
-			Target:       SchemaProcedure,
-			TargetType:   "Procedure",
-			Relationship: "M2M",
-			CreateField:  "procedureIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).AddProcedureIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpLink, EntityID: entityID, Edge: "procedures"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).RemoveProcedureIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpUnlink, EntityID: entityID, Edge: "procedures"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Risk.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "risk", Operation: OpQuery, EntityID: entityID, Edge: "procedures"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryProcedures().IDs(ctx)
-			},
+			Name:        "procedures",
+			Label:       "Procedures",
+			Target:      SchemaProcedure,
+			TargetType:  "Procedure",
+			CreateField: "procedureIDs",
+			AddField:    "addProcedureIDs",
+			RemoveField: "removeProcedureIDs",
 		},
 		{
-			Name:         "remediations",
-			Label:        "Remediations",
-			Target:       SchemaRemediation,
-			TargetType:   "Remediation",
-			Relationship: "M2M",
-			CreateField:  "remediationIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).AddRemediationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpLink, EntityID: entityID, Edge: "remediations"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).RemoveRemediationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpUnlink, EntityID: entityID, Edge: "remediations"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Risk.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "risk", Operation: OpQuery, EntityID: entityID, Edge: "remediations"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRemediations().IDs(ctx)
-			},
+			Name:        "remediations",
+			Label:       "Remediations",
+			Target:      SchemaRemediation,
+			TargetType:  "Remediation",
+			CreateField: "remediationIDs",
+			AddField:    "addRemediationIDs",
+			RemoveField: "removeRemediationIDs",
 		},
 		{
-			Name:         "reviews",
-			Label:        "Reviews",
-			Target:       SchemaReview,
-			TargetType:   "Review",
-			Relationship: "M2M",
-			CreateField:  "reviewIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).AddReviewIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpLink, EntityID: entityID, Edge: "reviews"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).RemoveReviewIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpUnlink, EntityID: entityID, Edge: "reviews"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Risk.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "risk", Operation: OpQuery, EntityID: entityID, Edge: "reviews"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryReviews().IDs(ctx)
-			},
+			Name:        "reviews",
+			Label:       "Reviews",
+			Target:      SchemaReview,
+			TargetType:  "Review",
+			CreateField: "reviewIDs",
+			AddField:    "addReviewIDs",
+			RemoveField: "removeReviewIDs",
 		},
 		{
-			Name:         "scans",
-			Label:        "Scans",
-			Target:       SchemaScan,
-			TargetType:   "Scan",
-			Relationship: "O2M",
-			CreateField:  "scanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).AddScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpLink, EntityID: entityID, Edge: "scans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).RemoveScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpUnlink, EntityID: entityID, Edge: "scans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Risk.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "risk", Operation: OpQuery, EntityID: entityID, Edge: "scans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryScans().IDs(ctx)
-			},
+			Name:        "scans",
+			Label:       "Scans",
+			Target:      SchemaScan,
+			TargetType:  "Scan",
+			CreateField: "scanIDs",
+			AddField:    "addScanIDs",
+			RemoveField: "removeScanIDs",
 		},
 		{
-			Name:         "subcontrols",
-			Label:        "Subcontrols",
-			Target:       SchemaSubcontrol,
-			TargetType:   "Subcontrol",
-			Relationship: "M2M",
-			CreateField:  "subcontrolIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).AddSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpLink, EntityID: entityID, Edge: "subcontrols"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).RemoveSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpUnlink, EntityID: entityID, Edge: "subcontrols"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Risk.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "risk", Operation: OpQuery, EntityID: entityID, Edge: "subcontrols"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrols().IDs(ctx)
-			},
+			Name:        "subcontrols",
+			Label:       "Subcontrols",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			CreateField: "subcontrolIDs",
+			AddField:    "addSubcontrolIDs",
+			RemoveField: "removeSubcontrolIDs",
 		},
 		{
-			Name:         "tasks",
-			Label:        "Tasks",
-			Target:       SchemaTask,
-			TargetType:   "Task",
-			Relationship: "M2M",
-			CreateField:  "taskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).AddTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpLink, EntityID: entityID, Edge: "tasks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).RemoveTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpUnlink, EntityID: entityID, Edge: "tasks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Risk.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "risk", Operation: OpQuery, EntityID: entityID, Edge: "tasks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTasks().IDs(ctx)
-			},
+			Name:        "tasks",
+			Label:       "Tasks",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			CreateField: "taskIDs",
+			AddField:    "addTaskIDs",
+			RemoveField: "removeTaskIDs",
 		},
 		{
-			Name:         "workflow_object_refs",
-			Label:        "WorkflowObjectRefs",
-			Target:       SchemaWorkflowObjectRef,
-			TargetType:   "WorkflowObjectRef",
-			Relationship: "O2M",
-			CreateField:  "workflowobjectrefIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Risk.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "risk", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Risk.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "risk", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflowobjectrefIDs",
+			AddField:    "addWorkflowObjectRefIDs",
+			RemoveField: "removeWorkflowObjectRefIDs",
 		},
 	}
 	SchemaScan.Edges = []EdgeDescriptor{
 		{
-			Name:         "action_plans",
-			Label:        "ActionPlans",
-			Target:       SchemaActionPlan,
-			TargetType:   "ActionPlan",
-			Relationship: "M2M",
-			CreateField:  "actionplanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).AddActionPlanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpLink, EntityID: entityID, Edge: "action_plans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).RemoveActionPlanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpUnlink, EntityID: entityID, Edge: "action_plans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Scan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "scan", Operation: OpQuery, EntityID: entityID, Edge: "action_plans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryActionPlans().IDs(ctx)
-			},
+			Name:        "action_plans",
+			Label:       "ActionPlans",
+			Target:      SchemaActionPlan,
+			TargetType:  "ActionPlan",
+			CreateField: "actionplanIDs",
+			AddField:    "addActionPlanIDs",
+			RemoveField: "removeActionPlanIDs",
 		},
 		{
-			Name:         "assets",
-			Label:        "Assets",
-			Target:       SchemaAsset,
-			TargetType:   "Asset",
-			Relationship: "M2M",
-			CreateField:  "assetIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).AddAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpLink, EntityID: entityID, Edge: "assets"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).RemoveAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpUnlink, EntityID: entityID, Edge: "assets"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Scan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "scan", Operation: OpQuery, EntityID: entityID, Edge: "assets"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssets().IDs(ctx)
-			},
+			Name:        "assets",
+			Label:       "Assets",
+			Target:      SchemaAsset,
+			TargetType:  "Asset",
+			CreateField: "assetIDs",
+			AddField:    "addAssetIDs",
+			RemoveField: "removeAssetIDs",
 		},
 		{
-			Name:         "controls",
-			Label:        "Controls",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2M",
-			CreateField:  "controlIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Scan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "scan", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "controlIDs",
+			AddField:    "addControlIDs",
+			RemoveField: "removeControlIDs",
 		},
 		{
-			Name:         "entities",
-			Label:        "Entities",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "M2M",
-			CreateField:  "entityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).AddEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpLink, EntityID: entityID, Edge: "entities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).RemoveEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpUnlink, EntityID: entityID, Edge: "entities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Scan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "scan", Operation: OpQuery, EntityID: entityID, Edge: "entities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEntities().IDs(ctx)
-			},
+			Name:        "entities",
+			Label:       "Entities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "entityIDs",
+			AddField:    "addEntityIDs",
+			RemoveField: "removeEntityIDs",
 		},
 		{
-			Name:         "evidence",
-			Label:        "Evidence",
-			Target:       SchemaEvidence,
-			TargetType:   "Evidence",
-			Relationship: "M2M",
-			CreateField:  "evidenceIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).AddEvidenceIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpLink, EntityID: entityID, Edge: "evidence"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).RemoveEvidenceIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpUnlink, EntityID: entityID, Edge: "evidence"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Scan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "scan", Operation: OpQuery, EntityID: entityID, Edge: "evidence"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEvidence().IDs(ctx)
-			},
+			Name:        "evidence",
+			Label:       "Evidence",
+			Target:      SchemaEvidence,
+			TargetType:  "Evidence",
+			CreateField: "evidenceIDs",
+			AddField:    "addEvidenceIDs",
+			RemoveField: "removeEvidenceIDs",
 		},
 		{
-			Name:         "findings",
-			Label:        "Findings",
-			Target:       SchemaFinding,
-			TargetType:   "Finding",
-			Relationship: "M2M",
-			CreateField:  "findingIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).AddFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpLink, EntityID: entityID, Edge: "findings"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).RemoveFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpUnlink, EntityID: entityID, Edge: "findings"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Scan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "scan", Operation: OpQuery, EntityID: entityID, Edge: "findings"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryFindings().IDs(ctx)
-			},
+			Name:        "findings",
+			Label:       "Findings",
+			Target:      SchemaFinding,
+			TargetType:  "Finding",
+			CreateField: "findingIDs",
+			AddField:    "addFindingIDs",
+			RemoveField: "removeFindingIDs",
 		},
 		{
-			Name:         "generated_by_platform",
-			Label:        "GeneratedByPlatform",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "generatedByPlatformID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.Scan.UpdateOneID(entityID).SetGeneratedByPlatformID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpLink, EntityID: entityID, Edge: "generated_by_platform"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).ClearGeneratedByPlatform().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpUnlink, EntityID: entityID, Edge: "generated_by_platform"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Scan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "scan", Operation: OpQuery, EntityID: entityID, Edge: "generated_by_platform"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryGeneratedByPlatform().IDs(ctx)
-			},
+			Name:        "generated_by_platform",
+			Label:       "GeneratedByPlatform",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			Unique:      true,
+			CreateField: "generatedByPlatformID",
+			ClearField:  "clearGeneratedByPlatform",
+			Field:       "generated_by_platform_id",
 		},
 		{
-			Name:         "platforms",
-			Label:        "Platforms",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2M",
-			CreateField:  "platformIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).AddPlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpLink, EntityID: entityID, Edge: "platforms"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).RemovePlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpUnlink, EntityID: entityID, Edge: "platforms"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Scan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "scan", Operation: OpQuery, EntityID: entityID, Edge: "platforms"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryPlatforms().IDs(ctx)
-			},
+			Name:        "platforms",
+			Label:       "Platforms",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			CreateField: "platformIDs",
+			AddField:    "addPlatformIDs",
+			RemoveField: "removePlatformIDs",
 		},
 		{
-			Name:         "remediations",
-			Label:        "Remediations",
-			Target:       SchemaRemediation,
-			TargetType:   "Remediation",
-			Relationship: "M2M",
-			CreateField:  "remediationIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).AddRemediationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpLink, EntityID: entityID, Edge: "remediations"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).RemoveRemediationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpUnlink, EntityID: entityID, Edge: "remediations"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Scan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "scan", Operation: OpQuery, EntityID: entityID, Edge: "remediations"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRemediations().IDs(ctx)
-			},
+			Name:        "remediations",
+			Label:       "Remediations",
+			Target:      SchemaRemediation,
+			TargetType:  "Remediation",
+			CreateField: "remediationIDs",
+			AddField:    "addRemediationIDs",
+			RemoveField: "removeRemediationIDs",
 		},
 		{
-			Name:         "subcontrols",
-			Label:        "Subcontrols",
-			Target:       SchemaSubcontrol,
-			TargetType:   "Subcontrol",
-			Relationship: "M2M",
-			CreateField:  "subcontrolIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).AddSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpLink, EntityID: entityID, Edge: "subcontrols"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).RemoveSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpUnlink, EntityID: entityID, Edge: "subcontrols"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Scan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "scan", Operation: OpQuery, EntityID: entityID, Edge: "subcontrols"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrols().IDs(ctx)
-			},
+			Name:        "subcontrols",
+			Label:       "Subcontrols",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			CreateField: "subcontrolIDs",
+			AddField:    "addSubcontrolIDs",
+			RemoveField: "removeSubcontrolIDs",
 		},
 		{
-			Name:         "tasks",
-			Label:        "Tasks",
-			Target:       SchemaTask,
-			TargetType:   "Task",
-			Relationship: "M2M",
-			CreateField:  "taskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).AddTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpLink, EntityID: entityID, Edge: "tasks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).RemoveTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpUnlink, EntityID: entityID, Edge: "tasks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Scan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "scan", Operation: OpQuery, EntityID: entityID, Edge: "tasks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTasks().IDs(ctx)
-			},
+			Name:        "tasks",
+			Label:       "Tasks",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			CreateField: "taskIDs",
+			AddField:    "addTaskIDs",
+			RemoveField: "removeTaskIDs",
 		},
 		{
-			Name:         "vulnerabilities",
-			Label:        "Vulnerabilities",
-			Target:       SchemaVulnerability,
-			TargetType:   "Vulnerability",
-			Relationship: "M2M",
-			CreateField:  "vulnerabilityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).AddVulnerabilityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpLink, EntityID: entityID, Edge: "vulnerabilities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Scan.UpdateOneID(entityID).RemoveVulnerabilityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scan", Operation: OpUnlink, EntityID: entityID, Edge: "vulnerabilities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Scan.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "scan", Operation: OpQuery, EntityID: entityID, Edge: "vulnerabilities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryVulnerabilities().IDs(ctx)
-			},
+			Name:        "vulnerabilities",
+			Label:       "Vulnerabilities",
+			Target:      SchemaVulnerability,
+			TargetType:  "Vulnerability",
+			CreateField: "vulnerabilityIDs",
+			AddField:    "addVulnerabilityIDs",
+			RemoveField: "removeVulnerabilityIDs",
 		},
 	}
 	SchemaScheduledJob.Edges = []EdgeDescriptor{
 		{
-			Name:         "controls",
-			Label:        "Controls",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2M",
-			CreateField:  "controlIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ScheduledJob.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scheduled_job", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ScheduledJob.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scheduled_job", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ScheduledJob.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "scheduled_job", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "controlIDs",
+			AddField:    "addControlIDs",
+			RemoveField: "removeControlIDs",
 		},
 		{
-			Name:         "subcontrols",
-			Label:        "Subcontrols",
-			Target:       SchemaSubcontrol,
-			TargetType:   "Subcontrol",
-			Relationship: "M2M",
-			CreateField:  "subcontrolIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ScheduledJob.UpdateOneID(entityID).AddSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scheduled_job", Operation: OpLink, EntityID: entityID, Edge: "subcontrols"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.ScheduledJob.UpdateOneID(entityID).RemoveSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "scheduled_job", Operation: OpUnlink, EntityID: entityID, Edge: "subcontrols"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.ScheduledJob.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "scheduled_job", Operation: OpQuery, EntityID: entityID, Edge: "subcontrols"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrols().IDs(ctx)
-			},
+			Name:        "subcontrols",
+			Label:       "Subcontrols",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			CreateField: "subcontrolIDs",
+			AddField:    "addSubcontrolIDs",
+			RemoveField: "removeSubcontrolIDs",
 		},
 	}
 	SchemaSubcontrol.Edges = []EdgeDescriptor{
@@ -16083,3167 +7594,1059 @@ func init() {
 			Label:            "ActionPlans",
 			Target:           SchemaActionPlan,
 			TargetType:       "ActionPlan",
-			Relationship:     "O2M",
 			CreateField:      "actionplanIDs",
+			AddField:         "addActionPlanIDs",
+			RemoveField:      "removeActionPlanIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).AddActionPlanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "action_plans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).RemoveActionPlanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpUnlink, EntityID: entityID, Edge: "action_plans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "action_plans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryActionPlans().IDs(ctx)
-			},
 		},
 		{
-			Name:         "assets",
-			Label:        "Assets",
-			Target:       SchemaAsset,
-			TargetType:   "Asset",
-			Relationship: "M2M",
-			CreateField:  "assetIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).AddAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "assets"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).RemoveAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpUnlink, EntityID: entityID, Edge: "assets"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "assets"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssets().IDs(ctx)
-			},
+			Name:        "assets",
+			Label:       "Assets",
+			Target:      SchemaAsset,
+			TargetType:  "Asset",
+			CreateField: "assetIDs",
+			AddField:    "addAssetIDs",
+			RemoveField: "removeAssetIDs",
 		},
 		{
 			Name:             "control",
 			Label:            "Control",
 			Target:           SchemaControl,
 			TargetType:       "Control",
-			Relationship:     "M2O",
 			Unique:           true,
 			CreateField:      "controlID",
+			Field:            "control_id",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.Subcontrol.UpdateOneID(entityID).SetControlID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "control"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "control"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControl().IDs(ctx)
-			},
 		},
 		{
 			Name:             "control_implementations",
 			Label:            "ControlImplementations",
 			Target:           SchemaControlImplementation,
 			TargetType:       "ControlImplementation",
-			Relationship:     "M2M",
 			CreateField:      "controlimplementationIDs",
+			AddField:         "addControlImplementationIDs",
+			RemoveField:      "removeControlImplementationIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).AddControlImplementationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "control_implementations"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).RemoveControlImplementationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpUnlink, EntityID: entityID, Edge: "control_implementations"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "control_implementations"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControlImplementations().IDs(ctx)
-			},
 		},
 		{
 			Name:             "control_objectives",
 			Label:            "ControlObjectives",
 			Target:           SchemaControlObjective,
 			TargetType:       "ControlObjective",
-			Relationship:     "M2M",
 			CreateField:      "controlobjectiveIDs",
+			AddField:         "addControlObjectiveIDs",
+			RemoveField:      "removeControlObjectiveIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).AddControlObjectiveIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "control_objectives"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).RemoveControlObjectiveIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpUnlink, EntityID: entityID, Edge: "control_objectives"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "control_objectives"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControlObjectives().IDs(ctx)
-			},
 		},
 		{
 			Name:             "discussions",
 			Label:            "Discussions",
 			Target:           SchemaDiscussion,
 			TargetType:       "Discussion",
-			Relationship:     "O2M",
 			CreateField:      "discussionIDs",
+			AddField:         "addDiscussionIDs",
+			RemoveField:      "removeDiscussionIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).AddDiscussionIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "discussions"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).RemoveDiscussionIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpUnlink, EntityID: entityID, Edge: "discussions"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "discussions"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryDiscussions().IDs(ctx)
-			},
 		},
 		{
-			Name:         "entities",
-			Label:        "Entities",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "M2M",
-			CreateField:  "entityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).AddEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "entities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).RemoveEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpUnlink, EntityID: entityID, Edge: "entities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "entities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEntities().IDs(ctx)
-			},
+			Name:        "entities",
+			Label:       "Entities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "entityIDs",
+			AddField:    "addEntityIDs",
+			RemoveField: "removeEntityIDs",
 		},
 		{
 			Name:             "evidence",
 			Label:            "Evidence",
 			Target:           SchemaEvidence,
 			TargetType:       "Evidence",
-			Relationship:     "M2M",
 			CreateField:      "evidenceIDs",
+			AddField:         "addEvidenceIDs",
+			RemoveField:      "removeEvidenceIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).AddEvidenceIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "evidence"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).RemoveEvidenceIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpUnlink, EntityID: entityID, Edge: "evidence"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "evidence"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEvidence().IDs(ctx)
-			},
 		},
 		{
-			Name:         "identity_holders",
-			Label:        "IdentityHolders",
-			Target:       SchemaIdentityHolder,
-			TargetType:   "IdentityHolder",
-			Relationship: "M2M",
-			CreateField:  "identityholderIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).AddIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "identity_holders"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).RemoveIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpUnlink, EntityID: entityID, Edge: "identity_holders"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "identity_holders"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryIdentityHolders().IDs(ctx)
-			},
+			Name:        "identity_holders",
+			Label:       "IdentityHolders",
+			Target:      SchemaIdentityHolder,
+			TargetType:  "IdentityHolder",
+			CreateField: "identityholderIDs",
+			AddField:    "addIdentityHolderIDs",
+			RemoveField: "removeIdentityHolderIDs",
 		},
 		{
 			Name:             "internal_policies",
 			Label:            "InternalPolicies",
 			Target:           SchemaInternalPolicy,
 			TargetType:       "InternalPolicy",
-			Relationship:     "M2M",
 			CreateField:      "internalpolicyIDs",
+			AddField:         "addInternalPolicyIDs",
+			RemoveField:      "removeInternalPolicyIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).AddInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "internal_policies"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).RemoveInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpUnlink, EntityID: entityID, Edge: "internal_policies"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "internal_policies"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryInternalPolicies().IDs(ctx)
-			},
 		},
 		{
 			Name:             "narratives",
 			Label:            "Narratives",
 			Target:           SchemaNarrative,
 			TargetType:       "Narrative",
-			Relationship:     "O2M",
 			CreateField:      "narrativeIDs",
+			AddField:         "addNarrativeIDs",
+			RemoveField:      "removeNarrativeIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).AddNarrativeIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "narratives"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).RemoveNarrativeIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpUnlink, EntityID: entityID, Edge: "narratives"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "narratives"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryNarratives().IDs(ctx)
-			},
 		},
 		{
 			Name:             "procedures",
 			Label:            "Procedures",
 			Target:           SchemaProcedure,
 			TargetType:       "Procedure",
-			Relationship:     "M2M",
 			CreateField:      "procedureIDs",
+			AddField:         "addProcedureIDs",
+			RemoveField:      "removeProcedureIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).AddProcedureIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "procedures"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).RemoveProcedureIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpUnlink, EntityID: entityID, Edge: "procedures"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "procedures"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryProcedures().IDs(ctx)
-			},
 		},
 		{
-			Name:         "remediations",
-			Label:        "Remediations",
-			Target:       SchemaRemediation,
-			TargetType:   "Remediation",
-			Relationship: "M2M",
-			CreateField:  "remediationIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).AddRemediationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "remediations"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).RemoveRemediationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpUnlink, EntityID: entityID, Edge: "remediations"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "remediations"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRemediations().IDs(ctx)
-			},
+			Name:        "remediations",
+			Label:       "Remediations",
+			Target:      SchemaRemediation,
+			TargetType:  "Remediation",
+			CreateField: "remediationIDs",
+			AddField:    "addRemediationIDs",
+			RemoveField: "removeRemediationIDs",
 		},
 		{
 			Name:             "responsible_party",
 			Label:            "ResponsibleParty",
 			Target:           SchemaEntity,
 			TargetType:       "Entity",
-			Relationship:     "M2O",
 			Unique:           true,
 			CreateField:      "responsiblePartyID",
+			ClearField:       "clearResponsibleParty",
+			Field:            "responsible_party_id",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.Subcontrol.UpdateOneID(entityID).SetResponsiblePartyID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "responsible_party"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).ClearResponsibleParty().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpUnlink, EntityID: entityID, Edge: "responsible_party"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "responsible_party"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryResponsibleParty().IDs(ctx)
-			},
 		},
 		{
-			Name:         "reviews",
-			Label:        "Reviews",
-			Target:       SchemaReview,
-			TargetType:   "Review",
-			Relationship: "M2M",
-			CreateField:  "reviewIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).AddReviewIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "reviews"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).RemoveReviewIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpUnlink, EntityID: entityID, Edge: "reviews"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "reviews"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryReviews().IDs(ctx)
-			},
+			Name:        "reviews",
+			Label:       "Reviews",
+			Target:      SchemaReview,
+			TargetType:  "Review",
+			CreateField: "reviewIDs",
+			AddField:    "addReviewIDs",
+			RemoveField: "removeReviewIDs",
 		},
 		{
 			Name:             "risks",
 			Label:            "Risks",
 			Target:           SchemaRisk,
 			TargetType:       "Risk",
-			Relationship:     "M2M",
 			CreateField:      "riskIDs",
+			AddField:         "addRiskIDs",
+			RemoveField:      "removeRiskIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).AddRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "risks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).RemoveRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpUnlink, EntityID: entityID, Edge: "risks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "risks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRisks().IDs(ctx)
-			},
 		},
 		{
-			Name:         "scans",
-			Label:        "Scans",
-			Target:       SchemaScan,
-			TargetType:   "Scan",
-			Relationship: "M2M",
-			CreateField:  "scanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).AddScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "scans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).RemoveScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpUnlink, EntityID: entityID, Edge: "scans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "scans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryScans().IDs(ctx)
-			},
+			Name:        "scans",
+			Label:       "Scans",
+			Target:      SchemaScan,
+			TargetType:  "Scan",
+			CreateField: "scanIDs",
+			AddField:    "addScanIDs",
+			RemoveField: "removeScanIDs",
 		},
 		{
-			Name:         "scheduled_jobs",
-			Label:        "ScheduledJobs",
-			Target:       SchemaScheduledJob,
-			TargetType:   "ScheduledJob",
-			Relationship: "M2M",
-			CreateField:  "scheduledjobIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).AddScheduledJobIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "scheduled_jobs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).RemoveScheduledJobIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpUnlink, EntityID: entityID, Edge: "scheduled_jobs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "scheduled_jobs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryScheduledJobs().IDs(ctx)
-			},
+			Name:        "scheduled_jobs",
+			Label:       "ScheduledJobs",
+			Target:      SchemaScheduledJob,
+			TargetType:  "ScheduledJob",
+			CreateField: "scheduledjobIDs",
+			AddField:    "addScheduledJobIDs",
+			RemoveField: "removeScheduledJobIDs",
 		},
 		{
 			Name:             "tasks",
 			Label:            "Tasks",
 			Target:           SchemaTask,
 			TargetType:       "Task",
-			Relationship:     "M2M",
 			CreateField:      "taskIDs",
+			AddField:         "addTaskIDs",
+			RemoveField:      "removeTaskIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).AddTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "tasks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).RemoveTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpUnlink, EntityID: entityID, Edge: "tasks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "tasks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTasks().IDs(ctx)
-			},
 		},
 		{
 			Name:             "workflow_object_refs",
 			Label:            "WorkflowObjectRefs",
 			Target:           SchemaWorkflowObjectRef,
 			TargetType:       "WorkflowObjectRef",
-			Relationship:     "O2M",
 			CreateField:      "workflowobjectrefIDs",
+			AddField:         "addWorkflowObjectRefIDs",
+			RemoveField:      "removeWorkflowObjectRefIDs",
 			WorkflowEligible: true,
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subcontrol.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subcontrol.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subcontrol", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
 		},
 	}
 	SchemaSubprocessor.Edges = []EdgeDescriptor{
 		{
-			Name:         "entities",
-			Label:        "Entities",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "M2M",
-			CreateField:  "entityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subprocessor.UpdateOneID(entityID).AddEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subprocessor", Operation: OpLink, EntityID: entityID, Edge: "entities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Subprocessor.UpdateOneID(entityID).RemoveEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "subprocessor", Operation: OpUnlink, EntityID: entityID, Edge: "entities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Subprocessor.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "subprocessor", Operation: OpQuery, EntityID: entityID, Edge: "entities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEntities().IDs(ctx)
-			},
+			Name:        "entities",
+			Label:       "Entities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "entityIDs",
+			AddField:    "addEntityIDs",
+			RemoveField: "removeEntityIDs",
 		},
 	}
 	SchemaSystemDetail.Edges = []EdgeDescriptor{
 		{
-			Name:         "assets",
-			Label:        "Assets",
-			Target:       SchemaAsset,
-			TargetType:   "Asset",
-			Relationship: "M2M",
-			CreateField:  "assetIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.SystemDetail.UpdateOneID(entityID).AddAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "system_detail", Operation: OpLink, EntityID: entityID, Edge: "assets"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.SystemDetail.UpdateOneID(entityID).RemoveAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "system_detail", Operation: OpUnlink, EntityID: entityID, Edge: "assets"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.SystemDetail.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "system_detail", Operation: OpQuery, EntityID: entityID, Edge: "assets"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssets().IDs(ctx)
-			},
+			Name:        "assets",
+			Label:       "Assets",
+			Target:      SchemaAsset,
+			TargetType:  "Asset",
+			CreateField: "assetIDs",
+			AddField:    "addAssetIDs",
+			RemoveField: "removeAssetIDs",
 		},
 		{
-			Name:         "entities",
-			Label:        "Entities",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "M2M",
-			CreateField:  "entityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.SystemDetail.UpdateOneID(entityID).AddEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "system_detail", Operation: OpLink, EntityID: entityID, Edge: "entities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.SystemDetail.UpdateOneID(entityID).RemoveEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "system_detail", Operation: OpUnlink, EntityID: entityID, Edge: "entities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.SystemDetail.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "system_detail", Operation: OpQuery, EntityID: entityID, Edge: "entities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEntities().IDs(ctx)
-			},
+			Name:        "entities",
+			Label:       "Entities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "entityIDs",
+			AddField:    "addEntityIDs",
+			RemoveField: "removeEntityIDs",
 		},
 		{
-			Name:         "platforms",
-			Label:        "Platforms",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2M",
-			CreateField:  "platformIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.SystemDetail.UpdateOneID(entityID).AddPlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "system_detail", Operation: OpLink, EntityID: entityID, Edge: "platforms"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.SystemDetail.UpdateOneID(entityID).RemovePlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "system_detail", Operation: OpUnlink, EntityID: entityID, Edge: "platforms"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.SystemDetail.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "system_detail", Operation: OpQuery, EntityID: entityID, Edge: "platforms"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryPlatforms().IDs(ctx)
-			},
+			Name:        "platforms",
+			Label:       "Platforms",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			CreateField: "platformIDs",
+			AddField:    "addPlatformIDs",
+			RemoveField: "removePlatformIDs",
 		},
 	}
 	SchemaTask.Edges = []EdgeDescriptor{
 		{
-			Name:         "action_plans",
-			Label:        "ActionPlans",
-			Target:       SchemaActionPlan,
-			TargetType:   "ActionPlan",
-			Relationship: "M2M",
-			CreateField:  "actionplanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).AddActionPlanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpLink, EntityID: entityID, Edge: "action_plans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).RemoveActionPlanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpUnlink, EntityID: entityID, Edge: "action_plans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Task.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "task", Operation: OpQuery, EntityID: entityID, Edge: "action_plans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryActionPlans().IDs(ctx)
-			},
+			Name:        "action_plans",
+			Label:       "ActionPlans",
+			Target:      SchemaActionPlan,
+			TargetType:  "ActionPlan",
+			CreateField: "actionplanIDs",
+			AddField:    "addActionPlanIDs",
+			RemoveField: "removeActionPlanIDs",
 		},
 		{
-			Name:         "control_implementations",
-			Label:        "ControlImplementations",
-			Target:       SchemaControlImplementation,
-			TargetType:   "ControlImplementation",
-			Relationship: "M2M",
-			CreateField:  "controlimplementationIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).AddControlImplementationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpLink, EntityID: entityID, Edge: "control_implementations"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).RemoveControlImplementationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpUnlink, EntityID: entityID, Edge: "control_implementations"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Task.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "task", Operation: OpQuery, EntityID: entityID, Edge: "control_implementations"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControlImplementations().IDs(ctx)
-			},
+			Name:        "control_implementations",
+			Label:       "ControlImplementations",
+			Target:      SchemaControlImplementation,
+			TargetType:  "ControlImplementation",
+			CreateField: "controlimplementationIDs",
+			AddField:    "addControlImplementationIDs",
+			RemoveField: "removeControlImplementationIDs",
 		},
 		{
-			Name:         "control_objectives",
-			Label:        "ControlObjectives",
-			Target:       SchemaControlObjective,
-			TargetType:   "ControlObjective",
-			Relationship: "M2M",
-			CreateField:  "controlobjectiveIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).AddControlObjectiveIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpLink, EntityID: entityID, Edge: "control_objectives"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).RemoveControlObjectiveIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpUnlink, EntityID: entityID, Edge: "control_objectives"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Task.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "task", Operation: OpQuery, EntityID: entityID, Edge: "control_objectives"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControlObjectives().IDs(ctx)
-			},
+			Name:        "control_objectives",
+			Label:       "ControlObjectives",
+			Target:      SchemaControlObjective,
+			TargetType:  "ControlObjective",
+			CreateField: "controlobjectiveIDs",
+			AddField:    "addControlObjectiveIDs",
+			RemoveField: "removeControlObjectiveIDs",
 		},
 		{
-			Name:         "controls",
-			Label:        "Controls",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2M",
-			CreateField:  "controlIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Task.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "task", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "controlIDs",
+			AddField:    "addControlIDs",
+			RemoveField: "removeControlIDs",
 		},
 		{
-			Name:         "evidence",
-			Label:        "Evidence",
-			Target:       SchemaEvidence,
-			TargetType:   "Evidence",
-			Relationship: "M2M",
-			CreateField:  "evidenceIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).AddEvidenceIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpLink, EntityID: entityID, Edge: "evidence"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).RemoveEvidenceIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpUnlink, EntityID: entityID, Edge: "evidence"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Task.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "task", Operation: OpQuery, EntityID: entityID, Edge: "evidence"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEvidence().IDs(ctx)
-			},
+			Name:        "evidence",
+			Label:       "Evidence",
+			Target:      SchemaEvidence,
+			TargetType:  "Evidence",
+			CreateField: "evidenceIDs",
+			AddField:    "addEvidenceIDs",
+			RemoveField: "removeEvidenceIDs",
 		},
 		{
-			Name:         "findings",
-			Label:        "Findings",
-			Target:       SchemaFinding,
-			TargetType:   "Finding",
-			Relationship: "M2M",
-			CreateField:  "findingIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).AddFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpLink, EntityID: entityID, Edge: "findings"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).RemoveFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpUnlink, EntityID: entityID, Edge: "findings"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Task.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "task", Operation: OpQuery, EntityID: entityID, Edge: "findings"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryFindings().IDs(ctx)
-			},
+			Name:        "findings",
+			Label:       "Findings",
+			Target:      SchemaFinding,
+			TargetType:  "Finding",
+			CreateField: "findingIDs",
+			AddField:    "addFindingIDs",
+			RemoveField: "removeFindingIDs",
 		},
 		{
-			Name:         "identity_holders",
-			Label:        "IdentityHolders",
-			Target:       SchemaIdentityHolder,
-			TargetType:   "IdentityHolder",
-			Relationship: "M2M",
-			CreateField:  "identityholderIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).AddIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpLink, EntityID: entityID, Edge: "identity_holders"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).RemoveIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpUnlink, EntityID: entityID, Edge: "identity_holders"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Task.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "task", Operation: OpQuery, EntityID: entityID, Edge: "identity_holders"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryIdentityHolders().IDs(ctx)
-			},
+			Name:        "identity_holders",
+			Label:       "IdentityHolders",
+			Target:      SchemaIdentityHolder,
+			TargetType:  "IdentityHolder",
+			CreateField: "identityholderIDs",
+			AddField:    "addIdentityHolderIDs",
+			RemoveField: "removeIdentityHolderIDs",
 		},
 		{
-			Name:         "internal_policies",
-			Label:        "InternalPolicies",
-			Target:       SchemaInternalPolicy,
-			TargetType:   "InternalPolicy",
-			Relationship: "M2M",
-			CreateField:  "internalpolicyIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).AddInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpLink, EntityID: entityID, Edge: "internal_policies"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).RemoveInternalPolicyIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpUnlink, EntityID: entityID, Edge: "internal_policies"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Task.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "task", Operation: OpQuery, EntityID: entityID, Edge: "internal_policies"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryInternalPolicies().IDs(ctx)
-			},
+			Name:        "internal_policies",
+			Label:       "InternalPolicies",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			CreateField: "internalpolicyIDs",
+			AddField:    "addInternalPolicyIDs",
+			RemoveField: "removeInternalPolicyIDs",
 		},
 		{
-			Name:         "parent",
-			Label:        "Parent",
-			Target:       SchemaTask,
-			TargetType:   "Task",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "parentID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.Task.UpdateOneID(entityID).SetParentID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpLink, EntityID: entityID, Edge: "parent"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).ClearParent().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpUnlink, EntityID: entityID, Edge: "parent"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Task.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "task", Operation: OpQuery, EntityID: entityID, Edge: "parent"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryParent().IDs(ctx)
-			},
+			Name:        "parent",
+			Label:       "Parent",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			Unique:      true,
+			CreateField: "parentID",
+			ClearField:  "clearParent",
+			Field:       "parent_task_id",
 		},
 		{
-			Name:         "platforms",
-			Label:        "Platforms",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2M",
-			CreateField:  "platformIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).AddPlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpLink, EntityID: entityID, Edge: "platforms"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).RemovePlatformIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpUnlink, EntityID: entityID, Edge: "platforms"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Task.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "task", Operation: OpQuery, EntityID: entityID, Edge: "platforms"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryPlatforms().IDs(ctx)
-			},
+			Name:        "platforms",
+			Label:       "Platforms",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			CreateField: "platformIDs",
+			AddField:    "addPlatformIDs",
+			RemoveField: "removePlatformIDs",
 		},
 		{
-			Name:         "procedures",
-			Label:        "Procedures",
-			Target:       SchemaProcedure,
-			TargetType:   "Procedure",
-			Relationship: "M2M",
-			CreateField:  "procedureIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).AddProcedureIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpLink, EntityID: entityID, Edge: "procedures"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).RemoveProcedureIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpUnlink, EntityID: entityID, Edge: "procedures"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Task.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "task", Operation: OpQuery, EntityID: entityID, Edge: "procedures"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryProcedures().IDs(ctx)
-			},
+			Name:        "procedures",
+			Label:       "Procedures",
+			Target:      SchemaProcedure,
+			TargetType:  "Procedure",
+			CreateField: "procedureIDs",
+			AddField:    "addProcedureIDs",
+			RemoveField: "removeProcedureIDs",
 		},
 		{
-			Name:         "risks",
-			Label:        "Risks",
-			Target:       SchemaRisk,
-			TargetType:   "Risk",
-			Relationship: "M2M",
-			CreateField:  "riskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).AddRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpLink, EntityID: entityID, Edge: "risks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).RemoveRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpUnlink, EntityID: entityID, Edge: "risks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Task.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "task", Operation: OpQuery, EntityID: entityID, Edge: "risks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRisks().IDs(ctx)
-			},
+			Name:        "risks",
+			Label:       "Risks",
+			Target:      SchemaRisk,
+			TargetType:  "Risk",
+			CreateField: "riskIDs",
+			AddField:    "addRiskIDs",
+			RemoveField: "removeRiskIDs",
 		},
 		{
-			Name:         "scans",
-			Label:        "Scans",
-			Target:       SchemaScan,
-			TargetType:   "Scan",
-			Relationship: "M2M",
-			CreateField:  "scanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).AddScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpLink, EntityID: entityID, Edge: "scans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).RemoveScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpUnlink, EntityID: entityID, Edge: "scans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Task.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "task", Operation: OpQuery, EntityID: entityID, Edge: "scans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryScans().IDs(ctx)
-			},
+			Name:        "scans",
+			Label:       "Scans",
+			Target:      SchemaScan,
+			TargetType:  "Scan",
+			CreateField: "scanIDs",
+			AddField:    "addScanIDs",
+			RemoveField: "removeScanIDs",
 		},
 		{
-			Name:         "subcontrols",
-			Label:        "Subcontrols",
-			Target:       SchemaSubcontrol,
-			TargetType:   "Subcontrol",
-			Relationship: "M2M",
-			CreateField:  "subcontrolIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).AddSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpLink, EntityID: entityID, Edge: "subcontrols"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).RemoveSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpUnlink, EntityID: entityID, Edge: "subcontrols"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Task.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "task", Operation: OpQuery, EntityID: entityID, Edge: "subcontrols"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrols().IDs(ctx)
-			},
+			Name:        "subcontrols",
+			Label:       "Subcontrols",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			CreateField: "subcontrolIDs",
+			AddField:    "addSubcontrolIDs",
+			RemoveField: "removeSubcontrolIDs",
 		},
 		{
-			Name:         "tasks",
-			Label:        "Tasks",
-			Target:       SchemaTask,
-			TargetType:   "Task",
-			Relationship: "O2M",
-			CreateField:  "taskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).AddTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpLink, EntityID: entityID, Edge: "tasks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).RemoveTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpUnlink, EntityID: entityID, Edge: "tasks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Task.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "task", Operation: OpQuery, EntityID: entityID, Edge: "tasks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTasks().IDs(ctx)
-			},
+			Name:        "tasks",
+			Label:       "Tasks",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			CreateField: "taskIDs",
+			AddField:    "addTaskIDs",
+			RemoveField: "removeTaskIDs",
 		},
 		{
-			Name:         "vulnerabilities",
-			Label:        "Vulnerabilities",
-			Target:       SchemaVulnerability,
-			TargetType:   "Vulnerability",
-			Relationship: "M2M",
-			CreateField:  "vulnerabilityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).AddVulnerabilityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpLink, EntityID: entityID, Edge: "vulnerabilities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).RemoveVulnerabilityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpUnlink, EntityID: entityID, Edge: "vulnerabilities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Task.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "task", Operation: OpQuery, EntityID: entityID, Edge: "vulnerabilities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryVulnerabilities().IDs(ctx)
-			},
+			Name:        "vulnerabilities",
+			Label:       "Vulnerabilities",
+			Target:      SchemaVulnerability,
+			TargetType:  "Vulnerability",
+			CreateField: "vulnerabilityIDs",
+			AddField:    "addVulnerabilityIDs",
+			RemoveField: "removeVulnerabilityIDs",
 		},
 		{
-			Name:         "workflow_object_refs",
-			Label:        "WorkflowObjectRefs",
-			Target:       SchemaWorkflowObjectRef,
-			TargetType:   "WorkflowObjectRef",
-			Relationship: "O2M",
-			CreateField:  "workflowobjectrefIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Task.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "task", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Task.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "task", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflowobjectrefIDs",
+			AddField:    "addWorkflowObjectRefIDs",
+			RemoveField: "removeWorkflowObjectRefIDs",
 		},
 	}
 	SchemaTemplate.Edges = []EdgeDescriptor{
 		{
-			Name:         "assessments",
-			Label:        "Assessments",
-			Target:       SchemaAssessment,
-			TargetType:   "Assessment",
-			Relationship: "O2M",
-			CreateField:  "assessmentIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Template.UpdateOneID(entityID).AddAssessmentIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "template", Operation: OpLink, EntityID: entityID, Edge: "assessments"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Template.UpdateOneID(entityID).RemoveAssessmentIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "template", Operation: OpUnlink, EntityID: entityID, Edge: "assessments"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Template.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "template", Operation: OpQuery, EntityID: entityID, Edge: "assessments"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssessments().IDs(ctx)
-			},
+			Name:        "assessments",
+			Label:       "Assessments",
+			Target:      SchemaAssessment,
+			TargetType:  "Assessment",
+			CreateField: "assessmentIDs",
+			AddField:    "addAssessmentIDs",
+			RemoveField: "removeAssessmentIDs",
 		},
 		{
-			Name:         "campaigns",
-			Label:        "Campaigns",
-			Target:       SchemaCampaign,
-			TargetType:   "Campaign",
-			Relationship: "O2M",
-			CreateField:  "campaignIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Template.UpdateOneID(entityID).AddCampaignIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "template", Operation: OpLink, EntityID: entityID, Edge: "campaigns"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Template.UpdateOneID(entityID).RemoveCampaignIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "template", Operation: OpUnlink, EntityID: entityID, Edge: "campaigns"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Template.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "template", Operation: OpQuery, EntityID: entityID, Edge: "campaigns"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryCampaigns().IDs(ctx)
-			},
+			Name:        "campaigns",
+			Label:       "Campaigns",
+			Target:      SchemaCampaign,
+			TargetType:  "Campaign",
+			CreateField: "campaignIDs",
+			AddField:    "addCampaignIDs",
+			RemoveField: "removeCampaignIDs",
 		},
 		{
-			Name:         "documents",
-			Label:        "Documents",
-			Target:       SchemaDocumentData,
-			TargetType:   "DocumentData",
-			Relationship: "O2M",
-			CreateField:  "documentIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Template.UpdateOneID(entityID).AddDocumentIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "template", Operation: OpLink, EntityID: entityID, Edge: "documents"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Template.UpdateOneID(entityID).RemoveDocumentIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "template", Operation: OpUnlink, EntityID: entityID, Edge: "documents"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Template.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "template", Operation: OpQuery, EntityID: entityID, Edge: "documents"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryDocuments().IDs(ctx)
-			},
+			Name:        "documents",
+			Label:       "Documents",
+			Target:      SchemaDocumentData,
+			TargetType:  "DocumentData",
+			CreateField: "documentIDs",
+			AddField:    "addDocumentIDs",
+			RemoveField: "removeDocumentIDs",
 		},
 		{
-			Name:         "identity_holders",
-			Label:        "IdentityHolders",
-			Target:       SchemaIdentityHolder,
-			TargetType:   "IdentityHolder",
-			Relationship: "M2M",
-			CreateField:  "identityholderIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Template.UpdateOneID(entityID).AddIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "template", Operation: OpLink, EntityID: entityID, Edge: "identity_holders"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Template.UpdateOneID(entityID).RemoveIdentityHolderIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "template", Operation: OpUnlink, EntityID: entityID, Edge: "identity_holders"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Template.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "template", Operation: OpQuery, EntityID: entityID, Edge: "identity_holders"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryIdentityHolders().IDs(ctx)
-			},
+			Name:        "identity_holders",
+			Label:       "IdentityHolders",
+			Target:      SchemaIdentityHolder,
+			TargetType:  "IdentityHolder",
+			CreateField: "identityholderIDs",
+			AddField:    "addIdentityHolderIDs",
+			RemoveField: "removeIdentityHolderIDs",
 		},
 	}
 	SchemaVendorRiskScore.Edges = []EdgeDescriptor{
 		{
-			Name:         "assessment_response",
-			Label:        "AssessmentResponse",
-			Target:       SchemaAssessmentResponse,
-			TargetType:   "AssessmentResponse",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "assessmentResponseID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.VendorRiskScore.UpdateOneID(entityID).SetAssessmentResponseID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vendor_risk_score", Operation: OpLink, EntityID: entityID, Edge: "assessment_response"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.VendorRiskScore.UpdateOneID(entityID).ClearAssessmentResponse().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vendor_risk_score", Operation: OpUnlink, EntityID: entityID, Edge: "assessment_response"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.VendorRiskScore.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "vendor_risk_score", Operation: OpQuery, EntityID: entityID, Edge: "assessment_response"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssessmentResponse().IDs(ctx)
-			},
+			Name:        "assessment_response",
+			Label:       "AssessmentResponse",
+			Target:      SchemaAssessmentResponse,
+			TargetType:  "AssessmentResponse",
+			Unique:      true,
+			CreateField: "assessmentResponseID",
+			ClearField:  "clearAssessmentResponse",
+			Field:       "assessment_response_id",
 		},
 		{
-			Name:         "entity",
-			Label:        "Entity",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "entityID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.VendorRiskScore.UpdateOneID(entityID).SetEntityID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vendor_risk_score", Operation: OpLink, EntityID: entityID, Edge: "entity"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.VendorRiskScore.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "vendor_risk_score", Operation: OpQuery, EntityID: entityID, Edge: "entity"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEntity().IDs(ctx)
-			},
+			Name:        "entity",
+			Label:       "Entity",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			Unique:      true,
+			CreateField: "entityID",
+			Field:       "entity_id",
 		},
 	}
 	SchemaVulnerability.Edges = []EdgeDescriptor{
 		{
-			Name:         "action_plans",
-			Label:        "ActionPlans",
-			Target:       SchemaActionPlan,
-			TargetType:   "ActionPlan",
-			Relationship: "M2M",
-			CreateField:  "actionplanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).AddActionPlanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpLink, EntityID: entityID, Edge: "action_plans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).RemoveActionPlanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpUnlink, EntityID: entityID, Edge: "action_plans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Vulnerability.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpQuery, EntityID: entityID, Edge: "action_plans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryActionPlans().IDs(ctx)
-			},
+			Name:        "action_plans",
+			Label:       "ActionPlans",
+			Target:      SchemaActionPlan,
+			TargetType:  "ActionPlan",
+			CreateField: "actionplanIDs",
+			AddField:    "addActionPlanIDs",
+			RemoveField: "removeActionPlanIDs",
 		},
 		{
-			Name:         "assets",
-			Label:        "Assets",
-			Target:       SchemaAsset,
-			TargetType:   "Asset",
-			Relationship: "O2M",
-			CreateField:  "assetIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).AddAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpLink, EntityID: entityID, Edge: "assets"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).RemoveAssetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpUnlink, EntityID: entityID, Edge: "assets"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Vulnerability.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpQuery, EntityID: entityID, Edge: "assets"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssets().IDs(ctx)
-			},
+			Name:        "assets",
+			Label:       "Assets",
+			Target:      SchemaAsset,
+			TargetType:  "Asset",
+			CreateField: "assetIDs",
+			AddField:    "addAssetIDs",
+			RemoveField: "removeAssetIDs",
 		},
 		{
-			Name:         "controls",
-			Label:        "Controls",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "O2M",
-			CreateField:  "controlIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).AddControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpLink, EntityID: entityID, Edge: "controls"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).RemoveControlIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpUnlink, EntityID: entityID, Edge: "controls"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Vulnerability.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpQuery, EntityID: entityID, Edge: "controls"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControls().IDs(ctx)
-			},
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "controlIDs",
+			AddField:    "addControlIDs",
+			RemoveField: "removeControlIDs",
 		},
 		{
-			Name:         "entities",
-			Label:        "Entities",
-			Target:       SchemaEntity,
-			TargetType:   "Entity",
-			Relationship: "O2M",
-			CreateField:  "entityIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).AddEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpLink, EntityID: entityID, Edge: "entities"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).RemoveEntityIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpUnlink, EntityID: entityID, Edge: "entities"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Vulnerability.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpQuery, EntityID: entityID, Edge: "entities"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEntities().IDs(ctx)
-			},
+			Name:        "entities",
+			Label:       "Entities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "entityIDs",
+			AddField:    "addEntityIDs",
+			RemoveField: "removeEntityIDs",
 		},
 		{
-			Name:         "findings",
-			Label:        "Findings",
-			Target:       SchemaFinding,
-			TargetType:   "Finding",
-			Relationship: "M2M",
-			CreateField:  "findingIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).AddFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpLink, EntityID: entityID, Edge: "findings"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).RemoveFindingIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpUnlink, EntityID: entityID, Edge: "findings"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Vulnerability.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpQuery, EntityID: entityID, Edge: "findings"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryFindings().IDs(ctx)
-			},
+			Name:        "findings",
+			Label:       "Findings",
+			Target:      SchemaFinding,
+			TargetType:  "Finding",
+			CreateField: "findingIDs",
+			AddField:    "addFindingIDs",
+			RemoveField: "removeFindingIDs",
 		},
 		{
-			Name:         "remediations",
-			Label:        "Remediations",
-			Target:       SchemaRemediation,
-			TargetType:   "Remediation",
-			Relationship: "M2M",
-			CreateField:  "remediationIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).AddRemediationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpLink, EntityID: entityID, Edge: "remediations"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).RemoveRemediationIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpUnlink, EntityID: entityID, Edge: "remediations"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Vulnerability.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpQuery, EntityID: entityID, Edge: "remediations"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRemediations().IDs(ctx)
-			},
+			Name:        "remediations",
+			Label:       "Remediations",
+			Target:      SchemaRemediation,
+			TargetType:  "Remediation",
+			CreateField: "remediationIDs",
+			AddField:    "addRemediationIDs",
+			RemoveField: "removeRemediationIDs",
 		},
 		{
-			Name:         "reviews",
-			Label:        "Reviews",
-			Target:       SchemaReview,
-			TargetType:   "Review",
-			Relationship: "M2M",
-			CreateField:  "reviewIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).AddReviewIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpLink, EntityID: entityID, Edge: "reviews"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).RemoveReviewIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpUnlink, EntityID: entityID, Edge: "reviews"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Vulnerability.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpQuery, EntityID: entityID, Edge: "reviews"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryReviews().IDs(ctx)
-			},
+			Name:        "reviews",
+			Label:       "Reviews",
+			Target:      SchemaReview,
+			TargetType:  "Review",
+			CreateField: "reviewIDs",
+			AddField:    "addReviewIDs",
+			RemoveField: "removeReviewIDs",
 		},
 		{
-			Name:         "risks",
-			Label:        "Risks",
-			Target:       SchemaRisk,
-			TargetType:   "Risk",
-			Relationship: "O2M",
-			CreateField:  "riskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).AddRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpLink, EntityID: entityID, Edge: "risks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).RemoveRiskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpUnlink, EntityID: entityID, Edge: "risks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Vulnerability.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpQuery, EntityID: entityID, Edge: "risks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRisks().IDs(ctx)
-			},
+			Name:        "risks",
+			Label:       "Risks",
+			Target:      SchemaRisk,
+			TargetType:  "Risk",
+			CreateField: "riskIDs",
+			AddField:    "addRiskIDs",
+			RemoveField: "removeRiskIDs",
 		},
 		{
-			Name:         "scans",
-			Label:        "Scans",
-			Target:       SchemaScan,
-			TargetType:   "Scan",
-			Relationship: "M2M",
-			CreateField:  "scanIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).AddScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpLink, EntityID: entityID, Edge: "scans"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).RemoveScanIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpUnlink, EntityID: entityID, Edge: "scans"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Vulnerability.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpQuery, EntityID: entityID, Edge: "scans"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryScans().IDs(ctx)
-			},
+			Name:        "scans",
+			Label:       "Scans",
+			Target:      SchemaScan,
+			TargetType:  "Scan",
+			CreateField: "scanIDs",
+			AddField:    "addScanIDs",
+			RemoveField: "removeScanIDs",
 		},
 		{
-			Name:         "subcontrols",
-			Label:        "Subcontrols",
-			Target:       SchemaSubcontrol,
-			TargetType:   "Subcontrol",
-			Relationship: "O2M",
-			CreateField:  "subcontrolIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).AddSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpLink, EntityID: entityID, Edge: "subcontrols"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).RemoveSubcontrolIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpUnlink, EntityID: entityID, Edge: "subcontrols"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Vulnerability.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpQuery, EntityID: entityID, Edge: "subcontrols"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrols().IDs(ctx)
-			},
+			Name:        "subcontrols",
+			Label:       "Subcontrols",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			CreateField: "subcontrolIDs",
+			AddField:    "addSubcontrolIDs",
+			RemoveField: "removeSubcontrolIDs",
 		},
 		{
-			Name:         "tasks",
-			Label:        "Tasks",
-			Target:       SchemaTask,
-			TargetType:   "Task",
-			Relationship: "M2M",
-			CreateField:  "taskIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).AddTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpLink, EntityID: entityID, Edge: "tasks"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).RemoveTaskIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpUnlink, EntityID: entityID, Edge: "tasks"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Vulnerability.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpQuery, EntityID: entityID, Edge: "tasks"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTasks().IDs(ctx)
-			},
+			Name:        "tasks",
+			Label:       "Tasks",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			CreateField: "taskIDs",
+			AddField:    "addTaskIDs",
+			RemoveField: "removeTaskIDs",
 		},
 		{
-			Name:         "workflow_object_refs",
-			Label:        "WorkflowObjectRefs",
-			Target:       SchemaWorkflowObjectRef,
-			TargetType:   "WorkflowObjectRef",
-			Relationship: "O2M",
-			CreateField:  "workflowobjectrefIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.Vulnerability.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.Vulnerability.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "vulnerability", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflowobjectrefIDs",
+			AddField:    "addWorkflowObjectRefIDs",
+			RemoveField: "removeWorkflowObjectRefIDs",
 		},
 	}
 	SchemaWorkflowAssignment.Edges = []EdgeDescriptor{
 		{
-			Name:         "workflow_assignment_targets",
-			Label:        "WorkflowAssignmentTargets",
-			Target:       SchemaWorkflowAssignmentTarget,
-			TargetType:   "WorkflowAssignmentTarget",
-			Relationship: "O2M",
-			CreateField:  "workflowassignmenttargetIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowAssignment.UpdateOneID(entityID).AddWorkflowAssignmentTargetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_assignment", Operation: OpLink, EntityID: entityID, Edge: "workflow_assignment_targets"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowAssignment.UpdateOneID(entityID).RemoveWorkflowAssignmentTargetIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_assignment", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_assignment_targets"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowAssignment.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_assignment", Operation: OpQuery, EntityID: entityID, Edge: "workflow_assignment_targets"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowAssignmentTargets().IDs(ctx)
-			},
+			Name:        "workflow_assignment_targets",
+			Label:       "WorkflowAssignmentTargets",
+			Target:      SchemaWorkflowAssignmentTarget,
+			TargetType:  "WorkflowAssignmentTarget",
+			CreateField: "workflowassignmenttargetIDs",
+			AddField:    "addWorkflowAssignmentTargetIDs",
+			RemoveField: "removeWorkflowAssignmentTargetIDs",
 		},
 		{
-			Name:         "workflow_instance",
-			Label:        "WorkflowInstance",
-			Target:       SchemaWorkflowInstance,
-			TargetType:   "WorkflowInstance",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "workflowInstanceID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowAssignment.UpdateOneID(entityID).SetWorkflowInstanceID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_assignment", Operation: OpLink, EntityID: entityID, Edge: "workflow_instance"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowAssignment.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_assignment", Operation: OpQuery, EntityID: entityID, Edge: "workflow_instance"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowInstance().IDs(ctx)
-			},
+			Name:        "workflow_instance",
+			Label:       "WorkflowInstance",
+			Target:      SchemaWorkflowInstance,
+			TargetType:  "WorkflowInstance",
+			Unique:      true,
+			CreateField: "workflowInstanceID",
+			Field:       "workflow_instance_id",
 		},
 	}
 	SchemaWorkflowAssignmentTarget.Edges = []EdgeDescriptor{
 		{
-			Name:         "workflow_assignment",
-			Label:        "WorkflowAssignment",
-			Target:       SchemaWorkflowAssignment,
-			TargetType:   "WorkflowAssignment",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "workflowAssignmentID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowAssignmentTarget.UpdateOneID(entityID).SetWorkflowAssignmentID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_assignment_target", Operation: OpLink, EntityID: entityID, Edge: "workflow_assignment"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowAssignmentTarget.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_assignment_target", Operation: OpQuery, EntityID: entityID, Edge: "workflow_assignment"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowAssignment().IDs(ctx)
-			},
+			Name:        "workflow_assignment",
+			Label:       "WorkflowAssignment",
+			Target:      SchemaWorkflowAssignment,
+			TargetType:  "WorkflowAssignment",
+			Unique:      true,
+			CreateField: "workflowAssignmentID",
+			Field:       "workflow_assignment_id",
 		},
 	}
 	SchemaWorkflowDefinition.Edges = []EdgeDescriptor{
 		{
-			Name:         "email_templates",
-			Label:        "EmailTemplates",
-			Target:       SchemaEmailTemplate,
-			TargetType:   "EmailTemplate",
-			Relationship: "O2M",
-			CreateField:  "emailtemplateIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowDefinition.UpdateOneID(entityID).AddEmailTemplateIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_definition", Operation: OpLink, EntityID: entityID, Edge: "email_templates"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowDefinition.UpdateOneID(entityID).RemoveEmailTemplateIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_definition", Operation: OpUnlink, EntityID: entityID, Edge: "email_templates"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowDefinition.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_definition", Operation: OpQuery, EntityID: entityID, Edge: "email_templates"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEmailTemplates().IDs(ctx)
-			},
+			Name:        "email_templates",
+			Label:       "EmailTemplates",
+			Target:      SchemaEmailTemplate,
+			TargetType:  "EmailTemplate",
+			CreateField: "emailtemplateIDs",
+			AddField:    "addEmailTemplateIDs",
+			RemoveField: "removeEmailTemplateIDs",
 		},
 		{
-			Name:         "notification_templates",
-			Label:        "NotificationTemplates",
-			Target:       SchemaNotificationTemplate,
-			TargetType:   "NotificationTemplate",
-			Relationship: "O2M",
-			CreateField:  "notificationtemplateIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowDefinition.UpdateOneID(entityID).AddNotificationTemplateIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_definition", Operation: OpLink, EntityID: entityID, Edge: "notification_templates"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowDefinition.UpdateOneID(entityID).RemoveNotificationTemplateIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_definition", Operation: OpUnlink, EntityID: entityID, Edge: "notification_templates"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowDefinition.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_definition", Operation: OpQuery, EntityID: entityID, Edge: "notification_templates"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryNotificationTemplates().IDs(ctx)
-			},
+			Name:        "notification_templates",
+			Label:       "NotificationTemplates",
+			Target:      SchemaNotificationTemplate,
+			TargetType:  "NotificationTemplate",
+			CreateField: "notificationtemplateIDs",
+			AddField:    "addNotificationTemplateIDs",
+			RemoveField: "removeNotificationTemplateIDs",
 		},
 		{
-			Name:         "workflow_instances",
-			Label:        "WorkflowInstances",
-			Target:       SchemaWorkflowInstance,
-			TargetType:   "WorkflowInstance",
-			Relationship: "O2M",
-			CreateField:  "workflowinstanceIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowDefinition.UpdateOneID(entityID).AddWorkflowInstanceIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_definition", Operation: OpLink, EntityID: entityID, Edge: "workflow_instances"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowDefinition.UpdateOneID(entityID).RemoveWorkflowInstanceIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_definition", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_instances"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowDefinition.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_definition", Operation: OpQuery, EntityID: entityID, Edge: "workflow_instances"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowInstances().IDs(ctx)
-			},
+			Name:        "workflow_instances",
+			Label:       "WorkflowInstances",
+			Target:      SchemaWorkflowInstance,
+			TargetType:  "WorkflowInstance",
+			CreateField: "workflowinstanceIDs",
+			AddField:    "addWorkflowInstanceIDs",
+			RemoveField: "removeWorkflowInstanceIDs",
 		},
 	}
 	SchemaWorkflowEvent.Edges = []EdgeDescriptor{
 		{
-			Name:         "workflow_instance",
-			Label:        "WorkflowInstance",
-			Target:       SchemaWorkflowInstance,
-			TargetType:   "WorkflowInstance",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "workflowInstanceID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowEvent.UpdateOneID(entityID).SetWorkflowInstanceID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_event", Operation: OpLink, EntityID: entityID, Edge: "workflow_instance"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowEvent.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_event", Operation: OpQuery, EntityID: entityID, Edge: "workflow_instance"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowInstance().IDs(ctx)
-			},
+			Name:        "workflow_instance",
+			Label:       "WorkflowInstance",
+			Target:      SchemaWorkflowInstance,
+			TargetType:  "WorkflowInstance",
+			Unique:      true,
+			CreateField: "workflowInstanceID",
+			Field:       "workflow_instance_id",
 		},
 	}
 	SchemaWorkflowInstance.Edges = []EdgeDescriptor{
 		{
-			Name:         "action_plan",
-			Label:        "ActionPlan",
-			Target:       SchemaActionPlan,
-			TargetType:   "ActionPlan",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "actionPlanID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowInstance.UpdateOneID(entityID).SetActionPlanID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "action_plan"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).ClearActionPlan().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "action_plan"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "action_plan"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryActionPlan().IDs(ctx)
-			},
+			Name:        "action_plan",
+			Label:       "ActionPlan",
+			Target:      SchemaActionPlan,
+			TargetType:  "ActionPlan",
+			Unique:      true,
+			CreateField: "actionPlanID",
+			ClearField:  "clearActionPlan",
+			Field:       "action_plan_id",
 		},
 		{
-			Name:         "assessment",
-			Label:        "Assessment",
-			Target:       SchemaAssessment,
-			TargetType:   "Assessment",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "assessmentID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowInstance.UpdateOneID(entityID).SetAssessmentID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "assessment"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).ClearAssessment().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "assessment"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "assessment"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssessment().IDs(ctx)
-			},
+			Name:        "assessment",
+			Label:       "Assessment",
+			Target:      SchemaAssessment,
+			TargetType:  "Assessment",
+			Unique:      true,
+			CreateField: "assessmentID",
+			ClearField:  "clearAssessment",
+			Field:       "assessment_id",
 		},
 		{
-			Name:         "assessment_response",
-			Label:        "AssessmentResponse",
-			Target:       SchemaAssessmentResponse,
-			TargetType:   "AssessmentResponse",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "assessmentResponseID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowInstance.UpdateOneID(entityID).SetAssessmentResponseID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "assessment_response"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).ClearAssessmentResponse().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "assessment_response"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "assessment_response"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssessmentResponse().IDs(ctx)
-			},
+			Name:        "assessment_response",
+			Label:       "AssessmentResponse",
+			Target:      SchemaAssessmentResponse,
+			TargetType:  "AssessmentResponse",
+			Unique:      true,
+			CreateField: "assessmentResponseID",
+			ClearField:  "clearAssessmentResponse",
+			Field:       "assessment_response_id",
 		},
 		{
-			Name:         "campaign",
-			Label:        "Campaign",
-			Target:       SchemaCampaign,
-			TargetType:   "Campaign",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "campaignID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowInstance.UpdateOneID(entityID).SetCampaignID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "campaign"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).ClearCampaign().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "campaign"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "campaign"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryCampaign().IDs(ctx)
-			},
+			Name:        "campaign",
+			Label:       "Campaign",
+			Target:      SchemaCampaign,
+			TargetType:  "Campaign",
+			Unique:      true,
+			CreateField: "campaignID",
+			ClearField:  "clearCampaign",
+			Field:       "campaign_id",
 		},
 		{
-			Name:         "campaign_target",
-			Label:        "CampaignTarget",
-			Target:       SchemaCampaignTarget,
-			TargetType:   "CampaignTarget",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "campaignTargetID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowInstance.UpdateOneID(entityID).SetCampaignTargetID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "campaign_target"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).ClearCampaignTarget().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "campaign_target"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "campaign_target"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryCampaignTarget().IDs(ctx)
-			},
+			Name:        "campaign_target",
+			Label:       "CampaignTarget",
+			Target:      SchemaCampaignTarget,
+			TargetType:  "CampaignTarget",
+			Unique:      true,
+			CreateField: "campaignTargetID",
+			ClearField:  "clearCampaignTarget",
+			Field:       "campaign_target_id",
 		},
 		{
-			Name:         "control",
-			Label:        "Control",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "controlID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowInstance.UpdateOneID(entityID).SetControlID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "control"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).ClearControl().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "control"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "control"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControl().IDs(ctx)
-			},
+			Name:        "control",
+			Label:       "Control",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			Unique:      true,
+			CreateField: "controlID",
+			ClearField:  "clearControl",
+			Field:       "control_id",
 		},
 		{
-			Name:         "email_templates",
-			Label:        "EmailTemplates",
-			Target:       SchemaEmailTemplate,
-			TargetType:   "EmailTemplate",
-			Relationship: "O2M",
-			CreateField:  "emailtemplateIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).AddEmailTemplateIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "email_templates"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).RemoveEmailTemplateIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "email_templates"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "email_templates"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEmailTemplates().IDs(ctx)
-			},
+			Name:        "email_templates",
+			Label:       "EmailTemplates",
+			Target:      SchemaEmailTemplate,
+			TargetType:  "EmailTemplate",
+			CreateField: "emailtemplateIDs",
+			AddField:    "addEmailTemplateIDs",
+			RemoveField: "removeEmailTemplateIDs",
 		},
 		{
-			Name:         "evidence",
-			Label:        "Evidence",
-			Target:       SchemaEvidence,
-			TargetType:   "Evidence",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "evidenceID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowInstance.UpdateOneID(entityID).SetEvidenceID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "evidence"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).ClearEvidence().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "evidence"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "evidence"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEvidence().IDs(ctx)
-			},
+			Name:        "evidence",
+			Label:       "Evidence",
+			Target:      SchemaEvidence,
+			TargetType:  "Evidence",
+			Unique:      true,
+			CreateField: "evidenceID",
+			ClearField:  "clearEvidence",
+			Field:       "evidence_id",
 		},
 		{
-			Name:         "finding",
-			Label:        "Finding",
-			Target:       SchemaFinding,
-			TargetType:   "Finding",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "findingID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowInstance.UpdateOneID(entityID).SetFindingID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "finding"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).ClearFinding().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "finding"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "finding"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryFinding().IDs(ctx)
-			},
+			Name:        "finding",
+			Label:       "Finding",
+			Target:      SchemaFinding,
+			TargetType:  "Finding",
+			Unique:      true,
+			CreateField: "findingID",
+			ClearField:  "clearFinding",
+			Field:       "finding_id",
 		},
 		{
-			Name:         "identity_holder",
-			Label:        "IdentityHolder",
-			Target:       SchemaIdentityHolder,
-			TargetType:   "IdentityHolder",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "identityHolderID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowInstance.UpdateOneID(entityID).SetIdentityHolderID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "identity_holder"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).ClearIdentityHolder().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "identity_holder"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "identity_holder"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryIdentityHolder().IDs(ctx)
-			},
+			Name:        "identity_holder",
+			Label:       "IdentityHolder",
+			Target:      SchemaIdentityHolder,
+			TargetType:  "IdentityHolder",
+			Unique:      true,
+			CreateField: "identityHolderID",
+			ClearField:  "clearIdentityHolder",
+			Field:       "identity_holder_id",
 		},
 		{
-			Name:         "internal_policy",
-			Label:        "InternalPolicy",
-			Target:       SchemaInternalPolicy,
-			TargetType:   "InternalPolicy",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "internalPolicyID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowInstance.UpdateOneID(entityID).SetInternalPolicyID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "internal_policy"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).ClearInternalPolicy().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "internal_policy"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "internal_policy"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryInternalPolicy().IDs(ctx)
-			},
+			Name:        "internal_policy",
+			Label:       "InternalPolicy",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			Unique:      true,
+			CreateField: "internalPolicyID",
+			ClearField:  "clearInternalPolicy",
+			Field:       "internal_policy_id",
 		},
 		{
-			Name:         "platform",
-			Label:        "Platform",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "platformID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowInstance.UpdateOneID(entityID).SetPlatformID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "platform"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).ClearPlatform().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "platform"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "platform"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryPlatform().IDs(ctx)
-			},
+			Name:        "platform",
+			Label:       "Platform",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			Unique:      true,
+			CreateField: "platformID",
+			ClearField:  "clearPlatform",
+			Field:       "platform_id",
 		},
 		{
-			Name:         "procedure",
-			Label:        "Procedure",
-			Target:       SchemaProcedure,
-			TargetType:   "Procedure",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "procedureID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowInstance.UpdateOneID(entityID).SetProcedureID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "procedure"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).ClearProcedure().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "procedure"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "procedure"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryProcedure().IDs(ctx)
-			},
+			Name:        "procedure",
+			Label:       "Procedure",
+			Target:      SchemaProcedure,
+			TargetType:  "Procedure",
+			Unique:      true,
+			CreateField: "procedureID",
+			ClearField:  "clearProcedure",
+			Field:       "procedure_id",
 		},
 		{
-			Name:         "remediation",
-			Label:        "Remediation",
-			Target:       SchemaRemediation,
-			TargetType:   "Remediation",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "remediationID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowInstance.UpdateOneID(entityID).SetRemediationID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "remediation"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).ClearRemediation().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "remediation"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "remediation"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRemediation().IDs(ctx)
-			},
+			Name:        "remediation",
+			Label:       "Remediation",
+			Target:      SchemaRemediation,
+			TargetType:  "Remediation",
+			Unique:      true,
+			CreateField: "remediationID",
+			ClearField:  "clearRemediation",
+			Field:       "remediation_id",
 		},
 		{
-			Name:         "risk",
-			Label:        "Risk",
-			Target:       SchemaRisk,
-			TargetType:   "Risk",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "riskID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowInstance.UpdateOneID(entityID).SetRiskID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "risk"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).ClearRisk().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "risk"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "risk"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRisk().IDs(ctx)
-			},
+			Name:        "risk",
+			Label:       "Risk",
+			Target:      SchemaRisk,
+			TargetType:  "Risk",
+			Unique:      true,
+			CreateField: "riskID",
+			ClearField:  "clearRisk",
+			Field:       "risk_id",
 		},
 		{
-			Name:         "subcontrol",
-			Label:        "Subcontrol",
-			Target:       SchemaSubcontrol,
-			TargetType:   "Subcontrol",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "subcontrolID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowInstance.UpdateOneID(entityID).SetSubcontrolID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "subcontrol"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).ClearSubcontrol().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "subcontrol"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "subcontrol"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrol().IDs(ctx)
-			},
+			Name:        "subcontrol",
+			Label:       "Subcontrol",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			Unique:      true,
+			CreateField: "subcontrolID",
+			ClearField:  "clearSubcontrol",
+			Field:       "subcontrol_id",
 		},
 		{
-			Name:         "task",
-			Label:        "Task",
-			Target:       SchemaTask,
-			TargetType:   "Task",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "taskID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowInstance.UpdateOneID(entityID).SetTaskID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "task"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).ClearTask().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "task"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "task"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTask().IDs(ctx)
-			},
+			Name:        "task",
+			Label:       "Task",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			Unique:      true,
+			CreateField: "taskID",
+			ClearField:  "clearTask",
+			Field:       "task_id",
 		},
 		{
-			Name:         "vulnerability",
-			Label:        "Vulnerability",
-			Target:       SchemaVulnerability,
-			TargetType:   "Vulnerability",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "vulnerabilityID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowInstance.UpdateOneID(entityID).SetVulnerabilityID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "vulnerability"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).ClearVulnerability().Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "vulnerability"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "vulnerability"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryVulnerability().IDs(ctx)
-			},
+			Name:        "vulnerability",
+			Label:       "Vulnerability",
+			Target:      SchemaVulnerability,
+			TargetType:  "Vulnerability",
+			Unique:      true,
+			CreateField: "vulnerabilityID",
+			ClearField:  "clearVulnerability",
+			Field:       "vulnerability_id",
 		},
 		{
-			Name:         "workflow_assignments",
-			Label:        "WorkflowAssignments",
-			Target:       SchemaWorkflowAssignment,
-			TargetType:   "WorkflowAssignment",
-			Relationship: "O2M",
-			CreateField:  "workflowassignmentIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).AddWorkflowAssignmentIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "workflow_assignments"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).RemoveWorkflowAssignmentIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_assignments"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "workflow_assignments"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowAssignments().IDs(ctx)
-			},
+			Name:        "workflow_assignments",
+			Label:       "WorkflowAssignments",
+			Target:      SchemaWorkflowAssignment,
+			TargetType:  "WorkflowAssignment",
+			CreateField: "workflowassignmentIDs",
+			AddField:    "addWorkflowAssignmentIDs",
+			RemoveField: "removeWorkflowAssignmentIDs",
 		},
 		{
-			Name:         "workflow_definition",
-			Label:        "WorkflowDefinition",
-			Target:       SchemaWorkflowDefinition,
-			TargetType:   "WorkflowDefinition",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "workflowDefinitionID",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if len(targetIDs) == 0 {
-					return nil
-				}
-
-				if err := client.WorkflowInstance.UpdateOneID(entityID).SetWorkflowDefinitionID(targetIDs[0]).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "workflow_definition"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "workflow_definition"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowDefinition().IDs(ctx)
-			},
+			Name:        "workflow_definition",
+			Label:       "WorkflowDefinition",
+			Target:      SchemaWorkflowDefinition,
+			TargetType:  "WorkflowDefinition",
+			Unique:      true,
+			CreateField: "workflowDefinitionID",
+			Field:       "workflow_definition_id",
 		},
 		{
-			Name:         "workflow_events",
-			Label:        "WorkflowEvents",
-			Target:       SchemaWorkflowEvent,
-			TargetType:   "WorkflowEvent",
-			Relationship: "O2M",
-			CreateField:  "workfloweventIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).AddWorkflowEventIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "workflow_events"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).RemoveWorkflowEventIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_events"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "workflow_events"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowEvents().IDs(ctx)
-			},
+			Name:        "workflow_events",
+			Label:       "WorkflowEvents",
+			Target:      SchemaWorkflowEvent,
+			TargetType:  "WorkflowEvent",
+			CreateField: "workfloweventIDs",
+			AddField:    "addWorkflowEventIDs",
+			RemoveField: "removeWorkflowEventIDs",
 		},
 		{
-			Name:         "workflow_object_refs",
-			Label:        "WorkflowObjectRefs",
-			Target:       SchemaWorkflowObjectRef,
-			TargetType:   "WorkflowObjectRef",
-			Relationship: "O2M",
-			CreateField:  "workflowobjectrefIDs",
-			Link: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).AddWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpLink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLinkFailed, err)
-				}
-
-				return nil
-			},
-			Unlink: func(ctx context.Context, client *generated.Client, entityID string, targetIDs ...string) error {
-				if err := client.WorkflowInstance.UpdateOneID(entityID).RemoveWorkflowObjectRefIDs(targetIDs...).Exec(ctx); err != nil {
-					return logPersistError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpUnlink, EntityID: entityID, Edge: "workflow_object_refs"}, ErrUnlinkFailed, err)
-				}
-
-				return nil
-			},
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowInstance.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_instance", Operation: OpQuery, EntityID: entityID, Edge: "workflow_object_refs"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowObjectRefs().IDs(ctx)
-			},
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflowobjectrefIDs",
+			AddField:    "addWorkflowObjectRefIDs",
+			RemoveField: "removeWorkflowObjectRefIDs",
 		},
 	}
 	SchemaWorkflowObjectRef.Edges = []EdgeDescriptor{
 		{
-			Name:         "action_plan",
-			Label:        "ActionPlan",
-			Target:       SchemaActionPlan,
-			TargetType:   "ActionPlan",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "actionPlanID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "action_plan"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryActionPlan().IDs(ctx)
-			},
+			Name:        "action_plan",
+			Label:       "ActionPlan",
+			Target:      SchemaActionPlan,
+			TargetType:  "ActionPlan",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "actionPlanID",
+			Field:       "action_plan_id",
 		},
 		{
-			Name:         "assessment",
-			Label:        "Assessment",
-			Target:       SchemaAssessment,
-			TargetType:   "Assessment",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "assessmentID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "assessment"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssessment().IDs(ctx)
-			},
+			Name:        "assessment",
+			Label:       "Assessment",
+			Target:      SchemaAssessment,
+			TargetType:  "Assessment",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "assessmentID",
+			Field:       "assessment_id",
 		},
 		{
-			Name:         "assessment_response",
-			Label:        "AssessmentResponse",
-			Target:       SchemaAssessmentResponse,
-			TargetType:   "AssessmentResponse",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "assessmentResponseID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "assessment_response"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryAssessmentResponse().IDs(ctx)
-			},
+			Name:        "assessment_response",
+			Label:       "AssessmentResponse",
+			Target:      SchemaAssessmentResponse,
+			TargetType:  "AssessmentResponse",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "assessmentResponseID",
+			Field:       "assessment_response_id",
 		},
 		{
-			Name:         "campaign",
-			Label:        "Campaign",
-			Target:       SchemaCampaign,
-			TargetType:   "Campaign",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "campaignID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "campaign"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryCampaign().IDs(ctx)
-			},
+			Name:        "campaign",
+			Label:       "Campaign",
+			Target:      SchemaCampaign,
+			TargetType:  "Campaign",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "campaignID",
+			Field:       "campaign_id",
 		},
 		{
-			Name:         "campaign_target",
-			Label:        "CampaignTarget",
-			Target:       SchemaCampaignTarget,
-			TargetType:   "CampaignTarget",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "campaignTargetID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "campaign_target"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryCampaignTarget().IDs(ctx)
-			},
+			Name:        "campaign_target",
+			Label:       "CampaignTarget",
+			Target:      SchemaCampaignTarget,
+			TargetType:  "CampaignTarget",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "campaignTargetID",
+			Field:       "campaign_target_id",
 		},
 		{
-			Name:         "control",
-			Label:        "Control",
-			Target:       SchemaControl,
-			TargetType:   "Control",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "controlID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "control"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryControl().IDs(ctx)
-			},
+			Name:        "control",
+			Label:       "Control",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "controlID",
+			Field:       "control_id",
 		},
 		{
-			Name:         "directory_account",
-			Label:        "DirectoryAccount",
-			Target:       SchemaDirectoryAccount,
-			TargetType:   "DirectoryAccount",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "directoryAccountID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "directory_account"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryDirectoryAccount().IDs(ctx)
-			},
+			Name:        "directory_account",
+			Label:       "DirectoryAccount",
+			Target:      SchemaDirectoryAccount,
+			TargetType:  "DirectoryAccount",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "directoryAccountID",
+			Field:       "directory_account_id",
 		},
 		{
-			Name:         "directory_group",
-			Label:        "DirectoryGroup",
-			Target:       SchemaDirectoryGroup,
-			TargetType:   "DirectoryGroup",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "directoryGroupID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "directory_group"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryDirectoryGroup().IDs(ctx)
-			},
+			Name:        "directory_group",
+			Label:       "DirectoryGroup",
+			Target:      SchemaDirectoryGroup,
+			TargetType:  "DirectoryGroup",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "directoryGroupID",
+			Field:       "directory_group_id",
 		},
 		{
-			Name:         "directory_membership",
-			Label:        "DirectoryMembership",
-			Target:       SchemaDirectoryMembership,
-			TargetType:   "DirectoryMembership",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "directoryMembershipID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "directory_membership"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryDirectoryMembership().IDs(ctx)
-			},
+			Name:        "directory_membership",
+			Label:       "DirectoryMembership",
+			Target:      SchemaDirectoryMembership,
+			TargetType:  "DirectoryMembership",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "directoryMembershipID",
+			Field:       "directory_membership_id",
 		},
 		{
-			Name:         "evidence",
-			Label:        "Evidence",
-			Target:       SchemaEvidence,
-			TargetType:   "Evidence",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "evidenceID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "evidence"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryEvidence().IDs(ctx)
-			},
+			Name:        "evidence",
+			Label:       "Evidence",
+			Target:      SchemaEvidence,
+			TargetType:  "Evidence",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "evidenceID",
+			Field:       "evidence_id",
 		},
 		{
-			Name:         "finding",
-			Label:        "Finding",
-			Target:       SchemaFinding,
-			TargetType:   "Finding",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "findingID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "finding"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryFinding().IDs(ctx)
-			},
+			Name:        "finding",
+			Label:       "Finding",
+			Target:      SchemaFinding,
+			TargetType:  "Finding",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "findingID",
+			Field:       "finding_id",
 		},
 		{
-			Name:         "identity_holder",
-			Label:        "IdentityHolder",
-			Target:       SchemaIdentityHolder,
-			TargetType:   "IdentityHolder",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "identityHolderID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "identity_holder"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryIdentityHolder().IDs(ctx)
-			},
+			Name:        "identity_holder",
+			Label:       "IdentityHolder",
+			Target:      SchemaIdentityHolder,
+			TargetType:  "IdentityHolder",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "identityHolderID",
+			Field:       "identity_holder_id",
 		},
 		{
-			Name:         "internal_policy",
-			Label:        "InternalPolicy",
-			Target:       SchemaInternalPolicy,
-			TargetType:   "InternalPolicy",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "internalPolicyID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "internal_policy"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryInternalPolicy().IDs(ctx)
-			},
+			Name:        "internal_policy",
+			Label:       "InternalPolicy",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "internalPolicyID",
+			Field:       "internal_policy_id",
 		},
 		{
-			Name:         "platform",
-			Label:        "Platform",
-			Target:       SchemaPlatform,
-			TargetType:   "Platform",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "platformID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "platform"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryPlatform().IDs(ctx)
-			},
+			Name:        "platform",
+			Label:       "Platform",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "platformID",
+			Field:       "platform_id",
 		},
 		{
-			Name:         "procedure",
-			Label:        "Procedure",
-			Target:       SchemaProcedure,
-			TargetType:   "Procedure",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "procedureID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "procedure"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryProcedure().IDs(ctx)
-			},
+			Name:        "procedure",
+			Label:       "Procedure",
+			Target:      SchemaProcedure,
+			TargetType:  "Procedure",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "procedureID",
+			Field:       "procedure_id",
 		},
 		{
-			Name:         "remediation",
-			Label:        "Remediation",
-			Target:       SchemaRemediation,
-			TargetType:   "Remediation",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "remediationID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "remediation"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRemediation().IDs(ctx)
-			},
+			Name:        "remediation",
+			Label:       "Remediation",
+			Target:      SchemaRemediation,
+			TargetType:  "Remediation",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "remediationID",
+			Field:       "remediation_id",
 		},
 		{
-			Name:         "risk",
-			Label:        "Risk",
-			Target:       SchemaRisk,
-			TargetType:   "Risk",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "riskID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "risk"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryRisk().IDs(ctx)
-			},
+			Name:        "risk",
+			Label:       "Risk",
+			Target:      SchemaRisk,
+			TargetType:  "Risk",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "riskID",
+			Field:       "risk_id",
 		},
 		{
-			Name:         "subcontrol",
-			Label:        "Subcontrol",
-			Target:       SchemaSubcontrol,
-			TargetType:   "Subcontrol",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "subcontrolID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "subcontrol"}, ErrLoadFailed, err)
-				}
-
-				return entity.QuerySubcontrol().IDs(ctx)
-			},
+			Name:        "subcontrol",
+			Label:       "Subcontrol",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "subcontrolID",
+			Field:       "subcontrol_id",
 		},
 		{
-			Name:         "task",
-			Label:        "Task",
-			Target:       SchemaTask,
-			TargetType:   "Task",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "taskID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "task"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryTask().IDs(ctx)
-			},
+			Name:        "task",
+			Label:       "Task",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "taskID",
+			Field:       "task_id",
 		},
 		{
-			Name:         "vulnerability",
-			Label:        "Vulnerability",
-			Target:       SchemaVulnerability,
-			TargetType:   "Vulnerability",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "vulnerabilityID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "vulnerability"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryVulnerability().IDs(ctx)
-			},
+			Name:        "vulnerability",
+			Label:       "Vulnerability",
+			Target:      SchemaVulnerability,
+			TargetType:  "Vulnerability",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "vulnerabilityID",
+			Field:       "vulnerability_id",
 		},
 		{
-			Name:         "workflow_instance",
-			Label:        "WorkflowInstance",
-			Target:       SchemaWorkflowInstance,
-			TargetType:   "WorkflowInstance",
-			Relationship: "M2O",
-			Unique:       true,
-			CreateField:  "workflowInstanceID",
-			Immutable:    true,
-			Query: func(ctx context.Context, client *generated.Client, entityID string) ([]string, error) {
-				entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
-				if err != nil {
-					return nil, logError(ctx, SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery, EntityID: entityID, Edge: "workflow_instance"}, ErrLoadFailed, err)
-				}
-
-				return entity.QueryWorkflowInstance().IDs(ctx)
-			},
+			Name:        "workflow_instance",
+			Label:       "WorkflowInstance",
+			Target:      SchemaWorkflowInstance,
+			TargetType:  "WorkflowInstance",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "workflowInstanceID",
+			Field:       "workflow_instance_id",
 		},
 	}
 	SchemaActionPlan.SourceContext = func(payload json.RawMessage) json.RawMessage {
@@ -19366,6 +8769,1254 @@ func init() {
 	SchemaWorkflowDefinition.SourceContext = func(payload json.RawMessage) json.RawMessage {
 		return payload
 	}
+	SchemaActionPlan.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "action_plan", Operation: OpQuery}
+
+		if !SchemaActionPlan.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "action_plan"))
+		}
+
+		entities, err := client.ActionPlan.Query().
+			Where(actionplan.OwnerID(orgID)).
+			Where(predicate.ActionPlan(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaAssessment.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "assessment", Operation: OpQuery}
+
+		if !SchemaAssessment.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "assessment"))
+		}
+
+		entities, err := client.Assessment.Query().
+			Where(assessment.OwnerID(orgID)).
+			Where(predicate.Assessment(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaAssessmentResponse.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "assessment_response", Operation: OpQuery}
+
+		if !SchemaAssessmentResponse.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "assessment_response"))
+		}
+
+		entities, err := client.AssessmentResponse.Query().
+			Where(assessmentresponse.OwnerID(orgID)).
+			Where(predicate.AssessmentResponse(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaAsset.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "asset", Operation: OpQuery}
+
+		if !SchemaAsset.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "asset"))
+		}
+
+		entities, err := client.Asset.Query().
+			Where(asset.OwnerID(orgID)).
+			Where(predicate.Asset(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaCampaign.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "campaign", Operation: OpQuery}
+
+		if !SchemaCampaign.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "campaign"))
+		}
+
+		entities, err := client.Campaign.Query().
+			Where(campaign.OwnerID(orgID)).
+			Where(predicate.Campaign(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaCampaignTarget.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "campaign_target", Operation: OpQuery}
+
+		if !SchemaCampaignTarget.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "campaign_target"))
+		}
+
+		entities, err := client.CampaignTarget.Query().
+			Where(campaigntarget.OwnerID(orgID)).
+			Where(predicate.CampaignTarget(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaContact.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "contact", Operation: OpQuery}
+
+		if !SchemaContact.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "contact"))
+		}
+
+		entities, err := client.Contact.Query().
+			Where(contact.OwnerID(orgID)).
+			Where(predicate.Contact(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaControl.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "control", Operation: OpQuery}
+
+		if !SchemaControl.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "control"))
+		}
+
+		entities, err := client.Control.Query().
+			Where(control.OwnerID(orgID)).
+			Where(predicate.Control(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaControlImplementation.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "control_implementation", Operation: OpQuery}
+
+		if !SchemaControlImplementation.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "control_implementation"))
+		}
+
+		entities, err := client.ControlImplementation.Query().
+			Where(controlimplementation.OwnerID(orgID)).
+			Where(predicate.ControlImplementation(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaControlObjective.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "control_objective", Operation: OpQuery}
+
+		if !SchemaControlObjective.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "control_objective"))
+		}
+
+		entities, err := client.ControlObjective.Query().
+			Where(controlobjective.OwnerID(orgID)).
+			Where(predicate.ControlObjective(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaDirectoryAccount.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "directory_account", Operation: OpQuery}
+
+		if !SchemaDirectoryAccount.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "directory_account"))
+		}
+
+		entities, err := client.DirectoryAccount.Query().
+			Where(directoryaccount.OwnerID(orgID)).
+			Where(predicate.DirectoryAccount(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaDirectoryGroup.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "directory_group", Operation: OpQuery}
+
+		if !SchemaDirectoryGroup.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "directory_group"))
+		}
+
+		entities, err := client.DirectoryGroup.Query().
+			Where(directorygroup.OwnerID(orgID)).
+			Where(predicate.DirectoryGroup(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaDirectoryMembership.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "directory_membership", Operation: OpQuery}
+
+		if !SchemaDirectoryMembership.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "directory_membership"))
+		}
+
+		entities, err := client.DirectoryMembership.Query().
+			Where(directorymembership.OwnerID(orgID)).
+			Where(predicate.DirectoryMembership(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaDiscussion.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "discussion", Operation: OpQuery}
+
+		if !SchemaDiscussion.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "discussion"))
+		}
+
+		entities, err := client.Discussion.Query().
+			Where(discussion.OwnerID(orgID)).
+			Where(predicate.Discussion(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaDocumentData.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "document_data", Operation: OpQuery}
+
+		if !SchemaDocumentData.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "document_data"))
+		}
+
+		entities, err := client.DocumentData.Query().
+			Where(documentdata.OwnerID(orgID)).
+			Where(predicate.DocumentData(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaEmailTemplate.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "email_template", Operation: OpQuery}
+
+		if !SchemaEmailTemplate.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "email_template"))
+		}
+
+		entities, err := client.EmailTemplate.Query().
+			Where(emailtemplate.OwnerID(orgID)).
+			Where(predicate.EmailTemplate(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaEntity.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "entity", Operation: OpQuery}
+
+		if !SchemaEntity.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "entity"))
+		}
+
+		entities, err := client.Entity.Query().
+			Where(entity.OwnerID(orgID)).
+			Where(predicate.Entity(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaEvidence.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "evidence", Operation: OpQuery}
+
+		if !SchemaEvidence.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "evidence"))
+		}
+
+		entities, err := client.Evidence.Query().
+			Where(evidence.OwnerID(orgID)).
+			Where(predicate.Evidence(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaFinding.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "finding", Operation: OpQuery}
+
+		if !SchemaFinding.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "finding"))
+		}
+
+		entities, err := client.Finding.Query().
+			Where(finding.OwnerID(orgID)).
+			Where(predicate.Finding(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaIdentityHolder.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "identity_holder", Operation: OpQuery}
+
+		if !SchemaIdentityHolder.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "identity_holder"))
+		}
+
+		entities, err := client.IdentityHolder.Query().
+			Where(identityholder.OwnerID(orgID)).
+			Where(predicate.IdentityHolder(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaInternalPolicy.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "internal_policy", Operation: OpQuery}
+
+		if !SchemaInternalPolicy.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "internal_policy"))
+		}
+
+		entities, err := client.InternalPolicy.Query().
+			Where(internalpolicy.OwnerID(orgID)).
+			Where(predicate.InternalPolicy(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaNarrative.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "narrative", Operation: OpQuery}
+
+		if !SchemaNarrative.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "narrative"))
+		}
+
+		entities, err := client.Narrative.Query().
+			Where(narrative.OwnerID(orgID)).
+			Where(predicate.Narrative(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaNotificationTemplate.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "notification_template", Operation: OpQuery}
+
+		if !SchemaNotificationTemplate.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "notification_template"))
+		}
+
+		entities, err := client.NotificationTemplate.Query().
+			Where(notificationtemplate.OwnerID(orgID)).
+			Where(predicate.NotificationTemplate(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaPlatform.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "platform", Operation: OpQuery}
+
+		if !SchemaPlatform.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "platform"))
+		}
+
+		entities, err := client.Platform.Query().
+			Where(platform.OwnerID(orgID)).
+			Where(predicate.Platform(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaProcedure.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "procedure", Operation: OpQuery}
+
+		if !SchemaProcedure.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "procedure"))
+		}
+
+		entities, err := client.Procedure.Query().
+			Where(procedure.OwnerID(orgID)).
+			Where(predicate.Procedure(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaRemediation.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "remediation", Operation: OpQuery}
+
+		if !SchemaRemediation.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "remediation"))
+		}
+
+		entities, err := client.Remediation.Query().
+			Where(remediation.OwnerID(orgID)).
+			Where(predicate.Remediation(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaReview.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "review", Operation: OpQuery}
+
+		if !SchemaReview.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "review"))
+		}
+
+		entities, err := client.Review.Query().
+			Where(review.OwnerID(orgID)).
+			Where(predicate.Review(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaRisk.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "risk", Operation: OpQuery}
+
+		if !SchemaRisk.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "risk"))
+		}
+
+		entities, err := client.Risk.Query().
+			Where(risk.OwnerID(orgID)).
+			Where(predicate.Risk(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaScan.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "scan", Operation: OpQuery}
+
+		if !SchemaScan.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "scan"))
+		}
+
+		entities, err := client.Scan.Query().
+			Where(scan.OwnerID(orgID)).
+			Where(predicate.Scan(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaScheduledJob.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "scheduled_job", Operation: OpQuery}
+
+		if !SchemaScheduledJob.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "scheduled_job"))
+		}
+
+		entities, err := client.ScheduledJob.Query().
+			Where(scheduledjob.OwnerID(orgID)).
+			Where(predicate.ScheduledJob(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaSubcontrol.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "subcontrol", Operation: OpQuery}
+
+		if !SchemaSubcontrol.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "subcontrol"))
+		}
+
+		entities, err := client.Subcontrol.Query().
+			Where(subcontrol.OwnerID(orgID)).
+			Where(predicate.Subcontrol(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaSubprocessor.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "subprocessor", Operation: OpQuery}
+
+		if !SchemaSubprocessor.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "subprocessor"))
+		}
+
+		entities, err := client.Subprocessor.Query().
+			Where(subprocessor.OwnerID(orgID)).
+			Where(predicate.Subprocessor(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaSystemDetail.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "system_detail", Operation: OpQuery}
+
+		if !SchemaSystemDetail.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "system_detail"))
+		}
+
+		entities, err := client.SystemDetail.Query().
+			Where(systemdetail.OwnerID(orgID)).
+			Where(predicate.SystemDetail(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaTask.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "task", Operation: OpQuery}
+
+		if !SchemaTask.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "task"))
+		}
+
+		entities, err := client.Task.Query().
+			Where(task.OwnerID(orgID)).
+			Where(predicate.Task(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaTemplate.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "template", Operation: OpQuery}
+
+		if !SchemaTemplate.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "template"))
+		}
+
+		entities, err := client.Template.Query().
+			Where(template.OwnerID(orgID)).
+			Where(predicate.Template(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaTrustCenterWatermarkConfig.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "trust_center_watermark_config", Operation: OpQuery}
+
+		if !SchemaTrustCenterWatermarkConfig.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "trust_center_watermark_config"))
+		}
+
+		entities, err := client.TrustCenterWatermarkConfig.Query().
+			Where(trustcenterwatermarkconfig.OwnerID(orgID)).
+			Where(predicate.TrustCenterWatermarkConfig(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaVendorRiskScore.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "vendor_risk_score", Operation: OpQuery}
+
+		if !SchemaVendorRiskScore.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "vendor_risk_score"))
+		}
+
+		entities, err := client.VendorRiskScore.Query().
+			Where(vendorriskscore.OwnerID(orgID)).
+			Where(predicate.VendorRiskScore(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaVulnerability.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "vulnerability", Operation: OpQuery}
+
+		if !SchemaVulnerability.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "vulnerability"))
+		}
+
+		entities, err := client.Vulnerability.Query().
+			Where(vulnerability.OwnerID(orgID)).
+			Where(predicate.Vulnerability(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaWorkflowAssignment.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "workflow_assignment", Operation: OpQuery}
+
+		if !SchemaWorkflowAssignment.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "workflow_assignment"))
+		}
+
+		entities, err := client.WorkflowAssignment.Query().
+			Where(workflowassignment.OwnerID(orgID)).
+			Where(predicate.WorkflowAssignment(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaWorkflowAssignmentTarget.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "workflow_assignment_target", Operation: OpQuery}
+
+		if !SchemaWorkflowAssignmentTarget.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "workflow_assignment_target"))
+		}
+
+		entities, err := client.WorkflowAssignmentTarget.Query().
+			Where(workflowassignmenttarget.OwnerID(orgID)).
+			Where(predicate.WorkflowAssignmentTarget(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaWorkflowDefinition.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "workflow_definition", Operation: OpQuery}
+
+		if !SchemaWorkflowDefinition.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "workflow_definition"))
+		}
+
+		entities, err := client.WorkflowDefinition.Query().
+			Where(workflowdefinition.OwnerID(orgID)).
+			Where(predicate.WorkflowDefinition(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaWorkflowEvent.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "workflow_event", Operation: OpQuery}
+
+		if !SchemaWorkflowEvent.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "workflow_event"))
+		}
+
+		entities, err := client.WorkflowEvent.Query().
+			Where(workflowevent.OwnerID(orgID)).
+			Where(predicate.WorkflowEvent(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaWorkflowInstance.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "workflow_instance", Operation: OpQuery}
+
+		if !SchemaWorkflowInstance.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "workflow_instance"))
+		}
+
+		entities, err := client.WorkflowInstance.Query().
+			Where(workflowinstance.OwnerID(orgID)).
+			Where(predicate.WorkflowInstance(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaWorkflowObjectRef.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery}
+
+		if !SchemaWorkflowObjectRef.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "workflow_object_ref"))
+		}
+
+		entities, err := client.WorkflowObjectRef.Query().
+			Where(workflowobjectref.OwnerID(orgID)).
+			Where(predicate.WorkflowObjectRef(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+
+	// AllowedKeys is derived from the unified field catalog: every integration-mapped field's
+	// input key is accepted for that schema
+	for _, schema := range allSchemas {
+		for _, field := range schema.Fields {
+			if field.InputKey == "" {
+				continue
+			}
+
+			if schema.AllowedKeys == nil {
+				schema.AllowedKeys = make(map[string]struct{})
+			}
+
+			schema.AllowedKeys[field.InputKey] = struct{}{}
+		}
+	}
 }
 
 // --- Lookup registry ---
@@ -19469,7 +10120,7 @@ func AllSchemas() []*Schema {
 func SelectTargets(ctx context.Context, client *generated.Client, orgID string, selector TargetSelector) ([]EntityRef, error) {
 	schema, ok := LookupSchema(selector.Schema.Name)
 	if !ok {
-		return nil, fmt.Errorf("%w: %s", ErrSchemaNotFound, selector.Schema.Name)
+		return nil, logError(ctx, SchemaRef{Schema: selector.Schema.Snake, Operation: OpQuery}, ErrSchemaNotFound, fmt.Errorf("schema %s is not registered", selector.Schema.Name))
 	}
 
 	entities, err := selectCandidates(ctx, client, schema, orgID, selector)
@@ -19497,8 +10148,12 @@ func SelectTargets(ctx context.Context, client *generated.Client, orgID string, 
 
 		eval, err = celx.NewNativeEntityEvaluator(envCfg, celx.FastEvalConfig(), schema.ProjectionType, sourceType)
 		if err != nil {
-			return nil, fmt.Errorf("%w: %s: %w", ErrEvaluatorBuildFailed, schema.Name, err)
+			errorEvent(ctx, SchemaRef{Schema: schema.Snake, Operation: OpQuery}, err).Str(FieldExpression, selector.Expression).Msg(ErrEvaluatorBuildFailed.Error())
+
+			return nil, fmt.Errorf("%w: %w", ErrEvaluatorBuildFailed, err)
 		}
+
+		logx.FromContext(ctx).Debug().Str(FieldSchema, schema.Snake).Str(FieldExpression, selector.Expression).Int("candidates", len(entities)).Msg("entityops: filtering targets with expression")
 	}
 
 	excludeSet := make(map[string]struct{}, len(selector.ExcludeIDs))
@@ -19536,7 +10191,7 @@ func SelectTargets(ctx context.Context, client *generated.Client, orgID string, 
 			}
 
 			if evalErr != nil {
-				logError(ctx, SchemaRef{Schema: schema.Snake, Operation: OpQuery, EntityID: parsed.ID}, ErrEvaluationFailed, evalErr)
+				errorEvent(ctx, SchemaRef{Schema: schema.Snake, Operation: OpQuery, EntityID: parsed.ID}, evalErr).Str(FieldExpression, selector.Expression).Msg(ErrEvaluationFailed.Error())
 				continue
 			}
 
