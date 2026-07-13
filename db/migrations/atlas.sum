@@ -1,4 +1,4 @@
-h1:mPbBsGoFj0HQfCszuDopC7UfqWsx2iySsDVbNvb1WdY=
+h1:yNX8THH6Ps2AnP3Ql9FB2F0CYbYqlPvtHrhyvEFgbQo=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -156,3 +156,5 @@ h1:mPbBsGoFj0HQfCszuDopC7UfqWsx2iySsDVbNvb1WdY=
 20260711140807_registry_edges.sql h1:VvW7K4b8KCCGorZqOtOgWgnHBPLv0Q6iqE2kyBO3Ouo=
 20260711140811_registry_edges_history.sql h1:7zZMw8HHQYKqMD5VKWWTcxplrBk4vQuOdKHsvP4Pul8=
 20260713215408_drop_campaign_name_uniqueness.sql h1:FcPmIa7F+dGPesVCJgNLnhlTKRoKMPWZZ7mLJQUEi8A=
+20260713225819_discoveredvulnids.sql h1:Ld/L3Te2uRpI1FbVlImVH+uGMiAK0je1MAxp2SGttIk=
+20260713225823_discoveredvulnids_history.sql h1:k8jVDjZoWgFqYPZuMqgXNZ0XpDx4Owk7k0zpi4f6SzE=
