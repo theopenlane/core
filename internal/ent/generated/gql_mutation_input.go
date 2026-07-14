@@ -21,7 +21,7 @@ type CreateAPITokenInput struct {
 	RevokedReason *string    `json:"revoked_reason,omitempty"`
 	RevokedBy     *string    `json:"revoked_by,omitempty"`
 	RevokedAt     *time.Time `json:"revoked_at,omitempty"`
-	OwnerID       *string
+	OwnerID       *string    `json:"owner_id,omitempty"`
 }
 
 // Mutate applies the CreateAPITokenInput on the APITokenMutation builder.
@@ -89,7 +89,7 @@ type UpdateAPITokenInput struct {
 	ClearRevokedAt     bool
 	RevokedAt          *time.Time `json:"revoked_at,omitempty"`
 	ClearOwner         bool
-	OwnerID            *string
+	OwnerID            *string `json:"owner_id,omitempty"`
 }
 
 // Mutate applies the UpdateAPITokenInput on the APITokenMutation builder.
@@ -213,25 +213,25 @@ type CreateActionPlanInput struct {
 	Metadata                        map[string]interface{}        `json:"metadata,omitempty"`
 	RawPayload                      map[string]interface{}        `json:"raw_payload,omitempty"`
 	Source                          *string                       `json:"source,omitempty"`
-	ApproverID                      *string
-	DelegateID                      *string
-	OwnerID                         *string
-	BlockedGroupIDs                 []string
-	EditorIDs                       []string
-	ViewerIDs                       []string
-	ActionPlanKindID                *string
-	RiskIDs                         []string
-	ControlIDs                      []string
-	ProgramIDs                      []string
-	FindingIDs                      []string
-	VulnerabilityIDs                []string
-	ScanIDs                         []string
-	ReviewIDs                       []string
-	RemediationIDs                  []string
-	TaskIDs                         []string
-	IntegrationIDs                  []string
-	FileID                          *string
-	WorkflowObjectRefIDs            []string
+	ApproverID                      *string                       `json:"approver_id,omitempty"`
+	DelegateID                      *string                       `json:"delegate_id,omitempty"`
+	OwnerID                         *string                       `json:"owner_id,omitempty"`
+	BlockedGroupIDs                 []string                      `json:"blocked_group_ids,omitempty"`
+	EditorIDs                       []string                      `json:"editor_ids,omitempty"`
+	ViewerIDs                       []string                      `json:"viewer_ids,omitempty"`
+	ActionPlanKindID                *string                       `json:"action_plan_kind_id,omitempty"`
+	RiskIDs                         []string                      `json:"risk_ids,omitempty"`
+	ControlIDs                      []string                      `json:"control_ids,omitempty"`
+	ProgramIDs                      []string                      `json:"program_ids,omitempty"`
+	FindingIDs                      []string                      `json:"finding_ids,omitempty"`
+	VulnerabilityIDs                []string                      `json:"vulnerability_ids,omitempty"`
+	ScanIDs                         []string                      `json:"scan_ids,omitempty"`
+	ReviewIDs                       []string                      `json:"review_ids,omitempty"`
+	RemediationIDs                  []string                      `json:"remediation_ids,omitempty"`
+	TaskIDs                         []string                      `json:"task_ids,omitempty"`
+	IntegrationIDs                  []string                      `json:"integration_ids,omitempty"`
+	FileID                          *string                       `json:"file_id,omitempty"`
+	WorkflowObjectRefIDs            []string                      `json:"workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the CreateActionPlanInput on the ActionPlanMutation builder.
@@ -474,55 +474,55 @@ type UpdateActionPlanInput struct {
 	ClearSource                           bool
 	Source                                *string `json:"source,omitempty"`
 	ClearApprover                         bool
-	ApproverID                            *string
+	ApproverID                            *string `json:"approver_id,omitempty"`
 	ClearDelegate                         bool
-	DelegateID                            *string
+	DelegateID                            *string `json:"delegate_id,omitempty"`
 	ClearBlockedGroups                    bool
-	AddBlockedGroupIDs                    []string
-	RemoveBlockedGroupIDs                 []string
+	AddBlockedGroupIDs                    []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs                 []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                          bool
-	AddEditorIDs                          []string
-	RemoveEditorIDs                       []string
+	AddEditorIDs                          []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs                       []string `json:"remove_editor_ids,omitempty"`
 	ClearViewers                          bool
-	AddViewerIDs                          []string
-	RemoveViewerIDs                       []string
+	AddViewerIDs                          []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs                       []string `json:"remove_viewer_ids,omitempty"`
 	ClearActionPlanKind                   bool
-	ActionPlanKindID                      *string
+	ActionPlanKindID                      *string `json:"action_plan_kind_id,omitempty"`
 	ClearRisks                            bool
-	AddRiskIDs                            []string
-	RemoveRiskIDs                         []string
+	AddRiskIDs                            []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs                         []string `json:"remove_risk_ids,omitempty"`
 	ClearControls                         bool
-	AddControlIDs                         []string
-	RemoveControlIDs                      []string
+	AddControlIDs                         []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs                      []string `json:"remove_control_ids,omitempty"`
 	ClearPrograms                         bool
-	AddProgramIDs                         []string
-	RemoveProgramIDs                      []string
+	AddProgramIDs                         []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs                      []string `json:"remove_program_ids,omitempty"`
 	ClearFindings                         bool
-	AddFindingIDs                         []string
-	RemoveFindingIDs                      []string
+	AddFindingIDs                         []string `json:"add_finding_ids,omitempty"`
+	RemoveFindingIDs                      []string `json:"remove_finding_ids,omitempty"`
 	ClearVulnerabilities                  bool
-	AddVulnerabilityIDs                   []string
-	RemoveVulnerabilityIDs                []string
+	AddVulnerabilityIDs                   []string `json:"add_vulnerability_ids,omitempty"`
+	RemoveVulnerabilityIDs                []string `json:"remove_vulnerability_ids,omitempty"`
 	ClearScans                            bool
-	AddScanIDs                            []string
-	RemoveScanIDs                         []string
+	AddScanIDs                            []string `json:"add_scan_ids,omitempty"`
+	RemoveScanIDs                         []string `json:"remove_scan_ids,omitempty"`
 	ClearReviews                          bool
-	AddReviewIDs                          []string
-	RemoveReviewIDs                       []string
+	AddReviewIDs                          []string `json:"add_review_ids,omitempty"`
+	RemoveReviewIDs                       []string `json:"remove_review_ids,omitempty"`
 	ClearRemediations                     bool
-	AddRemediationIDs                     []string
-	RemoveRemediationIDs                  []string
+	AddRemediationIDs                     []string `json:"add_remediation_ids,omitempty"`
+	RemoveRemediationIDs                  []string `json:"remove_remediation_ids,omitempty"`
 	ClearTasks                            bool
-	AddTaskIDs                            []string
-	RemoveTaskIDs                         []string
+	AddTaskIDs                            []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs                         []string `json:"remove_task_ids,omitempty"`
 	ClearIntegrations                     bool
-	AddIntegrationIDs                     []string
-	RemoveIntegrationIDs                  []string
+	AddIntegrationIDs                     []string `json:"add_integration_ids,omitempty"`
+	RemoveIntegrationIDs                  []string `json:"remove_integration_ids,omitempty"`
 	ClearFile                             bool
-	FileID                                *string
+	FileID                                *string `json:"file_id,omitempty"`
 	ClearWorkflowObjectRefs               bool
-	AddWorkflowObjectRefIDs               []string
-	RemoveWorkflowObjectRefIDs            []string
+	AddWorkflowObjectRefIDs               []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs            []string `json:"remove_workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the UpdateActionPlanInput on the ActionPlanMutation builder.
@@ -918,16 +918,16 @@ type CreateAssessmentInput struct {
 	Jsonconfig             map[string]interface{} `json:"jsonconfig,omitempty"`
 	Uischema               map[string]interface{} `json:"uischema,omitempty"`
 	ResponseDueDuration    *int64                 `json:"response_due_duration,omitempty"`
-	OwnerID                *string
-	BlockedGroupIDs        []string
-	EditorIDs              []string
-	ViewerIDs              []string
-	TemplateID             *string
-	PlatformIDs            []string
-	IdentityHolderIDs      []string
-	AssessmentResponseIDs  []string
-	CampaignIDs            []string
-	WorkflowObjectRefIDs   []string
+	OwnerID                *string                `json:"owner_id,omitempty"`
+	BlockedGroupIDs        []string               `json:"blocked_group_ids,omitempty"`
+	EditorIDs              []string               `json:"editor_ids,omitempty"`
+	ViewerIDs              []string               `json:"viewer_ids,omitempty"`
+	TemplateID             *string                `json:"template_id,omitempty"`
+	PlatformIDs            []string               `json:"platform_ids,omitempty"`
+	IdentityHolderIDs      []string               `json:"identity_holder_ids,omitempty"`
+	AssessmentResponseIDs  []string               `json:"assessment_response_ids,omitempty"`
+	CampaignIDs            []string               `json:"campaign_ids,omitempty"`
+	WorkflowObjectRefIDs   []string               `json:"workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the CreateAssessmentInput on the AssessmentMutation builder.
@@ -1014,31 +1014,31 @@ type UpdateAssessmentInput struct {
 	ClearResponseDueDuration    bool
 	ResponseDueDuration         *int64 `json:"response_due_duration,omitempty"`
 	ClearBlockedGroups          bool
-	AddBlockedGroupIDs          []string
-	RemoveBlockedGroupIDs       []string
+	AddBlockedGroupIDs          []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs       []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                bool
-	AddEditorIDs                []string
-	RemoveEditorIDs             []string
+	AddEditorIDs                []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs             []string `json:"remove_editor_ids,omitempty"`
 	ClearViewers                bool
-	AddViewerIDs                []string
-	RemoveViewerIDs             []string
+	AddViewerIDs                []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs             []string `json:"remove_viewer_ids,omitempty"`
 	ClearTemplate               bool
-	TemplateID                  *string
+	TemplateID                  *string `json:"template_id,omitempty"`
 	ClearPlatforms              bool
-	AddPlatformIDs              []string
-	RemovePlatformIDs           []string
+	AddPlatformIDs              []string `json:"add_platform_ids,omitempty"`
+	RemovePlatformIDs           []string `json:"remove_platform_ids,omitempty"`
 	ClearIdentityHolders        bool
-	AddIdentityHolderIDs        []string
-	RemoveIdentityHolderIDs     []string
+	AddIdentityHolderIDs        []string `json:"add_identity_holder_ids,omitempty"`
+	RemoveIdentityHolderIDs     []string `json:"remove_identity_holder_ids,omitempty"`
 	ClearAssessmentResponses    bool
-	AddAssessmentResponseIDs    []string
-	RemoveAssessmentResponseIDs []string
+	AddAssessmentResponseIDs    []string `json:"add_assessment_response_ids,omitempty"`
+	RemoveAssessmentResponseIDs []string `json:"remove_assessment_response_ids,omitempty"`
 	ClearCampaigns              bool
-	AddCampaignIDs              []string
-	RemoveCampaignIDs           []string
+	AddCampaignIDs              []string `json:"add_campaign_ids,omitempty"`
+	RemoveCampaignIDs           []string `json:"remove_campaign_ids,omitempty"`
 	ClearWorkflowObjectRefs     bool
-	AddWorkflowObjectRefIDs     []string
-	RemoveWorkflowObjectRefIDs  []string
+	AddWorkflowObjectRefIDs     []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs  []string `json:"remove_workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the UpdateAssessmentInput on the AssessmentMutation builder.
@@ -1196,14 +1196,14 @@ type CreateAssessmentResponseInput struct {
 	LastEmailEventAt       *time.Time             `json:"last_email_event_at,omitempty"`
 	EmailMetadata          map[string]interface{} `json:"email_metadata,omitempty"`
 	DueDate                *time.Time             `json:"due_date,omitempty"`
-	OwnerID                *string
-	AssessmentID           string
-	CampaignID             *string
-	IdentityHolderID       *string
-	EntityID               *string
-	DocumentID             *string
-	VendorRiskScoreIDs     []string
-	WorkflowObjectRefIDs   []string
+	OwnerID                *string                `json:"owner_id,omitempty"`
+	AssessmentID           string                 `json:"assessment_id,omitempty"`
+	CampaignID             *string                `json:"campaign_id,omitempty"`
+	IdentityHolderID       *string                `json:"identity_holder_id,omitempty"`
+	EntityID               *string                `json:"entity_id,omitempty"`
+	DocumentID             *string                `json:"document_id,omitempty"`
+	VendorRiskScoreIDs     []string               `json:"vendor_risk_score_ids,omitempty"`
+	WorkflowObjectRefIDs   []string               `json:"workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the CreateAssessmentResponseInput on the AssessmentResponseMutation builder.
@@ -1302,33 +1302,33 @@ type CreateAssetInput struct {
 	Cpe                         *string           `json:"cpe,omitempty"`
 	Categories                  []string          `json:"categories,omitempty"`
 	ObservedAt                  *models.DateTime  `json:"observed_at,omitempty"`
-	OwnerID                     *string
-	BlockedGroupIDs             []string
-	EditorIDs                   []string
-	ViewerIDs                   []string
-	InternalOwnerUserID         *string
-	InternalOwnerGroupID        *string
-	AssetSubtypeID              *string
-	AssetDataClassificationID   *string
-	EnvironmentID               *string
-	ScopeID                     *string
-	AccessModelID               *string
-	EncryptionStatusID          *string
-	SecurityTierID              *string
-	CriticalityID               *string
-	ScanIDs                     []string
-	EntityIDs                   []string
-	PlatformIDs                 []string
-	SystemDetailIDs             []string
-	OutOfScopePlatformIDs       []string
-	IdentityHolderIDs           []string
-	ControlIDs                  []string
-	SubcontrolIDs               []string
-	InternalPolicyIDs           []string
-	SourcePlatformID            *string
-	IntegrationID               *string
-	ConnectedAssetIDs           []string
-	ConnectedFromIDs            []string
+	OwnerID                     *string           `json:"owner_id,omitempty"`
+	BlockedGroupIDs             []string          `json:"blocked_group_ids,omitempty"`
+	EditorIDs                   []string          `json:"editor_ids,omitempty"`
+	ViewerIDs                   []string          `json:"viewer_ids,omitempty"`
+	InternalOwnerUserID         *string           `json:"internal_owner_user_id,omitempty"`
+	InternalOwnerGroupID        *string           `json:"internal_owner_group_id,omitempty"`
+	AssetSubtypeID              *string           `json:"asset_subtype_id,omitempty"`
+	AssetDataClassificationID   *string           `json:"asset_data_classification_id,omitempty"`
+	EnvironmentID               *string           `json:"environment_id,omitempty"`
+	ScopeID                     *string           `json:"scope_id,omitempty"`
+	AccessModelID               *string           `json:"access_model_id,omitempty"`
+	EncryptionStatusID          *string           `json:"encryption_status_id,omitempty"`
+	SecurityTierID              *string           `json:"security_tier_id,omitempty"`
+	CriticalityID               *string           `json:"criticality_id,omitempty"`
+	ScanIDs                     []string          `json:"scan_ids,omitempty"`
+	EntityIDs                   []string          `json:"entity_ids,omitempty"`
+	PlatformIDs                 []string          `json:"platform_ids,omitempty"`
+	SystemDetailIDs             []string          `json:"system_detail_ids,omitempty"`
+	OutOfScopePlatformIDs       []string          `json:"out_of_scope_platform_ids,omitempty"`
+	IdentityHolderIDs           []string          `json:"identity_holder_ids,omitempty"`
+	ControlIDs                  []string          `json:"control_ids,omitempty"`
+	SubcontrolIDs               []string          `json:"subcontrol_ids,omitempty"`
+	InternalPolicyIDs           []string          `json:"internal_policy_ids,omitempty"`
+	SourcePlatformID            *string           `json:"source_platform_id,omitempty"`
+	IntegrationID               *string           `json:"integration_id,omitempty"`
+	ConnectedAssetIDs           []string          `json:"connected_asset_ids,omitempty"`
+	ConnectedFromIDs            []string          `json:"connected_from_ids,omitempty"`
 }
 
 // Mutate applies the CreateAssetInput on the AssetMutation builder.
@@ -1567,69 +1567,69 @@ type UpdateAssetInput struct {
 	ClearObservedAt                  bool
 	ObservedAt                       *models.DateTime `json:"observed_at,omitempty"`
 	ClearBlockedGroups               bool
-	AddBlockedGroupIDs               []string
-	RemoveBlockedGroupIDs            []string
+	AddBlockedGroupIDs               []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs            []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                     bool
-	AddEditorIDs                     []string
-	RemoveEditorIDs                  []string
+	AddEditorIDs                     []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs                  []string `json:"remove_editor_ids,omitempty"`
 	ClearViewers                     bool
-	AddViewerIDs                     []string
-	RemoveViewerIDs                  []string
+	AddViewerIDs                     []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs                  []string `json:"remove_viewer_ids,omitempty"`
 	ClearInternalOwnerUser           bool
-	InternalOwnerUserID              *string
+	InternalOwnerUserID              *string `json:"internal_owner_user_id,omitempty"`
 	ClearInternalOwnerGroup          bool
-	InternalOwnerGroupID             *string
+	InternalOwnerGroupID             *string `json:"internal_owner_group_id,omitempty"`
 	ClearAssetSubtype                bool
-	AssetSubtypeID                   *string
+	AssetSubtypeID                   *string `json:"asset_subtype_id,omitempty"`
 	ClearAssetDataClassification     bool
-	AssetDataClassificationID        *string
+	AssetDataClassificationID        *string `json:"asset_data_classification_id,omitempty"`
 	ClearEnvironment                 bool
-	EnvironmentID                    *string
+	EnvironmentID                    *string `json:"environment_id,omitempty"`
 	ClearScope                       bool
-	ScopeID                          *string
+	ScopeID                          *string `json:"scope_id,omitempty"`
 	ClearAccessModel                 bool
-	AccessModelID                    *string
+	AccessModelID                    *string `json:"access_model_id,omitempty"`
 	ClearEncryptionStatus            bool
-	EncryptionStatusID               *string
+	EncryptionStatusID               *string `json:"encryption_status_id,omitempty"`
 	ClearSecurityTier                bool
-	SecurityTierID                   *string
+	SecurityTierID                   *string `json:"security_tier_id,omitempty"`
 	ClearCriticality                 bool
-	CriticalityID                    *string
+	CriticalityID                    *string `json:"criticality_id,omitempty"`
 	ClearScans                       bool
-	AddScanIDs                       []string
-	RemoveScanIDs                    []string
+	AddScanIDs                       []string `json:"add_scan_ids,omitempty"`
+	RemoveScanIDs                    []string `json:"remove_scan_ids,omitempty"`
 	ClearEntities                    bool
-	AddEntityIDs                     []string
-	RemoveEntityIDs                  []string
+	AddEntityIDs                     []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs                  []string `json:"remove_entity_ids,omitempty"`
 	ClearPlatforms                   bool
-	AddPlatformIDs                   []string
-	RemovePlatformIDs                []string
+	AddPlatformIDs                   []string `json:"add_platform_ids,omitempty"`
+	RemovePlatformIDs                []string `json:"remove_platform_ids,omitempty"`
 	ClearSystemDetails               bool
-	AddSystemDetailIDs               []string
-	RemoveSystemDetailIDs            []string
+	AddSystemDetailIDs               []string `json:"add_system_detail_ids,omitempty"`
+	RemoveSystemDetailIDs            []string `json:"remove_system_detail_ids,omitempty"`
 	ClearOutOfScopePlatforms         bool
-	AddOutOfScopePlatformIDs         []string
-	RemoveOutOfScopePlatformIDs      []string
+	AddOutOfScopePlatformIDs         []string `json:"add_out_of_scope_platform_ids,omitempty"`
+	RemoveOutOfScopePlatformIDs      []string `json:"remove_out_of_scope_platform_ids,omitempty"`
 	ClearIdentityHolders             bool
-	AddIdentityHolderIDs             []string
-	RemoveIdentityHolderIDs          []string
+	AddIdentityHolderIDs             []string `json:"add_identity_holder_ids,omitempty"`
+	RemoveIdentityHolderIDs          []string `json:"remove_identity_holder_ids,omitempty"`
 	ClearControls                    bool
-	AddControlIDs                    []string
-	RemoveControlIDs                 []string
+	AddControlIDs                    []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs                 []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols                 bool
-	AddSubcontrolIDs                 []string
-	RemoveSubcontrolIDs              []string
+	AddSubcontrolIDs                 []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs              []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearInternalPolicies            bool
-	AddInternalPolicyIDs             []string
-	RemoveInternalPolicyIDs          []string
+	AddInternalPolicyIDs             []string `json:"add_internal_policy_ids,omitempty"`
+	RemoveInternalPolicyIDs          []string `json:"remove_internal_policy_ids,omitempty"`
 	ClearSourcePlatform              bool
-	SourcePlatformID                 *string
+	SourcePlatformID                 *string `json:"source_platform_id,omitempty"`
 	ClearConnectedAssets             bool
-	AddConnectedAssetIDs             []string
-	RemoveConnectedAssetIDs          []string
+	AddConnectedAssetIDs             []string `json:"add_connected_asset_ids,omitempty"`
+	RemoveConnectedAssetIDs          []string `json:"remove_connected_asset_ids,omitempty"`
 	ClearConnectedFrom               bool
-	AddConnectedFromIDs              []string
-	RemoveConnectedFromIDs           []string
+	AddConnectedFromIDs              []string `json:"add_connected_from_ids,omitempty"`
+	RemoveConnectedFromIDs           []string `json:"remove_connected_from_ids,omitempty"`
 }
 
 // Mutate applies the UpdateAssetInput on the AssetMutation builder.
@@ -2038,26 +2038,26 @@ type CreateCampaignInput struct {
 	LastResentAt           *models.DateTime       `json:"last_resent_at,omitempty"`
 	Metadata               map[string]interface{} `json:"metadata,omitempty"`
 	EmailBrandingID        *string                `json:"email_branding_id,omitempty"`
-	OwnerID                *string
-	BlockedGroupIDs        []string
-	EditorIDs              []string
-	ViewerIDs              []string
-	InternalOwnerUserID    *string
-	InternalOwnerGroupID   *string
-	AssessmentID           *string
-	TemplateID             *string
-	IntegrationID          *string
-	EmailTemplateID        *string
-	EntityID               *string
-	TrustCenterID          *string
-	CampaignTargetIDs      []string
-	AssessmentResponseIDs  []string
-	ContactIDs             []string
-	UserIDs                []string
-	GroupIDs               []string
-	IdentityHolderIDs      []string
-	ControlIDs             []string
-	WorkflowObjectRefIDs   []string
+	OwnerID                *string                `json:"owner_id,omitempty"`
+	BlockedGroupIDs        []string               `json:"blocked_group_ids,omitempty"`
+	EditorIDs              []string               `json:"editor_ids,omitempty"`
+	ViewerIDs              []string               `json:"viewer_ids,omitempty"`
+	InternalOwnerUserID    *string                `json:"internal_owner_user_id,omitempty"`
+	InternalOwnerGroupID   *string                `json:"internal_owner_group_id,omitempty"`
+	AssessmentID           *string                `json:"assessment_id,omitempty"`
+	TemplateID             *string                `json:"template_id,omitempty"`
+	IntegrationID          *string                `json:"integration_id,omitempty"`
+	EmailTemplateID        *string                `json:"email_template_id,omitempty"`
+	EntityID               *string                `json:"entity_id,omitempty"`
+	TrustCenterID          *string                `json:"trust_center_id,omitempty"`
+	CampaignTargetIDs      []string               `json:"campaign_target_ids,omitempty"`
+	AssessmentResponseIDs  []string               `json:"assessment_response_ids,omitempty"`
+	ContactIDs             []string               `json:"contact_ids,omitempty"`
+	UserIDs                []string               `json:"user_ids,omitempty"`
+	GroupIDs               []string               `json:"group_ids,omitempty"`
+	IdentityHolderIDs      []string               `json:"identity_holder_ids,omitempty"`
+	ControlIDs             []string               `json:"control_ids,omitempty"`
+	WorkflowObjectRefIDs   []string               `json:"workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the CreateCampaignInput on the CampaignMutation builder.
@@ -2252,54 +2252,54 @@ type UpdateCampaignInput struct {
 	ClearEmailBrandingID        bool
 	EmailBrandingID             *string `json:"email_branding_id,omitempty"`
 	ClearBlockedGroups          bool
-	AddBlockedGroupIDs          []string
-	RemoveBlockedGroupIDs       []string
+	AddBlockedGroupIDs          []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs       []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                bool
-	AddEditorIDs                []string
-	RemoveEditorIDs             []string
+	AddEditorIDs                []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs             []string `json:"remove_editor_ids,omitempty"`
 	ClearViewers                bool
-	AddViewerIDs                []string
-	RemoveViewerIDs             []string
+	AddViewerIDs                []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs             []string `json:"remove_viewer_ids,omitempty"`
 	ClearInternalOwnerUser      bool
-	InternalOwnerUserID         *string
+	InternalOwnerUserID         *string `json:"internal_owner_user_id,omitempty"`
 	ClearInternalOwnerGroup     bool
-	InternalOwnerGroupID        *string
+	InternalOwnerGroupID        *string `json:"internal_owner_group_id,omitempty"`
 	ClearAssessment             bool
-	AssessmentID                *string
+	AssessmentID                *string `json:"assessment_id,omitempty"`
 	ClearTemplate               bool
-	TemplateID                  *string
+	TemplateID                  *string `json:"template_id,omitempty"`
 	ClearIntegration            bool
-	IntegrationID               *string
+	IntegrationID               *string `json:"integration_id,omitempty"`
 	ClearEmailTemplate          bool
-	EmailTemplateID             *string
+	EmailTemplateID             *string `json:"email_template_id,omitempty"`
 	ClearEntity                 bool
-	EntityID                    *string
+	EntityID                    *string `json:"entity_id,omitempty"`
 	ClearTrustCenter            bool
-	TrustCenterID               *string
+	TrustCenterID               *string `json:"trust_center_id,omitempty"`
 	ClearCampaignTargets        bool
-	AddCampaignTargetIDs        []string
-	RemoveCampaignTargetIDs     []string
+	AddCampaignTargetIDs        []string `json:"add_campaign_target_ids,omitempty"`
+	RemoveCampaignTargetIDs     []string `json:"remove_campaign_target_ids,omitempty"`
 	ClearAssessmentResponses    bool
-	AddAssessmentResponseIDs    []string
-	RemoveAssessmentResponseIDs []string
+	AddAssessmentResponseIDs    []string `json:"add_assessment_response_ids,omitempty"`
+	RemoveAssessmentResponseIDs []string `json:"remove_assessment_response_ids,omitempty"`
 	ClearContacts               bool
-	AddContactIDs               []string
-	RemoveContactIDs            []string
+	AddContactIDs               []string `json:"add_contact_ids,omitempty"`
+	RemoveContactIDs            []string `json:"remove_contact_ids,omitempty"`
 	ClearUsers                  bool
-	AddUserIDs                  []string
-	RemoveUserIDs               []string
+	AddUserIDs                  []string `json:"add_user_ids,omitempty"`
+	RemoveUserIDs               []string `json:"remove_user_ids,omitempty"`
 	ClearGroups                 bool
-	AddGroupIDs                 []string
-	RemoveGroupIDs              []string
+	AddGroupIDs                 []string `json:"add_group_ids,omitempty"`
+	RemoveGroupIDs              []string `json:"remove_group_ids,omitempty"`
 	ClearIdentityHolders        bool
-	AddIdentityHolderIDs        []string
-	RemoveIdentityHolderIDs     []string
+	AddIdentityHolderIDs        []string `json:"add_identity_holder_ids,omitempty"`
+	RemoveIdentityHolderIDs     []string `json:"remove_identity_holder_ids,omitempty"`
 	ClearControls               bool
-	AddControlIDs               []string
-	RemoveControlIDs            []string
+	AddControlIDs               []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs            []string `json:"remove_control_ids,omitempty"`
 	ClearWorkflowObjectRefs     bool
-	AddWorkflowObjectRefIDs     []string
-	RemoveWorkflowObjectRefIDs  []string
+	AddWorkflowObjectRefIDs     []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs  []string `json:"remove_workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the UpdateCampaignInput on the CampaignMutation builder.
@@ -2612,13 +2612,13 @@ type CreateCampaignTargetInput struct {
 	SentAt                 *models.DateTime                `json:"sent_at,omitempty"`
 	CompletedAt            *models.DateTime                `json:"completed_at,omitempty"`
 	Metadata               map[string]interface{}          `json:"metadata,omitempty"`
-	OwnerID                *string
-	CampaignID             string
-	ContactID              *string
-	UserID                 *string
-	GroupID                *string
-	SubscriberID           *string
-	WorkflowObjectRefIDs   []string
+	OwnerID                *string                         `json:"owner_id,omitempty"`
+	CampaignID             string                          `json:"campaign_id,omitempty"`
+	ContactID              *string                         `json:"contact_id,omitempty"`
+	UserID                 *string                         `json:"user_id,omitempty"`
+	GroupID                *string                         `json:"group_id,omitempty"`
+	SubscriberID           *string                         `json:"subscriber_id,omitempty"`
+	WorkflowObjectRefIDs   []string                        `json:"workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the CreateCampaignTargetInput on the CampaignTargetMutation builder.
@@ -2683,18 +2683,18 @@ type UpdateCampaignTargetInput struct {
 	CompletedAt                 *models.DateTime `json:"completed_at,omitempty"`
 	ClearMetadata               bool
 	Metadata                    map[string]interface{} `json:"metadata,omitempty"`
-	CampaignID                  *string
+	CampaignID                  *string                `json:"campaign_id,omitempty"`
 	ClearContact                bool
-	ContactID                   *string
+	ContactID                   *string `json:"contact_id,omitempty"`
 	ClearUser                   bool
-	UserID                      *string
+	UserID                      *string `json:"user_id,omitempty"`
 	ClearGroup                  bool
-	GroupID                     *string
+	GroupID                     *string `json:"group_id,omitempty"`
 	ClearSubscriber             bool
-	SubscriberID                *string
+	SubscriberID                *string `json:"subscriber_id,omitempty"`
 	ClearWorkflowObjectRefs     bool
-	AddWorkflowObjectRefIDs     []string
-	RemoveWorkflowObjectRefIDs  []string
+	AddWorkflowObjectRefIDs     []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs  []string `json:"remove_workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the UpdateCampaignTargetInput on the CampaignTargetMutation builder.
@@ -2794,12 +2794,12 @@ type CreateCheckResultInput struct {
 	ExternalURI      *string            `json:"external_uri,omitempty"`
 	Details          *string            `json:"details,omitempty"`
 	ParentExternalID *string            `json:"parent_external_id,omitempty"`
-	BlockedGroupIDs  []string
-	EditorIDs        []string
-	ViewerIDs        []string
-	ControlIDs       []string
-	FindingIDs       []string
-	IntegrationID    *string
+	BlockedGroupIDs  []string           `json:"blocked_group_ids,omitempty"`
+	EditorIDs        []string           `json:"editor_ids,omitempty"`
+	ViewerIDs        []string           `json:"viewer_ids,omitempty"`
+	ControlIDs       []string           `json:"control_ids,omitempty"`
+	FindingIDs       []string           `json:"finding_ids,omitempty"`
+	IntegrationID    *string            `json:"integration_id,omitempty"`
 }
 
 // Mutate applies the CreateCheckResultInput on the CheckResultMutation builder.
@@ -2865,20 +2865,20 @@ type UpdateCheckResultInput struct {
 	ClearParentExternalID bool
 	ParentExternalID      *string `json:"parent_external_id,omitempty"`
 	ClearBlockedGroups    bool
-	AddBlockedGroupIDs    []string
-	RemoveBlockedGroupIDs []string
+	AddBlockedGroupIDs    []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors          bool
-	AddEditorIDs          []string
-	RemoveEditorIDs       []string
+	AddEditorIDs          []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs       []string `json:"remove_editor_ids,omitempty"`
 	ClearViewers          bool
-	AddViewerIDs          []string
-	RemoveViewerIDs       []string
+	AddViewerIDs          []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs       []string `json:"remove_viewer_ids,omitempty"`
 	ClearControls         bool
-	AddControlIDs         []string
-	RemoveControlIDs      []string
+	AddControlIDs         []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs      []string `json:"remove_control_ids,omitempty"`
 	ClearFindings         bool
-	AddFindingIDs         []string
-	RemoveFindingIDs      []string
+	AddFindingIDs         []string `json:"add_finding_ids,omitempty"`
+	RemoveFindingIDs      []string `json:"remove_finding_ids,omitempty"`
 }
 
 // Mutate applies the UpdateCheckResultInput on the CheckResultMutation builder.
@@ -2994,12 +2994,12 @@ type CreateContactInput struct {
 	ExternalID        *string           `json:"external_id,omitempty"`
 	IntegrationID     *string           `json:"integration_id,omitempty"`
 	ObservedAt        *models.DateTime  `json:"observed_at,omitempty"`
-	OwnerID           *string
-	EntityIDs         []string
-	CampaignIDs       []string
-	CampaignTargetIDs []string
-	FileIDs           []string
-	SubscriberIDs     []string
+	OwnerID           *string           `json:"owner_id,omitempty"`
+	EntityIDs         []string          `json:"entity_ids,omitempty"`
+	CampaignIDs       []string          `json:"campaign_ids,omitempty"`
+	CampaignTargetIDs []string          `json:"campaign_target_ids,omitempty"`
+	FileIDs           []string          `json:"file_ids,omitempty"`
+	SubscriberIDs     []string          `json:"subscriber_ids,omitempty"`
 }
 
 // Mutate applies the CreateContactInput on the ContactMutation builder.
@@ -3088,22 +3088,22 @@ type UpdateContactInput struct {
 	ClearObservedAt         bool
 	ObservedAt              *models.DateTime `json:"observed_at,omitempty"`
 	ClearOwner              bool
-	OwnerID                 *string
+	OwnerID                 *string `json:"owner_id,omitempty"`
 	ClearEntities           bool
-	AddEntityIDs            []string
-	RemoveEntityIDs         []string
+	AddEntityIDs            []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs         []string `json:"remove_entity_ids,omitempty"`
 	ClearCampaigns          bool
-	AddCampaignIDs          []string
-	RemoveCampaignIDs       []string
+	AddCampaignIDs          []string `json:"add_campaign_ids,omitempty"`
+	RemoveCampaignIDs       []string `json:"remove_campaign_ids,omitempty"`
 	ClearCampaignTargets    bool
-	AddCampaignTargetIDs    []string
-	RemoveCampaignTargetIDs []string
+	AddCampaignTargetIDs    []string `json:"add_campaign_target_ids,omitempty"`
+	RemoveCampaignTargetIDs []string `json:"remove_campaign_target_ids,omitempty"`
 	ClearFiles              bool
-	AddFileIDs              []string
-	RemoveFileIDs           []string
+	AddFileIDs              []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs           []string `json:"remove_file_ids,omitempty"`
 	ClearSubscribers        bool
-	AddSubscriberIDs        []string
-	RemoveSubscriberIDs     []string
+	AddSubscriberIDs        []string `json:"add_subscriber_ids,omitempty"`
+	RemoveSubscriberIDs     []string `json:"remove_subscriber_ids,omitempty"`
 }
 
 // Mutate applies the UpdateContactInput on the ContactMutation builder.
@@ -3277,41 +3277,41 @@ type CreateControlInput struct {
 	WorkflowEligibleMarker     *bool                               `json:"workflow_eligible_marker,omitempty"`
 	RefCode                    string                              `json:"ref_code,omitempty"`
 	TrustCenterVisibility      *enums.TrustCenterControlVisibility `json:"trust_center_visibility,omitempty"`
-	EvidenceIDs                []string
-	ControlObjectiveIDs        []string
-	TaskIDs                    []string
-	NarrativeIDs               []string
-	RiskIDs                    []string
-	ActionPlanIDs              []string
-	ProcedureIDs               []string
-	InternalPolicyIDs          []string
-	CommentIDs                 []string
-	DiscussionIDs              []string
-	ControlOwnerID             *string
-	DelegateID                 *string
-	ResponsiblePartyID         *string
-	ReviewIDs                  []string
-	RemediationIDs             []string
-	ScanIDs                    []string
-	OwnerID                    *string
-	BlockedGroupIDs            []string
-	EditorIDs                  []string
-	ControlKindID              *string
-	EnvironmentID              *string
-	ScopeID                    *string
-	StandardID                 *string
-	CheckResultIDs             []string
-	ProgramIDs                 []string
-	PlatformIDs                []string
-	AssetIDs                   []string
-	EntityIDs                  []string
-	IdentityHolderIDs          []string
-	CampaignIDs                []string
-	FindingIDs                 []string
-	ControlImplementationIDs   []string
-	SubcontrolIDs              []string
-	ScheduledJobIDs            []string
-	WorkflowObjectRefIDs       []string
+	EvidenceIDs                []string                            `json:"evidence_ids,omitempty"`
+	ControlObjectiveIDs        []string                            `json:"control_objective_ids,omitempty"`
+	TaskIDs                    []string                            `json:"task_ids,omitempty"`
+	NarrativeIDs               []string                            `json:"narrative_ids,omitempty"`
+	RiskIDs                    []string                            `json:"risk_ids,omitempty"`
+	ActionPlanIDs              []string                            `json:"action_plan_ids,omitempty"`
+	ProcedureIDs               []string                            `json:"procedure_ids,omitempty"`
+	InternalPolicyIDs          []string                            `json:"internal_policy_ids,omitempty"`
+	CommentIDs                 []string                            `json:"comment_ids,omitempty"`
+	DiscussionIDs              []string                            `json:"discussion_ids,omitempty"`
+	ControlOwnerID             *string                             `json:"control_owner_id,omitempty"`
+	DelegateID                 *string                             `json:"delegate_id,omitempty"`
+	ResponsiblePartyID         *string                             `json:"responsible_party_id,omitempty"`
+	ReviewIDs                  []string                            `json:"review_ids,omitempty"`
+	RemediationIDs             []string                            `json:"remediation_ids,omitempty"`
+	ScanIDs                    []string                            `json:"scan_ids,omitempty"`
+	OwnerID                    *string                             `json:"owner_id,omitempty"`
+	BlockedGroupIDs            []string                            `json:"blocked_group_ids,omitempty"`
+	EditorIDs                  []string                            `json:"editor_ids,omitempty"`
+	ControlKindID              *string                             `json:"control_kind_id,omitempty"`
+	EnvironmentID              *string                             `json:"environment_id,omitempty"`
+	ScopeID                    *string                             `json:"scope_id,omitempty"`
+	StandardID                 *string                             `json:"standard_id,omitempty"`
+	CheckResultIDs             []string                            `json:"check_result_ids,omitempty"`
+	ProgramIDs                 []string                            `json:"program_ids,omitempty"`
+	PlatformIDs                []string                            `json:"platform_ids,omitempty"`
+	AssetIDs                   []string                            `json:"asset_ids,omitempty"`
+	EntityIDs                  []string                            `json:"entity_ids,omitempty"`
+	IdentityHolderIDs          []string                            `json:"identity_holder_ids,omitempty"`
+	CampaignIDs                []string                            `json:"campaign_ids,omitempty"`
+	FindingIDs                 []string                            `json:"finding_ids,omitempty"`
+	ControlImplementationIDs   []string                            `json:"control_implementation_ids,omitempty"`
+	SubcontrolIDs              []string                            `json:"subcontrol_ids,omitempty"`
+	ScheduledJobIDs            []string                            `json:"scheduled_job_ids,omitempty"`
+	WorkflowObjectRefIDs       []string                            `json:"workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the CreateControlInput on the ControlMutation builder.
@@ -3619,100 +3619,100 @@ type UpdateControlInput struct {
 	ClearTrustCenterVisibility      bool
 	TrustCenterVisibility           *enums.TrustCenterControlVisibility `json:"trust_center_visibility,omitempty"`
 	ClearEvidence                   bool
-	AddEvidenceIDs                  []string
-	RemoveEvidenceIDs               []string
+	AddEvidenceIDs                  []string `json:"add_evidence_ids,omitempty"`
+	RemoveEvidenceIDs               []string `json:"remove_evidence_ids,omitempty"`
 	ClearControlObjectives          bool
-	AddControlObjectiveIDs          []string
-	RemoveControlObjectiveIDs       []string
+	AddControlObjectiveIDs          []string `json:"add_control_objective_ids,omitempty"`
+	RemoveControlObjectiveIDs       []string `json:"remove_control_objective_ids,omitempty"`
 	ClearTasks                      bool
-	AddTaskIDs                      []string
-	RemoveTaskIDs                   []string
+	AddTaskIDs                      []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs                   []string `json:"remove_task_ids,omitempty"`
 	ClearNarratives                 bool
-	AddNarrativeIDs                 []string
-	RemoveNarrativeIDs              []string
+	AddNarrativeIDs                 []string `json:"add_narrative_ids,omitempty"`
+	RemoveNarrativeIDs              []string `json:"remove_narrative_ids,omitempty"`
 	ClearRisks                      bool
-	AddRiskIDs                      []string
-	RemoveRiskIDs                   []string
+	AddRiskIDs                      []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs                   []string `json:"remove_risk_ids,omitempty"`
 	ClearActionPlans                bool
-	AddActionPlanIDs                []string
-	RemoveActionPlanIDs             []string
+	AddActionPlanIDs                []string `json:"add_action_plan_ids,omitempty"`
+	RemoveActionPlanIDs             []string `json:"remove_action_plan_ids,omitempty"`
 	ClearProcedures                 bool
-	AddProcedureIDs                 []string
-	RemoveProcedureIDs              []string
+	AddProcedureIDs                 []string `json:"add_procedure_ids,omitempty"`
+	RemoveProcedureIDs              []string `json:"remove_procedure_ids,omitempty"`
 	ClearInternalPolicies           bool
-	AddInternalPolicyIDs            []string
-	RemoveInternalPolicyIDs         []string
+	AddInternalPolicyIDs            []string `json:"add_internal_policy_ids,omitempty"`
+	RemoveInternalPolicyIDs         []string `json:"remove_internal_policy_ids,omitempty"`
 	ClearComments                   bool
-	AddCommentIDs                   []string
-	RemoveCommentIDs                []string
+	AddCommentIDs                   []string `json:"add_comment_ids,omitempty"`
+	RemoveCommentIDs                []string `json:"remove_comment_ids,omitempty"`
 	ClearDiscussions                bool
-	AddDiscussionIDs                []string
-	RemoveDiscussionIDs             []string
+	AddDiscussionIDs                []string `json:"add_discussion_ids,omitempty"`
+	RemoveDiscussionIDs             []string `json:"remove_discussion_ids,omitempty"`
 	ClearControlOwner               bool
-	ControlOwnerID                  *string
+	ControlOwnerID                  *string `json:"control_owner_id,omitempty"`
 	ClearDelegate                   bool
-	DelegateID                      *string
+	DelegateID                      *string `json:"delegate_id,omitempty"`
 	ClearResponsibleParty           bool
-	ResponsiblePartyID              *string
+	ResponsiblePartyID              *string `json:"responsible_party_id,omitempty"`
 	ClearReviews                    bool
-	AddReviewIDs                    []string
-	RemoveReviewIDs                 []string
+	AddReviewIDs                    []string `json:"add_review_ids,omitempty"`
+	RemoveReviewIDs                 []string `json:"remove_review_ids,omitempty"`
 	ClearRemediations               bool
-	AddRemediationIDs               []string
-	RemoveRemediationIDs            []string
+	AddRemediationIDs               []string `json:"add_remediation_ids,omitempty"`
+	RemoveRemediationIDs            []string `json:"remove_remediation_ids,omitempty"`
 	ClearScans                      bool
-	AddScanIDs                      []string
-	RemoveScanIDs                   []string
+	AddScanIDs                      []string `json:"add_scan_ids,omitempty"`
+	RemoveScanIDs                   []string `json:"remove_scan_ids,omitempty"`
 	ClearBlockedGroups              bool
-	AddBlockedGroupIDs              []string
-	RemoveBlockedGroupIDs           []string
+	AddBlockedGroupIDs              []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs           []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                    bool
-	AddEditorIDs                    []string
-	RemoveEditorIDs                 []string
+	AddEditorIDs                    []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs                 []string `json:"remove_editor_ids,omitempty"`
 	ClearControlKind                bool
-	ControlKindID                   *string
+	ControlKindID                   *string `json:"control_kind_id,omitempty"`
 	ClearEnvironment                bool
-	EnvironmentID                   *string
+	EnvironmentID                   *string `json:"environment_id,omitempty"`
 	ClearScope                      bool
-	ScopeID                         *string
+	ScopeID                         *string `json:"scope_id,omitempty"`
 	ClearStandard                   bool
-	StandardID                      *string
+	StandardID                      *string `json:"standard_id,omitempty"`
 	ClearCheckResults               bool
-	AddCheckResultIDs               []string
-	RemoveCheckResultIDs            []string
+	AddCheckResultIDs               []string `json:"add_check_result_ids,omitempty"`
+	RemoveCheckResultIDs            []string `json:"remove_check_result_ids,omitempty"`
 	ClearPrograms                   bool
-	AddProgramIDs                   []string
-	RemoveProgramIDs                []string
+	AddProgramIDs                   []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs                []string `json:"remove_program_ids,omitempty"`
 	ClearPlatforms                  bool
-	AddPlatformIDs                  []string
-	RemovePlatformIDs               []string
+	AddPlatformIDs                  []string `json:"add_platform_ids,omitempty"`
+	RemovePlatformIDs               []string `json:"remove_platform_ids,omitempty"`
 	ClearAssets                     bool
-	AddAssetIDs                     []string
-	RemoveAssetIDs                  []string
+	AddAssetIDs                     []string `json:"add_asset_ids,omitempty"`
+	RemoveAssetIDs                  []string `json:"remove_asset_ids,omitempty"`
 	ClearEntities                   bool
-	AddEntityIDs                    []string
-	RemoveEntityIDs                 []string
+	AddEntityIDs                    []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs                 []string `json:"remove_entity_ids,omitempty"`
 	ClearIdentityHolders            bool
-	AddIdentityHolderIDs            []string
-	RemoveIdentityHolderIDs         []string
+	AddIdentityHolderIDs            []string `json:"add_identity_holder_ids,omitempty"`
+	RemoveIdentityHolderIDs         []string `json:"remove_identity_holder_ids,omitempty"`
 	ClearCampaigns                  bool
-	AddCampaignIDs                  []string
-	RemoveCampaignIDs               []string
+	AddCampaignIDs                  []string `json:"add_campaign_ids,omitempty"`
+	RemoveCampaignIDs               []string `json:"remove_campaign_ids,omitempty"`
 	ClearFindings                   bool
-	AddFindingIDs                   []string
-	RemoveFindingIDs                []string
+	AddFindingIDs                   []string `json:"add_finding_ids,omitempty"`
+	RemoveFindingIDs                []string `json:"remove_finding_ids,omitempty"`
 	ClearControlImplementations     bool
-	AddControlImplementationIDs     []string
-	RemoveControlImplementationIDs  []string
+	AddControlImplementationIDs     []string `json:"add_control_implementation_ids,omitempty"`
+	RemoveControlImplementationIDs  []string `json:"remove_control_implementation_ids,omitempty"`
 	ClearSubcontrols                bool
-	AddSubcontrolIDs                []string
-	RemoveSubcontrolIDs             []string
+	AddSubcontrolIDs                []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs             []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearScheduledJobs              bool
-	AddScheduledJobIDs              []string
-	RemoveScheduledJobIDs           []string
+	AddScheduledJobIDs              []string `json:"add_scheduled_job_ids,omitempty"`
+	RemoveScheduledJobIDs           []string `json:"remove_scheduled_job_ids,omitempty"`
 	ClearWorkflowObjectRefs         bool
-	AddWorkflowObjectRefIDs         []string
-	RemoveWorkflowObjectRefIDs      []string
+	AddWorkflowObjectRefIDs         []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs      []string `json:"remove_workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the UpdateControlInput on the ControlMutation builder.
@@ -4270,13 +4270,13 @@ type CreateControlImplementationInput struct {
 	VerificationDate   *time.Time            `json:"verification_date,omitempty"`
 	Details            *string               `json:"details,omitempty"`
 	DetailsJSON        []interface{}         `json:"details_json,omitempty"`
-	OwnerID            *string
-	BlockedGroupIDs    []string
-	EditorIDs          []string
-	ViewerIDs          []string
-	ControlIDs         []string
-	SubcontrolIDs      []string
-	TaskIDs            []string
+	OwnerID            *string               `json:"owner_id,omitempty"`
+	BlockedGroupIDs    []string              `json:"blocked_group_ids,omitempty"`
+	EditorIDs          []string              `json:"editor_ids,omitempty"`
+	ViewerIDs          []string              `json:"viewer_ids,omitempty"`
+	ControlIDs         []string              `json:"control_ids,omitempty"`
+	SubcontrolIDs      []string              `json:"subcontrol_ids,omitempty"`
+	TaskIDs            []string              `json:"task_ids,omitempty"`
 }
 
 // Mutate applies the CreateControlImplementationInput on the ControlImplementationMutation builder.
@@ -4360,23 +4360,23 @@ type UpdateControlImplementationInput struct {
 	DetailsJSON             []interface{} `json:"details_json,omitempty"`
 	AppendDetailsJSON       []interface{}
 	ClearBlockedGroups      bool
-	AddBlockedGroupIDs      []string
-	RemoveBlockedGroupIDs   []string
+	AddBlockedGroupIDs      []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs   []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors            bool
-	AddEditorIDs            []string
-	RemoveEditorIDs         []string
+	AddEditorIDs            []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs         []string `json:"remove_editor_ids,omitempty"`
 	ClearViewers            bool
-	AddViewerIDs            []string
-	RemoveViewerIDs         []string
+	AddViewerIDs            []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs         []string `json:"remove_viewer_ids,omitempty"`
 	ClearControls           bool
-	AddControlIDs           []string
-	RemoveControlIDs        []string
+	AddControlIDs           []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs        []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols        bool
-	AddSubcontrolIDs        []string
-	RemoveSubcontrolIDs     []string
+	AddSubcontrolIDs        []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs     []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearTasks              bool
-	AddTaskIDs              []string
-	RemoveTaskIDs           []string
+	AddTaskIDs              []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs           []string `json:"remove_task_ids,omitempty"`
 }
 
 // Mutate applies the UpdateControlImplementationInput on the ControlImplementationMutation builder.
@@ -4523,19 +4523,19 @@ type CreateControlObjectiveInput struct {
 	ControlObjectiveType *string                `json:"control_objective_type,omitempty"`
 	Category             *string                `json:"category,omitempty"`
 	Subcategory          *string                `json:"subcategory,omitempty"`
-	OwnerID              *string
-	BlockedGroupIDs      []string
-	EditorIDs            []string
-	ViewerIDs            []string
-	ProgramIDs           []string
-	EvidenceIDs          []string
-	ControlIDs           []string
-	SubcontrolIDs        []string
-	InternalPolicyIDs    []string
-	ProcedureIDs         []string
-	RiskIDs              []string
-	NarrativeIDs         []string
-	TaskIDs              []string
+	OwnerID              *string                `json:"owner_id,omitempty"`
+	BlockedGroupIDs      []string               `json:"blocked_group_ids,omitempty"`
+	EditorIDs            []string               `json:"editor_ids,omitempty"`
+	ViewerIDs            []string               `json:"viewer_ids,omitempty"`
+	ProgramIDs           []string               `json:"program_ids,omitempty"`
+	EvidenceIDs          []string               `json:"evidence_ids,omitempty"`
+	ControlIDs           []string               `json:"control_ids,omitempty"`
+	SubcontrolIDs        []string               `json:"subcontrol_ids,omitempty"`
+	InternalPolicyIDs    []string               `json:"internal_policy_ids,omitempty"`
+	ProcedureIDs         []string               `json:"procedure_ids,omitempty"`
+	RiskIDs              []string               `json:"risk_ids,omitempty"`
+	NarrativeIDs         []string               `json:"narrative_ids,omitempty"`
+	TaskIDs              []string               `json:"task_ids,omitempty"`
 }
 
 // Mutate applies the CreateControlObjectiveInput on the ControlObjectiveMutation builder.
@@ -4649,41 +4649,41 @@ type UpdateControlObjectiveInput struct {
 	ClearSubcategory          bool
 	Subcategory               *string `json:"subcategory,omitempty"`
 	ClearBlockedGroups        bool
-	AddBlockedGroupIDs        []string
-	RemoveBlockedGroupIDs     []string
+	AddBlockedGroupIDs        []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs     []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors              bool
-	AddEditorIDs              []string
-	RemoveEditorIDs           []string
+	AddEditorIDs              []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs           []string `json:"remove_editor_ids,omitempty"`
 	ClearViewers              bool
-	AddViewerIDs              []string
-	RemoveViewerIDs           []string
+	AddViewerIDs              []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs           []string `json:"remove_viewer_ids,omitempty"`
 	ClearPrograms             bool
-	AddProgramIDs             []string
-	RemoveProgramIDs          []string
+	AddProgramIDs             []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs          []string `json:"remove_program_ids,omitempty"`
 	ClearEvidence             bool
-	AddEvidenceIDs            []string
-	RemoveEvidenceIDs         []string
+	AddEvidenceIDs            []string `json:"add_evidence_ids,omitempty"`
+	RemoveEvidenceIDs         []string `json:"remove_evidence_ids,omitempty"`
 	ClearControls             bool
-	AddControlIDs             []string
-	RemoveControlIDs          []string
+	AddControlIDs             []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs          []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols          bool
-	AddSubcontrolIDs          []string
-	RemoveSubcontrolIDs       []string
+	AddSubcontrolIDs          []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs       []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearInternalPolicies     bool
-	AddInternalPolicyIDs      []string
-	RemoveInternalPolicyIDs   []string
+	AddInternalPolicyIDs      []string `json:"add_internal_policy_ids,omitempty"`
+	RemoveInternalPolicyIDs   []string `json:"remove_internal_policy_ids,omitempty"`
 	ClearProcedures           bool
-	AddProcedureIDs           []string
-	RemoveProcedureIDs        []string
+	AddProcedureIDs           []string `json:"add_procedure_ids,omitempty"`
+	RemoveProcedureIDs        []string `json:"remove_procedure_ids,omitempty"`
 	ClearRisks                bool
-	AddRiskIDs                []string
-	RemoveRiskIDs             []string
+	AddRiskIDs                []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs             []string `json:"remove_risk_ids,omitempty"`
 	ClearNarratives           bool
-	AddNarrativeIDs           []string
-	RemoveNarrativeIDs        []string
+	AddNarrativeIDs           []string `json:"add_narrative_ids,omitempty"`
+	RemoveNarrativeIDs        []string `json:"remove_narrative_ids,omitempty"`
 	ClearTasks                bool
-	AddTaskIDs                []string
-	RemoveTaskIDs             []string
+	AddTaskIDs                []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs             []string `json:"remove_task_ids,omitempty"`
 }
 
 // Mutate applies the UpdateControlObjectiveInput on the ControlObjectiveMutation builder.
@@ -4893,9 +4893,9 @@ type CreateCustomDomainInput struct {
 	CnameRecord       string                  `json:"cname_record,omitempty"`
 	TrustCenterID     *string                 `json:"trust_center_id,omitempty"`
 	DomainType        *enums.CustomDomainType `json:"domain_type,omitempty"`
-	OwnerID           *string
-	MappableDomainID  string
-	DNSVerificationID *string
+	OwnerID           *string                 `json:"owner_id,omitempty"`
+	MappableDomainID  string                  `json:"mappable_domain_id,omitempty"`
+	DNSVerificationID *string                 `json:"dns_verification_id,omitempty"`
 }
 
 // Mutate applies the CreateCustomDomainInput on the CustomDomainMutation builder.
@@ -4943,9 +4943,9 @@ type UpdateCustomDomainInput struct {
 	ClearTrustCenterID    bool
 	TrustCenterID         *string `json:"trust_center_id,omitempty"`
 	ClearOwner            bool
-	OwnerID               *string
+	OwnerID               *string `json:"owner_id,omitempty"`
 	ClearDNSVerification  bool
-	DNSVerificationID     *string
+	DNSVerificationID     *string `json:"dns_verification_id,omitempty"`
 }
 
 // Mutate applies the UpdateCustomDomainInput on the CustomDomainMutation builder.
@@ -5005,25 +5005,25 @@ func (c *CustomDomainUpdateOne) SetInput(i UpdateCustomDomainInput) *CustomDomai
 
 // CreateCustomTypeEnumInput represents a mutation input for creating customtypeenums.
 type CreateCustomTypeEnumInput struct {
-	InternalNotes     *string `json:"internal_notes,omitempty"`
-	SystemInternalID  *string `json:"system_internal_id,omitempty"`
-	ObjectType        string  `json:"object_type,omitempty"`
-	Field             *string `json:"field,omitempty"`
-	Name              string  `json:"name,omitempty"`
-	Description       *string `json:"description,omitempty"`
-	Color             *string `json:"color,omitempty"`
-	Icon              *string `json:"icon,omitempty"`
-	OwnerID           *string
-	TaskIDs           []string
-	ControlIDs        []string
-	SubcontrolIDs     []string
-	RiskIDs           []string
-	RiskCategoryIDs   []string
-	InternalPolicyIDs []string
-	ProcedureIDs      []string
-	ActionPlanIDs     []string
-	ProgramIDs        []string
-	PlatformIDs       []string
+	InternalNotes     *string  `json:"internal_notes,omitempty"`
+	SystemInternalID  *string  `json:"system_internal_id,omitempty"`
+	ObjectType        string   `json:"object_type,omitempty"`
+	Field             *string  `json:"field,omitempty"`
+	Name              string   `json:"name,omitempty"`
+	Description       *string  `json:"description,omitempty"`
+	Color             *string  `json:"color,omitempty"`
+	Icon              *string  `json:"icon,omitempty"`
+	OwnerID           *string  `json:"owner_id,omitempty"`
+	TaskIDs           []string `json:"task_ids,omitempty"`
+	ControlIDs        []string `json:"control_ids,omitempty"`
+	SubcontrolIDs     []string `json:"subcontrol_ids,omitempty"`
+	RiskIDs           []string `json:"risk_ids,omitempty"`
+	RiskCategoryIDs   []string `json:"risk_category_ids,omitempty"`
+	InternalPolicyIDs []string `json:"internal_policy_ids,omitempty"`
+	ProcedureIDs      []string `json:"procedure_ids,omitempty"`
+	ActionPlanIDs     []string `json:"action_plan_ids,omitempty"`
+	ProgramIDs        []string `json:"program_ids,omitempty"`
+	PlatformIDs       []string `json:"platform_ids,omitempty"`
 }
 
 // Mutate applies the CreateCustomTypeEnumInput on the CustomTypeEnumMutation builder.
@@ -5102,37 +5102,37 @@ type UpdateCustomTypeEnumInput struct {
 	ClearIcon               bool
 	Icon                    *string `json:"icon,omitempty"`
 	ClearOwner              bool
-	OwnerID                 *string
+	OwnerID                 *string `json:"owner_id,omitempty"`
 	ClearTasks              bool
-	AddTaskIDs              []string
-	RemoveTaskIDs           []string
+	AddTaskIDs              []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs           []string `json:"remove_task_ids,omitempty"`
 	ClearControls           bool
-	AddControlIDs           []string
-	RemoveControlIDs        []string
+	AddControlIDs           []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs        []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols        bool
-	AddSubcontrolIDs        []string
-	RemoveSubcontrolIDs     []string
+	AddSubcontrolIDs        []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs     []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearRisks              bool
-	AddRiskIDs              []string
-	RemoveRiskIDs           []string
+	AddRiskIDs              []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs           []string `json:"remove_risk_ids,omitempty"`
 	ClearRiskCategories     bool
-	AddRiskCategoryIDs      []string
-	RemoveRiskCategoryIDs   []string
+	AddRiskCategoryIDs      []string `json:"add_risk_category_ids,omitempty"`
+	RemoveRiskCategoryIDs   []string `json:"remove_risk_category_ids,omitempty"`
 	ClearInternalPolicies   bool
-	AddInternalPolicyIDs    []string
-	RemoveInternalPolicyIDs []string
+	AddInternalPolicyIDs    []string `json:"add_internal_policy_ids,omitempty"`
+	RemoveInternalPolicyIDs []string `json:"remove_internal_policy_ids,omitempty"`
 	ClearProcedures         bool
-	AddProcedureIDs         []string
-	RemoveProcedureIDs      []string
+	AddProcedureIDs         []string `json:"add_procedure_ids,omitempty"`
+	RemoveProcedureIDs      []string `json:"remove_procedure_ids,omitempty"`
 	ClearActionPlans        bool
-	AddActionPlanIDs        []string
-	RemoveActionPlanIDs     []string
+	AddActionPlanIDs        []string `json:"add_action_plan_ids,omitempty"`
+	RemoveActionPlanIDs     []string `json:"remove_action_plan_ids,omitempty"`
 	ClearPrograms           bool
-	AddProgramIDs           []string
-	RemoveProgramIDs        []string
+	AddProgramIDs           []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs        []string `json:"remove_program_ids,omitempty"`
 	ClearPlatforms          bool
-	AddPlatformIDs          []string
-	RemovePlatformIDs       []string
+	AddPlatformIDs          []string `json:"add_platform_ids,omitempty"`
+	RemovePlatformIDs       []string `json:"remove_platform_ids,omitempty"`
 }
 
 // Mutate applies the UpdateCustomTypeEnumInput on the CustomTypeEnumMutation builder.
@@ -5288,8 +5288,8 @@ type CreateDNSVerificationInput struct {
 	AcmeChallengePath           *string                      `json:"acme_challenge_path,omitempty"`
 	ExpectedAcmeChallengeValue  *string                      `json:"expected_acme_challenge_value,omitempty"`
 	AcmeChallengeStatus         *enums.SSLVerificationStatus `json:"acme_challenge_status,omitempty"`
-	OwnerID                     *string
-	CustomDomainIDs             []string
+	OwnerID                     *string                      `json:"owner_id,omitempty"`
+	CustomDomainIDs             []string                     `json:"custom_domain_ids,omitempty"`
 }
 
 // Mutate applies the CreateDNSVerificationInput on the DNSVerificationMutation builder.
@@ -5347,10 +5347,10 @@ type UpdateDNSVerificationInput struct {
 	ClearAcmeChallengeStatusReason   bool
 	AcmeChallengeStatusReason        *string `json:"acme_challenge_status_reason,omitempty"`
 	ClearOwner                       bool
-	OwnerID                          *string
+	OwnerID                          *string `json:"owner_id,omitempty"`
 	ClearCustomDomains               bool
-	AddCustomDomainIDs               []string
-	RemoveCustomDomainIDs            []string
+	AddCustomDomainIDs               []string `json:"add_custom_domain_ids,omitempty"`
+	RemoveCustomDomainIDs            []string `json:"remove_custom_domain_ids,omitempty"`
 }
 
 // Mutate applies the UpdateDNSVerificationInput on the DNSVerificationMutation builder.
@@ -5464,17 +5464,17 @@ type CreateDirectoryAccountInput struct {
 	Metadata             map[string]interface{}          `json:"metadata,omitempty"`
 	SourceVersion        *string                         `json:"source_version,omitempty"`
 	PrimarySource        *bool                           `json:"primary_source,omitempty"`
-	OwnerID              *string
-	EnvironmentID        *string
-	ScopeID              *string
-	IntegrationID        *string
-	DirectorySyncRunID   *string
-	PlatformID           *string
-	IdentityHolderID     *string
-	AvatarFileID         *string
-	GroupIDs             []string
-	FindingIDs           []string
-	WorkflowObjectRefIDs []string
+	OwnerID              *string                         `json:"owner_id,omitempty"`
+	EnvironmentID        *string                         `json:"environment_id,omitempty"`
+	ScopeID              *string                         `json:"scope_id,omitempty"`
+	IntegrationID        *string                         `json:"integration_id,omitempty"`
+	DirectorySyncRunID   *string                         `json:"directory_sync_run_id,omitempty"`
+	PlatformID           *string                         `json:"platform_id,omitempty"`
+	IdentityHolderID     *string                         `json:"identity_holder_id,omitempty"`
+	AvatarFileID         *string                         `json:"avatar_file_id,omitempty"`
+	GroupIDs             []string                        `json:"group_ids,omitempty"`
+	FindingIDs           []string                        `json:"finding_ids,omitempty"`
+	WorkflowObjectRefIDs []string                        `json:"workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the CreateDirectoryAccountInput on the DirectoryAccountMutation builder.
@@ -5680,22 +5680,22 @@ type UpdateDirectoryAccountInput struct {
 	SourceVersion              *string `json:"source_version,omitempty"`
 	PrimarySource              *bool   `json:"primary_source,omitempty"`
 	ClearEnvironment           bool
-	EnvironmentID              *string
+	EnvironmentID              *string `json:"environment_id,omitempty"`
 	ClearScope                 bool
-	ScopeID                    *string
+	ScopeID                    *string `json:"scope_id,omitempty"`
 	ClearIdentityHolder        bool
-	IdentityHolderID           *string
+	IdentityHolderID           *string `json:"identity_holder_id,omitempty"`
 	ClearAvatarFile            bool
-	AvatarFileID               *string
+	AvatarFileID               *string `json:"avatar_file_id,omitempty"`
 	ClearGroups                bool
-	AddGroupIDs                []string
-	RemoveGroupIDs             []string
+	AddGroupIDs                []string `json:"add_group_ids,omitempty"`
+	RemoveGroupIDs             []string `json:"remove_group_ids,omitempty"`
 	ClearFindings              bool
-	AddFindingIDs              []string
-	RemoveFindingIDs           []string
+	AddFindingIDs              []string `json:"add_finding_ids,omitempty"`
+	RemoveFindingIDs           []string `json:"remove_finding_ids,omitempty"`
 	ClearWorkflowObjectRefs    bool
-	AddWorkflowObjectRefIDs    []string
-	RemoveWorkflowObjectRefIDs []string
+	AddWorkflowObjectRefIDs    []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs []string `json:"remove_workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the UpdateDirectoryAccountInput on the DirectoryAccountMutation builder.
@@ -5969,13 +5969,13 @@ type CreateDirectoryGroupInput struct {
 	Metadata               map[string]interface{}              `json:"metadata,omitempty"`
 	SourceVersion          *string                             `json:"source_version,omitempty"`
 	DirectoryName          *string                             `json:"directory_name,omitempty"`
-	OwnerID                *string
-	EnvironmentID          *string
-	ScopeID                *string
-	IntegrationID          string
-	DirectorySyncRunID     string
-	PlatformID             *string
-	WorkflowObjectRefIDs   []string
+	OwnerID                *string                             `json:"owner_id,omitempty"`
+	EnvironmentID          *string                             `json:"environment_id,omitempty"`
+	ScopeID                *string                             `json:"scope_id,omitempty"`
+	IntegrationID          string                              `json:"integration_id,omitempty"`
+	DirectorySyncRunID     string                              `json:"directory_sync_run_id,omitempty"`
+	PlatformID             *string                             `json:"platform_id,omitempty"`
+	WorkflowObjectRefIDs   []string                            `json:"workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the CreateDirectoryGroupInput on the DirectoryGroupMutation builder.
@@ -6110,14 +6110,14 @@ type UpdateDirectoryGroupInput struct {
 	ClearDirectoryName          bool
 	DirectoryName               *string `json:"directory_name,omitempty"`
 	ClearOwner                  bool
-	OwnerID                     *string
+	OwnerID                     *string `json:"owner_id,omitempty"`
 	ClearEnvironment            bool
-	EnvironmentID               *string
+	EnvironmentID               *string `json:"environment_id,omitempty"`
 	ClearScope                  bool
-	ScopeID                     *string
+	ScopeID                     *string `json:"scope_id,omitempty"`
 	ClearWorkflowObjectRefs     bool
-	AddWorkflowObjectRefIDs     []string
-	RemoveWorkflowObjectRefIDs  []string
+	AddWorkflowObjectRefIDs     []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs  []string `json:"remove_workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the UpdateDirectoryGroupInput on the DirectoryGroupMutation builder.
@@ -6292,16 +6292,16 @@ type CreateDirectoryMembershipInput struct {
 	ObservedAt           *time.Time                     `json:"observed_at,omitempty"`
 	LastConfirmedRunID   *string                        `json:"last_confirmed_run_id,omitempty"`
 	Metadata             map[string]interface{}         `json:"metadata,omitempty"`
-	OwnerID              *string
-	EnvironmentID        *string
-	ScopeID              *string
-	IntegrationID        string
-	DirectorySyncRunID   string
-	PlatformID           *string
-	DirectoryAccountID   string
-	DirectoryGroupID     string
-	EventIDs             []string
-	WorkflowObjectRefIDs []string
+	OwnerID              *string                        `json:"owner_id,omitempty"`
+	EnvironmentID        *string                        `json:"environment_id,omitempty"`
+	ScopeID              *string                        `json:"scope_id,omitempty"`
+	IntegrationID        string                         `json:"integration_id,omitempty"`
+	DirectorySyncRunID   string                         `json:"directory_sync_run_id,omitempty"`
+	PlatformID           *string                        `json:"platform_id,omitempty"`
+	DirectoryAccountID   string                         `json:"directory_account_id,omitempty"`
+	DirectoryGroupID     string                         `json:"directory_group_id,omitempty"`
+	EventIDs             []string                       `json:"event_ids,omitempty"`
+	WorkflowObjectRefIDs []string                       `json:"workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the CreateDirectoryMembershipInput on the DirectoryMembershipMutation builder.
@@ -6402,17 +6402,17 @@ type UpdateDirectoryMembershipInput struct {
 	ClearMetadata              bool
 	Metadata                   map[string]interface{} `json:"metadata,omitempty"`
 	ClearOwner                 bool
-	OwnerID                    *string
+	OwnerID                    *string `json:"owner_id,omitempty"`
 	ClearEnvironment           bool
-	EnvironmentID              *string
+	EnvironmentID              *string `json:"environment_id,omitempty"`
 	ClearScope                 bool
-	ScopeID                    *string
+	ScopeID                    *string `json:"scope_id,omitempty"`
 	ClearEvents                bool
-	AddEventIDs                []string
-	RemoveEventIDs             []string
+	AddEventIDs                []string `json:"add_event_ids,omitempty"`
+	RemoveEventIDs             []string `json:"remove_event_ids,omitempty"`
 	ClearWorkflowObjectRefs    bool
-	AddWorkflowObjectRefIDs    []string
-	RemoveWorkflowObjectRefIDs []string
+	AddWorkflowObjectRefIDs    []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs []string `json:"remove_workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the UpdateDirectoryMembershipInput on the DirectoryMembershipMutation builder.
@@ -6553,13 +6553,13 @@ type CreateDirectorySyncRunInput struct {
 	Error               *string                       `json:"error,omitempty"`
 	RawManifestFileID   *string                       `json:"raw_manifest_file_id,omitempty"`
 	Stats               map[string]interface{}        `json:"stats,omitempty"`
-	OwnerID             *string
-	EnvironmentID       *string
-	ScopeID             *string
-	IntegrationID       string
-	PlatformID          *string
-	DirectoryAccountIDs []string
-	DirectoryGroupIDs   []string
+	OwnerID             *string                       `json:"owner_id,omitempty"`
+	EnvironmentID       *string                       `json:"environment_id,omitempty"`
+	ScopeID             *string                       `json:"scope_id,omitempty"`
+	IntegrationID       string                        `json:"integration_id,omitempty"`
+	PlatformID          *string                       `json:"platform_id,omitempty"`
+	DirectoryAccountIDs []string                      `json:"directory_account_ids,omitempty"`
+	DirectoryGroupIDs   []string                      `json:"directory_group_ids,omitempty"`
 }
 
 // Mutate applies the CreateDirectorySyncRunInput on the DirectorySyncRunMutation builder.
@@ -6650,17 +6650,17 @@ type UpdateDirectorySyncRunInput struct {
 	ClearStats                bool
 	Stats                     map[string]interface{} `json:"stats,omitempty"`
 	ClearOwner                bool
-	OwnerID                   *string
+	OwnerID                   *string `json:"owner_id,omitempty"`
 	ClearEnvironment          bool
-	EnvironmentID             *string
+	EnvironmentID             *string `json:"environment_id,omitempty"`
 	ClearScope                bool
-	ScopeID                   *string
+	ScopeID                   *string `json:"scope_id,omitempty"`
 	ClearDirectoryAccounts    bool
-	AddDirectoryAccountIDs    []string
-	RemoveDirectoryAccountIDs []string
+	AddDirectoryAccountIDs    []string `json:"add_directory_account_ids,omitempty"`
+	RemoveDirectoryAccountIDs []string `json:"remove_directory_account_ids,omitempty"`
 	ClearDirectoryGroups      bool
-	AddDirectoryGroupIDs      []string
-	RemoveDirectoryGroupIDs   []string
+	AddDirectoryGroupIDs      []string `json:"add_directory_group_ids,omitempty"`
+	RemoveDirectoryGroupIDs   []string `json:"remove_directory_group_ids,omitempty"`
 }
 
 // Mutate applies the UpdateDirectorySyncRunInput on the DirectorySyncRunMutation builder.
@@ -6777,15 +6777,15 @@ func (c *DirectorySyncRunUpdateOne) SetInput(i UpdateDirectorySyncRunInput) *Dir
 
 // CreateDiscussionInput represents a mutation input for creating discussions.
 type CreateDiscussionInput struct {
-	ExternalID       *string `json:"external_id,omitempty"`
-	IsResolved       *bool   `json:"is_resolved,omitempty"`
-	OwnerID          *string
-	CommentIDs       []string
-	ControlID        *string
-	SubcontrolID     *string
-	ProcedureID      *string
-	RiskID           *string
-	InternalPolicyID *string
+	ExternalID       *string  `json:"external_id,omitempty"`
+	IsResolved       *bool    `json:"is_resolved,omitempty"`
+	OwnerID          *string  `json:"owner_id,omitempty"`
+	CommentIDs       []string `json:"comment_ids,omitempty"`
+	ControlID        *string  `json:"control_id,omitempty"`
+	SubcontrolID     *string  `json:"subcontrol_id,omitempty"`
+	ProcedureID      *string  `json:"procedure_id,omitempty"`
+	RiskID           *string  `json:"risk_id,omitempty"`
+	InternalPolicyID *string  `json:"internal_policy_id,omitempty"`
 }
 
 // Mutate applies the CreateDiscussionInput on the DiscussionMutation builder.
@@ -6831,18 +6831,18 @@ type UpdateDiscussionInput struct {
 	ExternalID          *string `json:"external_id,omitempty"`
 	IsResolved          *bool   `json:"is_resolved,omitempty"`
 	ClearComments       bool
-	AddCommentIDs       []string
-	RemoveCommentIDs    []string
+	AddCommentIDs       []string `json:"add_comment_ids,omitempty"`
+	RemoveCommentIDs    []string `json:"remove_comment_ids,omitempty"`
 	ClearControl        bool
-	ControlID           *string
+	ControlID           *string `json:"control_id,omitempty"`
 	ClearSubcontrol     bool
-	SubcontrolID        *string
+	SubcontrolID        *string `json:"subcontrol_id,omitempty"`
 	ClearProcedure      bool
-	ProcedureID         *string
+	ProcedureID         *string `json:"procedure_id,omitempty"`
 	ClearRisk           bool
-	RiskID              *string
+	RiskID              *string `json:"risk_id,omitempty"`
 	ClearInternalPolicy bool
-	InternalPolicyID    *string
+	InternalPolicyID    *string `json:"internal_policy_id,omitempty"`
 }
 
 // Mutate applies the UpdateDiscussionInput on the DiscussionMutation builder.
@@ -6915,12 +6915,12 @@ type CreateDocumentDataInput struct {
 	EnvironmentName *string                `json:"environment_name,omitempty"`
 	ScopeName       *string                `json:"scope_name,omitempty"`
 	Data            map[string]interface{} `json:"data,omitempty"`
-	OwnerID         *string
-	EnvironmentID   *string
-	ScopeID         *string
-	TemplateID      *string
-	EntityIDs       []string
-	FileIDs         []string
+	OwnerID         *string                `json:"owner_id,omitempty"`
+	EnvironmentID   *string                `json:"environment_id,omitempty"`
+	ScopeID         *string                `json:"scope_id,omitempty"`
+	TemplateID      *string                `json:"template_id,omitempty"`
+	EntityIDs       []string               `json:"entity_ids,omitempty"`
+	FileIDs         []string               `json:"file_ids,omitempty"`
 }
 
 // Mutate applies the CreateDocumentDataInput on the DocumentDataMutation builder.
@@ -6974,17 +6974,17 @@ type UpdateDocumentDataInput struct {
 	ScopeName            *string                `json:"scope_name,omitempty"`
 	Data                 map[string]interface{} `json:"data,omitempty"`
 	ClearEnvironment     bool
-	EnvironmentID        *string
+	EnvironmentID        *string `json:"environment_id,omitempty"`
 	ClearScope           bool
-	ScopeID              *string
+	ScopeID              *string `json:"scope_id,omitempty"`
 	ClearTemplate        bool
-	TemplateID           *string
+	TemplateID           *string `json:"template_id,omitempty"`
 	ClearEntities        bool
-	AddEntityIDs         []string
-	RemoveEntityIDs      []string
+	AddEntityIDs         []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs      []string `json:"remove_entity_ids,omitempty"`
 	ClearFiles           bool
-	AddFileIDs           []string
-	RemoveFileIDs        []string
+	AddFileIDs           []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs        []string `json:"remove_file_ids,omitempty"`
 }
 
 // Mutate applies the UpdateDocumentDataInput on the DocumentDataMutation builder.
@@ -7084,17 +7084,17 @@ type CreateEmailTemplateInput struct {
 	Version                 *int                              `json:"version,omitempty"`
 	TemplateContext         *enums.TemplateContext            `json:"template_context,omitempty"`
 	Defaults                map[string]interface{}            `json:"defaults,omitempty"`
-	OwnerID                 *string
-	BlockedGroupIDs         []string
-	EditorIDs               []string
-	ViewerIDs               []string
-	IntegrationID           *string
-	WorkflowDefinitionID    *string
-	WorkflowInstanceID      *string
-	TrustCenterID           *string
-	CampaignIDs             []string
-	NotificationTemplateIDs []string
-	FileIDs                 []string
+	OwnerID                 *string                           `json:"owner_id,omitempty"`
+	BlockedGroupIDs         []string                          `json:"blocked_group_ids,omitempty"`
+	EditorIDs               []string                          `json:"editor_ids,omitempty"`
+	ViewerIDs               []string                          `json:"viewer_ids,omitempty"`
+	IntegrationID           *string                           `json:"integration_id,omitempty"`
+	WorkflowDefinitionID    *string                           `json:"workflow_definition_id,omitempty"`
+	WorkflowInstanceID      *string                           `json:"workflow_instance_id,omitempty"`
+	TrustCenterID           *string                           `json:"trust_center_id,omitempty"`
+	CampaignIDs             []string                          `json:"campaign_ids,omitempty"`
+	NotificationTemplateIDs []string                          `json:"notification_template_ids,omitempty"`
+	FileIDs                 []string                          `json:"file_ids,omitempty"`
 }
 
 // Mutate applies the CreateEmailTemplateInput on the EmailTemplateMutation builder.
@@ -7229,31 +7229,31 @@ type UpdateEmailTemplateInput struct {
 	ClearDefaults                 bool
 	Defaults                      map[string]interface{} `json:"defaults,omitempty"`
 	ClearBlockedGroups            bool
-	AddBlockedGroupIDs            []string
-	RemoveBlockedGroupIDs         []string
+	AddBlockedGroupIDs            []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs         []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                  bool
-	AddEditorIDs                  []string
-	RemoveEditorIDs               []string
+	AddEditorIDs                  []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs               []string `json:"remove_editor_ids,omitempty"`
 	ClearViewers                  bool
-	AddViewerIDs                  []string
-	RemoveViewerIDs               []string
+	AddViewerIDs                  []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs               []string `json:"remove_viewer_ids,omitempty"`
 	ClearIntegration              bool
-	IntegrationID                 *string
+	IntegrationID                 *string `json:"integration_id,omitempty"`
 	ClearWorkflowDefinition       bool
-	WorkflowDefinitionID          *string
+	WorkflowDefinitionID          *string `json:"workflow_definition_id,omitempty"`
 	ClearWorkflowInstance         bool
-	WorkflowInstanceID            *string
+	WorkflowInstanceID            *string `json:"workflow_instance_id,omitempty"`
 	ClearTrustCenter              bool
-	TrustCenterID                 *string
+	TrustCenterID                 *string `json:"trust_center_id,omitempty"`
 	ClearCampaigns                bool
-	AddCampaignIDs                []string
-	RemoveCampaignIDs             []string
+	AddCampaignIDs                []string `json:"add_campaign_ids,omitempty"`
+	RemoveCampaignIDs             []string `json:"remove_campaign_ids,omitempty"`
 	ClearNotificationTemplates    bool
-	AddNotificationTemplateIDs    []string
-	RemoveNotificationTemplateIDs []string
+	AddNotificationTemplateIDs    []string `json:"add_notification_template_ids,omitempty"`
+	RemoveNotificationTemplateIDs []string `json:"remove_notification_template_ids,omitempty"`
 	ClearFiles                    bool
-	AddFileIDs                    []string
-	RemoveFileIDs                 []string
+	AddFileIDs                    []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs                 []string `json:"remove_file_ids,omitempty"`
 }
 
 // Mutate applies the UpdateEmailTemplateInput on the EmailTemplateMutation builder.
@@ -7495,41 +7495,41 @@ type CreateEntityInput struct {
 	LogoRemoteURL                         *string                `json:"logo_remote_url,omitempty"`
 	ExternalID                            *string                `json:"external_id,omitempty"`
 	ObservedAt                            *models.DateTime       `json:"observed_at,omitempty"`
-	OwnerID                               *string
-	BlockedGroupIDs                       []string
-	EditorIDs                             []string
-	InternalOwnerUserID                   *string
-	InternalOwnerGroupID                  *string
-	ReviewedByUserID                      *string
-	ReviewedByGroupID                     *string
-	EntityRelationshipStateID             *string
-	EntitySecurityQuestionnaireStatusID   *string
-	EntitySourceTypeID                    *string
-	EnvironmentID                         *string
-	ScopeID                               *string
-	ContactIDs                            []string
-	DocumentIDs                           []string
-	NoteIDs                               []string
-	FileIDs                               []string
-	AssetIDs                              []string
-	SystemDetailIDs                       []string
-	ScanIDs                               []string
-	CampaignIDs                           []string
-	AssessmentResponseIDs                 []string
-	VendorRiskScoreIDs                    []string
-	IntegrationIDs                        []string
-	SubprocessorIDs                       []string
-	AuthMethodIDs                         []string
-	EmployerIdentityHolderIDs             []string
-	IdentityHolderIDs                     []string
-	ControlIDs                            []string
-	SubcontrolIDs                         []string
-	PlatformIDs                           []string
-	OutOfScopePlatformIDs                 []string
-	SourcePlatformIDs                     []string
-	EntityTypeID                          *string
-	LogoFileID                            *string
-	InternalPolicyIDs                     []string
+	OwnerID                               *string                `json:"owner_id,omitempty"`
+	BlockedGroupIDs                       []string               `json:"blocked_group_ids,omitempty"`
+	EditorIDs                             []string               `json:"editor_ids,omitempty"`
+	InternalOwnerUserID                   *string                `json:"internal_owner_user_id,omitempty"`
+	InternalOwnerGroupID                  *string                `json:"internal_owner_group_id,omitempty"`
+	ReviewedByUserID                      *string                `json:"reviewed_by_user_id,omitempty"`
+	ReviewedByGroupID                     *string                `json:"reviewed_by_group_id,omitempty"`
+	EntityRelationshipStateID             *string                `json:"entity_relationship_state_id,omitempty"`
+	EntitySecurityQuestionnaireStatusID   *string                `json:"entity_security_questionnaire_status_id,omitempty"`
+	EntitySourceTypeID                    *string                `json:"entity_source_type_id,omitempty"`
+	EnvironmentID                         *string                `json:"environment_id,omitempty"`
+	ScopeID                               *string                `json:"scope_id,omitempty"`
+	ContactIDs                            []string               `json:"contact_ids,omitempty"`
+	DocumentIDs                           []string               `json:"document_ids,omitempty"`
+	NoteIDs                               []string               `json:"note_ids,omitempty"`
+	FileIDs                               []string               `json:"file_ids,omitempty"`
+	AssetIDs                              []string               `json:"asset_ids,omitempty"`
+	SystemDetailIDs                       []string               `json:"system_detail_ids,omitempty"`
+	ScanIDs                               []string               `json:"scan_ids,omitempty"`
+	CampaignIDs                           []string               `json:"campaign_ids,omitempty"`
+	AssessmentResponseIDs                 []string               `json:"assessment_response_ids,omitempty"`
+	VendorRiskScoreIDs                    []string               `json:"vendor_risk_score_ids,omitempty"`
+	IntegrationIDs                        []string               `json:"integration_ids,omitempty"`
+	SubprocessorIDs                       []string               `json:"subprocessor_ids,omitempty"`
+	AuthMethodIDs                         []string               `json:"auth_method_ids,omitempty"`
+	EmployerIdentityHolderIDs             []string               `json:"employer_identity_holder_ids,omitempty"`
+	IdentityHolderIDs                     []string               `json:"identity_holder_ids,omitempty"`
+	ControlIDs                            []string               `json:"control_ids,omitempty"`
+	SubcontrolIDs                         []string               `json:"subcontrol_ids,omitempty"`
+	PlatformIDs                           []string               `json:"platform_ids,omitempty"`
+	OutOfScopePlatformIDs                 []string               `json:"out_of_scope_platform_ids,omitempty"`
+	SourcePlatformIDs                     []string               `json:"source_platform_ids,omitempty"`
+	EntityTypeID                          *string                `json:"entity_type_id,omitempty"`
+	LogoFileID                            *string                `json:"logo_file_id,omitempty"`
+	InternalPolicyIDs                     []string               `json:"internal_policy_ids,omitempty"`
 }
 
 // Mutate applies the CreateEntityInput on the EntityMutation builder.
@@ -7875,96 +7875,96 @@ type UpdateEntityInput struct {
 	ClearObservedAt                            bool
 	ObservedAt                                 *models.DateTime `json:"observed_at,omitempty"`
 	ClearBlockedGroups                         bool
-	AddBlockedGroupIDs                         []string
-	RemoveBlockedGroupIDs                      []string
+	AddBlockedGroupIDs                         []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs                      []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                               bool
-	AddEditorIDs                               []string
-	RemoveEditorIDs                            []string
+	AddEditorIDs                               []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs                            []string `json:"remove_editor_ids,omitempty"`
 	ClearInternalOwnerUser                     bool
-	InternalOwnerUserID                        *string
+	InternalOwnerUserID                        *string `json:"internal_owner_user_id,omitempty"`
 	ClearInternalOwnerGroup                    bool
-	InternalOwnerGroupID                       *string
+	InternalOwnerGroupID                       *string `json:"internal_owner_group_id,omitempty"`
 	ClearReviewedByUser                        bool
-	ReviewedByUserID                           *string
+	ReviewedByUserID                           *string `json:"reviewed_by_user_id,omitempty"`
 	ClearReviewedByGroup                       bool
-	ReviewedByGroupID                          *string
+	ReviewedByGroupID                          *string `json:"reviewed_by_group_id,omitempty"`
 	ClearEntityRelationshipState               bool
-	EntityRelationshipStateID                  *string
+	EntityRelationshipStateID                  *string `json:"entity_relationship_state_id,omitempty"`
 	ClearEntitySecurityQuestionnaireStatus     bool
-	EntitySecurityQuestionnaireStatusID        *string
+	EntitySecurityQuestionnaireStatusID        *string `json:"entity_security_questionnaire_status_id,omitempty"`
 	ClearEntitySourceType                      bool
-	EntitySourceTypeID                         *string
+	EntitySourceTypeID                         *string `json:"entity_source_type_id,omitempty"`
 	ClearEnvironment                           bool
-	EnvironmentID                              *string
+	EnvironmentID                              *string `json:"environment_id,omitempty"`
 	ClearScope                                 bool
-	ScopeID                                    *string
+	ScopeID                                    *string `json:"scope_id,omitempty"`
 	ClearContacts                              bool
-	AddContactIDs                              []string
-	RemoveContactIDs                           []string
+	AddContactIDs                              []string `json:"add_contact_ids,omitempty"`
+	RemoveContactIDs                           []string `json:"remove_contact_ids,omitempty"`
 	ClearDocuments                             bool
-	AddDocumentIDs                             []string
-	RemoveDocumentIDs                          []string
+	AddDocumentIDs                             []string `json:"add_document_ids,omitempty"`
+	RemoveDocumentIDs                          []string `json:"remove_document_ids,omitempty"`
 	ClearNotes                                 bool
-	AddNoteIDs                                 []string
-	RemoveNoteIDs                              []string
+	AddNoteIDs                                 []string `json:"add_note_ids,omitempty"`
+	RemoveNoteIDs                              []string `json:"remove_note_ids,omitempty"`
 	ClearFiles                                 bool
-	AddFileIDs                                 []string
-	RemoveFileIDs                              []string
+	AddFileIDs                                 []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs                              []string `json:"remove_file_ids,omitempty"`
 	ClearAssets                                bool
-	AddAssetIDs                                []string
-	RemoveAssetIDs                             []string
+	AddAssetIDs                                []string `json:"add_asset_ids,omitempty"`
+	RemoveAssetIDs                             []string `json:"remove_asset_ids,omitempty"`
 	ClearSystemDetails                         bool
-	AddSystemDetailIDs                         []string
-	RemoveSystemDetailIDs                      []string
+	AddSystemDetailIDs                         []string `json:"add_system_detail_ids,omitempty"`
+	RemoveSystemDetailIDs                      []string `json:"remove_system_detail_ids,omitempty"`
 	ClearScans                                 bool
-	AddScanIDs                                 []string
-	RemoveScanIDs                              []string
+	AddScanIDs                                 []string `json:"add_scan_ids,omitempty"`
+	RemoveScanIDs                              []string `json:"remove_scan_ids,omitempty"`
 	ClearCampaigns                             bool
-	AddCampaignIDs                             []string
-	RemoveCampaignIDs                          []string
+	AddCampaignIDs                             []string `json:"add_campaign_ids,omitempty"`
+	RemoveCampaignIDs                          []string `json:"remove_campaign_ids,omitempty"`
 	ClearAssessmentResponses                   bool
-	AddAssessmentResponseIDs                   []string
-	RemoveAssessmentResponseIDs                []string
+	AddAssessmentResponseIDs                   []string `json:"add_assessment_response_ids,omitempty"`
+	RemoveAssessmentResponseIDs                []string `json:"remove_assessment_response_ids,omitempty"`
 	ClearVendorRiskScores                      bool
-	AddVendorRiskScoreIDs                      []string
-	RemoveVendorRiskScoreIDs                   []string
+	AddVendorRiskScoreIDs                      []string `json:"add_vendor_risk_score_ids,omitempty"`
+	RemoveVendorRiskScoreIDs                   []string `json:"remove_vendor_risk_score_ids,omitempty"`
 	ClearIntegrations                          bool
-	AddIntegrationIDs                          []string
-	RemoveIntegrationIDs                       []string
+	AddIntegrationIDs                          []string `json:"add_integration_ids,omitempty"`
+	RemoveIntegrationIDs                       []string `json:"remove_integration_ids,omitempty"`
 	ClearSubprocessors                         bool
-	AddSubprocessorIDs                         []string
-	RemoveSubprocessorIDs                      []string
+	AddSubprocessorIDs                         []string `json:"add_subprocessor_ids,omitempty"`
+	RemoveSubprocessorIDs                      []string `json:"remove_subprocessor_ids,omitempty"`
 	ClearAuthMethods                           bool
-	AddAuthMethodIDs                           []string
-	RemoveAuthMethodIDs                        []string
+	AddAuthMethodIDs                           []string `json:"add_auth_method_ids,omitempty"`
+	RemoveAuthMethodIDs                        []string `json:"remove_auth_method_ids,omitempty"`
 	ClearEmployerIdentityHolders               bool
-	AddEmployerIdentityHolderIDs               []string
-	RemoveEmployerIdentityHolderIDs            []string
+	AddEmployerIdentityHolderIDs               []string `json:"add_employer_identity_holder_ids,omitempty"`
+	RemoveEmployerIdentityHolderIDs            []string `json:"remove_employer_identity_holder_ids,omitempty"`
 	ClearIdentityHolders                       bool
-	AddIdentityHolderIDs                       []string
-	RemoveIdentityHolderIDs                    []string
+	AddIdentityHolderIDs                       []string `json:"add_identity_holder_ids,omitempty"`
+	RemoveIdentityHolderIDs                    []string `json:"remove_identity_holder_ids,omitempty"`
 	ClearControls                              bool
-	AddControlIDs                              []string
-	RemoveControlIDs                           []string
+	AddControlIDs                              []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs                           []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols                           bool
-	AddSubcontrolIDs                           []string
-	RemoveSubcontrolIDs                        []string
+	AddSubcontrolIDs                           []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs                        []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearPlatforms                             bool
-	AddPlatformIDs                             []string
-	RemovePlatformIDs                          []string
+	AddPlatformIDs                             []string `json:"add_platform_ids,omitempty"`
+	RemovePlatformIDs                          []string `json:"remove_platform_ids,omitempty"`
 	ClearOutOfScopePlatforms                   bool
-	AddOutOfScopePlatformIDs                   []string
-	RemoveOutOfScopePlatformIDs                []string
+	AddOutOfScopePlatformIDs                   []string `json:"add_out_of_scope_platform_ids,omitempty"`
+	RemoveOutOfScopePlatformIDs                []string `json:"remove_out_of_scope_platform_ids,omitempty"`
 	ClearSourcePlatforms                       bool
-	AddSourcePlatformIDs                       []string
-	RemoveSourcePlatformIDs                    []string
+	AddSourcePlatformIDs                       []string `json:"add_source_platform_ids,omitempty"`
+	RemoveSourcePlatformIDs                    []string `json:"remove_source_platform_ids,omitempty"`
 	ClearEntityType                            bool
-	EntityTypeID                               *string
+	EntityTypeID                               *string `json:"entity_type_id,omitempty"`
 	ClearLogoFile                              bool
-	LogoFileID                                 *string
+	LogoFileID                                 *string `json:"logo_file_id,omitempty"`
 	ClearInternalPolicies                      bool
-	AddInternalPolicyIDs                       []string
-	RemoveInternalPolicyIDs                    []string
+	AddInternalPolicyIDs                       []string `json:"add_internal_policy_ids,omitempty"`
+	RemoveInternalPolicyIDs                    []string `json:"remove_internal_policy_ids,omitempty"`
 }
 
 // Mutate applies the UpdateEntityInput on the EntityMutation builder.
@@ -8541,8 +8541,8 @@ type CreateEntityTypeInput struct {
 	InternalNotes    *string  `json:"internal_notes,omitempty"`
 	SystemInternalID *string  `json:"system_internal_id,omitempty"`
 	Name             string   `json:"name,omitempty"`
-	OwnerID          *string
-	EntityIDs        []string
+	OwnerID          *string  `json:"owner_id,omitempty"`
+	EntityIDs        []string `json:"entity_ids,omitempty"`
 }
 
 // Mutate applies the CreateEntityTypeInput on the EntityTypeMutation builder.
@@ -8582,10 +8582,10 @@ type UpdateEntityTypeInput struct {
 	SystemInternalID      *string `json:"system_internal_id,omitempty"`
 	Name                  *string `json:"name,omitempty"`
 	ClearOwner            bool
-	OwnerID               *string
+	OwnerID               *string `json:"owner_id,omitempty"`
 	ClearEntities         bool
-	AddEntityIDs          []string
-	RemoveEntityIDs       []string
+	AddEntityIDs          []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs       []string `json:"remove_entity_ids,omitempty"`
 }
 
 // Mutate applies the UpdateEntityTypeInput on the EntityTypeMutation builder.
@@ -8650,16 +8650,16 @@ type CreateEventInput struct {
 	CorrelationID          *string                `json:"correlation_id,omitempty"`
 	EventType              string                 `json:"event_type,omitempty"`
 	Metadata               map[string]interface{} `json:"metadata,omitempty"`
-	UserIDs                []string
-	GroupIDs               []string
-	IntegrationIDs         []string
-	OrganizationIDs        []string
-	InviteIDs              []string
-	PersonalAccessTokenIDs []string
-	SecretIDs              []string
-	SubscriberIDs          []string
-	FileIDs                []string
-	OrgSubscriptionIDs     []string
+	UserIDs                []string               `json:"user_ids,omitempty"`
+	GroupIDs               []string               `json:"group_ids,omitempty"`
+	IntegrationIDs         []string               `json:"integration_ids,omitempty"`
+	OrganizationIDs        []string               `json:"organization_ids,omitempty"`
+	InviteIDs              []string               `json:"invite_ids,omitempty"`
+	PersonalAccessTokenIDs []string               `json:"personal_access_token_ids,omitempty"`
+	SecretIDs              []string               `json:"secret_ids,omitempty"`
+	SubscriberIDs          []string               `json:"subscriber_ids,omitempty"`
+	FileIDs                []string               `json:"file_ids,omitempty"`
+	OrgSubscriptionIDs     []string               `json:"org_subscription_ids,omitempty"`
 }
 
 // Mutate applies the CreateEventInput on the EventMutation builder.
@@ -8728,35 +8728,35 @@ type UpdateEventInput struct {
 	ClearMetadata                bool
 	Metadata                     map[string]interface{} `json:"metadata,omitempty"`
 	ClearUsers                   bool
-	AddUserIDs                   []string
-	RemoveUserIDs                []string
+	AddUserIDs                   []string `json:"add_user_ids,omitempty"`
+	RemoveUserIDs                []string `json:"remove_user_ids,omitempty"`
 	ClearGroups                  bool
-	AddGroupIDs                  []string
-	RemoveGroupIDs               []string
+	AddGroupIDs                  []string `json:"add_group_ids,omitempty"`
+	RemoveGroupIDs               []string `json:"remove_group_ids,omitempty"`
 	ClearIntegrations            bool
-	AddIntegrationIDs            []string
-	RemoveIntegrationIDs         []string
+	AddIntegrationIDs            []string `json:"add_integration_ids,omitempty"`
+	RemoveIntegrationIDs         []string `json:"remove_integration_ids,omitempty"`
 	ClearOrganizations           bool
-	AddOrganizationIDs           []string
-	RemoveOrganizationIDs        []string
+	AddOrganizationIDs           []string `json:"add_organization_ids,omitempty"`
+	RemoveOrganizationIDs        []string `json:"remove_organization_ids,omitempty"`
 	ClearInvites                 bool
-	AddInviteIDs                 []string
-	RemoveInviteIDs              []string
+	AddInviteIDs                 []string `json:"add_invite_ids,omitempty"`
+	RemoveInviteIDs              []string `json:"remove_invite_ids,omitempty"`
 	ClearPersonalAccessTokens    bool
-	AddPersonalAccessTokenIDs    []string
-	RemovePersonalAccessTokenIDs []string
+	AddPersonalAccessTokenIDs    []string `json:"add_personal_access_token_ids,omitempty"`
+	RemovePersonalAccessTokenIDs []string `json:"remove_personal_access_token_ids,omitempty"`
 	ClearSecrets                 bool
-	AddSecretIDs                 []string
-	RemoveSecretIDs              []string
+	AddSecretIDs                 []string `json:"add_secret_ids,omitempty"`
+	RemoveSecretIDs              []string `json:"remove_secret_ids,omitempty"`
 	ClearSubscribers             bool
-	AddSubscriberIDs             []string
-	RemoveSubscriberIDs          []string
+	AddSubscriberIDs             []string `json:"add_subscriber_ids,omitempty"`
+	RemoveSubscriberIDs          []string `json:"remove_subscriber_ids,omitempty"`
 	ClearFiles                   bool
-	AddFileIDs                   []string
-	RemoveFileIDs                []string
+	AddFileIDs                   []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs                []string `json:"remove_file_ids,omitempty"`
 	ClearOrgSubscriptions        bool
-	AddOrgSubscriptionIDs        []string
-	RemoveOrgSubscriptionIDs     []string
+	AddOrgSubscriptionIDs        []string `json:"add_org_subscription_ids,omitempty"`
+	RemoveOrgSubscriptionIDs     []string `json:"remove_org_subscription_ids,omitempty"`
 }
 
 // Mutate applies the UpdateEventInput on the EventMutation builder.
@@ -8912,20 +8912,20 @@ type CreateEvidenceInput struct {
 	URL                      *string               `json:"url,omitempty"`
 	Status                   *enums.EvidenceStatus `json:"status,omitempty"`
 	ReviewFrequency          *enums.Frequency      `json:"review_frequency,omitempty"`
-	OwnerID                  *string
-	EnvironmentID            *string
-	ScopeID                  *string
-	ControlIDs               []string
-	SubcontrolIDs            []string
-	ControlObjectiveIDs      []string
-	ControlImplementationIDs []string
-	FileIDs                  []string
-	ProgramIDs               []string
-	TaskIDs                  []string
-	PlatformIDs              []string
-	ScanIDs                  []string
-	CommentIDs               []string
-	WorkflowObjectRefIDs     []string
+	OwnerID                  *string               `json:"owner_id,omitempty"`
+	EnvironmentID            *string               `json:"environment_id,omitempty"`
+	ScopeID                  *string               `json:"scope_id,omitempty"`
+	ControlIDs               []string              `json:"control_ids,omitempty"`
+	SubcontrolIDs            []string              `json:"subcontrol_ids,omitempty"`
+	ControlObjectiveIDs      []string              `json:"control_objective_ids,omitempty"`
+	ControlImplementationIDs []string              `json:"control_implementation_ids,omitempty"`
+	FileIDs                  []string              `json:"file_ids,omitempty"`
+	ProgramIDs               []string              `json:"program_ids,omitempty"`
+	TaskIDs                  []string              `json:"task_ids,omitempty"`
+	PlatformIDs              []string              `json:"platform_ids,omitempty"`
+	ScanIDs                  []string              `json:"scan_ids,omitempty"`
+	CommentIDs               []string              `json:"comment_ids,omitempty"`
+	WorkflowObjectRefIDs     []string              `json:"workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the CreateEvidenceInput on the EvidenceMutation builder.
@@ -9055,42 +9055,42 @@ type UpdateEvidenceInput struct {
 	ClearReviewFrequency           bool
 	ReviewFrequency                *enums.Frequency `json:"review_frequency,omitempty"`
 	ClearEnvironment               bool
-	EnvironmentID                  *string
+	EnvironmentID                  *string `json:"environment_id,omitempty"`
 	ClearScope                     bool
-	ScopeID                        *string
+	ScopeID                        *string `json:"scope_id,omitempty"`
 	ClearControls                  bool
-	AddControlIDs                  []string
-	RemoveControlIDs               []string
+	AddControlIDs                  []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs               []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols               bool
-	AddSubcontrolIDs               []string
-	RemoveSubcontrolIDs            []string
+	AddSubcontrolIDs               []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs            []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearControlObjectives         bool
-	AddControlObjectiveIDs         []string
-	RemoveControlObjectiveIDs      []string
+	AddControlObjectiveIDs         []string `json:"add_control_objective_ids,omitempty"`
+	RemoveControlObjectiveIDs      []string `json:"remove_control_objective_ids,omitempty"`
 	ClearControlImplementations    bool
-	AddControlImplementationIDs    []string
-	RemoveControlImplementationIDs []string
+	AddControlImplementationIDs    []string `json:"add_control_implementation_ids,omitempty"`
+	RemoveControlImplementationIDs []string `json:"remove_control_implementation_ids,omitempty"`
 	ClearFiles                     bool
-	AddFileIDs                     []string
-	RemoveFileIDs                  []string
+	AddFileIDs                     []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs                  []string `json:"remove_file_ids,omitempty"`
 	ClearPrograms                  bool
-	AddProgramIDs                  []string
-	RemoveProgramIDs               []string
+	AddProgramIDs                  []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs               []string `json:"remove_program_ids,omitempty"`
 	ClearTasks                     bool
-	AddTaskIDs                     []string
-	RemoveTaskIDs                  []string
+	AddTaskIDs                     []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs                  []string `json:"remove_task_ids,omitempty"`
 	ClearPlatforms                 bool
-	AddPlatformIDs                 []string
-	RemovePlatformIDs              []string
+	AddPlatformIDs                 []string `json:"add_platform_ids,omitempty"`
+	RemovePlatformIDs              []string `json:"remove_platform_ids,omitempty"`
 	ClearScans                     bool
-	AddScanIDs                     []string
-	RemoveScanIDs                  []string
+	AddScanIDs                     []string `json:"add_scan_ids,omitempty"`
+	RemoveScanIDs                  []string `json:"remove_scan_ids,omitempty"`
 	ClearComments                  bool
-	AddCommentIDs                  []string
-	RemoveCommentIDs               []string
+	AddCommentIDs                  []string `json:"add_comment_ids,omitempty"`
+	RemoveCommentIDs               []string `json:"remove_comment_ids,omitempty"`
 	ClearWorkflowObjectRefs        bool
-	AddWorkflowObjectRefIDs        []string
-	RemoveWorkflowObjectRefIDs     []string
+	AddWorkflowObjectRefIDs        []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs     []string `json:"remove_workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the UpdateEvidenceInput on the EvidenceMutation builder.
@@ -9315,9 +9315,9 @@ type CreateExportInput struct {
 	Filters        *string                `json:"filters,omitempty"`
 	Mode           *enums.ExportMode      `json:"mode,omitempty"`
 	ExportMetadata *models.ExportMetadata `json:"export_metadata,omitempty"`
-	OwnerID        *string
-	EventIDs       []string
-	FileIDs        []string
+	OwnerID        *string                `json:"owner_id,omitempty"`
+	EventIDs       []string               `json:"event_ids,omitempty"`
+	FileIDs        []string               `json:"file_ids,omitempty"`
 }
 
 // Mutate applies the CreateExportInput on the ExportMutation builder.
@@ -9363,13 +9363,13 @@ type UpdateExportInput struct {
 	ClearExportMetadata bool
 	ExportMetadata      *models.ExportMetadata `json:"export_metadata,omitempty"`
 	ClearOwner          bool
-	OwnerID             *string
+	OwnerID             *string `json:"owner_id,omitempty"`
 	ClearEvents         bool
-	AddEventIDs         []string
-	RemoveEventIDs      []string
+	AddEventIDs         []string `json:"add_event_ids,omitempty"`
+	RemoveEventIDs      []string `json:"remove_event_ids,omitempty"`
 	ClearFiles          bool
-	AddFileIDs          []string
-	RemoveFileIDs       []string
+	AddFileIDs          []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs       []string `json:"remove_file_ids,omitempty"`
 }
 
 // Mutate applies the UpdateExportInput on the ExportMutation builder.
@@ -9453,27 +9453,27 @@ type CreateFileInput struct {
 	StorageRegion             *string                `json:"storage_region,omitempty"`
 	StorageProvider           *string                `json:"storage_provider,omitempty"`
 	LastAccessedAt            *time.Time             `json:"last_accessed_at,omitempty"`
-	EnvironmentID             *string
-	ScopeID                   *string
-	CategoryID                *string
-	OrganizationIDs           []string
-	GroupIDs                  []string
-	ContactIDs                []string
-	EntityIDs                 []string
-	OrganizationSettingIDs    []string
-	TemplateIDs               []string
-	DocumentIDs               []string
-	ProgramIDs                []string
-	PlatformIDs               []string
-	EvidenceIDs               []string
-	IdentityHolderIDs         []string
-	ScanIDs                   []string
-	EventIDs                  []string
-	IntegrationIDs            []string
-	SecretIDs                 []string
-	TrustCenterEntityIDs      []string
-	TrustCenterDocIDs         []string
-	OriginalTrustCenterDocIDs []string
+	EnvironmentID             *string                `json:"environment_id,omitempty"`
+	ScopeID                   *string                `json:"scope_id,omitempty"`
+	CategoryID                *string                `json:"category_id,omitempty"`
+	OrganizationIDs           []string               `json:"organization_ids,omitempty"`
+	GroupIDs                  []string               `json:"group_ids,omitempty"`
+	ContactIDs                []string               `json:"contact_ids,omitempty"`
+	EntityIDs                 []string               `json:"entity_ids,omitempty"`
+	OrganizationSettingIDs    []string               `json:"organization_setting_ids,omitempty"`
+	TemplateIDs               []string               `json:"template_ids,omitempty"`
+	DocumentIDs               []string               `json:"document_ids,omitempty"`
+	ProgramIDs                []string               `json:"program_ids,omitempty"`
+	PlatformIDs               []string               `json:"platform_ids,omitempty"`
+	EvidenceIDs               []string               `json:"evidence_ids,omitempty"`
+	IdentityHolderIDs         []string               `json:"identity_holder_ids,omitempty"`
+	ScanIDs                   []string               `json:"scan_ids,omitempty"`
+	EventIDs                  []string               `json:"event_ids,omitempty"`
+	IntegrationIDs            []string               `json:"integration_ids,omitempty"`
+	SecretIDs                 []string               `json:"secret_ids,omitempty"`
+	TrustCenterEntityIDs      []string               `json:"trust_center_entity_ids,omitempty"`
+	TrustCenterDocIDs         []string               `json:"trust_center_doc_ids,omitempty"`
+	OriginalTrustCenterDocIDs []string               `json:"original_trust_center_doc_ids,omitempty"`
 }
 
 // Mutate applies the CreateFileInput on the FileMutation builder.
@@ -9664,65 +9664,65 @@ type UpdateFileInput struct {
 	ClearLastAccessedAt             bool
 	LastAccessedAt                  *time.Time `json:"last_accessed_at,omitempty"`
 	ClearEnvironment                bool
-	EnvironmentID                   *string
+	EnvironmentID                   *string `json:"environment_id,omitempty"`
 	ClearScope                      bool
-	ScopeID                         *string
+	ScopeID                         *string `json:"scope_id,omitempty"`
 	ClearCategory                   bool
-	CategoryID                      *string
+	CategoryID                      *string `json:"category_id,omitempty"`
 	ClearOrganization               bool
-	AddOrganizationIDs              []string
-	RemoveOrganizationIDs           []string
+	AddOrganizationIDs              []string `json:"add_organization_ids,omitempty"`
+	RemoveOrganizationIDs           []string `json:"remove_organization_ids,omitempty"`
 	ClearGroups                     bool
-	AddGroupIDs                     []string
-	RemoveGroupIDs                  []string
+	AddGroupIDs                     []string `json:"add_group_ids,omitempty"`
+	RemoveGroupIDs                  []string `json:"remove_group_ids,omitempty"`
 	ClearContact                    bool
-	AddContactIDs                   []string
-	RemoveContactIDs                []string
+	AddContactIDs                   []string `json:"add_contact_ids,omitempty"`
+	RemoveContactIDs                []string `json:"remove_contact_ids,omitempty"`
 	ClearEntity                     bool
-	AddEntityIDs                    []string
-	RemoveEntityIDs                 []string
+	AddEntityIDs                    []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs                 []string `json:"remove_entity_ids,omitempty"`
 	ClearOrganizationSetting        bool
-	AddOrganizationSettingIDs       []string
-	RemoveOrganizationSettingIDs    []string
+	AddOrganizationSettingIDs       []string `json:"add_organization_setting_ids,omitempty"`
+	RemoveOrganizationSettingIDs    []string `json:"remove_organization_setting_ids,omitempty"`
 	ClearTemplate                   bool
-	AddTemplateIDs                  []string
-	RemoveTemplateIDs               []string
+	AddTemplateIDs                  []string `json:"add_template_ids,omitempty"`
+	RemoveTemplateIDs               []string `json:"remove_template_ids,omitempty"`
 	ClearDocument                   bool
-	AddDocumentIDs                  []string
-	RemoveDocumentIDs               []string
+	AddDocumentIDs                  []string `json:"add_document_ids,omitempty"`
+	RemoveDocumentIDs               []string `json:"remove_document_ids,omitempty"`
 	ClearProgram                    bool
-	AddProgramIDs                   []string
-	RemoveProgramIDs                []string
+	AddProgramIDs                   []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs                []string `json:"remove_program_ids,omitempty"`
 	ClearPlatform                   bool
-	AddPlatformIDs                  []string
-	RemovePlatformIDs               []string
+	AddPlatformIDs                  []string `json:"add_platform_ids,omitempty"`
+	RemovePlatformIDs               []string `json:"remove_platform_ids,omitempty"`
 	ClearEvidence                   bool
-	AddEvidenceIDs                  []string
-	RemoveEvidenceIDs               []string
+	AddEvidenceIDs                  []string `json:"add_evidence_ids,omitempty"`
+	RemoveEvidenceIDs               []string `json:"remove_evidence_ids,omitempty"`
 	ClearIdentityHolder             bool
-	AddIdentityHolderIDs            []string
-	RemoveIdentityHolderIDs         []string
+	AddIdentityHolderIDs            []string `json:"add_identity_holder_ids,omitempty"`
+	RemoveIdentityHolderIDs         []string `json:"remove_identity_holder_ids,omitempty"`
 	ClearScan                       bool
-	AddScanIDs                      []string
-	RemoveScanIDs                   []string
+	AddScanIDs                      []string `json:"add_scan_ids,omitempty"`
+	RemoveScanIDs                   []string `json:"remove_scan_ids,omitempty"`
 	ClearEvents                     bool
-	AddEventIDs                     []string
-	RemoveEventIDs                  []string
+	AddEventIDs                     []string `json:"add_event_ids,omitempty"`
+	RemoveEventIDs                  []string `json:"remove_event_ids,omitempty"`
 	ClearIntegrations               bool
-	AddIntegrationIDs               []string
-	RemoveIntegrationIDs            []string
+	AddIntegrationIDs               []string `json:"add_integration_ids,omitempty"`
+	RemoveIntegrationIDs            []string `json:"remove_integration_ids,omitempty"`
 	ClearSecrets                    bool
-	AddSecretIDs                    []string
-	RemoveSecretIDs                 []string
+	AddSecretIDs                    []string `json:"add_secret_ids,omitempty"`
+	RemoveSecretIDs                 []string `json:"remove_secret_ids,omitempty"`
 	ClearTrustCenterEntities        bool
-	AddTrustCenterEntityIDs         []string
-	RemoveTrustCenterEntityIDs      []string
+	AddTrustCenterEntityIDs         []string `json:"add_trust_center_entity_ids,omitempty"`
+	RemoveTrustCenterEntityIDs      []string `json:"remove_trust_center_entity_ids,omitempty"`
 	ClearTrustCenterDoc             bool
-	AddTrustCenterDocIDs            []string
-	RemoveTrustCenterDocIDs         []string
+	AddTrustCenterDocIDs            []string `json:"add_trust_center_doc_ids,omitempty"`
+	RemoveTrustCenterDocIDs         []string `json:"remove_trust_center_doc_ids,omitempty"`
 	ClearOriginalTrustCenterDoc     bool
-	AddOriginalTrustCenterDocIDs    []string
-	RemoveOriginalTrustCenterDocIDs []string
+	AddOriginalTrustCenterDocIDs    []string `json:"add_original_trust_center_doc_ids,omitempty"`
+	RemoveOriginalTrustCenterDocIDs []string `json:"remove_original_trust_center_doc_ids,omitempty"`
 }
 
 // Mutate applies the UpdateFileInput on the FileMutation builder.
@@ -10106,35 +10106,35 @@ type CreateFindingInput struct {
 	ExternalURI            *string                `json:"external_uri,omitempty"`
 	Metadata               map[string]interface{} `json:"metadata,omitempty"`
 	RawPayload             map[string]interface{} `json:"raw_payload,omitempty"`
-	OwnerID                *string
-	BlockedGroupIDs        []string
-	EditorIDs              []string
-	ReviewedByUserID       *string
-	ReviewedByGroupID      *string
-	AssignedToUserID       *string
-	AssignedToGroupID      *string
-	EnvironmentID          *string
-	ScopeID                *string
-	FindingStatusID        *string
-	IntegrationIDs         []string
-	VulnerabilityIDs       []string
-	ActionPlanIDs          []string
-	ControlIDs             []string
-	SubcontrolIDs          []string
-	RiskIDs                []string
-	ProgramIDs             []string
-	AssetIDs               []string
-	EntityIDs              []string
-	ScanIDs                []string
-	TaskIDs                []string
-	DirectoryAccountIDs    []string
-	IdentityHolderIDs      []string
-	RemediationIDs         []string
-	ReviewIDs              []string
-	CommentIDs             []string
-	FileIDs                []string
-	WorkflowObjectRefIDs   []string
-	CheckResultIDs         []string
+	OwnerID                *string                `json:"owner_id,omitempty"`
+	BlockedGroupIDs        []string               `json:"blocked_group_ids,omitempty"`
+	EditorIDs              []string               `json:"editor_ids,omitempty"`
+	ReviewedByUserID       *string                `json:"reviewed_by_user_id,omitempty"`
+	ReviewedByGroupID      *string                `json:"reviewed_by_group_id,omitempty"`
+	AssignedToUserID       *string                `json:"assigned_to_user_id,omitempty"`
+	AssignedToGroupID      *string                `json:"assigned_to_group_id,omitempty"`
+	EnvironmentID          *string                `json:"environment_id,omitempty"`
+	ScopeID                *string                `json:"scope_id,omitempty"`
+	FindingStatusID        *string                `json:"finding_status_id,omitempty"`
+	IntegrationIDs         []string               `json:"integration_ids,omitempty"`
+	VulnerabilityIDs       []string               `json:"vulnerability_ids,omitempty"`
+	ActionPlanIDs          []string               `json:"action_plan_ids,omitempty"`
+	ControlIDs             []string               `json:"control_ids,omitempty"`
+	SubcontrolIDs          []string               `json:"subcontrol_ids,omitempty"`
+	RiskIDs                []string               `json:"risk_ids,omitempty"`
+	ProgramIDs             []string               `json:"program_ids,omitempty"`
+	AssetIDs               []string               `json:"asset_ids,omitempty"`
+	EntityIDs              []string               `json:"entity_ids,omitempty"`
+	ScanIDs                []string               `json:"scan_ids,omitempty"`
+	TaskIDs                []string               `json:"task_ids,omitempty"`
+	DirectoryAccountIDs    []string               `json:"directory_account_ids,omitempty"`
+	IdentityHolderIDs      []string               `json:"identity_holder_ids,omitempty"`
+	RemediationIDs         []string               `json:"remediation_ids,omitempty"`
+	ReviewIDs              []string               `json:"review_ids,omitempty"`
+	CommentIDs             []string               `json:"comment_ids,omitempty"`
+	FileIDs                []string               `json:"file_ids,omitempty"`
+	WorkflowObjectRefIDs   []string               `json:"workflow_object_ref_ids,omitempty"`
+	CheckResultIDs         []string               `json:"check_result_ids,omitempty"`
 }
 
 // Mutate applies the CreateFindingInput on the FindingMutation builder.
@@ -10467,82 +10467,82 @@ type UpdateFindingInput struct {
 	ClearRawPayload             bool
 	RawPayload                  map[string]interface{} `json:"raw_payload,omitempty"`
 	ClearBlockedGroups          bool
-	AddBlockedGroupIDs          []string
-	RemoveBlockedGroupIDs       []string
+	AddBlockedGroupIDs          []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs       []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                bool
-	AddEditorIDs                []string
-	RemoveEditorIDs             []string
+	AddEditorIDs                []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs             []string `json:"remove_editor_ids,omitempty"`
 	ClearReviewedByUser         bool
-	ReviewedByUserID            *string
+	ReviewedByUserID            *string `json:"reviewed_by_user_id,omitempty"`
 	ClearReviewedByGroup        bool
-	ReviewedByGroupID           *string
+	ReviewedByGroupID           *string `json:"reviewed_by_group_id,omitempty"`
 	ClearAssignedToUser         bool
-	AssignedToUserID            *string
+	AssignedToUserID            *string `json:"assigned_to_user_id,omitempty"`
 	ClearAssignedToGroup        bool
-	AssignedToGroupID           *string
+	AssignedToGroupID           *string `json:"assigned_to_group_id,omitempty"`
 	ClearEnvironment            bool
-	EnvironmentID               *string
+	EnvironmentID               *string `json:"environment_id,omitempty"`
 	ClearScope                  bool
-	ScopeID                     *string
+	ScopeID                     *string `json:"scope_id,omitempty"`
 	ClearFindingStatus          bool
-	FindingStatusID             *string
+	FindingStatusID             *string `json:"finding_status_id,omitempty"`
 	ClearIntegrations           bool
-	AddIntegrationIDs           []string
-	RemoveIntegrationIDs        []string
+	AddIntegrationIDs           []string `json:"add_integration_ids,omitempty"`
+	RemoveIntegrationIDs        []string `json:"remove_integration_ids,omitempty"`
 	ClearVulnerabilities        bool
-	AddVulnerabilityIDs         []string
-	RemoveVulnerabilityIDs      []string
+	AddVulnerabilityIDs         []string `json:"add_vulnerability_ids,omitempty"`
+	RemoveVulnerabilityIDs      []string `json:"remove_vulnerability_ids,omitempty"`
 	ClearActionPlans            bool
-	AddActionPlanIDs            []string
-	RemoveActionPlanIDs         []string
+	AddActionPlanIDs            []string `json:"add_action_plan_ids,omitempty"`
+	RemoveActionPlanIDs         []string `json:"remove_action_plan_ids,omitempty"`
 	ClearControls               bool
-	AddControlIDs               []string
-	RemoveControlIDs            []string
+	AddControlIDs               []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs            []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols            bool
-	AddSubcontrolIDs            []string
-	RemoveSubcontrolIDs         []string
+	AddSubcontrolIDs            []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs         []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearRisks                  bool
-	AddRiskIDs                  []string
-	RemoveRiskIDs               []string
+	AddRiskIDs                  []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs               []string `json:"remove_risk_ids,omitempty"`
 	ClearPrograms               bool
-	AddProgramIDs               []string
-	RemoveProgramIDs            []string
+	AddProgramIDs               []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs            []string `json:"remove_program_ids,omitempty"`
 	ClearAssets                 bool
-	AddAssetIDs                 []string
-	RemoveAssetIDs              []string
+	AddAssetIDs                 []string `json:"add_asset_ids,omitempty"`
+	RemoveAssetIDs              []string `json:"remove_asset_ids,omitempty"`
 	ClearEntities               bool
-	AddEntityIDs                []string
-	RemoveEntityIDs             []string
+	AddEntityIDs                []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs             []string `json:"remove_entity_ids,omitempty"`
 	ClearScans                  bool
-	AddScanIDs                  []string
-	RemoveScanIDs               []string
+	AddScanIDs                  []string `json:"add_scan_ids,omitempty"`
+	RemoveScanIDs               []string `json:"remove_scan_ids,omitempty"`
 	ClearTasks                  bool
-	AddTaskIDs                  []string
-	RemoveTaskIDs               []string
+	AddTaskIDs                  []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs               []string `json:"remove_task_ids,omitempty"`
 	ClearDirectoryAccounts      bool
-	AddDirectoryAccountIDs      []string
-	RemoveDirectoryAccountIDs   []string
+	AddDirectoryAccountIDs      []string `json:"add_directory_account_ids,omitempty"`
+	RemoveDirectoryAccountIDs   []string `json:"remove_directory_account_ids,omitempty"`
 	ClearIdentityHolders        bool
-	AddIdentityHolderIDs        []string
-	RemoveIdentityHolderIDs     []string
+	AddIdentityHolderIDs        []string `json:"add_identity_holder_ids,omitempty"`
+	RemoveIdentityHolderIDs     []string `json:"remove_identity_holder_ids,omitempty"`
 	ClearRemediations           bool
-	AddRemediationIDs           []string
-	RemoveRemediationIDs        []string
+	AddRemediationIDs           []string `json:"add_remediation_ids,omitempty"`
+	RemoveRemediationIDs        []string `json:"remove_remediation_ids,omitempty"`
 	ClearReviews                bool
-	AddReviewIDs                []string
-	RemoveReviewIDs             []string
+	AddReviewIDs                []string `json:"add_review_ids,omitempty"`
+	RemoveReviewIDs             []string `json:"remove_review_ids,omitempty"`
 	ClearComments               bool
-	AddCommentIDs               []string
-	RemoveCommentIDs            []string
+	AddCommentIDs               []string `json:"add_comment_ids,omitempty"`
+	RemoveCommentIDs            []string `json:"remove_comment_ids,omitempty"`
 	ClearFiles                  bool
-	AddFileIDs                  []string
-	RemoveFileIDs               []string
+	AddFileIDs                  []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs               []string `json:"remove_file_ids,omitempty"`
 	ClearWorkflowObjectRefs     bool
-	AddWorkflowObjectRefIDs     []string
-	RemoveWorkflowObjectRefIDs  []string
+	AddWorkflowObjectRefIDs     []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs  []string `json:"remove_workflow_object_ref_ids,omitempty"`
 	ClearCheckResults           bool
-	AddCheckResultIDs           []string
-	RemoveCheckResultIDs        []string
+	AddCheckResultIDs           []string `json:"add_check_result_ids,omitempty"`
+	RemoveCheckResultIDs        []string `json:"remove_check_result_ids,omitempty"`
 }
 
 // Mutate applies the UpdateFindingInput on the FindingMutation builder.
@@ -11085,9 +11085,9 @@ type CreateFindingControlInput struct {
 	Source                  *string                `json:"source,omitempty"`
 	Metadata                map[string]interface{} `json:"metadata,omitempty"`
 	DiscoveredAt            *models.DateTime       `json:"discovered_at,omitempty"`
-	FindingID               string
-	ControlID               string
-	StandardID              *string
+	FindingID               string                 `json:"finding_id,omitempty"`
+	ControlID               string                 `json:"control_id,omitempty"`
+	StandardID              *string                `json:"standard_id,omitempty"`
 }
 
 // Mutate applies the CreateFindingControlInput on the FindingControlMutation builder.
@@ -11205,57 +11205,57 @@ type CreateGroupInput struct {
 	ScimDisplayName                      *string  `json:"scim_display_name,omitempty"`
 	ScimActive                           *bool    `json:"scim_active,omitempty"`
 	ScimGroupMailing                     *string  `json:"scim_group_mailing,omitempty"`
-	OwnerID                              *string
-	ProgramEditorIDs                     []string
-	ProgramBlockedGroupIDs               []string
-	ProgramViewerIDs                     []string
-	RiskEditorIDs                        []string
-	RiskBlockedGroupIDs                  []string
-	RiskViewerIDs                        []string
-	ControlObjectiveEditorIDs            []string
-	ControlObjectiveBlockedGroupIDs      []string
-	ControlObjectiveViewerIDs            []string
-	NarrativeEditorIDs                   []string
-	NarrativeBlockedGroupIDs             []string
-	NarrativeViewerIDs                   []string
-	ControlImplementationEditorIDs       []string
-	ControlImplementationBlockedGroupIDs []string
-	ControlImplementationViewerIDs       []string
-	ActionPlanEditorIDs                  []string
-	ActionPlanBlockedGroupIDs            []string
-	ActionPlanViewerIDs                  []string
-	PlatformEditorIDs                    []string
-	PlatformBlockedGroupIDs              []string
-	PlatformViewerIDs                    []string
-	CampaignEditorIDs                    []string
-	CampaignBlockedGroupIDs              []string
-	CampaignViewerIDs                    []string
-	ProcedureEditorIDs                   []string
-	ProcedureBlockedGroupIDs             []string
-	InternalPolicyEditorIDs              []string
-	InternalPolicyBlockedGroupIDs        []string
-	ControlEditorIDs                     []string
-	ControlBlockedGroupIDs               []string
-	MappedControlEditorIDs               []string
-	MappedControlBlockedGroupIDs         []string
-	ScanEditorIDs                        []string
-	ScanBlockedGroupIDs                  []string
-	EntityEditorIDs                      []string
-	EntityBlockedGroupIDs                []string
-	FindingEditorIDs                     []string
-	FindingBlockedGroupIDs               []string
-	ReviewEditorIDs                      []string
-	ReviewBlockedGroupIDs                []string
-	RemediationEditorIDs                 []string
-	RemediationBlockedGroupIDs           []string
-	SettingID                            *string
-	EventIDs                             []string
-	IntegrationIDs                       []string
-	AvatarFileID                         *string
-	FileIDs                              []string
-	TaskIDs                              []string
-	CampaignIDs                          []string
-	CampaignTargetIDs                    []string
+	OwnerID                              *string  `json:"owner_id,omitempty"`
+	ProgramEditorIDs                     []string `json:"program_editor_ids,omitempty"`
+	ProgramBlockedGroupIDs               []string `json:"program_blocked_group_ids,omitempty"`
+	ProgramViewerIDs                     []string `json:"program_viewer_ids,omitempty"`
+	RiskEditorIDs                        []string `json:"risk_editor_ids,omitempty"`
+	RiskBlockedGroupIDs                  []string `json:"risk_blocked_group_ids,omitempty"`
+	RiskViewerIDs                        []string `json:"risk_viewer_ids,omitempty"`
+	ControlObjectiveEditorIDs            []string `json:"control_objective_editor_ids,omitempty"`
+	ControlObjectiveBlockedGroupIDs      []string `json:"control_objective_blocked_group_ids,omitempty"`
+	ControlObjectiveViewerIDs            []string `json:"control_objective_viewer_ids,omitempty"`
+	NarrativeEditorIDs                   []string `json:"narrative_editor_ids,omitempty"`
+	NarrativeBlockedGroupIDs             []string `json:"narrative_blocked_group_ids,omitempty"`
+	NarrativeViewerIDs                   []string `json:"narrative_viewer_ids,omitempty"`
+	ControlImplementationEditorIDs       []string `json:"control_implementation_editor_ids,omitempty"`
+	ControlImplementationBlockedGroupIDs []string `json:"control_implementation_blocked_group_ids,omitempty"`
+	ControlImplementationViewerIDs       []string `json:"control_implementation_viewer_ids,omitempty"`
+	ActionPlanEditorIDs                  []string `json:"action_plan_editor_ids,omitempty"`
+	ActionPlanBlockedGroupIDs            []string `json:"action_plan_blocked_group_ids,omitempty"`
+	ActionPlanViewerIDs                  []string `json:"action_plan_viewer_ids,omitempty"`
+	PlatformEditorIDs                    []string `json:"platform_editor_ids,omitempty"`
+	PlatformBlockedGroupIDs              []string `json:"platform_blocked_group_ids,omitempty"`
+	PlatformViewerIDs                    []string `json:"platform_viewer_ids,omitempty"`
+	CampaignEditorIDs                    []string `json:"campaign_editor_ids,omitempty"`
+	CampaignBlockedGroupIDs              []string `json:"campaign_blocked_group_ids,omitempty"`
+	CampaignViewerIDs                    []string `json:"campaign_viewer_ids,omitempty"`
+	ProcedureEditorIDs                   []string `json:"procedure_editor_ids,omitempty"`
+	ProcedureBlockedGroupIDs             []string `json:"procedure_blocked_group_ids,omitempty"`
+	InternalPolicyEditorIDs              []string `json:"internal_policy_editor_ids,omitempty"`
+	InternalPolicyBlockedGroupIDs        []string `json:"internal_policy_blocked_group_ids,omitempty"`
+	ControlEditorIDs                     []string `json:"control_editor_ids,omitempty"`
+	ControlBlockedGroupIDs               []string `json:"control_blocked_group_ids,omitempty"`
+	MappedControlEditorIDs               []string `json:"mapped_control_editor_ids,omitempty"`
+	MappedControlBlockedGroupIDs         []string `json:"mapped_control_blocked_group_ids,omitempty"`
+	ScanEditorIDs                        []string `json:"scan_editor_ids,omitempty"`
+	ScanBlockedGroupIDs                  []string `json:"scan_blocked_group_ids,omitempty"`
+	EntityEditorIDs                      []string `json:"entity_editor_ids,omitempty"`
+	EntityBlockedGroupIDs                []string `json:"entity_blocked_group_ids,omitempty"`
+	FindingEditorIDs                     []string `json:"finding_editor_ids,omitempty"`
+	FindingBlockedGroupIDs               []string `json:"finding_blocked_group_ids,omitempty"`
+	ReviewEditorIDs                      []string `json:"review_editor_ids,omitempty"`
+	ReviewBlockedGroupIDs                []string `json:"review_blocked_group_ids,omitempty"`
+	RemediationEditorIDs                 []string `json:"remediation_editor_ids,omitempty"`
+	RemediationBlockedGroupIDs           []string `json:"remediation_blocked_group_ids,omitempty"`
+	SettingID                            *string  `json:"setting_id,omitempty"`
+	EventIDs                             []string `json:"event_ids,omitempty"`
+	IntegrationIDs                       []string `json:"integration_ids,omitempty"`
+	AvatarFileID                         *string  `json:"avatar_file_id,omitempty"`
+	FileIDs                              []string `json:"file_ids,omitempty"`
+	TaskIDs                              []string `json:"task_ids,omitempty"`
+	CampaignIDs                          []string `json:"campaign_ids,omitempty"`
+	CampaignTargetIDs                    []string `json:"campaign_target_ids,omitempty"`
 }
 
 // Mutate applies the CreateGroupInput on the GroupMutation builder.
@@ -11482,155 +11482,155 @@ type UpdateGroupInput struct {
 	ClearScimGroupMailing                      bool
 	ScimGroupMailing                           *string `json:"scim_group_mailing,omitempty"`
 	ClearOwner                                 bool
-	OwnerID                                    *string
+	OwnerID                                    *string `json:"owner_id,omitempty"`
 	ClearProgramEditors                        bool
-	AddProgramEditorIDs                        []string
-	RemoveProgramEditorIDs                     []string
+	AddProgramEditorIDs                        []string `json:"add_program_editor_ids,omitempty"`
+	RemoveProgramEditorIDs                     []string `json:"remove_program_editor_ids,omitempty"`
 	ClearProgramBlockedGroups                  bool
-	AddProgramBlockedGroupIDs                  []string
-	RemoveProgramBlockedGroupIDs               []string
+	AddProgramBlockedGroupIDs                  []string `json:"add_program_blocked_group_ids,omitempty"`
+	RemoveProgramBlockedGroupIDs               []string `json:"remove_program_blocked_group_ids,omitempty"`
 	ClearProgramViewers                        bool
-	AddProgramViewerIDs                        []string
-	RemoveProgramViewerIDs                     []string
+	AddProgramViewerIDs                        []string `json:"add_program_viewer_ids,omitempty"`
+	RemoveProgramViewerIDs                     []string `json:"remove_program_viewer_ids,omitempty"`
 	ClearRiskEditors                           bool
-	AddRiskEditorIDs                           []string
-	RemoveRiskEditorIDs                        []string
+	AddRiskEditorIDs                           []string `json:"add_risk_editor_ids,omitempty"`
+	RemoveRiskEditorIDs                        []string `json:"remove_risk_editor_ids,omitempty"`
 	ClearRiskBlockedGroups                     bool
-	AddRiskBlockedGroupIDs                     []string
-	RemoveRiskBlockedGroupIDs                  []string
+	AddRiskBlockedGroupIDs                     []string `json:"add_risk_blocked_group_ids,omitempty"`
+	RemoveRiskBlockedGroupIDs                  []string `json:"remove_risk_blocked_group_ids,omitempty"`
 	ClearRiskViewers                           bool
-	AddRiskViewerIDs                           []string
-	RemoveRiskViewerIDs                        []string
+	AddRiskViewerIDs                           []string `json:"add_risk_viewer_ids,omitempty"`
+	RemoveRiskViewerIDs                        []string `json:"remove_risk_viewer_ids,omitempty"`
 	ClearControlObjectiveEditors               bool
-	AddControlObjectiveEditorIDs               []string
-	RemoveControlObjectiveEditorIDs            []string
+	AddControlObjectiveEditorIDs               []string `json:"add_control_objective_editor_ids,omitempty"`
+	RemoveControlObjectiveEditorIDs            []string `json:"remove_control_objective_editor_ids,omitempty"`
 	ClearControlObjectiveBlockedGroups         bool
-	AddControlObjectiveBlockedGroupIDs         []string
-	RemoveControlObjectiveBlockedGroupIDs      []string
+	AddControlObjectiveBlockedGroupIDs         []string `json:"add_control_objective_blocked_group_ids,omitempty"`
+	RemoveControlObjectiveBlockedGroupIDs      []string `json:"remove_control_objective_blocked_group_ids,omitempty"`
 	ClearControlObjectiveViewers               bool
-	AddControlObjectiveViewerIDs               []string
-	RemoveControlObjectiveViewerIDs            []string
+	AddControlObjectiveViewerIDs               []string `json:"add_control_objective_viewer_ids,omitempty"`
+	RemoveControlObjectiveViewerIDs            []string `json:"remove_control_objective_viewer_ids,omitempty"`
 	ClearNarrativeEditors                      bool
-	AddNarrativeEditorIDs                      []string
-	RemoveNarrativeEditorIDs                   []string
+	AddNarrativeEditorIDs                      []string `json:"add_narrative_editor_ids,omitempty"`
+	RemoveNarrativeEditorIDs                   []string `json:"remove_narrative_editor_ids,omitempty"`
 	ClearNarrativeBlockedGroups                bool
-	AddNarrativeBlockedGroupIDs                []string
-	RemoveNarrativeBlockedGroupIDs             []string
+	AddNarrativeBlockedGroupIDs                []string `json:"add_narrative_blocked_group_ids,omitempty"`
+	RemoveNarrativeBlockedGroupIDs             []string `json:"remove_narrative_blocked_group_ids,omitempty"`
 	ClearNarrativeViewers                      bool
-	AddNarrativeViewerIDs                      []string
-	RemoveNarrativeViewerIDs                   []string
+	AddNarrativeViewerIDs                      []string `json:"add_narrative_viewer_ids,omitempty"`
+	RemoveNarrativeViewerIDs                   []string `json:"remove_narrative_viewer_ids,omitempty"`
 	ClearControlImplementationEditors          bool
-	AddControlImplementationEditorIDs          []string
-	RemoveControlImplementationEditorIDs       []string
+	AddControlImplementationEditorIDs          []string `json:"add_control_implementation_editor_ids,omitempty"`
+	RemoveControlImplementationEditorIDs       []string `json:"remove_control_implementation_editor_ids,omitempty"`
 	ClearControlImplementationBlockedGroups    bool
-	AddControlImplementationBlockedGroupIDs    []string
-	RemoveControlImplementationBlockedGroupIDs []string
+	AddControlImplementationBlockedGroupIDs    []string `json:"add_control_implementation_blocked_group_ids,omitempty"`
+	RemoveControlImplementationBlockedGroupIDs []string `json:"remove_control_implementation_blocked_group_ids,omitempty"`
 	ClearControlImplementationViewers          bool
-	AddControlImplementationViewerIDs          []string
-	RemoveControlImplementationViewerIDs       []string
+	AddControlImplementationViewerIDs          []string `json:"add_control_implementation_viewer_ids,omitempty"`
+	RemoveControlImplementationViewerIDs       []string `json:"remove_control_implementation_viewer_ids,omitempty"`
 	ClearActionPlanEditors                     bool
-	AddActionPlanEditorIDs                     []string
-	RemoveActionPlanEditorIDs                  []string
+	AddActionPlanEditorIDs                     []string `json:"add_action_plan_editor_ids,omitempty"`
+	RemoveActionPlanEditorIDs                  []string `json:"remove_action_plan_editor_ids,omitempty"`
 	ClearActionPlanBlockedGroups               bool
-	AddActionPlanBlockedGroupIDs               []string
-	RemoveActionPlanBlockedGroupIDs            []string
+	AddActionPlanBlockedGroupIDs               []string `json:"add_action_plan_blocked_group_ids,omitempty"`
+	RemoveActionPlanBlockedGroupIDs            []string `json:"remove_action_plan_blocked_group_ids,omitempty"`
 	ClearActionPlanViewers                     bool
-	AddActionPlanViewerIDs                     []string
-	RemoveActionPlanViewerIDs                  []string
+	AddActionPlanViewerIDs                     []string `json:"add_action_plan_viewer_ids,omitempty"`
+	RemoveActionPlanViewerIDs                  []string `json:"remove_action_plan_viewer_ids,omitempty"`
 	ClearPlatformEditors                       bool
-	AddPlatformEditorIDs                       []string
-	RemovePlatformEditorIDs                    []string
+	AddPlatformEditorIDs                       []string `json:"add_platform_editor_ids,omitempty"`
+	RemovePlatformEditorIDs                    []string `json:"remove_platform_editor_ids,omitempty"`
 	ClearPlatformBlockedGroups                 bool
-	AddPlatformBlockedGroupIDs                 []string
-	RemovePlatformBlockedGroupIDs              []string
+	AddPlatformBlockedGroupIDs                 []string `json:"add_platform_blocked_group_ids,omitempty"`
+	RemovePlatformBlockedGroupIDs              []string `json:"remove_platform_blocked_group_ids,omitempty"`
 	ClearPlatformViewers                       bool
-	AddPlatformViewerIDs                       []string
-	RemovePlatformViewerIDs                    []string
+	AddPlatformViewerIDs                       []string `json:"add_platform_viewer_ids,omitempty"`
+	RemovePlatformViewerIDs                    []string `json:"remove_platform_viewer_ids,omitempty"`
 	ClearCampaignEditors                       bool
-	AddCampaignEditorIDs                       []string
-	RemoveCampaignEditorIDs                    []string
+	AddCampaignEditorIDs                       []string `json:"add_campaign_editor_ids,omitempty"`
+	RemoveCampaignEditorIDs                    []string `json:"remove_campaign_editor_ids,omitempty"`
 	ClearCampaignBlockedGroups                 bool
-	AddCampaignBlockedGroupIDs                 []string
-	RemoveCampaignBlockedGroupIDs              []string
+	AddCampaignBlockedGroupIDs                 []string `json:"add_campaign_blocked_group_ids,omitempty"`
+	RemoveCampaignBlockedGroupIDs              []string `json:"remove_campaign_blocked_group_ids,omitempty"`
 	ClearCampaignViewers                       bool
-	AddCampaignViewerIDs                       []string
-	RemoveCampaignViewerIDs                    []string
+	AddCampaignViewerIDs                       []string `json:"add_campaign_viewer_ids,omitempty"`
+	RemoveCampaignViewerIDs                    []string `json:"remove_campaign_viewer_ids,omitempty"`
 	ClearProcedureEditors                      bool
-	AddProcedureEditorIDs                      []string
-	RemoveProcedureEditorIDs                   []string
+	AddProcedureEditorIDs                      []string `json:"add_procedure_editor_ids,omitempty"`
+	RemoveProcedureEditorIDs                   []string `json:"remove_procedure_editor_ids,omitempty"`
 	ClearProcedureBlockedGroups                bool
-	AddProcedureBlockedGroupIDs                []string
-	RemoveProcedureBlockedGroupIDs             []string
+	AddProcedureBlockedGroupIDs                []string `json:"add_procedure_blocked_group_ids,omitempty"`
+	RemoveProcedureBlockedGroupIDs             []string `json:"remove_procedure_blocked_group_ids,omitempty"`
 	ClearInternalPolicyEditors                 bool
-	AddInternalPolicyEditorIDs                 []string
-	RemoveInternalPolicyEditorIDs              []string
+	AddInternalPolicyEditorIDs                 []string `json:"add_internal_policy_editor_ids,omitempty"`
+	RemoveInternalPolicyEditorIDs              []string `json:"remove_internal_policy_editor_ids,omitempty"`
 	ClearInternalPolicyBlockedGroups           bool
-	AddInternalPolicyBlockedGroupIDs           []string
-	RemoveInternalPolicyBlockedGroupIDs        []string
+	AddInternalPolicyBlockedGroupIDs           []string `json:"add_internal_policy_blocked_group_ids,omitempty"`
+	RemoveInternalPolicyBlockedGroupIDs        []string `json:"remove_internal_policy_blocked_group_ids,omitempty"`
 	ClearControlEditors                        bool
-	AddControlEditorIDs                        []string
-	RemoveControlEditorIDs                     []string
+	AddControlEditorIDs                        []string `json:"add_control_editor_ids,omitempty"`
+	RemoveControlEditorIDs                     []string `json:"remove_control_editor_ids,omitempty"`
 	ClearControlBlockedGroups                  bool
-	AddControlBlockedGroupIDs                  []string
-	RemoveControlBlockedGroupIDs               []string
+	AddControlBlockedGroupIDs                  []string `json:"add_control_blocked_group_ids,omitempty"`
+	RemoveControlBlockedGroupIDs               []string `json:"remove_control_blocked_group_ids,omitempty"`
 	ClearMappedControlEditors                  bool
-	AddMappedControlEditorIDs                  []string
-	RemoveMappedControlEditorIDs               []string
+	AddMappedControlEditorIDs                  []string `json:"add_mapped_control_editor_ids,omitempty"`
+	RemoveMappedControlEditorIDs               []string `json:"remove_mapped_control_editor_ids,omitempty"`
 	ClearMappedControlBlockedGroups            bool
-	AddMappedControlBlockedGroupIDs            []string
-	RemoveMappedControlBlockedGroupIDs         []string
+	AddMappedControlBlockedGroupIDs            []string `json:"add_mapped_control_blocked_group_ids,omitempty"`
+	RemoveMappedControlBlockedGroupIDs         []string `json:"remove_mapped_control_blocked_group_ids,omitempty"`
 	ClearScanEditors                           bool
-	AddScanEditorIDs                           []string
-	RemoveScanEditorIDs                        []string
+	AddScanEditorIDs                           []string `json:"add_scan_editor_ids,omitempty"`
+	RemoveScanEditorIDs                        []string `json:"remove_scan_editor_ids,omitempty"`
 	ClearScanBlockedGroups                     bool
-	AddScanBlockedGroupIDs                     []string
-	RemoveScanBlockedGroupIDs                  []string
+	AddScanBlockedGroupIDs                     []string `json:"add_scan_blocked_group_ids,omitempty"`
+	RemoveScanBlockedGroupIDs                  []string `json:"remove_scan_blocked_group_ids,omitempty"`
 	ClearEntityEditors                         bool
-	AddEntityEditorIDs                         []string
-	RemoveEntityEditorIDs                      []string
+	AddEntityEditorIDs                         []string `json:"add_entity_editor_ids,omitempty"`
+	RemoveEntityEditorIDs                      []string `json:"remove_entity_editor_ids,omitempty"`
 	ClearEntityBlockedGroups                   bool
-	AddEntityBlockedGroupIDs                   []string
-	RemoveEntityBlockedGroupIDs                []string
+	AddEntityBlockedGroupIDs                   []string `json:"add_entity_blocked_group_ids,omitempty"`
+	RemoveEntityBlockedGroupIDs                []string `json:"remove_entity_blocked_group_ids,omitempty"`
 	ClearFindingEditors                        bool
-	AddFindingEditorIDs                        []string
-	RemoveFindingEditorIDs                     []string
+	AddFindingEditorIDs                        []string `json:"add_finding_editor_ids,omitempty"`
+	RemoveFindingEditorIDs                     []string `json:"remove_finding_editor_ids,omitempty"`
 	ClearFindingBlockedGroups                  bool
-	AddFindingBlockedGroupIDs                  []string
-	RemoveFindingBlockedGroupIDs               []string
+	AddFindingBlockedGroupIDs                  []string `json:"add_finding_blocked_group_ids,omitempty"`
+	RemoveFindingBlockedGroupIDs               []string `json:"remove_finding_blocked_group_ids,omitempty"`
 	ClearReviewEditors                         bool
-	AddReviewEditorIDs                         []string
-	RemoveReviewEditorIDs                      []string
+	AddReviewEditorIDs                         []string `json:"add_review_editor_ids,omitempty"`
+	RemoveReviewEditorIDs                      []string `json:"remove_review_editor_ids,omitempty"`
 	ClearReviewBlockedGroups                   bool
-	AddReviewBlockedGroupIDs                   []string
-	RemoveReviewBlockedGroupIDs                []string
+	AddReviewBlockedGroupIDs                   []string `json:"add_review_blocked_group_ids,omitempty"`
+	RemoveReviewBlockedGroupIDs                []string `json:"remove_review_blocked_group_ids,omitempty"`
 	ClearRemediationEditors                    bool
-	AddRemediationEditorIDs                    []string
-	RemoveRemediationEditorIDs                 []string
+	AddRemediationEditorIDs                    []string `json:"add_remediation_editor_ids,omitempty"`
+	RemoveRemediationEditorIDs                 []string `json:"remove_remediation_editor_ids,omitempty"`
 	ClearRemediationBlockedGroups              bool
-	AddRemediationBlockedGroupIDs              []string
-	RemoveRemediationBlockedGroupIDs           []string
+	AddRemediationBlockedGroupIDs              []string `json:"add_remediation_blocked_group_ids,omitempty"`
+	RemoveRemediationBlockedGroupIDs           []string `json:"remove_remediation_blocked_group_ids,omitempty"`
 	ClearSetting                               bool
-	SettingID                                  *string
+	SettingID                                  *string `json:"setting_id,omitempty"`
 	ClearEvents                                bool
-	AddEventIDs                                []string
-	RemoveEventIDs                             []string
+	AddEventIDs                                []string `json:"add_event_ids,omitempty"`
+	RemoveEventIDs                             []string `json:"remove_event_ids,omitempty"`
 	ClearIntegrations                          bool
-	AddIntegrationIDs                          []string
-	RemoveIntegrationIDs                       []string
+	AddIntegrationIDs                          []string `json:"add_integration_ids,omitempty"`
+	RemoveIntegrationIDs                       []string `json:"remove_integration_ids,omitempty"`
 	ClearAvatarFile                            bool
-	AvatarFileID                               *string
+	AvatarFileID                               *string `json:"avatar_file_id,omitempty"`
 	ClearFiles                                 bool
-	AddFileIDs                                 []string
-	RemoveFileIDs                              []string
+	AddFileIDs                                 []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs                              []string `json:"remove_file_ids,omitempty"`
 	ClearTasks                                 bool
-	AddTaskIDs                                 []string
-	RemoveTaskIDs                              []string
+	AddTaskIDs                                 []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs                              []string `json:"remove_task_ids,omitempty"`
 	ClearCampaigns                             bool
-	AddCampaignIDs                             []string
-	RemoveCampaignIDs                          []string
+	AddCampaignIDs                             []string `json:"add_campaign_ids,omitempty"`
+	RemoveCampaignIDs                          []string `json:"remove_campaign_ids,omitempty"`
 	ClearCampaignTargets                       bool
-	AddCampaignTargetIDs                       []string
-	RemoveCampaignTargetIDs                    []string
+	AddCampaignTargetIDs                       []string `json:"add_campaign_target_ids,omitempty"`
+	RemoveCampaignTargetIDs                    []string `json:"remove_campaign_target_ids,omitempty"`
 }
 
 // Mutate applies the UpdateGroupInput on the GroupMutation builder.
@@ -12174,9 +12174,9 @@ func (c *GroupUpdateOne) SetInput(i UpdateGroupInput) *GroupUpdateOne {
 // CreateGroupMembershipInput represents a mutation input for creating groupmemberships.
 type CreateGroupMembershipInput struct {
 	Role     *enums.Role `json:"role,omitempty"`
-	GroupID  string
-	UserID   string
-	EventIDs []string
+	GroupID  string      `json:"group_id,omitempty"`
+	UserID   string      `json:"user_id,omitempty"`
+	EventIDs []string    `json:"event_ids,omitempty"`
 }
 
 // Mutate applies the CreateGroupMembershipInput on the GroupMembershipMutation builder.
@@ -12201,8 +12201,8 @@ func (c *GroupMembershipCreate) SetInput(i CreateGroupMembershipInput) *GroupMem
 type UpdateGroupMembershipInput struct {
 	Role           *enums.Role `json:"role,omitempty"`
 	ClearEvents    bool
-	AddEventIDs    []string
-	RemoveEventIDs []string
+	AddEventIDs    []string `json:"add_event_ids,omitempty"`
+	RemoveEventIDs []string `json:"remove_event_ids,omitempty"`
 }
 
 // Mutate applies the UpdateGroupMembershipInput on the GroupMembershipMutation builder.
@@ -12239,7 +12239,7 @@ type CreateGroupSettingInput struct {
 	JoinPolicy   *enums.JoinPolicy `json:"join_policy,omitempty"`
 	SyncToSlack  *bool             `json:"sync_to_slack,omitempty"`
 	SyncToGithub *bool             `json:"sync_to_github,omitempty"`
-	GroupID      *string
+	GroupID      *string           `json:"group_id,omitempty"`
 }
 
 // Mutate applies the CreateGroupSettingInput on the GroupSettingMutation builder.
@@ -12276,7 +12276,7 @@ type UpdateGroupSettingInput struct {
 	ClearSyncToGithub bool
 	SyncToGithub      *bool `json:"sync_to_github,omitempty"`
 	ClearGroup        bool
-	GroupID           *string
+	GroupID           *string `json:"group_id,omitempty"`
 }
 
 // Mutate applies the UpdateGroupSettingInput on the GroupSettingMutation builder.
@@ -12332,10 +12332,10 @@ type CreateHushInput struct {
 	Metadata         map[string]interface{} `json:"metadata,omitempty"`
 	LastUsedAt       *time.Time             `json:"last_used_at,omitempty"`
 	ExpiresAt        *time.Time             `json:"expires_at,omitempty"`
-	OwnerID          *string
-	IntegrationIDs   []string
-	FileIDs          []string
-	EventIDs         []string
+	OwnerID          *string                `json:"owner_id,omitempty"`
+	IntegrationIDs   []string               `json:"integration_ids,omitempty"`
+	FileIDs          []string               `json:"file_ids,omitempty"`
+	EventIDs         []string               `json:"event_ids,omitempty"`
 }
 
 // Mutate applies the CreateHushInput on the HushMutation builder.
@@ -12411,16 +12411,16 @@ type UpdateHushInput struct {
 	ClearExpiresAt        bool
 	ExpiresAt             *time.Time `json:"expires_at,omitempty"`
 	ClearOwner            bool
-	OwnerID               *string
+	OwnerID               *string `json:"owner_id,omitempty"`
 	ClearIntegrations     bool
-	AddIntegrationIDs     []string
-	RemoveIntegrationIDs  []string
+	AddIntegrationIDs     []string `json:"add_integration_ids,omitempty"`
+	RemoveIntegrationIDs  []string `json:"remove_integration_ids,omitempty"`
 	ClearFiles            bool
-	AddFileIDs            []string
-	RemoveFileIDs         []string
+	AddFileIDs            []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs         []string `json:"remove_file_ids,omitempty"`
 	ClearEvents           bool
-	AddEventIDs           []string
-	RemoveEventIDs        []string
+	AddEventIDs           []string `json:"add_event_ids,omitempty"`
+	RemoveEventIDs        []string `json:"remove_event_ids,omitempty"`
 }
 
 // Mutate applies the UpdateHushInput on the HushMutation builder.
@@ -12549,32 +12549,32 @@ type CreateIdentityHolderInput struct {
 	ExternalReferenceID    *string                   `json:"external_reference_id,omitempty"`
 	Metadata               map[string]interface{}    `json:"metadata,omitempty"`
 	AvatarRemoteURL        *string                   `json:"avatar_remote_url,omitempty"`
-	OwnerID                *string
-	BlockedGroupIDs        []string
-	EditorIDs              []string
-	ViewerIDs              []string
-	InternalOwnerUserID    *string
-	InternalOwnerGroupID   *string
-	EnvironmentID          *string
-	ScopeID                *string
-	EmployerID             *string
-	AssessmentResponseIDs  []string
-	AssessmentIDs          []string
-	TemplateIDs            []string
-	AssetIDs               []string
-	EntityIDs              []string
-	DirectoryAccountIDs    []string
-	ControlIDs             []string
-	SubcontrolIDs          []string
-	PlatformIDs            []string
-	CampaignIDs            []string
-	TaskIDs                []string
-	FileIDs                []string
-	FindingIDs             []string
-	WorkflowObjectRefIDs   []string
-	AccessPlatformIDs      []string
-	UserID                 *string
-	InternalPolicyIDs      []string
+	OwnerID                *string                   `json:"owner_id,omitempty"`
+	BlockedGroupIDs        []string                  `json:"blocked_group_ids,omitempty"`
+	EditorIDs              []string                  `json:"editor_ids,omitempty"`
+	ViewerIDs              []string                  `json:"viewer_ids,omitempty"`
+	InternalOwnerUserID    *string                   `json:"internal_owner_user_id,omitempty"`
+	InternalOwnerGroupID   *string                   `json:"internal_owner_group_id,omitempty"`
+	EnvironmentID          *string                   `json:"environment_id,omitempty"`
+	ScopeID                *string                   `json:"scope_id,omitempty"`
+	EmployerID             *string                   `json:"employer_id,omitempty"`
+	AssessmentResponseIDs  []string                  `json:"assessment_response_ids,omitempty"`
+	AssessmentIDs          []string                  `json:"assessment_ids,omitempty"`
+	TemplateIDs            []string                  `json:"template_ids,omitempty"`
+	AssetIDs               []string                  `json:"asset_ids,omitempty"`
+	EntityIDs              []string                  `json:"entity_ids,omitempty"`
+	DirectoryAccountIDs    []string                  `json:"directory_account_ids,omitempty"`
+	ControlIDs             []string                  `json:"control_ids,omitempty"`
+	SubcontrolIDs          []string                  `json:"subcontrol_ids,omitempty"`
+	PlatformIDs            []string                  `json:"platform_ids,omitempty"`
+	CampaignIDs            []string                  `json:"campaign_ids,omitempty"`
+	TaskIDs                []string                  `json:"task_ids,omitempty"`
+	FileIDs                []string                  `json:"file_ids,omitempty"`
+	FindingIDs             []string                  `json:"finding_ids,omitempty"`
+	WorkflowObjectRefIDs   []string                  `json:"workflow_object_ref_ids,omitempty"`
+	AccessPlatformIDs      []string                  `json:"access_platform_ids,omitempty"`
+	UserID                 *string                   `json:"user_id,omitempty"`
+	InternalPolicyIDs      []string                  `json:"internal_policy_ids,omitempty"`
 }
 
 // Mutate applies the CreateIdentityHolderInput on the IdentityHolderMutation builder.
@@ -12781,74 +12781,74 @@ type UpdateIdentityHolderInput struct {
 	ClearAvatarRemoteURL        bool
 	AvatarRemoteURL             *string `json:"avatar_remote_url,omitempty"`
 	ClearBlockedGroups          bool
-	AddBlockedGroupIDs          []string
-	RemoveBlockedGroupIDs       []string
+	AddBlockedGroupIDs          []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs       []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                bool
-	AddEditorIDs                []string
-	RemoveEditorIDs             []string
+	AddEditorIDs                []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs             []string `json:"remove_editor_ids,omitempty"`
 	ClearViewers                bool
-	AddViewerIDs                []string
-	RemoveViewerIDs             []string
+	AddViewerIDs                []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs             []string `json:"remove_viewer_ids,omitempty"`
 	ClearInternalOwnerUser      bool
-	InternalOwnerUserID         *string
+	InternalOwnerUserID         *string `json:"internal_owner_user_id,omitempty"`
 	ClearInternalOwnerGroup     bool
-	InternalOwnerGroupID        *string
+	InternalOwnerGroupID        *string `json:"internal_owner_group_id,omitempty"`
 	ClearEnvironment            bool
-	EnvironmentID               *string
+	EnvironmentID               *string `json:"environment_id,omitempty"`
 	ClearScope                  bool
-	ScopeID                     *string
+	ScopeID                     *string `json:"scope_id,omitempty"`
 	ClearEmployer               bool
-	EmployerID                  *string
+	EmployerID                  *string `json:"employer_id,omitempty"`
 	ClearAssessmentResponses    bool
-	AddAssessmentResponseIDs    []string
-	RemoveAssessmentResponseIDs []string
+	AddAssessmentResponseIDs    []string `json:"add_assessment_response_ids,omitempty"`
+	RemoveAssessmentResponseIDs []string `json:"remove_assessment_response_ids,omitempty"`
 	ClearAssessments            bool
-	AddAssessmentIDs            []string
-	RemoveAssessmentIDs         []string
+	AddAssessmentIDs            []string `json:"add_assessment_ids,omitempty"`
+	RemoveAssessmentIDs         []string `json:"remove_assessment_ids,omitempty"`
 	ClearTemplates              bool
-	AddTemplateIDs              []string
-	RemoveTemplateIDs           []string
+	AddTemplateIDs              []string `json:"add_template_ids,omitempty"`
+	RemoveTemplateIDs           []string `json:"remove_template_ids,omitempty"`
 	ClearAssets                 bool
-	AddAssetIDs                 []string
-	RemoveAssetIDs              []string
+	AddAssetIDs                 []string `json:"add_asset_ids,omitempty"`
+	RemoveAssetIDs              []string `json:"remove_asset_ids,omitempty"`
 	ClearEntities               bool
-	AddEntityIDs                []string
-	RemoveEntityIDs             []string
+	AddEntityIDs                []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs             []string `json:"remove_entity_ids,omitempty"`
 	ClearDirectoryAccounts      bool
-	AddDirectoryAccountIDs      []string
-	RemoveDirectoryAccountIDs   []string
+	AddDirectoryAccountIDs      []string `json:"add_directory_account_ids,omitempty"`
+	RemoveDirectoryAccountIDs   []string `json:"remove_directory_account_ids,omitempty"`
 	ClearControls               bool
-	AddControlIDs               []string
-	RemoveControlIDs            []string
+	AddControlIDs               []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs            []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols            bool
-	AddSubcontrolIDs            []string
-	RemoveSubcontrolIDs         []string
+	AddSubcontrolIDs            []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs         []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearPlatforms              bool
-	AddPlatformIDs              []string
-	RemovePlatformIDs           []string
+	AddPlatformIDs              []string `json:"add_platform_ids,omitempty"`
+	RemovePlatformIDs           []string `json:"remove_platform_ids,omitempty"`
 	ClearCampaigns              bool
-	AddCampaignIDs              []string
-	RemoveCampaignIDs           []string
+	AddCampaignIDs              []string `json:"add_campaign_ids,omitempty"`
+	RemoveCampaignIDs           []string `json:"remove_campaign_ids,omitempty"`
 	ClearTasks                  bool
-	AddTaskIDs                  []string
-	RemoveTaskIDs               []string
+	AddTaskIDs                  []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs               []string `json:"remove_task_ids,omitempty"`
 	ClearFiles                  bool
-	AddFileIDs                  []string
-	RemoveFileIDs               []string
+	AddFileIDs                  []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs               []string `json:"remove_file_ids,omitempty"`
 	ClearFindings               bool
-	AddFindingIDs               []string
-	RemoveFindingIDs            []string
+	AddFindingIDs               []string `json:"add_finding_ids,omitempty"`
+	RemoveFindingIDs            []string `json:"remove_finding_ids,omitempty"`
 	ClearWorkflowObjectRefs     bool
-	AddWorkflowObjectRefIDs     []string
-	RemoveWorkflowObjectRefIDs  []string
+	AddWorkflowObjectRefIDs     []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs  []string `json:"remove_workflow_object_ref_ids,omitempty"`
 	ClearAccessPlatforms        bool
-	AddAccessPlatformIDs        []string
-	RemoveAccessPlatformIDs     []string
+	AddAccessPlatformIDs        []string `json:"add_access_platform_ids,omitempty"`
+	RemoveAccessPlatformIDs     []string `json:"remove_access_platform_ids,omitempty"`
 	ClearUser                   bool
-	UserID                      *string
+	UserID                      *string `json:"user_id,omitempty"`
 	ClearInternalPolicies       bool
-	AddInternalPolicyIDs        []string
-	RemoveInternalPolicyIDs     []string
+	AddInternalPolicyIDs        []string `json:"add_internal_policy_ids,omitempty"`
+	RemoveInternalPolicyIDs     []string `json:"remove_internal_policy_ids,omitempty"`
 }
 
 // Mutate applies the UpdateIdentityHolderInput on the IdentityHolderMutation builder.
@@ -13237,32 +13237,32 @@ type CreateInternalPolicyInput struct {
 	ScopeName                       *string                       `json:"scope_name,omitempty"`
 	WorkflowEligibleMarker          *bool                         `json:"workflow_eligible_marker,omitempty"`
 	ExternalUUID                    *string                       `json:"external_uuid,omitempty"`
-	OwnerID                         *string
-	BlockedGroupIDs                 []string
-	EditorIDs                       []string
-	ApproverID                      *string
-	DelegateID                      *string
-	InternalPolicyKindID            *string
-	EnvironmentID                   *string
-	ScopeID                         *string
-	ControlObjectiveIDs             []string
-	ControlImplementationIDs        []string
-	ControlIDs                      []string
-	SubcontrolIDs                   []string
-	ProcedureIDs                    []string
-	NarrativeIDs                    []string
-	TaskIDs                         []string
-	RiskIDs                         []string
-	ProgramIDs                      []string
-	FileID                          *string
-	CommentIDs                      []string
-	DiscussionIDs                   []string
-	WorkflowObjectRefIDs            []string
-	AssetIDs                        []string
-	EntityIDs                       []string
-	IdentityHolderIDs               []string
-	ReviewIDs                       []string
-	IntegrationIDs                  []string
+	OwnerID                         *string                       `json:"owner_id,omitempty"`
+	BlockedGroupIDs                 []string                      `json:"blocked_group_ids,omitempty"`
+	EditorIDs                       []string                      `json:"editor_ids,omitempty"`
+	ApproverID                      *string                       `json:"approver_id,omitempty"`
+	DelegateID                      *string                       `json:"delegate_id,omitempty"`
+	InternalPolicyKindID            *string                       `json:"internal_policy_kind_id,omitempty"`
+	EnvironmentID                   *string                       `json:"environment_id,omitempty"`
+	ScopeID                         *string                       `json:"scope_id,omitempty"`
+	ControlObjectiveIDs             []string                      `json:"control_objective_ids,omitempty"`
+	ControlImplementationIDs        []string                      `json:"control_implementation_ids,omitempty"`
+	ControlIDs                      []string                      `json:"control_ids,omitempty"`
+	SubcontrolIDs                   []string                      `json:"subcontrol_ids,omitempty"`
+	ProcedureIDs                    []string                      `json:"procedure_ids,omitempty"`
+	NarrativeIDs                    []string                      `json:"narrative_ids,omitempty"`
+	TaskIDs                         []string                      `json:"task_ids,omitempty"`
+	RiskIDs                         []string                      `json:"risk_ids,omitempty"`
+	ProgramIDs                      []string                      `json:"program_ids,omitempty"`
+	FileID                          *string                       `json:"file_id,omitempty"`
+	CommentIDs                      []string                      `json:"comment_ids,omitempty"`
+	DiscussionIDs                   []string                      `json:"discussion_ids,omitempty"`
+	WorkflowObjectRefIDs            []string                      `json:"workflow_object_ref_ids,omitempty"`
+	AssetIDs                        []string                      `json:"asset_ids,omitempty"`
+	EntityIDs                       []string                      `json:"entity_ids,omitempty"`
+	IdentityHolderIDs               []string                      `json:"identity_holder_ids,omitempty"`
+	ReviewIDs                       []string                      `json:"review_ids,omitempty"`
+	IntegrationIDs                  []string                      `json:"integration_ids,omitempty"`
 }
 
 // Mutate applies the CreateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -13491,76 +13491,76 @@ type UpdateInternalPolicyInput struct {
 	ClearExternalUUID                     bool
 	ExternalUUID                          *string `json:"external_uuid,omitempty"`
 	ClearOwner                            bool
-	OwnerID                               *string
+	OwnerID                               *string `json:"owner_id,omitempty"`
 	ClearBlockedGroups                    bool
-	AddBlockedGroupIDs                    []string
-	RemoveBlockedGroupIDs                 []string
+	AddBlockedGroupIDs                    []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs                 []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                          bool
-	AddEditorIDs                          []string
-	RemoveEditorIDs                       []string
+	AddEditorIDs                          []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs                       []string `json:"remove_editor_ids,omitempty"`
 	ClearApprover                         bool
-	ApproverID                            *string
+	ApproverID                            *string `json:"approver_id,omitempty"`
 	ClearDelegate                         bool
-	DelegateID                            *string
+	DelegateID                            *string `json:"delegate_id,omitempty"`
 	ClearInternalPolicyKind               bool
-	InternalPolicyKindID                  *string
+	InternalPolicyKindID                  *string `json:"internal_policy_kind_id,omitempty"`
 	ClearEnvironment                      bool
-	EnvironmentID                         *string
+	EnvironmentID                         *string `json:"environment_id,omitempty"`
 	ClearScope                            bool
-	ScopeID                               *string
+	ScopeID                               *string `json:"scope_id,omitempty"`
 	ClearControlObjectives                bool
-	AddControlObjectiveIDs                []string
-	RemoveControlObjectiveIDs             []string
+	AddControlObjectiveIDs                []string `json:"add_control_objective_ids,omitempty"`
+	RemoveControlObjectiveIDs             []string `json:"remove_control_objective_ids,omitempty"`
 	ClearControlImplementations           bool
-	AddControlImplementationIDs           []string
-	RemoveControlImplementationIDs        []string
+	AddControlImplementationIDs           []string `json:"add_control_implementation_ids,omitempty"`
+	RemoveControlImplementationIDs        []string `json:"remove_control_implementation_ids,omitempty"`
 	ClearControls                         bool
-	AddControlIDs                         []string
-	RemoveControlIDs                      []string
+	AddControlIDs                         []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs                      []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols                      bool
-	AddSubcontrolIDs                      []string
-	RemoveSubcontrolIDs                   []string
+	AddSubcontrolIDs                      []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs                   []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearProcedures                       bool
-	AddProcedureIDs                       []string
-	RemoveProcedureIDs                    []string
+	AddProcedureIDs                       []string `json:"add_procedure_ids,omitempty"`
+	RemoveProcedureIDs                    []string `json:"remove_procedure_ids,omitempty"`
 	ClearNarratives                       bool
-	AddNarrativeIDs                       []string
-	RemoveNarrativeIDs                    []string
+	AddNarrativeIDs                       []string `json:"add_narrative_ids,omitempty"`
+	RemoveNarrativeIDs                    []string `json:"remove_narrative_ids,omitempty"`
 	ClearTasks                            bool
-	AddTaskIDs                            []string
-	RemoveTaskIDs                         []string
+	AddTaskIDs                            []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs                         []string `json:"remove_task_ids,omitempty"`
 	ClearRisks                            bool
-	AddRiskIDs                            []string
-	RemoveRiskIDs                         []string
+	AddRiskIDs                            []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs                         []string `json:"remove_risk_ids,omitempty"`
 	ClearPrograms                         bool
-	AddProgramIDs                         []string
-	RemoveProgramIDs                      []string
+	AddProgramIDs                         []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs                      []string `json:"remove_program_ids,omitempty"`
 	ClearFile                             bool
-	FileID                                *string
+	FileID                                *string `json:"file_id,omitempty"`
 	ClearComments                         bool
-	AddCommentIDs                         []string
-	RemoveCommentIDs                      []string
+	AddCommentIDs                         []string `json:"add_comment_ids,omitempty"`
+	RemoveCommentIDs                      []string `json:"remove_comment_ids,omitempty"`
 	ClearDiscussions                      bool
-	AddDiscussionIDs                      []string
-	RemoveDiscussionIDs                   []string
+	AddDiscussionIDs                      []string `json:"add_discussion_ids,omitempty"`
+	RemoveDiscussionIDs                   []string `json:"remove_discussion_ids,omitempty"`
 	ClearWorkflowObjectRefs               bool
-	AddWorkflowObjectRefIDs               []string
-	RemoveWorkflowObjectRefIDs            []string
+	AddWorkflowObjectRefIDs               []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs            []string `json:"remove_workflow_object_ref_ids,omitempty"`
 	ClearAssets                           bool
-	AddAssetIDs                           []string
-	RemoveAssetIDs                        []string
+	AddAssetIDs                           []string `json:"add_asset_ids,omitempty"`
+	RemoveAssetIDs                        []string `json:"remove_asset_ids,omitempty"`
 	ClearEntities                         bool
-	AddEntityIDs                          []string
-	RemoveEntityIDs                       []string
+	AddEntityIDs                          []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs                       []string `json:"remove_entity_ids,omitempty"`
 	ClearIdentityHolders                  bool
-	AddIdentityHolderIDs                  []string
-	RemoveIdentityHolderIDs               []string
+	AddIdentityHolderIDs                  []string `json:"add_identity_holder_ids,omitempty"`
+	RemoveIdentityHolderIDs               []string `json:"remove_identity_holder_ids,omitempty"`
 	ClearReviews                          bool
-	AddReviewIDs                          []string
-	RemoveReviewIDs                       []string
+	AddReviewIDs                          []string `json:"add_review_ids,omitempty"`
+	RemoveReviewIDs                       []string `json:"remove_review_ids,omitempty"`
 	ClearIntegrations                     bool
-	AddIntegrationIDs                     []string
-	RemoveIntegrationIDs                  []string
+	AddIntegrationIDs                     []string `json:"add_integration_ids,omitempty"`
+	RemoveIntegrationIDs                  []string `json:"remove_integration_ids,omitempty"`
 }
 
 // Mutate applies the UpdateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -13978,9 +13978,9 @@ type CreateInviteInput struct {
 	SendAttempts      *int                `json:"send_attempts,omitempty"`
 	OwnershipTransfer *bool               `json:"ownership_transfer,omitempty"`
 	SSOExempt         *bool               `json:"sso_exempt,omitempty"`
-	OwnerID           *string
-	EventIDs          []string
-	GroupIDs          []string
+	OwnerID           *string             `json:"owner_id,omitempty"`
+	EventIDs          []string            `json:"event_ids,omitempty"`
+	GroupIDs          []string            `json:"group_ids,omitempty"`
 }
 
 // Mutate applies the CreateInviteInput on the InviteMutation builder.
@@ -14033,13 +14033,13 @@ type UpdateInviteInput struct {
 	ClearSSOExempt         bool
 	SSOExempt              *bool `json:"sso_exempt,omitempty"`
 	ClearOwner             bool
-	OwnerID                *string
+	OwnerID                *string `json:"owner_id,omitempty"`
 	ClearEvents            bool
-	AddEventIDs            []string
-	RemoveEventIDs         []string
+	AddEventIDs            []string `json:"add_event_ids,omitempty"`
+	RemoveEventIDs         []string `json:"remove_event_ids,omitempty"`
 	ClearGroups            bool
-	AddGroupIDs            []string
-	RemoveGroupIDs         []string
+	AddGroupIDs            []string `json:"add_group_ids,omitempty"`
+	RemoveGroupIDs         []string `json:"remove_group_ids,omitempty"`
 }
 
 // Mutate applies the UpdateInviteInput on the InviteMutation builder.
@@ -14116,9 +14116,9 @@ type CreateJobResultInput struct {
 	FinishedAt     *time.Time               `json:"finished_at,omitempty"`
 	StartedAt      *time.Time               `json:"started_at,omitempty"`
 	Log            *string                  `json:"log,omitempty"`
-	OwnerID        *string
-	ScheduledJobID string
-	FileID         string
+	OwnerID        *string                  `json:"owner_id,omitempty"`
+	ScheduledJobID string                   `json:"scheduled_job_id,omitempty"`
+	FileID         string                   `json:"file_id,omitempty"`
 }
 
 // Mutate applies the CreateJobResultInput on the JobResultMutation builder.
@@ -14153,9 +14153,9 @@ type UpdateJobResultInput struct {
 	ClearLog       bool
 	Log            *string `json:"log,omitempty"`
 	ClearOwner     bool
-	OwnerID        *string
-	ScheduledJobID *string
-	FileID         *string
+	OwnerID        *string `json:"owner_id,omitempty"`
+	ScheduledJobID *string `json:"scheduled_job_id,omitempty"`
+	FileID         *string `json:"file_id,omitempty"`
 }
 
 // Mutate applies the UpdateJobResultInput on the JobResultMutation builder.
@@ -14205,8 +14205,8 @@ type CreateJobRunnerInput struct {
 	LastSeen          *time.Time `json:"last_seen,omitempty"`
 	Version           *string    `json:"version,omitempty"`
 	Os                *string    `json:"os,omitempty"`
-	OwnerID           *string
-	JobRunnerTokenIDs []string
+	OwnerID           *string    `json:"owner_id,omitempty"`
+	JobRunnerTokenIDs []string   `json:"job_runner_token_ids,omitempty"`
 }
 
 // Mutate applies the CreateJobRunnerInput on the JobRunnerMutation builder.
@@ -14266,10 +14266,10 @@ type UpdateJobRunnerInput struct {
 	ClearOs                 bool
 	Os                      *string `json:"os,omitempty"`
 	ClearOwner              bool
-	OwnerID                 *string
+	OwnerID                 *string `json:"owner_id,omitempty"`
 	ClearJobRunnerTokens    bool
-	AddJobRunnerTokenIDs    []string
-	RemoveJobRunnerTokenIDs []string
+	AddJobRunnerTokenIDs    []string `json:"add_job_runner_token_ids,omitempty"`
+	RemoveJobRunnerTokenIDs []string `json:"remove_job_runner_token_ids,omitempty"`
 }
 
 // Mutate applies the UpdateJobRunnerInput on the JobRunnerMutation builder.
@@ -14355,8 +14355,8 @@ func (c *JobRunnerUpdateOne) SetInput(i UpdateJobRunnerInput) *JobRunnerUpdateOn
 type CreateJobRunnerRegistrationTokenInput struct {
 	Tags        []string   `json:"tags,omitempty"`
 	LastUsedAt  *time.Time `json:"last_used_at,omitempty"`
-	OwnerID     *string
-	JobRunnerID *string
+	OwnerID     *string    `json:"owner_id,omitempty"`
+	JobRunnerID *string    `json:"job_runner_id,omitempty"`
 }
 
 // Mutate applies the CreateJobRunnerRegistrationTokenInput on the JobRunnerRegistrationTokenMutation builder.
@@ -14389,9 +14389,9 @@ type UpdateJobRunnerRegistrationTokenInput struct {
 	ClearLastUsedAt bool
 	LastUsedAt      *time.Time `json:"last_used_at,omitempty"`
 	ClearOwner      bool
-	OwnerID         *string
+	OwnerID         *string `json:"owner_id,omitempty"`
 	ClearJobRunner  bool
-	JobRunnerID     *string
+	JobRunnerID     *string `json:"job_runner_id,omitempty"`
 }
 
 // Mutate applies the UpdateJobRunnerRegistrationTokenInput on the JobRunnerRegistrationTokenMutation builder.
@@ -14446,8 +14446,8 @@ type CreateJobRunnerTokenInput struct {
 	RevokedReason *string    `json:"revoked_reason,omitempty"`
 	RevokedBy     *string    `json:"revoked_by,omitempty"`
 	RevokedAt     *time.Time `json:"revoked_at,omitempty"`
-	OwnerID       *string
-	JobRunnerIDs  []string
+	OwnerID       *string    `json:"owner_id,omitempty"`
+	JobRunnerIDs  []string   `json:"job_runner_ids,omitempty"`
 }
 
 // Mutate applies the CreateJobRunnerTokenInput on the JobRunnerTokenMutation builder.
@@ -14503,10 +14503,10 @@ type UpdateJobRunnerTokenInput struct {
 	ClearRevokedAt     bool
 	RevokedAt          *time.Time `json:"revoked_at,omitempty"`
 	ClearOwner         bool
-	OwnerID            *string
+	OwnerID            *string `json:"owner_id,omitempty"`
 	ClearJobRunners    bool
-	AddJobRunnerIDs    []string
-	RemoveJobRunnerIDs []string
+	AddJobRunnerIDs    []string `json:"add_job_runner_ids,omitempty"`
+	RemoveJobRunnerIDs []string `json:"remove_job_runner_ids,omitempty"`
 }
 
 // Mutate applies the UpdateJobRunnerTokenInput on the JobRunnerTokenMutation builder.
@@ -14590,7 +14590,7 @@ type CreateJobTemplateInput struct {
 	DownloadURL      string                  `json:"download_url,omitempty"`
 	Configuration    models.JobConfiguration `json:"configuration,omitempty"`
 	Cron             *models.Cron            `json:"cron,omitempty"`
-	OwnerID          *string
+	OwnerID          *string                 `json:"owner_id,omitempty"`
 }
 
 // Mutate applies the CreateJobTemplateInput on the JobTemplateMutation builder.
@@ -14646,10 +14646,10 @@ type UpdateJobTemplateInput struct {
 	ClearCron             bool
 	Cron                  *models.Cron `json:"cron,omitempty"`
 	ClearOwner            bool
-	OwnerID               *string
+	OwnerID               *string `json:"owner_id,omitempty"`
 	ClearScheduledJobs    bool
-	AddScheduledJobIDs    []string
-	RemoveScheduledJobIDs []string
+	AddScheduledJobIDs    []string `json:"add_scheduled_job_ids,omitempty"`
+	RemoveScheduledJobIDs []string `json:"remove_scheduled_job_ids,omitempty"`
 }
 
 // Mutate applies the UpdateJobTemplateInput on the JobTemplateMutation builder.
@@ -14736,7 +14736,7 @@ type CreateMappableDomainInput struct {
 	Tags            []string `json:"tags,omitempty"`
 	Name            string   `json:"name,omitempty"`
 	ZoneID          string   `json:"zone_id,omitempty"`
-	CustomDomainIDs []string
+	CustomDomainIDs []string `json:"custom_domain_ids,omitempty"`
 }
 
 // Mutate applies the CreateMappableDomainInput on the MappableDomainMutation builder.
@@ -14763,8 +14763,8 @@ type UpdateMappableDomainInput struct {
 	Tags                  []string `json:"tags,omitempty"`
 	AppendTags            []string
 	ClearCustomDomains    bool
-	AddCustomDomainIDs    []string
-	RemoveCustomDomainIDs []string
+	AddCustomDomainIDs    []string `json:"add_custom_domain_ids,omitempty"`
+	RemoveCustomDomainIDs []string `json:"remove_custom_domain_ids,omitempty"`
 }
 
 // Mutate applies the UpdateMappableDomainInput on the MappableDomainMutation builder.
@@ -14810,13 +14810,13 @@ type CreateMappedControlInput struct {
 	Relation          *string              `json:"relation,omitempty"`
 	Confidence        *int                 `json:"confidence,omitempty"`
 	Source            *enums.MappingSource `json:"source,omitempty"`
-	OwnerID           *string
-	BlockedGroupIDs   []string
-	EditorIDs         []string
-	FromControlIDs    []string
-	ToControlIDs      []string
-	FromSubcontrolIDs []string
-	ToSubcontrolIDs   []string
+	OwnerID           *string              `json:"owner_id,omitempty"`
+	BlockedGroupIDs   []string             `json:"blocked_group_ids,omitempty"`
+	EditorIDs         []string             `json:"editor_ids,omitempty"`
+	FromControlIDs    []string             `json:"from_control_ids,omitempty"`
+	ToControlIDs      []string             `json:"to_control_ids,omitempty"`
+	FromSubcontrolIDs []string             `json:"from_subcontrol_ids,omitempty"`
+	ToSubcontrolIDs   []string             `json:"to_subcontrol_ids,omitempty"`
 }
 
 // Mutate applies the CreateMappedControlInput on the MappedControlMutation builder.
@@ -14888,25 +14888,25 @@ type UpdateMappedControlInput struct {
 	ClearSource             bool
 	Source                  *enums.MappingSource `json:"source,omitempty"`
 	ClearOwner              bool
-	OwnerID                 *string
+	OwnerID                 *string `json:"owner_id,omitempty"`
 	ClearBlockedGroups      bool
-	AddBlockedGroupIDs      []string
-	RemoveBlockedGroupIDs   []string
+	AddBlockedGroupIDs      []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs   []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors            bool
-	AddEditorIDs            []string
-	RemoveEditorIDs         []string
+	AddEditorIDs            []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs         []string `json:"remove_editor_ids,omitempty"`
 	ClearFromControls       bool
-	AddFromControlIDs       []string
-	RemoveFromControlIDs    []string
+	AddFromControlIDs       []string `json:"add_from_control_ids,omitempty"`
+	RemoveFromControlIDs    []string `json:"remove_from_control_ids,omitempty"`
 	ClearToControls         bool
-	AddToControlIDs         []string
-	RemoveToControlIDs      []string
+	AddToControlIDs         []string `json:"add_to_control_ids,omitempty"`
+	RemoveToControlIDs      []string `json:"remove_to_control_ids,omitempty"`
 	ClearFromSubcontrols    bool
-	AddFromSubcontrolIDs    []string
-	RemoveFromSubcontrolIDs []string
+	AddFromSubcontrolIDs    []string `json:"add_from_subcontrol_ids,omitempty"`
+	RemoveFromSubcontrolIDs []string `json:"remove_from_subcontrol_ids,omitempty"`
 	ClearToSubcontrols      bool
-	AddToSubcontrolIDs      []string
-	RemoveToSubcontrolIDs   []string
+	AddToSubcontrolIDs      []string `json:"add_to_subcontrol_ids,omitempty"`
+	RemoveToSubcontrolIDs   []string `json:"remove_to_subcontrol_ids,omitempty"`
 }
 
 // Mutate applies the UpdateMappedControlInput on the MappedControlMutation builder.
@@ -15035,14 +15035,14 @@ type CreateNarrativeInput struct {
 	Name              string   `json:"name,omitempty"`
 	Description       *string  `json:"description,omitempty"`
 	Details           *string  `json:"details,omitempty"`
-	OwnerID           *string
-	BlockedGroupIDs   []string
-	EditorIDs         []string
-	ViewerIDs         []string
-	SatisfyIDs        []string
-	ProgramIDs        []string
-	InternalPolicyIDs []string
-	ProcedureIDs      []string
+	OwnerID           *string  `json:"owner_id,omitempty"`
+	BlockedGroupIDs   []string `json:"blocked_group_ids,omitempty"`
+	EditorIDs         []string `json:"editor_ids,omitempty"`
+	ViewerIDs         []string `json:"viewer_ids,omitempty"`
+	SatisfyIDs        []string `json:"satisfy_ids,omitempty"`
+	ProgramIDs        []string `json:"program_ids,omitempty"`
+	InternalPolicyIDs []string `json:"internal_policy_ids,omitempty"`
+	ProcedureIDs      []string `json:"procedure_ids,omitempty"`
 }
 
 // Mutate applies the CreateNarrativeInput on the NarrativeMutation builder.
@@ -15110,26 +15110,26 @@ type UpdateNarrativeInput struct {
 	ClearDetails            bool
 	Details                 *string `json:"details,omitempty"`
 	ClearBlockedGroups      bool
-	AddBlockedGroupIDs      []string
-	RemoveBlockedGroupIDs   []string
+	AddBlockedGroupIDs      []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs   []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors            bool
-	AddEditorIDs            []string
-	RemoveEditorIDs         []string
+	AddEditorIDs            []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs         []string `json:"remove_editor_ids,omitempty"`
 	ClearViewers            bool
-	AddViewerIDs            []string
-	RemoveViewerIDs         []string
+	AddViewerIDs            []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs         []string `json:"remove_viewer_ids,omitempty"`
 	ClearSatisfies          bool
-	AddSatisfyIDs           []string
-	RemoveSatisfyIDs        []string
+	AddSatisfyIDs           []string `json:"add_satisfy_ids,omitempty"`
+	RemoveSatisfyIDs        []string `json:"remove_satisfy_ids,omitempty"`
 	ClearPrograms           bool
-	AddProgramIDs           []string
-	RemoveProgramIDs        []string
+	AddProgramIDs           []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs        []string `json:"remove_program_ids,omitempty"`
 	ClearInternalPolicies   bool
-	AddInternalPolicyIDs    []string
-	RemoveInternalPolicyIDs []string
+	AddInternalPolicyIDs    []string `json:"add_internal_policy_ids,omitempty"`
+	RemoveInternalPolicyIDs []string `json:"remove_internal_policy_ids,omitempty"`
 	ClearProcedures         bool
-	AddProcedureIDs         []string
-	RemoveProcedureIDs      []string
+	AddProcedureIDs         []string `json:"add_procedure_ids,omitempty"`
+	RemoveProcedureIDs      []string `json:"remove_procedure_ids,omitempty"`
 }
 
 // Mutate applies the UpdateNarrativeInput on the NarrativeMutation builder.
@@ -15255,19 +15255,19 @@ type CreateNoteInput struct {
 	NoteRef           *string       `json:"note_ref,omitempty"`
 	IsEdited          *bool         `json:"is_edited,omitempty"`
 	NotifySubscribers *bool         `json:"notify_subscribers,omitempty"`
-	OwnerID           *string
-	TaskID            *string
-	ControlID         *string
-	SubcontrolID      *string
-	ProcedureID       *string
-	RiskID            *string
-	InternalPolicyID  *string
-	ReviewID          *string
-	EvidenceID        *string
-	TrustCenterID     *string
-	DiscussionID      *string
-	TrustCenterFaqIDs []string
-	FileIDs           []string
+	OwnerID           *string       `json:"owner_id,omitempty"`
+	TaskID            *string       `json:"task_id,omitempty"`
+	ControlID         *string       `json:"control_id,omitempty"`
+	SubcontrolID      *string       `json:"subcontrol_id,omitempty"`
+	ProcedureID       *string       `json:"procedure_id,omitempty"`
+	RiskID            *string       `json:"risk_id,omitempty"`
+	InternalPolicyID  *string       `json:"internal_policy_id,omitempty"`
+	ReviewID          *string       `json:"review_id,omitempty"`
+	EvidenceID        *string       `json:"evidence_id,omitempty"`
+	TrustCenterID     *string       `json:"trust_center_id,omitempty"`
+	DiscussionID      *string       `json:"discussion_id,omitempty"`
+	TrustCenterFaqIDs []string      `json:"trust_center_faq_ids,omitempty"`
+	FileIDs           []string      `json:"file_ids,omitempty"`
 }
 
 // Mutate applies the CreateNoteInput on the NoteMutation builder.
@@ -15347,31 +15347,31 @@ type UpdateNoteInput struct {
 	NoteRef                 *string `json:"note_ref,omitempty"`
 	IsEdited                *bool   `json:"is_edited,omitempty"`
 	ClearTask               bool
-	TaskID                  *string
+	TaskID                  *string `json:"task_id,omitempty"`
 	ClearControl            bool
-	ControlID               *string
+	ControlID               *string `json:"control_id,omitempty"`
 	ClearSubcontrol         bool
-	SubcontrolID            *string
+	SubcontrolID            *string `json:"subcontrol_id,omitempty"`
 	ClearProcedure          bool
-	ProcedureID             *string
+	ProcedureID             *string `json:"procedure_id,omitempty"`
 	ClearRisk               bool
-	RiskID                  *string
+	RiskID                  *string `json:"risk_id,omitempty"`
 	ClearInternalPolicy     bool
-	InternalPolicyID        *string
+	InternalPolicyID        *string `json:"internal_policy_id,omitempty"`
 	ClearReview             bool
-	ReviewID                *string
+	ReviewID                *string `json:"review_id,omitempty"`
 	ClearEvidence           bool
-	EvidenceID              *string
+	EvidenceID              *string `json:"evidence_id,omitempty"`
 	ClearTrustCenter        bool
-	TrustCenterID           *string
+	TrustCenterID           *string `json:"trust_center_id,omitempty"`
 	ClearDiscussion         bool
-	DiscussionID            *string
+	DiscussionID            *string `json:"discussion_id,omitempty"`
 	ClearTrustCenterFaqs    bool
-	AddTrustCenterFaqIDs    []string
-	RemoveTrustCenterFaqIDs []string
+	AddTrustCenterFaqIDs    []string `json:"add_trust_center_faq_ids,omitempty"`
+	RemoveTrustCenterFaqIDs []string `json:"remove_trust_center_faq_ids,omitempty"`
 	ClearFiles              bool
-	AddFileIDs              []string
-	RemoveFileIDs           []string
+	AddFileIDs              []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs           []string `json:"remove_file_ids,omitempty"`
 }
 
 // Mutate applies the UpdateNoteInput on the NoteMutation builder.
@@ -15505,8 +15505,8 @@ type CreateNotificationInput struct {
 	Data                   map[string]interface{}   `json:"data,omitempty"`
 	Channels               []enums.Channel          `json:"channels,omitempty"`
 	Topic                  *enums.NotificationTopic `json:"topic,omitempty"`
-	OwnerID                *string
-	NotificationTemplateID *string
+	OwnerID                *string                  `json:"owner_id,omitempty"`
+	NotificationTemplateID *string                  `json:"notification_template_id,omitempty"`
 }
 
 // Mutate applies the CreateNotificationInput on the NotificationMutation builder.
@@ -15549,7 +15549,7 @@ type UpdateNotificationInput struct {
 	ClearReadAt bool
 	ReadAt      *models.DateTime `json:"read_at,omitempty"`
 	ClearOwner  bool
-	OwnerID     *string
+	OwnerID     *string `json:"owner_id,omitempty"`
 }
 
 // Mutate applies the UpdateNotificationInput on the NotificationMutation builder.
@@ -15610,9 +15610,9 @@ type CreateNotificationPreferenceInput struct {
 	LastUsedAt             *time.Time                       `json:"last_used_at,omitempty"`
 	LastError              *string                          `json:"last_error,omitempty"`
 	Metadata               map[string]interface{}           `json:"metadata,omitempty"`
-	OwnerID                *string
-	UserID                 string
-	NotificationTemplateID *string
+	OwnerID                *string                          `json:"owner_id,omitempty"`
+	UserID                 string                           `json:"user_id,omitempty"`
+	NotificationTemplateID *string                          `json:"notification_template_id,omitempty"`
 }
 
 // Mutate applies the CreateNotificationPreferenceInput on the NotificationPreferenceMutation builder.
@@ -15724,9 +15724,9 @@ type UpdateNotificationPreferenceInput struct {
 	ClearMetadata             bool
 	Metadata                  map[string]interface{} `json:"metadata,omitempty"`
 	ClearOwner                bool
-	OwnerID                   *string
+	OwnerID                   *string `json:"owner_id,omitempty"`
 	ClearNotificationTemplate bool
-	NotificationTemplateID    *string
+	NotificationTemplateID    *string `json:"notification_template_id,omitempty"`
 }
 
 // Mutate applies the UpdateNotificationPreferenceInput on the NotificationPreferenceMutation builder.
@@ -15883,11 +15883,11 @@ type CreateNotificationTemplateInput struct {
 	Version              *int                              `json:"version,omitempty"`
 	TemplateContext      *enums.TemplateContext            `json:"template_context,omitempty"`
 	Defaults             map[string]interface{}            `json:"defaults,omitempty"`
-	OwnerID              *string
-	IntegrationID        *string
-	WorkflowDefinitionID *string
-	EmailTemplateID      *string
-	NotificationIDs      []string
+	OwnerID              *string                           `json:"owner_id,omitempty"`
+	IntegrationID        *string                           `json:"integration_id,omitempty"`
+	WorkflowDefinitionID *string                           `json:"workflow_definition_id,omitempty"`
+	EmailTemplateID      *string                           `json:"email_template_id,omitempty"`
+	NotificationIDs      []string                          `json:"notification_ids,omitempty"`
 }
 
 // Mutate applies the CreateNotificationTemplateInput on the NotificationTemplateMutation builder.
@@ -16016,14 +16016,14 @@ type UpdateNotificationTemplateInput struct {
 	ClearDefaults           bool
 	Defaults                map[string]interface{} `json:"defaults,omitempty"`
 	ClearIntegration        bool
-	IntegrationID           *string
+	IntegrationID           *string `json:"integration_id,omitempty"`
 	ClearWorkflowDefinition bool
-	WorkflowDefinitionID    *string
+	WorkflowDefinitionID    *string `json:"workflow_definition_id,omitempty"`
 	ClearEmailTemplate      bool
-	EmailTemplateID         *string
+	EmailTemplateID         *string `json:"email_template_id,omitempty"`
 	ClearNotifications      bool
-	AddNotificationIDs      []string
-	RemoveNotificationIDs   []string
+	AddNotificationIDs      []string `json:"add_notification_ids,omitempty"`
+	RemoveNotificationIDs   []string `json:"remove_notification_ids,omitempty"`
 }
 
 // Mutate applies the UpdateNotificationTemplateInput on the NotificationTemplateMutation builder.
@@ -16191,7 +16191,7 @@ type CreateOnboardingInput struct {
 	UserDetails    map[string]interface{} `json:"user_details,omitempty"`
 	Compliance     map[string]interface{} `json:"compliance,omitempty"`
 	DemoRequested  *bool                  `json:"demo_requested,omitempty"`
-	OrganizationID *string
+	OrganizationID *string                `json:"organization_id,omitempty"`
 }
 
 // Mutate applies the CreateOnboardingInput on the OnboardingMutation builder.
@@ -16228,9 +16228,9 @@ type CreateOrgMembershipInput struct {
 	Role            *enums.Role `json:"role,omitempty"`
 	SSOExempt       *bool       `json:"sso_exempt,omitempty"`
 	SSOExemptReason *string     `json:"sso_exempt_reason,omitempty"`
-	OrganizationID  string
-	UserID          string
-	EventIDs        []string
+	OrganizationID  string      `json:"organization_id,omitempty"`
+	UserID          string      `json:"user_id,omitempty"`
+	EventIDs        []string    `json:"event_ids,omitempty"`
 }
 
 // Mutate applies the CreateOrgMembershipInput on the OrgMembershipMutation builder.
@@ -16265,8 +16265,8 @@ type UpdateOrgMembershipInput struct {
 	ClearSSOExemptReason bool
 	SSOExemptReason      *string `json:"sso_exempt_reason,omitempty"`
 	ClearEvents          bool
-	AddEventIDs          []string
-	RemoveEventIDs       []string
+	AddEventIDs          []string `json:"add_event_ids,omitempty"`
+	RemoveEventIDs       []string `json:"remove_event_ids,omitempty"`
 }
 
 // Mutate applies the UpdateOrgMembershipInput on the OrgMembershipMutation builder.
@@ -16318,165 +16318,165 @@ type CreateOrganizationInput struct {
 	PersonalOrg                          *bool      `json:"personal_org,omitempty"`
 	AvatarRemoteURL                      *string    `json:"avatar_remote_url,omitempty"`
 	AvatarUpdatedAt                      *time.Time `json:"avatar_updated_at,omitempty"`
-	ActionPlanCreatorIDs                 []string
-	APITokenCreatorIDs                   []string
-	AssessmentCreatorIDs                 []string
-	AssetCreatorIDs                      []string
-	CampaignCreatorIDs                   []string
-	CampaignTargetCreatorIDs             []string
-	CheckResultCreatorIDs                []string
-	ContactCreatorIDs                    []string
-	ControlCreatorIDs                    []string
-	ControlImplementationCreatorIDs      []string
-	ControlObjectiveCreatorIDs           []string
-	CustomDomainCreatorIDs               []string
-	CustomTypeEnumCreatorIDs             []string
-	DirectoryAccountCreatorIDs           []string
-	DirectoryGroupCreatorIDs             []string
-	DirectoryMembershipCreatorIDs        []string
-	DirectorySyncRunCreatorIDs           []string
-	DiscussionCreatorIDs                 []string
-	DocumentDataCreatorIDs               []string
-	EmailTemplateCreatorIDs              []string
-	EntityCreatorIDs                     []string
-	EntityTypeCreatorIDs                 []string
-	EvidenceCreatorIDs                   []string
-	FileCreatorIDs                       []string
-	FindingCreatorIDs                    []string
-	FindingControlCreatorIDs             []string
-	GroupCreatorIDs                      []string
-	GroupMembershipCreatorIDs            []string
-	GroupSettingCreatorIDs               []string
-	HushCreatorIDs                       []string
-	IdentityHolderCreatorIDs             []string
-	InternalPolicyCreatorIDs             []string
-	InviteCreatorIDs                     []string
-	JobRunnerCreatorIDs                  []string
-	JobRunnerRegistrationTokenCreatorIDs []string
-	JobRunnerTokenCreatorIDs             []string
-	JobTemplateCreatorIDs                []string
-	MappedControlCreatorIDs              []string
-	NarrativeCreatorIDs                  []string
-	NoteCreatorIDs                       []string
-	NotificationTemplateCreatorIDs       []string
-	OrgMembershipCreatorIDs              []string
-	PlatformCreatorIDs                   []string
-	ProcedureCreatorIDs                  []string
-	ProgramCreatorIDs                    []string
-	ProgramMembershipCreatorIDs          []string
-	RemediationCreatorIDs                []string
-	ReviewCreatorIDs                     []string
-	RiskCreatorIDs                       []string
-	ScanCreatorIDs                       []string
-	ScheduledJobCreatorIDs               []string
-	ScheduledJobRunCreatorIDs            []string
-	SLADefinitionCreatorIDs              []string
-	StandardCreatorIDs                   []string
-	SubcontrolCreatorIDs                 []string
-	SubprocessorCreatorIDs               []string
-	SubscriberCreatorIDs                 []string
-	SystemDetailCreatorIDs               []string
-	TagDefinitionCreatorIDs              []string
-	TaskCreatorIDs                       []string
-	TemplateCreatorIDs                   []string
-	TrustCenterCreatorIDs                []string
-	TrustCenterComplianceCreatorIDs      []string
-	TrustCenterDocCreatorIDs             []string
-	TrustCenterEntityCreatorIDs          []string
-	TrustCenterFaqCreatorIDs             []string
-	TrustCenterNdaRequestCreatorIDs      []string
-	TrustCenterSubprocessorCreatorIDs    []string
-	TrustCenterWatermarkConfigCreatorIDs []string
-	VendorRiskScoreCreatorIDs            []string
-	VendorScoringConfigCreatorIDs        []string
-	VulnerabilityCreatorIDs              []string
-	WorkflowDefinitionCreatorIDs         []string
-	CampaignsManagerIDs                  []string
-	ComplianceManagerIDs                 []string
-	GroupManagerIDs                      []string
-	PoliciesManagerIDs                   []string
-	RegistryManagerIDs                   []string
-	RiskManagerIDs                       []string
-	TrustCenterManagerIDs                []string
-	WorkflowsManagerIDs                  []string
-	ParentID                             *string
-	SettingID                            *string
-	PersonalAccessTokenIDs               []string
-	APITokenIDs                          []string
-	EmailTemplateIDs                     []string
-	NotificationPreferenceIDs            []string
-	NotificationTemplateIDs              []string
-	FileIDs                              []string
-	EventIDs                             []string
-	SecretIDs                            []string
-	AvatarFileID                         *string
-	GroupIDs                             []string
-	TemplateIDs                          []string
-	IntegrationIDs                       []string
-	DocumentIDs                          []string
-	OrgSubscriptionIDs                   []string
-	InviteIDs                            []string
-	SubscriberIDs                        []string
-	EntityIDs                            []string
-	PlatformIDs                          []string
-	IdentityHolderIDs                    []string
-	CampaignIDs                          []string
-	CampaignTargetIDs                    []string
-	EntityTypeIDs                        []string
-	ContactIDs                           []string
-	NoteIDs                              []string
-	TaskIDs                              []string
-	ProgramIDs                           []string
-	SystemDetailIDs                      []string
-	ProcedureIDs                         []string
-	InternalPolicyIDs                    []string
-	RiskIDs                              []string
-	ControlObjectiveIDs                  []string
-	NarrativeIDs                         []string
-	ControlIDs                           []string
-	SubcontrolIDs                        []string
-	ControlImplementationIDs             []string
-	MappedControlIDs                     []string
-	EvidenceIDs                          []string
-	StandardIDs                          []string
-	ActionPlanIDs                        []string
-	CustomDomainIDs                      []string
-	JobRunnerIDs                         []string
-	JobRunnerTokenIDs                    []string
-	JobRunnerRegistrationTokenIDs        []string
-	DNSVerificationIDs                   []string
-	JobTemplateIDs                       []string
-	ScheduledJobIDs                      []string
-	JobResultIDs                         []string
-	ScheduledJobRunIDs                   []string
-	TrustCenterIDs                       []string
-	AssetIDs                             []string
-	ScanIDs                              []string
-	SLADefinitionIDs                     []string
-	SubprocessorIDs                      []string
-	ExportIDs                            []string
-	TrustCenterWatermarkConfigIDs        []string
-	ImpersonationEventIDs                []string
-	AssessmentIDs                        []string
-	AssessmentResponseIDs                []string
-	CustomTypeEnumIDs                    []string
-	TagDefinitionIDs                     []string
-	RemediationIDs                       []string
-	FindingIDs                           []string
-	ReviewIDs                            []string
-	VulnerabilityIDs                     []string
-	WorkflowDefinitionIDs                []string
-	WorkflowInstanceIDs                  []string
-	WorkflowEventIDs                     []string
-	WorkflowAssignmentIDs                []string
-	WorkflowAssignmentTargetIDs          []string
-	WorkflowObjectRefIDs                 []string
-	DirectoryAccountIDs                  []string
-	DirectoryGroupIDs                    []string
-	DirectorySyncRunIDs                  []string
-	DiscussionIDs                        []string
-	VendorScoringConfigIDs               []string
-	VendorRiskScoreIDs                   []string
+	ActionPlanCreatorIDs                 []string   `json:"action_plan_creator_ids,omitempty"`
+	APITokenCreatorIDs                   []string   `json:"api_token_creator_ids,omitempty"`
+	AssessmentCreatorIDs                 []string   `json:"assessment_creator_ids,omitempty"`
+	AssetCreatorIDs                      []string   `json:"asset_creator_ids,omitempty"`
+	CampaignCreatorIDs                   []string   `json:"campaign_creator_ids,omitempty"`
+	CampaignTargetCreatorIDs             []string   `json:"campaign_target_creator_ids,omitempty"`
+	CheckResultCreatorIDs                []string   `json:"check_result_creator_ids,omitempty"`
+	ContactCreatorIDs                    []string   `json:"contact_creator_ids,omitempty"`
+	ControlCreatorIDs                    []string   `json:"control_creator_ids,omitempty"`
+	ControlImplementationCreatorIDs      []string   `json:"control_implementation_creator_ids,omitempty"`
+	ControlObjectiveCreatorIDs           []string   `json:"control_objective_creator_ids,omitempty"`
+	CustomDomainCreatorIDs               []string   `json:"custom_domain_creator_ids,omitempty"`
+	CustomTypeEnumCreatorIDs             []string   `json:"custom_type_enum_creator_ids,omitempty"`
+	DirectoryAccountCreatorIDs           []string   `json:"directory_account_creator_ids,omitempty"`
+	DirectoryGroupCreatorIDs             []string   `json:"directory_group_creator_ids,omitempty"`
+	DirectoryMembershipCreatorIDs        []string   `json:"directory_membership_creator_ids,omitempty"`
+	DirectorySyncRunCreatorIDs           []string   `json:"directory_sync_run_creator_ids,omitempty"`
+	DiscussionCreatorIDs                 []string   `json:"discussion_creator_ids,omitempty"`
+	DocumentDataCreatorIDs               []string   `json:"document_data_creator_ids,omitempty"`
+	EmailTemplateCreatorIDs              []string   `json:"email_template_creator_ids,omitempty"`
+	EntityCreatorIDs                     []string   `json:"entity_creator_ids,omitempty"`
+	EntityTypeCreatorIDs                 []string   `json:"entity_type_creator_ids,omitempty"`
+	EvidenceCreatorIDs                   []string   `json:"evidence_creator_ids,omitempty"`
+	FileCreatorIDs                       []string   `json:"file_creator_ids,omitempty"`
+	FindingCreatorIDs                    []string   `json:"finding_creator_ids,omitempty"`
+	FindingControlCreatorIDs             []string   `json:"finding_control_creator_ids,omitempty"`
+	GroupCreatorIDs                      []string   `json:"group_creator_ids,omitempty"`
+	GroupMembershipCreatorIDs            []string   `json:"group_membership_creator_ids,omitempty"`
+	GroupSettingCreatorIDs               []string   `json:"group_setting_creator_ids,omitempty"`
+	HushCreatorIDs                       []string   `json:"hush_creator_ids,omitempty"`
+	IdentityHolderCreatorIDs             []string   `json:"identity_holder_creator_ids,omitempty"`
+	InternalPolicyCreatorIDs             []string   `json:"internal_policy_creator_ids,omitempty"`
+	InviteCreatorIDs                     []string   `json:"invite_creator_ids,omitempty"`
+	JobRunnerCreatorIDs                  []string   `json:"job_runner_creator_ids,omitempty"`
+	JobRunnerRegistrationTokenCreatorIDs []string   `json:"job_runner_registration_token_creator_ids,omitempty"`
+	JobRunnerTokenCreatorIDs             []string   `json:"job_runner_token_creator_ids,omitempty"`
+	JobTemplateCreatorIDs                []string   `json:"job_template_creator_ids,omitempty"`
+	MappedControlCreatorIDs              []string   `json:"mapped_control_creator_ids,omitempty"`
+	NarrativeCreatorIDs                  []string   `json:"narrative_creator_ids,omitempty"`
+	NoteCreatorIDs                       []string   `json:"note_creator_ids,omitempty"`
+	NotificationTemplateCreatorIDs       []string   `json:"notification_template_creator_ids,omitempty"`
+	OrgMembershipCreatorIDs              []string   `json:"org_membership_creator_ids,omitempty"`
+	PlatformCreatorIDs                   []string   `json:"platform_creator_ids,omitempty"`
+	ProcedureCreatorIDs                  []string   `json:"procedure_creator_ids,omitempty"`
+	ProgramCreatorIDs                    []string   `json:"program_creator_ids,omitempty"`
+	ProgramMembershipCreatorIDs          []string   `json:"program_membership_creator_ids,omitempty"`
+	RemediationCreatorIDs                []string   `json:"remediation_creator_ids,omitempty"`
+	ReviewCreatorIDs                     []string   `json:"review_creator_ids,omitempty"`
+	RiskCreatorIDs                       []string   `json:"risk_creator_ids,omitempty"`
+	ScanCreatorIDs                       []string   `json:"scan_creator_ids,omitempty"`
+	ScheduledJobCreatorIDs               []string   `json:"scheduled_job_creator_ids,omitempty"`
+	ScheduledJobRunCreatorIDs            []string   `json:"scheduled_job_run_creator_ids,omitempty"`
+	SLADefinitionCreatorIDs              []string   `json:"sla_definition_creator_ids,omitempty"`
+	StandardCreatorIDs                   []string   `json:"standard_creator_ids,omitempty"`
+	SubcontrolCreatorIDs                 []string   `json:"subcontrol_creator_ids,omitempty"`
+	SubprocessorCreatorIDs               []string   `json:"subprocessor_creator_ids,omitempty"`
+	SubscriberCreatorIDs                 []string   `json:"subscriber_creator_ids,omitempty"`
+	SystemDetailCreatorIDs               []string   `json:"system_detail_creator_ids,omitempty"`
+	TagDefinitionCreatorIDs              []string   `json:"tag_definition_creator_ids,omitempty"`
+	TaskCreatorIDs                       []string   `json:"task_creator_ids,omitempty"`
+	TemplateCreatorIDs                   []string   `json:"template_creator_ids,omitempty"`
+	TrustCenterCreatorIDs                []string   `json:"trust_center_creator_ids,omitempty"`
+	TrustCenterComplianceCreatorIDs      []string   `json:"trust_center_compliance_creator_ids,omitempty"`
+	TrustCenterDocCreatorIDs             []string   `json:"trust_center_doc_creator_ids,omitempty"`
+	TrustCenterEntityCreatorIDs          []string   `json:"trust_center_entity_creator_ids,omitempty"`
+	TrustCenterFaqCreatorIDs             []string   `json:"trust_center_faq_creator_ids,omitempty"`
+	TrustCenterNdaRequestCreatorIDs      []string   `json:"trust_center_nda_request_creator_ids,omitempty"`
+	TrustCenterSubprocessorCreatorIDs    []string   `json:"trust_center_subprocessor_creator_ids,omitempty"`
+	TrustCenterWatermarkConfigCreatorIDs []string   `json:"trust_center_watermark_config_creator_ids,omitempty"`
+	VendorRiskScoreCreatorIDs            []string   `json:"vendor_risk_score_creator_ids,omitempty"`
+	VendorScoringConfigCreatorIDs        []string   `json:"vendor_scoring_config_creator_ids,omitempty"`
+	VulnerabilityCreatorIDs              []string   `json:"vulnerability_creator_ids,omitempty"`
+	WorkflowDefinitionCreatorIDs         []string   `json:"workflow_definition_creator_ids,omitempty"`
+	CampaignsManagerIDs                  []string   `json:"campaigns_manager_ids,omitempty"`
+	ComplianceManagerIDs                 []string   `json:"compliance_manager_ids,omitempty"`
+	GroupManagerIDs                      []string   `json:"group_manager_ids,omitempty"`
+	PoliciesManagerIDs                   []string   `json:"policies_manager_ids,omitempty"`
+	RegistryManagerIDs                   []string   `json:"registry_manager_ids,omitempty"`
+	RiskManagerIDs                       []string   `json:"risk_manager_ids,omitempty"`
+	TrustCenterManagerIDs                []string   `json:"trust_center_manager_ids,omitempty"`
+	WorkflowsManagerIDs                  []string   `json:"workflows_manager_ids,omitempty"`
+	ParentID                             *string    `json:"parent_id,omitempty"`
+	SettingID                            *string    `json:"setting_id,omitempty"`
+	PersonalAccessTokenIDs               []string   `json:"personal_access_token_ids,omitempty"`
+	APITokenIDs                          []string   `json:"api_token_ids,omitempty"`
+	EmailTemplateIDs                     []string   `json:"email_template_ids,omitempty"`
+	NotificationPreferenceIDs            []string   `json:"notification_preference_ids,omitempty"`
+	NotificationTemplateIDs              []string   `json:"notification_template_ids,omitempty"`
+	FileIDs                              []string   `json:"file_ids,omitempty"`
+	EventIDs                             []string   `json:"event_ids,omitempty"`
+	SecretIDs                            []string   `json:"secret_ids,omitempty"`
+	AvatarFileID                         *string    `json:"avatar_file_id,omitempty"`
+	GroupIDs                             []string   `json:"group_ids,omitempty"`
+	TemplateIDs                          []string   `json:"template_ids,omitempty"`
+	IntegrationIDs                       []string   `json:"integration_ids,omitempty"`
+	DocumentIDs                          []string   `json:"document_ids,omitempty"`
+	OrgSubscriptionIDs                   []string   `json:"org_subscription_ids,omitempty"`
+	InviteIDs                            []string   `json:"invite_ids,omitempty"`
+	SubscriberIDs                        []string   `json:"subscriber_ids,omitempty"`
+	EntityIDs                            []string   `json:"entity_ids,omitempty"`
+	PlatformIDs                          []string   `json:"platform_ids,omitempty"`
+	IdentityHolderIDs                    []string   `json:"identity_holder_ids,omitempty"`
+	CampaignIDs                          []string   `json:"campaign_ids,omitempty"`
+	CampaignTargetIDs                    []string   `json:"campaign_target_ids,omitempty"`
+	EntityTypeIDs                        []string   `json:"entity_type_ids,omitempty"`
+	ContactIDs                           []string   `json:"contact_ids,omitempty"`
+	NoteIDs                              []string   `json:"note_ids,omitempty"`
+	TaskIDs                              []string   `json:"task_ids,omitempty"`
+	ProgramIDs                           []string   `json:"program_ids,omitempty"`
+	SystemDetailIDs                      []string   `json:"system_detail_ids,omitempty"`
+	ProcedureIDs                         []string   `json:"procedure_ids,omitempty"`
+	InternalPolicyIDs                    []string   `json:"internal_policy_ids,omitempty"`
+	RiskIDs                              []string   `json:"risk_ids,omitempty"`
+	ControlObjectiveIDs                  []string   `json:"control_objective_ids,omitempty"`
+	NarrativeIDs                         []string   `json:"narrative_ids,omitempty"`
+	ControlIDs                           []string   `json:"control_ids,omitempty"`
+	SubcontrolIDs                        []string   `json:"subcontrol_ids,omitempty"`
+	ControlImplementationIDs             []string   `json:"control_implementation_ids,omitempty"`
+	MappedControlIDs                     []string   `json:"mapped_control_ids,omitempty"`
+	EvidenceIDs                          []string   `json:"evidence_ids,omitempty"`
+	StandardIDs                          []string   `json:"standard_ids,omitempty"`
+	ActionPlanIDs                        []string   `json:"action_plan_ids,omitempty"`
+	CustomDomainIDs                      []string   `json:"custom_domain_ids,omitempty"`
+	JobRunnerIDs                         []string   `json:"job_runner_ids,omitempty"`
+	JobRunnerTokenIDs                    []string   `json:"job_runner_token_ids,omitempty"`
+	JobRunnerRegistrationTokenIDs        []string   `json:"job_runner_registration_token_ids,omitempty"`
+	DNSVerificationIDs                   []string   `json:"dns_verification_ids,omitempty"`
+	JobTemplateIDs                       []string   `json:"job_template_ids,omitempty"`
+	ScheduledJobIDs                      []string   `json:"scheduled_job_ids,omitempty"`
+	JobResultIDs                         []string   `json:"job_result_ids,omitempty"`
+	ScheduledJobRunIDs                   []string   `json:"scheduled_job_run_ids,omitempty"`
+	TrustCenterIDs                       []string   `json:"trust_center_ids,omitempty"`
+	AssetIDs                             []string   `json:"asset_ids,omitempty"`
+	ScanIDs                              []string   `json:"scan_ids,omitempty"`
+	SLADefinitionIDs                     []string   `json:"sla_definition_ids,omitempty"`
+	SubprocessorIDs                      []string   `json:"subprocessor_ids,omitempty"`
+	ExportIDs                            []string   `json:"export_ids,omitempty"`
+	TrustCenterWatermarkConfigIDs        []string   `json:"trust_center_watermark_config_ids,omitempty"`
+	ImpersonationEventIDs                []string   `json:"impersonation_event_ids,omitempty"`
+	AssessmentIDs                        []string   `json:"assessment_ids,omitempty"`
+	AssessmentResponseIDs                []string   `json:"assessment_response_ids,omitempty"`
+	CustomTypeEnumIDs                    []string   `json:"custom_type_enum_ids,omitempty"`
+	TagDefinitionIDs                     []string   `json:"tag_definition_ids,omitempty"`
+	RemediationIDs                       []string   `json:"remediation_ids,omitempty"`
+	FindingIDs                           []string   `json:"finding_ids,omitempty"`
+	ReviewIDs                            []string   `json:"review_ids,omitempty"`
+	VulnerabilityIDs                     []string   `json:"vulnerability_ids,omitempty"`
+	WorkflowDefinitionIDs                []string   `json:"workflow_definition_ids,omitempty"`
+	WorkflowInstanceIDs                  []string   `json:"workflow_instance_ids,omitempty"`
+	WorkflowEventIDs                     []string   `json:"workflow_event_ids,omitempty"`
+	WorkflowAssignmentIDs                []string   `json:"workflow_assignment_ids,omitempty"`
+	WorkflowAssignmentTargetIDs          []string   `json:"workflow_assignment_target_ids,omitempty"`
+	WorkflowObjectRefIDs                 []string   `json:"workflow_object_ref_ids,omitempty"`
+	DirectoryAccountIDs                  []string   `json:"directory_account_ids,omitempty"`
+	DirectoryGroupIDs                    []string   `json:"directory_group_ids,omitempty"`
+	DirectorySyncRunIDs                  []string   `json:"directory_sync_run_ids,omitempty"`
+	DiscussionIDs                        []string   `json:"discussion_ids,omitempty"`
+	VendorScoringConfigIDs               []string   `json:"vendor_scoring_config_ids,omitempty"`
+	VendorRiskScoreIDs                   []string   `json:"vendor_risk_score_ids,omitempty"`
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -16998,477 +16998,477 @@ type UpdateOrganizationInput struct {
 	ClearAvatarUpdatedAt                       bool
 	AvatarUpdatedAt                            *time.Time `json:"avatar_updated_at,omitempty"`
 	ClearActionPlanCreators                    bool
-	AddActionPlanCreatorIDs                    []string
-	RemoveActionPlanCreatorIDs                 []string
+	AddActionPlanCreatorIDs                    []string `json:"add_action_plan_creator_ids,omitempty"`
+	RemoveActionPlanCreatorIDs                 []string `json:"remove_action_plan_creator_ids,omitempty"`
 	ClearAPITokenCreators                      bool
-	AddAPITokenCreatorIDs                      []string
-	RemoveAPITokenCreatorIDs                   []string
+	AddAPITokenCreatorIDs                      []string `json:"add_api_token_creator_ids,omitempty"`
+	RemoveAPITokenCreatorIDs                   []string `json:"remove_api_token_creator_ids,omitempty"`
 	ClearAssessmentCreators                    bool
-	AddAssessmentCreatorIDs                    []string
-	RemoveAssessmentCreatorIDs                 []string
+	AddAssessmentCreatorIDs                    []string `json:"add_assessment_creator_ids,omitempty"`
+	RemoveAssessmentCreatorIDs                 []string `json:"remove_assessment_creator_ids,omitempty"`
 	ClearAssetCreators                         bool
-	AddAssetCreatorIDs                         []string
-	RemoveAssetCreatorIDs                      []string
+	AddAssetCreatorIDs                         []string `json:"add_asset_creator_ids,omitempty"`
+	RemoveAssetCreatorIDs                      []string `json:"remove_asset_creator_ids,omitempty"`
 	ClearCampaignCreators                      bool
-	AddCampaignCreatorIDs                      []string
-	RemoveCampaignCreatorIDs                   []string
+	AddCampaignCreatorIDs                      []string `json:"add_campaign_creator_ids,omitempty"`
+	RemoveCampaignCreatorIDs                   []string `json:"remove_campaign_creator_ids,omitempty"`
 	ClearCampaignTargetCreators                bool
-	AddCampaignTargetCreatorIDs                []string
-	RemoveCampaignTargetCreatorIDs             []string
+	AddCampaignTargetCreatorIDs                []string `json:"add_campaign_target_creator_ids,omitempty"`
+	RemoveCampaignTargetCreatorIDs             []string `json:"remove_campaign_target_creator_ids,omitempty"`
 	ClearCheckResultCreators                   bool
-	AddCheckResultCreatorIDs                   []string
-	RemoveCheckResultCreatorIDs                []string
+	AddCheckResultCreatorIDs                   []string `json:"add_check_result_creator_ids,omitempty"`
+	RemoveCheckResultCreatorIDs                []string `json:"remove_check_result_creator_ids,omitempty"`
 	ClearContactCreators                       bool
-	AddContactCreatorIDs                       []string
-	RemoveContactCreatorIDs                    []string
+	AddContactCreatorIDs                       []string `json:"add_contact_creator_ids,omitempty"`
+	RemoveContactCreatorIDs                    []string `json:"remove_contact_creator_ids,omitempty"`
 	ClearControlCreators                       bool
-	AddControlCreatorIDs                       []string
-	RemoveControlCreatorIDs                    []string
+	AddControlCreatorIDs                       []string `json:"add_control_creator_ids,omitempty"`
+	RemoveControlCreatorIDs                    []string `json:"remove_control_creator_ids,omitempty"`
 	ClearControlImplementationCreators         bool
-	AddControlImplementationCreatorIDs         []string
-	RemoveControlImplementationCreatorIDs      []string
+	AddControlImplementationCreatorIDs         []string `json:"add_control_implementation_creator_ids,omitempty"`
+	RemoveControlImplementationCreatorIDs      []string `json:"remove_control_implementation_creator_ids,omitempty"`
 	ClearControlObjectiveCreators              bool
-	AddControlObjectiveCreatorIDs              []string
-	RemoveControlObjectiveCreatorIDs           []string
+	AddControlObjectiveCreatorIDs              []string `json:"add_control_objective_creator_ids,omitempty"`
+	RemoveControlObjectiveCreatorIDs           []string `json:"remove_control_objective_creator_ids,omitempty"`
 	ClearCustomDomainCreators                  bool
-	AddCustomDomainCreatorIDs                  []string
-	RemoveCustomDomainCreatorIDs               []string
+	AddCustomDomainCreatorIDs                  []string `json:"add_custom_domain_creator_ids,omitempty"`
+	RemoveCustomDomainCreatorIDs               []string `json:"remove_custom_domain_creator_ids,omitempty"`
 	ClearCustomTypeEnumCreators                bool
-	AddCustomTypeEnumCreatorIDs                []string
-	RemoveCustomTypeEnumCreatorIDs             []string
+	AddCustomTypeEnumCreatorIDs                []string `json:"add_custom_type_enum_creator_ids,omitempty"`
+	RemoveCustomTypeEnumCreatorIDs             []string `json:"remove_custom_type_enum_creator_ids,omitempty"`
 	ClearDirectoryAccountCreators              bool
-	AddDirectoryAccountCreatorIDs              []string
-	RemoveDirectoryAccountCreatorIDs           []string
+	AddDirectoryAccountCreatorIDs              []string `json:"add_directory_account_creator_ids,omitempty"`
+	RemoveDirectoryAccountCreatorIDs           []string `json:"remove_directory_account_creator_ids,omitempty"`
 	ClearDirectoryGroupCreators                bool
-	AddDirectoryGroupCreatorIDs                []string
-	RemoveDirectoryGroupCreatorIDs             []string
+	AddDirectoryGroupCreatorIDs                []string `json:"add_directory_group_creator_ids,omitempty"`
+	RemoveDirectoryGroupCreatorIDs             []string `json:"remove_directory_group_creator_ids,omitempty"`
 	ClearDirectoryMembershipCreators           bool
-	AddDirectoryMembershipCreatorIDs           []string
-	RemoveDirectoryMembershipCreatorIDs        []string
+	AddDirectoryMembershipCreatorIDs           []string `json:"add_directory_membership_creator_ids,omitempty"`
+	RemoveDirectoryMembershipCreatorIDs        []string `json:"remove_directory_membership_creator_ids,omitempty"`
 	ClearDirectorySyncRunCreators              bool
-	AddDirectorySyncRunCreatorIDs              []string
-	RemoveDirectorySyncRunCreatorIDs           []string
+	AddDirectorySyncRunCreatorIDs              []string `json:"add_directory_sync_run_creator_ids,omitempty"`
+	RemoveDirectorySyncRunCreatorIDs           []string `json:"remove_directory_sync_run_creator_ids,omitempty"`
 	ClearDiscussionCreators                    bool
-	AddDiscussionCreatorIDs                    []string
-	RemoveDiscussionCreatorIDs                 []string
+	AddDiscussionCreatorIDs                    []string `json:"add_discussion_creator_ids,omitempty"`
+	RemoveDiscussionCreatorIDs                 []string `json:"remove_discussion_creator_ids,omitempty"`
 	ClearDocumentDataCreators                  bool
-	AddDocumentDataCreatorIDs                  []string
-	RemoveDocumentDataCreatorIDs               []string
+	AddDocumentDataCreatorIDs                  []string `json:"add_document_data_creator_ids,omitempty"`
+	RemoveDocumentDataCreatorIDs               []string `json:"remove_document_data_creator_ids,omitempty"`
 	ClearEmailTemplateCreators                 bool
-	AddEmailTemplateCreatorIDs                 []string
-	RemoveEmailTemplateCreatorIDs              []string
+	AddEmailTemplateCreatorIDs                 []string `json:"add_email_template_creator_ids,omitempty"`
+	RemoveEmailTemplateCreatorIDs              []string `json:"remove_email_template_creator_ids,omitempty"`
 	ClearEntityCreators                        bool
-	AddEntityCreatorIDs                        []string
-	RemoveEntityCreatorIDs                     []string
+	AddEntityCreatorIDs                        []string `json:"add_entity_creator_ids,omitempty"`
+	RemoveEntityCreatorIDs                     []string `json:"remove_entity_creator_ids,omitempty"`
 	ClearEntityTypeCreators                    bool
-	AddEntityTypeCreatorIDs                    []string
-	RemoveEntityTypeCreatorIDs                 []string
+	AddEntityTypeCreatorIDs                    []string `json:"add_entity_type_creator_ids,omitempty"`
+	RemoveEntityTypeCreatorIDs                 []string `json:"remove_entity_type_creator_ids,omitempty"`
 	ClearEvidenceCreators                      bool
-	AddEvidenceCreatorIDs                      []string
-	RemoveEvidenceCreatorIDs                   []string
+	AddEvidenceCreatorIDs                      []string `json:"add_evidence_creator_ids,omitempty"`
+	RemoveEvidenceCreatorIDs                   []string `json:"remove_evidence_creator_ids,omitempty"`
 	ClearFileCreators                          bool
-	AddFileCreatorIDs                          []string
-	RemoveFileCreatorIDs                       []string
+	AddFileCreatorIDs                          []string `json:"add_file_creator_ids,omitempty"`
+	RemoveFileCreatorIDs                       []string `json:"remove_file_creator_ids,omitempty"`
 	ClearFindingCreators                       bool
-	AddFindingCreatorIDs                       []string
-	RemoveFindingCreatorIDs                    []string
+	AddFindingCreatorIDs                       []string `json:"add_finding_creator_ids,omitempty"`
+	RemoveFindingCreatorIDs                    []string `json:"remove_finding_creator_ids,omitempty"`
 	ClearFindingControlCreators                bool
-	AddFindingControlCreatorIDs                []string
-	RemoveFindingControlCreatorIDs             []string
+	AddFindingControlCreatorIDs                []string `json:"add_finding_control_creator_ids,omitempty"`
+	RemoveFindingControlCreatorIDs             []string `json:"remove_finding_control_creator_ids,omitempty"`
 	ClearGroupCreators                         bool
-	AddGroupCreatorIDs                         []string
-	RemoveGroupCreatorIDs                      []string
+	AddGroupCreatorIDs                         []string `json:"add_group_creator_ids,omitempty"`
+	RemoveGroupCreatorIDs                      []string `json:"remove_group_creator_ids,omitempty"`
 	ClearGroupMembershipCreators               bool
-	AddGroupMembershipCreatorIDs               []string
-	RemoveGroupMembershipCreatorIDs            []string
+	AddGroupMembershipCreatorIDs               []string `json:"add_group_membership_creator_ids,omitempty"`
+	RemoveGroupMembershipCreatorIDs            []string `json:"remove_group_membership_creator_ids,omitempty"`
 	ClearGroupSettingCreators                  bool
-	AddGroupSettingCreatorIDs                  []string
-	RemoveGroupSettingCreatorIDs               []string
+	AddGroupSettingCreatorIDs                  []string `json:"add_group_setting_creator_ids,omitempty"`
+	RemoveGroupSettingCreatorIDs               []string `json:"remove_group_setting_creator_ids,omitempty"`
 	ClearHushCreators                          bool
-	AddHushCreatorIDs                          []string
-	RemoveHushCreatorIDs                       []string
+	AddHushCreatorIDs                          []string `json:"add_hush_creator_ids,omitempty"`
+	RemoveHushCreatorIDs                       []string `json:"remove_hush_creator_ids,omitempty"`
 	ClearIdentityHolderCreators                bool
-	AddIdentityHolderCreatorIDs                []string
-	RemoveIdentityHolderCreatorIDs             []string
+	AddIdentityHolderCreatorIDs                []string `json:"add_identity_holder_creator_ids,omitempty"`
+	RemoveIdentityHolderCreatorIDs             []string `json:"remove_identity_holder_creator_ids,omitempty"`
 	ClearInternalPolicyCreators                bool
-	AddInternalPolicyCreatorIDs                []string
-	RemoveInternalPolicyCreatorIDs             []string
+	AddInternalPolicyCreatorIDs                []string `json:"add_internal_policy_creator_ids,omitempty"`
+	RemoveInternalPolicyCreatorIDs             []string `json:"remove_internal_policy_creator_ids,omitempty"`
 	ClearInviteCreators                        bool
-	AddInviteCreatorIDs                        []string
-	RemoveInviteCreatorIDs                     []string
+	AddInviteCreatorIDs                        []string `json:"add_invite_creator_ids,omitempty"`
+	RemoveInviteCreatorIDs                     []string `json:"remove_invite_creator_ids,omitempty"`
 	ClearJobRunnerCreators                     bool
-	AddJobRunnerCreatorIDs                     []string
-	RemoveJobRunnerCreatorIDs                  []string
+	AddJobRunnerCreatorIDs                     []string `json:"add_job_runner_creator_ids,omitempty"`
+	RemoveJobRunnerCreatorIDs                  []string `json:"remove_job_runner_creator_ids,omitempty"`
 	ClearJobRunnerRegistrationTokenCreators    bool
-	AddJobRunnerRegistrationTokenCreatorIDs    []string
-	RemoveJobRunnerRegistrationTokenCreatorIDs []string
+	AddJobRunnerRegistrationTokenCreatorIDs    []string `json:"add_job_runner_registration_token_creator_ids,omitempty"`
+	RemoveJobRunnerRegistrationTokenCreatorIDs []string `json:"remove_job_runner_registration_token_creator_ids,omitempty"`
 	ClearJobRunnerTokenCreators                bool
-	AddJobRunnerTokenCreatorIDs                []string
-	RemoveJobRunnerTokenCreatorIDs             []string
+	AddJobRunnerTokenCreatorIDs                []string `json:"add_job_runner_token_creator_ids,omitempty"`
+	RemoveJobRunnerTokenCreatorIDs             []string `json:"remove_job_runner_token_creator_ids,omitempty"`
 	ClearJobTemplateCreators                   bool
-	AddJobTemplateCreatorIDs                   []string
-	RemoveJobTemplateCreatorIDs                []string
+	AddJobTemplateCreatorIDs                   []string `json:"add_job_template_creator_ids,omitempty"`
+	RemoveJobTemplateCreatorIDs                []string `json:"remove_job_template_creator_ids,omitempty"`
 	ClearMappedControlCreators                 bool
-	AddMappedControlCreatorIDs                 []string
-	RemoveMappedControlCreatorIDs              []string
+	AddMappedControlCreatorIDs                 []string `json:"add_mapped_control_creator_ids,omitempty"`
+	RemoveMappedControlCreatorIDs              []string `json:"remove_mapped_control_creator_ids,omitempty"`
 	ClearNarrativeCreators                     bool
-	AddNarrativeCreatorIDs                     []string
-	RemoveNarrativeCreatorIDs                  []string
+	AddNarrativeCreatorIDs                     []string `json:"add_narrative_creator_ids,omitempty"`
+	RemoveNarrativeCreatorIDs                  []string `json:"remove_narrative_creator_ids,omitempty"`
 	ClearNoteCreators                          bool
-	AddNoteCreatorIDs                          []string
-	RemoveNoteCreatorIDs                       []string
+	AddNoteCreatorIDs                          []string `json:"add_note_creator_ids,omitempty"`
+	RemoveNoteCreatorIDs                       []string `json:"remove_note_creator_ids,omitempty"`
 	ClearNotificationTemplateCreators          bool
-	AddNotificationTemplateCreatorIDs          []string
-	RemoveNotificationTemplateCreatorIDs       []string
+	AddNotificationTemplateCreatorIDs          []string `json:"add_notification_template_creator_ids,omitempty"`
+	RemoveNotificationTemplateCreatorIDs       []string `json:"remove_notification_template_creator_ids,omitempty"`
 	ClearOrgMembershipCreators                 bool
-	AddOrgMembershipCreatorIDs                 []string
-	RemoveOrgMembershipCreatorIDs              []string
+	AddOrgMembershipCreatorIDs                 []string `json:"add_org_membership_creator_ids,omitempty"`
+	RemoveOrgMembershipCreatorIDs              []string `json:"remove_org_membership_creator_ids,omitempty"`
 	ClearPlatformCreators                      bool
-	AddPlatformCreatorIDs                      []string
-	RemovePlatformCreatorIDs                   []string
+	AddPlatformCreatorIDs                      []string `json:"add_platform_creator_ids,omitempty"`
+	RemovePlatformCreatorIDs                   []string `json:"remove_platform_creator_ids,omitempty"`
 	ClearProcedureCreators                     bool
-	AddProcedureCreatorIDs                     []string
-	RemoveProcedureCreatorIDs                  []string
+	AddProcedureCreatorIDs                     []string `json:"add_procedure_creator_ids,omitempty"`
+	RemoveProcedureCreatorIDs                  []string `json:"remove_procedure_creator_ids,omitempty"`
 	ClearProgramCreators                       bool
-	AddProgramCreatorIDs                       []string
-	RemoveProgramCreatorIDs                    []string
+	AddProgramCreatorIDs                       []string `json:"add_program_creator_ids,omitempty"`
+	RemoveProgramCreatorIDs                    []string `json:"remove_program_creator_ids,omitempty"`
 	ClearProgramMembershipCreators             bool
-	AddProgramMembershipCreatorIDs             []string
-	RemoveProgramMembershipCreatorIDs          []string
+	AddProgramMembershipCreatorIDs             []string `json:"add_program_membership_creator_ids,omitempty"`
+	RemoveProgramMembershipCreatorIDs          []string `json:"remove_program_membership_creator_ids,omitempty"`
 	ClearRemediationCreators                   bool
-	AddRemediationCreatorIDs                   []string
-	RemoveRemediationCreatorIDs                []string
+	AddRemediationCreatorIDs                   []string `json:"add_remediation_creator_ids,omitempty"`
+	RemoveRemediationCreatorIDs                []string `json:"remove_remediation_creator_ids,omitempty"`
 	ClearReviewCreators                        bool
-	AddReviewCreatorIDs                        []string
-	RemoveReviewCreatorIDs                     []string
+	AddReviewCreatorIDs                        []string `json:"add_review_creator_ids,omitempty"`
+	RemoveReviewCreatorIDs                     []string `json:"remove_review_creator_ids,omitempty"`
 	ClearRiskCreators                          bool
-	AddRiskCreatorIDs                          []string
-	RemoveRiskCreatorIDs                       []string
+	AddRiskCreatorIDs                          []string `json:"add_risk_creator_ids,omitempty"`
+	RemoveRiskCreatorIDs                       []string `json:"remove_risk_creator_ids,omitempty"`
 	ClearScanCreators                          bool
-	AddScanCreatorIDs                          []string
-	RemoveScanCreatorIDs                       []string
+	AddScanCreatorIDs                          []string `json:"add_scan_creator_ids,omitempty"`
+	RemoveScanCreatorIDs                       []string `json:"remove_scan_creator_ids,omitempty"`
 	ClearScheduledJobCreators                  bool
-	AddScheduledJobCreatorIDs                  []string
-	RemoveScheduledJobCreatorIDs               []string
+	AddScheduledJobCreatorIDs                  []string `json:"add_scheduled_job_creator_ids,omitempty"`
+	RemoveScheduledJobCreatorIDs               []string `json:"remove_scheduled_job_creator_ids,omitempty"`
 	ClearScheduledJobRunCreators               bool
-	AddScheduledJobRunCreatorIDs               []string
-	RemoveScheduledJobRunCreatorIDs            []string
+	AddScheduledJobRunCreatorIDs               []string `json:"add_scheduled_job_run_creator_ids,omitempty"`
+	RemoveScheduledJobRunCreatorIDs            []string `json:"remove_scheduled_job_run_creator_ids,omitempty"`
 	ClearSLADefinitionCreators                 bool
-	AddSLADefinitionCreatorIDs                 []string
-	RemoveSLADefinitionCreatorIDs              []string
+	AddSLADefinitionCreatorIDs                 []string `json:"add_sla_definition_creator_ids,omitempty"`
+	RemoveSLADefinitionCreatorIDs              []string `json:"remove_sla_definition_creator_ids,omitempty"`
 	ClearStandardCreators                      bool
-	AddStandardCreatorIDs                      []string
-	RemoveStandardCreatorIDs                   []string
+	AddStandardCreatorIDs                      []string `json:"add_standard_creator_ids,omitempty"`
+	RemoveStandardCreatorIDs                   []string `json:"remove_standard_creator_ids,omitempty"`
 	ClearSubcontrolCreators                    bool
-	AddSubcontrolCreatorIDs                    []string
-	RemoveSubcontrolCreatorIDs                 []string
+	AddSubcontrolCreatorIDs                    []string `json:"add_subcontrol_creator_ids,omitempty"`
+	RemoveSubcontrolCreatorIDs                 []string `json:"remove_subcontrol_creator_ids,omitempty"`
 	ClearSubprocessorCreators                  bool
-	AddSubprocessorCreatorIDs                  []string
-	RemoveSubprocessorCreatorIDs               []string
+	AddSubprocessorCreatorIDs                  []string `json:"add_subprocessor_creator_ids,omitempty"`
+	RemoveSubprocessorCreatorIDs               []string `json:"remove_subprocessor_creator_ids,omitempty"`
 	ClearSubscriberCreators                    bool
-	AddSubscriberCreatorIDs                    []string
-	RemoveSubscriberCreatorIDs                 []string
+	AddSubscriberCreatorIDs                    []string `json:"add_subscriber_creator_ids,omitempty"`
+	RemoveSubscriberCreatorIDs                 []string `json:"remove_subscriber_creator_ids,omitempty"`
 	ClearSystemDetailCreators                  bool
-	AddSystemDetailCreatorIDs                  []string
-	RemoveSystemDetailCreatorIDs               []string
+	AddSystemDetailCreatorIDs                  []string `json:"add_system_detail_creator_ids,omitempty"`
+	RemoveSystemDetailCreatorIDs               []string `json:"remove_system_detail_creator_ids,omitempty"`
 	ClearTagDefinitionCreators                 bool
-	AddTagDefinitionCreatorIDs                 []string
-	RemoveTagDefinitionCreatorIDs              []string
+	AddTagDefinitionCreatorIDs                 []string `json:"add_tag_definition_creator_ids,omitempty"`
+	RemoveTagDefinitionCreatorIDs              []string `json:"remove_tag_definition_creator_ids,omitempty"`
 	ClearTaskCreators                          bool
-	AddTaskCreatorIDs                          []string
-	RemoveTaskCreatorIDs                       []string
+	AddTaskCreatorIDs                          []string `json:"add_task_creator_ids,omitempty"`
+	RemoveTaskCreatorIDs                       []string `json:"remove_task_creator_ids,omitempty"`
 	ClearTemplateCreators                      bool
-	AddTemplateCreatorIDs                      []string
-	RemoveTemplateCreatorIDs                   []string
+	AddTemplateCreatorIDs                      []string `json:"add_template_creator_ids,omitempty"`
+	RemoveTemplateCreatorIDs                   []string `json:"remove_template_creator_ids,omitempty"`
 	ClearTrustCenterCreators                   bool
-	AddTrustCenterCreatorIDs                   []string
-	RemoveTrustCenterCreatorIDs                []string
+	AddTrustCenterCreatorIDs                   []string `json:"add_trust_center_creator_ids,omitempty"`
+	RemoveTrustCenterCreatorIDs                []string `json:"remove_trust_center_creator_ids,omitempty"`
 	ClearTrustCenterComplianceCreators         bool
-	AddTrustCenterComplianceCreatorIDs         []string
-	RemoveTrustCenterComplianceCreatorIDs      []string
+	AddTrustCenterComplianceCreatorIDs         []string `json:"add_trust_center_compliance_creator_ids,omitempty"`
+	RemoveTrustCenterComplianceCreatorIDs      []string `json:"remove_trust_center_compliance_creator_ids,omitempty"`
 	ClearTrustCenterDocCreators                bool
-	AddTrustCenterDocCreatorIDs                []string
-	RemoveTrustCenterDocCreatorIDs             []string
+	AddTrustCenterDocCreatorIDs                []string `json:"add_trust_center_doc_creator_ids,omitempty"`
+	RemoveTrustCenterDocCreatorIDs             []string `json:"remove_trust_center_doc_creator_ids,omitempty"`
 	ClearTrustCenterEntityCreators             bool
-	AddTrustCenterEntityCreatorIDs             []string
-	RemoveTrustCenterEntityCreatorIDs          []string
+	AddTrustCenterEntityCreatorIDs             []string `json:"add_trust_center_entity_creator_ids,omitempty"`
+	RemoveTrustCenterEntityCreatorIDs          []string `json:"remove_trust_center_entity_creator_ids,omitempty"`
 	ClearTrustCenterFaqCreators                bool
-	AddTrustCenterFaqCreatorIDs                []string
-	RemoveTrustCenterFaqCreatorIDs             []string
+	AddTrustCenterFaqCreatorIDs                []string `json:"add_trust_center_faq_creator_ids,omitempty"`
+	RemoveTrustCenterFaqCreatorIDs             []string `json:"remove_trust_center_faq_creator_ids,omitempty"`
 	ClearTrustCenterNdaRequestCreators         bool
-	AddTrustCenterNdaRequestCreatorIDs         []string
-	RemoveTrustCenterNdaRequestCreatorIDs      []string
+	AddTrustCenterNdaRequestCreatorIDs         []string `json:"add_trust_center_nda_request_creator_ids,omitempty"`
+	RemoveTrustCenterNdaRequestCreatorIDs      []string `json:"remove_trust_center_nda_request_creator_ids,omitempty"`
 	ClearTrustCenterSubprocessorCreators       bool
-	AddTrustCenterSubprocessorCreatorIDs       []string
-	RemoveTrustCenterSubprocessorCreatorIDs    []string
+	AddTrustCenterSubprocessorCreatorIDs       []string `json:"add_trust_center_subprocessor_creator_ids,omitempty"`
+	RemoveTrustCenterSubprocessorCreatorIDs    []string `json:"remove_trust_center_subprocessor_creator_ids,omitempty"`
 	ClearTrustCenterWatermarkConfigCreators    bool
-	AddTrustCenterWatermarkConfigCreatorIDs    []string
-	RemoveTrustCenterWatermarkConfigCreatorIDs []string
+	AddTrustCenterWatermarkConfigCreatorIDs    []string `json:"add_trust_center_watermark_config_creator_ids,omitempty"`
+	RemoveTrustCenterWatermarkConfigCreatorIDs []string `json:"remove_trust_center_watermark_config_creator_ids,omitempty"`
 	ClearVendorRiskScoreCreators               bool
-	AddVendorRiskScoreCreatorIDs               []string
-	RemoveVendorRiskScoreCreatorIDs            []string
+	AddVendorRiskScoreCreatorIDs               []string `json:"add_vendor_risk_score_creator_ids,omitempty"`
+	RemoveVendorRiskScoreCreatorIDs            []string `json:"remove_vendor_risk_score_creator_ids,omitempty"`
 	ClearVendorScoringConfigCreators           bool
-	AddVendorScoringConfigCreatorIDs           []string
-	RemoveVendorScoringConfigCreatorIDs        []string
+	AddVendorScoringConfigCreatorIDs           []string `json:"add_vendor_scoring_config_creator_ids,omitempty"`
+	RemoveVendorScoringConfigCreatorIDs        []string `json:"remove_vendor_scoring_config_creator_ids,omitempty"`
 	ClearVulnerabilityCreators                 bool
-	AddVulnerabilityCreatorIDs                 []string
-	RemoveVulnerabilityCreatorIDs              []string
+	AddVulnerabilityCreatorIDs                 []string `json:"add_vulnerability_creator_ids,omitempty"`
+	RemoveVulnerabilityCreatorIDs              []string `json:"remove_vulnerability_creator_ids,omitempty"`
 	ClearWorkflowDefinitionCreators            bool
-	AddWorkflowDefinitionCreatorIDs            []string
-	RemoveWorkflowDefinitionCreatorIDs         []string
+	AddWorkflowDefinitionCreatorIDs            []string `json:"add_workflow_definition_creator_ids,omitempty"`
+	RemoveWorkflowDefinitionCreatorIDs         []string `json:"remove_workflow_definition_creator_ids,omitempty"`
 	ClearCampaignsManager                      bool
-	AddCampaignsManagerIDs                     []string
-	RemoveCampaignsManagerIDs                  []string
+	AddCampaignsManagerIDs                     []string `json:"add_campaigns_manager_ids,omitempty"`
+	RemoveCampaignsManagerIDs                  []string `json:"remove_campaigns_manager_ids,omitempty"`
 	ClearComplianceManager                     bool
-	AddComplianceManagerIDs                    []string
-	RemoveComplianceManagerIDs                 []string
+	AddComplianceManagerIDs                    []string `json:"add_compliance_manager_ids,omitempty"`
+	RemoveComplianceManagerIDs                 []string `json:"remove_compliance_manager_ids,omitempty"`
 	ClearGroupManager                          bool
-	AddGroupManagerIDs                         []string
-	RemoveGroupManagerIDs                      []string
+	AddGroupManagerIDs                         []string `json:"add_group_manager_ids,omitempty"`
+	RemoveGroupManagerIDs                      []string `json:"remove_group_manager_ids,omitempty"`
 	ClearPoliciesManager                       bool
-	AddPoliciesManagerIDs                      []string
-	RemovePoliciesManagerIDs                   []string
+	AddPoliciesManagerIDs                      []string `json:"add_policies_manager_ids,omitempty"`
+	RemovePoliciesManagerIDs                   []string `json:"remove_policies_manager_ids,omitempty"`
 	ClearRegistryManager                       bool
-	AddRegistryManagerIDs                      []string
-	RemoveRegistryManagerIDs                   []string
+	AddRegistryManagerIDs                      []string `json:"add_registry_manager_ids,omitempty"`
+	RemoveRegistryManagerIDs                   []string `json:"remove_registry_manager_ids,omitempty"`
 	ClearRiskManager                           bool
-	AddRiskManagerIDs                          []string
-	RemoveRiskManagerIDs                       []string
+	AddRiskManagerIDs                          []string `json:"add_risk_manager_ids,omitempty"`
+	RemoveRiskManagerIDs                       []string `json:"remove_risk_manager_ids,omitempty"`
 	ClearTrustCenterManager                    bool
-	AddTrustCenterManagerIDs                   []string
-	RemoveTrustCenterManagerIDs                []string
+	AddTrustCenterManagerIDs                   []string `json:"add_trust_center_manager_ids,omitempty"`
+	RemoveTrustCenterManagerIDs                []string `json:"remove_trust_center_manager_ids,omitempty"`
 	ClearWorkflowsManager                      bool
-	AddWorkflowsManagerIDs                     []string
-	RemoveWorkflowsManagerIDs                  []string
+	AddWorkflowsManagerIDs                     []string `json:"add_workflows_manager_ids,omitempty"`
+	RemoveWorkflowsManagerIDs                  []string `json:"remove_workflows_manager_ids,omitempty"`
 	ClearSetting                               bool
-	SettingID                                  *string
+	SettingID                                  *string `json:"setting_id,omitempty"`
 	ClearPersonalAccessTokens                  bool
-	AddPersonalAccessTokenIDs                  []string
-	RemovePersonalAccessTokenIDs               []string
+	AddPersonalAccessTokenIDs                  []string `json:"add_personal_access_token_ids,omitempty"`
+	RemovePersonalAccessTokenIDs               []string `json:"remove_personal_access_token_ids,omitempty"`
 	ClearAPITokens                             bool
-	AddAPITokenIDs                             []string
-	RemoveAPITokenIDs                          []string
+	AddAPITokenIDs                             []string `json:"add_api_token_ids,omitempty"`
+	RemoveAPITokenIDs                          []string `json:"remove_api_token_ids,omitempty"`
 	ClearEmailTemplates                        bool
-	AddEmailTemplateIDs                        []string
-	RemoveEmailTemplateIDs                     []string
+	AddEmailTemplateIDs                        []string `json:"add_email_template_ids,omitempty"`
+	RemoveEmailTemplateIDs                     []string `json:"remove_email_template_ids,omitempty"`
 	ClearNotificationPreferences               bool
-	AddNotificationPreferenceIDs               []string
-	RemoveNotificationPreferenceIDs            []string
+	AddNotificationPreferenceIDs               []string `json:"add_notification_preference_ids,omitempty"`
+	RemoveNotificationPreferenceIDs            []string `json:"remove_notification_preference_ids,omitempty"`
 	ClearNotificationTemplates                 bool
-	AddNotificationTemplateIDs                 []string
-	RemoveNotificationTemplateIDs              []string
+	AddNotificationTemplateIDs                 []string `json:"add_notification_template_ids,omitempty"`
+	RemoveNotificationTemplateIDs              []string `json:"remove_notification_template_ids,omitempty"`
 	ClearFiles                                 bool
-	AddFileIDs                                 []string
-	RemoveFileIDs                              []string
+	AddFileIDs                                 []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs                              []string `json:"remove_file_ids,omitempty"`
 	ClearEvents                                bool
-	AddEventIDs                                []string
-	RemoveEventIDs                             []string
+	AddEventIDs                                []string `json:"add_event_ids,omitempty"`
+	RemoveEventIDs                             []string `json:"remove_event_ids,omitempty"`
 	ClearSecrets                               bool
-	AddSecretIDs                               []string
-	RemoveSecretIDs                            []string
+	AddSecretIDs                               []string `json:"add_secret_ids,omitempty"`
+	RemoveSecretIDs                            []string `json:"remove_secret_ids,omitempty"`
 	ClearAvatarFile                            bool
-	AvatarFileID                               *string
+	AvatarFileID                               *string `json:"avatar_file_id,omitempty"`
 	ClearGroups                                bool
-	AddGroupIDs                                []string
-	RemoveGroupIDs                             []string
+	AddGroupIDs                                []string `json:"add_group_ids,omitempty"`
+	RemoveGroupIDs                             []string `json:"remove_group_ids,omitempty"`
 	ClearTemplates                             bool
-	AddTemplateIDs                             []string
-	RemoveTemplateIDs                          []string
+	AddTemplateIDs                             []string `json:"add_template_ids,omitempty"`
+	RemoveTemplateIDs                          []string `json:"remove_template_ids,omitempty"`
 	ClearIntegrations                          bool
-	AddIntegrationIDs                          []string
-	RemoveIntegrationIDs                       []string
+	AddIntegrationIDs                          []string `json:"add_integration_ids,omitempty"`
+	RemoveIntegrationIDs                       []string `json:"remove_integration_ids,omitempty"`
 	ClearDocuments                             bool
-	AddDocumentIDs                             []string
-	RemoveDocumentIDs                          []string
+	AddDocumentIDs                             []string `json:"add_document_ids,omitempty"`
+	RemoveDocumentIDs                          []string `json:"remove_document_ids,omitempty"`
 	ClearOrgSubscriptions                      bool
-	AddOrgSubscriptionIDs                      []string
-	RemoveOrgSubscriptionIDs                   []string
+	AddOrgSubscriptionIDs                      []string `json:"add_org_subscription_ids,omitempty"`
+	RemoveOrgSubscriptionIDs                   []string `json:"remove_org_subscription_ids,omitempty"`
 	ClearInvites                               bool
-	AddInviteIDs                               []string
-	RemoveInviteIDs                            []string
+	AddInviteIDs                               []string `json:"add_invite_ids,omitempty"`
+	RemoveInviteIDs                            []string `json:"remove_invite_ids,omitempty"`
 	ClearSubscribers                           bool
-	AddSubscriberIDs                           []string
-	RemoveSubscriberIDs                        []string
+	AddSubscriberIDs                           []string `json:"add_subscriber_ids,omitempty"`
+	RemoveSubscriberIDs                        []string `json:"remove_subscriber_ids,omitempty"`
 	ClearEntities                              bool
-	AddEntityIDs                               []string
-	RemoveEntityIDs                            []string
+	AddEntityIDs                               []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs                            []string `json:"remove_entity_ids,omitempty"`
 	ClearPlatforms                             bool
-	AddPlatformIDs                             []string
-	RemovePlatformIDs                          []string
+	AddPlatformIDs                             []string `json:"add_platform_ids,omitempty"`
+	RemovePlatformIDs                          []string `json:"remove_platform_ids,omitempty"`
 	ClearIdentityHolders                       bool
-	AddIdentityHolderIDs                       []string
-	RemoveIdentityHolderIDs                    []string
+	AddIdentityHolderIDs                       []string `json:"add_identity_holder_ids,omitempty"`
+	RemoveIdentityHolderIDs                    []string `json:"remove_identity_holder_ids,omitempty"`
 	ClearCampaigns                             bool
-	AddCampaignIDs                             []string
-	RemoveCampaignIDs                          []string
+	AddCampaignIDs                             []string `json:"add_campaign_ids,omitempty"`
+	RemoveCampaignIDs                          []string `json:"remove_campaign_ids,omitempty"`
 	ClearCampaignTargets                       bool
-	AddCampaignTargetIDs                       []string
-	RemoveCampaignTargetIDs                    []string
+	AddCampaignTargetIDs                       []string `json:"add_campaign_target_ids,omitempty"`
+	RemoveCampaignTargetIDs                    []string `json:"remove_campaign_target_ids,omitempty"`
 	ClearEntityTypes                           bool
-	AddEntityTypeIDs                           []string
-	RemoveEntityTypeIDs                        []string
+	AddEntityTypeIDs                           []string `json:"add_entity_type_ids,omitempty"`
+	RemoveEntityTypeIDs                        []string `json:"remove_entity_type_ids,omitempty"`
 	ClearContacts                              bool
-	AddContactIDs                              []string
-	RemoveContactIDs                           []string
+	AddContactIDs                              []string `json:"add_contact_ids,omitempty"`
+	RemoveContactIDs                           []string `json:"remove_contact_ids,omitempty"`
 	ClearNotes                                 bool
-	AddNoteIDs                                 []string
-	RemoveNoteIDs                              []string
+	AddNoteIDs                                 []string `json:"add_note_ids,omitempty"`
+	RemoveNoteIDs                              []string `json:"remove_note_ids,omitempty"`
 	ClearTasks                                 bool
-	AddTaskIDs                                 []string
-	RemoveTaskIDs                              []string
+	AddTaskIDs                                 []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs                              []string `json:"remove_task_ids,omitempty"`
 	ClearPrograms                              bool
-	AddProgramIDs                              []string
-	RemoveProgramIDs                           []string
+	AddProgramIDs                              []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs                           []string `json:"remove_program_ids,omitempty"`
 	ClearSystemDetails                         bool
-	AddSystemDetailIDs                         []string
-	RemoveSystemDetailIDs                      []string
+	AddSystemDetailIDs                         []string `json:"add_system_detail_ids,omitempty"`
+	RemoveSystemDetailIDs                      []string `json:"remove_system_detail_ids,omitempty"`
 	ClearProcedures                            bool
-	AddProcedureIDs                            []string
-	RemoveProcedureIDs                         []string
+	AddProcedureIDs                            []string `json:"add_procedure_ids,omitempty"`
+	RemoveProcedureIDs                         []string `json:"remove_procedure_ids,omitempty"`
 	ClearInternalPolicies                      bool
-	AddInternalPolicyIDs                       []string
-	RemoveInternalPolicyIDs                    []string
+	AddInternalPolicyIDs                       []string `json:"add_internal_policy_ids,omitempty"`
+	RemoveInternalPolicyIDs                    []string `json:"remove_internal_policy_ids,omitempty"`
 	ClearRisks                                 bool
-	AddRiskIDs                                 []string
-	RemoveRiskIDs                              []string
+	AddRiskIDs                                 []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs                              []string `json:"remove_risk_ids,omitempty"`
 	ClearControlObjectives                     bool
-	AddControlObjectiveIDs                     []string
-	RemoveControlObjectiveIDs                  []string
+	AddControlObjectiveIDs                     []string `json:"add_control_objective_ids,omitempty"`
+	RemoveControlObjectiveIDs                  []string `json:"remove_control_objective_ids,omitempty"`
 	ClearNarratives                            bool
-	AddNarrativeIDs                            []string
-	RemoveNarrativeIDs                         []string
+	AddNarrativeIDs                            []string `json:"add_narrative_ids,omitempty"`
+	RemoveNarrativeIDs                         []string `json:"remove_narrative_ids,omitempty"`
 	ClearControls                              bool
-	AddControlIDs                              []string
-	RemoveControlIDs                           []string
+	AddControlIDs                              []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs                           []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols                           bool
-	AddSubcontrolIDs                           []string
-	RemoveSubcontrolIDs                        []string
+	AddSubcontrolIDs                           []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs                        []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearControlImplementations                bool
-	AddControlImplementationIDs                []string
-	RemoveControlImplementationIDs             []string
+	AddControlImplementationIDs                []string `json:"add_control_implementation_ids,omitempty"`
+	RemoveControlImplementationIDs             []string `json:"remove_control_implementation_ids,omitempty"`
 	ClearMappedControls                        bool
-	AddMappedControlIDs                        []string
-	RemoveMappedControlIDs                     []string
+	AddMappedControlIDs                        []string `json:"add_mapped_control_ids,omitempty"`
+	RemoveMappedControlIDs                     []string `json:"remove_mapped_control_ids,omitempty"`
 	ClearEvidence                              bool
-	AddEvidenceIDs                             []string
-	RemoveEvidenceIDs                          []string
+	AddEvidenceIDs                             []string `json:"add_evidence_ids,omitempty"`
+	RemoveEvidenceIDs                          []string `json:"remove_evidence_ids,omitempty"`
 	ClearStandards                             bool
-	AddStandardIDs                             []string
-	RemoveStandardIDs                          []string
+	AddStandardIDs                             []string `json:"add_standard_ids,omitempty"`
+	RemoveStandardIDs                          []string `json:"remove_standard_ids,omitempty"`
 	ClearActionPlans                           bool
-	AddActionPlanIDs                           []string
-	RemoveActionPlanIDs                        []string
+	AddActionPlanIDs                           []string `json:"add_action_plan_ids,omitempty"`
+	RemoveActionPlanIDs                        []string `json:"remove_action_plan_ids,omitempty"`
 	ClearCustomDomains                         bool
-	AddCustomDomainIDs                         []string
-	RemoveCustomDomainIDs                      []string
+	AddCustomDomainIDs                         []string `json:"add_custom_domain_ids,omitempty"`
+	RemoveCustomDomainIDs                      []string `json:"remove_custom_domain_ids,omitempty"`
 	ClearJobRunners                            bool
-	AddJobRunnerIDs                            []string
-	RemoveJobRunnerIDs                         []string
+	AddJobRunnerIDs                            []string `json:"add_job_runner_ids,omitempty"`
+	RemoveJobRunnerIDs                         []string `json:"remove_job_runner_ids,omitempty"`
 	ClearJobRunnerTokens                       bool
-	AddJobRunnerTokenIDs                       []string
-	RemoveJobRunnerTokenIDs                    []string
+	AddJobRunnerTokenIDs                       []string `json:"add_job_runner_token_ids,omitempty"`
+	RemoveJobRunnerTokenIDs                    []string `json:"remove_job_runner_token_ids,omitempty"`
 	ClearJobRunnerRegistrationTokens           bool
-	AddJobRunnerRegistrationTokenIDs           []string
-	RemoveJobRunnerRegistrationTokenIDs        []string
+	AddJobRunnerRegistrationTokenIDs           []string `json:"add_job_runner_registration_token_ids,omitempty"`
+	RemoveJobRunnerRegistrationTokenIDs        []string `json:"remove_job_runner_registration_token_ids,omitempty"`
 	ClearDNSVerifications                      bool
-	AddDNSVerificationIDs                      []string
-	RemoveDNSVerificationIDs                   []string
+	AddDNSVerificationIDs                      []string `json:"add_dns_verification_ids,omitempty"`
+	RemoveDNSVerificationIDs                   []string `json:"remove_dns_verification_ids,omitempty"`
 	ClearJobTemplates                          bool
-	AddJobTemplateIDs                          []string
-	RemoveJobTemplateIDs                       []string
+	AddJobTemplateIDs                          []string `json:"add_job_template_ids,omitempty"`
+	RemoveJobTemplateIDs                       []string `json:"remove_job_template_ids,omitempty"`
 	ClearScheduledJobs                         bool
-	AddScheduledJobIDs                         []string
-	RemoveScheduledJobIDs                      []string
+	AddScheduledJobIDs                         []string `json:"add_scheduled_job_ids,omitempty"`
+	RemoveScheduledJobIDs                      []string `json:"remove_scheduled_job_ids,omitempty"`
 	ClearJobResults                            bool
-	AddJobResultIDs                            []string
-	RemoveJobResultIDs                         []string
+	AddJobResultIDs                            []string `json:"add_job_result_ids,omitempty"`
+	RemoveJobResultIDs                         []string `json:"remove_job_result_ids,omitempty"`
 	ClearScheduledJobRuns                      bool
-	AddScheduledJobRunIDs                      []string
-	RemoveScheduledJobRunIDs                   []string
+	AddScheduledJobRunIDs                      []string `json:"add_scheduled_job_run_ids,omitempty"`
+	RemoveScheduledJobRunIDs                   []string `json:"remove_scheduled_job_run_ids,omitempty"`
 	ClearTrustCenters                          bool
-	AddTrustCenterIDs                          []string
-	RemoveTrustCenterIDs                       []string
+	AddTrustCenterIDs                          []string `json:"add_trust_center_ids,omitempty"`
+	RemoveTrustCenterIDs                       []string `json:"remove_trust_center_ids,omitempty"`
 	ClearAssets                                bool
-	AddAssetIDs                                []string
-	RemoveAssetIDs                             []string
+	AddAssetIDs                                []string `json:"add_asset_ids,omitempty"`
+	RemoveAssetIDs                             []string `json:"remove_asset_ids,omitempty"`
 	ClearScans                                 bool
-	AddScanIDs                                 []string
-	RemoveScanIDs                              []string
+	AddScanIDs                                 []string `json:"add_scan_ids,omitempty"`
+	RemoveScanIDs                              []string `json:"remove_scan_ids,omitempty"`
 	ClearSLADefinitions                        bool
-	AddSLADefinitionIDs                        []string
-	RemoveSLADefinitionIDs                     []string
+	AddSLADefinitionIDs                        []string `json:"add_sla_definition_ids,omitempty"`
+	RemoveSLADefinitionIDs                     []string `json:"remove_sla_definition_ids,omitempty"`
 	ClearSubprocessors                         bool
-	AddSubprocessorIDs                         []string
-	RemoveSubprocessorIDs                      []string
+	AddSubprocessorIDs                         []string `json:"add_subprocessor_ids,omitempty"`
+	RemoveSubprocessorIDs                      []string `json:"remove_subprocessor_ids,omitempty"`
 	ClearExports                               bool
-	AddExportIDs                               []string
-	RemoveExportIDs                            []string
+	AddExportIDs                               []string `json:"add_export_ids,omitempty"`
+	RemoveExportIDs                            []string `json:"remove_export_ids,omitempty"`
 	ClearTrustCenterWatermarkConfigs           bool
-	AddTrustCenterWatermarkConfigIDs           []string
-	RemoveTrustCenterWatermarkConfigIDs        []string
+	AddTrustCenterWatermarkConfigIDs           []string `json:"add_trust_center_watermark_config_ids,omitempty"`
+	RemoveTrustCenterWatermarkConfigIDs        []string `json:"remove_trust_center_watermark_config_ids,omitempty"`
 	ClearImpersonationEvents                   bool
-	AddImpersonationEventIDs                   []string
-	RemoveImpersonationEventIDs                []string
+	AddImpersonationEventIDs                   []string `json:"add_impersonation_event_ids,omitempty"`
+	RemoveImpersonationEventIDs                []string `json:"remove_impersonation_event_ids,omitempty"`
 	ClearAssessments                           bool
-	AddAssessmentIDs                           []string
-	RemoveAssessmentIDs                        []string
+	AddAssessmentIDs                           []string `json:"add_assessment_ids,omitempty"`
+	RemoveAssessmentIDs                        []string `json:"remove_assessment_ids,omitempty"`
 	ClearAssessmentResponses                   bool
-	AddAssessmentResponseIDs                   []string
-	RemoveAssessmentResponseIDs                []string
+	AddAssessmentResponseIDs                   []string `json:"add_assessment_response_ids,omitempty"`
+	RemoveAssessmentResponseIDs                []string `json:"remove_assessment_response_ids,omitempty"`
 	ClearCustomTypeEnums                       bool
-	AddCustomTypeEnumIDs                       []string
-	RemoveCustomTypeEnumIDs                    []string
+	AddCustomTypeEnumIDs                       []string `json:"add_custom_type_enum_ids,omitempty"`
+	RemoveCustomTypeEnumIDs                    []string `json:"remove_custom_type_enum_ids,omitempty"`
 	ClearTagDefinitions                        bool
-	AddTagDefinitionIDs                        []string
-	RemoveTagDefinitionIDs                     []string
+	AddTagDefinitionIDs                        []string `json:"add_tag_definition_ids,omitempty"`
+	RemoveTagDefinitionIDs                     []string `json:"remove_tag_definition_ids,omitempty"`
 	ClearRemediations                          bool
-	AddRemediationIDs                          []string
-	RemoveRemediationIDs                       []string
+	AddRemediationIDs                          []string `json:"add_remediation_ids,omitempty"`
+	RemoveRemediationIDs                       []string `json:"remove_remediation_ids,omitempty"`
 	ClearFindings                              bool
-	AddFindingIDs                              []string
-	RemoveFindingIDs                           []string
+	AddFindingIDs                              []string `json:"add_finding_ids,omitempty"`
+	RemoveFindingIDs                           []string `json:"remove_finding_ids,omitempty"`
 	ClearReviews                               bool
-	AddReviewIDs                               []string
-	RemoveReviewIDs                            []string
+	AddReviewIDs                               []string `json:"add_review_ids,omitempty"`
+	RemoveReviewIDs                            []string `json:"remove_review_ids,omitempty"`
 	ClearVulnerabilities                       bool
-	AddVulnerabilityIDs                        []string
-	RemoveVulnerabilityIDs                     []string
+	AddVulnerabilityIDs                        []string `json:"add_vulnerability_ids,omitempty"`
+	RemoveVulnerabilityIDs                     []string `json:"remove_vulnerability_ids,omitempty"`
 	ClearWorkflowDefinitions                   bool
-	AddWorkflowDefinitionIDs                   []string
-	RemoveWorkflowDefinitionIDs                []string
+	AddWorkflowDefinitionIDs                   []string `json:"add_workflow_definition_ids,omitempty"`
+	RemoveWorkflowDefinitionIDs                []string `json:"remove_workflow_definition_ids,omitempty"`
 	ClearWorkflowInstances                     bool
-	AddWorkflowInstanceIDs                     []string
-	RemoveWorkflowInstanceIDs                  []string
+	AddWorkflowInstanceIDs                     []string `json:"add_workflow_instance_ids,omitempty"`
+	RemoveWorkflowInstanceIDs                  []string `json:"remove_workflow_instance_ids,omitempty"`
 	ClearWorkflowEvents                        bool
-	AddWorkflowEventIDs                        []string
-	RemoveWorkflowEventIDs                     []string
+	AddWorkflowEventIDs                        []string `json:"add_workflow_event_ids,omitempty"`
+	RemoveWorkflowEventIDs                     []string `json:"remove_workflow_event_ids,omitempty"`
 	ClearWorkflowAssignments                   bool
-	AddWorkflowAssignmentIDs                   []string
-	RemoveWorkflowAssignmentIDs                []string
+	AddWorkflowAssignmentIDs                   []string `json:"add_workflow_assignment_ids,omitempty"`
+	RemoveWorkflowAssignmentIDs                []string `json:"remove_workflow_assignment_ids,omitempty"`
 	ClearWorkflowAssignmentTargets             bool
-	AddWorkflowAssignmentTargetIDs             []string
-	RemoveWorkflowAssignmentTargetIDs          []string
+	AddWorkflowAssignmentTargetIDs             []string `json:"add_workflow_assignment_target_ids,omitempty"`
+	RemoveWorkflowAssignmentTargetIDs          []string `json:"remove_workflow_assignment_target_ids,omitempty"`
 	ClearWorkflowObjectRefs                    bool
-	AddWorkflowObjectRefIDs                    []string
-	RemoveWorkflowObjectRefIDs                 []string
+	AddWorkflowObjectRefIDs                    []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs                 []string `json:"remove_workflow_object_ref_ids,omitempty"`
 	ClearDirectoryAccounts                     bool
-	AddDirectoryAccountIDs                     []string
-	RemoveDirectoryAccountIDs                  []string
+	AddDirectoryAccountIDs                     []string `json:"add_directory_account_ids,omitempty"`
+	RemoveDirectoryAccountIDs                  []string `json:"remove_directory_account_ids,omitempty"`
 	ClearDirectoryGroups                       bool
-	AddDirectoryGroupIDs                       []string
-	RemoveDirectoryGroupIDs                    []string
+	AddDirectoryGroupIDs                       []string `json:"add_directory_group_ids,omitempty"`
+	RemoveDirectoryGroupIDs                    []string `json:"remove_directory_group_ids,omitempty"`
 	ClearDirectorySyncRuns                     bool
-	AddDirectorySyncRunIDs                     []string
-	RemoveDirectorySyncRunIDs                  []string
+	AddDirectorySyncRunIDs                     []string `json:"add_directory_sync_run_ids,omitempty"`
+	RemoveDirectorySyncRunIDs                  []string `json:"remove_directory_sync_run_ids,omitempty"`
 	ClearDiscussions                           bool
-	AddDiscussionIDs                           []string
-	RemoveDiscussionIDs                        []string
+	AddDiscussionIDs                           []string `json:"add_discussion_ids,omitempty"`
+	RemoveDiscussionIDs                        []string `json:"remove_discussion_ids,omitempty"`
 	ClearVendorScoringConfigs                  bool
-	AddVendorScoringConfigIDs                  []string
-	RemoveVendorScoringConfigIDs               []string
+	AddVendorScoringConfigIDs                  []string `json:"add_vendor_scoring_config_ids,omitempty"`
+	RemoveVendorScoringConfigIDs               []string `json:"remove_vendor_scoring_config_ids,omitempty"`
 	ClearVendorRiskScores                      bool
-	AddVendorRiskScoreIDs                      []string
-	RemoveVendorRiskScoreIDs                   []string
+	AddVendorRiskScoreIDs                      []string `json:"add_vendor_risk_score_ids,omitempty"`
+	RemoveVendorRiskScoreIDs                   []string `json:"remove_vendor_risk_score_ids,omitempty"`
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -18962,8 +18962,8 @@ type CreateOrganizationSettingInput struct {
 	SSOExemptDomains                 []string           `json:"sso_exempt_domains,omitempty"`
 	AllowSupportAccess               *bool              `json:"allow_support_access,omitempty"`
 	ComplianceWebhookToken           *string            `json:"compliance_webhook_token,omitempty"`
-	OrganizationID                   *string
-	FileIDs                          []string
+	OrganizationID                   *string            `json:"organization_id,omitempty"`
+	FileIDs                          []string           `json:"file_ids,omitempty"`
 }
 
 // Mutate applies the CreateOrganizationSettingInput on the OrganizationSettingMutation builder.
@@ -19124,10 +19124,10 @@ type UpdateOrganizationSettingInput struct {
 	ClearPendingDeletionAt                bool
 	PendingDeletionAt                     *models.DateTime `json:"pending_deletion_at,omitempty"`
 	ClearOrganization                     bool
-	OrganizationID                        *string
+	OrganizationID                        *string `json:"organization_id,omitempty"`
 	ClearFiles                            bool
-	AddFileIDs                            []string
-	RemoveFileIDs                         []string
+	AddFileIDs                            []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs                         []string `json:"remove_file_ids,omitempty"`
 }
 
 // Mutate applies the UpdateOrganizationSettingInput on the OrganizationSettingMutation builder.
@@ -19344,8 +19344,8 @@ type CreatePersonalAccessTokenInput struct {
 	Scopes          []string   `json:"scopes,omitempty"`
 	LastUsedAt      *time.Time `json:"last_used_at,omitempty"`
 	IsActive        *bool      `json:"is_active,omitempty"`
-	OrganizationIDs []string
-	EventIDs        []string
+	OrganizationIDs []string   `json:"organization_ids,omitempty"`
+	EventIDs        []string   `json:"event_ids,omitempty"`
 }
 
 // Mutate applies the CreatePersonalAccessTokenInput on the PersonalAccessTokenMutation builder.
@@ -19401,11 +19401,11 @@ type UpdatePersonalAccessTokenInput struct {
 	ClearIsActive         bool
 	IsActive              *bool `json:"is_active,omitempty"`
 	ClearOrganizations    bool
-	AddOrganizationIDs    []string
-	RemoveOrganizationIDs []string
+	AddOrganizationIDs    []string `json:"add_organization_ids,omitempty"`
+	RemoveOrganizationIDs []string `json:"remove_organization_ids,omitempty"`
 	ClearEvents           bool
-	AddEventIDs           []string
-	RemoveEventIDs        []string
+	AddEventIDs           []string `json:"add_event_ids,omitempty"`
+	RemoveEventIDs        []string `json:"remove_event_ids,omitempty"`
 }
 
 // Mutate applies the UpdatePersonalAccessTokenInput on the PersonalAccessTokenMutation builder.
@@ -19521,52 +19521,52 @@ type CreatePlatformInput struct {
 	PurchaseDate                   *models.DateTime       `json:"purchase_date,omitempty"`
 	ExternalReferenceID            *string                `json:"external_reference_id,omitempty"`
 	Metadata                       map[string]interface{} `json:"metadata,omitempty"`
-	OwnerID                        *string
-	BlockedGroupIDs                []string
-	EditorIDs                      []string
-	ViewerIDs                      []string
-	InternalOwnerUserID            *string
-	InternalOwnerGroupID           *string
-	BusinessOwnerUserID            *string
-	BusinessOwnerGroupID           *string
-	TechnicalOwnerUserID           *string
-	TechnicalOwnerGroupID          *string
-	SecurityOwnerUserID            *string
-	SecurityOwnerGroupID           *string
-	PlatformKindID                 *string
-	PlatformDataClassificationID   *string
-	EnvironmentID                  *string
-	ScopeID                        *string
-	AccessModelID                  *string
-	EncryptionStatusID             *string
-	SecurityTierID                 *string
-	CriticalityID                  *string
-	AssetIDs                       []string
-	EntityIDs                      []string
-	EvidenceIDs                    []string
-	FileIDs                        []string
-	ArchitectureDiagramIDs         []string
-	DataFlowDiagramIDs             []string
-	TrustBoundaryDiagramIDs        []string
-	RiskIDs                        []string
-	ControlIDs                     []string
-	AssessmentIDs                  []string
-	ScanIDs                        []string
-	TaskIDs                        []string
-	IdentityHolderIDs              []string
-	IntegrationIDs                 []string
-	DirectorySyncRunIDs            []string
-	DirectoryAccountIDs            []string
-	DirectoryGroupIDs              []string
-	WorkflowObjectRefIDs           []string
-	SourceAssetIDs                 []string
-	SourceEntityIDs                []string
-	OutOfScopeAssetIDs             []string
-	OutOfScopeVendorIDs            []string
-	ApplicableFrameworkIDs         []string
-	GeneratedScanIDs               []string
-	PlatformOwnerID                *string
-	SystemDetailIDs                []string
+	OwnerID                        *string                `json:"owner_id,omitempty"`
+	BlockedGroupIDs                []string               `json:"blocked_group_ids,omitempty"`
+	EditorIDs                      []string               `json:"editor_ids,omitempty"`
+	ViewerIDs                      []string               `json:"viewer_ids,omitempty"`
+	InternalOwnerUserID            *string                `json:"internal_owner_user_id,omitempty"`
+	InternalOwnerGroupID           *string                `json:"internal_owner_group_id,omitempty"`
+	BusinessOwnerUserID            *string                `json:"business_owner_user_id,omitempty"`
+	BusinessOwnerGroupID           *string                `json:"business_owner_group_id,omitempty"`
+	TechnicalOwnerUserID           *string                `json:"technical_owner_user_id,omitempty"`
+	TechnicalOwnerGroupID          *string                `json:"technical_owner_group_id,omitempty"`
+	SecurityOwnerUserID            *string                `json:"security_owner_user_id,omitempty"`
+	SecurityOwnerGroupID           *string                `json:"security_owner_group_id,omitempty"`
+	PlatformKindID                 *string                `json:"platform_kind_id,omitempty"`
+	PlatformDataClassificationID   *string                `json:"platform_data_classification_id,omitempty"`
+	EnvironmentID                  *string                `json:"environment_id,omitempty"`
+	ScopeID                        *string                `json:"scope_id,omitempty"`
+	AccessModelID                  *string                `json:"access_model_id,omitempty"`
+	EncryptionStatusID             *string                `json:"encryption_status_id,omitempty"`
+	SecurityTierID                 *string                `json:"security_tier_id,omitempty"`
+	CriticalityID                  *string                `json:"criticality_id,omitempty"`
+	AssetIDs                       []string               `json:"asset_ids,omitempty"`
+	EntityIDs                      []string               `json:"entity_ids,omitempty"`
+	EvidenceIDs                    []string               `json:"evidence_ids,omitempty"`
+	FileIDs                        []string               `json:"file_ids,omitempty"`
+	ArchitectureDiagramIDs         []string               `json:"architecture_diagram_ids,omitempty"`
+	DataFlowDiagramIDs             []string               `json:"data_flow_diagram_ids,omitempty"`
+	TrustBoundaryDiagramIDs        []string               `json:"trust_boundary_diagram_ids,omitempty"`
+	RiskIDs                        []string               `json:"risk_ids,omitempty"`
+	ControlIDs                     []string               `json:"control_ids,omitempty"`
+	AssessmentIDs                  []string               `json:"assessment_ids,omitempty"`
+	ScanIDs                        []string               `json:"scan_ids,omitempty"`
+	TaskIDs                        []string               `json:"task_ids,omitempty"`
+	IdentityHolderIDs              []string               `json:"identity_holder_ids,omitempty"`
+	IntegrationIDs                 []string               `json:"integration_ids,omitempty"`
+	DirectorySyncRunIDs            []string               `json:"directory_sync_run_ids,omitempty"`
+	DirectoryAccountIDs            []string               `json:"directory_account_ids,omitempty"`
+	DirectoryGroupIDs              []string               `json:"directory_group_ids,omitempty"`
+	WorkflowObjectRefIDs           []string               `json:"workflow_object_ref_ids,omitempty"`
+	SourceAssetIDs                 []string               `json:"source_asset_ids,omitempty"`
+	SourceEntityIDs                []string               `json:"source_entity_ids,omitempty"`
+	OutOfScopeAssetIDs             []string               `json:"out_of_scope_asset_ids,omitempty"`
+	OutOfScopeVendorIDs            []string               `json:"out_of_scope_vendor_ids,omitempty"`
+	ApplicableFrameworkIDs         []string               `json:"applicable_framework_ids,omitempty"`
+	GeneratedScanIDs               []string               `json:"generated_scan_ids,omitempty"`
+	PlatformOwnerID                *string                `json:"platform_owner_id,omitempty"`
+	SystemDetailIDs                []string               `json:"system_detail_ids,omitempty"`
 }
 
 // Mutate applies the CreatePlatformInput on the PlatformMutation builder.
@@ -19876,123 +19876,123 @@ type UpdatePlatformInput struct {
 	ClearMetadata                       bool
 	Metadata                            map[string]interface{} `json:"metadata,omitempty"`
 	ClearBlockedGroups                  bool
-	AddBlockedGroupIDs                  []string
-	RemoveBlockedGroupIDs               []string
+	AddBlockedGroupIDs                  []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs               []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                        bool
-	AddEditorIDs                        []string
-	RemoveEditorIDs                     []string
+	AddEditorIDs                        []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs                     []string `json:"remove_editor_ids,omitempty"`
 	ClearViewers                        bool
-	AddViewerIDs                        []string
-	RemoveViewerIDs                     []string
+	AddViewerIDs                        []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs                     []string `json:"remove_viewer_ids,omitempty"`
 	ClearInternalOwnerUser              bool
-	InternalOwnerUserID                 *string
+	InternalOwnerUserID                 *string `json:"internal_owner_user_id,omitempty"`
 	ClearInternalOwnerGroup             bool
-	InternalOwnerGroupID                *string
+	InternalOwnerGroupID                *string `json:"internal_owner_group_id,omitempty"`
 	ClearBusinessOwnerUser              bool
-	BusinessOwnerUserID                 *string
+	BusinessOwnerUserID                 *string `json:"business_owner_user_id,omitempty"`
 	ClearBusinessOwnerGroup             bool
-	BusinessOwnerGroupID                *string
+	BusinessOwnerGroupID                *string `json:"business_owner_group_id,omitempty"`
 	ClearTechnicalOwnerUser             bool
-	TechnicalOwnerUserID                *string
+	TechnicalOwnerUserID                *string `json:"technical_owner_user_id,omitempty"`
 	ClearTechnicalOwnerGroup            bool
-	TechnicalOwnerGroupID               *string
+	TechnicalOwnerGroupID               *string `json:"technical_owner_group_id,omitempty"`
 	ClearSecurityOwnerUser              bool
-	SecurityOwnerUserID                 *string
+	SecurityOwnerUserID                 *string `json:"security_owner_user_id,omitempty"`
 	ClearSecurityOwnerGroup             bool
-	SecurityOwnerGroupID                *string
+	SecurityOwnerGroupID                *string `json:"security_owner_group_id,omitempty"`
 	ClearPlatformKind                   bool
-	PlatformKindID                      *string
+	PlatformKindID                      *string `json:"platform_kind_id,omitempty"`
 	ClearPlatformDataClassification     bool
-	PlatformDataClassificationID        *string
+	PlatformDataClassificationID        *string `json:"platform_data_classification_id,omitempty"`
 	ClearEnvironment                    bool
-	EnvironmentID                       *string
+	EnvironmentID                       *string `json:"environment_id,omitempty"`
 	ClearScope                          bool
-	ScopeID                             *string
+	ScopeID                             *string `json:"scope_id,omitempty"`
 	ClearAccessModel                    bool
-	AccessModelID                       *string
+	AccessModelID                       *string `json:"access_model_id,omitempty"`
 	ClearEncryptionStatus               bool
-	EncryptionStatusID                  *string
+	EncryptionStatusID                  *string `json:"encryption_status_id,omitempty"`
 	ClearSecurityTier                   bool
-	SecurityTierID                      *string
+	SecurityTierID                      *string `json:"security_tier_id,omitempty"`
 	ClearCriticality                    bool
-	CriticalityID                       *string
+	CriticalityID                       *string `json:"criticality_id,omitempty"`
 	ClearAssets                         bool
-	AddAssetIDs                         []string
-	RemoveAssetIDs                      []string
+	AddAssetIDs                         []string `json:"add_asset_ids,omitempty"`
+	RemoveAssetIDs                      []string `json:"remove_asset_ids,omitempty"`
 	ClearEntities                       bool
-	AddEntityIDs                        []string
-	RemoveEntityIDs                     []string
+	AddEntityIDs                        []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs                     []string `json:"remove_entity_ids,omitempty"`
 	ClearEvidence                       bool
-	AddEvidenceIDs                      []string
-	RemoveEvidenceIDs                   []string
+	AddEvidenceIDs                      []string `json:"add_evidence_ids,omitempty"`
+	RemoveEvidenceIDs                   []string `json:"remove_evidence_ids,omitempty"`
 	ClearFiles                          bool
-	AddFileIDs                          []string
-	RemoveFileIDs                       []string
+	AddFileIDs                          []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs                       []string `json:"remove_file_ids,omitempty"`
 	ClearArchitectureDiagrams           bool
-	AddArchitectureDiagramIDs           []string
-	RemoveArchitectureDiagramIDs        []string
+	AddArchitectureDiagramIDs           []string `json:"add_architecture_diagram_ids,omitempty"`
+	RemoveArchitectureDiagramIDs        []string `json:"remove_architecture_diagram_ids,omitempty"`
 	ClearDataFlowDiagrams               bool
-	AddDataFlowDiagramIDs               []string
-	RemoveDataFlowDiagramIDs            []string
+	AddDataFlowDiagramIDs               []string `json:"add_data_flow_diagram_ids,omitempty"`
+	RemoveDataFlowDiagramIDs            []string `json:"remove_data_flow_diagram_ids,omitempty"`
 	ClearTrustBoundaryDiagrams          bool
-	AddTrustBoundaryDiagramIDs          []string
-	RemoveTrustBoundaryDiagramIDs       []string
+	AddTrustBoundaryDiagramIDs          []string `json:"add_trust_boundary_diagram_ids,omitempty"`
+	RemoveTrustBoundaryDiagramIDs       []string `json:"remove_trust_boundary_diagram_ids,omitempty"`
 	ClearRisks                          bool
-	AddRiskIDs                          []string
-	RemoveRiskIDs                       []string
+	AddRiskIDs                          []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs                       []string `json:"remove_risk_ids,omitempty"`
 	ClearControls                       bool
-	AddControlIDs                       []string
-	RemoveControlIDs                    []string
+	AddControlIDs                       []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs                    []string `json:"remove_control_ids,omitempty"`
 	ClearAssessments                    bool
-	AddAssessmentIDs                    []string
-	RemoveAssessmentIDs                 []string
+	AddAssessmentIDs                    []string `json:"add_assessment_ids,omitempty"`
+	RemoveAssessmentIDs                 []string `json:"remove_assessment_ids,omitempty"`
 	ClearScans                          bool
-	AddScanIDs                          []string
-	RemoveScanIDs                       []string
+	AddScanIDs                          []string `json:"add_scan_ids,omitempty"`
+	RemoveScanIDs                       []string `json:"remove_scan_ids,omitempty"`
 	ClearTasks                          bool
-	AddTaskIDs                          []string
-	RemoveTaskIDs                       []string
+	AddTaskIDs                          []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs                       []string `json:"remove_task_ids,omitempty"`
 	ClearIdentityHolders                bool
-	AddIdentityHolderIDs                []string
-	RemoveIdentityHolderIDs             []string
+	AddIdentityHolderIDs                []string `json:"add_identity_holder_ids,omitempty"`
+	RemoveIdentityHolderIDs             []string `json:"remove_identity_holder_ids,omitempty"`
 	ClearIntegrations                   bool
-	AddIntegrationIDs                   []string
-	RemoveIntegrationIDs                []string
+	AddIntegrationIDs                   []string `json:"add_integration_ids,omitempty"`
+	RemoveIntegrationIDs                []string `json:"remove_integration_ids,omitempty"`
 	ClearDirectorySyncRuns              bool
-	AddDirectorySyncRunIDs              []string
-	RemoveDirectorySyncRunIDs           []string
+	AddDirectorySyncRunIDs              []string `json:"add_directory_sync_run_ids,omitempty"`
+	RemoveDirectorySyncRunIDs           []string `json:"remove_directory_sync_run_ids,omitempty"`
 	ClearDirectoryAccounts              bool
-	AddDirectoryAccountIDs              []string
-	RemoveDirectoryAccountIDs           []string
+	AddDirectoryAccountIDs              []string `json:"add_directory_account_ids,omitempty"`
+	RemoveDirectoryAccountIDs           []string `json:"remove_directory_account_ids,omitempty"`
 	ClearDirectoryGroups                bool
-	AddDirectoryGroupIDs                []string
-	RemoveDirectoryGroupIDs             []string
+	AddDirectoryGroupIDs                []string `json:"add_directory_group_ids,omitempty"`
+	RemoveDirectoryGroupIDs             []string `json:"remove_directory_group_ids,omitempty"`
 	ClearWorkflowObjectRefs             bool
-	AddWorkflowObjectRefIDs             []string
-	RemoveWorkflowObjectRefIDs          []string
+	AddWorkflowObjectRefIDs             []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs          []string `json:"remove_workflow_object_ref_ids,omitempty"`
 	ClearSourceAssets                   bool
-	AddSourceAssetIDs                   []string
-	RemoveSourceAssetIDs                []string
+	AddSourceAssetIDs                   []string `json:"add_source_asset_ids,omitempty"`
+	RemoveSourceAssetIDs                []string `json:"remove_source_asset_ids,omitempty"`
 	ClearSourceEntities                 bool
-	AddSourceEntityIDs                  []string
-	RemoveSourceEntityIDs               []string
+	AddSourceEntityIDs                  []string `json:"add_source_entity_ids,omitempty"`
+	RemoveSourceEntityIDs               []string `json:"remove_source_entity_ids,omitempty"`
 	ClearOutOfScopeAssets               bool
-	AddOutOfScopeAssetIDs               []string
-	RemoveOutOfScopeAssetIDs            []string
+	AddOutOfScopeAssetIDs               []string `json:"add_out_of_scope_asset_ids,omitempty"`
+	RemoveOutOfScopeAssetIDs            []string `json:"remove_out_of_scope_asset_ids,omitempty"`
 	ClearOutOfScopeVendors              bool
-	AddOutOfScopeVendorIDs              []string
-	RemoveOutOfScopeVendorIDs           []string
+	AddOutOfScopeVendorIDs              []string `json:"add_out_of_scope_vendor_ids,omitempty"`
+	RemoveOutOfScopeVendorIDs           []string `json:"remove_out_of_scope_vendor_ids,omitempty"`
 	ClearApplicableFrameworks           bool
-	AddApplicableFrameworkIDs           []string
-	RemoveApplicableFrameworkIDs        []string
+	AddApplicableFrameworkIDs           []string `json:"add_applicable_framework_ids,omitempty"`
+	RemoveApplicableFrameworkIDs        []string `json:"remove_applicable_framework_ids,omitempty"`
 	ClearGeneratedScans                 bool
-	AddGeneratedScanIDs                 []string
-	RemoveGeneratedScanIDs              []string
+	AddGeneratedScanIDs                 []string `json:"add_generated_scan_ids,omitempty"`
+	RemoveGeneratedScanIDs              []string `json:"remove_generated_scan_ids,omitempty"`
 	ClearPlatformOwner                  bool
-	PlatformOwnerID                     *string
+	PlatformOwnerID                     *string `json:"platform_owner_id,omitempty"`
 	ClearSystemDetails                  bool
-	AddSystemDetailIDs                  []string
-	RemoveSystemDetailIDs               []string
+	AddSystemDetailIDs                  []string `json:"add_system_detail_ids,omitempty"`
+	RemoveSystemDetailIDs               []string `json:"remove_system_detail_ids,omitempty"`
 }
 
 // Mutate applies the UpdatePlatformInput on the PlatformMutation builder.
@@ -20578,25 +20578,25 @@ type CreateProcedureInput struct {
 	EnvironmentName                 *string                       `json:"environment_name,omitempty"`
 	ScopeName                       *string                       `json:"scope_name,omitempty"`
 	WorkflowEligibleMarker          *bool                         `json:"workflow_eligible_marker,omitempty"`
-	OwnerID                         *string
-	BlockedGroupIDs                 []string
-	EditorIDs                       []string
-	ApproverID                      *string
-	DelegateID                      *string
-	ProcedureKindID                 *string
-	EnvironmentID                   *string
-	ScopeID                         *string
-	ControlIDs                      []string
-	SubcontrolIDs                   []string
-	InternalPolicyIDs               []string
-	ProgramIDs                      []string
-	NarrativeIDs                    []string
-	RiskIDs                         []string
-	TaskIDs                         []string
-	CommentIDs                      []string
-	DiscussionIDs                   []string
-	FileID                          *string
-	WorkflowObjectRefIDs            []string
+	OwnerID                         *string                       `json:"owner_id,omitempty"`
+	BlockedGroupIDs                 []string                      `json:"blocked_group_ids,omitempty"`
+	EditorIDs                       []string                      `json:"editor_ids,omitempty"`
+	ApproverID                      *string                       `json:"approver_id,omitempty"`
+	DelegateID                      *string                       `json:"delegate_id,omitempty"`
+	ProcedureKindID                 *string                       `json:"procedure_kind_id,omitempty"`
+	EnvironmentID                   *string                       `json:"environment_id,omitempty"`
+	ScopeID                         *string                       `json:"scope_id,omitempty"`
+	ControlIDs                      []string                      `json:"control_ids,omitempty"`
+	SubcontrolIDs                   []string                      `json:"subcontrol_ids,omitempty"`
+	InternalPolicyIDs               []string                      `json:"internal_policy_ids,omitempty"`
+	ProgramIDs                      []string                      `json:"program_ids,omitempty"`
+	NarrativeIDs                    []string                      `json:"narrative_ids,omitempty"`
+	RiskIDs                         []string                      `json:"risk_ids,omitempty"`
+	TaskIDs                         []string                      `json:"task_ids,omitempty"`
+	CommentIDs                      []string                      `json:"comment_ids,omitempty"`
+	DiscussionIDs                   []string                      `json:"discussion_ids,omitempty"`
+	FileID                          *string                       `json:"file_id,omitempty"`
+	WorkflowObjectRefIDs            []string                      `json:"workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the CreateProcedureInput on the ProcedureMutation builder.
@@ -20799,55 +20799,55 @@ type UpdateProcedureInput struct {
 	ClearWorkflowEligibleMarker           bool
 	WorkflowEligibleMarker                *bool `json:"workflow_eligible_marker,omitempty"`
 	ClearOwner                            bool
-	OwnerID                               *string
+	OwnerID                               *string `json:"owner_id,omitempty"`
 	ClearBlockedGroups                    bool
-	AddBlockedGroupIDs                    []string
-	RemoveBlockedGroupIDs                 []string
+	AddBlockedGroupIDs                    []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs                 []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                          bool
-	AddEditorIDs                          []string
-	RemoveEditorIDs                       []string
+	AddEditorIDs                          []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs                       []string `json:"remove_editor_ids,omitempty"`
 	ClearApprover                         bool
-	ApproverID                            *string
+	ApproverID                            *string `json:"approver_id,omitempty"`
 	ClearDelegate                         bool
-	DelegateID                            *string
+	DelegateID                            *string `json:"delegate_id,omitempty"`
 	ClearProcedureKind                    bool
-	ProcedureKindID                       *string
+	ProcedureKindID                       *string `json:"procedure_kind_id,omitempty"`
 	ClearEnvironment                      bool
-	EnvironmentID                         *string
+	EnvironmentID                         *string `json:"environment_id,omitempty"`
 	ClearScope                            bool
-	ScopeID                               *string
+	ScopeID                               *string `json:"scope_id,omitempty"`
 	ClearControls                         bool
-	AddControlIDs                         []string
-	RemoveControlIDs                      []string
+	AddControlIDs                         []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs                      []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols                      bool
-	AddSubcontrolIDs                      []string
-	RemoveSubcontrolIDs                   []string
+	AddSubcontrolIDs                      []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs                   []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearInternalPolicies                 bool
-	AddInternalPolicyIDs                  []string
-	RemoveInternalPolicyIDs               []string
+	AddInternalPolicyIDs                  []string `json:"add_internal_policy_ids,omitempty"`
+	RemoveInternalPolicyIDs               []string `json:"remove_internal_policy_ids,omitempty"`
 	ClearPrograms                         bool
-	AddProgramIDs                         []string
-	RemoveProgramIDs                      []string
+	AddProgramIDs                         []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs                      []string `json:"remove_program_ids,omitempty"`
 	ClearNarratives                       bool
-	AddNarrativeIDs                       []string
-	RemoveNarrativeIDs                    []string
+	AddNarrativeIDs                       []string `json:"add_narrative_ids,omitempty"`
+	RemoveNarrativeIDs                    []string `json:"remove_narrative_ids,omitempty"`
 	ClearRisks                            bool
-	AddRiskIDs                            []string
-	RemoveRiskIDs                         []string
+	AddRiskIDs                            []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs                         []string `json:"remove_risk_ids,omitempty"`
 	ClearTasks                            bool
-	AddTaskIDs                            []string
-	RemoveTaskIDs                         []string
+	AddTaskIDs                            []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs                         []string `json:"remove_task_ids,omitempty"`
 	ClearComments                         bool
-	AddCommentIDs                         []string
-	RemoveCommentIDs                      []string
+	AddCommentIDs                         []string `json:"add_comment_ids,omitempty"`
+	RemoveCommentIDs                      []string `json:"remove_comment_ids,omitempty"`
 	ClearDiscussions                      bool
-	AddDiscussionIDs                      []string
-	RemoveDiscussionIDs                   []string
+	AddDiscussionIDs                      []string `json:"add_discussion_ids,omitempty"`
+	RemoveDiscussionIDs                   []string `json:"remove_discussion_ids,omitempty"`
 	ClearFile                             bool
-	FileID                                *string
+	FileID                                *string `json:"file_id,omitempty"`
 	ClearWorkflowObjectRefs               bool
-	AddWorkflowObjectRefIDs               []string
-	RemoveWorkflowObjectRefIDs            []string
+	AddWorkflowObjectRefIDs               []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs            []string `json:"remove_workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the UpdateProcedureInput on the ProcedureMutation builder.
@@ -21204,25 +21204,25 @@ type CreateProgramInput struct {
 	AuditFirm            *string              `json:"audit_firm,omitempty"`
 	Auditor              *string              `json:"auditor,omitempty"`
 	AuditorEmail         *string              `json:"auditor_email,omitempty"`
-	OwnerID              *string
-	BlockedGroupIDs      []string
-	EditorIDs            []string
-	ViewerIDs            []string
-	ProgramKindID        *string
-	ControlIDs           []string
-	SubcontrolIDs        []string
-	ControlObjectiveIDs  []string
-	InternalPolicyIDs    []string
-	ProcedureIDs         []string
-	RiskIDs              []string
-	TaskIDs              []string
-	NoteIDs              []string
-	FileIDs              []string
-	EvidenceIDs          []string
-	NarrativeIDs         []string
-	ActionPlanIDs        []string
-	SystemDetailIDs      []string
-	ProgramOwnerID       *string
+	OwnerID              *string              `json:"owner_id,omitempty"`
+	BlockedGroupIDs      []string             `json:"blocked_group_ids,omitempty"`
+	EditorIDs            []string             `json:"editor_ids,omitempty"`
+	ViewerIDs            []string             `json:"viewer_ids,omitempty"`
+	ProgramKindID        *string              `json:"program_kind_id,omitempty"`
+	ControlIDs           []string             `json:"control_ids,omitempty"`
+	SubcontrolIDs        []string             `json:"subcontrol_ids,omitempty"`
+	ControlObjectiveIDs  []string             `json:"control_objective_ids,omitempty"`
+	InternalPolicyIDs    []string             `json:"internal_policy_ids,omitempty"`
+	ProcedureIDs         []string             `json:"procedure_ids,omitempty"`
+	RiskIDs              []string             `json:"risk_ids,omitempty"`
+	TaskIDs              []string             `json:"task_ids,omitempty"`
+	NoteIDs              []string             `json:"note_ids,omitempty"`
+	FileIDs              []string             `json:"file_ids,omitempty"`
+	EvidenceIDs          []string             `json:"evidence_ids,omitempty"`
+	NarrativeIDs         []string             `json:"narrative_ids,omitempty"`
+	ActionPlanIDs        []string             `json:"action_plan_ids,omitempty"`
+	SystemDetailIDs      []string             `json:"system_detail_ids,omitempty"`
+	ProgramOwnerID       *string              `json:"program_owner_id,omitempty"`
 }
 
 // Mutate applies the CreateProgramInput on the ProgramMutation builder.
@@ -21364,59 +21364,59 @@ type UpdateProgramInput struct {
 	ClearAuditorEmail         bool
 	AuditorEmail              *string `json:"auditor_email,omitempty"`
 	ClearOwner                bool
-	OwnerID                   *string
+	OwnerID                   *string `json:"owner_id,omitempty"`
 	ClearBlockedGroups        bool
-	AddBlockedGroupIDs        []string
-	RemoveBlockedGroupIDs     []string
+	AddBlockedGroupIDs        []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs     []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors              bool
-	AddEditorIDs              []string
-	RemoveEditorIDs           []string
+	AddEditorIDs              []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs           []string `json:"remove_editor_ids,omitempty"`
 	ClearViewers              bool
-	AddViewerIDs              []string
-	RemoveViewerIDs           []string
+	AddViewerIDs              []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs           []string `json:"remove_viewer_ids,omitempty"`
 	ClearProgramKind          bool
-	ProgramKindID             *string
+	ProgramKindID             *string `json:"program_kind_id,omitempty"`
 	ClearControls             bool
-	AddControlIDs             []string
-	RemoveControlIDs          []string
+	AddControlIDs             []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs          []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols          bool
-	AddSubcontrolIDs          []string
-	RemoveSubcontrolIDs       []string
+	AddSubcontrolIDs          []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs       []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearControlObjectives    bool
-	AddControlObjectiveIDs    []string
-	RemoveControlObjectiveIDs []string
+	AddControlObjectiveIDs    []string `json:"add_control_objective_ids,omitempty"`
+	RemoveControlObjectiveIDs []string `json:"remove_control_objective_ids,omitempty"`
 	ClearInternalPolicies     bool
-	AddInternalPolicyIDs      []string
-	RemoveInternalPolicyIDs   []string
+	AddInternalPolicyIDs      []string `json:"add_internal_policy_ids,omitempty"`
+	RemoveInternalPolicyIDs   []string `json:"remove_internal_policy_ids,omitempty"`
 	ClearProcedures           bool
-	AddProcedureIDs           []string
-	RemoveProcedureIDs        []string
+	AddProcedureIDs           []string `json:"add_procedure_ids,omitempty"`
+	RemoveProcedureIDs        []string `json:"remove_procedure_ids,omitempty"`
 	ClearRisks                bool
-	AddRiskIDs                []string
-	RemoveRiskIDs             []string
+	AddRiskIDs                []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs             []string `json:"remove_risk_ids,omitempty"`
 	ClearTasks                bool
-	AddTaskIDs                []string
-	RemoveTaskIDs             []string
+	AddTaskIDs                []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs             []string `json:"remove_task_ids,omitempty"`
 	ClearNotes                bool
-	AddNoteIDs                []string
-	RemoveNoteIDs             []string
+	AddNoteIDs                []string `json:"add_note_ids,omitempty"`
+	RemoveNoteIDs             []string `json:"remove_note_ids,omitempty"`
 	ClearFiles                bool
-	AddFileIDs                []string
-	RemoveFileIDs             []string
+	AddFileIDs                []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs             []string `json:"remove_file_ids,omitempty"`
 	ClearEvidence             bool
-	AddEvidenceIDs            []string
-	RemoveEvidenceIDs         []string
+	AddEvidenceIDs            []string `json:"add_evidence_ids,omitempty"`
+	RemoveEvidenceIDs         []string `json:"remove_evidence_ids,omitempty"`
 	ClearNarratives           bool
-	AddNarrativeIDs           []string
-	RemoveNarrativeIDs        []string
+	AddNarrativeIDs           []string `json:"add_narrative_ids,omitempty"`
+	RemoveNarrativeIDs        []string `json:"remove_narrative_ids,omitempty"`
 	ClearActionPlans          bool
-	AddActionPlanIDs          []string
-	RemoveActionPlanIDs       []string
+	AddActionPlanIDs          []string `json:"add_action_plan_ids,omitempty"`
+	RemoveActionPlanIDs       []string `json:"remove_action_plan_ids,omitempty"`
 	ClearSystemDetails        bool
-	AddSystemDetailIDs        []string
-	RemoveSystemDetailIDs     []string
+	AddSystemDetailIDs        []string `json:"add_system_detail_ids,omitempty"`
+	RemoveSystemDetailIDs     []string `json:"remove_system_detail_ids,omitempty"`
 	ClearProgramOwner         bool
-	ProgramOwnerID            *string
+	ProgramOwnerID            *string `json:"program_owner_id,omitempty"`
 }
 
 // Mutate applies the UpdateProgramInput on the ProgramMutation builder.
@@ -21678,8 +21678,8 @@ func (c *ProgramUpdateOne) SetInput(i UpdateProgramInput) *ProgramUpdateOne {
 // CreateProgramMembershipInput represents a mutation input for creating programmemberships.
 type CreateProgramMembershipInput struct {
 	Role      *enums.Role `json:"role,omitempty"`
-	ProgramID string
-	UserID    string
+	ProgramID string      `json:"program_id,omitempty"`
+	UserID    string      `json:"user_id,omitempty"`
 }
 
 // Mutate applies the CreateProgramMembershipInput on the ProgramMembershipMutation builder.
@@ -21749,27 +21749,27 @@ type CreateRemediationInput struct {
 	Source                 *string                  `json:"source,omitempty"`
 	ExternalURI            *string                  `json:"external_uri,omitempty"`
 	Metadata               map[string]interface{}   `json:"metadata,omitempty"`
-	OwnerID                *string
-	BlockedGroupIDs        []string
-	EditorIDs              []string
-	EnvironmentID          *string
-	ScopeID                *string
-	IntegrationIDs         []string
-	ScanIDs                []string
-	FindingIDs             []string
-	VulnerabilityIDs       []string
-	ActionPlanIDs          []string
-	TaskIDs                []string
-	ControlIDs             []string
-	SubcontrolIDs          []string
-	RiskIDs                []string
-	ProgramIDs             []string
-	AssetIDs               []string
-	EntityIDs              []string
-	ReviewIDs              []string
-	CommentIDs             []string
-	FileIDs                []string
-	WorkflowObjectRefIDs   []string
+	OwnerID                *string                  `json:"owner_id,omitempty"`
+	BlockedGroupIDs        []string                 `json:"blocked_group_ids,omitempty"`
+	EditorIDs              []string                 `json:"editor_ids,omitempty"`
+	EnvironmentID          *string                  `json:"environment_id,omitempty"`
+	ScopeID                *string                  `json:"scope_id,omitempty"`
+	IntegrationIDs         []string                 `json:"integration_ids,omitempty"`
+	ScanIDs                []string                 `json:"scan_ids,omitempty"`
+	FindingIDs             []string                 `json:"finding_ids,omitempty"`
+	VulnerabilityIDs       []string                 `json:"vulnerability_ids,omitempty"`
+	ActionPlanIDs          []string                 `json:"action_plan_ids,omitempty"`
+	TaskIDs                []string                 `json:"task_ids,omitempty"`
+	ControlIDs             []string                 `json:"control_ids,omitempty"`
+	SubcontrolIDs          []string                 `json:"subcontrol_ids,omitempty"`
+	RiskIDs                []string                 `json:"risk_ids,omitempty"`
+	ProgramIDs             []string                 `json:"program_ids,omitempty"`
+	AssetIDs               []string                 `json:"asset_ids,omitempty"`
+	EntityIDs              []string                 `json:"entity_ids,omitempty"`
+	ReviewIDs              []string                 `json:"review_ids,omitempty"`
+	CommentIDs             []string                 `json:"comment_ids,omitempty"`
+	FileIDs                []string                 `json:"file_ids,omitempty"`
+	WorkflowObjectRefIDs   []string                 `json:"workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the CreateRemediationInput on the RemediationMutation builder.
@@ -21979,63 +21979,63 @@ type UpdateRemediationInput struct {
 	ClearMetadata               bool
 	Metadata                    map[string]interface{} `json:"metadata,omitempty"`
 	ClearBlockedGroups          bool
-	AddBlockedGroupIDs          []string
-	RemoveBlockedGroupIDs       []string
+	AddBlockedGroupIDs          []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs       []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                bool
-	AddEditorIDs                []string
-	RemoveEditorIDs             []string
+	AddEditorIDs                []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs             []string `json:"remove_editor_ids,omitempty"`
 	ClearEnvironment            bool
-	EnvironmentID               *string
+	EnvironmentID               *string `json:"environment_id,omitempty"`
 	ClearScope                  bool
-	ScopeID                     *string
+	ScopeID                     *string `json:"scope_id,omitempty"`
 	ClearIntegrations           bool
-	AddIntegrationIDs           []string
-	RemoveIntegrationIDs        []string
+	AddIntegrationIDs           []string `json:"add_integration_ids,omitempty"`
+	RemoveIntegrationIDs        []string `json:"remove_integration_ids,omitempty"`
 	ClearScans                  bool
-	AddScanIDs                  []string
-	RemoveScanIDs               []string
+	AddScanIDs                  []string `json:"add_scan_ids,omitempty"`
+	RemoveScanIDs               []string `json:"remove_scan_ids,omitempty"`
 	ClearFindings               bool
-	AddFindingIDs               []string
-	RemoveFindingIDs            []string
+	AddFindingIDs               []string `json:"add_finding_ids,omitempty"`
+	RemoveFindingIDs            []string `json:"remove_finding_ids,omitempty"`
 	ClearVulnerabilities        bool
-	AddVulnerabilityIDs         []string
-	RemoveVulnerabilityIDs      []string
+	AddVulnerabilityIDs         []string `json:"add_vulnerability_ids,omitempty"`
+	RemoveVulnerabilityIDs      []string `json:"remove_vulnerability_ids,omitempty"`
 	ClearActionPlans            bool
-	AddActionPlanIDs            []string
-	RemoveActionPlanIDs         []string
+	AddActionPlanIDs            []string `json:"add_action_plan_ids,omitempty"`
+	RemoveActionPlanIDs         []string `json:"remove_action_plan_ids,omitempty"`
 	ClearTasks                  bool
-	AddTaskIDs                  []string
-	RemoveTaskIDs               []string
+	AddTaskIDs                  []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs               []string `json:"remove_task_ids,omitempty"`
 	ClearControls               bool
-	AddControlIDs               []string
-	RemoveControlIDs            []string
+	AddControlIDs               []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs            []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols            bool
-	AddSubcontrolIDs            []string
-	RemoveSubcontrolIDs         []string
+	AddSubcontrolIDs            []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs         []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearRisks                  bool
-	AddRiskIDs                  []string
-	RemoveRiskIDs               []string
+	AddRiskIDs                  []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs               []string `json:"remove_risk_ids,omitempty"`
 	ClearPrograms               bool
-	AddProgramIDs               []string
-	RemoveProgramIDs            []string
+	AddProgramIDs               []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs            []string `json:"remove_program_ids,omitempty"`
 	ClearAssets                 bool
-	AddAssetIDs                 []string
-	RemoveAssetIDs              []string
+	AddAssetIDs                 []string `json:"add_asset_ids,omitempty"`
+	RemoveAssetIDs              []string `json:"remove_asset_ids,omitempty"`
 	ClearEntities               bool
-	AddEntityIDs                []string
-	RemoveEntityIDs             []string
+	AddEntityIDs                []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs             []string `json:"remove_entity_ids,omitempty"`
 	ClearReviews                bool
-	AddReviewIDs                []string
-	RemoveReviewIDs             []string
+	AddReviewIDs                []string `json:"add_review_ids,omitempty"`
+	RemoveReviewIDs             []string `json:"remove_review_ids,omitempty"`
 	ClearComments               bool
-	AddCommentIDs               []string
-	RemoveCommentIDs            []string
+	AddCommentIDs               []string `json:"add_comment_ids,omitempty"`
+	RemoveCommentIDs            []string `json:"remove_comment_ids,omitempty"`
 	ClearFiles                  bool
-	AddFileIDs                  []string
-	RemoveFileIDs               []string
+	AddFileIDs                  []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs               []string `json:"remove_file_ids,omitempty"`
 	ClearWorkflowObjectRefs     bool
-	AddWorkflowObjectRefIDs     []string
-	RemoveWorkflowObjectRefIDs  []string
+	AddWorkflowObjectRefIDs     []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs  []string `json:"remove_workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the UpdateRemediationInput on the RemediationMutation builder.
@@ -22412,27 +22412,27 @@ type CreateReviewInput struct {
 	ExternalURI       *string                `json:"external_uri,omitempty"`
 	Metadata          map[string]interface{} `json:"metadata,omitempty"`
 	RawPayload        map[string]interface{} `json:"raw_payload,omitempty"`
-	OwnerID           *string
-	BlockedGroupIDs   []string
-	EditorIDs         []string
-	EnvironmentID     *string
-	ScopeID           *string
-	IntegrationIDs    []string
-	FindingIDs        []string
-	VulnerabilityIDs  []string
-	ActionPlanIDs     []string
-	RemediationIDs    []string
-	ControlIDs        []string
-	SubcontrolIDs     []string
-	RiskIDs           []string
-	ProgramIDs        []string
-	AssetIDs          []string
-	EntityIDs         []string
-	TaskIDs           []string
-	ReviewerID        *string
-	CommentIDs        []string
-	FileIDs           []string
-	InternalPolicyIDs []string
+	OwnerID           *string                `json:"owner_id,omitempty"`
+	BlockedGroupIDs   []string               `json:"blocked_group_ids,omitempty"`
+	EditorIDs         []string               `json:"editor_ids,omitempty"`
+	EnvironmentID     *string                `json:"environment_id,omitempty"`
+	ScopeID           *string                `json:"scope_id,omitempty"`
+	IntegrationIDs    []string               `json:"integration_ids,omitempty"`
+	FindingIDs        []string               `json:"finding_ids,omitempty"`
+	VulnerabilityIDs  []string               `json:"vulnerability_ids,omitempty"`
+	ActionPlanIDs     []string               `json:"action_plan_ids,omitempty"`
+	RemediationIDs    []string               `json:"remediation_ids,omitempty"`
+	ControlIDs        []string               `json:"control_ids,omitempty"`
+	SubcontrolIDs     []string               `json:"subcontrol_ids,omitempty"`
+	RiskIDs           []string               `json:"risk_ids,omitempty"`
+	ProgramIDs        []string               `json:"program_ids,omitempty"`
+	AssetIDs          []string               `json:"asset_ids,omitempty"`
+	EntityIDs         []string               `json:"entity_ids,omitempty"`
+	TaskIDs           []string               `json:"task_ids,omitempty"`
+	ReviewerID        *string                `json:"reviewer_id,omitempty"`
+	CommentIDs        []string               `json:"comment_ids,omitempty"`
+	FileIDs           []string               `json:"file_ids,omitempty"`
+	InternalPolicyIDs []string               `json:"internal_policy_ids,omitempty"`
 }
 
 // Mutate applies the CreateReviewInput on the ReviewMutation builder.
@@ -22624,62 +22624,62 @@ type UpdateReviewInput struct {
 	ClearRawPayload         bool
 	RawPayload              map[string]interface{} `json:"raw_payload,omitempty"`
 	ClearBlockedGroups      bool
-	AddBlockedGroupIDs      []string
-	RemoveBlockedGroupIDs   []string
+	AddBlockedGroupIDs      []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs   []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors            bool
-	AddEditorIDs            []string
-	RemoveEditorIDs         []string
+	AddEditorIDs            []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs         []string `json:"remove_editor_ids,omitempty"`
 	ClearEnvironment        bool
-	EnvironmentID           *string
+	EnvironmentID           *string `json:"environment_id,omitempty"`
 	ClearScope              bool
-	ScopeID                 *string
+	ScopeID                 *string `json:"scope_id,omitempty"`
 	ClearIntegrations       bool
-	AddIntegrationIDs       []string
-	RemoveIntegrationIDs    []string
+	AddIntegrationIDs       []string `json:"add_integration_ids,omitempty"`
+	RemoveIntegrationIDs    []string `json:"remove_integration_ids,omitempty"`
 	ClearFindings           bool
-	AddFindingIDs           []string
-	RemoveFindingIDs        []string
+	AddFindingIDs           []string `json:"add_finding_ids,omitempty"`
+	RemoveFindingIDs        []string `json:"remove_finding_ids,omitempty"`
 	ClearVulnerabilities    bool
-	AddVulnerabilityIDs     []string
-	RemoveVulnerabilityIDs  []string
+	AddVulnerabilityIDs     []string `json:"add_vulnerability_ids,omitempty"`
+	RemoveVulnerabilityIDs  []string `json:"remove_vulnerability_ids,omitempty"`
 	ClearActionPlans        bool
-	AddActionPlanIDs        []string
-	RemoveActionPlanIDs     []string
+	AddActionPlanIDs        []string `json:"add_action_plan_ids,omitempty"`
+	RemoveActionPlanIDs     []string `json:"remove_action_plan_ids,omitempty"`
 	ClearRemediations       bool
-	AddRemediationIDs       []string
-	RemoveRemediationIDs    []string
+	AddRemediationIDs       []string `json:"add_remediation_ids,omitempty"`
+	RemoveRemediationIDs    []string `json:"remove_remediation_ids,omitempty"`
 	ClearControls           bool
-	AddControlIDs           []string
-	RemoveControlIDs        []string
+	AddControlIDs           []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs        []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols        bool
-	AddSubcontrolIDs        []string
-	RemoveSubcontrolIDs     []string
+	AddSubcontrolIDs        []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs     []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearRisks              bool
-	AddRiskIDs              []string
-	RemoveRiskIDs           []string
+	AddRiskIDs              []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs           []string `json:"remove_risk_ids,omitempty"`
 	ClearPrograms           bool
-	AddProgramIDs           []string
-	RemoveProgramIDs        []string
+	AddProgramIDs           []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs        []string `json:"remove_program_ids,omitempty"`
 	ClearAssets             bool
-	AddAssetIDs             []string
-	RemoveAssetIDs          []string
+	AddAssetIDs             []string `json:"add_asset_ids,omitempty"`
+	RemoveAssetIDs          []string `json:"remove_asset_ids,omitempty"`
 	ClearEntities           bool
-	AddEntityIDs            []string
-	RemoveEntityIDs         []string
+	AddEntityIDs            []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs         []string `json:"remove_entity_ids,omitempty"`
 	ClearTasks              bool
-	AddTaskIDs              []string
-	RemoveTaskIDs           []string
+	AddTaskIDs              []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs           []string `json:"remove_task_ids,omitempty"`
 	ClearReviewer           bool
-	ReviewerID              *string
+	ReviewerID              *string `json:"reviewer_id,omitempty"`
 	ClearComments           bool
-	AddCommentIDs           []string
-	RemoveCommentIDs        []string
+	AddCommentIDs           []string `json:"add_comment_ids,omitempty"`
+	RemoveCommentIDs        []string `json:"remove_comment_ids,omitempty"`
 	ClearFiles              bool
-	AddFileIDs              []string
-	RemoveFileIDs           []string
+	AddFileIDs              []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs           []string `json:"remove_file_ids,omitempty"`
 	ClearInternalPolicies   bool
-	AddInternalPolicyIDs    []string
-	RemoveInternalPolicyIDs []string
+	AddInternalPolicyIDs    []string `json:"add_internal_policy_ids,omitempty"`
+	RemoveInternalPolicyIDs []string `json:"remove_internal_policy_ids,omitempty"`
 }
 
 // Mutate applies the UpdateReviewInput on the ReviewMutation builder.
@@ -23038,32 +23038,32 @@ type CreateRiskInput struct {
 	NextReviewDueAt        *models.DateTime      `json:"next_review_due_at,omitempty"`
 	ResidualScore          *int                  `json:"residual_score,omitempty"`
 	RiskDecision           *enums.RiskDecision   `json:"risk_decision,omitempty"`
-	OwnerID                *string
-	BlockedGroupIDs        []string
-	EditorIDs              []string
-	ViewerIDs              []string
-	RiskKindID             *string
-	RiskCategoryID         *string
-	EnvironmentID          *string
-	ScopeID                *string
-	ControlIDs             []string
-	SubcontrolIDs          []string
-	ProcedureIDs           []string
-	InternalPolicyIDs      []string
-	ProgramIDs             []string
-	PlatformIDs            []string
-	ActionPlanIDs          []string
-	TaskIDs                []string
-	AssetIDs               []string
-	EntityIDs              []string
-	ScanIDs                []string
-	StakeholderID          *string
-	DelegateID             *string
-	CommentIDs             []string
-	DiscussionIDs          []string
-	ReviewIDs              []string
-	RemediationIDs         []string
-	WorkflowObjectRefIDs   []string
+	OwnerID                *string               `json:"owner_id,omitempty"`
+	BlockedGroupIDs        []string              `json:"blocked_group_ids,omitempty"`
+	EditorIDs              []string              `json:"editor_ids,omitempty"`
+	ViewerIDs              []string              `json:"viewer_ids,omitempty"`
+	RiskKindID             *string               `json:"risk_kind_id,omitempty"`
+	RiskCategoryID         *string               `json:"risk_category_id,omitempty"`
+	EnvironmentID          *string               `json:"environment_id,omitempty"`
+	ScopeID                *string               `json:"scope_id,omitempty"`
+	ControlIDs             []string              `json:"control_ids,omitempty"`
+	SubcontrolIDs          []string              `json:"subcontrol_ids,omitempty"`
+	ProcedureIDs           []string              `json:"procedure_ids,omitempty"`
+	InternalPolicyIDs      []string              `json:"internal_policy_ids,omitempty"`
+	ProgramIDs             []string              `json:"program_ids,omitempty"`
+	PlatformIDs            []string              `json:"platform_ids,omitempty"`
+	ActionPlanIDs          []string              `json:"action_plan_ids,omitempty"`
+	TaskIDs                []string              `json:"task_ids,omitempty"`
+	AssetIDs               []string              `json:"asset_ids,omitempty"`
+	EntityIDs              []string              `json:"entity_ids,omitempty"`
+	ScanIDs                []string              `json:"scan_ids,omitempty"`
+	StakeholderID          *string               `json:"stakeholder_id,omitempty"`
+	DelegateID             *string               `json:"delegate_id,omitempty"`
+	CommentIDs             []string              `json:"comment_ids,omitempty"`
+	DiscussionIDs          []string              `json:"discussion_ids,omitempty"`
+	ReviewIDs              []string              `json:"review_ids,omitempty"`
+	RemediationIDs         []string              `json:"remediation_ids,omitempty"`
+	WorkflowObjectRefIDs   []string              `json:"workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the CreateRiskInput on the RiskMutation builder.
@@ -23303,74 +23303,74 @@ type UpdateRiskInput struct {
 	ClearRiskDecision           bool
 	RiskDecision                *enums.RiskDecision `json:"risk_decision,omitempty"`
 	ClearBlockedGroups          bool
-	AddBlockedGroupIDs          []string
-	RemoveBlockedGroupIDs       []string
+	AddBlockedGroupIDs          []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs       []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                bool
-	AddEditorIDs                []string
-	RemoveEditorIDs             []string
+	AddEditorIDs                []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs             []string `json:"remove_editor_ids,omitempty"`
 	ClearViewers                bool
-	AddViewerIDs                []string
-	RemoveViewerIDs             []string
+	AddViewerIDs                []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs             []string `json:"remove_viewer_ids,omitempty"`
 	ClearRiskKind               bool
-	RiskKindID                  *string
+	RiskKindID                  *string `json:"risk_kind_id,omitempty"`
 	ClearRiskCategory           bool
-	RiskCategoryID              *string
+	RiskCategoryID              *string `json:"risk_category_id,omitempty"`
 	ClearEnvironment            bool
-	EnvironmentID               *string
+	EnvironmentID               *string `json:"environment_id,omitempty"`
 	ClearScope                  bool
-	ScopeID                     *string
+	ScopeID                     *string `json:"scope_id,omitempty"`
 	ClearControls               bool
-	AddControlIDs               []string
-	RemoveControlIDs            []string
+	AddControlIDs               []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs            []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols            bool
-	AddSubcontrolIDs            []string
-	RemoveSubcontrolIDs         []string
+	AddSubcontrolIDs            []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs         []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearProcedures             bool
-	AddProcedureIDs             []string
-	RemoveProcedureIDs          []string
+	AddProcedureIDs             []string `json:"add_procedure_ids,omitempty"`
+	RemoveProcedureIDs          []string `json:"remove_procedure_ids,omitempty"`
 	ClearInternalPolicies       bool
-	AddInternalPolicyIDs        []string
-	RemoveInternalPolicyIDs     []string
+	AddInternalPolicyIDs        []string `json:"add_internal_policy_ids,omitempty"`
+	RemoveInternalPolicyIDs     []string `json:"remove_internal_policy_ids,omitempty"`
 	ClearPrograms               bool
-	AddProgramIDs               []string
-	RemoveProgramIDs            []string
+	AddProgramIDs               []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs            []string `json:"remove_program_ids,omitempty"`
 	ClearPlatforms              bool
-	AddPlatformIDs              []string
-	RemovePlatformIDs           []string
+	AddPlatformIDs              []string `json:"add_platform_ids,omitempty"`
+	RemovePlatformIDs           []string `json:"remove_platform_ids,omitempty"`
 	ClearActionPlans            bool
-	AddActionPlanIDs            []string
-	RemoveActionPlanIDs         []string
+	AddActionPlanIDs            []string `json:"add_action_plan_ids,omitempty"`
+	RemoveActionPlanIDs         []string `json:"remove_action_plan_ids,omitempty"`
 	ClearTasks                  bool
-	AddTaskIDs                  []string
-	RemoveTaskIDs               []string
+	AddTaskIDs                  []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs               []string `json:"remove_task_ids,omitempty"`
 	ClearAssets                 bool
-	AddAssetIDs                 []string
-	RemoveAssetIDs              []string
+	AddAssetIDs                 []string `json:"add_asset_ids,omitempty"`
+	RemoveAssetIDs              []string `json:"remove_asset_ids,omitempty"`
 	ClearEntities               bool
-	AddEntityIDs                []string
-	RemoveEntityIDs             []string
+	AddEntityIDs                []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs             []string `json:"remove_entity_ids,omitempty"`
 	ClearScans                  bool
-	AddScanIDs                  []string
-	RemoveScanIDs               []string
+	AddScanIDs                  []string `json:"add_scan_ids,omitempty"`
+	RemoveScanIDs               []string `json:"remove_scan_ids,omitempty"`
 	ClearStakeholder            bool
-	StakeholderID               *string
+	StakeholderID               *string `json:"stakeholder_id,omitempty"`
 	ClearDelegate               bool
-	DelegateID                  *string
+	DelegateID                  *string `json:"delegate_id,omitempty"`
 	ClearComments               bool
-	AddCommentIDs               []string
-	RemoveCommentIDs            []string
+	AddCommentIDs               []string `json:"add_comment_ids,omitempty"`
+	RemoveCommentIDs            []string `json:"remove_comment_ids,omitempty"`
 	ClearDiscussions            bool
-	AddDiscussionIDs            []string
-	RemoveDiscussionIDs         []string
+	AddDiscussionIDs            []string `json:"add_discussion_ids,omitempty"`
+	RemoveDiscussionIDs         []string `json:"remove_discussion_ids,omitempty"`
 	ClearReviews                bool
-	AddReviewIDs                []string
-	RemoveReviewIDs             []string
+	AddReviewIDs                []string `json:"add_review_ids,omitempty"`
+	RemoveReviewIDs             []string `json:"remove_review_ids,omitempty"`
 	ClearRemediations           bool
-	AddRemediationIDs           []string
-	RemoveRemediationIDs        []string
+	AddRemediationIDs           []string `json:"add_remediation_ids,omitempty"`
+	RemoveRemediationIDs        []string `json:"remove_remediation_ids,omitempty"`
 	ClearWorkflowObjectRefs     bool
-	AddWorkflowObjectRefIDs     []string
-	RemoveWorkflowObjectRefIDs  []string
+	AddWorkflowObjectRefIDs     []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs  []string `json:"remove_workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the UpdateRiskInput on the RiskMutation builder.
@@ -23783,9 +23783,9 @@ func (c *RiskUpdateOne) SetInput(i UpdateRiskInput) *RiskUpdateOne {
 type CreateSLADefinitionInput struct {
 	Tags            []string `json:"tags,omitempty"`
 	SLADays         int      `json:"sla_days,omitempty"`
-	OwnerID         *string
-	BlockedGroupIDs []string
-	EditorIDs       []string
+	OwnerID         *string  `json:"owner_id,omitempty"`
+	BlockedGroupIDs []string `json:"blocked_group_ids,omitempty"`
+	EditorIDs       []string `json:"editor_ids,omitempty"`
 }
 
 // Mutate applies the CreateSLADefinitionInput on the SLADefinitionMutation builder.
@@ -23818,13 +23818,13 @@ type UpdateSLADefinitionInput struct {
 	AppendTags            []string
 	SLADays               *int `json:"sla_days,omitempty"`
 	ClearOwner            bool
-	OwnerID               *string
+	OwnerID               *string `json:"owner_id,omitempty"`
 	ClearBlockedGroups    bool
-	AddBlockedGroupIDs    []string
-	RemoveBlockedGroupIDs []string
+	AddBlockedGroupIDs    []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors          bool
-	AddEditorIDs          []string
-	RemoveEditorIDs       []string
+	AddEditorIDs          []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs       []string `json:"remove_editor_ids,omitempty"`
 }
 
 // Mutate applies the UpdateSLADefinitionInput on the SLADefinitionMutation builder.
@@ -23895,30 +23895,30 @@ type CreateScanInput struct {
 	PerformedBy                *string                `json:"performed_by,omitempty"`
 	DiscoveredVulnerabilityIds []string               `json:"discovered_vulnerability_ids,omitempty"`
 	Status                     *enums.ScanStatus      `json:"status,omitempty"`
-	OwnerID                    *string
-	BlockedGroupIDs            []string
-	EditorIDs                  []string
-	ReviewedByUserID           *string
-	ReviewedByGroupID          *string
-	AssignedToUserID           *string
-	AssignedToGroupID          *string
-	EnvironmentID              *string
-	ScopeID                    *string
-	AssetIDs                   []string
-	EntityIDs                  []string
-	EvidenceIDs                []string
-	FileIDs                    []string
-	RemediationIDs             []string
-	ActionPlanIDs              []string
-	TaskIDs                    []string
-	PlatformIDs                []string
-	VulnerabilityIDs           []string
-	ControlIDs                 []string
-	SubcontrolIDs              []string
-	FindingIDs                 []string
-	GeneratedByPlatformID      *string
-	PerformedByUserID          *string
-	PerformedByGroupID         *string
+	OwnerID                    *string                `json:"owner_id,omitempty"`
+	BlockedGroupIDs            []string               `json:"blocked_group_ids,omitempty"`
+	EditorIDs                  []string               `json:"editor_ids,omitempty"`
+	ReviewedByUserID           *string                `json:"reviewed_by_user_id,omitempty"`
+	ReviewedByGroupID          *string                `json:"reviewed_by_group_id,omitempty"`
+	AssignedToUserID           *string                `json:"assigned_to_user_id,omitempty"`
+	AssignedToGroupID          *string                `json:"assigned_to_group_id,omitempty"`
+	EnvironmentID              *string                `json:"environment_id,omitempty"`
+	ScopeID                    *string                `json:"scope_id,omitempty"`
+	AssetIDs                   []string               `json:"asset_ids,omitempty"`
+	EntityIDs                  []string               `json:"entity_ids,omitempty"`
+	EvidenceIDs                []string               `json:"evidence_ids,omitempty"`
+	FileIDs                    []string               `json:"file_ids,omitempty"`
+	RemediationIDs             []string               `json:"remediation_ids,omitempty"`
+	ActionPlanIDs              []string               `json:"action_plan_ids,omitempty"`
+	TaskIDs                    []string               `json:"task_ids,omitempty"`
+	PlatformIDs                []string               `json:"platform_ids,omitempty"`
+	VulnerabilityIDs           []string               `json:"vulnerability_ids,omitempty"`
+	ControlIDs                 []string               `json:"control_ids,omitempty"`
+	SubcontrolIDs              []string               `json:"subcontrol_ids,omitempty"`
+	FindingIDs                 []string               `json:"finding_ids,omitempty"`
+	GeneratedByPlatformID      *string                `json:"generated_by_platform_id,omitempty"`
+	PerformedByUserID          *string                `json:"performed_by_user_id,omitempty"`
+	PerformedByGroupID         *string                `json:"performed_by_group_id,omitempty"`
 }
 
 // Mutate applies the CreateScanInput on the ScanMutation builder.
@@ -24073,65 +24073,65 @@ type UpdateScanInput struct {
 	AppendDiscoveredVulnerabilityIds []string
 	Status                           *enums.ScanStatus `json:"status,omitempty"`
 	ClearBlockedGroups               bool
-	AddBlockedGroupIDs               []string
-	RemoveBlockedGroupIDs            []string
+	AddBlockedGroupIDs               []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs            []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                     bool
-	AddEditorIDs                     []string
-	RemoveEditorIDs                  []string
+	AddEditorIDs                     []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs                  []string `json:"remove_editor_ids,omitempty"`
 	ClearReviewedByUser              bool
-	ReviewedByUserID                 *string
+	ReviewedByUserID                 *string `json:"reviewed_by_user_id,omitempty"`
 	ClearReviewedByGroup             bool
-	ReviewedByGroupID                *string
+	ReviewedByGroupID                *string `json:"reviewed_by_group_id,omitempty"`
 	ClearAssignedToUser              bool
-	AssignedToUserID                 *string
+	AssignedToUserID                 *string `json:"assigned_to_user_id,omitempty"`
 	ClearAssignedToGroup             bool
-	AssignedToGroupID                *string
+	AssignedToGroupID                *string `json:"assigned_to_group_id,omitempty"`
 	ClearEnvironment                 bool
-	EnvironmentID                    *string
+	EnvironmentID                    *string `json:"environment_id,omitempty"`
 	ClearScope                       bool
-	ScopeID                          *string
+	ScopeID                          *string `json:"scope_id,omitempty"`
 	ClearAssets                      bool
-	AddAssetIDs                      []string
-	RemoveAssetIDs                   []string
+	AddAssetIDs                      []string `json:"add_asset_ids,omitempty"`
+	RemoveAssetIDs                   []string `json:"remove_asset_ids,omitempty"`
 	ClearEntities                    bool
-	AddEntityIDs                     []string
-	RemoveEntityIDs                  []string
+	AddEntityIDs                     []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs                  []string `json:"remove_entity_ids,omitempty"`
 	ClearEvidence                    bool
-	AddEvidenceIDs                   []string
-	RemoveEvidenceIDs                []string
+	AddEvidenceIDs                   []string `json:"add_evidence_ids,omitempty"`
+	RemoveEvidenceIDs                []string `json:"remove_evidence_ids,omitempty"`
 	ClearFiles                       bool
-	AddFileIDs                       []string
-	RemoveFileIDs                    []string
+	AddFileIDs                       []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs                    []string `json:"remove_file_ids,omitempty"`
 	ClearRemediations                bool
-	AddRemediationIDs                []string
-	RemoveRemediationIDs             []string
+	AddRemediationIDs                []string `json:"add_remediation_ids,omitempty"`
+	RemoveRemediationIDs             []string `json:"remove_remediation_ids,omitempty"`
 	ClearActionPlans                 bool
-	AddActionPlanIDs                 []string
-	RemoveActionPlanIDs              []string
+	AddActionPlanIDs                 []string `json:"add_action_plan_ids,omitempty"`
+	RemoveActionPlanIDs              []string `json:"remove_action_plan_ids,omitempty"`
 	ClearTasks                       bool
-	AddTaskIDs                       []string
-	RemoveTaskIDs                    []string
+	AddTaskIDs                       []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs                    []string `json:"remove_task_ids,omitempty"`
 	ClearPlatforms                   bool
-	AddPlatformIDs                   []string
-	RemovePlatformIDs                []string
+	AddPlatformIDs                   []string `json:"add_platform_ids,omitempty"`
+	RemovePlatformIDs                []string `json:"remove_platform_ids,omitempty"`
 	ClearVulnerabilities             bool
-	AddVulnerabilityIDs              []string
-	RemoveVulnerabilityIDs           []string
+	AddVulnerabilityIDs              []string `json:"add_vulnerability_ids,omitempty"`
+	RemoveVulnerabilityIDs           []string `json:"remove_vulnerability_ids,omitempty"`
 	ClearControls                    bool
-	AddControlIDs                    []string
-	RemoveControlIDs                 []string
+	AddControlIDs                    []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs                 []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols                 bool
-	AddSubcontrolIDs                 []string
-	RemoveSubcontrolIDs              []string
+	AddSubcontrolIDs                 []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs              []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearFindings                    bool
-	AddFindingIDs                    []string
-	RemoveFindingIDs                 []string
+	AddFindingIDs                    []string `json:"add_finding_ids,omitempty"`
+	RemoveFindingIDs                 []string `json:"remove_finding_ids,omitempty"`
 	ClearGeneratedByPlatform         bool
-	GeneratedByPlatformID            *string
+	GeneratedByPlatformID            *string `json:"generated_by_platform_id,omitempty"`
 	ClearPerformedByUser             bool
-	PerformedByUserID                *string
+	PerformedByUserID                *string `json:"performed_by_user_id,omitempty"`
 	ClearPerformedByGroup            bool
-	PerformedByGroupID               *string
+	PerformedByGroupID               *string `json:"performed_by_group_id,omitempty"`
 }
 
 // Mutate applies the UpdateScanInput on the ScanMutation builder.
@@ -24416,11 +24416,11 @@ type CreateScheduledJobInput struct {
 	Active        *bool                   `json:"active,omitempty"`
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
 	Cron          *models.Cron            `json:"cron,omitempty"`
-	OwnerID       *string
-	JobTemplateID string
-	ControlIDs    []string
-	SubcontrolIDs []string
-	JobRunnerID   *string
+	OwnerID       *string                 `json:"owner_id,omitempty"`
+	JobTemplateID string                  `json:"job_template_id,omitempty"`
+	ControlIDs    []string                `json:"control_ids,omitempty"`
+	SubcontrolIDs []string                `json:"subcontrol_ids,omitempty"`
+	JobRunnerID   *string                 `json:"job_runner_id,omitempty"`
 }
 
 // Mutate applies the CreateScheduledJobInput on the ScheduledJobMutation builder.
@@ -24463,15 +24463,15 @@ type UpdateScheduledJobInput struct {
 	AppendConfiguration models.JobConfiguration
 	ClearCron           bool
 	Cron                *models.Cron `json:"cron,omitempty"`
-	JobTemplateID       *string
+	JobTemplateID       *string      `json:"job_template_id,omitempty"`
 	ClearControls       bool
-	AddControlIDs       []string
-	RemoveControlIDs    []string
+	AddControlIDs       []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs    []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols    bool
-	AddSubcontrolIDs    []string
-	RemoveSubcontrolIDs []string
+	AddSubcontrolIDs    []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearJobRunner      bool
-	JobRunnerID         *string
+	JobRunnerID         *string `json:"job_runner_id,omitempty"`
 }
 
 // Mutate applies the UpdateScheduledJobInput on the ScheduledJobMutation builder.
@@ -24540,9 +24540,9 @@ type CreateScheduledJobRunInput struct {
 	Status                *enums.ScheduledJobRunStatus `json:"status,omitempty"`
 	ExpectedExecutionTime time.Time                    `json:"expected_execution_time,omitempty"`
 	Script                string                       `json:"script,omitempty"`
-	OwnerID               *string
-	ScheduledJobID        string
-	JobRunnerID           string
+	OwnerID               *string                      `json:"owner_id,omitempty"`
+	ScheduledJobID        string                       `json:"scheduled_job_id,omitempty"`
+	JobRunnerID           string                       `json:"job_runner_id,omitempty"`
 }
 
 // Mutate applies the CreateScheduledJobRunInput on the ScheduledJobRunMutation builder.
@@ -24569,9 +24569,9 @@ func (c *ScheduledJobRunCreate) SetInput(i CreateScheduledJobRunInput) *Schedule
 type UpdateScheduledJobRunInput struct {
 	Status         *enums.ScheduledJobRunStatus `json:"status,omitempty"`
 	ClearOwner     bool
-	OwnerID        *string
-	ScheduledJobID *string
-	JobRunnerID    *string
+	OwnerID        *string `json:"owner_id,omitempty"`
+	ScheduledJobID *string `json:"scheduled_job_id,omitempty"`
+	JobRunnerID    *string `json:"job_runner_id,omitempty"`
 }
 
 // Mutate applies the UpdateScheduledJobRunInput on the ScheduledJobRunMutation builder.
@@ -24624,12 +24624,12 @@ type CreateStandardInput struct {
 	FreeToUse                *bool                 `json:"free_to_use,omitempty"`
 	StandardType             *string               `json:"standard_type,omitempty"`
 	Version                  *string               `json:"version,omitempty"`
-	OwnerID                  *string
-	ControlIDs               []string
-	TrustCenterComplianceIDs []string
-	TrustCenterDocIDs        []string
-	ApplicablePlatformIDs    []string
-	LogoFileID               *string
+	OwnerID                  *string               `json:"owner_id,omitempty"`
+	ControlIDs               []string              `json:"control_ids,omitempty"`
+	TrustCenterComplianceIDs []string              `json:"trust_center_compliance_ids,omitempty"`
+	TrustCenterDocIDs        []string              `json:"trust_center_doc_ids,omitempty"`
+	ApplicablePlatformIDs    []string              `json:"applicable_platform_ids,omitempty"`
+	LogoFileID               *string               `json:"logo_file_id,omitempty"`
 }
 
 // Mutate applies the CreateStandardInput on the StandardMutation builder.
@@ -24747,21 +24747,21 @@ type UpdateStandardInput struct {
 	ClearVersion                   bool
 	Version                        *string `json:"version,omitempty"`
 	ClearOwner                     bool
-	OwnerID                        *string
+	OwnerID                        *string `json:"owner_id,omitempty"`
 	ClearControls                  bool
-	AddControlIDs                  []string
-	RemoveControlIDs               []string
+	AddControlIDs                  []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs               []string `json:"remove_control_ids,omitempty"`
 	ClearTrustCenterCompliances    bool
-	AddTrustCenterComplianceIDs    []string
-	RemoveTrustCenterComplianceIDs []string
+	AddTrustCenterComplianceIDs    []string `json:"add_trust_center_compliance_ids,omitempty"`
+	RemoveTrustCenterComplianceIDs []string `json:"remove_trust_center_compliance_ids,omitempty"`
 	ClearTrustCenterDocs           bool
-	AddTrustCenterDocIDs           []string
-	RemoveTrustCenterDocIDs        []string
+	AddTrustCenterDocIDs           []string `json:"add_trust_center_doc_ids,omitempty"`
+	RemoveTrustCenterDocIDs        []string `json:"remove_trust_center_doc_ids,omitempty"`
 	ClearApplicablePlatforms       bool
-	AddApplicablePlatformIDs       []string
-	RemoveApplicablePlatformIDs    []string
+	AddApplicablePlatformIDs       []string `json:"add_applicable_platform_ids,omitempty"`
+	RemoveApplicablePlatformIDs    []string `json:"remove_applicable_platform_ids,omitempty"`
 	ClearLogoFile                  bool
-	LogoFileID                     *string
+	LogoFileID                     *string `json:"logo_file_id,omitempty"`
 }
 
 // Mutate applies the UpdateStandardInput on the StandardMutation builder.
@@ -24968,31 +24968,31 @@ type CreateSubcontrolInput struct {
 	SubcontrolKindName         *string                            `json:"subcontrol_kind_name,omitempty"`
 	WorkflowEligibleMarker     *bool                              `json:"workflow_eligible_marker,omitempty"`
 	RefCode                    string                             `json:"ref_code,omitempty"`
-	EvidenceIDs                []string
-	ControlObjectiveIDs        []string
-	TaskIDs                    []string
-	NarrativeIDs               []string
-	RiskIDs                    []string
-	ActionPlanIDs              []string
-	ProcedureIDs               []string
-	InternalPolicyIDs          []string
-	CommentIDs                 []string
-	DiscussionIDs              []string
-	ControlOwnerID             *string
-	DelegateID                 *string
-	ResponsiblePartyID         *string
-	ReviewIDs                  []string
-	RemediationIDs             []string
-	ScanIDs                    []string
-	OwnerID                    *string
-	SubcontrolKindID           *string
-	ControlID                  string
-	ControlImplementationIDs   []string
-	ScheduledJobIDs            []string
-	WorkflowObjectRefIDs       []string
-	AssetIDs                   []string
-	EntityIDs                  []string
-	IdentityHolderIDs          []string
+	EvidenceIDs                []string                           `json:"evidence_ids,omitempty"`
+	ControlObjectiveIDs        []string                           `json:"control_objective_ids,omitempty"`
+	TaskIDs                    []string                           `json:"task_ids,omitempty"`
+	NarrativeIDs               []string                           `json:"narrative_ids,omitempty"`
+	RiskIDs                    []string                           `json:"risk_ids,omitempty"`
+	ActionPlanIDs              []string                           `json:"action_plan_ids,omitempty"`
+	ProcedureIDs               []string                           `json:"procedure_ids,omitempty"`
+	InternalPolicyIDs          []string                           `json:"internal_policy_ids,omitempty"`
+	CommentIDs                 []string                           `json:"comment_ids,omitempty"`
+	DiscussionIDs              []string                           `json:"discussion_ids,omitempty"`
+	ControlOwnerID             *string                            `json:"control_owner_id,omitempty"`
+	DelegateID                 *string                            `json:"delegate_id,omitempty"`
+	ResponsiblePartyID         *string                            `json:"responsible_party_id,omitempty"`
+	ReviewIDs                  []string                           `json:"review_ids,omitempty"`
+	RemediationIDs             []string                           `json:"remediation_ids,omitempty"`
+	ScanIDs                    []string                           `json:"scan_ids,omitempty"`
+	OwnerID                    *string                            `json:"owner_id,omitempty"`
+	SubcontrolKindID           *string                            `json:"subcontrol_kind_id,omitempty"`
+	ControlID                  string                             `json:"control_id,omitempty"`
+	ControlImplementationIDs   []string                           `json:"control_implementation_ids,omitempty"`
+	ScheduledJobIDs            []string                           `json:"scheduled_job_ids,omitempty"`
+	WorkflowObjectRefIDs       []string                           `json:"workflow_object_ref_ids,omitempty"`
+	AssetIDs                   []string                           `json:"asset_ids,omitempty"`
+	EntityIDs                  []string                           `json:"entity_ids,omitempty"`
+	IdentityHolderIDs          []string                           `json:"identity_holder_ids,omitempty"`
 }
 
 // Mutate applies the CreateSubcontrolInput on the SubcontrolMutation builder.
@@ -25253,71 +25253,71 @@ type UpdateSubcontrolInput struct {
 	WorkflowEligibleMarker          *bool   `json:"workflow_eligible_marker,omitempty"`
 	RefCode                         *string `json:"ref_code,omitempty"`
 	ClearEvidence                   bool
-	AddEvidenceIDs                  []string
-	RemoveEvidenceIDs               []string
+	AddEvidenceIDs                  []string `json:"add_evidence_ids,omitempty"`
+	RemoveEvidenceIDs               []string `json:"remove_evidence_ids,omitempty"`
 	ClearControlObjectives          bool
-	AddControlObjectiveIDs          []string
-	RemoveControlObjectiveIDs       []string
+	AddControlObjectiveIDs          []string `json:"add_control_objective_ids,omitempty"`
+	RemoveControlObjectiveIDs       []string `json:"remove_control_objective_ids,omitempty"`
 	ClearTasks                      bool
-	AddTaskIDs                      []string
-	RemoveTaskIDs                   []string
+	AddTaskIDs                      []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs                   []string `json:"remove_task_ids,omitempty"`
 	ClearNarratives                 bool
-	AddNarrativeIDs                 []string
-	RemoveNarrativeIDs              []string
+	AddNarrativeIDs                 []string `json:"add_narrative_ids,omitempty"`
+	RemoveNarrativeIDs              []string `json:"remove_narrative_ids,omitempty"`
 	ClearRisks                      bool
-	AddRiskIDs                      []string
-	RemoveRiskIDs                   []string
+	AddRiskIDs                      []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs                   []string `json:"remove_risk_ids,omitempty"`
 	ClearActionPlans                bool
-	AddActionPlanIDs                []string
-	RemoveActionPlanIDs             []string
+	AddActionPlanIDs                []string `json:"add_action_plan_ids,omitempty"`
+	RemoveActionPlanIDs             []string `json:"remove_action_plan_ids,omitempty"`
 	ClearProcedures                 bool
-	AddProcedureIDs                 []string
-	RemoveProcedureIDs              []string
+	AddProcedureIDs                 []string `json:"add_procedure_ids,omitempty"`
+	RemoveProcedureIDs              []string `json:"remove_procedure_ids,omitempty"`
 	ClearInternalPolicies           bool
-	AddInternalPolicyIDs            []string
-	RemoveInternalPolicyIDs         []string
+	AddInternalPolicyIDs            []string `json:"add_internal_policy_ids,omitempty"`
+	RemoveInternalPolicyIDs         []string `json:"remove_internal_policy_ids,omitempty"`
 	ClearComments                   bool
-	AddCommentIDs                   []string
-	RemoveCommentIDs                []string
+	AddCommentIDs                   []string `json:"add_comment_ids,omitempty"`
+	RemoveCommentIDs                []string `json:"remove_comment_ids,omitempty"`
 	ClearDiscussions                bool
-	AddDiscussionIDs                []string
-	RemoveDiscussionIDs             []string
+	AddDiscussionIDs                []string `json:"add_discussion_ids,omitempty"`
+	RemoveDiscussionIDs             []string `json:"remove_discussion_ids,omitempty"`
 	ClearControlOwner               bool
-	ControlOwnerID                  *string
+	ControlOwnerID                  *string `json:"control_owner_id,omitempty"`
 	ClearDelegate                   bool
-	DelegateID                      *string
+	DelegateID                      *string `json:"delegate_id,omitempty"`
 	ClearResponsibleParty           bool
-	ResponsiblePartyID              *string
+	ResponsiblePartyID              *string `json:"responsible_party_id,omitempty"`
 	ClearReviews                    bool
-	AddReviewIDs                    []string
-	RemoveReviewIDs                 []string
+	AddReviewIDs                    []string `json:"add_review_ids,omitempty"`
+	RemoveReviewIDs                 []string `json:"remove_review_ids,omitempty"`
 	ClearRemediations               bool
-	AddRemediationIDs               []string
-	RemoveRemediationIDs            []string
+	AddRemediationIDs               []string `json:"add_remediation_ids,omitempty"`
+	RemoveRemediationIDs            []string `json:"remove_remediation_ids,omitempty"`
 	ClearScans                      bool
-	AddScanIDs                      []string
-	RemoveScanIDs                   []string
+	AddScanIDs                      []string `json:"add_scan_ids,omitempty"`
+	RemoveScanIDs                   []string `json:"remove_scan_ids,omitempty"`
 	ClearSubcontrolKind             bool
-	SubcontrolKindID                *string
-	ControlID                       *string
+	SubcontrolKindID                *string `json:"subcontrol_kind_id,omitempty"`
+	ControlID                       *string `json:"control_id,omitempty"`
 	ClearControlImplementations     bool
-	AddControlImplementationIDs     []string
-	RemoveControlImplementationIDs  []string
+	AddControlImplementationIDs     []string `json:"add_control_implementation_ids,omitempty"`
+	RemoveControlImplementationIDs  []string `json:"remove_control_implementation_ids,omitempty"`
 	ClearScheduledJobs              bool
-	AddScheduledJobIDs              []string
-	RemoveScheduledJobIDs           []string
+	AddScheduledJobIDs              []string `json:"add_scheduled_job_ids,omitempty"`
+	RemoveScheduledJobIDs           []string `json:"remove_scheduled_job_ids,omitempty"`
 	ClearWorkflowObjectRefs         bool
-	AddWorkflowObjectRefIDs         []string
-	RemoveWorkflowObjectRefIDs      []string
+	AddWorkflowObjectRefIDs         []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs      []string `json:"remove_workflow_object_ref_ids,omitempty"`
 	ClearAssets                     bool
-	AddAssetIDs                     []string
-	RemoveAssetIDs                  []string
+	AddAssetIDs                     []string `json:"add_asset_ids,omitempty"`
+	RemoveAssetIDs                  []string `json:"remove_asset_ids,omitempty"`
 	ClearEntities                   bool
-	AddEntityIDs                    []string
-	RemoveEntityIDs                 []string
+	AddEntityIDs                    []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs                 []string `json:"remove_entity_ids,omitempty"`
 	ClearIdentityHolders            bool
-	AddIdentityHolderIDs            []string
-	RemoveIdentityHolderIDs         []string
+	AddIdentityHolderIDs            []string `json:"add_identity_holder_ids,omitempty"`
+	RemoveIdentityHolderIDs         []string `json:"remove_identity_holder_ids,omitempty"`
 }
 
 // Mutate applies the UpdateSubcontrolInput on the SubcontrolMutation builder.
@@ -25767,10 +25767,10 @@ type CreateSubprocessorInput struct {
 	Name                       string   `json:"name,omitempty"`
 	Description                *string  `json:"description,omitempty"`
 	LogoRemoteURL              *string  `json:"logo_remote_url,omitempty"`
-	OwnerID                    *string
-	LogoFileID                 *string
-	TrustCenterSubprocessorIDs []string
-	EntityIDs                  []string
+	OwnerID                    *string  `json:"owner_id,omitempty"`
+	LogoFileID                 *string  `json:"logo_file_id,omitempty"`
+	TrustCenterSubprocessorIDs []string `json:"trust_center_subprocessor_ids,omitempty"`
+	EntityIDs                  []string `json:"entity_ids,omitempty"`
 }
 
 // Mutate applies the CreateSubprocessorInput on the SubprocessorMutation builder.
@@ -25826,13 +25826,13 @@ type UpdateSubprocessorInput struct {
 	ClearLogoRemoteURL               bool
 	LogoRemoteURL                    *string `json:"logo_remote_url,omitempty"`
 	ClearLogoFile                    bool
-	LogoFileID                       *string
+	LogoFileID                       *string `json:"logo_file_id,omitempty"`
 	ClearTrustCenterSubprocessors    bool
-	AddTrustCenterSubprocessorIDs    []string
-	RemoveTrustCenterSubprocessorIDs []string
+	AddTrustCenterSubprocessorIDs    []string `json:"add_trust_center_subprocessor_ids,omitempty"`
+	RemoveTrustCenterSubprocessorIDs []string `json:"remove_trust_center_subprocessor_ids,omitempty"`
 	ClearEntities                    bool
-	AddEntityIDs                     []string
-	RemoveEntityIDs                  []string
+	AddEntityIDs                     []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs                  []string `json:"remove_entity_ids,omitempty"`
 }
 
 // Mutate applies the UpdateSubprocessorInput on the SubprocessorMutation builder.
@@ -25916,12 +25916,12 @@ type CreateSubscriberInput struct {
 	Tags              []string `json:"tags,omitempty"`
 	Email             string   `json:"email,omitempty"`
 	PhoneNumber       *string  `json:"phone_number,omitempty"`
-	OwnerID           *string
-	EventIDs          []string
-	TrustCenterID     *string
-	CampaignTargetIDs []string
-	ContactID         *string
-	UserID            *string
+	OwnerID           *string  `json:"owner_id,omitempty"`
+	EventIDs          []string `json:"event_ids,omitempty"`
+	TrustCenterID     *string  `json:"trust_center_id,omitempty"`
+	CampaignTargetIDs []string `json:"campaign_target_ids,omitempty"`
+	ContactID         *string  `json:"contact_id,omitempty"`
+	UserID            *string  `json:"user_id,omitempty"`
 }
 
 // Mutate applies the CreateSubscriberInput on the SubscriberMutation builder.
@@ -25969,17 +25969,17 @@ type UpdateSubscriberInput struct {
 	PhoneNumber             *string `json:"phone_number,omitempty"`
 	Unsubscribed            *bool   `json:"unsubscribed,omitempty"`
 	ClearOwner              bool
-	OwnerID                 *string
+	OwnerID                 *string `json:"owner_id,omitempty"`
 	ClearEvents             bool
-	AddEventIDs             []string
-	RemoveEventIDs          []string
+	AddEventIDs             []string `json:"add_event_ids,omitempty"`
+	RemoveEventIDs          []string `json:"remove_event_ids,omitempty"`
 	ClearCampaignTargets    bool
-	AddCampaignTargetIDs    []string
-	RemoveCampaignTargetIDs []string
+	AddCampaignTargetIDs    []string `json:"add_campaign_target_ids,omitempty"`
+	RemoveCampaignTargetIDs []string `json:"remove_campaign_target_ids,omitempty"`
 	ClearContact            bool
-	ContactID               *string
+	ContactID               *string `json:"contact_id,omitempty"`
 	ClearUser               bool
-	UserID                  *string
+	UserID                  *string `json:"user_id,omitempty"`
 }
 
 // Mutate applies the UpdateSubscriberInput on the SubscriberMutation builder.
@@ -26066,11 +26066,11 @@ type CreateSystemDetailInput struct {
 	LastReviewed          *models.DateTime              `json:"last_reviewed,omitempty"`
 	RevisionHistory       []interface{}                 `json:"revision_history,omitempty"`
 	OscalMetadataJSON     map[string]interface{}        `json:"oscal_metadata_json,omitempty"`
-	OwnerID               *string
-	ProgramIDs            []string
-	PlatformIDs           []string
-	EntityIDs             []string
-	AssetIDs              []string
+	OwnerID               *string                       `json:"owner_id,omitempty"`
+	ProgramIDs            []string                      `json:"program_ids,omitempty"`
+	PlatformIDs           []string                      `json:"platform_ids,omitempty"`
+	EntityIDs             []string                      `json:"entity_ids,omitempty"`
+	AssetIDs              []string                      `json:"asset_ids,omitempty"`
 }
 
 // Mutate applies the CreateSystemDetailInput on the SystemDetailMutation builder.
@@ -26145,17 +26145,17 @@ type UpdateSystemDetailInput struct {
 	ClearOscalMetadataJSON     bool
 	OscalMetadataJSON          map[string]interface{} `json:"oscal_metadata_json,omitempty"`
 	ClearPrograms              bool
-	AddProgramIDs              []string
-	RemoveProgramIDs           []string
+	AddProgramIDs              []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs           []string `json:"remove_program_ids,omitempty"`
 	ClearPlatforms             bool
-	AddPlatformIDs             []string
-	RemovePlatformIDs          []string
+	AddPlatformIDs             []string `json:"add_platform_ids,omitempty"`
+	RemovePlatformIDs          []string `json:"remove_platform_ids,omitempty"`
 	ClearEntities              bool
-	AddEntityIDs               []string
-	RemoveEntityIDs            []string
+	AddEntityIDs               []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs            []string `json:"remove_entity_ids,omitempty"`
 	ClearAssets                bool
-	AddAssetIDs                []string
-	RemoveAssetIDs             []string
+	AddAssetIDs                []string `json:"add_asset_ids,omitempty"`
+	RemoveAssetIDs             []string `json:"remove_asset_ids,omitempty"`
 }
 
 // Mutate applies the UpdateSystemDetailInput on the SystemDetailMutation builder.
@@ -26325,7 +26325,7 @@ type CreateTagDefinitionInput struct {
 	Aliases          []string `json:"aliases,omitempty"`
 	Description      *string  `json:"description,omitempty"`
 	Color            *string  `json:"color,omitempty"`
-	OwnerID          *string
+	OwnerID          *string  `json:"owner_id,omitempty"`
 }
 
 // Mutate applies the CreateTagDefinitionInput on the TagDefinitionMutation builder.
@@ -26371,7 +26371,7 @@ type UpdateTagDefinitionInput struct {
 	ClearColor            bool
 	Color                 *string `json:"color,omitempty"`
 	ClearOwner            bool
-	OwnerID               *string
+	OwnerID               *string `json:"owner_id,omitempty"`
 }
 
 // Mutate applies the UpdateTagDefinitionInput on the TagDefinitionMutation builder.
@@ -26446,32 +26446,32 @@ type CreateTaskInput struct {
 	SystemGenerated          *bool             `json:"system_generated,omitempty"`
 	IsTemplate               *bool             `json:"is_template,omitempty"`
 	ExternalReferenceURL     []string          `json:"external_reference_url,omitempty"`
-	OwnerID                  *string
-	TaskKindID               *string
-	EnvironmentID            *string
-	ScopeID                  *string
-	AssignerID               *string
-	AssigneeID               *string
-	CommentIDs               []string
-	GroupIDs                 []string
-	InternalPolicyIDs        []string
-	ProcedureIDs             []string
-	ControlIDs               []string
-	SubcontrolIDs            []string
-	ControlObjectiveIDs      []string
-	ProgramIDs               []string
-	RiskIDs                  []string
-	PlatformIDs              []string
-	ScanIDs                  []string
-	IdentityHolderIDs        []string
-	ControlImplementationIDs []string
-	ActionPlanIDs            []string
-	EvidenceIDs              []string
-	WorkflowObjectRefIDs     []string
-	VulnerabilityIDs         []string
-	FindingIDs               []string
-	ParentID                 *string
-	TaskIDs                  []string
+	OwnerID                  *string           `json:"owner_id,omitempty"`
+	TaskKindID               *string           `json:"task_kind_id,omitempty"`
+	EnvironmentID            *string           `json:"environment_id,omitempty"`
+	ScopeID                  *string           `json:"scope_id,omitempty"`
+	AssignerID               *string           `json:"assigner_id,omitempty"`
+	AssigneeID               *string           `json:"assignee_id,omitempty"`
+	CommentIDs               []string          `json:"comment_ids,omitempty"`
+	GroupIDs                 []string          `json:"group_ids,omitempty"`
+	InternalPolicyIDs        []string          `json:"internal_policy_ids,omitempty"`
+	ProcedureIDs             []string          `json:"procedure_ids,omitempty"`
+	ControlIDs               []string          `json:"control_ids,omitempty"`
+	SubcontrolIDs            []string          `json:"subcontrol_ids,omitempty"`
+	ControlObjectiveIDs      []string          `json:"control_objective_ids,omitempty"`
+	ProgramIDs               []string          `json:"program_ids,omitempty"`
+	RiskIDs                  []string          `json:"risk_ids,omitempty"`
+	PlatformIDs              []string          `json:"platform_ids,omitempty"`
+	ScanIDs                  []string          `json:"scan_ids,omitempty"`
+	IdentityHolderIDs        []string          `json:"identity_holder_ids,omitempty"`
+	ControlImplementationIDs []string          `json:"control_implementation_ids,omitempty"`
+	ActionPlanIDs            []string          `json:"action_plan_ids,omitempty"`
+	EvidenceIDs              []string          `json:"evidence_ids,omitempty"`
+	WorkflowObjectRefIDs     []string          `json:"workflow_object_ref_ids,omitempty"`
+	VulnerabilityIDs         []string          `json:"vulnerability_ids,omitempty"`
+	FindingIDs               []string          `json:"finding_ids,omitempty"`
+	ParentID                 *string           `json:"parent_id,omitempty"`
+	TaskIDs                  []string          `json:"task_ids,omitempty"`
 }
 
 // Mutate applies the CreateTaskInput on the TaskMutation builder.
@@ -26637,74 +26637,74 @@ type UpdateTaskInput struct {
 	ExternalReferenceURL           []string `json:"external_reference_url,omitempty"`
 	AppendExternalReferenceURL     []string
 	ClearTaskKind                  bool
-	TaskKindID                     *string
+	TaskKindID                     *string `json:"task_kind_id,omitempty"`
 	ClearEnvironment               bool
-	EnvironmentID                  *string
+	EnvironmentID                  *string `json:"environment_id,omitempty"`
 	ClearScope                     bool
-	ScopeID                        *string
+	ScopeID                        *string `json:"scope_id,omitempty"`
 	ClearAssigner                  bool
-	AssignerID                     *string
+	AssignerID                     *string `json:"assigner_id,omitempty"`
 	ClearAssignee                  bool
-	AssigneeID                     *string
+	AssigneeID                     *string `json:"assignee_id,omitempty"`
 	ClearComments                  bool
-	AddCommentIDs                  []string
-	RemoveCommentIDs               []string
+	AddCommentIDs                  []string `json:"add_comment_ids,omitempty"`
+	RemoveCommentIDs               []string `json:"remove_comment_ids,omitempty"`
 	ClearGroups                    bool
-	AddGroupIDs                    []string
-	RemoveGroupIDs                 []string
+	AddGroupIDs                    []string `json:"add_group_ids,omitempty"`
+	RemoveGroupIDs                 []string `json:"remove_group_ids,omitempty"`
 	ClearInternalPolicies          bool
-	AddInternalPolicyIDs           []string
-	RemoveInternalPolicyIDs        []string
+	AddInternalPolicyIDs           []string `json:"add_internal_policy_ids,omitempty"`
+	RemoveInternalPolicyIDs        []string `json:"remove_internal_policy_ids,omitempty"`
 	ClearProcedures                bool
-	AddProcedureIDs                []string
-	RemoveProcedureIDs             []string
+	AddProcedureIDs                []string `json:"add_procedure_ids,omitempty"`
+	RemoveProcedureIDs             []string `json:"remove_procedure_ids,omitempty"`
 	ClearControls                  bool
-	AddControlIDs                  []string
-	RemoveControlIDs               []string
+	AddControlIDs                  []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs               []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols               bool
-	AddSubcontrolIDs               []string
-	RemoveSubcontrolIDs            []string
+	AddSubcontrolIDs               []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs            []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearControlObjectives         bool
-	AddControlObjectiveIDs         []string
-	RemoveControlObjectiveIDs      []string
+	AddControlObjectiveIDs         []string `json:"add_control_objective_ids,omitempty"`
+	RemoveControlObjectiveIDs      []string `json:"remove_control_objective_ids,omitempty"`
 	ClearPrograms                  bool
-	AddProgramIDs                  []string
-	RemoveProgramIDs               []string
+	AddProgramIDs                  []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs               []string `json:"remove_program_ids,omitempty"`
 	ClearRisks                     bool
-	AddRiskIDs                     []string
-	RemoveRiskIDs                  []string
+	AddRiskIDs                     []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs                  []string `json:"remove_risk_ids,omitempty"`
 	ClearPlatforms                 bool
-	AddPlatformIDs                 []string
-	RemovePlatformIDs              []string
+	AddPlatformIDs                 []string `json:"add_platform_ids,omitempty"`
+	RemovePlatformIDs              []string `json:"remove_platform_ids,omitempty"`
 	ClearScans                     bool
-	AddScanIDs                     []string
-	RemoveScanIDs                  []string
+	AddScanIDs                     []string `json:"add_scan_ids,omitempty"`
+	RemoveScanIDs                  []string `json:"remove_scan_ids,omitempty"`
 	ClearIdentityHolders           bool
-	AddIdentityHolderIDs           []string
-	RemoveIdentityHolderIDs        []string
+	AddIdentityHolderIDs           []string `json:"add_identity_holder_ids,omitempty"`
+	RemoveIdentityHolderIDs        []string `json:"remove_identity_holder_ids,omitempty"`
 	ClearControlImplementations    bool
-	AddControlImplementationIDs    []string
-	RemoveControlImplementationIDs []string
+	AddControlImplementationIDs    []string `json:"add_control_implementation_ids,omitempty"`
+	RemoveControlImplementationIDs []string `json:"remove_control_implementation_ids,omitempty"`
 	ClearActionPlans               bool
-	AddActionPlanIDs               []string
-	RemoveActionPlanIDs            []string
+	AddActionPlanIDs               []string `json:"add_action_plan_ids,omitempty"`
+	RemoveActionPlanIDs            []string `json:"remove_action_plan_ids,omitempty"`
 	ClearEvidence                  bool
-	AddEvidenceIDs                 []string
-	RemoveEvidenceIDs              []string
+	AddEvidenceIDs                 []string `json:"add_evidence_ids,omitempty"`
+	RemoveEvidenceIDs              []string `json:"remove_evidence_ids,omitempty"`
 	ClearWorkflowObjectRefs        bool
-	AddWorkflowObjectRefIDs        []string
-	RemoveWorkflowObjectRefIDs     []string
+	AddWorkflowObjectRefIDs        []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs     []string `json:"remove_workflow_object_ref_ids,omitempty"`
 	ClearVulnerabilities           bool
-	AddVulnerabilityIDs            []string
-	RemoveVulnerabilityIDs         []string
+	AddVulnerabilityIDs            []string `json:"add_vulnerability_ids,omitempty"`
+	RemoveVulnerabilityIDs         []string `json:"remove_vulnerability_ids,omitempty"`
 	ClearFindings                  bool
-	AddFindingIDs                  []string
-	RemoveFindingIDs               []string
+	AddFindingIDs                  []string `json:"add_finding_ids,omitempty"`
+	RemoveFindingIDs               []string `json:"remove_finding_ids,omitempty"`
 	ClearParent                    bool
-	ParentID                       *string
+	ParentID                       *string `json:"parent_id,omitempty"`
 	ClearTasks                     bool
-	AddTaskIDs                     []string
-	RemoveTaskIDs                  []string
+	AddTaskIDs                     []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs                  []string `json:"remove_task_ids,omitempty"`
 }
 
 // Mutate applies the UpdateTaskInput on the TaskMutation builder.
@@ -27031,15 +27031,15 @@ type CreateTemplateInput struct {
 	Jsonconfig             map[string]interface{}           `json:"jsonconfig,omitempty"`
 	Uischema               map[string]interface{}           `json:"uischema,omitempty"`
 	TransformConfiguration *models.TemplateProjectionConfig `json:"transform_configuration,omitempty"`
-	OwnerID                *string
-	EnvironmentID          *string
-	ScopeID                *string
-	DocumentIDs            []string
-	FileIDs                []string
-	TrustCenterID          *string
-	AssessmentIDs          []string
-	CampaignIDs            []string
-	IdentityHolderIDs      []string
+	OwnerID                *string                          `json:"owner_id,omitempty"`
+	EnvironmentID          *string                          `json:"environment_id,omitempty"`
+	ScopeID                *string                          `json:"scope_id,omitempty"`
+	DocumentIDs            []string                         `json:"document_ids,omitempty"`
+	FileIDs                []string                         `json:"file_ids,omitempty"`
+	TrustCenterID          *string                          `json:"trust_center_id,omitempty"`
+	AssessmentIDs          []string                         `json:"assessment_ids,omitempty"`
+	CampaignIDs            []string                         `json:"campaign_ids,omitempty"`
+	IdentityHolderIDs      []string                         `json:"identity_holder_ids,omitempty"`
 }
 
 // Mutate applies the CreateTemplateInput on the TemplateMutation builder.
@@ -27138,26 +27138,26 @@ type UpdateTemplateInput struct {
 	ClearTransformConfiguration bool
 	TransformConfiguration      *models.TemplateProjectionConfig `json:"transform_configuration,omitempty"`
 	ClearEnvironment            bool
-	EnvironmentID               *string
+	EnvironmentID               *string `json:"environment_id,omitempty"`
 	ClearScope                  bool
-	ScopeID                     *string
+	ScopeID                     *string `json:"scope_id,omitempty"`
 	ClearDocuments              bool
-	AddDocumentIDs              []string
-	RemoveDocumentIDs           []string
+	AddDocumentIDs              []string `json:"add_document_ids,omitempty"`
+	RemoveDocumentIDs           []string `json:"remove_document_ids,omitempty"`
 	ClearFiles                  bool
-	AddFileIDs                  []string
-	RemoveFileIDs               []string
+	AddFileIDs                  []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs               []string `json:"remove_file_ids,omitempty"`
 	ClearTrustCenter            bool
-	TrustCenterID               *string
+	TrustCenterID               *string `json:"trust_center_id,omitempty"`
 	ClearAssessments            bool
-	AddAssessmentIDs            []string
-	RemoveAssessmentIDs         []string
+	AddAssessmentIDs            []string `json:"add_assessment_ids,omitempty"`
+	RemoveAssessmentIDs         []string `json:"remove_assessment_ids,omitempty"`
 	ClearCampaigns              bool
-	AddCampaignIDs              []string
-	RemoveCampaignIDs           []string
+	AddCampaignIDs              []string `json:"add_campaign_ids,omitempty"`
+	RemoveCampaignIDs           []string `json:"remove_campaign_ids,omitempty"`
 	ClearIdentityHolders        bool
-	AddIdentityHolderIDs        []string
-	RemoveIdentityHolderIDs     []string
+	AddIdentityHolderIDs        []string `json:"add_identity_holder_ids,omitempty"`
+	RemoveIdentityHolderIDs     []string `json:"remove_identity_holder_ids,omitempty"`
 }
 
 // Mutate applies the UpdateTemplateInput on the TemplateMutation builder.
@@ -27313,25 +27313,25 @@ type CreateTrustCenterInput struct {
 	PirschAccessLink           *string                         `json:"pirsch_access_link,omitempty"`
 	PreviewStatus              *enums.TrustCenterPreviewStatus `json:"preview_status,omitempty"`
 	SubprocessorURL            *string                         `json:"subprocessor_url,omitempty"`
-	OwnerID                    *string
-	BlockedGroupIDs            []string
-	EditorIDs                  []string
-	CustomDomainID             *string
-	PreviewDomainID            *string
-	SettingID                  *string
-	PreviewSettingID           *string
-	WatermarkConfigID          *string
-	TrustCenterSubprocessorIDs []string
-	TrustCenterDocIDs          []string
-	TrustCenterComplianceIDs   []string
-	TemplateIDs                []string
-	PostIDs                    []string
-	TrustCenterEntityIDs       []string
-	TrustCenterNdaRequestIDs   []string
-	TrustCenterFaqIDs          []string
-	SubscriberIDs              []string
-	EmailTemplateIDs           []string
-	CampaignIDs                []string
+	OwnerID                    *string                         `json:"owner_id,omitempty"`
+	BlockedGroupIDs            []string                        `json:"blocked_group_ids,omitempty"`
+	EditorIDs                  []string                        `json:"editor_ids,omitempty"`
+	CustomDomainID             *string                         `json:"custom_domain_id,omitempty"`
+	PreviewDomainID            *string                         `json:"preview_domain_id,omitempty"`
+	SettingID                  *string                         `json:"setting_id,omitempty"`
+	PreviewSettingID           *string                         `json:"preview_setting_id,omitempty"`
+	WatermarkConfigID          *string                         `json:"watermark_config_id,omitempty"`
+	TrustCenterSubprocessorIDs []string                        `json:"trust_center_subprocessor_ids,omitempty"`
+	TrustCenterDocIDs          []string                        `json:"trust_center_doc_ids,omitempty"`
+	TrustCenterComplianceIDs   []string                        `json:"trust_center_compliance_ids,omitempty"`
+	TemplateIDs                []string                        `json:"template_ids,omitempty"`
+	PostIDs                    []string                        `json:"post_ids,omitempty"`
+	TrustCenterEntityIDs       []string                        `json:"trust_center_entity_ids,omitempty"`
+	TrustCenterNdaRequestIDs   []string                        `json:"trust_center_nda_request_ids,omitempty"`
+	TrustCenterFaqIDs          []string                        `json:"trust_center_faq_ids,omitempty"`
+	SubscriberIDs              []string                        `json:"subscriber_ids,omitempty"`
+	EmailTemplateIDs           []string                        `json:"email_template_ids,omitempty"`
+	CampaignIDs                []string                        `json:"campaign_ids,omitempty"`
 }
 
 // Mutate applies the CreateTrustCenterInput on the TrustCenterMutation builder.
@@ -27435,56 +27435,56 @@ type UpdateTrustCenterInput struct {
 	ClearSubprocessorURL             bool
 	SubprocessorURL                  *string `json:"subprocessor_url,omitempty"`
 	ClearOwner                       bool
-	OwnerID                          *string
+	OwnerID                          *string `json:"owner_id,omitempty"`
 	ClearBlockedGroups               bool
-	AddBlockedGroupIDs               []string
-	RemoveBlockedGroupIDs            []string
+	AddBlockedGroupIDs               []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs            []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                     bool
-	AddEditorIDs                     []string
-	RemoveEditorIDs                  []string
+	AddEditorIDs                     []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs                  []string `json:"remove_editor_ids,omitempty"`
 	ClearCustomDomain                bool
-	CustomDomainID                   *string
+	CustomDomainID                   *string `json:"custom_domain_id,omitempty"`
 	ClearPreviewDomain               bool
-	PreviewDomainID                  *string
+	PreviewDomainID                  *string `json:"preview_domain_id,omitempty"`
 	ClearSetting                     bool
-	SettingID                        *string
+	SettingID                        *string `json:"setting_id,omitempty"`
 	ClearPreviewSetting              bool
-	PreviewSettingID                 *string
+	PreviewSettingID                 *string `json:"preview_setting_id,omitempty"`
 	ClearWatermarkConfig             bool
-	WatermarkConfigID                *string
+	WatermarkConfigID                *string `json:"watermark_config_id,omitempty"`
 	ClearTrustCenterSubprocessors    bool
-	AddTrustCenterSubprocessorIDs    []string
-	RemoveTrustCenterSubprocessorIDs []string
+	AddTrustCenterSubprocessorIDs    []string `json:"add_trust_center_subprocessor_ids,omitempty"`
+	RemoveTrustCenterSubprocessorIDs []string `json:"remove_trust_center_subprocessor_ids,omitempty"`
 	ClearTrustCenterDocs             bool
-	AddTrustCenterDocIDs             []string
-	RemoveTrustCenterDocIDs          []string
+	AddTrustCenterDocIDs             []string `json:"add_trust_center_doc_ids,omitempty"`
+	RemoveTrustCenterDocIDs          []string `json:"remove_trust_center_doc_ids,omitempty"`
 	ClearTrustCenterCompliances      bool
-	AddTrustCenterComplianceIDs      []string
-	RemoveTrustCenterComplianceIDs   []string
+	AddTrustCenterComplianceIDs      []string `json:"add_trust_center_compliance_ids,omitempty"`
+	RemoveTrustCenterComplianceIDs   []string `json:"remove_trust_center_compliance_ids,omitempty"`
 	ClearTemplates                   bool
-	AddTemplateIDs                   []string
-	RemoveTemplateIDs                []string
+	AddTemplateIDs                   []string `json:"add_template_ids,omitempty"`
+	RemoveTemplateIDs                []string `json:"remove_template_ids,omitempty"`
 	ClearPosts                       bool
-	AddPostIDs                       []string
-	RemovePostIDs                    []string
+	AddPostIDs                       []string `json:"add_post_ids,omitempty"`
+	RemovePostIDs                    []string `json:"remove_post_ids,omitempty"`
 	ClearTrustCenterEntities         bool
-	AddTrustCenterEntityIDs          []string
-	RemoveTrustCenterEntityIDs       []string
+	AddTrustCenterEntityIDs          []string `json:"add_trust_center_entity_ids,omitempty"`
+	RemoveTrustCenterEntityIDs       []string `json:"remove_trust_center_entity_ids,omitempty"`
 	ClearTrustCenterNdaRequests      bool
-	AddTrustCenterNdaRequestIDs      []string
-	RemoveTrustCenterNdaRequestIDs   []string
+	AddTrustCenterNdaRequestIDs      []string `json:"add_trust_center_nda_request_ids,omitempty"`
+	RemoveTrustCenterNdaRequestIDs   []string `json:"remove_trust_center_nda_request_ids,omitempty"`
 	ClearTrustCenterFaqs             bool
-	AddTrustCenterFaqIDs             []string
-	RemoveTrustCenterFaqIDs          []string
+	AddTrustCenterFaqIDs             []string `json:"add_trust_center_faq_ids,omitempty"`
+	RemoveTrustCenterFaqIDs          []string `json:"remove_trust_center_faq_ids,omitempty"`
 	ClearSubscribers                 bool
-	AddSubscriberIDs                 []string
-	RemoveSubscriberIDs              []string
+	AddSubscriberIDs                 []string `json:"add_subscriber_ids,omitempty"`
+	RemoveSubscriberIDs              []string `json:"remove_subscriber_ids,omitempty"`
 	ClearEmailTemplates              bool
-	AddEmailTemplateIDs              []string
-	RemoveEmailTemplateIDs           []string
+	AddEmailTemplateIDs              []string `json:"add_email_template_ids,omitempty"`
+	RemoveEmailTemplateIDs           []string `json:"remove_email_template_ids,omitempty"`
 	ClearCampaigns                   bool
-	AddCampaignIDs                   []string
-	RemoveCampaignIDs                []string
+	AddCampaignIDs                   []string `json:"add_campaign_ids,omitempty"`
+	RemoveCampaignIDs                []string `json:"remove_campaign_ids,omitempty"`
 }
 
 // Mutate applies the UpdateTrustCenterInput on the TrustCenterMutation builder.
@@ -27698,10 +27698,10 @@ func (c *TrustCenterUpdateOne) SetInput(i UpdateTrustCenterInput) *TrustCenterUp
 // CreateTrustCenterComplianceInput represents a mutation input for creating trustcentercompliances.
 type CreateTrustCenterComplianceInput struct {
 	Tags            []string `json:"tags,omitempty"`
-	BlockedGroupIDs []string
-	EditorIDs       []string
-	TrustCenterID   *string
-	StandardID      string
+	BlockedGroupIDs []string `json:"blocked_group_ids,omitempty"`
+	EditorIDs       []string `json:"editor_ids,omitempty"`
+	TrustCenterID   *string  `json:"trust_center_id,omitempty"`
+	StandardID      string   `json:"standard_id,omitempty"`
 }
 
 // Mutate applies the CreateTrustCenterComplianceInput on the TrustCenterComplianceMutation builder.
@@ -27733,12 +27733,12 @@ type UpdateTrustCenterComplianceInput struct {
 	Tags                  []string `json:"tags,omitempty"`
 	AppendTags            []string
 	ClearBlockedGroups    bool
-	AddBlockedGroupIDs    []string
-	RemoveBlockedGroupIDs []string
+	AddBlockedGroupIDs    []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors          bool
-	AddEditorIDs          []string
-	RemoveEditorIDs       []string
-	StandardID            *string
+	AddEditorIDs          []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs       []string `json:"remove_editor_ids,omitempty"`
+	StandardID            *string  `json:"standard_id,omitempty"`
 }
 
 // Mutate applies the UpdateTrustCenterComplianceInput on the TrustCenterComplianceMutation builder.
@@ -27795,13 +27795,13 @@ type CreateTrustCenterDocInput struct {
 	WatermarkingEnabled    *bool                                `json:"watermarking_enabled,omitempty"`
 	WatermarkStatus        *enums.WatermarkStatus               `json:"watermark_status,omitempty"`
 	Visibility             *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
-	TrustCenterDocKindID   *string
-	BlockedGroupIDs        []string
-	EditorIDs              []string
-	TrustCenterID          *string
-	StandardID             *string
-	FileID                 *string
-	OriginalFileID         *string
+	TrustCenterDocKindID   *string                              `json:"trust_center_doc_kind_id,omitempty"`
+	BlockedGroupIDs        []string                             `json:"blocked_group_ids,omitempty"`
+	EditorIDs              []string                             `json:"editor_ids,omitempty"`
+	TrustCenterID          *string                              `json:"trust_center_id,omitempty"`
+	StandardID             *string                              `json:"standard_id,omitempty"`
+	FileID                 *string                              `json:"file_id,omitempty"`
+	OriginalFileID         *string                              `json:"original_file_id,omitempty"`
 }
 
 // Mutate applies the CreateTrustCenterDocInput on the TrustCenterDocMutation builder.
@@ -27866,19 +27866,19 @@ type UpdateTrustCenterDocInput struct {
 	ClearVisibility             bool
 	Visibility                  *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
 	ClearTrustCenterDocKind     bool
-	TrustCenterDocKindID        *string
+	TrustCenterDocKindID        *string `json:"trust_center_doc_kind_id,omitempty"`
 	ClearBlockedGroups          bool
-	AddBlockedGroupIDs          []string
-	RemoveBlockedGroupIDs       []string
+	AddBlockedGroupIDs          []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs       []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                bool
-	AddEditorIDs                []string
-	RemoveEditorIDs             []string
+	AddEditorIDs                []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs             []string `json:"remove_editor_ids,omitempty"`
 	ClearStandard               bool
-	StandardID                  *string
+	StandardID                  *string `json:"standard_id,omitempty"`
 	ClearFile                   bool
-	FileID                      *string
+	FileID                      *string `json:"file_id,omitempty"`
 	ClearOriginalFile           bool
-	OriginalFileID              *string
+	OriginalFileID              *string `json:"original_file_id,omitempty"`
 }
 
 // Mutate applies the UpdateTrustCenterDocInput on the TrustCenterDocMutation builder.
@@ -27977,13 +27977,13 @@ func (c *TrustCenterDocUpdateOne) SetInput(i UpdateTrustCenterDocInput) *TrustCe
 
 // CreateTrustCenterEntityInput represents a mutation input for creating trustcenterentities.
 type CreateTrustCenterEntityInput struct {
-	URL             *string `json:"url,omitempty"`
-	Name            string  `json:"name,omitempty"`
-	BlockedGroupIDs []string
-	EditorIDs       []string
-	LogoFileID      *string
-	TrustCenterID   *string
-	EntityTypeID    *string
+	URL             *string  `json:"url,omitempty"`
+	Name            string   `json:"name,omitempty"`
+	BlockedGroupIDs []string `json:"blocked_group_ids,omitempty"`
+	EditorIDs       []string `json:"editor_ids,omitempty"`
+	LogoFileID      *string  `json:"logo_file_id,omitempty"`
+	TrustCenterID   *string  `json:"trust_center_id,omitempty"`
+	EntityTypeID    *string  `json:"entity_type_id,omitempty"`
 }
 
 // Mutate applies the CreateTrustCenterEntityInput on the TrustCenterEntityMutation builder.
@@ -28020,13 +28020,13 @@ type UpdateTrustCenterEntityInput struct {
 	ClearURL              bool
 	URL                   *string `json:"url,omitempty"`
 	ClearBlockedGroups    bool
-	AddBlockedGroupIDs    []string
-	RemoveBlockedGroupIDs []string
+	AddBlockedGroupIDs    []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors          bool
-	AddEditorIDs          []string
-	RemoveEditorIDs       []string
+	AddEditorIDs          []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs       []string `json:"remove_editor_ids,omitempty"`
 	ClearLogoFile         bool
-	LogoFileID            *string
+	LogoFileID            *string `json:"logo_file_id,omitempty"`
 }
 
 // Mutate applies the UpdateTrustCenterEntityInput on the TrustCenterEntityMutation builder.
@@ -28077,14 +28077,14 @@ func (c *TrustCenterEntityUpdateOne) SetInput(i UpdateTrustCenterEntityInput) *T
 
 // CreateTrustCenterFAQInput represents a mutation input for creating trustcenterfaqs.
 type CreateTrustCenterFAQInput struct {
-	TrustCenterFaqKindName *string `json:"trust_center_faq_kind_name,omitempty"`
-	ReferenceLink          *string `json:"reference_link,omitempty"`
-	DisplayOrder           *int    `json:"display_order,omitempty"`
-	TrustCenterFaqKindID   *string
-	BlockedGroupIDs        []string
-	EditorIDs              []string
-	TrustCenterID          *string
-	NoteID                 string
+	TrustCenterFaqKindName *string  `json:"trust_center_faq_kind_name,omitempty"`
+	ReferenceLink          *string  `json:"reference_link,omitempty"`
+	DisplayOrder           *int     `json:"display_order,omitempty"`
+	TrustCenterFaqKindID   *string  `json:"trust_center_faq_kind_id,omitempty"`
+	BlockedGroupIDs        []string `json:"blocked_group_ids,omitempty"`
+	EditorIDs              []string `json:"editor_ids,omitempty"`
+	TrustCenterID          *string  `json:"trust_center_id,omitempty"`
+	NoteID                 string   `json:"note_id,omitempty"`
 }
 
 // Mutate applies the CreateTrustCenterFAQInput on the TrustCenterFAQMutation builder.
@@ -28128,13 +28128,13 @@ type UpdateTrustCenterFAQInput struct {
 	ClearDisplayOrder           bool
 	DisplayOrder                *int `json:"display_order,omitempty"`
 	ClearTrustCenterFaqKind     bool
-	TrustCenterFaqKindID        *string
+	TrustCenterFaqKindID        *string `json:"trust_center_faq_kind_id,omitempty"`
 	ClearBlockedGroups          bool
-	AddBlockedGroupIDs          []string
-	RemoveBlockedGroupIDs       []string
+	AddBlockedGroupIDs          []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs       []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                bool
-	AddEditorIDs                []string
-	RemoveEditorIDs             []string
+	AddEditorIDs                []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs             []string `json:"remove_editor_ids,omitempty"`
 }
 
 // Mutate applies the UpdateTrustCenterFAQInput on the TrustCenterFAQMutation builder.
@@ -28207,12 +28207,12 @@ type CreateTrustCenterNDARequestInput struct {
 	ApprovedAt        *models.DateTime                        `json:"approved_at,omitempty"`
 	ApprovedByUserID  *string                                 `json:"approved_by_user_id,omitempty"`
 	SignedAt          *models.DateTime                        `json:"signed_at,omitempty"`
-	BlockedGroupIDs   []string
-	EditorIDs         []string
-	TrustCenterID     *string
-	TrustCenterDocIDs []string
-	DocumentID        *string
-	FileID            *string
+	BlockedGroupIDs   []string                                `json:"blocked_group_ids,omitempty"`
+	EditorIDs         []string                                `json:"editor_ids,omitempty"`
+	TrustCenterID     *string                                 `json:"trust_center_id,omitempty"`
+	TrustCenterDocIDs []string                                `json:"trust_center_doc_ids,omitempty"`
+	DocumentID        *string                                 `json:"document_id,omitempty"`
+	FileID            *string                                 `json:"file_id,omitempty"`
 }
 
 // Mutate applies the CreateTrustCenterNDARequestInput on the TrustCenterNDARequestMutation builder.
@@ -28290,18 +28290,18 @@ type UpdateTrustCenterNDARequestInput struct {
 	ClearSignedAt           bool
 	SignedAt                *models.DateTime `json:"signed_at,omitempty"`
 	ClearBlockedGroups      bool
-	AddBlockedGroupIDs      []string
-	RemoveBlockedGroupIDs   []string
+	AddBlockedGroupIDs      []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs   []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors            bool
-	AddEditorIDs            []string
-	RemoveEditorIDs         []string
+	AddEditorIDs            []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs         []string `json:"remove_editor_ids,omitempty"`
 	ClearTrustCenterDocs    bool
-	AddTrustCenterDocIDs    []string
-	RemoveTrustCenterDocIDs []string
+	AddTrustCenterDocIDs    []string `json:"add_trust_center_doc_ids,omitempty"`
+	RemoveTrustCenterDocIDs []string `json:"remove_trust_center_doc_ids,omitempty"`
 	ClearDocument           bool
-	DocumentID              *string
+	DocumentID              *string `json:"document_id,omitempty"`
 	ClearFile               bool
-	FileID                  *string
+	FileID                  *string `json:"file_id,omitempty"`
 }
 
 // Mutate applies the UpdateTrustCenterNDARequestInput on the TrustCenterNDARequestMutation builder.
@@ -28443,12 +28443,12 @@ type CreateTrustCenterSettingInput struct {
 	AllowSubscribers                      *bool                         `json:"allow_subscribers,omitempty"`
 	NotifySubscribersOnSubprocessorChange *bool                         `json:"notify_subscribers_on_subprocessor_change,omitempty"`
 	StatusPageURL                         *string                       `json:"status_page_url,omitempty"`
-	BlockedGroupIDs                       []string
-	EditorIDs                             []string
-	LogoFileID                            *string
-	FaviconFileID                         *string
-	HeroImageFileID                       *string
-	NdaApproverGroupID                    *string
+	BlockedGroupIDs                       []string                      `json:"blocked_group_ids,omitempty"`
+	EditorIDs                             []string                      `json:"editor_ids,omitempty"`
+	LogoFileID                            *string                       `json:"logo_file_id,omitempty"`
+	FaviconFileID                         *string                       `json:"favicon_file_id,omitempty"`
+	HeroImageFileID                       *string                       `json:"hero_image_file_id,omitempty"`
+	NdaApproverGroupID                    *string                       `json:"nda_approver_group_id,omitempty"`
 }
 
 // Mutate applies the CreateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -28590,19 +28590,19 @@ type UpdateTrustCenterSettingInput struct {
 	ClearStatusPageURL                         bool
 	StatusPageURL                              *string `json:"status_page_url,omitempty"`
 	ClearBlockedGroups                         bool
-	AddBlockedGroupIDs                         []string
-	RemoveBlockedGroupIDs                      []string
+	AddBlockedGroupIDs                         []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs                      []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                               bool
-	AddEditorIDs                               []string
-	RemoveEditorIDs                            []string
+	AddEditorIDs                               []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs                            []string `json:"remove_editor_ids,omitempty"`
 	ClearLogoFile                              bool
-	LogoFileID                                 *string
+	LogoFileID                                 *string `json:"logo_file_id,omitempty"`
 	ClearFaviconFile                           bool
-	FaviconFileID                              *string
+	FaviconFileID                              *string `json:"favicon_file_id,omitempty"`
 	ClearHeroImageFile                         bool
-	HeroImageFileID                            *string
+	HeroImageFileID                            *string `json:"hero_image_file_id,omitempty"`
 	ClearNdaApproverGroup                      bool
-	NdaApproverGroupID                         *string
+	NdaApproverGroupID                         *string `json:"nda_approver_group_id,omitempty"`
 }
 
 // Mutate applies the UpdateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -28793,11 +28793,11 @@ func (c *TrustCenterSettingUpdateOne) SetInput(i UpdateTrustCenterSettingInput) 
 type CreateTrustCenterSubprocessorInput struct {
 	TrustCenterSubprocessorKindName *string  `json:"trust_center_subprocessor_kind_name,omitempty"`
 	Countries                       []string `json:"countries,omitempty"`
-	TrustCenterSubprocessorKindID   *string
-	BlockedGroupIDs                 []string
-	EditorIDs                       []string
-	TrustCenterID                   *string
-	SubprocessorID                  string
+	TrustCenterSubprocessorKindID   *string  `json:"trust_center_subprocessor_kind_id,omitempty"`
+	BlockedGroupIDs                 []string `json:"blocked_group_ids,omitempty"`
+	EditorIDs                       []string `json:"editor_ids,omitempty"`
+	TrustCenterID                   *string  `json:"trust_center_id,omitempty"`
+	SubprocessorID                  string   `json:"subprocessor_id,omitempty"`
 }
 
 // Mutate applies the CreateTrustCenterSubprocessorInput on the TrustCenterSubprocessorMutation builder.
@@ -28837,13 +28837,13 @@ type UpdateTrustCenterSubprocessorInput struct {
 	Countries                            []string `json:"countries,omitempty"`
 	AppendCountries                      []string
 	ClearTrustCenterSubprocessorKind     bool
-	TrustCenterSubprocessorKindID        *string
+	TrustCenterSubprocessorKindID        *string `json:"trust_center_subprocessor_kind_id,omitempty"`
 	ClearBlockedGroups                   bool
-	AddBlockedGroupIDs                   []string
-	RemoveBlockedGroupIDs                []string
+	AddBlockedGroupIDs                   []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs                []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                         bool
-	AddEditorIDs                         []string
-	RemoveEditorIDs                      []string
+	AddEditorIDs                         []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs                      []string `json:"remove_editor_ids,omitempty"`
 }
 
 // Mutate applies the UpdateTrustCenterSubprocessorInput on the TrustCenterSubprocessorMutation builder.
@@ -28911,11 +28911,11 @@ type CreateTrustCenterWatermarkConfigInput struct {
 	Rotation        *float64    `json:"rotation,omitempty"`
 	Color           *string     `json:"color,omitempty"`
 	Font            *enums.Font `json:"font,omitempty"`
-	OwnerID         *string
-	BlockedGroupIDs []string
-	EditorIDs       []string
-	TrustCenterIDs  []string
-	FileID          *string
+	OwnerID         *string     `json:"owner_id,omitempty"`
+	BlockedGroupIDs []string    `json:"blocked_group_ids,omitempty"`
+	EditorIDs       []string    `json:"editor_ids,omitempty"`
+	TrustCenterIDs  []string    `json:"trust_center_ids,omitempty"`
+	FileID          *string     `json:"file_id,omitempty"`
 }
 
 // Mutate applies the CreateTrustCenterWatermarkConfigInput on the TrustCenterWatermarkConfigMutation builder.
@@ -28984,16 +28984,16 @@ type UpdateTrustCenterWatermarkConfigInput struct {
 	ClearFont             bool
 	Font                  *enums.Font `json:"font,omitempty"`
 	ClearBlockedGroups    bool
-	AddBlockedGroupIDs    []string
-	RemoveBlockedGroupIDs []string
+	AddBlockedGroupIDs    []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors          bool
-	AddEditorIDs          []string
-	RemoveEditorIDs       []string
+	AddEditorIDs          []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs       []string `json:"remove_editor_ids,omitempty"`
 	ClearTrustCenter      bool
-	AddTrustCenterIDs     []string
-	RemoveTrustCenterIDs  []string
+	AddTrustCenterIDs     []string `json:"add_trust_center_ids,omitempty"`
+	RemoveTrustCenterIDs  []string `json:"remove_trust_center_ids,omitempty"`
 	ClearFile             bool
-	FileID                *string
+	FileID                *string `json:"file_id,omitempty"`
 }
 
 // Mutate applies the UpdateTrustCenterWatermarkConfigInput on the TrustCenterWatermarkConfigMutation builder.
@@ -29107,27 +29107,27 @@ type CreateUserInput struct {
 	ScimActive               *bool               `json:"scim_active,omitempty"`
 	ScimPreferredLanguage    *string             `json:"scim_preferred_language,omitempty"`
 	ScimLocale               *string             `json:"scim_locale,omitempty"`
-	PersonalAccessTokenIDs   []string
-	TfaSettingIDs            []string
-	SettingID                string
-	SubscriberIDs            []string
-	GroupIDs                 []string
-	OrganizationIDs          []string
-	WebauthnIDs              []string
-	AvatarFileID             *string
-	EventIDs                 []string
-	ActionPlanIDs            []string
-	CampaignIDs              []string
-	CampaignTargetIDs        []string
-	SubcontrolIDs            []string
-	AssignerTaskIDs          []string
-	AssigneeTaskIDs          []string
-	ProgramIDs               []string
-	ProgramsOwnedIDs         []string
-	PlatformsOwnedIDs        []string
-	IdentityHolderProfileIDs []string
-	ImpersonationEventIDs    []string
-	TargetedImpersonationIDs []string
+	PersonalAccessTokenIDs   []string            `json:"personal_access_token_ids,omitempty"`
+	TfaSettingIDs            []string            `json:"tfa_setting_ids,omitempty"`
+	SettingID                string              `json:"setting_id,omitempty"`
+	SubscriberIDs            []string            `json:"subscriber_ids,omitempty"`
+	GroupIDs                 []string            `json:"group_ids,omitempty"`
+	OrganizationIDs          []string            `json:"organization_ids,omitempty"`
+	WebauthnIDs              []string            `json:"webauthn_ids,omitempty"`
+	AvatarFileID             *string             `json:"avatar_file_id,omitempty"`
+	EventIDs                 []string            `json:"event_ids,omitempty"`
+	ActionPlanIDs            []string            `json:"action_plan_ids,omitempty"`
+	CampaignIDs              []string            `json:"campaign_ids,omitempty"`
+	CampaignTargetIDs        []string            `json:"campaign_target_ids,omitempty"`
+	SubcontrolIDs            []string            `json:"subcontrol_ids,omitempty"`
+	AssignerTaskIDs          []string            `json:"assigner_task_ids,omitempty"`
+	AssigneeTaskIDs          []string            `json:"assignee_task_ids,omitempty"`
+	ProgramIDs               []string            `json:"program_ids,omitempty"`
+	ProgramsOwnedIDs         []string            `json:"programs_owned_ids,omitempty"`
+	PlatformsOwnedIDs        []string            `json:"platforms_owned_ids,omitempty"`
+	IdentityHolderProfileIDs []string            `json:"identity_holder_profile_ids,omitempty"`
+	ImpersonationEventIDs    []string            `json:"impersonation_event_ids,omitempty"`
+	TargetedImpersonationIDs []string            `json:"targeted_impersonation_ids,omitempty"`
 }
 
 // Mutate applies the CreateUserInput on the UserMutation builder.
@@ -29288,65 +29288,65 @@ type UpdateUserInput struct {
 	ClearScimLocale                bool
 	ScimLocale                     *string `json:"scim_locale,omitempty"`
 	ClearPersonalAccessTokens      bool
-	AddPersonalAccessTokenIDs      []string
-	RemovePersonalAccessTokenIDs   []string
+	AddPersonalAccessTokenIDs      []string `json:"add_personal_access_token_ids,omitempty"`
+	RemovePersonalAccessTokenIDs   []string `json:"remove_personal_access_token_ids,omitempty"`
 	ClearTfaSettings               bool
-	AddTfaSettingIDs               []string
-	RemoveTfaSettingIDs            []string
-	SettingID                      *string
+	AddTfaSettingIDs               []string `json:"add_tfa_setting_ids,omitempty"`
+	RemoveTfaSettingIDs            []string `json:"remove_tfa_setting_ids,omitempty"`
+	SettingID                      *string  `json:"setting_id,omitempty"`
 	ClearSubscribers               bool
-	AddSubscriberIDs               []string
-	RemoveSubscriberIDs            []string
+	AddSubscriberIDs               []string `json:"add_subscriber_ids,omitempty"`
+	RemoveSubscriberIDs            []string `json:"remove_subscriber_ids,omitempty"`
 	ClearGroups                    bool
-	AddGroupIDs                    []string
-	RemoveGroupIDs                 []string
+	AddGroupIDs                    []string `json:"add_group_ids,omitempty"`
+	RemoveGroupIDs                 []string `json:"remove_group_ids,omitempty"`
 	ClearOrganizations             bool
-	AddOrganizationIDs             []string
-	RemoveOrganizationIDs          []string
+	AddOrganizationIDs             []string `json:"add_organization_ids,omitempty"`
+	RemoveOrganizationIDs          []string `json:"remove_organization_ids,omitempty"`
 	ClearWebauthns                 bool
-	AddWebauthnIDs                 []string
-	RemoveWebauthnIDs              []string
+	AddWebauthnIDs                 []string `json:"add_webauthn_ids,omitempty"`
+	RemoveWebauthnIDs              []string `json:"remove_webauthn_ids,omitempty"`
 	ClearAvatarFile                bool
-	AvatarFileID                   *string
+	AvatarFileID                   *string `json:"avatar_file_id,omitempty"`
 	ClearEvents                    bool
-	AddEventIDs                    []string
-	RemoveEventIDs                 []string
+	AddEventIDs                    []string `json:"add_event_ids,omitempty"`
+	RemoveEventIDs                 []string `json:"remove_event_ids,omitempty"`
 	ClearActionPlans               bool
-	AddActionPlanIDs               []string
-	RemoveActionPlanIDs            []string
+	AddActionPlanIDs               []string `json:"add_action_plan_ids,omitempty"`
+	RemoveActionPlanIDs            []string `json:"remove_action_plan_ids,omitempty"`
 	ClearCampaigns                 bool
-	AddCampaignIDs                 []string
-	RemoveCampaignIDs              []string
+	AddCampaignIDs                 []string `json:"add_campaign_ids,omitempty"`
+	RemoveCampaignIDs              []string `json:"remove_campaign_ids,omitempty"`
 	ClearCampaignTargets           bool
-	AddCampaignTargetIDs           []string
-	RemoveCampaignTargetIDs        []string
+	AddCampaignTargetIDs           []string `json:"add_campaign_target_ids,omitempty"`
+	RemoveCampaignTargetIDs        []string `json:"remove_campaign_target_ids,omitempty"`
 	ClearSubcontrols               bool
-	AddSubcontrolIDs               []string
-	RemoveSubcontrolIDs            []string
+	AddSubcontrolIDs               []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs            []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearAssignerTasks             bool
-	AddAssignerTaskIDs             []string
-	RemoveAssignerTaskIDs          []string
+	AddAssignerTaskIDs             []string `json:"add_assigner_task_ids,omitempty"`
+	RemoveAssignerTaskIDs          []string `json:"remove_assigner_task_ids,omitempty"`
 	ClearAssigneeTasks             bool
-	AddAssigneeTaskIDs             []string
-	RemoveAssigneeTaskIDs          []string
+	AddAssigneeTaskIDs             []string `json:"add_assignee_task_ids,omitempty"`
+	RemoveAssigneeTaskIDs          []string `json:"remove_assignee_task_ids,omitempty"`
 	ClearPrograms                  bool
-	AddProgramIDs                  []string
-	RemoveProgramIDs               []string
+	AddProgramIDs                  []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs               []string `json:"remove_program_ids,omitempty"`
 	ClearProgramsOwned             bool
-	AddProgramsOwnedIDs            []string
-	RemoveProgramsOwnedIDs         []string
+	AddProgramsOwnedIDs            []string `json:"add_programs_owned_ids,omitempty"`
+	RemoveProgramsOwnedIDs         []string `json:"remove_programs_owned_ids,omitempty"`
 	ClearPlatformsOwned            bool
-	AddPlatformsOwnedIDs           []string
-	RemovePlatformsOwnedIDs        []string
+	AddPlatformsOwnedIDs           []string `json:"add_platforms_owned_ids,omitempty"`
+	RemovePlatformsOwnedIDs        []string `json:"remove_platforms_owned_ids,omitempty"`
 	ClearIdentityHolderProfiles    bool
-	AddIdentityHolderProfileIDs    []string
-	RemoveIdentityHolderProfileIDs []string
+	AddIdentityHolderProfileIDs    []string `json:"add_identity_holder_profile_ids,omitempty"`
+	RemoveIdentityHolderProfileIDs []string `json:"remove_identity_holder_profile_ids,omitempty"`
 	ClearImpersonationEvents       bool
-	AddImpersonationEventIDs       []string
-	RemoveImpersonationEventIDs    []string
+	AddImpersonationEventIDs       []string `json:"add_impersonation_event_ids,omitempty"`
+	RemoveImpersonationEventIDs    []string `json:"remove_impersonation_event_ids,omitempty"`
 	ClearTargetedImpersonations    bool
-	AddTargetedImpersonationIDs    []string
-	RemoveTargetedImpersonationIDs []string
+	AddTargetedImpersonationIDs    []string `json:"add_targeted_impersonation_ids,omitempty"`
+	RemoveTargetedImpersonationIDs []string `json:"remove_targeted_impersonation_ids,omitempty"`
 }
 
 // Mutate applies the UpdateUserInput on the UserMutation builder.
@@ -29659,8 +29659,8 @@ type CreateUserSettingInput struct {
 	Status          *enums.UserStatus `json:"status,omitempty"`
 	EmailConfirmed  *bool             `json:"email_confirmed,omitempty"`
 	IsTfaEnabled    *bool             `json:"is_tfa_enabled,omitempty"`
-	UserID          *string
-	DefaultOrgID    *string
+	UserID          *string           `json:"user_id,omitempty"`
+	DefaultOrgID    *string           `json:"default_org_id,omitempty"`
 }
 
 // Mutate applies the CreateUserSettingInput on the UserSettingMutation builder.
@@ -29730,9 +29730,9 @@ type UpdateUserSettingInput struct {
 	ClearIsTfaEnabled    bool
 	IsTfaEnabled         *bool `json:"is_tfa_enabled,omitempty"`
 	ClearUser            bool
-	UserID               *string
+	UserID               *string `json:"user_id,omitempty"`
 	ClearDefaultOrg      bool
-	DefaultOrgID         *string
+	DefaultOrgID         *string `json:"default_org_id,omitempty"`
 }
 
 // Mutate applies the UpdateUserSettingInput on the UserSettingMutation builder.
@@ -29828,10 +29828,10 @@ type CreateVendorRiskScoreInput struct {
 	Likelihood            enums.VendorRiskLikelihood  `json:"likelihood,omitempty"`
 	Answer                *string                     `json:"answer,omitempty"`
 	Notes                 *string                     `json:"notes,omitempty"`
-	OwnerID               *string
-	VendorScoringConfigID *string
-	EntityID              string
-	AssessmentResponseID  *string
+	OwnerID               *string                     `json:"owner_id,omitempty"`
+	VendorScoringConfigID *string                     `json:"vendor_scoring_config_id,omitempty"`
+	EntityID              string                      `json:"entity_id,omitempty"`
+	AssessmentResponseID  *string                     `json:"assessment_response_id,omitempty"`
 }
 
 // Mutate applies the CreateVendorRiskScoreInput on the VendorRiskScoreMutation builder.
@@ -29888,10 +29888,10 @@ type UpdateVendorRiskScoreInput struct {
 	ClearNotes               bool
 	Notes                    *string `json:"notes,omitempty"`
 	ClearVendorScoringConfig bool
-	VendorScoringConfigID    *string
-	EntityID                 *string
+	VendorScoringConfigID    *string `json:"vendor_scoring_config_id,omitempty"`
+	EntityID                 *string `json:"entity_id,omitempty"`
 	ClearAssessmentResponse  bool
-	AssessmentResponseID     *string
+	AssessmentResponseID     *string `json:"assessment_response_id,omitempty"`
 }
 
 // Mutate applies the UpdateVendorRiskScoreInput on the VendorRiskScoreMutation builder.
@@ -29973,8 +29973,8 @@ type CreateVendorScoringConfigInput struct {
 	Questions          *models.VendorScoringQuestionsConfig `json:"questions,omitempty"`
 	ScoringMode        *enums.VendorScoringMode             `json:"scoring_mode,omitempty"`
 	RiskThresholds     *models.RiskThresholdsConfig         `json:"risk_thresholds,omitempty"`
-	OwnerID            *string
-	VendorRiskScoreIDs []string
+	OwnerID            *string                              `json:"owner_id,omitempty"`
+	VendorRiskScoreIDs []string                             `json:"vendor_risk_score_ids,omitempty"`
 }
 
 // Mutate applies the CreateVendorScoringConfigInput on the VendorScoringConfigMutation builder.
@@ -30014,10 +30014,10 @@ type UpdateVendorScoringConfigInput struct {
 	ScoringMode              *enums.VendorScoringMode             `json:"scoring_mode,omitempty"`
 	RiskThresholds           *models.RiskThresholdsConfig         `json:"risk_thresholds,omitempty"`
 	ClearOwner               bool
-	OwnerID                  *string
+	OwnerID                  *string `json:"owner_id,omitempty"`
 	ClearVendorRiskScores    bool
-	AddVendorRiskScoreIDs    []string
-	RemoveVendorRiskScoreIDs []string
+	AddVendorRiskScoreIDs    []string `json:"add_vendor_risk_score_ids,omitempty"`
+	RemoveVendorRiskScoreIDs []string `json:"remove_vendor_risk_score_ids,omitempty"`
 }
 
 // Mutate applies the UpdateVendorScoringConfigInput on the VendorScoringConfigMutation builder.
@@ -30121,33 +30121,33 @@ type CreateVulnerabilityInput struct {
 	ExternalURI             *string                `json:"external_uri,omitempty"`
 	Metadata                map[string]interface{} `json:"metadata,omitempty"`
 	RawPayload              map[string]interface{} `json:"raw_payload,omitempty"`
-	OwnerID                 *string
-	BlockedGroupIDs         []string
-	EditorIDs               []string
-	ViewerIDs               []string
-	ReviewedByUserID        *string
-	ReviewedByGroupID       *string
-	AssignedToUserID        *string
-	AssignedToGroupID       *string
-	EnvironmentID           *string
-	ScopeID                 *string
-	VulnerabilityStatusID   *string
-	IntegrationIDs          []string
-	FindingIDs              []string
-	ActionPlanIDs           []string
-	ControlIDs              []string
-	SubcontrolIDs           []string
-	RiskIDs                 []string
-	ProgramIDs              []string
-	AssetIDs                []string
-	EntityIDs               []string
-	ScanIDs                 []string
-	TaskIDs                 []string
-	RemediationIDs          []string
-	ReviewIDs               []string
-	CommentIDs              []string
-	FileIDs                 []string
-	WorkflowObjectRefIDs    []string
+	OwnerID                 *string                `json:"owner_id,omitempty"`
+	BlockedGroupIDs         []string               `json:"blocked_group_ids,omitempty"`
+	EditorIDs               []string               `json:"editor_ids,omitempty"`
+	ViewerIDs               []string               `json:"viewer_ids,omitempty"`
+	ReviewedByUserID        *string                `json:"reviewed_by_user_id,omitempty"`
+	ReviewedByGroupID       *string                `json:"reviewed_by_group_id,omitempty"`
+	AssignedToUserID        *string                `json:"assigned_to_user_id,omitempty"`
+	AssignedToGroupID       *string                `json:"assigned_to_group_id,omitempty"`
+	EnvironmentID           *string                `json:"environment_id,omitempty"`
+	ScopeID                 *string                `json:"scope_id,omitempty"`
+	VulnerabilityStatusID   *string                `json:"vulnerability_status_id,omitempty"`
+	IntegrationIDs          []string               `json:"integration_ids,omitempty"`
+	FindingIDs              []string               `json:"finding_ids,omitempty"`
+	ActionPlanIDs           []string               `json:"action_plan_ids,omitempty"`
+	ControlIDs              []string               `json:"control_ids,omitempty"`
+	SubcontrolIDs           []string               `json:"subcontrol_ids,omitempty"`
+	RiskIDs                 []string               `json:"risk_ids,omitempty"`
+	ProgramIDs              []string               `json:"program_ids,omitempty"`
+	AssetIDs                []string               `json:"asset_ids,omitempty"`
+	EntityIDs               []string               `json:"entity_ids,omitempty"`
+	ScanIDs                 []string               `json:"scan_ids,omitempty"`
+	TaskIDs                 []string               `json:"task_ids,omitempty"`
+	RemediationIDs          []string               `json:"remediation_ids,omitempty"`
+	ReviewIDs               []string               `json:"review_ids,omitempty"`
+	CommentIDs              []string               `json:"comment_ids,omitempty"`
+	FileIDs                 []string               `json:"file_ids,omitempty"`
+	WorkflowObjectRefIDs    []string               `json:"workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the CreateVulnerabilityInput on the VulnerabilityMutation builder.
@@ -30495,76 +30495,76 @@ type UpdateVulnerabilityInput struct {
 	ClearRawPayload              bool
 	RawPayload                   map[string]interface{} `json:"raw_payload,omitempty"`
 	ClearBlockedGroups           bool
-	AddBlockedGroupIDs           []string
-	RemoveBlockedGroupIDs        []string
+	AddBlockedGroupIDs           []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs        []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                 bool
-	AddEditorIDs                 []string
-	RemoveEditorIDs              []string
+	AddEditorIDs                 []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs              []string `json:"remove_editor_ids,omitempty"`
 	ClearViewers                 bool
-	AddViewerIDs                 []string
-	RemoveViewerIDs              []string
+	AddViewerIDs                 []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs              []string `json:"remove_viewer_ids,omitempty"`
 	ClearReviewedByUser          bool
-	ReviewedByUserID             *string
+	ReviewedByUserID             *string `json:"reviewed_by_user_id,omitempty"`
 	ClearReviewedByGroup         bool
-	ReviewedByGroupID            *string
+	ReviewedByGroupID            *string `json:"reviewed_by_group_id,omitempty"`
 	ClearAssignedToUser          bool
-	AssignedToUserID             *string
+	AssignedToUserID             *string `json:"assigned_to_user_id,omitempty"`
 	ClearAssignedToGroup         bool
-	AssignedToGroupID            *string
+	AssignedToGroupID            *string `json:"assigned_to_group_id,omitempty"`
 	ClearEnvironment             bool
-	EnvironmentID                *string
+	EnvironmentID                *string `json:"environment_id,omitempty"`
 	ClearScope                   bool
-	ScopeID                      *string
+	ScopeID                      *string `json:"scope_id,omitempty"`
 	ClearVulnerabilityStatus     bool
-	VulnerabilityStatusID        *string
+	VulnerabilityStatusID        *string `json:"vulnerability_status_id,omitempty"`
 	ClearIntegrations            bool
-	AddIntegrationIDs            []string
-	RemoveIntegrationIDs         []string
+	AddIntegrationIDs            []string `json:"add_integration_ids,omitempty"`
+	RemoveIntegrationIDs         []string `json:"remove_integration_ids,omitempty"`
 	ClearFindings                bool
-	AddFindingIDs                []string
-	RemoveFindingIDs             []string
+	AddFindingIDs                []string `json:"add_finding_ids,omitempty"`
+	RemoveFindingIDs             []string `json:"remove_finding_ids,omitempty"`
 	ClearActionPlans             bool
-	AddActionPlanIDs             []string
-	RemoveActionPlanIDs          []string
+	AddActionPlanIDs             []string `json:"add_action_plan_ids,omitempty"`
+	RemoveActionPlanIDs          []string `json:"remove_action_plan_ids,omitempty"`
 	ClearControls                bool
-	AddControlIDs                []string
-	RemoveControlIDs             []string
+	AddControlIDs                []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs             []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols             bool
-	AddSubcontrolIDs             []string
-	RemoveSubcontrolIDs          []string
+	AddSubcontrolIDs             []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs          []string `json:"remove_subcontrol_ids,omitempty"`
 	ClearRisks                   bool
-	AddRiskIDs                   []string
-	RemoveRiskIDs                []string
+	AddRiskIDs                   []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs                []string `json:"remove_risk_ids,omitempty"`
 	ClearPrograms                bool
-	AddProgramIDs                []string
-	RemoveProgramIDs             []string
+	AddProgramIDs                []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs             []string `json:"remove_program_ids,omitempty"`
 	ClearAssets                  bool
-	AddAssetIDs                  []string
-	RemoveAssetIDs               []string
+	AddAssetIDs                  []string `json:"add_asset_ids,omitempty"`
+	RemoveAssetIDs               []string `json:"remove_asset_ids,omitempty"`
 	ClearEntities                bool
-	AddEntityIDs                 []string
-	RemoveEntityIDs              []string
+	AddEntityIDs                 []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs              []string `json:"remove_entity_ids,omitempty"`
 	ClearScans                   bool
-	AddScanIDs                   []string
-	RemoveScanIDs                []string
+	AddScanIDs                   []string `json:"add_scan_ids,omitempty"`
+	RemoveScanIDs                []string `json:"remove_scan_ids,omitempty"`
 	ClearTasks                   bool
-	AddTaskIDs                   []string
-	RemoveTaskIDs                []string
+	AddTaskIDs                   []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs                []string `json:"remove_task_ids,omitempty"`
 	ClearRemediations            bool
-	AddRemediationIDs            []string
-	RemoveRemediationIDs         []string
+	AddRemediationIDs            []string `json:"add_remediation_ids,omitempty"`
+	RemoveRemediationIDs         []string `json:"remove_remediation_ids,omitempty"`
 	ClearReviews                 bool
-	AddReviewIDs                 []string
-	RemoveReviewIDs              []string
+	AddReviewIDs                 []string `json:"add_review_ids,omitempty"`
+	RemoveReviewIDs              []string `json:"remove_review_ids,omitempty"`
 	ClearComments                bool
-	AddCommentIDs                []string
-	RemoveCommentIDs             []string
+	AddCommentIDs                []string `json:"add_comment_ids,omitempty"`
+	RemoveCommentIDs             []string `json:"remove_comment_ids,omitempty"`
 	ClearFiles                   bool
-	AddFileIDs                   []string
-	RemoveFileIDs                []string
+	AddFileIDs                   []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs                []string `json:"remove_file_ids,omitempty"`
 	ClearWorkflowObjectRefs      bool
-	AddWorkflowObjectRefIDs      []string
-	RemoveWorkflowObjectRefIDs   []string
+	AddWorkflowObjectRefIDs      []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs   []string `json:"remove_workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the UpdateVulnerabilityInput on the VulnerabilityMutation builder.
@@ -31122,14 +31122,14 @@ type CreateWorkflowDefinitionInput struct {
 	Active                  *bool                              `json:"active,omitempty"`
 	DefinitionJSON          *models.WorkflowDefinitionDocument `json:"definition_json,omitempty"`
 	TrackedFields           []string                           `json:"tracked_fields,omitempty"`
-	OwnerID                 *string
-	BlockedGroupIDs         []string
-	EditorIDs               []string
-	ViewerIDs               []string
-	TagDefinitionIDs        []string
-	GroupIDs                []string
-	NotificationTemplateIDs []string
-	EmailTemplateIDs        []string
+	OwnerID                 *string                            `json:"owner_id,omitempty"`
+	BlockedGroupIDs         []string                           `json:"blocked_group_ids,omitempty"`
+	EditorIDs               []string                           `json:"editor_ids,omitempty"`
+	ViewerIDs               []string                           `json:"viewer_ids,omitempty"`
+	TagDefinitionIDs        []string                           `json:"tag_definition_ids,omitempty"`
+	GroupIDs                []string                           `json:"group_ids,omitempty"`
+	NotificationTemplateIDs []string                           `json:"notification_template_ids,omitempty"`
+	EmailTemplateIDs        []string                           `json:"email_template_ids,omitempty"`
 }
 
 // Mutate applies the CreateWorkflowDefinitionInput on the WorkflowDefinitionMutation builder.
@@ -31232,26 +31232,26 @@ type UpdateWorkflowDefinitionInput struct {
 	TrackedFields                 []string `json:"tracked_fields,omitempty"`
 	AppendTrackedFields           []string
 	ClearBlockedGroups            bool
-	AddBlockedGroupIDs            []string
-	RemoveBlockedGroupIDs         []string
+	AddBlockedGroupIDs            []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs         []string `json:"remove_blocked_group_ids,omitempty"`
 	ClearEditors                  bool
-	AddEditorIDs                  []string
-	RemoveEditorIDs               []string
+	AddEditorIDs                  []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs               []string `json:"remove_editor_ids,omitempty"`
 	ClearViewers                  bool
-	AddViewerIDs                  []string
-	RemoveViewerIDs               []string
+	AddViewerIDs                  []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs               []string `json:"remove_viewer_ids,omitempty"`
 	ClearTagDefinitions           bool
-	AddTagDefinitionIDs           []string
-	RemoveTagDefinitionIDs        []string
+	AddTagDefinitionIDs           []string `json:"add_tag_definition_ids,omitempty"`
+	RemoveTagDefinitionIDs        []string `json:"remove_tag_definition_ids,omitempty"`
 	ClearGroups                   bool
-	AddGroupIDs                   []string
-	RemoveGroupIDs                []string
+	AddGroupIDs                   []string `json:"add_group_ids,omitempty"`
+	RemoveGroupIDs                []string `json:"remove_group_ids,omitempty"`
 	ClearNotificationTemplates    bool
-	AddNotificationTemplateIDs    []string
-	RemoveNotificationTemplateIDs []string
+	AddNotificationTemplateIDs    []string `json:"add_notification_template_ids,omitempty"`
+	RemoveNotificationTemplateIDs []string `json:"remove_notification_template_ids,omitempty"`
 	ClearEmailTemplates           bool
-	AddEmailTemplateIDs           []string
-	RemoveEmailTemplateIDs        []string
+	AddEmailTemplateIDs           []string `json:"add_email_template_ids,omitempty"`
+	RemoveEmailTemplateIDs        []string `json:"remove_email_template_ids,omitempty"`
 }
 
 // Mutate applies the UpdateWorkflowDefinitionInput on the WorkflowDefinitionMutation builder.

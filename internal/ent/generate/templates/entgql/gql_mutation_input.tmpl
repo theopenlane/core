@@ -1,8 +1,9 @@
 {{/*
-Override of entgql's built-in gql_mutation_input template. The ONLY change from upstream is the
-scalar field line, which now emits a snake_case `json` struct tag sourced from the ent field name
-($f.Name), matching the entity struct's json tags. This lets a snake_case payload json.Unmarshal
-directly into Create/Update inputs.
+Override of entgql's built-in gql_mutation_input template. The changes from upstream emit a
+snake_case `json` struct tag on every field: scalars are tagged from the ent field name ($f.Name),
+and edge-derived ID fields (unique *ID, and *IDs / Add*IDs / Remove*IDs) are tagged via snake of
+their derived Go struct field name. This lets a snake_case payload json.Unmarshal directly into
+Create/Update inputs, matching entityops's mapping-key convention with no per-field exceptions.
 Registered after entgql.AllTemplates so this define overrides the built-in. Upstream:
 https://github.com/ent/contrib/tree/master/entgql/template/mutation_input.tmpl
 */}}
@@ -66,14 +67,14 @@ import (
             {{- end }}
             {{- if $e.Unique }}
                 {{- $structField := print (pascal $e.Name) "ID" }}
-                {{ $structField }} {{ if or (not $n.IsCreate) $e.Optional }}*{{ end }}{{ $e.Type.ID.Type }}
+                {{ $structField }} {{ if or (not $n.IsCreate) $e.Optional }}*{{ end }}{{ $e.Type.ID.Type }} `json:"{{ snake $structField }},omitempty"`
             {{- else }}
                 {{- if $n.IsCreate }}
                     {{- $structField := print (singular $e.Name | pascal) "IDs" }}
-                    {{ $structField }} []{{ $e.Type.ID.Type }}
+                    {{ $structField }} []{{ $e.Type.ID.Type }} `json:"{{ snake $structField }},omitempty"`
                 {{- else }}
-                    {{ $e.MutationAdd }} []{{ $e.Type.ID.Type }}
-                    {{ $e.MutationRemove }} []{{ $e.Type.ID.Type }}
+                    {{ $e.MutationAdd }} []{{ $e.Type.ID.Type }} `json:"{{ snake $e.MutationAdd }},omitempty"`
+                    {{ $e.MutationRemove }} []{{ $e.Type.ID.Type }} `json:"{{ snake $e.MutationRemove }},omitempty"`
                 {{- end }}
             {{- end }}
         {{- end }}
