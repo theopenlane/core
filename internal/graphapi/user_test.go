@@ -15,6 +15,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/pkg/anon"
 )
 
 func TestQueryUser(t *testing.T) {
@@ -371,15 +372,9 @@ func TestMutationDeleteUser(t *testing.T) {
 }
 
 func TestQueryUserSupportContext(t *testing.T) {
-	const (
-		supportSubjectID = "01JSPPRT000000000000000000"
-		supportName      = "Openlane Support"
-		supportEmail     = "support@theopenlane.io"
-	)
-
 	orgID := sharedTestUser1.OrganizationID
 
-	caller := auth.NewOrgSupportCaller(orgID, supportSubjectID, supportName, supportEmail)
+	caller := auth.NewOrgSupportCaller(orgID, anon.SupportSubjectID, supportSubjectName, supportSubjectEmail)
 	supportCtx := auth.WithCaller(sharedTestUser1.UserCtx, caller)
 
 	t.Run("Self returns synthetic support user", func(t *testing.T) {
@@ -388,23 +383,23 @@ func TestQueryUserSupportContext(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
-		assert.Check(t, is.Equal(supportSubjectID, resp.Self.ID))
-		assert.Check(t, is.Equal(supportName, resp.Self.DisplayName))
-		assert.Check(t, is.Equal(supportEmail, resp.Self.Email))
+		assert.Check(t, is.Equal(anon.SupportSubjectID, resp.Self.ID))
+		assert.Check(t, is.Equal(supportSubjectName, resp.Self.DisplayName))
+		assert.Check(t, is.Equal(supportSubjectEmail, resp.Self.Email))
 		assert.Check(t, resp.Self.Setting.EmailConfirmed)
 		assert.Check(t, resp.Self.Setting.DefaultOrg != nil)
 		assert.Check(t, is.Equal(orgID, resp.Self.Setting.DefaultOrg.ID))
 	})
 
 	t.Run("User returns synthetic support user", func(t *testing.T) {
-		resp, err := suite.client.api.GetUserByID(supportCtx, supportSubjectID)
+		resp, err := suite.client.api.GetUserByID(supportCtx, anon.SupportSubjectID)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
-		assert.Check(t, is.Equal(supportSubjectID, resp.User.ID))
-		assert.Check(t, is.Equal(supportName, resp.User.DisplayName))
-		assert.Check(t, is.Equal(supportEmail, resp.User.Email))
+		assert.Check(t, is.Equal(anon.SupportSubjectID, resp.User.ID))
+		assert.Check(t, is.Equal(supportSubjectName, resp.User.DisplayName))
+		assert.Check(t, is.Equal(supportSubjectEmail, resp.User.Email))
 	})
 }
 

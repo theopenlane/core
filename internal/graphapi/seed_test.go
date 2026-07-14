@@ -17,6 +17,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	coreutils "github.com/theopenlane/core/internal/testutils"
+	"github.com/theopenlane/core/pkg/anon"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 )
 
@@ -42,10 +43,9 @@ var (
 	sharedSupportCtx context.Context
 )
 
-// supportSubjectID/supportSubjectName/supportSubjectEmail identify the synthetic
+// supportSubjectName/supportSubjectEmail identify the synthetic
 // org-scoped support caller returned by newSupportCtx
 const (
-	supportSubjectID    = "01JSPPRT000000000000000000"
 	supportSubjectName  = "Openlane Support"
 	supportSubjectEmail = "support@theopenlane.io"
 )
@@ -54,7 +54,7 @@ const (
 // on organizationID, layered on top of baseCtx. Support sessions are scoped to a single org, so a
 // context built for one org cannot be used to reach another org's resources
 func newSupportCtx(baseCtx context.Context, organizationID string) context.Context {
-	caller := auth.NewOrgSupportCaller(organizationID, supportSubjectID, supportSubjectName, supportSubjectEmail)
+	caller := auth.NewOrgSupportCaller(organizationID, anon.SupportSubjectID, supportSubjectName, supportSubjectEmail)
 	return auth.WithCaller(baseCtx, caller)
 }
 
