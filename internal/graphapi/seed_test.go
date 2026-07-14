@@ -17,6 +17,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	coreutils "github.com/theopenlane/core/internal/testutils"
+	"github.com/theopenlane/core/pkg/anon"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 )
 
@@ -37,7 +38,25 @@ var (
 	sharedSystemAdminUser testUserDetails
 	// sharedAuditorUser is a test user that has auditor access to an organization
 	sharedAuditorUser testUserDetails
+	// sharedSupportCtx is a request context for an org-scoped support session (auth.NewOrgSupportCaller)
+	// on sharedTestUser1's organization
+	sharedSupportCtx context.Context
 )
+
+// supportSubjectName/supportSubjectEmail identify the synthetic
+// org-scoped support caller returned by newSupportCtx
+const (
+	supportSubjectName  = "Openlane Support"
+	supportSubjectEmail = "support@theopenlane.io"
+)
+
+// newSupportCtx builds a request context for an org-scoped support session (auth.NewOrgSupportCaller)
+// on organizationID, layered on top of baseCtx. Support sessions are scoped to a single org, so a
+// context built for one org cannot be used to reach another org's resources
+func newSupportCtx(baseCtx context.Context, organizationID string) context.Context {
+	caller := auth.NewOrgSupportCaller(organizationID, anon.SupportSubjectID, supportSubjectName, supportSubjectEmail)
+	return auth.WithCaller(baseCtx, caller)
+}
 
 // testUserDetails is a struct that holds the details of a test user
 type testUserDetails struct {
@@ -129,6 +148,9 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context, t *testing.T) {
 		suite.client.apiWithPAT = suite.setupPatClient(sharedTestUser1, t)
 		suite.client.apiWithToken = suite.setupAPITokenClient(sharedTestUser1.UserCtx, t)
 		suite.client.apiWithTokenOrg2 = suite.setupAPITokenClient(sharedTestUser2.UserCtx, t)
+
+		// set up an org-scoped support session on sharedTestUser1's org
+		sharedSupportCtx = newSupportCtx(sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID)
 	})
 
 	requireNoError(t, seedErr)

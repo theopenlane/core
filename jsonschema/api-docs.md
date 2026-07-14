@@ -903,7 +903,7 @@ SupportAccessConfig contains configuration for the Openlane support access flow.
 |**enabled**|`boolean`|Enabled toggles the support access endpoints<br/>||
 |**email**|`string`|Email is the email of the virtual support identity, used as the first factor username<br/>||
 |**displayname**|`string`|DisplayName is the display name of the virtual support identity, used for record attribution<br/>||
-|**subjectid**|`string`|SubjectID is the stable subject id of the virtual support identity used for created_by/updated_by<br/>attribution. It must be a valid ULID and is consistent without a backing user row<br/>||
+|**subjectid**|`string`|SubjectID is the stable subject id of the virtual support identity used for created_by/updated_by<br/>attribution. It must be a valid ULID and is consistent without a backing user row. Default should match anon.SupportSubjectID<br/>||
 |**password**|`string`|Password is the shared password for the virtual support identity, validated against this value<br/>||
 |**clientid**|`string`|ClientID is the client ID for the second factor identity provider<br/>||
 |**clientsecret**|`string`|ClientSecret is the client secret for the second factor identity provider<br/>||
