@@ -240,7 +240,7 @@ func EnsureObjectInOrganization(ctx context.Context, m ent.Mutation, objectType,
 	}
 
 	// if users table, we want to check orgmemberships table to make sure the provided
-	// user is a memeber of the org instead
+	// user is a member of the org instead
 	if strings.EqualFold(objectType, user.Label) {
 		query := fmt.Sprintf("SELECT EXISTS (SELECT 1 FROM %s WHERE %s = $1 and %s = $2)",
 			orgmembership.Table, orgmembership.FieldUserID, orgmembership.FieldOrganizationID)
