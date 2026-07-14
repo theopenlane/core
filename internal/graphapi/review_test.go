@@ -147,6 +147,7 @@ func TestCreateReviewUpdatesEntityReviewFields(t *testing.T) {
 func TestCreateReview(t *testing.T) {
 	entity1 := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	program := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	program2 := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	control := (&ControlBuilder{client: suite.client, ProgramID: program.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
 	programInOrg2 := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
@@ -155,7 +156,7 @@ func TestCreateReview(t *testing.T) {
 	entitiesToCleanup := []string{entity1.ID}
 	entityTypesToCleanup := []string{entity1.EntityTypeID}
 	controlsToCleanup := []string{control.ID}
-	programsToCleanup := []string{program.ID}
+	programsToCleanup := []string{program.ID, program2.ID}
 	controlsNoAccessToCleanup := []string{controlInOrg2.ID}
 	programsNoAccessToCleanup := []string{programInOrg2.ID}
 
@@ -194,6 +195,17 @@ func TestCreateReview(t *testing.T) {
 			reviewInput: testclient.CreateReviewInput{
 				Title:      "Program Review",
 				ProgramIDs: []string{program.ID},
+			},
+			client: suite.client.api,
+			ctx:    sharedAuditorUser.UserCtx,
+		},
+		{
+			name: "happy path, auditor creating review linked to program with reviewer",
+			reviewInput: testclient.CreateReviewInput{
+				Title:      "Program Review with Reviewer",
+				ProgramIDs: []string{program2.ID},
+				Reporter:   lo.ToPtr("Reporter 1"),
+				ReviewerID: lo.ToPtr(sharedAuditorUser.ID),
 			},
 			client: suite.client.api,
 			ctx:    sharedAuditorUser.UserCtx,
@@ -272,6 +284,14 @@ func TestCreateReview(t *testing.T) {
 
 			if tc.reviewInput.Summary != nil {
 				assert.Check(t, is.Equal(*tc.reviewInput.Summary, *review.Summary))
+			}
+
+			if tc.reviewInput.Reporter != nil {
+				assert.Check(t, is.Equal(*tc.reviewInput.Reporter, lo.FromPtr(review.Reporter)))
+			}
+
+			if tc.reviewInput.ReviewerID != nil {
+				assert.Check(t, is.Equal(*tc.reviewInput.ReviewerID, lo.FromPtr(review.ReviewerID)))
 			}
 
 			if len(tc.reviewInput.ProgramIDs) > 0 {

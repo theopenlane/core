@@ -4539,7 +4539,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: false,
 }, "reviewer": {
 	ObjectType:          "reviewer",
-	SkipEditCheck:       false,
+	SkipEditCheck:       true,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "comments": {
