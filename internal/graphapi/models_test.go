@@ -599,13 +599,17 @@ func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Or
 	org, err := m.Save(ctx)
 	requireNoError(t, err)
 
-	if o.AllowedDomains != nil {
-		orgSetting, err := org.Setting(ctx)
-		requireNoError(t, err)
+	orgSetting, err := org.Setting(ctx)
+	requireNoError(t, err)
+	update := orgSetting.Update()
 
-		err = orgSetting.Update().SetAllowedEmailDomains(o.AllowedDomains).Exec(ctx)
-		requireNoError(t, err)
+	if o.AllowedDomains != nil {
+		update.SetAllowedEmailDomains(o.AllowedDomains)
 	}
+
+	// turn on so all tests have this by default
+	err = update.SetAllowSupportAccess(true).Exec(ctx)
+	requireNoError(t, err)
 
 	o.enableModules(ctx, t, org.ID)
 

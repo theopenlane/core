@@ -58,6 +58,7 @@ type trustCenterOrg struct {
 	trustCenter    *generated.TrustCenter
 	ndaTemplateID  *string
 	ndaFileID      *string
+	supportCtx     context.Context
 	*testOrgUsers
 }
 
@@ -69,6 +70,15 @@ type trustCenterConfig struct {
 	ndaFileID        *string
 	seedAllUserTypes bool
 	seedAPIClients   bool
+	seedSupportUser  bool
+}
+
+// withSupportUser creates an org-scoped support session (auth.NewOrgSupportCaller) for the org,
+// available as trustCenterOrg.supportCtx
+func withSupportUser() trustCenterOption {
+	return func(ctx context.Context, t *testing.T, c *trustCenterConfig) {
+		c.seedSupportUser = true
+	}
 }
 
 // withAllUserTypes creates the owner, super admin, admin (with api and pat clients), member, and auditor users
@@ -164,11 +174,17 @@ func createFreshOrgWithTrustCenter(t *testing.T, opts ...trustCenterOption) *tru
 		opt(ownerCtx, t, &config)
 	}
 
+	var supportCtx context.Context
+	if config.seedSupportUser {
+		supportCtx = newSupportCtx(ownerCtx, localUsers.owner.OrganizationID)
+	}
+
 	return &trustCenterOrg{
 		organizationID: localUsers.owner.OrganizationID,
 		trustCenter:    localTrustCenter,
 		ndaTemplateID:  config.ndaTemplateID,
 		ndaFileID:      config.ndaFileID,
+		supportCtx:     supportCtx,
 		testOrgUsers:   localUsers,
 	}
 }
