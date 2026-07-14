@@ -56,7 +56,8 @@ func HookGroupMembers() ent.Hook {
 				return nil, ErrManagedGroup
 			}
 
-			// ensure user is a member of the organization
+			// the edges already ensure the user is a member of the organization now.
+			// but we still need to fetch the org membership id to link correctly
 			orgMemberID, err := getOrgMemberID(ctx, m, userID, group.OwnerID)
 			if err != nil {
 				return nil, err

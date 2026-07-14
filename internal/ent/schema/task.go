@@ -193,7 +193,7 @@ func (t Task) Edges() []ent.Edge {
 			field:      "assigner_id",
 			ref:        "assigner_tasks",
 			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
+				accessmap.EdgeViewCheck(User{}.Name()),
 			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
@@ -203,7 +203,7 @@ func (t Task) Edges() []ent.Edge {
 			field:      "assignee_id",
 			ref:        "assignee_tasks",
 			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
+				accessmap.EdgeViewCheck(User{}.Name()),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{

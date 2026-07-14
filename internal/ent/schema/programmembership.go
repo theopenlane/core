@@ -11,13 +11,14 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/entx/accessmap"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/entx/accessmap"
 )
 
 // ProgramMembership holds the schema definition for the ProgramMembership entity
@@ -77,7 +78,7 @@ func (p ProgramMembership) Edges() []ent.Edge {
 			immutable:  true,
 			field:      "user_id",
 			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
+				accessmap.EdgeViewCheck(User{}.Name()),
 			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{

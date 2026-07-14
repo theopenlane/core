@@ -218,7 +218,7 @@ func (r Review) Edges() []ent.Edge {
 			field:      "reviewer_id",
 			comment:    "primary reviewer responsible for the record",
 			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
+				accessmap.EdgeViewCheck(User{}.Name()),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{

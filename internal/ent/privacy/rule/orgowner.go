@@ -2,6 +2,7 @@ package rule
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"entgo.io/ent"
@@ -9,16 +10,18 @@ import (
 	"entgo.io/ent/privacy"
 	"github.com/gertd/go-pluralize"
 	"github.com/stoewer/go-strcase"
+	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	access "github.com/theopenlane/core/internal/ent/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/entx/history"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
 )
 
 // DenyIfNotInOrganization runs to ensure the object being updated is part of the user's
@@ -234,6 +237,34 @@ func EnsureObjectInOrganization(ctx context.Context, m ent.Mutation, objectType,
 		}
 
 		return privacy.Denyf("user does not have access to the requested organization")
+	}
+
+	// if users table, we want to check orgmemberships table to make sure the provided
+	// user is a memeber of the org instead
+	if strings.EqualFold(objectType, user.Label) {
+		query := fmt.Sprintf("SELECT EXISTS (SELECT 1 FROM %s WHERE %s = $1 and %s = $2)",
+			orgmembership.Table, orgmembership.FieldUserID, orgmembership.FieldOrganizationID)
+
+		var rows sql.Rows
+		if err := mut.Client().Driver().Query(ctx, query, []any{objectID, orgID}, &rows); err != nil {
+			logx.FromContext(ctx).Error().Err(err).
+				Str("id", objectID).
+				Str("object", user.Table).
+				Msg("failed to check for object in organization")
+
+			return err
+		}
+
+		defer rows.Close()
+
+		if rows.Next() {
+			var exists bool
+			if err := rows.Scan(&exists); err == nil && exists {
+				return nil
+			}
+		}
+
+		return privacy.Denyf("requested object not in organization")
 	}
 
 	// check if the object is in the organization

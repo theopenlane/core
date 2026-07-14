@@ -12,11 +12,12 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/entx/accessmap"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/entx/accessmap"
 )
 
 // NotificationPreference holds the schema definition for notification preferences.
@@ -156,7 +157,7 @@ func (n NotificationPreference) Edges() []ent.Edge {
 			required:   true,
 			immutable:  true,
 			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
+				accessmap.EdgeViewCheck(User{}.Name()),
 			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
