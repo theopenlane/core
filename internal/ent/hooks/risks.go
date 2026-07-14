@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -16,6 +18,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -229,7 +233,16 @@ func setStatusBasedOnRemediation(ctx context.Context, m *generated.RiskMutation)
 
 // setDueDateBasedOnSLAConfig sets the next review due date based on the SLA config for the risk, if the due date is not already set or being updated
 func setDueDateBasedOnSLAConfig(ctx context.Context, m *generated.RiskMutation) error {
-	slaConfig, err := m.Client().SLADefinition.Query().All(ctx)
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	// this is an internal lookup to default the due date, not a caller-requested view of SLA
+	// config, so bypass the caller's own view permissions but keep the query scoped to their org
+	slaConfig, err := m.Client().SLADefinition.Query().
+		Where(sladefinition.OwnerID(orgID)).
+		All(rule.WithInternalContext(ctx))
 	if err != nil {
 		return err
 	}
