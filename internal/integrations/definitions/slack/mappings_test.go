@@ -51,16 +51,16 @@ func TestSlackMappingsUserExample(t *testing.T) {
 	mapped, err := jsonx.ToMap(result)
 	assert.NilError(t, err)
 
-	assert.Equal(t, "U123ABC456", mapped["externalID"])
-	assert.Equal(t, "sholmes@example.com", mapped["canonicalEmail"])
-	assert.Equal(t, "sherlock", mapped["displayName"])
-	assert.Equal(t, "Sherlock", mapped["givenName"])
-	assert.Equal(t, "Holmes", mapped["familyName"])
-	assert.Equal(t, "Senior Detective", mapped["jobTitle"])
-	assert.Equal(t, "DISABLED", mapped["mfaState"])
+	assert.Equal(t, "U123ABC456", mapped["external_id"])
+	assert.Equal(t, "sholmes@example.com", mapped["canonical_email"])
+	assert.Equal(t, "sherlock", mapped["display_name"])
+	assert.Equal(t, "Sherlock", mapped["given_name"])
+	assert.Equal(t, "Holmes", mapped["family_name"])
+	assert.Equal(t, "Senior Detective", mapped["job_title"])
+	assert.Equal(t, "DISABLED", mapped["mfa_state"])
 	assert.Equal(t, "ACTIVE", mapped["status"])
-	assert.Equal(t, "T123ABC456", mapped["directoryInstanceID"])
-	assert.Equal(t, "USER", mapped["accountType"])
+	assert.Equal(t, "T123ABC456", mapped["directory_instance_id"])
+	assert.Equal(t, "USER", mapped["account_type"])
 }
 
 // TestSlackMappingsServiceExample tests the directory account mapping against examples/service.json
@@ -84,10 +84,10 @@ func TestSlackMappingsServiceExample(t *testing.T) {
 	mapped, err := jsonx.ToMap(result)
 	assert.NilError(t, err)
 
-	assert.Equal(t, "U123ABC456", mapped["externalID"])
-	assert.Equal(t, "sholmes@example.com", mapped["canonicalEmail"])
-	assert.Equal(t, "sherlock", mapped["displayName"])
+	assert.Equal(t, "U123ABC456", mapped["external_id"])
+	assert.Equal(t, "sholmes@example.com", mapped["canonical_email"])
+	assert.Equal(t, "sherlock", mapped["display_name"])
 	assert.Equal(t, "ACTIVE", mapped["status"])
-	assert.Equal(t, "T123ABC456", mapped["directoryInstanceID"])
-	assert.Equal(t, "SERVICE", mapped["accountType"])
+	assert.Equal(t, "T123ABC456", mapped["directory_instance_id"])
+	assert.Equal(t, "SERVICE", mapped["account_type"])
 }

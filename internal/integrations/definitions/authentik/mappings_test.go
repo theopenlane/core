@@ -43,14 +43,14 @@ func TestExamplePayloads(t *testing.T) {
 
 		mapped := mappingtest.EvalMap(t, accountSpec, envelope)
 
-		assert.Equal(t, "772416add93e0b563b4ceb5c534f9b064f356bb2782d61d31bf1dc2c7cf1e3a5", mapped["externalID"])
-		assert.Equal(t, "authentik Default Admin", mapped["displayName"])
-		assert.Equal(t, "manab@gmail.com", mapped["canonicalEmail"])
+		assert.Equal(t, "772416add93e0b563b4ceb5c534f9b064f356bb2782d61d31bf1dc2c7cf1e3a5", mapped["external_id"])
+		assert.Equal(t, "authentik Default Admin", mapped["display_name"])
+		assert.Equal(t, "manab@gmail.com", mapped["canonical_email"])
 		assert.Equal(t, "ACTIVE", mapped["status"])
-		assert.Equal(t, "USER", mapped["accountType"])
-		assert.Equal(t, "2026-05-08T01:54:15.179825Z", mapped["addedAt"])
-		assert.Equal(t, "2026-05-09T08:11:37.941933Z", mapped["lastSeenAt"])
-		assert.Equal(t, "2026-05-08T01:55:21.345631Z", mapped["observedAt"])
+		assert.Equal(t, "USER", mapped["account_type"])
+		assert.Equal(t, "2026-05-08T01:54:15.179825Z", mapped["added_at"])
+		assert.Equal(t, "2026-05-09T08:11:37.941933Z", mapped["last_seen_at"])
+		assert.Equal(t, "2026-05-08T01:55:21.345631Z", mapped["observed_at"])
 	})
 
 	t.Run("group_json", func(t *testing.T) {
@@ -62,8 +62,8 @@ func TestExamplePayloads(t *testing.T) {
 
 		mapped := mappingtest.EvalMap(t, groupSpec, envelope)
 
-		assert.Equal(t, "488f8a0c-c0b6-4dce-bf79-82db3af7cdac", mapped["externalID"])
-		assert.Equal(t, "authentik Admins", mapped["displayName"])
+		assert.Equal(t, "488f8a0c-c0b6-4dce-bf79-82db3af7cdac", mapped["external_id"])
+		assert.Equal(t, "authentik Admins", mapped["display_name"])
 		assert.Equal(t, "ACTIVE", mapped["status"])
 	})
 
@@ -81,8 +81,8 @@ func TestExamplePayloads(t *testing.T) {
 
 		mapped := mappingtest.EvalMap(t, membershipSpec, envelope)
 
-		assert.Equal(t, "772416add93e0b563b4ceb5c534f9b064f356bb2782d61d31bf1dc2c7cf1e3a5", mapped["directoryAccountID"])
-		assert.Equal(t, "488f8a0c-c0b6-4dce-bf79-82db3af7cdac", mapped["directoryGroupID"])
+		assert.Equal(t, "772416add93e0b563b4ceb5c534f9b064f356bb2782d61d31bf1dc2c7cf1e3a5", mapped["directory_account_id"])
+		assert.Equal(t, "488f8a0c-c0b6-4dce-bf79-82db3af7cdac", mapped["directory_group_id"])
 		assert.Equal(t, "MEMBER", mapped["role"])
 	})
 
@@ -125,7 +125,7 @@ func TestExamplePayloads(t *testing.T) {
 		envelope := types.MappingEnvelope{Payload: json.RawMessage(payload)}
 		mapped := mappingtest.EvalMap(t, accountSpec, envelope)
 
-		assert.Equal(t, "SERVICE", mapped["accountType"])
+		assert.Equal(t, "SERVICE", mapped["account_type"])
 		assert.Equal(t, "ACTIVE", mapped["status"])
 	})
 }

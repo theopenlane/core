@@ -1,6 +1,7 @@
 package azuresecuritycenter
 
 import (
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -13,19 +14,19 @@ import (
 // Timestamps come from AssessmentStatusResponse: first_evaluated_at → discovered_at,
 // status_changed_at → source_updated_at.
 var mapExprAssessment = providerkit.CelMapExpr([]providerkit.CelMapEntry{
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityExternalID, Expr: `'id' in payload ? payload.id : ""`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityExternalOwnerID, Expr: `'resource_id' in payload && payload.resource_id != "" ? payload.resource_id : resource`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityDisplayName, Expr: `'display_name' in payload ? payload.display_name : ""`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilitySummary, Expr: `'display_name' in payload ? payload.display_name : ""`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityDescription, Expr: `'description' in payload ? payload.description : ""`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilitySeverity, Expr: `'severity' in payload ? payload.severity : ""`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityCategory, Expr: `'category' in payload ? payload.category : ""`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityVulnerabilityStatusName, Expr: `'status_code' in payload ? payload.status_code : ""`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityOpen, Expr: `dyn('status_code' in payload ? payload.status_code == "Unhealthy" : false)`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityExternalURI, Expr: `'external_uri' in payload ? payload.external_uri : ""`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityDiscoveredAt, Expr: `'first_evaluated_at' in payload ? payload.first_evaluated_at : null`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilitySourceUpdatedAt, Expr: `'status_changed_at' in payload ? payload.status_changed_at : null`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityRawPayload, Expr: "payload"},
+	{Key: entityops.InputKeyVulnerabilityExternalID, Expr: `'id' in payload ? payload.id : ""`},
+	{Key: entityops.InputKeyVulnerabilityExternalOwnerID, Expr: `'resource_id' in payload && payload.resource_id != "" ? payload.resource_id : resource`},
+	{Key: entityops.InputKeyVulnerabilityDisplayName, Expr: `'display_name' in payload ? payload.display_name : ""`},
+	{Key: entityops.InputKeyVulnerabilitySummary, Expr: `'display_name' in payload ? payload.display_name : ""`},
+	{Key: entityops.InputKeyVulnerabilityDescription, Expr: `'description' in payload ? payload.description : ""`},
+	{Key: entityops.InputKeyVulnerabilitySeverity, Expr: `'severity' in payload ? payload.severity : ""`},
+	{Key: entityops.InputKeyVulnerabilityCategory, Expr: `'category' in payload ? payload.category : ""`},
+	{Key: entityops.InputKeyVulnerabilityVulnerabilityStatusName, Expr: `'status_code' in payload ? payload.status_code : ""`},
+	{Key: entityops.InputKeyVulnerabilityOpen, Expr: `dyn('status_code' in payload ? payload.status_code == "Unhealthy" : false)`},
+	{Key: entityops.InputKeyVulnerabilityExternalURI, Expr: `'external_uri' in payload ? payload.external_uri : ""`},
+	{Key: entityops.InputKeyVulnerabilityDiscoveredAt, Expr: `'first_evaluated_at' in payload ? payload.first_evaluated_at : null`},
+	{Key: entityops.InputKeyVulnerabilitySourceUpdatedAt, Expr: `'status_changed_at' in payload ? payload.status_changed_at : null`},
+	{Key: entityops.InputKeyVulnerabilityRawPayload, Expr: "payload"},
 })
 
 // mapExprSubAssessment maps SubAssessmentPayload fields to the Vulnerability schema.
@@ -40,19 +41,19 @@ var mapExprAssessment = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 // one record per CVE per organization, whereas Azure sub-assessments are scoped per
 // resource (the same CVE can appear on multiple container images or VMs).
 var mapExprSubAssessment = providerkit.CelMapExpr([]providerkit.CelMapEntry{
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityExternalID, Expr: `'id' in payload ? payload.id : ""`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityExternalOwnerID, Expr: `'resource_id' in payload && payload.resource_id != "" ? payload.resource_id : resource`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityDisplayName, Expr: `'display_name' in payload ? payload.display_name : ""`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilitySummary, Expr: `'display_name' in payload ? payload.display_name : ""`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityDescription, Expr: `'description' in payload ? payload.description : ""`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilitySeverity, Expr: `'severity' in payload ? payload.severity : ""`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityCategory, Expr: `'category' in payload ? payload.category : ""`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityVulnerabilityStatusName, Expr: `'status_code' in payload ? payload.status_code : ""`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityOpen, Expr: `dyn('status_code' in payload ? payload.status_code == "Unhealthy" : false)`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityScore, Expr: `'cvss_score' in payload && payload.cvss_score != null ? payload.cvss_score : null`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityDiscoveredAt, Expr: `'published_at' in payload ? payload.published_at : null`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilitySourceUpdatedAt, Expr: `'time_generated' in payload ? payload.time_generated : null`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityRawPayload, Expr: "payload"},
+	{Key: entityops.InputKeyVulnerabilityExternalID, Expr: `'id' in payload ? payload.id : ""`},
+	{Key: entityops.InputKeyVulnerabilityExternalOwnerID, Expr: `'resource_id' in payload && payload.resource_id != "" ? payload.resource_id : resource`},
+	{Key: entityops.InputKeyVulnerabilityDisplayName, Expr: `'display_name' in payload ? payload.display_name : ""`},
+	{Key: entityops.InputKeyVulnerabilitySummary, Expr: `'display_name' in payload ? payload.display_name : ""`},
+	{Key: entityops.InputKeyVulnerabilityDescription, Expr: `'description' in payload ? payload.description : ""`},
+	{Key: entityops.InputKeyVulnerabilitySeverity, Expr: `'severity' in payload ? payload.severity : ""`},
+	{Key: entityops.InputKeyVulnerabilityCategory, Expr: `'category' in payload ? payload.category : ""`},
+	{Key: entityops.InputKeyVulnerabilityVulnerabilityStatusName, Expr: `'status_code' in payload ? payload.status_code : ""`},
+	{Key: entityops.InputKeyVulnerabilityOpen, Expr: `dyn('status_code' in payload ? payload.status_code == "Unhealthy" : false)`},
+	{Key: entityops.InputKeyVulnerabilityScore, Expr: `'cvss_score' in payload && payload.cvss_score != null ? payload.cvss_score : null`},
+	{Key: entityops.InputKeyVulnerabilityDiscoveredAt, Expr: `'published_at' in payload ? payload.published_at : null`},
+	{Key: entityops.InputKeyVulnerabilitySourceUpdatedAt, Expr: `'time_generated' in payload ? payload.time_generated : null`},
+	{Key: entityops.InputKeyVulnerabilityRawPayload, Expr: "payload"},
 })
 
 // azureSecurityCenterMappings returns the built-in Azure Security Center ingest mappings

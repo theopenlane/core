@@ -28,8 +28,8 @@ func TestGitHubDirectoryMembershipMapping(t *testing.T) {
 	assert.NilError(t, err)
 
 	assert.Check(t, is.Equal("MAINTAINER", maintainerMapped["role"]))
-	assert.Check(t, is.Equal("7", maintainerMapped["directoryAccountID"]))
-	assert.Check(t, is.Equal("42", maintainerMapped["directoryGroupID"]))
+	assert.Check(t, is.Equal("7", maintainerMapped["directory_account_id"]))
+	assert.Check(t, is.Equal("42", maintainerMapped["directory_group_id"]))
 
 	noRoleRaw, err := providerkit.EvalMap(context.Background(), spec.MapExpr, types.MappingEnvelope{
 		Resource: "acme/security",
@@ -56,8 +56,8 @@ func TestGitHubDirectoryAccountMapping(t *testing.T) {
 	withAliasesMapped, err := jsonx.ToMap(withAliasesRaw)
 	assert.NilError(t, err)
 
-	assert.Check(t, is.Equal("kwaters@example.com", withAliasesMapped["canonicalEmail"]))
-	assert.Check(t, is.DeepEqual([]any{"kelsey@example.com", "kw@example.dev"}, withAliasesMapped["emailAliases"]))
+	assert.Check(t, is.Equal("kwaters@example.com", withAliasesMapped["canonical_email"]))
+	assert.Check(t, is.DeepEqual([]any{"kelsey@example.com", "kw@example.dev"}, withAliasesMapped["email_aliases"]))
 
 	noAliasesRaw, err := providerkit.EvalMap(context.Background(), spec.MapExpr, types.MappingEnvelope{
 		Resource: "acme",
@@ -68,7 +68,7 @@ func TestGitHubDirectoryAccountMapping(t *testing.T) {
 	noAliasesMapped, err := jsonx.ToMap(noAliasesRaw)
 	assert.NilError(t, err)
 
-	assert.Check(t, is.DeepEqual([]any{}, noAliasesMapped["emailAliases"]))
+	assert.Check(t, is.DeepEqual([]any{}, noAliasesMapped["email_aliases"]))
 }
 
 // TestResolveCanonicalEmail verifies the priority chain and confirmed alias collection
