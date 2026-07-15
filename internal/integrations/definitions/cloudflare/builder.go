@@ -18,7 +18,7 @@ import (
 // runtime.DomainScan configures vendor/technology classification for onboarding domain scan reports.
 // When devMode is true or runtime.Provisioned() is true, a RuntimeIntegration is included so
 // system-initiated calls (e.g. onboarding domain scans) can use the operator-owned account
-func Builder(runtime *RuntimeConfig, devMode bool) registry.Builder {
+func Builder(runtime *RuntimeConfig) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		def := types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
@@ -187,7 +187,7 @@ func Builder(runtime *RuntimeConfig, devMode bool) registry.Builder {
 			Mappings: cloudflareMappings(),
 		}
 
-		if runtime != nil && (devMode || runtime.Provisioned()) {
+		if runtime.Provisioned() {
 			runtimeCloudflareRef.SetConfig(runtime)
 
 			marshaledConfig, err := runtimeCloudflareRef.MarshalConfig()
