@@ -1,33 +1,30 @@
 # object
 
-Config contains the configuration for the core server
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**domain**|`string`|Domain provides a global domain value for other modules to inherit<br/>||
-|**refreshinterval**|`integer`|RefreshInterval determines how often to reload the config<br/>||
-|[**server**](#server)|`object`|Server settings for the echo server<br/>|yes|
-|[**entconfig**](#entconfig)|`object`|Config holds the configuration for the ent server<br/>||
-|[**auth**](#auth)|`object`|Auth settings including oauth2 providers and token configuration<br/>|yes|
+|**domain**|`string`|||
+|**refreshinterval**|`integer`|||
+|[**server**](#server)|`object`||yes|
+|[**entconfig**](#entconfig)|`object`|||
+|[**auth**](#auth)|`object`||yes|
 |[**authz**](#authz)|`object`||yes|
 |[**db**](#db)|`object`||yes|
 |[**jobqueue**](#jobqueue)|`object`|||
 |[**redis**](#redis)|`object`|||
 |[**sessions**](#sessions)|`object`|||
 |[**totp**](#totp)|`object`|||
-|[**ratelimit**](#ratelimit)|`object`|Config defines the configuration settings for the rate limiter middleware.<br/>||
-|[**ratelimitunmatched**](#ratelimitunmatched)|`object`|Config defines the configuration settings for the rate limiter middleware.<br/>||
-|[**objectstorage**](#objectstorage)|`object`|ProviderConfig contains configuration for object storage providers<br/>||
+|[**ratelimit**](#ratelimit)|`object`|||
+|[**ratelimitunmatched**](#ratelimitunmatched)|`object`|||
+|[**objectstorage**](#objectstorage)|`object`|||
 |[**subscription**](#subscription)|`object`|||
-|[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
+|[**keywatcher**](#keywatcher)|`object`|||
 |[**integrations**](#integrations)|`object`|||
 |[**workflows**](#workflows)|`object`|||
-|[**cloudflare**](#cloudflare)|`object`|CloudflareConfig contains configuration for Cloudflare integration.<br/>||
+|[**cloudflare**](#cloudflare)|`object`|||
 |[**shortlinks**](#shortlinks)|`object`|||
-|[**backfill**](#backfill)|`object`|Backfill configures one-time startup data backfill routines that populate fields introduced by recent migrations for organizations and memberships that pre-date them<br/>||
+|[**backfill**](#backfill)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -171,37 +168,34 @@ Config contains the configuration for the core server
 <a name="server"></a>
 ## server: object
 
-Server settings for the echo server
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**dev**|`boolean`|Dev enables echo's dev mode options<br/>|no|
-|**listen**|`string`|Listen sets the listen address to serve the echo server on<br/>|yes|
-|**metricsport**|`string`|MetricsPort sets the port for the metrics endpoint<br/>|no|
-|**shutdowngraceperiod**|`integer`|ShutdownGracePeriod sets the grace period for in flight requests before shutting down<br/>|no|
-|**readtimeout**|`integer`|ReadTimeout sets the maximum duration for reading the entire request including the body<br/>|no|
-|**writetimeout**|`integer`|WriteTimeout sets the maximum duration before timing out writes of the response<br/>|no|
-|**idletimeout**|`integer`|IdleTimeout sets the maximum amount of time to wait for the next request when keep-alives are enabled<br/>|no|
-|**readheadertimeout**|`integer`|ReadHeaderTimeout sets the amount of time allowed to read request headers<br/>|no|
-|[**tls**](#servertls)|`object`|TLS settings for the server for secure connections<br/>|no|
-|[**cors**](#servercors)|`object`|Config holds the cors configuration settings<br/>|no|
-|[**secure**](#serversecure)|`object`|Config contains the types used in the mw middleware<br/>|no|
-|[**cachecontrol**](#servercachecontrol)|`object`|Config is the config values for the cache-control middleware<br/>|no|
-|[**mime**](#servermime)|`object`|Config defines the config for Mime middleware<br/>|no|
-|[**graphpool**](#servergraphpool)|`object`|PoolConfig contains the settings for the goroutine pool<br/>|no|
-|**enablegraphextensions**|`boolean`|EnableGraphExtensions enables the graph extensions for the graph resolvers<br/>|no|
-|**enablegraphsubscriptions**|`boolean`|EnableGraphSubscriptions enables graphql subscriptions to the server using websockets or sse<br/>|no|
-|**complexitylimit**|`integer`|ComplexityLimit sets the maximum complexity allowed for a query<br/>|no|
-|**maxresultlimit**|`integer`|MaxResultLimit sets the maximum number of results allowed for a query<br/>|no|
-|[**csrfprotection**](#servercsrfprotection)|`object`|Config defines configuration for the CSRF middleware wrapper.<br/>|no|
-|**secretmanager**|`string`|SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key<br/>|no|
-|**defaulttrustcenterdomain**|`string`|DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set<br/>|no|
-|**trustcentercnametarget**|`string`|TrustCenterCnameTarget is the cname target for the trust center<br/>Used for mapping the vanity domains to the trust centers<br/>|no|
-|**trustcenterpreviewzoneid**|`string`|TrustCenterPreviewZoneID is the cloudflare zone id for the trust center preview domain<br/>|no|
-|**notificationlookbackdays**|`integer`|NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription<br/>Unread notifications are always pulled regardless of this setting<br/>|no|
+|**dev**|`boolean`||no|
+|**listen**|`string`||yes|
+|**metricsport**|`string`||no|
+|**shutdowngraceperiod**|`integer`||no|
+|**readtimeout**|`integer`||no|
+|**writetimeout**|`integer`||no|
+|**idletimeout**|`integer`||no|
+|**readheadertimeout**|`integer`||no|
+|[**tls**](#servertls)|`object`||no|
+|[**cors**](#servercors)|`object`||no|
+|[**secure**](#serversecure)|`object`||no|
+|[**cachecontrol**](#servercachecontrol)|`object`||no|
+|[**mime**](#servermime)|`object`||no|
+|[**graphpool**](#servergraphpool)|`object`||no|
+|**enablegraphextensions**|`boolean`||no|
+|**enablegraphsubscriptions**|`boolean`||no|
+|**complexitylimit**|`integer`||no|
+|**maxresultlimit**|`integer`||no|
+|[**csrfprotection**](#servercsrfprotection)|`object`||no|
+|**secretmanager**|`string`||no|
+|**defaulttrustcenterdomain**|`string`||no|
+|**trustcentercnametarget**|`string`||no|
+|**trustcenterpreviewzoneid**|`string`||no|
+|**notificationlookbackdays**|`integer`||no|
 
 **Additional Properties:** not allowed  
 **Example**
@@ -225,33 +219,27 @@ Server settings for the echo server
 <a name="servertls"></a>
 ### server\.tls: object
 
-TLS settings for the server for secure connections
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled turns on TLS settings for the server<br/>||
-|**certfile**|`string`|CertFile location for the TLS server<br/>||
-|**certkey**|`string`|CertKey file location for the TLS server<br/>||
-|**autocert**|`boolean`|AutoCert generates the cert with letsencrypt, this does not work on localhost<br/>||
+|**enabled**|`boolean`|||
+|**certfile**|`string`|||
+|**certkey**|`string`|||
+|**autocert**|`boolean`|||
 
 **Additional Properties:** not allowed  
 <a name="servercors"></a>
 ### server\.cors: object
 
-Config holds the cors configuration settings
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enable or disable the CORS middleware<br/>||
+|**enabled**|`boolean`|||
 |[**prefixes**](#servercorsprefixes)|`object`|||
 |[**alloworigins**](#servercorsalloworigins)|`string[]`|||
-|**cookieinsecure**|`boolean`|CookieInsecure sets the cookie to be insecure<br/>||
+|**cookieinsecure**|`boolean`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -286,29 +274,23 @@ Config holds the cors configuration settings
 <a name="serversecure"></a>
 ### server\.secure: object
 
-Config contains the types used in the mw middleware
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates if the secure middleware should be enabled<br/>||
-|**xssprotection**|`string`|XSSProtection is the value to set the X-XSS-Protection header to - default is 1; mode=block<br/>||
-|**contenttypenosniff**|`string`|ContentTypeNosniff is the value to set the X-Content-Type-Options header to - default is nosniff<br/>||
-|**xframeoptions**|`string`|XFrameOptions is the value to set the X-Frame-Options header to - default is SAMEORIGIN<br/>||
-|**hstspreloadenabled**|`boolean`|HSTSPreloadEnabled is a boolean to enable HSTS preloading - default is false<br/>||
-|**hstsmaxage**|`integer`|HSTSMaxAge is the max age to set the HSTS header to - default is 31536000<br/>||
-|**contentsecuritypolicy**|`string`|ContentSecurityPolicy is the value to set the Content-Security-Policy header to - default is default-src 'self'<br/>||
-|**referrerpolicy**|`string`|ReferrerPolicy is the value to set the Referrer-Policy header to - default is same-origin<br/>||
-|**cspreportonly**|`boolean`|CSPReportOnly is a boolean to enable the Content-Security-Policy-Report-Only header - default is false<br/>||
+|**enabled**|`boolean`|||
+|**xssprotection**|`string`|||
+|**contenttypenosniff**|`string`|||
+|**xframeoptions**|`string`|||
+|**hstspreloadenabled**|`boolean`|||
+|**hstsmaxage**|`integer`|||
+|**contentsecuritypolicy**|`string`|||
+|**referrerpolicy**|`string`|||
+|**cspreportonly**|`boolean`|||
 
 **Additional Properties:** not allowed  
 <a name="servercachecontrol"></a>
 ### server\.cachecontrol: object
-
-Config is the config values for the cache-control middleware
-
 
 **Properties**
 
@@ -345,70 +327,58 @@ Config is the config values for the cache-control middleware
 <a name="servermime"></a>
 ### server\.mime: object
 
-Config defines the config for Mime middleware
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates if the mime middleware should be enabled<br/>||
-|**mimetypesfile**|`string`|MimeTypesFile is the file to load mime types from<br/>||
-|**defaultcontenttype**|`string`|DefaultContentType is the default content type to set if no mime type is found<br/>||
+|**enabled**|`boolean`|||
+|**mimetypesfile**|`string`|||
+|**defaultcontenttype**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="servergraphpool"></a>
 ### server\.graphpool: object
 
-PoolConfig contains the settings for the goroutine pool
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**maxworkers**|`integer`|MaxWorkers is the maximum number of workers in the pool<br/>||
+|**maxworkers**|`integer`|||
 
 **Additional Properties:** not allowed  
 <a name="servercsrfprotection"></a>
 ### server\.csrfprotection: object
 
-Config defines configuration for the CSRF middleware wrapper.
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates whether CSRF protection is enabled.<br/>||
-|**header**|`string`|Header specifies the header name to look for the CSRF token.<br/>||
-|**cookie**|`string`|Cookie specifies the cookie name used to store the CSRF token.<br/>||
-|**secure**|`boolean`|Secure sets the Secure flag on the CSRF cookie.<br/>||
-|**samesite**|`string`|SameSite configures the SameSite attribute on the CSRF cookie. Valid<br/>values are "Lax", "Strict", "None" and "Default".<br/>||
-|**cookiehttponly**|`boolean`|CookieHTTPOnly indicates whether the CSRF cookie is HTTP only.<br/>||
-|**cookiedomain**|`string`|CookieDomain specifies the domain for the CSRF cookie, default to no domain<br/>||
-|**cookiepath**|`string`|CookiePath specifies the path for the CSRF cookie, default to "/"<br/>||
+|**enabled**|`boolean`|||
+|**header**|`string`|||
+|**cookie**|`string`|||
+|**secure**|`boolean`|||
+|**samesite**|`string`|||
+|**cookiehttponly**|`boolean`|||
+|**cookiedomain**|`string`|||
+|**cookiepath**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="entconfig"></a>
 ## entconfig: object
-
-Config holds the configuration for the ent server
-
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |[**entitytypes**](#entconfigentitytypes)|`string[]`|||
-|[**summarizer**](#entconfigsummarizer)|`object`|Config holds configuration for the text summarization functionality<br/>||
-|**maxpoolsize**|`integer`|MaxPoolSize is the max worker pool size that can be used by the ent client<br/>||
-|[**modules**](#entconfigmodules)|`object`|Modules settings for features access<br/>||
-|**maxschemaimportsize**|`integer`|MaxSchemaImportSize is the maximum size allowed for schema imports in bytes<br/>||
-|[**emailvalidation**](#entconfigemailvalidation)|`object`|EmailVerificationConfig is the configuration for email verification<br/>||
-|[**billing**](#entconfigbilling)|`object`|Billing settings for feature access<br/>||
-|[**notifications**](#entconfignotifications)|`object`|Notifications settings for notifications sent to users based on events<br/>||
-|**questionnaireproducturl**|`string`|QuestionnaireProductURL is the product URL used to build questionnaire access links<br/>||
+|[**summarizer**](#entconfigsummarizer)|`object`|||
+|**maxpoolsize**|`integer`|||
+|[**modules**](#entconfigmodules)|`object`|||
+|**maxschemaimportsize**|`integer`|||
+|[**emailvalidation**](#entconfigemailvalidation)|`object`|||
+|[**billing**](#entconfigbilling)|`object`|||
+|[**notifications**](#entconfignotifications)|`object`|||
+|**questionnaireproducturl**|`string`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -440,16 +410,13 @@ Config holds the configuration for the ent server
 <a name="entconfigsummarizer"></a>
 ### entconfig\.summarizer: object
 
-Config holds configuration for the text summarization functionality
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**type**|`string`|Type specifies the summarization algorithm to use<br/>||
-|[**llm**](#entconfigsummarizerllm)|`object`|LLM contains configuration for multiple LLM providers<br/>||
-|**maximumsentences**|`integer`|MaximumSentences specifies the maximum number of sentences in the summary<br/>||
+|**type**|`string`|||
+|[**llm**](#entconfigsummarizerllm)|`object`|||
+|**maximumsentences**|`integer`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -467,17 +434,14 @@ Config holds configuration for the text summarization functionality
 <a name="entconfigsummarizerllm"></a>
 #### entconfig\.summarizer\.llm: object
 
-LLM contains configuration for multiple LLM providers
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**provider**|`string`|Provider specifies which LLM service to use<br/>||
-|[**anthropic**](#entconfigsummarizerllmanthropic)|`object`|AnthropicConfig contains Anthropic specific configuration<br/>||
-|[**cloudflare**](#entconfigsummarizerllmcloudflare)|`object`|CloudflareConfig contains Cloudflare specific configuration<br/>||
-|[**openai**](#entconfigsummarizerllmopenai)|`object`|OpenAIConfig contains OpenAI specific configuration<br/>||
+|**provider**|`string`|||
+|[**anthropic**](#entconfigsummarizerllmanthropic)|`object`|||
+|[**cloudflare**](#entconfigsummarizerllmcloudflare)|`object`|||
+|[**openai**](#entconfigsummarizerllmopenai)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -493,82 +457,67 @@ LLM contains configuration for multiple LLM providers
 <a name="entconfigsummarizerllmanthropic"></a>
 ##### entconfig\.summarizer\.llm\.anthropic: object
 
-AnthropicConfig contains Anthropic specific configuration
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**betaheader**|`string`|BetaHeader specifies the beta API features to enable<br/>||
-|**legacytextcompletion**|`boolean`|LegacyTextCompletion enables legacy text completion API<br/>||
-|**baseurl**|`string`|BaseURL specifies the API endpoint<br/>||
-|**model**|`string`|Model specifies the model name to use<br/>||
-|**apikey**|`string`|APIKey contains the authentication key for the service<br/>||
+|**betaheader**|`string`|||
+|**legacytextcompletion**|`boolean`|||
+|**baseurl**|`string`|||
+|**model**|`string`|||
+|**apikey**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="entconfigsummarizerllmcloudflare"></a>
 ##### entconfig\.summarizer\.llm\.cloudflare: object
 
-CloudflareConfig contains Cloudflare specific configuration
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**model**|`string`|Model specifies the model name to use<br/>||
-|**apikey**|`string`|APIKey contains the authentication key for the service<br/>||
-|**accountid**|`string`|AccountID specifies the Cloudflare account ID<br/>||
-|**serverurl**|`string`|ServerURL specifies the API endpoint<br/>||
+|**model**|`string`|||
+|**apikey**|`string`|||
+|**accountid**|`string`|||
+|**serverurl**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="entconfigsummarizerllmopenai"></a>
 ##### entconfig\.summarizer\.llm\.openai: object
 
-OpenAIConfig contains OpenAI specific configuration
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**model**|`string`|Model specifies the model name to use<br/>||
-|**apikey**|`string`|APIKey contains the authentication key for the service<br/>||
-|**url**|`string`|URL specifies the API endpoint<br/>||
-|**organizationid**|`string`|OrganizationID specifies the OpenAI organization ID<br/>||
+|**model**|`string`|||
+|**apikey**|`string`|||
+|**url**|`string`|||
+|**organizationid**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="entconfigmodules"></a>
 ### entconfig\.modules: object
 
-Modules settings for features access
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates whether to check and verify module access<br/>||
-|**usesandbox**|`boolean`|UseSandbox indicates whether to use the sandbox catalog for module access checks<br/>||
-|**devmode**|`boolean`|DevMode enables all modules for local development regardless of trial status<br/>||
+|**enabled**|`boolean`|||
+|**usesandbox**|`boolean`|||
+|**devmode**|`boolean`|||
 
 **Additional Properties:** not allowed  
 <a name="entconfigemailvalidation"></a>
 ### entconfig\.emailvalidation: object
 
-EmailVerificationConfig is the configuration for email verification
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates whether email verification is enabled<br/>||
-|**enableautoupdatedisposable**|`boolean`|EnableAutoUpdateDisposable indicates whether to automatically update disposable email addresses<br/>||
-|**enablegravatarcheck**|`boolean`|EnableGravatarCheck indicates whether to check for Gravatar existence<br/>||
-|**enablesmtpcheck**|`boolean`|EnableSMTPCheck indicates whether to check email by smtp<br/>||
-|[**allowedemailtypes**](#entconfigemailvalidationallowedemailtypes)|`object`|AllowedEmailTypes defines the allowed email types for verification<br/>||
+|**enabled**|`boolean`|||
+|**enableautoupdatedisposable**|`boolean`|||
+|**enablegravatarcheck**|`boolean`|||
+|**enablesmtpcheck**|`boolean`|||
+|[**allowedemailtypes**](#entconfigemailvalidationallowedemailtypes)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -582,29 +531,23 @@ EmailVerificationConfig is the configuration for email verification
 <a name="entconfigemailvalidationallowedemailtypes"></a>
 #### entconfig\.emailvalidation\.allowedemailtypes: object
 
-AllowedEmailTypes defines the allowed email types for verification
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**disposable**|`boolean`|Disposable indicates whether disposable email addresses are allowed<br/>||
-|**free**|`boolean`|Free indicates whether free email addresses are allowed<br/>||
-|**role**|`boolean`|Role indicates whether role-based email addresses are allowed<br/>||
+|**disposable**|`boolean`|||
+|**free**|`boolean`|||
+|**role**|`boolean`|||
 
 **Additional Properties:** not allowed  
 <a name="entconfigbilling"></a>
 ### entconfig\.billing: object
 
-Billing settings for feature access
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**requirepaymentmethod**|`boolean`|RequirePaymentMethod indicates whether to check if a payment method<br/>exists for orgs before they can access some resource<br/>||
+|**requirepaymentmethod**|`boolean`|||
 |[**bypassemaildomains**](#entconfigbillingbypassemaildomains)|`string[]`|||
 
 **Additional Properties:** not allowed  
@@ -617,31 +560,25 @@ Billing settings for feature access
 <a name="entconfignotifications"></a>
 ### entconfig\.notifications: object
 
-Notifications settings for notifications sent to users based on events
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**consoleurl**|`string`|ConsoleURL for ui links used in notifications<br/>||
+|**consoleurl**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="auth"></a>
 ## auth: object
 
-Auth settings including oauth2 providers and token configuration
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled authentication on the server, not recommended to disable<br/>|no|
+|**enabled**|`boolean`||no|
 |[**token**](#authtoken)|`object`||yes|
 |[**supportedproviders**](#authsupportedproviders)|`string[]`||no|
-|[**providers**](#authproviders)|`object`|OauthProviderConfig represents the configuration for OAuth providers such as Github and Google<br/>|no|
-|[**supportaccess**](#authsupportaccess)|`object`|SupportAccessConfig contains configuration for the Openlane support access flow.<br/>|no|
+|[**providers**](#authproviders)|`object`||no|
+|[**supportaccess**](#authsupportaccess)|`object`||no|
 
 **Additional Properties:** not allowed  
 **Example**
@@ -807,14 +744,11 @@ Auth settings including oauth2 providers and token configuration
 <a name="authproviders"></a>
 ### auth\.providers: object
 
-OauthProviderConfig represents the configuration for OAuth providers such as Github and Google
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**redirecturl**|`string`|RedirectURL is the URL that the OAuth2 client will redirect to after authentication is complete<br/>||
+|**redirecturl**|`string`|||
 |[**github**](#authprovidersgithub)|`object`||yes|
 |[**google**](#authprovidersgoogle)|`object`||yes|
 |[**webauthn**](#authproviderswebauthn)|`object`||yes|
@@ -896,24 +830,21 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 <a name="authsupportaccess"></a>
 ### auth\.supportaccess: object
 
-SupportAccessConfig contains configuration for the Openlane support access flow.
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled toggles the support access endpoints<br/>||
-|**email**|`string`|Email is the email of the virtual support identity, used as the first factor username<br/>||
-|**displayname**|`string`|DisplayName is the display name of the virtual support identity, used for record attribution<br/>||
-|**subjectid**|`string`|SubjectID is the stable subject id of the virtual support identity used for created_by/updated_by<br/>attribution. It must be a valid ULID and is consistent without a backing user row. Default should match anon.SupportSubjectID<br/>||
-|**password**|`string`|Password is the shared password for the virtual support identity, validated against this value<br/>||
-|**clientid**|`string`|ClientID is the client ID for the second factor identity provider<br/>||
-|**clientsecret**|`string`|ClientSecret is the client secret for the second factor identity provider<br/>||
-|**issuerurl**|`string`|IssuerURL is the issuer URL of the second factor identity provider<br/>||
-|**discoveryendpoint**|`string`|DiscoveryEndpoint is the optional OIDC discovery endpoint of the second factor identity provider<br/>||
-|**redirecturl**|`string`|RedirectURL is the callback URL registered with the second factor identity provider<br/>||
-|**alloweddomain**|`string`|AllowedDomain restricts which email domain may complete the second factor (e.g. theopenlane.io)<br/>||
+|**enabled**|`boolean`|||
+|**email**|`string`|||
+|**displayname**|`string`|||
+|**subjectid**|`string`|||
+|**password**|`string`|||
+|**clientid**|`string`|||
+|**clientsecret**|`string`|||
+|**issuerurl**|`string`|||
+|**discoveryendpoint**|`string`|||
+|**redirecturl**|`string`|||
+|**alloweddomain**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="authz"></a>
@@ -1244,9 +1175,6 @@ SupportAccessConfig contains configuration for the Openlane support access flow.
 <a name="ratelimit"></a>
 ## ratelimit: object
 
-Config defines the configuration settings for the rate limiter middleware.
-
-
 **Properties**
 
 |Name|Type|Description|Required|
@@ -1254,14 +1182,14 @@ Config defines the configuration settings for the rate limiter middleware.
 |**enabled**|`boolean`|||
 |[**options**](#ratelimitoptions)|`array`|||
 |[**headers**](#ratelimitheaders)|`string[]`|||
-|**forwardedindexfrombehind**|`integer`|ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.<br/>0 means the closest client, 1 the proxy behind it, etc.<br/>||
-|**includepath**|`boolean`|IncludePath appends the request path to the limiter key when true.<br/>||
-|**includemethod**|`boolean`|IncludeMethod appends the request method to the limiter key when true.<br/>||
-|**keyprefix**|`string`|KeyPrefix allows scoping the limiter key space with a static prefix.<br/>||
-|**denystatus**|`integer`|DenyStatus overrides the HTTP status code returned when a rate limit is exceeded.<br/>||
-|**denymessage**|`string`|DenyMessage customises the error payload when a rate limit is exceeded.<br/>||
-|**sendretryafterheader**|`boolean`|SendRetryAfterHeader toggles whether the Retry-After header should be added when available.<br/>||
-|**dryrun**|`boolean`|DryRun enables logging rate limit decisions without blocking requests.<br/>||
+|**forwardedindexfrombehind**|`integer`|||
+|**includepath**|`boolean`|||
+|**includemethod**|`boolean`|||
+|**keyprefix**|`string`|||
+|**denystatus**|`integer`|||
+|**denymessage**|`string`|||
+|**sendretryafterheader**|`boolean`|||
+|**dryrun**|`boolean`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1296,9 +1224,6 @@ Config defines the configuration settings for the rate limiter middleware.
 <a name="ratelimitunmatched"></a>
 ## ratelimitunmatched: object
 
-Config defines the configuration settings for the rate limiter middleware.
-
-
 **Properties**
 
 |Name|Type|Description|Required|
@@ -1306,14 +1231,14 @@ Config defines the configuration settings for the rate limiter middleware.
 |**enabled**|`boolean`|||
 |[**options**](#ratelimitunmatchedoptions)|`array`|||
 |[**headers**](#ratelimitunmatchedheaders)|`string[]`|||
-|**forwardedindexfrombehind**|`integer`|ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.<br/>0 means the closest client, 1 the proxy behind it, etc.<br/>||
-|**includepath**|`boolean`|IncludePath appends the request path to the limiter key when true.<br/>||
-|**includemethod**|`boolean`|IncludeMethod appends the request method to the limiter key when true.<br/>||
-|**keyprefix**|`string`|KeyPrefix allows scoping the limiter key space with a static prefix.<br/>||
-|**denystatus**|`integer`|DenyStatus overrides the HTTP status code returned when a rate limit is exceeded.<br/>||
-|**denymessage**|`string`|DenyMessage customises the error payload when a rate limit is exceeded.<br/>||
-|**sendretryafterheader**|`boolean`|SendRetryAfterHeader toggles whether the Retry-After header should be added when available.<br/>||
-|**dryrun**|`boolean`|DryRun enables logging rate limit decisions without blocking requests.<br/>||
+|**forwardedindexfrombehind**|`integer`|||
+|**includepath**|`boolean`|||
+|**includemethod**|`boolean`|||
+|**keyprefix**|`string`|||
+|**denystatus**|`integer`|||
+|**denymessage**|`string`|||
+|**sendretryafterheader**|`boolean`|||
+|**dryrun**|`boolean`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1348,18 +1273,15 @@ Config defines the configuration settings for the rate limiter middleware.
 <a name="objectstorage"></a>
 ## objectstorage: object
 
-ProviderConfig contains configuration for object storage providers
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates if object storage is enabled<br/>||
+|**enabled**|`boolean`|||
 |[**keys**](#objectstoragekeys)|`string[]`|||
-|**maxsizemb**|`integer`|MaxSizeMB is the maximum file size allowed in MB<br/>||
-|**maxmemorymb**|`integer`|MaxMemoryMB is the maximum memory to use for file uploads in MB<br/>||
-|**devmode**|`boolean`|DevMode automatically configures a local disk storage provider (and ensures directories exist) and ignores other provider configs<br/>||
+|**maxsizemb**|`integer`|||
+|**maxmemorymb**|`integer`|||
+|**devmode**|`boolean`|||
 |[**providers**](#objectstorageproviders)|`object`|||
 
 **Additional Properties:** not allowed  
@@ -1397,10 +1319,10 @@ ProviderConfig contains configuration for object storage providers
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|[**s3**](#objectstorageproviderss3)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
-|[**r2**](#objectstorageprovidersr2)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
-|[**disk**](#objectstorageprovidersdisk)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
-|[**database**](#objectstorageprovidersdatabase)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
+|[**s3**](#objectstorageproviderss3)|`object`|||
+|[**r2**](#objectstorageprovidersr2)|`object`|||
+|[**disk**](#objectstorageprovidersdisk)|`object`|||
+|[**database**](#objectstorageprovidersdatabase)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1425,21 +1347,18 @@ ProviderConfig contains configuration for object storage providers
 <a name="objectstorageproviderss3"></a>
 #### objectstorage\.providers\.s3: object
 
-ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates if this provider is enabled<br/>||
-|**ensureavailable**|`boolean`|EnsureAvailable enforces provider availability before completing server startup<br/>||
-|**region**|`string`|Region for cloud providers<br/>||
-|**bucket**|`string`|Bucket name for cloud providers<br/>||
-|**endpoint**|`string`|Endpoint for custom endpoints<br/>||
-|**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
-|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
-|[**credentials**](#objectstorageproviderss3credentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
+|**enabled**|`boolean`|||
+|**ensureavailable**|`boolean`|||
+|**region**|`string`|||
+|**bucket**|`string`|||
+|**endpoint**|`string`|||
+|**proxypresignenabled**|`boolean`|||
+|**baseurl**|`string`|||
+|[**credentials**](#objectstorageproviderss3credentials)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1453,38 +1372,32 @@ ProviderConfigs contains configuration for all storage providers This is structu
 <a name="objectstorageproviderss3credentials"></a>
 ##### objectstorage\.providers\.s3\.credentials: object
 
-ProviderCredentials contains credentials for a storage provider
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**accesskeyid**|`string`|AccessKeyID for cloud providers<br/>||
-|**secretaccesskey**|`string`|SecretAccessKey for cloud providers<br/>||
-|**projectid**|`string`|ProjectID for GCS<br/>||
-|**accountid**|`string`|AccountID for Cloudflare R2<br/>||
-|**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
+|**accesskeyid**|`string`|||
+|**secretaccesskey**|`string`|||
+|**projectid**|`string`|||
+|**accountid**|`string`|||
+|**apitoken**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="objectstorageprovidersr2"></a>
 #### objectstorage\.providers\.r2: object
 
-ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates if this provider is enabled<br/>||
-|**ensureavailable**|`boolean`|EnsureAvailable enforces provider availability before completing server startup<br/>||
-|**region**|`string`|Region for cloud providers<br/>||
-|**bucket**|`string`|Bucket name for cloud providers<br/>||
-|**endpoint**|`string`|Endpoint for custom endpoints<br/>||
-|**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
-|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
-|[**credentials**](#objectstorageprovidersr2credentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
+|**enabled**|`boolean`|||
+|**ensureavailable**|`boolean`|||
+|**region**|`string`|||
+|**bucket**|`string`|||
+|**endpoint**|`string`|||
+|**proxypresignenabled**|`boolean`|||
+|**baseurl**|`string`|||
+|[**credentials**](#objectstorageprovidersr2credentials)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1498,38 +1411,32 @@ ProviderConfigs contains configuration for all storage providers This is structu
 <a name="objectstorageprovidersr2credentials"></a>
 ##### objectstorage\.providers\.r2\.credentials: object
 
-ProviderCredentials contains credentials for a storage provider
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**accesskeyid**|`string`|AccessKeyID for cloud providers<br/>||
-|**secretaccesskey**|`string`|SecretAccessKey for cloud providers<br/>||
-|**projectid**|`string`|ProjectID for GCS<br/>||
-|**accountid**|`string`|AccountID for Cloudflare R2<br/>||
-|**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
+|**accesskeyid**|`string`|||
+|**secretaccesskey**|`string`|||
+|**projectid**|`string`|||
+|**accountid**|`string`|||
+|**apitoken**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="objectstorageprovidersdisk"></a>
 #### objectstorage\.providers\.disk: object
 
-ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates if this provider is enabled<br/>||
-|**ensureavailable**|`boolean`|EnsureAvailable enforces provider availability before completing server startup<br/>||
-|**region**|`string`|Region for cloud providers<br/>||
-|**bucket**|`string`|Bucket name for cloud providers<br/>||
-|**endpoint**|`string`|Endpoint for custom endpoints<br/>||
-|**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
-|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
-|[**credentials**](#objectstorageprovidersdiskcredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
+|**enabled**|`boolean`|||
+|**ensureavailable**|`boolean`|||
+|**region**|`string`|||
+|**bucket**|`string`|||
+|**endpoint**|`string`|||
+|**proxypresignenabled**|`boolean`|||
+|**baseurl**|`string`|||
+|[**credentials**](#objectstorageprovidersdiskcredentials)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1543,38 +1450,32 @@ ProviderConfigs contains configuration for all storage providers This is structu
 <a name="objectstorageprovidersdiskcredentials"></a>
 ##### objectstorage\.providers\.disk\.credentials: object
 
-ProviderCredentials contains credentials for a storage provider
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**accesskeyid**|`string`|AccessKeyID for cloud providers<br/>||
-|**secretaccesskey**|`string`|SecretAccessKey for cloud providers<br/>||
-|**projectid**|`string`|ProjectID for GCS<br/>||
-|**accountid**|`string`|AccountID for Cloudflare R2<br/>||
-|**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
+|**accesskeyid**|`string`|||
+|**secretaccesskey**|`string`|||
+|**projectid**|`string`|||
+|**accountid**|`string`|||
+|**apitoken**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="objectstorageprovidersdatabase"></a>
 #### objectstorage\.providers\.database: object
 
-ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates if this provider is enabled<br/>||
-|**ensureavailable**|`boolean`|EnsureAvailable enforces provider availability before completing server startup<br/>||
-|**region**|`string`|Region for cloud providers<br/>||
-|**bucket**|`string`|Bucket name for cloud providers<br/>||
-|**endpoint**|`string`|Endpoint for custom endpoints<br/>||
-|**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
-|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
-|[**credentials**](#objectstorageprovidersdatabasecredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
+|**enabled**|`boolean`|||
+|**ensureavailable**|`boolean`|||
+|**region**|`string`|||
+|**bucket**|`string`|||
+|**endpoint**|`string`|||
+|**proxypresignenabled**|`boolean`|||
+|**baseurl**|`string`|||
+|[**credentials**](#objectstorageprovidersdatabasecredentials)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1588,18 +1489,15 @@ ProviderConfigs contains configuration for all storage providers This is structu
 <a name="objectstorageprovidersdatabasecredentials"></a>
 ##### objectstorage\.providers\.database\.credentials: object
 
-ProviderCredentials contains credentials for a storage provider
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**accesskeyid**|`string`|AccessKeyID for cloud providers<br/>||
-|**secretaccesskey**|`string`|SecretAccessKey for cloud providers<br/>||
-|**projectid**|`string`|ProjectID for GCS<br/>||
-|**accountid**|`string`|AccountID for Cloudflare R2<br/>||
-|**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
+|**accesskeyid**|`string`|||
+|**secretaccesskey**|`string`|||
+|**projectid**|`string`|||
+|**accountid**|`string`|||
+|**apitoken**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="subscription"></a>
@@ -1609,16 +1507,16 @@ ProviderCredentials contains credentials for a storage provider
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled determines if the entitlements service is enabled<br/>||
-|**privatestripekey**|`string`|PrivateStripeKey is the key for the stripe service<br/>||
-|**stripewebhooksecret**|`string`|StripeWebhookSecret is the secret for the stripe service (legacy, use StripeWebhookSecrets for version-specific secrets)<br/>||
+|**enabled**|`boolean`|||
+|**privatestripekey**|`string`|||
+|**stripewebhooksecret**|`string`|||
 |[**stripewebhooksecrets**](#subscriptionstripewebhooksecrets)|`object`|||
-|**stripewebhookurl**|`string`|StripeWebhookURL is the URL for the stripe webhook<br/>||
-|**stripebillingportalsuccessurl**|`string`|StripeBillingPortalSuccessURL<br/>||
-|**stripecancellationreturnurl**|`string`|StripeCancellationReturnURL is the URL for the stripe cancellation return<br/>||
+|**stripewebhookurl**|`string`|||
+|**stripebillingportalsuccessurl**|`string`|||
+|**stripecancellationreturnurl**|`string`|||
 |[**stripewebhookevents**](#subscriptionstripewebhookevents)|`string[]`|||
-|**stripewebhookapiversion**|`string`|StripeWebhookAPIVersion is the Stripe API version currently accepted by the webhook handler<br/>||
-|**stripewebhookdiscardapiversion**|`string`|StripeWebhookDiscardAPIVersion is the Stripe API version to discard during migration<br/>||
+|**stripewebhookapiversion**|`string`|||
+|**stripewebhookdiscardapiversion**|`string`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1647,15 +1545,12 @@ ProviderCredentials contains credentials for a storage provider
 <a name="keywatcher"></a>
 ## keywatcher: object
 
-KeyWatcher contains settings for the key watcher that manages JWT signing keys
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates whether the key watcher is enabled<br/>||
-|**keydir**|`string`|KeyDir is the path to the directory containing PEM keys for JWT signing<br/>||
+|**enabled**|`boolean`|||
+|**keydir**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="integrations"></a>
@@ -2030,18 +1925,15 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 <a name="cloudflare"></a>
 ## cloudflare: object
 
-CloudflareConfig contains configuration for Cloudflare integration.
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled toggles the Cloudflare snapshot handler<br/>||
-|**apitoken**|`string`|APIToken is the API token used for Cloudflare client initialization<br/>||
-|**accountid**|`string`|AccountID is the Cloudflare account ID to use for snapshot operations<br/>||
-|**clientid**|`string`|ClientID is the Cloudflare Access client ID for shortlink API requests<br/>||
-|**clientsecret**|`string`|ClientSecret is the Cloudflare Access client secret for shortlink API requests<br/>||
+|**enabled**|`boolean`|||
+|**apitoken**|`string`|||
+|**accountid**|`string`|||
+|**clientid**|`string`|||
+|**clientsecret**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="shortlinks"></a>
@@ -2060,14 +1952,11 @@ CloudflareConfig contains configuration for Cloudflare integration.
 <a name="backfill"></a>
 ## backfill: object
 
-Backfill configures one-time startup data backfill routines that populate fields introduced by recent migrations for organizations and memberships that pre-date them
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled runs the backfill routines on server startup<br/>||
+|**enabled**|`boolean`|||
 
 **Additional Properties:** not allowed  
 
