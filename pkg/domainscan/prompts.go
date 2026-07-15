@@ -40,7 +40,7 @@ SSO/MFA support: whether the product advertises single sign-on (SSO) support or 
 
 // subprocessorsPromptText is the shared instruction for extracting subprocessor/vendor names,
 // used by both the compliance page and trust center prompts so they ask for it identically
-const subprocessorsPromptText = `Subprocessors: the names of any subprocessors or third-party vendors listed on the page.`
+const subprocessorsPromptText = `Subprocessors: a list of only the short company or product names of subprocessors or third-party vendors explicitly listed on the page (e.g. "Amazon Web Services", "Stripe", "Google Cloud Platform"). Each entry must be a name only, never a sentence, explanation, or caveat about subprocessors. If the page does not explicitly list any subprocessors or vendors, return an empty list.`
 
 // controlsPromptText is the shared instruction for extracting concrete security/operational controls,
 // used by both the compliance page and trust center prompts so they ask for it identically

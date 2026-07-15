@@ -302,8 +302,12 @@ func printFindingsTables(report map[string]any) {
 	t.Append([]string{"Security Violations", joinOrDash(stringSlice(findings["security_violations"]))})
 	t.Append([]string{"Risks", joinOrDash(stringSlice(findings["risks"]))})
 	t.Append([]string{"Malicious", fmt.Sprint(malicious)})
-	t.Append([]string{"Missing Compliance Links", joinOrDash(stringSlice(findings["missing_compliance_links"]))})
 	t.Render()
+
+	if missingComplianceLinks, ok := findings["missing_compliance_links"].(string); ok && missingComplianceLinks != "" {
+		fmt.Println("\nMissing Compliance Links:")
+		fmt.Println(missingComplianceLinks)
+	}
 
 	agentReadiness, ok := findings["agent_readiness"].(map[string]any)
 	if !ok {
@@ -480,8 +484,10 @@ func newCloudflareClient(apiToken, accountID string) *cloudflare.CloudflareClien
 			option.WithAPIToken(apiToken),
 			option.WithHTTPClient(&http.Client{Timeout: domainScanHTTPTimeout}),
 		),
-		AccountID: accountID,
-		APIToken:  apiToken,
+		Config: cloudflare.ClientConfig{
+			AccountID: accountID,
+			APIToken:  apiToken,
+		},
 	}
 }
 

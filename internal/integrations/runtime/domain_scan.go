@@ -26,10 +26,10 @@ var errDomainScanTaskFailed = errors.New("domain scan: cloudflare scan task fail
 // errDomainScanMaxAttemptsReached is returned when a scan never completes within the poll budget
 var errDomainScanMaxAttemptsReached = errors.New("domain scan: max poll attempts reached")
 
-// HandleDomainScanCreate submits an organization's domains to Cloudflare's URL Scanner, creates a Scan record in "processing"
-// status for each so it's visible right away, and schedules a poll cycle to update that same record once the scan completes.
-// Submission runs inline through ExecuteRuntimeOperation rather than the async Dispatch path, since the scan UUIDs
-// returned by Cloudflare are needed synchronously to create the Scan records and schedule the poll cycles
+// domainScanForceRefreshMetadataKey is the Scan.Metadata key used to carry the ForceRefresh flag
+const domainScanForceRefreshMetadataKey = "force_refresh"
+
+// HandleDomainScanCreate submits an organization's domains to Cloudflare's URL Scanner
 func (r *Runtime) HandleDomainScanCreate(ctx context.Context, envelope operations.DomainScanCreateEnvelope) error {
 	logger := logx.FromContext(ctx).With().
 		Str("organization_id", envelope.OrganizationID).
@@ -69,6 +69,7 @@ func (r *Runtime) HandleDomainScanCreate(ctx context.Context, envelope operation
 			SetScanDate(*now).
 			SetPerformedBy("openlane_domain_scan").
 			SetStatus(enums.ScanStatusProcessing).
+			SetMetadata(map[string]any{domainScanForceRefreshMetadataKey: envelope.ForceRefresh}).
 			Save(systemCtx)
 		if err != nil {
 			logger.Error().Err(err).Str("scan_id", scan.UUID).Msg("domain scan: failed creating scan record")
@@ -203,6 +204,13 @@ func (r *Runtime) finalizeDomainScan(ctx context.Context, organizationID, intern
 
 	systemCtx := domainScanSystemContext(ctx, organizationID)
 
+	scanRecord, err := r.DB().Scan.Get(systemCtx, internalScanID)
+	if err != nil {
+		return err
+	}
+
+	forceRefresh, _ := scanRecord.Metadata[domainScanForceRefreshMetadataKey].(bool)
+
 	resultJSON, err := json.Marshal(result.Result)
 	if err != nil {
 		return err
@@ -212,6 +220,7 @@ func (r *Runtime) finalizeDomainScan(ctx context.Context, organizationID, intern
 		Domain:         domain,
 		InternalScanID: internalScanID,
 		Result:         resultJSON,
+		ForceRefresh:   forceRefresh,
 	})
 	if err != nil {
 		return err

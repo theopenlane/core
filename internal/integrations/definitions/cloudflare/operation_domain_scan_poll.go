@@ -137,7 +137,7 @@ func (DomainScanPoll) Run(ctx context.Context, client *CloudflareClient, cfg Dom
 
 // getScanResultOnce makes a single attempt at retrieving a URL Scanner result by scan ID
 func getScanResultOnce(ctx context.Context, client *CloudflareClient, scanID string) (*url_scanner.ScanGetResponse, ScanTaskErrors, error) {
-	result, err := client.URLScanner.Scans.Get(ctx, scanID, url_scanner.ScanGetParams{AccountID: cf.F(client.AccountID)})
+	result, err := client.URLScanner.Scans.Get(ctx, scanID, url_scanner.ScanGetParams{AccountID: cf.F(client.Config.AccountID)})
 	if err != nil {
 		return nil, nil, err
 	}

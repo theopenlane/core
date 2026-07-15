@@ -16,7 +16,6 @@ import (
 )
 
 const (
-	domainScanTTL = 600 // 10 minutes in seconds
 	// browserNavigationTimeout is the Puppeteer-level navigation timeout in milliseconds, controlling how long the browser waits for the waitUntil condition.
 	// The default Puppeteer timeout is 30000ms; 45000ms provides additional headroom for slow initial page loads.
 	browserNavigationTimeout = 45000
@@ -45,7 +44,7 @@ var trustCenterSubpaths = []string{"", "controls", "compliance", "security", "do
 
 // companyProfileSubpaths are common marketing/product pages fetched alongside the homepage when building a company
 // profile, since details are frequently only mentioned on a dedicated page rather than the homepage itself
-var companyProfileSubpaths = []string{"company", "pricing", "security", "legal", "contact", "about", "features", "platform", "docs"}
+var companyProfileSubpaths = []string{"company", "pricing", "security", "legal", "contact", "about", "features", "platform", "docs", "legal/subprocessors", "subprocessors"}
 
 // Config holds the Cloudflare credentials used for browser rendering and browser-derived enrichment lookups
 type Config struct {
@@ -53,6 +52,9 @@ type Config struct {
 	APIToken string
 	// AccountID the APIToken is associated with
 	AccountID string
+	// CacheTTL is the cache TTL, in seconds, Cloudflare applies to Browser Rendering requests.
+	// Zero disables caching for the request, forcing a fresh render instead of a cached one
+	CacheTTL int
 }
 
 // clientOptions builds the request options shared by every Cloudflare API call this package makes
@@ -344,7 +346,7 @@ type waitForSelectorOptions struct {
 func (c *Config) getBrowserRenderingJSONParams(url string, prompt string, kind PromptType) browser_rendering.JsonNewParams {
 	params := browser_rendering.JsonNewParams{
 		AccountID: cloudflare.F(c.AccountID),
-		CacheTTL:  cloudflare.Float(domainScanTTL),
+		CacheTTL:  cloudflare.Float(float64(c.CacheTTL)),
 	}
 
 	var schema ResponseFormat

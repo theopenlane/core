@@ -1052,6 +1052,9 @@ data:
           deniedvendornames:
           {{- toYaml $sliceValue | nindent 12 }}
           {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan.scanttl }}
+          scanttl: {{ .Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan.scanttl }}
+          {{- end }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.githubapp }}

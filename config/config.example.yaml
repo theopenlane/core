@@ -189,6 +189,7 @@ integrations:
                 - JavaScript frameworks
                 - JavaScript libraries
                 - Static site generator
+            scanttl: 86400
     consoleintegrationpath: /organization-settings/integrations
     email:
         apikey: ""

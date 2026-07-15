@@ -46,6 +46,9 @@ type DomainScanCreateEnvelope struct {
 	OrganizationID string `json:"organizationId"`
 	// Domains is the list of domains to submit for scanning
 	Domains []string `json:"domains"`
+	// ForceRefresh bypasses Cloudflare's Browser Rendering cache, forcing a fresh render
+	// instead of reusing one from a previous scan of the same domain
+	ForceRefresh bool `json:"forceRefresh,omitempty"`
 }
 
 // domainScanCreateSchemaName is the type name derived from the JSON schema reflector

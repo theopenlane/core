@@ -38,11 +38,12 @@ var (
 // Cloudflare calls (e.g. onboarding domain scans) that are not tied to a customer installation
 type RuntimeConfig struct {
 	// APIToken is the Cloudflare API token for the operator-owned account
-	APIToken string `json:"apiToken,omitempty" koanf:"apitoken" jsonschema:"description=Cloudflare API token for the operator-owned account" sensitive:"true"`
+	APIToken string `json:"apitoken" koanf:"apitoken" jsonschema:"description=Cloudflare API token for the operator-owned account" sensitive:"true"`
 	// AccountID is the Cloudflare account identifier for the operator-owned account
-	AccountID string `json:"accountId,omitempty" koanf:"accountid" jsonschema:"description=Cloudflare account ID for the operator-owned account"`
-	// DomainScan configures vendor/technology classification for onboarding domain scan reports
-	DomainScan domainscan.ReportConfig `json:"domainScan,omitempty" koanf:"domainscan" jsonschema:"description=Vendor/technology classification for onboarding domain scan reports"`
+	AccountID string `json:"accountid" koanf:"accountid" jsonschema:"description=Cloudflare account ID for the operator-owned account"`
+	// DomainScan configures vendor/technology classification and enrichment behavior for
+	// onboarding domain scan reports
+	DomainScan domainscan.ReportConfig `json:"domainscan" koanf:"domainscan" jsonschema:"description=Vendor/technology classification and enrichment behavior for onboarding domain scan reports"`
 }
 
 // Provisioned reports whether the runtime config has the minimum required fields to make Cloudflare API calls

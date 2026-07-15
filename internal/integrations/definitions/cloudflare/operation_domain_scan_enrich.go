@@ -27,6 +27,9 @@ type DomainScanEnrich struct {
 	InternalScanID string `json:"internalScanId"`
 	// Result is the completed URL Scanner task result to build the report from
 	Result json.RawMessage `json:"result"`
+	// ForceRefresh bypasses Cloudflare's Browser Rendering cache, forcing a fresh render
+	// instead of reusing one from a previous scan of the same domain
+	ForceRefresh bool `json:"forceRefresh,omitempty"`
 }
 
 // DomainScanEnrichResult carries the structured report built from the scan result and enrichment
@@ -55,15 +58,21 @@ func (DomainScanEnrich) Run(ctx context.Context, client *CloudflareClient, cfg D
 		return DomainScanEnrichResult{}, fmt.Errorf("%w: %w", ErrOperationConfigInvalid, err)
 	}
 
+	cacheTTL := client.Config.DomainScan.ScanTTL
+	if cfg.ForceRefresh {
+		cacheTTL = 0
+	}
+
 	enrichmentCfg := domainscan.Config{
-		APIToken:  client.APIToken,
-		AccountID: client.AccountID,
+		APIToken:  client.Config.APIToken,
+		AccountID: client.Config.AccountID,
+		CacheTTL:  cacheTTL,
 	}
 
 	enrichment, enrichmentErrs := enrichmentCfg.GatherEnrichment(ctx, cfg.Domain, domainScanEnrichmentTimeout)
 	logDomainScanEnrichmentErrors(ctx, cfg.Domain, enrichmentErrs)
 
-	data := domainscan.BuildScanReport(&scanResult, enrichment, client.DomainScan.NonVendorCategories, client.DomainScan.DeniedVendorNames)
+	data := domainscan.BuildScanReport(&scanResult, enrichment, client.Config.DomainScan.NonVendorCategories, client.Config.DomainScan.DeniedVendorNames)
 	data["internal_scan_id"] = cfg.InternalScanID
 
 	return DomainScanEnrichResult{Data: data}, nil

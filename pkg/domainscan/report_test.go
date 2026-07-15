@@ -252,12 +252,12 @@ func TestBuildMissingComplianceLinks(t *testing.T) {
 	tests := []struct {
 		name       string
 		compliance *CompliancePage
-		want       []string
+		want       string
 	}{
 		{
-			name:       "nil compliance returns nil",
+			name:       "nil compliance returns empty string",
 			compliance: nil,
-			want:       nil,
+			want:       "",
 		},
 		{
 			name: "found links and page type are excluded from missing",
@@ -267,7 +267,7 @@ func TestBuildMissingComplianceLinks(t *testing.T) {
 					{URL: "https://example.com/terms", Type: "terms_of_service"},
 				},
 			},
-			want: []string{"trust_center", "dpa", "security", "cookie_policy"},
+			want: "- [ ] trust_center\n- [ ] dpa\n- [ ] security\n- [ ] cookie_policy",
 		},
 	}
 

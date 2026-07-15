@@ -238,6 +238,8 @@ type ReportConfig struct {
 	NonVendorCategories []string `json:"nonvendorcategories" koanf:"nonvendorcategories" default:"[Miscellaneous,JavaScript frameworks,JavaScript libraries,Static site generator]"`
 	// DeniedVendorNames lists vendor names to always exclude from an onboarding domain scan report's vendor list
 	DeniedVendorNames []string `json:"deniedvendornames" koanf:"deniedvendornames" default:"[rfc-editor,ajax,website-files,http/3,googletagmanager,cloudflareinsights,googlesyndication,gstatic,hcaptcha,googleapis,hsforms,hs-scripts,hscollectedforms,hsts]"`
+	// ScanTTL is the cache TTL, in seconds, for Browser Rendering requests issued during domain scan enrichment
+	ScanTTL int `json:"scanttl" koanf:"scanttl" default:"86400"`
 }
 
 // BuildScanReport combines a Cloudflare URL Scanner result with the Enrichment gathered by GatherEnrichment into a single report
@@ -343,6 +345,25 @@ func filterRedundantGoogle(vendors []map[string]any) []map[string]any {
 	return filtered
 }
 
+// maxVendorNameWords bounds how many words an LLM-extracted vendor/subprocessor name can have
+// before it's treated as prose rather than an actual name and dropped
+const maxVendorNameWords = 6
+
+// looksLikeVendorName reports whether name is plausibly an actual company/product name rather
+// than an explanatory sentence the extraction model returned in place of a real vendor list entry
+func looksLikeVendorName(name string) bool {
+	name = strings.TrimSpace(name)
+	if name == "" {
+		return false
+	}
+
+	if strings.HasSuffix(name, ".") || strings.HasSuffix(name, "?") || strings.HasSuffix(name, "!") {
+		return false
+	}
+
+	return len(strings.Fields(name)) <= maxVendorNameWords
+}
+
 // filterDeniedVendors drops any vendor whose name matches deniedVendorNames (case-insensitive)
 func filterDeniedVendors(vendors []map[string]any, deniedVendorNames []string) []map[string]any {
 	denied := make(map[string]bool, len(deniedVendorNames))
@@ -390,7 +411,9 @@ func mergeEnrichmentVendors(enrichment Enrichment, groups *vendorGroups) {
 
 	if enrichment.Company != nil {
 		for _, tech := range enrichment.Company.Technologies {
-			addNamedVendor(tech, "")
+			if looksLikeVendorName(tech) {
+				addNamedVendor(tech, "")
+			}
 		}
 
 		if enrichment.Company.SocialLinks.GitHub != "" {
@@ -400,7 +423,9 @@ func mergeEnrichmentVendors(enrichment Enrichment, groups *vendorGroups) {
 
 	if enrichment.Compliance != nil {
 		for _, subprocessor := range enrichment.Compliance.Subprocessors {
-			addNamedVendor(subprocessor, "")
+			if looksLikeVendorName(subprocessor) {
+				addNamedVendor(subprocessor, "")
+			}
 		}
 	}
 
@@ -637,7 +662,7 @@ func buildFindings(result *url_scanner.ScanGetResponse, enrichment Enrichment) m
 		findings["agent_readiness"] = agentReadiness
 	}
 
-	if missing := buildMissingComplianceLinks(enrichment); len(missing) > 0 {
+	if missing := buildMissingComplianceLinks(enrichment); missing != "" {
 		findings["missing_compliance_links"] = missing
 	}
 
@@ -648,11 +673,12 @@ func buildFindings(result *url_scanner.ScanGetResponse, enrichment Enrichment) m
 // site is generally expected to publish
 var expectedComplianceLinkTypes = []string{"privacy_policy", "terms_of_service", "trust_center", "dpa", "security", "cookie_policy"}
 
-// buildMissingComplianceLinks reports which of expectedComplianceLinkTypes
-// weren't found in the domainscan enrichment's compliance links
-func buildMissingComplianceLinks(enrichment Enrichment) []string {
+// buildMissingComplianceLinks renders a GitHub-flavored Markdown task list, one unchecked
+// item per expectedComplianceLinkTypes entry not found in the domainscan enrichment's
+// compliance links, so it surfaces as one actionable checklist finding
+func buildMissingComplianceLinks(enrichment Enrichment) string {
 	if enrichment.Compliance == nil {
-		return nil
+		return ""
 	}
 
 	found := make(map[string]bool, len(enrichment.Compliance.ComplianceLinks))
@@ -664,15 +690,15 @@ func buildMissingComplianceLinks(enrichment Enrichment) []string {
 		found[enrichment.Compliance.PageType] = true
 	}
 
-	missing := make([]string, 0, len(expectedComplianceLinkTypes))
+	items := make([]string, 0, len(expectedComplianceLinkTypes))
 
 	for _, t := range expectedComplianceLinkTypes {
 		if !found[t] {
-			missing = append(missing, t)
+			items = append(items, fmt.Sprintf("- [ ] %s", t))
 		}
 	}
 
-	return missing
+	return strings.Join(items, "\n")
 }
 
 // buildAgentReadinessFindings reports the failing checks from the scan's agent-readiness assessment

@@ -204,7 +204,7 @@
         },
         "domainscan": {
           "$ref": "#/$defs/domainscan.ReportConfig",
-          "description": "Vendor/technology classification for onboarding domain scan reports"
+          "description": "Vendor/technology classification and enrichment behavior for onboarding domain scan reports"
         }
       },
       "additionalProperties": false,
@@ -475,6 +475,9 @@
         },
         "deniedvendornames": {
           "$ref": "#/$defs/[]string"
+        },
+        "scanttl": {
+          "type": "integer"
         }
       },
       "additionalProperties": false,

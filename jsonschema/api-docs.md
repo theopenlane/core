@@ -1753,6 +1753,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |----|----|-----------|--------|
 |[**nonvendorcategories**](#integrationscloudflareruntimedomainscannonvendorcategories)|`string[]`|||
 |[**deniedvendornames**](#integrationscloudflareruntimedomainscandeniedvendornames)|`string[]`|||
+|**scanttl**|`integer`|||
 
 **Additional Properties:** not allowed  
 <a name="integrationscloudflareruntimedomainscannonvendorcategories"></a>

@@ -14,12 +14,20 @@ import (
 	"github.com/theopenlane/core/pkg/domainscan"
 )
 
-// CloudflareClient wraps the Cloudflare SDK client with the account ID
-// it's scoped to: the customer's own account for installation-bound operations, or
-// the operator-owned account for system-initiated operations run through the runtime path.
-// DomainScan is only populated for the runtime (system) client, used by the domain scan enrichment operation
+// CloudflareClient wraps the Cloudflare SDK client with the account it's scoped to:
+// the customer's own account for installation-bound operations, or the operator-owned
+// account for system-initiated operations run through the runtime path.
+// Config.DomainScan is only populated for the runtime (system) client, used by the
+// domain scan enrichment operation
 type CloudflareClient struct { //nolint:revive
 	*cf.Client
+	// Config holds the account scope and domain scan settings this client was built with
+	Config ClientConfig
+}
+
+// ClientConfig holds the account and domain scan settings a CloudflareClient is built from, sourced from either
+// per-installation credentials or the operator-owned runtime config
+type ClientConfig struct {
 	// AccountID is the Cloudflare account this client is scoped to
 	AccountID string
 	// APIToken is the raw Cloudflare API token, needed by calls made outside the SDK client
@@ -49,8 +57,10 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error
 			option.WithAPIToken(cred.APIToken),
 			option.WithHTTPClient(&http.Client{Timeout: time.Minute}),
 		),
-		AccountID: cred.AccountID,
-		APIToken:  cred.APIToken,
+		Config: ClientConfig{
+			AccountID: cred.AccountID,
+			APIToken:  cred.APIToken,
+		},
 	}, nil
 }
 
@@ -73,9 +83,11 @@ func runtimeCloudflareClientBuilder() func(context.Context, json.RawMessage) (an
 				option.WithAPIToken(cfg.APIToken),
 				option.WithHTTPClient(&http.Client{Timeout: time.Minute}),
 			),
-			AccountID:  cfg.AccountID,
-			APIToken:   cfg.APIToken,
-			DomainScan: cfg.DomainScan,
+			Config: ClientConfig{
+				AccountID:  cfg.AccountID,
+				APIToken:   cfg.APIToken,
+				DomainScan: cfg.DomainScan,
+			},
 		}, nil
 	}
 }

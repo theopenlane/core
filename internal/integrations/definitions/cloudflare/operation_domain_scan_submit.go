@@ -63,7 +63,7 @@ func (DomainScanSubmit) Run(ctx context.Context, client *CloudflareClient, cfg D
 		}
 
 		params := url_scanner.ScanBulkNewParams{
-			AccountID: cf.F(client.AccountID),
+			AccountID: cf.F(client.Config.AccountID),
 			Body:      body,
 		}
 

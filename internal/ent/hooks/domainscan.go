@@ -16,7 +16,7 @@ import (
 )
 
 // sendDomainScanCreate emits a domain scan create event via the integration runtime on the ent client
-func sendDomainScanCreate(ctx context.Context, client *generated.Client, organizationID string, domains []string) error {
+func sendDomainScanCreate(ctx context.Context, client *generated.Client, organizationID string, domains []string, forceRefresh bool) error {
 	rt := intruntime.FromClient(ctx, client)
 	if rt == nil {
 		return nil
@@ -25,6 +25,7 @@ func sendDomainScanCreate(ctx context.Context, client *generated.Client, organiz
 	receipt := rt.Gala().EmitWithHeaders(ctx, operations.DomainScanCreateTopic, operations.DomainScanCreateEnvelope{
 		OrganizationID: organizationID,
 		Domains:        domains,
+		ForceRefresh:   forceRefresh,
 	}, gala.Headers{})
 
 	return receipt.Err
@@ -66,7 +67,7 @@ func HookDomainScanUpdate() ent.Hook {
 				return retVal, nil
 			}
 
-			if err := sendDomainScanCreate(ctx, m.Client(), orgID, addedDomains); err != nil {
+			if err := sendDomainScanCreate(ctx, m.Client(), orgID, addedDomains, false); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("unable to emit domain scan create event")
 			}
 
