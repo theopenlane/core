@@ -670,7 +670,7 @@ func (r *Runtime) resolveOperationClient(ctx context.Context, integration *ent.I
 			return nil, credentials, meta.DefinitionID, ErrRuntimeClientNotFound
 		}
 
-		logx.FromContext(ctx).Info().Msg("runtime client resolved")
+		logx.FromContext(ctx).Debug().Msg("runtime client resolved")
 
 		return client, credentials, meta.DefinitionID, nil
 	}
@@ -694,7 +694,7 @@ func (r *Runtime) resolveOperationClient(ctx context.Context, integration *ent.I
 		return nil, credentials, integration.DefinitionID, err
 	}
 
-	logx.FromContext(ctx).Info().Msg("client initialized")
+	logx.FromContext(ctx).Debug().Msg("client initialized")
 
 	return client, credentials, integration.DefinitionID, nil
 }
