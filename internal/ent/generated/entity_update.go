@@ -623,6 +623,24 @@ func (_u *EntityUpdate) ClearDomains() *EntityUpdate {
 	return _u
 }
 
+// SetAliases sets the "aliases" field.
+func (_u *EntityUpdate) SetAliases(v []string) *EntityUpdate {
+	_u.mutation.SetAliases(v)
+	return _u
+}
+
+// AppendAliases appends value to the "aliases" field.
+func (_u *EntityUpdate) AppendAliases(v []string) *EntityUpdate {
+	_u.mutation.AppendAliases(v)
+	return _u
+}
+
+// ClearAliases clears the value of the "aliases" field.
+func (_u *EntityUpdate) ClearAliases() *EntityUpdate {
+	_u.mutation.ClearAliases()
+	return _u
+}
+
 // SetEntityTypeID sets the "entity_type_id" field.
 func (_u *EntityUpdate) SetEntityTypeID(v string) *EntityUpdate {
 	_u.mutation.SetEntityTypeID(v)
@@ -2479,6 +2497,17 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.DomainsCleared() {
 		_spec.ClearField(entity.FieldDomains, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Aliases(); ok {
+		_spec.SetField(entity.FieldAliases, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedAliases(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, entity.FieldAliases, value)
+		})
+	}
+	if _u.mutation.AliasesCleared() {
+		_spec.ClearField(entity.FieldAliases, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(entity.FieldStatus, field.TypeEnum, value)
@@ -4724,6 +4753,24 @@ func (_u *EntityUpdateOne) ClearDomains() *EntityUpdateOne {
 	return _u
 }
 
+// SetAliases sets the "aliases" field.
+func (_u *EntityUpdateOne) SetAliases(v []string) *EntityUpdateOne {
+	_u.mutation.SetAliases(v)
+	return _u
+}
+
+// AppendAliases appends value to the "aliases" field.
+func (_u *EntityUpdateOne) AppendAliases(v []string) *EntityUpdateOne {
+	_u.mutation.AppendAliases(v)
+	return _u
+}
+
+// ClearAliases clears the value of the "aliases" field.
+func (_u *EntityUpdateOne) ClearAliases() *EntityUpdateOne {
+	_u.mutation.ClearAliases()
+	return _u
+}
+
 // SetEntityTypeID sets the "entity_type_id" field.
 func (_u *EntityUpdateOne) SetEntityTypeID(v string) *EntityUpdateOne {
 	_u.mutation.SetEntityTypeID(v)
@@ -6610,6 +6657,17 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 	}
 	if _u.mutation.DomainsCleared() {
 		_spec.ClearField(entity.FieldDomains, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Aliases(); ok {
+		_spec.SetField(entity.FieldAliases, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedAliases(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, entity.FieldAliases, value)
+		})
+	}
+	if _u.mutation.AliasesCleared() {
+		_spec.ClearField(entity.FieldAliases, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(entity.FieldStatus, field.TypeEnum, value)

@@ -86,6 +86,13 @@ func (Entity) Fields() []ent.Field {
 			Comment("domains associated with the entity").
 			Validate(validator.ValidateDomains()).
 			Optional(),
+		field.Strings("aliases").
+			Comment("common matching names that should match with the entity").
+			Annotations(
+				entx.FieldSearchable(),
+				entx.IntegrationMappingField(),
+			).
+			Optional(),
 		field.String("entity_type_id").
 			Comment("The type of the entity").
 			Optional(),

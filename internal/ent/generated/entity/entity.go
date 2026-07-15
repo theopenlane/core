@@ -84,6 +84,8 @@ const (
 	FieldDescription = "description"
 	// FieldDomains holds the string denoting the domains field in the database.
 	FieldDomains = "domains"
+	// FieldAliases holds the string denoting the aliases field in the database.
+	FieldAliases = "aliases"
 	// FieldEntityTypeID holds the string denoting the entity_type_id field in the database.
 	FieldEntityTypeID = "entity_type_id"
 	// FieldStatus holds the string denoting the status field in the database.
@@ -469,6 +471,7 @@ var Columns = []string{
 	FieldDisplayName,
 	FieldDescription,
 	FieldDomains,
+	FieldAliases,
 	FieldEntityTypeID,
 	FieldStatus,
 	FieldApprovedForUse,

@@ -7466,6 +7466,7 @@ type CreateEntityInput struct {
 	DisplayName                           *string                `json:"display_name,omitempty"`
 	Description                           *string                `json:"description,omitempty"`
 	Domains                               []string               `json:"domains,omitempty"`
+	Aliases                               []string               `json:"aliases,omitempty"`
 	Status                                *enums.EntityStatus    `json:"status,omitempty"`
 	ApprovedForUse                        *bool                  `json:"approved_for_use,omitempty"`
 	LinkedAssetIds                        []string               `json:"linked_asset_ids,omitempty"`
@@ -7578,6 +7579,9 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.Domains; v != nil {
 		m.SetDomains(v)
+	}
+	if v := i.Aliases; v != nil {
+		m.SetAliases(v)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
@@ -7813,6 +7817,9 @@ type UpdateEntityInput struct {
 	ClearDomains                               bool
 	Domains                                    []string `json:"domains,omitempty"`
 	AppendDomains                              []string
+	ClearAliases                               bool
+	Aliases                                    []string `json:"aliases,omitempty"`
+	AppendAliases                              []string
 	ClearStatus                                bool
 	Status                                     *enums.EntityStatus `json:"status,omitempty"`
 	ClearApprovedForUse                        bool
@@ -8064,6 +8071,15 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if i.AppendDomains != nil {
 		m.AppendDomains(i.Domains)
+	}
+	if i.ClearAliases {
+		m.ClearAliases()
+	}
+	if v := i.Aliases; v != nil {
+		m.SetAliases(v)
+	}
+	if i.AppendAliases != nil {
+		m.AppendAliases(i.Aliases)
 	}
 	if i.ClearStatus {
 		m.ClearStatus()

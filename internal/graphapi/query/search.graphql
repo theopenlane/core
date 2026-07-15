@@ -204,6 +204,7 @@ query GlobalSearch($query: String!) {
       }
       edges {
         node {
+          aliases
           description
           displayName
           id

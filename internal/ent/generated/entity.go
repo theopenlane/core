@@ -92,6 +92,8 @@ type Entity struct {
 	Description string `json:"description,omitempty"`
 	// domains associated with the entity
 	Domains []string `json:"domains,omitempty"`
+	// common matching names that should match with the entity
+	Aliases []string `json:"aliases,omitempty"`
 	// The type of the entity
 	EntityTypeID string `json:"entity_type_id,omitempty"`
 	// status of the entity
@@ -617,7 +619,7 @@ func (*Entity) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case entity.FieldLastReviewedAt, entity.FieldSoc2PeriodEnd, entity.FieldContractStartDate, entity.FieldContractEndDate, entity.FieldNextReviewAt, entity.FieldContractRenewalAt, entity.FieldObservedAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
-		case entity.FieldTags, entity.FieldDomains, entity.FieldLinkedAssetIds, entity.FieldProvidedServices, entity.FieldLinks, entity.FieldVendorMetadata:
+		case entity.FieldTags, entity.FieldDomains, entity.FieldAliases, entity.FieldLinkedAssetIds, entity.FieldProvidedServices, entity.FieldLinks, entity.FieldVendorMetadata:
 			values[i] = new([]byte)
 		case entity.FieldSystemOwned, entity.FieldApprovedForUse, entity.FieldHasSoc2, entity.FieldAutoRenews, entity.FieldSSOEnforced, entity.FieldMfaSupported, entity.FieldMfaEnforced:
 			values[i] = new(sql.NullBool)
@@ -866,6 +868,14 @@ func (_m *Entity) assignValues(columns []string, values []any) error {
 			} else if value != nil && len(*value) > 0 {
 				if err := json.Unmarshal(*value, &_m.Domains); err != nil {
 					return fmt.Errorf("unmarshal field domains: %w", err)
+				}
+			}
+		case entity.FieldAliases:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field aliases", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Aliases); err != nil {
+					return fmt.Errorf("unmarshal field aliases: %w", err)
 				}
 			}
 		case entity.FieldEntityTypeID:
@@ -1435,6 +1445,9 @@ func (_m *Entity) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("domains=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Domains))
+	builder.WriteString(", ")
+	builder.WriteString("aliases=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Aliases))
 	builder.WriteString(", ")
 	builder.WriteString("entity_type_id=")
 	builder.WriteString(_m.EntityTypeID)
