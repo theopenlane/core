@@ -61,26 +61,27 @@ type dkimSelector struct {
 	vendor string
 }
 
-// vendorAlias is the source of truth for a known vendor's name and every host
-// or domain it's known to operate from
+// vendorAlias is the source of truth for a known vendor: its canonical display
+// name, any alternate names it's also known by (e.g. "The Open Lane" for
+// "Openlane"), and every host or domain it's known to operate from
 // TODO: use system owned vendors to do the lookup instead
 type vendorAlias struct {
-	name    string
-	hosts   []string
-	domains []string
+	name        string
+	alsoKnownAs []string
+	hosts       []string
+	domains     []string
 }
 
 var knownVendorAliases = []vendorAlias{
 	{name: "Google Workspace", hosts: []string{"admin.google.com"}},
 	{name: "Google Cloud", hosts: []string{"cloud.google.com"}},
-	{name: "Amazon SES", domains: []string{"amazonses.com"}},
-	{name: "Openlane", domains: []string{"theopenlane.io"}},
-	{name: "The Open Lane", domains: []string{"theopenlane.io"}},
-	{name: "Hubspot", domains: []string{"hubspotemail.net"}},
-	{name: "Help Scout", domains: []string{"helpscoutdocs.com"}},
-	{name: "Atlassian Statuspage", domains: []string{"stspg-customer.com"}},
-	{name: "Vercel", domains: []string{"vercel-dns.com"}},
-	{name: "Stripe", domains: []string{"stripecdn.com"}},
+	{name: "AWS", alsoKnownAs: []string{"Amazonses", "Amazon Web Services"}, domains: []string{"amazonses.com"}},
+	{name: "Openlane", alsoKnownAs: []string{"The Open Lane"}, domains: []string{"theopenlane.io"}},
+	{name: "Hubspot", alsoKnownAs: []string{"hubspotemail"}, domains: []string{"hubspot.com"}},
+	{name: "Help Scout", alsoKnownAs: []string{"Helpscoutdocs"}, domains: []string{"helpscoutdocs.com"}},
+	{name: "Atlassian Statuspage", alsoKnownAs: []string{"stspg-customer"}, domains: []string{"stspg-customer.com"}},
+	{name: "Vercel", alsoKnownAs: []string{"vercel-dns"}, domains: []string{"vercel-dns.com"}},
+	{name: "Stripe", alsoKnownAs: []string{"Stripecdn"}, domains: []string{"stipe.com"}},
 }
 
 // vendorHostNames overrides the display name derived from an exact hostname, derived from knownVendorAliases
@@ -92,6 +93,10 @@ var vendorDomainNames = map[string]string{}
 // vendorNameDomains looks up a known vendor's domain given only its name (e.g. a technology
 // or subprocessor name with no URL attached), the inverse of vendorDomainNames, keyed lowercase
 var vendorNameDomains = map[string]string{}
+
+// vendorCanonicalNames maps a known vendor's name and every alsoKnownAs alternate down to
+// its single canonical display name, so alternate spellings collapse into one vendor group
+var vendorCanonicalNames = map[string]string{}
 
 func init() {
 	for _, v := range knownVendorAliases {
@@ -105,6 +110,12 @@ func init() {
 			if _, ok := vendorNameDomains[strings.ToLower(v.name)]; !ok {
 				vendorNameDomains[strings.ToLower(v.name)] = domain
 			}
+		}
+
+		vendorCanonicalNames[strings.ToLower(v.name)] = v.name
+
+		for _, alias := range v.alsoKnownAs {
+			vendorCanonicalNames[strings.ToLower(alias)] = v.name
 		}
 	}
 }

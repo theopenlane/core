@@ -334,6 +334,10 @@ func mergeEnrichmentVendors(enrichment Enrichment, groups *vendorGroups) {
 			return
 		}
 
+		if canonical, ok := vendorCanonicalNames[strings.ToLower(name)]; ok {
+			name = canonical
+		}
+
 		if url == "" {
 			if domain, ok := vendorNameDomains[strings.ToLower(name)]; ok {
 				url = "https://" + domain
