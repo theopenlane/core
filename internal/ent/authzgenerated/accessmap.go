@@ -2851,8 +2851,8 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: false,
 }, "user": {
 	ObjectType:          "user",
-	SkipEditCheck:       true,
-	CheckViewAccess:     true,
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "notification_template": {
 	ObjectType:          "notification_template",
@@ -2867,8 +2867,8 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: false,
 }, "user": {
 	ObjectType:          "user",
-	SkipEditCheck:       true,
-	CheckViewAccess:     true,
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "notification_template": {
 	ObjectType:          "notification_template",

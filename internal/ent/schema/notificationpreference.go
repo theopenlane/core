@@ -6,13 +6,10 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
-
-	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -156,9 +153,6 @@ func (n NotificationPreference) Edges() []ent.Edge {
 			field:      "user_id",
 			required:   true,
 			immutable:  true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeViewCheck(User{}.Name()),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: n,

@@ -239,32 +239,8 @@ func EnsureObjectInOrganization(ctx context.Context, m ent.Mutation, objectType,
 		return privacy.Denyf("user does not have access to the requested organization")
 	}
 
-	// if users table, we want to check orgmemberships table to make sure the provided
-	// user is a member of the org instead
 	if strings.EqualFold(objectType, user.Label) {
-		query := fmt.Sprintf("SELECT EXISTS (SELECT 1 FROM %s WHERE %s = $1 and %s = $2)",
-			orgmembership.Table, orgmembership.FieldUserID, orgmembership.FieldOrganizationID)
-
-		var rows sql.Rows
-		if err := mut.Client().Driver().Query(ctx, query, []any{objectID, orgID}, &rows); err != nil {
-			logx.FromContext(ctx).Error().Err(err).
-				Str("id", objectID).
-				Str("object", user.Table).
-				Msg("failed to check for object in organization")
-
-			return err
-		}
-
-		defer rows.Close()
-
-		if rows.Next() {
-			var exists bool
-			if err := rows.Scan(&exists); err == nil && exists {
-				return nil
-			}
-		}
-
-		return privacy.Denyf("requested object not in organization")
+		return ensureUserIsAnOrgMember(ctx, mut, objectID, orgID)
 	}
 
 	// check if the object is in the organization
@@ -297,6 +273,32 @@ func EnsureObjectInOrganization(ctx context.Context, m ent.Mutation, objectType,
 	}
 
 	// fall back to deny if the object is not in the organization
+	return privacy.Denyf("requested object not in organization")
+}
+
+func ensureUserIsAnOrgMember(ctx context.Context, mut utils.GenericMutation, userID, orgID string) error {
+	query := fmt.Sprintf("SELECT EXISTS (SELECT 1 FROM %s WHERE %s = $1 and %s = $2)",
+		orgmembership.Table, orgmembership.FieldUserID, orgmembership.FieldOrganizationID)
+
+	var rows sql.Rows
+	if err := mut.Client().Driver().Query(ctx, query, []any{userID, orgID}, &rows); err != nil {
+		logx.FromContext(ctx).Error().Err(err).
+			Str("id", userID).
+			Str("object", user.Table).
+			Msg("failed to check for object in organization")
+
+		return err
+	}
+
+	defer rows.Close()
+
+	if rows.Next() {
+		var exists bool
+		if err := rows.Scan(&exists); err == nil && exists {
+			return nil
+		}
+	}
+
 	return privacy.Denyf("requested object not in organization")
 }
 

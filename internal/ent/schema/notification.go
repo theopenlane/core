@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/common/enums"
@@ -134,7 +133,6 @@ func (n Notification) Edges() []ent.Edge {
 			field:      "user_id",
 			immutable:  true,
 			annotations: []schema.Annotation{
-				accessmap.EdgeViewCheck(User{}.Name()),
 				entgql.Skip(entgql.SkipAll),
 			},
 		}),

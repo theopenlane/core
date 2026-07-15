@@ -299,6 +299,9 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 
 			// check api token scope first, as api tokens will have full access to object types they have scope for
 			if confirmedInOrganization {
+				// if EnsureObjectInOrganization confirms the user is a member of the org,
+				// we do not check fga for user ( as no tuples exists ).
+				// the only check we need here is org membership validation
 				if edgeMap.ObjectType == user.Label && edgeMap.CheckViewAccess {
 					continue
 				}
