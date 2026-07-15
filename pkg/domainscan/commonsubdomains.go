@@ -74,14 +74,14 @@ type vendorAlias struct {
 
 var knownVendorAliases = []vendorAlias{
 	{name: "Google Workspace", hosts: []string{"admin.google.com"}},
-	{name: "Google Cloud", hosts: []string{"cloud.google.com"}},
-	{name: "AWS", alsoKnownAs: []string{"Amazonses", "Amazon Web Services"}, domains: []string{"amazonses.com"}},
+	{name: "Google Cloud", alsoKnownAs: []string{"Googlecloud"}, hosts: []string{"cloud.google.com"}},
+	{name: "AWS", alsoKnownAs: []string{"Amazonses", "Amazon Web Services"}, domains: []string{"aws.amazon.com"}},
 	{name: "Openlane", alsoKnownAs: []string{"The Open Lane"}, domains: []string{"theopenlane.io"}},
 	{name: "Hubspot", alsoKnownAs: []string{"hubspotemail"}, domains: []string{"hubspot.com"}},
 	{name: "Help Scout", alsoKnownAs: []string{"Helpscoutdocs"}, domains: []string{"helpscoutdocs.com"}},
 	{name: "Atlassian Statuspage", alsoKnownAs: []string{"stspg-customer"}, domains: []string{"stspg-customer.com"}},
 	{name: "Vercel", alsoKnownAs: []string{"vercel-dns"}, domains: []string{"vercel-dns.com"}},
-	{name: "Stripe", alsoKnownAs: []string{"Stripecdn"}, domains: []string{"stipe.com"}},
+	{name: "Stripe", alsoKnownAs: []string{"Stripecdn"}, domains: []string{"stripe.com"}},
 }
 
 // vendorHostNames overrides the display name derived from an exact hostname, derived from knownVendorAliases
@@ -106,9 +106,17 @@ func init() {
 
 		for _, domain := range v.domains {
 			vendorDomainNames[domain] = v.name
+		}
 
-			if _, ok := vendorNameDomains[strings.ToLower(v.name)]; !ok {
-				vendorNameDomains[strings.ToLower(v.name)] = domain
+		// prefer a domain for the name -> URL lookup, but fall back to a known host
+		// (e.g. Google Cloud has no apex domain of its own, only cloud.google.com) so we
+		// never leave a bare name with no known domain for a caller to guess at
+		if _, ok := vendorNameDomains[strings.ToLower(v.name)]; !ok {
+			switch {
+			case len(v.domains) > 0:
+				vendorNameDomains[strings.ToLower(v.name)] = v.domains[0]
+			case len(v.hosts) > 0:
+				vendorNameDomains[strings.ToLower(v.name)] = v.hosts[0]
 			}
 		}
 

@@ -154,7 +154,7 @@ func TestMergeEnrichmentVendors(t *testing.T) {
 	want := []map[string]any{
 		{"name": "Segment", "url": "Unknown"},
 		{"name": "GitHub", "url": "https://github.com"},
-		{"name": "AWS", "url": "Unknown"},
+		{"name": "AWS", "url": "https://aws.amazon.com"},
 		{"name": "Cloudflare", "url": "https://cloudflare.com"},
 	}
 

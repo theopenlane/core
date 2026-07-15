@@ -122,7 +122,8 @@ func icannRegistrableDomain(host string) (string, bool) {
 
 // domainVendorName derives a display name from a registrable domain: an override
 // from vendorDomainNames if the domain has one, otherwise capitalizing its first
-// label, e.g. "google.com" -> "Google"
+// label, e.g. "google.com" -> "Google", falling back to vendorCanonicalNames if
+// that naive label is itself a known alsoKnownAs alias (e.g. "hubspotemail.net" -> "Hubspot")
 func domainVendorName(domain string) string {
 	if override, ok := vendorDomainNames[domain]; ok {
 		return override
@@ -131,6 +132,10 @@ func domainVendorName(domain string) string {
 	label := strings.SplitN(domain, ".", 2)[0] //nolint:mnd
 	if label == "" {
 		return domain
+	}
+
+	if canonical, ok := vendorCanonicalNames[strings.ToLower(label)]; ok {
+		return canonical
 	}
 
 	return strings.ToUpper(label[:1]) + label[1:]
@@ -232,7 +237,7 @@ type ReportConfig struct {
 	// instead of vendors when building an onboarding domain scan report
 	NonVendorCategories []string `json:"nonvendorcategories" koanf:"nonvendorcategories" default:"[Miscellaneous,JavaScript frameworks,JavaScript libraries,Static site generator]"`
 	// DeniedVendorNames lists vendor names to always exclude from an onboarding domain scan report's vendor list
-	DeniedVendorNames []string `json:"deniedvendornames" koanf:"deniedvendornames" default:"[rfc-editor,ajax,website-files,http/3,googletagmanager,cloudflareinsights,googlesyndication,gstatic,hcaptcha,googleapis,hsforms,hs-scripts,hscollectedforms]"`
+	DeniedVendorNames []string `json:"deniedvendornames" koanf:"deniedvendornames" default:"[rfc-editor,ajax,website-files,http/3,googletagmanager,cloudflareinsights,googlesyndication,gstatic,hcaptcha,googleapis,hsforms,hs-scripts,hscollectedforms,hsts]"`
 }
 
 // BuildScanReport combines a Cloudflare URL Scanner result with the Enrichment gathered by GatherEnrichment into a single report
