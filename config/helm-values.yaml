@@ -592,6 +592,7 @@ coreConfiguration:
           - hsforms
           - hs-scripts
           - hscollectedforms
+          - hsts
     githubapp:
       appslug: ""  # @schema type:string
     slack:
