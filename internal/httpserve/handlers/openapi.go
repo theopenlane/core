@@ -1,26 +1,45 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"reflect"
+	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
 
 	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/utils/rout"
+
+	models "github.com/theopenlane/core/common/openapi"
+
+	"github.com/theopenlane/core/pkg/jsonx"
 )
+
+// ErrorReplySchemaName is the component schema name for the error body (rout.Reply) returned by all handler error helpers
+const ErrorReplySchemaName = "ErrorReply"
+
+// errorReplySchemaRef is the reference to the shared error response schema
+const errorReplySchemaRef = "#/components/schemas/" + ErrorReplySchemaName
 
 // Security Requirements for common authentication patterns
 var (
-	// AuthenticatedSecurity for endpoints requiring authentication
-	AuthenticatedSecurity = BearerSecurity()
+	// AuthenticatedSecurity for endpoints requiring authentication, satisfied by
+	// either a bearer JWT or an API key; the requirements are listed under the
+	// "or" context, meaning only one of them needs to be met. If you wanted to
+	// require more than one at once you would list them all under a single
+	// SecurityRequirement rather than individual ones
+	AuthenticatedSecurity = &openapi3.SecurityRequirements{
+		openapi3.SecurityRequirement{
+			"bearer": []string{},
+		},
+		openapi3.SecurityRequirement{
+			"apiKey": []string{},
+		},
+	}
 	// PublicSecurity for public endpoints with no authentication
 	PublicSecurity = &openapi3.SecurityRequirements{}
-)
-
-// Error Response Patterns for common error combinations
-var (
-	// StandardAuthErrors for typical authenticated endpoints
-	StandardAuthErrors = []int{http.StatusBadRequest, http.StatusUnauthorized, http.StatusInternalServerError}
 )
 
 // AuthEndpointDesc creates a description for authenticated endpoints
@@ -28,101 +47,188 @@ func AuthEndpointDesc(action, resource string) string {
 	return fmt.Sprintf("%s %s. Requires authentication.", action, resource)
 }
 
-// commonResponse creates a response that references a common error schema
-func commonResponse(statusCode int) *openapi3.Response {
+// NewErrorResponse creates a response for the given status code whose body references the shared ErrorReply schema
+func NewErrorResponse(statusCode int) *openapi3.Response {
 	statusText := http.StatusText(statusCode)
-	// For now, just return a simple response without schema reference
-	// TODO: Add proper error schema references when StatusError schema is working
-	return openapi3.NewResponse().
-		WithDescription(statusText)
+
+	response := openapi3.NewResponse().
+		WithDescription(statusText).
+		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: errorReplySchemaRef}))
+
+	response.Content.Get(httpsling.ContentTypeJSON).Examples = map[string]*openapi3.ExampleRef{
+		"error": {Value: openapi3.NewExample(normalizeExampleValue(rout.Reply{Success: false, Error: strings.ToLower(statusText)}))},
+	}
+
+	return response
 }
 
-// Legacy wrapper functions for backward compatibility
-// These can be gradually replaced with commonResponse(statusCode) calls
+// RedirectResponse builds the 302 response; redirects carry no body, only a Location header
+func RedirectResponse() *openapi3.Response {
+	response := openapi3.NewResponse().WithDescription(http.StatusText(http.StatusFound))
+	response.Headers = openapi3.Headers{
+		"Location": &openapi3.HeaderRef{Value: &openapi3.Header{Parameter: openapi3.Parameter{
+			Description: "Destination URL of the redirect",
+			Schema:      openapi3.NewStringSchema().NewRef(),
+		}}},
+	}
 
-// badRequest is a wrapper for OpenAPI bad request response
-func badRequest() *openapi3.Response {
-	return commonResponse(http.StatusBadRequest)
+	return response
 }
 
-// internalServerError is a wrapper for OpenAPI internal server error response
-func internalServerError() *openapi3.Response {
-	return commonResponse(http.StatusInternalServerError)
-}
+// RegisterRequestBody attaches the request body schema and its curated named examples for the
+// given request model instance to the operation; used only during spec generation
+func RegisterRequestBody(op *openapi3.Operation, registry SchemaRegistry, instance any, examples map[string]any) error {
+	schemaRef, err := registry.GetOrRegister(instance)
+	if err != nil {
+		return err
+	}
 
-// unauthorized is a wrapper for OpenAPI unauthorized response
-func unauthorized() *openapi3.Response {
-	return commonResponse(http.StatusUnauthorized)
-}
-
-// AddRequestBody is used to add a request body definition to the OpenAPI schema
-func (h *Handler) AddRequestBody(name string, body interface{}, op *openapi3.Operation) {
 	request := openapi3.NewRequestBody().
 		WithDescription("Request body").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/schemas/" + name}))
+		WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
 	op.RequestBody = &openapi3.RequestBodyRef{Value: request}
 
-	request.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-	request.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(body))}
+	request.Content.Get(httpsling.ContentTypeJSON).Examples = exampleRefs(instance, examples)
+
+	return nil
 }
 
-// AddResponse is used to add a response definition to the OpenAPI schema
-func (h *Handler) AddResponse(name string, description string, body interface{}, op *openapi3.Operation, status int) {
+// RegisterSuccessResponse attaches a success response schema and its curated named examples for
+// the given response model instance to the operation; used only during spec generation
+func RegisterSuccessResponse(op *openapi3.Operation, registry SchemaRegistry, status int, instance any, examples map[string]any) error {
+	schemaRef, err := registry.GetOrRegister(instance)
+	if err != nil {
+		return err
+	}
+
 	response := openapi3.NewResponse().
-		WithDescription(description).
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/schemas/" + name}))
+		WithDescription(http.StatusText(status)).
+		WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
 	op.AddResponse(status, response)
 
-	response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-	response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(body))}
+	response.Content.Get(httpsling.ContentTypeJSON).Examples = exampleRefs(instance, examples)
+
+	return nil
 }
 
-// bearerSecurity is used to add a bearer security definition to the OpenAPI schema
-func BearerSecurity() *openapi3.SecurityRequirements {
-	return &openapi3.SecurityRequirements{
-		openapi3.SecurityRequirement{
-			"bearer": []string{},
-		},
+// exampleRefs renders curated examples as named example refs; models without curated examples get
+// one from ExampleProvider when implemented, and none otherwise — a zero-value instance is not a
+// meaningful example and its nil slices would not even validate against the schema
+func exampleRefs(instance any, examples map[string]any) map[string]*openapi3.ExampleRef {
+	if len(examples) == 0 {
+		provider, ok := pointerTo(instance).(models.ExampleProvider)
+		if !ok {
+			return nil
+		}
+
+		examples = map[string]any{"success": provider.ExampleResponse()}
+	}
+
+	refs := make(map[string]*openapi3.ExampleRef, len(examples))
+	for name, example := range examples {
+		refs[name] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(example))}
+	}
+
+	return refs
+}
+
+// pointerTo returns an addressable pointer to a copy of the value so pointer-receiver interface
+// implementations can be detected on instances stored as any
+func pointerTo(value any) any {
+	if value == nil {
+		return nil
+	}
+
+	v := reflect.ValueOf(value)
+	if v.Kind() == reflect.Pointer {
+		return value
+	}
+
+	ptr := reflect.New(v.Type())
+	ptr.Elem().Set(v)
+
+	return ptr.Interface()
+}
+
+// RegisterParameters adds query and path parameters derived from the request model's struct tags
+// to the operation; pathParams holds the parameter names present in the route's path template so a
+// model shared by routes with and without a path parameter only declares it where the template has
+// it. Used only during spec generation
+func RegisterParameters(op *openapi3.Operation, instance any, pathParams map[string]bool) {
+	typ := reflect.TypeOf(instance)
+	if typ == nil {
+		return
+	}
+
+	if typ.Kind() == reflect.Pointer {
+		typ = typ.Elem()
+	}
+
+	if typ.Kind() != reflect.Struct {
+		return
+	}
+
+	for field := range typ.Fields() {
+		field := field
+		description := field.Tag.Get("description")
+		exampleTag := field.Tag.Get("example")
+
+		if queryTag := field.Tag.Get("query"); queryTag != "" {
+			param := openapi3.NewQueryParameter(queryTag).WithSchema(openapi3.NewStringSchema())
+			param.Description = description
+
+			if exampleTag != "" {
+				param.Example = exampleTag
+			}
+
+			op.AddParameter(param)
+		}
+
+		if paramTag := field.Tag.Get("param"); paramTag != "" && pathParams[paramTag] {
+			param := openapi3.NewPathParameter(paramTag).WithSchema(openapi3.NewStringSchema())
+			param.Description = description
+
+			if exampleTag != "" {
+				param.Example = exampleTag
+			}
+
+			op.AddParameter(param)
+		}
 	}
 }
 
-// basicSecurity is used to add a basic security definition to the OpenAPI schema
-func BasicSecurity() *openapi3.SecurityRequirements {
-	return &openapi3.SecurityRequirements{
-		openapi3.SecurityRequirement{
-			"basic": []string{},
-		},
+// normalizeExampleValue converts strongly-typed example objects into a generic form
+// that kin-openapi can validate (maps, slices, primitives). Structs are marshaled
+// to JSON and unmarshaled back into map[string]any / []any representations
+func normalizeExampleValue(value any) any {
+	if value == nil {
+		return nil
 	}
-}
 
-// allSecurityRequirements is used to add all security definitions to the OpenAPI schema under the "or" context,
-// meaning you can satisfy 1 or any / all of these requirements but only 1 is required
-// if you wanted to list the security requirements with an "and" operator (meaning more than 1 needs to be met)
-// you would list them all under a single `SecurityRequirement` rather than individual ones
-func AllSecurityRequirements() *openapi3.SecurityRequirements {
-	return &openapi3.SecurityRequirements{
-		openapi3.SecurityRequirement{
-			"bearer": []string{},
-		},
-		openapi3.SecurityRequirement{
-			"oauth2": []string{},
-		},
-		openapi3.SecurityRequirement{
-			"basic": []string{},
-		},
-		openapi3.SecurityRequirement{
-			"apiKey": []string{},
-		},
-	}
-}
+	rv := reflect.ValueOf(value)
+	if rv.Kind() == reflect.Pointer {
+		if rv.IsNil() {
+			return nil
+		}
 
-// AddStandardResponses adds common error responses to an OpenAPI operation
-// Note: This function is now a no-op since error responses are registered
-// dynamically by the error handler methods themselves when they are called.
-func AddStandardResponses(operation *openapi3.Operation) {
-	if operation != nil {
-		operation.AddResponse(http.StatusBadRequest, badRequest())
-		operation.AddResponse(http.StatusUnauthorized, unauthorized())
-		operation.AddResponse(http.StatusInternalServerError, internalServerError())
+		return normalizeExampleValue(rv.Elem().Interface())
 	}
+
+	switch value.(type) {
+	case map[string]any, []any,
+		string, bool,
+		int, int8, int16, int32, int64,
+		uint, uint8, uint16, uint32, uint64,
+		float32, float64,
+		json.Number:
+		return value
+	}
+
+	var generic any
+
+	if err := jsonx.RoundTrip(value, &generic); err != nil {
+		return value
+	}
+
+	return generic
 }

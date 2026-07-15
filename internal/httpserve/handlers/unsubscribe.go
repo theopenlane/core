@@ -15,14 +15,10 @@ import (
 
 // UnsubscribeHandler unsubscribes a subscriber by their bearer token. The token is embedded in every
 // campaign email's unsubscribe link, so it stays valid while subscribed; a replay is an idempotent no-op
-func (h *Handler) UnsubscribeHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleUnsubscribeRequest, models.ExampleUnsubscribeResponse, openapi.Registry)
+func (h *Handler) UnsubscribeHandler(ctx echo.Context) error {
+	in, err := BindAndValidate[models.UnsubscribeRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -33,12 +29,12 @@ func (h *Handler) UnsubscribeHandler(ctx echo.Context, openapi *OpenAPIContext) 
 	entSubscriber, err := h.getSubscriberByToken(ctxWithToken, in.Token)
 	if err != nil {
 		if generated.IsNotFound(err) {
-			return h.BadRequest(ctx, err, openapi)
+			return h.BadRequest(ctx, err)
 		}
 
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving subscriber")
 
-		return h.InternalServerError(ctx, ErrUnableToUnsubscribe, openapi)
+		return h.InternalServerError(ctx, ErrUnableToUnsubscribe)
 	}
 
 	// scope the caller to the subscriber's owning org so the update passes the org-ownership pre-policy
@@ -55,13 +51,13 @@ func (h *Handler) UnsubscribeHandler(ctx echo.Context, openapi *OpenAPIContext) 
 			Message: "You are already unsubscribed and will not receive updates.",
 		}
 
-		return h.Success(ctx, out, openapi)
+		return h.Success(ctx, out)
 	}
 
 	if err := h.setSubscriberUnsubscribed(ctxWithToken, entSubscriber.ID); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error unsubscribing subscriber")
 
-		return h.InternalServerError(ctx, ErrUnableToUnsubscribe, openapi)
+		return h.InternalServerError(ctx, ErrUnableToUnsubscribe)
 	}
 
 	out := &models.UnsubscribeReply{
@@ -69,5 +65,5 @@ func (h *Handler) UnsubscribeHandler(ctx echo.Context, openapi *OpenAPIContext) 
 		Message: "You have been unsubscribed and will no longer receive updates.",
 	}
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }

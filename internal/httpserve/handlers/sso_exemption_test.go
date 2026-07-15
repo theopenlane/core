@@ -79,7 +79,7 @@ func (suite *HandlerTestSuite) ssoEnforcedOrg() *ent.Organization {
 func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptMember() {
 	t := suite.T()
 
-	suite.registerTestHandler("POST", "login", suite.createImpersonationOperation("LoginHandler", "Test login"), suite.h.LoginHandler)
+	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
 
 	org := suite.ssoEnforcedOrg()
 
@@ -116,7 +116,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptMember() {
 func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptDomain() {
 	t := suite.T()
 
-	suite.registerTestHandler("POST", "login", suite.createImpersonationOperation("LoginHandler", "Test login"), suite.h.LoginHandler)
+	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
 
 	org := suite.ssoEnforcedOrg()
 
@@ -160,8 +160,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptDomain() {
 func (suite *HandlerTestSuite) TestWebfingerHandlerExemptMember() {
 	t := suite.T()
 
-	webfingerOp := suite.createImpersonationOperation("WebfingerHandler", "Webfinger handler")
-	suite.registerTestHandler("GET", ".well-known/webfinger", webfingerOp, suite.h.WebfingerHandler)
+	suite.registerTestHandler("GET", ".well-known/webfinger", suite.h.WebfingerHandler)
 
 	org := suite.ssoEnforcedOrg()
 
@@ -225,8 +224,7 @@ func (suite *HandlerTestSuite) TestOrgOwnerSeededSSOExempt() {
 func (suite *HandlerTestSuite) TestSwitchHandlerSSOExemptMember() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("SwitchHandler", "Switch organization context")
-	suite.registerTestHandler("POST", "switch", operation, suite.h.SwitchHandler)
+	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
 	org := suite.ssoEnforcedOrg()
 

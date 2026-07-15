@@ -9,15 +9,16 @@ import (
 // registerSwitchRoute registers the switch route to switch the user's logged in organization context
 func registerSwitchRoute(router *Router) error {
 	config := Config{
-		Path:        "/switch",
-		Method:      http.MethodPost,
-		Name:        "Switch",
-		Description: "Switch the user's organization context",
-		Tags:        []string{"organization"},
-		OperationID: "Switch",
-		Security:    handlers.AllSecurityRequirements(),
-		Middlewares: *authenticatedEndpoint,
-		Handler:     router.Handler.SwitchHandler,
+		Path:         "/switch",
+		Method:       http.MethodPost,
+		Name:         "Switch",
+		Description:  "Switch the user's organization context",
+		Tags:         []string{"Authentication"},
+		OperationID:  "Switch",
+		IncludeInOAS: true,
+		Security:     handlers.AuthenticatedSecurity,
+		Middlewares:  *authenticatedEndpoint,
+		Handler:      router.Handler.SwitchHandler,
 	}
 
 	return router.AddV1HandlerRoute(config)

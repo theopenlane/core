@@ -20,8 +20,7 @@ import (
 func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("UnsubscribeHandler", "Unsubscribe")
-	suite.registerTestHandler("POST", "unsubscribe", operation, suite.h.UnsubscribeHandler)
+	suite.registerTestHandler("POST", "unsubscribe", suite.h.UnsubscribeHandler)
 
 	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 

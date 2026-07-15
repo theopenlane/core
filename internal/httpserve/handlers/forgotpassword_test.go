@@ -23,8 +23,8 @@ import (
 func (suite *HandlerTestSuite) TestForgotPasswordHandler() {
 	t := suite.T()
 
-	// Register test handler with OpenAPI context
-	suite.registerTestHandler("POST", "forgot-password", suite.createImpersonationOperation("ForgotPassword", "Test forgot password"), suite.h.ForgotPassword)
+	// Register test handler
+	suite.registerTestHandler("POST", "forgot-password", suite.h.ForgotPassword)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 

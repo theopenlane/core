@@ -14,15 +14,10 @@ import (
 
 // ValidateTOTP validates a user's TOTP code
 // this currently only supports TOTP and not OTP codes via email and SMS
-func (h *Handler) ValidateTOTP(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleTFASuccessRequest, models.ExampleTFASSuccessResponse, openapi.Registry)
+func (h *Handler) ValidateTOTP(ctx echo.Context) error {
+	in, err := BindAndValidate[models.TFARequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	// Skip actual handler logic during OpenAPI registration
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -31,7 +26,7 @@ func (h *Handler) ValidateTOTP(ctx echo.Context, openapi *OpenAPIContext) error 
 	if !tfaOk || tfaCaller == nil || tfaCaller.SubjectID == "" {
 		logx.FromContext(reqCtx).Error().Msg("unable to get user id from context")
 
-		return h.BadRequest(ctx, auth.ErrNoAuthUser, openapi)
+		return h.BadRequest(ctx, auth.ErrNoAuthUser)
 	}
 
 	userID := tfaCaller.SubjectID
@@ -41,13 +36,13 @@ func (h *Handler) ValidateTOTP(ctx echo.Context, openapi *OpenAPIContext) error 
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get user")
 
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	if user.Edges.TfaSettings == nil || len(user.Edges.TfaSettings) != 1 || user.Edges.TfaSettings[0].TfaSecret == nil {
 		logx.FromContext(reqCtx).Info().Msg("tfa validation request but user has no TFA settings")
 
-		return h.InvalidInput(ctx, ErrInvalidInput, openapi)
+		return h.InvalidInput(ctx, ErrInvalidInput)
 	}
 
 	tfasetting := user.Edges.TfaSettings[0]
@@ -62,15 +57,15 @@ func (h *Handler) ValidateTOTP(ctx echo.Context, openapi *OpenAPIContext) error 
 			if err := h.updateRecoveryCodes(reqCtx, tfasetting.ID, tfasetting.RecoveryCodes); err != nil {
 				logx.FromContext(reqCtx).Error().Err(err).Msg("unable to update recovery codes")
 
-				return h.BadRequest(ctx, err, openapi)
+				return h.BadRequest(ctx, err)
 			}
 
 			return h.Success(ctx, models.TFAReply{
 				Reply: rout.Reply{Success: true},
-			}, openapi)
+			})
 		}
 
-		return h.BadRequest(ctx, ErrInvalidRecoveryCode, openapi)
+		return h.BadRequest(ctx, ErrInvalidRecoveryCode)
 	}
 
 	totpUser := totp.User{
@@ -83,10 +78,10 @@ func (h *Handler) ValidateTOTP(ctx echo.Context, openapi *OpenAPIContext) error 
 	if err := h.OTPManager.Manager.ValidateTOTP(reqCtx, &totpUser, in.TOTPCode); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to validate TOTP code")
 
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	return h.Success(ctx, models.TFAReply{
 		Reply: rout.Reply{Success: true},
-	}, openapi)
+	})
 }

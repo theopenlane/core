@@ -30,8 +30,8 @@ import (
 func (suite *HandlerTestSuite) TestRegisterHandler() {
 	t := suite.T()
 
-	// Register test handler with OpenAPI context
-	suite.registerTestHandler("POST", "register", suite.createImpersonationOperation("RegisterHandler", "Test register"), suite.h.RegisterHandler)
+	// Register test handler
+	suite.registerTestHandler("POST", "register", suite.h.RegisterHandler)
 
 	var bonkers = "b!a!n!a!n!a!s!"
 
@@ -359,8 +359,8 @@ func (suite *HandlerTestSuite) TestRegisterHandler_EmailVerification() {
 	original := suite.db.EmailVerifier
 	suite.db.EmailVerifier = config.NewVerifier()
 
-	// Register test handler with OpenAPI context
-	suite.registerTestHandler("POST", "register", suite.createImpersonationOperation("RegisterHandler", "Test register"), suite.h.RegisterHandler)
+	// Register test handler
+	suite.registerTestHandler("POST", "register", suite.h.RegisterHandler)
 
 	testCases := []struct {
 		name              string

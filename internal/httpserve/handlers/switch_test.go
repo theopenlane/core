@@ -23,9 +23,7 @@ import (
 func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
 	t := suite.T()
 
-	// Create operation for SwitchHandler
-	operation := suite.createImpersonationOperation("SwitchHandler", "Switch organization context")
-	suite.registerTestHandler("POST", "switch", operation, suite.h.SwitchHandler)
+	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -83,9 +81,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
 func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforced() {
 	t := suite.T()
 
-	// Create operation for SwitchHandler
-	operation := suite.createImpersonationOperation("SwitchHandler", "Switch organization context")
-	suite.registerTestHandler("POST", "switch", operation, suite.h.SwitchHandler)
+	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -149,9 +145,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforced() {
 func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforcedUserHasTFA() {
 	t := suite.T()
 
-	// Create operation for SwitchHandler
-	operation := suite.createImpersonationOperation("SwitchHandler", "Switch organization context")
-	suite.registerTestHandler("POST", "switch", operation, suite.h.SwitchHandler)
+	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)

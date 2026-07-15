@@ -19,10 +19,10 @@ const (
 )
 
 // ProductCatalogHandler lists all products in the catalog
-func (h *Handler) ProductCatalogHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, models.ExampleProductCatalogRequest, models.ExampleProductCatalogReply, openapi.Registry)
+func (h *Handler) ProductCatalogHandler(ctx echo.Context) error {
+	in, err := BindAndValidate[models.ProductCatalogRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
+		return h.InvalidInput(ctx, err)
 	}
 
 	out := &models.ProductCatalogReply{
@@ -30,7 +30,7 @@ func (h *Handler) ProductCatalogHandler(ctx echo.Context, openapi *OpenAPIContex
 		Catalog: h.filterCatalog(in),
 	}
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }
 
 // filterCatalog filters the catalog based on the request parameters

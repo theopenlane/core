@@ -18,9 +18,7 @@ func (suite *HandlerTestSuite) TestProductCatalogHandler() {
 	t := suite.T()
 
 	// add handler
-	// Create operation for ProductCatalogHandler
-	operation := suite.createImpersonationOperation("ProductCatalogHandler", "Get product catalog")
-	suite.registerTestHandler(http.MethodGet, "products", operation, suite.h.ProductCatalogHandler)
+	suite.registerTestHandler(http.MethodGet, "products", suite.h.ProductCatalogHandler)
 
 	testCases := []struct {
 		name                  string

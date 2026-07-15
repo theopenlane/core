@@ -44,15 +44,10 @@ type InviteToken struct {
 // It receives a request with the user's invitation details, validates the request,
 // and creates organization membership for the user
 // On success, it returns a response with the organization information
-func (h *Handler) OrganizationInviteAccept(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleInviteRequest, models.ExampleInviteResponse, openapi.Registry)
+func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
+	in, err := BindAndValidate[models.InviteRequest](ctx)
 	if err != nil {
-		return h.BadRequest(ctx, err, openapi)
-	}
-
-	// Skip actual handler logic during OpenAPI registration
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.BadRequest(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -62,7 +57,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context, openapi *OpenAPICon
 	if !inviteOk || inviteCaller == nil || inviteCaller.SubjectID == "" {
 		logx.FromContext(reqCtx).Error().Msg("unable to get user id from context")
 
-		return h.BadRequest(ctx, auth.ErrNoAuthUser, openapi)
+		return h.BadRequest(ctx, auth.ErrNoAuthUser)
 	}
 
 	userID := inviteCaller.SubjectID
@@ -71,12 +66,12 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context, openapi *OpenAPICon
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving user details")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	ctxWithToken, user, invitedUser, err := h.processInvitation(ctx, in.Token, user.Email)
 	if err != nil {
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	// create new claims for the user
@@ -84,7 +79,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context, openapi *OpenAPICon
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// reply with the relevant details

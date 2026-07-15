@@ -43,8 +43,6 @@ type RestClient interface {
 	AccountRolesOrganization(context.Context, *api.AccountRolesOrganizationRequest) (*api.AccountRolesOrganizationReply, error)
 	// AccountFeatures lists features a user has for an organization
 	AccountFeatures(context.Context, *api.AccountFeaturesRequest) (*api.AccountFeaturesReply, error)
-	// RegisterRunner registers a new job runner node with the server
-	RegisterRunner(context.Context, *api.JobRunnerRegistrationRequest) (*api.JobRunnerRegistrationReply, error)
 }
 
 // NewRestClient creates a new API v1 client that implements the Openlane Client interface
@@ -387,24 +385,6 @@ func (s *APIv1) AccountFeatures(ctx context.Context, in *api.AccountFeaturesRequ
 
 	if !httpsling.IsSuccess(resp) {
 		return nil, newRequestError(resp.StatusCode, out.Error)
-	}
-
-	return out, nil
-}
-
-// RegisterRunner registers a new job runner node with the server.
-func (s *APIv1) RegisterRunner(ctx context.Context, in *api.JobRunnerRegistrationRequest) (out *api.JobRunnerRegistrationReply, err error) {
-	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
-		httpsling.Post(v1Path("runners")),
-		httpsling.Body(in))
-	if err != nil {
-		return nil, err
-	}
-
-	defer resp.Body.Close()
-
-	if !httpsling.IsSuccess(resp) {
-		return nil, newRequestError(resp.StatusCode, out.Reply.Error)
 	}
 
 	return out, nil

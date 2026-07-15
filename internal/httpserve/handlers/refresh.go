@@ -15,15 +15,10 @@ import (
 )
 
 // RefreshHandler allows users to refresh their access token using their refresh token
-func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleRefreshRequest, models.ExampleRefreshSuccessResponse, openapi.Registry)
+func (h *Handler) RefreshHandler(ctx echo.Context) error {
+	req, err := BindAndValidate[models.RefreshRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	// Skip actual handler logic during OpenAPI registration
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -33,7 +28,7 @@ func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) erro
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error verifying token")
 
-		return h.BadRequest(ctx, ErrUnableToVerifyToken, openapi)
+		return h.BadRequest(ctx, ErrUnableToVerifyToken)
 	}
 
 	// check user in the database, sub == claims subject and ensure only one record is returned
@@ -42,17 +37,17 @@ func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) erro
 		if ent.IsNotFound(err) {
 			logx.FromContext(reqCtx).Info().Str("userID", claims.Subject).Msg("user not found during token refresh")
 
-			return h.NotFound(ctx, ErrProcessingRequest, openapi)
+			return h.NotFound(ctx, ErrProcessingRequest)
 		}
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// ensure the user is still active
 	if user.Edges.Setting == nil || user.Edges.Setting.Status != enums.UserStatusActive {
 		logx.FromContext(reqCtx).Info().Str("userID", user.ID).Msg("user not active during token refresh")
 
-		return h.NotFound(ctx, ErrProcessingRequest, openapi)
+		return h.NotFound(ctx, ErrProcessingRequest)
 	}
 
 	// get modules on refresh
@@ -70,7 +65,7 @@ func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) erro
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error creating token pair")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// set cookies on request with the access and refresh token
@@ -92,5 +87,5 @@ func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) erro
 		},
 	}
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }

@@ -23,9 +23,7 @@ func (suite *HandlerTestSuite) TestACMESolverHandler() {
 	t := suite.T()
 
 	// setup handler
-	// Create operation for ACMESolverHandler
-	operation := suite.createImpersonationOperation("ACMESolverHandler", "ACME solver handler")
-	suite.registerTestHandler("GET", "/.well-known/acme-challenge/:path", operation, suite.h.ACMESolverHandler)
+	suite.registerTestHandler("GET", "/.well-known/acme-challenge/:path", suite.h.ACMESolverHandler)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 

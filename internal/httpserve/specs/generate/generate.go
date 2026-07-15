@@ -1,3 +1,4 @@
 package main
 
-//go:generate go run main.go
+//go:generate go run . --emit-types
+//go:generate go run .

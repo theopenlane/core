@@ -47,6 +47,7 @@ linters:
       - internal/ent/integrationgenerated
       - internal/integrations/cli
       - internal/integrations/definitions/email/themmes
+      - internal/httpserve/specs
 formatters:
   enable:
     - gofmt
@@ -62,3 +63,4 @@ formatters:
       - internal/workflows/examples/*
       - internal/ent/csvgenerated/*
       - internal/ent/workflowgenerated/*
+      - internal/httpserve/specs/*

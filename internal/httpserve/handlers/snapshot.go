@@ -17,14 +17,10 @@ const (
 )
 
 // Snapshot will take a snapshot of a provided domain
-func (h *Handler) SnapshotHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleSnapshotSuccessRequest, models.ExampleSnapshotSuccessResponse, openapi.Registry)
+func (h *Handler) SnapshotHandler(ctx echo.Context) error {
+	in, err := BindAndValidate[models.SnapshotRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -44,12 +40,12 @@ func (h *Handler) SnapshotHandler(ctx echo.Context, openapi *OpenAPIContext) err
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Str("url", in.URL).Err(err).Msg("failed to take snapshot")
 
-		return h.InternalServerError(ctx, err, openapi)
+		return h.InternalServerError(ctx, err)
 	}
 
 	out.Image = resp.Screenshot
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }
 
 // getSnapshotParams converts the input SnapshotRequest into Cloudflare SnapshotNewParams

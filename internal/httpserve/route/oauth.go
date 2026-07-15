@@ -6,7 +6,6 @@ import (
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/httpsling"
 )
 
 // registerOAuthRegisterHandler registers the oauth register handler used by the UI to register
@@ -31,18 +30,16 @@ func registerOAuthRegisterHandler(router *Router) error {
 // registerUserInfoHandler registers the userinfo handler
 func registerUserInfoHandler(router *Router) error {
 	config := Config{
-		Path:        "/oauth/userinfo",
-		Method:      http.MethodGet,
-		Name:        "UserInfo",
-		Description: "Get user information for OAuth authenticated user",
-		Tags:        []string{"oauth", "user"},
-		OperationID: "UserInfo",
-		Security:    handlers.AuthenticatedSecurity,
-		Middlewares: *authenticatedEndpoint,
-		Handler: func(ctx echo.Context, openapi *handlers.OpenAPIContext) error {
-			ctx.Response().Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
-			return router.Handler.UserInfo(ctx, openapi)
-		},
+		Path:         "/oauth/userinfo",
+		Method:       http.MethodGet,
+		Name:         "UserInfo",
+		Description:  "Get user information for OAuth authenticated user",
+		Tags:         []string{"Account Management"},
+		OperationID:  "UserInfo",
+		IncludeInOAS: true,
+		Security:     handlers.AuthenticatedSecurity,
+		Middlewares:  *authenticatedEndpoint,
+		Handler:      router.Handler.UserInfo,
 	}
 
 	return router.AddUnversionedHandlerRoute(config)
@@ -60,7 +57,7 @@ func registerGithubLoginHandler(router *Router) error {
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
 		RateLimit:   authFlowRateLimit,
-		SimpleHandler: func(ctx echo.Context) error {
+		Handler: func(ctx echo.Context) error {
 			return githubLogin(router)(ctx)
 		},
 	}
@@ -80,7 +77,7 @@ func registerGithubCallbackHandler(router *Router) error {
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
 		RateLimit:   authFlowRateLimit,
-		SimpleHandler: func(ctx echo.Context) error {
+		Handler: func(ctx echo.Context) error {
 			return githubCallback(router)(ctx)
 		},
 	}
@@ -100,7 +97,7 @@ func registerGoogleLoginHandler(router *Router) error {
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
 		RateLimit:   authFlowRateLimit,
-		SimpleHandler: func(ctx echo.Context) error {
+		Handler: func(ctx echo.Context) error {
 			return googleLogin(router)(ctx)
 		},
 	}
@@ -120,7 +117,7 @@ func registerGoogleCallbackHandler(router *Router) error {
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
 		RateLimit:   authFlowRateLimit,
-		SimpleHandler: func(ctx echo.Context) error {
+		Handler: func(ctx echo.Context) error {
 			return googleCallback(router)(ctx)
 		},
 	}

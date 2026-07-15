@@ -14,14 +14,10 @@ import (
 )
 
 // AccountRolesOrganizationHandler lists roles a subject has in relation to an organization
-func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, models.ExampleAccountRolesOrganizationRequest, models.ExampleAccountRolesOrganizationReply, openapi.Registry)
+func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context) error {
+	in, err := BindAndValidate[models.AccountRolesOrganizationRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -30,19 +26,19 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context, openapi *Ope
 	if !ok || caller == nil {
 		logx.FromContext(reqCtx).Error().Msg("error getting authenticated user")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	orgID, orgIDErr := h.getOrganizationID(in.ID, caller)
 	if orgIDErr != nil {
-		return h.BadRequest(ctx, orgIDErr, openapi)
+		return h.BadRequest(ctx, orgIDErr)
 	}
 
 	in.ID = orgID
 
 	// validate the input
 	if err := in.Validate(); err != nil {
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	req := fgax.ListAccess{
@@ -56,12 +52,12 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context, openapi *Ope
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Interface("access_request", req).Msg("error checking access")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	return h.Success(ctx, models.AccountRolesOrganizationReply{
 		Reply:          rout.Reply{Success: true},
 		Roles:          roles,
 		OrganizationID: req.ObjectID,
-	}, openapi)
+	})
 }

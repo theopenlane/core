@@ -19,9 +19,7 @@ func (suite *HandlerTestSuite) TestAccountFeaturesHandler() {
 	t := suite.T()
 
 	// add handler
-	// Create operation for AccountFeaturesHandler
-	operation := suite.createImpersonationOperation("AccountFeaturesHandler", "Get account features")
-	suite.registerTestHandler("POST", "account/features", operation, suite.h.AccountFeaturesHandler)
+	suite.registerTestHandler("POST", "account/features", suite.h.AccountFeaturesHandler)
 
 	// add modules for the user
 	modulesEnabled := []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogEntityManagementModule, models.CatalogTrustCenterModule, models.CatalogRegistryModule}

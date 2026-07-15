@@ -25,9 +25,7 @@ func (suite *HandlerTestSuite) TestResendHandler() {
 	t := suite.T()
 
 	// add handler
-	// Create operation for ResendEmail
-	operation := suite.createImpersonationOperation("ResendEmail", "Resend email verification")
-	suite.registerTestHandler("POST", "resend", operation, suite.h.ResendEmail)
+	suite.registerTestHandler("POST", "resend", suite.h.ResendEmail)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 

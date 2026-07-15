@@ -23,14 +23,10 @@ import (
 const impersonationBlacklistTTL = 24 * time.Hour
 
 // StartImpersonation handles requests to start user impersonation
-func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleStartImpersonationRequest, &models.StartImpersonationReply{}, openapi.Registry)
+func (h *Handler) StartImpersonation(ctx echo.Context) error {
+	req, err := BindAndValidate[models.StartImpersonationRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -38,12 +34,12 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 	// Get the current authenticated user (the impersonator)
 	caller, ok := auth.CallerFromContext(reqCtx)
 	if !ok || caller == nil {
-		return h.Unauthorized(ctx, ErrAuthenticationRequired, openapi)
+		return h.Unauthorized(ctx, ErrAuthenticationRequired)
 	}
 
 	// Validate permissions for impersonation
 	if err := h.validateImpersonationPermissions(caller, *req); err != nil {
-		return h.Forbidden(ctx, err, openapi)
+		return h.Forbidden(ctx, err)
 	}
 
 	// Determine organization context
@@ -66,7 +62,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error getting target user")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// Calculate duration
@@ -79,7 +75,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 	if h.TokenManager == nil {
 		logx.FromContext(reqCtx).Error().Msg("token manager not configured")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// Create impersonation token with proper claims
@@ -96,7 +92,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error creating impersonation token")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// Extract session ID from the created token claims
@@ -106,7 +102,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 		// but we have an issue with token parsing - this should not happen
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to extract session ID from newly created impersonation token")
 
-		return h.InternalServerError(ctx, ErrFailedToExtractSessionID, openapi)
+		return h.InternalServerError(ctx, ErrFailedToExtractSessionID)
 	}
 
 	// Log impersonation start with enhanced context for system admin tokens
@@ -141,14 +137,14 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 		Message:   "Impersonation session started successfully",
 	}
 
-	return h.Success(ctx, response, openapi)
+	return h.Success(ctx, response)
 }
 
 // EndImpersonation handles requests to end an impersonation session
-func (h *Handler) EndImpersonation(ctx echo.Context, openapi *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleEndImpersonationRequest, &models.EndImpersonationReply{}, openapi.Registry)
+func (h *Handler) EndImpersonation(ctx echo.Context) error {
+	req, err := BindAndValidate[models.EndImpersonationRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -156,12 +152,12 @@ func (h *Handler) EndImpersonation(ctx echo.Context, openapi *OpenAPIContext) er
 	// Get impersonation details from the caller in context.
 	caller, ok := auth.CallerFromContext(reqCtx)
 	if !ok || caller == nil || caller.Impersonation == nil {
-		return h.BadRequest(ctx, ErrNoActiveImpersonationSession, openapi)
+		return h.BadRequest(ctx, ErrNoActiveImpersonationSession)
 	}
 
 	// Validate session ID matches
 	if caller.Impersonation.SessionID != req.SessionID {
-		return h.BadRequest(ctx, ErrInvalidSessionID, openapi)
+		return h.BadRequest(ctx, ErrInvalidSessionID)
 	}
 
 	// Log impersonation end
@@ -193,7 +189,7 @@ func (h *Handler) EndImpersonation(ctx echo.Context, openapi *OpenAPIContext) er
 		Message: "Impersonation session ended successfully",
 	}
 
-	return h.Success(ctx, response, openapi)
+	return h.Success(ctx, response)
 }
 
 // validateImpersonationPermissions checks if the current user can impersonate the target user

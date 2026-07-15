@@ -21,15 +21,10 @@ import (
 // endpoint is public so that a caller holding an expired access token can still log out. Cookies
 // are only cleared once the server-side revocation has succeeded so that a failed logout is
 // retried by the client rather than silently leaving valid credentials in place
-func (h *Handler) LogoutHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleLogoutRequest, models.ExampleLogoutSuccessResponse, openapi.Registry)
+func (h *Handler) LogoutHandler(ctx echo.Context) error {
+	req, err := BindAndValidate[models.LogoutRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	// Skip actual handler logic during OpenAPI registration
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -41,7 +36,7 @@ func (h *Handler) LogoutHandler(ctx echo.Context, openapi *OpenAPIContext) error
 		if err := h.revokeToken(reqCtx, accessToken); err != nil {
 			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to revoke access token on logout")
 
-			return h.InternalServerError(ctx, err, openapi)
+			return h.InternalServerError(ctx, err)
 		}
 	}
 
@@ -60,7 +55,7 @@ func (h *Handler) LogoutHandler(ctx echo.Context, openapi *OpenAPIContext) error
 		if err := h.revokeToken(reqCtx, refreshToken); err != nil {
 			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to revoke refresh token on logout")
 
-			return h.InternalServerError(ctx, err, openapi)
+			return h.InternalServerError(ctx, err)
 		}
 	}
 
@@ -69,7 +64,7 @@ func (h *Handler) LogoutHandler(ctx echo.Context, openapi *OpenAPIContext) error
 	if err := h.SessionConfig.DestroySession(reqCtx, ctx.Response().Writer, ctx.Request()); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to destroy session on logout")
 
-		return h.InternalServerError(ctx, err, openapi)
+		return h.InternalServerError(ctx, err)
 	}
 
 	// clear the auth token cookies using the same config they were set with, once the server-side
@@ -81,7 +76,7 @@ func (h *Handler) LogoutHandler(ctx echo.Context, openapi *OpenAPIContext) error
 		Message: "logged out successfully",
 	}
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }
 
 // revokeToken records the token's id on the blacklist for the remainder of its lifetime so it can no

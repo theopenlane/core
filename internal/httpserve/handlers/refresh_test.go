@@ -36,9 +36,7 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 	suite.enableModules(testUser1.ID, testUser1.OrganizationID, modulesEnabled)
 
 	// add handler
-	// Create operation for RefreshHandler
-	operation := suite.createImpersonationOperation("RefreshHandler", "Refresh authentication token")
-	suite.registerTestHandler("POST", "refresh", operation, suite.h.RefreshHandler)
+	suite.registerTestHandler("POST", "refresh", suite.h.RefreshHandler)
 
 	// Set full overlap of the refresh and access token so the refresh token is immediately valid
 	tm, err := testutils.CreateTokenManager(-60 * time.Minute) //nolint:mnd

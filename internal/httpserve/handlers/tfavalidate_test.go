@@ -27,9 +27,7 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 	t := suite.T()
 
 	// add login handler
-	// Create operation for ValidateTOTP
-	operation := suite.createImpersonationOperation("ValidateTOTP", "Validate TOTP code")
-	suite.registerTestHandler("POST", "2fa/validate", operation, suite.h.ValidateTOTP)
+	suite.registerTestHandler("POST", "2fa/validate", suite.h.ValidateTOTP)
 
 	// Create a fresh TFA-enabled user per subtest to avoid time-window and reuse
 	// collisions between tests.

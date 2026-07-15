@@ -15,8 +15,8 @@ import (
 )
 
 // ScopesHandler lists available scopes that can be used for api tokens
-func (h *Handler) ScopesHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	return ProcessAuthenticatedRequest(ctx, h, openapi, models.ExampleScopesRequest, models.ExampleScopesReply,
+func (h *Handler) ScopesHandler(ctx echo.Context) error {
+	return ProcessAuthenticatedRequest(ctx, h,
 		func(reqCtx context.Context, _ *models.ScopesRequest, _ *auth.Caller) (*models.ScopesReply, error) {
 			scopes, err := fgamodel.ScopeOptions()
 			if err != nil {

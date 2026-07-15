@@ -9,9 +9,9 @@ import (
 )
 
 // ListIntegrationProviders returns declarative metadata about available third-party integration definitions
-func (h *Handler) ListIntegrationProviders(ctx echo.Context, _ *OpenAPIContext) error {
-	if isRegistrationContext(ctx) {
-		return nil
+func (h *Handler) ListIntegrationProviders(ctx echo.Context) error {
+	if h.IntegrationsRuntime == nil {
+		return h.BadRequest(ctx, ErrIntegrationsNotEnabled)
 	}
 
 	defs := h.IntegrationsRuntime.Registry().Definitions()

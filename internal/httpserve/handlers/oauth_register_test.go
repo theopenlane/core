@@ -25,9 +25,7 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 	t := suite.T()
 
 	// add login handler
-	// Create operation for OauthRegister
-	operation := suite.createImpersonationOperation("OauthRegister", "OAuth register")
-	suite.registerTestHandler("POST", "oauth/register", operation, suite.h.OauthRegister)
+	suite.registerTestHandler("POST", "oauth/register", suite.h.OauthRegister)
 
 	ensureUserAbsent := func(t *testing.T, email string) {
 		t.Helper()

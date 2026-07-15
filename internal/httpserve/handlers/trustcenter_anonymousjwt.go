@@ -15,12 +15,7 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenAPIContext) error {
-	if isRegistrationContext(ctx) {
-		response := models.CreateTrustCenterAnonymousJWTResponse{}
-		return h.Success(ctx, response, openapi)
-	}
-
+func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context) error {
 	referer := ctx.Request().Referer()
 
 	// 1. create the auth allowContext with a bootstrap trust center caller
@@ -30,25 +25,25 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenA
 
 	// 2. parse the URL out of the `in`
 	if referer == "" {
-		return h.BadRequest(ctx, ErrMissingReferer, openapi)
+		return h.BadRequest(ctx, ErrMissingReferer)
 	}
 
 	parsedURL, err := url.Parse(referer)
 	if err != nil {
-		return h.BadRequest(ctx, ErrInvalidRefererURL, openapi)
+		return h.BadRequest(ctx, ErrInvalidRefererURL)
 	}
 
 	hostname := parsedURL.Hostname()
 	normalizedHost, err := domain.NormalizeHostname(hostname)
 	if err != nil {
-		return h.BadRequest(ctx, ErrInvalidRefererURL, openapi)
+		return h.BadRequest(ctx, ErrInvalidRefererURL)
 	}
 
 	normalizedDefaultDomain, err := domain.NormalizeHostname(h.DefaultTrustCenterDomain)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("invalid default trust center domain")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	var trustCenter *generated.TrustCenter
@@ -58,7 +53,7 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenA
 		// 4. if we have the default trust center domain, then we require the PATH of the url to be the "slug"
 		pathSegments := strings.Split(strings.Trim(parsedURL.Path, "/"), "/")
 		if len(pathSegments) == 0 || pathSegments[0] == "" {
-			return h.BadRequest(ctx, ErrMissingSlugInPath, openapi)
+			return h.BadRequest(ctx, ErrMissingSlugInPath)
 		}
 
 		slug := pathSegments[0]
@@ -74,7 +69,7 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenA
 
 			logx.FromContext(reqCtx).Error().Err(err).Msg("error querying trust center")
 
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
 	} else {
 		// 5. if not default trust center, all we care about is the hostname.
@@ -96,7 +91,7 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenA
 
 			logx.FromContext(reqCtx).Error().Err(err).Msg("error querying trust center by custom domain")
 
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
 	}
 
@@ -104,12 +99,12 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenA
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	response := models.CreateTrustCenterAnonymousJWTResponse{
 		AuthData: *auth,
 	}
 
-	return h.Success(ctx, response, openapi)
+	return h.Success(ctx, response)
 }

@@ -14,14 +14,10 @@ import (
 )
 
 // ForgotPassword will send an forgot password email if the provided email exists
-func (h *Handler) ForgotPassword(ctx echo.Context, openapi *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleForgotPasswordSuccessRequest, models.ExampleForgotPasswordSuccessResponse, openapi.Registry)
+func (h *Handler) ForgotPassword(ctx echo.Context) error {
+	req, err := BindAndValidate[models.ForgotPasswordRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	out := &models.ForgotPasswordReply{
@@ -38,12 +34,12 @@ func (h *Handler) ForgotPassword(ctx echo.Context, openapi *OpenAPIContext) erro
 		if ent.IsNotFound(err) {
 			// return a 200 response even if user is not found to avoid
 			// exposing confidential information
-			return h.Success(ctx, out, openapi)
+			return h.Success(ctx, out)
 		}
 
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving user email")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// create password reset email token
@@ -59,10 +55,10 @@ func (h *Handler) ForgotPassword(ctx echo.Context, openapi *OpenAPIContext) erro
 	if _, err = h.storeAndSendPasswordResetToken(authCtx, user); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error storing and sending password reset token")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }
 
 // storeAndSendPasswordResetToken creates a password reset token for the user and sends an email with the token

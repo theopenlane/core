@@ -18,14 +18,10 @@ import (
 )
 
 // VerifyEmail is the handler for the email verification endpoint
-func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleVerifySuccessRequest, models.ExampleVerifySuccessResponse, openapi.Registry)
+func (h *Handler) VerifyEmail(ctx echo.Context) error {
+	in, err := BindAndValidate[models.VerifyRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -36,12 +32,12 @@ func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 	entUser, err := h.getUserByEVToken(ctxWithToken, in.Token)
 	if err != nil {
 		if generated.IsNotFound(err) {
-			return h.BadRequest(ctx, err, openapi)
+			return h.BadRequest(ctx, err)
 		}
 
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving user token")
 
-		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
+		return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
 	}
 
 	// create email verification
@@ -56,14 +52,14 @@ func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 	if entUser.Edges.Setting.EmailConfirmed {
 		logx.FromContext(reqCtx).Error().Err(ErrEmailAlreadyConfirmed).Msg("email verify token replayed")
 
-		return h.BadRequest(ctx, ErrEmailAlreadyConfirmed, openapi)
+		return h.BadRequest(ctx, ErrEmailAlreadyConfirmed)
 	}
 
 	// set tokens for request
 	if err := user.setUserTokens(entUser, in.Token); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to set user tokens for request")
 
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	// Construct the user token from the database fields
@@ -74,7 +70,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 	if t.ExpiresAt, err = user.GetVerificationExpires(); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to parse expiration")
 
-		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
+		return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
 	}
 
 	// Verify the token with the stored secret
@@ -86,7 +82,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 			if err != nil {
 				logx.FromContext(reqCtx).Error().Err(err).Msg("unable to resend verification token")
 
-				return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
+				return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
 			}
 
 			out := &models.VerifyReply{
@@ -99,11 +95,11 @@ func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 			return h.Created(ctx, out)
 		}
 
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	if err := h.setEmailConfirmed(userCtx, entUser); err != nil {
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	// create new claims for the user
@@ -111,7 +107,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	out := &models.VerifyReply{
@@ -122,7 +118,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 		AuthData: *auth,
 	}
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }
 
 // setUserTokens sets the fields to verify the email

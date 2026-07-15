@@ -27,9 +27,7 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 	t := suite.T()
 
 	// setup request request
-	// Create operation for ResetPassword
-	operation := suite.createImpersonationOperation("ResetPassword", "Reset user password")
-	suite.registerTestHandler("POST", "password-reset", operation, suite.h.ResetPassword)
+	suite.registerTestHandler("POST", "password-reset", suite.h.ResetPassword)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 

@@ -38,9 +38,7 @@ import (
 func (suite *HandlerTestSuite) TestWebfingerHandler() {
 	t := suite.T()
 
-	// Create operation for WebfingerHandler
-	webfingerOp := suite.createImpersonationOperation("WebfingerHandler", "Webfinger handler")
-	suite.registerTestHandler("GET", ".well-known/webfinger", webfingerOp, suite.h.WebfingerHandler)
+	suite.registerTestHandler("GET", ".well-known/webfinger", suite.h.WebfingerHandler)
 
 	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 	ctx = ent.NewContext(ctx, suite.db)
@@ -88,9 +86,7 @@ func (suite *HandlerTestSuite) TestWebfingerHandler() {
 func (suite *HandlerTestSuite) TestWebfingerHandlerTFAOnly() {
 	t := suite.T()
 
-	// Create operation for WebfingerHandler
-	webfingerOp := suite.createImpersonationOperation("WebfingerHandler", "Webfinger handler")
-	suite.registerTestHandler("GET", ".well-known/webfinger", webfingerOp, suite.h.WebfingerHandler)
+	suite.registerTestHandler("GET", ".well-known/webfinger", suite.h.WebfingerHandler)
 
 	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 	ctx = ent.NewContext(ctx, suite.db)
@@ -121,9 +117,7 @@ func (suite *HandlerTestSuite) TestWebfingerHandlerTFAOnly() {
 }
 
 func (suite *HandlerTestSuite) TestWebfingerHandlerNotFound() {
-	// Create operation for WebfingerHandler
-	webfingerOp := suite.createImpersonationOperation("WebfingerHandler", "Webfinger handler")
-	suite.registerTestHandler("GET", ".well-known/webfinger", webfingerOp, suite.h.WebfingerHandler)
+	suite.registerTestHandler("GET", ".well-known/webfinger", suite.h.WebfingerHandler)
 
 	req := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=acct:"+gofakeit.Email(), nil)
 	rec := httptest.NewRecorder()
@@ -300,8 +294,7 @@ func (m *mockOIDCServer) Close() { m.server.Close() }
 func (suite *HandlerTestSuite) TestSSOInitiateHandler() {
 	t := suite.T()
 
-	op := suite.createImpersonationOperation("SSOInitiateHandler", "SSO initiate handler")
-	suite.registerTestHandler("GET", "v1/orgs/:slug_name/sso", op, suite.h.SSOInitiateHandler)
+	suite.registerTestHandler("GET", "v1/orgs/:slug_name/sso", suite.h.SSOInitiateHandler)
 
 	oidc := newMockOIDCServer(t)
 	defer oidc.Close()
@@ -359,11 +352,8 @@ func (suite *HandlerTestSuite) TestSSOInitiateHandler() {
 func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 	t := suite.T()
 
-	// Create operations for SSO handlers
-	ssoLoginOp := suite.createImpersonationOperation("SSOLoginHandler", "SSO login handler")
-	ssoCallbackOp := suite.createImpersonationOperation("SSOCallbackHandler", "SSO callback handler")
-	suite.registerTestHandler("GET", "v1/sso/login", ssoLoginOp, suite.h.SSOLoginHandler)
-	suite.registerTestHandler("GET", "v1/sso/callback", ssoCallbackOp, suite.h.SSOCallbackHandler)
+	suite.registerTestHandler("GET", "v1/sso/login", suite.h.SSOLoginHandler)
+	suite.registerTestHandler("GET", "v1/sso/callback", suite.h.SSOCallbackHandler)
 
 	oidc := newMockOIDCServer(t,
 		withExpectedCode("code123"),
@@ -544,10 +534,8 @@ func (suite *HandlerTestSuite) ssoJITScenario(t *testing.T, email string, enforc
 func (suite *HandlerTestSuite) TestSSOCallbackJITPermutations() {
 	t := suite.T()
 
-	ssoLoginOp := suite.createImpersonationOperation("SSOLoginHandler", "SSO login handler")
-	ssoCallbackOp := suite.createImpersonationOperation("SSOCallbackHandler", "SSO callback handler")
-	suite.registerTestHandler("GET", "v1/sso/login", ssoLoginOp, suite.h.SSOLoginHandler)
-	suite.registerTestHandler("GET", "v1/sso/callback", ssoCallbackOp, suite.h.SSOCallbackHandler)
+	suite.registerTestHandler("GET", "v1/sso/login", suite.h.SSOLoginHandler)
+	suite.registerTestHandler("GET", "v1/sso/callback", suite.h.SSOCallbackHandler)
 
 	// allowlist match: enforced + JIT on + domain in jit_allowed_email_domains => provisioned
 	member, code := suite.ssoJITScenario(t, "match@allowed-jit.com", true, true, []string{"allowed-jit.com"})
@@ -573,10 +561,8 @@ func (suite *HandlerTestSuite) TestSSOCallbackJITPermutations() {
 func (suite *HandlerTestSuite) TestSSOCallbackJITProvisioning() {
 	t := suite.T()
 
-	ssoLoginOp := suite.createImpersonationOperation("SSOLoginHandler", "SSO login handler")
-	ssoCallbackOp := suite.createImpersonationOperation("SSOCallbackHandler", "SSO callback handler")
-	suite.registerTestHandler("GET", "v1/sso/login", ssoLoginOp, suite.h.SSOLoginHandler)
-	suite.registerTestHandler("GET", "v1/sso/callback", ssoCallbackOp, suite.h.SSOCallbackHandler)
+	suite.registerTestHandler("GET", "v1/sso/login", suite.h.SSOLoginHandler)
+	suite.registerTestHandler("GET", "v1/sso/callback", suite.h.SSOCallbackHandler)
 
 	oidc := newMockOIDCServer(t,
 		withExpectedCode("code123"),

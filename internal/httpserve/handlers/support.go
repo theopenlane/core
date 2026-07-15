@@ -40,18 +40,18 @@ const supportSessionDefaultHours = 1
 // the database), confirms the target organization consents to support access, and returns the second
 // factor identity provider redirect. It is only reached from LoginHandler after the support email is
 // detected, so the support email can never authenticate against a database user
-func (h *Handler) supportFirstFactor(ctx echo.Context, openapi *OpenAPIContext, req *apimodels.LoginRequest) error {
+func (h *Handler) supportFirstFactor(ctx echo.Context, req *apimodels.LoginRequest) error {
 	reqCtx := ctx.Request().Context()
 
 	cfg := h.SupportAccessConfig
 
 	// validate the shared password against configuration, never the database
 	if cfg.Password == "" || subtle.ConstantTimeCompare([]byte(req.Password), []byte(cfg.Password)) != 1 {
-		return h.Unauthorized(ctx, ErrSupportInvalidCredentials, openapi)
+		return h.Unauthorized(ctx, ErrSupportInvalidCredentials)
 	}
 
 	if req.TargetOrganizationID == "" || len(req.Reason) < apimodels.MinImpersonationReasonLength {
-		return h.InvalidInput(ctx, ErrSupportLoginRequiresOrgAndReason, openapi)
+		return h.InvalidInput(ctx, ErrSupportLoginRequiresOrgAndReason)
 	}
 
 	// the target organization must have consented to support access
@@ -60,74 +60,70 @@ func (h *Handler) supportFirstFactor(ctx echo.Context, openapi *OpenAPIContext, 
 	setting, err := h.getOrganizationSettingByOrgID(allowCtx, req.TargetOrganizationID)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return h.NotFound(ctx, ErrNotFound, openapi)
+			return h.NotFound(ctx, ErrNotFound)
 		}
 
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error fetching organization setting")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	if !setting.AllowSupportAccess {
-		return h.Forbidden(ctx, ErrSupportAccessNotConsented, openapi)
+		return h.Forbidden(ctx, ErrSupportAccessNotConsented)
 	}
 
 	authURL, err := h.generateSupportAuthURL(ctx, req.TargetOrganizationID, req.Reason)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to generate support second factor auth URL")
 
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	return h.Success(ctx, apimodels.LoginReply{
 		Reply:       rout.Reply{Success: true},
 		RedirectURI: authURL,
-	}, openapi)
+	})
 }
 
 // SupportCallbackHandler is the second factor of the Openlane support access flow. It completes the
 // configured identity provider exchange, requires the individual's email to be within the configured
 // domain, and mints a support session token attributed to the individual who completed it
-func (h *Handler) SupportCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, apimodels.ExampleSupportCallbackRequest, apimodels.ExampleSupportAccessReply, openapi.Registry)
+func (h *Handler) SupportCallbackHandler(ctx echo.Context) error {
+	in, err := BindAndValidate[apimodels.SupportCallbackRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
 
 	cfg := h.SupportAccessConfig
 	if !cfg.Enabled {
-		return h.BadRequest(ctx, ErrSupportAccessNotEnabled, openapi)
+		return h.BadRequest(ctx, ErrSupportAccessNotEnabled)
 	}
 
 	// confirm the first factor was completed in this browser session
 	if _, err := sessions.GetCookie(ctx.Request(), supportPendingCookie); err != nil {
-		return h.BadRequest(ctx, ErrSupportFirstFactorRequired, openapi)
+		return h.BadRequest(ctx, ErrSupportFirstFactorRequired)
 	}
 
 	stateCookie, err := sessions.GetCookie(ctx.Request(), supportStateCookie)
 	if err != nil || in.State == "" || in.State != stateCookie.Value {
-		return h.BadRequest(ctx, ErrStateMismatch, openapi)
+		return h.BadRequest(ctx, ErrStateMismatch)
 	}
 
 	nonceCookie, err := sessions.GetCookie(ctx.Request(), supportNonceCookie)
 	if err != nil {
-		return h.BadRequest(ctx, ErrNonceMissing, openapi)
+		return h.BadRequest(ctx, ErrNonceMissing)
 	}
 
 	orgCookie, err := sessions.GetCookie(ctx.Request(), supportOrgCookie)
 	if err != nil {
-		return h.BadRequest(ctx, ErrMissingField, openapi)
+		return h.BadRequest(ctx, ErrMissingField)
 	}
 
 	rpCfg, err := h.supportOIDCConfig(reqCtx)
 	if err != nil {
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	// exchange the code for the identity provider tokens, verifying the nonce
@@ -135,7 +131,7 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context, openapi *OpenAPIConte
 
 	idTokens, err := rp.CodeExchange[*oidc.IDTokenClaims](nonceCtx, in.Code, rpCfg)
 	if err != nil {
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	individualEmail := idTokens.IDTokenClaims.Email
@@ -144,7 +140,7 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context, openapi *OpenAPIConte
 	if !emailInDomain(individualEmail, cfg.AllowedDomain) {
 		logx.FromContext(reqCtx).Warn().Str("email", individualEmail).Msg("support second factor email domain not allowed")
 
-		return h.Forbidden(ctx, ErrSupportDomainNotAllowed, openapi)
+		return h.Forbidden(ctx, ErrSupportDomainNotAllowed)
 	}
 
 	// re-confirm the organization still consents to support access
@@ -152,7 +148,7 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context, openapi *OpenAPIConte
 
 	setting, err := h.getOrganizationSettingByOrgID(allowCtx, orgCookie.Value)
 	if err != nil || !setting.AllowSupportAccess {
-		return h.Forbidden(ctx, ErrSupportAccessNotConsented, openapi)
+		return h.Forbidden(ctx, ErrSupportAccessNotConsented)
 	}
 
 	individualID := ""
@@ -173,7 +169,7 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context, openapi *OpenAPIConte
 	if h.TokenManager == nil {
 		logx.FromContext(reqCtx).Error().Msg("token manager not configured")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// mint the support session token targeting the virtual support identity, attributed to the individual
@@ -190,14 +186,14 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context, openapi *OpenAPIConte
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error creating support access token")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	sessionID, err := h.extractSessionIDFromToken(token)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to extract session ID from support access token")
 
-		return h.InternalServerError(ctx, ErrFailedToExtractSessionID, openapi)
+		return h.InternalServerError(ctx, ErrFailedToExtractSessionID)
 	}
 
 	// create a session so the graph session middleware can validate subsequent authenticated
@@ -206,14 +202,14 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context, openapi *OpenAPIConte
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create support session")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	sessionToken, err := sessions.SessionToken(reqCtx)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get support session token")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	auditLog := &auth.ImpersonationAuditLog{
@@ -244,7 +240,7 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context, openapi *OpenAPIConte
 		OrganizationID: orgCookie.Value,
 		Impersonator:   individualEmail,
 		Message:        "Support access session started successfully",
-	}, openapi)
+	})
 }
 
 // supportOIDCConfig builds the relying party for the configured support second factor identity provider

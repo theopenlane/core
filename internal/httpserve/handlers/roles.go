@@ -16,8 +16,8 @@ import (
 )
 
 // RolesHandler lists available roles that can be assigned to users in addition to the base organization role
-func (h *Handler) RolesHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	return ProcessAuthenticatedRequest(ctx, h, openapi, models.ExampleRolesRequest, models.ExampleRolesReply,
+func (h *Handler) RolesHandler(ctx echo.Context) error {
+	return ProcessAuthenticatedRequest(ctx, h,
 		func(reqCtx context.Context, _ *models.RolesRequest, _ *auth.Caller) (*models.RolesReply, error) {
 			roles, err := fgamodel.OrganizationRoles()
 			if err != nil {
@@ -35,44 +35,40 @@ func (h *Handler) RolesHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 }
 
 // AssignOrganizationRolesHandler assigns a role to the provided user or group
-func (h *Handler) AssignOrganizationRolesHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	return h.handleRoleMutation(ctx, openapi, false)
+func (h *Handler) AssignOrganizationRolesHandler(ctx echo.Context) error {
+	return h.handleRoleMutation(ctx, false)
 }
 
 // DeleteOrganizationRolesHandler removes a role from the provided user or group
-func (h *Handler) DeleteOrganizationRolesHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	return h.handleRoleMutation(ctx, openapi, true)
+func (h *Handler) DeleteOrganizationRolesHandler(ctx echo.Context) error {
+	return h.handleRoleMutation(ctx, true)
 }
 
 // AccountRolesMeHandler returns the roles the user has access to
-func (h *Handler) AccountRolesMeHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	if _, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleAccountRolesMeRequest, models.ExampleAccountRolesMeReply, openapi.Registry); err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+func (h *Handler) AccountRolesMeHandler(ctx echo.Context) error {
+	if _, err := BindAndValidate[models.AccountRolesMeRequest](ctx); err != nil {
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
 	caller, ok := auth.CallerFromContext(reqCtx)
 	if !ok || caller == nil {
 		logx.FromContext(reqCtx).Error().Msg("error getting caller from context")
-		return h.InternalServerError(ctx, auth.ErrNoAuthUser, openapi)
+		return h.InternalServerError(ctx, auth.ErrNoAuthUser)
 	}
 
 	orgID, err := h.getOrganizationID("", caller)
 	if err != nil {
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 	if orgID == "" {
-		return h.BadRequest(ctx, ErrInvalidInput, openapi)
+		return h.BadRequest(ctx, ErrInvalidInput)
 	}
 
 	roles, err := fgamodel.OrganizationRoles()
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving organization roles")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	ids := make([]string, 0, len(roles))
@@ -91,24 +87,20 @@ func (h *Handler) AccountRolesMeHandler(ctx echo.Context, openapi *OpenAPIContex
 	assignedRoles, err := h.DBClient.Authz.ListRelations(reqCtx, req)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Interface("access_request", req).Msg("error checking organization role access")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	return h.Success(ctx, models.AccountRolesMeReply{
 		Reply:          rout.Reply{Success: true},
 		Roles:          convertOrgRolesToOpenAPI(fgamodel.FilterOrganizationRoles(roles, assignedRoles)),
 		OrganizationID: orgID,
-	}, openapi)
+	})
 }
 
-func (h *Handler) handleRoleMutation(ctx echo.Context, openapi *OpenAPIContext, isDeleteOp bool) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleOrganizationRolesRequest, models.ExampleOrganizationRolesReply, openapi.Registry)
+func (h *Handler) handleRoleMutation(ctx echo.Context, isDeleteOp bool) error {
+	in, err := BindAndValidate[models.OrganizationRolesRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -116,20 +108,20 @@ func (h *Handler) handleRoleMutation(ctx echo.Context, openapi *OpenAPIContext, 
 	caller, ok := auth.CallerFromContext(reqCtx)
 	if !ok || caller == nil {
 		logx.FromContext(reqCtx).Error().Msg("error getting caller from context")
-		return h.InternalServerError(ctx, auth.ErrNoAuthUser, openapi)
+		return h.InternalServerError(ctx, auth.ErrNoAuthUser)
 	}
 
 	orgID, err := h.getOrganizationID(in.OrganizationID, caller)
 	if err != nil {
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	if orgID == "" {
-		return h.BadRequest(ctx, ErrInvalidInput, openapi)
+		return h.BadRequest(ctx, ErrInvalidInput)
 	}
 
 	if !isCallerAdmin(caller) {
-		return h.BadRequest(ctx, ErrInvalidInput, openapi)
+		return h.BadRequest(ctx, ErrInvalidInput)
 	}
 
 	tuples := convertOrgRolesToTuples(orgID, in.Role, in.UserIDs, in.GroupIDs)
@@ -142,14 +134,14 @@ func (h *Handler) handleRoleMutation(ctx echo.Context, openapi *OpenAPIContext, 
 
 	if _, err := h.DBClient.Authz.WriteTupleKeys(reqCtx, writes, deletes); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Str("organization_id", orgID).Str("role", in.Role).Msg("error updating organization roles")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	return h.Success(ctx, models.OrganizationRolesReply{
 		Reply:          rout.Reply{Success: true},
 		OrganizationID: orgID,
 		Role:           in.Role,
-	}, openapi)
+	})
 }
 
 func isCallerAdmin(caller *auth.Caller) bool {

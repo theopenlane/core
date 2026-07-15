@@ -1637,87 +1637,6 @@ var ExampleExampleCSVRequest = ExampleCSVRequest{
 }
 
 // =========
-// JOB RUNNERS
-// =========
-
-// JobRunnerRegistrationRequest is the request to register a new node
-type JobRunnerRegistrationRequest struct {
-	// IPAddress is the ip_address value.
-	IPAddress string `json:"ip_address" description:"The IP address of the node being registered"`
-	// Token is the token value.
-	Token string `json:"token" description:"Your agent registration token"`
-	// Name is the name value.
-	Name string `json:"name" description:"the name of your job runner node"`
-	// Tags is the tags value.
-	Tags []string `json:"tags" description:"The tags for your runner node"`
-}
-
-// Validate ensures the required fields are set on the AgentNodeRegistrationRequest
-func (r *JobRunnerRegistrationRequest) Validate() error {
-	if r.IPAddress == "" {
-		return rout.NewMissingRequiredFieldError("ip_address")
-	}
-
-	if r.Token == "" {
-		return rout.NewMissingRequiredFieldError("token")
-	}
-
-	if r.Name == "" {
-		return rout.NewMissingRequiredFieldError("name")
-	}
-
-	if len(r.Tags) == 0 {
-		r.Tags = append(r.Tags, "self-hosted")
-	}
-
-	return nil
-}
-
-// JobRunnerRegistrationReply is the response to begin a job runner registration
-// this includes the credential creation options and the session token
-type JobRunnerRegistrationReply struct {
-	// Reply is the reply value.
-	Reply rout.Reply
-	// Message is the message value.
-	Message string `json:"message"`
-}
-
-// ExampleResponse returns an example JobRunnerRegistrationReply for OpenAPI documentation
-func (r *JobRunnerRegistrationReply) ExampleResponse() any {
-	return JobRunnerRegistrationReply{
-		Reply:   rout.Reply{Success: true},
-		Message: "Job runner registered successfully",
-	}
-}
-
-// ExampleJobRunnerRegistrationRequest is an example of a successful job runner
-// registration request
-var ExampleJobRunnerRegistrationRequest = JobRunnerRegistrationRequest{
-	IPAddress: "192.168.0.1",
-	Name:      "ubuntu-eu-west-2",
-	Token:     "registration_tokenhere",
-	Tags:      []string{"self-hosted", "eu-west-2", "gcp", "kubernetes"},
-}
-
-// ExampleJobRunnerRegistrationResponse is an example of a successful job runner
-// registration response
-var ExampleJobRunnerRegistrationResponse = JobRunnerRegistrationReply{
-	Reply:   rout.Reply{Success: true},
-	Message: "Job runner node registered",
-}
-
-// AcmeSolverRequest is the request to solve an acme challenge
-type AcmeSolverRequest struct {
-	// Path is the path value.
-	Path string `param:"path" description:"The path to the acme challenge" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
-}
-
-// ExampleAcmeSolverRequest is an example ACME solver request for OpenAPI documentation
-var ExampleAcmeSolverRequest = AcmeSolverRequest{
-	Path: "01J4HMNDSZCCQBTY93BF9CBF5D",
-}
-
-// =========
 // SSO
 // =========
 
@@ -2840,4 +2759,15 @@ var ExampleAccountRolesMeReply = AccountRolesMeReply{
 		},
 	},
 	OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+}
+
+// AcmeSolverRequest is the request to solve an acme challenge
+type AcmeSolverRequest struct {
+	// Path is the path value.
+	Path string `param:"path" description:"The path to the acme challenge" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+}
+
+// ExampleAcmeSolverRequest is an example ACME solver request for OpenAPI documentation
+var ExampleAcmeSolverRequest = AcmeSolverRequest{
+	Path: "01J4HMNDSZCCQBTY93BF9CBF5D",
 }
