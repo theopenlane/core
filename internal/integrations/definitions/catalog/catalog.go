@@ -31,7 +31,7 @@ func Builders(cfg Config, devMode bool) []registry.Builder {
 		awssecurityhub.Builder(cfg.AWSSecurityHub),
 		azureentraid.Builder(cfg.AzureEntraID),
 		azuresecuritycenter.Builder(),
-		cloudflare.Builder(&cfg.CloudflareRuntime, devMode),
+		cloudflare.Builder(cfg.DomainScan, &cfg.CloudflareRuntime, devMode),
 		email.Builder(&cfg.Email, devMode),
 		gcpscc.Builder(),
 		githubapp.Builder(cfg.GitHubApp),

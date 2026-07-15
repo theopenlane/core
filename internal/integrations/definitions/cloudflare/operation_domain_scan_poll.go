@@ -30,8 +30,6 @@ const (
 
 // DomainScanPoll retrieves a previously submitted URL Scanner result by scan ID
 type DomainScanPoll struct {
-	// AccountID is the Cloudflare account the scan was submitted under
-	AccountID string `json:"accountId"`
 	// ScanResultID is the scan ID returned by DomainScanSubmit
 	ScanResultID string `json:"scanResultId"`
 }
@@ -93,7 +91,7 @@ func (e ScanTaskErrors) Error() string {
 
 // Handle adapts domain scan polling to the generic operation registration boundary
 func (p DomainScanPoll) Handle() types.OperationHandler {
-	return providerkit.WithClientConfig(cloudflareClient, DomainScanPollOp, ErrOperationConfigInvalid, func(ctx context.Context, client *cf.Client, cfg DomainScanPoll) (json.RawMessage, error) {
+	return providerkit.WithClientConfig(cloudflareClient, DomainScanPollOp, ErrOperationConfigInvalid, func(ctx context.Context, client *CloudflareClient, cfg DomainScanPoll) (json.RawMessage, error) {
 		result, err := p.Run(ctx, client, cfg)
 		if err != nil {
 			return nil, err
@@ -105,7 +103,7 @@ func (p DomainScanPoll) Handle() types.OperationHandler {
 
 // Run retrieves a URL Scanner result by scan ID through. A 400 or 404 shortly after submission usually just means
 // Cloudflare hasn't indexed the scan yet, so those are retried with a flat delay before giving up
-func (DomainScanPoll) Run(ctx context.Context, client *cf.Client, cfg DomainScanPoll) (DomainScanPollResult, error) {
+func (DomainScanPoll) Run(ctx context.Context, client *CloudflareClient, cfg DomainScanPoll) (DomainScanPollResult, error) {
 	var lastErr error
 
 	for attempt := range domainScanResultNotReadyMaxAttempts {
@@ -117,7 +115,7 @@ func (DomainScanPoll) Run(ctx context.Context, client *cf.Client, cfg DomainScan
 			}
 		}
 
-		result, taskErrors, err := getScanResultOnce(ctx, client, cfg.AccountID, cfg.ScanResultID)
+		result, taskErrors, err := getScanResultOnce(ctx, client, cfg.ScanResultID)
 		if err == nil {
 			return DomainScanPollResult{Result: result, TaskErrors: taskErrors}, nil
 		}
@@ -138,8 +136,8 @@ func (DomainScanPoll) Run(ctx context.Context, client *cf.Client, cfg DomainScan
 }
 
 // getScanResultOnce makes a single attempt at retrieving a URL Scanner result by scan ID
-func getScanResultOnce(ctx context.Context, client *cf.Client, accountID, scanID string) (*url_scanner.ScanGetResponse, ScanTaskErrors, error) {
-	result, err := client.URLScanner.Scans.Get(ctx, scanID, url_scanner.ScanGetParams{AccountID: cf.F(accountID)})
+func getScanResultOnce(ctx context.Context, client *CloudflareClient, scanID string) (*url_scanner.ScanGetResponse, ScanTaskErrors, error) {
+	result, err := client.URLScanner.Scans.Get(ctx, scanID, url_scanner.ScanGetParams{AccountID: cf.F(client.AccountID)})
 	if err != nil {
 		return nil, nil, err
 	}

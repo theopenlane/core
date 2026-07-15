@@ -472,13 +472,17 @@ func printComplianceTable(report map[string]any) {
 // domainScanHTTPTimeout bounds the Cloudflare API client used for domain scan calls
 const domainScanHTTPTimeout = time.Minute
 
-// newCloudflareClient builds a Cloudflare API client from an API token, the same way
-// internal/integrations/runtime builds one from the operator-owned runtime config
-func newCloudflareClient(apiToken string) *cf.Client {
-	return cf.NewClient(
-		option.WithAPIToken(apiToken),
-		option.WithHTTPClient(&http.Client{Timeout: domainScanHTTPTimeout}),
-	)
+// newCloudflareClient builds a Cloudflare API client from an API token and account ID, the same
+// way internal/integrations/definitions/cloudflare builds one from the operator-owned runtime config
+func newCloudflareClient(apiToken, accountID string) *cloudflare.CloudflareClient {
+	return &cloudflare.CloudflareClient{
+		Client: cf.NewClient(
+			option.WithAPIToken(apiToken),
+			option.WithHTTPClient(&http.Client{Timeout: domainScanHTTPTimeout}),
+		),
+		AccountID: accountID,
+		APIToken:  apiToken,
+	}
 }
 
 // submitAndPollScan submits domain to Cloudflare's URL Scanner and polls
@@ -489,11 +493,10 @@ func newCloudflareClient(apiToken string) *cf.Client {
 func submitAndPollScan(cfg *domainscan.Config, domain string) *url_scanner.ScanGetResponse {
 	ctx := context.Background()
 
-	client := newCloudflareClient(cfg.APIToken)
+	client := newCloudflareClient(cfg.APIToken, cfg.AccountID)
 
 	submitResult, err := cloudflare.DomainScanSubmit{}.Run(ctx, client, cloudflare.DomainScanSubmit{
-		AccountID: cfg.AccountID,
-		Domains:   []string{domain},
+		Domains: []string{domain},
 	})
 	if err != nil {
 		log.Fatalf("failed to submit scan: %v", err)
@@ -511,7 +514,6 @@ func submitAndPollScan(cfg *domainscan.Config, domain string) *url_scanner.ScanG
 
 	for attempt := 0; attempt < operations.DomainScanMaxAttempts; attempt++ {
 		pollResult, err := cloudflare.DomainScanPoll{}.Run(ctx, client, cloudflare.DomainScanPoll{
-			AccountID:    cfg.AccountID,
 			ScanResultID: scanID,
 		})
 		if err != nil {

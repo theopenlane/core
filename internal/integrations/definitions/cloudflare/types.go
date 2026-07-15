@@ -1,8 +1,6 @@
 package cloudflare
 
 import (
-	cf "github.com/cloudflare/cloudflare-go/v7"
-
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -15,7 +13,7 @@ var (
 	// cloudflareSchema is the credential schema for the Cloudflare integration definition
 	cloudflareSchema, cloudflareCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// cloudflareClient is the client ref for the Cloudflare API client used by this definition
-	cloudflareClient = types.NewClientRef[*cf.Client]()
+	cloudflareClient = types.NewClientRef[*CloudflareClient]()
 	// healthDefaultOperation is the operation ref for the Cloudflare health check
 	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// directorySyncSchema is the operation ref for the directory account sync operation
@@ -28,6 +26,8 @@ var (
 	domainScanSubmitSchema, DomainScanSubmitOp = providerkit.OperationSchema[DomainScanSubmit]() //nolint:revive
 	// domainScanPollSchema is the operation ref for polling a submitted URL Scanner result
 	domainScanPollSchema, DomainScanPollOp = providerkit.OperationSchema[DomainScanPoll]() //nolint:revive
+	// domainScanEnrichSchema is the operation ref for enriching a completed URL Scanner result
+	domainScanEnrichSchema, DomainScanEnrichOp = providerkit.OperationSchema[DomainScanEnrich]() //nolint:revive
 	// runtimeCloudflareSchema is the JSON schema and typed ref for the runtime Cloudflare config
 	runtimeCloudflareSchema, runtimeCloudflareRef = providerkit.RuntimeSchema[RuntimeCloudflareConfig]()
 )

@@ -10,14 +10,16 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/domainscan"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // Builder returns the Cloudflare definition builder with the supplied runtime config applied.
+// reportConfig configures vendor/technology classification for onboarding domain scan reports.
 // When devMode is true or runtime.Provisioned() is true, a RuntimeIntegration is included so
 // system-initiated calls (e.g. onboarding domain scans) can use the operator-owned account
-func Builder(runtime *RuntimeCloudflareConfig, devMode bool) registry.Builder {
+func Builder(reportConfig domainscan.ReportConfig, runtime *RuntimeCloudflareConfig, devMode bool) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		def := types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
@@ -159,6 +161,16 @@ func Builder(runtime *RuntimeCloudflareConfig, devMode bool) registry.Builder {
 					Handle:             DomainScanPoll{}.Handle(),
 					CustomerSelectable: lo.ToPtr(false),
 				},
+				{
+					Name:               DomainScanEnrichOp.Name(),
+					Description:        "Enrich a completed URL Scanner result and build the onboarding domain scan report",
+					Topic:              DefinitionID.OperationTopic(DomainScanEnrichOp.Name()),
+					ClientRef:          cloudflareClient.ID(),
+					ConfigSchema:       domainScanEnrichSchema,
+					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
+					Handle:             DomainScanEnrich{}.Handle(),
+					CustomerSelectable: lo.ToPtr(false),
+				},
 			},
 			Mappings: cloudflareMappings(),
 		}
@@ -175,7 +187,7 @@ func Builder(runtime *RuntimeCloudflareConfig, devMode bool) registry.Builder {
 				Ref:    runtimeCloudflareRef.ID(),
 				Schema: runtimeCloudflareSchema,
 				Config: marshaledConfig,
-				Build:  runtimeCloudflareClientBuilder(),
+				Build:  runtimeCloudflareClientBuilder(reportConfig),
 			}
 		}
 

@@ -2,14 +2,12 @@ package runtime
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
-	"net/http"
 	"net/url"
 	"time"
 
-	cf "github.com/cloudflare/cloudflare-go/v7"
-	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/riverqueue/river"
 	"github.com/theopenlane/iam/auth"
 
@@ -18,17 +16,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
 	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/pkg/domainscan"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
-
-// domainScanHTTPTimeout bounds the Cloudflare API client used for domain scan calls
-const domainScanHTTPTimeout = time.Minute
-
-// domainScanEnrichmentTimeout bounds how long to spend gathering company profile,
-// compliance, and DNS vendor data before finalizing the scan without it
-const domainScanEnrichmentTimeout = 5 * time.Minute
 
 // errDomainScanTaskFailed is returned when Cloudflare reports the scan task itself failed
 var errDomainScanTaskFailed = errors.New("domain scan: cloudflare scan task failed")
@@ -36,40 +26,31 @@ var errDomainScanTaskFailed = errors.New("domain scan: cloudflare scan task fail
 // errDomainScanMaxAttemptsReached is returned when a scan never completes within the poll budget
 var errDomainScanMaxAttemptsReached = errors.New("domain scan: max poll attempts reached")
 
-// cloudflareRuntimeClient builds a Cloudflare API client from the operator-owned runtime config
-func (r *Runtime) cloudflareRuntimeClient() (*cf.Client, error) {
-	if !r.cloudflareRuntimeConfig.Provisioned() {
-		return nil, cloudflare.ErrRuntimeConfigInvalid
-	}
-
-	return cf.NewClient(
-		option.WithAPIToken(r.cloudflareRuntimeConfig.APIToken),
-		option.WithHTTPClient(&http.Client{Timeout: domainScanHTTPTimeout}),
-	), nil
-}
-
 // HandleDomainScanCreate submits an organization's domains to Cloudflare's URL Scanner, creates a Scan record in "processing"
 // status for each so it's visible right away, and schedules a poll cycle to update that same record once the scan completes.
-// Submission is called directly rather than through Dispatch, since the scan UUIDs returned by Cloudflare
-// are needed synchronously to create the Scan records and schedule the poll cycles
+// Submission runs inline through ExecuteRuntimeOperation rather than the async Dispatch path, since the scan UUIDs
+// returned by Cloudflare are needed synchronously to create the Scan records and schedule the poll cycles
 func (r *Runtime) HandleDomainScanCreate(ctx context.Context, envelope operations.DomainScanCreateEnvelope) error {
 	logger := logx.FromContext(ctx).With().
 		Str("organization_id", envelope.OrganizationID).
 		Strs("domains", envelope.Domains).
 		Logger()
 
-	client, err := r.cloudflareRuntimeClient()
+	config, err := json.Marshal(cloudflare.DomainScanSubmit{
+		Domains: envelope.Domains,
+	})
 	if err != nil {
-		logger.Error().Err(err).Msg("domain scan: cloudflare runtime client unavailable")
 		return err
 	}
 
-	result, err := cloudflare.DomainScanSubmit{}.Run(ctx, client, cloudflare.DomainScanSubmit{
-		AccountID: r.cloudflareRuntimeConfig.AccountID,
-		Domains:   envelope.Domains,
-	})
+	response, err := r.ExecuteRuntimeOperation(ctx, cloudflare.DefinitionID.ID(), cloudflare.DomainScanSubmitOp.Name(), config)
 	if err != nil {
 		logger.Error().Err(err).Msg("domain scan: failed submitting scans to cloudflare")
+		return err
+	}
+
+	var result cloudflare.DomainScanSubmitResult
+	if err := json.Unmarshal(response, &result); err != nil {
 		return err
 	}
 
@@ -140,18 +121,21 @@ func (r *Runtime) HandleDomainScanPoll(ctx context.Context, envelope operations.
 		Int("attempt", envelope.Attempt).
 		Logger()
 
-	client, err := r.cloudflareRuntimeClient()
-	if err != nil {
-		logger.Error().Err(err).Msg("domain scan: cloudflare runtime client unavailable")
-		return true, river.JobCancel(err)
-	}
-
-	result, err := cloudflare.DomainScanPoll{}.Run(ctx, client, cloudflare.DomainScanPoll{
-		AccountID:    r.cloudflareRuntimeConfig.AccountID,
+	config, err := json.Marshal(cloudflare.DomainScanPoll{
 		ScanResultID: envelope.ScanResultID,
 	})
 	if err != nil {
+		return true, river.JobCancel(err)
+	}
+
+	response, err := r.ExecuteRuntimeOperation(ctx, cloudflare.DefinitionID.ID(), cloudflare.DomainScanPollOp.Name(), config)
+	if err != nil {
 		logger.Error().Err(err).Msg("domain scan: failed polling cloudflare for scan result")
+		return true, river.JobCancel(err)
+	}
+
+	var result cloudflare.DomainScanPollResult
+	if err := json.Unmarshal(response, &result); err != nil {
 		return true, river.JobCancel(err)
 	}
 
@@ -211,57 +195,54 @@ func (r *Runtime) markDomainScanFailed(ctx context.Context, organizationID, inte
 	}
 }
 
-// finalizeDomainScan gathers company profile / compliance / DNS vendor enrichment, builds the structured scan report,
-// and updates the Scan record (created in "processing" status by to completed), then notifies the organization
+// finalizeDomainScan enriches the completed scan result and builds the structured scan report through
+// ExecuteRuntimeOperation, updates the Scan record (created in "processing" status by HandleDomainScanCreate
+// to completed), then notifies the organization
 func (r *Runtime) finalizeDomainScan(ctx context.Context, organizationID, internalScanID string, result cloudflare.DomainScanPollResult) error {
 	domain := hostFromURL(result.Result.Task.URL)
 
 	systemCtx := domainScanSystemContext(ctx, organizationID)
 
-	enrichmentCfg := domainscan.Config{
-		APIToken:  r.cloudflareRuntimeConfig.APIToken,
-		AccountID: r.cloudflareRuntimeConfig.AccountID,
+	resultJSON, err := json.Marshal(result.Result)
+	if err != nil {
+		return err
 	}
-	enrichment, enrichmentErrs := enrichmentCfg.GatherEnrichment(ctx, domain, domainScanEnrichmentTimeout)
-	logDomainScanEnrichmentErrors(ctx, domain, enrichmentErrs)
 
-	data := domainscan.BuildScanReport(result.Result, enrichment, r.domainScanReportConfig.NonVendorCategories, r.domainScanReportConfig.DeniedVendorNames)
-	data["internal_scan_id"] = internalScanID
+	config, err := json.Marshal(cloudflare.DomainScanEnrich{
+		Domain:         domain,
+		InternalScanID: internalScanID,
+		Result:         resultJSON,
+	})
+	if err != nil {
+		return err
+	}
+
+	response, err := r.ExecuteRuntimeOperation(ctx, cloudflare.DefinitionID.ID(), cloudflare.DomainScanEnrichOp.Name(), config)
+	if err != nil {
+		return err
+	}
+
+	var enriched cloudflare.DomainScanEnrichResult
+	if err := json.Unmarshal(response, &enriched); err != nil {
+		return err
+	}
 
 	if err := r.DB().Scan.UpdateOneID(internalScanID).
 		SetStatus(enums.ScanStatusCompleted).
-		SetMetadata(data).
+		SetMetadata(enriched.Data).
 		Exec(systemCtx); err != nil {
 		return err
 	}
 
-	_, err := r.DB().Notification.Create().
+	_, err = r.DB().Notification.Create().
 		SetOwnerID(organizationID).
 		SetNotificationType(enums.NotificationTypeOrganization).
 		SetObjectType("scan.created").
 		SetTitle("Domain scan completed").
 		SetBody(fmt.Sprintf("Scan completed successfully for %s, see the results to import your detected vendors, findings, and more", domain)).
-		SetData(data).
+		SetData(enriched.Data).
 		SetTopic(enums.NotificationTopicDomainScan).
 		Save(systemCtx)
 
 	return err
-}
-
-// logDomainScanEnrichmentErrors logs any per-lookup enrichment failures through the structured
-// logger; each is best-effort (the report is built without that section) so these are warnings, not errors
-func logDomainScanEnrichmentErrors(ctx context.Context, domain string, errs domainscan.EnrichmentErrors) {
-	logger := logx.FromContext(ctx).With().Str("domain", domain).Logger()
-
-	if errs.Company != nil {
-		logger.Warn().Err(errs.Company).Msg("domain scan: failed to get company profile")
-	}
-
-	if errs.Compliance != nil {
-		logger.Warn().Err(errs.Compliance).Msg("domain scan: failed to get compliance data")
-	}
-
-	if errs.DNS != nil {
-		logger.Warn().Err(errs.DNS).Msg("domain scan: failed to get dns vendor info")
-	}
 }

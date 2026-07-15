@@ -10,13 +10,11 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/definitions/catalog"
-	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
-	"github.com/theopenlane/core/pkg/domainscan"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
@@ -69,12 +67,6 @@ type Runtime struct {
 	paymentReminderConfig operations.PaymentReminderConfig
 	// organizationDeleteConfig holds the organization deletion scheduling parameters
 	organizationDeleteConfig operations.OrganizationDeleteConfig
-	// cloudflareRuntimeConfig holds the operator-owned Cloudflare account used for
-	// system-initiated Cloudflare calls such as onboarding domain scans
-	cloudflareRuntimeConfig cloudflare.RuntimeCloudflareConfig
-	// domainScanReportConfig configures vendor/technology classification for
-	// onboarding domain scan reports
-	domainScanReportConfig domainscan.ReportConfig
 	// devMode indicates the server is running in development mode
 	devMode bool
 }
@@ -223,8 +215,6 @@ func New(config Config) (*Runtime, error) {
 		defaultLookback:          lookback,
 		paymentReminderConfig:    config.PaymentReminder,
 		organizationDeleteConfig: config.OrganizationDelete,
-		cloudflareRuntimeConfig:  config.CatalogConfig.CloudflareRuntime,
-		domainScanReportConfig:   config.CatalogConfig.DomainScan,
 		devMode:                  config.DevMode,
 	}
 
