@@ -972,9 +972,16 @@ func normalizeEnumToken(value string) string {
 }
 
 // inputWithOwnerID is a struct that contains the owner id
-// this is used to unmarshal the owner id from the input
+// this is used to unmarshal the owner id from raw GraphQL variables, which are always
+// camelCase per GraphQL SDL convention and are not affected by ent's generated json tags
 type inputWithOwnerID struct {
 	OwnerID *string `json:"ownerID"`
+}
+
+// inputWithOwnerIDSnake is a struct that contains the owner id, tagged to match the snake_case
+// json tag ent emits on generated Create/Update input structs (e.g. generated.CreateProcedureInput)
+type inputWithOwnerIDSnake struct {
+	OwnerID *string `json:"owner_id"`
 }
 
 // inputWithTemplateKind is a struct that contains the template kind
@@ -991,17 +998,22 @@ func GetOrgOwnerFromInput[T any](input *T) (*string, error) {
 		return nil, nil
 	}
 
-	var ownerInput inputWithOwnerID
 	inputBytes, err := json.Marshal(input)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := jsonx.RoundTrip(inputBytes, &ownerInput); err != nil {
+	var ownerInputSnake inputWithOwnerIDSnake
+	if err := jsonx.RoundTrip(inputBytes, &ownerInputSnake); err != nil {
 		return nil, err
 	}
 
-	if ownerInput.OwnerID != nil {
+	if ownerInputSnake.OwnerID != nil {
+		return ownerInputSnake.OwnerID, nil
+	}
+
+	var ownerInput inputWithOwnerID
+	if err := jsonx.RoundTrip(inputBytes, &ownerInput); err == nil && ownerInput.OwnerID != nil {
 		return ownerInput.OwnerID, nil
 	}
 
