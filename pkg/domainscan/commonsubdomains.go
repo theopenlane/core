@@ -33,6 +33,20 @@ var commonSubdomains = []string{
 	"help",
 }
 
+// systemSubdomainCandidates are subdomain labels commonly used for a company's own product
+// surfaces (a web console, public API, docs, etc.), probed for HTTP reachability so the company
+// profile prompt can be handed verified evidence instead of relying on whatever the model happens
+// to notice linked from the single rendered homepage — this works for any company, not just one
+var systemSubdomainCandidates = []string{
+	"console",
+	"app",
+	"portal",
+	"api",
+	"graphql",
+	"docs",
+	"cli",
+}
+
 // dkimSelector is a DKIM selector label ("<selector>._domainkey.<host>") to probe for, paired with
 // the vendor it's attributable to
 var commonDKIMSelectors = []dkimSelector{

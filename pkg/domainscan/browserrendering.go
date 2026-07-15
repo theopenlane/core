@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/browser_rendering"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/theopenlane/httpsling"
+	"golang.org/x/sync/errgroup"
 )
 
 const (
@@ -85,7 +86,7 @@ func (c *Config) GetComplianceData(ctx context.Context, domain string) (*Complia
 
 // fetchCompliancePage runs the compliance prompt against a single URL and unmarshals the structured result into a CompliancePage
 func (c *Config) fetchCompliancePage(ctx context.Context, url string) (*CompliancePage, error) {
-	resp, err := c.browserRendering(ctx, url, promptCompliance)
+	resp, err := c.browserRendering(ctx, url, promptCompliance, "")
 	if err != nil {
 		return nil, err
 	}
@@ -142,7 +143,7 @@ func (c *Config) fetchTrustCenterPages(ctx context.Context, trustURL string) (*T
 // fetchTrustCenterPage runs the trust center prompt against a single URL and
 // unmarshals the structured result into a TrustCenterPage
 func (c *Config) fetchTrustCenterPage(ctx context.Context, url string) (*TrustCenterPage, error) {
-	resp, err := c.browserRendering(ctx, url, promptTrustCenter)
+	resp, err := c.browserRendering(ctx, url, promptTrustCenter, "")
 	if err != nil {
 		return nil, err
 	}
@@ -160,8 +161,51 @@ func (c *Config) fetchTrustCenterPage(ctx context.Context, url string) (*TrustCe
 	return tc, nil
 }
 
+// discoverSystemSubdomains probes systemSubdomainCandidates under url's apex domain for HTTP
+// reachability concurrently, returning whichever resolve as confirmed evidence of real systems
+func discoverSystemSubdomains(ctx context.Context, url string) []string {
+	apex, ok := apexDomain(url)
+	if !ok {
+		return nil
+	}
+
+	resolved := make([]string, len(systemSubdomainCandidates))
+
+	var g errgroup.Group
+
+	for i, label := range systemSubdomainCandidates {
+		g.Go(func() error {
+			if final, ok := urlReachable(ctx, "https://"+label+"."+apex); ok {
+				resolved[i] = final
+			}
+
+			return nil
+		})
+	}
+
+	_ = g.Wait() // per-candidate failures just mean that subdomain isn't reachable; never fails overall
+
+	found := make([]string, 0, len(resolved))
+
+	for _, r := range resolved {
+		if r != "" {
+			found = append(found, r)
+		}
+	}
+
+	return found
+}
+
 func (c *Config) GetCompanyData(ctx context.Context, url string) (*CompanyProfile, error) {
-	resp, err := c.browserRendering(ctx, url, promptCompany)
+	var promptSuffix string
+
+	if subdomains := discoverSystemSubdomains(ctx, url); len(subdomains) > 0 {
+		promptSuffix = "\n\nThe following subdomains were confirmed reachable for this company (not just linked from the page, but actually verified live): " +
+			strings.Join(subdomains, ", ") +
+			". Treat each as strong evidence of a real, separate system and factor them into the systems list even if they aren't mentioned or linked anywhere on the rendered page."
+	}
+
+	resp, err := c.browserRendering(ctx, url, promptCompany, promptSuffix)
 	if err != nil {
 		return nil, err
 	}
@@ -187,15 +231,17 @@ func (c *Config) GetCompanyData(ctx context.Context, url string) (*CompanyProfil
 	return profile, nil
 }
 
-// BrowserRendering will take a snapshot of a provided domain and return the extracted company profile
-func (c *Config) browserRendering(ctx context.Context, target string, kind PromptType) (*browser_rendering.JsonNewResponse, error) {
+// BrowserRendering will take a snapshot of a provided domain and return the extracted company profile.
+// promptSuffix, if non-empty, is appended to the base prompt for kind, letting callers hand the model
+// verified facts (e.g. confirmed-reachable subdomains) it can't discover from the rendered page alone
+func (c *Config) browserRendering(ctx context.Context, target string, kind PromptType, promptSuffix string) (*browser_rendering.JsonNewResponse, error) {
 	client := cloudflare.NewClient(c.clientOptions()...)
 
 	if parsed, ok := normalizeURL(target); ok {
 		target = parsed.String()
 	}
 
-	params := c.getBrowserRenderingJSONParams(target, getPrompt(kind), kind)
+	params := c.getBrowserRenderingJSONParams(target, getPrompt(kind)+promptSuffix, kind)
 
 	var lastErr error
 
