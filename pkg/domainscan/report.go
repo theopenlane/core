@@ -306,7 +306,41 @@ func buildVendorsAndTechnologies(result *url_scanner.ScanGetResponse, enrichment
 
 	mergeEnrichmentVendors(enrichment, groups)
 
-	return filterDeniedVendors(groups.finalize(), deniedVendorNames), technologies
+	vendors = filterDeniedVendors(groups.finalize(), deniedVendorNames)
+	vendors = filterRedundantGoogle(vendors)
+
+	return vendors, technologies
+}
+
+// filterRedundantGoogle drops the generic "Google" vendor entry when a more specific Google
+// product (Google Workspace, Google Cloud, Google Drive, etc.) is also present in the list
+func filterRedundantGoogle(vendors []map[string]any) []map[string]any {
+	hasSpecificGoogle := false
+
+	for _, vendor := range vendors {
+		name, _ := vendor["name"].(string)
+		if name != "Google" && strings.HasPrefix(name, "Google ") {
+			hasSpecificGoogle = true
+			break
+		}
+	}
+
+	if !hasSpecificGoogle {
+		return vendors
+	}
+
+	filtered := make([]map[string]any, 0, len(vendors))
+
+	for _, vendor := range vendors {
+		name, _ := vendor["name"].(string)
+		if name == "Google" {
+			continue
+		}
+
+		filtered = append(filtered, vendor)
+	}
+
+	return filtered
 }
 
 // filterDeniedVendors drops any vendor whose name matches deniedVendorNames (case-insensitive)
@@ -413,10 +447,15 @@ func groupWappaDetections(wappaData []url_scanner.ScanGetResponseMetaProcessorsW
 			continue
 		}
 
+		name := w.App
+		if canonical, ok := vendorCanonicalNames[strings.ToLower(name)]; ok {
+			name = canonical
+		}
+
 		if domain := registrableDomain(w.Website); domain != "" {
-			groups.add(domain, w.App, "https://"+domain, categories)
+			groups.add(domain, name, "https://"+domain, categories)
 		} else {
-			groups.add("name:"+strings.ToLower(w.App), w.App, "Unknown", categories)
+			groups.add("name:"+strings.ToLower(name), name, "Unknown", categories)
 		}
 	}
 

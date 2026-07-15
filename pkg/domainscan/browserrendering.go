@@ -43,6 +43,10 @@ const trustCenterContentSelector = `main, [class*="control" i], [class*="framewo
 // trustCenterSubpaths are common paths appended to a trust center's root URL and each fetched independently
 var trustCenterSubpaths = []string{"", "controls", "compliance", "security", "documents", "subprocessors"}
 
+// companyProfileSubpaths are common marketing/product pages fetched alongside the homepage when building a company
+// profile, since details are frequently only mentioned on a dedicated page rather than the homepage itself
+var companyProfileSubpaths = []string{"company", "pricing", "security", "legal", "contact", "about", "features", "platform", "docs"}
+
 // Config holds the Cloudflare credentials used for browser rendering and browser-derived enrichment lookups
 type Config struct {
 	// APIToken use to authenticate into with the cloudflare API
@@ -196,6 +200,8 @@ func discoverSystemSubdomains(ctx context.Context, url string) []string {
 	return found
 }
 
+// GetCompanyData builds a company profile from url's homepage, merged with whichever of companyProfileSubpaths
+// resolve on the same host
 func (c *Config) GetCompanyData(ctx context.Context, url string) (*CompanyProfile, error) {
 	var promptSuffix string
 
@@ -205,6 +211,56 @@ func (c *Config) GetCompanyData(ctx context.Context, url string) (*CompanyProfil
 			". Treat each as strong evidence of a real, separate system and factor them into the systems list even if they aren't mentioned or linked anywhere on the rendered page."
 	}
 
+	homepage, err := c.fetchCompanyProfilePage(ctx, url, promptSuffix)
+	if err != nil {
+		return nil, err
+	}
+
+	pages := make([]*CompanyProfile, len(companyProfileSubpaths))
+
+	var g errgroup.Group
+
+	for i, sub := range companyProfileSubpaths {
+		g.Go(func() error {
+			pageURL, ok := subpathURL(url, sub)
+			if !ok {
+				return nil
+			}
+
+			resolved, reachable := urlReachable(ctx, pageURL)
+			if !reachable {
+				return nil
+			}
+
+			page, err := c.fetchCompanyProfilePage(ctx, resolved, "")
+			if err != nil {
+				// this subpath may have failed to render, not an actual error
+				return nil
+			}
+
+			pages[i] = page
+
+			return nil
+		})
+	}
+
+	_ = g.Wait() // per-subpath failures just mean that page isn't reachable or didn't render; never fails overall
+
+	profile := mergeCompanyProfiles(append([]*CompanyProfile{homepage}, pages...)...)
+
+	if profile.StatusPageURL == "" {
+		if candidate, ok := statusPageURL(url); ok {
+			if resolved, exists := urlReachable(ctx, candidate); exists {
+				profile.StatusPageURL = resolved
+			}
+		}
+	}
+
+	return profile, nil
+}
+
+// fetchCompanyProfilePage runs the company profile prompt against a single URL and unmarshals the structured result into a CompanyProfile
+func (c *Config) fetchCompanyProfilePage(ctx context.Context, url, promptSuffix string) (*CompanyProfile, error) {
 	resp, err := c.browserRendering(ctx, url, promptCompany, promptSuffix)
 	if err != nil {
 		return nil, err
@@ -218,14 +274,6 @@ func (c *Config) GetCompanyData(ctx context.Context, url string) (*CompanyProfil
 	profile := &CompanyProfile{}
 	if err := json.Unmarshal(data, profile); err != nil {
 		return nil, err
-	}
-
-	if profile.StatusPageURL == "" {
-		if candidate, ok := statusPageURL(url); ok {
-			if resolved, exists := urlReachable(ctx, candidate); exists {
-				profile.StatusPageURL = resolved
-			}
-		}
 	}
 
 	return profile, nil
@@ -542,19 +590,6 @@ func buildTrustCenterPageSchema() ResponseFormat {
 					Items: &JSONSchemaProperty{
 						Type:        "string",
 						Description: "A single concrete security or operational practice, not a framework or certification name",
-					},
-				},
-				"documents": {
-					Type:        "array",
-					Description: "Compliance documents or reports listed on the trust center",
-					Items: &JSONSchemaProperty{
-						Type:        "object",
-						Description: "A single compliance document",
-						Properties: map[string]JSONSchemaProperty{
-							"name":   {Type: "string", Description: "The document title, e.g. SOC 2 Type II Report, ISO 27001 Certificate"},
-							"url":    {Type: "string", Description: "A direct link to the document, if one is available without requesting access"},
-							"public": {Type: "boolean", Description: "True if the document can be viewed or downloaded without requesting access or signing an NDA, false if it requires a request"},
-						},
 					},
 				},
 				"subprocessors": {

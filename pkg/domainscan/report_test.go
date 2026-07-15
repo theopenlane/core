@@ -4,6 +4,7 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/cloudflare/cloudflare-go/v7/url_scanner"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
@@ -113,6 +114,71 @@ func TestVendorGroupsAddAndFinalize(t *testing.T) {
 	}
 
 	assert.Check(t, is.DeepEqual(want, got))
+}
+
+func TestGroupWappaDetectionsCanonicalizesVendorName(t *testing.T) {
+	// Wappalyzer reports this technology under its own app name, but it should
+	// collapse into the "Cloudflare" alias group rather than surface as a
+	// separate vendor sharing the same domain
+	wappaData := []url_scanner.ScanGetResponseMetaProcessorsWappaData{
+		{
+			App:     "Cloudflare Browser Insights",
+			Website: "https://cloudflare.com",
+			Categories: []url_scanner.ScanGetResponseMetaProcessorsWappaDataCategory{
+				{Name: "Analytics"},
+			},
+		},
+	}
+
+	groups, technologies := groupWappaDetections(wappaData, map[string]bool{}, map[string]bool{})
+
+	assert.Check(t, is.Len(technologies, 0))
+
+	want := []map[string]any{
+		{"name": "Cloudflare", "url": "https://cloudflare.com", "categories": []string{"Analytics"}},
+	}
+
+	assert.Check(t, is.DeepEqual(want, groups.finalize()))
+}
+
+func TestFilterRedundantGoogle(t *testing.T) {
+	tests := []struct {
+		name    string
+		vendors []map[string]any
+		want    []map[string]any
+	}{
+		{
+			name: "plain Google is dropped when a specific Google product is present",
+			vendors: []map[string]any{
+				{"name": "Google"},
+				{"name": "Google Workspace"},
+				{"name": "Acme"},
+			},
+			want: []map[string]any{
+				{"name": "Google Workspace"},
+				{"name": "Acme"},
+			},
+		},
+		{
+			name: "plain Google is kept when no specific Google product is present",
+			vendors: []map[string]any{
+				{"name": "Google"},
+				{"name": "Acme"},
+			},
+			want: []map[string]any{
+				{"name": "Google"},
+				{"name": "Acme"},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := filterRedundantGoogle(tt.vendors)
+
+			assert.Check(t, is.DeepEqual(tt.want, got))
+		})
+	}
 }
 
 func TestFilterDeniedVendors(t *testing.T) {

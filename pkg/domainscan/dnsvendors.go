@@ -301,6 +301,13 @@ func vendorNameFromHostname(host string) (name, domain string) {
 	}
 
 	label := strings.SplitN(domain, ".", 2)[0] //nolint:mnd
+	if label == "" {
+		return domain, domain
+	}
+
+	if canonical, ok := vendorCanonicalNames[strings.ToLower(label)]; ok {
+		return canonical, domain
+	}
 
 	return titleCaseLabel(label), domain
 }
@@ -315,7 +322,8 @@ func titleCaseLabel(s string) string {
 }
 
 // verificationVendorName recognizes a "tag=token" or "tag:token" TXT record (e.g.
-// "google-site-verification=abc123") and derives the vendor name from the tag's first hyphen-delimited part
+// "google-site-verification=abc123") and derives the vendor name from the tag's leading
+// word
 func verificationVendorName(record string) (string, bool) {
 	key, value, ok := strings.Cut(record, "=")
 	if !ok {
@@ -343,7 +351,10 @@ func verificationVendorName(record string) (string, bool) {
 		return "", false
 	}
 
-	label := strings.SplitN(key, "-", 2)[0] //nolint:mnd
+	label := key
+	if idx := strings.IndexAny(key, "-_"); idx != -1 {
+		label = key[:idx]
+	}
 
 	return titleCaseLabel(label), label != ""
 }

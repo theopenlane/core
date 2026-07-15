@@ -143,6 +143,46 @@ func TestTrustCenterURLs(t *testing.T) {
 	}
 }
 
+func TestSubpathURL(t *testing.T) {
+	tests := []struct {
+		name   string
+		rawURL string
+		path   string
+		want   string
+		wantOK bool
+	}{
+		{
+			name:   "appends path to bare host",
+			rawURL: "example.com",
+			path:   "pricing",
+			want:   "https://example.com/pricing",
+			wantOK: true,
+		},
+		{
+			name:   "replaces existing path and drops query",
+			rawURL: "https://www.example.com/some/path?x=1",
+			path:   "security",
+			want:   "https://www.example.com/security",
+			wantOK: true,
+		},
+		{
+			name:   "invalid url fails",
+			rawURL: "https://",
+			path:   "pricing",
+			wantOK: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, ok := subpathURL(tt.rawURL, tt.path)
+
+			assert.Check(t, is.Equal(tt.wantOK, ok))
+			assert.Check(t, is.Equal(tt.want, got))
+		})
+	}
+}
+
 func TestStatusPageURL(t *testing.T) {
 	tests := []struct {
 		name   string

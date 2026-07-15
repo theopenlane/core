@@ -36,7 +36,15 @@ Social links: LinkedIn, Twitter/X, GitHub, Discord, Instagram, YouTube, and Face
 
 Status page: the URL of a public status/uptime page, if one is linked anywhere on the site.
 
-SSO/MFA support: whether the product advertises single sign-on (SSO) support or multi-factor authentication (MFA) support, as true/false values based on explicit mentions in marketing, pricing, or documentation pages.`
+SSO/MFA support: whether the product advertises single sign-on (SSO) support or multi-factor authentication (MFA, 2FA) support, as true/false values based on explicit mentions in marketing, pricing, or documentation pages.`
+
+// subprocessorsPromptText is the shared instruction for extracting subprocessor/vendor names,
+// used by both the compliance page and trust center prompts so they ask for it identically
+const subprocessorsPromptText = `Subprocessors: the names of any subprocessors or third-party vendors listed on the page.`
+
+// controlsPromptText is the shared instruction for extracting concrete security/operational controls,
+// used by both the compliance page and trust center prompts so they ask for it identically
+const controlsPromptText = `Controls: individual, concrete security or operational practices that this specific page explicitly describes — statements about access control, encryption, monitoring, testing, or training. Do not repeat framework or certification names here (e.g. do not list "SOC 2" or "ISO 27001 Certified" as a control; those belong only in the frameworks list and soc2_certified). Do not invent typical-sounding practices that aren't actually stated on the page; return an empty list if none are described.`
 
 // compliancePagePrompt guides the AI to extract structured compliance information from a page
 const compliancePagePrompt = `Analyze this compliance or legal page.
@@ -49,19 +57,17 @@ Frameworks: any compliance frameworks or certifications the company claims to ha
 
 Other compliance links: find every other compliance-related link on the page (in the footer, nav, or body) such as privacy policies, terms of service, trust center pages, data processing agreements, subprocessor lists, cookie policies, or security pages, and classify each one using the same page type categories listed above. Actively look for a link to a trust center or trust portal (e.g. pages hosted on Openlane, Vanta, Drata, SafeBase, Whistic, or Conveyor, or a company's own /trust or /security page) even if it isn't the current page.
 
-Subprocessors: the names of any subprocessors or third-party vendors listed on the page.
+` + subprocessorsPromptText + `
 
-Controls: individual, concrete security or operational practices that this specific page explicitly describes — statements about access control, encryption, monitoring, testing, or training. Do not repeat framework or certification names here (e.g. do not list "SOC 2 Certified" or "ISO 27001 Certified" as a control; those belong only in the frameworks list). Do not invent typical-sounding practices that aren't actually stated on the page; return an empty list if none are described.`
+` + controlsPromptText
 
 // trustCenterPrompt guides the AI to extract structured information from a dedicated trust center or trust portal page
 const trustCenterPrompt = `Analyze this trust center or trust portal page.
 
-Hosted by: identify which platform or vendor is hosting this trust center. Look for any "Powered by", footer, or page-title attribution naming it (e.g. Vanta, Drata, SafeBase, Whistic, Conveyor, TrustArc, OneTrust, SecurityPal, or any other vendor not listed here), not only the examples given. Respond "self-hosted" only if no such attribution appears anywhere on the page. This hosting platform is itself a vendor the company relies on.
+Hosted by: identify which platform or vendor is hosting this trust center. Look for any "Powered by", footer, or page-title attribution naming it (e.g. Openlane, Vanta, Drata, SafeBase, Whistic, Conveyor, TrustArc, OneTrust, SecurityPal, or any other vendor not listed here), not only the examples given. Respond "self-hosted" only if no such attribution appears anywhere on the page. This hosting platform is itself a vendor the company relies on.
 
 Frameworks: extract all compliance frameworks or certifications listed, for example SOC 2 Type I, SOC 2 Type II, ISO 27001, ISO 27017, ISO 27018, ISO 27701, ISO 42001, ISO 9001, GDPR, CCPA, HIPAA, HITRUST, PCI DSS, FedRAMP, NIST 800-53, NIST CSF, or CSA STAR. Specifically note whether SOC 2 (Type I or Type II) certification or compliance is claimed as a true/false value.
 
-Controls: individual, concrete security or operational practices that this specific page explicitly describes — statements about access control, encryption, monitoring, testing, or training. Do not repeat framework or certification names here (e.g. do not list "SOC 2 Certified" or "ISO 27001 Certified" as a control; those belong only in the frameworks list and soc2_certified). Do not invent typical-sounding practices that aren't actually stated on the page; return an empty list if none are described.
+` + controlsPromptText + `
 
-Documents: extract every compliance document or report listed (e.g. SOC 2 report, ISO certificate, penetration test summary, DPA template), including its name, a direct URL if one is available, and whether it is publicly accessible without requesting access or signing an NDA. Mark public as true only if the document can be viewed or downloaded immediately, false if it requires submitting a request or signing an NDA first.
-
-Subprocessors: the names of any subprocessors or third-party vendors listed.`
+` + subprocessorsPromptText

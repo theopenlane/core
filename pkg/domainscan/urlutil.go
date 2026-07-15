@@ -8,6 +8,13 @@ import (
 	"golang.org/x/net/publicsuffix"
 )
 
+// userAgent identifies this scanner to servers it probes
+const userAgent = "theopenlane-domainscan/1.0"
+
+// trustCenterCandidateSubdomains are subdomain prefixes commonly used for a
+// company's trust/security/compliance portal, tried in this order.
+var trustCenterCandidateSubdomains = []string{"trust", "security", "compliance"}
+
 // normalizeURL parses rawURL, assuming an https:// scheme if none is given
 func normalizeURL(rawURL string) (*url.URL, bool) {
 	u, err := url.Parse(rawURL)
@@ -44,10 +51,6 @@ func apexDomain(rawURL string) (string, bool) {
 
 	return host, true
 }
-
-// trustCenterCandidateSubdomains are subdomain prefixes commonly used for a
-// company's trust/security/compliance portal, tried in this order.
-var trustCenterCandidateSubdomains = []string{"trust", "security", "compliance"}
 
 // trustCenterURLs derives candidate trust center URLs for rawURL, one per
 // entry in trustCenterCandidateSubdomains (e.g. trust.<domain>, security.<domain>).
@@ -98,10 +101,36 @@ func statusPageURL(rawURL string) (string, bool) {
 	return status.String(), true
 }
 
+// subpathURL returns the URL formed by pointing rawURL at path
+func subpathURL(rawURL, path string) (string, bool) {
+	parsed, ok := normalizeURL(rawURL)
+	if !ok {
+		return "", false
+	}
+
+	parsed.Path = "/" + path
+	parsed.RawQuery = ""
+	parsed.Fragment = ""
+
+	return parsed.String(), true
+}
+
+// newHeadRequest builds a HEAD request against rawURL with the scanner's User-Agent set
+func newHeadRequest(ctx context.Context, rawURL string) (*http.Request, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodHead, rawURL, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("User-Agent", userAgent)
+
+	return req, nil
+}
+
 // urlReachable does a lightweight HEAD request to rawURL and reports whether
 // it resolves to a non-error response, returning the final URL after any redirects.
 func urlReachable(ctx context.Context, rawURL string) (string, bool) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodHead, rawURL, nil)
+	req, err := newHeadRequest(ctx, rawURL)
 	if err != nil {
 		return "", false
 	}
@@ -124,13 +153,9 @@ func urlReachable(ctx context.Context, rawURL string) (string, bool) {
 	return rawURL, true
 }
 
-// resolveRedirectTarget follows rawURL's HTTP redirect chain via a lightweight
-// HEAD request and returns the origin (scheme+host, no path) it lands on,
-// since some trust centers redirect their whole domain elsewhere and drop the
-// path, which would otherwise collapse every subpath probe onto one page.
-// Returns rawURL unchanged if the request fails or there's nothing to resolve.
+// resolveRedirectTarget follows rawURL's HTTP redirect chain via a lightweight HEAD request and returns the origin
 func resolveRedirectTarget(ctx context.Context, rawURL string) string {
-	req, err := http.NewRequestWithContext(ctx, http.MethodHead, rawURL, nil)
+	req, err := newHeadRequest(ctx, rawURL)
 	if err != nil {
 		return rawURL
 	}

@@ -86,17 +86,26 @@ type vendorAlias struct {
 	domains     []string
 }
 
+// knownVendorAliases are aliases that should map together for common vendors
+// TODO: this will move to system owned entities instead of hardcoded here in another PR
 var knownVendorAliases = []vendorAlias{
+	{name: "Google", alsoKnownAs: []string{"Google Analytics", "Google-analytics", "Google Hosted Libraries"}, domains: []string{"google.com", "google-analytics.com"}},
 	{name: "Google Workspace", hosts: []string{"admin.google.com"}},
 	{name: "Google Cloud", alsoKnownAs: []string{"Googlecloud"}, hosts: []string{"cloud.google.com"}},
 	{name: "Google Drive", alsoKnownAs: []string{"Googlecloud"}, hosts: []string{"drive.google.com"}},
-	{name: "AWS", alsoKnownAs: []string{"Amazonses", "Amazon Web Services"}, domains: []string{"aws.amazon.com"}},
-	{name: "Openlane", alsoKnownAs: []string{"The Open Lane"}, domains: []string{"theopenlane.io"}},
+	{name: "AWS", alsoKnownAs: []string{"Amazonses", "Amazon Web Services", "Cloudfront", "Amazon CloudFront"}, domains: []string{"aws.amazon.com", "cloudfront.net"}},
+	{name: "Openlane", alsoKnownAs: []string{"The Open Lane", "TheOpenLane"}, domains: []string{"theopenlane.io"}},
 	{name: "Hubspot", alsoKnownAs: []string{"hubspotemail"}, domains: []string{"hubspot.com"}},
 	{name: "Help Scout", alsoKnownAs: []string{"Helpscoutdocs"}, domains: []string{"helpscoutdocs.com"}},
 	{name: "Atlassian Statuspage", alsoKnownAs: []string{"stspg-customer"}, domains: []string{"stspg-customer.com"}},
 	{name: "Vercel", alsoKnownAs: []string{"vercel-dns"}, domains: []string{"vercel-dns.com"}},
 	{name: "Stripe", alsoKnownAs: []string{"Stripecdn"}, domains: []string{"stripe.com"}},
+	{name: "Cloudflare", alsoKnownAs: []string{"Cloudflareinsights", "Cloudflare Browser Insights"}, domains: []string{"cloudflare.com"}},
+	{name: "Squarespace", alsoKnownAs: []string{"Sqspcdn", "Squarespace-cdn"}, domains: []string{"squarespace.com"}},
+	{name: "GoDaddy", alsoKnownAs: []string{"Domaincontrol"}, domains: []string{"godaddy.com", "domaincontrol.com"}},
+	{name: "Namecheap", alsoKnownAs: []string{"Registrar-servers"}, domains: []string{"namecheap.com", "registrar-servers.com"}},
+	{name: "GitHub", alsoKnownAs: []string{"Githubusercontent", "Github"}, domains: []string{"github.com", "githubusercontent.com"}},
+	{name: "Fastly", domains: []string{"fastly.com"}},
 }
 
 // vendorHostNames overrides the display name derived from an exact hostname, derived from knownVendorAliases
