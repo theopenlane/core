@@ -8,6 +8,7 @@ package graphapi
 import (
 	"context"
 
+	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -188,4 +189,24 @@ func (r *queryResolver) Task(ctx context.Context, id string) (*generated.Task, e
 	}
 
 	return res, nil
+}
+
+// HasPendingWorkflow is the resolver for the hasPendingWorkflow field.
+func (r *taskResolver) HasPendingWorkflow(ctx context.Context, obj *generated.Task) (bool, error) {
+	return workflowResolverHasPending(ctx, generated.TypeTask, obj.ID)
+}
+
+// HasWorkflowHistory is the resolver for the hasWorkflowHistory field.
+func (r *taskResolver) HasWorkflowHistory(ctx context.Context, obj *generated.Task) (bool, error) {
+	return workflowResolverHasHistory(ctx, generated.TypeTask, obj.ID)
+}
+
+// ActiveWorkflowInstances is the resolver for the activeWorkflowInstances field.
+func (r *taskResolver) ActiveWorkflowInstances(ctx context.Context, obj *generated.Task) ([]*generated.WorkflowInstance, error) {
+	return workflowResolverActiveInstances(ctx, generated.TypeTask, obj.ID)
+}
+
+// WorkflowTimeline is the resolver for the workflowTimeline field.
+func (r *taskResolver) WorkflowTimeline(ctx context.Context, obj *generated.Task, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) (*generated.WorkflowEventConnection, error) {
+	return workflowResolverTimeline(ctx, generated.TypeTask, obj.ID, after, first, before, last, orderBy, where, includeEmitFailures)
 }

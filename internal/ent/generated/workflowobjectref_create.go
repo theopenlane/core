@@ -11,6 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -24,8 +26,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
@@ -344,6 +349,76 @@ func (_c *WorkflowObjectRefCreate) SetNillablePlatformID(v *string) *WorkflowObj
 	return _c
 }
 
+// SetVulnerabilityID sets the "vulnerability_id" field.
+func (_c *WorkflowObjectRefCreate) SetVulnerabilityID(v string) *WorkflowObjectRefCreate {
+	_c.mutation.SetVulnerabilityID(v)
+	return _c
+}
+
+// SetNillableVulnerabilityID sets the "vulnerability_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefCreate) SetNillableVulnerabilityID(v *string) *WorkflowObjectRefCreate {
+	if v != nil {
+		_c.SetVulnerabilityID(*v)
+	}
+	return _c
+}
+
+// SetRiskID sets the "risk_id" field.
+func (_c *WorkflowObjectRefCreate) SetRiskID(v string) *WorkflowObjectRefCreate {
+	_c.mutation.SetRiskID(v)
+	return _c
+}
+
+// SetNillableRiskID sets the "risk_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefCreate) SetNillableRiskID(v *string) *WorkflowObjectRefCreate {
+	if v != nil {
+		_c.SetRiskID(*v)
+	}
+	return _c
+}
+
+// SetAssessmentID sets the "assessment_id" field.
+func (_c *WorkflowObjectRefCreate) SetAssessmentID(v string) *WorkflowObjectRefCreate {
+	_c.mutation.SetAssessmentID(v)
+	return _c
+}
+
+// SetNillableAssessmentID sets the "assessment_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefCreate) SetNillableAssessmentID(v *string) *WorkflowObjectRefCreate {
+	if v != nil {
+		_c.SetAssessmentID(*v)
+	}
+	return _c
+}
+
+// SetAssessmentResponseID sets the "assessment_response_id" field.
+func (_c *WorkflowObjectRefCreate) SetAssessmentResponseID(v string) *WorkflowObjectRefCreate {
+	_c.mutation.SetAssessmentResponseID(v)
+	return _c
+}
+
+// SetNillableAssessmentResponseID sets the "assessment_response_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefCreate) SetNillableAssessmentResponseID(v *string) *WorkflowObjectRefCreate {
+	if v != nil {
+		_c.SetAssessmentResponseID(*v)
+	}
+	return _c
+}
+
+// SetRemediationID sets the "remediation_id" field.
+func (_c *WorkflowObjectRefCreate) SetRemediationID(v string) *WorkflowObjectRefCreate {
+	_c.mutation.SetRemediationID(v)
+	return _c
+}
+
+// SetNillableRemediationID sets the "remediation_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefCreate) SetNillableRemediationID(v *string) *WorkflowObjectRefCreate {
+	if v != nil {
+		_c.SetRemediationID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *WorkflowObjectRefCreate) SetID(v string) *WorkflowObjectRefCreate {
 	_c.mutation.SetID(v)
@@ -456,6 +531,31 @@ func (_c *WorkflowObjectRefCreate) SetIdentityHolder(v *IdentityHolder) *Workflo
 // SetPlatform sets the "platform" edge to the Platform entity.
 func (_c *WorkflowObjectRefCreate) SetPlatform(v *Platform) *WorkflowObjectRefCreate {
 	return _c.SetPlatformID(v.ID)
+}
+
+// SetVulnerability sets the "vulnerability" edge to the Vulnerability entity.
+func (_c *WorkflowObjectRefCreate) SetVulnerability(v *Vulnerability) *WorkflowObjectRefCreate {
+	return _c.SetVulnerabilityID(v.ID)
+}
+
+// SetRisk sets the "risk" edge to the Risk entity.
+func (_c *WorkflowObjectRefCreate) SetRisk(v *Risk) *WorkflowObjectRefCreate {
+	return _c.SetRiskID(v.ID)
+}
+
+// SetAssessment sets the "assessment" edge to the Assessment entity.
+func (_c *WorkflowObjectRefCreate) SetAssessment(v *Assessment) *WorkflowObjectRefCreate {
+	return _c.SetAssessmentID(v.ID)
+}
+
+// SetAssessmentResponse sets the "assessment_response" edge to the AssessmentResponse entity.
+func (_c *WorkflowObjectRefCreate) SetAssessmentResponse(v *AssessmentResponse) *WorkflowObjectRefCreate {
+	return _c.SetAssessmentResponseID(v.ID)
+}
+
+// SetRemediation sets the "remediation" edge to the Remediation entity.
+func (_c *WorkflowObjectRefCreate) SetRemediation(v *Remediation) *WorkflowObjectRefCreate {
+	return _c.SetRemediationID(v.ID)
 }
 
 // Mutation returns the WorkflowObjectRefMutation object of the builder.
@@ -926,6 +1026,96 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.PlatformID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.VulnerabilityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowobjectref.VulnerabilityTable,
+			Columns: []string{workflowobjectref.VulnerabilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.VulnerabilityID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RiskIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowobjectref.RiskTable,
+			Columns: []string{workflowobjectref.RiskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.RiskID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssessmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowobjectref.AssessmentTable,
+			Columns: []string{workflowobjectref.AssessmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.AssessmentID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssessmentResponseIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowobjectref.AssessmentResponseTable,
+			Columns: []string{workflowobjectref.AssessmentResponseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.AssessmentResponseID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RemediationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowobjectref.RemediationTable,
+			Columns: []string{workflowobjectref.RemediationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.RemediationID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

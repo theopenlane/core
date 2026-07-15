@@ -78,6 +78,9 @@ func (WorkflowAssignment) Fields() []ent.Field {
 		field.JSON("invalidation_metadata", models.WorkflowAssignmentInvalidation{}).
 			Comment("structured invalidation metadata").
 			Optional(),
+		field.JSON("outcome_metadata", models.AssignmentOutcome{}).
+			Comment("consolidated terminal outcome metadata discriminated by decision (supersedes approval/rejection/invalidation metadata)").
+			Optional(),
 		field.Time("decided_at").
 			Comment("Timestamp when the assignment was decided").
 			Optional().Nillable(),

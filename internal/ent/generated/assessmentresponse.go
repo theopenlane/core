@@ -41,6 +41,8 @@ type AssessmentResponse struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// the assessment this response is for
 	AssessmentID string `json:"assessment_id,omitempty"`
 	// whether this assessment response is for a test send
@@ -110,13 +112,16 @@ type AssessmentResponseEdges struct {
 	Document *DocumentData `json:"document,omitempty"`
 	// VendorRiskScores holds the value of the vendor_risk_scores edge.
 	VendorRiskScores []*VendorRiskScore `json:"vendor_risk_scores,omitempty"`
+	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
+	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [8]map[string]int
 
-	namedVendorRiskScores map[string][]*VendorRiskScore
+	namedVendorRiskScores   map[string][]*VendorRiskScore
+	namedWorkflowObjectRefs map[string][]*WorkflowObjectRef
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -194,6 +199,15 @@ func (e AssessmentResponseEdges) VendorRiskScoresOrErr() ([]*VendorRiskScore, er
 	return nil, &NotLoadedError{edge: "vendor_risk_scores"}
 }
 
+// WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
+// was not loaded in eager-loading.
+func (e AssessmentResponseEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
+	if e.loadedTypes[7] {
+		return e.WorkflowObjectRefs, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_object_refs"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*AssessmentResponse) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -201,7 +215,7 @@ func (*AssessmentResponse) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case assessmentresponse.FieldEmailMetadata:
 			values[i] = new([]byte)
-		case assessmentresponse.FieldIsTest, assessmentresponse.FieldIsDraft:
+		case assessmentresponse.FieldWorkflowEligibleMarker, assessmentresponse.FieldIsTest, assessmentresponse.FieldIsDraft:
 			values[i] = new(sql.NullBool)
 		case assessmentresponse.FieldSendAttempts, assessmentresponse.FieldEmailOpenCount, assessmentresponse.FieldEmailClickCount:
 			values[i] = new(sql.NullInt64)
@@ -278,6 +292,12 @@ func (_m *AssessmentResponse) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case assessmentresponse.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
+			} else if value.Valid {
+				_m.WorkflowEligibleMarker = value.Bool
 			}
 		case assessmentresponse.FieldAssessmentID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -461,6 +481,11 @@ func (_m *AssessmentResponse) QueryVendorRiskScores() *VendorRiskScoreQuery {
 	return NewAssessmentResponseClient(_m.config).QueryVendorRiskScores(_m)
 }
 
+// QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the AssessmentResponse entity.
+func (_m *AssessmentResponse) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	return NewAssessmentResponseClient(_m.config).QueryWorkflowObjectRefs(_m)
+}
+
 // Update returns a builder for updating this AssessmentResponse.
 // Note that you need to call AssessmentResponse.Unwrap() before calling this method if this AssessmentResponse
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -509,6 +534,9 @@ func (_m *AssessmentResponse) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteString(", ")
 	builder.WriteString("assessment_id=")
 	builder.WriteString(_m.AssessmentID)
@@ -600,6 +628,30 @@ func (_m *AssessmentResponse) appendNamedVendorRiskScores(name string, edges ...
 		_m.Edges.namedVendorRiskScores[name] = []*VendorRiskScore{}
 	} else {
 		_m.Edges.namedVendorRiskScores[name] = append(_m.Edges.namedVendorRiskScores[name], edges...)
+	}
+}
+
+// NamedWorkflowObjectRefs returns the WorkflowObjectRefs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *AssessmentResponse) NamedWorkflowObjectRefs(name string) ([]*WorkflowObjectRef, error) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowObjectRefs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *AssessmentResponse) appendNamedWorkflowObjectRefs(name string, edges ...*WorkflowObjectRef) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		_m.Edges.namedWorkflowObjectRefs = make(map[string][]*WorkflowObjectRef)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowObjectRefs[name] = []*WorkflowObjectRef{}
+	} else {
+		_m.Edges.namedWorkflowObjectRefs[name] = append(_m.Edges.namedWorkflowObjectRefs[name], edges...)
 	}
 }
 

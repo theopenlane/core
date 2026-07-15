@@ -133,6 +133,11 @@ func SystemInternalID(v string) predicate.AssessmentHistory {
 	return predicate.AssessmentHistory(sql.FieldEQ(FieldSystemInternalID, v))
 }
 
+// WorkflowEligibleMarker applies equality check predicate on the "workflow_eligible_marker" field. It's identical to WorkflowEligibleMarkerEQ.
+func WorkflowEligibleMarker(v bool) predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.AssessmentHistory {
 	return predicate.AssessmentHistory(sql.FieldEQ(FieldName, v))
@@ -986,6 +991,26 @@ func SystemInternalIDEqualFold(v string) predicate.AssessmentHistory {
 // SystemInternalIDContainsFold applies the ContainsFold predicate on the "system_internal_id" field.
 func SystemInternalIDContainsFold(v string) predicate.AssessmentHistory {
 	return predicate.AssessmentHistory(sql.FieldContainsFold(FieldSystemInternalID, v))
+}
+
+// WorkflowEligibleMarkerEQ applies the EQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerEQ(v bool) predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerNEQ applies the NEQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNEQ(v bool) predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldNEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerIsNil applies the IsNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerIsNil() predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldIsNull(FieldWorkflowEligibleMarker))
+}
+
+// WorkflowEligibleMarkerNotNil applies the NotNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNotNil() predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldNotNull(FieldWorkflowEligibleMarker))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.

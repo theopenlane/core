@@ -59,6 +59,8 @@ type Risk struct {
 	ScopeName string `json:"scope_name,omitempty"`
 	// the scope of the risk
 	ScopeID string `json:"scope_id,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// stable identifier assigned by the source system, used for integration ingest deduplication
 	ExternalID string `json:"external_id,omitempty"`
 	// integration that surfaced this risk, when sourced via integration ingest
@@ -172,30 +174,33 @@ type RiskEdges struct {
 	Reviews []*Review `json:"reviews,omitempty"`
 	// Remediations holds the value of the remediations edge.
 	Remediations []*Remediation `json:"remediations,omitempty"`
+	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
+	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [25]bool
+	loadedTypes [26]bool
 	// totalCount holds the count of the edges above.
-	totalCount [25]map[string]int
+	totalCount [26]map[string]int
 
-	namedBlockedGroups    map[string][]*Group
-	namedEditors          map[string][]*Group
-	namedViewers          map[string][]*Group
-	namedControls         map[string][]*Control
-	namedSubcontrols      map[string][]*Subcontrol
-	namedProcedures       map[string][]*Procedure
-	namedInternalPolicies map[string][]*InternalPolicy
-	namedPrograms         map[string][]*Program
-	namedPlatforms        map[string][]*Platform
-	namedActionPlans      map[string][]*ActionPlan
-	namedTasks            map[string][]*Task
-	namedAssets           map[string][]*Asset
-	namedEntities         map[string][]*Entity
-	namedScans            map[string][]*Scan
-	namedComments         map[string][]*Note
-	namedDiscussions      map[string][]*Discussion
-	namedReviews          map[string][]*Review
-	namedRemediations     map[string][]*Remediation
+	namedBlockedGroups      map[string][]*Group
+	namedEditors            map[string][]*Group
+	namedViewers            map[string][]*Group
+	namedControls           map[string][]*Control
+	namedSubcontrols        map[string][]*Subcontrol
+	namedProcedures         map[string][]*Procedure
+	namedInternalPolicies   map[string][]*InternalPolicy
+	namedPrograms           map[string][]*Program
+	namedPlatforms          map[string][]*Platform
+	namedActionPlans        map[string][]*ActionPlan
+	namedTasks              map[string][]*Task
+	namedAssets             map[string][]*Asset
+	namedEntities           map[string][]*Entity
+	namedScans              map[string][]*Scan
+	namedComments           map[string][]*Note
+	namedDiscussions        map[string][]*Discussion
+	namedReviews            map[string][]*Review
+	namedRemediations       map[string][]*Remediation
+	namedWorkflowObjectRefs map[string][]*WorkflowObjectRef
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -437,6 +442,15 @@ func (e RiskEdges) RemediationsOrErr() ([]*Remediation, error) {
 	return nil, &NotLoadedError{edge: "remediations"}
 }
 
+// WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
+// was not loaded in eager-loading.
+func (e RiskEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
+	if e.loadedTypes[25] {
+		return e.WorkflowObjectRefs, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_object_refs"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Risk) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -446,7 +460,7 @@ func (*Risk) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case risk.FieldTags, risk.FieldMitigationJSON, risk.FieldDetailsJSON, risk.FieldBusinessCostsJSON:
 			values[i] = new([]byte)
-		case risk.FieldReviewRequired:
+		case risk.FieldWorkflowEligibleMarker, risk.FieldReviewRequired:
 			values[i] = new(sql.NullBool)
 		case risk.FieldScore, risk.FieldResidualScore:
 			values[i] = new(sql.NullInt64)
@@ -595,6 +609,12 @@ func (_m *Risk) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
 			} else if value.Valid {
 				_m.ScopeID = value.String
+			}
+		case risk.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
+			} else if value.Valid {
+				_m.WorkflowEligibleMarker = value.Bool
 			}
 		case risk.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -931,6 +951,11 @@ func (_m *Risk) QueryRemediations() *RemediationQuery {
 	return NewRiskClient(_m.config).QueryRemediations(_m)
 }
 
+// QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the Risk entity.
+func (_m *Risk) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	return NewRiskClient(_m.config).QueryWorkflowObjectRefs(_m)
+}
+
 // Update returns a builder for updating this Risk.
 // Note that you need to call Risk.Unwrap() before calling this method if this Risk
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -1009,6 +1034,9 @@ func (_m *Risk) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("scope_id=")
 	builder.WriteString(_m.ScopeID)
+	builder.WriteString(", ")
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)
@@ -1529,6 +1557,30 @@ func (_m *Risk) appendNamedRemediations(name string, edges ...*Remediation) {
 		_m.Edges.namedRemediations[name] = []*Remediation{}
 	} else {
 		_m.Edges.namedRemediations[name] = append(_m.Edges.namedRemediations[name], edges...)
+	}
+}
+
+// NamedWorkflowObjectRefs returns the WorkflowObjectRefs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Risk) NamedWorkflowObjectRefs(name string) ([]*WorkflowObjectRef, error) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowObjectRefs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Risk) appendNamedWorkflowObjectRefs(name string, edges ...*WorkflowObjectRef) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		_m.Edges.namedWorkflowObjectRefs = make(map[string][]*WorkflowObjectRef)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowObjectRefs[name] = []*WorkflowObjectRef{}
+	} else {
+		_m.Edges.namedWorkflowObjectRefs[name] = append(_m.Edges.namedWorkflowObjectRefs[name], edges...)
 	}
 }
 

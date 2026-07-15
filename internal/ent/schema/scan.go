@@ -111,7 +111,7 @@ func (Scan) Fields() []ent.Field {
 			Annotations(
 				entx.CSVRef().FromColumn("GeneratedByPlatformName").MatchOn("name").CreateIfMissing(),
 			),
-		field.Strings("vulnerability_ids").
+		field.Strings("discovered_vulnerability_ids").
 			Comment("identifiers of vulnerabilities discovered during the scan").
 			Default([]string{}).
 			Optional(),

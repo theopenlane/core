@@ -447,6 +447,26 @@ func (_u *FindingUpdate) ClearFindingStatusID() *FindingUpdate {
 	return _u
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *FindingUpdate) SetWorkflowEligibleMarker(v bool) *FindingUpdate {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableWorkflowEligibleMarker(v *bool) *FindingUpdate {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *FindingUpdate) ClearWorkflowEligibleMarker() *FindingUpdate {
+	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *FindingUpdate) SetExternalID(v string) *FindingUpdate {
 	_u.mutation.SetExternalID(v)
@@ -2225,6 +2245,12 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.FindingStatusNameCleared() {
 		_spec.ClearField(finding.FieldFindingStatusName, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(finding.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(finding.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
@@ -4191,6 +4217,26 @@ func (_u *FindingUpdateOne) ClearFindingStatusID() *FindingUpdateOne {
 	return _u
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *FindingUpdateOne) SetWorkflowEligibleMarker(v bool) *FindingUpdateOne {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *FindingUpdateOne {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *FindingUpdateOne) ClearWorkflowEligibleMarker() *FindingUpdateOne {
+	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *FindingUpdateOne) SetExternalID(v string) *FindingUpdateOne {
 	_u.mutation.SetExternalID(v)
@@ -5999,6 +6045,12 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	}
 	if _u.mutation.FindingStatusNameCleared() {
 		_spec.ClearField(finding.FieldFindingStatusName, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(finding.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(finding.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(finding.FieldExternalID, field.TypeString, value)

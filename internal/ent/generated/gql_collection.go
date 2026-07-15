@@ -2680,6 +2680,95 @@ func (_q *AssessmentQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			_q.WithNamedCampaigns(alias, func(wq *CampaignQuery) {
 				*wq = *query
 			})
+
+		case "workflowObjectRefs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowObjectRefClient{config: _q.config}).Query()
+			)
+			args := newWorkflowObjectRefPaginateArgs(fieldArgs(ctx, new(WorkflowObjectRefWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowObjectRefPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Assessment) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"assessment_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(assessment.WorkflowObjectRefsColumn), ids...))
+						})
+						if err := query.GroupBy(assessment.WorkflowObjectRefsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[9] == nil {
+								nodes[i].Edges.totalCount[9] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[9][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Assessment) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowObjectRefs)
+							if nodes[i].Edges.totalCount[9] == nil {
+								nodes[i].Edges.totalCount[9] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[9][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowobjectrefImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(assessment.WorkflowObjectRefsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowObjectRefs(alias, func(wq *WorkflowObjectRefQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[assessment.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, assessment.FieldCreatedAt)
@@ -2729,6 +2818,11 @@ func (_q *AssessmentQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			if _, ok := fieldSeen[assessment.FieldSystemInternalID]; !ok {
 				selectedFields = append(selectedFields, assessment.FieldSystemInternalID)
 				fieldSeen[assessment.FieldSystemInternalID] = struct{}{}
+			}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[assessment.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, assessment.FieldWorkflowEligibleMarker)
+				fieldSeen[assessment.FieldWorkflowEligibleMarker] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[assessment.FieldName]; !ok {
@@ -3029,6 +3123,95 @@ func (_q *AssessmentResponseQuery) collectField(ctx context.Context, oneNode boo
 			_q.WithNamedVendorRiskScores(alias, func(wq *VendorRiskScoreQuery) {
 				*wq = *query
 			})
+
+		case "workflowObjectRefs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowObjectRefClient{config: _q.config}).Query()
+			)
+			args := newWorkflowObjectRefPaginateArgs(fieldArgs(ctx, new(WorkflowObjectRefWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowObjectRefPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*AssessmentResponse) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"assessment_response_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(assessmentresponse.WorkflowObjectRefsColumn), ids...))
+						})
+						if err := query.GroupBy(assessmentresponse.WorkflowObjectRefsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[7] == nil {
+								nodes[i].Edges.totalCount[7] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[7][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*AssessmentResponse) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowObjectRefs)
+							if nodes[i].Edges.totalCount[7] == nil {
+								nodes[i].Edges.totalCount[7] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[7][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowobjectrefImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(assessmentresponse.WorkflowObjectRefsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowObjectRefs(alias, func(wq *WorkflowObjectRefQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[assessmentresponse.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, assessmentresponse.FieldCreatedAt)
@@ -3058,6 +3241,11 @@ func (_q *AssessmentResponseQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[assessmentresponse.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, assessmentresponse.FieldOwnerID)
 				fieldSeen[assessmentresponse.FieldOwnerID] = struct{}{}
+			}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[assessmentresponse.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, assessmentresponse.FieldWorkflowEligibleMarker)
+				fieldSeen[assessmentresponse.FieldWorkflowEligibleMarker] = struct{}{}
 			}
 		case "assessmentID":
 			if _, ok := fieldSeen[assessmentresponse.FieldAssessmentID]; !ok {
@@ -27812,6 +28000,11 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			if _, ok := fieldSeen[finding.FieldFindingStatusID]; !ok {
 				selectedFields = append(selectedFields, finding.FieldFindingStatusID)
 				fieldSeen[finding.FieldFindingStatusID] = struct{}{}
+			}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[finding.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, finding.FieldWorkflowEligibleMarker)
+				fieldSeen[finding.FieldWorkflowEligibleMarker] = struct{}{}
 			}
 		case "externalID":
 			if _, ok := fieldSeen[finding.FieldExternalID]; !ok {
@@ -69279,6 +69472,95 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			_q.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
+
+		case "workflowObjectRefs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowObjectRefClient{config: _q.config}).Query()
+			)
+			args := newWorkflowObjectRefPaginateArgs(fieldArgs(ctx, new(WorkflowObjectRefWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowObjectRefPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Remediation) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"remediation_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(remediation.WorkflowObjectRefsColumn), ids...))
+						})
+						if err := query.GroupBy(remediation.WorkflowObjectRefsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[20] == nil {
+								nodes[i].Edges.totalCount[20] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[20][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Remediation) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowObjectRefs)
+							if nodes[i].Edges.totalCount[20] == nil {
+								nodes[i].Edges.totalCount[20] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[20][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowobjectrefImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(remediation.WorkflowObjectRefsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowObjectRefs(alias, func(wq *WorkflowObjectRefQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[remediation.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, remediation.FieldCreatedAt)
@@ -69353,6 +69635,11 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[remediation.FieldScopeID]; !ok {
 				selectedFields = append(selectedFields, remediation.FieldScopeID)
 				fieldSeen[remediation.FieldScopeID] = struct{}{}
+			}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[remediation.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, remediation.FieldWorkflowEligibleMarker)
+				fieldSeen[remediation.FieldWorkflowEligibleMarker] = struct{}{}
 			}
 		case "externalID":
 			if _, ok := fieldSeen[remediation.FieldExternalID]; !ok {
@@ -73175,6 +73462,95 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			_q.WithNamedRemediations(alias, func(wq *RemediationQuery) {
 				*wq = *query
 			})
+
+		case "workflowObjectRefs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowObjectRefClient{config: _q.config}).Query()
+			)
+			args := newWorkflowObjectRefPaginateArgs(fieldArgs(ctx, new(WorkflowObjectRefWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowObjectRefPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"risk_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(risk.WorkflowObjectRefsColumn), ids...))
+						})
+						if err := query.GroupBy(risk.WorkflowObjectRefsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[25] == nil {
+								nodes[i].Edges.totalCount[25] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[25][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Risk) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowObjectRefs)
+							if nodes[i].Edges.totalCount[25] == nil {
+								nodes[i].Edges.totalCount[25] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[25][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowobjectrefImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(risk.WorkflowObjectRefsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowObjectRefs(alias, func(wq *WorkflowObjectRefQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[risk.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, risk.FieldCreatedAt)
@@ -73254,6 +73630,11 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			if _, ok := fieldSeen[risk.FieldScopeID]; !ok {
 				selectedFields = append(selectedFields, risk.FieldScopeID)
 				fieldSeen[risk.FieldScopeID] = struct{}{}
+			}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[risk.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, risk.FieldWorkflowEligibleMarker)
+				fieldSeen[risk.FieldWorkflowEligibleMarker] = struct{}{}
 			}
 		case "externalID":
 			if _, ok := fieldSeen[risk.FieldExternalID]; !ok {
@@ -75390,10 +75771,10 @@ func (_q *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				selectedFields = append(selectedFields, scan.FieldGeneratedByPlatformID)
 				fieldSeen[scan.FieldGeneratedByPlatformID] = struct{}{}
 			}
-		case "vulnerabilityIds":
-			if _, ok := fieldSeen[scan.FieldVulnerabilityIds]; !ok {
-				selectedFields = append(selectedFields, scan.FieldVulnerabilityIds)
-				fieldSeen[scan.FieldVulnerabilityIds] = struct{}{}
+		case "discoveredVulnerabilityIds":
+			if _, ok := fieldSeen[scan.FieldDiscoveredVulnerabilityIds]; !ok {
+				selectedFields = append(selectedFields, scan.FieldDiscoveredVulnerabilityIds)
+				fieldSeen[scan.FieldDiscoveredVulnerabilityIds] = struct{}{}
 			}
 		case "status":
 			if _, ok := fieldSeen[scan.FieldStatus]; !ok {
@@ -82337,6 +82718,11 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			if _, ok := fieldSeen[task.FieldScopeID]; !ok {
 				selectedFields = append(selectedFields, task.FieldScopeID)
 				fieldSeen[task.FieldScopeID] = struct{}{}
+			}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[task.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, task.FieldWorkflowEligibleMarker)
+				fieldSeen[task.FieldWorkflowEligibleMarker] = struct{}{}
 			}
 		case "externalUUID":
 			if _, ok := fieldSeen[task.FieldExternalUUID]; !ok {
@@ -92318,6 +92704,95 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 			_q.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
+
+		case "workflowObjectRefs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowObjectRefClient{config: _q.config}).Query()
+			)
+			args := newWorkflowObjectRefPaginateArgs(fieldArgs(ctx, new(WorkflowObjectRefWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowObjectRefPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Vulnerability) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"vulnerability_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(vulnerability.WorkflowObjectRefsColumn), ids...))
+						})
+						if err := query.GroupBy(vulnerability.WorkflowObjectRefsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[26] == nil {
+								nodes[i].Edges.totalCount[26] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[26][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Vulnerability) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowObjectRefs)
+							if nodes[i].Edges.totalCount[26] == nil {
+								nodes[i].Edges.totalCount[26] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[26][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowobjectrefImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(vulnerability.WorkflowObjectRefsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowObjectRefs(alias, func(wq *WorkflowObjectRefQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[vulnerability.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, vulnerability.FieldCreatedAt)
@@ -92432,6 +92907,11 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 			if _, ok := fieldSeen[vulnerability.FieldVulnerabilityStatusID]; !ok {
 				selectedFields = append(selectedFields, vulnerability.FieldVulnerabilityStatusID)
 				fieldSeen[vulnerability.FieldVulnerabilityStatusID] = struct{}{}
+			}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[vulnerability.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, vulnerability.FieldWorkflowEligibleMarker)
+				fieldSeen[vulnerability.FieldWorkflowEligibleMarker] = struct{}{}
 			}
 		case "externalOwnerID":
 			if _, ok := fieldSeen[vulnerability.FieldExternalOwnerID]; !ok {
@@ -93110,6 +93590,11 @@ func (_q *WorkflowAssignmentQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[workflowassignment.FieldInvalidationMetadata]; !ok {
 				selectedFields = append(selectedFields, workflowassignment.FieldInvalidationMetadata)
 				fieldSeen[workflowassignment.FieldInvalidationMetadata] = struct{}{}
+			}
+		case "outcomeMetadata":
+			if _, ok := fieldSeen[workflowassignment.FieldOutcomeMetadata]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldOutcomeMetadata)
+				fieldSeen[workflowassignment.FieldOutcomeMetadata] = struct{}{}
 			}
 		case "decidedAt":
 			if _, ok := fieldSeen[workflowassignment.FieldDecidedAt]; !ok {
@@ -94640,6 +95125,126 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 				fieldSeen[workflowinstance.FieldPlatformID] = struct{}{}
 			}
 
+		case "assessment":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&AssessmentClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, assessmentImplementors)...); err != nil {
+				return err
+			}
+			_q.withAssessment = query
+			if _, ok := fieldSeen[workflowinstance.FieldAssessmentID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldAssessmentID)
+				fieldSeen[workflowinstance.FieldAssessmentID] = struct{}{}
+			}
+
+		case "assessmentResponse":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&AssessmentResponseClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, assessmentresponseImplementors)...); err != nil {
+				return err
+			}
+			_q.withAssessmentResponse = query
+			if _, ok := fieldSeen[workflowinstance.FieldAssessmentResponseID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldAssessmentResponseID)
+				fieldSeen[workflowinstance.FieldAssessmentResponseID] = struct{}{}
+			}
+
+		case "finding":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FindingClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, findingImplementors)...); err != nil {
+				return err
+			}
+			_q.withFinding = query
+			if _, ok := fieldSeen[workflowinstance.FieldFindingID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldFindingID)
+				fieldSeen[workflowinstance.FieldFindingID] = struct{}{}
+			}
+
+		case "integration":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&IntegrationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, integrationImplementors)...); err != nil {
+				return err
+			}
+			_q.withIntegration = query
+			if _, ok := fieldSeen[workflowinstance.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldIntegrationID)
+				fieldSeen[workflowinstance.FieldIntegrationID] = struct{}{}
+			}
+
+		case "remediation":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RemediationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, remediationImplementors)...); err != nil {
+				return err
+			}
+			_q.withRemediation = query
+			if _, ok := fieldSeen[workflowinstance.FieldRemediationID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldRemediationID)
+				fieldSeen[workflowinstance.FieldRemediationID] = struct{}{}
+			}
+
+		case "risk":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RiskClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, riskImplementors)...); err != nil {
+				return err
+			}
+			_q.withRisk = query
+			if _, ok := fieldSeen[workflowinstance.FieldRiskID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldRiskID)
+				fieldSeen[workflowinstance.FieldRiskID] = struct{}{}
+			}
+
+		case "task":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TaskClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, taskImplementors)...); err != nil {
+				return err
+			}
+			_q.withTask = query
+			if _, ok := fieldSeen[workflowinstance.FieldTaskID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldTaskID)
+				fieldSeen[workflowinstance.FieldTaskID] = struct{}{}
+			}
+
+		case "vulnerability":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&VulnerabilityClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, vulnerabilityImplementors)...); err != nil {
+				return err
+			}
+			_q.withVulnerability = query
+			if _, ok := fieldSeen[workflowinstance.FieldVulnerabilityID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldVulnerabilityID)
+				fieldSeen[workflowinstance.FieldVulnerabilityID] = struct{}{}
+			}
+
 		case "workflowAssignments":
 			var (
 				alias = field.Alias
@@ -94683,10 +95288,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[12] == nil {
-								nodes[i].Edges.totalCount[12] = make(map[string]int)
+							if nodes[i].Edges.totalCount[20] == nil {
+								nodes[i].Edges.totalCount[20] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[12][alias] = n
+							nodes[i].Edges.totalCount[20][alias] = n
 						}
 						return nil
 					})
@@ -94694,10 +95299,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*WorkflowInstance) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.WorkflowAssignments)
-							if nodes[i].Edges.totalCount[12] == nil {
-								nodes[i].Edges.totalCount[12] = make(map[string]int)
+							if nodes[i].Edges.totalCount[20] == nil {
+								nodes[i].Edges.totalCount[20] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[12][alias] = n
+							nodes[i].Edges.totalCount[20][alias] = n
 						}
 						return nil
 					})
@@ -94772,10 +95377,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[13] == nil {
-								nodes[i].Edges.totalCount[13] = make(map[string]int)
+							if nodes[i].Edges.totalCount[21] == nil {
+								nodes[i].Edges.totalCount[21] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[13][alias] = n
+							nodes[i].Edges.totalCount[21][alias] = n
 						}
 						return nil
 					})
@@ -94783,10 +95388,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*WorkflowInstance) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.WorkflowEvents)
-							if nodes[i].Edges.totalCount[13] == nil {
-								nodes[i].Edges.totalCount[13] = make(map[string]int)
+							if nodes[i].Edges.totalCount[21] == nil {
+								nodes[i].Edges.totalCount[21] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[13][alias] = n
+							nodes[i].Edges.totalCount[21][alias] = n
 						}
 						return nil
 					})
@@ -94861,10 +95466,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[14] == nil {
-								nodes[i].Edges.totalCount[14] = make(map[string]int)
+							if nodes[i].Edges.totalCount[22] == nil {
+								nodes[i].Edges.totalCount[22] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[14][alias] = n
+							nodes[i].Edges.totalCount[22][alias] = n
 						}
 						return nil
 					})
@@ -94872,10 +95477,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*WorkflowInstance) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.EmailTemplates)
-							if nodes[i].Edges.totalCount[14] == nil {
-								nodes[i].Edges.totalCount[14] = make(map[string]int)
+							if nodes[i].Edges.totalCount[22] == nil {
+								nodes[i].Edges.totalCount[22] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[14][alias] = n
+							nodes[i].Edges.totalCount[22][alias] = n
 						}
 						return nil
 					})
@@ -94950,10 +95555,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[15] == nil {
-								nodes[i].Edges.totalCount[15] = make(map[string]int)
+							if nodes[i].Edges.totalCount[23] == nil {
+								nodes[i].Edges.totalCount[23] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[15][alias] = n
+							nodes[i].Edges.totalCount[23][alias] = n
 						}
 						return nil
 					})
@@ -94961,10 +95566,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*WorkflowInstance) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.WorkflowObjectRefs)
-							if nodes[i].Edges.totalCount[15] == nil {
-								nodes[i].Edges.totalCount[15] = make(map[string]int)
+							if nodes[i].Edges.totalCount[23] == nil {
+								nodes[i].Edges.totalCount[23] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[15][alias] = n
+							nodes[i].Edges.totalCount[23][alias] = n
 						}
 						return nil
 					})
@@ -95119,6 +95724,46 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[workflowinstance.FieldPlatformID]; !ok {
 				selectedFields = append(selectedFields, workflowinstance.FieldPlatformID)
 				fieldSeen[workflowinstance.FieldPlatformID] = struct{}{}
+			}
+		case "assessmentID":
+			if _, ok := fieldSeen[workflowinstance.FieldAssessmentID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldAssessmentID)
+				fieldSeen[workflowinstance.FieldAssessmentID] = struct{}{}
+			}
+		case "assessmentResponseID":
+			if _, ok := fieldSeen[workflowinstance.FieldAssessmentResponseID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldAssessmentResponseID)
+				fieldSeen[workflowinstance.FieldAssessmentResponseID] = struct{}{}
+			}
+		case "findingID":
+			if _, ok := fieldSeen[workflowinstance.FieldFindingID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldFindingID)
+				fieldSeen[workflowinstance.FieldFindingID] = struct{}{}
+			}
+		case "integrationID":
+			if _, ok := fieldSeen[workflowinstance.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldIntegrationID)
+				fieldSeen[workflowinstance.FieldIntegrationID] = struct{}{}
+			}
+		case "remediationID":
+			if _, ok := fieldSeen[workflowinstance.FieldRemediationID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldRemediationID)
+				fieldSeen[workflowinstance.FieldRemediationID] = struct{}{}
+			}
+		case "riskID":
+			if _, ok := fieldSeen[workflowinstance.FieldRiskID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldRiskID)
+				fieldSeen[workflowinstance.FieldRiskID] = struct{}{}
+			}
+		case "taskID":
+			if _, ok := fieldSeen[workflowinstance.FieldTaskID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldTaskID)
+				fieldSeen[workflowinstance.FieldTaskID] = struct{}{}
+			}
+		case "vulnerabilityID":
+			if _, ok := fieldSeen[workflowinstance.FieldVulnerabilityID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldVulnerabilityID)
+				fieldSeen[workflowinstance.FieldVulnerabilityID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -95465,6 +96110,81 @@ func (_q *WorkflowObjectRefQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, workflowobjectref.FieldPlatformID)
 				fieldSeen[workflowobjectref.FieldPlatformID] = struct{}{}
 			}
+
+		case "vulnerability":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&VulnerabilityClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, vulnerabilityImplementors)...); err != nil {
+				return err
+			}
+			_q.withVulnerability = query
+			if _, ok := fieldSeen[workflowobjectref.FieldVulnerabilityID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldVulnerabilityID)
+				fieldSeen[workflowobjectref.FieldVulnerabilityID] = struct{}{}
+			}
+
+		case "risk":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RiskClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, riskImplementors)...); err != nil {
+				return err
+			}
+			_q.withRisk = query
+			if _, ok := fieldSeen[workflowobjectref.FieldRiskID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldRiskID)
+				fieldSeen[workflowobjectref.FieldRiskID] = struct{}{}
+			}
+
+		case "assessment":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&AssessmentClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, assessmentImplementors)...); err != nil {
+				return err
+			}
+			_q.withAssessment = query
+			if _, ok := fieldSeen[workflowobjectref.FieldAssessmentID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldAssessmentID)
+				fieldSeen[workflowobjectref.FieldAssessmentID] = struct{}{}
+			}
+
+		case "assessmentResponse":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&AssessmentResponseClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, assessmentresponseImplementors)...); err != nil {
+				return err
+			}
+			_q.withAssessmentResponse = query
+			if _, ok := fieldSeen[workflowobjectref.FieldAssessmentResponseID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldAssessmentResponseID)
+				fieldSeen[workflowobjectref.FieldAssessmentResponseID] = struct{}{}
+			}
+
+		case "remediation":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RemediationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, remediationImplementors)...); err != nil {
+				return err
+			}
+			_q.withRemediation = query
+			if _, ok := fieldSeen[workflowobjectref.FieldRemediationID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldRemediationID)
+				fieldSeen[workflowobjectref.FieldRemediationID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[workflowobjectref.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, workflowobjectref.FieldCreatedAt)
@@ -95579,6 +96299,31 @@ func (_q *WorkflowObjectRefQuery) collectField(ctx context.Context, oneNode bool
 			if _, ok := fieldSeen[workflowobjectref.FieldPlatformID]; !ok {
 				selectedFields = append(selectedFields, workflowobjectref.FieldPlatformID)
 				fieldSeen[workflowobjectref.FieldPlatformID] = struct{}{}
+			}
+		case "vulnerabilityID":
+			if _, ok := fieldSeen[workflowobjectref.FieldVulnerabilityID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldVulnerabilityID)
+				fieldSeen[workflowobjectref.FieldVulnerabilityID] = struct{}{}
+			}
+		case "riskID":
+			if _, ok := fieldSeen[workflowobjectref.FieldRiskID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldRiskID)
+				fieldSeen[workflowobjectref.FieldRiskID] = struct{}{}
+			}
+		case "assessmentID":
+			if _, ok := fieldSeen[workflowobjectref.FieldAssessmentID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldAssessmentID)
+				fieldSeen[workflowobjectref.FieldAssessmentID] = struct{}{}
+			}
+		case "assessmentResponseID":
+			if _, ok := fieldSeen[workflowobjectref.FieldAssessmentResponseID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldAssessmentResponseID)
+				fieldSeen[workflowobjectref.FieldAssessmentResponseID] = struct{}{}
+			}
+		case "remediationID":
+			if _, ok := fieldSeen[workflowobjectref.FieldRemediationID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldRemediationID)
+				fieldSeen[workflowobjectref.FieldRemediationID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -95744,6 +96489,11 @@ func (_q *WorkflowProposalQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[workflowproposal.FieldChanges]; !ok {
 				selectedFields = append(selectedFields, workflowproposal.FieldChanges)
 				fieldSeen[workflowproposal.FieldChanges] = struct{}{}
+			}
+		case "proposedChanges":
+			if _, ok := fieldSeen[workflowproposal.FieldProposedChanges]; !ok {
+				selectedFields = append(selectedFields, workflowproposal.FieldProposedChanges)
+				fieldSeen[workflowproposal.FieldProposedChanges] = struct{}{}
 			}
 		case "proposedHash":
 			if _, ok := fieldSeen[workflowproposal.FieldProposedHash]; !ok {

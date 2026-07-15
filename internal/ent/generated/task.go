@@ -55,6 +55,8 @@ type Task struct {
 	ScopeName string `json:"scope_name,omitempty"`
 	// the scope of the task
 	ScopeID string `json:"scope_id,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// stable external UUID for deterministic OSCAL export and round-tripping
 	ExternalUUID *string `json:"external_uuid,omitempty"`
 	// the title of the task
@@ -431,7 +433,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case task.FieldTags, task.FieldDetailsJSON, task.FieldExternalReferenceURL:
 			values[i] = new([]byte)
-		case task.FieldSystemGenerated, task.FieldIsTemplate:
+		case task.FieldWorkflowEligibleMarker, task.FieldSystemGenerated, task.FieldIsTemplate:
 			values[i] = new(sql.NullBool)
 		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldUpdatedByImpersonator, task.FieldDeletedBy, task.FieldDisplayID, task.FieldOwnerID, task.FieldTaskKindName, task.FieldTaskKindID, task.FieldEnvironmentName, task.FieldEnvironmentID, task.FieldScopeName, task.FieldScopeID, task.FieldExternalUUID, task.FieldTitle, task.FieldDetails, task.FieldStatus, task.FieldAssigneeID, task.FieldAssignerID, task.FieldIdempotencyKey, task.FieldParentTaskID:
 			values[i] = new(sql.NullString)
@@ -564,6 +566,12 @@ func (_m *Task) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
 			} else if value.Valid {
 				_m.ScopeID = value.String
+			}
+		case task.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
+			} else if value.Valid {
+				_m.WorkflowEligibleMarker = value.Bool
 			}
 		case task.FieldExternalUUID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -900,6 +908,9 @@ func (_m *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("scope_id=")
 	builder.WriteString(_m.ScopeID)
+	builder.WriteString(", ")
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteString(", ")
 	if v := _m.ExternalUUID; v != nil {
 		builder.WriteString("external_uuid=")

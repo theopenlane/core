@@ -281,6 +281,20 @@ func (_c *RemediationHistoryCreate) SetNillableScopeID(v *string) *RemediationHi
 	return _c
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *RemediationHistoryCreate) SetWorkflowEligibleMarker(v bool) *RemediationHistoryCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *RemediationHistoryCreate) SetNillableWorkflowEligibleMarker(v *bool) *RemediationHistoryCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *RemediationHistoryCreate) SetExternalID(v string) *RemediationHistoryCreate {
 	_c.mutation.SetExternalID(v)
@@ -633,6 +647,10 @@ func (_c *RemediationHistoryCreate) defaults() error {
 		v := remediationhistory.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := remediationhistory.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
+	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := remediationhistory.DefaultStatus
 		_c.mutation.SetStatus(v)
@@ -783,6 +801,10 @@ func (_c *RemediationHistoryCreate) createSpec() (*RemediationHistory, *sqlgraph
 	if value, ok := _c.mutation.ScopeID(); ok {
 		_spec.SetField(remediationhistory.FieldScopeID, field.TypeString, value)
 		_node.ScopeID = value
+	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(remediationhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(remediationhistory.FieldExternalID, field.TypeString, value)

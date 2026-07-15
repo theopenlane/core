@@ -7,6 +7,16 @@ import (
 	"github.com/wundergraph/astjson"
 )
 
+// Decode unmarshals a json.RawMessage into a typed value
+func Decode[T any](raw json.RawMessage) (T, error) {
+	var result T
+	if err := json.Unmarshal(raw, &result); err != nil {
+		return result, err
+	}
+
+	return result, nil
+}
+
 // RoundTrip marshals input to JSON and unmarshals it into output
 func RoundTrip(input any, output any) error {
 	switch typed := input.(type) {

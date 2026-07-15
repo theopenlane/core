@@ -6,6 +6,7 @@ mutation CreateBulkCSVScan ($input: Upload!) {
 			assignedToUserID
 			createdAt
 			createdBy
+			discoveredVulnerabilityIds
 			environmentID
 			environmentName
 			generatedByPlatformID
@@ -30,7 +31,6 @@ mutation CreateBulkCSVScan ($input: Upload!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
-			vulnerabilityIds
 		}
 	}
 }
@@ -42,6 +42,7 @@ mutation CreateBulkScan ($input: [CreateScanInput!]) {
 			assignedToUserID
 			createdAt
 			createdBy
+			discoveredVulnerabilityIds
 			environmentID
 			environmentName
 			generatedByPlatformID
@@ -66,7 +67,6 @@ mutation CreateBulkScan ($input: [CreateScanInput!]) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
-			vulnerabilityIds
 		}
 	}
 }
@@ -78,6 +78,7 @@ mutation CreateScan ($input: CreateScanInput!) {
 			assignedToUserID
 			createdAt
 			createdBy
+			discoveredVulnerabilityIds
 			environmentID
 			environmentName
 			generatedByPlatformID
@@ -102,7 +103,6 @@ mutation CreateScan ($input: CreateScanInput!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
-			vulnerabilityIds
 		}
 	}
 }
@@ -144,6 +144,7 @@ query GetScanByID ($scanId: ID!) {
 		assignedToUserID
 		createdAt
 		createdBy
+		discoveredVulnerabilityIds
 		environmentID
 		environmentName
 		generatedByPlatformID
@@ -168,7 +169,6 @@ query GetScanByID ($scanId: ID!) {
 		updatedAt
 		updatedBy
 		updatedByImpersonator
-		vulnerabilityIds
 	}
 }
 query GetScans ($first: Int, $last: Int, $where: ScanWhereInput) {
@@ -205,6 +205,7 @@ mutation UpdateScan ($updateScanId: ID!, $input: UpdateScanInput!) {
 			assignedToUserID
 			createdAt
 			createdBy
+			discoveredVulnerabilityIds
 			environmentID
 			environmentName
 			generatedByPlatformID
@@ -229,7 +230,6 @@ mutation UpdateScan ($updateScanId: ID!, $input: UpdateScanInput!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
-			vulnerabilityIds
 		}
 	}
 }

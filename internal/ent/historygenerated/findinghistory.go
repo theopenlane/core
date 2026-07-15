@@ -79,6 +79,8 @@ type FindingHistory struct {
 	FindingStatusName string `json:"finding_status_name,omitempty"`
 	// the status of the finding
 	FindingStatusID string `json:"finding_status_id,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// external identifier from the integration source for the finding
 	ExternalID string `json:"external_id,omitempty"`
 	// incoming source severity
@@ -167,7 +169,7 @@ func (*FindingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case findinghistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case findinghistory.FieldSystemOwned, findinghistory.FieldOpen, findinghistory.FieldBlocksProduction, findinghistory.FieldProduction, findinghistory.FieldPublic, findinghistory.FieldValidated:
+		case findinghistory.FieldSystemOwned, findinghistory.FieldWorkflowEligibleMarker, findinghistory.FieldOpen, findinghistory.FieldBlocksProduction, findinghistory.FieldProduction, findinghistory.FieldPublic, findinghistory.FieldValidated:
 			values[i] = new(sql.NullBool)
 		case findinghistory.FieldNumericSeverity, findinghistory.FieldScore, findinghistory.FieldImpact, findinghistory.FieldExploitability:
 			values[i] = new(sql.NullFloat64)
@@ -370,6 +372,12 @@ func (_m *FindingHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field finding_status_id", values[i])
 			} else if value.Valid {
 				_m.FindingStatusID = value.String
+			}
+		case findinghistory.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
+			} else if value.Valid {
+				_m.WorkflowEligibleMarker = value.Bool
 			}
 		case findinghistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -735,6 +743,9 @@ func (_m *FindingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("finding_status_id=")
 	builder.WriteString(_m.FindingStatusID)
+	builder.WriteString(", ")
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

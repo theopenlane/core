@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
@@ -178,6 +179,26 @@ func (_u *WorkflowProposalUpdate) SetChanges(v map[string]interface{}) *Workflow
 // ClearChanges clears the value of the "changes" field.
 func (_u *WorkflowProposalUpdate) ClearChanges() *WorkflowProposalUpdate {
 	_u.mutation.ClearChanges()
+	return _u
+}
+
+// SetProposedChanges sets the "proposed_changes" field.
+func (_u *WorkflowProposalUpdate) SetProposedChanges(v models.WorkflowProposedChanges) *WorkflowProposalUpdate {
+	_u.mutation.SetProposedChanges(v)
+	return _u
+}
+
+// SetNillableProposedChanges sets the "proposed_changes" field if the given value is not nil.
+func (_u *WorkflowProposalUpdate) SetNillableProposedChanges(v *models.WorkflowProposedChanges) *WorkflowProposalUpdate {
+	if v != nil {
+		_u.SetProposedChanges(*v)
+	}
+	return _u
+}
+
+// ClearProposedChanges clears the value of the "proposed_changes" field.
+func (_u *WorkflowProposalUpdate) ClearProposedChanges() *WorkflowProposalUpdate {
+	_u.mutation.ClearProposedChanges()
 	return _u
 }
 
@@ -474,6 +495,12 @@ func (_u *WorkflowProposalUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if _u.mutation.ChangesCleared() {
 		_spec.ClearField(workflowproposal.FieldChanges, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.ProposedChanges(); ok {
+		_spec.SetField(workflowproposal.FieldProposedChanges, field.TypeJSON, value)
+	}
+	if _u.mutation.ProposedChangesCleared() {
+		_spec.ClearField(workflowproposal.FieldProposedChanges, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.ProposedHash(); ok {
 		_spec.SetField(workflowproposal.FieldProposedHash, field.TypeString, value)
 	}
@@ -768,6 +795,26 @@ func (_u *WorkflowProposalUpdateOne) SetChanges(v map[string]interface{}) *Workf
 // ClearChanges clears the value of the "changes" field.
 func (_u *WorkflowProposalUpdateOne) ClearChanges() *WorkflowProposalUpdateOne {
 	_u.mutation.ClearChanges()
+	return _u
+}
+
+// SetProposedChanges sets the "proposed_changes" field.
+func (_u *WorkflowProposalUpdateOne) SetProposedChanges(v models.WorkflowProposedChanges) *WorkflowProposalUpdateOne {
+	_u.mutation.SetProposedChanges(v)
+	return _u
+}
+
+// SetNillableProposedChanges sets the "proposed_changes" field if the given value is not nil.
+func (_u *WorkflowProposalUpdateOne) SetNillableProposedChanges(v *models.WorkflowProposedChanges) *WorkflowProposalUpdateOne {
+	if v != nil {
+		_u.SetProposedChanges(*v)
+	}
+	return _u
+}
+
+// ClearProposedChanges clears the value of the "proposed_changes" field.
+func (_u *WorkflowProposalUpdateOne) ClearProposedChanges() *WorkflowProposalUpdateOne {
+	_u.mutation.ClearProposedChanges()
 	return _u
 }
 
@@ -1093,6 +1140,12 @@ func (_u *WorkflowProposalUpdateOne) sqlSave(ctx context.Context) (_node *Workfl
 	}
 	if _u.mutation.ChangesCleared() {
 		_spec.ClearField(workflowproposal.FieldChanges, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ProposedChanges(); ok {
+		_spec.SetField(workflowproposal.FieldProposedChanges, field.TypeJSON, value)
+	}
+	if _u.mutation.ProposedChangesCleared() {
+		_spec.ClearField(workflowproposal.FieldProposedChanges, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ProposedHash(); ok {
 		_spec.SetField(workflowproposal.FieldProposedHash, field.TypeString, value)

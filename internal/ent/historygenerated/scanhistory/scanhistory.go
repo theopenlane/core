@@ -84,8 +84,8 @@ const (
 	FieldPerformedByGroupID = "performed_by_group_id"
 	// FieldGeneratedByPlatformID holds the string denoting the generated_by_platform_id field in the database.
 	FieldGeneratedByPlatformID = "generated_by_platform_id"
-	// FieldVulnerabilityIds holds the string denoting the vulnerability_ids field in the database.
-	FieldVulnerabilityIds = "vulnerability_ids"
+	// FieldDiscoveredVulnerabilityIds holds the string denoting the discovered_vulnerability_ids field in the database.
+	FieldDiscoveredVulnerabilityIds = "discovered_vulnerability_ids"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// Table holds the table name of the scanhistory in the database.
@@ -127,7 +127,7 @@ var Columns = []string{
 	FieldPerformedByUserID,
 	FieldPerformedByGroupID,
 	FieldGeneratedByPlatformID,
-	FieldVulnerabilityIds,
+	FieldDiscoveredVulnerabilityIds,
 	FieldStatus,
 }
 
@@ -160,8 +160,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
-	// DefaultVulnerabilityIds holds the default value on creation for the "vulnerability_ids" field.
-	DefaultVulnerabilityIds []string
+	// DefaultDiscoveredVulnerabilityIds holds the default value on creation for the "discovered_vulnerability_ids" field.
+	DefaultDiscoveredVulnerabilityIds []string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )

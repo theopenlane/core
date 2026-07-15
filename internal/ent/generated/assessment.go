@@ -45,6 +45,8 @@ type Assessment struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// the name of the assessment, e.g. cloud providers, marketing team
 	Name string `json:"name,omitempty"`
 	// AssessmentType holds the value of the "assessment_type" field.
@@ -86,11 +88,13 @@ type AssessmentEdges struct {
 	AssessmentResponses []*AssessmentResponse `json:"assessment_responses,omitempty"`
 	// Campaigns holds the value of the campaigns edge.
 	Campaigns []*Campaign `json:"campaigns,omitempty"`
+	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
+	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [9]bool
+	loadedTypes [10]bool
 	// totalCount holds the count of the edges above.
-	totalCount [9]map[string]int
+	totalCount [10]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
@@ -99,6 +103,7 @@ type AssessmentEdges struct {
 	namedIdentityHolders     map[string][]*IdentityHolder
 	namedAssessmentResponses map[string][]*AssessmentResponse
 	namedCampaigns           map[string][]*Campaign
+	namedWorkflowObjectRefs  map[string][]*WorkflowObjectRef
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -186,6 +191,15 @@ func (e AssessmentEdges) CampaignsOrErr() ([]*Campaign, error) {
 	return nil, &NotLoadedError{edge: "campaigns"}
 }
 
+// WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
+// was not loaded in eager-loading.
+func (e AssessmentEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
+	if e.loadedTypes[9] {
+		return e.WorkflowObjectRefs, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_object_refs"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Assessment) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -193,7 +207,7 @@ func (*Assessment) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case assessment.FieldTags, assessment.FieldJsonconfig, assessment.FieldUischema:
 			values[i] = new([]byte)
-		case assessment.FieldSystemOwned:
+		case assessment.FieldSystemOwned, assessment.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
 		case assessment.FieldResponseDueDuration:
 			values[i] = new(sql.NullInt64)
@@ -299,6 +313,12 @@ func (_m *Assessment) assignValues(columns []string, values []any) error {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
 			}
+		case assessment.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
+			} else if value.Valid {
+				_m.WorkflowEligibleMarker = value.Bool
+			}
 		case assessment.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -397,6 +417,11 @@ func (_m *Assessment) QueryCampaigns() *CampaignQuery {
 	return NewAssessmentClient(_m.config).QueryCampaigns(_m)
 }
 
+// QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the Assessment entity.
+func (_m *Assessment) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	return NewAssessmentClient(_m.config).QueryWorkflowObjectRefs(_m)
+}
+
 // Update returns a builder for updating this Assessment.
 // Note that you need to call Assessment.Unwrap() before calling this method if this Assessment
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -461,6 +486,9 @@ func (_m *Assessment) String() string {
 		builder.WriteString("system_internal_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
@@ -648,6 +676,30 @@ func (_m *Assessment) appendNamedCampaigns(name string, edges ...*Campaign) {
 		_m.Edges.namedCampaigns[name] = []*Campaign{}
 	} else {
 		_m.Edges.namedCampaigns[name] = append(_m.Edges.namedCampaigns[name], edges...)
+	}
+}
+
+// NamedWorkflowObjectRefs returns the WorkflowObjectRefs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Assessment) NamedWorkflowObjectRefs(name string) ([]*WorkflowObjectRef, error) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowObjectRefs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Assessment) appendNamedWorkflowObjectRefs(name string, edges ...*WorkflowObjectRef) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		_m.Edges.namedWorkflowObjectRefs = make(map[string][]*WorkflowObjectRef)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowObjectRefs[name] = []*WorkflowObjectRef{}
+	} else {
+		_m.Edges.namedWorkflowObjectRefs[name] = append(_m.Edges.namedWorkflowObjectRefs[name], edges...)
 	}
 }
 

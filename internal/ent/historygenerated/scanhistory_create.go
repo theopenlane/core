@@ -441,9 +441,9 @@ func (_c *ScanHistoryCreate) SetNillableGeneratedByPlatformID(v *string) *ScanHi
 	return _c
 }
 
-// SetVulnerabilityIds sets the "vulnerability_ids" field.
-func (_c *ScanHistoryCreate) SetVulnerabilityIds(v []string) *ScanHistoryCreate {
-	_c.mutation.SetVulnerabilityIds(v)
+// SetDiscoveredVulnerabilityIds sets the "discovered_vulnerability_ids" field.
+func (_c *ScanHistoryCreate) SetDiscoveredVulnerabilityIds(v []string) *ScanHistoryCreate {
+	_c.mutation.SetDiscoveredVulnerabilityIds(v)
 	return _c
 }
 
@@ -541,9 +541,9 @@ func (_c *ScanHistoryCreate) defaults() error {
 		v := scanhistory.DefaultScanType
 		_c.mutation.SetScanType(v)
 	}
-	if _, ok := _c.mutation.VulnerabilityIds(); !ok {
-		v := scanhistory.DefaultVulnerabilityIds
-		_c.mutation.SetVulnerabilityIds(v)
+	if _, ok := _c.mutation.DiscoveredVulnerabilityIds(); !ok {
+		v := scanhistory.DefaultDiscoveredVulnerabilityIds
+		_c.mutation.SetDiscoveredVulnerabilityIds(v)
 	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := scanhistory.DefaultStatus
@@ -760,9 +760,9 @@ func (_c *ScanHistoryCreate) createSpec() (*ScanHistory, *sqlgraph.CreateSpec) {
 		_spec.SetField(scanhistory.FieldGeneratedByPlatformID, field.TypeString, value)
 		_node.GeneratedByPlatformID = value
 	}
-	if value, ok := _c.mutation.VulnerabilityIds(); ok {
-		_spec.SetField(scanhistory.FieldVulnerabilityIds, field.TypeJSON, value)
-		_node.VulnerabilityIds = value
+	if value, ok := _c.mutation.DiscoveredVulnerabilityIds(); ok {
+		_spec.SetField(scanhistory.FieldDiscoveredVulnerabilityIds, field.TypeJSON, value)
+		_node.DiscoveredVulnerabilityIds = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(scanhistory.FieldStatus, field.TypeEnum, value)

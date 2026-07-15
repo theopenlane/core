@@ -33,6 +33,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -278,6 +279,26 @@ func (_u *RemediationUpdate) SetNillableScopeID(v *string) *RemediationUpdate {
 // ClearScopeID clears the value of the "scope_id" field.
 func (_u *RemediationUpdate) ClearScopeID() *RemediationUpdate {
 	_u.mutation.ClearScopeID()
+	return _u
+}
+
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *RemediationUpdate) SetWorkflowEligibleMarker(v bool) *RemediationUpdate {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *RemediationUpdate) SetNillableWorkflowEligibleMarker(v *bool) *RemediationUpdate {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *RemediationUpdate) ClearWorkflowEligibleMarker() *RemediationUpdate {
+	_u.mutation.ClearWorkflowEligibleMarker()
 	return _u
 }
 
@@ -938,6 +959,21 @@ func (_u *RemediationUpdate) AddFiles(v ...*File) *RemediationUpdate {
 	return _u.AddFileIDs(ids...)
 }
 
+// AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
+func (_u *RemediationUpdate) AddWorkflowObjectRefIDs(ids ...string) *RemediationUpdate {
+	_u.mutation.AddWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// AddWorkflowObjectRefs adds the "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *RemediationUpdate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *RemediationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowObjectRefIDs(ids...)
+}
+
 // Mutation returns the RemediationMutation object of the builder.
 func (_u *RemediationUpdate) Mutation() *RemediationMutation {
 	return _u.mutation
@@ -1312,6 +1348,27 @@ func (_u *RemediationUpdate) RemoveFiles(v ...*File) *RemediationUpdate {
 	return _u.RemoveFileIDs(ids...)
 }
 
+// ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *RemediationUpdate) ClearWorkflowObjectRefs() *RemediationUpdate {
+	_u.mutation.ClearWorkflowObjectRefs()
+	return _u
+}
+
+// RemoveWorkflowObjectRefIDs removes the "workflow_object_refs" edge to WorkflowObjectRef entities by IDs.
+func (_u *RemediationUpdate) RemoveWorkflowObjectRefIDs(ids ...string) *RemediationUpdate {
+	_u.mutation.RemoveWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowObjectRefs removes "workflow_object_refs" edges to WorkflowObjectRef entities.
+func (_u *RemediationUpdate) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRef) *RemediationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowObjectRefIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *RemediationUpdate) Save(ctx context.Context) (int, error) {
 	if err := _u.defaults(); err != nil {
@@ -1455,6 +1512,12 @@ func (_u *RemediationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(remediation.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(remediation.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(remediation.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(remediation.FieldExternalID, field.TypeString, value)
@@ -2454,6 +2517,54 @@ func (_u *RemediationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   remediation.WorkflowObjectRefsTable,
+			Columns: []string{remediation.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   remediation.WorkflowObjectRefsTable,
+			Columns: []string{remediation.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   remediation.WorkflowObjectRefsTable,
+			Columns: []string{remediation.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.Remediation
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -2705,6 +2816,26 @@ func (_u *RemediationUpdateOne) SetNillableScopeID(v *string) *RemediationUpdate
 // ClearScopeID clears the value of the "scope_id" field.
 func (_u *RemediationUpdateOne) ClearScopeID() *RemediationUpdateOne {
 	_u.mutation.ClearScopeID()
+	return _u
+}
+
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *RemediationUpdateOne) SetWorkflowEligibleMarker(v bool) *RemediationUpdateOne {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *RemediationUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *RemediationUpdateOne {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *RemediationUpdateOne) ClearWorkflowEligibleMarker() *RemediationUpdateOne {
+	_u.mutation.ClearWorkflowEligibleMarker()
 	return _u
 }
 
@@ -3365,6 +3496,21 @@ func (_u *RemediationUpdateOne) AddFiles(v ...*File) *RemediationUpdateOne {
 	return _u.AddFileIDs(ids...)
 }
 
+// AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
+func (_u *RemediationUpdateOne) AddWorkflowObjectRefIDs(ids ...string) *RemediationUpdateOne {
+	_u.mutation.AddWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// AddWorkflowObjectRefs adds the "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *RemediationUpdateOne) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *RemediationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowObjectRefIDs(ids...)
+}
+
 // Mutation returns the RemediationMutation object of the builder.
 func (_u *RemediationUpdateOne) Mutation() *RemediationMutation {
 	return _u.mutation
@@ -3739,6 +3885,27 @@ func (_u *RemediationUpdateOne) RemoveFiles(v ...*File) *RemediationUpdateOne {
 	return _u.RemoveFileIDs(ids...)
 }
 
+// ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *RemediationUpdateOne) ClearWorkflowObjectRefs() *RemediationUpdateOne {
+	_u.mutation.ClearWorkflowObjectRefs()
+	return _u
+}
+
+// RemoveWorkflowObjectRefIDs removes the "workflow_object_refs" edge to WorkflowObjectRef entities by IDs.
+func (_u *RemediationUpdateOne) RemoveWorkflowObjectRefIDs(ids ...string) *RemediationUpdateOne {
+	_u.mutation.RemoveWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowObjectRefs removes "workflow_object_refs" edges to WorkflowObjectRef entities.
+func (_u *RemediationUpdateOne) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRef) *RemediationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowObjectRefIDs(ids...)
+}
+
 // Where appends a list predicates to the RemediationUpdate builder.
 func (_u *RemediationUpdateOne) Where(ps ...predicate.Remediation) *RemediationUpdateOne {
 	_u.mutation.Where(ps...)
@@ -3912,6 +4079,12 @@ func (_u *RemediationUpdateOne) sqlSave(ctx context.Context) (_node *Remediation
 	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(remediation.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(remediation.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(remediation.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(remediation.FieldExternalID, field.TypeString, value)
@@ -4906,6 +5079,54 @@ func (_u *RemediationUpdateOne) sqlSave(ctx context.Context) (_node *Remediation
 			},
 		}
 		edge.Schema = _u.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   remediation.WorkflowObjectRefsTable,
+			Columns: []string{remediation.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   remediation.WorkflowObjectRefsTable,
+			Columns: []string{remediation.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   remediation.WorkflowObjectRefsTable,
+			Columns: []string{remediation.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

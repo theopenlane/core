@@ -108,6 +108,14 @@ WorkflowAssignmentRejection captures details when an approval is rejected or den
 """
 scalar WorkflowAssignmentRejection
 """
+AssignmentOutcome captures consolidated terminal outcome metadata for a workflow assignment, discriminated by decision.
+"""
+scalar AssignmentOutcome
+"""
+WorkflowProposedChanges captures staged field updates as opaque JSON for workflow proposals.
+"""
+scalar WorkflowProposedChanges
+"""
 Channel notifications will be sent to including in-app, slack, etc
 """
 scalar Channel

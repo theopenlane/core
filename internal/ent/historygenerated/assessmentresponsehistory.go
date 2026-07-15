@@ -44,6 +44,8 @@ type AssessmentResponseHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// the assessment this response is for
 	AssessmentID string `json:"assessment_id,omitempty"`
 	// whether this assessment response is for a test send
@@ -100,7 +102,7 @@ func (*AssessmentResponseHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case assessmentresponsehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case assessmentresponsehistory.FieldIsTest, assessmentresponsehistory.FieldIsDraft:
+		case assessmentresponsehistory.FieldWorkflowEligibleMarker, assessmentresponsehistory.FieldIsTest, assessmentresponsehistory.FieldIsDraft:
 			values[i] = new(sql.NullBool)
 		case assessmentresponsehistory.FieldSendAttempts, assessmentresponsehistory.FieldEmailOpenCount, assessmentresponsehistory.FieldEmailClickCount:
 			values[i] = new(sql.NullInt64)
@@ -195,6 +197,12 @@ func (_m *AssessmentResponseHistory) assignValues(columns []string, values []any
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case assessmentresponsehistory.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
+			} else if value.Valid {
+				_m.WorkflowEligibleMarker = value.Bool
 			}
 		case assessmentresponsehistory.FieldAssessmentID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -400,6 +408,9 @@ func (_m *AssessmentResponseHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteString(", ")
 	builder.WriteString("assessment_id=")
 	builder.WriteString(_m.AssessmentID)

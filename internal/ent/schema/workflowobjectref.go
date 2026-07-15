@@ -106,6 +106,26 @@ func (WorkflowObjectRef) Fields() []ent.Field {
 			Immutable().
 			Comment("Platform referenced by this workflow instance").
 			Optional(),
+		field.String("vulnerability_id").
+			Immutable().
+			Comment("Vulnerability referenced by this workflow instance").
+			Optional(),
+		field.String("risk_id").
+			Immutable().
+			Comment("Risk referenced by this workflow instance").
+			Optional(),
+		field.String("assessment_id").
+			Immutable().
+			Comment("Assessment referenced by this workflow instance").
+			Optional(),
+		field.String("assessment_response_id").
+			Immutable().
+			Comment("Assessment response referenced by this workflow instance").
+			Optional(),
+		field.String("remediation_id").
+			Immutable().
+			Comment("Remediation referenced by this workflow instance").
+			Optional(),
 	}
 }
 
@@ -235,6 +255,41 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			comment:    "Platform referenced by this workflow instance",
 			immutable:  true,
 		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Vulnerability{},
+			field:      "vulnerability_id",
+			comment:    "Vulnerability referenced by this workflow instance",
+			immutable:  true,
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Risk{},
+			field:      "risk_id",
+			comment:    "Risk referenced by this workflow instance",
+			immutable:  true,
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Assessment{},
+			field:      "assessment_id",
+			comment:    "Assessment referenced by this workflow instance",
+			immutable:  true,
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: AssessmentResponse{},
+			field:      "assessment_response_id",
+			comment:    "Assessment response referenced by this workflow instance",
+			immutable:  true,
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Remediation{},
+			field:      "remediation_id",
+			comment:    "Remediation referenced by this workflow instance",
+			immutable:  true,
+		}),
 	}
 }
 
@@ -270,6 +325,16 @@ func (WorkflowObjectRef) Indexes() []ent.Index {
 		index.Fields("workflow_instance_id", "identity_holder_id").
 			Unique(),
 		index.Fields("workflow_instance_id", "platform_id").
+			Unique(),
+		index.Fields("workflow_instance_id", "vulnerability_id").
+			Unique(),
+		index.Fields("workflow_instance_id", "risk_id").
+			Unique(),
+		index.Fields("workflow_instance_id", "assessment_id").
+			Unique(),
+		index.Fields("workflow_instance_id", "assessment_response_id").
+			Unique(),
+		index.Fields("workflow_instance_id", "remediation_id").
 			Unique(),
 	}
 }

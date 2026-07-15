@@ -396,6 +396,16 @@ func (ec *executionContext) marshalOAssessmentObjective2ᚕgithubᚗcomᚋtheope
 	return ret
 }
 
+func (ec *executionContext) unmarshalOAssignmentOutcome2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐAssignmentOutcome(ctx context.Context, v any) (models.AssignmentOutcome, error) {
+	var res models.AssignmentOutcome
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOAssignmentOutcome2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐAssignmentOutcome(ctx context.Context, sel ast.SelectionSet, v models.AssignmentOutcome) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalOChannel2ᚕstringᚄ(ctx context.Context, v any) ([]string, error) {
 	if v == nil {
 		return nil, nil
@@ -949,6 +959,16 @@ func (ec *executionContext) unmarshalOWorkflowInstanceContext2githubᚗcomᚋthe
 }
 
 func (ec *executionContext) marshalOWorkflowInstanceContext2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowInstanceContext(ctx context.Context, sel ast.SelectionSet, v models.WorkflowInstanceContext) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOWorkflowProposedChanges2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowProposedChanges(ctx context.Context, v any) (models.WorkflowProposedChanges, error) {
+	var res models.WorkflowProposedChanges
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOWorkflowProposedChanges2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowProposedChanges(ctx context.Context, sel ast.SelectionSet, v models.WorkflowProposedChanges) graphql.Marshaler {
 	return v
 }
 

@@ -5,6 +5,8 @@ import (
 	"strings"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/stoewer/go-strcase"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
@@ -72,7 +74,7 @@ func setParentObjectIDInInput(ctx context.Context, dataInput *generated.CreateNo
 
 	// stripe the "update" prefix from the operation to get the object type
 	parentType := strings.TrimPrefix(parentOperation, "update")
-	parentField := parentType + "ID"
+	parentField := strcase.SnakeCase(parentType + "ID")
 
 	// set the parent ID in the input map
 	mapInput[parentField] = *parentID

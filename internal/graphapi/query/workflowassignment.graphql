@@ -59,6 +59,7 @@ query GetWorkflowAssignmentByID ($workflowAssignmentId: ID!) {
 		label
 		metadata
 		notes
+		outcomeMetadata
 		ownerID
 		rejectionMetadata
 		required

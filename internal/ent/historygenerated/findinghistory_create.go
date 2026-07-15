@@ -393,6 +393,20 @@ func (_c *FindingHistoryCreate) SetNillableFindingStatusID(v *string) *FindingHi
 	return _c
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *FindingHistoryCreate) SetWorkflowEligibleMarker(v bool) *FindingHistoryCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableWorkflowEligibleMarker(v *bool) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *FindingHistoryCreate) SetExternalID(v string) *FindingHistoryCreate {
 	_c.mutation.SetExternalID(v)
@@ -935,6 +949,10 @@ func (_c *FindingHistoryCreate) defaults() error {
 		v := findinghistory.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := findinghistory.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
+	}
 	if _, ok := _c.mutation.SecurityLevel(); !ok {
 		v := findinghistory.DefaultSecurityLevel
 		_c.mutation.SetSecurityLevel(v)
@@ -1137,6 +1155,10 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.FindingStatusID(); ok {
 		_spec.SetField(findinghistory.FieldFindingStatusID, field.TypeString, value)
 		_node.FindingStatusID = value
+	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(findinghistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(findinghistory.FieldExternalID, field.TypeString, value)

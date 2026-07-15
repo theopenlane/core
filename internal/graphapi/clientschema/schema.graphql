@@ -1939,6 +1939,10 @@ type Assessment implements Node {
 	"""
 	systemInternalID: String @hidden(if: true)
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	"""
 	the name of the assessment, e.g. cloud providers, marketing team
 	"""
 	name: String!
@@ -2178,6 +2182,53 @@ type Assessment implements Node {
 		"""
 		where: CampaignWhereInput
 	): CampaignConnection!
+	workflowObjectRefs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for WorkflowObjectRefs returned from the connection.
+		"""
+		orderBy: [WorkflowObjectRefOrder!]
+
+		"""
+		Filtering options for WorkflowObjectRefs returned from the connection.
+		"""
+		where: WorkflowObjectRefWhereInput
+	): WorkflowObjectRefConnection!
+	"""
+	Indicates if this assessment has pending changes awaiting workflow approval
+	"""
+	hasPendingWorkflow: Boolean!
+	"""
+	Indicates if this assessment has any workflow history (completed or failed instances)
+	"""
+	hasWorkflowHistory: Boolean!
+	"""
+	Returns active workflow instances for this assessment (RUNNING or PAUSED)
+	"""
+	activeWorkflowInstances: [WorkflowInstance!]!
+	"""
+	Returns the workflow event timeline for this assessment across all workflow instances
+	"""
+	workflowTimeline(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [WorkflowEventOrder!], where: WorkflowEventWhereInput, includeEmitFailures: Boolean): WorkflowEventConnection!
 	accessURL: String
 }
 """
@@ -2297,6 +2348,10 @@ type AssessmentResponse implements Node {
 	the ID of the organization owner of the object
 	"""
 	ownerID: ID
+	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
 	"""
 	the assessment this response is for
 	"""
@@ -2422,6 +2477,53 @@ type AssessmentResponse implements Node {
 		"""
 		where: VendorRiskScoreWhereInput
 	): VendorRiskScoreConnection!
+	workflowObjectRefs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for WorkflowObjectRefs returned from the connection.
+		"""
+		orderBy: [WorkflowObjectRefOrder!]
+
+		"""
+		Filtering options for WorkflowObjectRefs returned from the connection.
+		"""
+		where: WorkflowObjectRefWhereInput
+	): WorkflowObjectRefConnection!
+	"""
+	Indicates if this assessmentResponse has pending changes awaiting workflow approval
+	"""
+	hasPendingWorkflow: Boolean!
+	"""
+	Indicates if this assessmentResponse has any workflow history (completed or failed instances)
+	"""
+	hasWorkflowHistory: Boolean!
+	"""
+	Returns active workflow instances for this assessmentResponse (RUNNING or PAUSED)
+	"""
+	activeWorkflowInstances: [WorkflowInstance!]!
+	"""
+	Returns the workflow event timeline for this assessmentResponse across all workflow instances
+	"""
+	workflowTimeline(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [WorkflowEventOrder!], where: WorkflowEventWhereInput, includeEmitFailures: Boolean): WorkflowEventConnection!
 	questionnaireTransformError: String
 }
 """
@@ -2636,6 +2738,13 @@ input AssessmentResponseWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
+	"""
+	workflow_eligible_marker field predicates
+	"""
+	workflowEligibleMarker: Boolean
+	workflowEligibleMarkerNEQ: Boolean
+	workflowEligibleMarkerIsNil: Boolean
+	workflowEligibleMarkerNotNil: Boolean
 	"""
 	assessment_id field predicates
 	"""
@@ -2931,6 +3040,11 @@ input AssessmentResponseWhereInput {
 	"""
 	hasVendorRiskScores: Boolean
 	hasVendorRiskScoresWith: [VendorRiskScoreWhereInput!]
+	"""
+	workflow_object_refs edge predicates
+	"""
+	hasWorkflowObjectRefs: Boolean
+	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 }
 """
 Return response for updateAssessment mutation
@@ -3104,6 +3218,13 @@ input AssessmentWhereInput {
 	systemInternalIDEqualFold: String
 	systemInternalIDContainsFold: String
 	"""
+	workflow_eligible_marker field predicates
+	"""
+	workflowEligibleMarker: Boolean
+	workflowEligibleMarkerNEQ: Boolean
+	workflowEligibleMarkerIsNil: Boolean
+	workflowEligibleMarkerNotNil: Boolean
+	"""
 	name field predicates
 	"""
 	name: String
@@ -3202,6 +3323,11 @@ input AssessmentWhereInput {
 	"""
 	hasCampaigns: Boolean
 	hasCampaignsWith: [CampaignWhereInput!]
+	"""
+	workflow_object_refs edge predicates
+	"""
+	hasWorkflowObjectRefs: Boolean
+	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -4889,6 +5015,10 @@ input AssetWhereInput {
 	"""
 	categoriesHas: String
 }
+"""
+AssignmentOutcome captures consolidated terminal outcome metadata for a workflow assignment, discriminated by decision.
+"""
+scalar AssignmentOutcome
 """
 Return response for approveNDARequests or denyNDARequests mutation
 """
@@ -12446,6 +12576,10 @@ input CreateAssessmentInput {
 	"""
 	systemInternalID: String @readOnly
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	"""
 	the name of the assessment, e.g. cloud providers, marketing team
 	"""
 	name: String!
@@ -12471,12 +12605,17 @@ input CreateAssessmentInput {
 	identityHolderIDs: [ID!]
 	assessmentResponseIDs: [ID!]
 	campaignIDs: [ID!]
+	workflowObjectRefIDs: [ID!]
 }
 """
 CreateAssessmentResponseInput is used for create AssessmentResponse object.
 Input was generated by ent.
 """
 input CreateAssessmentResponseInput {
+	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
 	"""
 	display name for the submitted assessment response
 	"""
@@ -12524,6 +12663,7 @@ input CreateAssessmentResponseInput {
 	entityID: ID
 	documentID: ID
 	vendorRiskScoreIDs: [ID!]
+	workflowObjectRefIDs: [ID!]
 }
 """
 CreateAssetInput is used for create Asset object.
@@ -14466,6 +14606,10 @@ input CreateFindingInput {
 	the status of the finding
 	"""
 	findingStatusName: String
+	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
 	"""
 	external identifier from the integration source for the finding
 	"""
@@ -16517,6 +16661,10 @@ input CreateRemediationInput {
 	"""
 	scopeName: String
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	"""
 	external identifier from the integration source for the remediation
 	"""
 	externalID: String
@@ -16616,6 +16764,7 @@ input CreateRemediationInput {
 	reviewIDs: [ID!]
 	commentIDs: [ID!]
 	fileIDs: [ID!]
+	workflowObjectRefIDs: [ID!]
 }
 """
 CreateReviewInput is used for create Review object.
@@ -16762,6 +16911,10 @@ input CreateRiskInput {
 	"""
 	scopeName: String
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	"""
 	stable identifier assigned by the source system, used for integration ingest deduplication
 	"""
 	externalID: String
@@ -16875,6 +17028,7 @@ input CreateRiskInput {
 	discussionIDs: [ID!]
 	reviewIDs: [ID!]
 	remediationIDs: [ID!]
+	workflowObjectRefIDs: [ID!]
 }
 """
 CreateSLADefinitionInput is used for create SLADefinition object.
@@ -16949,7 +17103,7 @@ input CreateScanInput {
 	"""
 	identifiers of vulnerabilities discovered during the scan
 	"""
-	vulnerabilityIds: [String!]
+	discoveredVulnerabilityIds: [String!]
 	"""
 	the status of the scan, e.g., processing, completed, failed
 	"""
@@ -17435,6 +17589,10 @@ input CreateTaskInput {
 	the scope of the task
 	"""
 	scopeName: String
+	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
 	"""
 	stable external UUID for deterministic OSCAL export and round-tripping
 	"""
@@ -18249,6 +18407,10 @@ input CreateVulnerabilityInput {
 	"""
 	vulnerabilityStatusName: String
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	"""
 	owner of the vulnerability
 	"""
 	externalOwnerID: String
@@ -18438,6 +18600,7 @@ input CreateVulnerabilityInput {
 	reviewIDs: [ID!]
 	commentIDs: [ID!]
 	fileIDs: [ID!]
+	workflowObjectRefIDs: [ID!]
 }
 """
 CreateWorkflowDefinitionInput is used for create WorkflowDefinition object.
@@ -31309,6 +31472,10 @@ type Finding implements Node {
 	"""
 	findingStatusID: ID
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	"""
 	external identifier from the integration source for the finding
 	"""
 	externalID: String
@@ -32146,6 +32313,22 @@ type Finding implements Node {
 		"""
 		where: FindingControlWhereInput
 	): FindingControlConnection!
+	"""
+	Indicates if this finding has pending changes awaiting workflow approval
+	"""
+	hasPendingWorkflow: Boolean!
+	"""
+	Indicates if this finding has any workflow history (completed or failed instances)
+	"""
+	hasWorkflowHistory: Boolean!
+	"""
+	Returns active workflow instances for this finding (RUNNING or PAUSED)
+	"""
+	activeWorkflowInstances: [WorkflowInstance!]!
+	"""
+	Returns the workflow event timeline for this finding across all workflow instances
+	"""
+	workflowTimeline(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [WorkflowEventOrder!], where: WorkflowEventWhereInput, includeEmitFailures: Boolean): WorkflowEventConnection!
 }
 """
 Return response for createBulkFinding mutation
@@ -32997,6 +33180,13 @@ input FindingWhereInput {
 	findingStatusIDNotNil: Boolean
 	findingStatusIDEqualFold: ID
 	findingStatusIDContainsFold: ID
+	"""
+	workflow_eligible_marker field predicates
+	"""
+	workflowEligibleMarker: Boolean
+	workflowEligibleMarkerNEQ: Boolean
+	workflowEligibleMarkerIsNil: Boolean
+	workflowEligibleMarkerNotNil: Boolean
 	"""
 	external_id field predicates
 	"""
@@ -73008,6 +73198,10 @@ type Remediation implements Node {
 	"""
 	scopeID: ID
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	"""
 	external identifier from the integration source for the remediation
 	"""
 	externalID: String
@@ -73617,6 +73811,53 @@ type Remediation implements Node {
 		"""
 		where: FileWhereInput
 	): FileConnection!
+	workflowObjectRefs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for WorkflowObjectRefs returned from the connection.
+		"""
+		orderBy: [WorkflowObjectRefOrder!]
+
+		"""
+		Filtering options for WorkflowObjectRefs returned from the connection.
+		"""
+		where: WorkflowObjectRefWhereInput
+	): WorkflowObjectRefConnection!
+	"""
+	Indicates if this remediation has pending changes awaiting workflow approval
+	"""
+	hasPendingWorkflow: Boolean!
+	"""
+	Indicates if this remediation has any workflow history (completed or failed instances)
+	"""
+	hasWorkflowHistory: Boolean!
+	"""
+	Returns active workflow instances for this remediation (RUNNING or PAUSED)
+	"""
+	activeWorkflowInstances: [WorkflowInstance!]!
+	"""
+	Returns the workflow event timeline for this remediation across all workflow instances
+	"""
+	workflowTimeline(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [WorkflowEventOrder!], where: WorkflowEventWhereInput, includeEmitFailures: Boolean): WorkflowEventConnection!
 }
 """
 Return response for createBulkRemediation mutation
@@ -73999,6 +74240,13 @@ input RemediationWhereInput {
 	scopeIDNotNil: Boolean
 	scopeIDEqualFold: ID
 	scopeIDContainsFold: ID
+	"""
+	workflow_eligible_marker field predicates
+	"""
+	workflowEligibleMarker: Boolean
+	workflowEligibleMarkerNEQ: Boolean
+	workflowEligibleMarkerIsNil: Boolean
+	workflowEligibleMarkerNotNil: Boolean
 	"""
 	external_id field predicates
 	"""
@@ -74417,6 +74665,11 @@ input RemediationWhereInput {
 	"""
 	hasFiles: Boolean
 	hasFilesWith: [FileWhereInput!]
+	"""
+	workflow_object_refs edge predicates
+	"""
+	hasWorkflowObjectRefs: Boolean
+	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -75923,6 +76176,10 @@ type Risk implements Node {
 	"""
 	scopeID: ID
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	"""
 	stable identifier assigned by the source system, used for integration ingest deduplication
 	"""
 	externalID: String
@@ -76590,6 +76847,53 @@ type Risk implements Node {
 		"""
 		where: RemediationWhereInput
 	): RemediationConnection!
+	workflowObjectRefs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for WorkflowObjectRefs returned from the connection.
+		"""
+		orderBy: [WorkflowObjectRefOrder!]
+
+		"""
+		Filtering options for WorkflowObjectRefs returned from the connection.
+		"""
+		where: WorkflowObjectRefWhereInput
+	): WorkflowObjectRefConnection!
+	"""
+	Indicates if this risk has pending changes awaiting workflow approval
+	"""
+	hasPendingWorkflow: Boolean!
+	"""
+	Indicates if this risk has any workflow history (completed or failed instances)
+	"""
+	hasWorkflowHistory: Boolean!
+	"""
+	Returns active workflow instances for this risk (RUNNING or PAUSED)
+	"""
+	activeWorkflowInstances: [WorkflowInstance!]!
+	"""
+	Returns the workflow event timeline for this risk across all workflow instances
+	"""
+	workflowTimeline(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [WorkflowEventOrder!], where: WorkflowEventWhereInput, includeEmitFailures: Boolean): WorkflowEventConnection!
 }
 """
 Return response for createBulkRisk mutation
@@ -77060,6 +77364,13 @@ input RiskWhereInput {
 	scopeIDEqualFold: ID
 	scopeIDContainsFold: ID
 	"""
+	workflow_eligible_marker field predicates
+	"""
+	workflowEligibleMarker: Boolean
+	workflowEligibleMarkerNEQ: Boolean
+	workflowEligibleMarkerIsNil: Boolean
+	workflowEligibleMarkerNotNil: Boolean
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -77487,6 +77798,11 @@ input RiskWhereInput {
 	"""
 	hasRemediations: Boolean
 	hasRemediationsWith: [RemediationWhereInput!]
+	"""
+	workflow_object_refs edge predicates
+	"""
+	hasWorkflowObjectRefs: Boolean
+	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -77993,7 +78309,7 @@ type Scan implements Node {
 	"""
 	identifiers of vulnerabilities discovered during the scan
 	"""
-	vulnerabilityIds: [String!]
+	discoveredVulnerabilityIds: [String!]
 	"""
 	the status of the scan, e.g., processing, completed, failed
 	"""
@@ -79133,9 +79449,9 @@ input ScanWhereInput {
 	"""
 	tagsHas: String
 	"""
-	Filter for vulnerabilityIdsHas to contain a specific value
+	Filter for discoveredVulnerabilityIdsHas to contain a specific value
 	"""
-	vulnerabilityIdsHas: String
+	discoveredVulnerabilityIdsHas: String
 }
 type ScheduledJob implements Node {
 	id: ID!
@@ -84578,6 +84894,10 @@ type Task implements Node {
 	"""
 	scopeID: ID
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	"""
 	stable external UUID for deterministic OSCAL export and round-tripping
 	"""
 	externalUUID: String
@@ -85199,6 +85519,22 @@ type Task implements Node {
 	): FindingConnection!
 	parent: Task
 	tasks: [Task!]
+	"""
+	Indicates if this task has pending changes awaiting workflow approval
+	"""
+	hasPendingWorkflow: Boolean!
+	"""
+	Indicates if this task has any workflow history (completed or failed instances)
+	"""
+	hasWorkflowHistory: Boolean!
+	"""
+	Returns active workflow instances for this task (RUNNING or PAUSED)
+	"""
+	activeWorkflowInstances: [WorkflowInstance!]!
+	"""
+	Returns the workflow event timeline for this task across all workflow instances
+	"""
+	workflowTimeline(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [WorkflowEventOrder!], where: WorkflowEventWhereInput, includeEmitFailures: Boolean): WorkflowEventConnection!
 }
 """
 Return response for createBulkTask mutation
@@ -85574,6 +85910,13 @@ input TaskWhereInput {
 	scopeIDNotNil: Boolean
 	scopeIDEqualFold: ID
 	scopeIDContainsFold: ID
+	"""
+	workflow_eligible_marker field predicates
+	"""
+	workflowEligibleMarker: Boolean
+	workflowEligibleMarkerNEQ: Boolean
+	workflowEligibleMarkerIsNil: Boolean
+	workflowEligibleMarkerNotNil: Boolean
 	"""
 	external_uuid field predicates
 	"""
@@ -92031,6 +92374,11 @@ input UpdateAssessmentInput {
 	systemInternalID: String @readOnly
 	clearSystemInternalID: Boolean
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	clearWorkflowEligibleMarker: Boolean
+	"""
 	the name of the assessment, e.g. cloud providers, marketing team
 	"""
 	name: String
@@ -92072,6 +92420,9 @@ input UpdateAssessmentInput {
 	addCampaignIDs: [ID!]
 	removeCampaignIDs: [ID!]
 	clearCampaigns: Boolean
+	addWorkflowObjectRefIDs: [ID!]
+	removeWorkflowObjectRefIDs: [ID!]
+	clearWorkflowObjectRefs: Boolean
 }
 """
 UpdateAssetInput is used for update Asset object.
@@ -94709,6 +95060,11 @@ input UpdateFindingInput {
 	"""
 	findingStatusName: String
 	clearFindingStatusName: Boolean
+	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	clearWorkflowEligibleMarker: Boolean
 	"""
 	external identifier from the integration source for the finding
 	"""
@@ -97714,6 +98070,11 @@ input UpdateRemediationInput {
 	scopeName: String
 	clearScopeName: Boolean
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	clearWorkflowEligibleMarker: Boolean
+	"""
 	external identifier from the integration source for the remediation
 	"""
 	externalID: String
@@ -97868,6 +98229,9 @@ input UpdateRemediationInput {
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
+	addWorkflowObjectRefIDs: [ID!]
+	removeWorkflowObjectRefIDs: [ID!]
+	clearWorkflowObjectRefs: Boolean
 }
 """
 UpdateReviewInput is used for update Review object.
@@ -98081,6 +98445,11 @@ input UpdateRiskInput {
 	scopeName: String
 	clearScopeName: Boolean
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	clearWorkflowEligibleMarker: Boolean
+	"""
 	stable identifier assigned by the source system, used for integration ingest deduplication
 	"""
 	externalID: String
@@ -98260,6 +98629,9 @@ input UpdateRiskInput {
 	addRemediationIDs: [ID!]
 	removeRemediationIDs: [ID!]
 	clearRemediations: Boolean
+	addWorkflowObjectRefIDs: [ID!]
+	removeWorkflowObjectRefIDs: [ID!]
+	clearWorkflowObjectRefs: Boolean
 	addDiscussion: CreateDiscussionInput
 	updateDiscussion: UpdateDiscussionsInput
 	deleteDiscussion: ID
@@ -98357,9 +98729,9 @@ input UpdateScanInput {
 	"""
 	identifiers of vulnerabilities discovered during the scan
 	"""
-	vulnerabilityIds: [String!]
-	appendVulnerabilityIds: [String!]
-	clearVulnerabilityIds: Boolean
+	discoveredVulnerabilityIds: [String!]
+	appendDiscoveredVulnerabilityIds: [String!]
+	clearDiscoveredVulnerabilityIds: Boolean
 	"""
 	the status of the scan, e.g., processing, completed, failed
 	"""
@@ -99051,6 +99423,11 @@ input UpdateTaskInput {
 	"""
 	scopeName: String
 	clearScopeName: Boolean
+	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	clearWorkflowEligibleMarker: Boolean
 	"""
 	stable external UUID for deterministic OSCAL export and round-tripping
 	"""
@@ -100077,6 +100454,11 @@ input UpdateVulnerabilityInput {
 	vulnerabilityStatusName: String
 	clearVulnerabilityStatusName: Boolean
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	clearWorkflowEligibleMarker: Boolean
+	"""
 	owner of the vulnerability
 	"""
 	externalOwnerID: String
@@ -100351,6 +100733,9 @@ input UpdateVulnerabilityInput {
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
+	addWorkflowObjectRefIDs: [ID!]
+	removeWorkflowObjectRefIDs: [ID!]
+	clearWorkflowObjectRefs: Boolean
 }
 """
 UpdateWorkflowDefinitionInput is used for update WorkflowDefinition object.
@@ -103126,6 +103511,10 @@ type Vulnerability implements Node {
 	"""
 	vulnerabilityStatusID: ID
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	"""
 	owner of the vulnerability
 	"""
 	externalOwnerID: String
@@ -103859,6 +104248,53 @@ type Vulnerability implements Node {
 		"""
 		where: FileWhereInput
 	): FileConnection!
+	workflowObjectRefs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for WorkflowObjectRefs returned from the connection.
+		"""
+		orderBy: [WorkflowObjectRefOrder!]
+
+		"""
+		Filtering options for WorkflowObjectRefs returned from the connection.
+		"""
+		where: WorkflowObjectRefWhereInput
+	): WorkflowObjectRefConnection!
+	"""
+	Indicates if this vulnerability has pending changes awaiting workflow approval
+	"""
+	hasPendingWorkflow: Boolean!
+	"""
+	Indicates if this vulnerability has any workflow history (completed or failed instances)
+	"""
+	hasWorkflowHistory: Boolean!
+	"""
+	Returns active workflow instances for this vulnerability (RUNNING or PAUSED)
+	"""
+	activeWorkflowInstances: [WorkflowInstance!]!
+	"""
+	Returns the workflow event timeline for this vulnerability across all workflow instances
+	"""
+	workflowTimeline(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [WorkflowEventOrder!], where: WorkflowEventWhereInput, includeEmitFailures: Boolean): WorkflowEventConnection!
 }
 """
 Return response for createBulkVulnerability mutation
@@ -104434,6 +104870,13 @@ input VulnerabilityWhereInput {
 	vulnerabilityStatusIDNotNil: Boolean
 	vulnerabilityStatusIDEqualFold: ID
 	vulnerabilityStatusIDContainsFold: ID
+	"""
+	workflow_eligible_marker field predicates
+	"""
+	workflowEligibleMarker: Boolean
+	workflowEligibleMarkerNEQ: Boolean
+	workflowEligibleMarkerIsNil: Boolean
+	workflowEligibleMarkerNotNil: Boolean
 	"""
 	external_owner_id field predicates
 	"""
@@ -105104,6 +105547,11 @@ input VulnerabilityWhereInput {
 	hasFiles: Boolean
 	hasFilesWith: [FileWhereInput!]
 	"""
+	workflow_object_refs edge predicates
+	"""
+	hasWorkflowObjectRefs: Boolean
+	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+	"""
 	Filter for tagsHas to contain a specific value
 	"""
 	tagsHas: String
@@ -105358,6 +105806,10 @@ type WorkflowAssignment implements Node {
 	structured invalidation metadata
 	"""
 	invalidationMetadata: WorkflowAssignmentInvalidation
+	"""
+	consolidated terminal outcome metadata discriminated by decision (supersedes approval/rejection/invalidation metadata)
+	"""
+	outcomeMetadata: AssignmentOutcome
 	"""
 	Timestamp when the assignment was decided
 	"""
@@ -107374,6 +107826,38 @@ type WorkflowInstance implements Node {
 	ID of the platform this workflow instance is associated with
 	"""
 	platformID: ID
+	"""
+	ID of the assessment this workflow instance is associated with
+	"""
+	assessmentID: ID
+	"""
+	ID of the assessment response this workflow instance is associated with
+	"""
+	assessmentResponseID: ID
+	"""
+	ID of the finding this workflow instance is associated with
+	"""
+	findingID: ID
+	"""
+	ID of the integration this workflow instance is associated with
+	"""
+	integrationID: ID
+	"""
+	ID of the remediation this workflow instance is associated with
+	"""
+	remediationID: ID
+	"""
+	ID of the risk this workflow instance is associated with
+	"""
+	riskID: ID
+	"""
+	ID of the task this workflow instance is associated with
+	"""
+	taskID: ID
+	"""
+	ID of the vulnerability this workflow instance is associated with
+	"""
+	vulnerabilityID: ID
 	owner: Organization
 	"""
 	Definition driving this instance
@@ -107419,6 +107903,38 @@ type WorkflowInstance implements Node {
 	Platform this workflow instance is associated with
 	"""
 	platform: Platform
+	"""
+	Assessment this workflow instance is associated with
+	"""
+	assessment: Assessment
+	"""
+	Assessment response this workflow instance is associated with
+	"""
+	assessmentResponse: AssessmentResponse
+	"""
+	Finding this workflow instance is associated with
+	"""
+	finding: Finding
+	"""
+	Integration this workflow instance is associated with
+	"""
+	integration: Integration
+	"""
+	Remediation this workflow instance is associated with
+	"""
+	remediation: Remediation
+	"""
+	Risk this workflow instance is associated with
+	"""
+	risk: Risk
+	"""
+	Task this workflow instance is associated with
+	"""
+	task: Task
+	"""
+	Vulnerability this workflow instance is associated with
+	"""
+	vulnerability: Vulnerability
 	workflowAssignments(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -108002,6 +108518,150 @@ input WorkflowInstanceWhereInput {
 	platformIDEqualFold: ID
 	platformIDContainsFold: ID
 	"""
+	assessment_id field predicates
+	"""
+	assessmentID: ID
+	assessmentIDNEQ: ID
+	assessmentIDIn: [ID!]
+	assessmentIDNotIn: [ID!]
+	assessmentIDGT: ID
+	assessmentIDGTE: ID
+	assessmentIDLT: ID
+	assessmentIDLTE: ID
+	assessmentIDContains: ID
+	assessmentIDHasPrefix: ID
+	assessmentIDHasSuffix: ID
+	assessmentIDIsNil: Boolean
+	assessmentIDNotNil: Boolean
+	assessmentIDEqualFold: ID
+	assessmentIDContainsFold: ID
+	"""
+	assessment_response_id field predicates
+	"""
+	assessmentResponseID: ID
+	assessmentResponseIDNEQ: ID
+	assessmentResponseIDIn: [ID!]
+	assessmentResponseIDNotIn: [ID!]
+	assessmentResponseIDGT: ID
+	assessmentResponseIDGTE: ID
+	assessmentResponseIDLT: ID
+	assessmentResponseIDLTE: ID
+	assessmentResponseIDContains: ID
+	assessmentResponseIDHasPrefix: ID
+	assessmentResponseIDHasSuffix: ID
+	assessmentResponseIDIsNil: Boolean
+	assessmentResponseIDNotNil: Boolean
+	assessmentResponseIDEqualFold: ID
+	assessmentResponseIDContainsFold: ID
+	"""
+	finding_id field predicates
+	"""
+	findingID: ID
+	findingIDNEQ: ID
+	findingIDIn: [ID!]
+	findingIDNotIn: [ID!]
+	findingIDGT: ID
+	findingIDGTE: ID
+	findingIDLT: ID
+	findingIDLTE: ID
+	findingIDContains: ID
+	findingIDHasPrefix: ID
+	findingIDHasSuffix: ID
+	findingIDIsNil: Boolean
+	findingIDNotNil: Boolean
+	findingIDEqualFold: ID
+	findingIDContainsFold: ID
+	"""
+	integration_id field predicates
+	"""
+	integrationID: ID
+	integrationIDNEQ: ID
+	integrationIDIn: [ID!]
+	integrationIDNotIn: [ID!]
+	integrationIDGT: ID
+	integrationIDGTE: ID
+	integrationIDLT: ID
+	integrationIDLTE: ID
+	integrationIDContains: ID
+	integrationIDHasPrefix: ID
+	integrationIDHasSuffix: ID
+	integrationIDIsNil: Boolean
+	integrationIDNotNil: Boolean
+	integrationIDEqualFold: ID
+	integrationIDContainsFold: ID
+	"""
+	remediation_id field predicates
+	"""
+	remediationID: ID
+	remediationIDNEQ: ID
+	remediationIDIn: [ID!]
+	remediationIDNotIn: [ID!]
+	remediationIDGT: ID
+	remediationIDGTE: ID
+	remediationIDLT: ID
+	remediationIDLTE: ID
+	remediationIDContains: ID
+	remediationIDHasPrefix: ID
+	remediationIDHasSuffix: ID
+	remediationIDIsNil: Boolean
+	remediationIDNotNil: Boolean
+	remediationIDEqualFold: ID
+	remediationIDContainsFold: ID
+	"""
+	risk_id field predicates
+	"""
+	riskID: ID
+	riskIDNEQ: ID
+	riskIDIn: [ID!]
+	riskIDNotIn: [ID!]
+	riskIDGT: ID
+	riskIDGTE: ID
+	riskIDLT: ID
+	riskIDLTE: ID
+	riskIDContains: ID
+	riskIDHasPrefix: ID
+	riskIDHasSuffix: ID
+	riskIDIsNil: Boolean
+	riskIDNotNil: Boolean
+	riskIDEqualFold: ID
+	riskIDContainsFold: ID
+	"""
+	task_id field predicates
+	"""
+	taskID: ID
+	taskIDNEQ: ID
+	taskIDIn: [ID!]
+	taskIDNotIn: [ID!]
+	taskIDGT: ID
+	taskIDGTE: ID
+	taskIDLT: ID
+	taskIDLTE: ID
+	taskIDContains: ID
+	taskIDHasPrefix: ID
+	taskIDHasSuffix: ID
+	taskIDIsNil: Boolean
+	taskIDNotNil: Boolean
+	taskIDEqualFold: ID
+	taskIDContainsFold: ID
+	"""
+	vulnerability_id field predicates
+	"""
+	vulnerabilityID: ID
+	vulnerabilityIDNEQ: ID
+	vulnerabilityIDIn: [ID!]
+	vulnerabilityIDNotIn: [ID!]
+	vulnerabilityIDGT: ID
+	vulnerabilityIDGTE: ID
+	vulnerabilityIDLT: ID
+	vulnerabilityIDLTE: ID
+	vulnerabilityIDContains: ID
+	vulnerabilityIDHasPrefix: ID
+	vulnerabilityIDHasSuffix: ID
+	vulnerabilityIDIsNil: Boolean
+	vulnerabilityIDNotNil: Boolean
+	vulnerabilityIDEqualFold: ID
+	vulnerabilityIDContainsFold: ID
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -108061,6 +108721,46 @@ input WorkflowInstanceWhereInput {
 	"""
 	hasPlatform: Boolean
 	hasPlatformWith: [PlatformWhereInput!]
+	"""
+	assessment edge predicates
+	"""
+	hasAssessment: Boolean
+	hasAssessmentWith: [AssessmentWhereInput!]
+	"""
+	assessment_response edge predicates
+	"""
+	hasAssessmentResponse: Boolean
+	hasAssessmentResponseWith: [AssessmentResponseWhereInput!]
+	"""
+	finding edge predicates
+	"""
+	hasFinding: Boolean
+	hasFindingWith: [FindingWhereInput!]
+	"""
+	integration edge predicates
+	"""
+	hasIntegration: Boolean
+	hasIntegrationWith: [IntegrationWhereInput!]
+	"""
+	remediation edge predicates
+	"""
+	hasRemediation: Boolean
+	hasRemediationWith: [RemediationWhereInput!]
+	"""
+	risk edge predicates
+	"""
+	hasRisk: Boolean
+	hasRiskWith: [RiskWhereInput!]
+	"""
+	task edge predicates
+	"""
+	hasTask: Boolean
+	hasTaskWith: [TaskWhereInput!]
+	"""
+	vulnerability edge predicates
+	"""
+	hasVulnerability: Boolean
+	hasVulnerabilityWith: [VulnerabilityWhereInput!]
 	"""
 	workflow_assignments edge predicates
 	"""
@@ -108190,6 +108890,26 @@ type WorkflowObjectRef implements Node {
 	Platform referenced by this workflow instance
 	"""
 	platformID: ID
+	"""
+	Vulnerability referenced by this workflow instance
+	"""
+	vulnerabilityID: ID
+	"""
+	Risk referenced by this workflow instance
+	"""
+	riskID: ID
+	"""
+	Assessment referenced by this workflow instance
+	"""
+	assessmentID: ID
+	"""
+	Assessment response referenced by this workflow instance
+	"""
+	assessmentResponseID: ID
+	"""
+	Remediation referenced by this workflow instance
+	"""
+	remediationID: ID
 	owner: Organization
 	"""
 	Workflow instance this object is associated with
@@ -108255,6 +108975,26 @@ type WorkflowObjectRef implements Node {
 	Platform referenced by this workflow instance
 	"""
 	platform: Platform
+	"""
+	Vulnerability referenced by this workflow instance
+	"""
+	vulnerability: Vulnerability
+	"""
+	Risk referenced by this workflow instance
+	"""
+	risk: Risk
+	"""
+	Assessment referenced by this workflow instance
+	"""
+	assessment: Assessment
+	"""
+	Assessment response referenced by this workflow instance
+	"""
+	assessmentResponse: AssessmentResponse
+	"""
+	Remediation referenced by this workflow instance
+	"""
+	remediation: Remediation
 }
 """
 A connection to a list of items.
@@ -108728,6 +109468,96 @@ input WorkflowObjectRefWhereInput {
 	platformIDEqualFold: ID
 	platformIDContainsFold: ID
 	"""
+	vulnerability_id field predicates
+	"""
+	vulnerabilityID: ID
+	vulnerabilityIDNEQ: ID
+	vulnerabilityIDIn: [ID!]
+	vulnerabilityIDNotIn: [ID!]
+	vulnerabilityIDGT: ID
+	vulnerabilityIDGTE: ID
+	vulnerabilityIDLT: ID
+	vulnerabilityIDLTE: ID
+	vulnerabilityIDContains: ID
+	vulnerabilityIDHasPrefix: ID
+	vulnerabilityIDHasSuffix: ID
+	vulnerabilityIDIsNil: Boolean
+	vulnerabilityIDNotNil: Boolean
+	vulnerabilityIDEqualFold: ID
+	vulnerabilityIDContainsFold: ID
+	"""
+	risk_id field predicates
+	"""
+	riskID: ID
+	riskIDNEQ: ID
+	riskIDIn: [ID!]
+	riskIDNotIn: [ID!]
+	riskIDGT: ID
+	riskIDGTE: ID
+	riskIDLT: ID
+	riskIDLTE: ID
+	riskIDContains: ID
+	riskIDHasPrefix: ID
+	riskIDHasSuffix: ID
+	riskIDIsNil: Boolean
+	riskIDNotNil: Boolean
+	riskIDEqualFold: ID
+	riskIDContainsFold: ID
+	"""
+	assessment_id field predicates
+	"""
+	assessmentID: ID
+	assessmentIDNEQ: ID
+	assessmentIDIn: [ID!]
+	assessmentIDNotIn: [ID!]
+	assessmentIDGT: ID
+	assessmentIDGTE: ID
+	assessmentIDLT: ID
+	assessmentIDLTE: ID
+	assessmentIDContains: ID
+	assessmentIDHasPrefix: ID
+	assessmentIDHasSuffix: ID
+	assessmentIDIsNil: Boolean
+	assessmentIDNotNil: Boolean
+	assessmentIDEqualFold: ID
+	assessmentIDContainsFold: ID
+	"""
+	assessment_response_id field predicates
+	"""
+	assessmentResponseID: ID
+	assessmentResponseIDNEQ: ID
+	assessmentResponseIDIn: [ID!]
+	assessmentResponseIDNotIn: [ID!]
+	assessmentResponseIDGT: ID
+	assessmentResponseIDGTE: ID
+	assessmentResponseIDLT: ID
+	assessmentResponseIDLTE: ID
+	assessmentResponseIDContains: ID
+	assessmentResponseIDHasPrefix: ID
+	assessmentResponseIDHasSuffix: ID
+	assessmentResponseIDIsNil: Boolean
+	assessmentResponseIDNotNil: Boolean
+	assessmentResponseIDEqualFold: ID
+	assessmentResponseIDContainsFold: ID
+	"""
+	remediation_id field predicates
+	"""
+	remediationID: ID
+	remediationIDNEQ: ID
+	remediationIDIn: [ID!]
+	remediationIDNotIn: [ID!]
+	remediationIDGT: ID
+	remediationIDGTE: ID
+	remediationIDLT: ID
+	remediationIDLTE: ID
+	remediationIDContains: ID
+	remediationIDHasPrefix: ID
+	remediationIDHasSuffix: ID
+	remediationIDIsNil: Boolean
+	remediationIDNotNil: Boolean
+	remediationIDEqualFold: ID
+	remediationIDContainsFold: ID
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -108812,6 +109642,31 @@ input WorkflowObjectRefWhereInput {
 	"""
 	hasPlatform: Boolean
 	hasPlatformWith: [PlatformWhereInput!]
+	"""
+	vulnerability edge predicates
+	"""
+	hasVulnerability: Boolean
+	hasVulnerabilityWith: [VulnerabilityWhereInput!]
+	"""
+	risk edge predicates
+	"""
+	hasRisk: Boolean
+	hasRiskWith: [RiskWhereInput!]
+	"""
+	assessment edge predicates
+	"""
+	hasAssessment: Boolean
+	hasAssessmentWith: [AssessmentWhereInput!]
+	"""
+	assessment_response edge predicates
+	"""
+	hasAssessmentResponse: Boolean
+	hasAssessmentResponseWith: [AssessmentResponseWhereInput!]
+	"""
+	remediation edge predicates
+	"""
+	hasRemediation: Boolean
+	hasRemediationWith: [RemediationWhereInput!]
 }
 """
 Metadata for a workflow object type
@@ -108880,6 +109735,10 @@ type WorkflowProposal implements Node {
 	Staged field updates for this domain; applied only after approval
 	"""
 	changes: Map
+	"""
+	Staged field updates as opaque JSON; preferred over changes field
+	"""
+	proposedChanges: WorkflowProposedChanges
 	"""
 	Hash of the current proposed changes for approval verification
 	"""
@@ -108984,3 +109843,7 @@ enum WorkflowProposalWorkflowProposalState @goModel(model: "github.com/theopenla
 	REJECTED
 	SUPERSEDED
 }
+"""
+WorkflowProposedChanges captures staged field updates as opaque JSON for workflow proposals.
+"""
+scalar WorkflowProposedChanges

@@ -100,26 +100,27 @@ type ComplexityRoot struct {
 	}
 
 	AssessmentHistory struct {
-		AssessmentType        func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		HistoryTime           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		InternalNotes         func(childComplexity int) int
-		Jsonconfig            func(childComplexity int) int
-		Name                  func(childComplexity int) int
-		Operation             func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Ref                   func(childComplexity int) int
-		ResponseDueDuration   func(childComplexity int) int
-		SystemInternalID      func(childComplexity int) int
-		SystemOwned           func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		TemplateID            func(childComplexity int) int
-		Uischema              func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
+		AssessmentType         func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		HistoryTime            func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		InternalNotes          func(childComplexity int) int
+		Jsonconfig             func(childComplexity int) int
+		Name                   func(childComplexity int) int
+		Operation              func(childComplexity int) int
+		OwnerID                func(childComplexity int) int
+		Ref                    func(childComplexity int) int
+		ResponseDueDuration    func(childComplexity int) int
+		SystemInternalID       func(childComplexity int) int
+		SystemOwned            func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		TemplateID             func(childComplexity int) int
+		Uischema               func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
+		UpdatedByImpersonator  func(childComplexity int) int
+		WorkflowEligibleMarker func(childComplexity int) int
 	}
 
 	AssessmentHistoryConnection struct {
@@ -134,38 +135,39 @@ type ComplexityRoot struct {
 	}
 
 	AssessmentResponseHistory struct {
-		AssessmentID          func(childComplexity int) int
-		AssignedAt            func(childComplexity int) int
-		CampaignID            func(childComplexity int) int
-		CompletedAt           func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		DisplayName           func(childComplexity int) int
-		DocumentDataID        func(childComplexity int) int
-		DueDate               func(childComplexity int) int
-		Email                 func(childComplexity int) int
-		EmailClickCount       func(childComplexity int) int
-		EmailClickedAt        func(childComplexity int) int
-		EmailDeliveredAt      func(childComplexity int) int
-		EmailMetadata         func(childComplexity int) int
-		EmailOpenCount        func(childComplexity int) int
-		EmailOpenedAt         func(childComplexity int) int
-		EntityID              func(childComplexity int) int
-		HistoryTime           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		IdentityHolderID      func(childComplexity int) int
-		IsDraft               func(childComplexity int) int
-		IsTest                func(childComplexity int) int
-		LastEmailEventAt      func(childComplexity int) int
-		Operation             func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Ref                   func(childComplexity int) int
-		SendAttempts          func(childComplexity int) int
-		StartedAt             func(childComplexity int) int
-		Status                func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
+		AssessmentID           func(childComplexity int) int
+		AssignedAt             func(childComplexity int) int
+		CampaignID             func(childComplexity int) int
+		CompletedAt            func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		DisplayName            func(childComplexity int) int
+		DocumentDataID         func(childComplexity int) int
+		DueDate                func(childComplexity int) int
+		Email                  func(childComplexity int) int
+		EmailClickCount        func(childComplexity int) int
+		EmailClickedAt         func(childComplexity int) int
+		EmailDeliveredAt       func(childComplexity int) int
+		EmailMetadata          func(childComplexity int) int
+		EmailOpenCount         func(childComplexity int) int
+		EmailOpenedAt          func(childComplexity int) int
+		EntityID               func(childComplexity int) int
+		HistoryTime            func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		IdentityHolderID       func(childComplexity int) int
+		IsDraft                func(childComplexity int) int
+		IsTest                 func(childComplexity int) int
+		LastEmailEventAt       func(childComplexity int) int
+		Operation              func(childComplexity int) int
+		OwnerID                func(childComplexity int) int
+		Ref                    func(childComplexity int) int
+		SendAttempts           func(childComplexity int) int
+		StartedAt              func(childComplexity int) int
+		Status                 func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
+		UpdatedByImpersonator  func(childComplexity int) int
+		WorkflowEligibleMarker func(childComplexity int) int
 	}
 
 	AssessmentResponseHistoryConnection struct {
@@ -1113,70 +1115,71 @@ type ComplexityRoot struct {
 	}
 
 	FindingHistory struct {
-		AssessmentID          func(childComplexity int) int
-		AssignedTo            func(childComplexity int) int
-		AssignedToGroupID     func(childComplexity int) int
-		AssignedToUserID      func(childComplexity int) int
-		BlocksProduction      func(childComplexity int) int
-		Categories            func(childComplexity int) int
-		Category              func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		Description           func(childComplexity int) int
-		DisplayID             func(childComplexity int) int
-		DisplayName           func(childComplexity int) int
-		EnvironmentID         func(childComplexity int) int
-		EnvironmentName       func(childComplexity int) int
-		EventTime             func(childComplexity int) int
-		Exploitability        func(childComplexity int) int
-		ExternalID            func(childComplexity int) int
-		ExternalOwnerID       func(childComplexity int) int
-		ExternalURI           func(childComplexity int) int
-		FindingClass          func(childComplexity int) int
-		FindingStatusID       func(childComplexity int) int
-		FindingStatusName     func(childComplexity int) int
-		HistoryTime           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		Impact                func(childComplexity int) int
-		InternalNotes         func(childComplexity int) int
-		Metadata              func(childComplexity int) int
-		NumericSeverity       func(childComplexity int) int
-		Open                  func(childComplexity int) int
-		Operation             func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Priority              func(childComplexity int) int
-		Production            func(childComplexity int) int
-		Public                func(childComplexity int) int
-		RawPayload            func(childComplexity int) int
-		Recommendation        func(childComplexity int) int
-		RecommendedActions    func(childComplexity int) int
-		Ref                   func(childComplexity int) int
-		References            func(childComplexity int) int
-		RemediationSLA        func(childComplexity int) int
-		ReportedAt            func(childComplexity int) int
-		ResourceName          func(childComplexity int) int
-		ReviewedBy            func(childComplexity int) int
-		ReviewedByGroupID     func(childComplexity int) int
-		ReviewedByUserID      func(childComplexity int) int
-		ScopeID               func(childComplexity int) int
-		ScopeName             func(childComplexity int) int
-		Score                 func(childComplexity int) int
-		SecurityLevel         func(childComplexity int) int
-		Severity              func(childComplexity int) int
-		Source                func(childComplexity int) int
-		SourceUpdatedAt       func(childComplexity int) int
-		State                 func(childComplexity int) int
-		StepsToReproduce      func(childComplexity int) int
-		SystemInternalID      func(childComplexity int) int
-		SystemOwned           func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		TargetDetails         func(childComplexity int) int
-		Targets               func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
-		Validated             func(childComplexity int) int
-		Vector                func(childComplexity int) int
+		AssessmentID           func(childComplexity int) int
+		AssignedTo             func(childComplexity int) int
+		AssignedToGroupID      func(childComplexity int) int
+		AssignedToUserID       func(childComplexity int) int
+		BlocksProduction       func(childComplexity int) int
+		Categories             func(childComplexity int) int
+		Category               func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		Description            func(childComplexity int) int
+		DisplayID              func(childComplexity int) int
+		DisplayName            func(childComplexity int) int
+		EnvironmentID          func(childComplexity int) int
+		EnvironmentName        func(childComplexity int) int
+		EventTime              func(childComplexity int) int
+		Exploitability         func(childComplexity int) int
+		ExternalID             func(childComplexity int) int
+		ExternalOwnerID        func(childComplexity int) int
+		ExternalURI            func(childComplexity int) int
+		FindingClass           func(childComplexity int) int
+		FindingStatusID        func(childComplexity int) int
+		FindingStatusName      func(childComplexity int) int
+		HistoryTime            func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		Impact                 func(childComplexity int) int
+		InternalNotes          func(childComplexity int) int
+		Metadata               func(childComplexity int) int
+		NumericSeverity        func(childComplexity int) int
+		Open                   func(childComplexity int) int
+		Operation              func(childComplexity int) int
+		OwnerID                func(childComplexity int) int
+		Priority               func(childComplexity int) int
+		Production             func(childComplexity int) int
+		Public                 func(childComplexity int) int
+		RawPayload             func(childComplexity int) int
+		Recommendation         func(childComplexity int) int
+		RecommendedActions     func(childComplexity int) int
+		Ref                    func(childComplexity int) int
+		References             func(childComplexity int) int
+		RemediationSLA         func(childComplexity int) int
+		ReportedAt             func(childComplexity int) int
+		ResourceName           func(childComplexity int) int
+		ReviewedBy             func(childComplexity int) int
+		ReviewedByGroupID      func(childComplexity int) int
+		ReviewedByUserID       func(childComplexity int) int
+		ScopeID                func(childComplexity int) int
+		ScopeName              func(childComplexity int) int
+		Score                  func(childComplexity int) int
+		SecurityLevel          func(childComplexity int) int
+		Severity               func(childComplexity int) int
+		Source                 func(childComplexity int) int
+		SourceUpdatedAt        func(childComplexity int) int
+		State                  func(childComplexity int) int
+		StepsToReproduce       func(childComplexity int) int
+		SystemInternalID       func(childComplexity int) int
+		SystemOwned            func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		TargetDetails          func(childComplexity int) int
+		Targets                func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
+		UpdatedByImpersonator  func(childComplexity int) int
+		Validated              func(childComplexity int) int
+		Vector                 func(childComplexity int) int
+		WorkflowEligibleMarker func(childComplexity int) int
 	}
 
 	FindingHistoryConnection struct {
@@ -2173,45 +2176,46 @@ type ComplexityRoot struct {
 	}
 
 	RemediationHistory struct {
-		CompletedAt           func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		DisplayID             func(childComplexity int) int
-		DueAt                 func(childComplexity int) int
-		EnvironmentID         func(childComplexity int) int
-		EnvironmentName       func(childComplexity int) int
-		Error                 func(childComplexity int) int
-		Explanation           func(childComplexity int) int
-		ExternalID            func(childComplexity int) int
-		ExternalOwnerID       func(childComplexity int) int
-		ExternalURI           func(childComplexity int) int
-		HistoryTime           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		Instructions          func(childComplexity int) int
-		Intent                func(childComplexity int) int
-		InternalNotes         func(childComplexity int) int
-		Metadata              func(childComplexity int) int
-		Operation             func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		OwnerReference        func(childComplexity int) int
-		PrGeneratedAt         func(childComplexity int) int
-		PullRequestURI        func(childComplexity int) int
-		Ref                   func(childComplexity int) int
-		RepositoryURI         func(childComplexity int) int
-		ScopeID               func(childComplexity int) int
-		ScopeName             func(childComplexity int) int
-		Source                func(childComplexity int) int
-		State                 func(childComplexity int) int
-		Status                func(childComplexity int) int
-		Summary               func(childComplexity int) int
-		SystemInternalID      func(childComplexity int) int
-		SystemOwned           func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		TicketReference       func(childComplexity int) int
-		Title                 func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
+		CompletedAt            func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		DisplayID              func(childComplexity int) int
+		DueAt                  func(childComplexity int) int
+		EnvironmentID          func(childComplexity int) int
+		EnvironmentName        func(childComplexity int) int
+		Error                  func(childComplexity int) int
+		Explanation            func(childComplexity int) int
+		ExternalID             func(childComplexity int) int
+		ExternalOwnerID        func(childComplexity int) int
+		ExternalURI            func(childComplexity int) int
+		HistoryTime            func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		Instructions           func(childComplexity int) int
+		Intent                 func(childComplexity int) int
+		InternalNotes          func(childComplexity int) int
+		Metadata               func(childComplexity int) int
+		Operation              func(childComplexity int) int
+		OwnerID                func(childComplexity int) int
+		OwnerReference         func(childComplexity int) int
+		PrGeneratedAt          func(childComplexity int) int
+		PullRequestURI         func(childComplexity int) int
+		Ref                    func(childComplexity int) int
+		RepositoryURI          func(childComplexity int) int
+		ScopeID                func(childComplexity int) int
+		ScopeName              func(childComplexity int) int
+		Source                 func(childComplexity int) int
+		State                  func(childComplexity int) int
+		Status                 func(childComplexity int) int
+		Summary                func(childComplexity int) int
+		SystemInternalID       func(childComplexity int) int
+		SystemOwned            func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		TicketReference        func(childComplexity int) int
+		Title                  func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
+		UpdatedByImpersonator  func(childComplexity int) int
+		WorkflowEligibleMarker func(childComplexity int) int
 	}
 
 	RemediationHistoryConnection struct {
@@ -2277,51 +2281,52 @@ type ComplexityRoot struct {
 	}
 
 	RiskHistory struct {
-		BusinessCosts         func(childComplexity int) int
-		BusinessCostsJSON     func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		DelegateID            func(childComplexity int) int
-		Details               func(childComplexity int) int
-		DetailsJSON           func(childComplexity int) int
-		DisplayID             func(childComplexity int) int
-		DueDate               func(childComplexity int) int
-		EnvironmentID         func(childComplexity int) int
-		EnvironmentName       func(childComplexity int) int
-		ExternalID            func(childComplexity int) int
-		ExternalUUID          func(childComplexity int) int
-		HistoryTime           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		Impact                func(childComplexity int) int
-		IntegrationID         func(childComplexity int) int
-		LastReviewedAt        func(childComplexity int) int
-		Likelihood            func(childComplexity int) int
-		MitigatedAt           func(childComplexity int) int
-		Mitigation            func(childComplexity int) int
-		MitigationJSON        func(childComplexity int) int
-		Name                  func(childComplexity int) int
-		NextReviewDueAt       func(childComplexity int) int
-		ObservedAt            func(childComplexity int) int
-		Operation             func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Ref                   func(childComplexity int) int
-		ResidualScore         func(childComplexity int) int
-		ReviewFrequency       func(childComplexity int) int
-		ReviewRequired        func(childComplexity int) int
-		RiskCategoryID        func(childComplexity int) int
-		RiskCategoryName      func(childComplexity int) int
-		RiskDecision          func(childComplexity int) int
-		RiskKindID            func(childComplexity int) int
-		RiskKindName          func(childComplexity int) int
-		ScopeID               func(childComplexity int) int
-		ScopeName             func(childComplexity int) int
-		Score                 func(childComplexity int) int
-		StakeholderID         func(childComplexity int) int
-		Status                func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
+		BusinessCosts          func(childComplexity int) int
+		BusinessCostsJSON      func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		DelegateID             func(childComplexity int) int
+		Details                func(childComplexity int) int
+		DetailsJSON            func(childComplexity int) int
+		DisplayID              func(childComplexity int) int
+		DueDate                func(childComplexity int) int
+		EnvironmentID          func(childComplexity int) int
+		EnvironmentName        func(childComplexity int) int
+		ExternalID             func(childComplexity int) int
+		ExternalUUID           func(childComplexity int) int
+		HistoryTime            func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		Impact                 func(childComplexity int) int
+		IntegrationID          func(childComplexity int) int
+		LastReviewedAt         func(childComplexity int) int
+		Likelihood             func(childComplexity int) int
+		MitigatedAt            func(childComplexity int) int
+		Mitigation             func(childComplexity int) int
+		MitigationJSON         func(childComplexity int) int
+		Name                   func(childComplexity int) int
+		NextReviewDueAt        func(childComplexity int) int
+		ObservedAt             func(childComplexity int) int
+		Operation              func(childComplexity int) int
+		OwnerID                func(childComplexity int) int
+		Ref                    func(childComplexity int) int
+		ResidualScore          func(childComplexity int) int
+		ReviewFrequency        func(childComplexity int) int
+		ReviewRequired         func(childComplexity int) int
+		RiskCategoryID         func(childComplexity int) int
+		RiskCategoryName       func(childComplexity int) int
+		RiskDecision           func(childComplexity int) int
+		RiskKindID             func(childComplexity int) int
+		RiskKindName           func(childComplexity int) int
+		ScopeID                func(childComplexity int) int
+		ScopeName              func(childComplexity int) int
+		Score                  func(childComplexity int) int
+		StakeholderID          func(childComplexity int) int
+		Status                 func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
+		UpdatedByImpersonator  func(childComplexity int) int
+		WorkflowEligibleMarker func(childComplexity int) int
 	}
 
 	RiskHistoryConnection struct {
@@ -2364,39 +2369,39 @@ type ComplexityRoot struct {
 	}
 
 	ScanHistory struct {
-		AssignedTo            func(childComplexity int) int
-		AssignedToGroupID     func(childComplexity int) int
-		AssignedToUserID      func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		EnvironmentID         func(childComplexity int) int
-		EnvironmentName       func(childComplexity int) int
-		GeneratedByPlatformID func(childComplexity int) int
-		HistoryTime           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		Metadata              func(childComplexity int) int
-		NextScanRunAt         func(childComplexity int) int
-		Operation             func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		PerformedBy           func(childComplexity int) int
-		PerformedByGroupID    func(childComplexity int) int
-		PerformedByUserID     func(childComplexity int) int
-		Ref                   func(childComplexity int) int
-		ReviewedBy            func(childComplexity int) int
-		ReviewedByGroupID     func(childComplexity int) int
-		ReviewedByUserID      func(childComplexity int) int
-		ScanDate              func(childComplexity int) int
-		ScanSchedule          func(childComplexity int) int
-		ScanType              func(childComplexity int) int
-		ScopeID               func(childComplexity int) int
-		ScopeName             func(childComplexity int) int
-		Status                func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		Target                func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
-		VulnerabilityIds      func(childComplexity int) int
+		AssignedTo                 func(childComplexity int) int
+		AssignedToGroupID          func(childComplexity int) int
+		AssignedToUserID           func(childComplexity int) int
+		CreatedAt                  func(childComplexity int) int
+		CreatedBy                  func(childComplexity int) int
+		DiscoveredVulnerabilityIds func(childComplexity int) int
+		EnvironmentID              func(childComplexity int) int
+		EnvironmentName            func(childComplexity int) int
+		GeneratedByPlatformID      func(childComplexity int) int
+		HistoryTime                func(childComplexity int) int
+		ID                         func(childComplexity int) int
+		Metadata                   func(childComplexity int) int
+		NextScanRunAt              func(childComplexity int) int
+		Operation                  func(childComplexity int) int
+		OwnerID                    func(childComplexity int) int
+		PerformedBy                func(childComplexity int) int
+		PerformedByGroupID         func(childComplexity int) int
+		PerformedByUserID          func(childComplexity int) int
+		Ref                        func(childComplexity int) int
+		ReviewedBy                 func(childComplexity int) int
+		ReviewedByGroupID          func(childComplexity int) int
+		ReviewedByUserID           func(childComplexity int) int
+		ScanDate                   func(childComplexity int) int
+		ScanSchedule               func(childComplexity int) int
+		ScanType                   func(childComplexity int) int
+		ScopeID                    func(childComplexity int) int
+		ScopeName                  func(childComplexity int) int
+		Status                     func(childComplexity int) int
+		Tags                       func(childComplexity int) int
+		Target                     func(childComplexity int) int
+		UpdatedAt                  func(childComplexity int) int
+		UpdatedBy                  func(childComplexity int) int
+		UpdatedByImpersonator      func(childComplexity int) int
 	}
 
 	ScanHistoryConnection struct {
@@ -2614,38 +2619,39 @@ type ComplexityRoot struct {
 	}
 
 	TaskHistory struct {
-		AssigneeID            func(childComplexity int) int
-		AssignerID            func(childComplexity int) int
-		Completed             func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		Details               func(childComplexity int) int
-		DetailsJSON           func(childComplexity int) int
-		DisplayID             func(childComplexity int) int
-		Due                   func(childComplexity int) int
-		EnvironmentID         func(childComplexity int) int
-		EnvironmentName       func(childComplexity int) int
-		ExternalReferenceURL  func(childComplexity int) int
-		ExternalUUID          func(childComplexity int) int
-		HistoryTime           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		IdempotencyKey        func(childComplexity int) int
-		IsTemplate            func(childComplexity int) int
-		Operation             func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		ParentTaskID          func(childComplexity int) int
-		Ref                   func(childComplexity int) int
-		ScopeID               func(childComplexity int) int
-		ScopeName             func(childComplexity int) int
-		Status                func(childComplexity int) int
-		SystemGenerated       func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		TaskKindID            func(childComplexity int) int
-		TaskKindName          func(childComplexity int) int
-		Title                 func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
+		AssigneeID             func(childComplexity int) int
+		AssignerID             func(childComplexity int) int
+		Completed              func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		Details                func(childComplexity int) int
+		DetailsJSON            func(childComplexity int) int
+		DisplayID              func(childComplexity int) int
+		Due                    func(childComplexity int) int
+		EnvironmentID          func(childComplexity int) int
+		EnvironmentName        func(childComplexity int) int
+		ExternalReferenceURL   func(childComplexity int) int
+		ExternalUUID           func(childComplexity int) int
+		HistoryTime            func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		IdempotencyKey         func(childComplexity int) int
+		IsTemplate             func(childComplexity int) int
+		Operation              func(childComplexity int) int
+		OwnerID                func(childComplexity int) int
+		ParentTaskID           func(childComplexity int) int
+		Ref                    func(childComplexity int) int
+		ScopeID                func(childComplexity int) int
+		ScopeName              func(childComplexity int) int
+		Status                 func(childComplexity int) int
+		SystemGenerated        func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		TaskKindID             func(childComplexity int) int
+		TaskKindName           func(childComplexity int) int
+		Title                  func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
+		UpdatedByImpersonator  func(childComplexity int) int
+		WorkflowEligibleMarker func(childComplexity int) int
 	}
 
 	TaskHistoryConnection struct {
@@ -3210,6 +3216,7 @@ type ComplexityRoot struct {
 		VulnerabilityStatusID   func(childComplexity int) int
 		VulnerabilityStatusName func(childComplexity int) int
 		VulnerableVersionRange  func(childComplexity int) int
+		WorkflowEligibleMarker  func(childComplexity int) int
 	}
 
 	VulnerabilityHistoryConnection struct {
@@ -3240,6 +3247,7 @@ type ComplexityRoot struct {
 		Metadata              func(childComplexity int) int
 		Notes                 func(childComplexity int) int
 		Operation             func(childComplexity int) int
+		OutcomeMetadata       func(childComplexity int) int
 		OwnerID               func(childComplexity int) int
 		Ref                   func(childComplexity int) int
 		RejectionMetadata     func(childComplexity int) int
@@ -3367,6 +3375,8 @@ type ComplexityRoot struct {
 
 	WorkflowInstanceHistory struct {
 		ActionPlanID          func(childComplexity int) int
+		AssessmentID          func(childComplexity int) int
+		AssessmentResponseID  func(childComplexity int) int
 		CampaignID            func(childComplexity int) int
 		CampaignTargetID      func(childComplexity int) int
 		Context               func(childComplexity int) int
@@ -3377,9 +3387,11 @@ type ComplexityRoot struct {
 		DefinitionSnapshot    func(childComplexity int) int
 		DisplayID             func(childComplexity int) int
 		EvidenceID            func(childComplexity int) int
+		FindingID             func(childComplexity int) int
 		HistoryTime           func(childComplexity int) int
 		ID                    func(childComplexity int) int
 		IdentityHolderID      func(childComplexity int) int
+		IntegrationID         func(childComplexity int) int
 		InternalPolicyID      func(childComplexity int) int
 		LastEvaluatedAt       func(childComplexity int) int
 		Operation             func(childComplexity int) int
@@ -3387,12 +3399,16 @@ type ComplexityRoot struct {
 		PlatformID            func(childComplexity int) int
 		ProcedureID           func(childComplexity int) int
 		Ref                   func(childComplexity int) int
+		RemediationID         func(childComplexity int) int
+		RiskID                func(childComplexity int) int
 		State                 func(childComplexity int) int
 		SubcontrolID          func(childComplexity int) int
 		Tags                  func(childComplexity int) int
+		TaskID                func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
 		UpdatedByImpersonator func(childComplexity int) int
+		VulnerabilityID       func(childComplexity int) int
 		WorkflowDefinitionID  func(childComplexity int) int
 		WorkflowProposalID    func(childComplexity int) int
 	}
@@ -3410,6 +3426,8 @@ type ComplexityRoot struct {
 
 	WorkflowObjectRefHistory struct {
 		ActionPlanID          func(childComplexity int) int
+		AssessmentID          func(childComplexity int) int
+		AssessmentResponseID  func(childComplexity int) int
 		CampaignID            func(childComplexity int) int
 		CampaignTargetID      func(childComplexity int) int
 		ControlID             func(childComplexity int) int
@@ -3430,11 +3448,14 @@ type ComplexityRoot struct {
 		PlatformID            func(childComplexity int) int
 		ProcedureID           func(childComplexity int) int
 		Ref                   func(childComplexity int) int
+		RemediationID         func(childComplexity int) int
+		RiskID                func(childComplexity int) int
 		SubcontrolID          func(childComplexity int) int
 		TaskID                func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
 		UpdatedByImpersonator func(childComplexity int) int
+		VulnerabilityID       func(childComplexity int) int
 		WorkflowInstanceID    func(childComplexity int) int
 	}
 
@@ -3917,6 +3938,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentHistory.UpdatedByImpersonator(childComplexity), true
+	case "AssessmentHistory.workflowEligibleMarker":
+		if e.ComplexityRoot.AssessmentHistory.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "AssessmentHistoryConnection.edges":
 		if e.ComplexityRoot.AssessmentHistoryConnection.Edges == nil {
@@ -4142,6 +4169,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentResponseHistory.UpdatedByImpersonator(childComplexity), true
+	case "AssessmentResponseHistory.workflowEligibleMarker":
+		if e.ComplexityRoot.AssessmentResponseHistory.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentResponseHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "AssessmentResponseHistoryConnection.edges":
 		if e.ComplexityRoot.AssessmentResponseHistoryConnection.Edges == nil {
@@ -9086,6 +9119,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FindingHistory.Vector(childComplexity), true
+	case "FindingHistory.workflowEligibleMarker":
+		if e.ComplexityRoot.FindingHistory.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "FindingHistoryConnection.edges":
 		if e.ComplexityRoot.FindingHistoryConnection.Edges == nil {
@@ -14495,6 +14534,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RemediationHistory.UpdatedByImpersonator(childComplexity), true
+	case "RemediationHistory.workflowEligibleMarker":
+		if e.ComplexityRoot.RemediationHistory.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RemediationHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "RemediationHistoryConnection.edges":
 		if e.ComplexityRoot.RemediationHistoryConnection.Edges == nil {
@@ -15053,6 +15098,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RiskHistory.UpdatedByImpersonator(childComplexity), true
+	case "RiskHistory.workflowEligibleMarker":
+		if e.ComplexityRoot.RiskHistory.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "RiskHistoryConnection.edges":
 		if e.ComplexityRoot.RiskHistoryConnection.Edges == nil {
@@ -15233,6 +15284,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ScanHistory.CreatedBy(childComplexity), true
+	case "ScanHistory.discoveredVulnerabilityIds":
+		if e.ComplexityRoot.ScanHistory.DiscoveredVulnerabilityIds == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ScanHistory.DiscoveredVulnerabilityIds(childComplexity), true
 	case "ScanHistory.environmentID":
 		if e.ComplexityRoot.ScanHistory.EnvironmentID == nil {
 			break
@@ -15395,12 +15452,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ScanHistory.UpdatedByImpersonator(childComplexity), true
-	case "ScanHistory.vulnerabilityIds":
-		if e.ComplexityRoot.ScanHistory.VulnerabilityIds == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScanHistory.VulnerabilityIds(childComplexity), true
 
 	case "ScanHistoryConnection.edges":
 		if e.ComplexityRoot.ScanHistoryConnection.Edges == nil {
@@ -16589,6 +16640,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TaskHistory.UpdatedByImpersonator(childComplexity), true
+	case "TaskHistory.workflowEligibleMarker":
+		if e.ComplexityRoot.TaskHistory.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "TaskHistoryConnection.edges":
 		if e.ComplexityRoot.TaskHistoryConnection.Edges == nil {
@@ -19208,6 +19265,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VulnerabilityHistory.VulnerableVersionRange(childComplexity), true
+	case "VulnerabilityHistory.workflowEligibleMarker":
+		if e.ComplexityRoot.VulnerabilityHistory.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "VulnerabilityHistoryConnection.edges":
 		if e.ComplexityRoot.VulnerabilityHistoryConnection.Edges == nil {
@@ -19337,6 +19400,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkflowAssignmentHistory.Operation(childComplexity), true
+	case "WorkflowAssignmentHistory.outcomeMetadata":
+		if e.ComplexityRoot.WorkflowAssignmentHistory.OutcomeMetadata == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowAssignmentHistory.OutcomeMetadata(childComplexity), true
 	case "WorkflowAssignmentHistory.ownerID":
 		if e.ComplexityRoot.WorkflowAssignmentHistory.OwnerID == nil {
 			break
@@ -19895,6 +19964,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkflowInstanceHistory.ActionPlanID(childComplexity), true
+	case "WorkflowInstanceHistory.assessmentID":
+		if e.ComplexityRoot.WorkflowInstanceHistory.AssessmentID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowInstanceHistory.AssessmentID(childComplexity), true
+	case "WorkflowInstanceHistory.assessmentResponseID":
+		if e.ComplexityRoot.WorkflowInstanceHistory.AssessmentResponseID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowInstanceHistory.AssessmentResponseID(childComplexity), true
 	case "WorkflowInstanceHistory.campaignID":
 		if e.ComplexityRoot.WorkflowInstanceHistory.CampaignID == nil {
 			break
@@ -19955,6 +20036,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkflowInstanceHistory.EvidenceID(childComplexity), true
+	case "WorkflowInstanceHistory.findingID":
+		if e.ComplexityRoot.WorkflowInstanceHistory.FindingID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowInstanceHistory.FindingID(childComplexity), true
 	case "WorkflowInstanceHistory.historyTime":
 		if e.ComplexityRoot.WorkflowInstanceHistory.HistoryTime == nil {
 			break
@@ -19973,6 +20060,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkflowInstanceHistory.IdentityHolderID(childComplexity), true
+	case "WorkflowInstanceHistory.integrationID":
+		if e.ComplexityRoot.WorkflowInstanceHistory.IntegrationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowInstanceHistory.IntegrationID(childComplexity), true
 	case "WorkflowInstanceHistory.internalPolicyID":
 		if e.ComplexityRoot.WorkflowInstanceHistory.InternalPolicyID == nil {
 			break
@@ -20015,6 +20108,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkflowInstanceHistory.Ref(childComplexity), true
+	case "WorkflowInstanceHistory.remediationID":
+		if e.ComplexityRoot.WorkflowInstanceHistory.RemediationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowInstanceHistory.RemediationID(childComplexity), true
+	case "WorkflowInstanceHistory.riskID":
+		if e.ComplexityRoot.WorkflowInstanceHistory.RiskID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowInstanceHistory.RiskID(childComplexity), true
 	case "WorkflowInstanceHistory.state":
 		if e.ComplexityRoot.WorkflowInstanceHistory.State == nil {
 			break
@@ -20033,6 +20138,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkflowInstanceHistory.Tags(childComplexity), true
+	case "WorkflowInstanceHistory.taskID":
+		if e.ComplexityRoot.WorkflowInstanceHistory.TaskID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowInstanceHistory.TaskID(childComplexity), true
 	case "WorkflowInstanceHistory.updatedAt":
 		if e.ComplexityRoot.WorkflowInstanceHistory.UpdatedAt == nil {
 			break
@@ -20051,6 +20162,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkflowInstanceHistory.UpdatedByImpersonator(childComplexity), true
+	case "WorkflowInstanceHistory.vulnerabilityID":
+		if e.ComplexityRoot.WorkflowInstanceHistory.VulnerabilityID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowInstanceHistory.VulnerabilityID(childComplexity), true
 	case "WorkflowInstanceHistory.workflowDefinitionID":
 		if e.ComplexityRoot.WorkflowInstanceHistory.WorkflowDefinitionID == nil {
 			break
@@ -20102,6 +20219,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkflowObjectRefHistory.ActionPlanID(childComplexity), true
+	case "WorkflowObjectRefHistory.assessmentID":
+		if e.ComplexityRoot.WorkflowObjectRefHistory.AssessmentID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowObjectRefHistory.AssessmentID(childComplexity), true
+	case "WorkflowObjectRefHistory.assessmentResponseID":
+		if e.ComplexityRoot.WorkflowObjectRefHistory.AssessmentResponseID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowObjectRefHistory.AssessmentResponseID(childComplexity), true
 	case "WorkflowObjectRefHistory.campaignID":
 		if e.ComplexityRoot.WorkflowObjectRefHistory.CampaignID == nil {
 			break
@@ -20222,6 +20351,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkflowObjectRefHistory.Ref(childComplexity), true
+	case "WorkflowObjectRefHistory.remediationID":
+		if e.ComplexityRoot.WorkflowObjectRefHistory.RemediationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowObjectRefHistory.RemediationID(childComplexity), true
+	case "WorkflowObjectRefHistory.riskID":
+		if e.ComplexityRoot.WorkflowObjectRefHistory.RiskID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowObjectRefHistory.RiskID(childComplexity), true
 	case "WorkflowObjectRefHistory.subcontrolID":
 		if e.ComplexityRoot.WorkflowObjectRefHistory.SubcontrolID == nil {
 			break
@@ -20252,6 +20393,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkflowObjectRefHistory.UpdatedByImpersonator(childComplexity), true
+	case "WorkflowObjectRefHistory.vulnerabilityID":
+		if e.ComplexityRoot.WorkflowObjectRefHistory.VulnerabilityID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowObjectRefHistory.VulnerabilityID(childComplexity), true
 	case "WorkflowObjectRefHistory.workflowInstanceID":
 		if e.ComplexityRoot.WorkflowObjectRefHistory.WorkflowInstanceID == nil {
 			break
@@ -20648,6 +20795,14 @@ scalar WorkflowAssignmentInvalidation
 WorkflowAssignmentRejection captures details when an approval is rejected or denied.
 """
 scalar WorkflowAssignmentRejection
+"""
+AssignmentOutcome captures consolidated terminal outcome metadata for a workflow assignment, discriminated by decision.
+"""
+scalar AssignmentOutcome
+"""
+WorkflowProposedChanges captures staged field updates as opaque JSON for workflow proposals.
+"""
+scalar WorkflowProposedChanges
 """
 Channel notifications will be sent to including in-app, slack, etc
 """
@@ -21557,6 +21712,10 @@ type AssessmentHistory implements Node {
   """
   systemInternalID: String @hidden(if: true)
   """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
   the name of the assessment, e.g. cloud providers, marketing team
   """
   name: String!
@@ -21846,6 +22005,13 @@ input AssessmentHistoryWhereInput {
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
   """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
   name field predicates
   """
   name: String
@@ -21917,6 +22083,10 @@ type AssessmentResponseHistory implements Node {
   the ID of the organization owner of the object
   """
   ownerID: String
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
   """
   the assessment this response is for
   """
@@ -22245,6 +22415,13 @@ input AssessmentResponseHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   assessment_id field predicates
   """
@@ -35489,6 +35666,10 @@ type FindingHistory implements Node {
   """
   findingStatusID: String
   """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
   external identifier from the integration source for the finding
   """
   externalID: String
@@ -36143,6 +36324,13 @@ input FindingHistoryWhereInput {
   findingStatusIDNotNil: Boolean
   findingStatusIDEqualFold: String
   findingStatusIDContainsFold: String
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   external_id field predicates
   """
@@ -50419,6 +50607,10 @@ type RemediationHistory implements Node {
   """
   scopeID: String
   """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
   external identifier from the integration source for the remediation
   """
   externalID: String
@@ -50859,6 +51051,13 @@ input RemediationHistoryWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: String
   scopeIDContainsFold: String
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   external_id field predicates
   """
@@ -51975,6 +52174,10 @@ type RiskHistory implements Node {
   """
   scopeID: String
   """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
   stable identifier assigned by the source system, used for integration ingest deduplication
   """
   externalID: String
@@ -52515,6 +52718,13 @@ input RiskHistoryWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: String
   scopeIDContainsFold: String
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   external_id field predicates
   """
@@ -53218,7 +53428,7 @@ type ScanHistory implements Node {
   """
   identifiers of vulnerabilities discovered during the scan
   """
-  vulnerabilityIds: [String!]
+  discoveredVulnerabilityIds: [String!]
   """
   the status of the scan, e.g., processing, completed, failed
   """
@@ -56368,6 +56578,10 @@ type TaskHistory implements Node {
   """
   scopeID: String
   """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
   stable external UUID for deterministic OSCAL export and round-tripping
   """
   externalUUID: String
@@ -56777,6 +56991,13 @@ input TaskHistoryWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: String
   scopeIDContainsFold: String
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   external_uuid field predicates
   """
@@ -62941,6 +63162,10 @@ type VulnerabilityHistory implements Node {
   """
   vulnerabilityStatusID: String
   """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
   owner of the vulnerability
   """
   externalOwnerID: String
@@ -63616,6 +63841,13 @@ input VulnerabilityHistoryWhereInput {
   vulnerabilityStatusIDEqualFold: String
   vulnerabilityStatusIDContainsFold: String
   """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
   external_owner_id field predicates
   """
   externalOwnerID: String
@@ -64220,6 +64452,10 @@ type WorkflowAssignmentHistory implements Node {
   structured invalidation metadata
   """
   invalidationMetadata: WorkflowAssignmentInvalidation
+  """
+  consolidated terminal outcome metadata discriminated by decision (supersedes approval/rejection/invalidation metadata)
+  """
+  outcomeMetadata: AssignmentOutcome
   """
   Timestamp when the assignment was decided
   """
@@ -65886,6 +66122,38 @@ type WorkflowInstanceHistory implements Node {
   ID of the platform this workflow instance is associated with
   """
   platformID: String
+  """
+  ID of the assessment this workflow instance is associated with
+  """
+  assessmentID: String
+  """
+  ID of the assessment response this workflow instance is associated with
+  """
+  assessmentResponseID: String
+  """
+  ID of the finding this workflow instance is associated with
+  """
+  findingID: String
+  """
+  ID of the integration this workflow instance is associated with
+  """
+  integrationID: String
+  """
+  ID of the remediation this workflow instance is associated with
+  """
+  remediationID: String
+  """
+  ID of the risk this workflow instance is associated with
+  """
+  riskID: String
+  """
+  ID of the task this workflow instance is associated with
+  """
+  taskID: String
+  """
+  ID of the vulnerability this workflow instance is associated with
+  """
+  vulnerabilityID: String
 }
 """
 A connection to a list of items.
@@ -66362,6 +66630,150 @@ input WorkflowInstanceHistoryWhereInput {
   platformIDNotNil: Boolean
   platformIDEqualFold: String
   platformIDContainsFold: String
+  """
+  assessment_id field predicates
+  """
+  assessmentID: String
+  assessmentIDNEQ: String
+  assessmentIDIn: [String!]
+  assessmentIDNotIn: [String!]
+  assessmentIDGT: String
+  assessmentIDGTE: String
+  assessmentIDLT: String
+  assessmentIDLTE: String
+  assessmentIDContains: String
+  assessmentIDHasPrefix: String
+  assessmentIDHasSuffix: String
+  assessmentIDIsNil: Boolean
+  assessmentIDNotNil: Boolean
+  assessmentIDEqualFold: String
+  assessmentIDContainsFold: String
+  """
+  assessment_response_id field predicates
+  """
+  assessmentResponseID: String
+  assessmentResponseIDNEQ: String
+  assessmentResponseIDIn: [String!]
+  assessmentResponseIDNotIn: [String!]
+  assessmentResponseIDGT: String
+  assessmentResponseIDGTE: String
+  assessmentResponseIDLT: String
+  assessmentResponseIDLTE: String
+  assessmentResponseIDContains: String
+  assessmentResponseIDHasPrefix: String
+  assessmentResponseIDHasSuffix: String
+  assessmentResponseIDIsNil: Boolean
+  assessmentResponseIDNotNil: Boolean
+  assessmentResponseIDEqualFold: String
+  assessmentResponseIDContainsFold: String
+  """
+  finding_id field predicates
+  """
+  findingID: String
+  findingIDNEQ: String
+  findingIDIn: [String!]
+  findingIDNotIn: [String!]
+  findingIDGT: String
+  findingIDGTE: String
+  findingIDLT: String
+  findingIDLTE: String
+  findingIDContains: String
+  findingIDHasPrefix: String
+  findingIDHasSuffix: String
+  findingIDIsNil: Boolean
+  findingIDNotNil: Boolean
+  findingIDEqualFold: String
+  findingIDContainsFold: String
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
+  """
+  remediation_id field predicates
+  """
+  remediationID: String
+  remediationIDNEQ: String
+  remediationIDIn: [String!]
+  remediationIDNotIn: [String!]
+  remediationIDGT: String
+  remediationIDGTE: String
+  remediationIDLT: String
+  remediationIDLTE: String
+  remediationIDContains: String
+  remediationIDHasPrefix: String
+  remediationIDHasSuffix: String
+  remediationIDIsNil: Boolean
+  remediationIDNotNil: Boolean
+  remediationIDEqualFold: String
+  remediationIDContainsFold: String
+  """
+  risk_id field predicates
+  """
+  riskID: String
+  riskIDNEQ: String
+  riskIDIn: [String!]
+  riskIDNotIn: [String!]
+  riskIDGT: String
+  riskIDGTE: String
+  riskIDLT: String
+  riskIDLTE: String
+  riskIDContains: String
+  riskIDHasPrefix: String
+  riskIDHasSuffix: String
+  riskIDIsNil: Boolean
+  riskIDNotNil: Boolean
+  riskIDEqualFold: String
+  riskIDContainsFold: String
+  """
+  task_id field predicates
+  """
+  taskID: String
+  taskIDNEQ: String
+  taskIDIn: [String!]
+  taskIDNotIn: [String!]
+  taskIDGT: String
+  taskIDGTE: String
+  taskIDLT: String
+  taskIDLTE: String
+  taskIDContains: String
+  taskIDHasPrefix: String
+  taskIDHasSuffix: String
+  taskIDIsNil: Boolean
+  taskIDNotNil: Boolean
+  taskIDEqualFold: String
+  taskIDContainsFold: String
+  """
+  vulnerability_id field predicates
+  """
+  vulnerabilityID: String
+  vulnerabilityIDNEQ: String
+  vulnerabilityIDIn: [String!]
+  vulnerabilityIDNotIn: [String!]
+  vulnerabilityIDGT: String
+  vulnerabilityIDGTE: String
+  vulnerabilityIDLT: String
+  vulnerabilityIDLTE: String
+  vulnerabilityIDContains: String
+  vulnerabilityIDHasPrefix: String
+  vulnerabilityIDHasSuffix: String
+  vulnerabilityIDIsNil: Boolean
+  vulnerabilityIDNotNil: Boolean
+  vulnerabilityIDEqualFold: String
+  vulnerabilityIDContainsFold: String
 }
 """
 WorkflowInstanceHistoryWorkflowInstanceState is enum for the field state
@@ -66457,6 +66869,26 @@ type WorkflowObjectRefHistory implements Node {
   Platform referenced by this workflow instance
   """
   platformID: String
+  """
+  Vulnerability referenced by this workflow instance
+  """
+  vulnerabilityID: String
+  """
+  Risk referenced by this workflow instance
+  """
+  riskID: String
+  """
+  Assessment referenced by this workflow instance
+  """
+  assessmentID: String
+  """
+  Assessment response referenced by this workflow instance
+  """
+  assessmentResponseID: String
+  """
+  Remediation referenced by this workflow instance
+  """
+  remediationID: String
 }
 """
 A connection to a list of items.
@@ -66974,6 +67406,96 @@ input WorkflowObjectRefHistoryWhereInput {
   platformIDNotNil: Boolean
   platformIDEqualFold: String
   platformIDContainsFold: String
+  """
+  vulnerability_id field predicates
+  """
+  vulnerabilityID: String
+  vulnerabilityIDNEQ: String
+  vulnerabilityIDIn: [String!]
+  vulnerabilityIDNotIn: [String!]
+  vulnerabilityIDGT: String
+  vulnerabilityIDGTE: String
+  vulnerabilityIDLT: String
+  vulnerabilityIDLTE: String
+  vulnerabilityIDContains: String
+  vulnerabilityIDHasPrefix: String
+  vulnerabilityIDHasSuffix: String
+  vulnerabilityIDIsNil: Boolean
+  vulnerabilityIDNotNil: Boolean
+  vulnerabilityIDEqualFold: String
+  vulnerabilityIDContainsFold: String
+  """
+  risk_id field predicates
+  """
+  riskID: String
+  riskIDNEQ: String
+  riskIDIn: [String!]
+  riskIDNotIn: [String!]
+  riskIDGT: String
+  riskIDGTE: String
+  riskIDLT: String
+  riskIDLTE: String
+  riskIDContains: String
+  riskIDHasPrefix: String
+  riskIDHasSuffix: String
+  riskIDIsNil: Boolean
+  riskIDNotNil: Boolean
+  riskIDEqualFold: String
+  riskIDContainsFold: String
+  """
+  assessment_id field predicates
+  """
+  assessmentID: String
+  assessmentIDNEQ: String
+  assessmentIDIn: [String!]
+  assessmentIDNotIn: [String!]
+  assessmentIDGT: String
+  assessmentIDGTE: String
+  assessmentIDLT: String
+  assessmentIDLTE: String
+  assessmentIDContains: String
+  assessmentIDHasPrefix: String
+  assessmentIDHasSuffix: String
+  assessmentIDIsNil: Boolean
+  assessmentIDNotNil: Boolean
+  assessmentIDEqualFold: String
+  assessmentIDContainsFold: String
+  """
+  assessment_response_id field predicates
+  """
+  assessmentResponseID: String
+  assessmentResponseIDNEQ: String
+  assessmentResponseIDIn: [String!]
+  assessmentResponseIDNotIn: [String!]
+  assessmentResponseIDGT: String
+  assessmentResponseIDGTE: String
+  assessmentResponseIDLT: String
+  assessmentResponseIDLTE: String
+  assessmentResponseIDContains: String
+  assessmentResponseIDHasPrefix: String
+  assessmentResponseIDHasSuffix: String
+  assessmentResponseIDIsNil: Boolean
+  assessmentResponseIDNotNil: Boolean
+  assessmentResponseIDEqualFold: String
+  assessmentResponseIDContainsFold: String
+  """
+  remediation_id field predicates
+  """
+  remediationID: String
+  remediationIDNEQ: String
+  remediationIDIn: [String!]
+  remediationIDNotIn: [String!]
+  remediationIDGT: String
+  remediationIDGTE: String
+  remediationIDLT: String
+  remediationIDLTE: String
+  remediationIDContains: String
+  remediationIDHasPrefix: String
+  remediationIDHasSuffix: String
+  remediationIDIsNil: Boolean
+  remediationIDNotNil: Boolean
+  remediationIDEqualFold: String
+  remediationIDContainsFold: String
 }
 `, BuiltIn: false},
 	{Name: "../schemahistory/enums.graphql", Input: `"""
@@ -67150,6 +67672,8 @@ func (ec *executionContext) childFields_AssessmentHistory(ctx context.Context, f
 		return ec.fieldContext_AssessmentHistory_internalNotes(ctx, field)
 	case "systemInternalID":
 		return ec.fieldContext_AssessmentHistory_systemInternalID(ctx, field)
+	case "workflowEligibleMarker":
+		return ec.fieldContext_AssessmentHistory_workflowEligibleMarker(ctx, field)
 	case "name":
 		return ec.fieldContext_AssessmentHistory_name(ctx, field)
 	case "assessmentType":
@@ -67210,6 +67734,8 @@ func (ec *executionContext) childFields_AssessmentResponseHistory(ctx context.Co
 		return ec.fieldContext_AssessmentResponseHistory_updatedByImpersonator(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_AssessmentResponseHistory_ownerID(ctx, field)
+	case "workflowEligibleMarker":
+		return ec.fieldContext_AssessmentResponseHistory_workflowEligibleMarker(ctx, field)
 	case "assessmentID":
 		return ec.fieldContext_AssessmentResponseHistory_assessmentID(ctx, field)
 	case "isTest":
@@ -69202,6 +69728,8 @@ func (ec *executionContext) childFields_FindingHistory(ctx context.Context, fiel
 		return ec.fieldContext_FindingHistory_findingStatusName(ctx, field)
 	case "findingStatusID":
 		return ec.fieldContext_FindingHistory_findingStatusID(ctx, field)
+	case "workflowEligibleMarker":
+		return ec.fieldContext_FindingHistory_workflowEligibleMarker(ctx, field)
 	case "externalID":
 		return ec.fieldContext_FindingHistory_externalID(ctx, field)
 	case "securityLevel":
@@ -71138,6 +71666,8 @@ func (ec *executionContext) childFields_RemediationHistory(ctx context.Context, 
 		return ec.fieldContext_RemediationHistory_scopeName(ctx, field)
 	case "scopeID":
 		return ec.fieldContext_RemediationHistory_scopeID(ctx, field)
+	case "workflowEligibleMarker":
+		return ec.fieldContext_RemediationHistory_workflowEligibleMarker(ctx, field)
 	case "externalID":
 		return ec.fieldContext_RemediationHistory_externalID(ctx, field)
 	case "externalOwnerID":
@@ -71348,6 +71878,8 @@ func (ec *executionContext) childFields_RiskHistory(ctx context.Context, field g
 		return ec.fieldContext_RiskHistory_scopeName(ctx, field)
 	case "scopeID":
 		return ec.fieldContext_RiskHistory_scopeID(ctx, field)
+	case "workflowEligibleMarker":
+		return ec.fieldContext_RiskHistory_workflowEligibleMarker(ctx, field)
 	case "externalID":
 		return ec.fieldContext_RiskHistory_externalID(ctx, field)
 	case "integrationID":
@@ -71544,8 +72076,8 @@ func (ec *executionContext) childFields_ScanHistory(ctx context.Context, field g
 		return ec.fieldContext_ScanHistory_performedByGroupID(ctx, field)
 	case "generatedByPlatformID":
 		return ec.fieldContext_ScanHistory_generatedByPlatformID(ctx, field)
-	case "vulnerabilityIds":
-		return ec.fieldContext_ScanHistory_vulnerabilityIds(ctx, field)
+	case "discoveredVulnerabilityIds":
+		return ec.fieldContext_ScanHistory_discoveredVulnerabilityIds(ctx, field)
 	case "status":
 		return ec.fieldContext_ScanHistory_status(ctx, field)
 	}
@@ -72018,6 +72550,8 @@ func (ec *executionContext) childFields_TaskHistory(ctx context.Context, field g
 		return ec.fieldContext_TaskHistory_scopeName(ctx, field)
 	case "scopeID":
 		return ec.fieldContext_TaskHistory_scopeID(ctx, field)
+	case "workflowEligibleMarker":
+		return ec.fieldContext_TaskHistory_workflowEligibleMarker(ctx, field)
 	case "externalUUID":
 		return ec.fieldContext_TaskHistory_externalUUID(ctx, field)
 	case "title":
@@ -73090,6 +73624,8 @@ func (ec *executionContext) childFields_VulnerabilityHistory(ctx context.Context
 		return ec.fieldContext_VulnerabilityHistory_vulnerabilityStatusName(ctx, field)
 	case "vulnerabilityStatusID":
 		return ec.fieldContext_VulnerabilityHistory_vulnerabilityStatusID(ctx, field)
+	case "workflowEligibleMarker":
+		return ec.fieldContext_VulnerabilityHistory_workflowEligibleMarker(ctx, field)
 	case "externalOwnerID":
 		return ec.fieldContext_VulnerabilityHistory_externalOwnerID(ctx, field)
 	case "securityLevel":
@@ -73246,6 +73782,8 @@ func (ec *executionContext) childFields_WorkflowAssignmentHistory(ctx context.Co
 		return ec.fieldContext_WorkflowAssignmentHistory_rejectionMetadata(ctx, field)
 	case "invalidationMetadata":
 		return ec.fieldContext_WorkflowAssignmentHistory_invalidationMetadata(ctx, field)
+	case "outcomeMetadata":
+		return ec.fieldContext_WorkflowAssignmentHistory_outcomeMetadata(ctx, field)
 	case "decidedAt":
 		return ec.fieldContext_WorkflowAssignmentHistory_decidedAt(ctx, field)
 	case "actorUserID":
@@ -73544,6 +74082,22 @@ func (ec *executionContext) childFields_WorkflowInstanceHistory(ctx context.Cont
 		return ec.fieldContext_WorkflowInstanceHistory_identityHolderID(ctx, field)
 	case "platformID":
 		return ec.fieldContext_WorkflowInstanceHistory_platformID(ctx, field)
+	case "assessmentID":
+		return ec.fieldContext_WorkflowInstanceHistory_assessmentID(ctx, field)
+	case "assessmentResponseID":
+		return ec.fieldContext_WorkflowInstanceHistory_assessmentResponseID(ctx, field)
+	case "findingID":
+		return ec.fieldContext_WorkflowInstanceHistory_findingID(ctx, field)
+	case "integrationID":
+		return ec.fieldContext_WorkflowInstanceHistory_integrationID(ctx, field)
+	case "remediationID":
+		return ec.fieldContext_WorkflowInstanceHistory_remediationID(ctx, field)
+	case "riskID":
+		return ec.fieldContext_WorkflowInstanceHistory_riskID(ctx, field)
+	case "taskID":
+		return ec.fieldContext_WorkflowInstanceHistory_taskID(ctx, field)
+	case "vulnerabilityID":
+		return ec.fieldContext_WorkflowInstanceHistory_vulnerabilityID(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type WorkflowInstanceHistory", field.Name)
 }
@@ -73626,6 +74180,16 @@ func (ec *executionContext) childFields_WorkflowObjectRefHistory(ctx context.Con
 		return ec.fieldContext_WorkflowObjectRefHistory_identityHolderID(ctx, field)
 	case "platformID":
 		return ec.fieldContext_WorkflowObjectRefHistory_platformID(ctx, field)
+	case "vulnerabilityID":
+		return ec.fieldContext_WorkflowObjectRefHistory_vulnerabilityID(ctx, field)
+	case "riskID":
+		return ec.fieldContext_WorkflowObjectRefHistory_riskID(ctx, field)
+	case "assessmentID":
+		return ec.fieldContext_WorkflowObjectRefHistory_assessmentID(ctx, field)
+	case "assessmentResponseID":
+		return ec.fieldContext_WorkflowObjectRefHistory_assessmentResponseID(ctx, field)
+	case "remediationID":
+		return ec.fieldContext_WorkflowObjectRefHistory_remediationID(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type WorkflowObjectRefHistory", field.Name)
 }

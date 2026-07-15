@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
@@ -43,6 +44,7 @@ type AssessmentQuery struct {
 	withIdentityHolders          *IdentityHolderQuery
 	withAssessmentResponses      *AssessmentResponseQuery
 	withCampaigns                *CampaignQuery
+	withWorkflowObjectRefs       *WorkflowObjectRefQuery
 	loadTotal                    []func(context.Context, []*Assessment) error
 	modifiers                    []func(*sql.Selector)
 	withNamedBlockedGroups       map[string]*GroupQuery
@@ -52,6 +54,7 @@ type AssessmentQuery struct {
 	withNamedIdentityHolders     map[string]*IdentityHolderQuery
 	withNamedAssessmentResponses map[string]*AssessmentResponseQuery
 	withNamedCampaigns           map[string]*CampaignQuery
+	withNamedWorkflowObjectRefs  map[string]*WorkflowObjectRefQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -313,6 +316,31 @@ func (_q *AssessmentQuery) QueryCampaigns() *CampaignQuery {
 	return query
 }
 
+// QueryWorkflowObjectRefs chains the current query on the "workflow_object_refs" edge.
+func (_q *AssessmentQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, selector),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, assessment.WorkflowObjectRefsTable, assessment.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Assessment entity from the query.
 // Returns a *NotFoundError when no Assessment was found.
 func (_q *AssessmentQuery) First(ctx context.Context) (*Assessment, error) {
@@ -514,6 +542,7 @@ func (_q *AssessmentQuery) Clone() *AssessmentQuery {
 		withIdentityHolders:     _q.withIdentityHolders.Clone(),
 		withAssessmentResponses: _q.withAssessmentResponses.Clone(),
 		withCampaigns:           _q.withCampaigns.Clone(),
+		withWorkflowObjectRefs:  _q.withWorkflowObjectRefs.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -620,6 +649,17 @@ func (_q *AssessmentQuery) WithCampaigns(opts ...func(*CampaignQuery)) *Assessme
 	return _q
 }
 
+// WithWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to
+// the "workflow_object_refs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObjectRefQuery)) *AssessmentQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWorkflowObjectRefs = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -704,7 +744,7 @@ func (_q *AssessmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 	var (
 		nodes       = []*Assessment{}
 		_spec       = _q.querySpec()
-		loadedTypes = [9]bool{
+		loadedTypes = [10]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -714,6 +754,7 @@ func (_q *AssessmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 			_q.withIdentityHolders != nil,
 			_q.withAssessmentResponses != nil,
 			_q.withCampaigns != nil,
+			_q.withWorkflowObjectRefs != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -802,6 +843,15 @@ func (_q *AssessmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 			return nil, err
 		}
 	}
+	if query := _q.withWorkflowObjectRefs; query != nil {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *Assessment) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
+			func(n *Assessment, e *WorkflowObjectRef) {
+				n.Edges.WorkflowObjectRefs = append(n.Edges.WorkflowObjectRefs, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedBlockedGroups {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Assessment) { n.appendNamedBlockedGroups(name) },
@@ -848,6 +898,13 @@ func (_q *AssessmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 		if err := _q.loadCampaigns(ctx, query, nodes,
 			func(n *Assessment) { n.appendNamedCampaigns(name) },
 			func(n *Assessment, e *Campaign) { n.appendNamedCampaigns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedWorkflowObjectRefs {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *Assessment) { n.appendNamedWorkflowObjectRefs(name) },
+			func(n *Assessment, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1194,6 +1251,37 @@ func (_q *AssessmentQuery) loadCampaigns(ctx context.Context, query *CampaignQue
 	}
 	return nil
 }
+func (_q *AssessmentQuery) loadWorkflowObjectRefs(ctx context.Context, query *WorkflowObjectRefQuery, nodes []*Assessment, init func(*Assessment), assign func(*Assessment, *WorkflowObjectRef)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Assessment)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(workflowobjectref.FieldAssessmentID)
+	}
+	query.Where(predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(assessment.WorkflowObjectRefsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.AssessmentID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "assessment_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *AssessmentQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1394,6 +1482,20 @@ func (_q *AssessmentQuery) WithNamedCampaigns(name string, opts ...func(*Campaig
 		_q.withNamedCampaigns = make(map[string]*CampaignQuery)
 	}
 	_q.withNamedCampaigns[name] = query
+	return _q
+}
+
+// WithNamedWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to the "workflow_object_refs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentQuery) WithNamedWorkflowObjectRefs(name string, opts ...func(*WorkflowObjectRefQuery)) *AssessmentQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedWorkflowObjectRefs == nil {
+		_q.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery)
+	}
+	_q.withNamedWorkflowObjectRefs[name] = query
 	return _q
 }
 
