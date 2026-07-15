@@ -179,6 +179,11 @@ integrations:
             - cloudflareinsights
             - googlesyndication
             - gstatic
+            - hcaptcha
+            - googleapis
+            - hsforms
+            - hs-scripts
+            - hscollectedforms
         nonvendorcategories:
             - Miscellaneous
             - JavaScript frameworks

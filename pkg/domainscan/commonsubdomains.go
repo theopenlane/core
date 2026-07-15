@@ -58,3 +58,23 @@ type dkimSelector struct {
 	label  string
 	vendor string
 }
+
+// vendorHostNames overrides the display name derived from an exact hostname
+// TODO: use system owned vendors to do the lookup instead
+var vendorHostNames = map[string]string{
+	"admin.google.com": "Google Workspace",
+	"cloud.google.com": "Google Cloud",
+}
+
+// vendorDomainNames overrides the display name derived from a registrable domain
+// when naively title-casing its first label (see domainVendorName and
+// vendorNameFromHostname) produces something other than the vendor's actual name
+// TODO: use system owned vendors to do the lookup instead
+var vendorDomainNames = map[string]string{
+	"amazonses.com":      "Amazon SES",
+	"theopenlane.io":     "Openlane",
+	"hubspotemail.net":   "Hubspot",
+	"helpscoutdocs.com":  "Help Scout",
+	"stspg-customer.com": "Atlassian Statuspage",
+	"vercel-dns.com":     "Vercel",
+}

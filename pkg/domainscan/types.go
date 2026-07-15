@@ -26,7 +26,7 @@ type CompanyProfile struct {
 	Name             string      `json:"name"`
 	Description      string      `json:"description"`
 	Industry         string      `json:"industry"`
-	Products         []Product   `json:"products"`
+	Systems          []System    `json:"systems"`
 	Location         string      `json:"location"`
 	EmployeeRange    string      `json:"employee_range"`
 	FoundedYear      string      `json:"founded_year"`
@@ -45,13 +45,14 @@ type CompanyProfile struct {
 	MFASupported bool `json:"mfa_supported"`
 }
 
-// Product describes a single product or service offered by the company
-type Product struct {
+// System describes a single technical system or component that makes up the
+// company's offering (e.g. a web console, public API, mobile app, or storage backend)
+type System struct {
 	Name string `json:"name"`
-	// Summary is a brief, 1-2 sentence description of the product
+	// Summary is a brief, 1-2 sentence description of the system
 	Summary string `json:"summary"`
-	// FullDescription is a more thorough description of the product, drawn
-	// from documentation, feature pages, or other technical content when available
+	// FullDescription is a more thorough description of the system, drawn
+	// from documentation, architecture pages, or other technical content when available
 	FullDescription string `json:"full_description"`
 }
 

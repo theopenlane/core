@@ -587,6 +587,11 @@ coreConfiguration:
           - cloudflareinsights
           - googlesyndication
           - gstatic
+          - hcaptcha
+          - googleapis
+          - hsforms
+          - hs-scripts
+          - hscollectedforms
     githubapp:
       appslug: ""  # @schema type:string
     slack:

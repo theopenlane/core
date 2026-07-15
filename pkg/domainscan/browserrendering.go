@@ -304,16 +304,16 @@ func buildCompanyProfileSchema() ResponseFormat {
 					Type:        "string",
 					Description: "The primary industry the company operates in",
 				},
-				"products": {
+				"systems": {
 					Type:        "array",
-					Description: "Key products or services offered by the company",
+					Description: "Typically 2-5 distinct technical surfaces that make up the company's own product infrastructure, e.g. a web console/dashboard, public API, mobile app, CLI tool, or storage/database backend. Do NOT include the company's product modules, capabilities, or named marketing features as separate entries (e.g. things like 'Compliance Automation', 'Policy Management', 'Frameworks', 'Trust Center', 'Registry', 'Reporting', or similar named offerings are features within one web console, not separate systems, and must be excluded). A company with a single product should usually yield a single system, not one per feature it markets.",
 					Items: &JSONSchemaProperty{
 						Type:        "object",
-						Description: "A single product or service",
+						Description: "A single technical system, not a product module, capability, or marketing feature name",
 						Properties: map[string]JSONSchemaProperty{
-							"name":             {Type: "string", Description: "The product or service name"},
-							"summary":          {Type: "string", Description: "A brief, 1-2 sentence description of what this product or service does"},
-							"full_description": {Type: "string", Description: "A more thorough description of this product or service, including key features and the problem it solves, drawn from documentation, feature pages, or other technical content when available"},
+							"name":             {Type: "string", Description: "The system name (e.g. Console, API, Mobile App, Storage Backend) — never a marketing feature or module name"},
+							"summary":          {Type: "string", Description: "A brief, 1-2 sentence description of what this system does"},
+							"full_description": {Type: "string", Description: "A more thorough description of what this system does and what data or functionality it handles, drawn from documentation, architecture pages, or other technical content when available"},
 						},
 					},
 				},

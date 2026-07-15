@@ -270,7 +270,7 @@ func TestBuildSystems(t *testing.T) {
 	t.Run("prefers full description, falls back to summary", func(t *testing.T) {
 		enrichment := Enrichment{
 			Company: &CompanyProfile{
-				Products: []Product{
+				Systems: []System{
 					{Name: "Widget", Summary: "short", FullDescription: "long"},
 					{Name: "Gadget", Summary: "short only"},
 				},

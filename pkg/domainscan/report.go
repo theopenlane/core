@@ -121,15 +121,39 @@ func icannRegistrableDomain(host string) (string, bool) {
 	return domain, err == nil
 }
 
-// domainVendorName derives a display name from a registrable domain by
-// capitalizing its first label, e.g. "google.com" -> "Google"
+// domainVendorName derives a display name from a registrable domain: an override
+// from vendorDomainNames if the domain has one, otherwise capitalizing its first
+// label, e.g. "google.com" -> "Google"
 func domainVendorName(domain string) string {
+	if override, ok := vendorDomainNames[domain]; ok {
+		return override
+	}
+
 	label := strings.SplitN(domain, ".", 2)[0] //nolint:mnd
 	if label == "" {
 		return domain
 	}
 
 	return strings.ToUpper(label[:1]) + label[1:]
+}
+
+// vendorNameForURL derives a vendor's grouping domain and display name from rawURL,
+// preferring an exact vendorHostNames match (for hosts that share a registrable
+// domain with another product, e.g. admin.google.com vs cloud.google.com) before
+// collapsing to the registrable domain via domainVendorName
+func vendorNameForURL(rawURL string) (name, domain string) {
+	domain = registrableDomain(rawURL)
+	if domain == "" {
+		return "", ""
+	}
+
+	if u, err := url.Parse(rawURL); err == nil {
+		if override, ok := vendorHostNames[strings.ToLower(u.Hostname())]; ok {
+			return override, domain
+		}
+	}
+
+	return domainVendorName(domain), domain
 }
 
 // vendorGroups accumulates vendor signals (wappalyzer detections, third-party
@@ -209,7 +233,7 @@ type ReportConfig struct {
 	// instead of vendors when building an onboarding domain scan report
 	NonVendorCategories []string `json:"nonvendorcategories" koanf:"nonvendorcategories" default:"[Miscellaneous,JavaScript frameworks,JavaScript libraries,Static site generator]"`
 	// DeniedVendorNames lists vendor names to always exclude from an onboarding domain scan report's vendor list
-	DeniedVendorNames []string `json:"deniedvendornames" koanf:"deniedvendornames" default:"[rfc-editor,ajax,website-files,http/3,googletagmanager,cloudflareinsights,googlesyndication,gstatic]"`
+	DeniedVendorNames []string `json:"deniedvendornames" koanf:"deniedvendornames" default:"[rfc-editor,ajax,website-files,http/3,googletagmanager,cloudflareinsights,googlesyndication,gstatic,hcaptcha,googleapis,hsforms,hs-scripts,hscollectedforms]"`
 }
 
 // BuildScanReport combines a Cloudflare URL Scanner result with the Enrichment gathered by GatherEnrichment into a single report
@@ -377,8 +401,8 @@ func groupWappaDetections(wappaData []url_scanner.ScanGetResponseMetaProcessorsW
 			continue
 		}
 
-		if domain := registrableDomain(w.Website); domain != "" {
-			groups.add(domain, domainVendorName(domain), "https://"+domain, categories)
+		if name, domain := vendorNameForURL(w.Website); domain != "" {
+			groups.add(domain, name, "https://"+domain, categories)
 		} else {
 			groups.add("name:"+strings.ToLower(w.App), w.App, "Unknown", categories)
 		}
@@ -396,12 +420,12 @@ func mergeRequestVendors(requests []url_scanner.ScanGetResponseDataRequest, apex
 			rawURL = req.Request.Request.URL
 		}
 
-		domain := registrableDomain(rawURL)
+		name, domain := vendorNameForURL(rawURL)
 		if domain == "" || domain == apexDomain {
 			continue
 		}
 
-		groups.add(domain, domainVendorName(domain), "https://"+domain, nil)
+		groups.add(domain, name, "https://"+domain, nil)
 	}
 }
 
@@ -769,23 +793,23 @@ func buildPlatform(enrichment Enrichment) map[string]any {
 	return platform
 }
 
-// buildSystems shapes each of the company's products, using field names that
+// buildSystems shapes each of the company's systems, using field names that
 // mirror Openlane's SystemDetail object (system_name/description)
 func buildSystems(enrichment Enrichment) []map[string]any {
 	if enrichment.Company == nil {
 		return nil
 	}
 
-	systems := make([]map[string]any, 0, len(enrichment.Company.Products))
+	systems := make([]map[string]any, 0, len(enrichment.Company.Systems))
 
-	for _, p := range enrichment.Company.Products {
-		description := p.FullDescription
+	for _, s := range enrichment.Company.Systems {
+		description := s.FullDescription
 		if description == "" {
-			description = p.Summary
+			description = s.Summary
 		}
 
 		systems = append(systems, map[string]any{
-			"system_name": p.Name,
+			"system_name": s.Name,
 			"description": description,
 		})
 	}

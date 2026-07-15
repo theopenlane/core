@@ -83,7 +83,6 @@ func (r *Runtime) HandleDomainScanCreate(ctx context.Context, envelope operation
 	for _, scan := range result.Scans {
 		scanRecord, err := r.DB().Scan.Create().
 			SetOwnerID(envelope.OrganizationID).
-			SetScopeName("production").
 			SetTarget(hostFromURL(scan.URL)).
 			SetScanType(enums.ScanTypeDomain).
 			SetScanDate(*now).

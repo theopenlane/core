@@ -289,9 +289,19 @@ func spfIncludeHosts(record string) []string {
 // "aspmx.l.google.com" -> "Google", "google.com", also returning that
 // registrable domain so callers can use it as the vendor's URL
 func vendorNameFromHostname(host string) (name, domain string) {
-	domain, ok := icannRegistrableDomain(strings.TrimSuffix(host, "."))
+	host = strings.TrimSuffix(host, ".")
+
+	domain, ok := icannRegistrableDomain(host)
 	if !ok {
 		return "", ""
+	}
+
+	if override, ok := vendorHostNames[strings.ToLower(host)]; ok {
+		return override, domain
+	}
+
+	if override, ok := vendorDomainNames[domain]; ok {
+		return override, domain
 	}
 
 	label := strings.SplitN(domain, ".", 2)[0]
