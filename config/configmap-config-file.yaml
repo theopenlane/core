@@ -1041,15 +1041,18 @@ data:
         accountid: {{ .Values.openlane.coreConfiguration.integrations.cloudflareruntime.accountid | quote }}
         {{- end }}
       {{- end }}
-      {{- $sliceValue := (.Values.openlane.coreConfiguration.integrations.domainscannonvendorcategories | default (list)) }}
-      {{- if gt (len $sliceValue) 0 }}
-      domainscannonvendorcategories:
-      {{- toYaml $sliceValue | nindent 8 }}
-      {{- end }}
-      {{- $sliceValue := (.Values.openlane.coreConfiguration.integrations.domainscandeniedvendornames | default (list)) }}
-      {{- if gt (len $sliceValue) 0 }}
-      domainscandeniedvendornames:
-      {{- toYaml $sliceValue | nindent 8 }}
+      {{- if .Values.openlane.coreConfiguration.integrations.domainscan }}
+      domainscan:
+        {{- $sliceValue := (.Values.openlane.coreConfiguration.integrations.domainscan.nonvendorcategories | default (list)) }}
+        {{- if gt (len $sliceValue) 0 }}
+        nonvendorcategories:
+        {{- toYaml $sliceValue | nindent 10 }}
+        {{- end }}
+        {{- $sliceValue := (.Values.openlane.coreConfiguration.integrations.domainscan.deniedvendornames | default (list)) }}
+        {{- if gt (len $sliceValue) 0 }}
+        deniedvendornames:
+        {{- toYaml $sliceValue | nindent 10 }}
+        {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.githubapp }}
       githubapp:

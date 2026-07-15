@@ -136,6 +136,7 @@ Config contains the configuration for the core server
     "integrations": {
         "awssecurityhub": {},
         "cloudflareruntime": {},
+        "domainscan": {},
         "githubapp": {},
         "slack": {},
         "slackruntime": {},
@@ -1666,8 +1667,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**consoleintegrationpath**|`string`|||
 |[**awssecurityhub**](#integrationsawssecurityhub)|`object`|||
 |[**cloudflareruntime**](#integrationscloudflareruntime)|`object`|||
-|[**domainscannonvendorcategories**](#integrationsdomainscannonvendorcategories)|`string[]`|||
-|[**domainscandeniedvendornames**](#integrationsdomainscandeniedvendornames)|`string[]`|||
+|[**domainscan**](#integrationsdomainscan)|`object`|||
 |[**githubapp**](#integrationsgithubapp)|`object`|||
 |[**slack**](#integrationsslack)|`object`|||
 |[**slackruntime**](#integrationsslackruntime)|`object`|||
@@ -1688,6 +1688,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 {
     "awssecurityhub": {},
     "cloudflareruntime": {},
+    "domainscan": {},
     "githubapp": {},
     "slack": {},
     "slackruntime": {},
@@ -1733,14 +1734,25 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**accountid**|`string`|Cloudflare account ID for the operator-owned account<br/>||
 
 **Additional Properties:** not allowed  
+<a name="integrationsdomainscan"></a>
+### integrations\.domainscan: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|[**nonvendorcategories**](#integrationsdomainscannonvendorcategories)|`string[]`|||
+|[**deniedvendornames**](#integrationsdomainscandeniedvendornames)|`string[]`|||
+
+**Additional Properties:** not allowed  
 <a name="integrationsdomainscannonvendorcategories"></a>
-### integrations\.domainscannonvendorcategories: array
+#### integrations\.domainscan\.nonvendorcategories: array
 
 **Items**
 
 **Item Type:** `string`  
 <a name="integrationsdomainscandeniedvendornames"></a>
-### integrations\.domainscandeniedvendornames: array
+#### integrations\.domainscan\.deniedvendornames: array
 
 **Items**
 

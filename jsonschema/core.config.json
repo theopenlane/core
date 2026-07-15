@@ -152,11 +152,8 @@
         "cloudflareruntime": {
           "$ref": "#/$defs/cloudflare.RuntimeCloudflareConfig"
         },
-        "domainscannonvendorcategories": {
-          "$ref": "#/$defs/[]string"
-        },
-        "domainscandeniedvendornames": {
-          "$ref": "#/$defs/[]string"
+        "domainscan": {
+          "$ref": "#/$defs/domainscan.ReportConfig"
         },
         "githubapp": {
           "$ref": "#/$defs/githubapp.Config"
@@ -469,6 +466,18 @@
       "additionalProperties": false,
       "type": "object",
       "description": "Config defines configuration for the CSRF middleware wrapper."
+    },
+    "domainscan.ReportConfig": {
+      "properties": {
+        "nonvendorcategories": {
+          "$ref": "#/$defs/[]string"
+        },
+        "deniedvendornames": {
+          "$ref": "#/$defs/[]string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "email.RuntimeEmailConfig": {
       "properties": {

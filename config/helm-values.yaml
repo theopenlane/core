@@ -572,20 +572,21 @@ coreConfiguration:
     cloudflareruntime:
       # -- Cloudflare account ID for the operator-owned account
       accountId: ""  # @schema type:string
-    domainscannonvendorcategories:
-        - Miscellaneous
-        - JavaScript frameworks
-        - JavaScript libraries
-        - Static site generator
-    domainscandeniedvendornames:
-        - rfc-editor
-        - ajax
-        - website-files
-        - http/3
-        - googletagmanager
-        - cloudflareinsights
-        - googlesyndication
-        - gstatic
+    domainscan:
+      nonvendorcategories:
+          - Miscellaneous
+          - JavaScript frameworks
+          - JavaScript libraries
+          - Static site generator
+      deniedvendornames:
+          - rfc-editor
+          - ajax
+          - website-files
+          - http/3
+          - googletagmanager
+          - cloudflareinsights
+          - googlesyndication
+          - gstatic
     githubapp:
       appslug: ""  # @schema type:string
     slack:
