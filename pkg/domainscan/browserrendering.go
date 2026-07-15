@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	domainScanTTL = 0 // 10 minutes in seconds
+	domainScanTTL = 600 // 10 minutes in seconds
 	// browserNavigationTimeout is the Puppeteer-level navigation timeout in milliseconds, controlling how long the browser waits for the waitUntil condition.
 	// The default Puppeteer timeout is 30000ms; 45000ms provides additional headroom for slow initial page loads.
 	browserNavigationTimeout = 45000
