@@ -184,6 +184,8 @@ integrations:
                 - hs-scripts
                 - hscollectedforms
                 - hsts
+                - hs-banner
+                - hs-analytics
             nonvendorcategories:
                 - Miscellaneous
                 - JavaScript frameworks

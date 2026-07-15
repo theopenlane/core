@@ -594,6 +594,8 @@ coreConfiguration:
             - hs-scripts
             - hscollectedforms
             - hsts
+            - hs-banner
+            - hs-analytics
         scanttl: 86400  # @schema type:integer; default:86400
     githubapp:
       appslug: ""  # @schema type:string

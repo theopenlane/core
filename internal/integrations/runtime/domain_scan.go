@@ -8,15 +8,20 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/cloudflare/cloudflare-go/v7/url_scanner"
 	"github.com/riverqueue/river"
+	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/auth"
+	"golang.org/x/sync/errgroup"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
 	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/pkg/domainscan"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -26,8 +31,10 @@ var errDomainScanTaskFailed = errors.New("domain scan: cloudflare scan task fail
 // errDomainScanMaxAttemptsReached is returned when a scan never completes within the poll budget
 var errDomainScanMaxAttemptsReached = errors.New("domain scan: max poll attempts reached")
 
-// domainScanForceRefreshMetadataKey is the Scan.Metadata key used to carry the ForceRefresh flag
-const domainScanForceRefreshMetadataKey = "force_refresh"
+// domainScanEnrichmentMetadataKey is the Scan.Metadata key used to carry the enrichment data
+// gathered concurrently with URL Scanner submission and polling, until the poll cycle
+// finishes and needs it to build the final report
+const domainScanEnrichmentMetadataKey = "enrichment"
 
 // HandleDomainScanCreate submits an organization's domains to Cloudflare's URL Scanner
 func (r *Runtime) HandleDomainScanCreate(ctx context.Context, envelope operations.DomainScanCreateEnvelope) error {
@@ -54,6 +61,8 @@ func (r *Runtime) HandleDomainScanCreate(ctx context.Context, envelope operation
 		return err
 	}
 
+	enrichments := r.gatherDomainScanEnrichments(ctx, result.Scans, envelope.ForceRefresh, logger)
+
 	systemCtx := domainScanSystemContext(ctx, envelope.OrganizationID)
 
 	now, err := models.ToDateTime(time.Now().Format(time.RFC3339))
@@ -61,7 +70,7 @@ func (r *Runtime) HandleDomainScanCreate(ctx context.Context, envelope operation
 		return err
 	}
 
-	for _, scan := range result.Scans {
+	for i, scan := range result.Scans {
 		scanRecord, err := r.DB().Scan.Create().
 			SetOwnerID(envelope.OrganizationID).
 			SetTarget(hostFromURL(scan.URL)).
@@ -69,7 +78,7 @@ func (r *Runtime) HandleDomainScanCreate(ctx context.Context, envelope operation
 			SetScanDate(*now).
 			SetPerformedBy("openlane_domain_scan").
 			SetStatus(enums.ScanStatusProcessing).
-			SetMetadata(map[string]any{domainScanForceRefreshMetadataKey: envelope.ForceRefresh}).
+			SetMetadata(map[string]any{domainScanEnrichmentMetadataKey: enrichments[i]}).
 			Save(systemCtx)
 		if err != nil {
 			logger.Error().Err(err).Str("scan_id", scan.UUID).Msg("domain scan: failed creating scan record")
@@ -110,6 +119,51 @@ func hostFromURL(rawURL string) string {
 	}
 
 	return rawURL
+}
+
+// gatherDomainScanEnrichments gathers company profile, compliance, and DNS vendor data for
+// every submitted scan concurrently, so enrichment overlaps with URL Scanner processing
+// instead of waiting for it to complete. Each lookup is best-effort: a failure is logged and
+// that scan's Enrichment is left zero-valued rather than failing the whole batch
+func (r *Runtime) gatherDomainScanEnrichments(ctx context.Context, scans []url_scanner.ScanBulkNewResponse, forceRefresh bool, logger zerolog.Logger) []domainscan.Enrichment {
+	enrichments := make([]domainscan.Enrichment, len(scans))
+
+	var g errgroup.Group
+
+	for i, scan := range scans {
+		g.Go(func() error {
+			domain := hostFromURL(scan.URL)
+
+			config, err := json.Marshal(cloudflare.DomainScanGatherEnrichment{
+				Domain:       domain,
+				ForceRefresh: forceRefresh,
+			})
+			if err != nil {
+				logger.Error().Err(err).Str("domain", domain).Msg("domain scan: failed encoding enrichment gather config")
+				return nil
+			}
+
+			response, err := r.ExecuteRuntimeOperation(ctx, cloudflare.DefinitionID.ID(), cloudflare.DomainScanGatherEnrichmentOp.Name(), config)
+			if err != nil {
+				logger.Error().Err(err).Str("domain", domain).Msg("domain scan: failed gathering enrichment")
+				return nil
+			}
+
+			var result cloudflare.DomainScanGatherEnrichmentResult
+			if err := json.Unmarshal(response, &result); err != nil {
+				logger.Error().Err(err).Str("domain", domain).Msg("domain scan: failed decoding gathered enrichment")
+				return nil
+			}
+
+			enrichments[i] = result.Enrichment
+
+			return nil
+		})
+	}
+
+	_ = g.Wait()
+
+	return enrichments
 }
 
 // HandleDomainScanPoll processes one poll cycle for a submitted scan: re-emitting itself for
@@ -209,29 +263,34 @@ func (r *Runtime) finalizeDomainScan(ctx context.Context, organizationID, intern
 		return err
 	}
 
-	forceRefresh, _ := scanRecord.Metadata[domainScanForceRefreshMetadataKey].(bool)
+	// enrichment was already gathered concurrently with URL Scanner submission and polling
+	// (see gatherDomainScanEnrichments); round-trip it since ent's field.JSON decodes the
+	// stored struct back as a map[string]any
+	var enrichment domainscan.Enrichment
+	if err := jsonx.RoundTrip(scanRecord.Metadata[domainScanEnrichmentMetadataKey], &enrichment); err != nil {
+		return err
+	}
 
 	resultJSON, err := json.Marshal(result.Result)
 	if err != nil {
 		return err
 	}
 
-	config, err := json.Marshal(cloudflare.DomainScanEnrich{
-		Domain:         domain,
+	config, err := json.Marshal(cloudflare.DomainScanBuildReport{
 		InternalScanID: internalScanID,
 		Result:         resultJSON,
-		ForceRefresh:   forceRefresh,
+		Enrichment:     enrichment,
 	})
 	if err != nil {
 		return err
 	}
 
-	response, err := r.ExecuteRuntimeOperation(ctx, cloudflare.DefinitionID.ID(), cloudflare.DomainScanEnrichOp.Name(), config)
+	response, err := r.ExecuteRuntimeOperation(ctx, cloudflare.DefinitionID.ID(), cloudflare.DomainScanBuildReportOp.Name(), config)
 	if err != nil {
 		return err
 	}
 
-	var enriched cloudflare.DomainScanEnrichResult
+	var enriched cloudflare.DomainScanBuildReportResult
 	if err := json.Unmarshal(response, &enriched); err != nil {
 		return err
 	}

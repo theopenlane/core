@@ -237,7 +237,7 @@ type ReportConfig struct {
 	// instead of vendors when building an onboarding domain scan report
 	NonVendorCategories []string `json:"nonvendorcategories" koanf:"nonvendorcategories" default:"[Miscellaneous,JavaScript frameworks,JavaScript libraries,Static site generator]"`
 	// DeniedVendorNames lists vendor names to always exclude from an onboarding domain scan report's vendor list
-	DeniedVendorNames []string `json:"deniedvendornames" koanf:"deniedvendornames" default:"[rfc-editor,ajax,website-files,http/3,googletagmanager,cloudflareinsights,googlesyndication,gstatic,hcaptcha,googleapis,hsforms,hs-scripts,hscollectedforms,hsts]"`
+	DeniedVendorNames []string `json:"deniedvendornames" koanf:"deniedvendornames" default:"[rfc-editor,ajax,website-files,http/3,googletagmanager,cloudflareinsights,googlesyndication,gstatic,hcaptcha,googleapis,hsforms,hs-scripts,hscollectedforms,hsts,hs-banner,hs-analytics]"`
 	// ScanTTL is the cache TTL, in seconds, for Browser Rendering requests issued during domain scan enrichment
 	ScanTTL int `json:"scanttl" koanf:"scanttl" default:"86400"`
 }
