@@ -75,6 +75,7 @@ type vendorAlias struct {
 var knownVendorAliases = []vendorAlias{
 	{name: "Google Workspace", hosts: []string{"admin.google.com"}},
 	{name: "Google Cloud", alsoKnownAs: []string{"Googlecloud"}, hosts: []string{"cloud.google.com"}},
+	{name: "Google Drive", alsoKnownAs: []string{"Googlecloud"}, hosts: []string{"drive.google.com"}},
 	{name: "AWS", alsoKnownAs: []string{"Amazonses", "Amazon Web Services"}, domains: []string{"aws.amazon.com"}},
 	{name: "Openlane", alsoKnownAs: []string{"The Open Lane"}, domains: []string{"theopenlane.io"}},
 	{name: "Hubspot", alsoKnownAs: []string{"hubspotemail"}, domains: []string{"hubspot.com"}},
