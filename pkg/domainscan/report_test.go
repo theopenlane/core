@@ -171,14 +171,13 @@ func TestBuildInternalDomains(t *testing.T) {
 			ComplianceLinks: []ComplianceLink{{URL: "https://trust.example.com/page", Type: "trust_center"}},
 		},
 		DNS: &DNSVendorInfo{
-			Subdomains:     []SubdomainDNSInfo{{Host: "mail.example.com"}},
-			CertSubdomains: []string{"api.example.com", "mail.example.com"},
+			Subdomains: []SubdomainDNSInfo{{Host: "mail.example.com"}},
 		},
 	}
 
 	got := buildInternalDomains(enrichment)
 
-	want := []string{"api.example.com", "app.example.com", "mail.example.com", "status.example.com", "trust.example.com"}
+	want := []string{"app.example.com", "mail.example.com", "status.example.com", "trust.example.com"}
 
 	assert.Check(t, is.DeepEqual(want, got))
 }

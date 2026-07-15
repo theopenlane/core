@@ -67,10 +67,6 @@ func GetDNSVendorInfo(ctx context.Context, rawURL string) (*DNSVendorInfo, error
 		info.DMARCPolicy = dmarcTagValue(dmarc, "p")
 	}
 
-	if hosts, err := certTransparencySubdomains(ctx, host); err == nil {
-		info.CertSubdomains = hosts
-	}
-
 	return info, nil
 }
 

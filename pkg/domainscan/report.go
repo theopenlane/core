@@ -545,10 +545,6 @@ func buildInternalDomains(enrichment Enrichment) []string {
 		for _, sub := range enrichment.DNS.Subdomains {
 			add(sub.Host)
 		}
-
-		for _, host := range enrichment.DNS.CertSubdomains {
-			add(host)
-		}
 	}
 
 	sort.Strings(domains)

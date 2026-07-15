@@ -159,11 +159,6 @@ type DNSVendorInfo struct {
 	// Subdomains holds MX, TXT, CNAME, and DKIM selector records found on conventional
 	// mail/vendor subdomains (see commonSubdomains), probed up to two levels deep
 	Subdomains []SubdomainDNSInfo `json:"subdomains,omitempty"`
-	// CertSubdomains lists subdomains discovered from certificate transparency logs
-	// (crt.sh) — a passive lookup against a public third-party log rather than a probe
-	// of the target's own infrastructure, so these are inventory only and not otherwise
-	// resolved or vendor-attributed
-	CertSubdomains []string `json:"cert_subdomains,omitempty"`
 	// Vendors lists vendors identified from the MX, SPF, TXT, CNAME, DKIM selector, and
 	// NS records found at the apex and on Subdomains
 	Vendors []DNSVendor `json:"vendors,omitempty"`
