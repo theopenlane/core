@@ -36,6 +36,7 @@ linters:
       - pkg/entitlements/mocks
       - pkg/objects/mocks
       - pkg/objects/examples
+      - pkg/domainscan/example
       - internal/testutils
       - internal/graphapi/generated
       - internal/graphapi/historygenerated

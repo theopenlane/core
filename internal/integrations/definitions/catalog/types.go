@@ -3,6 +3,7 @@ package catalog
 import (
 	"github.com/theopenlane/core/internal/integrations/definitions/awssecurityhub"
 	"github.com/theopenlane/core/internal/integrations/definitions/azureentraid"
+	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
 	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/internal/integrations/definitions/googledrive"
@@ -21,6 +22,9 @@ type Config struct {
 	ConsoleIntegrationPath string `json:"consoleintegrationpath" koanf:"consoleintegrationpath" default:"/organization-settings/integrations"`
 	// AWSSecurityHub holds operator credentials for the AWS Security Hub definition
 	AWSSecurityHub awssecurityhub.Config `json:"awssecurityhub" koanf:"awssecurityhub"`
+	// CloudflareRuntime holds runtime-provisioned configuration for the operator-owned
+	// account, used for system-initiated calls
+	CloudflareRuntime cloudflare.RuntimeConfig `json:"cloudflareruntime" koanf:"cloudflareruntime"`
 	// GitHubApp holds operator credentials for the GitHub App definition
 	GitHubApp githubapp.Config `json:"githubapp" koanf:"githubapp"`
 	// Slack holds OAuth credentials for the Slack definition
