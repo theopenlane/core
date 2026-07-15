@@ -6,7 +6,6 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
@@ -16,7 +15,6 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/entx/accessmap"
 )
 
 // NotificationPreference holds the schema definition for notification preferences.
@@ -155,9 +153,6 @@ func (n NotificationPreference) Edges() []ent.Edge {
 			field:      "user_id",
 			required:   true,
 			immutable:  true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: n,

@@ -2138,7 +2138,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 }, "user": {
 	ObjectType:          "user",
 	SkipEditCheck:       true,
-	CheckViewAccess:     false,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
 }, "org_membership": {
 	ObjectType:          "org_membership",
@@ -2877,7 +2877,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: false,
 }, "user": {
 	ObjectType:          "user",
-	SkipEditCheck:       true,
+	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "notification_template": {
@@ -4353,7 +4353,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 }, "user": {
 	ObjectType:          "user",
 	SkipEditCheck:       true,
-	CheckViewAccess:     false,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
 }, "org_membership": {
 	ObjectType:          "org_membership",
@@ -4553,9 +4553,9 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "reviewer": {
-	ObjectType:          "reviewer",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	ObjectType:          "user",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
 }, "comments": {
 	ObjectType:          "note",
@@ -5161,14 +5161,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "assigner": {
-	ObjectType:          "assigner",
+	ObjectType:          "user",
 	SkipEditCheck:       true,
-	CheckViewAccess:     false,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
 }, "assignee": {
-	ObjectType:          "assignee",
+	ObjectType:          "user",
 	SkipEditCheck:       true,
-	CheckViewAccess:     false,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
 }, "comments": {
 	ObjectType:          "note",

@@ -11,7 +11,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -61,24 +60,7 @@ func HookTaskPermissions() ent.Hook {
 			taskID, _ := m.ID()
 			assignee, ok := m.AssigneeID()
 
-			orgID, ownerOk := m.OwnerID()
-			if !ownerOk {
-				task, err := m.Client().Task.Query().Where(task.ID(taskID)).Select(ownerFieldName).Only(ctx)
-				if err != nil {
-					return nil, err
-				}
-
-				orgID = task.OwnerID
-			}
-
 			if ok || m.AssigneeCleared() || slices.Contains(m.RemovedEdges(), assigneeField) {
-				// ensure the assignee is a member of the organization
-				if assignee != "" {
-					if _, err := getOrgMemberID(ctx, m, assignee, orgID); err != nil {
-						return nil, err
-					}
-				}
-
 				// update the assignee tuple
 				if err := updateTaskAssigneeTuples(ctx, m, assignee, taskID); err != nil {
 					return nil, err
@@ -87,13 +69,6 @@ func HookTaskPermissions() ent.Hook {
 
 			assigner, ok := m.AssignerID()
 			if ok || m.AssignerCleared() || slices.Contains(m.RemovedEdges(), assignerField) {
-				// ensure the assigner is a member of the organization
-				if assigner != "" {
-					if _, err := getOrgMemberID(ctx, m, assigner, orgID); err != nil {
-						return nil, err
-					}
-				}
-
 				// update the assigner tuple
 				if err := updateTaskAssignerTuples(ctx, m, assigner, taskID); err != nil {
 					return nil, err
