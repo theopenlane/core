@@ -1035,6 +1035,22 @@ data:
         arn: {{ .Values.openlane.coreConfiguration.integrations.awssecurityhub.arn | quote }}
         {{- end }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.cloudflareruntime }}
+      cloudflareruntime:
+        {{- if .Values.openlane.coreConfiguration.integrations.cloudflareruntime.accountid }}
+        accountid: {{ .Values.openlane.coreConfiguration.integrations.cloudflareruntime.accountid | quote }}
+        {{- end }}
+      {{- end }}
+      {{- $sliceValue := (.Values.openlane.coreConfiguration.integrations.domainscannonvendorcategories | default (list)) }}
+      {{- if gt (len $sliceValue) 0 }}
+      domainscannonvendorcategories:
+      {{- toYaml $sliceValue | nindent 8 }}
+      {{- end }}
+      {{- $sliceValue := (.Values.openlane.coreConfiguration.integrations.domainscandeniedvendornames | default (list)) }}
+      {{- if gt (len $sliceValue) 0 }}
+      domainscandeniedvendornames:
+      {{- toYaml $sliceValue | nindent 8 }}
+      {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.githubapp }}
       githubapp:
         {{- if .Values.openlane.coreConfiguration.integrations.githubapp.appslug }}

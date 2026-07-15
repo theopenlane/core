@@ -569,6 +569,23 @@ coreConfiguration:
     consoleintegrationpath: "/organization-settings/integrations"  # @schema type:string; default:/organization-settings/integrations
     awssecurityhub:
       arn: ""  # @schema type:string
+    cloudflareruntime:
+      # -- Cloudflare account ID for the operator-owned account
+      accountId: ""  # @schema type:string
+    domainscannonvendorcategories:
+        - Miscellaneous
+        - JavaScript frameworks
+        - JavaScript libraries
+        - Static site generator
+    domainscandeniedvendornames:
+        - rfc-editor
+        - ajax
+        - website-files
+        - http/3
+        - googletagmanager
+        - cloudflareinsights
+        - googlesyndication
+        - gstatic
     githubapp:
       appslug: ""  # @schema type:string
     slack:
@@ -1011,6 +1028,14 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_AWSSECURITYHUB_SECRETACCESSKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-awssecurityhub-secretaccesskey"  # @schema type:string
+    # -- core-integrations-cloudflareruntime-apitoken secret configuration
+    core-integrations-cloudflareruntime-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.cloudflareruntime.apiToken
+      secretKey: "CORE_INTEGRATIONS_CLOUDFLARERUNTIME_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-cloudflareruntime-apitoken"  # @schema type:string
     # -- core-integrations-githubapp-appid secret configuration
     core-integrations-githubapp-appid:
       # -- Enable this external secret

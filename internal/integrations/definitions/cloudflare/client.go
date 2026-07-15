@@ -2,6 +2,8 @@ package cloudflare
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -29,6 +31,26 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error
 		option.WithAPIToken(cred.APIToken),
 		option.WithHTTPClient(&http.Client{Timeout: time.Minute}),
 	), nil
+}
+
+// runtimeCloudflareClientBuilder returns a build function that constructs a Cloudflare API
+// client for the runtime (system) path, using the operator-owned account's API token
+func runtimeCloudflareClientBuilder() func(context.Context, json.RawMessage) (any, error) {
+	return func(_ context.Context, config json.RawMessage) (any, error) {
+		var cfg RuntimeCloudflareConfig
+		if err := json.Unmarshal(config, &cfg); err != nil {
+			return nil, fmt.Errorf("%w: %w", ErrRuntimeConfigDecode, err)
+		}
+
+		if !cfg.Provisioned() {
+			return nil, ErrRuntimeConfigInvalid
+		}
+
+		return cf.NewClient(
+			option.WithAPIToken(cfg.APIToken),
+			option.WithHTTPClient(&http.Client{Timeout: time.Minute}),
+		), nil
+	}
 }
 
 func resolveCredential(bindings types.CredentialBindings) (CredentialSchema, error) {

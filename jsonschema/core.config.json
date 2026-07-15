@@ -149,6 +149,15 @@
         "awssecurityhub": {
           "$ref": "#/$defs/awssecurityhub.Config"
         },
+        "cloudflareruntime": {
+          "$ref": "#/$defs/cloudflare.RuntimeCloudflareConfig"
+        },
+        "domainscannonvendorcategories": {
+          "$ref": "#/$defs/[]string"
+        },
+        "domainscandeniedvendornames": {
+          "$ref": "#/$defs/[]string"
+        },
         "githubapp": {
           "$ref": "#/$defs/githubapp.Config"
         },
@@ -184,6 +193,20 @@
         },
         "organizationdelete": {
           "$ref": "#/$defs/operations.OrganizationDeleteConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "cloudflare.RuntimeCloudflareConfig": {
+      "properties": {
+        "apitoken": {
+          "type": "string",
+          "description": "Cloudflare API token for the operator-owned account"
+        },
+        "accountid": {
+          "type": "string",
+          "description": "Cloudflare account ID for the operator-owned account"
         }
       },
       "additionalProperties": false,

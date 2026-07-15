@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	// definitionID is the stable identifier for the Cloudflare integration definition
-	definitionID = types.NewDefinitionRef("def_01K0CFLARE00000000000000001")
+	// DefinitionID is the stable identifier for the Cloudflare integration definition
+	DefinitionID = types.NewDefinitionRef("def_01K0CFLARE00000000000000001")
 	// installation is the typed installation metadata handle for the Cloudflare definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// cloudflareSchema is the credential schema for the Cloudflare integration definition
@@ -24,7 +24,28 @@ var (
 	assetSyncSchema, assetSyncOperation = providerkit.OperationSchema[AssetSync]()
 	// findingsSyncSchema is the operation ref for the Security Center insights finding sync operation
 	findingsSyncSchema, findingsSyncOperation = providerkit.OperationSchema[FindingsSync]()
+	// domainScanSubmitSchema is the operation ref for submitting domains to the URL Scanner
+	domainScanSubmitSchema, DomainScanSubmitOp = providerkit.OperationSchema[DomainScanSubmit]()
+	// domainScanPollSchema is the operation ref for polling a submitted URL Scanner result
+	domainScanPollSchema, DomainScanPollOp = providerkit.OperationSchema[DomainScanPoll]()
+	// runtimeCloudflareSchema is the JSON schema and typed ref for the runtime Cloudflare config
+	runtimeCloudflareSchema, runtimeCloudflareRef = providerkit.RuntimeSchema[RuntimeCloudflareConfig]()
 )
+
+// RuntimeCloudflareConfig is the runtime-provisioned configuration for the operator-owned
+// Cloudflare account. Sourced from koanf/environment at startup; used for system-initiated
+// Cloudflare calls (e.g. onboarding domain scans) that are not tied to a customer installation
+type RuntimeCloudflareConfig struct {
+	// APIToken is the Cloudflare API token for the operator-owned account
+	APIToken string `json:"apiToken,omitempty" koanf:"apitoken" jsonschema:"description=Cloudflare API token for the operator-owned account" sensitive:"true"`
+	// AccountID is the Cloudflare account identifier for the operator-owned account
+	AccountID string `json:"accountId,omitempty" koanf:"accountid" jsonschema:"description=Cloudflare account ID for the operator-owned account"`
+}
+
+// Provisioned reports whether the runtime config has the minimum required fields to make Cloudflare API calls
+func (c RuntimeCloudflareConfig) Provisioned() bool {
+	return c.APIToken != "" && c.AccountID != ""
+}
 
 const (
 	assetSyncRegistrarPageSize = 50

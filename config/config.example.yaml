@@ -165,7 +165,24 @@ integrations:
         clientsecret: ""
         defaulttenant: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
+    cloudflareruntime:
+        accountid: ""
+        apitoken: ""
     consoleintegrationpath: /organization-settings/integrations
+    domainscandeniedvendornames:
+        - rfc-editor
+        - ajax
+        - website-files
+        - http/3
+        - googletagmanager
+        - cloudflareinsights
+        - googlesyndication
+        - gstatic
+    domainscannonvendorcategories:
+        - Miscellaneous
+        - JavaScript frameworks
+        - JavaScript libraries
+        - Static site generator
     email:
         apikey: ""
         apiurl: https://api.theopenlane.io
