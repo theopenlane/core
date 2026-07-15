@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"html"
 	"net/url"
 	"sort"
 	"strings"
@@ -336,7 +335,11 @@ func mergeEnrichmentVendors(enrichment Enrichment, groups *vendorGroups) {
 		}
 
 		if url == "" {
-			url = "Unknown"
+			if domain, ok := vendorNameDomains[strings.ToLower(name)]; ok {
+				url = "https://" + domain
+			} else {
+				url = "Unknown"
+			}
 		}
 
 		groups.add("name:"+strings.ToLower(name), name, url, nil)
@@ -401,8 +404,8 @@ func groupWappaDetections(wappaData []url_scanner.ScanGetResponseMetaProcessorsW
 			continue
 		}
 
-		if name, domain := vendorNameForURL(w.Website); domain != "" {
-			groups.add(domain, name, "https://"+domain, categories)
+		if domain := registrableDomain(w.Website); domain != "" {
+			groups.add(domain, w.App, "https://"+domain, categories)
 		} else {
 			groups.add("name:"+strings.ToLower(w.App), w.App, "Unknown", categories)
 		}
@@ -660,7 +663,7 @@ func buildAgentReadinessFindings(processor url_scanner.ScanGetResponseMetaProces
 	return map[string]any{
 		"level":      parsed.Level,
 		"level_name": parsed.LevelName,
-		"checklist":  buildAgentReadinessChecklistHTML(failedChecks),
+		"checklist":  buildAgentReadinessChecklistMarkdown(failedChecks),
 		"reference":  agentReadinessReferenceURL,
 	}
 }
@@ -669,20 +672,17 @@ func buildAgentReadinessFindings(processor url_scanner.ScanGetResponseMetaProces
 // assessment measures and why, for context alongside the failed-check checklist
 const agentReadinessReferenceURL = "https://blog.cloudflare.com/agent-readiness/"
 
-// buildAgentReadinessChecklistHTML renders failedChecks as a single HTML checklist
-func buildAgentReadinessChecklistHTML(failedChecks []map[string]any) string {
-	var b strings.Builder
-
-	b.WriteString("<ul>")
+// buildAgentReadinessChecklistMarkdown renders failedChecks as a single GitHub-flavored
+// Markdown task list, one unchecked item per failing check, so the assessment surfaces
+// as one finding instead of one per check
+func buildAgentReadinessChecklistMarkdown(failedChecks []map[string]any) string {
+	items := make([]string, 0, len(failedChecks))
 
 	for _, c := range failedChecks {
-		fmt.Fprintf(&b, "<li><input type=\"checkbox\" disabled> %s</li>",
-			html.EscapeString(fmt.Sprint(c["message"])))
+		items = append(items, fmt.Sprintf("- [ ] %s", fmt.Sprint(c["message"])))
 	}
 
-	b.WriteString("</ul>")
-
-	return b.String()
+	return strings.Join(items, "\n")
 }
 
 // walkAgentReadinessChecks recursively descends a generic agent-readiness check result

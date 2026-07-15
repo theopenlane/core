@@ -320,16 +320,15 @@ func TestBuildComplianceSection(t *testing.T) {
 	})
 }
 
-func TestBuildAgentReadinessChecklistHTML(t *testing.T) {
+func TestBuildAgentReadinessChecklistMarkdown(t *testing.T) {
 	failedChecks := []map[string]any{
 		{"check": "markdown", "message": "missing markdown negotiation"},
-		{"check": "mcp", "message": "no <script> card"},
+		{"check": "mcp", "message": "no MCP server card"},
 	}
 
-	got := buildAgentReadinessChecklistHTML(failedChecks)
+	got := buildAgentReadinessChecklistMarkdown(failedChecks)
 
-	want := `<ul><li><input type="checkbox" disabled> missing markdown negotiation</li>` +
-		`<li><input type="checkbox" disabled> no &lt;script&gt; card</li></ul>`
+	want := "- [ ] missing markdown negotiation\n- [ ] no MCP server card"
 
 	assert.Check(t, is.Equal(want, got))
 }

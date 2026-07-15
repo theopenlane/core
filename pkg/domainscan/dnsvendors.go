@@ -15,7 +15,7 @@ const maxSubdomainDepth = 2
 func GetDNSVendorInfo(ctx context.Context, rawURL string) (*DNSVendorInfo, error) {
 	host, ok := apexDomain(rawURL)
 	if !ok {
-		return nil, fmt.Errorf("could not determine domain from %q", rawURL)
+		return nil, fmt.Errorf("%w: %q", ErrInvalidDomain, rawURL)
 	}
 
 	info := &DNSVendorInfo{}
@@ -304,7 +304,7 @@ func vendorNameFromHostname(host string) (name, domain string) {
 		return override, domain
 	}
 
-	label := strings.SplitN(domain, ".", 2)[0]
+	label := strings.SplitN(domain, ".", 2)[0] //nolint:mnd
 
 	return titleCaseLabel(label), domain
 }
@@ -347,7 +347,7 @@ func verificationVendorName(record string) (string, bool) {
 		return "", false
 	}
 
-	label := strings.SplitN(key, "-", 2)[0]
+	label := strings.SplitN(key, "-", 2)[0] //nolint:mnd
 
 	return titleCaseLabel(label), label != ""
 }

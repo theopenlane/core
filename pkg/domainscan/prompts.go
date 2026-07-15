@@ -4,11 +4,11 @@ type PromptType string
 
 func getPrompt(t PromptType) string {
 	switch t {
-	case PROMPT_COMPANY:
+	case promptCompany:
 		return companyProfilePrompt
-	case PROMPT_COMPLIANCE:
+	case promptCompliance:
 		return compliancePagePrompt
-	case PROMPT_TRUST_CENTER:
+	case promptTrustCenter:
 		return trustCenterPrompt
 	}
 
@@ -16,9 +16,9 @@ func getPrompt(t PromptType) string {
 }
 
 const (
-	PROMPT_COMPANY      PromptType = "COMPANY"
-	PROMPT_COMPLIANCE   PromptType = "COMPLIANCE"
-	PROMPT_TRUST_CENTER PromptType = "TRUST_CENTER"
+	promptCompany     PromptType = "COMPANY"
+	promptCompliance  PromptType = "COMPLIANCE"
+	promptTrustCenter PromptType = "TRUST_CENTER"
 )
 
 // companyProfilePrompt guides the AI to extract company information from a website

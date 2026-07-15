@@ -35,7 +35,7 @@ func DomainScanPollBackoff(attempt int) time.Duration {
 		interval = DomainScanPollIntervalMax
 	}
 
-	jitter := time.Duration(rand.Int64N(int64(interval) / 4))
+	jitter := time.Duration(rand.Int64N(int64(interval) / 4)) //nolint:gosec,mnd
 
 	return interval + jitter
 }

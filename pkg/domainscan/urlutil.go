@@ -113,7 +113,7 @@ func urlReachable(ctx context.Context, rawURL string) (string, bool) {
 
 	defer resp.Body.Close()
 
-	if resp.StatusCode >= 400 {
+	if resp.StatusCode >= http.StatusBadRequest {
 		return "", false
 	}
 

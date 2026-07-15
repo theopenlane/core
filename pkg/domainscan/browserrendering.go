@@ -85,7 +85,7 @@ func (c *Config) GetComplianceData(ctx context.Context, domain string) (*Complia
 
 // fetchCompliancePage runs the compliance prompt against a single URL and unmarshals the structured result into a CompliancePage
 func (c *Config) fetchCompliancePage(ctx context.Context, url string) (*CompliancePage, error) {
-	resp, err := c.browserRendering(ctx, url, PROMPT_COMPLIANCE)
+	resp, err := c.browserRendering(ctx, url, promptCompliance)
 	if err != nil {
 		return nil, err
 	}
@@ -142,7 +142,7 @@ func (c *Config) fetchTrustCenterPages(ctx context.Context, trustURL string) (*T
 // fetchTrustCenterPage runs the trust center prompt against a single URL and
 // unmarshals the structured result into a TrustCenterPage
 func (c *Config) fetchTrustCenterPage(ctx context.Context, url string) (*TrustCenterPage, error) {
-	resp, err := c.browserRendering(ctx, url, PROMPT_TRUST_CENTER)
+	resp, err := c.browserRendering(ctx, url, promptTrustCenter)
 	if err != nil {
 		return nil, err
 	}
@@ -161,7 +161,7 @@ func (c *Config) fetchTrustCenterPage(ctx context.Context, url string) (*TrustCe
 }
 
 func (c *Config) GetCompanyData(ctx context.Context, url string) (*CompanyProfile, error) {
-	resp, err := c.browserRendering(ctx, url, PROMPT_COMPANY)
+	resp, err := c.browserRendering(ctx, url, promptCompany)
 	if err != nil {
 		return nil, err
 	}
@@ -256,9 +256,9 @@ func (c *Config) getBrowserRenderingJSONParams(url string, prompt string, kind P
 	var schema ResponseFormat
 
 	switch kind {
-	case PROMPT_COMPLIANCE:
+	case promptCompliance:
 		schema = buildCompliancePageSchema()
-	case PROMPT_TRUST_CENTER:
+	case promptTrustCenter:
 		schema = buildTrustCenterPageSchema()
 	default:
 		schema = buildCompanyProfileSchema()
@@ -272,7 +272,7 @@ func (c *Config) getBrowserRenderingJSONParams(url string, prompt string, kind P
 		WaitForTimeout: cloudflare.Float(browserWaitForTimeout),
 	}
 
-	if kind == PROMPT_TRUST_CENTER {
+	if kind == promptTrustCenter {
 		body.WaitForSelector = cloudflare.F[any](waitForSelectorOptions{
 			Selector: trustCenterContentSelector,
 			Timeout:  trustCenterWaitForSelectorTimeout,

@@ -50,7 +50,7 @@ func certTransparencySubdomains(ctx context.Context, apex string) ([]string, err
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("crt.sh: unexpected status %d", resp.StatusCode)
+		return nil, fmt.Errorf("%w - %s %d", ErrUnexpectedErrorCode, resp.StatusCode)
 	}
 
 	var entries []crtSHEntry

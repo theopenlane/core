@@ -24,10 +24,10 @@ var (
 	assetSyncSchema, assetSyncOperation = providerkit.OperationSchema[AssetSync]()
 	// findingsSyncSchema is the operation ref for the Security Center insights finding sync operation
 	findingsSyncSchema, findingsSyncOperation = providerkit.OperationSchema[FindingsSync]()
-	// domainScanSubmitSchema is the operation ref for submitting domains to the URL Scanner
-	domainScanSubmitSchema, DomainScanSubmitOp = providerkit.OperationSchema[DomainScanSubmit]()
-	// domainScanPollSchema is the operation ref for polling a submitted URL Scanner result
-	domainScanPollSchema, DomainScanPollOp = providerkit.OperationSchema[DomainScanPoll]()
+	// DomainScanSubmitSchema is the operation ref for submitting domains to the URL Scanner
+	DomainScanSubmitSchema, DomainScanSubmitOp = providerkit.OperationSchema[DomainScanSubmit]()
+	// DomainScanPollSchema is the operation ref for polling a submitted URL Scanner result
+	DomainScanPollSchema, DomainScanPollOp = providerkit.OperationSchema[DomainScanPoll]()
 	// runtimeCloudflareSchema is the JSON schema and typed ref for the runtime Cloudflare config
 	runtimeCloudflareSchema, runtimeCloudflareRef = providerkit.RuntimeSchema[RuntimeCloudflareConfig]()
 )
