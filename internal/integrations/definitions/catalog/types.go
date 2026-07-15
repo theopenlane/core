@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/onedrive"
 	"github.com/theopenlane/core/internal/integrations/definitions/slack"
 	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/pkg/domainscan"
 )
 
 // Config aggregates the definitions configuration structs (for when definitions require operator-held credentials or other config)
@@ -24,10 +23,8 @@ type Config struct {
 	// AWSSecurityHub holds operator credentials for the AWS Security Hub definition
 	AWSSecurityHub awssecurityhub.Config `json:"awssecurityhub" koanf:"awssecurityhub"`
 	// CloudflareRuntime holds runtime-provisioned configuration for the operator-owned
-	// Cloudflare account, used for system-initiated calls such as onboarding domain scans
-	CloudflareRuntime cloudflare.RuntimeCloudflareConfig `json:"cloudflareruntime" koanf:"cloudflareruntime"`
-	// DomainScan configures vendor/technology classification for onboarding domain scan reports
-	DomainScan domainscan.ReportConfig `json:"domainscan" koanf:"domainscan"`
+	// account, used for system-initiated calls
+	CloudflareRuntime cloudflare.RuntimeConfig `json:"cloudflareruntime" koanf:"cloudflareruntime"`
 	// GitHubApp holds operator credentials for the GitHub App definition
 	GitHubApp githubapp.Config `json:"githubapp" koanf:"githubapp"`
 	// Slack holds OAuth credentials for the Slack definition

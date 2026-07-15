@@ -168,28 +168,28 @@ integrations:
     cloudflareruntime:
         accountid: ""
         apitoken: ""
+        domainscan:
+            deniedvendornames:
+                - rfc-editor
+                - ajax
+                - website-files
+                - http/3
+                - googletagmanager
+                - cloudflareinsights
+                - googlesyndication
+                - gstatic
+                - hcaptcha
+                - googleapis
+                - hsforms
+                - hs-scripts
+                - hscollectedforms
+                - hsts
+            nonvendorcategories:
+                - Miscellaneous
+                - JavaScript frameworks
+                - JavaScript libraries
+                - Static site generator
     consoleintegrationpath: /organization-settings/integrations
-    domainscan:
-        deniedvendornames:
-            - rfc-editor
-            - ajax
-            - website-files
-            - http/3
-            - googletagmanager
-            - cloudflareinsights
-            - googlesyndication
-            - gstatic
-            - hcaptcha
-            - googleapis
-            - hsforms
-            - hs-scripts
-            - hscollectedforms
-            - hsts
-        nonvendorcategories:
-            - Miscellaneous
-            - JavaScript frameworks
-            - JavaScript libraries
-            - Static site generator
     email:
         apikey: ""
         apiurl: https://api.theopenlane.io

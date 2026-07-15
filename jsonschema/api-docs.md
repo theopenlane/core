@@ -135,8 +135,9 @@ Config contains the configuration for the core server
     "keywatcher": {},
     "integrations": {
         "awssecurityhub": {},
-        "cloudflareruntime": {},
-        "domainscan": {},
+        "cloudflareruntime": {
+            "domainscan": {}
+        },
         "githubapp": {},
         "slack": {},
         "slackruntime": {},
@@ -1667,7 +1668,6 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**consoleintegrationpath**|`string`|||
 |[**awssecurityhub**](#integrationsawssecurityhub)|`object`|||
 |[**cloudflareruntime**](#integrationscloudflareruntime)|`object`|||
-|[**domainscan**](#integrationsdomainscan)|`object`|||
 |[**githubapp**](#integrationsgithubapp)|`object`|||
 |[**slack**](#integrationsslack)|`object`|||
 |[**slackruntime**](#integrationsslackruntime)|`object`|||
@@ -1687,8 +1687,9 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 ```json
 {
     "awssecurityhub": {},
-    "cloudflareruntime": {},
-    "domainscan": {},
+    "cloudflareruntime": {
+        "domainscan": {}
+    },
     "githubapp": {},
     "slack": {},
     "slackruntime": {},
@@ -1732,27 +1733,36 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |----|----|-----------|--------|
 |**apitoken**|`string`|Cloudflare API token for the operator-owned account<br/>||
 |**accountid**|`string`|Cloudflare account ID for the operator-owned account<br/>||
+|[**domainscan**](#integrationscloudflareruntimedomainscan)|`object`|||
 
 **Additional Properties:** not allowed  
-<a name="integrationsdomainscan"></a>
-### integrations\.domainscan: object
+**Example**
+
+```json
+{
+    "domainscan": {}
+}
+```
+
+<a name="integrationscloudflareruntimedomainscan"></a>
+#### integrations\.cloudflareruntime\.domainscan: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|[**nonvendorcategories**](#integrationsdomainscannonvendorcategories)|`string[]`|||
-|[**deniedvendornames**](#integrationsdomainscandeniedvendornames)|`string[]`|||
+|[**nonvendorcategories**](#integrationscloudflareruntimedomainscannonvendorcategories)|`string[]`|||
+|[**deniedvendornames**](#integrationscloudflareruntimedomainscandeniedvendornames)|`string[]`|||
 
 **Additional Properties:** not allowed  
-<a name="integrationsdomainscannonvendorcategories"></a>
-#### integrations\.domainscan\.nonvendorcategories: array
+<a name="integrationscloudflareruntimedomainscannonvendorcategories"></a>
+##### integrations\.cloudflareruntime\.domainscan\.nonvendorcategories: array
 
 **Items**
 
 **Item Type:** `string`  
-<a name="integrationsdomainscandeniedvendornames"></a>
-#### integrations\.domainscan\.deniedvendornames: array
+<a name="integrationscloudflareruntimedomainscandeniedvendornames"></a>
+##### integrations\.cloudflareruntime\.domainscan\.deniedvendornames: array
 
 **Items**
 

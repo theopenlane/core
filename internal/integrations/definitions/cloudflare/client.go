@@ -55,11 +55,11 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error
 }
 
 // runtimeCloudflareClientBuilder returns a build function that constructs a Cloudflare API
-// client for the runtime (system) path, using the operator-owned account's API token and account
-// ID plus the vendor/technology classification config used by the domain scan enrichment operation
-func runtimeCloudflareClientBuilder(reportConfig domainscan.ReportConfig) func(context.Context, json.RawMessage) (any, error) {
+// client for the runtime (system) path, using the operator-owned account's API token, account
+// ID, and domain scan report classification config
+func runtimeCloudflareClientBuilder() func(context.Context, json.RawMessage) (any, error) {
 	return func(_ context.Context, config json.RawMessage) (any, error) {
-		var cfg RuntimeCloudflareConfig
+		var cfg RuntimeConfig
 		if err := json.Unmarshal(config, &cfg); err != nil {
 			return nil, fmt.Errorf("%w: %w", ErrRuntimeConfigDecode, err)
 		}
@@ -75,7 +75,7 @@ func runtimeCloudflareClientBuilder(reportConfig domainscan.ReportConfig) func(c
 			),
 			AccountID:  cfg.AccountID,
 			APIToken:   cfg.APIToken,
-			DomainScan: reportConfig,
+			DomainScan: cfg.DomainScan,
 		}, nil
 	}
 }

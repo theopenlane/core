@@ -150,10 +150,7 @@
           "$ref": "#/$defs/awssecurityhub.Config"
         },
         "cloudflareruntime": {
-          "$ref": "#/$defs/cloudflare.RuntimeCloudflareConfig"
-        },
-        "domainscan": {
-          "$ref": "#/$defs/domainscan.ReportConfig"
+          "$ref": "#/$defs/cloudflare.RuntimeConfig"
         },
         "githubapp": {
           "$ref": "#/$defs/githubapp.Config"
@@ -195,7 +192,7 @@
       "additionalProperties": false,
       "type": "object"
     },
-    "cloudflare.RuntimeCloudflareConfig": {
+    "cloudflare.RuntimeConfig": {
       "properties": {
         "apitoken": {
           "type": "string",
@@ -204,6 +201,10 @@
         "accountid": {
           "type": "string",
           "description": "Cloudflare account ID for the operator-owned account"
+        },
+        "domainscan": {
+          "$ref": "#/$defs/domainscan.ReportConfig",
+          "description": "Vendor/technology classification for onboarding domain scan reports"
         }
       },
       "additionalProperties": false,

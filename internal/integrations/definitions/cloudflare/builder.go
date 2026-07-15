@@ -10,16 +10,15 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/domainscan"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // Builder returns the Cloudflare definition builder with the supplied runtime config applied.
-// reportConfig configures vendor/technology classification for onboarding domain scan reports.
+// runtime.DomainScan configures vendor/technology classification for onboarding domain scan reports.
 // When devMode is true or runtime.Provisioned() is true, a RuntimeIntegration is included so
 // system-initiated calls (e.g. onboarding domain scans) can use the operator-owned account
-func Builder(reportConfig domainscan.ReportConfig, runtime *RuntimeCloudflareConfig, devMode bool) registry.Builder {
+func Builder(runtime *RuntimeConfig, devMode bool) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		def := types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
@@ -32,6 +31,9 @@ func Builder(reportConfig domainscan.ReportConfig, runtime *RuntimeCloudflareCon
 				Tags:        []string{"directory", "assets"},
 				Active:      true,
 				Visible:     true,
+			},
+			OperatorConfig: &types.OperatorConfigRegistration{
+				Schema: jsonx.SchemaFrom[RuntimeConfig](),
 			},
 			UserInput: &types.UserInputRegistration{
 				Schema: jsonx.SchemaFrom[UserInput](),
@@ -187,7 +189,7 @@ func Builder(reportConfig domainscan.ReportConfig, runtime *RuntimeCloudflareCon
 				Ref:    runtimeCloudflareRef.ID(),
 				Schema: runtimeCloudflareSchema,
 				Config: marshaledConfig,
-				Build:  runtimeCloudflareClientBuilder(reportConfig),
+				Build:  runtimeCloudflareClientBuilder(),
 			}
 		}
 

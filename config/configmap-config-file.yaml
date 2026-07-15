@@ -1040,18 +1040,18 @@ data:
         {{- if .Values.openlane.coreConfiguration.integrations.cloudflareruntime.accountid }}
         accountid: {{ .Values.openlane.coreConfiguration.integrations.cloudflareruntime.accountid | quote }}
         {{- end }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.integrations.domainscan }}
-      domainscan:
-        {{- $sliceValue := (.Values.openlane.coreConfiguration.integrations.domainscan.nonvendorcategories | default (list)) }}
-        {{- if gt (len $sliceValue) 0 }}
-        nonvendorcategories:
-        {{- toYaml $sliceValue | nindent 10 }}
-        {{- end }}
-        {{- $sliceValue := (.Values.openlane.coreConfiguration.integrations.domainscan.deniedvendornames | default (list)) }}
-        {{- if gt (len $sliceValue) 0 }}
-        deniedvendornames:
-        {{- toYaml $sliceValue | nindent 10 }}
+        {{- if .Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan }}
+        domainscan:
+          {{- $sliceValue := (.Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan.nonvendorcategories | default (list)) }}
+          {{- if gt (len $sliceValue) 0 }}
+          nonvendorcategories:
+          {{- toYaml $sliceValue | nindent 12 }}
+          {{- end }}
+          {{- $sliceValue := (.Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan.deniedvendornames | default (list)) }}
+          {{- if gt (len $sliceValue) 0 }}
+          deniedvendornames:
+          {{- toYaml $sliceValue | nindent 12 }}
+          {{- end }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.githubapp }}

@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/domainscan"
 )
 
 var (
@@ -29,21 +30,23 @@ var (
 	// domainScanEnrichSchema is the operation ref for enriching a completed URL Scanner result
 	domainScanEnrichSchema, DomainScanEnrichOp = providerkit.OperationSchema[DomainScanEnrich]() //nolint:revive
 	// runtimeCloudflareSchema is the JSON schema and typed ref for the runtime Cloudflare config
-	runtimeCloudflareSchema, runtimeCloudflareRef = providerkit.RuntimeSchema[RuntimeCloudflareConfig]()
+	runtimeCloudflareSchema, runtimeCloudflareRef = providerkit.RuntimeSchema[RuntimeConfig]()
 )
 
-// RuntimeCloudflareConfig is the runtime-provisioned configuration for the operator-owned
+// RuntimeConfig is the runtime-provisioned configuration for the operator-owned
 // Cloudflare account. Sourced from koanf/environment at startup; used for system-initiated
 // Cloudflare calls (e.g. onboarding domain scans) that are not tied to a customer installation
-type RuntimeCloudflareConfig struct {
+type RuntimeConfig struct {
 	// APIToken is the Cloudflare API token for the operator-owned account
 	APIToken string `json:"apiToken,omitempty" koanf:"apitoken" jsonschema:"description=Cloudflare API token for the operator-owned account" sensitive:"true"`
 	// AccountID is the Cloudflare account identifier for the operator-owned account
 	AccountID string `json:"accountId,omitempty" koanf:"accountid" jsonschema:"description=Cloudflare account ID for the operator-owned account"`
+	// DomainScan configures vendor/technology classification for onboarding domain scan reports
+	DomainScan domainscan.ReportConfig `json:"domainScan,omitempty" koanf:"domainscan" jsonschema:"description=Vendor/technology classification for onboarding domain scan reports"`
 }
 
 // Provisioned reports whether the runtime config has the minimum required fields to make Cloudflare API calls
-func (c RuntimeCloudflareConfig) Provisioned() bool {
+func (c RuntimeConfig) Provisioned() bool {
 	return c.APIToken != "" && c.AccountID != ""
 }
 
