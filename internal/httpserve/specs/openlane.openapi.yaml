@@ -1727,6 +1727,12 @@ components:
                 unverified:
                     type: boolean
             type: object
+        UnsubscribeRequest:
+            properties:
+                Token:
+                    description: The token to be used to unsubscribe, token is sent via email
+                    type: string
+            type: object
         User:
             description: |
                 SCIM User resource as defined in RFC 7643 Section 4.1.
@@ -1965,6 +1971,12 @@ components:
                     type: boolean
                 unverified:
                     type: boolean
+            type: object
+        VerifySubscribeRequest:
+            properties:
+                Token:
+                    description: The token to be used to verify the subscription, token is sent via email
+                    type: string
             type: object
         WebauthnBeginLoginResponse:
             properties:
@@ -2693,7 +2705,7 @@ paths:
                             examples:
                                 error:
                                     value:
-                                        error: 'Get "https://www.googleapis.com/oauth2/v2/userinfo?alt=json&prettyPrint=false": dial tcp 142.251.142.10:443: connect: network is unreachable'
+                                        error: 'googleapi: Error 401: Request is missing required authentication credential. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project., unauthorized'
                                         error_code: INVALID_INPUT
                                         success: false
                             schema:
@@ -4730,9 +4742,19 @@ paths:
             tags:
                 - sso
     /v1/subscribe/verify:
-        get:
+        post:
             description: Verify a subscription
             operationId: VerifySubscription
+            requestBody:
+                content:
+                    application/json:
+                        examples:
+                            success:
+                                value:
+                                    Token: token
+                        schema:
+                            $ref: '#/components/schemas/VerifySubscribeRequest'
+                description: Request body
             responses:
                 "200":
                     content:
@@ -4840,9 +4862,19 @@ paths:
             tags:
                 - organization
     /v1/unsubscribe:
-        get:
+        post:
             description: Unsubscribe from communications
             operationId: Unsubscribe
+            requestBody:
+                content:
+                    application/json:
+                        examples:
+                            success:
+                                value:
+                                    Token: token
+                        schema:
+                            $ref: '#/components/schemas/UnsubscribeRequest'
+                description: Request body
             responses:
                 "200":
                     content:

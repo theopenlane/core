@@ -208,6 +208,11 @@ func NdaApprovalRequired(v bool) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldNdaApprovalRequired, v))
 }
 
+// AllowSubscribers applies equality check predicate on the "allow_subscribers" field. It's identical to AllowSubscribersEQ.
+func AllowSubscribers(v bool) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldAllowSubscribers, v))
+}
+
 // NotifySubscribersOnSubprocessorChange applies equality check predicate on the "notify_subscribers_on_subprocessor_change" field. It's identical to NotifySubscribersOnSubprocessorChangeEQ.
 func NotifySubscribersOnSubprocessorChange(v bool) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldNotifySubscribersOnSubprocessorChange, v))
@@ -2221,6 +2226,26 @@ func NdaApprovalRequiredIsNil() predicate.TrustCenterSetting {
 // NdaApprovalRequiredNotNil applies the NotNil predicate on the "nda_approval_required" field.
 func NdaApprovalRequiredNotNil() predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldNdaApprovalRequired))
+}
+
+// AllowSubscribersEQ applies the EQ predicate on the "allow_subscribers" field.
+func AllowSubscribersEQ(v bool) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldAllowSubscribers, v))
+}
+
+// AllowSubscribersNEQ applies the NEQ predicate on the "allow_subscribers" field.
+func AllowSubscribersNEQ(v bool) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldAllowSubscribers, v))
+}
+
+// AllowSubscribersIsNil applies the IsNil predicate on the "allow_subscribers" field.
+func AllowSubscribersIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldAllowSubscribers))
+}
+
+// AllowSubscribersNotNil applies the NotNil predicate on the "allow_subscribers" field.
+func AllowSubscribersNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldAllowSubscribers))
 }
 
 // NotifySubscribersOnSubprocessorChangeEQ applies the EQ predicate on the "notify_subscribers_on_subprocessor_change" field.

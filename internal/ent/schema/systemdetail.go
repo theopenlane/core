@@ -3,10 +3,8 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
-	"entgo.io/ent/schema/index"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/entfga"
@@ -45,14 +43,6 @@ func (SystemDetail) PluralName() string {
 // Fields of the SystemDetail
 func (SystemDetail) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("program_id").
-			Comment("optional program anchor for this system detail").
-			Optional().
-			Nillable(),
-		field.String("platform_id").
-			Comment("optional platform anchor for this system detail").
-			Optional().
-			Nillable(),
 		field.String("system_name").
 			Comment("system name used in OSCAL metadata").
 			NotEmpty().
@@ -104,20 +94,10 @@ func (SystemDetail) Fields() []ent.Field {
 // Edges of the SystemDetail
 func (s SystemDetail) Edges() []ent.Edge {
 	return []ent.Edge{
-		uniqueEdgeFrom(&edgeDefinition{
-			fromSchema: s,
-			edgeSchema: Program{},
-			field:      "program_id",
-			ref:        "system_detail",
-			comment:    "optional program this detail belongs to",
-		}),
-		uniqueEdgeFrom(&edgeDefinition{
-			fromSchema: s,
-			edgeSchema: Platform{},
-			field:      "platform_id",
-			ref:        "system_detail",
-			comment:    "optional platform this detail belongs to",
-		}),
+		defaultEdgeFromWithPagination(s, Program{}),
+		defaultEdgeFromWithPagination(s, Platform{}),
+		defaultEdgeFromWithPagination(s, Entity{}),
+		defaultEdgeToWithPagination(s, Asset{}),
 	}
 }
 
@@ -137,18 +117,7 @@ func (s SystemDetail) Mixin() []ent.Mixin {
 
 // Indexes of the SystemDetail
 func (SystemDetail) Indexes() []ent.Index {
-	return []ent.Index{
-		index.Fields("program_id").
-			Unique().
-			Annotations(
-				entsql.IndexWhere("deleted_at is NULL AND program_id is not NULL"),
-			),
-		index.Fields("platform_id").
-			Unique().
-			Annotations(
-				entsql.IndexWhere("deleted_at is NULL AND platform_id is not NULL"),
-			),
-	}
+	return []ent.Index{}
 }
 
 // Modules returns modules required for this schema

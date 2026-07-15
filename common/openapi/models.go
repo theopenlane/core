@@ -141,6 +141,15 @@ func (r *LoginReply) ExampleResponse() any {
 func (r *LoginRequest) Validate() error {
 	r.Username = strings.TrimSpace(r.Username)
 	r.Password = strings.TrimSpace(r.Password)
+	r.Reason = strings.TrimSpace(r.Reason)
+	if r.Reason != "" {
+		reason, err := url.QueryUnescape(r.Reason)
+		if err != nil {
+			return err
+		}
+
+		r.Reason = reason
+	}
 
 	switch {
 	case r.Username == "":
@@ -1089,6 +1098,9 @@ func (r *VerifySubscribeRequest) Validate() error {
 	return nil
 }
 
+// BindsQueryParams opts this request into query-param binding on any HTTP method
+func (r *VerifySubscribeRequest) BindsQueryParams() bool { return true }
+
 // ExampleVerifySubscriptionSuccessRequest is an example of a successful verify subscription request for OpenAPI documentation
 var ExampleVerifySubscriptionSuccessRequest = VerifySubscribeRequest{
 	Token: "token",
@@ -1126,6 +1138,9 @@ func (r *UnsubscribeRequest) Validate() error {
 
 	return nil
 }
+
+// BindsQueryParams opts this request into query-param binding on any HTTP method
+func (r *UnsubscribeRequest) BindsQueryParams() bool { return true }
 
 // ExampleUnsubscribeRequest is an example of a successful unsubscribe request for OpenAPI documentation
 var ExampleUnsubscribeRequest = UnsubscribeRequest{

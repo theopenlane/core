@@ -2571,8 +2571,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			systemdetailhistory.FieldDisplayID:             {Type: field.TypeString, Column: systemdetailhistory.FieldDisplayID},
 			systemdetailhistory.FieldTags:                  {Type: field.TypeJSON, Column: systemdetailhistory.FieldTags},
 			systemdetailhistory.FieldOwnerID:               {Type: field.TypeString, Column: systemdetailhistory.FieldOwnerID},
-			systemdetailhistory.FieldProgramID:             {Type: field.TypeString, Column: systemdetailhistory.FieldProgramID},
-			systemdetailhistory.FieldPlatformID:            {Type: field.TypeString, Column: systemdetailhistory.FieldPlatformID},
 			systemdetailhistory.FieldSystemName:            {Type: field.TypeString, Column: systemdetailhistory.FieldSystemName},
 			systemdetailhistory.FieldVersion:               {Type: field.TypeString, Column: systemdetailhistory.FieldVersion},
 			systemdetailhistory.FieldDescription:           {Type: field.TypeString, Column: systemdetailhistory.FieldDescription},
@@ -2900,6 +2898,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersettinghistory.FieldCompanyDomain:                         {Type: field.TypeString, Column: trustcentersettinghistory.FieldCompanyDomain},
 			trustcentersettinghistory.FieldSecurityContact:                       {Type: field.TypeString, Column: trustcentersettinghistory.FieldSecurityContact},
 			trustcentersettinghistory.FieldNdaApprovalRequired:                   {Type: field.TypeBool, Column: trustcentersettinghistory.FieldNdaApprovalRequired},
+			trustcentersettinghistory.FieldAllowSubscribers:                      {Type: field.TypeBool, Column: trustcentersettinghistory.FieldAllowSubscribers},
 			trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange: {Type: field.TypeBool, Column: trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange},
 			trustcentersettinghistory.FieldSubprocessorsNotifiedAt:               {Type: field.TypeTime, Column: trustcentersettinghistory.FieldSubprocessorsNotifiedAt},
 			trustcentersettinghistory.FieldNdaApproverGroupID:                    {Type: field.TypeString, Column: trustcentersettinghistory.FieldNdaApproverGroupID},
@@ -14402,16 +14401,6 @@ func (f *SystemDetailHistoryFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(systemdetailhistory.FieldOwnerID))
 }
 
-// WhereProgramID applies the entql string predicate on the program_id field.
-func (f *SystemDetailHistoryFilter) WhereProgramID(p entql.StringP) {
-	f.Where(p.Field(systemdetailhistory.FieldProgramID))
-}
-
-// WherePlatformID applies the entql string predicate on the platform_id field.
-func (f *SystemDetailHistoryFilter) WherePlatformID(p entql.StringP) {
-	f.Where(p.Field(systemdetailhistory.FieldPlatformID))
-}
-
 // WhereSystemName applies the entql string predicate on the system_name field.
 func (f *SystemDetailHistoryFilter) WhereSystemName(p entql.StringP) {
 	f.Where(p.Field(systemdetailhistory.FieldSystemName))
@@ -15820,6 +15809,11 @@ func (f *TrustCenterSettingHistoryFilter) WhereSecurityContact(p entql.StringP) 
 // WhereNdaApprovalRequired applies the entql bool predicate on the nda_approval_required field.
 func (f *TrustCenterSettingHistoryFilter) WhereNdaApprovalRequired(p entql.BoolP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldNdaApprovalRequired))
+}
+
+// WhereAllowSubscribers applies the entql bool predicate on the allow_subscribers field.
+func (f *TrustCenterSettingHistoryFilter) WhereAllowSubscribers(p entql.BoolP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldAllowSubscribers))
 }
 
 // WhereNotifySubscribersOnSubprocessorChange applies the entql bool predicate on the notify_subscribers_on_subprocessor_change field.

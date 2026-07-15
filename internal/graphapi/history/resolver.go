@@ -10,7 +10,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
-	"github.com/gorilla/websocket"
+	"github.com/coder/websocket"
 	echo "github.com/theopenlane/echox"
 	"github.com/vektah/gqlparser/v2/ast"
 
@@ -86,9 +86,9 @@ func (r *Resolver) Handler() *Handler {
 
 	srv.AddTransport(transport.Websocket{
 		KeepAlivePingInterval: 10 * time.Second, //nolint:mnd
-		Upgrader: websocket.Upgrader{
-			CheckOrigin: func(_ *http.Request) bool {
-				return true
+		Implementation: transport.CoderWebsocketImplementation{
+			AcceptOptions: websocket.AcceptOptions{
+				InsecureSkipVerify: true, // allow all origins
 			},
 		},
 	})

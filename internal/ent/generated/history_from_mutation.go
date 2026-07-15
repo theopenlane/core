@@ -22309,14 +22309,6 @@ func (m *SystemDetailMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetOwnerID(ownerID)
 	}
 
-	if programID, exists := m.ProgramID(); exists {
-		create = create.SetNillableProgramID(&programID)
-	}
-
-	if platformID, exists := m.PlatformID(); exists {
-		create = create.SetNillablePlatformID(&platformID)
-	}
-
 	if systemName, exists := m.SystemName(); exists {
 		create = create.SetSystemName(systemName)
 	}
@@ -22440,18 +22432,6 @@ func (m *SystemDetailMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetOwnerID(systemdetail.OwnerID)
 		}
 
-		if programID, exists := m.ProgramID(); exists {
-			create = create.SetNillableProgramID(&programID)
-		} else {
-			create = create.SetNillableProgramID(systemdetail.ProgramID)
-		}
-
-		if platformID, exists := m.PlatformID(); exists {
-			create = create.SetNillablePlatformID(&platformID)
-		} else {
-			create = create.SetNillablePlatformID(systemdetail.PlatformID)
-		}
-
 		if systemName, exists := m.SystemName(); exists {
 			create = create.SetSystemName(systemName)
 		} else {
@@ -22545,8 +22525,6 @@ func (m *SystemDetailMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetDisplayID(systemdetail.DisplayID).
 			SetTags(systemdetail.Tags).
 			SetOwnerID(systemdetail.OwnerID).
-			SetNillableProgramID(systemdetail.ProgramID).
-			SetNillablePlatformID(systemdetail.PlatformID).
 			SetSystemName(systemdetail.SystemName).
 			SetVersion(systemdetail.Version).
 			SetDescription(systemdetail.Description).
@@ -25023,6 +25001,10 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetNdaApprovalRequired(ndaApprovalRequired)
 	}
 
+	if allowSubscribers, exists := m.AllowSubscribers(); exists {
+		create = create.SetAllowSubscribers(allowSubscribers)
+	}
+
 	if notifySubscribersOnSubprocessorChange, exists := m.NotifySubscribersOnSubprocessorChange(); exists {
 		create = create.SetNotifySubscribersOnSubprocessorChange(notifySubscribersOnSubprocessorChange)
 	}
@@ -25250,6 +25232,12 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetNdaApprovalRequired(trustcentersetting.NdaApprovalRequired)
 		}
 
+		if allowSubscribers, exists := m.AllowSubscribers(); exists {
+			create = create.SetAllowSubscribers(allowSubscribers)
+		} else {
+			create = create.SetAllowSubscribers(trustcentersetting.AllowSubscribers)
+		}
+
 		if notifySubscribersOnSubprocessorChange, exists := m.NotifySubscribersOnSubprocessorChange(); exists {
 			create = create.SetNotifySubscribersOnSubprocessorChange(notifySubscribersOnSubprocessorChange)
 		} else {
@@ -25339,6 +25327,7 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetNillableCompanyDomain(trustcentersetting.CompanyDomain).
 			SetNillableSecurityContact(trustcentersetting.SecurityContact).
 			SetNdaApprovalRequired(trustcentersetting.NdaApprovalRequired).
+			SetAllowSubscribers(trustcentersetting.AllowSubscribers).
 			SetNotifySubscribersOnSubprocessorChange(trustcentersetting.NotifySubscribersOnSubprocessorChange).
 			SetNillableSubprocessorsNotifiedAt(trustcentersetting.SubprocessorsNotifiedAt).
 			SetNillableNdaApproverGroupID(trustcentersetting.NdaApproverGroupID).

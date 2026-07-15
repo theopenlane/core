@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 h1:WsyfApAhXAyUngAw6LbiFi91ic2Fp3iYg20IvdwhP1o=
+||||||| 21ec32dd0
+h1:licMB7R3F7SosppF8zDQHX7kwBPhlZYr1TLZjSs7m0U=
+=======
+h1:mPbBsGoFj0HQfCszuDopC7UfqWsx2iySsDVbNvb1WdY=
+>>>>>>> origin/main
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -151,4 +157,13 @@ h1:WsyfApAhXAyUngAw6LbiFi91ic2Fp3iYg20IvdwhP1o=
 20260701043815_impersonation_event_target_user.sql h1:Pzz7fWnH4tgaApfpSZHMAKe8Lo4LoNWVCh1joo2rR0A=
 20260706222040_add_responsibility_mixin_vuln_finding.sql h1:emeMCJuwOrYv3zoEAECK4tYGGJeG66120h482bAEp8o=
 20260706222045_add_responsibility_mixin_vuln_finding_history.sql h1:x1LEHKaGB3ryiwRz8cxEBRXheei4HubqASY2Ik1X21k=
+<<<<<<< HEAD
 20260708200016_task_idempotency_index.sql h1:pmLD0R/VAwAiIXjbCdC/nID/VZwogHH+4ux9/EhKnOA=
+||||||| 21ec32dd0
+=======
+20260709061733_tssubscriberupdates.sql h1:7xXRj3pjA2lFK+6rZ8nRUeG9yNXY6UZBeyTfhaeL/KU=
+20260709061737_tssubscriberupdates_history.sql h1:osHJSVQArP8CCnwYnSyXUUyeXKOGW9EctmzSz6xo4y8=
+20260711140807_registry_edges.sql h1:VvW7K4b8KCCGorZqOtOgWgnHBPLv0Q6iqE2kyBO3Ouo=
+20260711140811_registry_edges_history.sql h1:7zZMw8HHQYKqMD5VKWWTcxplrBk4vQuOdKHsvP4Pul8=
+20260713215408_drop_campaign_name_uniqueness.sql h1:FcPmIa7F+dGPesVCJgNLnhlTKRoKMPWZZ7mLJQUEi8A=
+>>>>>>> origin/main

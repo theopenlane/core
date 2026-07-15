@@ -2591,8 +2591,6 @@ type ComplexityRoot struct {
 		Operation             func(childComplexity int) int
 		OscalMetadataJSON     func(childComplexity int) int
 		OwnerID               func(childComplexity int) int
-		PlatformID            func(childComplexity int) int
-		ProgramID             func(childComplexity int) int
 		Ref                   func(childComplexity int) int
 		RevisionHistory       func(childComplexity int) int
 		SensitivityLevel      func(childComplexity int) int
@@ -2890,6 +2888,7 @@ type ComplexityRoot struct {
 
 	TrustCenterSettingHistory struct {
 		AccentColor                           func(childComplexity int) int
+		AllowSubscribers                      func(childComplexity int) int
 		BackgroundColor                       func(childComplexity int) int
 		CompanyDescription                    func(childComplexity int) int
 		CompanyDomain                         func(childComplexity int) int
@@ -16311,18 +16310,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SystemDetailHistory.OwnerID(childComplexity), true
-	case "SystemDetailHistory.platformID":
-		if e.ComplexityRoot.SystemDetailHistory.PlatformID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.SystemDetailHistory.PlatformID(childComplexity), true
-	case "SystemDetailHistory.programID":
-		if e.ComplexityRoot.SystemDetailHistory.ProgramID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.SystemDetailHistory.ProgramID(childComplexity), true
 	case "SystemDetailHistory.ref":
 		if e.ComplexityRoot.SystemDetailHistory.Ref == nil {
 			break
@@ -17646,6 +17633,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.AccentColor(childComplexity), true
+	case "TrustCenterSettingHistory.allowSubscribers":
+		if e.ComplexityRoot.TrustCenterSettingHistory.AllowSubscribers == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSettingHistory.AllowSubscribers(childComplexity), true
 	case "TrustCenterSettingHistory.backgroundColor":
 		if e.ComplexityRoot.TrustCenterSettingHistory.BackgroundColor == nil {
 			break
@@ -30323,6 +30316,7 @@ DirectoryMembershipHistoryDirectoryMembershipRole is enum for the field role
 """
 enum DirectoryMembershipHistoryDirectoryMembershipRole @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryMembershipRole") {
   MEMBER
+  MAINTAINER
   MANAGER
   OWNER
 }
@@ -55959,14 +55953,6 @@ type SystemDetailHistory implements Node {
   """
   ownerID: String
   """
-  optional program anchor for this system detail
-  """
-  programID: String
-  """
-  optional platform anchor for this system detail
-  """
-  platformID: String
-  """
   system name used in OSCAL metadata
   """
   systemName: String!
@@ -56239,42 +56225,6 @@ input SystemDetailHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  program_id field predicates
-  """
-  programID: String
-  programIDNEQ: String
-  programIDIn: [String!]
-  programIDNotIn: [String!]
-  programIDGT: String
-  programIDGTE: String
-  programIDLT: String
-  programIDLTE: String
-  programIDContains: String
-  programIDHasPrefix: String
-  programIDHasSuffix: String
-  programIDIsNil: Boolean
-  programIDNotNil: Boolean
-  programIDEqualFold: String
-  programIDContainsFold: String
-  """
-  platform_id field predicates
-  """
-  platformID: String
-  platformIDNEQ: String
-  platformIDIn: [String!]
-  platformIDNotIn: [String!]
-  platformIDGT: String
-  platformIDGTE: String
-  platformIDLT: String
-  platformIDLTE: String
-  platformIDContains: String
-  platformIDHasPrefix: String
-  platformIDHasSuffix: String
-  platformIDIsNil: Boolean
-  platformIDNotNil: Boolean
-  platformIDEqualFold: String
-  platformIDContainsFold: String
   """
   system_name field predicates
   """
@@ -59819,6 +59769,10 @@ type TrustCenterSettingHistory implements Node {
   """
   ndaApprovalRequired: Boolean
   """
+  whether the trust center accepts new subscriber registrations; when false, subscriber creation for the trust center is blocked
+  """
+  allowSubscribers: Boolean
+  """
   whether to email trust center subscribers when subprocessors are added, updated, or removed
   """
   notifySubscribersOnSubprocessorChange: Boolean
@@ -60419,6 +60373,13 @@ input TrustCenterSettingHistoryWhereInput {
   ndaApprovalRequiredNEQ: Boolean
   ndaApprovalRequiredIsNil: Boolean
   ndaApprovalRequiredNotNil: Boolean
+  """
+  allow_subscribers field predicates
+  """
+  allowSubscribers: Boolean
+  allowSubscribersNEQ: Boolean
+  allowSubscribersIsNil: Boolean
+  allowSubscribersNotNil: Boolean
   """
   notify_subscribers_on_subprocessor_change field predicates
   """
@@ -71977,10 +71938,6 @@ func (ec *executionContext) childFields_SystemDetailHistory(ctx context.Context,
 		return ec.fieldContext_SystemDetailHistory_tags(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_SystemDetailHistory_ownerID(ctx, field)
-	case "programID":
-		return ec.fieldContext_SystemDetailHistory_programID(ctx, field)
-	case "platformID":
-		return ec.fieldContext_SystemDetailHistory_platformID(ctx, field)
 	case "systemName":
 		return ec.fieldContext_SystemDetailHistory_systemName(ctx, field)
 	case "version":
@@ -72635,6 +72592,8 @@ func (ec *executionContext) childFields_TrustCenterSettingHistory(ctx context.Co
 		return ec.fieldContext_TrustCenterSettingHistory_securityContact(ctx, field)
 	case "ndaApprovalRequired":
 		return ec.fieldContext_TrustCenterSettingHistory_ndaApprovalRequired(ctx, field)
+	case "allowSubscribers":
+		return ec.fieldContext_TrustCenterSettingHistory_allowSubscribers(ctx, field)
 	case "notifySubscribersOnSubprocessorChange":
 		return ec.fieldContext_TrustCenterSettingHistory_notifySubscribersOnSubprocessorChange(ctx, field)
 	case "subprocessorsNotifiedAt":

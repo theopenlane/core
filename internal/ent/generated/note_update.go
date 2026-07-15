@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -415,6 +416,25 @@ func (_u *NoteUpdate) SetInternalPolicy(v *InternalPolicy) *NoteUpdate {
 	return _u.SetInternalPolicyID(v.ID)
 }
 
+// SetReviewID sets the "review" edge to the Review entity by ID.
+func (_u *NoteUpdate) SetReviewID(id string) *NoteUpdate {
+	_u.mutation.SetReviewID(id)
+	return _u
+}
+
+// SetNillableReviewID sets the "review" edge to the Review entity by ID if the given value is not nil.
+func (_u *NoteUpdate) SetNillableReviewID(id *string) *NoteUpdate {
+	if id != nil {
+		_u = _u.SetReviewID(*id)
+	}
+	return _u
+}
+
+// SetReview sets the "review" edge to the Review entity.
+func (_u *NoteUpdate) SetReview(v *Review) *NoteUpdate {
+	return _u.SetReviewID(v.ID)
+}
+
 // SetEvidenceID sets the "evidence" edge to the Evidence entity by ID.
 func (_u *NoteUpdate) SetEvidenceID(id string) *NoteUpdate {
 	_u.mutation.SetEvidenceID(id)
@@ -512,6 +532,12 @@ func (_u *NoteUpdate) ClearRisk() *NoteUpdate {
 // ClearInternalPolicy clears the "internal_policy" edge to the InternalPolicy entity.
 func (_u *NoteUpdate) ClearInternalPolicy() *NoteUpdate {
 	_u.mutation.ClearInternalPolicy()
+	return _u
+}
+
+// ClearReview clears the "review" edge to the Review entity.
+func (_u *NoteUpdate) ClearReview() *NoteUpdate {
+	_u.mutation.ClearReview()
 	return _u
 }
 
@@ -900,6 +926,37 @@ func (_u *NoteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ReviewTable,
+			Columns: []string{note.ReviewColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ReviewTable,
+			Columns: []string{note.ReviewColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Note
@@ -1493,6 +1550,25 @@ func (_u *NoteUpdateOne) SetInternalPolicy(v *InternalPolicy) *NoteUpdateOne {
 	return _u.SetInternalPolicyID(v.ID)
 }
 
+// SetReviewID sets the "review" edge to the Review entity by ID.
+func (_u *NoteUpdateOne) SetReviewID(id string) *NoteUpdateOne {
+	_u.mutation.SetReviewID(id)
+	return _u
+}
+
+// SetNillableReviewID sets the "review" edge to the Review entity by ID if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableReviewID(id *string) *NoteUpdateOne {
+	if id != nil {
+		_u = _u.SetReviewID(*id)
+	}
+	return _u
+}
+
+// SetReview sets the "review" edge to the Review entity.
+func (_u *NoteUpdateOne) SetReview(v *Review) *NoteUpdateOne {
+	return _u.SetReviewID(v.ID)
+}
+
 // SetEvidenceID sets the "evidence" edge to the Evidence entity by ID.
 func (_u *NoteUpdateOne) SetEvidenceID(id string) *NoteUpdateOne {
 	_u.mutation.SetEvidenceID(id)
@@ -1590,6 +1666,12 @@ func (_u *NoteUpdateOne) ClearRisk() *NoteUpdateOne {
 // ClearInternalPolicy clears the "internal_policy" edge to the InternalPolicy entity.
 func (_u *NoteUpdateOne) ClearInternalPolicy() *NoteUpdateOne {
 	_u.mutation.ClearInternalPolicy()
+	return _u
+}
+
+// ClearReview clears the "review" edge to the Review entity.
+func (_u *NoteUpdateOne) ClearReview() *NoteUpdateOne {
+	_u.mutation.ClearReview()
 	return _u
 }
 
@@ -2008,6 +2090,37 @@ func (_u *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ReviewTable,
+			Columns: []string{note.ReviewColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ReviewTable,
+			Columns: []string{note.ReviewColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Note

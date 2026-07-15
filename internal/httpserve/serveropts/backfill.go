@@ -24,9 +24,10 @@ import (
 // skipping the org-filter, FGA, and managed-group guards the membership hooks would otherwise apply
 const backfillBypassCaps = auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation | auth.CapBypassManagedGroup
 
-// WithBackfill runs one-time, idempotent startup backfills for fields introduced by recent migrations:
-// organization slug names and the SSO exemption on existing organization owners. It is gated by the
-// Backfill.Enabled config flag and runs in the background so it never blocks server startup
+// WithBackfill runs one-time, idempotent startup backfills for data introduced by recent migrations:
+// organization slug names, owner SSO exemptions, trust center update templates, and file md5 hashes.
+// It is gated by the Backfill.Enabled config flag and runs in the background so it never blocks
+// server startup
 func WithBackfill(ctx context.Context, dbClient *ent.Client) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		if dbClient == nil || !s.Config.Settings.Backfill.Enabled {

@@ -62,7 +62,7 @@ type ProgramQuery struct {
 	withEvidence               *EvidenceQuery
 	withNarratives             *NarrativeQuery
 	withActionPlans            *ActionPlanQuery
-	withSystemDetail           *SystemDetailQuery
+	withSystemDetails          *SystemDetailQuery
 	withUsers                  *UserQuery
 	withProgramOwner           *UserQuery
 	withMembers                *ProgramMembershipQuery
@@ -84,6 +84,7 @@ type ProgramQuery struct {
 	withNamedEvidence          map[string]*EvidenceQuery
 	withNamedNarratives        map[string]*NarrativeQuery
 	withNamedActionPlans       map[string]*ActionPlanQuery
+	withNamedSystemDetails     map[string]*SystemDetailQuery
 	withNamedUsers             map[string]*UserQuery
 	withNamedMembers           map[string]*ProgramMembershipQuery
 	// intermediate query (i.e. traversal path).
@@ -547,8 +548,8 @@ func (_q *ProgramQuery) QueryActionPlans() *ActionPlanQuery {
 	return query
 }
 
-// QuerySystemDetail chains the current query on the "system_detail" edge.
-func (_q *ProgramQuery) QuerySystemDetail() *SystemDetailQuery {
+// QuerySystemDetails chains the current query on the "system_details" edge.
+func (_q *ProgramQuery) QuerySystemDetails() *SystemDetailQuery {
 	query := (&SystemDetailClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
@@ -561,11 +562,11 @@ func (_q *ProgramQuery) QuerySystemDetail() *SystemDetailQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(program.Table, program.FieldID, selector),
 			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, program.SystemDetailTable, program.SystemDetailColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, program.SystemDetailsTable, program.SystemDetailsPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.SystemDetail
-		step.Edge.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.ProgramSystemDetails
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -856,7 +857,7 @@ func (_q *ProgramQuery) Clone() *ProgramQuery {
 		withEvidence:          _q.withEvidence.Clone(),
 		withNarratives:        _q.withNarratives.Clone(),
 		withActionPlans:       _q.withActionPlans.Clone(),
-		withSystemDetail:      _q.withSystemDetail.Clone(),
+		withSystemDetails:     _q.withSystemDetails.Clone(),
 		withUsers:             _q.withUsers.Clone(),
 		withProgramOwner:      _q.withProgramOwner.Clone(),
 		withMembers:           _q.withMembers.Clone(),
@@ -1054,14 +1055,14 @@ func (_q *ProgramQuery) WithActionPlans(opts ...func(*ActionPlanQuery)) *Program
 	return _q
 }
 
-// WithSystemDetail tells the query-builder to eager-load the nodes that are connected to
-// the "system_detail" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *ProgramQuery) WithSystemDetail(opts ...func(*SystemDetailQuery)) *ProgramQuery {
+// WithSystemDetails tells the query-builder to eager-load the nodes that are connected to
+// the "system_details" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ProgramQuery) WithSystemDetails(opts ...func(*SystemDetailQuery)) *ProgramQuery {
 	query := (&SystemDetailClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	_q.withSystemDetail = query
+	_q.withSystemDetails = query
 	return _q
 }
 
@@ -1201,7 +1202,7 @@ func (_q *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 			_q.withEvidence != nil,
 			_q.withNarratives != nil,
 			_q.withActionPlans != nil,
-			_q.withSystemDetail != nil,
+			_q.withSystemDetails != nil,
 			_q.withUsers != nil,
 			_q.withProgramOwner != nil,
 			_q.withMembers != nil,
@@ -1352,9 +1353,10 @@ func (_q *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 			return nil, err
 		}
 	}
-	if query := _q.withSystemDetail; query != nil {
-		if err := _q.loadSystemDetail(ctx, query, nodes, nil,
-			func(n *Program, e *SystemDetail) { n.Edges.SystemDetail = e }); err != nil {
+	if query := _q.withSystemDetails; query != nil {
+		if err := _q.loadSystemDetails(ctx, query, nodes,
+			func(n *Program) { n.Edges.SystemDetails = []*SystemDetail{} },
+			func(n *Program, e *SystemDetail) { n.Edges.SystemDetails = append(n.Edges.SystemDetails, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1480,6 +1482,13 @@ func (_q *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 		if err := _q.loadActionPlans(ctx, query, nodes,
 			func(n *Program) { n.appendNamedActionPlans(name) },
 			func(n *Program, e *ActionPlan) { n.appendNamedActionPlans(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedSystemDetails {
+		if err := _q.loadSystemDetails(ctx, query, nodes,
+			func(n *Program) { n.appendNamedSystemDetails(name) },
+			func(n *Program, e *SystemDetail) { n.appendNamedSystemDetails(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2431,33 +2440,65 @@ func (_q *ProgramQuery) loadActionPlans(ctx context.Context, query *ActionPlanQu
 	}
 	return nil
 }
-func (_q *ProgramQuery) loadSystemDetail(ctx context.Context, query *SystemDetailQuery, nodes []*Program, init func(*Program), assign func(*Program, *SystemDetail)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Program)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+func (_q *ProgramQuery) loadSystemDetails(ctx context.Context, query *SystemDetailQuery, nodes []*Program, init func(*Program), assign func(*Program, *SystemDetail)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Program)
+	nids := make(map[string]map[*Program]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
 	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(systemdetail.FieldProgramID)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(program.SystemDetailsTable)
+		joinT.Schema(_q.schemaConfig.ProgramSystemDetails)
+		s.Join(joinT).On(s.C(systemdetail.FieldID), joinT.C(program.SystemDetailsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(program.SystemDetailsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(program.SystemDetailsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
 	}
-	query.Where(predicate.SystemDetail(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(program.SystemDetailColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Program]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*SystemDetail](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.ProgramID
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "program_id" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "program_id" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "system_details" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -2898,6 +2939,20 @@ func (_q *ProgramQuery) WithNamedActionPlans(name string, opts ...func(*ActionPl
 		_q.withNamedActionPlans = make(map[string]*ActionPlanQuery)
 	}
 	_q.withNamedActionPlans[name] = query
+	return _q
+}
+
+// WithNamedSystemDetails tells the query-builder to eager-load the nodes that are connected to the "system_details"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ProgramQuery) WithNamedSystemDetails(name string, opts ...func(*SystemDetailQuery)) *ProgramQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSystemDetails == nil {
+		_q.withNamedSystemDetails = make(map[string]*SystemDetailQuery)
+	}
+	_q.withNamedSystemDetails[name] = query
 	return _q
 }
 

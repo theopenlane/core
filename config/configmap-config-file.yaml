@@ -1166,6 +1166,9 @@ data:
         {{- if .Values.openlane.coreConfiguration.integrations.email.docsurl }}
         docsurl: {{ .Values.openlane.coreConfiguration.integrations.email.docsurl | quote }}
         {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.apiurl }}
+        apiurl: {{ .Values.openlane.coreConfiguration.integrations.email.apiurl | quote }}
+        {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.paymentreminder }}
       paymentreminder:

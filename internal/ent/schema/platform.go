@@ -327,7 +327,7 @@ func (s Platform) Edges() []ent.Edge {
 				accessmap.EdgeNoAuthCheck(),
 			},
 		}),
-		uniqueEdgeTo(&edgeDefinition{
+		edgeToWithPagination(&edgeDefinition{
 			fromSchema: s,
 			edgeSchema: SystemDetail{},
 			annotations: []schema.Annotation{

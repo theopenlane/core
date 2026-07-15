@@ -325,13 +325,11 @@ const (
 	EntitiesInverseTable = "entities"
 	// EntitiesColumn is the table column denoting the entities relation/edge.
 	EntitiesColumn = "finding_entities"
-	// ScansTable is the table that holds the scans relation/edge.
-	ScansTable = "scans"
+	// ScansTable is the table that holds the scans relation/edge. The primary key declared below.
+	ScansTable = "finding_scans"
 	// ScansInverseTable is the table name for the Scan entity.
 	// It exists in this package in order to avoid circular dependency with the "scan" package.
 	ScansInverseTable = "scans"
-	// ScansColumn is the table column denoting the scans relation/edge.
-	ScansColumn = "finding_scans"
 	// TasksTable is the table that holds the tasks relation/edge. The primary key declared below.
 	TasksTable = "finding_tasks"
 	// TasksInverseTable is the table name for the Task entity.
@@ -478,6 +476,9 @@ var (
 	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
 	// primary key for the controls relation (M2M).
 	ControlsPrimaryKey = []string{"finding_id", "control_id"}
+	// ScansPrimaryKey and ScansColumn2 are the table columns denoting the
+	// primary key for the scans relation (M2M).
+	ScansPrimaryKey = []string{"finding_id", "scan_id"}
 	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
 	// primary key for the tasks relation (M2M).
 	TasksPrimaryKey = []string{"finding_id", "task_id"}
@@ -1335,7 +1336,7 @@ func newScansStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ScansInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ScansTable, ScansColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, ScansTable, ScansPrimaryKey...),
 	)
 }
 func newTasksStep() *sqlgraph.Step {

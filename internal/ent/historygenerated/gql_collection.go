@@ -12935,16 +12935,6 @@ func (_q *SystemDetailHistoryQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, systemdetailhistory.FieldOwnerID)
 				fieldSeen[systemdetailhistory.FieldOwnerID] = struct{}{}
 			}
-		case "programID":
-			if _, ok := fieldSeen[systemdetailhistory.FieldProgramID]; !ok {
-				selectedFields = append(selectedFields, systemdetailhistory.FieldProgramID)
-				fieldSeen[systemdetailhistory.FieldProgramID] = struct{}{}
-			}
-		case "platformID":
-			if _, ok := fieldSeen[systemdetailhistory.FieldPlatformID]; !ok {
-				selectedFields = append(selectedFields, systemdetailhistory.FieldPlatformID)
-				fieldSeen[systemdetailhistory.FieldPlatformID] = struct{}{}
-			}
 		case "systemName":
 			if _, ok := fieldSeen[systemdetailhistory.FieldSystemName]; !ok {
 				selectedFields = append(selectedFields, systemdetailhistory.FieldSystemName)
@@ -14660,6 +14650,11 @@ func (_q *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneN
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldNdaApprovalRequired]; !ok {
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldNdaApprovalRequired)
 				fieldSeen[trustcentersettinghistory.FieldNdaApprovalRequired] = struct{}{}
+			}
+		case "allowSubscribers":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldAllowSubscribers]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldAllowSubscribers)
+				fieldSeen[trustcentersettinghistory.FieldAllowSubscribers] = struct{}{}
 			}
 		case "notifySubscribersOnSubprocessorChange":
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange]; !ok {

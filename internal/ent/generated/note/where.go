@@ -1400,6 +1400,35 @@ func HasInternalPolicyWith(preds ...predicate.InternalPolicy) predicate.Note {
 	})
 }
 
+// HasReview applies the HasEdge predicate on the "review" edge.
+func HasReview() predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, ReviewTable, ReviewColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReviewWith applies the HasEdge predicate on the "review" edge with a given conditions (other predicates).
+func HasReviewWith(preds ...predicate.Review) predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := newReviewStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasEvidence applies the HasEdge predicate on the "evidence" edge.
 func HasEvidence() predicate.Note {
 	return predicate.Note(func(s *sql.Selector) {

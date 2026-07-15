@@ -492,6 +492,10 @@
           "type": "string",
           "description": "Documentation URL"
         },
+        "apiurl": {
+          "type": "string",
+          "description": "Public base URL of the API for email links that hit the API directly"
+        },
         "CompanyName": {
           "type": "string",
           "description": "Company display name"
@@ -575,6 +579,10 @@
         "FooterTextColor": {
           "type": "string",
           "description": "Muted text color for headers footers and secondary content"
+        },
+        "AccentBorderColor": {
+          "type": "string",
+          "description": "Decorative accent color applied to borders only"
         },
         "Tagline": {
           "type": "string",
@@ -1227,11 +1235,13 @@
         },
         "enabled": {
           "type": "boolean",
-          "description": "Whether the payment reminder listener is enabled"
+          "description": "Whether the payment reminder listener is enabled",
+          "default": false
         },
         "dryrun": {
           "type": "boolean",
-          "description": "If true only log organization IDs that would be processed"
+          "description": "If true only log organization IDs that would be processed",
+          "default": true
         }
       },
       "additionalProperties": false,

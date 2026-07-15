@@ -2974,6 +2974,25 @@ func (c *AssetClient) QueryPlatforms(_m *Asset) *PlatformQuery {
 	return query
 }
 
+// QuerySystemDetails queries the system_details edge of a Asset.
+func (c *AssetClient) QuerySystemDetails(_m *Asset) *SystemDetailQuery {
+	query := (&SystemDetailClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, asset.SystemDetailsTable, asset.SystemDetailsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.SystemDetailAssets
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryOutOfScopePlatforms queries the out_of_scope_platforms edge of a Asset.
 func (c *AssetClient) QueryOutOfScopePlatforms(_m *Asset) *PlatformQuery {
 	query := (&PlatformClient{config: c.config}).Query()
@@ -9396,6 +9415,25 @@ func (c *EntityClient) QueryAssets(_m *Entity) *AssetQuery {
 	return query
 }
 
+// QuerySystemDetails queries the system_details edge of a Entity.
+func (c *EntityClient) QuerySystemDetails(_m *Entity) *SystemDetailQuery {
+	query := (&SystemDetailClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, entity.SystemDetailsTable, entity.SystemDetailsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.EntitySystemDetails
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryScans queries the scans edge of a Entity.
 func (c *EntityClient) QueryScans(_m *Entity) *ScanQuery {
 	query := (&ScanClient{config: c.config}).Query()
@@ -9404,11 +9442,11 @@ func (c *EntityClient) QueryScans(_m *Entity) *ScanQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(entity.Table, entity.FieldID, id),
 			sqlgraph.To(scan.Table, scan.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, entity.ScansTable, entity.ScansColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, entity.ScansTable, entity.ScansPrimaryKey...),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanEntities
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -12039,11 +12077,11 @@ func (c *FindingClient) QueryScans(_m *Finding) *ScanQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(finding.Table, finding.FieldID, id),
 			sqlgraph.To(scan.Table, scan.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, finding.ScansTable, finding.ScansColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, finding.ScansTable, finding.ScansPrimaryKey...),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.FindingScans
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -18715,6 +18753,25 @@ func (c *NoteClient) QueryInternalPolicy(_m *Note) *InternalPolicyQuery {
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryReview queries the review edge of a Note.
+func (c *NoteClient) QueryReview(_m *Note) *ReviewQuery {
+	query := (&ReviewClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(review.Table, review.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.ReviewTable, note.ReviewColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Review
 		step.Edge.Schema = schemaConfig.Note
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -25533,19 +25590,19 @@ func (c *PlatformClient) QueryPlatformOwner(_m *Platform) *UserQuery {
 	return query
 }
 
-// QuerySystemDetail queries the system_detail edge of a Platform.
-func (c *PlatformClient) QuerySystemDetail(_m *Platform) *SystemDetailQuery {
+// QuerySystemDetails queries the system_details edge of a Platform.
+func (c *PlatformClient) QuerySystemDetails(_m *Platform) *SystemDetailQuery {
 	query := (&SystemDetailClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(platform.Table, platform.FieldID, id),
 			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, platform.SystemDetailTable, platform.SystemDetailColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.SystemDetailsTable, platform.SystemDetailsPrimaryKey...),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.SystemDetail
-		step.Edge.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.PlatformSystemDetails
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -26506,19 +26563,19 @@ func (c *ProgramClient) QueryActionPlans(_m *Program) *ActionPlanQuery {
 	return query
 }
 
-// QuerySystemDetail queries the system_detail edge of a Program.
-func (c *ProgramClient) QuerySystemDetail(_m *Program) *SystemDetailQuery {
+// QuerySystemDetails queries the system_details edge of a Program.
+func (c *ProgramClient) QuerySystemDetails(_m *Program) *SystemDetailQuery {
 	query := (&SystemDetailClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(program.Table, program.FieldID, id),
 			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, program.SystemDetailTable, program.SystemDetailColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, program.SystemDetailsTable, program.SystemDetailsPrimaryKey...),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.SystemDetail
-		step.Edge.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.ProgramSystemDetails
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -28958,11 +29015,11 @@ func (c *ScanClient) QueryEntities(_m *Scan) *EntityQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(scan.Table, scan.FieldID, id),
 			sqlgraph.To(entity.Table, entity.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, scan.EntitiesTable, scan.EntitiesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, scan.EntitiesTable, scan.EntitiesPrimaryKey...),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.ScanEntities
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -29134,6 +29191,25 @@ func (c *ScanClient) QuerySubcontrols(_m *Scan) *SubcontrolQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
 		step.Edge.Schema = schemaConfig.SubcontrolScans
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFindings queries the findings edge of a Scan.
+func (c *ScanClient) QueryFindings(_m *Scan) *FindingQuery {
+	query := (&FindingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, scan.FindingsTable, scan.FindingsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingScans
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -31130,38 +31206,76 @@ func (c *SystemDetailClient) QueryOwner(_m *SystemDetail) *OrganizationQuery {
 	return query
 }
 
-// QueryProgram queries the program edge of a SystemDetail.
-func (c *SystemDetailClient) QueryProgram(_m *SystemDetail) *ProgramQuery {
+// QueryPrograms queries the programs edge of a SystemDetail.
+func (c *SystemDetailClient) QueryPrograms(_m *SystemDetail) *ProgramQuery {
 	query := (&ProgramClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(systemdetail.Table, systemdetail.FieldID, id),
 			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, systemdetail.ProgramTable, systemdetail.ProgramColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, systemdetail.ProgramsTable, systemdetail.ProgramsPrimaryKey...),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.ProgramSystemDetails
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
-// QueryPlatform queries the platform edge of a SystemDetail.
-func (c *SystemDetailClient) QueryPlatform(_m *SystemDetail) *PlatformQuery {
+// QueryPlatforms queries the platforms edge of a SystemDetail.
+func (c *SystemDetailClient) QueryPlatforms(_m *SystemDetail) *PlatformQuery {
 	query := (&PlatformClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(systemdetail.Table, systemdetail.FieldID, id),
 			sqlgraph.To(platform.Table, platform.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, systemdetail.PlatformTable, systemdetail.PlatformColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, systemdetail.PlatformsTable, systemdetail.PlatformsPrimaryKey...),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.PlatformSystemDetails
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntities queries the entities edge of a SystemDetail.
+func (c *SystemDetailClient) QueryEntities(_m *SystemDetail) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(systemdetail.Table, systemdetail.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, systemdetail.EntitiesTable, systemdetail.EntitiesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.EntitySystemDetails
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssets queries the assets edge of a SystemDetail.
+func (c *SystemDetailClient) QueryAssets(_m *SystemDetail) *AssetQuery {
+	query := (&AssetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(systemdetail.Table, systemdetail.FieldID, id),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, systemdetail.AssetsTable, systemdetail.AssetsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.SystemDetailAssets
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

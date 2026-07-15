@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // Review defines the review schema.
@@ -297,6 +298,7 @@ func (r Review) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
+			rule.CheckIfCommentOnly(),
 			policy.CheckOrgWriteAccess(),
 			entfga.CheckEditAccess[*generated.ReviewMutation](),
 		),

@@ -10,7 +10,7 @@ import (
 func registerVerifySubscribeHandler(router *Router) error {
 	config := Config{
 		Path:        "/subscribe/verify",
-		Method:      http.MethodGet,
+		Method:      http.MethodPost,
 		Name:        "VerifySubscription",
 		Description: "Verify a subscription",
 		Tags:        []string{"subscription"},
@@ -19,6 +19,7 @@ func registerVerifySubscribeHandler(router *Router) error {
 		Middlewares: *unauthenticatedEndpoint,
 		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.VerifySubscriptionHandler,
+		PublicCORS:  true,
 	}
 
 	return router.AddV1HandlerRoute(config)
@@ -28,7 +29,7 @@ func registerVerifySubscribeHandler(router *Router) error {
 func registerUnsubscribeHandler(router *Router) error {
 	config := Config{
 		Path:        "/unsubscribe",
-		Method:      http.MethodGet,
+		Method:      http.MethodPost,
 		Name:        "Unsubscribe",
 		Description: "Unsubscribe from communications",
 		Tags:        []string{"subscription"},
@@ -37,6 +38,7 @@ func registerUnsubscribeHandler(router *Router) error {
 		Middlewares: *unauthenticatedEndpoint,
 		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.UnsubscribeHandler,
+		PublicCORS:  true,
 	}
 
 	return router.AddV1HandlerRoute(config)

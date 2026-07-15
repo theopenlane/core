@@ -80,6 +80,8 @@ type TrustCenterSetting struct {
 	SecurityContact *string `json:"security_contact,omitempty"`
 	// whether NDA requests require approval before being processed
 	NdaApprovalRequired bool `json:"nda_approval_required,omitempty"`
+	// whether the trust center accepts new subscriber registrations; when false, subscriber creation for the trust center is blocked
+	AllowSubscribers bool `json:"allow_subscribers,omitempty"`
 	// whether to email trust center subscribers when subprocessors are added, updated, or removed
 	NotifySubscribersOnSubprocessorChange bool `json:"notify_subscribers_on_subprocessor_change,omitempty"`
 	// watermark of the most recent subprocessor change subscribers have been notified about
@@ -185,7 +187,7 @@ func (*TrustCenterSetting) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case trustcentersetting.FieldRemoveBranding, trustcentersetting.FieldNdaApprovalRequired, trustcentersetting.FieldNotifySubscribersOnSubprocessorChange:
+		case trustcentersetting.FieldRemoveBranding, trustcentersetting.FieldNdaApprovalRequired, trustcentersetting.FieldAllowSubscribers, trustcentersetting.FieldNotifySubscribersOnSubprocessorChange:
 			values[i] = new(sql.NullBool)
 		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldUpdatedByImpersonator, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldCompanyName, trustcentersetting.FieldCompanyDescription, trustcentersetting.FieldOverview, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID, trustcentersetting.FieldHeroImageLocalFileID, trustcentersetting.FieldThemeMode, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldFont, trustcentersetting.FieldForegroundColor, trustcentersetting.FieldBackgroundColor, trustcentersetting.FieldAccentColor, trustcentersetting.FieldSecondaryBackgroundColor, trustcentersetting.FieldSecondaryForegroundColor, trustcentersetting.FieldEnvironment, trustcentersetting.FieldCompanyDomain, trustcentersetting.FieldSecurityContact, trustcentersetting.FieldNdaApproverGroupID, trustcentersetting.FieldStatusPageURL:
 			values[i] = new(sql.NullString)
@@ -400,6 +402,12 @@ func (_m *TrustCenterSetting) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.NdaApprovalRequired = value.Bool
 			}
+		case trustcentersetting.FieldAllowSubscribers:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field allow_subscribers", values[i])
+			} else if value.Valid {
+				_m.AllowSubscribers = value.Bool
+			}
 		case trustcentersetting.FieldNotifySubscribersOnSubprocessorChange:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field notify_subscribers_on_subprocessor_change", values[i])
@@ -598,6 +606,9 @@ func (_m *TrustCenterSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("nda_approval_required=")
 	builder.WriteString(fmt.Sprintf("%v", _m.NdaApprovalRequired))
+	builder.WriteString(", ")
+	builder.WriteString("allow_subscribers=")
+	builder.WriteString(fmt.Sprintf("%v", _m.AllowSubscribers))
 	builder.WriteString(", ")
 	builder.WriteString("notify_subscribers_on_subprocessor_change=")
 	builder.WriteString(fmt.Sprintf("%v", _m.NotifySubscribersOnSubprocessorChange))

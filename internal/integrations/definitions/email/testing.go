@@ -70,19 +70,14 @@ func TrustCenterSettingFixture() *generated.TrustCenterSetting {
 	}
 }
 
-// TrustCenterUpdateTemplateFixture returns a sample email template configured for a trust center
-// update, with branded message content and a tokenized unsubscribe link
-func TrustCenterUpdateTemplateFixture() *generated.EmailTemplate {
-	return &generated.EmailTemplate{
-		Key: "BrandedMessageRequest",
-		Defaults: map[string]any{
-			"subject":        "{{ .companyName }} trust center update",
-			"title":          "Hi {{ .firstName }}, an update from {{ .companyName }}",
-			"intros":         []any{"We've updated our subprocessor list.", "Review the changes in our trust center."},
-			"buttonText":     "View Trust Center",
-			"buttonLink":     "https://securecorp.example.com/trust",
-			"unsubscribeURL": "https://securecorp.example.com/unsubscribe?token={{ .unsubscribeToken }}",
-		},
+// cloudflareTrustCenterBranding returns a production-like trust center branding overlay for the
+// trust center email fixtures, using Cloudflare's real logo and brand orange so test sends preview
+// how an actual branded customer email renders (logo resolves, accent border shows a real palette)
+func cloudflareTrustCenterBranding() TrustCenterBranding {
+	return TrustCenterBranding{
+		CompanyName: "Cloudflare",
+		LogoURL:     "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Cloudflare_Logo.svg/330px-Cloudflare_Logo.svg.png",
+		AccentColor: "#f6821f",
 	}
 }
 
@@ -98,8 +93,10 @@ func TestRecipient(toEmail string) RecipientInfo {
 // TestFixture returns a scaffolded JSON payload for the given dispatcher name.
 // All required fields are populated with realistic test values; URL-resolved fields
 // (NDAURL, AuthURL) are set directly so PreHooks that require a database are bypassed.
-// Returns nil when no fixture is defined for the dispatcher
-func TestFixture(name, toEmail string) json.RawMessage {
+// When defaultBranding is true, the trust center branding overlay is stripped from trust-center emails
+// so they render with the Openlane system defaults (the fallback used when a trust center configures no
+// branding), letting both branding variants be previewed. Returns nil when no fixture is defined
+func TestFixture(name, toEmail string, defaultBranding bool) json.RawMessage {
 	r := TestRecipient(toEmail)
 
 	fixtures := map[string]any{
@@ -111,14 +108,16 @@ func TestFixture(name, toEmail string) json.RawMessage {
 			RecipientInfo: r,
 		},
 		"InviteRequest": InviteRequest{
-			RecipientInfo: r,
+			// production sets only Email on the invite recipient (no name), so there is no greeting name
+			RecipientInfo: RecipientInfo{Email: toEmail},
 			InviterName:   "Jane Smith",
 			OrgName:       "Acme Corp",
 			Role:          "admin",
 			Token:         "test-invite-token-12345",
+			NewUser:       true,
 		},
 		"InviteJoinedRequest": InviteJoinedRequest{
-			RecipientInfo: r,
+			RecipientInfo: RecipientInfo{Email: toEmail},
 			OrgName:       "Acme Corp",
 		},
 		"PasswordResetEmailRequest": PasswordResetEmailRequest{
@@ -129,9 +128,12 @@ func TestFixture(name, toEmail string) json.RawMessage {
 			RecipientInfo: r,
 		},
 		"SubscribeRequest": SubscribeRequest{
-			RecipientInfo: r,
-			OrgName:       "Acme Corp",
-			Token:         "test-subscribe-token-12345",
+			RecipientInfo:       r,
+			TrustCenterBranding: cloudflareTrustCenterBranding(),
+			OrgName:             "Cloudflare",
+			Token:               "test-subscribe-token-12345",
+			VerifyURL:           "https://www.cloudflare.com/trust-hub/subscribe/verify?token=test-subscribe-token-12345",
+			UnsubscribeURL:      "https://www.cloudflare.com/trust-hub/unsubscribe?token=test-subscribe-token-12345",
 		},
 		"VerifyBillingRequest": VerifyBillingRequest{
 			RecipientInfo: r,
@@ -146,13 +148,13 @@ func TestFixture(name, toEmail string) json.RawMessage {
 			RecipientInfo:      r,
 			OrgName:            "SecureCorp",
 			TrustCenterURL:     "https://trustcenter.example.com/securecorp?token=test",
-			AttachmentFilename: "SecureCorp-NDA-Signed.pdf",
+			AttachmentFilename: "signed_nda_file.pdf",
 			AttachmentData:     testAttestedNDAPDF(),
 		},
 		"TrustCenterAuthEmail": TrustCenterAuthEmail{
 			RecipientInfo: r,
 			OrgName:       "SecureCorp",
-			AuthURL:       "https://trustcenter.example.com/securecorp/auth?token=test",
+			AuthURL:       "https://trustcenter.example.com/securecorp?token=test",
 		},
 		"TrustCenterNDAApprovalRequestEmail": TrustCenterNDAApprovalRequestEmail{
 			RecipientInfo:  RecipientInfo{Email: toEmail, Recipients: []string{toEmail}, FirstName: r.FirstName, LastName: r.LastName},
@@ -164,7 +166,7 @@ func TestFixture(name, toEmail string) json.RawMessage {
 			RecipientInfo:  r,
 			OrgName:        "Acme Corp",
 			AssessmentName: "SOC 2 Type II Review",
-			AuthURL:        "https://questionnaire.example.com/auth?token=test",
+			AuthURL:        "https://questionnaire.example.com/questionnaire?token=test",
 		},
 		"BillingEmailChangedEmail": BillingEmailChangedEmail{
 			RecipientInfo:   r,
@@ -189,14 +191,59 @@ func TestFixture(name, toEmail string) json.RawMessage {
 			Title:      "Welcome to {{ .companyName }}",
 			Intros:     []string{"Hi {{ .firstName }}, this branded message was sent via the email-test CLI.", "All templates are rendering correctly for {{ .companyName }}."},
 			ButtonText: "Visit Dashboard",
-			ButtonLink: "{{ .rootURL }}/campaigns",
-			Outros:     []string{"If you received this, the branded message template is working as expected.", "Questions? Reach us at {{ .supportEmail }}."},
+			ButtonLink: "https://app.example.com/campaigns",
+			Outros:     []string{"If you received this, the branded message template is working as expected.", "Questions? Reach us at {{ .supportemail }}."},
+		},
+		"SubprocessorNotificationRequest": SubprocessorNotificationRequest{
+			RecipientInfo: RecipientInfo{
+				Email:            toEmail,
+				FirstName:        r.FirstName,
+				LastName:         r.LastName,
+				UnsubscribeToken: "test-unsubscribe-token-12345",
+			},
+			TrustCenterBranding: cloudflareTrustCenterBranding(),
+			Subprocessors: []SubprocessorEntry{
+				{Name: "Amazon Web Services", Change: "Added"},
+				{Name: "Stripe", Change: "Updated"},
+				{Name: "Twilio", Change: "Removed"},
+			},
+			TrustCenterURL: "https://www.cloudflare.com/trust-hub/",
+			UnsubscribeURL: "https://www.cloudflare.com/trust-hub/unsubscribe?token={{ .unsubscribeToken }}",
+		},
+		TrustCenterUpdateTemplate: TrustCenterUpdateRequest{
+			RecipientInfo: RecipientInfo{
+				Email:            toEmail,
+				FirstName:        r.FirstName,
+				LastName:         r.LastName,
+				UnsubscribeToken: "test-unsubscribe-token-12345",
+			},
+			TrustCenterBranding: cloudflareTrustCenterBranding(),
+			PostTitle:           "SOC 2 Type II report published",
+			PostText:            "Our latest SOC 2 Type II report is now available in the trust center.\nRequest access to review the full report.",
+			TrustCenterURL:      "https://www.cloudflare.com/trust-hub/",
+			UnsubscribeURL:      "https://www.cloudflare.com/trust-hub/unsubscribe?token={{ .unsubscribeToken }}",
 		},
 	}
 
 	fixture, ok := fixtures[name]
 	if !ok {
 		return nil
+	}
+
+	// preview the Openlane fallback by clearing the trust center branding overlay
+	if defaultBranding {
+		switch req := fixture.(type) {
+		case SubprocessorNotificationRequest:
+			req.TrustCenterBranding = TrustCenterBranding{}
+			fixture = req
+		case TrustCenterUpdateRequest:
+			req.TrustCenterBranding = TrustCenterBranding{}
+			fixture = req
+		case SubscribeRequest:
+			req.TrustCenterBranding = TrustCenterBranding{}
+			req.OrgName = ""
+			fixture = req
+		}
 	}
 
 	data, err := json.Marshal(fixture)

@@ -152,6 +152,8 @@ const (
 	EdgeEntities = "entities"
 	// EdgePlatforms holds the string denoting the platforms edge name in mutations.
 	EdgePlatforms = "platforms"
+	// EdgeSystemDetails holds the string denoting the system_details edge name in mutations.
+	EdgeSystemDetails = "system_details"
 	// EdgeOutOfScopePlatforms holds the string denoting the out_of_scope_platforms edge name in mutations.
 	EdgeOutOfScopePlatforms = "out_of_scope_platforms"
 	// EdgeIdentityHolders holds the string denoting the identity_holders edge name in mutations.
@@ -285,6 +287,11 @@ const (
 	// PlatformsInverseTable is the table name for the Platform entity.
 	// It exists in this package in order to avoid circular dependency with the "platform" package.
 	PlatformsInverseTable = "platforms"
+	// SystemDetailsTable is the table that holds the system_details relation/edge. The primary key declared below.
+	SystemDetailsTable = "system_detail_assets"
+	// SystemDetailsInverseTable is the table name for the SystemDetail entity.
+	// It exists in this package in order to avoid circular dependency with the "systemdetail" package.
+	SystemDetailsInverseTable = "system_details"
 	// OutOfScopePlatformsTable is the table that holds the out_of_scope_platforms relation/edge. The primary key declared below.
 	OutOfScopePlatformsTable = "platform_out_of_scope_assets"
 	// OutOfScopePlatformsInverseTable is the table name for the Platform entity.
@@ -405,6 +412,9 @@ var (
 	// PlatformsPrimaryKey and PlatformsColumn2 are the table columns denoting the
 	// primary key for the platforms relation (M2M).
 	PlatformsPrimaryKey = []string{"platform_id", "asset_id"}
+	// SystemDetailsPrimaryKey and SystemDetailsColumn2 are the table columns denoting the
+	// primary key for the system_details relation (M2M).
+	SystemDetailsPrimaryKey = []string{"system_detail_id", "asset_id"}
 	// OutOfScopePlatformsPrimaryKey and OutOfScopePlatformsColumn2 are the table columns denoting the
 	// primary key for the out_of_scope_platforms relation (M2M).
 	OutOfScopePlatformsPrimaryKey = []string{"platform_id", "asset_id"}
@@ -907,6 +917,20 @@ func ByPlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// BySystemDetailsCount orders the results by system_details count.
+func BySystemDetailsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSystemDetailsStep(), opts...)
+	}
+}
+
+// BySystemDetails orders the results by system_details terms.
+func BySystemDetails(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSystemDetailsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByOutOfScopePlatformsCount orders the results by out_of_scope_platforms count.
 func ByOutOfScopePlatformsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1135,6 +1159,13 @@ func newPlatformsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PlatformsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, PlatformsTable, PlatformsPrimaryKey...),
+	)
+}
+func newSystemDetailsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SystemDetailsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, SystemDetailsTable, SystemDetailsPrimaryKey...),
 	)
 }
 func newOutOfScopePlatformsStep() *sqlgraph.Step {

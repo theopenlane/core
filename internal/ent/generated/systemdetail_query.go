@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -12,6 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -25,15 +28,21 @@ import (
 // SystemDetailQuery is the builder for querying SystemDetail entities.
 type SystemDetailQuery struct {
 	config
-	ctx          *QueryContext
-	order        []systemdetail.OrderOption
-	inters       []Interceptor
-	predicates   []predicate.SystemDetail
-	withOwner    *OrganizationQuery
-	withProgram  *ProgramQuery
-	withPlatform *PlatformQuery
-	loadTotal    []func(context.Context, []*SystemDetail) error
-	modifiers    []func(*sql.Selector)
+	ctx                *QueryContext
+	order              []systemdetail.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.SystemDetail
+	withOwner          *OrganizationQuery
+	withPrograms       *ProgramQuery
+	withPlatforms      *PlatformQuery
+	withEntities       *EntityQuery
+	withAssets         *AssetQuery
+	loadTotal          []func(context.Context, []*SystemDetail) error
+	modifiers          []func(*sql.Selector)
+	withNamedPrograms  map[string]*ProgramQuery
+	withNamedPlatforms map[string]*PlatformQuery
+	withNamedEntities  map[string]*EntityQuery
+	withNamedAssets    map[string]*AssetQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -95,8 +104,8 @@ func (_q *SystemDetailQuery) QueryOwner() *OrganizationQuery {
 	return query
 }
 
-// QueryProgram chains the current query on the "program" edge.
-func (_q *SystemDetailQuery) QueryProgram() *ProgramQuery {
+// QueryPrograms chains the current query on the "programs" edge.
+func (_q *SystemDetailQuery) QueryPrograms() *ProgramQuery {
 	query := (&ProgramClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
@@ -109,19 +118,19 @@ func (_q *SystemDetailQuery) QueryProgram() *ProgramQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(systemdetail.Table, systemdetail.FieldID, selector),
 			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, systemdetail.ProgramTable, systemdetail.ProgramColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, systemdetail.ProgramsTable, systemdetail.ProgramsPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.ProgramSystemDetails
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
-// QueryPlatform chains the current query on the "platform" edge.
-func (_q *SystemDetailQuery) QueryPlatform() *PlatformQuery {
+// QueryPlatforms chains the current query on the "platforms" edge.
+func (_q *SystemDetailQuery) QueryPlatforms() *PlatformQuery {
 	query := (&PlatformClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
@@ -134,11 +143,61 @@ func (_q *SystemDetailQuery) QueryPlatform() *PlatformQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(systemdetail.Table, systemdetail.FieldID, selector),
 			sqlgraph.To(platform.Table, platform.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, systemdetail.PlatformTable, systemdetail.PlatformColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, systemdetail.PlatformsTable, systemdetail.PlatformsPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.PlatformSystemDetails
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEntities chains the current query on the "entities" edge.
+func (_q *SystemDetailQuery) QueryEntities() *EntityQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(systemdetail.Table, systemdetail.FieldID, selector),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, systemdetail.EntitiesTable, systemdetail.EntitiesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.EntitySystemDetails
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssets chains the current query on the "assets" edge.
+func (_q *SystemDetailQuery) QueryAssets() *AssetQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(systemdetail.Table, systemdetail.FieldID, selector),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, systemdetail.AssetsTable, systemdetail.AssetsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.SystemDetailAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -332,14 +391,16 @@ func (_q *SystemDetailQuery) Clone() *SystemDetailQuery {
 		return nil
 	}
 	return &SystemDetailQuery{
-		config:       _q.config,
-		ctx:          _q.ctx.Clone(),
-		order:        append([]systemdetail.OrderOption{}, _q.order...),
-		inters:       append([]Interceptor{}, _q.inters...),
-		predicates:   append([]predicate.SystemDetail{}, _q.predicates...),
-		withOwner:    _q.withOwner.Clone(),
-		withProgram:  _q.withProgram.Clone(),
-		withPlatform: _q.withPlatform.Clone(),
+		config:        _q.config,
+		ctx:           _q.ctx.Clone(),
+		order:         append([]systemdetail.OrderOption{}, _q.order...),
+		inters:        append([]Interceptor{}, _q.inters...),
+		predicates:    append([]predicate.SystemDetail{}, _q.predicates...),
+		withOwner:     _q.withOwner.Clone(),
+		withPrograms:  _q.withPrograms.Clone(),
+		withPlatforms: _q.withPlatforms.Clone(),
+		withEntities:  _q.withEntities.Clone(),
+		withAssets:    _q.withAssets.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -358,25 +419,47 @@ func (_q *SystemDetailQuery) WithOwner(opts ...func(*OrganizationQuery)) *System
 	return _q
 }
 
-// WithProgram tells the query-builder to eager-load the nodes that are connected to
-// the "program" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *SystemDetailQuery) WithProgram(opts ...func(*ProgramQuery)) *SystemDetailQuery {
+// WithPrograms tells the query-builder to eager-load the nodes that are connected to
+// the "programs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SystemDetailQuery) WithPrograms(opts ...func(*ProgramQuery)) *SystemDetailQuery {
 	query := (&ProgramClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	_q.withProgram = query
+	_q.withPrograms = query
 	return _q
 }
 
-// WithPlatform tells the query-builder to eager-load the nodes that are connected to
-// the "platform" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *SystemDetailQuery) WithPlatform(opts ...func(*PlatformQuery)) *SystemDetailQuery {
+// WithPlatforms tells the query-builder to eager-load the nodes that are connected to
+// the "platforms" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SystemDetailQuery) WithPlatforms(opts ...func(*PlatformQuery)) *SystemDetailQuery {
 	query := (&PlatformClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	_q.withPlatform = query
+	_q.withPlatforms = query
+	return _q
+}
+
+// WithEntities tells the query-builder to eager-load the nodes that are connected to
+// the "entities" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SystemDetailQuery) WithEntities(opts ...func(*EntityQuery)) *SystemDetailQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEntities = query
+	return _q
+}
+
+// WithAssets tells the query-builder to eager-load the nodes that are connected to
+// the "assets" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SystemDetailQuery) WithAssets(opts ...func(*AssetQuery)) *SystemDetailQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssets = query
 	return _q
 }
 
@@ -464,10 +547,12 @@ func (_q *SystemDetailQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*SystemDetail{}
 		_spec       = _q.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [5]bool{
 			_q.withOwner != nil,
-			_q.withProgram != nil,
-			_q.withPlatform != nil,
+			_q.withPrograms != nil,
+			_q.withPlatforms != nil,
+			_q.withEntities != nil,
+			_q.withAssets != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -499,15 +584,59 @@ func (_q *SystemDetailQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
-	if query := _q.withProgram; query != nil {
-		if err := _q.loadProgram(ctx, query, nodes, nil,
-			func(n *SystemDetail, e *Program) { n.Edges.Program = e }); err != nil {
+	if query := _q.withPrograms; query != nil {
+		if err := _q.loadPrograms(ctx, query, nodes,
+			func(n *SystemDetail) { n.Edges.Programs = []*Program{} },
+			func(n *SystemDetail, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := _q.withPlatform; query != nil {
-		if err := _q.loadPlatform(ctx, query, nodes, nil,
-			func(n *SystemDetail, e *Platform) { n.Edges.Platform = e }); err != nil {
+	if query := _q.withPlatforms; query != nil {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *SystemDetail) { n.Edges.Platforms = []*Platform{} },
+			func(n *SystemDetail, e *Platform) { n.Edges.Platforms = append(n.Edges.Platforms, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEntities; query != nil {
+		if err := _q.loadEntities(ctx, query, nodes,
+			func(n *SystemDetail) { n.Edges.Entities = []*Entity{} },
+			func(n *SystemDetail, e *Entity) { n.Edges.Entities = append(n.Edges.Entities, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssets; query != nil {
+		if err := _q.loadAssets(ctx, query, nodes,
+			func(n *SystemDetail) { n.Edges.Assets = []*Asset{} },
+			func(n *SystemDetail, e *Asset) { n.Edges.Assets = append(n.Edges.Assets, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedPrograms {
+		if err := _q.loadPrograms(ctx, query, nodes,
+			func(n *SystemDetail) { n.appendNamedPrograms(name) },
+			func(n *SystemDetail, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedPlatforms {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *SystemDetail) { n.appendNamedPlatforms(name) },
+			func(n *SystemDetail, e *Platform) { n.appendNamedPlatforms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEntities {
+		if err := _q.loadEntities(ctx, query, nodes,
+			func(n *SystemDetail) { n.appendNamedEntities(name) },
+			func(n *SystemDetail, e *Entity) { n.appendNamedEntities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAssets {
+		if err := _q.loadAssets(ctx, query, nodes,
+			func(n *SystemDetail) { n.appendNamedAssets(name) },
+			func(n *SystemDetail, e *Asset) { n.appendNamedAssets(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -548,66 +677,250 @@ func (_q *SystemDetailQuery) loadOwner(ctx context.Context, query *OrganizationQ
 	}
 	return nil
 }
-func (_q *SystemDetailQuery) loadProgram(ctx context.Context, query *ProgramQuery, nodes []*SystemDetail, init func(*SystemDetail), assign func(*SystemDetail, *Program)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*SystemDetail)
-	for i := range nodes {
-		if nodes[i].ProgramID == nil {
-			continue
+func (_q *SystemDetailQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*SystemDetail, init func(*SystemDetail), assign func(*SystemDetail, *Program)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*SystemDetail)
+	nids := make(map[string]map[*SystemDetail]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
 		}
-		fk := *nodes[i].ProgramID
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	if len(ids) == 0 {
-		return nil
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(systemdetail.ProgramsTable)
+		joinT.Schema(_q.schemaConfig.ProgramSystemDetails)
+		s.Join(joinT).On(s.C(program.FieldID), joinT.C(systemdetail.ProgramsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(systemdetail.ProgramsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(systemdetail.ProgramsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
 	}
-	query.Where(program.IDIn(ids...))
-	neighbors, err := query.All(ctx)
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*SystemDetail]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "program_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "programs" node returned %v`, n.ID)
 		}
-		for i := range nodes {
-			assign(nodes[i], n)
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil
 }
-func (_q *SystemDetailQuery) loadPlatform(ctx context.Context, query *PlatformQuery, nodes []*SystemDetail, init func(*SystemDetail), assign func(*SystemDetail, *Platform)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*SystemDetail)
-	for i := range nodes {
-		if nodes[i].PlatformID == nil {
-			continue
+func (_q *SystemDetailQuery) loadPlatforms(ctx context.Context, query *PlatformQuery, nodes []*SystemDetail, init func(*SystemDetail), assign func(*SystemDetail, *Platform)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*SystemDetail)
+	nids := make(map[string]map[*SystemDetail]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
 		}
-		fk := *nodes[i].PlatformID
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	if len(ids) == 0 {
-		return nil
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(systemdetail.PlatformsTable)
+		joinT.Schema(_q.schemaConfig.PlatformSystemDetails)
+		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(systemdetail.PlatformsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(systemdetail.PlatformsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(systemdetail.PlatformsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
 	}
-	query.Where(platform.IDIn(ids...))
-	neighbors, err := query.All(ctx)
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*SystemDetail]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Platform](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "platform_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "platforms" node returned %v`, n.ID)
 		}
-		for i := range nodes {
-			assign(nodes[i], n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *SystemDetailQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*SystemDetail, init func(*SystemDetail), assign func(*SystemDetail, *Entity)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*SystemDetail)
+	nids := make(map[string]map[*SystemDetail]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(systemdetail.EntitiesTable)
+		joinT.Schema(_q.schemaConfig.EntitySystemDetails)
+		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(systemdetail.EntitiesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(systemdetail.EntitiesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(systemdetail.EntitiesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*SystemDetail]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Entity](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "entities" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *SystemDetailQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []*SystemDetail, init func(*SystemDetail), assign func(*SystemDetail, *Asset)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*SystemDetail)
+	nids := make(map[string]map[*SystemDetail]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(systemdetail.AssetsTable)
+		joinT.Schema(_q.schemaConfig.SystemDetailAssets)
+		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(systemdetail.AssetsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(systemdetail.AssetsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(systemdetail.AssetsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*SystemDetail]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Asset](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "assets" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil
@@ -645,12 +958,6 @@ func (_q *SystemDetailQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(systemdetail.FieldOwnerID)
-		}
-		if _q.withProgram != nil {
-			_spec.Node.AddColumnOnce(systemdetail.FieldProgramID)
-		}
-		if _q.withPlatform != nil {
-			_spec.Node.AddColumnOnce(systemdetail.FieldPlatformID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
@@ -718,6 +1025,62 @@ func (_q *SystemDetailQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *SystemDetailQuery) Modify(modifiers ...func(s *sql.Selector)) *SystemDetailSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedPrograms tells the query-builder to eager-load the nodes that are connected to the "programs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *SystemDetailQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *SystemDetailQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPrograms == nil {
+		_q.withNamedPrograms = make(map[string]*ProgramQuery)
+	}
+	_q.withNamedPrograms[name] = query
+	return _q
+}
+
+// WithNamedPlatforms tells the query-builder to eager-load the nodes that are connected to the "platforms"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *SystemDetailQuery) WithNamedPlatforms(name string, opts ...func(*PlatformQuery)) *SystemDetailQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPlatforms == nil {
+		_q.withNamedPlatforms = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedPlatforms[name] = query
+	return _q
+}
+
+// WithNamedEntities tells the query-builder to eager-load the nodes that are connected to the "entities"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *SystemDetailQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *SystemDetailQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEntities == nil {
+		_q.withNamedEntities = make(map[string]*EntityQuery)
+	}
+	_q.withNamedEntities[name] = query
+	return _q
+}
+
+// WithNamedAssets tells the query-builder to eager-load the nodes that are connected to the "assets"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *SystemDetailQuery) WithNamedAssets(name string, opts ...func(*AssetQuery)) *SystemDetailQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAssets == nil {
+		_q.withNamedAssets = make(map[string]*AssetQuery)
+	}
+	_q.withNamedAssets[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids with FGA batch filtering applied

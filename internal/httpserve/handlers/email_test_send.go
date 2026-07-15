@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strings"
 
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/newman"
@@ -17,6 +18,9 @@ type EmailTestSendRequest struct {
 	To string `json:"to" jsonschema:"required,description=Recipient email address"`
 	// Name filters to a single dispatcher; empty sends all registered dispatchers
 	Name string `json:"name,omitempty" jsonschema:"description=Dispatcher name to send (empty sends all)"`
+	// Branding selects the trust center branding variant for trust-center emails: "default" renders the
+	// Openlane fallback (no configured branding); any other value renders the configured trust center branding
+	Branding string `json:"branding,omitempty" jsonschema:"description=Trust center branding variant: default or trustcenter"`
 }
 
 // EmailTestSendResult is the per-dispatcher outcome in the response
@@ -104,7 +108,7 @@ func (h *Handler) EmailTestSendHandler(ctx echo.Context, openapi *OpenAPIContext
 			continue
 		}
 
-		payload := email.TestFixture(op.Name, req.To)
+		payload := email.TestFixture(op.Name, req.To, strings.EqualFold(req.Branding, "default"))
 		if payload == nil {
 			results = append(results, EmailTestSendResult{Name: op.Name, Status: "SKIP", Error: "no fixture defined"})
 			continue

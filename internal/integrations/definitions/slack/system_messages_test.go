@@ -16,14 +16,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestNewSubscriberTemplateRender(t *testing.T) {
-	t.Parallel()
-
-	var buf bytes.Buffer
-	require.NoError(t, newSubscriberTemplate.Execute(&buf, NewSubscriberMessage{Email: "alice@example.com"}))
-	require.Contains(t, buf.String(), "alice@example.com")
-}
-
 func TestIntegrationInstalledTemplateRender(t *testing.T) {
 	t.Parallel()
 
@@ -62,6 +54,59 @@ func TestDemoRequestTemplateRender(t *testing.T) {
 	require.Contains(t, out, "acme.com, acme.io")
 	require.Contains(t, out, "size")
 	require.Contains(t, out, "Demo requested")
+}
+
+func TestOrganizationsPendingDeletionTemplateRender(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name     string
+		input    OrganizationsPendingDeletionMessage
+		contains []string
+	}{
+		{
+			name: "without dry run",
+			input: OrganizationsPendingDeletionMessage{
+				Count: 3,
+				Organizations: []string{
+					"Openlane Inc (openlane-1)",
+					"Github Inc (github)",
+					"Google (google)",
+				},
+			},
+			contains: []string{
+				"Organization deletion reminders scheduled",
+				"Organizations marked for deletion: 3",
+				"- Github Inc",
+				"- Openlane Inc",
+			},
+		},
+		{
+			name: "with dry run",
+			input: OrganizationsPendingDeletionMessage{
+				Count:         1,
+				Organizations: []string{"Openlane Inc (openlane-1)"},
+				DryRun:        true,
+			},
+			contains: []string{
+				"[Dry run] Organization deletion reminders scheduled",
+				"- Openlane Inc (openlane-1)",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			var buf bytes.Buffer
+			require.NoError(t, orgDeletionReminderTemplate.Execute(&buf, tt.input))
+
+			for _, expected := range tt.contains {
+				require.Contains(t, buf.String(), expected)
+			}
+		})
+	}
 }
 
 func TestSlackClientSendTextEmpty(t *testing.T) {

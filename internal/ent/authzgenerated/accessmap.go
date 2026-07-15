@@ -281,6 +281,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
+}, "system_details": {
+	ObjectType:          "system_detail",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
 }, "out_of_scope_platforms": {
 	ObjectType:          "out_of_scope_platform",
 	SkipEditCheck:       false,
@@ -1315,6 +1320,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
+}, "system_details": {
+	ObjectType:          "system_detail",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
 }, "scans": {
 	ObjectType:          "scan",
 	SkipEditCheck:       false,
@@ -1739,8 +1749,8 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: true,
 }, "controls": {
 	ObjectType:          "control",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "subcontrols": {
 	ObjectType:          "subcontrol",
@@ -1818,10 +1828,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "control_mappings": {
-	ObjectType:          "control_mapping",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
+	ObjectType:          "control",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
 },
 }, "finding_control": {"finding": {
 	ObjectType:          "finding",
@@ -2800,6 +2810,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: false,
 }, "internal_policy": {
 	ObjectType:          "internal_policy",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
+}, "review": {
+	ObjectType:          "review",
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
@@ -4112,7 +4127,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
-}, "system_detail": {
+}, "system_details": {
 	ObjectType:          "system_detail",
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
@@ -4299,7 +4314,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
-}, "system_detail": {
+}, "system_details": {
 	ObjectType:          "system_detail",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
@@ -4785,6 +4800,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
+}, "findings": {
+	ObjectType:          "finding",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
 }, "generated_by_platform": {
 	ObjectType:          "platform",
 	SkipEditCheck:       true,
@@ -5067,16 +5087,26 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
-}, "program": {
+}, "programs": {
 	ObjectType:          "program",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
-}, "platform": {
+}, "platforms": {
 	ObjectType:          "platform",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
+}, "entities": {
+	ObjectType:          "entity",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
+}, "assets": {
+	ObjectType:          "asset",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
 },
 }, "tfa_setting": {"owner": {
 	ObjectType:          "owner",

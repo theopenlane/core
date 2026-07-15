@@ -183,34 +183,6 @@ func (_c *SystemDetailHistoryCreate) SetNillableOwnerID(v *string) *SystemDetail
 	return _c
 }
 
-// SetProgramID sets the "program_id" field.
-func (_c *SystemDetailHistoryCreate) SetProgramID(v string) *SystemDetailHistoryCreate {
-	_c.mutation.SetProgramID(v)
-	return _c
-}
-
-// SetNillableProgramID sets the "program_id" field if the given value is not nil.
-func (_c *SystemDetailHistoryCreate) SetNillableProgramID(v *string) *SystemDetailHistoryCreate {
-	if v != nil {
-		_c.SetProgramID(*v)
-	}
-	return _c
-}
-
-// SetPlatformID sets the "platform_id" field.
-func (_c *SystemDetailHistoryCreate) SetPlatformID(v string) *SystemDetailHistoryCreate {
-	_c.mutation.SetPlatformID(v)
-	return _c
-}
-
-// SetNillablePlatformID sets the "platform_id" field if the given value is not nil.
-func (_c *SystemDetailHistoryCreate) SetNillablePlatformID(v *string) *SystemDetailHistoryCreate {
-	if v != nil {
-		_c.SetPlatformID(*v)
-	}
-	return _c
-}
-
 // SetSystemName sets the "system_name" field.
 func (_c *SystemDetailHistoryCreate) SetSystemName(v string) *SystemDetailHistoryCreate {
 	_c.mutation.SetSystemName(v)
@@ -500,14 +472,6 @@ func (_c *SystemDetailHistoryCreate) createSpec() (*SystemDetailHistory, *sqlgra
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(systemdetailhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
-	}
-	if value, ok := _c.mutation.ProgramID(); ok {
-		_spec.SetField(systemdetailhistory.FieldProgramID, field.TypeString, value)
-		_node.ProgramID = &value
-	}
-	if value, ok := _c.mutation.PlatformID(); ok {
-		_spec.SetField(systemdetailhistory.FieldPlatformID, field.TypeString, value)
-		_node.PlatformID = &value
 	}
 	if value, ok := _c.mutation.SystemName(); ok {
 		_spec.SetField(systemdetailhistory.FieldSystemName, field.TypeString, value)

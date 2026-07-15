@@ -164,6 +164,7 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 
 			orgID, err := auth.GetOrganizationIDFromContext(ctx)
 			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("unable to get organization id from context")
 				return nil, fmt.Errorf("%w: %s is not valid", ErrCustomEnumCreationFailed, enumValue)
 			}
 
@@ -212,6 +213,7 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 				switch generated.IsNotFound(err) {
 				case true:
 					if in.DisableAutoCreate {
+						logx.FromContext(ctx).Error().Err(err).Msg("auto create is disable, unable to set enum value")
 						return nil, fmt.Errorf("%w: %s is not valid", ErrCustomEnumCreationFailed, enumValue)
 					}
 
@@ -251,6 +253,7 @@ func createCustomEnum(ctx context.Context, client *generated.Client, in CustomEn
 
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to get organization id from context")
 		return nil, fmt.Errorf("%w: %s is not valid", ErrCustomEnumCreationFailed, enumValue)
 	}
 

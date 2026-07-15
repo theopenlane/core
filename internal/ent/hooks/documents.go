@@ -184,9 +184,9 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T, update
 		}
 
 		if parsedContent.Frontmatter.Status != "" {
-			status := enums.ToDocumentStatus(parsedContent.Frontmatter.Status)
-
-			m.SetStatus(*status)
+			if status := enums.ToDocumentStatus(parsedContent.Frontmatter.Status); status != nil {
+				m.SetStatus(*status)
+			}
 		}
 
 		if len(parsedContent.Frontmatter.Tags) > 0 {

@@ -7502,7 +7502,7 @@ func init() {
 	// systemdetail.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	systemdetail.OwnerIDValidator = systemdetailDescOwnerID.Validators[0].(func(string) error)
 	// systemdetailDescSystemName is the schema descriptor for system_name field.
-	systemdetailDescSystemName := systemdetailFields[2].Descriptor()
+	systemdetailDescSystemName := systemdetailFields[0].Descriptor()
 	// systemdetail.SystemNameValidator is a validator for the "system_name" field. It is called by the builders before save.
 	systemdetail.SystemNameValidator = systemdetailDescSystemName.Validators[0].(func(string) error)
 	// systemdetailDescID is the schema descriptor for id field.
@@ -8491,12 +8491,16 @@ func init() {
 	trustcentersettingDescNdaApprovalRequired := trustcentersettingFields[22].Descriptor()
 	// trustcentersetting.DefaultNdaApprovalRequired holds the default value on creation for the nda_approval_required field.
 	trustcentersetting.DefaultNdaApprovalRequired = trustcentersettingDescNdaApprovalRequired.Default.(bool)
+	// trustcentersettingDescAllowSubscribers is the schema descriptor for allow_subscribers field.
+	trustcentersettingDescAllowSubscribers := trustcentersettingFields[23].Descriptor()
+	// trustcentersetting.DefaultAllowSubscribers holds the default value on creation for the allow_subscribers field.
+	trustcentersetting.DefaultAllowSubscribers = trustcentersettingDescAllowSubscribers.Default.(bool)
 	// trustcentersettingDescNotifySubscribersOnSubprocessorChange is the schema descriptor for notify_subscribers_on_subprocessor_change field.
-	trustcentersettingDescNotifySubscribersOnSubprocessorChange := trustcentersettingFields[23].Descriptor()
+	trustcentersettingDescNotifySubscribersOnSubprocessorChange := trustcentersettingFields[24].Descriptor()
 	// trustcentersetting.DefaultNotifySubscribersOnSubprocessorChange holds the default value on creation for the notify_subscribers_on_subprocessor_change field.
 	trustcentersetting.DefaultNotifySubscribersOnSubprocessorChange = trustcentersettingDescNotifySubscribersOnSubprocessorChange.Default.(bool)
 	// trustcentersettingDescStatusPageURL is the schema descriptor for status_page_url field.
-	trustcentersettingDescStatusPageURL := trustcentersettingFields[26].Descriptor()
+	trustcentersettingDescStatusPageURL := trustcentersettingFields[27].Descriptor()
 	// trustcentersetting.StatusPageURLValidator is a validator for the "status_page_url" field. It is called by the builders before save.
 	trustcentersetting.StatusPageURLValidator = func() func(string) error {
 		validators := trustcentersettingDescStatusPageURL.Validators

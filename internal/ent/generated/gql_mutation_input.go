@@ -1283,6 +1283,7 @@ type CreateAssetInput struct {
 	ScanIDs                     []string
 	EntityIDs                   []string
 	PlatformIDs                 []string
+	SystemDetailIDs             []string
 	OutOfScopePlatformIDs       []string
 	IdentityHolderIDs           []string
 	ControlIDs                  []string
@@ -1432,6 +1433,9 @@ func (i *CreateAssetInput) Mutate(m *AssetMutation) {
 	if v := i.PlatformIDs; len(v) > 0 {
 		m.AddPlatformIDs(v...)
 	}
+	if v := i.SystemDetailIDs; len(v) > 0 {
+		m.AddSystemDetailIDs(v...)
+	}
 	if v := i.OutOfScopePlatformIDs; len(v) > 0 {
 		m.AddOutOfScopePlatformIDs(v...)
 	}
@@ -1564,6 +1568,9 @@ type UpdateAssetInput struct {
 	ClearPlatforms                   bool
 	AddPlatformIDs                   []string
 	RemovePlatformIDs                []string
+	ClearSystemDetails               bool
+	AddSystemDetailIDs               []string
+	RemoveSystemDetailIDs            []string
 	ClearOutOfScopePlatforms         bool
 	AddOutOfScopePlatformIDs         []string
 	RemoveOutOfScopePlatformIDs      []string
@@ -1875,6 +1882,15 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if v := i.RemovePlatformIDs; len(v) > 0 {
 		m.RemovePlatformIDs(v...)
+	}
+	if i.ClearSystemDetails {
+		m.ClearSystemDetails()
+	}
+	if v := i.AddSystemDetailIDs; len(v) > 0 {
+		m.AddSystemDetailIDs(v...)
+	}
+	if v := i.RemoveSystemDetailIDs; len(v) > 0 {
+		m.RemoveSystemDetailIDs(v...)
 	}
 	if i.ClearOutOfScopePlatforms {
 		m.ClearOutOfScopePlatforms()
@@ -7460,6 +7476,7 @@ type CreateEntityInput struct {
 	NoteIDs                               []string
 	FileIDs                               []string
 	AssetIDs                              []string
+	SystemDetailIDs                       []string
 	ScanIDs                               []string
 	CampaignIDs                           []string
 	AssessmentResponseIDs                 []string
@@ -7664,6 +7681,9 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.AssetIDs; len(v) > 0 {
 		m.AddAssetIDs(v...)
 	}
+	if v := i.SystemDetailIDs; len(v) > 0 {
+		m.AddSystemDetailIDs(v...)
+	}
 	if v := i.ScanIDs; len(v) > 0 {
 		m.AddScanIDs(v...)
 	}
@@ -7857,6 +7877,9 @@ type UpdateEntityInput struct {
 	ClearAssets                                bool
 	AddAssetIDs                                []string
 	RemoveAssetIDs                             []string
+	ClearSystemDetails                         bool
+	AddSystemDetailIDs                         []string
+	RemoveSystemDetailIDs                      []string
 	ClearScans                                 bool
 	AddScanIDs                                 []string
 	RemoveScanIDs                              []string
@@ -8305,6 +8328,15 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.RemoveAssetIDs; len(v) > 0 {
 		m.RemoveAssetIDs(v...)
+	}
+	if i.ClearSystemDetails {
+		m.ClearSystemDetails()
+	}
+	if v := i.AddSystemDetailIDs; len(v) > 0 {
+		m.AddSystemDetailIDs(v...)
+	}
+	if v := i.RemoveSystemDetailIDs; len(v) > 0 {
+		m.RemoveSystemDetailIDs(v...)
 	}
 	if i.ClearScans {
 		m.ClearScans()
@@ -15182,6 +15214,7 @@ type CreateNoteInput struct {
 	ProcedureID       *string
 	RiskID            *string
 	InternalPolicyID  *string
+	ReviewID          *string
 	EvidenceID        *string
 	TrustCenterID     *string
 	DiscussionID      *string
@@ -15227,6 +15260,9 @@ func (i *CreateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.InternalPolicyID; v != nil {
 		m.SetInternalPolicyID(*v)
+	}
+	if v := i.ReviewID; v != nil {
+		m.SetReviewID(*v)
 	}
 	if v := i.EvidenceID; v != nil {
 		m.SetEvidenceID(*v)
@@ -15274,6 +15310,8 @@ type UpdateNoteInput struct {
 	RiskID                  *string
 	ClearInternalPolicy     bool
 	InternalPolicyID        *string
+	ClearReview             bool
+	ReviewID                *string
 	ClearEvidence           bool
 	EvidenceID              *string
 	ClearTrustCenter        bool
@@ -15352,6 +15390,12 @@ func (i *UpdateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.InternalPolicyID; v != nil {
 		m.SetInternalPolicyID(*v)
+	}
+	if i.ClearReview {
+		m.ClearReview()
+	}
+	if v := i.ReviewID; v != nil {
+		m.SetReviewID(*v)
 	}
 	if i.ClearEvidence {
 		m.ClearEvidence()
@@ -19474,7 +19518,7 @@ type CreatePlatformInput struct {
 	ApplicableFrameworkIDs         []string
 	GeneratedScanIDs               []string
 	PlatformOwnerID                *string
-	SystemDetailID                 *string
+	SystemDetailIDs                []string
 }
 
 // Mutate applies the CreatePlatformInput on the PlatformMutation builder.
@@ -19708,8 +19752,8 @@ func (i *CreatePlatformInput) Mutate(m *PlatformMutation) {
 	if v := i.PlatformOwnerID; v != nil {
 		m.SetPlatformOwnerID(*v)
 	}
-	if v := i.SystemDetailID; v != nil {
-		m.SetSystemDetailID(*v)
+	if v := i.SystemDetailIDs; len(v) > 0 {
+		m.AddSystemDetailIDs(v...)
 	}
 }
 
@@ -19898,8 +19942,9 @@ type UpdatePlatformInput struct {
 	RemoveGeneratedScanIDs              []string
 	ClearPlatformOwner                  bool
 	PlatformOwnerID                     *string
-	ClearSystemDetail                   bool
-	SystemDetailID                      *string
+	ClearSystemDetails                  bool
+	AddSystemDetailIDs                  []string
+	RemoveSystemDetailIDs               []string
 }
 
 // Mutate applies the UpdatePlatformInput on the PlatformMutation builder.
@@ -20435,11 +20480,14 @@ func (i *UpdatePlatformInput) Mutate(m *PlatformMutation) {
 	if v := i.PlatformOwnerID; v != nil {
 		m.SetPlatformOwnerID(*v)
 	}
-	if i.ClearSystemDetail {
-		m.ClearSystemDetail()
+	if i.ClearSystemDetails {
+		m.ClearSystemDetails()
 	}
-	if v := i.SystemDetailID; v != nil {
-		m.SetSystemDetailID(*v)
+	if v := i.AddSystemDetailIDs; len(v) > 0 {
+		m.AddSystemDetailIDs(v...)
+	}
+	if v := i.RemoveSystemDetailIDs; len(v) > 0 {
+		m.RemoveSystemDetailIDs(v...)
 	}
 }
 
@@ -21125,7 +21173,7 @@ type CreateProgramInput struct {
 	EvidenceIDs          []string
 	NarrativeIDs         []string
 	ActionPlanIDs        []string
-	SystemDetailID       *string
+	SystemDetailIDs      []string
 	ProgramOwnerID       *string
 }
 
@@ -21225,8 +21273,8 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.ActionPlanIDs; len(v) > 0 {
 		m.AddActionPlanIDs(v...)
 	}
-	if v := i.SystemDetailID; v != nil {
-		m.SetSystemDetailID(*v)
+	if v := i.SystemDetailIDs; len(v) > 0 {
+		m.AddSystemDetailIDs(v...)
 	}
 	if v := i.ProgramOwnerID; v != nil {
 		m.SetProgramOwnerID(*v)
@@ -21316,8 +21364,9 @@ type UpdateProgramInput struct {
 	ClearActionPlans          bool
 	AddActionPlanIDs          []string
 	RemoveActionPlanIDs       []string
-	ClearSystemDetail         bool
-	SystemDetailID            *string
+	ClearSystemDetails        bool
+	AddSystemDetailIDs        []string
+	RemoveSystemDetailIDs     []string
 	ClearProgramOwner         bool
 	ProgramOwnerID            *string
 }
@@ -21549,11 +21598,14 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.RemoveActionPlanIDs; len(v) > 0 {
 		m.RemoveActionPlanIDs(v...)
 	}
-	if i.ClearSystemDetail {
-		m.ClearSystemDetail()
+	if i.ClearSystemDetails {
+		m.ClearSystemDetails()
 	}
-	if v := i.SystemDetailID; v != nil {
-		m.SetSystemDetailID(*v)
+	if v := i.AddSystemDetailIDs; len(v) > 0 {
+		m.AddSystemDetailIDs(v...)
+	}
+	if v := i.RemoveSystemDetailIDs; len(v) > 0 {
+		m.RemoveSystemDetailIDs(v...)
 	}
 	if i.ClearProgramOwner {
 		m.ClearProgramOwner()
@@ -23759,6 +23811,7 @@ type CreateScanInput struct {
 	VulnerabilityIDs      []string
 	ControlIDs            []string
 	SubcontrolIDs         []string
+	FindingIDs            []string
 	GeneratedByPlatformID *string
 	PerformedByUserID     *string
 	PerformedByGroupID    *string
@@ -23866,6 +23919,9 @@ func (i *CreateScanInput) Mutate(m *ScanMutation) {
 	if v := i.SubcontrolIDs; len(v) > 0 {
 		m.AddSubcontrolIDs(v...)
 	}
+	if v := i.FindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
 	if v := i.GeneratedByPlatformID; v != nil {
 		m.SetGeneratedByPlatformID(*v)
 	}
@@ -23963,6 +24019,9 @@ type UpdateScanInput struct {
 	ClearSubcontrols         bool
 	AddSubcontrolIDs         []string
 	RemoveSubcontrolIDs      []string
+	ClearFindings            bool
+	AddFindingIDs            []string
+	RemoveFindingIDs         []string
 	ClearGeneratedByPlatform bool
 	GeneratedByPlatformID    *string
 	ClearPerformedByUser     bool
@@ -24206,6 +24265,15 @@ func (i *UpdateScanInput) Mutate(m *ScanMutation) {
 	}
 	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
 		m.RemoveSubcontrolIDs(v...)
+	}
+	if i.ClearFindings {
+		m.ClearFindings()
+	}
+	if v := i.AddFindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RemoveFindingIDs; len(v) > 0 {
+		m.RemoveFindingIDs(v...)
 	}
 	if i.ClearGeneratedByPlatform {
 		m.ClearGeneratedByPlatform()
@@ -25895,8 +25963,10 @@ type CreateSystemDetailInput struct {
 	RevisionHistory       []interface{}
 	OscalMetadataJSON     map[string]interface{}
 	OwnerID               *string
-	ProgramID             *string
-	PlatformID            *string
+	ProgramIDs            []string
+	PlatformIDs           []string
+	EntityIDs             []string
+	AssetIDs              []string
 }
 
 // Mutate applies the CreateSystemDetailInput on the SystemDetailMutation builder.
@@ -25929,11 +25999,17 @@ func (i *CreateSystemDetailInput) Mutate(m *SystemDetailMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
-	if v := i.ProgramID; v != nil {
-		m.SetProgramID(*v)
+	if v := i.ProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
 	}
-	if v := i.PlatformID; v != nil {
-		m.SetPlatformID(*v)
+	if v := i.PlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.EntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.AssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
 	}
 }
 
@@ -25964,10 +26040,18 @@ type UpdateSystemDetailInput struct {
 	AppendRevisionHistory      []interface{}
 	ClearOscalMetadataJSON     bool
 	OscalMetadataJSON          map[string]interface{}
-	ClearProgram               bool
-	ProgramID                  *string
-	ClearPlatform              bool
-	PlatformID                 *string
+	ClearPrograms              bool
+	AddProgramIDs              []string
+	RemoveProgramIDs           []string
+	ClearPlatforms             bool
+	AddPlatformIDs             []string
+	RemovePlatformIDs          []string
+	ClearEntities              bool
+	AddEntityIDs               []string
+	RemoveEntityIDs            []string
+	ClearAssets                bool
+	AddAssetIDs                []string
+	RemoveAssetIDs             []string
 }
 
 // Mutate applies the UpdateSystemDetailInput on the SystemDetailMutation builder.
@@ -26029,17 +26113,41 @@ func (i *UpdateSystemDetailInput) Mutate(m *SystemDetailMutation) {
 	if v := i.OscalMetadataJSON; v != nil {
 		m.SetOscalMetadataJSON(v)
 	}
-	if i.ClearProgram {
-		m.ClearProgram()
+	if i.ClearPrograms {
+		m.ClearPrograms()
 	}
-	if v := i.ProgramID; v != nil {
-		m.SetProgramID(*v)
+	if v := i.AddProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
 	}
-	if i.ClearPlatform {
-		m.ClearPlatform()
+	if v := i.RemoveProgramIDs; len(v) > 0 {
+		m.RemoveProgramIDs(v...)
 	}
-	if v := i.PlatformID; v != nil {
-		m.SetPlatformID(*v)
+	if i.ClearPlatforms {
+		m.ClearPlatforms()
+	}
+	if v := i.AddPlatformIDs; len(v) > 0 {
+		m.AddPlatformIDs(v...)
+	}
+	if v := i.RemovePlatformIDs; len(v) > 0 {
+		m.RemovePlatformIDs(v...)
+	}
+	if i.ClearEntities {
+		m.ClearEntities()
+	}
+	if v := i.AddEntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.RemoveEntityIDs; len(v) > 0 {
+		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearAssets {
+		m.ClearAssets()
+	}
+	if v := i.AddAssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.RemoveAssetIDs; len(v) > 0 {
+		m.RemoveAssetIDs(v...)
 	}
 }
 
@@ -28216,6 +28324,7 @@ type CreateTrustCenterSettingInput struct {
 	CompanyDomain                         *string
 	SecurityContact                       *string
 	NdaApprovalRequired                   *bool
+	AllowSubscribers                      *bool
 	NotifySubscribersOnSubprocessorChange *bool
 	StatusPageURL                         *string
 	BlockedGroupIDs                       []string
@@ -28284,6 +28393,9 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.NdaApprovalRequired; v != nil {
 		m.SetNdaApprovalRequired(*v)
+	}
+	if v := i.AllowSubscribers; v != nil {
+		m.SetAllowSubscribers(*v)
 	}
 	if v := i.NotifySubscribersOnSubprocessorChange; v != nil {
 		m.SetNotifySubscribersOnSubprocessorChange(*v)
@@ -28355,6 +28467,8 @@ type UpdateTrustCenterSettingInput struct {
 	SecurityContact                            *string
 	ClearNdaApprovalRequired                   bool
 	NdaApprovalRequired                        *bool
+	ClearAllowSubscribers                      bool
+	AllowSubscribers                           *bool
 	ClearNotifySubscribersOnSubprocessorChange bool
 	NotifySubscribersOnSubprocessorChange      *bool
 	ClearStatusPageURL                         bool
@@ -28484,6 +28598,12 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.NdaApprovalRequired; v != nil {
 		m.SetNdaApprovalRequired(*v)
+	}
+	if i.ClearAllowSubscribers {
+		m.ClearAllowSubscribers()
+	}
+	if v := i.AllowSubscribers; v != nil {
+		m.SetAllowSubscribers(*v)
 	}
 	if i.ClearNotifySubscribersOnSubprocessorChange {
 		m.ClearNotifySubscribersOnSubprocessorChange()
