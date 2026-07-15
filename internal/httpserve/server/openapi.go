@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"fmt"
-	"go/doc"
 	"maps"
 	"net/url"
 	"os"
@@ -15,10 +14,10 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3gen"
 	"github.com/rs/zerolog/log"
-	"golang.org/x/tools/go/packages"
 
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/core/internal/genhelpers"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/specs"
 )
@@ -355,7 +354,7 @@ var customizer = openapi3gen.SchemaCustomizer(func(_ string, t reflect.Type, tag
 
 	// For all structs, try to extract description from Go doc comments if not already set
 	if schema.Description == "" && t.Kind() == reflect.Struct {
-		if desc := getTypeDescription(t); desc != "" {
+		if desc := typeDoc(t.PkgPath(), t.Name()); desc != "" {
 			schema.Description = desc
 		}
 	}
@@ -363,83 +362,49 @@ var customizer = openapi3gen.SchemaCustomizer(func(_ string, t reflect.Type, tag
 	return nil
 })
 
+// openapiModelsPackage is the package whose type doc comments describe the published component schemas
+const openapiModelsPackage = "github.com/theopenlane/core/common/openapi"
+
 var (
-	docCache = make(map[string]string)
-	docMutex sync.RWMutex
+	docMutex   sync.Mutex
+	docPkgSeen = make(map[string]bool)
+	docCache   = make(map[string]string)
 )
 
-// getTypeDescription extracts the Go doc comment for a given type
-func getTypeDescription(t reflect.Type) string {
-	if t.PkgPath() == "" {
+// typeDoc returns the Go doc comment for the named type, extracting the whole package's comments
+// through the shared generation helper on first use; extraction only succeeds where the module
+// source is on disk, which is the case everywhere the spec is built
+func typeDoc(pkgPath, typeName string) string {
+	if pkgPath == "" || typeName == "" {
 		return ""
 	}
 
-	// Create cache key
-	cacheKey := t.PkgPath() + "." + t.Name()
+	docMutex.Lock()
+	defer docMutex.Unlock()
 
-	// Check cache first
-	docMutex.RLock()
+	if !docPkgSeen[pkgPath] {
+		docPkgSeen[pkgPath] = true
 
-	if desc, exists := docCache[cacheKey]; exists {
-		docMutex.RUnlock()
-
-		return desc
-	}
-
-	docMutex.RUnlock()
-
-	// Get the source file path for this type
-	pkgPath := t.PkgPath()
-
-	// Find the Go source files for this package
-	cfg := &packages.Config{
-		Mode: packages.NeedName | packages.NeedSyntax,
-	}
-
-	// Load the package by import path, respecting build tags
-	pkgs, err := packages.Load(cfg, pkgPath)
-	if err != nil {
-		return ""
-	}
-
-	// Look through all packages
-	for _, pkg := range pkgs {
-		// Create doc package
-		docPkg, err := doc.NewFromFiles(pkg.Fset, pkg.Syntax, pkg.PkgPath)
+		comments, err := genhelpers.LoadCommentMap(pkgPath)
 		if err != nil {
-			continue
+			log.Warn().Err(err).Str("package", pkgPath).Msg("failed to extract doc comments for schema descriptions")
+
+			return ""
 		}
 
-		// Look for the type in the package
-		for _, typ := range docPkg.Types {
-			if typ.Name == t.Name() {
-				// Cache and return the description
-				description := strings.TrimSpace(typ.Doc)
-
-				docMutex.Lock()
-
-				docCache[cacheKey] = description
-
-				docMutex.Unlock()
-
-				return description
-			}
-		}
+		maps.Copy(docCache, comments)
 	}
 
-	return ""
+	return docCache[pkgPath+"."+typeName]
 }
 
-// addSchemaDescriptions extracts Go doc comments and adds them as descriptions to schemas
+// addSchemaDescriptions adds Go doc comments from the openapi models package as descriptions to
+// component schemas that do not carry one; component schema names are the bare model type names
 func addSchemaDescriptions(spec *openapi3.T) {
 	if spec == nil || spec.Components == nil || spec.Components.Schemas == nil {
 		return
 	}
 
-	// Extract all type descriptions from the openapi package
-	typeDescriptions := extractOpenAPITypeDescriptions()
-
-	// Apply descriptions to schemas
 	for name, schemaRef := range spec.Components.Schemas {
 		if schemaRef == nil || schemaRef.Value == nil {
 			continue
@@ -447,47 +412,12 @@ func addSchemaDescriptions(spec *openapi3.T) {
 
 		schema := schemaRef.Value
 
-		// Only add description if one doesn't exist
 		if schema.Description == "" {
-			if desc, exists := typeDescriptions[name]; exists {
+			if desc := typeDoc(openapiModelsPackage, name); desc != "" {
 				schema.Description = desc
 			}
 		}
 	}
-}
-
-// extractOpenAPITypeDescriptions parses the openapi package and extracts type descriptions
-func extractOpenAPITypeDescriptions() map[string]string {
-	descriptions := make(map[string]string)
-
-	// Load the package by import path, respecting build tags
-	cfg := &packages.Config{
-		Mode: packages.NeedName | packages.NeedSyntax,
-	}
-
-	// Navigate from server -> httpserve -> internal -> core -> common/openapi
-	pkgs, err := packages.Load(cfg, "github.com/theopenlane/core/common/openapi")
-	if err != nil {
-		log.Warn().Err(err).Msg("failed to load openapi package for type descriptions")
-
-		return descriptions
-	}
-
-	// Extract type descriptions from all packages in the directory
-	for _, pkg := range pkgs {
-		docPkg, err := doc.NewFromFiles(pkg.Fset, pkg.Syntax, pkg.PkgPath)
-		if err != nil {
-			continue
-		}
-
-		for _, typ := range docPkg.Types {
-			if typ.Doc != "" {
-				descriptions[typ.Name] = strings.TrimSpace(typ.Doc)
-			}
-		}
-	}
-
-	return descriptions
 }
 
 // generateTagsFromOperations collects all unique tags from operations and generates tag definitions using operation descriptions

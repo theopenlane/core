@@ -80,7 +80,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *models.VerifySubscribeReply
+			var out *models.VerifySubscribeResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {

@@ -55,7 +55,7 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context) error {
 	// sort for consistency
 	sort.Strings(features)
 
-	return h.Success(ctx, models.AccountFeaturesReply{
+	return h.Success(ctx, models.AccountFeaturesResponse{
 		Reply:          rout.Reply{Success: true},
 		Features:       features,
 		OrganizationID: in.ID,

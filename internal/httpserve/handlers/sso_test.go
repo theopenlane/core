@@ -62,7 +62,7 @@ func (suite *HandlerTestSuite) TestWebfingerHandler() {
 	suite.e.ServeHTTP(rec, req)
 
 	assert.Equal(t, http.StatusOK, rec.Code)
-	var out models.SSOStatusReply
+	var out models.SSOStatusResponse
 	assert.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
 	log.Error().Err(errors.New("output")).Interface("out", out).Msg("WebfingerHandler output")
 	assert.True(t, out.Enforced)
@@ -73,7 +73,7 @@ func (suite *HandlerTestSuite) TestWebfingerHandler() {
 	emailRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(emailRec, emailReq)
 	assert.Equal(t, http.StatusOK, emailRec.Code)
-	var emailOut models.SSOStatusReply
+	var emailOut models.SSOStatusResponse
 	assert.NoError(t, json.NewDecoder(emailRec.Body).Decode(&emailOut))
 	// testUser1 is the organization owner, so the per-account lookup reflects the owner SSO exemption;
 	// the org level lookup above still reports enforcement. TFA enforcement is independent of exemption
@@ -109,7 +109,7 @@ func (suite *HandlerTestSuite) TestWebfingerHandlerTFAOnly() {
 	suite.e.ServeHTTP(rec, req)
 
 	assert.Equal(t, http.StatusOK, rec.Code)
-	var out models.SSOStatusReply
+	var out models.SSOStatusResponse
 	assert.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
 	assert.False(t, out.Enforced)      // SSO not enforced
 	assert.True(t, out.OrgTFAEnforced) // TFA enforced
@@ -328,7 +328,7 @@ func (suite *HandlerTestSuite) TestSSOInitiateHandler() {
 
 	require.Equal(t, http.StatusOK, rec.Code)
 
-	var out models.SSOLoginReply
+	var out models.SSOLoginResponse
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
 	assert.True(t, out.Success)
 	assert.NotEmpty(t, out.RedirectURI, "should return the identity provider redirect URL")
@@ -433,7 +433,7 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 
 	suite.e.ServeHTTP(cbRec, cbReq)
 	assert.Equal(t, http.StatusOK, cbRec.Code)
-	var out models.LoginReply
+	var out models.LoginResponse
 	assert.NoError(t, json.NewDecoder(cbRec.Body).Decode(&out))
 	assert.True(t, out.Success)
 }

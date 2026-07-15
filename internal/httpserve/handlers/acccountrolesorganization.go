@@ -55,7 +55,7 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context) error {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
-	return h.Success(ctx, models.AccountRolesOrganizationReply{
+	return h.Success(ctx, models.AccountRolesOrganizationResponse{
 		Reply:          rout.Reply{Success: true},
 		Roles:          roles,
 		OrganizationID: req.ObjectID,

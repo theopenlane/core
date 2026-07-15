@@ -35,7 +35,7 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 	}
 
 	// Helper keeps the handler call consistent across subtests.
-	send := func(t *testing.T, registerJSON models.OauthTokenRequest) (*httptest.ResponseRecorder, *models.LoginReply) {
+	send := func(t *testing.T, registerJSON models.OauthTokenRequest) (*httptest.ResponseRecorder, *models.LoginResponse) {
 		body, err := json.Marshal(registerJSON)
 		if err != nil {
 			require.NoError(t, err)
@@ -50,7 +50,7 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 		res := recorder.Result()
 		defer res.Body.Close()
 
-		var out *models.LoginReply
+		var out *models.LoginResponse
 		if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
 			t.Error("error parsing response", err)
 		}

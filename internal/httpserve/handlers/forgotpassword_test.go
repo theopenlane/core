@@ -106,7 +106,7 @@ func (suite *HandlerTestSuite) TestForgotPasswordHandler() {
 			assert.Equal(t, tc.expectedStatus, recorder.Code)
 
 			if tc.expectedStatus != http.StatusOK {
-				var out *models.ForgotPasswordReply
+				var out *models.ForgotPasswordResponse
 
 				// parse request body
 				if err := json.NewDecoder(res.Body).Decode(&out); err != nil {

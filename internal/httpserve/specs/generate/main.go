@@ -14,7 +14,6 @@ import (
 	"github.com/rs/zerolog/log"
 	"gopkg.in/yaml.v3"
 
-	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/server"
 )
 
@@ -109,12 +108,11 @@ func runEmitTypes() error {
 }
 
 // renderInstancesFile renders the generated Go source mapping qualified type names to instances
-// and curated Example variables
 func renderInstancesFile(names []string) (string, error) {
 	aliases := make(map[string]string)
 	imports := make([]string, 0)
 
-	var instances, examples strings.Builder
+	var instances strings.Builder
 
 	for _, name := range names {
 		dot := strings.LastIndex(name, ".")
@@ -132,17 +130,6 @@ func renderInstancesFile(names []string) (string, error) {
 		}
 
 		fmt.Fprintf(&instances, "\t%q: %s.%s{},\n", name, alias, typeName)
-
-		if exampleVars := handlers.SpecTypeExamples(name); len(exampleVars) > 0 {
-			fmt.Fprintf(&examples, "\t%q: {\n", name)
-
-			for _, exampleVar := range exampleVars {
-				// the example key is the variable name minus the Example prefix, verbatim
-				fmt.Fprintf(&examples, "\t\t%q: %s.%s,\n", strings.TrimPrefix(exampleVar, "Example"), alias, exampleVar)
-			}
-
-			examples.WriteString("\t},\n")
-		}
 	}
 
 	sort.Strings(imports)
@@ -157,13 +144,8 @@ import (
 // SpecInstances maps qualified model type names to instances for schema reflection during spec generation
 var SpecInstances = map[string]any{
 %s}
-
-// SpecExamples maps qualified model type names to their curated named example values for spec generation
-var SpecExamples = map[string]map[string]any{
-%s}
-`, strings.Join(imports, "\n"), instances.String(), examples.String()), nil
+`, strings.Join(imports, "\n"), instances.String()), nil
 }
-
 
 func specsOutputDir() (string, error) {
 	_, currentFile, _, ok := runtime.Caller(0)

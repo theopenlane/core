@@ -25,7 +25,7 @@ func (h *Handler) SnapshotHandler(ctx echo.Context) error {
 
 	reqCtx := ctx.Request().Context()
 
-	out := &models.SnapshotReply{
+	out := &models.SnapshotResponse{
 		Reply: rout.Reply{Success: true},
 	}
 

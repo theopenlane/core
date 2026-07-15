@@ -132,7 +132,7 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *apimodels.RefreshReply
+			var out *apimodels.RefreshResponse
 
 			// parse request body
 			err = json.NewDecoder(res.Body).Decode(&out)

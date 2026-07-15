@@ -272,7 +272,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *apimodels.LoginReply
+			var out *apimodels.LoginResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
@@ -407,7 +407,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOwnerBypass() {
 	suite.e.ServeHTTP(rec, req)
 
 	require.Equal(t, http.StatusOK, rec.Code)
-	var out apimodels.LoginReply
+	var out apimodels.LoginResponse
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
 	assert.True(t, out.Success)
 }
@@ -456,7 +456,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforced() {
 
 	// Should succeed but indicate TFA is required
 	require.Equal(t, http.StatusOK, rec.Code)
-	var out apimodels.LoginReply
+	var out apimodels.LoginResponse
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
 	assert.True(t, out.Success)
 	assert.False(t, out.TFAEnabled)      // User doesn't have TFA enabled
@@ -507,7 +507,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforcedUserHasTFA() {
 
 	// Should succeed without requiring TFA setup since user already has it
 	require.Equal(t, http.StatusOK, rec.Code)
-	var out apimodels.LoginReply
+	var out apimodels.LoginResponse
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
 	assert.True(t, out.Success)
 	assert.True(t, out.TFAEnabled)        // User has TFA enabled

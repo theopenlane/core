@@ -20,7 +20,7 @@ func (h *Handler) ForgotPassword(ctx echo.Context) error {
 		return h.InvalidInput(ctx, err)
 	}
 
-	out := &models.ForgotPasswordReply{
+	out := &models.ForgotPasswordResponse{
 		Reply: rout.Reply{
 			Success: true,
 		},

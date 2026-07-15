@@ -25,7 +25,7 @@ func (h *Handler) ProductCatalogHandler(ctx echo.Context) error {
 		return h.InvalidInput(ctx, err)
 	}
 
-	out := &models.ProductCatalogReply{
+	out := &models.ProductCatalogResponse{
 		Reply:   rout.Reply{Success: true},
 		Catalog: h.filterCatalog(in),
 	}

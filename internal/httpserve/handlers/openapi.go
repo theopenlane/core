@@ -75,9 +75,9 @@ func RedirectResponse() *openapi3.Response {
 	return response
 }
 
-// RegisterRequestBody attaches the request body schema and its curated named examples for the
-// given request model instance to the operation; used only during spec generation
-func RegisterRequestBody(op *openapi3.Operation, registry SchemaRegistry, instance any, examples map[string]any) error {
+// RegisterRequestBody attaches the request body schema and the model's registered examples for
+// the given request model instance to the operation; used only during spec generation
+func RegisterRequestBody(op *openapi3.Operation, registry SchemaRegistry, instance any) error {
 	schemaRef, err := registry.GetOrRegister(instance)
 	if err != nil {
 		return err
@@ -88,14 +88,14 @@ func RegisterRequestBody(op *openapi3.Operation, registry SchemaRegistry, instan
 		WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
 	op.RequestBody = &openapi3.RequestBodyRef{Value: request}
 
-	request.Content.Get(httpsling.ContentTypeJSON).Examples = exampleRefs(instance, examples)
+	request.Content.Get(httpsling.ContentTypeJSON).Examples = exampleRefs(instance)
 
 	return nil
 }
 
-// RegisterSuccessResponse attaches a success response schema and its curated named examples for
-// the given response model instance to the operation; used only during spec generation
-func RegisterSuccessResponse(op *openapi3.Operation, registry SchemaRegistry, status int, instance any, examples map[string]any) error {
+// RegisterSuccessResponse attaches a success response schema and the model's registered examples
+// for the given response model instance to the operation; used only during spec generation
+func RegisterSuccessResponse(op *openapi3.Operation, registry SchemaRegistry, status int, instance any) error {
 	schemaRef, err := registry.GetOrRegister(instance)
 	if err != nil {
 		return err
@@ -106,22 +106,25 @@ func RegisterSuccessResponse(op *openapi3.Operation, registry SchemaRegistry, st
 		WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
 	op.AddResponse(status, response)
 
-	response.Content.Get(httpsling.ContentTypeJSON).Examples = exampleRefs(instance, examples)
+	response.Content.Get(httpsling.ContentTypeJSON).Examples = exampleRefs(instance)
 
 	return nil
 }
 
-// exampleRefs renders curated examples as named example refs; models without curated examples get
-// one from ExampleProvider when implemented, and none otherwise — a zero-value instance is not a
-// meaningful example and its nil slices would not even validate against the schema
-func exampleRefs(instance any, examples map[string]any) map[string]*openapi3.ExampleRef {
-	if len(examples) == 0 {
-		provider, ok := pointerTo(instance).(models.ExampleProvider)
-		if !ok {
-			return nil
-		}
+// exampleRefs renders the model's explicitly registered examples as named example refs: the
+// curated set from ExampleSetProvider when implemented, else one success example from
+// ExampleProvider, and none otherwise — a zero-value instance is not a meaningful example and its
+// nil slices would not even validate against the schema
+func exampleRefs(instance any) map[string]*openapi3.ExampleRef {
+	var examples map[string]any
 
+	switch provider := pointerTo(instance).(type) {
+	case models.ExampleSetProvider:
+		examples = provider.ExampleSet()
+	case models.ExampleProvider:
 		examples = map[string]any{"success": provider.ExampleResponse()}
+	default:
+		return nil
 	}
 
 	refs := make(map[string]*openapi3.ExampleRef, len(examples))

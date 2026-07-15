@@ -62,7 +62,7 @@ func (suite *HandlerTestSuite) TestResendHandler() {
 		SaveX(ctx)
 
 	// Helper to keep request/response handling consistent across subtests.
-	send := func(t *testing.T, email string) (*httptest.ResponseRecorder, *models.ResendReply) {
+	send := func(t *testing.T, email string) (*httptest.ResponseRecorder, *models.ResendResponse) {
 		resendJSON := models.ResendRequest{
 			Email: email,
 		}
@@ -84,7 +84,7 @@ func (suite *HandlerTestSuite) TestResendHandler() {
 		res := recorder.Result()
 		defer res.Body.Close()
 
-		var out *models.ResendReply
+		var out *models.ResendResponse
 		if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
 			t.Error("error parsing response", err)
 		}

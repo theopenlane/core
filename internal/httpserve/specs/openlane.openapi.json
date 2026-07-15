@@ -327,7 +327,7 @@
         },
         "type": "object"
       },
-      "AccountFeaturesReply": {
+      "AccountFeaturesResponse": {
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -360,7 +360,7 @@
         },
         "type": "object"
       },
-      "AccountRolesMeReply": {
+      "AccountRolesMeResponse": {
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -410,7 +410,7 @@
         },
         "type": "object"
       },
-      "AccountRolesOrganizationReply": {
+      "AccountRolesOrganizationResponse": {
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -591,7 +591,17 @@
         ],
         "type": "object"
       },
-      "ForgotPasswordReply": {
+      "ForgotPasswordRequest": {
+        "properties": {
+          "email": {
+            "description": "The email address associated with the account to send the password reset email to",
+            "example": "jsnow@example.com",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ForgotPasswordResponse": {
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -610,16 +620,6 @@
           },
           "unverified": {
             "type": "boolean"
-          }
-        },
-        "type": "object"
-      },
-      "ForgotPasswordRequest": {
-        "properties": {
-          "email": {
-            "description": "The email address associated with the account to send the password reset email to",
-            "example": "jsnow@example.com",
-            "type": "string"
           }
         },
         "type": "object"
@@ -1012,7 +1012,7 @@
         },
         "type": "object"
       },
-      "InviteReply": {
+      "InviteResponse": {
         "properties": {
           "access_token": {
             "description": "The access token to be used for authentication",
@@ -1075,7 +1075,30 @@
         },
         "type": "object"
       },
-      "LoginReply": {
+      "LoginRequest": {
+        "properties": {
+          "password": {
+            "description": "The password associated with the account",
+            "example": "Wint3rIsC0ming123!",
+            "type": "string"
+          },
+          "reason": {
+            "description": "For Openlane support login only: the reason for accessing the organization",
+            "type": "string"
+          },
+          "target_organization_id": {
+            "description": "For Openlane support login only: the organization to access",
+            "type": "string"
+          },
+          "username": {
+            "description": "The email address associated with the existing account",
+            "example": "jsnow@example.com",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "LoginResponse": {
         "properties": {
           "access_token": {
             "description": "The access token to be used for authentication",
@@ -1124,30 +1147,16 @@
         },
         "type": "object"
       },
-      "LoginRequest": {
+      "LogoutRequest": {
         "properties": {
-          "password": {
-            "description": "The password associated with the account",
-            "example": "Wint3rIsC0ming123!",
-            "type": "string"
-          },
-          "reason": {
-            "description": "For Openlane support login only: the reason for accessing the organization",
-            "type": "string"
-          },
-          "target_organization_id": {
-            "description": "For Openlane support login only: the organization to access",
-            "type": "string"
-          },
-          "username": {
-            "description": "The email address associated with the existing account",
-            "example": "jsnow@example.com",
+          "refresh_token": {
+            "description": "Optional refresh token to revoke when not provided via cookie",
             "type": "string"
           }
         },
         "type": "object"
       },
-      "LogoutReply": {
+      "LogoutResponse": {
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -1158,45 +1167,6 @@
             "type": "string"
           },
           "message": {
-            "type": "string"
-          },
-          "success": {
-            "description": "Whether or not the request was successful or not",
-            "type": "boolean"
-          },
-          "unverified": {
-            "type": "boolean"
-          }
-        },
-        "type": "object"
-      },
-      "LogoutRequest": {
-        "properties": {
-          "refresh_token": {
-            "description": "Optional refresh token to revoke when not provided via cookie",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "OrganizationRolesReply": {
-        "properties": {
-          "error": {
-            "description": "The error message if the request was unsuccessful",
-            "type": "string"
-          },
-          "error_code": {
-            "description": "The error code if the request was unsuccessful",
-            "type": "string"
-          },
-          "organization_id": {
-            "description": "The ID of the organization the role was applied to",
-            "example": "01J4HMNDSZCCQBTY93BF9CBF5D",
-            "type": "string"
-          },
-          "role": {
-            "description": "The organization responsibility role",
-            "example": "policy_manager",
             "type": "string"
           },
           "success": {
@@ -1236,6 +1206,36 @@
               "type": "string"
             },
             "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "OrganizationRolesResponse": {
+        "properties": {
+          "error": {
+            "description": "The error message if the request was unsuccessful",
+            "type": "string"
+          },
+          "error_code": {
+            "description": "The error code if the request was unsuccessful",
+            "type": "string"
+          },
+          "organization_id": {
+            "description": "The ID of the organization the role was applied to",
+            "example": "01J4HMNDSZCCQBTY93BF9CBF5D",
+            "type": "string"
+          },
+          "role": {
+            "description": "The organization responsibility role",
+            "example": "policy_manager",
+            "type": "string"
+          },
+          "success": {
+            "description": "Whether or not the request was successful or not",
+            "type": "boolean"
+          },
+          "unverified": {
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -1307,7 +1307,7 @@
         ],
         "type": "object"
       },
-      "ProductCatalogReply": {
+      "ProductCatalogResponse": {
         "properties": {
           "addons": {
             "additionalProperties": {
@@ -1495,7 +1495,16 @@
         },
         "type": "object"
       },
-      "RefreshReply": {
+      "RefreshRequest": {
+        "properties": {
+          "refresh_token": {
+            "description": "The token to be used to refresh the access token after expiration",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "RefreshResponse": {
         "properties": {
           "access_token": {
             "description": "The access token to be used for authentication",
@@ -1535,16 +1544,37 @@
         },
         "type": "object"
       },
-      "RefreshRequest": {
+      "RegisterRequest": {
         "properties": {
-          "refresh_token": {
-            "description": "The token to be used to refresh the access token after expiration",
+          "email": {
+            "description": "The email address of the user",
+            "example": "jsnow@example.com",
+            "type": "string"
+          },
+          "first_name": {
+            "description": "The first name of the user",
+            "example": "Jon",
+            "type": "string"
+          },
+          "last_name": {
+            "description": "The last name of the user",
+            "example": "Snow",
+            "type": "string"
+          },
+          "password": {
+            "description": "The password to be used for authentication after registration",
+            "example": "Wint3rIsC0ming123!",
+            "type": "string"
+          },
+          "token": {
+            "description": "A newly invited user can use this to join a org as at the same time they are creating their account",
+            "nullable": true,
             "type": "string"
           }
         },
         "type": "object"
       },
-      "RegisterReply": {
+      "RegisterResponse": {
         "properties": {
           "email": {
             "description": "The email address of the user",
@@ -1577,36 +1607,6 @@
         },
         "type": "object"
       },
-      "RegisterRequest": {
-        "properties": {
-          "email": {
-            "description": "The email address of the user",
-            "example": "jsnow@example.com",
-            "type": "string"
-          },
-          "first_name": {
-            "description": "The first name of the user",
-            "example": "Jon",
-            "type": "string"
-          },
-          "last_name": {
-            "description": "The last name of the user",
-            "example": "Snow",
-            "type": "string"
-          },
-          "password": {
-            "description": "The password to be used for authentication after registration",
-            "example": "Wint3rIsC0ming123!",
-            "type": "string"
-          },
-          "token": {
-            "description": "A newly invited user can use this to join a org as at the same time they are creating their account",
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
       "ResendQuestionnaireRequest": {
         "properties": {
           "assessment_id": {
@@ -1620,29 +1620,6 @@
         },
         "type": "object"
       },
-      "ResendReply": {
-        "properties": {
-          "error": {
-            "description": "The error message if the request was unsuccessful",
-            "type": "string"
-          },
-          "error_code": {
-            "description": "The error code if the request was unsuccessful",
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          },
-          "success": {
-            "description": "Whether or not the request was successful or not",
-            "type": "boolean"
-          },
-          "unverified": {
-            "type": "boolean"
-          }
-        },
-        "type": "object"
-      },
       "ResendRequest": {
         "properties": {
           "email": {
@@ -1652,7 +1629,7 @@
         },
         "type": "object"
       },
-      "ResetPasswordReply": {
+      "ResendResponse": {
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -1684,6 +1661,29 @@
           "token": {
             "description": "The token to be used to reset the password, token is sent via email",
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ResetPasswordResponse": {
+        "properties": {
+          "error": {
+            "description": "The error message if the request was unsuccessful",
+            "type": "string"
+          },
+          "error_code": {
+            "description": "The error code if the request was unsuccessful",
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "success": {
+            "description": "Whether or not the request was successful or not",
+            "type": "boolean"
+          },
+          "unverified": {
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -1784,7 +1784,7 @@
         ],
         "type": "object"
       },
-      "SSOLoginReply": {
+      "SSOLoginResponse": {
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -2138,7 +2138,17 @@
         },
         "type": "object"
       },
-      "SwitchOrganizationReply": {
+      "SwitchOrganizationRequest": {
+        "properties": {
+          "target_organization_id": {
+            "description": "The ID of the organization to switch to",
+            "example": "01J4EXD5MM60CX4YNYN0DEE3Y1",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "SwitchOrganizationResponse": {
         "properties": {
           "access_token": {
             "description": "The access token to be used for authentication",
@@ -2184,17 +2194,16 @@
         },
         "type": "object"
       },
-      "SwitchOrganizationRequest": {
+      "UnsubscribeRequest": {
         "properties": {
-          "target_organization_id": {
-            "description": "The ID of the organization to switch to",
-            "example": "01J4EXD5MM60CX4YNYN0DEE3Y1",
+          "Token": {
+            "description": "The token to be used to unsubscribe, token is sent via email",
             "type": "string"
           }
         },
         "type": "object"
       },
-      "UnsubscribeReply": {
+      "UnsubscribeResponse": {
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -2213,15 +2222,6 @@
           },
           "unverified": {
             "type": "boolean"
-          }
-        },
-        "type": "object"
-      },
-      "UnsubscribeRequest": {
-        "properties": {
-          "Token": {
-            "description": "The token to be used to unsubscribe, token is sent via email",
-            "type": "string"
           }
         },
         "type": "object"
@@ -2454,7 +2454,7 @@
         ],
         "type": "object"
       },
-      "VerifyReply": {
+      "VerifyResponse": {
         "properties": {
           "access_token": {
             "description": "The access token to be used for authentication",
@@ -2504,7 +2504,16 @@
         },
         "type": "object"
       },
-      "VerifySubscribeReply": {
+      "VerifySubscribeRequest": {
+        "properties": {
+          "Token": {
+            "description": "The token to be used to verify the subscription, token is sent via email",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "VerifySubscribeResponse": {
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -2523,15 +2532,6 @@
           },
           "unverified": {
             "type": "boolean"
-          }
-        },
-        "type": "object"
-      },
-      "VerifySubscribeRequest": {
-        "properties": {
-          "Token": {
-            "description": "The token to be used to verify the subscription, token is sent via email",
-            "type": "string"
           }
         },
         "type": "object"
@@ -3029,7 +3029,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/ResendReply"
+                  "$ref": "#/components/schemas/ResendResponse"
                 }
               }
             },
@@ -3936,7 +3936,7 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "AccountFeaturesReply": {
+                  "AccountFeaturesResponse": {
                     "value": {
                       "features": [
                         "policy-and-procedure-module",
@@ -3950,7 +3950,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/AccountFeaturesReply"
+                  "$ref": "#/components/schemas/AccountFeaturesResponse"
                 }
               }
             },
@@ -4046,7 +4046,7 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "AccountFeaturesReply": {
+                  "AccountFeaturesResponse": {
                     "value": {
                       "features": [
                         "policy-and-procedure-module",
@@ -4060,7 +4060,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/AccountFeaturesReply"
+                  "$ref": "#/components/schemas/AccountFeaturesResponse"
                 }
               }
             },
@@ -4168,7 +4168,7 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "OrganizationRolesReply": {
+                  "OrganizationRolesResponse": {
                     "value": {
                       "organization_id": "01J4HMNDSZCCQBTY93BF9CBF5D",
                       "role": "policy_manager",
@@ -4177,7 +4177,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/OrganizationRolesReply"
+                  "$ref": "#/components/schemas/OrganizationRolesResponse"
                 }
               }
             },
@@ -4365,7 +4365,7 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "OrganizationRolesReply": {
+                  "OrganizationRolesResponse": {
                     "value": {
                       "organization_id": "01J4HMNDSZCCQBTY93BF9CBF5D",
                       "role": "policy_manager",
@@ -4374,7 +4374,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/OrganizationRolesReply"
+                  "$ref": "#/components/schemas/OrganizationRolesResponse"
                 }
               }
             },
@@ -4560,7 +4560,7 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "AccountRolesMeReply": {
+                  "AccountRolesMeResponse": {
                     "value": {
                       "organization_id": "01J4HMNDSZCCQBTY93BF9CBF5D",
                       "roles": [
@@ -4575,7 +4575,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/AccountRolesMeReply"
+                  "$ref": "#/components/schemas/AccountRolesMeResponse"
                 }
               }
             },
@@ -4659,7 +4659,7 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "AccountRolesOrganizationReply": {
+                  "AccountRolesOrganizationResponse": {
                     "value": {
                       "organization_id": "01J4HMNDSZCCQBTY93BF9CBF5D",
                       "roles": [
@@ -4672,7 +4672,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/AccountRolesOrganizationReply"
+                  "$ref": "#/components/schemas/AccountRolesOrganizationResponse"
                 }
               }
             },
@@ -4768,7 +4768,7 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "AccountRolesOrganizationReply": {
+                  "AccountRolesOrganizationResponse": {
                     "value": {
                       "organization_id": "01J4HMNDSZCCQBTY93BF9CBF5D",
                       "roles": [
@@ -4781,7 +4781,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/AccountRolesOrganizationReply"
+                  "$ref": "#/components/schemas/AccountRolesOrganizationResponse"
                 }
               }
             },
@@ -4890,7 +4890,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/ForgotPasswordReply"
+                  "$ref": "#/components/schemas/ForgotPasswordResponse"
                 }
               }
             },
@@ -5380,7 +5380,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/InviteReply"
+                  "$ref": "#/components/schemas/InviteResponse"
                 }
               }
             },
@@ -5501,7 +5501,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/LoginReply"
+                  "$ref": "#/components/schemas/LoginResponse"
                 }
               }
             },
@@ -5668,7 +5668,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/LogoutReply"
+                  "$ref": "#/components/schemas/LogoutResponse"
                 }
               }
             },
@@ -5782,7 +5782,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SSOLoginReply"
+                  "$ref": "#/components/schemas/SSOLoginResponse"
                 }
               }
             },
@@ -5903,7 +5903,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/ResetPasswordReply"
+                  "$ref": "#/components/schemas/ResetPasswordResponse"
                 }
               }
             },
@@ -6000,7 +6000,7 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "ProductCatalogReply": {
+                  "ProductCatalogResponse": {
                     "value": {
                       "addons": {},
                       "modules": {
@@ -6042,7 +6042,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/ProductCatalogReply"
+                  "$ref": "#/components/schemas/ProductCatalogResponse"
                 }
               }
             },
@@ -6148,7 +6148,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/RefreshReply"
+                  "$ref": "#/components/schemas/RefreshResponse"
                 }
               }
             },
@@ -6299,7 +6299,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/RegisterReply"
+                  "$ref": "#/components/schemas/RegisterResponse"
                 }
               }
             },
@@ -6425,7 +6425,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/ResendReply"
+                  "$ref": "#/components/schemas/ResendResponse"
                 }
               }
             },
@@ -6705,7 +6705,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/VerifySubscribeReply"
+                  "$ref": "#/components/schemas/VerifySubscribeResponse"
                 }
               }
             },
@@ -6799,7 +6799,7 @@
             "content": {
               "application/json": {
                 "examples": {
-                  "SwitchSuccessReply": {
+                  "SwitchSuccessResponse": {
                     "value": {
                       "access_token": "access_token",
                       "refresh_token": "refresh_token",
@@ -6810,7 +6810,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/SwitchOrganizationReply"
+                  "$ref": "#/components/schemas/SwitchOrganizationResponse"
                 }
               }
             },
@@ -6929,7 +6929,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/UnsubscribeReply"
+                  "$ref": "#/components/schemas/UnsubscribeResponse"
                 }
               }
             },
@@ -7030,7 +7030,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/VerifyReply"
+                  "$ref": "#/components/schemas/VerifyResponse"
                 }
               }
             },
@@ -7054,7 +7054,7 @@
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/VerifyReply"
+                  "$ref": "#/components/schemas/VerifyResponse"
                 }
               }
             },

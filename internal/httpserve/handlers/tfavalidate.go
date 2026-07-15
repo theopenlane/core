@@ -60,7 +60,7 @@ func (h *Handler) ValidateTOTP(ctx echo.Context) error {
 				return h.BadRequest(ctx, err)
 			}
 
-			return h.Success(ctx, models.TFAReply{
+			return h.Success(ctx, models.TFAResponse{
 				Reply: rout.Reply{Success: true},
 			})
 		}
@@ -81,7 +81,7 @@ func (h *Handler) ValidateTOTP(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	return h.Success(ctx, models.TFAReply{
+	return h.Success(ctx, models.TFAResponse{
 		Reply: rout.Reply{Success: true},
 	})
 }

@@ -107,7 +107,6 @@ func NewSpecRouter(c LogConfig) (*route.Router, error) {
 		OAS:            oas,
 		SchemaRegistry: NewSchemaRegistry(oas, openapi3gen.UseAllExportedFields(), customizer),
 		SpecInstances:  specs.SpecInstances,
-		SpecExamples:   specs.SpecExamples,
 		SpecTypes:      make(map[string]bool),
 	}, nil
 }

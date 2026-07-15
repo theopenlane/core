@@ -97,7 +97,7 @@ func (suite *HandlerTestSuite) TestStartImpersonation() {
 			},
 			expectedStatus: http.StatusOK,
 			checkResponse: func(t *testing.T, rec *httptest.ResponseRecorder) {
-				var response models.StartImpersonationReply
+				var response models.StartImpersonationResponse
 				err := json.Unmarshal(rec.Body.Bytes(), &response)
 				require.NoError(t, err)
 				assert.True(t, response.Success)
@@ -236,7 +236,7 @@ func (suite *HandlerTestSuite) TestEndImpersonation() {
 			},
 			expectedStatus: http.StatusOK,
 			checkResponse: func(t *testing.T, rec *httptest.ResponseRecorder) {
-				var response models.EndImpersonationReply
+				var response models.EndImpersonationResponse
 				err := json.Unmarshal(rec.Body.Bytes(), &response)
 				require.NoError(t, err)
 				assert.True(t, response.Success)
@@ -416,7 +416,7 @@ func (suite *HandlerTestSuite) TestExtractSessionIDFromToken() {
 	assert.Equal(t, http.StatusOK, rec.Code)
 
 	// Verify the response includes a session ID (which means extractSessionIDFromToken worked)
-	var response models.StartImpersonationReply
+	var response models.StartImpersonationResponse
 	err = json.Unmarshal(rec.Body.Bytes(), &response)
 	require.NoError(t, err)
 	assert.NotEmpty(t, response.SessionID)

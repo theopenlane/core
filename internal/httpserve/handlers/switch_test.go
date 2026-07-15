@@ -135,7 +135,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforced() {
 
 	// Should return success with NeedsTFA flag
 	assert.Equal(t, http.StatusOK, rec.Code)
-	var out models.SwitchOrganizationReply
+	var out models.SwitchOrganizationResponse
 	err := json.NewDecoder(rec.Body).Decode(&out)
 	assert.NoError(t, err)
 	assert.True(t, out.Success)
@@ -199,7 +199,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforcedUserHasTFA() {
 
 	// Should succeed normally since user has TFA
 	assert.Equal(t, http.StatusOK, rec.Code)
-	var out models.SwitchOrganizationReply
+	var out models.SwitchOrganizationResponse
 	err := json.NewDecoder(rec.Body).Decode(&out)
 	assert.NoError(t, err)
 	assert.True(t, out.Success)

@@ -25,7 +25,7 @@ func (h *Handler) ResendEmail(ctx echo.Context) error {
 	// set viewer context
 	ctxWithToken := token.NewContextWithSignUpToken(reqCtx, in.Email)
 
-	out := &models.ResendReply{
+	out := &models.ResendResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "We've received your request to be resent an email to complete verification. Please check your email.",
 	}

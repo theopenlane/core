@@ -238,7 +238,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *models.RegisterReply
+			var out *models.RegisterResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
@@ -426,7 +426,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler_EmailVerification() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *models.RegisterReply
+			var out *models.RegisterResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {

@@ -122,7 +122,7 @@ func (suite *HandlerTestSuite) TestSupportAccessLoginAndCallback() {
 
 			require.Equal(t, http.StatusOK, loginRec.Code)
 
-			var loginOut models.LoginReply
+			var loginOut models.LoginResponse
 			require.NoError(t, json.NewDecoder(loginRec.Body).Decode(&loginOut))
 			assert.True(t, loginOut.Success)
 			assert.NotEmpty(t, loginOut.RedirectURI, "first factor should return the identity provider redirect")
@@ -152,7 +152,7 @@ func (suite *HandlerTestSuite) TestSupportAccessLoginAndCallback() {
 
 			require.Equal(t, http.StatusOK, cbRec.Code)
 
-			var cbOut models.SupportAccessReply
+			var cbOut models.SupportAccessResponse
 			require.NoError(t, json.NewDecoder(cbRec.Body).Decode(&cbOut))
 			assert.True(t, cbOut.Success)
 			assert.NotEmpty(t, cbOut.Token)
@@ -374,7 +374,7 @@ func (suite *HandlerTestSuite) supportSessionToken(t *testing.T) (string, *ent.O
 	suite.e.ServeHTTP(cbRec, cbReq)
 	require.Equal(t, http.StatusOK, cbRec.Code)
 
-	var cbOut models.SupportAccessReply
+	var cbOut models.SupportAccessResponse
 	require.NoError(t, json.NewDecoder(cbRec.Body).Decode(&cbOut))
 	require.NotEmpty(t, cbOut.Token)
 

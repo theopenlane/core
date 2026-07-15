@@ -51,8 +51,6 @@ type sourceIndex struct {
 	declsByName   map[string]*ast.FuncDecl
 	declsByObject map[types.Object]*ast.FuncDecl
 	info          *types.Info
-	// namedTypes records every payload type the analysis has resolved, keyed by qualified name
-	namedTypes map[string]*types.Named
 }
 
 var (
@@ -79,7 +77,6 @@ func loadSourceIndex() (*sourceIndex, error) {
 		idx := &sourceIndex{
 			declsByName:   make(map[string]*ast.FuncDecl),
 			declsByObject: make(map[types.Object]*ast.FuncDecl),
-			namedTypes:    make(map[string]*types.Named),
 			info: &types.Info{
 				Types:     make(map[ast.Expr]types.TypeAndValue),
 				Defs:      make(map[*ast.Ident]types.Object),
@@ -393,10 +390,10 @@ func (idx *sourceIndex) payloadTypeName(expr ast.Expr, env typeEnv) string {
 	return idx.qualifiedName(idx.exprType(expr, env))
 }
 
-// qualifiedName renders a named struct type as its fully qualified name and records it for the
-// instance emitter; non-struct and unnamed types yield empty, as do ent entities — those are
-// database models whose edge graph would drag the entire schema universe into the spec, so
-// handlers returning them get a schema-less JSON response instead
+// qualifiedName renders a named struct type as its fully qualified name; non-struct and unnamed
+// types yield empty, as do ent entities — those are database models whose edge graph would drag
+// the entire schema universe into the spec, so handlers returning them get a schema-less JSON
+// response instead
 func (idx *sourceIndex) qualifiedName(t types.Type) string {
 	if t == nil {
 		return ""
@@ -420,44 +417,5 @@ func (idx *sourceIndex) qualifiedName(t types.Type) string {
 		return ""
 	}
 
-	name := pkgPath + "." + named.Obj().Name()
-	idx.namedTypes[name] = named
-
-	return name
-}
-
-// SpecTypeExamples finds every Example-prefixed package variable of the given qualified type, used
-// by the instance emitter to pair curated examples with their models; a type can carry several
-// curated examples and all of them are published as named examples in the spec
-func SpecTypeExamples(qualifiedName string) []string {
-	idx, err := loadSourceIndex()
-	if err != nil {
-		return nil
-	}
-
-	named, ok := idx.namedTypes[qualifiedName]
-	if !ok {
-		return nil
-	}
-
-	scope := named.Obj().Pkg().Scope()
-
-	names := make([]string, 0)
-
-	for _, name := range scope.Names() {
-		if !strings.HasPrefix(name, "Example") {
-			continue
-		}
-
-		obj, ok := scope.Lookup(name).(*types.Var)
-		if !ok {
-			continue
-		}
-
-		if types.Identical(obj.Type(), named) {
-			names = append(names, name)
-		}
-	}
-
-	return names
+	return pkgPath + "." + named.Obj().Name()
 }

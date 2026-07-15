@@ -153,7 +153,7 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 
 			assert.Equal(t, tc.expectedStatus, recorder.Code)
 
-			var out *models.VerifyReply
+			var out *models.VerifyResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {

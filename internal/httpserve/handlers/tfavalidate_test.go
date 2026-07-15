@@ -131,7 +131,7 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *models.TFAReply
+			var out *models.TFAResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
@@ -155,7 +155,7 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 		require.NotEmpty(t, recoveryCodes)
 		recoveryCode := recoveryCodes[0]
 
-		send := func() (*httptest.ResponseRecorder, *models.TFAReply) {
+		send := func() (*httptest.ResponseRecorder, *models.TFAResponse) {
 			tfaJSON := models.TFARequest{
 				RecoveryCode: recoveryCode,
 			}
@@ -172,7 +172,7 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *models.TFAReply
+			var out *models.TFAResponse
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
 				t.Error("error parsing response", err)
 			}

@@ -33,7 +33,7 @@ func (suite *HandlerTestSuite) TestOrganizationRolesHandler() {
 	response := recorder.Result()
 	defer response.Body.Close()
 
-	var out models.RolesReply
+	var out models.RolesResponse
 	require.NoError(t, json.NewDecoder(response.Body).Decode(&out))
 
 	assert.Equal(t, http.StatusOK, recorder.Code)
@@ -221,7 +221,7 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 			response := recorder.Result()
 			defer response.Body.Close()
 
-			var out models.OrganizationRolesReply
+			var out models.OrganizationRolesResponse
 			require.NoError(t, json.NewDecoder(response.Body).Decode(&out))
 
 			assert.Equal(t, tc.statusCode, recorder.Code)
@@ -295,7 +295,7 @@ func (suite *HandlerTestSuite) TestAccountRolesMeHandler() {
 	res := recorder.Result()
 	defer res.Body.Close()
 
-	var out models.AccountRolesMeReply
+	var out models.AccountRolesMeResponse
 	require.NoError(t, json.NewDecoder(res.Body).Decode(&out))
 
 	assert.Equal(t, http.StatusOK, recorder.Code)

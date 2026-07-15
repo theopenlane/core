@@ -78,7 +78,7 @@ func (h *Handler) RefreshHandler(ctx echo.Context) error {
 		return err
 	}
 
-	out := &models.RefreshReply{
+	out := &models.RefreshResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "success",
 		AuthData: models.AuthData{

@@ -72,7 +72,7 @@ func (suite *HandlerTestSuite) TestAccountFeaturesHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *apimodels.AccountFeaturesReply
+			var out *apimodels.AccountFeaturesResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {

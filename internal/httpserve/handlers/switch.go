@@ -62,7 +62,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 
 		sessions.SetCookie(ctx.Response().Writer, authenticatedUserSSOCookieValue, authenticatedUserSSOCookieName, *h.SessionConfig.CookieConfig)
 
-		out := &models.SwitchOrganizationReply{
+		out := &models.SwitchOrganizationResponse{
 			Reply:       rout.Reply{Success: true},
 			NeedsSSO:    true,
 			RedirectURI: authURL,
@@ -75,7 +75,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 	if status.OrgTFAEnforced {
 		// Check if user has TFA enabled
 		if user.Edges.Setting == nil || !user.Edges.Setting.IsTfaEnabled {
-			out := &models.SwitchOrganizationReply{
+			out := &models.SwitchOrganizationResponse{
 				Reply:    rout.Reply{Success: true},
 				NeedsTFA: true,
 			}
@@ -93,7 +93,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 	}
 
 	// set the out attributes we send back to the client only on success
-	out := &models.SwitchOrganizationReply{
+	out := &models.SwitchOrganizationResponse{
 		Reply:    rout.Reply{Success: true},
 		AuthData: *authData,
 	}

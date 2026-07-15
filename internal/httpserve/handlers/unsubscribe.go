@@ -46,7 +46,7 @@ func (h *Handler) UnsubscribeHandler(ctx echo.Context) error {
 
 	// idempotent replay
 	if entSubscriber.Unsubscribed {
-		out := &models.UnsubscribeReply{
+		out := &models.UnsubscribeResponse{
 			Reply:   rout.Reply{Success: true},
 			Message: "You are already unsubscribed and will not receive updates.",
 		}
@@ -60,7 +60,7 @@ func (h *Handler) UnsubscribeHandler(ctx echo.Context) error {
 		return h.InternalServerError(ctx, ErrUnableToUnsubscribe)
 	}
 
-	out := &models.UnsubscribeReply{
+	out := &models.UnsubscribeResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "You have been unsubscribed and will no longer receive updates.",
 	}

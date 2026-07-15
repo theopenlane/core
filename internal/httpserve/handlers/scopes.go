@@ -17,14 +17,14 @@ import (
 // ScopesHandler lists available scopes that can be used for api tokens
 func (h *Handler) ScopesHandler(ctx echo.Context) error {
 	return ProcessAuthenticatedRequest(ctx, h,
-		func(reqCtx context.Context, _ *models.ScopesRequest, _ *auth.Caller) (*models.ScopesReply, error) {
+		func(reqCtx context.Context, _ *models.ScopesRequest, _ *auth.Caller) (*models.ScopesResponse, error) {
 			scopes, err := fgamodel.ScopeOptions()
 			if err != nil {
 				logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving api scopes")
 				return nil, ErrProcessingRequest
 			}
 
-			resp := &models.ScopesReply{
+			resp := &models.ScopesResponse{
 				Reply:  rout.Reply{Success: true},
 				Scopes: scopes,
 			}

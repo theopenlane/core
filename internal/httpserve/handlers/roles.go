@@ -18,14 +18,14 @@ import (
 // RolesHandler lists available roles that can be assigned to users in addition to the base organization role
 func (h *Handler) RolesHandler(ctx echo.Context) error {
 	return ProcessAuthenticatedRequest(ctx, h,
-		func(reqCtx context.Context, _ *models.RolesRequest, _ *auth.Caller) (*models.RolesReply, error) {
+		func(reqCtx context.Context, _ *models.RolesRequest, _ *auth.Caller) (*models.RolesResponse, error) {
 			roles, err := fgamodel.OrganizationRoles()
 			if err != nil {
 				logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving api roles")
 				return nil, ErrProcessingRequest
 			}
 
-			resp := &models.RolesReply{
+			resp := &models.RolesResponse{
 				Reply: rout.Reply{Success: true},
 				Roles: convertOrgRolesToOpenAPI(roles),
 			}
@@ -90,7 +90,7 @@ func (h *Handler) AccountRolesMeHandler(ctx echo.Context) error {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
-	return h.Success(ctx, models.AccountRolesMeReply{
+	return h.Success(ctx, models.AccountRolesMeResponse{
 		Reply:          rout.Reply{Success: true},
 		Roles:          convertOrgRolesToOpenAPI(fgamodel.FilterOrganizationRoles(roles, assignedRoles)),
 		OrganizationID: orgID,
@@ -137,7 +137,7 @@ func (h *Handler) handleRoleMutation(ctx echo.Context, isDeleteOp bool) error {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
-	return h.Success(ctx, models.OrganizationRolesReply{
+	return h.Success(ctx, models.OrganizationRolesResponse{
 		Reply:          rout.Reply{Success: true},
 		OrganizationID: orgID,
 		Role:           in.Role,

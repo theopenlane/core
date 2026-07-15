@@ -73,7 +73,7 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	out := apimodels.SSOLoginReply{
+	out := apimodels.SSOLoginResponse{
 		Reply:       rout.Reply{Success: true},
 		RedirectURI: authURL,
 	}
@@ -112,7 +112,7 @@ func (h *Handler) SSOInitiateHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	return h.Success(ctx, apimodels.SSOLoginReply{
+	return h.Success(ctx, apimodels.SSOLoginResponse{
 		Reply:       rout.Reply{Success: true},
 		RedirectURI: authURL,
 	})
@@ -277,7 +277,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 		}
 	}
 
-	out := apimodels.LoginReply{
+	out := apimodels.LoginResponse{
 		Reply:      rout.Reply{Success: true},
 		TFAEnabled: entUser.Edges.Setting.IsTfaEnabled,
 		Message:    "success",
@@ -410,7 +410,7 @@ func (h *Handler) ssoCallbackURL() string { return h.OauthProvider.RedirectURL }
 
 // orgEnforcementsForUser checks the user's default org SSO and TFA requirements
 // Returns the org settings status which includes both SSO and TFA enforcement
-func (h *Handler) orgEnforcementsForUser(ctx context.Context, email string) *apimodels.SSOStatusReply {
+func (h *Handler) orgEnforcementsForUser(ctx context.Context, email string) *apimodels.SSOStatusResponse {
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	user, err := h.getUserByEmail(allowCtx, email)

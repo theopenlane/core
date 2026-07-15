@@ -79,7 +79,7 @@ func (suite *HandlerTestSuite) TestProductCatalogHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *apimodels.ProductCatalogReply
+			var out *apimodels.ProductCatalogResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {

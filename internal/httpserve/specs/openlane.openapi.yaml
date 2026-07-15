@@ -227,7 +227,7 @@ components:
                     example: user
                     type: string
             type: object
-        AccountFeaturesReply:
+        AccountFeaturesResponse:
             properties:
                 error:
                     description: The error message if the request was unsuccessful
@@ -251,7 +251,7 @@ components:
                 unverified:
                     type: boolean
             type: object
-        AccountRolesMeReply:
+        AccountRolesMeResponse:
             properties:
                 error:
                     description: The error message if the request was unsuccessful
@@ -288,7 +288,7 @@ components:
                 unverified:
                     type: boolean
             type: object
-        AccountRolesOrganizationReply:
+        AccountRolesOrganizationResponse:
             properties:
                 error:
                     description: The error message if the request was unsuccessful
@@ -422,7 +422,14 @@ components:
                 - schemas
                 - status
             type: object
-        ForgotPasswordReply:
+        ForgotPasswordRequest:
+            properties:
+                email:
+                    description: The email address associated with the account to send the password reset email to
+                    example: jsnow@example.com
+                    type: string
+            type: object
+        ForgotPasswordResponse:
             properties:
                 error:
                     description: The error message if the request was unsuccessful
@@ -437,13 +444,6 @@ components:
                     type: boolean
                 unverified:
                     type: boolean
-            type: object
-        ForgotPasswordRequest:
-            properties:
-                email:
-                    description: The email address associated with the account to send the password reset email to
-                    example: jsnow@example.com
-                    type: string
             type: object
         GetQuestionnaireResponse:
             properties:
@@ -716,7 +716,7 @@ components:
                 unverified:
                     type: boolean
             type: object
-        InviteReply:
+        InviteResponse:
             properties:
                 access_token:
                     description: The access token to be used for authentication
@@ -763,7 +763,24 @@ components:
                     example: 01J4EXD5MM60CX4YNYN0DEE3Y1
                     type: string
             type: object
-        LoginReply:
+        LoginRequest:
+            properties:
+                password:
+                    description: The password associated with the account
+                    example: Wint3rIsC0ming123!
+                    type: string
+                reason:
+                    description: 'For Openlane support login only: the reason for accessing the organization'
+                    type: string
+                target_organization_id:
+                    description: 'For Openlane support login only: the organization to access'
+                    type: string
+                username:
+                    description: The email address associated with the existing account
+                    example: jsnow@example.com
+                    type: string
+            type: object
+        LoginResponse:
             properties:
                 access_token:
                     description: The access token to be used for authentication
@@ -798,24 +815,13 @@ components:
                 unverified:
                     type: boolean
             type: object
-        LoginRequest:
+        LogoutRequest:
             properties:
-                password:
-                    description: The password associated with the account
-                    example: Wint3rIsC0ming123!
-                    type: string
-                reason:
-                    description: 'For Openlane support login only: the reason for accessing the organization'
-                    type: string
-                target_organization_id:
-                    description: 'For Openlane support login only: the organization to access'
-                    type: string
-                username:
-                    description: The email address associated with the existing account
-                    example: jsnow@example.com
+                refresh_token:
+                    description: Optional refresh token to revoke when not provided via cookie
                     type: string
             type: object
-        LogoutReply:
+        LogoutResponse:
             properties:
                 error:
                     description: The error message if the request was unsuccessful
@@ -824,34 +830,6 @@ components:
                     description: The error code if the request was unsuccessful
                     type: string
                 message:
-                    type: string
-                success:
-                    description: Whether or not the request was successful or not
-                    type: boolean
-                unverified:
-                    type: boolean
-            type: object
-        LogoutRequest:
-            properties:
-                refresh_token:
-                    description: Optional refresh token to revoke when not provided via cookie
-                    type: string
-            type: object
-        OrganizationRolesReply:
-            properties:
-                error:
-                    description: The error message if the request was unsuccessful
-                    type: string
-                error_code:
-                    description: The error code if the request was unsuccessful
-                    type: string
-                organization_id:
-                    description: The ID of the organization the role was applied to
-                    example: 01J4HMNDSZCCQBTY93BF9CBF5D
-                    type: string
-                role:
-                    description: The organization responsibility role
-                    example: policy_manager
                     type: string
                 success:
                     description: Whether or not the request was successful or not
@@ -881,6 +859,28 @@ components:
                         description: User IDs to assign the role to
                         type: string
                     type: array
+            type: object
+        OrganizationRolesResponse:
+            properties:
+                error:
+                    description: The error message if the request was unsuccessful
+                    type: string
+                error_code:
+                    description: The error code if the request was unsuccessful
+                    type: string
+                organization_id:
+                    description: The ID of the organization the role was applied to
+                    example: 01J4HMNDSZCCQBTY93BF9CBF5D
+                    type: string
+                role:
+                    description: The organization responsibility role
+                    example: policy_manager
+                    type: string
+                success:
+                    description: Whether or not the request was successful or not
+                    type: boolean
+                unverified:
+                    type: boolean
             type: object
         PatchRequest:
             description: SCIM PATCH operation as defined in RFC 7644 Section 3.5.2
@@ -928,7 +928,7 @@ components:
                 - schemas
                 - Operations
             type: object
-        ProductCatalogReply:
+        ProductCatalogResponse:
             properties:
                 addons:
                     additionalProperties:
@@ -1054,7 +1054,13 @@ components:
                 version:
                     type: string
             type: object
-        RefreshReply:
+        RefreshRequest:
+            properties:
+                refresh_token:
+                    description: The token to be used to refresh the access token after expiration
+                    type: string
+            type: object
+        RefreshResponse:
             properties:
                 access_token:
                     description: The access token to be used for authentication
@@ -1083,36 +1089,6 @@ components:
                 unverified:
                     type: boolean
             type: object
-        RefreshRequest:
-            properties:
-                refresh_token:
-                    description: The token to be used to refresh the access token after expiration
-                    type: string
-            type: object
-        RegisterReply:
-            properties:
-                email:
-                    description: The email address of the user
-                    example: jsnow@example.com
-                    type: string
-                error:
-                    description: The error message if the request was unsuccessful
-                    type: string
-                error_code:
-                    description: The error code if the request was unsuccessful
-                    type: string
-                message:
-                    type: string
-                success:
-                    description: Whether or not the request was successful or not
-                    type: boolean
-                unverified:
-                    type: boolean
-                user_id:
-                    description: The ID of the user that was created
-                    example: 01J4EXD5MM60CX4YNYN0DEE3Y1
-                    type: string
-            type: object
         RegisterRequest:
             properties:
                 email:
@@ -1136,17 +1112,12 @@ components:
                     nullable: true
                     type: string
             type: object
-        ResendQuestionnaireRequest:
+        RegisterResponse:
             properties:
-                assessment_id:
-                    description: The ID of the assessment
-                    type: string
                 email:
-                    description: The email address associated with the assessment response
+                    description: The email address of the user
+                    example: jsnow@example.com
                     type: string
-            type: object
-        ResendReply:
-            properties:
                 error:
                     description: The error message if the request was unsuccessful
                     type: string
@@ -1160,6 +1131,19 @@ components:
                     type: boolean
                 unverified:
                     type: boolean
+                user_id:
+                    description: The ID of the user that was created
+                    example: 01J4EXD5MM60CX4YNYN0DEE3Y1
+                    type: string
+            type: object
+        ResendQuestionnaireRequest:
+            properties:
+                assessment_id:
+                    description: The ID of the assessment
+                    type: string
+                email:
+                    description: The email address associated with the assessment response
+                    type: string
             type: object
         ResendRequest:
             properties:
@@ -1167,7 +1151,7 @@ components:
                     description: The email address to resend the verification email to, must match the email address on the existing account
                     type: string
             type: object
-        ResetPasswordReply:
+        ResendResponse:
             properties:
                 error:
                     description: The error message if the request was unsuccessful
@@ -1191,6 +1175,22 @@ components:
                 token:
                     description: The token to be used to reset the password, token is sent via email
                     type: string
+            type: object
+        ResetPasswordResponse:
+            properties:
+                error:
+                    description: The error message if the request was unsuccessful
+                    type: string
+                error_code:
+                    description: The error code if the request was unsuccessful
+                    type: string
+                message:
+                    type: string
+                success:
+                    description: Whether or not the request was successful or not
+                    type: boolean
+                unverified:
+                    type: boolean
             type: object
         ResourceMetadata:
             description: Resource metadata as defined in RFC 7643 Section 3.1
@@ -1265,7 +1265,7 @@ components:
                 - endpoint
                 - schema
             type: object
-        SSOLoginReply:
+        SSOLoginResponse:
             properties:
                 error:
                     description: The error message if the request was unsuccessful
@@ -1523,7 +1523,14 @@ components:
                 status:
                     type: string
             type: object
-        SwitchOrganizationReply:
+        SwitchOrganizationRequest:
+            properties:
+                target_organization_id:
+                    description: The ID of the organization to switch to
+                    example: 01J4EXD5MM60CX4YNYN0DEE3Y1
+                    type: string
+            type: object
+        SwitchOrganizationResponse:
             properties:
                 access_token:
                     description: The access token to be used for authentication
@@ -1556,14 +1563,13 @@ components:
                 unverified:
                     type: boolean
             type: object
-        SwitchOrganizationRequest:
+        UnsubscribeRequest:
             properties:
-                target_organization_id:
-                    description: The ID of the organization to switch to
-                    example: 01J4EXD5MM60CX4YNYN0DEE3Y1
+                Token:
+                    description: The token to be used to unsubscribe, token is sent via email
                     type: string
             type: object
-        UnsubscribeReply:
+        UnsubscribeResponse:
             properties:
                 error:
                     description: The error message if the request was unsuccessful
@@ -1578,12 +1584,6 @@ components:
                     type: boolean
                 unverified:
                     type: boolean
-            type: object
-        UnsubscribeRequest:
-            properties:
-                Token:
-                    description: The token to be used to unsubscribe, token is sent via email
-                    type: string
             type: object
         User:
             description: |
@@ -1771,7 +1771,7 @@ components:
                 - schemas
                 - userName
             type: object
-        VerifyReply:
+        VerifyResponse:
             properties:
                 access_token:
                     description: The access token to be used for authentication
@@ -1808,7 +1808,13 @@ components:
                     example: 01J4EXD5MM60CX4YNYN0DEE3Y1
                     type: string
             type: object
-        VerifySubscribeReply:
+        VerifySubscribeRequest:
+            properties:
+                Token:
+                    description: The token to be used to verify the subscription, token is sent via email
+                    type: string
+            type: object
+        VerifySubscribeResponse:
             properties:
                 error:
                     description: The error message if the request was unsuccessful
@@ -1823,12 +1829,6 @@ components:
                     type: boolean
                 unverified:
                     type: boolean
-            type: object
-        VerifySubscribeRequest:
-            properties:
-                Token:
-                    description: The token to be used to verify the subscription, token is sent via email
-                    type: string
             type: object
         itemsPerPage:
             description: The number of resources returned in the current page
@@ -2145,7 +2145,7 @@ paths:
                                         message: If the email address is associated with an active assessment, a new authentication email has been sent
                                         success: true
                             schema:
-                                $ref: '#/components/schemas/ResendReply'
+                                $ref: '#/components/schemas/ResendResponse'
                     description: OK
                 "400":
                     content:
@@ -2690,7 +2690,7 @@ paths:
                     content:
                         application/json:
                             examples:
-                                AccountFeaturesReply:
+                                AccountFeaturesResponse:
                                     value:
                                         features:
                                             - policy-and-procedure-module
@@ -2700,7 +2700,7 @@ paths:
                                         organization_id: 01J4HMNDSZCCQBTY93BF9CBF5D
                                         success: true
                             schema:
-                                $ref: '#/components/schemas/AccountFeaturesReply'
+                                $ref: '#/components/schemas/AccountFeaturesResponse'
                     description: OK
                 "400":
                     content:
@@ -2758,7 +2758,7 @@ paths:
                     content:
                         application/json:
                             examples:
-                                AccountFeaturesReply:
+                                AccountFeaturesResponse:
                                     value:
                                         features:
                                             - policy-and-procedure-module
@@ -2768,7 +2768,7 @@ paths:
                                         organization_id: 01J4HMNDSZCCQBTY93BF9CBF5D
                                         success: true
                             schema:
-                                $ref: '#/components/schemas/AccountFeaturesReply'
+                                $ref: '#/components/schemas/AccountFeaturesResponse'
                     description: OK
                 "400":
                     content:
@@ -2833,13 +2833,13 @@ paths:
                     content:
                         application/json:
                             examples:
-                                OrganizationRolesReply:
+                                OrganizationRolesResponse:
                                     value:
                                         organization_id: 01J4HMNDSZCCQBTY93BF9CBF5D
                                         role: policy_manager
                                         success: true
                             schema:
-                                $ref: '#/components/schemas/OrganizationRolesReply'
+                                $ref: '#/components/schemas/OrganizationRolesResponse'
                     description: OK
                 "400":
                     content:
@@ -2952,13 +2952,13 @@ paths:
                     content:
                         application/json:
                             examples:
-                                OrganizationRolesReply:
+                                OrganizationRolesResponse:
                                     value:
                                         organization_id: 01J4HMNDSZCCQBTY93BF9CBF5D
                                         role: policy_manager
                                         success: true
                             schema:
-                                $ref: '#/components/schemas/OrganizationRolesReply'
+                                $ref: '#/components/schemas/OrganizationRolesResponse'
                     description: OK
                 "400":
                     content:
@@ -3069,7 +3069,7 @@ paths:
                     content:
                         application/json:
                             examples:
-                                AccountRolesMeReply:
+                                AccountRolesMeResponse:
                                     value:
                                         organization_id: 01J4HMNDSZCCQBTY93BF9CBF5D
                                         roles:
@@ -3078,7 +3078,7 @@ paths:
                                               name: Policy Manager
                                         success: true
                             schema:
-                                $ref: '#/components/schemas/AccountRolesMeReply'
+                                $ref: '#/components/schemas/AccountRolesMeResponse'
                     description: OK
                 "400":
                     content:
@@ -3128,7 +3128,7 @@ paths:
                     content:
                         application/json:
                             examples:
-                                AccountRolesOrganizationReply:
+                                AccountRolesOrganizationResponse:
                                     value:
                                         organization_id: 01J4HMNDSZCCQBTY93BF9CBF5D
                                         roles:
@@ -3137,7 +3137,7 @@ paths:
                                             - audit_log_viewer
                                         success: true
                             schema:
-                                $ref: '#/components/schemas/AccountRolesOrganizationReply'
+                                $ref: '#/components/schemas/AccountRolesOrganizationResponse'
                     description: OK
                 "400":
                     content:
@@ -3195,7 +3195,7 @@ paths:
                     content:
                         application/json:
                             examples:
-                                AccountRolesOrganizationReply:
+                                AccountRolesOrganizationResponse:
                                     value:
                                         organization_id: 01J4HMNDSZCCQBTY93BF9CBF5D
                                         roles:
@@ -3204,7 +3204,7 @@ paths:
                                             - audit_log_viewer
                                         success: true
                             schema:
-                                $ref: '#/components/schemas/AccountRolesOrganizationReply'
+                                $ref: '#/components/schemas/AccountRolesOrganizationResponse'
                     description: OK
                 "400":
                     content:
@@ -3269,7 +3269,7 @@ paths:
                                         message: We've received your request to have the password associated with this email reset. Please check your email.
                                         success: true
                             schema:
-                                $ref: '#/components/schemas/ForgotPasswordReply'
+                                $ref: '#/components/schemas/ForgotPasswordResponse'
                     description: OK
                 "400":
                     content:
@@ -3568,7 +3568,7 @@ paths:
                                         token_type: bearer
                                         user_id: "1234"
                             schema:
-                                $ref: '#/components/schemas/InviteReply'
+                                $ref: '#/components/schemas/InviteResponse'
                     description: Created
                 "400":
                     content:
@@ -3643,7 +3643,7 @@ paths:
                                         tfa_enabled: true
                                         token_type: bearer
                             schema:
-                                $ref: '#/components/schemas/LoginReply'
+                                $ref: '#/components/schemas/LoginResponse'
                     description: OK
                 "302":
                     description: Found
@@ -3746,7 +3746,7 @@ paths:
                                         message: success
                                         success: true
                             schema:
-                                $ref: '#/components/schemas/LogoutReply'
+                                $ref: '#/components/schemas/LogoutResponse'
                     description: OK
                 "400":
                     content:
@@ -3815,7 +3815,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/SSOLoginReply'
+                                $ref: '#/components/schemas/SSOLoginResponse'
                     description: OK
                 "400":
                     content:
@@ -3890,7 +3890,7 @@ paths:
                                         message: Password has been reset
                                         success: true
                             schema:
-                                $ref: '#/components/schemas/ResetPasswordReply'
+                                $ref: '#/components/schemas/ResetPasswordResponse'
                     description: OK
                 "400":
                     content:
@@ -3951,7 +3951,7 @@ paths:
                     content:
                         application/json:
                             examples:
-                                ProductCatalogReply:
+                                ProductCatalogResponse:
                                     value:
                                         addons: {}
                                         modules:
@@ -3981,7 +3981,7 @@ paths:
                                         success: true
                                         version: v0.0.1
                             schema:
-                                $ref: '#/components/schemas/ProductCatalogReply'
+                                $ref: '#/components/schemas/ProductCatalogResponse'
                     description: OK
                 "400":
                     content:
@@ -4048,7 +4048,7 @@ paths:
                                         success: true
                                         token_type: bearer
                             schema:
-                                $ref: '#/components/schemas/RefreshReply'
+                                $ref: '#/components/schemas/RefreshResponse'
                     description: OK
                 "400":
                     content:
@@ -4141,7 +4141,7 @@ paths:
                                         success: true
                                         user_id: "1234"
                             schema:
-                                $ref: '#/components/schemas/RegisterReply'
+                                $ref: '#/components/schemas/RegisterResponse'
                     description: Created
                 "400":
                     content:
@@ -4219,7 +4219,7 @@ paths:
                                         message: If the email address is associated with an active assessment, a new authentication email has been sent
                                         success: true
                             schema:
-                                $ref: '#/components/schemas/ResendReply'
+                                $ref: '#/components/schemas/ResendResponse'
                     description: OK
                 "400":
                     content:
@@ -4388,7 +4388,7 @@ paths:
                                         message: Subscription confirmed, looking forward to sending you updates!
                                         success: true
                             schema:
-                                $ref: '#/components/schemas/VerifySubscribeReply'
+                                $ref: '#/components/schemas/VerifySubscribeResponse'
                     description: OK
                 "400":
                     content:
@@ -4446,7 +4446,7 @@ paths:
                     content:
                         application/json:
                             examples:
-                                SwitchSuccessReply:
+                                SwitchSuccessResponse:
                                     value:
                                         access_token: access_token
                                         refresh_token: refresh_token
@@ -4454,7 +4454,7 @@ paths:
                                         success: true
                                         token_type: bearer
                             schema:
-                                $ref: '#/components/schemas/SwitchOrganizationReply'
+                                $ref: '#/components/schemas/SwitchOrganizationResponse'
                     description: OK
                 "400":
                     content:
@@ -4525,7 +4525,7 @@ paths:
                                         message: You have been unsubscribed and will no longer receive updates.
                                         success: true
                             schema:
-                                $ref: '#/components/schemas/UnsubscribeReply'
+                                $ref: '#/components/schemas/UnsubscribeResponse'
                     description: OK
                 "400":
                     content:
@@ -4590,7 +4590,7 @@ paths:
                                         token_type: bearer
                                         user_id: 01K9MJ23ND309PAN0ZQFK6N2R3
                             schema:
-                                $ref: '#/components/schemas/VerifyReply'
+                                $ref: '#/components/schemas/VerifyResponse'
                     description: OK
                 "201":
                     content:
@@ -4607,7 +4607,7 @@ paths:
                                         token_type: bearer
                                         user_id: 01K9MJ23ND309PAN0ZQFK6N2R3
                             schema:
-                                $ref: '#/components/schemas/VerifyReply'
+                                $ref: '#/components/schemas/VerifyResponse'
                     description: Created
                 "400":
                     content:

@@ -85,7 +85,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 				return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
 			}
 
-			out := &models.VerifyReply{
+			out := &models.VerifyResponse{
 				Reply:   rout.Reply{Success: false},
 				ID:      meowtoken.ID,
 				Email:   user.Email,
@@ -110,7 +110,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
-	out := &models.VerifyReply{
+	out := &models.VerifyResponse{
 		ID:       entUser.ID,
 		Email:    entUser.Email,
 		Reply:    rout.Reply{Success: true},

@@ -70,7 +70,7 @@ func (h *Handler) OauthRegister(ctx echo.Context) error {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
-	out := models.LoginReply{
+	out := models.LoginResponse{
 		Reply:      rout.Reply{Success: true},
 		TFAEnabled: user.Edges.Setting.IsTfaEnabled,
 		Message:    "success",

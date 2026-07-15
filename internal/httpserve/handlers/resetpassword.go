@@ -128,7 +128,7 @@ func (h *Handler) ResetPassword(ctx echo.Context) error {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
-	out := &models.ResetPasswordReply{
+	out := &models.ResetPasswordResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "password has been re-set successfully",
 	}

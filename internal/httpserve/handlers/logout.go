@@ -71,7 +71,7 @@ func (h *Handler) LogoutHandler(ctx echo.Context) error {
 	// revocation has succeeded
 	auth.ClearAuthCookies(ctx.Response().Writer, *h.SessionConfig.CookieConfig)
 
-	out := &models.LogoutReply{
+	out := &models.LogoutResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "logged out successfully",
 	}

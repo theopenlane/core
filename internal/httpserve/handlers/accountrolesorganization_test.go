@@ -51,7 +51,7 @@ func (suite *HandlerTestSuite) TestAccountRolesOrganizationHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *models.AccountRolesOrganizationReply
+			var out *models.AccountRolesOrganizationResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {

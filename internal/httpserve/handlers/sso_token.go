@@ -57,7 +57,7 @@ func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context) error {
 		authenticatedUserSSOCookieName: authenticatedUserSSOCookieValue,
 	})
 
-	out := apimodels.SSOLoginReply{
+	out := apimodels.SSOLoginResponse{
 		Reply:       rout.Reply{Success: true},
 		RedirectURI: authURL,
 	}
@@ -160,7 +160,7 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context) error {
 	// cleanup cookies
 	h.clearAuthFlowCookies(ctx.Response().Writer, "token_id", "token_type", "organization_id", "state", "nonce")
 
-	out := apimodels.SSOTokenAuthorizeReply{
+	out := apimodels.SSOTokenAuthorizeResponse{
 		Reply:          rout.Reply{Success: true},
 		OrganizationID: orgCookie.Value,
 		TokenID:        tokenIDCookie.Value,

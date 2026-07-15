@@ -144,7 +144,7 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 			// check status
 			assert.Equal(t, tc.expectedStatus, recorder.Code)
 
-			var out *models.ResetPasswordReply
+			var out *models.ResetPasswordResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {

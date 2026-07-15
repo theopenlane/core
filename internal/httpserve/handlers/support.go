@@ -79,7 +79,7 @@ func (h *Handler) supportFirstFactor(ctx echo.Context, req *apimodels.LoginReque
 		return h.BadRequest(ctx, err)
 	}
 
-	return h.Success(ctx, apimodels.LoginReply{
+	return h.Success(ctx, apimodels.LoginResponse{
 		Reply:       rout.Reply{Success: true},
 		RedirectURI: authURL,
 	})
@@ -231,7 +231,7 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context) error {
 	h.clearAuthFlowCookies(ctx.Response().Writer,
 		supportPendingCookie, supportStateCookie, supportNonceCookie, supportOrgCookie, supportReasonCookie)
 
-	return h.Success(ctx, apimodels.SupportAccessReply{
+	return h.Success(ctx, apimodels.SupportAccessResponse{
 		Reply:          rout.Reply{Success: true},
 		AuthData:       apimodels.AuthData{Session: sessionToken},
 		Token:          token,

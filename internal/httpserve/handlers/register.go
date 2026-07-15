@@ -107,7 +107,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 		}
 	}
 
-	out := &models.RegisterReply{
+	out := &models.RegisterResponse{
 		Reply:   rout.Reply{Success: true},
 		ID:      meowuser.ID,
 		Email:   meowuser.Email,

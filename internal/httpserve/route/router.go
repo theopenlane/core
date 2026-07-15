@@ -115,9 +115,6 @@ type Router struct {
 	// SpecInstances maps qualified model type names to instances for schema reflection; populated
 	// from the generated instances file, only in spec-build mode
 	SpecInstances map[string]any
-	// SpecExamples maps qualified model type names to their curated named example values;
-	// populated from the generated instances file, only in spec-build mode
-	SpecExamples map[string]map[string]any
 	// SpecTypes accumulates every model type name the analyzed handlers need, used by the instance
 	// emitter and to detect missing instances after registration
 	SpecTypes map[string]bool
@@ -304,7 +301,7 @@ func (r *Router) buildOperation(config Config, specPath string) error {
 			handlers.RegisterParameters(operation, instance, pathParamNames(config.Path))
 
 			if config.Method != http.MethodGet {
-				if err := handlers.RegisterRequestBody(operation, r.SchemaRegistry, instance, r.SpecExamples[analysis.Request]); err != nil {
+				if err := handlers.RegisterRequestBody(operation, r.SchemaRegistry, instance); err != nil {
 					return fmt.Errorf("%s: %w", config.OperationID, err)
 				}
 			}
@@ -323,7 +320,6 @@ func (r *Router) buildOperation(config Config, specPath string) error {
 
 	return nil
 }
-
 
 // registerResponses adds the analyzed responses to the operation: success payloads with schemas,
 // redirects, error statuses, and statuses produced by route middleware rather than handler code
@@ -352,7 +348,7 @@ func (r *Router) registerResponses(config Config, operation *openapi3.Operation,
 			r.SpecTypes[shape.Type] = true
 
 			if instance, ok := r.SpecInstances[shape.Type]; ok {
-				if err := handlers.RegisterSuccessResponse(operation, r.SchemaRegistry, status, instance, r.SpecExamples[shape.Type]); err != nil {
+				if err := handlers.RegisterSuccessResponse(operation, r.SchemaRegistry, status, instance); err != nil {
 					return fmt.Errorf("%s: %w", config.OperationID, err)
 				}
 			}

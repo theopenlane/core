@@ -129,7 +129,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context) error {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to log impersonation event")
 	}
 
-	response := models.StartImpersonationReply{
+	response := models.StartImpersonationResponse{
 		Reply:     rout.Reply{Success: true},
 		Token:     token,
 		ExpiresAt: time.Now().Add(duration),
@@ -184,7 +184,7 @@ func (h *Handler) EndImpersonation(ctx echo.Context) error {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to revoke impersonation session")
 	}
 
-	response := models.EndImpersonationReply{
+	response := models.EndImpersonationResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "Impersonation session ended successfully",
 	}

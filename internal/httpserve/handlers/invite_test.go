@@ -116,7 +116,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *apimodels.InviteReply
+			var out *apimodels.InviteResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {

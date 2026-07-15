@@ -36,7 +36,7 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context) error {
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 	allowCtx = auth.WithCaller(allowCtx, auth.NewWebhookCaller(""))
 
-	out := &models.ResendReply{
+	out := &models.ResendResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "If the email address is associated with an active assessment, a new link has been sent to access this",
 	}

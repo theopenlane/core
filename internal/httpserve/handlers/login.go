@@ -115,7 +115,7 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 		}
 	}
 
-	out := models.LoginReply{
+	out := models.LoginResponse{
 		Reply:            rout.Reply{Success: true},
 		TFAEnabled:       user.Edges.Setting.IsTfaEnabled,
 		TFASetupRequired: tfaSetupRequired,

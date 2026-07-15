@@ -85,13 +85,13 @@ type nonce string
 // reports the raw organization enforcement; when a userID is provided it additionally applies that
 // user's owner, per-user, and per-domain exemptions, so callers and the webfinger acct lookup do not
 // route an exempt user through SSO. Provider, discovery URL, and TFA enforcement are always reported
-func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (models.SSOStatusReply, error) {
+func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (models.SSOStatusResponse, error) {
 	in, setting, err := sso.LoadEnforcement(ctx, h.DBClient, orgID, userID, "")
 	if err != nil {
-		return models.SSOStatusReply{}, err
+		return models.SSOStatusResponse{}, err
 	}
 
-	out := models.SSOStatusReply{
+	out := models.SSOStatusResponse{
 		Reply:          rout.Reply{Success: true},
 		Enforced:       setting.IdentityProviderLoginEnforced,
 		OrganizationID: orgID,

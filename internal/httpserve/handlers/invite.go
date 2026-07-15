@@ -83,7 +83,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	}
 
 	// reply with the relevant details
-	out := &models.InviteReply{
+	out := &models.InviteResponse{
 		Reply:       rout.Reply{Success: true},
 		ID:          userID,
 		Email:       invitedUser.Recipient,

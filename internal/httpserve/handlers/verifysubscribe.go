@@ -66,7 +66,7 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context) error {
 		switch {
 		case errors.Is(err, ErrExpiredToken):
 			// a fresh link was already emailed; confirmation is still pending on that link
-			return h.Success(ctx, &models.VerifySubscribeReply{
+			return h.Success(ctx, &models.VerifySubscribeResponse{
 				Reply:   rout.Reply{Success: true},
 				Message: "The verification link has expired, a new one has been sent - check your inbox to confirm.",
 			})
@@ -89,7 +89,7 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context) error {
 
 	// the confirmation UX lives on the trust center's own domain (the page that called this endpoint), so
 	// reply inline; the caller lands the subscriber on the trust center
-	out := &models.VerifySubscribeReply{
+	out := &models.VerifySubscribeResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "Subscription confirmed, looking forward to sending you updates!",
 	}
