@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 )
 
 // AssessmentCreate is the builder for creating a Assessment entity.
@@ -184,6 +185,20 @@ func (_c *AssessmentCreate) SetSystemInternalID(v string) *AssessmentCreate {
 func (_c *AssessmentCreate) SetNillableSystemInternalID(v *string) *AssessmentCreate {
 	if v != nil {
 		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *AssessmentCreate) SetWorkflowEligibleMarker(v bool) *AssessmentCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *AssessmentCreate) SetNillableWorkflowEligibleMarker(v *bool) *AssessmentCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
 	}
 	return _c
 }
@@ -377,6 +392,21 @@ func (_c *AssessmentCreate) AddCampaigns(v ...*Campaign) *AssessmentCreate {
 	return _c.AddCampaignIDs(ids...)
 }
 
+// AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
+func (_c *AssessmentCreate) AddWorkflowObjectRefIDs(ids ...string) *AssessmentCreate {
+	_c.mutation.AddWorkflowObjectRefIDs(ids...)
+	return _c
+}
+
+// AddWorkflowObjectRefs adds the "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_c *AssessmentCreate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *AssessmentCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddWorkflowObjectRefIDs(ids...)
+}
+
 // Mutation returns the AssessmentMutation object of the builder.
 func (_c *AssessmentCreate) Mutation() *AssessmentMutation {
 	return _c.mutation
@@ -435,6 +465,10 @@ func (_c *AssessmentCreate) defaults() error {
 	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := assessment.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
+	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := assessment.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
 	}
 	if _, ok := _c.mutation.AssessmentType(); !ok {
 		v := assessment.DefaultAssessmentType
@@ -552,6 +586,10 @@ func (_c *AssessmentCreate) createSpec() (*Assessment, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.SystemInternalID(); ok {
 		_spec.SetField(assessment.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
+	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(assessment.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(assessment.FieldName, field.TypeString, value)
@@ -723,6 +761,23 @@ func (_c *AssessmentCreate) createSpec() (*Assessment, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   assessment.WorkflowObjectRefsTable,
+			Columns: []string{assessment.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

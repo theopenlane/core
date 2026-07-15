@@ -61,6 +61,9 @@ func (WorkflowProposal) Fields() []ent.Field {
 		field.JSON("changes", map[string]any{}).
 			Comment("Staged field updates for this domain; applied only after approval").
 			Optional(),
+		field.JSON("proposed_changes", models.WorkflowProposedChanges{}).
+			Comment("Staged field updates as opaque JSON; preferred over changes field").
+			Optional(),
 		field.String("proposed_hash").
 			Comment("Hash of the current proposed changes for approval verification").
 			Optional(),

@@ -60,6 +60,8 @@ const (
 	FieldScopeName = "scope_name"
 	// FieldScopeID holds the string denoting the scope_id field in the database.
 	FieldScopeID = "scope_id"
+	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
+	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
 	// FieldExternalOwnerID holds the string denoting the external_owner_id field in the database.
@@ -127,6 +129,7 @@ var Columns = []string{
 	FieldEnvironmentID,
 	FieldScopeName,
 	FieldScopeID,
+	FieldWorkflowEligibleMarker,
 	FieldExternalID,
 	FieldExternalOwnerID,
 	FieldTitle,
@@ -180,6 +183,8 @@ var (
 	DefaultTags []string
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
+	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
+	DefaultWorkflowEligibleMarker bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -307,6 +312,11 @@ func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
 // ByScopeID orders the results by the scope_id field.
 func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
+}
+
+// ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
+func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
 }
 
 // ByExternalID orders the results by the external_id field.

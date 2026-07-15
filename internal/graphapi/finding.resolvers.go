@@ -8,6 +8,7 @@ package graphapi
 import (
 	"context"
 
+	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -17,6 +18,26 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
+
+// HasPendingWorkflow is the resolver for the hasPendingWorkflow field.
+func (r *findingResolver) HasPendingWorkflow(ctx context.Context, obj *generated.Finding) (bool, error) {
+	return workflowResolverHasPending(ctx, generated.TypeFinding, obj.ID)
+}
+
+// HasWorkflowHistory is the resolver for the hasWorkflowHistory field.
+func (r *findingResolver) HasWorkflowHistory(ctx context.Context, obj *generated.Finding) (bool, error) {
+	return workflowResolverHasHistory(ctx, generated.TypeFinding, obj.ID)
+}
+
+// ActiveWorkflowInstances is the resolver for the activeWorkflowInstances field.
+func (r *findingResolver) ActiveWorkflowInstances(ctx context.Context, obj *generated.Finding) ([]*generated.WorkflowInstance, error) {
+	return workflowResolverActiveInstances(ctx, generated.TypeFinding, obj.ID)
+}
+
+// WorkflowTimeline is the resolver for the workflowTimeline field.
+func (r *findingResolver) WorkflowTimeline(ctx context.Context, obj *generated.Finding, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) (*generated.WorkflowEventConnection, error) {
+	return workflowResolverTimeline(ctx, generated.TypeFinding, obj.ID, after, first, before, last, orderBy, where, includeEmitFailures)
+}
 
 // CreateFinding is the resolver for the createFinding field.
 func (r *mutationResolver) CreateFinding(ctx context.Context, input generated.CreateFindingInput) (*model.FindingCreatePayload, error) {

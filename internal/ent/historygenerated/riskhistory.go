@@ -65,6 +65,8 @@ type RiskHistory struct {
 	ScopeName string `json:"scope_name,omitempty"`
 	// the scope of the risk
 	ScopeID string `json:"scope_id,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// stable identifier assigned by the source system, used for integration ingest deduplication
 	ExternalID string `json:"external_id,omitempty"`
 	// integration that surfaced this risk, when sourced via integration ingest
@@ -129,7 +131,7 @@ func (*RiskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case riskhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case riskhistory.FieldReviewRequired:
+		case riskhistory.FieldWorkflowEligibleMarker, riskhistory.FieldReviewRequired:
 			values[i] = new(sql.NullBool)
 		case riskhistory.FieldScore, riskhistory.FieldResidualScore:
 			values[i] = new(sql.NullInt64)
@@ -286,6 +288,12 @@ func (_m *RiskHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
 			} else if value.Valid {
 				_m.ScopeID = value.String
+			}
+		case riskhistory.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
+			} else if value.Valid {
+				_m.WorkflowEligibleMarker = value.Bool
 			}
 		case riskhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -549,6 +557,9 @@ func (_m *RiskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("scope_id=")
 	builder.WriteString(_m.ScopeID)
+	builder.WriteString(", ")
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

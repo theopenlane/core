@@ -1,0 +1,158 @@
+{{/*
+Override of entgql's built-in gql_mutation_input template. The changes from upstream emit a
+snake_case `json` struct tag on every field: scalars are tagged from the ent field name ($f.Name),
+and edge-derived ID fields (unique *ID, and *IDs / Add*IDs / Remove*IDs) are tagged via snake of
+their derived Go struct field name. This lets a snake_case payload json.Unmarshal directly into
+Create/Update inputs, matching entityops's mapping-key convention with no per-field exceptions.
+Registered after entgql.AllTemplates so this define overrides the built-in. Upstream:
+https://github.com/ent/contrib/tree/master/entgql/template/mutation_input.tmpl
+*/}}
+
+{{ define "gql_mutation_input" }}
+
+{{- /*gotype: entgo.io/ent/entc/gen.Graph*/ -}}
+
+{{ $pkg := base $.Config.Package }}
+{{- with extend $ "Package" $pkg }}
+        {{ template "header" . }}
+{{- end }}
+
+{{ template "import" $ }}
+
+{{ $gqlNodes := filterNodes $.Nodes (skipMode "mutation_create_input" "mutation_update_input") }}
+import (
+    "entgo.io/contrib/entgql"
+    {{- range $n := $gqlNodes }}
+        {{- template "import/types" $n }}
+        "{{ $.Config.Package }}/{{ $n.Package }}"
+    {{- end }}
+)
+
+{{- range $n := mutationInputs $.Nodes }}
+    {{- $names := nodePaginationNames $n.Type }}
+    {{- $input := $n.Input }}
+    {{- $fields := $n.InputFields }}
+    {{- $edges := $n.InputEdges }}
+    {{- if $n.IsCreate }}
+    // {{ $input }} represents a mutation input for creating {{ plural $names.Node | lower }}.
+    {{- else }}
+    // {{ $input }} represents a mutation input for updating {{ plural $names.Node | lower }}.
+    {{- end }}
+    type {{ $input }} struct {
+        {{- range $f := $fields }}
+            {{- if $f.ClearOp }}
+                {{ print "Clear" $f.StructField }} bool
+            {{- end }}
+            {{- /* Skip the json tag when this scalar's Go field name case-collides with an edge id field
+                   (e.g. the vulnerability_ids scalar vs the vulnerabilities edge's VulnerabilityIDs).
+                   gqlgen distinguishes the two case-only graphql fields via resolver stubs; an explicit
+                   snake tag makes it bind both graphql fields to this one Go field, corrupting the edge.
+                   Leaving such a field untagged preserves gqlgen's resolver-based disambiguation. */ -}}
+            {{- $skipTag := false }}
+            {{- range $e := $edges }}
+                {{- if $e.Unique }}
+                    {{- if eq (lower $f.StructField) (lower (print (pascal $e.Name) "ID")) }}{{ $skipTag = true }}{{ end }}
+                {{- else if $n.IsCreate }}
+                    {{- if eq (lower $f.StructField) (lower (print (singular $e.Name | pascal) "IDs")) }}{{ $skipTag = true }}{{ end }}
+                {{- end }}
+            {{- end }}
+            {{ $f.StructField }} {{ if $f.IsPointer }}*{{ end }}{{ $f.Type }}{{ if not $skipTag }} `json:"{{ $f.Name }},omitempty"`{{ end }}
+            {{- if $f.AppendOp }}
+                {{ $f.MutationAppend }} {{ if $f.IsPointer }}*{{ end }}{{ $f.Type }}
+            {{- end }}
+        {{- end }}
+        {{- range $e := $edges }}
+            {{- if and (not $n.IsCreate) $e.Optional }}
+                {{ $e.MutationClear }} bool
+            {{- end }}
+            {{- if $e.Unique }}
+                {{- $structField := print (pascal $e.Name) "ID" }}
+                {{ $structField }} {{ if or (not $n.IsCreate) $e.Optional }}*{{ end }}{{ $e.Type.ID.Type }} `json:"{{ snake $structField }},omitempty"`
+            {{- else }}
+                {{- if $n.IsCreate }}
+                    {{- $structField := print (singular $e.Name | pascal) "IDs" }}
+                    {{ $structField }} []{{ $e.Type.ID.Type }} `json:"{{ snake $structField }},omitempty"`
+                {{- else }}
+                    {{ $e.MutationAdd }} []{{ $e.Type.ID.Type }} `json:"{{ snake $e.MutationAdd }},omitempty"`
+                    {{ $e.MutationRemove }} []{{ $e.Type.ID.Type }} `json:"{{ snake $e.MutationRemove }},omitempty"`
+                {{- end }}
+            {{- end }}
+        {{- end }}
+
+        {{- with $tmpls := matchTemplate "helper/gql_mutation_input/fields/*"  }}
+            {{- range $tmpl := $tmpls }}
+                {{- xtemplate $tmpl $n }}
+            {{- end }}
+        {{- end }}
+    }
+
+    // Mutate applies the {{ $input }} on the {{ $n.MutationName }} builder.
+    func (i *{{ $input }}) Mutate(m *{{ $n.MutationName }}) {
+        {{- /* The order of the operators is purposefully sorted: Clear, Set and Append */}}
+        {{- range $f := $fields }}
+            {{- if $f.ClearOp }}
+                if i.{{ print "Clear" $f.StructField }} {
+                    m.{{ print "Clear" $f.StructField }}()
+                }
+            {{- end }}
+            {{- if or $f.Type.Nillable $f.IsPointer }}
+                if v := i.{{ $f.StructField }}; v != nil {
+                    m.{{ $f.MutationSet }}({{ if $f.IsPointer }}*{{ end }}v)
+                }
+            {{- else }}
+                m.{{ $f.MutationSet }}(i.{{ $f.StructField }})
+            {{- end }}
+            {{- if $f.AppendOp }}
+                if i.{{ $f.MutationAppend }} != nil {
+                    m.{{ $f.MutationAppend }}({{ if $f.IsPointer }}*{{ end }}i.{{ $f.StructField }})
+                }
+            {{- end }}
+        {{- end }}
+        {{- range $e := $edges }}
+           {{- if and (not $n.IsCreate) $e.Optional }}
+                if i.{{ $e.MutationClear }} {
+                    m.{{ $e.MutationClear }}()
+                }
+            {{- end }}
+            {{- if $e.Unique }}
+                {{- $structField := print (pascal $e.Name) "ID" }}
+                {{- if or (not $n.IsCreate) $e.Optional }}
+                    if v := i.{{ $structField }}; v != nil {
+                        m.{{ $e.MutationSet }}(*v)
+                    }
+                {{- else }}
+                    m.{{ $e.MutationSet }}(i.{{ $structField }})
+                {{- end }}
+            {{- else }}
+                {{- if $n.IsCreate }}
+                    {{- $structField := print (singular $e.Name | pascal) "IDs" }}
+                    if v := i.{{ $structField }}; len(v) > 0 {
+                        m.{{ $e.MutationAdd }}(v...)
+                    }
+                {{- else }}
+                    if v := i.{{ $e.MutationAdd }}; len(v) > 0 {
+                        m.{{ $e.MutationAdd }}(v...)
+                    }
+                    if v := i.{{ $e.MutationRemove }}; len(v) > 0 {
+                        m.{{ $e.MutationRemove }}(v...)
+                    }
+                {{- end }}
+            {{- end }}
+        {{- end }}
+
+        {{- with $tmpls := matchTemplate "helper/gql_mutation_input/mutate/*"  }}
+            {{- range $tmpl := $tmpls }}
+                {{- xtemplate $tmpl $n }}
+            {{- end }}
+        {{- end }}
+    }
+
+    {{- range $b := $n.Builders }}
+    // SetInput applies the change-set in the {{ $input }} on the {{ $b }} builder.
+    func(c *{{ $b }}) SetInput(i {{ $input }}) *{{ $b }} {
+        i.Mutate(c.Mutation())
+        return c
+    }
+    {{- end}}
+{{- end }}
+{{ end }}

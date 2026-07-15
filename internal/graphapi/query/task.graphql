@@ -30,6 +30,7 @@ mutation CreateBulkCSVTask ($input: Upload!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 			assignee {
 				id
 				firstName
@@ -88,6 +89,7 @@ mutation CreateBulkTask ($input: [CreateTaskInput!]) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 			assignee {
 				id
 				firstName
@@ -146,6 +148,7 @@ mutation CreateTask ($input: CreateTaskInput!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 			assignee {
 				id
 				firstName
@@ -217,6 +220,7 @@ query GetAllTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				updatedAt
 				updatedBy
 				updatedByImpersonator
+				workflowEligibleMarker
 				assignee {
 					id
 					firstName
@@ -289,6 +293,7 @@ query GetTaskByID ($taskId: ID!) {
 		updatedAt
 		updatedBy
 		updatedByImpersonator
+		workflowEligibleMarker
 		assignee {
 			id
 			firstName
@@ -368,6 +373,7 @@ query GetTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				updatedAt
 				updatedBy
 				updatedByImpersonator
+				workflowEligibleMarker
 				assignee {
 					id
 					firstName
@@ -437,6 +443,7 @@ mutation UpdateBulkTask ($ids: [ID!]!, $input: UpdateTaskInput!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 			assignee {
 				id
 				firstName
@@ -496,6 +503,7 @@ mutation UpdateTask ($updateTaskId: ID!, $input: UpdateTaskInput!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 			assignee {
 				id
 				firstName

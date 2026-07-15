@@ -88,7 +88,7 @@ type ScanHistory struct {
 	// the platform that generated the scan
 	GeneratedByPlatformID string `json:"generated_by_platform_id,omitempty"`
 	// identifiers of vulnerabilities discovered during the scan
-	VulnerabilityIds []string `json:"vulnerability_ids,omitempty"`
+	DiscoveredVulnerabilityIds []string `json:"discovered_vulnerability_ids,omitempty"`
 	// the status of the scan, e.g., processing, completed, failed
 	Status       enums.ScanStatus `json:"status,omitempty"`
 	selectValues sql.SelectValues
@@ -103,7 +103,7 @@ func (*ScanHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.Cron)}
 		case scanhistory.FieldScanDate, scanhistory.FieldNextScanRunAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
-		case scanhistory.FieldTags, scanhistory.FieldMetadata, scanhistory.FieldVulnerabilityIds:
+		case scanhistory.FieldTags, scanhistory.FieldMetadata, scanhistory.FieldDiscoveredVulnerabilityIds:
 			values[i] = new([]byte)
 		case scanhistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -332,12 +332,12 @@ func (_m *ScanHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.GeneratedByPlatformID = value.String
 			}
-		case scanhistory.FieldVulnerabilityIds:
+		case scanhistory.FieldDiscoveredVulnerabilityIds:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field vulnerability_ids", values[i])
+				return fmt.Errorf("unexpected type %T for field discovered_vulnerability_ids", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &_m.VulnerabilityIds); err != nil {
-					return fmt.Errorf("unmarshal field vulnerability_ids: %w", err)
+				if err := json.Unmarshal(*value, &_m.DiscoveredVulnerabilityIds); err != nil {
+					return fmt.Errorf("unmarshal field discovered_vulnerability_ids: %w", err)
 				}
 			}
 		case scanhistory.FieldStatus:
@@ -486,8 +486,8 @@ func (_m *ScanHistory) String() string {
 	builder.WriteString("generated_by_platform_id=")
 	builder.WriteString(_m.GeneratedByPlatformID)
 	builder.WriteString(", ")
-	builder.WriteString("vulnerability_ids=")
-	builder.WriteString(fmt.Sprintf("%v", _m.VulnerabilityIds))
+	builder.WriteString("discovered_vulnerability_ids=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DiscoveredVulnerabilityIds))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))

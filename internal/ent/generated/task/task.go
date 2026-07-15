@@ -50,6 +50,8 @@ const (
 	FieldScopeName = "scope_name"
 	// FieldScopeID holds the string denoting the scope_id field in the database.
 	FieldScopeID = "scope_id"
+	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
+	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// FieldExternalUUID holds the string denoting the external_uuid field in the database.
 	FieldExternalUUID = "external_uuid"
 	// FieldTitle holds the string denoting the title field in the database.
@@ -297,6 +299,7 @@ var Columns = []string{
 	FieldEnvironmentID,
 	FieldScopeName,
 	FieldScopeID,
+	FieldWorkflowEligibleMarker,
 	FieldExternalUUID,
 	FieldTitle,
 	FieldDetails,
@@ -394,7 +397,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [14]ent.Hook
+	Hooks        [15]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -409,6 +412,8 @@ var (
 	DefaultTags []string
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
+	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
+	DefaultWorkflowEligibleMarker bool
 	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	TitleValidator func(string) error
 	// DefaultSystemGenerated holds the default value on creation for the "system_generated" field.
@@ -514,6 +519,11 @@ func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
 // ByScopeID orders the results by the scope_id field.
 func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
+}
+
+// ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
+func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
 }
 
 // ByExternalUUID orders the results by the external_uuid field.

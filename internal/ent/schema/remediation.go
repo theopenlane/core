@@ -76,12 +76,14 @@ func (Remediation) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("status"),
+				entx.FieldWorkflowEligible(),
 			),
 		field.String("state").
 			Comment("state of the remediation, such as pending or completed").
 			Optional().
 			Annotations(
 				entgql.OrderField("state"),
+				entx.FieldWorkflowEligible(),
 			),
 		field.String("intent").
 			Comment("intent or goal of the remediation effort").
@@ -111,12 +113,18 @@ func (Remediation) Fields() []ent.Field {
 			Comment("timestamp when the remediation is due").
 			GoType(models.DateTime{}).
 			Optional().
-			Nillable(),
+			Nillable().
+			Annotations(
+				entx.FieldWorkflowEligible(),
+			),
 		field.Time("completed_at").
 			Comment("timestamp when the remediation was completed").
 			GoType(models.DateTime{}).
 			Optional().
-			Nillable(),
+			Nillable().
+			Annotations(
+				entx.FieldWorkflowEligible(),
+			),
 		field.Time("pr_generated_at").
 			Comment("timestamp when an automated pull request was generated").
 			GoType(models.DateTime{}).
@@ -239,6 +247,12 @@ func (r Remediation) Edges() []ent.Edge {
 			edgeSchema: File{},
 			comment:    "supporting files or evidence for the remediation",
 		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: WorkflowObjectRef{},
+			name:       "workflow_object_refs",
+			ref:        "remediation",
+		}),
 	}
 }
 
@@ -268,6 +282,7 @@ func (r Remediation) Mixin() []ent.Mixin {
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(r, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(r, withEnumFieldName("scope"), withGlobalEnum()),
+			WorkflowApprovalMixin{},
 		},
 	}.getMixins(r)
 }

@@ -8,6 +8,7 @@ package graphapi
 import (
 	"context"
 
+	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -15,6 +16,26 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
+
+// HasPendingWorkflow is the resolver for the hasPendingWorkflow field.
+func (r *assessmentResponseResolver) HasPendingWorkflow(ctx context.Context, obj *generated.AssessmentResponse) (bool, error) {
+	return workflowResolverHasPending(ctx, generated.TypeAssessmentResponse, obj.ID)
+}
+
+// HasWorkflowHistory is the resolver for the hasWorkflowHistory field.
+func (r *assessmentResponseResolver) HasWorkflowHistory(ctx context.Context, obj *generated.AssessmentResponse) (bool, error) {
+	return workflowResolverHasHistory(ctx, generated.TypeAssessmentResponse, obj.ID)
+}
+
+// ActiveWorkflowInstances is the resolver for the activeWorkflowInstances field.
+func (r *assessmentResponseResolver) ActiveWorkflowInstances(ctx context.Context, obj *generated.AssessmentResponse) ([]*generated.WorkflowInstance, error) {
+	return workflowResolverActiveInstances(ctx, generated.TypeAssessmentResponse, obj.ID)
+}
+
+// WorkflowTimeline is the resolver for the workflowTimeline field.
+func (r *assessmentResponseResolver) WorkflowTimeline(ctx context.Context, obj *generated.AssessmentResponse, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) (*generated.WorkflowEventConnection, error) {
+	return workflowResolverTimeline(ctx, generated.TypeAssessmentResponse, obj.ID, after, first, before, last, orderBy, where, includeEmitFailures)
+}
 
 // CreateAssessmentResponse is the resolver for the createAssessmentResponse field.
 func (r *mutationResolver) CreateAssessmentResponse(ctx context.Context, input generated.CreateAssessmentResponseInput) (*model.AssessmentResponseCreatePayload, error) {

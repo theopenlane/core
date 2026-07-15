@@ -63,6 +63,8 @@ query GetAllWorkflowInstances {
 query GetWorkflowInstanceByID ($workflowInstanceId: ID!) {
 	workflowInstance(id: $workflowInstanceId) {
 		actionPlanID
+		assessmentID
+		assessmentResponseID
 		campaignID
 		campaignTargetID
 		context
@@ -73,19 +75,25 @@ query GetWorkflowInstanceByID ($workflowInstanceId: ID!) {
 		definitionSnapshot
 		displayID
 		evidenceID
+		findingID
 		id
 		identityHolderID
+		integrationID
 		internalPolicyID
 		lastEvaluatedAt
 		ownerID
 		platformID
 		procedureID
+		remediationID
+		riskID
 		state
 		subcontrolID
 		tags
+		taskID
 		updatedAt
 		updatedBy
 		updatedByImpersonator
+		vulnerabilityID
 		workflowDefinitionID
 		workflowProposalID
 		workflowAssignments {

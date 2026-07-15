@@ -550,6 +550,7 @@ steps:
       - label: ":golang: build"
         key: "gobuild-server"
         cancel_on_build_failing: true
+        if: build.tag == null
         artifact_paths: "bin/${APP_NAME}"
         if_changed:
           include:

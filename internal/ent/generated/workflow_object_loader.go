@@ -7,15 +7,22 @@ import (
 	"fmt"
 
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 )
 
 // LoadWorkflowObject loads a workflow object entity by schema type and ID with optional eager loading
@@ -24,6 +31,20 @@ func (c *Client) LoadWorkflowObject(ctx context.Context, schemaType string, enti
 	switch schemaType {
 	case TypeActionPlan:
 		query := c.ActionPlan.Query().Where(actionplan.ID(entityID))
+		entity, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return entity, nil
+	case TypeAssessment:
+		query := c.Assessment.Query().Where(assessment.ID(entityID))
+		entity, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return entity, nil
+	case TypeAssessmentResponse:
+		query := c.AssessmentResponse.Query().Where(assessmentresponse.ID(entityID))
 		entity, err := query.Only(ctx)
 		if err != nil {
 			return nil, err
@@ -57,6 +78,13 @@ func (c *Client) LoadWorkflowObject(ctx context.Context, schemaType string, enti
 			return nil, err
 		}
 		return entity, nil
+	case TypeFinding:
+		query := c.Finding.Query().Where(finding.ID(entityID))
+		entity, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return entity, nil
 	case TypeIdentityHolder:
 		query := c.IdentityHolder.Query().Where(identityholder.ID(entityID))
 		entity, err := query.Only(ctx)
@@ -85,8 +113,36 @@ func (c *Client) LoadWorkflowObject(ctx context.Context, schemaType string, enti
 			return nil, err
 		}
 		return entity, nil
+	case TypeRemediation:
+		query := c.Remediation.Query().Where(remediation.ID(entityID))
+		entity, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return entity, nil
+	case TypeRisk:
+		query := c.Risk.Query().Where(risk.ID(entityID))
+		entity, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return entity, nil
 	case TypeSubcontrol:
 		query := c.Subcontrol.Query().Where(subcontrol.ID(entityID))
+		entity, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return entity, nil
+	case TypeTask:
+		query := c.Task.Query().Where(task.ID(entityID))
+		entity, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return entity, nil
+	case TypeVulnerability:
+		query := c.Vulnerability.Query().Where(vulnerability.ID(entityID))
 		entity, err := query.Only(ctx)
 		if err != nil {
 			return nil, err
@@ -100,6 +156,18 @@ func (c *Client) LoadWorkflowObject(ctx context.Context, schemaType string, enti
 // LoadActionPlanWorkflowObject loads a ActionPlan entity with eager loading for workflow processing
 func (c *Client) LoadActionPlanWorkflowObject(ctx context.Context, id string) (*ActionPlan, error) {
 	query := c.ActionPlan.Query().Where(actionplan.ID(id))
+	return query.Only(ctx)
+}
+
+// LoadAssessmentWorkflowObject loads a Assessment entity with eager loading for workflow processing
+func (c *Client) LoadAssessmentWorkflowObject(ctx context.Context, id string) (*Assessment, error) {
+	query := c.Assessment.Query().Where(assessment.ID(id))
+	return query.Only(ctx)
+}
+
+// LoadAssessmentResponseWorkflowObject loads a AssessmentResponse entity with eager loading for workflow processing
+func (c *Client) LoadAssessmentResponseWorkflowObject(ctx context.Context, id string) (*AssessmentResponse, error) {
+	query := c.AssessmentResponse.Query().Where(assessmentresponse.ID(id))
 	return query.Only(ctx)
 }
 
@@ -127,6 +195,12 @@ func (c *Client) LoadEvidenceWorkflowObject(ctx context.Context, id string) (*Ev
 	return query.Only(ctx)
 }
 
+// LoadFindingWorkflowObject loads a Finding entity with eager loading for workflow processing
+func (c *Client) LoadFindingWorkflowObject(ctx context.Context, id string) (*Finding, error) {
+	query := c.Finding.Query().Where(finding.ID(id))
+	return query.Only(ctx)
+}
+
 // LoadIdentityHolderWorkflowObject loads a IdentityHolder entity with eager loading for workflow processing
 func (c *Client) LoadIdentityHolderWorkflowObject(ctx context.Context, id string) (*IdentityHolder, error) {
 	query := c.IdentityHolder.Query().Where(identityholder.ID(id))
@@ -151,8 +225,32 @@ func (c *Client) LoadProcedureWorkflowObject(ctx context.Context, id string) (*P
 	return query.Only(ctx)
 }
 
+// LoadRemediationWorkflowObject loads a Remediation entity with eager loading for workflow processing
+func (c *Client) LoadRemediationWorkflowObject(ctx context.Context, id string) (*Remediation, error) {
+	query := c.Remediation.Query().Where(remediation.ID(id))
+	return query.Only(ctx)
+}
+
+// LoadRiskWorkflowObject loads a Risk entity with eager loading for workflow processing
+func (c *Client) LoadRiskWorkflowObject(ctx context.Context, id string) (*Risk, error) {
+	query := c.Risk.Query().Where(risk.ID(id))
+	return query.Only(ctx)
+}
+
 // LoadSubcontrolWorkflowObject loads a Subcontrol entity with eager loading for workflow processing
 func (c *Client) LoadSubcontrolWorkflowObject(ctx context.Context, id string) (*Subcontrol, error) {
 	query := c.Subcontrol.Query().Where(subcontrol.ID(id))
+	return query.Only(ctx)
+}
+
+// LoadTaskWorkflowObject loads a Task entity with eager loading for workflow processing
+func (c *Client) LoadTaskWorkflowObject(ctx context.Context, id string) (*Task, error) {
+	query := c.Task.Query().Where(task.ID(id))
+	return query.Only(ctx)
+}
+
+// LoadVulnerabilityWorkflowObject loads a Vulnerability entity with eager loading for workflow processing
+func (c *Client) LoadVulnerabilityWorkflowObject(ctx context.Context, id string) (*Vulnerability, error) {
+	query := c.Vulnerability.Query().Where(vulnerability.ID(id))
 	return query.Only(ctx)
 }

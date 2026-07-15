@@ -56,6 +56,8 @@ type Remediation struct {
 	ScopeName string `json:"scope_name,omitempty"`
 	// the scope of the remediation
 	ScopeID string `json:"scope_id,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// external identifier from the integration source for the remediation
 	ExternalID string `json:"external_id,omitempty"`
 	// external identifier from the integration source for the remediation
@@ -144,29 +146,32 @@ type RemediationEdges struct {
 	Comments []*Note `json:"comments,omitempty"`
 	// supporting files or evidence for the remediation
 	Files []*File `json:"files,omitempty"`
+	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
+	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [20]bool
+	loadedTypes [21]bool
 	// totalCount holds the count of the edges above.
-	totalCount [20]map[string]int
+	totalCount [21]map[string]int
 
-	namedBlockedGroups   map[string][]*Group
-	namedEditors         map[string][]*Group
-	namedIntegrations    map[string][]*Integration
-	namedScans           map[string][]*Scan
-	namedFindings        map[string][]*Finding
-	namedVulnerabilities map[string][]*Vulnerability
-	namedActionPlans     map[string][]*ActionPlan
-	namedTasks           map[string][]*Task
-	namedControls        map[string][]*Control
-	namedSubcontrols     map[string][]*Subcontrol
-	namedRisks           map[string][]*Risk
-	namedPrograms        map[string][]*Program
-	namedAssets          map[string][]*Asset
-	namedEntities        map[string][]*Entity
-	namedReviews         map[string][]*Review
-	namedComments        map[string][]*Note
-	namedFiles           map[string][]*File
+	namedBlockedGroups      map[string][]*Group
+	namedEditors            map[string][]*Group
+	namedIntegrations       map[string][]*Integration
+	namedScans              map[string][]*Scan
+	namedFindings           map[string][]*Finding
+	namedVulnerabilities    map[string][]*Vulnerability
+	namedActionPlans        map[string][]*ActionPlan
+	namedTasks              map[string][]*Task
+	namedControls           map[string][]*Control
+	namedSubcontrols        map[string][]*Subcontrol
+	namedRisks              map[string][]*Risk
+	namedPrograms           map[string][]*Program
+	namedAssets             map[string][]*Asset
+	namedEntities           map[string][]*Entity
+	namedReviews            map[string][]*Review
+	namedComments           map[string][]*Note
+	namedFiles              map[string][]*File
+	namedWorkflowObjectRefs map[string][]*WorkflowObjectRef
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -355,6 +360,15 @@ func (e RemediationEdges) FilesOrErr() ([]*File, error) {
 	return nil, &NotLoadedError{edge: "files"}
 }
 
+// WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
+// was not loaded in eager-loading.
+func (e RemediationEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
+	if e.loadedTypes[20] {
+		return e.WorkflowObjectRefs, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_object_refs"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Remediation) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -364,7 +378,7 @@ func (*Remediation) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case remediation.FieldTags, remediation.FieldMetadata:
 			values[i] = new([]byte)
-		case remediation.FieldSystemOwned:
+		case remediation.FieldSystemOwned, remediation.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
 		case remediation.FieldID, remediation.FieldCreatedBy, remediation.FieldUpdatedBy, remediation.FieldUpdatedByImpersonator, remediation.FieldDeletedBy, remediation.FieldDisplayID, remediation.FieldOwnerID, remediation.FieldInternalNotes, remediation.FieldSystemInternalID, remediation.FieldEnvironmentName, remediation.FieldEnvironmentID, remediation.FieldScopeName, remediation.FieldScopeID, remediation.FieldExternalID, remediation.FieldExternalOwnerID, remediation.FieldTitle, remediation.FieldStatus, remediation.FieldState, remediation.FieldIntent, remediation.FieldSummary, remediation.FieldExplanation, remediation.FieldInstructions, remediation.FieldOwnerReference, remediation.FieldRepositoryURI, remediation.FieldPullRequestURI, remediation.FieldTicketReference, remediation.FieldError, remediation.FieldSource, remediation.FieldExternalURI:
 			values[i] = new(sql.NullString)
@@ -497,6 +511,12 @@ func (_m *Remediation) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
 			} else if value.Valid {
 				_m.ScopeID = value.String
+			}
+		case remediation.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
+			} else if value.Valid {
+				_m.WorkflowEligibleMarker = value.Bool
 			}
 		case remediation.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -736,6 +756,11 @@ func (_m *Remediation) QueryFiles() *FileQuery {
 	return NewRemediationClient(_m.config).QueryFiles(_m)
 }
 
+// QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the Remediation entity.
+func (_m *Remediation) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	return NewRemediationClient(_m.config).QueryWorkflowObjectRefs(_m)
+}
+
 // Update returns a builder for updating this Remediation.
 // Note that you need to call Remediation.Unwrap() before calling this method if this Remediation
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -815,6 +840,9 @@ func (_m *Remediation) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("scope_id=")
 	builder.WriteString(_m.ScopeID)
+	builder.WriteString(", ")
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)
@@ -1290,6 +1318,30 @@ func (_m *Remediation) appendNamedFiles(name string, edges ...*File) {
 		_m.Edges.namedFiles[name] = []*File{}
 	} else {
 		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
+	}
+}
+
+// NamedWorkflowObjectRefs returns the WorkflowObjectRefs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Remediation) NamedWorkflowObjectRefs(name string) ([]*WorkflowObjectRef, error) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowObjectRefs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Remediation) appendNamedWorkflowObjectRefs(name string, edges ...*WorkflowObjectRef) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		_m.Edges.namedWorkflowObjectRefs = make(map[string][]*WorkflowObjectRef)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowObjectRefs[name] = []*WorkflowObjectRef{}
+	} else {
+		_m.Edges.namedWorkflowObjectRefs[name] = append(_m.Edges.namedWorkflowObjectRefs[name], edges...)
 	}
 }
 

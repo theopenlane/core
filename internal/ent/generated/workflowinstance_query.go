@@ -14,18 +14,26 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
@@ -56,6 +64,14 @@ type WorkflowInstanceQuery struct {
 	withCampaignTarget           *CampaignTargetQuery
 	withIdentityHolder           *IdentityHolderQuery
 	withPlatform                 *PlatformQuery
+	withAssessment               *AssessmentQuery
+	withAssessmentResponse       *AssessmentResponseQuery
+	withFinding                  *FindingQuery
+	withIntegration              *IntegrationQuery
+	withRemediation              *RemediationQuery
+	withRisk                     *RiskQuery
+	withTask                     *TaskQuery
+	withVulnerability            *VulnerabilityQuery
 	withWorkflowProposal         *WorkflowProposalQuery
 	withWorkflowAssignments      *WorkflowAssignmentQuery
 	withWorkflowEvents           *WorkflowEventQuery
@@ -403,6 +419,206 @@ func (_q *WorkflowInstanceQuery) QueryPlatform() *PlatformQuery {
 	return query
 }
 
+// QueryAssessment chains the current query on the "assessment" edge.
+func (_q *WorkflowInstanceQuery) QueryAssessment() *AssessmentQuery {
+	query := (&AssessmentClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, selector),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.AssessmentTable, workflowinstance.AssessmentColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssessmentResponse chains the current query on the "assessment_response" edge.
+func (_q *WorkflowInstanceQuery) QueryAssessmentResponse() *AssessmentResponseQuery {
+	query := (&AssessmentResponseClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, selector),
+			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.AssessmentResponseTable, workflowinstance.AssessmentResponseColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.AssessmentResponse
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFinding chains the current query on the "finding" edge.
+func (_q *WorkflowInstanceQuery) QueryFinding() *FindingQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, selector),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.FindingTable, workflowinstance.FindingColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIntegration chains the current query on the "integration" edge.
+func (_q *WorkflowInstanceQuery) QueryIntegration() *IntegrationQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, selector),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.IntegrationTable, workflowinstance.IntegrationColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRemediation chains the current query on the "remediation" edge.
+func (_q *WorkflowInstanceQuery) QueryRemediation() *RemediationQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, selector),
+			sqlgraph.To(remediation.Table, remediation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.RemediationTable, workflowinstance.RemediationColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRisk chains the current query on the "risk" edge.
+func (_q *WorkflowInstanceQuery) QueryRisk() *RiskQuery {
+	query := (&RiskClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, selector),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.RiskTable, workflowinstance.RiskColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTask chains the current query on the "task" edge.
+func (_q *WorkflowInstanceQuery) QueryTask() *TaskQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, selector),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.TaskTable, workflowinstance.TaskColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryVulnerability chains the current query on the "vulnerability" edge.
+func (_q *WorkflowInstanceQuery) QueryVulnerability() *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, selector),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.VulnerabilityTable, workflowinstance.VulnerabilityColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryWorkflowProposal chains the current query on the "workflow_proposal" edge.
 func (_q *WorkflowInstanceQuery) QueryWorkflowProposal() *WorkflowProposalQuery {
 	query := (&WorkflowProposalClient{config: _q.config}).Query()
@@ -732,6 +948,14 @@ func (_q *WorkflowInstanceQuery) Clone() *WorkflowInstanceQuery {
 		withCampaignTarget:      _q.withCampaignTarget.Clone(),
 		withIdentityHolder:      _q.withIdentityHolder.Clone(),
 		withPlatform:            _q.withPlatform.Clone(),
+		withAssessment:          _q.withAssessment.Clone(),
+		withAssessmentResponse:  _q.withAssessmentResponse.Clone(),
+		withFinding:             _q.withFinding.Clone(),
+		withIntegration:         _q.withIntegration.Clone(),
+		withRemediation:         _q.withRemediation.Clone(),
+		withRisk:                _q.withRisk.Clone(),
+		withTask:                _q.withTask.Clone(),
+		withVulnerability:       _q.withVulnerability.Clone(),
 		withWorkflowProposal:    _q.withWorkflowProposal.Clone(),
 		withWorkflowAssignments: _q.withWorkflowAssignments.Clone(),
 		withWorkflowEvents:      _q.withWorkflowEvents.Clone(),
@@ -876,6 +1100,94 @@ func (_q *WorkflowInstanceQuery) WithPlatform(opts ...func(*PlatformQuery)) *Wor
 	return _q
 }
 
+// WithAssessment tells the query-builder to eager-load the nodes that are connected to
+// the "assessment" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowInstanceQuery) WithAssessment(opts ...func(*AssessmentQuery)) *WorkflowInstanceQuery {
+	query := (&AssessmentClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssessment = query
+	return _q
+}
+
+// WithAssessmentResponse tells the query-builder to eager-load the nodes that are connected to
+// the "assessment_response" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowInstanceQuery) WithAssessmentResponse(opts ...func(*AssessmentResponseQuery)) *WorkflowInstanceQuery {
+	query := (&AssessmentResponseClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssessmentResponse = query
+	return _q
+}
+
+// WithFinding tells the query-builder to eager-load the nodes that are connected to
+// the "finding" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowInstanceQuery) WithFinding(opts ...func(*FindingQuery)) *WorkflowInstanceQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFinding = query
+	return _q
+}
+
+// WithIntegration tells the query-builder to eager-load the nodes that are connected to
+// the "integration" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowInstanceQuery) WithIntegration(opts ...func(*IntegrationQuery)) *WorkflowInstanceQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegration = query
+	return _q
+}
+
+// WithRemediation tells the query-builder to eager-load the nodes that are connected to
+// the "remediation" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowInstanceQuery) WithRemediation(opts ...func(*RemediationQuery)) *WorkflowInstanceQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withRemediation = query
+	return _q
+}
+
+// WithRisk tells the query-builder to eager-load the nodes that are connected to
+// the "risk" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowInstanceQuery) WithRisk(opts ...func(*RiskQuery)) *WorkflowInstanceQuery {
+	query := (&RiskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withRisk = query
+	return _q
+}
+
+// WithTask tells the query-builder to eager-load the nodes that are connected to
+// the "task" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowInstanceQuery) WithTask(opts ...func(*TaskQuery)) *WorkflowInstanceQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTask = query
+	return _q
+}
+
+// WithVulnerability tells the query-builder to eager-load the nodes that are connected to
+// the "vulnerability" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowInstanceQuery) WithVulnerability(opts ...func(*VulnerabilityQuery)) *WorkflowInstanceQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withVulnerability = query
+	return _q
+}
+
 // WithWorkflowProposal tells the query-builder to eager-load the nodes that are connected to
 // the "workflow_proposal" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *WorkflowInstanceQuery) WithWorkflowProposal(opts ...func(*WorkflowProposalQuery)) *WorkflowInstanceQuery {
@@ -1015,7 +1327,7 @@ func (_q *WorkflowInstanceQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	var (
 		nodes       = []*WorkflowInstance{}
 		_spec       = _q.querySpec()
-		loadedTypes = [17]bool{
+		loadedTypes = [25]bool{
 			_q.withOwner != nil,
 			_q.withWorkflowDefinition != nil,
 			_q.withControl != nil,
@@ -1028,6 +1340,14 @@ func (_q *WorkflowInstanceQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 			_q.withCampaignTarget != nil,
 			_q.withIdentityHolder != nil,
 			_q.withPlatform != nil,
+			_q.withAssessment != nil,
+			_q.withAssessmentResponse != nil,
+			_q.withFinding != nil,
+			_q.withIntegration != nil,
+			_q.withRemediation != nil,
+			_q.withRisk != nil,
+			_q.withTask != nil,
+			_q.withVulnerability != nil,
 			_q.withWorkflowProposal != nil,
 			_q.withWorkflowAssignments != nil,
 			_q.withWorkflowEvents != nil,
@@ -1127,6 +1447,54 @@ func (_q *WorkflowInstanceQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	if query := _q.withPlatform; query != nil {
 		if err := _q.loadPlatform(ctx, query, nodes, nil,
 			func(n *WorkflowInstance, e *Platform) { n.Edges.Platform = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssessment; query != nil {
+		if err := _q.loadAssessment(ctx, query, nodes, nil,
+			func(n *WorkflowInstance, e *Assessment) { n.Edges.Assessment = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssessmentResponse; query != nil {
+		if err := _q.loadAssessmentResponse(ctx, query, nodes, nil,
+			func(n *WorkflowInstance, e *AssessmentResponse) { n.Edges.AssessmentResponse = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFinding; query != nil {
+		if err := _q.loadFinding(ctx, query, nodes, nil,
+			func(n *WorkflowInstance, e *Finding) { n.Edges.Finding = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIntegration; query != nil {
+		if err := _q.loadIntegration(ctx, query, nodes, nil,
+			func(n *WorkflowInstance, e *Integration) { n.Edges.Integration = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withRemediation; query != nil {
+		if err := _q.loadRemediation(ctx, query, nodes, nil,
+			func(n *WorkflowInstance, e *Remediation) { n.Edges.Remediation = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withRisk; query != nil {
+		if err := _q.loadRisk(ctx, query, nodes, nil,
+			func(n *WorkflowInstance, e *Risk) { n.Edges.Risk = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withTask; query != nil {
+		if err := _q.loadTask(ctx, query, nodes, nil,
+			func(n *WorkflowInstance, e *Task) { n.Edges.Task = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withVulnerability; query != nil {
+		if err := _q.loadVulnerability(ctx, query, nodes, nil,
+			func(n *WorkflowInstance, e *Vulnerability) { n.Edges.Vulnerability = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1556,6 +1924,238 @@ func (_q *WorkflowInstanceQuery) loadPlatform(ctx context.Context, query *Platfo
 	}
 	return nil
 }
+func (_q *WorkflowInstanceQuery) loadAssessment(ctx context.Context, query *AssessmentQuery, nodes []*WorkflowInstance, init func(*WorkflowInstance), assign func(*WorkflowInstance, *Assessment)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowInstance)
+	for i := range nodes {
+		fk := nodes[i].AssessmentID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(assessment.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "assessment_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *WorkflowInstanceQuery) loadAssessmentResponse(ctx context.Context, query *AssessmentResponseQuery, nodes []*WorkflowInstance, init func(*WorkflowInstance), assign func(*WorkflowInstance, *AssessmentResponse)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowInstance)
+	for i := range nodes {
+		fk := nodes[i].AssessmentResponseID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(assessmentresponse.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "assessment_response_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *WorkflowInstanceQuery) loadFinding(ctx context.Context, query *FindingQuery, nodes []*WorkflowInstance, init func(*WorkflowInstance), assign func(*WorkflowInstance, *Finding)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowInstance)
+	for i := range nodes {
+		fk := nodes[i].FindingID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(finding.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "finding_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *WorkflowInstanceQuery) loadIntegration(ctx context.Context, query *IntegrationQuery, nodes []*WorkflowInstance, init func(*WorkflowInstance), assign func(*WorkflowInstance, *Integration)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowInstance)
+	for i := range nodes {
+		fk := nodes[i].IntegrationID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(integration.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "integration_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *WorkflowInstanceQuery) loadRemediation(ctx context.Context, query *RemediationQuery, nodes []*WorkflowInstance, init func(*WorkflowInstance), assign func(*WorkflowInstance, *Remediation)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowInstance)
+	for i := range nodes {
+		fk := nodes[i].RemediationID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(remediation.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "remediation_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *WorkflowInstanceQuery) loadRisk(ctx context.Context, query *RiskQuery, nodes []*WorkflowInstance, init func(*WorkflowInstance), assign func(*WorkflowInstance, *Risk)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowInstance)
+	for i := range nodes {
+		fk := nodes[i].RiskID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(risk.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "risk_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *WorkflowInstanceQuery) loadTask(ctx context.Context, query *TaskQuery, nodes []*WorkflowInstance, init func(*WorkflowInstance), assign func(*WorkflowInstance, *Task)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowInstance)
+	for i := range nodes {
+		fk := nodes[i].TaskID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(task.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "task_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *WorkflowInstanceQuery) loadVulnerability(ctx context.Context, query *VulnerabilityQuery, nodes []*WorkflowInstance, init func(*WorkflowInstance), assign func(*WorkflowInstance, *Vulnerability)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowInstance)
+	for i := range nodes {
+		fk := nodes[i].VulnerabilityID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(vulnerability.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "vulnerability_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *WorkflowInstanceQuery) loadWorkflowProposal(ctx context.Context, query *WorkflowProposalQuery, nodes []*WorkflowInstance, init func(*WorkflowInstance), assign func(*WorkflowInstance, *WorkflowProposal)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*WorkflowInstance)
@@ -1774,6 +2374,30 @@ func (_q *WorkflowInstanceQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withPlatform != nil {
 			_spec.Node.AddColumnOnce(workflowinstance.FieldPlatformID)
+		}
+		if _q.withAssessment != nil {
+			_spec.Node.AddColumnOnce(workflowinstance.FieldAssessmentID)
+		}
+		if _q.withAssessmentResponse != nil {
+			_spec.Node.AddColumnOnce(workflowinstance.FieldAssessmentResponseID)
+		}
+		if _q.withFinding != nil {
+			_spec.Node.AddColumnOnce(workflowinstance.FieldFindingID)
+		}
+		if _q.withIntegration != nil {
+			_spec.Node.AddColumnOnce(workflowinstance.FieldIntegrationID)
+		}
+		if _q.withRemediation != nil {
+			_spec.Node.AddColumnOnce(workflowinstance.FieldRemediationID)
+		}
+		if _q.withRisk != nil {
+			_spec.Node.AddColumnOnce(workflowinstance.FieldRiskID)
+		}
+		if _q.withTask != nil {
+			_spec.Node.AddColumnOnce(workflowinstance.FieldTaskID)
+		}
+		if _q.withVulnerability != nil {
+			_spec.Node.AddColumnOnce(workflowinstance.FieldVulnerabilityID)
 		}
 		if _q.withWorkflowProposal != nil {
 			_spec.Node.AddColumnOnce(workflowinstance.FieldWorkflowProposalID)

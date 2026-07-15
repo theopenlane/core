@@ -15,17 +15,25 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
@@ -489,6 +497,166 @@ func (_u *WorkflowInstanceUpdate) ClearPlatformID() *WorkflowInstanceUpdate {
 	return _u
 }
 
+// SetAssessmentID sets the "assessment_id" field.
+func (_u *WorkflowInstanceUpdate) SetAssessmentID(v string) *WorkflowInstanceUpdate {
+	_u.mutation.SetAssessmentID(v)
+	return _u
+}
+
+// SetNillableAssessmentID sets the "assessment_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdate) SetNillableAssessmentID(v *string) *WorkflowInstanceUpdate {
+	if v != nil {
+		_u.SetAssessmentID(*v)
+	}
+	return _u
+}
+
+// ClearAssessmentID clears the value of the "assessment_id" field.
+func (_u *WorkflowInstanceUpdate) ClearAssessmentID() *WorkflowInstanceUpdate {
+	_u.mutation.ClearAssessmentID()
+	return _u
+}
+
+// SetAssessmentResponseID sets the "assessment_response_id" field.
+func (_u *WorkflowInstanceUpdate) SetAssessmentResponseID(v string) *WorkflowInstanceUpdate {
+	_u.mutation.SetAssessmentResponseID(v)
+	return _u
+}
+
+// SetNillableAssessmentResponseID sets the "assessment_response_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdate) SetNillableAssessmentResponseID(v *string) *WorkflowInstanceUpdate {
+	if v != nil {
+		_u.SetAssessmentResponseID(*v)
+	}
+	return _u
+}
+
+// ClearAssessmentResponseID clears the value of the "assessment_response_id" field.
+func (_u *WorkflowInstanceUpdate) ClearAssessmentResponseID() *WorkflowInstanceUpdate {
+	_u.mutation.ClearAssessmentResponseID()
+	return _u
+}
+
+// SetFindingID sets the "finding_id" field.
+func (_u *WorkflowInstanceUpdate) SetFindingID(v string) *WorkflowInstanceUpdate {
+	_u.mutation.SetFindingID(v)
+	return _u
+}
+
+// SetNillableFindingID sets the "finding_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdate) SetNillableFindingID(v *string) *WorkflowInstanceUpdate {
+	if v != nil {
+		_u.SetFindingID(*v)
+	}
+	return _u
+}
+
+// ClearFindingID clears the value of the "finding_id" field.
+func (_u *WorkflowInstanceUpdate) ClearFindingID() *WorkflowInstanceUpdate {
+	_u.mutation.ClearFindingID()
+	return _u
+}
+
+// SetIntegrationID sets the "integration_id" field.
+func (_u *WorkflowInstanceUpdate) SetIntegrationID(v string) *WorkflowInstanceUpdate {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdate) SetNillableIntegrationID(v *string) *WorkflowInstanceUpdate {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *WorkflowInstanceUpdate) ClearIntegrationID() *WorkflowInstanceUpdate {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
+// SetRemediationID sets the "remediation_id" field.
+func (_u *WorkflowInstanceUpdate) SetRemediationID(v string) *WorkflowInstanceUpdate {
+	_u.mutation.SetRemediationID(v)
+	return _u
+}
+
+// SetNillableRemediationID sets the "remediation_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdate) SetNillableRemediationID(v *string) *WorkflowInstanceUpdate {
+	if v != nil {
+		_u.SetRemediationID(*v)
+	}
+	return _u
+}
+
+// ClearRemediationID clears the value of the "remediation_id" field.
+func (_u *WorkflowInstanceUpdate) ClearRemediationID() *WorkflowInstanceUpdate {
+	_u.mutation.ClearRemediationID()
+	return _u
+}
+
+// SetRiskID sets the "risk_id" field.
+func (_u *WorkflowInstanceUpdate) SetRiskID(v string) *WorkflowInstanceUpdate {
+	_u.mutation.SetRiskID(v)
+	return _u
+}
+
+// SetNillableRiskID sets the "risk_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdate) SetNillableRiskID(v *string) *WorkflowInstanceUpdate {
+	if v != nil {
+		_u.SetRiskID(*v)
+	}
+	return _u
+}
+
+// ClearRiskID clears the value of the "risk_id" field.
+func (_u *WorkflowInstanceUpdate) ClearRiskID() *WorkflowInstanceUpdate {
+	_u.mutation.ClearRiskID()
+	return _u
+}
+
+// SetTaskID sets the "task_id" field.
+func (_u *WorkflowInstanceUpdate) SetTaskID(v string) *WorkflowInstanceUpdate {
+	_u.mutation.SetTaskID(v)
+	return _u
+}
+
+// SetNillableTaskID sets the "task_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdate) SetNillableTaskID(v *string) *WorkflowInstanceUpdate {
+	if v != nil {
+		_u.SetTaskID(*v)
+	}
+	return _u
+}
+
+// ClearTaskID clears the value of the "task_id" field.
+func (_u *WorkflowInstanceUpdate) ClearTaskID() *WorkflowInstanceUpdate {
+	_u.mutation.ClearTaskID()
+	return _u
+}
+
+// SetVulnerabilityID sets the "vulnerability_id" field.
+func (_u *WorkflowInstanceUpdate) SetVulnerabilityID(v string) *WorkflowInstanceUpdate {
+	_u.mutation.SetVulnerabilityID(v)
+	return _u
+}
+
+// SetNillableVulnerabilityID sets the "vulnerability_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdate) SetNillableVulnerabilityID(v *string) *WorkflowInstanceUpdate {
+	if v != nil {
+		_u.SetVulnerabilityID(*v)
+	}
+	return _u
+}
+
+// ClearVulnerabilityID clears the value of the "vulnerability_id" field.
+func (_u *WorkflowInstanceUpdate) ClearVulnerabilityID() *WorkflowInstanceUpdate {
+	_u.mutation.ClearVulnerabilityID()
+	return _u
+}
+
 // SetWorkflowDefinition sets the "workflow_definition" edge to the WorkflowDefinition entity.
 func (_u *WorkflowInstanceUpdate) SetWorkflowDefinition(v *WorkflowDefinition) *WorkflowInstanceUpdate {
 	return _u.SetWorkflowDefinitionID(v.ID)
@@ -542,6 +710,46 @@ func (_u *WorkflowInstanceUpdate) SetIdentityHolder(v *IdentityHolder) *Workflow
 // SetPlatform sets the "platform" edge to the Platform entity.
 func (_u *WorkflowInstanceUpdate) SetPlatform(v *Platform) *WorkflowInstanceUpdate {
 	return _u.SetPlatformID(v.ID)
+}
+
+// SetAssessment sets the "assessment" edge to the Assessment entity.
+func (_u *WorkflowInstanceUpdate) SetAssessment(v *Assessment) *WorkflowInstanceUpdate {
+	return _u.SetAssessmentID(v.ID)
+}
+
+// SetAssessmentResponse sets the "assessment_response" edge to the AssessmentResponse entity.
+func (_u *WorkflowInstanceUpdate) SetAssessmentResponse(v *AssessmentResponse) *WorkflowInstanceUpdate {
+	return _u.SetAssessmentResponseID(v.ID)
+}
+
+// SetFinding sets the "finding" edge to the Finding entity.
+func (_u *WorkflowInstanceUpdate) SetFinding(v *Finding) *WorkflowInstanceUpdate {
+	return _u.SetFindingID(v.ID)
+}
+
+// SetIntegration sets the "integration" edge to the Integration entity.
+func (_u *WorkflowInstanceUpdate) SetIntegration(v *Integration) *WorkflowInstanceUpdate {
+	return _u.SetIntegrationID(v.ID)
+}
+
+// SetRemediation sets the "remediation" edge to the Remediation entity.
+func (_u *WorkflowInstanceUpdate) SetRemediation(v *Remediation) *WorkflowInstanceUpdate {
+	return _u.SetRemediationID(v.ID)
+}
+
+// SetRisk sets the "risk" edge to the Risk entity.
+func (_u *WorkflowInstanceUpdate) SetRisk(v *Risk) *WorkflowInstanceUpdate {
+	return _u.SetRiskID(v.ID)
+}
+
+// SetTask sets the "task" edge to the Task entity.
+func (_u *WorkflowInstanceUpdate) SetTask(v *Task) *WorkflowInstanceUpdate {
+	return _u.SetTaskID(v.ID)
+}
+
+// SetVulnerability sets the "vulnerability" edge to the Vulnerability entity.
+func (_u *WorkflowInstanceUpdate) SetVulnerability(v *Vulnerability) *WorkflowInstanceUpdate {
+	return _u.SetVulnerabilityID(v.ID)
 }
 
 // SetWorkflowProposal sets the "workflow_proposal" edge to the WorkflowProposal entity.
@@ -677,6 +885,54 @@ func (_u *WorkflowInstanceUpdate) ClearIdentityHolder() *WorkflowInstanceUpdate 
 // ClearPlatform clears the "platform" edge to the Platform entity.
 func (_u *WorkflowInstanceUpdate) ClearPlatform() *WorkflowInstanceUpdate {
 	_u.mutation.ClearPlatform()
+	return _u
+}
+
+// ClearAssessment clears the "assessment" edge to the Assessment entity.
+func (_u *WorkflowInstanceUpdate) ClearAssessment() *WorkflowInstanceUpdate {
+	_u.mutation.ClearAssessment()
+	return _u
+}
+
+// ClearAssessmentResponse clears the "assessment_response" edge to the AssessmentResponse entity.
+func (_u *WorkflowInstanceUpdate) ClearAssessmentResponse() *WorkflowInstanceUpdate {
+	_u.mutation.ClearAssessmentResponse()
+	return _u
+}
+
+// ClearFinding clears the "finding" edge to the Finding entity.
+func (_u *WorkflowInstanceUpdate) ClearFinding() *WorkflowInstanceUpdate {
+	_u.mutation.ClearFinding()
+	return _u
+}
+
+// ClearIntegration clears the "integration" edge to the Integration entity.
+func (_u *WorkflowInstanceUpdate) ClearIntegration() *WorkflowInstanceUpdate {
+	_u.mutation.ClearIntegration()
+	return _u
+}
+
+// ClearRemediation clears the "remediation" edge to the Remediation entity.
+func (_u *WorkflowInstanceUpdate) ClearRemediation() *WorkflowInstanceUpdate {
+	_u.mutation.ClearRemediation()
+	return _u
+}
+
+// ClearRisk clears the "risk" edge to the Risk entity.
+func (_u *WorkflowInstanceUpdate) ClearRisk() *WorkflowInstanceUpdate {
+	_u.mutation.ClearRisk()
+	return _u
+}
+
+// ClearTask clears the "task" edge to the Task entity.
+func (_u *WorkflowInstanceUpdate) ClearTask() *WorkflowInstanceUpdate {
+	_u.mutation.ClearTask()
+	return _u
+}
+
+// ClearVulnerability clears the "vulnerability" edge to the Vulnerability entity.
+func (_u *WorkflowInstanceUpdate) ClearVulnerability() *WorkflowInstanceUpdate {
+	_u.mutation.ClearVulnerability()
 	return _u
 }
 
@@ -1260,6 +1516,254 @@ func (_u *WorkflowInstanceUpdate) sqlSave(ctx context.Context) (_node int, err e
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssessmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.AssessmentTable,
+			Columns: []string{workflowinstance.AssessmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssessmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.AssessmentTable,
+			Columns: []string{workflowinstance.AssessmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssessmentResponseCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.AssessmentResponseTable,
+			Columns: []string{workflowinstance.AssessmentResponseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssessmentResponseIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.AssessmentResponseTable,
+			Columns: []string{workflowinstance.AssessmentResponseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.FindingTable,
+			Columns: []string{workflowinstance.FindingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.FindingTable,
+			Columns: []string{workflowinstance.FindingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.IntegrationTable,
+			Columns: []string{workflowinstance.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.IntegrationTable,
+			Columns: []string{workflowinstance.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RemediationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.RemediationTable,
+			Columns: []string{workflowinstance.RemediationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemediationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.RemediationTable,
+			Columns: []string{workflowinstance.RemediationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RiskCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.RiskTable,
+			Columns: []string{workflowinstance.RiskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RiskIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.RiskTable,
+			Columns: []string{workflowinstance.RiskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TaskCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.TaskTable,
+			Columns: []string{workflowinstance.TaskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TaskIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.TaskTable,
+			Columns: []string{workflowinstance.TaskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VulnerabilityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.VulnerabilityTable,
+			Columns: []string{workflowinstance.VulnerabilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VulnerabilityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.VulnerabilityTable,
+			Columns: []string{workflowinstance.VulnerabilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.WorkflowInstance
@@ -1954,6 +2458,166 @@ func (_u *WorkflowInstanceUpdateOne) ClearPlatformID() *WorkflowInstanceUpdateOn
 	return _u
 }
 
+// SetAssessmentID sets the "assessment_id" field.
+func (_u *WorkflowInstanceUpdateOne) SetAssessmentID(v string) *WorkflowInstanceUpdateOne {
+	_u.mutation.SetAssessmentID(v)
+	return _u
+}
+
+// SetNillableAssessmentID sets the "assessment_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdateOne) SetNillableAssessmentID(v *string) *WorkflowInstanceUpdateOne {
+	if v != nil {
+		_u.SetAssessmentID(*v)
+	}
+	return _u
+}
+
+// ClearAssessmentID clears the value of the "assessment_id" field.
+func (_u *WorkflowInstanceUpdateOne) ClearAssessmentID() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearAssessmentID()
+	return _u
+}
+
+// SetAssessmentResponseID sets the "assessment_response_id" field.
+func (_u *WorkflowInstanceUpdateOne) SetAssessmentResponseID(v string) *WorkflowInstanceUpdateOne {
+	_u.mutation.SetAssessmentResponseID(v)
+	return _u
+}
+
+// SetNillableAssessmentResponseID sets the "assessment_response_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdateOne) SetNillableAssessmentResponseID(v *string) *WorkflowInstanceUpdateOne {
+	if v != nil {
+		_u.SetAssessmentResponseID(*v)
+	}
+	return _u
+}
+
+// ClearAssessmentResponseID clears the value of the "assessment_response_id" field.
+func (_u *WorkflowInstanceUpdateOne) ClearAssessmentResponseID() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearAssessmentResponseID()
+	return _u
+}
+
+// SetFindingID sets the "finding_id" field.
+func (_u *WorkflowInstanceUpdateOne) SetFindingID(v string) *WorkflowInstanceUpdateOne {
+	_u.mutation.SetFindingID(v)
+	return _u
+}
+
+// SetNillableFindingID sets the "finding_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdateOne) SetNillableFindingID(v *string) *WorkflowInstanceUpdateOne {
+	if v != nil {
+		_u.SetFindingID(*v)
+	}
+	return _u
+}
+
+// ClearFindingID clears the value of the "finding_id" field.
+func (_u *WorkflowInstanceUpdateOne) ClearFindingID() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearFindingID()
+	return _u
+}
+
+// SetIntegrationID sets the "integration_id" field.
+func (_u *WorkflowInstanceUpdateOne) SetIntegrationID(v string) *WorkflowInstanceUpdateOne {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdateOne) SetNillableIntegrationID(v *string) *WorkflowInstanceUpdateOne {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *WorkflowInstanceUpdateOne) ClearIntegrationID() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
+// SetRemediationID sets the "remediation_id" field.
+func (_u *WorkflowInstanceUpdateOne) SetRemediationID(v string) *WorkflowInstanceUpdateOne {
+	_u.mutation.SetRemediationID(v)
+	return _u
+}
+
+// SetNillableRemediationID sets the "remediation_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdateOne) SetNillableRemediationID(v *string) *WorkflowInstanceUpdateOne {
+	if v != nil {
+		_u.SetRemediationID(*v)
+	}
+	return _u
+}
+
+// ClearRemediationID clears the value of the "remediation_id" field.
+func (_u *WorkflowInstanceUpdateOne) ClearRemediationID() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearRemediationID()
+	return _u
+}
+
+// SetRiskID sets the "risk_id" field.
+func (_u *WorkflowInstanceUpdateOne) SetRiskID(v string) *WorkflowInstanceUpdateOne {
+	_u.mutation.SetRiskID(v)
+	return _u
+}
+
+// SetNillableRiskID sets the "risk_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdateOne) SetNillableRiskID(v *string) *WorkflowInstanceUpdateOne {
+	if v != nil {
+		_u.SetRiskID(*v)
+	}
+	return _u
+}
+
+// ClearRiskID clears the value of the "risk_id" field.
+func (_u *WorkflowInstanceUpdateOne) ClearRiskID() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearRiskID()
+	return _u
+}
+
+// SetTaskID sets the "task_id" field.
+func (_u *WorkflowInstanceUpdateOne) SetTaskID(v string) *WorkflowInstanceUpdateOne {
+	_u.mutation.SetTaskID(v)
+	return _u
+}
+
+// SetNillableTaskID sets the "task_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdateOne) SetNillableTaskID(v *string) *WorkflowInstanceUpdateOne {
+	if v != nil {
+		_u.SetTaskID(*v)
+	}
+	return _u
+}
+
+// ClearTaskID clears the value of the "task_id" field.
+func (_u *WorkflowInstanceUpdateOne) ClearTaskID() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearTaskID()
+	return _u
+}
+
+// SetVulnerabilityID sets the "vulnerability_id" field.
+func (_u *WorkflowInstanceUpdateOne) SetVulnerabilityID(v string) *WorkflowInstanceUpdateOne {
+	_u.mutation.SetVulnerabilityID(v)
+	return _u
+}
+
+// SetNillableVulnerabilityID sets the "vulnerability_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdateOne) SetNillableVulnerabilityID(v *string) *WorkflowInstanceUpdateOne {
+	if v != nil {
+		_u.SetVulnerabilityID(*v)
+	}
+	return _u
+}
+
+// ClearVulnerabilityID clears the value of the "vulnerability_id" field.
+func (_u *WorkflowInstanceUpdateOne) ClearVulnerabilityID() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearVulnerabilityID()
+	return _u
+}
+
 // SetWorkflowDefinition sets the "workflow_definition" edge to the WorkflowDefinition entity.
 func (_u *WorkflowInstanceUpdateOne) SetWorkflowDefinition(v *WorkflowDefinition) *WorkflowInstanceUpdateOne {
 	return _u.SetWorkflowDefinitionID(v.ID)
@@ -2007,6 +2671,46 @@ func (_u *WorkflowInstanceUpdateOne) SetIdentityHolder(v *IdentityHolder) *Workf
 // SetPlatform sets the "platform" edge to the Platform entity.
 func (_u *WorkflowInstanceUpdateOne) SetPlatform(v *Platform) *WorkflowInstanceUpdateOne {
 	return _u.SetPlatformID(v.ID)
+}
+
+// SetAssessment sets the "assessment" edge to the Assessment entity.
+func (_u *WorkflowInstanceUpdateOne) SetAssessment(v *Assessment) *WorkflowInstanceUpdateOne {
+	return _u.SetAssessmentID(v.ID)
+}
+
+// SetAssessmentResponse sets the "assessment_response" edge to the AssessmentResponse entity.
+func (_u *WorkflowInstanceUpdateOne) SetAssessmentResponse(v *AssessmentResponse) *WorkflowInstanceUpdateOne {
+	return _u.SetAssessmentResponseID(v.ID)
+}
+
+// SetFinding sets the "finding" edge to the Finding entity.
+func (_u *WorkflowInstanceUpdateOne) SetFinding(v *Finding) *WorkflowInstanceUpdateOne {
+	return _u.SetFindingID(v.ID)
+}
+
+// SetIntegration sets the "integration" edge to the Integration entity.
+func (_u *WorkflowInstanceUpdateOne) SetIntegration(v *Integration) *WorkflowInstanceUpdateOne {
+	return _u.SetIntegrationID(v.ID)
+}
+
+// SetRemediation sets the "remediation" edge to the Remediation entity.
+func (_u *WorkflowInstanceUpdateOne) SetRemediation(v *Remediation) *WorkflowInstanceUpdateOne {
+	return _u.SetRemediationID(v.ID)
+}
+
+// SetRisk sets the "risk" edge to the Risk entity.
+func (_u *WorkflowInstanceUpdateOne) SetRisk(v *Risk) *WorkflowInstanceUpdateOne {
+	return _u.SetRiskID(v.ID)
+}
+
+// SetTask sets the "task" edge to the Task entity.
+func (_u *WorkflowInstanceUpdateOne) SetTask(v *Task) *WorkflowInstanceUpdateOne {
+	return _u.SetTaskID(v.ID)
+}
+
+// SetVulnerability sets the "vulnerability" edge to the Vulnerability entity.
+func (_u *WorkflowInstanceUpdateOne) SetVulnerability(v *Vulnerability) *WorkflowInstanceUpdateOne {
+	return _u.SetVulnerabilityID(v.ID)
 }
 
 // SetWorkflowProposal sets the "workflow_proposal" edge to the WorkflowProposal entity.
@@ -2142,6 +2846,54 @@ func (_u *WorkflowInstanceUpdateOne) ClearIdentityHolder() *WorkflowInstanceUpda
 // ClearPlatform clears the "platform" edge to the Platform entity.
 func (_u *WorkflowInstanceUpdateOne) ClearPlatform() *WorkflowInstanceUpdateOne {
 	_u.mutation.ClearPlatform()
+	return _u
+}
+
+// ClearAssessment clears the "assessment" edge to the Assessment entity.
+func (_u *WorkflowInstanceUpdateOne) ClearAssessment() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearAssessment()
+	return _u
+}
+
+// ClearAssessmentResponse clears the "assessment_response" edge to the AssessmentResponse entity.
+func (_u *WorkflowInstanceUpdateOne) ClearAssessmentResponse() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearAssessmentResponse()
+	return _u
+}
+
+// ClearFinding clears the "finding" edge to the Finding entity.
+func (_u *WorkflowInstanceUpdateOne) ClearFinding() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearFinding()
+	return _u
+}
+
+// ClearIntegration clears the "integration" edge to the Integration entity.
+func (_u *WorkflowInstanceUpdateOne) ClearIntegration() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearIntegration()
+	return _u
+}
+
+// ClearRemediation clears the "remediation" edge to the Remediation entity.
+func (_u *WorkflowInstanceUpdateOne) ClearRemediation() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearRemediation()
+	return _u
+}
+
+// ClearRisk clears the "risk" edge to the Risk entity.
+func (_u *WorkflowInstanceUpdateOne) ClearRisk() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearRisk()
+	return _u
+}
+
+// ClearTask clears the "task" edge to the Task entity.
+func (_u *WorkflowInstanceUpdateOne) ClearTask() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearTask()
+	return _u
+}
+
+// ClearVulnerability clears the "vulnerability" edge to the Vulnerability entity.
+func (_u *WorkflowInstanceUpdateOne) ClearVulnerability() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearVulnerability()
 	return _u
 }
 
@@ -2755,6 +3507,254 @@ func (_u *WorkflowInstanceUpdateOne) sqlSave(ctx context.Context) (_node *Workfl
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssessmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.AssessmentTable,
+			Columns: []string{workflowinstance.AssessmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssessmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.AssessmentTable,
+			Columns: []string{workflowinstance.AssessmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssessmentResponseCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.AssessmentResponseTable,
+			Columns: []string{workflowinstance.AssessmentResponseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssessmentResponseIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.AssessmentResponseTable,
+			Columns: []string{workflowinstance.AssessmentResponseColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.FindingTable,
+			Columns: []string{workflowinstance.FindingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.FindingTable,
+			Columns: []string{workflowinstance.FindingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.IntegrationTable,
+			Columns: []string{workflowinstance.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.IntegrationTable,
+			Columns: []string{workflowinstance.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RemediationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.RemediationTable,
+			Columns: []string{workflowinstance.RemediationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemediationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.RemediationTable,
+			Columns: []string{workflowinstance.RemediationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RiskCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.RiskTable,
+			Columns: []string{workflowinstance.RiskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RiskIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.RiskTable,
+			Columns: []string{workflowinstance.RiskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TaskCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.TaskTable,
+			Columns: []string{workflowinstance.TaskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TaskIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.TaskTable,
+			Columns: []string{workflowinstance.TaskColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VulnerabilityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.VulnerabilityTable,
+			Columns: []string{workflowinstance.VulnerabilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VulnerabilityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.VulnerabilityTable,
+			Columns: []string{workflowinstance.VulnerabilityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.WorkflowInstance

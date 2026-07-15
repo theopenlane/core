@@ -18,6 +18,7 @@ mutation CreateAssessment ($input: CreateAssessmentInput!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 		}
 	}
 }
@@ -85,6 +86,7 @@ query GetAssessmentByID ($assessmentId: ID!) {
 		updatedAt
 		updatedBy
 		updatedByImpersonator
+		workflowEligibleMarker
 		campaigns {
 			edges {
 				node {
@@ -152,6 +154,7 @@ mutation UpdateAssessment ($updateAssessmentId: ID!, $input: UpdateAssessmentInp
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 		}
 	}
 }

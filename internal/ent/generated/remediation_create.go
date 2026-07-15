@@ -31,6 +31,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 )
 
 // RemediationCreate is the builder for creating a Remediation entity.
@@ -258,6 +259,20 @@ func (_c *RemediationCreate) SetScopeID(v string) *RemediationCreate {
 func (_c *RemediationCreate) SetNillableScopeID(v *string) *RemediationCreate {
 	if v != nil {
 		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *RemediationCreate) SetWorkflowEligibleMarker(v bool) *RemediationCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *RemediationCreate) SetNillableWorkflowEligibleMarker(v *bool) *RemediationCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
 	}
 	return _c
 }
@@ -818,6 +833,21 @@ func (_c *RemediationCreate) AddFiles(v ...*File) *RemediationCreate {
 	return _c.AddFileIDs(ids...)
 }
 
+// AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
+func (_c *RemediationCreate) AddWorkflowObjectRefIDs(ids ...string) *RemediationCreate {
+	_c.mutation.AddWorkflowObjectRefIDs(ids...)
+	return _c
+}
+
+// AddWorkflowObjectRefs adds the "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_c *RemediationCreate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *RemediationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddWorkflowObjectRefIDs(ids...)
+}
+
 // Mutation returns the RemediationMutation object of the builder.
 func (_c *RemediationCreate) Mutation() *RemediationMutation {
 	return _c.mutation
@@ -876,6 +906,10 @@ func (_c *RemediationCreate) defaults() error {
 	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := remediation.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
+	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := remediation.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
 	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := remediation.DefaultStatus
@@ -1002,6 +1036,10 @@ func (_c *RemediationCreate) createSpec() (*Remediation, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ScopeName(); ok {
 		_spec.SetField(remediation.FieldScopeName, field.TypeString, value)
 		_node.ScopeName = value
+	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(remediation.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(remediation.FieldExternalID, field.TypeString, value)
@@ -1421,6 +1459,23 @@ func (_c *RemediationCreate) createSpec() (*Remediation, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   remediation.WorkflowObjectRefsTable,
+			Columns: []string{remediation.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -74,7 +74,7 @@ Schema for Openlane workflow definitions
 The object type the workflow applies to
 
 **Item Type:** `string`  
-**Item Enum:** `"ActionPlan"`, `"Campaign"`, `"CampaignTarget"`, `"Control"`, `"Evidence"`, `"IdentityHolder"`, `"InternalPolicy"`, `"Platform"`, `"Procedure"`, `"Subcontrol"`  
+**Item Enum:** `"ActionPlan"`, `"Assessment"`, `"AssessmentResponse"`, `"Campaign"`, `"CampaignTarget"`, `"Control"`, `"Evidence"`, `"Finding"`, `"IdentityHolder"`, `"InternalPolicy"`, `"Platform"`, `"Procedure"`, `"Remediation"`, `"Risk"`, `"Subcontrol"`, `"Task"`, `"Vulnerability"`  
 <a name="triggers"></a>
 ## triggers\[\]: array
 

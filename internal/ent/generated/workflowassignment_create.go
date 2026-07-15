@@ -267,6 +267,20 @@ func (_c *WorkflowAssignmentCreate) SetNillableInvalidationMetadata(v *models.Wo
 	return _c
 }
 
+// SetOutcomeMetadata sets the "outcome_metadata" field.
+func (_c *WorkflowAssignmentCreate) SetOutcomeMetadata(v models.AssignmentOutcome) *WorkflowAssignmentCreate {
+	_c.mutation.SetOutcomeMetadata(v)
+	return _c
+}
+
+// SetNillableOutcomeMetadata sets the "outcome_metadata" field if the given value is not nil.
+func (_c *WorkflowAssignmentCreate) SetNillableOutcomeMetadata(v *models.AssignmentOutcome) *WorkflowAssignmentCreate {
+	if v != nil {
+		_c.SetOutcomeMetadata(*v)
+	}
+	return _c
+}
+
 // SetDecidedAt sets the "decided_at" field.
 func (_c *WorkflowAssignmentCreate) SetDecidedAt(v time.Time) *WorkflowAssignmentCreate {
 	_c.mutation.SetDecidedAt(v)
@@ -646,6 +660,10 @@ func (_c *WorkflowAssignmentCreate) createSpec() (*WorkflowAssignment, *sqlgraph
 	if value, ok := _c.mutation.InvalidationMetadata(); ok {
 		_spec.SetField(workflowassignment.FieldInvalidationMetadata, field.TypeJSON, value)
 		_node.InvalidationMetadata = value
+	}
+	if value, ok := _c.mutation.OutcomeMetadata(); ok {
+		_spec.SetField(workflowassignment.FieldOutcomeMetadata, field.TypeJSON, value)
+		_node.OutcomeMetadata = value
 	}
 	if value, ok := _c.mutation.DecidedAt(); ok {
 		_spec.SetField(workflowassignment.FieldDecidedAt, field.TypeTime, value)

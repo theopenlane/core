@@ -12,29 +12,43 @@ import (
 type WorkflowObjectType string
 
 var (
-	WorkflowObjectTypeActionPlan     WorkflowObjectType = "ActionPlan"
-	WorkflowObjectTypeCampaign       WorkflowObjectType = "Campaign"
-	WorkflowObjectTypeCampaignTarget WorkflowObjectType = "CampaignTarget"
-	WorkflowObjectTypeControl        WorkflowObjectType = "Control"
-	WorkflowObjectTypeEvidence       WorkflowObjectType = "Evidence"
-	WorkflowObjectTypeIdentityHolder WorkflowObjectType = "IdentityHolder"
-	WorkflowObjectTypeInternalPolicy WorkflowObjectType = "InternalPolicy"
-	WorkflowObjectTypePlatform       WorkflowObjectType = "Platform"
-	WorkflowObjectTypeProcedure      WorkflowObjectType = "Procedure"
-	WorkflowObjectTypeSubcontrol     WorkflowObjectType = "Subcontrol"
+	WorkflowObjectTypeActionPlan         WorkflowObjectType = "ActionPlan"
+	WorkflowObjectTypeAssessment         WorkflowObjectType = "Assessment"
+	WorkflowObjectTypeAssessmentResponse WorkflowObjectType = "AssessmentResponse"
+	WorkflowObjectTypeCampaign           WorkflowObjectType = "Campaign"
+	WorkflowObjectTypeCampaignTarget     WorkflowObjectType = "CampaignTarget"
+	WorkflowObjectTypeControl            WorkflowObjectType = "Control"
+	WorkflowObjectTypeEvidence           WorkflowObjectType = "Evidence"
+	WorkflowObjectTypeFinding            WorkflowObjectType = "Finding"
+	WorkflowObjectTypeIdentityHolder     WorkflowObjectType = "IdentityHolder"
+	WorkflowObjectTypeInternalPolicy     WorkflowObjectType = "InternalPolicy"
+	WorkflowObjectTypePlatform           WorkflowObjectType = "Platform"
+	WorkflowObjectTypeProcedure          WorkflowObjectType = "Procedure"
+	WorkflowObjectTypeRemediation        WorkflowObjectType = "Remediation"
+	WorkflowObjectTypeRisk               WorkflowObjectType = "Risk"
+	WorkflowObjectTypeSubcontrol         WorkflowObjectType = "Subcontrol"
+	WorkflowObjectTypeTask               WorkflowObjectType = "Task"
+	WorkflowObjectTypeVulnerability      WorkflowObjectType = "Vulnerability"
 )
 
 var WorkflowObjectTypes = []string{
 	string(WorkflowObjectTypeActionPlan),
+	string(WorkflowObjectTypeAssessment),
+	string(WorkflowObjectTypeAssessmentResponse),
 	string(WorkflowObjectTypeCampaign),
 	string(WorkflowObjectTypeCampaignTarget),
 	string(WorkflowObjectTypeControl),
 	string(WorkflowObjectTypeEvidence),
+	string(WorkflowObjectTypeFinding),
 	string(WorkflowObjectTypeIdentityHolder),
 	string(WorkflowObjectTypeInternalPolicy),
 	string(WorkflowObjectTypePlatform),
 	string(WorkflowObjectTypeProcedure),
+	string(WorkflowObjectTypeRemediation),
+	string(WorkflowObjectTypeRisk),
 	string(WorkflowObjectTypeSubcontrol),
+	string(WorkflowObjectTypeTask),
+	string(WorkflowObjectTypeVulnerability),
 }
 
 // Values returns all workflow object type values.
@@ -50,6 +64,10 @@ func ToWorkflowObjectType(v string) *WorkflowObjectType {
 	switch v {
 	case WorkflowObjectTypeActionPlan.String():
 		return &WorkflowObjectTypeActionPlan
+	case WorkflowObjectTypeAssessment.String():
+		return &WorkflowObjectTypeAssessment
+	case WorkflowObjectTypeAssessmentResponse.String():
+		return &WorkflowObjectTypeAssessmentResponse
 	case WorkflowObjectTypeCampaign.String():
 		return &WorkflowObjectTypeCampaign
 	case WorkflowObjectTypeCampaignTarget.String():
@@ -58,6 +76,8 @@ func ToWorkflowObjectType(v string) *WorkflowObjectType {
 		return &WorkflowObjectTypeControl
 	case WorkflowObjectTypeEvidence.String():
 		return &WorkflowObjectTypeEvidence
+	case WorkflowObjectTypeFinding.String():
+		return &WorkflowObjectTypeFinding
 	case WorkflowObjectTypeIdentityHolder.String():
 		return &WorkflowObjectTypeIdentityHolder
 	case WorkflowObjectTypeInternalPolicy.String():
@@ -66,8 +86,16 @@ func ToWorkflowObjectType(v string) *WorkflowObjectType {
 		return &WorkflowObjectTypePlatform
 	case WorkflowObjectTypeProcedure.String():
 		return &WorkflowObjectTypeProcedure
+	case WorkflowObjectTypeRemediation.String():
+		return &WorkflowObjectTypeRemediation
+	case WorkflowObjectTypeRisk.String():
+		return &WorkflowObjectTypeRisk
 	case WorkflowObjectTypeSubcontrol.String():
 		return &WorkflowObjectTypeSubcontrol
+	case WorkflowObjectTypeTask.String():
+		return &WorkflowObjectTypeTask
+	case WorkflowObjectTypeVulnerability.String():
+		return &WorkflowObjectTypeVulnerability
 	default:
 		return nil
 	}

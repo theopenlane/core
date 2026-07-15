@@ -426,6 +426,26 @@ func (_u *FindingHistoryUpdate) ClearFindingStatusID() *FindingHistoryUpdate {
 	return _u
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *FindingHistoryUpdate) SetWorkflowEligibleMarker(v bool) *FindingHistoryUpdate {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *FindingHistoryUpdate) SetNillableWorkflowEligibleMarker(v *bool) *FindingHistoryUpdate {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *FindingHistoryUpdate) ClearWorkflowEligibleMarker() *FindingHistoryUpdate {
+	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *FindingHistoryUpdate) SetExternalID(v string) *FindingHistoryUpdate {
 	_u.mutation.SetExternalID(v)
@@ -1384,6 +1404,12 @@ func (_u *FindingHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.FindingStatusIDCleared() {
 		_spec.ClearField(findinghistory.FieldFindingStatusID, field.TypeString)
 	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(findinghistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(findinghistory.FieldWorkflowEligibleMarker, field.TypeBool)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(findinghistory.FieldExternalID, field.TypeString, value)
 	}
@@ -2052,6 +2078,26 @@ func (_u *FindingHistoryUpdateOne) SetNillableFindingStatusID(v *string) *Findin
 // ClearFindingStatusID clears the value of the "finding_status_id" field.
 func (_u *FindingHistoryUpdateOne) ClearFindingStatusID() *FindingHistoryUpdateOne {
 	_u.mutation.ClearFindingStatusID()
+	return _u
+}
+
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *FindingHistoryUpdateOne) SetWorkflowEligibleMarker(v bool) *FindingHistoryUpdateOne {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *FindingHistoryUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *FindingHistoryUpdateOne {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *FindingHistoryUpdateOne) ClearWorkflowEligibleMarker() *FindingHistoryUpdateOne {
+	_u.mutation.ClearWorkflowEligibleMarker()
 	return _u
 }
 
@@ -3042,6 +3088,12 @@ func (_u *FindingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FindingH
 	}
 	if _u.mutation.FindingStatusIDCleared() {
 		_spec.ClearField(findinghistory.FieldFindingStatusID, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(findinghistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(findinghistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(findinghistory.FieldExternalID, field.TypeString, value)

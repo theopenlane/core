@@ -33,6 +33,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
@@ -41,49 +42,51 @@ import (
 // RemediationQuery is the builder for querying Remediation entities.
 type RemediationQuery struct {
 	config
-	ctx                      *QueryContext
-	order                    []remediation.OrderOption
-	inters                   []Interceptor
-	predicates               []predicate.Remediation
-	withOwner                *OrganizationQuery
-	withBlockedGroups        *GroupQuery
-	withEditors              *GroupQuery
-	withEnvironment          *CustomTypeEnumQuery
-	withScope                *CustomTypeEnumQuery
-	withIntegrations         *IntegrationQuery
-	withScans                *ScanQuery
-	withFindings             *FindingQuery
-	withVulnerabilities      *VulnerabilityQuery
-	withActionPlans          *ActionPlanQuery
-	withTasks                *TaskQuery
-	withControls             *ControlQuery
-	withSubcontrols          *SubcontrolQuery
-	withRisks                *RiskQuery
-	withPrograms             *ProgramQuery
-	withAssets               *AssetQuery
-	withEntities             *EntityQuery
-	withReviews              *ReviewQuery
-	withComments             *NoteQuery
-	withFiles                *FileQuery
-	loadTotal                []func(context.Context, []*Remediation) error
-	modifiers                []func(*sql.Selector)
-	withNamedBlockedGroups   map[string]*GroupQuery
-	withNamedEditors         map[string]*GroupQuery
-	withNamedIntegrations    map[string]*IntegrationQuery
-	withNamedScans           map[string]*ScanQuery
-	withNamedFindings        map[string]*FindingQuery
-	withNamedVulnerabilities map[string]*VulnerabilityQuery
-	withNamedActionPlans     map[string]*ActionPlanQuery
-	withNamedTasks           map[string]*TaskQuery
-	withNamedControls        map[string]*ControlQuery
-	withNamedSubcontrols     map[string]*SubcontrolQuery
-	withNamedRisks           map[string]*RiskQuery
-	withNamedPrograms        map[string]*ProgramQuery
-	withNamedAssets          map[string]*AssetQuery
-	withNamedEntities        map[string]*EntityQuery
-	withNamedReviews         map[string]*ReviewQuery
-	withNamedComments        map[string]*NoteQuery
-	withNamedFiles           map[string]*FileQuery
+	ctx                         *QueryContext
+	order                       []remediation.OrderOption
+	inters                      []Interceptor
+	predicates                  []predicate.Remediation
+	withOwner                   *OrganizationQuery
+	withBlockedGroups           *GroupQuery
+	withEditors                 *GroupQuery
+	withEnvironment             *CustomTypeEnumQuery
+	withScope                   *CustomTypeEnumQuery
+	withIntegrations            *IntegrationQuery
+	withScans                   *ScanQuery
+	withFindings                *FindingQuery
+	withVulnerabilities         *VulnerabilityQuery
+	withActionPlans             *ActionPlanQuery
+	withTasks                   *TaskQuery
+	withControls                *ControlQuery
+	withSubcontrols             *SubcontrolQuery
+	withRisks                   *RiskQuery
+	withPrograms                *ProgramQuery
+	withAssets                  *AssetQuery
+	withEntities                *EntityQuery
+	withReviews                 *ReviewQuery
+	withComments                *NoteQuery
+	withFiles                   *FileQuery
+	withWorkflowObjectRefs      *WorkflowObjectRefQuery
+	loadTotal                   []func(context.Context, []*Remediation) error
+	modifiers                   []func(*sql.Selector)
+	withNamedBlockedGroups      map[string]*GroupQuery
+	withNamedEditors            map[string]*GroupQuery
+	withNamedIntegrations       map[string]*IntegrationQuery
+	withNamedScans              map[string]*ScanQuery
+	withNamedFindings           map[string]*FindingQuery
+	withNamedVulnerabilities    map[string]*VulnerabilityQuery
+	withNamedActionPlans        map[string]*ActionPlanQuery
+	withNamedTasks              map[string]*TaskQuery
+	withNamedControls           map[string]*ControlQuery
+	withNamedSubcontrols        map[string]*SubcontrolQuery
+	withNamedRisks              map[string]*RiskQuery
+	withNamedPrograms           map[string]*ProgramQuery
+	withNamedAssets             map[string]*AssetQuery
+	withNamedEntities           map[string]*EntityQuery
+	withNamedReviews            map[string]*ReviewQuery
+	withNamedComments           map[string]*NoteQuery
+	withNamedFiles              map[string]*FileQuery
+	withNamedWorkflowObjectRefs map[string]*WorkflowObjectRefQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -620,6 +623,31 @@ func (_q *RemediationQuery) QueryFiles() *FileQuery {
 	return query
 }
 
+// QueryWorkflowObjectRefs chains the current query on the "workflow_object_refs" edge.
+func (_q *RemediationQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, selector),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, remediation.WorkflowObjectRefsTable, remediation.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Remediation entity from the query.
 // Returns a *NotFoundError when no Remediation was found.
 func (_q *RemediationQuery) First(ctx context.Context) (*Remediation, error) {
@@ -807,31 +835,32 @@ func (_q *RemediationQuery) Clone() *RemediationQuery {
 		return nil
 	}
 	return &RemediationQuery{
-		config:              _q.config,
-		ctx:                 _q.ctx.Clone(),
-		order:               append([]remediation.OrderOption{}, _q.order...),
-		inters:              append([]Interceptor{}, _q.inters...),
-		predicates:          append([]predicate.Remediation{}, _q.predicates...),
-		withOwner:           _q.withOwner.Clone(),
-		withBlockedGroups:   _q.withBlockedGroups.Clone(),
-		withEditors:         _q.withEditors.Clone(),
-		withEnvironment:     _q.withEnvironment.Clone(),
-		withScope:           _q.withScope.Clone(),
-		withIntegrations:    _q.withIntegrations.Clone(),
-		withScans:           _q.withScans.Clone(),
-		withFindings:        _q.withFindings.Clone(),
-		withVulnerabilities: _q.withVulnerabilities.Clone(),
-		withActionPlans:     _q.withActionPlans.Clone(),
-		withTasks:           _q.withTasks.Clone(),
-		withControls:        _q.withControls.Clone(),
-		withSubcontrols:     _q.withSubcontrols.Clone(),
-		withRisks:           _q.withRisks.Clone(),
-		withPrograms:        _q.withPrograms.Clone(),
-		withAssets:          _q.withAssets.Clone(),
-		withEntities:        _q.withEntities.Clone(),
-		withReviews:         _q.withReviews.Clone(),
-		withComments:        _q.withComments.Clone(),
-		withFiles:           _q.withFiles.Clone(),
+		config:                 _q.config,
+		ctx:                    _q.ctx.Clone(),
+		order:                  append([]remediation.OrderOption{}, _q.order...),
+		inters:                 append([]Interceptor{}, _q.inters...),
+		predicates:             append([]predicate.Remediation{}, _q.predicates...),
+		withOwner:              _q.withOwner.Clone(),
+		withBlockedGroups:      _q.withBlockedGroups.Clone(),
+		withEditors:            _q.withEditors.Clone(),
+		withEnvironment:        _q.withEnvironment.Clone(),
+		withScope:              _q.withScope.Clone(),
+		withIntegrations:       _q.withIntegrations.Clone(),
+		withScans:              _q.withScans.Clone(),
+		withFindings:           _q.withFindings.Clone(),
+		withVulnerabilities:    _q.withVulnerabilities.Clone(),
+		withActionPlans:        _q.withActionPlans.Clone(),
+		withTasks:              _q.withTasks.Clone(),
+		withControls:           _q.withControls.Clone(),
+		withSubcontrols:        _q.withSubcontrols.Clone(),
+		withRisks:              _q.withRisks.Clone(),
+		withPrograms:           _q.withPrograms.Clone(),
+		withAssets:             _q.withAssets.Clone(),
+		withEntities:           _q.withEntities.Clone(),
+		withReviews:            _q.withReviews.Clone(),
+		withComments:           _q.withComments.Clone(),
+		withFiles:              _q.withFiles.Clone(),
+		withWorkflowObjectRefs: _q.withWorkflowObjectRefs.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -1059,6 +1088,17 @@ func (_q *RemediationQuery) WithFiles(opts ...func(*FileQuery)) *RemediationQuer
 	return _q
 }
 
+// WithWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to
+// the "workflow_object_refs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RemediationQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObjectRefQuery)) *RemediationQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWorkflowObjectRefs = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -1143,7 +1183,7 @@ func (_q *RemediationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	var (
 		nodes       = []*Remediation{}
 		_spec       = _q.querySpec()
-		loadedTypes = [20]bool{
+		loadedTypes = [21]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1164,6 +1204,7 @@ func (_q *RemediationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			_q.withReviews != nil,
 			_q.withComments != nil,
 			_q.withFiles != nil,
+			_q.withWorkflowObjectRefs != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -1326,6 +1367,15 @@ func (_q *RemediationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
+	if query := _q.withWorkflowObjectRefs; query != nil {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *Remediation) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
+			func(n *Remediation, e *WorkflowObjectRef) {
+				n.Edges.WorkflowObjectRefs = append(n.Edges.WorkflowObjectRefs, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedBlockedGroups {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Remediation) { n.appendNamedBlockedGroups(name) },
@@ -1442,6 +1492,13 @@ func (_q *RemediationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Remediation) { n.appendNamedFiles(name) },
 			func(n *Remediation, e *File) { n.appendNamedFiles(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedWorkflowObjectRefs {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *Remediation) { n.appendNamedWorkflowObjectRefs(name) },
+			func(n *Remediation, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2408,6 +2465,37 @@ func (_q *RemediationQuery) loadFiles(ctx context.Context, query *FileQuery, nod
 	}
 	return nil
 }
+func (_q *RemediationQuery) loadWorkflowObjectRefs(ctx context.Context, query *WorkflowObjectRefQuery, nodes []*Remediation, init func(*Remediation), assign func(*Remediation, *WorkflowObjectRef)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Remediation)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(workflowobjectref.FieldRemediationID)
+	}
+	query.Where(predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(remediation.WorkflowObjectRefsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.RemediationID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "remediation_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *RemediationQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -2751,6 +2839,20 @@ func (_q *RemediationQuery) WithNamedFiles(name string, opts ...func(*FileQuery)
 		_q.withNamedFiles = make(map[string]*FileQuery)
 	}
 	_q.withNamedFiles[name] = query
+	return _q
+}
+
+// WithNamedWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to the "workflow_object_refs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *RemediationQuery) WithNamedWorkflowObjectRefs(name string, opts ...func(*WorkflowObjectRefQuery)) *RemediationQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedWorkflowObjectRefs == nil {
+		_q.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery)
+	}
+	_q.withNamedWorkflowObjectRefs[name] = query
 	return _q
 }
 

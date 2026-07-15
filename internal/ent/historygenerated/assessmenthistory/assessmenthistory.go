@@ -50,6 +50,8 @@ const (
 	FieldInternalNotes = "internal_notes"
 	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
 	FieldSystemInternalID = "system_internal_id"
+	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
+	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldAssessmentType holds the string denoting the assessment_type field in the database.
@@ -84,6 +86,7 @@ var Columns = []string{
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
+	FieldWorkflowEligibleMarker,
 	FieldName,
 	FieldAssessmentType,
 	FieldTemplateID,
@@ -123,6 +126,8 @@ var (
 	DefaultTags []string
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
+	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
+	DefaultWorkflowEligibleMarker bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -225,6 +230,11 @@ func ByInternalNotes(opts ...sql.OrderTermOption) OrderOption {
 // BySystemInternalID orders the results by the system_internal_id field.
 func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
+}
+
+// ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
+func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

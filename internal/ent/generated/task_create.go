@@ -251,6 +251,20 @@ func (_c *TaskCreate) SetNillableScopeID(v *string) *TaskCreate {
 	return _c
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *TaskCreate) SetWorkflowEligibleMarker(v bool) *TaskCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *TaskCreate) SetNillableWorkflowEligibleMarker(v *bool) *TaskCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
+	}
+	return _c
+}
+
 // SetExternalUUID sets the "external_uuid" field.
 func (_c *TaskCreate) SetExternalUUID(v string) *TaskCreate {
 	_c.mutation.SetExternalUUID(v)
@@ -826,6 +840,10 @@ func (_c *TaskCreate) defaults() error {
 		v := task.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := task.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
+	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := task.DefaultStatus
 		_c.mutation.SetStatus(v)
@@ -973,6 +991,10 @@ func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ScopeName(); ok {
 		_spec.SetField(task.FieldScopeName, field.TypeString, value)
 		_node.ScopeName = value
+	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(task.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.ExternalUUID(); ok {
 		_spec.SetField(task.FieldExternalUUID, field.TypeString, value)

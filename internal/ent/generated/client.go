@@ -2248,6 +2248,25 @@ func (c *AssessmentClient) QueryCampaigns(_m *Assessment) *CampaignQuery {
 	return query
 }
 
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a Assessment.
+func (c *AssessmentClient) QueryWorkflowObjectRefs(_m *Assessment) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, assessment.WorkflowObjectRefsTable, assessment.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *AssessmentClient) Hooks() []Hook {
 	hooks := c.hooks.Assessment
@@ -2510,6 +2529,25 @@ func (c *AssessmentResponseClient) QueryVendorRiskScores(_m *AssessmentResponse)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.VendorRiskScore
 		step.Edge.Schema = schemaConfig.VendorRiskScore
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a AssessmentResponse.
+func (c *AssessmentResponseClient) QueryWorkflowObjectRefs(_m *AssessmentResponse) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentresponse.Table, assessmentresponse.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, assessmentresponse.WorkflowObjectRefsTable, assessmentresponse.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -27346,6 +27384,25 @@ func (c *RemediationClient) QueryFiles(_m *Remediation) *FileQuery {
 	return query
 }
 
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a Remediation.
+func (c *RemediationClient) QueryWorkflowObjectRefs(_m *Remediation) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, remediation.WorkflowObjectRefsTable, remediation.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *RemediationClient) Hooks() []Hook {
 	hooks := c.hooks.Remediation
@@ -28484,6 +28541,25 @@ func (c *RiskClient) QueryRemediations(_m *Risk) *RemediationQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Remediation
 		step.Edge.Schema = schemaConfig.RemediationRisks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a Risk.
+func (c *RiskClient) QueryWorkflowObjectRefs(_m *Risk) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, risk.WorkflowObjectRefsTable, risk.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -36771,6 +36847,25 @@ func (c *VulnerabilityClient) QueryFiles(_m *Vulnerability) *FileQuery {
 	return query
 }
 
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryWorkflowObjectRefs(_m *Vulnerability) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, vulnerability.WorkflowObjectRefsTable, vulnerability.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *VulnerabilityClient) Hooks() []Hook {
 	hooks := c.hooks.Vulnerability
@@ -38208,6 +38303,158 @@ func (c *WorkflowInstanceClient) QueryPlatform(_m *WorkflowInstance) *PlatformQu
 	return query
 }
 
+// QueryAssessment queries the assessment edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryAssessment(_m *WorkflowInstance) *AssessmentQuery {
+	query := (&AssessmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.AssessmentTable, workflowinstance.AssessmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssessmentResponse queries the assessment_response edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryAssessmentResponse(_m *WorkflowInstance) *AssessmentResponseQuery {
+	query := (&AssessmentResponseClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.AssessmentResponseTable, workflowinstance.AssessmentResponseColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.AssessmentResponse
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFinding queries the finding edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryFinding(_m *WorkflowInstance) *FindingQuery {
+	query := (&FindingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.FindingTable, workflowinstance.FindingColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegration queries the integration edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryIntegration(_m *WorkflowInstance) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.IntegrationTable, workflowinstance.IntegrationColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRemediation queries the remediation edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryRemediation(_m *WorkflowInstance) *RemediationQuery {
+	query := (&RemediationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(remediation.Table, remediation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.RemediationTable, workflowinstance.RemediationColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRisk queries the risk edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryRisk(_m *WorkflowInstance) *RiskQuery {
+	query := (&RiskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.RiskTable, workflowinstance.RiskColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTask queries the task edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryTask(_m *WorkflowInstance) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.TaskTable, workflowinstance.TaskColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVulnerability queries the vulnerability edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryVulnerability(_m *WorkflowInstance) *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.VulnerabilityTable, workflowinstance.VulnerabilityColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryWorkflowProposal queries the workflow_proposal edge of a WorkflowInstance.
 func (c *WorkflowInstanceClient) QueryWorkflowProposal(_m *WorkflowInstance) *WorkflowProposalQuery {
 	query := (&WorkflowProposalClient{config: c.config}).Query()
@@ -38773,6 +39020,101 @@ func (c *WorkflowObjectRefClient) QueryPlatform(_m *WorkflowObjectRef) *Platform
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVulnerability queries the vulnerability edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryVulnerability(_m *WorkflowObjectRef) *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.VulnerabilityTable, workflowobjectref.VulnerabilityColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRisk queries the risk edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryRisk(_m *WorkflowObjectRef) *RiskQuery {
+	query := (&RiskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.RiskTable, workflowobjectref.RiskColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssessment queries the assessment edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryAssessment(_m *WorkflowObjectRef) *AssessmentQuery {
+	query := (&AssessmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.AssessmentTable, workflowobjectref.AssessmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssessmentResponse queries the assessment_response edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryAssessmentResponse(_m *WorkflowObjectRef) *AssessmentResponseQuery {
+	query := (&AssessmentResponseClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.AssessmentResponseTable, workflowobjectref.AssessmentResponseColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.AssessmentResponse
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRemediation queries the remediation edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryRemediation(_m *WorkflowObjectRef) *RemediationQuery {
+	query := (&RemediationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(remediation.Table, remediation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.RemediationTable, workflowobjectref.RemediationColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Remediation
 		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil

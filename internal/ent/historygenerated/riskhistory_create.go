@@ -295,6 +295,20 @@ func (_c *RiskHistoryCreate) SetNillableScopeID(v *string) *RiskHistoryCreate {
 	return _c
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *RiskHistoryCreate) SetWorkflowEligibleMarker(v bool) *RiskHistoryCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableWorkflowEligibleMarker(v *bool) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *RiskHistoryCreate) SetExternalID(v string) *RiskHistoryCreate {
 	_c.mutation.SetExternalID(v)
@@ -689,6 +703,10 @@ func (_c *RiskHistoryCreate) defaults() error {
 		v := riskhistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := riskhistory.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
+	}
 	if _, ok := _c.mutation.Likelihood(); !ok {
 		v := riskhistory.DefaultLikelihood
 		_c.mutation.SetLikelihood(v)
@@ -878,6 +896,10 @@ func (_c *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ScopeID(); ok {
 		_spec.SetField(riskhistory.FieldScopeID, field.TypeString, value)
 		_node.ScopeID = value
+	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(riskhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(riskhistory.FieldExternalID, field.TypeString, value)

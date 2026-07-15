@@ -170,6 +170,20 @@ func (_c *AssessmentResponseHistoryCreate) SetNillableOwnerID(v *string) *Assess
 	return _c
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *AssessmentResponseHistoryCreate) SetWorkflowEligibleMarker(v bool) *AssessmentResponseHistoryCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *AssessmentResponseHistoryCreate) SetNillableWorkflowEligibleMarker(v *bool) *AssessmentResponseHistoryCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
+	}
+	return _c
+}
+
 // SetAssessmentID sets the "assessment_id" field.
 func (_c *AssessmentResponseHistoryCreate) SetAssessmentID(v string) *AssessmentResponseHistoryCreate {
 	_c.mutation.SetAssessmentID(v)
@@ -534,6 +548,10 @@ func (_c *AssessmentResponseHistoryCreate) defaults() error {
 		v := assessmentresponsehistory.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := assessmentresponsehistory.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
+	}
 	if _, ok := _c.mutation.IsTest(); !ok {
 		v := assessmentresponsehistory.DefaultIsTest
 		_c.mutation.SetIsTest(v)
@@ -697,6 +715,10 @@ func (_c *AssessmentResponseHistoryCreate) createSpec() (*AssessmentResponseHist
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.AssessmentID(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldAssessmentID, field.TypeString, value)

@@ -144,6 +144,11 @@ func ScopeID(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldScopeID, v))
 }
 
+// WorkflowEligibleMarker applies equality check predicate on the "workflow_eligible_marker" field. It's identical to WorkflowEligibleMarkerEQ.
+func WorkflowEligibleMarker(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
+}
+
 // ExternalUUID applies equality check predicate on the "external_uuid" field. It's identical to ExternalUUIDEQ.
 func ExternalUUID(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldExternalUUID, v))
@@ -1247,6 +1252,26 @@ func ScopeIDEqualFold(v string) predicate.Task {
 // ScopeIDContainsFold applies the ContainsFold predicate on the "scope_id" field.
 func ScopeIDContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldScopeID, v))
+}
+
+// WorkflowEligibleMarkerEQ applies the EQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerNEQ applies the NEQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerIsNil applies the IsNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldWorkflowEligibleMarker))
+}
+
+// WorkflowEligibleMarkerNotNil applies the NotNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldWorkflowEligibleMarker))
 }
 
 // ExternalUUIDEQ applies the EQ predicate on the "external_uuid" field.

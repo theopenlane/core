@@ -33,6 +33,7 @@ import (
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/entx/entityops"
 	"github.com/theopenlane/entx/genhooks"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/entx/integrationmapping"
@@ -77,6 +78,7 @@ const (
 	csvGeneratedPath         = "internal/ent/csvgenerated"
 	oscalGeneratedPath       = "internal/ent/oscalgenerated"
 	integrationGeneratedPath = "internal/ent/integrationgenerated"
+	entityOpsGeneratedPath   = "internal/ent/entityops"
 
 	schemaInputChecksumFile  = "./internal/ent/checksum/.schema_checksum"
 	historyInputChecksumFile = "./internal/ent/checksum/.history_schema_checksum"
@@ -193,7 +195,7 @@ func main() {
 // 12/18/2025 MKA - This was modified to remove the use of prepareQuery and withInterceptors to prevent duplicate query execution
 func WithGqlWithTemplates() entgql.ExtensionOption {
 	paginationTmpl := gen.MustParse(gen.NewTemplate("node").
-		Funcs(entgql.TemplateFuncs).ParseFS(_entqlTemplates, "templates/entgql/gql_where.tmpl", "templates/entgql/pagination.tmpl"))
+		Funcs(entgql.TemplateFuncs).ParseFS(_entqlTemplates, "templates/entgql/gql_where.tmpl", "templates/entgql/pagination.tmpl", "templates/entgql/gql_mutation_input.tmpl"))
 	return entgql.WithTemplates(append(entgql.AllTemplates, paginationTmpl)...)
 }
 
@@ -340,6 +342,17 @@ func runParallelPostGenHooks(g *gen.Graph) {
 
 	fileCategoryGen := filecategorygen.New(schemaPath, "internal/objects/store/file_category_generated.go")
 
+	entityOpsExt := entityops.New(
+		entityops.WithOutputDir(entityOpsGeneratedPath),
+		entityops.WithPackageName("entityops"),
+		entityops.WithEntPackage("github.com/theopenlane/core/"+entGeneratedPath),
+		entityops.WithGalaPackage("github.com/theopenlane/core/pkg/gala"),
+		entityops.WithJsonxPackage("github.com/theopenlane/core/pkg/jsonx"),
+		entityops.WithLogxPackage("github.com/theopenlane/core/pkg/logx"),
+		entityops.WithContextxPackage("github.com/theopenlane/utils/contextx"),
+		entityops.WithCelxPackage("github.com/theopenlane/core/pkg/celx"),
+	)
+
 	hooks := []gen.Hook{
 		genhooks.GenCSVSchema(
 			genhooks.WithCSVOutputDir(csvGeneratedPath),
@@ -365,6 +378,7 @@ func runParallelPostGenHooks(g *gen.Graph) {
 		fileCategoryGen.Hook(),
 		exportenums.New().Hook(),
 		workflowGenExt.Hook(),
+		entityOpsExt.Hook(),
 	}
 
 	noopGen := gen.GenerateFunc(func(*gen.Graph) error { return nil })

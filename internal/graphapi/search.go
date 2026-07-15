@@ -1877,7 +1877,7 @@ func adminSearchScans(ctx context.Context, query string, after *entgql.Cursor[st
 				scan.GeneratedByPlatformIDContainsFold(query), // search by GeneratedByPlatformID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(vulnerability_ids)::text LIKE $21", likeQuery)) // search by VulnerabilityIds
+					s.Where(sql.ExprP("(discovered_vulnerability_ids)::text LIKE $21", likeQuery)) // search by DiscoveredVulnerabilityIds
 				},
 			),
 		)
