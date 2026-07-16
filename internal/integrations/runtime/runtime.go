@@ -311,5 +311,9 @@ func New(config Config) (*Runtime, error) {
 		return nil, err
 	}
 
+	if err := operations.RegisterDomainScanListeners(rt.Gala(), rt.HandleDomainScanCreate, rt.HandleDomainScanPoll); err != nil {
+		return nil, err
+	}
+
 	return rt, nil
 }

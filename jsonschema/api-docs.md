@@ -135,6 +135,9 @@ Config contains the configuration for the core server
     "keywatcher": {},
     "integrations": {
         "awssecurityhub": {},
+        "cloudflareruntime": {
+            "domainscan": {}
+        },
         "githubapp": {},
         "slack": {},
         "slackruntime": {},
@@ -903,7 +906,7 @@ SupportAccessConfig contains configuration for the Openlane support access flow.
 |**enabled**|`boolean`|Enabled toggles the support access endpoints<br/>||
 |**email**|`string`|Email is the email of the virtual support identity, used as the first factor username<br/>||
 |**displayname**|`string`|DisplayName is the display name of the virtual support identity, used for record attribution<br/>||
-|**subjectid**|`string`|SubjectID is the stable subject id of the virtual support identity used for created_by/updated_by<br/>attribution. It must be a valid ULID and is consistent without a backing user row<br/>||
+|**subjectid**|`string`|SubjectID is the stable subject id of the virtual support identity used for created_by/updated_by<br/>attribution. It must be a valid ULID and is consistent without a backing user row. Default should match anon.SupportSubjectID<br/>||
 |**password**|`string`|Password is the shared password for the virtual support identity, validated against this value<br/>||
 |**clientid**|`string`|ClientID is the client ID for the second factor identity provider<br/>||
 |**clientsecret**|`string`|ClientSecret is the client secret for the second factor identity provider<br/>||
@@ -1664,6 +1667,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |----|----|-----------|--------|
 |**consoleintegrationpath**|`string`|||
 |[**awssecurityhub**](#integrationsawssecurityhub)|`object`|||
+|[**cloudflareruntime**](#integrationscloudflareruntime)|`object`|||
 |[**githubapp**](#integrationsgithubapp)|`object`|||
 |[**slack**](#integrationsslack)|`object`|||
 |[**slackruntime**](#integrationsslackruntime)|`object`|||
@@ -1683,6 +1687,9 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 ```json
 {
     "awssecurityhub": {},
+    "cloudflareruntime": {
+        "domainscan": {}
+    },
     "githubapp": {},
     "slack": {},
     "slackruntime": {},
@@ -1717,6 +1724,50 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**arn**|`string`|||
 
 **Additional Properties:** not allowed  
+<a name="integrationscloudflareruntime"></a>
+### integrations\.cloudflareruntime: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**apitoken**|`string`|Cloudflare API token for the operator-owned account<br/>||
+|**accountid**|`string`|Cloudflare account ID for the operator-owned account<br/>||
+|[**domainscan**](#integrationscloudflareruntimedomainscan)|`object`|||
+
+**Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "domainscan": {}
+}
+```
+
+<a name="integrationscloudflareruntimedomainscan"></a>
+#### integrations\.cloudflareruntime\.domainscan: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|[**nonvendorcategories**](#integrationscloudflareruntimedomainscannonvendorcategories)|`string[]`|||
+|[**deniedvendornames**](#integrationscloudflareruntimedomainscandeniedvendornames)|`string[]`|||
+|**scanttl**|`integer`|||
+
+**Additional Properties:** not allowed  
+<a name="integrationscloudflareruntimedomainscannonvendorcategories"></a>
+##### integrations\.cloudflareruntime\.domainscan\.nonvendorcategories: array
+
+**Items**
+
+**Item Type:** `string`  
+<a name="integrationscloudflareruntimedomainscandeniedvendornames"></a>
+##### integrations\.cloudflareruntime\.domainscan\.deniedvendornames: array
+
+**Items**
+
+**Item Type:** `string`  
 <a name="integrationsgithubapp"></a>
 ### integrations\.githubapp: object
 

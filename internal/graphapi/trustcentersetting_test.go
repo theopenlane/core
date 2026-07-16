@@ -322,6 +322,29 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 	cleanupOrganizationDataWithContext(tcOrg2.owner.UserCtx, t)
 }
 
+// TestUpdateTrustCenterSettingSupportUser verifies that an org-scoped support session
+// (auth.NewOrgSupportCaller, CapOrgSupport) can update trust center branding on behalf
+// of the org it is scoped to, the same way a fully-scoped API token can
+func TestUpdateTrustCenterSettingSupportUser(t *testing.T) {
+	tcOrg := createFreshOrgWithTrustCenter(t, withSupportUser())
+	trustCenter := tcOrg.trustCenter
+	settingID := trustCenter.Edges.Setting.ID
+
+	resp, err := suite.client.api.UpdateTrustCenterSetting(tcOrg.supportCtx, settingID, testclient.UpdateTrustCenterSettingInput{
+		Title:        lo.ToPtr("Support Updated Branding"),
+		PrimaryColor: lo.ToPtr("#123456"),
+	}, nil, nil, nil, nil, nil, nil)
+
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Equal(settingID, resp.UpdateTrustCenterSetting.TrustCenterSetting.ID))
+	assert.Check(t, is.Equal("Support Updated Branding", *resp.UpdateTrustCenterSetting.TrustCenterSetting.Title))
+	assert.Check(t, is.Equal("#123456", *resp.UpdateTrustCenterSetting.TrustCenterSetting.PrimaryColor))
+
+	// Clean up
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+}
+
 // TestSubprocessorNotifyWatermarkInitialized verifies enabling notify-on-subprocessor-change stamps
 // the notification watermark so subscribers are only notified about changes made after opting in,
 // not the trust center's pre-existing subprocessor list

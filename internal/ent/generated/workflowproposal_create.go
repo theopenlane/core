@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
@@ -158,6 +159,20 @@ func (_c *WorkflowProposalCreate) SetNillableRevision(v *int) *WorkflowProposalC
 // SetChanges sets the "changes" field.
 func (_c *WorkflowProposalCreate) SetChanges(v map[string]interface{}) *WorkflowProposalCreate {
 	_c.mutation.SetChanges(v)
+	return _c
+}
+
+// SetProposedChanges sets the "proposed_changes" field.
+func (_c *WorkflowProposalCreate) SetProposedChanges(v models.WorkflowProposedChanges) *WorkflowProposalCreate {
+	_c.mutation.SetProposedChanges(v)
+	return _c
+}
+
+// SetNillableProposedChanges sets the "proposed_changes" field if the given value is not nil.
+func (_c *WorkflowProposalCreate) SetNillableProposedChanges(v *models.WorkflowProposedChanges) *WorkflowProposalCreate {
+	if v != nil {
+		_c.SetProposedChanges(*v)
+	}
 	return _c
 }
 
@@ -460,6 +475,10 @@ func (_c *WorkflowProposalCreate) createSpec() (*WorkflowProposal, *sqlgraph.Cre
 	if value, ok := _c.mutation.Changes(); ok {
 		_spec.SetField(workflowproposal.FieldChanges, field.TypeJSON, value)
 		_node.Changes = value
+	}
+	if value, ok := _c.mutation.ProposedChanges(); ok {
+		_spec.SetField(workflowproposal.FieldProposedChanges, field.TypeJSON, value)
+		_node.ProposedChanges = value
 	}
 	if value, ok := _c.mutation.ProposedHash(); ok {
 		_spec.SetField(workflowproposal.FieldProposedHash, field.TypeString, value)

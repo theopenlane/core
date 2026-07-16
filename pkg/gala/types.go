@@ -21,6 +21,8 @@ type Headers struct {
 	MaxAttempts int `json:"max_attempts,omitempty"`
 	// ScheduledAt defers execution until the specified time; nil means immediate
 	ScheduledAt *time.Time `json:"scheduled_at,omitempty"`
+	// Metadata carries structured operation context as opaque JSON
+	Metadata json.RawMessage `json:"metadata,omitempty"`
 }
 
 // NewHeaders returns Headers with the given tags and the input marshaled as JSON in the "input" property

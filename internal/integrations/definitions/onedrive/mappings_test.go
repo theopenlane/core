@@ -41,9 +41,9 @@ func TestInternalPolicyMappingWithWebURL(t *testing.T) {
 	mapped := mappingtest.EvalMap(t, spec, envelope)
 
 	assert.Equal(t, "Security Policy.docx", mapped["name"])
-	assert.Equal(t, "01BYE5RZ6QN3ZWBTUFOFD3GSPGOHDJD36K", mapped["externalFileID"])
+	assert.Equal(t, "01BYE5RZ6QN3ZWBTUFOFD3GSPGOHDJD36K", mapped["external_file_id"])
 	assert.Equal(t, "https://contoso.sharepoint.com/sites/policies/Shared%20Documents/Security%20Policy.docx", mapped["url"])
-	assert.Equal(t, "INTEGRATION", mapped["managementMode"])
+	assert.Equal(t, "INTEGRATION", mapped["management_mode"])
 	assert.Equal(t, "DRAFT", mapped["status"])
 }
 
@@ -61,8 +61,8 @@ func TestInternalPolicyMappingWithoutWebURL(t *testing.T) {
 	mapped := mappingtest.EvalMap(t, spec, envelope)
 
 	assert.Equal(t, "Security Policy.docx", mapped["name"])
-	assert.Equal(t, "01BYE5RZ6QN3ZWBTUFOFD3GSPGOHDJD36K", mapped["externalFileID"])
+	assert.Equal(t, "01BYE5RZ6QN3ZWBTUFOFD3GSPGOHDJD36K", mapped["external_file_id"])
 	assert.Equal(t, nil, mapped["url"])
-	assert.Equal(t, "INTEGRATION", mapped["managementMode"])
+	assert.Equal(t, "INTEGRATION", mapped["management_mode"])
 	assert.Equal(t, "DRAFT", mapped["status"])
 }

@@ -126,6 +126,26 @@ func (_u *AssessmentResponseHistoryUpdate) ClearDeletedBy() *AssessmentResponseH
 	return _u
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *AssessmentResponseHistoryUpdate) SetWorkflowEligibleMarker(v bool) *AssessmentResponseHistoryUpdate {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *AssessmentResponseHistoryUpdate) SetNillableWorkflowEligibleMarker(v *bool) *AssessmentResponseHistoryUpdate {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *AssessmentResponseHistoryUpdate) ClearWorkflowEligibleMarker() *AssessmentResponseHistoryUpdate {
+	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
 // SetAssessmentID sets the "assessment_id" field.
 func (_u *AssessmentResponseHistoryUpdate) SetAssessmentID(v string) *AssessmentResponseHistoryUpdate {
 	_u.mutation.SetAssessmentID(v)
@@ -620,6 +640,12 @@ func (_u *AssessmentResponseHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldOwnerID, field.TypeString)
 	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(assessmentresponsehistory.FieldWorkflowEligibleMarker, field.TypeBool)
+	}
 	if value, ok := _u.mutation.AssessmentID(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldAssessmentID, field.TypeString, value)
 	}
@@ -847,6 +873,26 @@ func (_u *AssessmentResponseHistoryUpdateOne) SetNillableDeletedBy(v *string) *A
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (_u *AssessmentResponseHistoryUpdateOne) ClearDeletedBy() *AssessmentResponseHistoryUpdateOne {
 	_u.mutation.ClearDeletedBy()
+	return _u
+}
+
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *AssessmentResponseHistoryUpdateOne) SetWorkflowEligibleMarker(v bool) *AssessmentResponseHistoryUpdateOne {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *AssessmentResponseHistoryUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *AssessmentResponseHistoryUpdateOne {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *AssessmentResponseHistoryUpdateOne) ClearWorkflowEligibleMarker() *AssessmentResponseHistoryUpdateOne {
+	_u.mutation.ClearWorkflowEligibleMarker()
 	return _u
 }
 
@@ -1373,6 +1419,12 @@ func (_u *AssessmentResponseHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldOwnerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(assessmentresponsehistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.AssessmentID(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldAssessmentID, field.TypeString, value)

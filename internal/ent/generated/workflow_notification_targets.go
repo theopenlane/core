@@ -30,6 +30,10 @@ func (c *Client) ResolveNotificationTargets(ctx context.Context, objectType enum
 	switch objectType {
 	case enums.WorkflowObjectTypeActionPlan:
 		return c.resolveActionPlanNotificationTargets(ctx, objectID, targetType)
+	case enums.WorkflowObjectTypeAssessment:
+		return c.resolveAssessmentNotificationTargets(ctx, objectID, targetType)
+	case enums.WorkflowObjectTypeAssessmentResponse:
+		return c.resolveAssessmentResponseNotificationTargets(ctx, objectID, targetType)
 	case enums.WorkflowObjectTypeCampaign:
 		return c.resolveCampaignNotificationTargets(ctx, objectID, targetType)
 	case enums.WorkflowObjectTypeCampaignTarget:
@@ -38,6 +42,8 @@ func (c *Client) ResolveNotificationTargets(ctx context.Context, objectType enum
 		return c.resolveControlNotificationTargets(ctx, objectID, targetType)
 	case enums.WorkflowObjectTypeEvidence:
 		return c.resolveEvidenceNotificationTargets(ctx, objectID, targetType)
+	case enums.WorkflowObjectTypeFinding:
+		return c.resolveFindingNotificationTargets(ctx, objectID, targetType)
 	case enums.WorkflowObjectTypeIdentityHolder:
 		return c.resolveIdentityHolderNotificationTargets(ctx, objectID, targetType)
 	case enums.WorkflowObjectTypeInternalPolicy:
@@ -46,8 +52,16 @@ func (c *Client) ResolveNotificationTargets(ctx context.Context, objectType enum
 		return c.resolvePlatformNotificationTargets(ctx, objectID, targetType)
 	case enums.WorkflowObjectTypeProcedure:
 		return c.resolveProcedureNotificationTargets(ctx, objectID, targetType)
+	case enums.WorkflowObjectTypeRemediation:
+		return c.resolveRemediationNotificationTargets(ctx, objectID, targetType)
+	case enums.WorkflowObjectTypeRisk:
+		return c.resolveRiskNotificationTargets(ctx, objectID, targetType)
 	case enums.WorkflowObjectTypeSubcontrol:
 		return c.resolveSubcontrolNotificationTargets(ctx, objectID, targetType)
+	case enums.WorkflowObjectTypeTask:
+		return c.resolveTaskNotificationTargets(ctx, objectID, targetType)
+	case enums.WorkflowObjectTypeVulnerability:
+		return c.resolveVulnerabilityNotificationTargets(ctx, objectID, targetType)
 	default:
 		return nil, nil
 	}
@@ -141,6 +155,66 @@ func (c *Client) resolveActionPlanNotificationTargets(ctx context.Context, objec
 			return nil, err
 		}
 		return c.resolveGroupsMemberIDs(ctx, groups)
+	default:
+		return nil, nil
+	}
+}
+
+// resolveAssessmentNotificationTargets resolves notification targets for Assessment
+func (c *Client) resolveAssessmentNotificationTargets(ctx context.Context, objectID string, targetType NotificationTargetType) ([]string, error) {
+	obj, err := c.Assessment.Get(ctx, objectID)
+	if err != nil {
+		return nil, err
+	}
+
+	switch targetType {
+	case NotificationTargetOwner:
+		if obj.OwnerID != "" {
+			return []string{obj.OwnerID}, nil
+		}
+		return nil, nil
+	case NotificationTargetInitiator:
+		// Initiator is resolved from workflow instance context, not from the object
+		return nil, nil
+	case NotificationTargetType("BLOCKED_GROUPS"):
+		groups, err := obj.QueryBlockedGroups().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("EDITORS"):
+		groups, err := obj.QueryEditors().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("VIEWERS"):
+		groups, err := obj.QueryViewers().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	default:
+		return nil, nil
+	}
+}
+
+// resolveAssessmentResponseNotificationTargets resolves notification targets for AssessmentResponse
+func (c *Client) resolveAssessmentResponseNotificationTargets(ctx context.Context, objectID string, targetType NotificationTargetType) ([]string, error) {
+	obj, err := c.AssessmentResponse.Get(ctx, objectID)
+	if err != nil {
+		return nil, err
+	}
+
+	switch targetType {
+	case NotificationTargetOwner:
+		if obj.OwnerID != "" {
+			return []string{obj.OwnerID}, nil
+		}
+		return nil, nil
+	case NotificationTargetInitiator:
+		// Initiator is resolved from workflow instance context, not from the object
+		return nil, nil
 	default:
 		return nil, nil
 	}
@@ -290,6 +364,59 @@ func (c *Client) resolveEvidenceNotificationTargets(ctx context.Context, objectI
 		return nil, nil
 	case NotificationTargetInitiator:
 		// Initiator is resolved from workflow instance context, not from the object
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// resolveFindingNotificationTargets resolves notification targets for Finding
+func (c *Client) resolveFindingNotificationTargets(ctx context.Context, objectID string, targetType NotificationTargetType) ([]string, error) {
+	obj, err := c.Finding.Get(ctx, objectID)
+	if err != nil {
+		return nil, err
+	}
+
+	switch targetType {
+	case NotificationTargetOwner:
+		if obj.OwnerID != "" {
+			return []string{obj.OwnerID}, nil
+		}
+		return nil, nil
+	case NotificationTargetInitiator:
+		// Initiator is resolved from workflow instance context, not from the object
+		return nil, nil
+	case NotificationTargetType("BLOCKED_GROUPS"):
+		groups, err := obj.QueryBlockedGroups().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("EDITORS"):
+		groups, err := obj.QueryEditors().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("REVIEWED_BY_USER"):
+		if obj.ReviewedByUserID != "" {
+			return []string{obj.ReviewedByUserID}, nil
+		}
+		return nil, nil
+	case NotificationTargetType("REVIEWED_BY_GROUP"):
+		if obj.ReviewedByGroupID != "" {
+			return c.resolveGroupMemberIDs(ctx, obj.ReviewedByGroupID)
+		}
+		return nil, nil
+	case NotificationTargetType("ASSIGNED_TO_USER"):
+		if obj.AssignedToUserID != "" {
+			return []string{obj.AssignedToUserID}, nil
+		}
+		return nil, nil
+	case NotificationTargetType("ASSIGNED_TO_GROUP"):
+		if obj.AssignedToGroupID != "" {
+			return c.resolveGroupMemberIDs(ctx, obj.AssignedToGroupID)
+		}
 		return nil, nil
 	default:
 		return nil, nil
@@ -520,6 +647,88 @@ func (c *Client) resolveProcedureNotificationTargets(ctx context.Context, object
 	}
 }
 
+// resolveRemediationNotificationTargets resolves notification targets for Remediation
+func (c *Client) resolveRemediationNotificationTargets(ctx context.Context, objectID string, targetType NotificationTargetType) ([]string, error) {
+	obj, err := c.Remediation.Get(ctx, objectID)
+	if err != nil {
+		return nil, err
+	}
+
+	switch targetType {
+	case NotificationTargetOwner:
+		if obj.OwnerID != "" {
+			return []string{obj.OwnerID}, nil
+		}
+		return nil, nil
+	case NotificationTargetInitiator:
+		// Initiator is resolved from workflow instance context, not from the object
+		return nil, nil
+	case NotificationTargetType("BLOCKED_GROUPS"):
+		groups, err := obj.QueryBlockedGroups().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("EDITORS"):
+		groups, err := obj.QueryEditors().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	default:
+		return nil, nil
+	}
+}
+
+// resolveRiskNotificationTargets resolves notification targets for Risk
+func (c *Client) resolveRiskNotificationTargets(ctx context.Context, objectID string, targetType NotificationTargetType) ([]string, error) {
+	obj, err := c.Risk.Get(ctx, objectID)
+	if err != nil {
+		return nil, err
+	}
+
+	switch targetType {
+	case NotificationTargetOwner:
+		if obj.OwnerID != "" {
+			return []string{obj.OwnerID}, nil
+		}
+		return nil, nil
+	case NotificationTargetInitiator:
+		// Initiator is resolved from workflow instance context, not from the object
+		return nil, nil
+	case NotificationTargetType("BLOCKED_GROUPS"):
+		groups, err := obj.QueryBlockedGroups().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("EDITORS"):
+		groups, err := obj.QueryEditors().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("VIEWERS"):
+		groups, err := obj.QueryViewers().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("STAKEHOLDER"):
+		if obj.StakeholderID != "" {
+			return c.resolveGroupMemberIDs(ctx, obj.StakeholderID)
+		}
+		return nil, nil
+	case NotificationTargetType("DELEGATE"):
+		if obj.DelegateID != "" {
+			return c.resolveGroupMemberIDs(ctx, obj.DelegateID)
+		}
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
 // resolveSubcontrolNotificationTargets resolves notification targets for Subcontrol
 func (c *Client) resolveSubcontrolNotificationTargets(ctx context.Context, objectID string, targetType NotificationTargetType) ([]string, error) {
 	obj, err := c.Subcontrol.Get(ctx, objectID)
@@ -544,6 +753,102 @@ func (c *Client) resolveSubcontrolNotificationTargets(ctx context.Context, objec
 	case NotificationTargetType("DELEGATE"):
 		if obj.DelegateID != "" {
 			return c.resolveGroupMemberIDs(ctx, obj.DelegateID)
+		}
+		return nil, nil
+	default:
+		return nil, nil
+	}
+}
+
+// resolveTaskNotificationTargets resolves notification targets for Task
+func (c *Client) resolveTaskNotificationTargets(ctx context.Context, objectID string, targetType NotificationTargetType) ([]string, error) {
+	obj, err := c.Task.Get(ctx, objectID)
+	if err != nil {
+		return nil, err
+	}
+
+	switch targetType {
+	case NotificationTargetOwner:
+		if obj.OwnerID != "" {
+			return []string{obj.OwnerID}, nil
+		}
+		return nil, nil
+	case NotificationTargetInitiator:
+		// Initiator is resolved from workflow instance context, not from the object
+		return nil, nil
+	case NotificationTargetType("ASSIGNER"):
+		if obj.AssignerID != "" {
+			return []string{obj.AssignerID}, nil
+		}
+		return nil, nil
+	case NotificationTargetType("ASSIGNEE"):
+		if obj.AssigneeID != "" {
+			return []string{obj.AssigneeID}, nil
+		}
+		return nil, nil
+	case NotificationTargetType("GROUPS"):
+		groups, err := obj.QueryGroups().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	default:
+		return nil, nil
+	}
+}
+
+// resolveVulnerabilityNotificationTargets resolves notification targets for Vulnerability
+func (c *Client) resolveVulnerabilityNotificationTargets(ctx context.Context, objectID string, targetType NotificationTargetType) ([]string, error) {
+	obj, err := c.Vulnerability.Get(ctx, objectID)
+	if err != nil {
+		return nil, err
+	}
+
+	switch targetType {
+	case NotificationTargetOwner:
+		if obj.OwnerID != "" {
+			return []string{obj.OwnerID}, nil
+		}
+		return nil, nil
+	case NotificationTargetInitiator:
+		// Initiator is resolved from workflow instance context, not from the object
+		return nil, nil
+	case NotificationTargetType("BLOCKED_GROUPS"):
+		groups, err := obj.QueryBlockedGroups().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("EDITORS"):
+		groups, err := obj.QueryEditors().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("VIEWERS"):
+		groups, err := obj.QueryViewers().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("REVIEWED_BY_USER"):
+		if obj.ReviewedByUserID != "" {
+			return []string{obj.ReviewedByUserID}, nil
+		}
+		return nil, nil
+	case NotificationTargetType("REVIEWED_BY_GROUP"):
+		if obj.ReviewedByGroupID != "" {
+			return c.resolveGroupMemberIDs(ctx, obj.ReviewedByGroupID)
+		}
+		return nil, nil
+	case NotificationTargetType("ASSIGNED_TO_USER"):
+		if obj.AssignedToUserID != "" {
+			return []string{obj.AssignedToUserID}, nil
+		}
+		return nil, nil
+	case NotificationTargetType("ASSIGNED_TO_GROUP"):
+		if obj.AssignedToGroupID != "" {
+			return c.resolveGroupMemberIDs(ctx, obj.AssignedToGroupID)
 		}
 		return nil, nil
 	default:

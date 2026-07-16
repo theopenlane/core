@@ -513,6 +513,27 @@ func (_m *Assessment) Campaigns(
 	return _m.QueryCampaigns().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Assessment) WorkflowObjectRefs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowObjectRefOrder, where *WorkflowObjectRefWhereInput,
+) (*WorkflowObjectRefConnection, error) {
+	opts := []WorkflowObjectRefPaginateOption{
+		WithWorkflowObjectRefOrder(orderBy),
+		WithWorkflowObjectRefFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[9][alias]
+	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowObjectRefPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowObjectRefConnection{Edges: []*WorkflowObjectRefEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowObjectRefs().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *AssessmentResponse) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -580,6 +601,27 @@ func (_m *AssessmentResponse) VendorRiskScores(
 		return conn, nil
 	}
 	return _m.QueryVendorRiskScores().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *AssessmentResponse) WorkflowObjectRefs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowObjectRefOrder, where *WorkflowObjectRefWhereInput,
+) (*WorkflowObjectRefConnection, error) {
+	opts := []WorkflowObjectRefPaginateOption{
+		WithWorkflowObjectRefOrder(orderBy),
+		WithWorkflowObjectRefFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[7][alias]
+	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowObjectRefPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowObjectRefConnection{Edges: []*WorkflowObjectRefEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowObjectRefs().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (_m *Asset) Owner(ctx context.Context) (*Organization, error) {
@@ -8767,6 +8809,14 @@ func (_m *Note) InternalPolicy(ctx context.Context) (*InternalPolicy, error) {
 	return result, MaskNotFound(err)
 }
 
+func (_m *Note) Review(ctx context.Context) (*Review, error) {
+	result, err := _m.Edges.ReviewOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryReview().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *Note) Evidence(ctx context.Context) (*Evidence, error) {
 	result, err := _m.Edges.EvidenceOrErr()
 	if IsNotLoaded(err) {
@@ -8799,7 +8849,7 @@ func (_m *Note) TrustCenterFaqs(
 		WithTrustCenterFAQFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[10][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[11][alias]
 	if nodes, err := _m.NamedTrustCenterFaqs(alias); err == nil || hasTotalCount {
 		pager, err := newTrustCenterFAQPager(opts, last != nil)
 		if err != nil {
@@ -8820,7 +8870,7 @@ func (_m *Note) Files(
 		WithFileFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[11][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[12][alias]
 	if nodes, err := _m.NamedFiles(alias); err == nil || hasTotalCount {
 		pager, err := newFilePager(opts, last != nil)
 		if err != nil {
@@ -14292,6 +14342,27 @@ func (_m *Remediation) Files(
 	return _m.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Remediation) WorkflowObjectRefs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowObjectRefOrder, where *WorkflowObjectRefWhereInput,
+) (*WorkflowObjectRefConnection, error) {
+	opts := []WorkflowObjectRefPaginateOption{
+		WithWorkflowObjectRefOrder(orderBy),
+		WithWorkflowObjectRefFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[20][alias]
+	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowObjectRefPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowObjectRefConnection{Edges: []*WorkflowObjectRefEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowObjectRefs().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Review) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -15113,6 +15184,27 @@ func (_m *Risk) Remediations(
 		return conn, nil
 	}
 	return _m.QueryRemediations().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Risk) WorkflowObjectRefs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowObjectRefOrder, where *WorkflowObjectRefWhereInput,
+) (*WorkflowObjectRefConnection, error) {
+	opts := []WorkflowObjectRefPaginateOption{
+		WithWorkflowObjectRefOrder(orderBy),
+		WithWorkflowObjectRefFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[25][alias]
+	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowObjectRefPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowObjectRefConnection{Edges: []*WorkflowObjectRefEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowObjectRefs().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (_m *SLADefinition) Owner(ctx context.Context) (*Organization, error) {
@@ -18844,6 +18936,27 @@ func (_m *Vulnerability) Files(
 	return _m.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Vulnerability) WorkflowObjectRefs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowObjectRefOrder, where *WorkflowObjectRefWhereInput,
+) (*WorkflowObjectRefConnection, error) {
+	opts := []WorkflowObjectRefPaginateOption{
+		WithWorkflowObjectRefOrder(orderBy),
+		WithWorkflowObjectRefFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[26][alias]
+	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowObjectRefPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowObjectRefConnection{Edges: []*WorkflowObjectRefEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowObjectRefs().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Webauthn) Owner(ctx context.Context) (*User, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -19204,6 +19317,70 @@ func (_m *WorkflowInstance) Platform(ctx context.Context) (*Platform, error) {
 	return result, MaskNotFound(err)
 }
 
+func (_m *WorkflowInstance) Assessment(ctx context.Context) (*Assessment, error) {
+	result, err := _m.Edges.AssessmentOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryAssessment().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowInstance) AssessmentResponse(ctx context.Context) (*AssessmentResponse, error) {
+	result, err := _m.Edges.AssessmentResponseOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryAssessmentResponse().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowInstance) Finding(ctx context.Context) (*Finding, error) {
+	result, err := _m.Edges.FindingOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryFinding().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowInstance) Integration(ctx context.Context) (*Integration, error) {
+	result, err := _m.Edges.IntegrationOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryIntegration().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowInstance) Remediation(ctx context.Context) (*Remediation, error) {
+	result, err := _m.Edges.RemediationOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryRemediation().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowInstance) Risk(ctx context.Context) (*Risk, error) {
+	result, err := _m.Edges.RiskOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryRisk().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowInstance) Task(ctx context.Context) (*Task, error) {
+	result, err := _m.Edges.TaskOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryTask().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowInstance) Vulnerability(ctx context.Context) (*Vulnerability, error) {
+	result, err := _m.Edges.VulnerabilityOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryVulnerability().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *WorkflowInstance) WorkflowAssignments(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowAssignmentOrder, where *WorkflowAssignmentWhereInput,
 ) (*WorkflowAssignmentConnection, error) {
@@ -19212,7 +19389,7 @@ func (_m *WorkflowInstance) WorkflowAssignments(
 		WithWorkflowAssignmentFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[12][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[20][alias]
 	if nodes, err := _m.NamedWorkflowAssignments(alias); err == nil || hasTotalCount {
 		pager, err := newWorkflowAssignmentPager(opts, last != nil)
 		if err != nil {
@@ -19233,7 +19410,7 @@ func (_m *WorkflowInstance) WorkflowEvents(
 		WithWorkflowEventFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[13][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[21][alias]
 	if nodes, err := _m.NamedWorkflowEvents(alias); err == nil || hasTotalCount {
 		pager, err := newWorkflowEventPager(opts, last != nil)
 		if err != nil {
@@ -19254,7 +19431,7 @@ func (_m *WorkflowInstance) EmailTemplates(
 		WithEmailTemplateFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[14][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[22][alias]
 	if nodes, err := _m.NamedEmailTemplates(alias); err == nil || hasTotalCount {
 		pager, err := newEmailTemplatePager(opts, last != nil)
 		if err != nil {
@@ -19275,7 +19452,7 @@ func (_m *WorkflowInstance) WorkflowObjectRefs(
 		WithWorkflowObjectRefFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[15][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[23][alias]
 	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
 		pager, err := newWorkflowObjectRefPager(opts, last != nil)
 		if err != nil {
@@ -19420,6 +19597,46 @@ func (_m *WorkflowObjectRef) Platform(ctx context.Context) (*Platform, error) {
 	result, err := _m.Edges.PlatformOrErr()
 	if IsNotLoaded(err) {
 		result, err = _m.QueryPlatform().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowObjectRef) Vulnerability(ctx context.Context) (*Vulnerability, error) {
+	result, err := _m.Edges.VulnerabilityOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryVulnerability().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowObjectRef) Risk(ctx context.Context) (*Risk, error) {
+	result, err := _m.Edges.RiskOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryRisk().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowObjectRef) Assessment(ctx context.Context) (*Assessment, error) {
+	result, err := _m.Edges.AssessmentOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryAssessment().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowObjectRef) AssessmentResponse(ctx context.Context) (*AssessmentResponse, error) {
+	result, err := _m.Edges.AssessmentResponseOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryAssessmentResponse().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowObjectRef) Remediation(ctx context.Context) (*Remediation, error) {
+	result, err := _m.Edges.RemediationOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryRemediation().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }

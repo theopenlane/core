@@ -30,6 +30,7 @@ mutation CreateAssessmentResponse ($input: CreateAssessmentResponseInput!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 		}
 	}
 }
@@ -99,6 +100,7 @@ query GetAssessmentResponseByID ($assessmentResponseId: ID!) {
 		updatedAt
 		updatedBy
 		updatedByImpersonator
+		workflowEligibleMarker
 	}
 }
 query GetAssessmentResponses ($first: Int, $last: Int, $where: AssessmentResponseWhereInput) {

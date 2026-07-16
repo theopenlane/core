@@ -7800,7 +7800,7 @@ func (r *mutationResolver) bulkUpdateScan(ctx context.Context, ids []string, inp
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendVulnerabilityIds(input.AppendVulnerabilityIds).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendDiscoveredVulnerabilityIds(input.AppendDiscoveredVulnerabilityIds).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("scan_id", id).Msg("failed to update scan in bulk operation")
 			continue
@@ -7841,7 +7841,7 @@ func (r *mutationResolver) bulkUpdateCSVScan(ctx context.Context, inputs []*csvg
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendVulnerabilityIds(input.Input.AppendVulnerabilityIds).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDiscoveredVulnerabilityIds(input.Input.AppendDiscoveredVulnerabilityIds).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("scan_id", input.ID).Msg("failed to update scan in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "scan"})

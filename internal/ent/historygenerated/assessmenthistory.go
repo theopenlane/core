@@ -52,6 +52,8 @@ type AssessmentHistory struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// the name of the assessment, e.g. cloud providers, marketing team
 	Name string `json:"name,omitempty"`
 	// AssessmentType holds the value of the "assessment_type" field.
@@ -76,7 +78,7 @@ func (*AssessmentHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case assessmenthistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case assessmenthistory.FieldSystemOwned:
+		case assessmenthistory.FieldSystemOwned, assessmenthistory.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
 		case assessmenthistory.FieldResponseDueDuration:
 			values[i] = new(sql.NullInt64)
@@ -199,6 +201,12 @@ func (_m *AssessmentHistory) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
+			}
+		case assessmenthistory.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
+			} else if value.Valid {
+				_m.WorkflowEligibleMarker = value.Bool
 			}
 		case assessmenthistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -326,6 +334,9 @@ func (_m *AssessmentHistory) String() string {
 		builder.WriteString("system_internal_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

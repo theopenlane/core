@@ -1060,6 +1060,8 @@ type Assessment struct {
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// the name of the assessment, e.g. cloud providers, marketing team
 	Name           string               `json:"name"`
 	AssessmentType enums.AssessmentType `json:"assessmentType"`
@@ -1080,7 +1082,16 @@ type Assessment struct {
 	IdentityHolders     *IdentityHolderConnection     `json:"identityHolders"`
 	AssessmentResponses *AssessmentResponseConnection `json:"assessmentResponses"`
 	Campaigns           *CampaignConnection           `json:"campaigns"`
-	AccessURL           *string                       `json:"accessURL,omitempty"`
+	WorkflowObjectRefs  *WorkflowObjectRefConnection  `json:"workflowObjectRefs"`
+	// Indicates if this assessment has pending changes awaiting workflow approval
+	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
+	// Indicates if this assessment has any workflow history (completed or failed instances)
+	HasWorkflowHistory bool `json:"hasWorkflowHistory"`
+	// Returns active workflow instances for this assessment (RUNNING or PAUSED)
+	ActiveWorkflowInstances []*WorkflowInstance `json:"activeWorkflowInstances"`
+	// Returns the workflow event timeline for this assessment across all workflow instances
+	WorkflowTimeline *WorkflowEventConnection `json:"workflowTimeline"`
+	AccessURL        *string                  `json:"accessURL,omitempty"`
 }
 
 func (Assessment) IsNode() {}
@@ -1143,6 +1154,8 @@ type AssessmentResponse struct {
 	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// the assessment this response is for
 	AssessmentID string `json:"assessmentID"`
 	// whether this assessment response is for a test send
@@ -1186,15 +1199,24 @@ type AssessmentResponse struct {
 	// the document containing the user's response data
 	DocumentDataID *string `json:"documentDataID,omitempty"`
 	// is this a draft response? can the user resume from where they left?
-	IsDraft                     bool                       `json:"isDraft"`
-	Owner                       *Organization              `json:"owner,omitempty"`
-	Assessment                  *Assessment                `json:"assessment"`
-	Campaign                    *Campaign                  `json:"campaign,omitempty"`
-	IdentityHolder              *IdentityHolder            `json:"identityHolder,omitempty"`
-	Entity                      *Entity                    `json:"entity,omitempty"`
-	Document                    *DocumentData              `json:"document,omitempty"`
-	VendorRiskScores            *VendorRiskScoreConnection `json:"vendorRiskScores"`
-	QuestionnaireTransformError *string                    `json:"questionnaireTransformError,omitempty"`
+	IsDraft            bool                         `json:"isDraft"`
+	Owner              *Organization                `json:"owner,omitempty"`
+	Assessment         *Assessment                  `json:"assessment"`
+	Campaign           *Campaign                    `json:"campaign,omitempty"`
+	IdentityHolder     *IdentityHolder              `json:"identityHolder,omitempty"`
+	Entity             *Entity                      `json:"entity,omitempty"`
+	Document           *DocumentData                `json:"document,omitempty"`
+	VendorRiskScores   *VendorRiskScoreConnection   `json:"vendorRiskScores"`
+	WorkflowObjectRefs *WorkflowObjectRefConnection `json:"workflowObjectRefs"`
+	// Indicates if this assessmentResponse has pending changes awaiting workflow approval
+	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
+	// Indicates if this assessmentResponse has any workflow history (completed or failed instances)
+	HasWorkflowHistory bool `json:"hasWorkflowHistory"`
+	// Returns active workflow instances for this assessmentResponse (RUNNING or PAUSED)
+	ActiveWorkflowInstances []*WorkflowInstance `json:"activeWorkflowInstances"`
+	// Returns the workflow event timeline for this assessmentResponse across all workflow instances
+	WorkflowTimeline            *WorkflowEventConnection `json:"workflowTimeline"`
+	QuestionnaireTransformError *string                  `json:"questionnaireTransformError,omitempty"`
 }
 
 func (AssessmentResponse) IsNode() {}
@@ -1340,6 +1362,11 @@ type AssessmentResponseWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// workflow_eligible_marker field predicates
+	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
+	WorkflowEligibleMarkerNeq    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
+	WorkflowEligibleMarkerIsNil  *bool `json:"workflowEligibleMarkerIsNil,omitempty"`
+	WorkflowEligibleMarkerNotNil *bool `json:"workflowEligibleMarkerNotNil,omitempty"`
 	// assessment_id field predicates
 	AssessmentID             *string  `json:"assessmentID,omitempty"`
 	AssessmentIdneq          *string  `json:"assessmentIDNEQ,omitempty"`
@@ -1581,6 +1608,9 @@ type AssessmentResponseWhereInput struct {
 	// vendor_risk_scores edge predicates
 	HasVendorRiskScores     *bool                        `json:"hasVendorRiskScores,omitempty"`
 	HasVendorRiskScoresWith []*VendorRiskScoreWhereInput `json:"hasVendorRiskScoresWith,omitempty"`
+	// workflow_object_refs edge predicates
+	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
+	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
 }
 
 // Return response for updateAssessment mutation
@@ -1729,6 +1759,11 @@ type AssessmentWhereInput struct {
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
 	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
 	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+	// workflow_eligible_marker field predicates
+	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
+	WorkflowEligibleMarkerNeq    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
+	WorkflowEligibleMarkerIsNil  *bool `json:"workflowEligibleMarkerIsNil,omitempty"`
+	WorkflowEligibleMarkerNotNil *bool `json:"workflowEligibleMarkerNotNil,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -1802,6 +1837,9 @@ type AssessmentWhereInput struct {
 	// campaigns edge predicates
 	HasCampaigns     *bool                 `json:"hasCampaigns,omitempty"`
 	HasCampaignsWith []*CampaignWhereInput `json:"hasCampaignsWith,omitempty"`
+	// workflow_object_refs edge predicates
+	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
+	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -6590,6 +6628,8 @@ type CreateAssessmentInput struct {
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// the name of the assessment, e.g. cloud providers, marketing team
 	Name           string                `json:"name"`
 	AssessmentType *enums.AssessmentType `json:"assessmentType,omitempty"`
@@ -6608,11 +6648,14 @@ type CreateAssessmentInput struct {
 	IdentityHolderIDs     []string `json:"identityHolderIDs,omitempty"`
 	AssessmentResponseIDs []string `json:"assessmentResponseIDs,omitempty"`
 	CampaignIDs           []string `json:"campaignIDs,omitempty"`
+	WorkflowObjectRefIDs  []string `json:"workflowObjectRefIDs,omitempty"`
 }
 
 // CreateAssessmentResponseInput is used for create AssessmentResponse object.
 // Input was generated by ent.
 type CreateAssessmentResponseInput struct {
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// display name for the submitted assessment response
 	DisplayName *string `json:"displayName,omitempty"`
 	// the email address of the recipient
@@ -6632,14 +6675,15 @@ type CreateAssessmentResponseInput struct {
 	// additional metadata about email delivery events
 	EmailMetadata map[string]any `json:"emailMetadata,omitempty"`
 	// when the assessment response is due
-	DueDate            *time.Time `json:"dueDate,omitempty"`
-	OwnerID            *string    `json:"ownerID,omitempty"`
-	AssessmentID       string     `json:"assessmentID"`
-	CampaignID         *string    `json:"campaignID,omitempty"`
-	IdentityHolderID   *string    `json:"identityHolderID,omitempty"`
-	EntityID           *string    `json:"entityID,omitempty"`
-	DocumentID         *string    `json:"documentID,omitempty"`
-	VendorRiskScoreIDs []string   `json:"vendorRiskScoreIDs,omitempty"`
+	DueDate              *time.Time `json:"dueDate,omitempty"`
+	OwnerID              *string    `json:"ownerID,omitempty"`
+	AssessmentID         string     `json:"assessmentID"`
+	CampaignID           *string    `json:"campaignID,omitempty"`
+	IdentityHolderID     *string    `json:"identityHolderID,omitempty"`
+	EntityID             *string    `json:"entityID,omitempty"`
+	DocumentID           *string    `json:"documentID,omitempty"`
+	VendorRiskScoreIDs   []string   `json:"vendorRiskScoreIDs,omitempty"`
+	WorkflowObjectRefIDs []string   `json:"workflowObjectRefIDs,omitempty"`
 }
 
 // CreateAssetInput is used for create Asset object.
@@ -7814,6 +7858,8 @@ type CreateFindingInput struct {
 	ScopeName *string `json:"scopeName,omitempty"`
 	// the status of the finding
 	FindingStatusName *string `json:"findingStatusName,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// external identifier from the integration source for the finding
 	ExternalID *string `json:"externalID,omitempty"`
 	// the owner of the finding
@@ -8437,6 +8483,7 @@ type CreateNoteInput struct {
 	ProcedureID       *string  `json:"procedureID,omitempty"`
 	RiskID            *string  `json:"riskID,omitempty"`
 	InternalPolicyID  *string  `json:"internalPolicyID,omitempty"`
+	ReviewID          *string  `json:"reviewID,omitempty"`
 	EvidenceID        *string  `json:"evidenceID,omitempty"`
 	TrustCenterID     *string  `json:"trustCenterID,omitempty"`
 	DiscussionID      *string  `json:"discussionID,omitempty"`
@@ -9135,6 +9182,8 @@ type CreateRemediationInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the remediation
 	ScopeName *string `json:"scopeName,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// external identifier from the integration source for the remediation
 	ExternalID *string `json:"externalID,omitempty"`
 	// external identifier from the integration source for the remediation
@@ -9174,27 +9223,28 @@ type CreateRemediationInput struct {
 	// link to the remediation in the source system
 	ExternalURI *string `json:"externalURI,omitempty"`
 	// raw metadata payload for the remediation from the source system
-	Metadata         map[string]any `json:"metadata,omitempty"`
-	OwnerID          *string        `json:"ownerID,omitempty"`
-	BlockedGroupIDs  []string       `json:"blockedGroupIDs,omitempty"`
-	EditorIDs        []string       `json:"editorIDs,omitempty"`
-	EnvironmentID    *string        `json:"environmentID,omitempty"`
-	ScopeID          *string        `json:"scopeID,omitempty"`
-	IntegrationIDs   []string       `json:"integrationIDs,omitempty"`
-	ScanIDs          []string       `json:"scanIDs,omitempty"`
-	FindingIDs       []string       `json:"findingIDs,omitempty"`
-	VulnerabilityIDs []string       `json:"vulnerabilityIDs,omitempty"`
-	ActionPlanIDs    []string       `json:"actionPlanIDs,omitempty"`
-	TaskIDs          []string       `json:"taskIDs,omitempty"`
-	ControlIDs       []string       `json:"controlIDs,omitempty"`
-	SubcontrolIDs    []string       `json:"subcontrolIDs,omitempty"`
-	RiskIDs          []string       `json:"riskIDs,omitempty"`
-	ProgramIDs       []string       `json:"programIDs,omitempty"`
-	AssetIDs         []string       `json:"assetIDs,omitempty"`
-	EntityIDs        []string       `json:"entityIDs,omitempty"`
-	ReviewIDs        []string       `json:"reviewIDs,omitempty"`
-	CommentIDs       []string       `json:"commentIDs,omitempty"`
-	FileIDs          []string       `json:"fileIDs,omitempty"`
+	Metadata             map[string]any `json:"metadata,omitempty"`
+	OwnerID              *string        `json:"ownerID,omitempty"`
+	BlockedGroupIDs      []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs            []string       `json:"editorIDs,omitempty"`
+	EnvironmentID        *string        `json:"environmentID,omitempty"`
+	ScopeID              *string        `json:"scopeID,omitempty"`
+	IntegrationIDs       []string       `json:"integrationIDs,omitempty"`
+	ScanIDs              []string       `json:"scanIDs,omitempty"`
+	FindingIDs           []string       `json:"findingIDs,omitempty"`
+	VulnerabilityIDs     []string       `json:"vulnerabilityIDs,omitempty"`
+	ActionPlanIDs        []string       `json:"actionPlanIDs,omitempty"`
+	TaskIDs              []string       `json:"taskIDs,omitempty"`
+	ControlIDs           []string       `json:"controlIDs,omitempty"`
+	SubcontrolIDs        []string       `json:"subcontrolIDs,omitempty"`
+	RiskIDs              []string       `json:"riskIDs,omitempty"`
+	ProgramIDs           []string       `json:"programIDs,omitempty"`
+	AssetIDs             []string       `json:"assetIDs,omitempty"`
+	EntityIDs            []string       `json:"entityIDs,omitempty"`
+	ReviewIDs            []string       `json:"reviewIDs,omitempty"`
+	CommentIDs           []string       `json:"commentIDs,omitempty"`
+	FileIDs              []string       `json:"fileIDs,omitempty"`
+	WorkflowObjectRefIDs []string       `json:"workflowObjectRefIDs,omitempty"`
 }
 
 // CreateReviewInput is used for create Review object.
@@ -9282,6 +9332,8 @@ type CreateRiskInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the risk
 	ScopeName *string `json:"scopeName,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// stable identifier assigned by the source system, used for integration ingest deduplication
 	ExternalID *string `json:"externalID,omitempty"`
 	// integration that surfaced this risk, when sourced via integration ingest
@@ -9326,32 +9378,33 @@ type CreateRiskInput struct {
 	// score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
 	ResidualScore *int64 `json:"residualScore,omitempty"`
 	// the decision made for the risk - accept, transfer, avoid, mitigate, or none
-	RiskDecision      *enums.RiskDecision `json:"riskDecision,omitempty"`
-	OwnerID           *string             `json:"ownerID,omitempty"`
-	BlockedGroupIDs   []string            `json:"blockedGroupIDs,omitempty"`
-	EditorIDs         []string            `json:"editorIDs,omitempty"`
-	ViewerIDs         []string            `json:"viewerIDs,omitempty"`
-	RiskKindID        *string             `json:"riskKindID,omitempty"`
-	RiskCategoryID    *string             `json:"riskCategoryID,omitempty"`
-	EnvironmentID     *string             `json:"environmentID,omitempty"`
-	ScopeID           *string             `json:"scopeID,omitempty"`
-	ControlIDs        []string            `json:"controlIDs,omitempty"`
-	SubcontrolIDs     []string            `json:"subcontrolIDs,omitempty"`
-	ProcedureIDs      []string            `json:"procedureIDs,omitempty"`
-	InternalPolicyIDs []string            `json:"internalPolicyIDs,omitempty"`
-	ProgramIDs        []string            `json:"programIDs,omitempty"`
-	PlatformIDs       []string            `json:"platformIDs,omitempty"`
-	ActionPlanIDs     []string            `json:"actionPlanIDs,omitempty"`
-	TaskIDs           []string            `json:"taskIDs,omitempty"`
-	AssetIDs          []string            `json:"assetIDs,omitempty"`
-	EntityIDs         []string            `json:"entityIDs,omitempty"`
-	ScanIDs           []string            `json:"scanIDs,omitempty"`
-	StakeholderID     *string             `json:"stakeholderID,omitempty"`
-	DelegateID        *string             `json:"delegateID,omitempty"`
-	CommentIDs        []string            `json:"commentIDs,omitempty"`
-	DiscussionIDs     []string            `json:"discussionIDs,omitempty"`
-	ReviewIDs         []string            `json:"reviewIDs,omitempty"`
-	RemediationIDs    []string            `json:"remediationIDs,omitempty"`
+	RiskDecision         *enums.RiskDecision `json:"riskDecision,omitempty"`
+	OwnerID              *string             `json:"ownerID,omitempty"`
+	BlockedGroupIDs      []string            `json:"blockedGroupIDs,omitempty"`
+	EditorIDs            []string            `json:"editorIDs,omitempty"`
+	ViewerIDs            []string            `json:"viewerIDs,omitempty"`
+	RiskKindID           *string             `json:"riskKindID,omitempty"`
+	RiskCategoryID       *string             `json:"riskCategoryID,omitempty"`
+	EnvironmentID        *string             `json:"environmentID,omitempty"`
+	ScopeID              *string             `json:"scopeID,omitempty"`
+	ControlIDs           []string            `json:"controlIDs,omitempty"`
+	SubcontrolIDs        []string            `json:"subcontrolIDs,omitempty"`
+	ProcedureIDs         []string            `json:"procedureIDs,omitempty"`
+	InternalPolicyIDs    []string            `json:"internalPolicyIDs,omitempty"`
+	ProgramIDs           []string            `json:"programIDs,omitempty"`
+	PlatformIDs          []string            `json:"platformIDs,omitempty"`
+	ActionPlanIDs        []string            `json:"actionPlanIDs,omitempty"`
+	TaskIDs              []string            `json:"taskIDs,omitempty"`
+	AssetIDs             []string            `json:"assetIDs,omitempty"`
+	EntityIDs            []string            `json:"entityIDs,omitempty"`
+	ScanIDs              []string            `json:"scanIDs,omitempty"`
+	StakeholderID        *string             `json:"stakeholderID,omitempty"`
+	DelegateID           *string             `json:"delegateID,omitempty"`
+	CommentIDs           []string            `json:"commentIDs,omitempty"`
+	DiscussionIDs        []string            `json:"discussionIDs,omitempty"`
+	ReviewIDs            []string            `json:"reviewIDs,omitempty"`
+	RemediationIDs       []string            `json:"remediationIDs,omitempty"`
+	WorkflowObjectRefIDs []string            `json:"workflowObjectRefIDs,omitempty"`
 }
 
 // CreateSLADefinitionInput is used for create SLADefinition object.
@@ -9394,7 +9447,7 @@ type CreateScanInput struct {
 	// who performed the scan when no user or group is linked
 	PerformedBy *string `json:"performedBy,omitempty"`
 	// identifiers of vulnerabilities discovered during the scan
-	VulnerabilityIds []string `json:"vulnerabilityIds,omitempty"`
+	DiscoveredVulnerabilityIds []string `json:"discoveredVulnerabilityIds,omitempty"`
 	// the status of the scan, e.g., processing, completed, failed
 	Status                *enums.ScanStatus `json:"status,omitempty"`
 	OwnerID               *string           `json:"ownerID,omitempty"`
@@ -9698,6 +9751,8 @@ type CreateTaskInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the task
 	ScopeName *string `json:"scopeName,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// stable external UUID for deterministic OSCAL export and round-tripping
 	ExternalUUID *string `json:"externalUUID,omitempty"`
 	// the title of the task
@@ -10205,6 +10260,8 @@ type CreateVulnerabilityInput struct {
 	ScopeName *string `json:"scopeName,omitempty"`
 	// the status of the vulnerability
 	VulnerabilityStatusName *string `json:"vulnerabilityStatusName,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// owner of the vulnerability
 	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
 	// external identifier from the integration source for the vulnerability
@@ -10313,6 +10370,7 @@ type CreateVulnerabilityInput struct {
 	ReviewIDs             []string       `json:"reviewIDs,omitempty"`
 	CommentIDs            []string       `json:"commentIDs,omitempty"`
 	FileIDs               []string       `json:"fileIDs,omitempty"`
+	WorkflowObjectRefIDs  []string       `json:"workflowObjectRefIDs,omitempty"`
 }
 
 // CreateWorkflowDefinitionInput is used for create WorkflowDefinition object.
@@ -17814,6 +17872,8 @@ type Finding struct {
 	FindingStatusName *string `json:"findingStatusName,omitempty"`
 	// the status of the finding
 	FindingStatusID *string `json:"findingStatusID,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// external identifier from the integration source for the finding
 	ExternalID *string `json:"externalID,omitempty"`
 	// incoming source severity
@@ -17918,6 +17978,14 @@ type Finding struct {
 	WorkflowObjectRefs *WorkflowObjectRefConnection `json:"workflowObjectRefs"`
 	CheckResults       *CheckResultConnection       `json:"checkResults"`
 	ControlMappings    *FindingControlConnection    `json:"controlMappings"`
+	// Indicates if this finding has pending changes awaiting workflow approval
+	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
+	// Indicates if this finding has any workflow history (completed or failed instances)
+	HasWorkflowHistory bool `json:"hasWorkflowHistory"`
+	// Returns active workflow instances for this finding (RUNNING or PAUSED)
+	ActiveWorkflowInstances []*WorkflowInstance `json:"activeWorkflowInstances"`
+	// Returns the workflow event timeline for this finding across all workflow instances
+	WorkflowTimeline *WorkflowEventConnection `json:"workflowTimeline"`
 }
 
 func (Finding) IsNode() {}
@@ -18583,6 +18651,11 @@ type FindingWhereInput struct {
 	FindingStatusIDNotNil       *bool    `json:"findingStatusIDNotNil,omitempty"`
 	FindingStatusIDEqualFold    *string  `json:"findingStatusIDEqualFold,omitempty"`
 	FindingStatusIDContainsFold *string  `json:"findingStatusIDContainsFold,omitempty"`
+	// workflow_eligible_marker field predicates
+	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
+	WorkflowEligibleMarkerNeq    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
+	WorkflowEligibleMarkerIsNil  *bool `json:"workflowEligibleMarkerIsNil,omitempty"`
+	WorkflowEligibleMarkerNotNil *bool `json:"workflowEligibleMarkerNotNil,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -25035,6 +25108,7 @@ type Note struct {
 	Procedure       *Procedure                `json:"procedure,omitempty"`
 	Risk            *Risk                     `json:"risk,omitempty"`
 	InternalPolicy  *InternalPolicy           `json:"internalPolicy,omitempty"`
+	Review          *Review                   `json:"review,omitempty"`
 	Evidence        *Evidence                 `json:"evidence,omitempty"`
 	TrustCenter     *TrustCenter              `json:"trustCenter,omitempty"`
 	Discussion      *Discussion               `json:"discussion,omitempty"`
@@ -25311,6 +25385,9 @@ type NoteWhereInput struct {
 	// internal_policy edge predicates
 	HasInternalPolicy     *bool                       `json:"hasInternalPolicy,omitempty"`
 	HasInternalPolicyWith []*InternalPolicyWhereInput `json:"hasInternalPolicyWith,omitempty"`
+	// review edge predicates
+	HasReview     *bool               `json:"hasReview,omitempty"`
+	HasReviewWith []*ReviewWhereInput `json:"hasReviewWith,omitempty"`
 	// evidence edge predicates
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
@@ -31245,6 +31322,8 @@ type Remediation struct {
 	ScopeName *string `json:"scopeName,omitempty"`
 	// the scope of the remediation
 	ScopeID *string `json:"scopeID,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// external identifier from the integration source for the remediation
 	ExternalID *string `json:"externalID,omitempty"`
 	// external identifier from the integration source for the remediation
@@ -31284,27 +31363,36 @@ type Remediation struct {
 	// link to the remediation in the source system
 	ExternalURI *string `json:"externalURI,omitempty"`
 	// raw metadata payload for the remediation from the source system
-	Metadata        map[string]any           `json:"metadata,omitempty"`
-	Owner           *Organization            `json:"owner,omitempty"`
-	BlockedGroups   *GroupConnection         `json:"blockedGroups"`
-	Editors         *GroupConnection         `json:"editors"`
-	Environment     *CustomTypeEnum          `json:"environment,omitempty"`
-	Scope           *CustomTypeEnum          `json:"scope,omitempty"`
-	Integrations    *IntegrationConnection   `json:"integrations"`
-	Scans           *ScanConnection          `json:"scans"`
-	Findings        *FindingConnection       `json:"findings"`
-	Vulnerabilities *VulnerabilityConnection `json:"vulnerabilities"`
-	ActionPlans     *ActionPlanConnection    `json:"actionPlans"`
-	Tasks           *TaskConnection          `json:"tasks"`
-	Controls        *ControlConnection       `json:"controls"`
-	Subcontrols     *SubcontrolConnection    `json:"subcontrols"`
-	Risks           *RiskConnection          `json:"risks"`
-	Programs        *ProgramConnection       `json:"programs"`
-	Assets          *AssetConnection         `json:"assets"`
-	Entities        *EntityConnection        `json:"entities"`
-	Reviews         *ReviewConnection        `json:"reviews"`
-	Comments        *NoteConnection          `json:"comments"`
-	Files           *FileConnection          `json:"files"`
+	Metadata           map[string]any               `json:"metadata,omitempty"`
+	Owner              *Organization                `json:"owner,omitempty"`
+	BlockedGroups      *GroupConnection             `json:"blockedGroups"`
+	Editors            *GroupConnection             `json:"editors"`
+	Environment        *CustomTypeEnum              `json:"environment,omitempty"`
+	Scope              *CustomTypeEnum              `json:"scope,omitempty"`
+	Integrations       *IntegrationConnection       `json:"integrations"`
+	Scans              *ScanConnection              `json:"scans"`
+	Findings           *FindingConnection           `json:"findings"`
+	Vulnerabilities    *VulnerabilityConnection     `json:"vulnerabilities"`
+	ActionPlans        *ActionPlanConnection        `json:"actionPlans"`
+	Tasks              *TaskConnection              `json:"tasks"`
+	Controls           *ControlConnection           `json:"controls"`
+	Subcontrols        *SubcontrolConnection        `json:"subcontrols"`
+	Risks              *RiskConnection              `json:"risks"`
+	Programs           *ProgramConnection           `json:"programs"`
+	Assets             *AssetConnection             `json:"assets"`
+	Entities           *EntityConnection            `json:"entities"`
+	Reviews            *ReviewConnection            `json:"reviews"`
+	Comments           *NoteConnection              `json:"comments"`
+	Files              *FileConnection              `json:"files"`
+	WorkflowObjectRefs *WorkflowObjectRefConnection `json:"workflowObjectRefs"`
+	// Indicates if this remediation has pending changes awaiting workflow approval
+	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
+	// Indicates if this remediation has any workflow history (completed or failed instances)
+	HasWorkflowHistory bool `json:"hasWorkflowHistory"`
+	// Returns active workflow instances for this remediation (RUNNING or PAUSED)
+	ActiveWorkflowInstances []*WorkflowInstance `json:"activeWorkflowInstances"`
+	// Returns the workflow event timeline for this remediation across all workflow instances
+	WorkflowTimeline *WorkflowEventConnection `json:"workflowTimeline"`
 }
 
 func (Remediation) IsNode() {}
@@ -31595,6 +31683,11 @@ type RemediationWhereInput struct {
 	ScopeIDNotNil       *bool    `json:"scopeIDNotNil,omitempty"`
 	ScopeIDEqualFold    *string  `json:"scopeIDEqualFold,omitempty"`
 	ScopeIDContainsFold *string  `json:"scopeIDContainsFold,omitempty"`
+	// workflow_eligible_marker field predicates
+	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
+	WorkflowEligibleMarkerNeq    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
+	WorkflowEligibleMarkerIsNil  *bool `json:"workflowEligibleMarkerIsNil,omitempty"`
+	WorkflowEligibleMarkerNotNil *bool `json:"workflowEligibleMarkerNotNil,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -31935,6 +32028,9 @@ type RemediationWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// workflow_object_refs edge predicates
+	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
+	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -32659,6 +32755,8 @@ type Risk struct {
 	ScopeName *string `json:"scopeName,omitempty"`
 	// the scope of the risk
 	ScopeID *string `json:"scopeID,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// stable identifier assigned by the source system, used for integration ingest deduplication
 	ExternalID *string `json:"externalID,omitempty"`
 	// integration that surfaced this risk, when sourced via integration ingest
@@ -32730,11 +32828,20 @@ type Risk struct {
 	// the group of users who are responsible for risk oversight
 	Stakeholder *Group `json:"stakeholder,omitempty"`
 	// temporary delegates for the risk, used for temporary ownership
-	Delegate     *Group                 `json:"delegate,omitempty"`
-	Comments     *NoteConnection        `json:"comments"`
-	Discussions  *DiscussionConnection  `json:"discussions"`
-	Reviews      *ReviewConnection      `json:"reviews"`
-	Remediations *RemediationConnection `json:"remediations"`
+	Delegate           *Group                       `json:"delegate,omitempty"`
+	Comments           *NoteConnection              `json:"comments"`
+	Discussions        *DiscussionConnection        `json:"discussions"`
+	Reviews            *ReviewConnection            `json:"reviews"`
+	Remediations       *RemediationConnection       `json:"remediations"`
+	WorkflowObjectRefs *WorkflowObjectRefConnection `json:"workflowObjectRefs"`
+	// Indicates if this risk has pending changes awaiting workflow approval
+	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
+	// Indicates if this risk has any workflow history (completed or failed instances)
+	HasWorkflowHistory bool `json:"hasWorkflowHistory"`
+	// Returns active workflow instances for this risk (RUNNING or PAUSED)
+	ActiveWorkflowInstances []*WorkflowInstance `json:"activeWorkflowInstances"`
+	// Returns the workflow event timeline for this risk across all workflow instances
+	WorkflowTimeline *WorkflowEventConnection `json:"workflowTimeline"`
 }
 
 func (Risk) IsNode() {}
@@ -33052,6 +33159,11 @@ type RiskWhereInput struct {
 	ScopeIDNotNil       *bool    `json:"scopeIDNotNil,omitempty"`
 	ScopeIDEqualFold    *string  `json:"scopeIDEqualFold,omitempty"`
 	ScopeIDContainsFold *string  `json:"scopeIDContainsFold,omitempty"`
+	// workflow_eligible_marker field predicates
+	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
+	WorkflowEligibleMarkerNeq    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
+	WorkflowEligibleMarkerIsNil  *bool `json:"workflowEligibleMarkerIsNil,omitempty"`
+	WorkflowEligibleMarkerNotNil *bool `json:"workflowEligibleMarkerNotNil,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -33386,6 +33498,9 @@ type RiskWhereInput struct {
 	// remediations edge predicates
 	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
 	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
+	// workflow_object_refs edge predicates
+	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
+	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -33680,7 +33795,7 @@ type Scan struct {
 	// the platform that generated the scan
 	GeneratedByPlatformID *string `json:"generatedByPlatformID,omitempty"`
 	// identifiers of vulnerabilities discovered during the scan
-	VulnerabilityIds []string `json:"vulnerabilityIds,omitempty"`
+	DiscoveredVulnerabilityIds []string `json:"discoveredVulnerabilityIds,omitempty"`
 	// the status of the scan, e.g., processing, completed, failed
 	Status              enums.ScanStatus         `json:"status"`
 	Owner               *Organization            `json:"owner,omitempty"`
@@ -34226,8 +34341,8 @@ type ScanWhereInput struct {
 	HasPerformedByGroupWith []*GroupWhereInput `json:"hasPerformedByGroupWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
-	// Filter for vulnerabilityIdsHas to contain a specific value
-	VulnerabilityIdsHas *string `json:"vulnerabilityIdsHas,omitempty"`
+	// Filter for discoveredVulnerabilityIdsHas to contain a specific value
+	DiscoveredVulnerabilityIdsHas *string `json:"discoveredVulnerabilityIdsHas,omitempty"`
 }
 
 type ScheduledJob struct {
@@ -37509,6 +37624,8 @@ type Task struct {
 	ScopeName *string `json:"scopeName,omitempty"`
 	// the scope of the task
 	ScopeID *string `json:"scopeID,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// stable external UUID for deterministic OSCAL export and round-tripping
 	ExternalUUID *string `json:"externalUUID,omitempty"`
 	// the title of the task
@@ -37563,6 +37680,14 @@ type Task struct {
 	Findings               *FindingConnection               `json:"findings"`
 	Parent                 *Task                            `json:"parent,omitempty"`
 	Tasks                  []*Task                          `json:"tasks,omitempty"`
+	// Indicates if this task has pending changes awaiting workflow approval
+	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
+	// Indicates if this task has any workflow history (completed or failed instances)
+	HasWorkflowHistory bool `json:"hasWorkflowHistory"`
+	// Returns active workflow instances for this task (RUNNING or PAUSED)
+	ActiveWorkflowInstances []*WorkflowInstance `json:"activeWorkflowInstances"`
+	// Returns the workflow event timeline for this task across all workflow instances
+	WorkflowTimeline *WorkflowEventConnection `json:"workflowTimeline"`
 }
 
 func (Task) IsNode() {}
@@ -37848,6 +37973,11 @@ type TaskWhereInput struct {
 	ScopeIDNotNil       *bool    `json:"scopeIDNotNil,omitempty"`
 	ScopeIDEqualFold    *string  `json:"scopeIDEqualFold,omitempty"`
 	ScopeIDContainsFold *string  `json:"scopeIDContainsFold,omitempty"`
+	// workflow_eligible_marker field predicates
+	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
+	WorkflowEligibleMarkerNeq    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
+	WorkflowEligibleMarkerIsNil  *bool `json:"workflowEligibleMarkerIsNil,omitempty"`
+	WorkflowEligibleMarkerNotNil *bool `json:"workflowEligibleMarkerNotNil,omitempty"`
 	// external_uuid field predicates
 	ExternalUUID             *string  `json:"externalUUID,omitempty"`
 	ExternalUUIDNeq          *string  `json:"externalUUIDNEQ,omitempty"`
@@ -41827,6 +41957,9 @@ type UpdateAssessmentInput struct {
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID      *string `json:"systemInternalID,omitempty"`
 	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker      *bool `json:"workflowEligibleMarker,omitempty"`
+	ClearWorkflowEligibleMarker *bool `json:"clearWorkflowEligibleMarker,omitempty"`
 	// the name of the assessment, e.g. cloud providers, marketing team
 	Name *string `json:"name,omitempty"`
 	// the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
@@ -41861,6 +41994,9 @@ type UpdateAssessmentInput struct {
 	AddCampaignIDs              []string `json:"addCampaignIDs,omitempty"`
 	RemoveCampaignIDs           []string `json:"removeCampaignIDs,omitempty"`
 	ClearCampaigns              *bool    `json:"clearCampaigns,omitempty"`
+	AddWorkflowObjectRefIDs     []string `json:"addWorkflowObjectRefIDs,omitempty"`
+	RemoveWorkflowObjectRefIDs  []string `json:"removeWorkflowObjectRefIDs,omitempty"`
+	ClearWorkflowObjectRefs     *bool    `json:"clearWorkflowObjectRefs,omitempty"`
 }
 
 // UpdateAssetInput is used for update Asset object.
@@ -43759,6 +43895,9 @@ type UpdateFindingInput struct {
 	// the status of the finding
 	FindingStatusName      *string `json:"findingStatusName,omitempty"`
 	ClearFindingStatusName *bool   `json:"clearFindingStatusName,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker      *bool `json:"workflowEligibleMarker,omitempty"`
+	ClearWorkflowEligibleMarker *bool `json:"clearWorkflowEligibleMarker,omitempty"`
 	// external identifier from the integration source for the finding
 	ExternalID      *string `json:"externalID,omitempty"`
 	ClearExternalID *bool   `json:"clearExternalID,omitempty"`
@@ -44807,6 +44946,8 @@ type UpdateNoteInput struct {
 	ClearRisk               *bool    `json:"clearRisk,omitempty"`
 	InternalPolicyID        *string  `json:"internalPolicyID,omitempty"`
 	ClearInternalPolicy     *bool    `json:"clearInternalPolicy,omitempty"`
+	ReviewID                *string  `json:"reviewID,omitempty"`
+	ClearReview             *bool    `json:"clearReview,omitempty"`
 	EvidenceID              *string  `json:"evidenceID,omitempty"`
 	ClearEvidence           *bool    `json:"clearEvidence,omitempty"`
 	TrustCenterID           *string  `json:"trustCenterID,omitempty"`
@@ -46095,6 +46236,9 @@ type UpdateRemediationInput struct {
 	// the scope of the remediation
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker      *bool `json:"workflowEligibleMarker,omitempty"`
+	ClearWorkflowEligibleMarker *bool `json:"clearWorkflowEligibleMarker,omitempty"`
 	// external identifier from the integration source for the remediation
 	ExternalID      *string `json:"externalID,omitempty"`
 	ClearExternalID *bool   `json:"clearExternalID,omitempty"`
@@ -46153,63 +46297,66 @@ type UpdateRemediationInput struct {
 	ExternalURI      *string `json:"externalURI,omitempty"`
 	ClearExternalURI *bool   `json:"clearExternalURI,omitempty"`
 	// raw metadata payload for the remediation from the source system
-	Metadata               map[string]any `json:"metadata,omitempty"`
-	ClearMetadata          *bool          `json:"clearMetadata,omitempty"`
-	AddBlockedGroupIDs     []string       `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs  []string       `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups     *bool          `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs           []string       `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs        []string       `json:"removeEditorIDs,omitempty"`
-	ClearEditors           *bool          `json:"clearEditors,omitempty"`
-	EnvironmentID          *string        `json:"environmentID,omitempty"`
-	ClearEnvironment       *bool          `json:"clearEnvironment,omitempty"`
-	ScopeID                *string        `json:"scopeID,omitempty"`
-	ClearScope             *bool          `json:"clearScope,omitempty"`
-	AddIntegrationIDs      []string       `json:"addIntegrationIDs,omitempty"`
-	RemoveIntegrationIDs   []string       `json:"removeIntegrationIDs,omitempty"`
-	ClearIntegrations      *bool          `json:"clearIntegrations,omitempty"`
-	AddScanIDs             []string       `json:"addScanIDs,omitempty"`
-	RemoveScanIDs          []string       `json:"removeScanIDs,omitempty"`
-	ClearScans             *bool          `json:"clearScans,omitempty"`
-	AddFindingIDs          []string       `json:"addFindingIDs,omitempty"`
-	RemoveFindingIDs       []string       `json:"removeFindingIDs,omitempty"`
-	ClearFindings          *bool          `json:"clearFindings,omitempty"`
-	AddVulnerabilityIDs    []string       `json:"addVulnerabilityIDs,omitempty"`
-	RemoveVulnerabilityIDs []string       `json:"removeVulnerabilityIDs,omitempty"`
-	ClearVulnerabilities   *bool          `json:"clearVulnerabilities,omitempty"`
-	AddActionPlanIDs       []string       `json:"addActionPlanIDs,omitempty"`
-	RemoveActionPlanIDs    []string       `json:"removeActionPlanIDs,omitempty"`
-	ClearActionPlans       *bool          `json:"clearActionPlans,omitempty"`
-	AddTaskIDs             []string       `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs          []string       `json:"removeTaskIDs,omitempty"`
-	ClearTasks             *bool          `json:"clearTasks,omitempty"`
-	AddControlIDs          []string       `json:"addControlIDs,omitempty"`
-	RemoveControlIDs       []string       `json:"removeControlIDs,omitempty"`
-	ClearControls          *bool          `json:"clearControls,omitempty"`
-	AddSubcontrolIDs       []string       `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs    []string       `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols       *bool          `json:"clearSubcontrols,omitempty"`
-	AddRiskIDs             []string       `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs          []string       `json:"removeRiskIDs,omitempty"`
-	ClearRisks             *bool          `json:"clearRisks,omitempty"`
-	AddProgramIDs          []string       `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs       []string       `json:"removeProgramIDs,omitempty"`
-	ClearPrograms          *bool          `json:"clearPrograms,omitempty"`
-	AddAssetIDs            []string       `json:"addAssetIDs,omitempty"`
-	RemoveAssetIDs         []string       `json:"removeAssetIDs,omitempty"`
-	ClearAssets            *bool          `json:"clearAssets,omitempty"`
-	AddEntityIDs           []string       `json:"addEntityIDs,omitempty"`
-	RemoveEntityIDs        []string       `json:"removeEntityIDs,omitempty"`
-	ClearEntities          *bool          `json:"clearEntities,omitempty"`
-	AddReviewIDs           []string       `json:"addReviewIDs,omitempty"`
-	RemoveReviewIDs        []string       `json:"removeReviewIDs,omitempty"`
-	ClearReviews           *bool          `json:"clearReviews,omitempty"`
-	AddCommentIDs          []string       `json:"addCommentIDs,omitempty"`
-	RemoveCommentIDs       []string       `json:"removeCommentIDs,omitempty"`
-	ClearComments          *bool          `json:"clearComments,omitempty"`
-	AddFileIDs             []string       `json:"addFileIDs,omitempty"`
-	RemoveFileIDs          []string       `json:"removeFileIDs,omitempty"`
-	ClearFiles             *bool          `json:"clearFiles,omitempty"`
+	Metadata                   map[string]any `json:"metadata,omitempty"`
+	ClearMetadata              *bool          `json:"clearMetadata,omitempty"`
+	AddBlockedGroupIDs         []string       `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs      []string       `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups         *bool          `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs               []string       `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs            []string       `json:"removeEditorIDs,omitempty"`
+	ClearEditors               *bool          `json:"clearEditors,omitempty"`
+	EnvironmentID              *string        `json:"environmentID,omitempty"`
+	ClearEnvironment           *bool          `json:"clearEnvironment,omitempty"`
+	ScopeID                    *string        `json:"scopeID,omitempty"`
+	ClearScope                 *bool          `json:"clearScope,omitempty"`
+	AddIntegrationIDs          []string       `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs       []string       `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations          *bool          `json:"clearIntegrations,omitempty"`
+	AddScanIDs                 []string       `json:"addScanIDs,omitempty"`
+	RemoveScanIDs              []string       `json:"removeScanIDs,omitempty"`
+	ClearScans                 *bool          `json:"clearScans,omitempty"`
+	AddFindingIDs              []string       `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs           []string       `json:"removeFindingIDs,omitempty"`
+	ClearFindings              *bool          `json:"clearFindings,omitempty"`
+	AddVulnerabilityIDs        []string       `json:"addVulnerabilityIDs,omitempty"`
+	RemoveVulnerabilityIDs     []string       `json:"removeVulnerabilityIDs,omitempty"`
+	ClearVulnerabilities       *bool          `json:"clearVulnerabilities,omitempty"`
+	AddActionPlanIDs           []string       `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs        []string       `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans           *bool          `json:"clearActionPlans,omitempty"`
+	AddTaskIDs                 []string       `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs              []string       `json:"removeTaskIDs,omitempty"`
+	ClearTasks                 *bool          `json:"clearTasks,omitempty"`
+	AddControlIDs              []string       `json:"addControlIDs,omitempty"`
+	RemoveControlIDs           []string       `json:"removeControlIDs,omitempty"`
+	ClearControls              *bool          `json:"clearControls,omitempty"`
+	AddSubcontrolIDs           []string       `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs        []string       `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols           *bool          `json:"clearSubcontrols,omitempty"`
+	AddRiskIDs                 []string       `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs              []string       `json:"removeRiskIDs,omitempty"`
+	ClearRisks                 *bool          `json:"clearRisks,omitempty"`
+	AddProgramIDs              []string       `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs           []string       `json:"removeProgramIDs,omitempty"`
+	ClearPrograms              *bool          `json:"clearPrograms,omitempty"`
+	AddAssetIDs                []string       `json:"addAssetIDs,omitempty"`
+	RemoveAssetIDs             []string       `json:"removeAssetIDs,omitempty"`
+	ClearAssets                *bool          `json:"clearAssets,omitempty"`
+	AddEntityIDs               []string       `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs            []string       `json:"removeEntityIDs,omitempty"`
+	ClearEntities              *bool          `json:"clearEntities,omitempty"`
+	AddReviewIDs               []string       `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs            []string       `json:"removeReviewIDs,omitempty"`
+	ClearReviews               *bool          `json:"clearReviews,omitempty"`
+	AddCommentIDs              []string       `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs           []string       `json:"removeCommentIDs,omitempty"`
+	ClearComments              *bool          `json:"clearComments,omitempty"`
+	AddFileIDs                 []string       `json:"addFileIDs,omitempty"`
+	RemoveFileIDs              []string       `json:"removeFileIDs,omitempty"`
+	ClearFiles                 *bool          `json:"clearFiles,omitempty"`
+	AddWorkflowObjectRefIDs    []string       `json:"addWorkflowObjectRefIDs,omitempty"`
+	RemoveWorkflowObjectRefIDs []string       `json:"removeWorkflowObjectRefIDs,omitempty"`
+	ClearWorkflowObjectRefs    *bool          `json:"clearWorkflowObjectRefs,omitempty"`
 }
 
 // UpdateReviewInput is used for update Review object.
@@ -46282,65 +46429,67 @@ type UpdateReviewInput struct {
 	Metadata      map[string]any `json:"metadata,omitempty"`
 	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
 	// raw payload received from the integration for auditing and troubleshooting
-	RawPayload              map[string]any `json:"rawPayload,omitempty"`
-	ClearRawPayload         *bool          `json:"clearRawPayload,omitempty"`
-	AddBlockedGroupIDs      []string       `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs   []string       `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups      *bool          `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs            []string       `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs         []string       `json:"removeEditorIDs,omitempty"`
-	ClearEditors            *bool          `json:"clearEditors,omitempty"`
-	EnvironmentID           *string        `json:"environmentID,omitempty"`
-	ClearEnvironment        *bool          `json:"clearEnvironment,omitempty"`
-	ScopeID                 *string        `json:"scopeID,omitempty"`
-	ClearScope              *bool          `json:"clearScope,omitempty"`
-	AddIntegrationIDs       []string       `json:"addIntegrationIDs,omitempty"`
-	RemoveIntegrationIDs    []string       `json:"removeIntegrationIDs,omitempty"`
-	ClearIntegrations       *bool          `json:"clearIntegrations,omitempty"`
-	AddFindingIDs           []string       `json:"addFindingIDs,omitempty"`
-	RemoveFindingIDs        []string       `json:"removeFindingIDs,omitempty"`
-	ClearFindings           *bool          `json:"clearFindings,omitempty"`
-	AddVulnerabilityIDs     []string       `json:"addVulnerabilityIDs,omitempty"`
-	RemoveVulnerabilityIDs  []string       `json:"removeVulnerabilityIDs,omitempty"`
-	ClearVulnerabilities    *bool          `json:"clearVulnerabilities,omitempty"`
-	AddActionPlanIDs        []string       `json:"addActionPlanIDs,omitempty"`
-	RemoveActionPlanIDs     []string       `json:"removeActionPlanIDs,omitempty"`
-	ClearActionPlans        *bool          `json:"clearActionPlans,omitempty"`
-	AddRemediationIDs       []string       `json:"addRemediationIDs,omitempty"`
-	RemoveRemediationIDs    []string       `json:"removeRemediationIDs,omitempty"`
-	ClearRemediations       *bool          `json:"clearRemediations,omitempty"`
-	AddControlIDs           []string       `json:"addControlIDs,omitempty"`
-	RemoveControlIDs        []string       `json:"removeControlIDs,omitempty"`
-	ClearControls           *bool          `json:"clearControls,omitempty"`
-	AddSubcontrolIDs        []string       `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs     []string       `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols        *bool          `json:"clearSubcontrols,omitempty"`
-	AddRiskIDs              []string       `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs           []string       `json:"removeRiskIDs,omitempty"`
-	ClearRisks              *bool          `json:"clearRisks,omitempty"`
-	AddProgramIDs           []string       `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs        []string       `json:"removeProgramIDs,omitempty"`
-	ClearPrograms           *bool          `json:"clearPrograms,omitempty"`
-	AddAssetIDs             []string       `json:"addAssetIDs,omitempty"`
-	RemoveAssetIDs          []string       `json:"removeAssetIDs,omitempty"`
-	ClearAssets             *bool          `json:"clearAssets,omitempty"`
-	AddEntityIDs            []string       `json:"addEntityIDs,omitempty"`
-	RemoveEntityIDs         []string       `json:"removeEntityIDs,omitempty"`
-	ClearEntities           *bool          `json:"clearEntities,omitempty"`
-	AddTaskIDs              []string       `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs           []string       `json:"removeTaskIDs,omitempty"`
-	ClearTasks              *bool          `json:"clearTasks,omitempty"`
-	ReviewerID              *string        `json:"reviewerID,omitempty"`
-	ClearReviewer           *bool          `json:"clearReviewer,omitempty"`
-	AddCommentIDs           []string       `json:"addCommentIDs,omitempty"`
-	RemoveCommentIDs        []string       `json:"removeCommentIDs,omitempty"`
-	ClearComments           *bool          `json:"clearComments,omitempty"`
-	AddFileIDs              []string       `json:"addFileIDs,omitempty"`
-	RemoveFileIDs           []string       `json:"removeFileIDs,omitempty"`
-	ClearFiles              *bool          `json:"clearFiles,omitempty"`
-	AddInternalPolicyIDs    []string       `json:"addInternalPolicyIDs,omitempty"`
-	RemoveInternalPolicyIDs []string       `json:"removeInternalPolicyIDs,omitempty"`
-	ClearInternalPolicies   *bool          `json:"clearInternalPolicies,omitempty"`
+	RawPayload              map[string]any   `json:"rawPayload,omitempty"`
+	ClearRawPayload         *bool            `json:"clearRawPayload,omitempty"`
+	AddBlockedGroupIDs      []string         `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs   []string         `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups      *bool            `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs            []string         `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs         []string         `json:"removeEditorIDs,omitempty"`
+	ClearEditors            *bool            `json:"clearEditors,omitempty"`
+	EnvironmentID           *string          `json:"environmentID,omitempty"`
+	ClearEnvironment        *bool            `json:"clearEnvironment,omitempty"`
+	ScopeID                 *string          `json:"scopeID,omitempty"`
+	ClearScope              *bool            `json:"clearScope,omitempty"`
+	AddIntegrationIDs       []string         `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs    []string         `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations       *bool            `json:"clearIntegrations,omitempty"`
+	AddFindingIDs           []string         `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs        []string         `json:"removeFindingIDs,omitempty"`
+	ClearFindings           *bool            `json:"clearFindings,omitempty"`
+	AddVulnerabilityIDs     []string         `json:"addVulnerabilityIDs,omitempty"`
+	RemoveVulnerabilityIDs  []string         `json:"removeVulnerabilityIDs,omitempty"`
+	ClearVulnerabilities    *bool            `json:"clearVulnerabilities,omitempty"`
+	AddActionPlanIDs        []string         `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs     []string         `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans        *bool            `json:"clearActionPlans,omitempty"`
+	AddRemediationIDs       []string         `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs    []string         `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations       *bool            `json:"clearRemediations,omitempty"`
+	AddControlIDs           []string         `json:"addControlIDs,omitempty"`
+	RemoveControlIDs        []string         `json:"removeControlIDs,omitempty"`
+	ClearControls           *bool            `json:"clearControls,omitempty"`
+	AddSubcontrolIDs        []string         `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs     []string         `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols        *bool            `json:"clearSubcontrols,omitempty"`
+	AddRiskIDs              []string         `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs           []string         `json:"removeRiskIDs,omitempty"`
+	ClearRisks              *bool            `json:"clearRisks,omitempty"`
+	AddProgramIDs           []string         `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs        []string         `json:"removeProgramIDs,omitempty"`
+	ClearPrograms           *bool            `json:"clearPrograms,omitempty"`
+	AddAssetIDs             []string         `json:"addAssetIDs,omitempty"`
+	RemoveAssetIDs          []string         `json:"removeAssetIDs,omitempty"`
+	ClearAssets             *bool            `json:"clearAssets,omitempty"`
+	AddEntityIDs            []string         `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs         []string         `json:"removeEntityIDs,omitempty"`
+	ClearEntities           *bool            `json:"clearEntities,omitempty"`
+	AddTaskIDs              []string         `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs           []string         `json:"removeTaskIDs,omitempty"`
+	ClearTasks              *bool            `json:"clearTasks,omitempty"`
+	ReviewerID              *string          `json:"reviewerID,omitempty"`
+	ClearReviewer           *bool            `json:"clearReviewer,omitempty"`
+	AddCommentIDs           []string         `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs        []string         `json:"removeCommentIDs,omitempty"`
+	ClearComments           *bool            `json:"clearComments,omitempty"`
+	AddFileIDs              []string         `json:"addFileIDs,omitempty"`
+	RemoveFileIDs           []string         `json:"removeFileIDs,omitempty"`
+	ClearFiles              *bool            `json:"clearFiles,omitempty"`
+	AddInternalPolicyIDs    []string         `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs []string         `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies   *bool            `json:"clearInternalPolicies,omitempty"`
+	AddComment              *CreateNoteInput `json:"addComment,omitempty"`
+	DeleteComment           *string          `json:"deleteComment,omitempty"`
 }
 
 // UpdateRiskInput is used for update Risk object.
@@ -46362,6 +46511,9 @@ type UpdateRiskInput struct {
 	// the scope of the risk
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker      *bool `json:"workflowEligibleMarker,omitempty"`
+	ClearWorkflowEligibleMarker *bool `json:"clearWorkflowEligibleMarker,omitempty"`
 	// stable identifier assigned by the source system, used for integration ingest deduplication
 	ExternalID      *string `json:"externalID,omitempty"`
 	ClearExternalID *bool   `json:"clearExternalID,omitempty"`
@@ -46430,79 +46582,82 @@ type UpdateRiskInput struct {
 	ResidualScore      *int64 `json:"residualScore,omitempty"`
 	ClearResidualScore *bool  `json:"clearResidualScore,omitempty"`
 	// the decision made for the risk - accept, transfer, avoid, mitigate, or none
-	RiskDecision            *enums.RiskDecision     `json:"riskDecision,omitempty"`
-	ClearRiskDecision       *bool                   `json:"clearRiskDecision,omitempty"`
-	AddBlockedGroupIDs      []string                `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs   []string                `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups      *bool                   `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs            []string                `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs         []string                `json:"removeEditorIDs,omitempty"`
-	ClearEditors            *bool                   `json:"clearEditors,omitempty"`
-	AddViewerIDs            []string                `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs         []string                `json:"removeViewerIDs,omitempty"`
-	ClearViewers            *bool                   `json:"clearViewers,omitempty"`
-	RiskKindID              *string                 `json:"riskKindID,omitempty"`
-	ClearRiskKind           *bool                   `json:"clearRiskKind,omitempty"`
-	RiskCategoryID          *string                 `json:"riskCategoryID,omitempty"`
-	ClearRiskCategory       *bool                   `json:"clearRiskCategory,omitempty"`
-	EnvironmentID           *string                 `json:"environmentID,omitempty"`
-	ClearEnvironment        *bool                   `json:"clearEnvironment,omitempty"`
-	ScopeID                 *string                 `json:"scopeID,omitempty"`
-	ClearScope              *bool                   `json:"clearScope,omitempty"`
-	AddControlIDs           []string                `json:"addControlIDs,omitempty"`
-	RemoveControlIDs        []string                `json:"removeControlIDs,omitempty"`
-	ClearControls           *bool                   `json:"clearControls,omitempty"`
-	AddSubcontrolIDs        []string                `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs     []string                `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols        *bool                   `json:"clearSubcontrols,omitempty"`
-	AddProcedureIDs         []string                `json:"addProcedureIDs,omitempty"`
-	RemoveProcedureIDs      []string                `json:"removeProcedureIDs,omitempty"`
-	ClearProcedures         *bool                   `json:"clearProcedures,omitempty"`
-	AddInternalPolicyIDs    []string                `json:"addInternalPolicyIDs,omitempty"`
-	RemoveInternalPolicyIDs []string                `json:"removeInternalPolicyIDs,omitempty"`
-	ClearInternalPolicies   *bool                   `json:"clearInternalPolicies,omitempty"`
-	AddProgramIDs           []string                `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs        []string                `json:"removeProgramIDs,omitempty"`
-	ClearPrograms           *bool                   `json:"clearPrograms,omitempty"`
-	AddPlatformIDs          []string                `json:"addPlatformIDs,omitempty"`
-	RemovePlatformIDs       []string                `json:"removePlatformIDs,omitempty"`
-	ClearPlatforms          *bool                   `json:"clearPlatforms,omitempty"`
-	AddActionPlanIDs        []string                `json:"addActionPlanIDs,omitempty"`
-	RemoveActionPlanIDs     []string                `json:"removeActionPlanIDs,omitempty"`
-	ClearActionPlans        *bool                   `json:"clearActionPlans,omitempty"`
-	AddTaskIDs              []string                `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs           []string                `json:"removeTaskIDs,omitempty"`
-	ClearTasks              *bool                   `json:"clearTasks,omitempty"`
-	AddAssetIDs             []string                `json:"addAssetIDs,omitempty"`
-	RemoveAssetIDs          []string                `json:"removeAssetIDs,omitempty"`
-	ClearAssets             *bool                   `json:"clearAssets,omitempty"`
-	AddEntityIDs            []string                `json:"addEntityIDs,omitempty"`
-	RemoveEntityIDs         []string                `json:"removeEntityIDs,omitempty"`
-	ClearEntities           *bool                   `json:"clearEntities,omitempty"`
-	AddScanIDs              []string                `json:"addScanIDs,omitempty"`
-	RemoveScanIDs           []string                `json:"removeScanIDs,omitempty"`
-	ClearScans              *bool                   `json:"clearScans,omitempty"`
-	StakeholderID           *string                 `json:"stakeholderID,omitempty"`
-	ClearStakeholder        *bool                   `json:"clearStakeholder,omitempty"`
-	DelegateID              *string                 `json:"delegateID,omitempty"`
-	ClearDelegate           *bool                   `json:"clearDelegate,omitempty"`
-	AddCommentIDs           []string                `json:"addCommentIDs,omitempty"`
-	RemoveCommentIDs        []string                `json:"removeCommentIDs,omitempty"`
-	ClearComments           *bool                   `json:"clearComments,omitempty"`
-	AddDiscussionIDs        []string                `json:"addDiscussionIDs,omitempty"`
-	RemoveDiscussionIDs     []string                `json:"removeDiscussionIDs,omitempty"`
-	ClearDiscussions        *bool                   `json:"clearDiscussions,omitempty"`
-	AddReviewIDs            []string                `json:"addReviewIDs,omitempty"`
-	RemoveReviewIDs         []string                `json:"removeReviewIDs,omitempty"`
-	ClearReviews            *bool                   `json:"clearReviews,omitempty"`
-	AddRemediationIDs       []string                `json:"addRemediationIDs,omitempty"`
-	RemoveRemediationIDs    []string                `json:"removeRemediationIDs,omitempty"`
-	ClearRemediations       *bool                   `json:"clearRemediations,omitempty"`
-	AddDiscussion           *CreateDiscussionInput  `json:"addDiscussion,omitempty"`
-	UpdateDiscussion        *UpdateDiscussionsInput `json:"updateDiscussion,omitempty"`
-	DeleteDiscussion        *string                 `json:"deleteDiscussion,omitempty"`
-	AddComment              *CreateNoteInput        `json:"addComment,omitempty"`
-	DeleteComment           *string                 `json:"deleteComment,omitempty"`
+	RiskDecision               *enums.RiskDecision     `json:"riskDecision,omitempty"`
+	ClearRiskDecision          *bool                   `json:"clearRiskDecision,omitempty"`
+	AddBlockedGroupIDs         []string                `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs      []string                `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups         *bool                   `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs               []string                `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs            []string                `json:"removeEditorIDs,omitempty"`
+	ClearEditors               *bool                   `json:"clearEditors,omitempty"`
+	AddViewerIDs               []string                `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs            []string                `json:"removeViewerIDs,omitempty"`
+	ClearViewers               *bool                   `json:"clearViewers,omitempty"`
+	RiskKindID                 *string                 `json:"riskKindID,omitempty"`
+	ClearRiskKind              *bool                   `json:"clearRiskKind,omitempty"`
+	RiskCategoryID             *string                 `json:"riskCategoryID,omitempty"`
+	ClearRiskCategory          *bool                   `json:"clearRiskCategory,omitempty"`
+	EnvironmentID              *string                 `json:"environmentID,omitempty"`
+	ClearEnvironment           *bool                   `json:"clearEnvironment,omitempty"`
+	ScopeID                    *string                 `json:"scopeID,omitempty"`
+	ClearScope                 *bool                   `json:"clearScope,omitempty"`
+	AddControlIDs              []string                `json:"addControlIDs,omitempty"`
+	RemoveControlIDs           []string                `json:"removeControlIDs,omitempty"`
+	ClearControls              *bool                   `json:"clearControls,omitempty"`
+	AddSubcontrolIDs           []string                `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs        []string                `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols           *bool                   `json:"clearSubcontrols,omitempty"`
+	AddProcedureIDs            []string                `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs         []string                `json:"removeProcedureIDs,omitempty"`
+	ClearProcedures            *bool                   `json:"clearProcedures,omitempty"`
+	AddInternalPolicyIDs       []string                `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs    []string                `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies      *bool                   `json:"clearInternalPolicies,omitempty"`
+	AddProgramIDs              []string                `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs           []string                `json:"removeProgramIDs,omitempty"`
+	ClearPrograms              *bool                   `json:"clearPrograms,omitempty"`
+	AddPlatformIDs             []string                `json:"addPlatformIDs,omitempty"`
+	RemovePlatformIDs          []string                `json:"removePlatformIDs,omitempty"`
+	ClearPlatforms             *bool                   `json:"clearPlatforms,omitempty"`
+	AddActionPlanIDs           []string                `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs        []string                `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans           *bool                   `json:"clearActionPlans,omitempty"`
+	AddTaskIDs                 []string                `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs              []string                `json:"removeTaskIDs,omitempty"`
+	ClearTasks                 *bool                   `json:"clearTasks,omitempty"`
+	AddAssetIDs                []string                `json:"addAssetIDs,omitempty"`
+	RemoveAssetIDs             []string                `json:"removeAssetIDs,omitempty"`
+	ClearAssets                *bool                   `json:"clearAssets,omitempty"`
+	AddEntityIDs               []string                `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs            []string                `json:"removeEntityIDs,omitempty"`
+	ClearEntities              *bool                   `json:"clearEntities,omitempty"`
+	AddScanIDs                 []string                `json:"addScanIDs,omitempty"`
+	RemoveScanIDs              []string                `json:"removeScanIDs,omitempty"`
+	ClearScans                 *bool                   `json:"clearScans,omitempty"`
+	StakeholderID              *string                 `json:"stakeholderID,omitempty"`
+	ClearStakeholder           *bool                   `json:"clearStakeholder,omitempty"`
+	DelegateID                 *string                 `json:"delegateID,omitempty"`
+	ClearDelegate              *bool                   `json:"clearDelegate,omitempty"`
+	AddCommentIDs              []string                `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs           []string                `json:"removeCommentIDs,omitempty"`
+	ClearComments              *bool                   `json:"clearComments,omitempty"`
+	AddDiscussionIDs           []string                `json:"addDiscussionIDs,omitempty"`
+	RemoveDiscussionIDs        []string                `json:"removeDiscussionIDs,omitempty"`
+	ClearDiscussions           *bool                   `json:"clearDiscussions,omitempty"`
+	AddReviewIDs               []string                `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs            []string                `json:"removeReviewIDs,omitempty"`
+	ClearReviews               *bool                   `json:"clearReviews,omitempty"`
+	AddRemediationIDs          []string                `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs       []string                `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations          *bool                   `json:"clearRemediations,omitempty"`
+	AddWorkflowObjectRefIDs    []string                `json:"addWorkflowObjectRefIDs,omitempty"`
+	RemoveWorkflowObjectRefIDs []string                `json:"removeWorkflowObjectRefIDs,omitempty"`
+	ClearWorkflowObjectRefs    *bool                   `json:"clearWorkflowObjectRefs,omitempty"`
+	AddDiscussion              *CreateDiscussionInput  `json:"addDiscussion,omitempty"`
+	UpdateDiscussion           *UpdateDiscussionsInput `json:"updateDiscussion,omitempty"`
+	DeleteDiscussion           *string                 `json:"deleteDiscussion,omitempty"`
+	AddComment                 *CreateNoteInput        `json:"addComment,omitempty"`
+	DeleteComment              *string                 `json:"deleteComment,omitempty"`
 }
 
 // UpdateSLADefinitionInput is used for update SLADefinition object.
@@ -46563,9 +46718,9 @@ type UpdateScanInput struct {
 	PerformedBy      *string `json:"performedBy,omitempty"`
 	ClearPerformedBy *bool   `json:"clearPerformedBy,omitempty"`
 	// identifiers of vulnerabilities discovered during the scan
-	VulnerabilityIds       []string `json:"vulnerabilityIds,omitempty"`
-	AppendVulnerabilityIds []string `json:"appendVulnerabilityIds,omitempty"`
-	ClearVulnerabilityIds  *bool    `json:"clearVulnerabilityIds,omitempty"`
+	DiscoveredVulnerabilityIds       []string `json:"discoveredVulnerabilityIds,omitempty"`
+	AppendDiscoveredVulnerabilityIds []string `json:"appendDiscoveredVulnerabilityIds,omitempty"`
+	ClearDiscoveredVulnerabilityIds  *bool    `json:"clearDiscoveredVulnerabilityIds,omitempty"`
 	// the status of the scan, e.g., processing, completed, failed
 	Status                   *enums.ScanStatus `json:"status,omitempty"`
 	AddBlockedGroupIDs       []string          `json:"addBlockedGroupIDs,omitempty"`
@@ -47077,6 +47232,9 @@ type UpdateTaskInput struct {
 	// the scope of the task
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker      *bool `json:"workflowEligibleMarker,omitempty"`
+	ClearWorkflowEligibleMarker *bool `json:"clearWorkflowEligibleMarker,omitempty"`
 	// stable external UUID for deterministic OSCAL export and round-tripping
 	ExternalUUID      *string `json:"externalUUID,omitempty"`
 	ClearExternalUUID *bool   `json:"clearExternalUUID,omitempty"`
@@ -47831,6 +47989,9 @@ type UpdateVulnerabilityInput struct {
 	// the status of the vulnerability
 	VulnerabilityStatusName      *string `json:"vulnerabilityStatusName,omitempty"`
 	ClearVulnerabilityStatusName *bool   `json:"clearVulnerabilityStatusName,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker      *bool `json:"workflowEligibleMarker,omitempty"`
+	ClearWorkflowEligibleMarker *bool `json:"clearWorkflowEligibleMarker,omitempty"`
 	// owner of the vulnerability
 	ExternalOwnerID      *string `json:"externalOwnerID,omitempty"`
 	ClearExternalOwnerID *bool   `json:"clearExternalOwnerID,omitempty"`
@@ -47954,76 +48115,79 @@ type UpdateVulnerabilityInput struct {
 	Metadata      map[string]any `json:"metadata,omitempty"`
 	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
 	// raw payload received from the integration for auditing and troubleshooting
-	RawPayload               map[string]any `json:"rawPayload,omitempty"`
-	ClearRawPayload          *bool          `json:"clearRawPayload,omitempty"`
-	AddBlockedGroupIDs       []string       `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs    []string       `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups       *bool          `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs             []string       `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs          []string       `json:"removeEditorIDs,omitempty"`
-	ClearEditors             *bool          `json:"clearEditors,omitempty"`
-	AddViewerIDs             []string       `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs          []string       `json:"removeViewerIDs,omitempty"`
-	ClearViewers             *bool          `json:"clearViewers,omitempty"`
-	ReviewedByUserID         *string        `json:"reviewedByUserID,omitempty"`
-	ClearReviewedByUser      *bool          `json:"clearReviewedByUser,omitempty"`
-	ReviewedByGroupID        *string        `json:"reviewedByGroupID,omitempty"`
-	ClearReviewedByGroup     *bool          `json:"clearReviewedByGroup,omitempty"`
-	AssignedToUserID         *string        `json:"assignedToUserID,omitempty"`
-	ClearAssignedToUser      *bool          `json:"clearAssignedToUser,omitempty"`
-	AssignedToGroupID        *string        `json:"assignedToGroupID,omitempty"`
-	ClearAssignedToGroup     *bool          `json:"clearAssignedToGroup,omitempty"`
-	EnvironmentID            *string        `json:"environmentID,omitempty"`
-	ClearEnvironment         *bool          `json:"clearEnvironment,omitempty"`
-	ScopeID                  *string        `json:"scopeID,omitempty"`
-	ClearScope               *bool          `json:"clearScope,omitempty"`
-	VulnerabilityStatusID    *string        `json:"vulnerabilityStatusID,omitempty"`
-	ClearVulnerabilityStatus *bool          `json:"clearVulnerabilityStatus,omitempty"`
-	AddIntegrationIDs        []string       `json:"addIntegrationIDs,omitempty"`
-	RemoveIntegrationIDs     []string       `json:"removeIntegrationIDs,omitempty"`
-	ClearIntegrations        *bool          `json:"clearIntegrations,omitempty"`
-	AddFindingIDs            []string       `json:"addFindingIDs,omitempty"`
-	RemoveFindingIDs         []string       `json:"removeFindingIDs,omitempty"`
-	ClearFindings            *bool          `json:"clearFindings,omitempty"`
-	AddActionPlanIDs         []string       `json:"addActionPlanIDs,omitempty"`
-	RemoveActionPlanIDs      []string       `json:"removeActionPlanIDs,omitempty"`
-	ClearActionPlans         *bool          `json:"clearActionPlans,omitempty"`
-	AddControlIDs            []string       `json:"addControlIDs,omitempty"`
-	RemoveControlIDs         []string       `json:"removeControlIDs,omitempty"`
-	ClearControls            *bool          `json:"clearControls,omitempty"`
-	AddSubcontrolIDs         []string       `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs      []string       `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols         *bool          `json:"clearSubcontrols,omitempty"`
-	AddRiskIDs               []string       `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs            []string       `json:"removeRiskIDs,omitempty"`
-	ClearRisks               *bool          `json:"clearRisks,omitempty"`
-	AddProgramIDs            []string       `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs         []string       `json:"removeProgramIDs,omitempty"`
-	ClearPrograms            *bool          `json:"clearPrograms,omitempty"`
-	AddAssetIDs              []string       `json:"addAssetIDs,omitempty"`
-	RemoveAssetIDs           []string       `json:"removeAssetIDs,omitempty"`
-	ClearAssets              *bool          `json:"clearAssets,omitempty"`
-	AddEntityIDs             []string       `json:"addEntityIDs,omitempty"`
-	RemoveEntityIDs          []string       `json:"removeEntityIDs,omitempty"`
-	ClearEntities            *bool          `json:"clearEntities,omitempty"`
-	AddScanIDs               []string       `json:"addScanIDs,omitempty"`
-	RemoveScanIDs            []string       `json:"removeScanIDs,omitempty"`
-	ClearScans               *bool          `json:"clearScans,omitempty"`
-	AddTaskIDs               []string       `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs            []string       `json:"removeTaskIDs,omitempty"`
-	ClearTasks               *bool          `json:"clearTasks,omitempty"`
-	AddRemediationIDs        []string       `json:"addRemediationIDs,omitempty"`
-	RemoveRemediationIDs     []string       `json:"removeRemediationIDs,omitempty"`
-	ClearRemediations        *bool          `json:"clearRemediations,omitempty"`
-	AddReviewIDs             []string       `json:"addReviewIDs,omitempty"`
-	RemoveReviewIDs          []string       `json:"removeReviewIDs,omitempty"`
-	ClearReviews             *bool          `json:"clearReviews,omitempty"`
-	AddCommentIDs            []string       `json:"addCommentIDs,omitempty"`
-	RemoveCommentIDs         []string       `json:"removeCommentIDs,omitempty"`
-	ClearComments            *bool          `json:"clearComments,omitempty"`
-	AddFileIDs               []string       `json:"addFileIDs,omitempty"`
-	RemoveFileIDs            []string       `json:"removeFileIDs,omitempty"`
-	ClearFiles               *bool          `json:"clearFiles,omitempty"`
+	RawPayload                 map[string]any `json:"rawPayload,omitempty"`
+	ClearRawPayload            *bool          `json:"clearRawPayload,omitempty"`
+	AddBlockedGroupIDs         []string       `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs      []string       `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups         *bool          `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs               []string       `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs            []string       `json:"removeEditorIDs,omitempty"`
+	ClearEditors               *bool          `json:"clearEditors,omitempty"`
+	AddViewerIDs               []string       `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs            []string       `json:"removeViewerIDs,omitempty"`
+	ClearViewers               *bool          `json:"clearViewers,omitempty"`
+	ReviewedByUserID           *string        `json:"reviewedByUserID,omitempty"`
+	ClearReviewedByUser        *bool          `json:"clearReviewedByUser,omitempty"`
+	ReviewedByGroupID          *string        `json:"reviewedByGroupID,omitempty"`
+	ClearReviewedByGroup       *bool          `json:"clearReviewedByGroup,omitempty"`
+	AssignedToUserID           *string        `json:"assignedToUserID,omitempty"`
+	ClearAssignedToUser        *bool          `json:"clearAssignedToUser,omitempty"`
+	AssignedToGroupID          *string        `json:"assignedToGroupID,omitempty"`
+	ClearAssignedToGroup       *bool          `json:"clearAssignedToGroup,omitempty"`
+	EnvironmentID              *string        `json:"environmentID,omitempty"`
+	ClearEnvironment           *bool          `json:"clearEnvironment,omitempty"`
+	ScopeID                    *string        `json:"scopeID,omitempty"`
+	ClearScope                 *bool          `json:"clearScope,omitempty"`
+	VulnerabilityStatusID      *string        `json:"vulnerabilityStatusID,omitempty"`
+	ClearVulnerabilityStatus   *bool          `json:"clearVulnerabilityStatus,omitempty"`
+	AddIntegrationIDs          []string       `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs       []string       `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations          *bool          `json:"clearIntegrations,omitempty"`
+	AddFindingIDs              []string       `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs           []string       `json:"removeFindingIDs,omitempty"`
+	ClearFindings              *bool          `json:"clearFindings,omitempty"`
+	AddActionPlanIDs           []string       `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs        []string       `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans           *bool          `json:"clearActionPlans,omitempty"`
+	AddControlIDs              []string       `json:"addControlIDs,omitempty"`
+	RemoveControlIDs           []string       `json:"removeControlIDs,omitempty"`
+	ClearControls              *bool          `json:"clearControls,omitempty"`
+	AddSubcontrolIDs           []string       `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs        []string       `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols           *bool          `json:"clearSubcontrols,omitempty"`
+	AddRiskIDs                 []string       `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs              []string       `json:"removeRiskIDs,omitempty"`
+	ClearRisks                 *bool          `json:"clearRisks,omitempty"`
+	AddProgramIDs              []string       `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs           []string       `json:"removeProgramIDs,omitempty"`
+	ClearPrograms              *bool          `json:"clearPrograms,omitempty"`
+	AddAssetIDs                []string       `json:"addAssetIDs,omitempty"`
+	RemoveAssetIDs             []string       `json:"removeAssetIDs,omitempty"`
+	ClearAssets                *bool          `json:"clearAssets,omitempty"`
+	AddEntityIDs               []string       `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs            []string       `json:"removeEntityIDs,omitempty"`
+	ClearEntities              *bool          `json:"clearEntities,omitempty"`
+	AddScanIDs                 []string       `json:"addScanIDs,omitempty"`
+	RemoveScanIDs              []string       `json:"removeScanIDs,omitempty"`
+	ClearScans                 *bool          `json:"clearScans,omitempty"`
+	AddTaskIDs                 []string       `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs              []string       `json:"removeTaskIDs,omitempty"`
+	ClearTasks                 *bool          `json:"clearTasks,omitempty"`
+	AddRemediationIDs          []string       `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs       []string       `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations          *bool          `json:"clearRemediations,omitempty"`
+	AddReviewIDs               []string       `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs            []string       `json:"removeReviewIDs,omitempty"`
+	ClearReviews               *bool          `json:"clearReviews,omitempty"`
+	AddCommentIDs              []string       `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs           []string       `json:"removeCommentIDs,omitempty"`
+	ClearComments              *bool          `json:"clearComments,omitempty"`
+	AddFileIDs                 []string       `json:"addFileIDs,omitempty"`
+	RemoveFileIDs              []string       `json:"removeFileIDs,omitempty"`
+	ClearFiles                 *bool          `json:"clearFiles,omitempty"`
+	AddWorkflowObjectRefIDs    []string       `json:"addWorkflowObjectRefIDs,omitempty"`
+	RemoveWorkflowObjectRefIDs []string       `json:"removeWorkflowObjectRefIDs,omitempty"`
+	ClearWorkflowObjectRefs    *bool          `json:"clearWorkflowObjectRefs,omitempty"`
 }
 
 // UpdateWorkflowDefinitionInput is used for update WorkflowDefinition object.
@@ -49516,6 +49680,8 @@ type Vulnerability struct {
 	VulnerabilityStatusName *string `json:"vulnerabilityStatusName,omitempty"`
 	// the status of the vulnerability
 	VulnerabilityStatusID *string `json:"vulnerabilityStatusID,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// owner of the vulnerability
 	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
 	// security level of the vulnerability
@@ -49599,33 +49765,42 @@ type Vulnerability struct {
 	// raw metadata payload for the vulnerability from the source system
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// raw payload received from the integration for auditing and troubleshooting
-	RawPayload          map[string]any         `json:"rawPayload,omitempty"`
-	Owner               *Organization          `json:"owner,omitempty"`
-	BlockedGroups       *GroupConnection       `json:"blockedGroups"`
-	Editors             *GroupConnection       `json:"editors"`
-	Viewers             *GroupConnection       `json:"viewers"`
-	ReviewedByUser      *User                  `json:"reviewedByUser,omitempty"`
-	ReviewedByGroup     *Group                 `json:"reviewedByGroup,omitempty"`
-	AssignedToUser      *User                  `json:"assignedToUser,omitempty"`
-	AssignedToGroup     *Group                 `json:"assignedToGroup,omitempty"`
-	Environment         *CustomTypeEnum        `json:"environment,omitempty"`
-	Scope               *CustomTypeEnum        `json:"scope,omitempty"`
-	VulnerabilityStatus *CustomTypeEnum        `json:"vulnerabilityStatus,omitempty"`
-	Integrations        *IntegrationConnection `json:"integrations"`
-	Findings            *FindingConnection     `json:"findings"`
-	ActionPlans         *ActionPlanConnection  `json:"actionPlans"`
-	Controls            *ControlConnection     `json:"controls"`
-	Subcontrols         *SubcontrolConnection  `json:"subcontrols"`
-	Risks               *RiskConnection        `json:"risks"`
-	Programs            *ProgramConnection     `json:"programs"`
-	Assets              *AssetConnection       `json:"assets"`
-	Entities            *EntityConnection      `json:"entities"`
-	Scans               *ScanConnection        `json:"scans"`
-	Tasks               *TaskConnection        `json:"tasks"`
-	Remediations        *RemediationConnection `json:"remediations"`
-	Reviews             *ReviewConnection      `json:"reviews"`
-	Comments            *NoteConnection        `json:"comments"`
-	Files               *FileConnection        `json:"files"`
+	RawPayload          map[string]any               `json:"rawPayload,omitempty"`
+	Owner               *Organization                `json:"owner,omitempty"`
+	BlockedGroups       *GroupConnection             `json:"blockedGroups"`
+	Editors             *GroupConnection             `json:"editors"`
+	Viewers             *GroupConnection             `json:"viewers"`
+	ReviewedByUser      *User                        `json:"reviewedByUser,omitempty"`
+	ReviewedByGroup     *Group                       `json:"reviewedByGroup,omitempty"`
+	AssignedToUser      *User                        `json:"assignedToUser,omitempty"`
+	AssignedToGroup     *Group                       `json:"assignedToGroup,omitempty"`
+	Environment         *CustomTypeEnum              `json:"environment,omitempty"`
+	Scope               *CustomTypeEnum              `json:"scope,omitempty"`
+	VulnerabilityStatus *CustomTypeEnum              `json:"vulnerabilityStatus,omitempty"`
+	Integrations        *IntegrationConnection       `json:"integrations"`
+	Findings            *FindingConnection           `json:"findings"`
+	ActionPlans         *ActionPlanConnection        `json:"actionPlans"`
+	Controls            *ControlConnection           `json:"controls"`
+	Subcontrols         *SubcontrolConnection        `json:"subcontrols"`
+	Risks               *RiskConnection              `json:"risks"`
+	Programs            *ProgramConnection           `json:"programs"`
+	Assets              *AssetConnection             `json:"assets"`
+	Entities            *EntityConnection            `json:"entities"`
+	Scans               *ScanConnection              `json:"scans"`
+	Tasks               *TaskConnection              `json:"tasks"`
+	Remediations        *RemediationConnection       `json:"remediations"`
+	Reviews             *ReviewConnection            `json:"reviews"`
+	Comments            *NoteConnection              `json:"comments"`
+	Files               *FileConnection              `json:"files"`
+	WorkflowObjectRefs  *WorkflowObjectRefConnection `json:"workflowObjectRefs"`
+	// Indicates if this vulnerability has pending changes awaiting workflow approval
+	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
+	// Indicates if this vulnerability has any workflow history (completed or failed instances)
+	HasWorkflowHistory bool `json:"hasWorkflowHistory"`
+	// Returns active workflow instances for this vulnerability (RUNNING or PAUSED)
+	ActiveWorkflowInstances []*WorkflowInstance `json:"activeWorkflowInstances"`
+	// Returns the workflow event timeline for this vulnerability across all workflow instances
+	WorkflowTimeline *WorkflowEventConnection `json:"workflowTimeline"`
 }
 
 func (Vulnerability) IsNode() {}
@@ -50072,6 +50247,11 @@ type VulnerabilityWhereInput struct {
 	VulnerabilityStatusIDNotNil       *bool    `json:"vulnerabilityStatusIDNotNil,omitempty"`
 	VulnerabilityStatusIDEqualFold    *string  `json:"vulnerabilityStatusIDEqualFold,omitempty"`
 	VulnerabilityStatusIDContainsFold *string  `json:"vulnerabilityStatusIDContainsFold,omitempty"`
+	// workflow_eligible_marker field predicates
+	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
+	WorkflowEligibleMarkerNeq    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
+	WorkflowEligibleMarkerIsNil  *bool `json:"workflowEligibleMarkerIsNil,omitempty"`
+	WorkflowEligibleMarkerNotNil *bool `json:"workflowEligibleMarkerNotNil,omitempty"`
 	// external_owner_id field predicates
 	ExternalOwnerID             *string  `json:"externalOwnerID,omitempty"`
 	ExternalOwnerIdneq          *string  `json:"externalOwnerIDNEQ,omitempty"`
@@ -50615,6 +50795,9 @@ type VulnerabilityWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// workflow_object_refs edge predicates
+	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
+	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 	// Filter for referencesHas to contain a specific value
@@ -50788,6 +50971,8 @@ type WorkflowAssignment struct {
 	RejectionMetadata *models.WorkflowAssignmentRejection `json:"rejectionMetadata,omitempty"`
 	// structured invalidation metadata
 	InvalidationMetadata *models.WorkflowAssignmentInvalidation `json:"invalidationMetadata,omitempty"`
+	// consolidated terminal outcome metadata discriminated by decision (supersedes approval/rejection/invalidation metadata)
+	OutcomeMetadata *string `json:"outcomeMetadata,omitempty"`
 	// Timestamp when the assignment was decided
 	DecidedAt *time.Time `json:"decidedAt,omitempty"`
 	// User who made the decision
@@ -52045,8 +52230,24 @@ type WorkflowInstance struct {
 	// ID of the identity holder this workflow instance is associated with
 	IdentityHolderID *string `json:"identityHolderID,omitempty"`
 	// ID of the platform this workflow instance is associated with
-	PlatformID *string       `json:"platformID,omitempty"`
-	Owner      *Organization `json:"owner,omitempty"`
+	PlatformID *string `json:"platformID,omitempty"`
+	// ID of the assessment this workflow instance is associated with
+	AssessmentID *string `json:"assessmentID,omitempty"`
+	// ID of the assessment response this workflow instance is associated with
+	AssessmentResponseID *string `json:"assessmentResponseID,omitempty"`
+	// ID of the finding this workflow instance is associated with
+	FindingID *string `json:"findingID,omitempty"`
+	// ID of the integration this workflow instance is associated with
+	IntegrationID *string `json:"integrationID,omitempty"`
+	// ID of the remediation this workflow instance is associated with
+	RemediationID *string `json:"remediationID,omitempty"`
+	// ID of the risk this workflow instance is associated with
+	RiskID *string `json:"riskID,omitempty"`
+	// ID of the task this workflow instance is associated with
+	TaskID *string `json:"taskID,omitempty"`
+	// ID of the vulnerability this workflow instance is associated with
+	VulnerabilityID *string       `json:"vulnerabilityID,omitempty"`
+	Owner           *Organization `json:"owner,omitempty"`
 	// Definition driving this instance
 	WorkflowDefinition *WorkflowDefinition `json:"workflowDefinition"`
 	// Control this workflow instance is associated with
@@ -52068,7 +52269,23 @@ type WorkflowInstance struct {
 	// Identity holder this workflow instance is associated with
 	IdentityHolder *IdentityHolder `json:"identityHolder,omitempty"`
 	// Platform this workflow instance is associated with
-	Platform            *Platform                     `json:"platform,omitempty"`
+	Platform *Platform `json:"platform,omitempty"`
+	// Assessment this workflow instance is associated with
+	Assessment *Assessment `json:"assessment,omitempty"`
+	// Assessment response this workflow instance is associated with
+	AssessmentResponse *AssessmentResponse `json:"assessmentResponse,omitempty"`
+	// Finding this workflow instance is associated with
+	Finding *Finding `json:"finding,omitempty"`
+	// Integration this workflow instance is associated with
+	Integration *Integration `json:"integration,omitempty"`
+	// Remediation this workflow instance is associated with
+	Remediation *Remediation `json:"remediation,omitempty"`
+	// Risk this workflow instance is associated with
+	Risk *Risk `json:"risk,omitempty"`
+	// Task this workflow instance is associated with
+	Task *Task `json:"task,omitempty"`
+	// Vulnerability this workflow instance is associated with
+	Vulnerability       *Vulnerability                `json:"vulnerability,omitempty"`
 	WorkflowAssignments *WorkflowAssignmentConnection `json:"workflowAssignments"`
 	WorkflowEvents      *WorkflowEventConnection      `json:"workflowEvents"`
 	EmailTemplates      *EmailTemplateConnection      `json:"emailTemplates"`
@@ -52450,6 +52667,134 @@ type WorkflowInstanceWhereInput struct {
 	PlatformIDNotNil       *bool    `json:"platformIDNotNil,omitempty"`
 	PlatformIDEqualFold    *string  `json:"platformIDEqualFold,omitempty"`
 	PlatformIDContainsFold *string  `json:"platformIDContainsFold,omitempty"`
+	// assessment_id field predicates
+	AssessmentID             *string  `json:"assessmentID,omitempty"`
+	AssessmentIdneq          *string  `json:"assessmentIDNEQ,omitempty"`
+	AssessmentIDIn           []string `json:"assessmentIDIn,omitempty"`
+	AssessmentIDNotIn        []string `json:"assessmentIDNotIn,omitempty"`
+	AssessmentIdgt           *string  `json:"assessmentIDGT,omitempty"`
+	AssessmentIdgte          *string  `json:"assessmentIDGTE,omitempty"`
+	AssessmentIdlt           *string  `json:"assessmentIDLT,omitempty"`
+	AssessmentIdlte          *string  `json:"assessmentIDLTE,omitempty"`
+	AssessmentIDContains     *string  `json:"assessmentIDContains,omitempty"`
+	AssessmentIDHasPrefix    *string  `json:"assessmentIDHasPrefix,omitempty"`
+	AssessmentIDHasSuffix    *string  `json:"assessmentIDHasSuffix,omitempty"`
+	AssessmentIDIsNil        *bool    `json:"assessmentIDIsNil,omitempty"`
+	AssessmentIDNotNil       *bool    `json:"assessmentIDNotNil,omitempty"`
+	AssessmentIDEqualFold    *string  `json:"assessmentIDEqualFold,omitempty"`
+	AssessmentIDContainsFold *string  `json:"assessmentIDContainsFold,omitempty"`
+	// assessment_response_id field predicates
+	AssessmentResponseID             *string  `json:"assessmentResponseID,omitempty"`
+	AssessmentResponseIdneq          *string  `json:"assessmentResponseIDNEQ,omitempty"`
+	AssessmentResponseIDIn           []string `json:"assessmentResponseIDIn,omitempty"`
+	AssessmentResponseIDNotIn        []string `json:"assessmentResponseIDNotIn,omitempty"`
+	AssessmentResponseIdgt           *string  `json:"assessmentResponseIDGT,omitempty"`
+	AssessmentResponseIdgte          *string  `json:"assessmentResponseIDGTE,omitempty"`
+	AssessmentResponseIdlt           *string  `json:"assessmentResponseIDLT,omitempty"`
+	AssessmentResponseIdlte          *string  `json:"assessmentResponseIDLTE,omitempty"`
+	AssessmentResponseIDContains     *string  `json:"assessmentResponseIDContains,omitempty"`
+	AssessmentResponseIDHasPrefix    *string  `json:"assessmentResponseIDHasPrefix,omitempty"`
+	AssessmentResponseIDHasSuffix    *string  `json:"assessmentResponseIDHasSuffix,omitempty"`
+	AssessmentResponseIDIsNil        *bool    `json:"assessmentResponseIDIsNil,omitempty"`
+	AssessmentResponseIDNotNil       *bool    `json:"assessmentResponseIDNotNil,omitempty"`
+	AssessmentResponseIDEqualFold    *string  `json:"assessmentResponseIDEqualFold,omitempty"`
+	AssessmentResponseIDContainsFold *string  `json:"assessmentResponseIDContainsFold,omitempty"`
+	// finding_id field predicates
+	FindingID             *string  `json:"findingID,omitempty"`
+	FindingIdneq          *string  `json:"findingIDNEQ,omitempty"`
+	FindingIDIn           []string `json:"findingIDIn,omitempty"`
+	FindingIDNotIn        []string `json:"findingIDNotIn,omitempty"`
+	FindingIdgt           *string  `json:"findingIDGT,omitempty"`
+	FindingIdgte          *string  `json:"findingIDGTE,omitempty"`
+	FindingIdlt           *string  `json:"findingIDLT,omitempty"`
+	FindingIdlte          *string  `json:"findingIDLTE,omitempty"`
+	FindingIDContains     *string  `json:"findingIDContains,omitempty"`
+	FindingIDHasPrefix    *string  `json:"findingIDHasPrefix,omitempty"`
+	FindingIDHasSuffix    *string  `json:"findingIDHasSuffix,omitempty"`
+	FindingIDIsNil        *bool    `json:"findingIDIsNil,omitempty"`
+	FindingIDNotNil       *bool    `json:"findingIDNotNil,omitempty"`
+	FindingIDEqualFold    *string  `json:"findingIDEqualFold,omitempty"`
+	FindingIDContainsFold *string  `json:"findingIDContainsFold,omitempty"`
+	// integration_id field predicates
+	IntegrationID             *string  `json:"integrationID,omitempty"`
+	IntegrationIdneq          *string  `json:"integrationIDNEQ,omitempty"`
+	IntegrationIDIn           []string `json:"integrationIDIn,omitempty"`
+	IntegrationIDNotIn        []string `json:"integrationIDNotIn,omitempty"`
+	IntegrationIdgt           *string  `json:"integrationIDGT,omitempty"`
+	IntegrationIdgte          *string  `json:"integrationIDGTE,omitempty"`
+	IntegrationIdlt           *string  `json:"integrationIDLT,omitempty"`
+	IntegrationIdlte          *string  `json:"integrationIDLTE,omitempty"`
+	IntegrationIDContains     *string  `json:"integrationIDContains,omitempty"`
+	IntegrationIDHasPrefix    *string  `json:"integrationIDHasPrefix,omitempty"`
+	IntegrationIDHasSuffix    *string  `json:"integrationIDHasSuffix,omitempty"`
+	IntegrationIDIsNil        *bool    `json:"integrationIDIsNil,omitempty"`
+	IntegrationIDNotNil       *bool    `json:"integrationIDNotNil,omitempty"`
+	IntegrationIDEqualFold    *string  `json:"integrationIDEqualFold,omitempty"`
+	IntegrationIDContainsFold *string  `json:"integrationIDContainsFold,omitempty"`
+	// remediation_id field predicates
+	RemediationID             *string  `json:"remediationID,omitempty"`
+	RemediationIdneq          *string  `json:"remediationIDNEQ,omitempty"`
+	RemediationIDIn           []string `json:"remediationIDIn,omitempty"`
+	RemediationIDNotIn        []string `json:"remediationIDNotIn,omitempty"`
+	RemediationIdgt           *string  `json:"remediationIDGT,omitempty"`
+	RemediationIdgte          *string  `json:"remediationIDGTE,omitempty"`
+	RemediationIdlt           *string  `json:"remediationIDLT,omitempty"`
+	RemediationIdlte          *string  `json:"remediationIDLTE,omitempty"`
+	RemediationIDContains     *string  `json:"remediationIDContains,omitempty"`
+	RemediationIDHasPrefix    *string  `json:"remediationIDHasPrefix,omitempty"`
+	RemediationIDHasSuffix    *string  `json:"remediationIDHasSuffix,omitempty"`
+	RemediationIDIsNil        *bool    `json:"remediationIDIsNil,omitempty"`
+	RemediationIDNotNil       *bool    `json:"remediationIDNotNil,omitempty"`
+	RemediationIDEqualFold    *string  `json:"remediationIDEqualFold,omitempty"`
+	RemediationIDContainsFold *string  `json:"remediationIDContainsFold,omitempty"`
+	// risk_id field predicates
+	RiskID             *string  `json:"riskID,omitempty"`
+	RiskIdneq          *string  `json:"riskIDNEQ,omitempty"`
+	RiskIDIn           []string `json:"riskIDIn,omitempty"`
+	RiskIDNotIn        []string `json:"riskIDNotIn,omitempty"`
+	RiskIdgt           *string  `json:"riskIDGT,omitempty"`
+	RiskIdgte          *string  `json:"riskIDGTE,omitempty"`
+	RiskIdlt           *string  `json:"riskIDLT,omitempty"`
+	RiskIdlte          *string  `json:"riskIDLTE,omitempty"`
+	RiskIDContains     *string  `json:"riskIDContains,omitempty"`
+	RiskIDHasPrefix    *string  `json:"riskIDHasPrefix,omitempty"`
+	RiskIDHasSuffix    *string  `json:"riskIDHasSuffix,omitempty"`
+	RiskIDIsNil        *bool    `json:"riskIDIsNil,omitempty"`
+	RiskIDNotNil       *bool    `json:"riskIDNotNil,omitempty"`
+	RiskIDEqualFold    *string  `json:"riskIDEqualFold,omitempty"`
+	RiskIDContainsFold *string  `json:"riskIDContainsFold,omitempty"`
+	// task_id field predicates
+	TaskID             *string  `json:"taskID,omitempty"`
+	TaskIdneq          *string  `json:"taskIDNEQ,omitempty"`
+	TaskIDIn           []string `json:"taskIDIn,omitempty"`
+	TaskIDNotIn        []string `json:"taskIDNotIn,omitempty"`
+	TaskIdgt           *string  `json:"taskIDGT,omitempty"`
+	TaskIdgte          *string  `json:"taskIDGTE,omitempty"`
+	TaskIdlt           *string  `json:"taskIDLT,omitempty"`
+	TaskIdlte          *string  `json:"taskIDLTE,omitempty"`
+	TaskIDContains     *string  `json:"taskIDContains,omitempty"`
+	TaskIDHasPrefix    *string  `json:"taskIDHasPrefix,omitempty"`
+	TaskIDHasSuffix    *string  `json:"taskIDHasSuffix,omitempty"`
+	TaskIDIsNil        *bool    `json:"taskIDIsNil,omitempty"`
+	TaskIDNotNil       *bool    `json:"taskIDNotNil,omitempty"`
+	TaskIDEqualFold    *string  `json:"taskIDEqualFold,omitempty"`
+	TaskIDContainsFold *string  `json:"taskIDContainsFold,omitempty"`
+	// vulnerability_id field predicates
+	VulnerabilityID             *string  `json:"vulnerabilityID,omitempty"`
+	VulnerabilityIdneq          *string  `json:"vulnerabilityIDNEQ,omitempty"`
+	VulnerabilityIDIn           []string `json:"vulnerabilityIDIn,omitempty"`
+	VulnerabilityIDNotIn        []string `json:"vulnerabilityIDNotIn,omitempty"`
+	VulnerabilityIdgt           *string  `json:"vulnerabilityIDGT,omitempty"`
+	VulnerabilityIdgte          *string  `json:"vulnerabilityIDGTE,omitempty"`
+	VulnerabilityIdlt           *string  `json:"vulnerabilityIDLT,omitempty"`
+	VulnerabilityIdlte          *string  `json:"vulnerabilityIDLTE,omitempty"`
+	VulnerabilityIDContains     *string  `json:"vulnerabilityIDContains,omitempty"`
+	VulnerabilityIDHasPrefix    *string  `json:"vulnerabilityIDHasPrefix,omitempty"`
+	VulnerabilityIDHasSuffix    *string  `json:"vulnerabilityIDHasSuffix,omitempty"`
+	VulnerabilityIDIsNil        *bool    `json:"vulnerabilityIDIsNil,omitempty"`
+	VulnerabilityIDNotNil       *bool    `json:"vulnerabilityIDNotNil,omitempty"`
+	VulnerabilityIDEqualFold    *string  `json:"vulnerabilityIDEqualFold,omitempty"`
+	VulnerabilityIDContainsFold *string  `json:"vulnerabilityIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -52486,6 +52831,30 @@ type WorkflowInstanceWhereInput struct {
 	// platform edge predicates
 	HasPlatform     *bool                 `json:"hasPlatform,omitempty"`
 	HasPlatformWith []*PlatformWhereInput `json:"hasPlatformWith,omitempty"`
+	// assessment edge predicates
+	HasAssessment     *bool                   `json:"hasAssessment,omitempty"`
+	HasAssessmentWith []*AssessmentWhereInput `json:"hasAssessmentWith,omitempty"`
+	// assessment_response edge predicates
+	HasAssessmentResponse     *bool                           `json:"hasAssessmentResponse,omitempty"`
+	HasAssessmentResponseWith []*AssessmentResponseWhereInput `json:"hasAssessmentResponseWith,omitempty"`
+	// finding edge predicates
+	HasFinding     *bool                `json:"hasFinding,omitempty"`
+	HasFindingWith []*FindingWhereInput `json:"hasFindingWith,omitempty"`
+	// integration edge predicates
+	HasIntegration     *bool                    `json:"hasIntegration,omitempty"`
+	HasIntegrationWith []*IntegrationWhereInput `json:"hasIntegrationWith,omitempty"`
+	// remediation edge predicates
+	HasRemediation     *bool                    `json:"hasRemediation,omitempty"`
+	HasRemediationWith []*RemediationWhereInput `json:"hasRemediationWith,omitempty"`
+	// risk edge predicates
+	HasRisk     *bool             `json:"hasRisk,omitempty"`
+	HasRiskWith []*RiskWhereInput `json:"hasRiskWith,omitempty"`
+	// task edge predicates
+	HasTask     *bool             `json:"hasTask,omitempty"`
+	HasTaskWith []*TaskWhereInput `json:"hasTaskWith,omitempty"`
+	// vulnerability edge predicates
+	HasVulnerability     *bool                      `json:"hasVulnerability,omitempty"`
+	HasVulnerabilityWith []*VulnerabilityWhereInput `json:"hasVulnerabilityWith,omitempty"`
 	// workflow_assignments edge predicates
 	HasWorkflowAssignments     *bool                           `json:"hasWorkflowAssignments,omitempty"`
 	HasWorkflowAssignmentsWith []*WorkflowAssignmentWhereInput `json:"hasWorkflowAssignmentsWith,omitempty"`
@@ -52553,8 +52922,18 @@ type WorkflowObjectRef struct {
 	// Identity holder referenced by this workflow instance
 	IdentityHolderID *string `json:"identityHolderID,omitempty"`
 	// Platform referenced by this workflow instance
-	PlatformID *string       `json:"platformID,omitempty"`
-	Owner      *Organization `json:"owner,omitempty"`
+	PlatformID *string `json:"platformID,omitempty"`
+	// Vulnerability referenced by this workflow instance
+	VulnerabilityID *string `json:"vulnerabilityID,omitempty"`
+	// Risk referenced by this workflow instance
+	RiskID *string `json:"riskID,omitempty"`
+	// Assessment referenced by this workflow instance
+	AssessmentID *string `json:"assessmentID,omitempty"`
+	// Assessment response referenced by this workflow instance
+	AssessmentResponseID *string `json:"assessmentResponseID,omitempty"`
+	// Remediation referenced by this workflow instance
+	RemediationID *string       `json:"remediationID,omitempty"`
+	Owner         *Organization `json:"owner,omitempty"`
 	// Workflow instance this object is associated with
 	WorkflowInstance *WorkflowInstance `json:"workflowInstance"`
 	// Control referenced by this workflow instance
@@ -52587,6 +52966,16 @@ type WorkflowObjectRef struct {
 	IdentityHolder *IdentityHolder `json:"identityHolder,omitempty"`
 	// Platform referenced by this workflow instance
 	Platform *Platform `json:"platform,omitempty"`
+	// Vulnerability referenced by this workflow instance
+	Vulnerability *Vulnerability `json:"vulnerability,omitempty"`
+	// Risk referenced by this workflow instance
+	Risk *Risk `json:"risk,omitempty"`
+	// Assessment referenced by this workflow instance
+	Assessment *Assessment `json:"assessment,omitempty"`
+	// Assessment response referenced by this workflow instance
+	AssessmentResponse *AssessmentResponse `json:"assessmentResponse,omitempty"`
+	// Remediation referenced by this workflow instance
+	Remediation *Remediation `json:"remediation,omitempty"`
 }
 
 func (WorkflowObjectRef) IsNode() {}
@@ -52988,6 +53377,86 @@ type WorkflowObjectRefWhereInput struct {
 	PlatformIDNotNil       *bool    `json:"platformIDNotNil,omitempty"`
 	PlatformIDEqualFold    *string  `json:"platformIDEqualFold,omitempty"`
 	PlatformIDContainsFold *string  `json:"platformIDContainsFold,omitempty"`
+	// vulnerability_id field predicates
+	VulnerabilityID             *string  `json:"vulnerabilityID,omitempty"`
+	VulnerabilityIdneq          *string  `json:"vulnerabilityIDNEQ,omitempty"`
+	VulnerabilityIDIn           []string `json:"vulnerabilityIDIn,omitempty"`
+	VulnerabilityIDNotIn        []string `json:"vulnerabilityIDNotIn,omitempty"`
+	VulnerabilityIdgt           *string  `json:"vulnerabilityIDGT,omitempty"`
+	VulnerabilityIdgte          *string  `json:"vulnerabilityIDGTE,omitempty"`
+	VulnerabilityIdlt           *string  `json:"vulnerabilityIDLT,omitempty"`
+	VulnerabilityIdlte          *string  `json:"vulnerabilityIDLTE,omitempty"`
+	VulnerabilityIDContains     *string  `json:"vulnerabilityIDContains,omitempty"`
+	VulnerabilityIDHasPrefix    *string  `json:"vulnerabilityIDHasPrefix,omitempty"`
+	VulnerabilityIDHasSuffix    *string  `json:"vulnerabilityIDHasSuffix,omitempty"`
+	VulnerabilityIDIsNil        *bool    `json:"vulnerabilityIDIsNil,omitempty"`
+	VulnerabilityIDNotNil       *bool    `json:"vulnerabilityIDNotNil,omitempty"`
+	VulnerabilityIDEqualFold    *string  `json:"vulnerabilityIDEqualFold,omitempty"`
+	VulnerabilityIDContainsFold *string  `json:"vulnerabilityIDContainsFold,omitempty"`
+	// risk_id field predicates
+	RiskID             *string  `json:"riskID,omitempty"`
+	RiskIdneq          *string  `json:"riskIDNEQ,omitempty"`
+	RiskIDIn           []string `json:"riskIDIn,omitempty"`
+	RiskIDNotIn        []string `json:"riskIDNotIn,omitempty"`
+	RiskIdgt           *string  `json:"riskIDGT,omitempty"`
+	RiskIdgte          *string  `json:"riskIDGTE,omitempty"`
+	RiskIdlt           *string  `json:"riskIDLT,omitempty"`
+	RiskIdlte          *string  `json:"riskIDLTE,omitempty"`
+	RiskIDContains     *string  `json:"riskIDContains,omitempty"`
+	RiskIDHasPrefix    *string  `json:"riskIDHasPrefix,omitempty"`
+	RiskIDHasSuffix    *string  `json:"riskIDHasSuffix,omitempty"`
+	RiskIDIsNil        *bool    `json:"riskIDIsNil,omitempty"`
+	RiskIDNotNil       *bool    `json:"riskIDNotNil,omitempty"`
+	RiskIDEqualFold    *string  `json:"riskIDEqualFold,omitempty"`
+	RiskIDContainsFold *string  `json:"riskIDContainsFold,omitempty"`
+	// assessment_id field predicates
+	AssessmentID             *string  `json:"assessmentID,omitempty"`
+	AssessmentIdneq          *string  `json:"assessmentIDNEQ,omitempty"`
+	AssessmentIDIn           []string `json:"assessmentIDIn,omitempty"`
+	AssessmentIDNotIn        []string `json:"assessmentIDNotIn,omitempty"`
+	AssessmentIdgt           *string  `json:"assessmentIDGT,omitempty"`
+	AssessmentIdgte          *string  `json:"assessmentIDGTE,omitempty"`
+	AssessmentIdlt           *string  `json:"assessmentIDLT,omitempty"`
+	AssessmentIdlte          *string  `json:"assessmentIDLTE,omitempty"`
+	AssessmentIDContains     *string  `json:"assessmentIDContains,omitempty"`
+	AssessmentIDHasPrefix    *string  `json:"assessmentIDHasPrefix,omitempty"`
+	AssessmentIDHasSuffix    *string  `json:"assessmentIDHasSuffix,omitempty"`
+	AssessmentIDIsNil        *bool    `json:"assessmentIDIsNil,omitempty"`
+	AssessmentIDNotNil       *bool    `json:"assessmentIDNotNil,omitempty"`
+	AssessmentIDEqualFold    *string  `json:"assessmentIDEqualFold,omitempty"`
+	AssessmentIDContainsFold *string  `json:"assessmentIDContainsFold,omitempty"`
+	// assessment_response_id field predicates
+	AssessmentResponseID             *string  `json:"assessmentResponseID,omitempty"`
+	AssessmentResponseIdneq          *string  `json:"assessmentResponseIDNEQ,omitempty"`
+	AssessmentResponseIDIn           []string `json:"assessmentResponseIDIn,omitempty"`
+	AssessmentResponseIDNotIn        []string `json:"assessmentResponseIDNotIn,omitempty"`
+	AssessmentResponseIdgt           *string  `json:"assessmentResponseIDGT,omitempty"`
+	AssessmentResponseIdgte          *string  `json:"assessmentResponseIDGTE,omitempty"`
+	AssessmentResponseIdlt           *string  `json:"assessmentResponseIDLT,omitempty"`
+	AssessmentResponseIdlte          *string  `json:"assessmentResponseIDLTE,omitempty"`
+	AssessmentResponseIDContains     *string  `json:"assessmentResponseIDContains,omitempty"`
+	AssessmentResponseIDHasPrefix    *string  `json:"assessmentResponseIDHasPrefix,omitempty"`
+	AssessmentResponseIDHasSuffix    *string  `json:"assessmentResponseIDHasSuffix,omitempty"`
+	AssessmentResponseIDIsNil        *bool    `json:"assessmentResponseIDIsNil,omitempty"`
+	AssessmentResponseIDNotNil       *bool    `json:"assessmentResponseIDNotNil,omitempty"`
+	AssessmentResponseIDEqualFold    *string  `json:"assessmentResponseIDEqualFold,omitempty"`
+	AssessmentResponseIDContainsFold *string  `json:"assessmentResponseIDContainsFold,omitempty"`
+	// remediation_id field predicates
+	RemediationID             *string  `json:"remediationID,omitempty"`
+	RemediationIdneq          *string  `json:"remediationIDNEQ,omitempty"`
+	RemediationIDIn           []string `json:"remediationIDIn,omitempty"`
+	RemediationIDNotIn        []string `json:"remediationIDNotIn,omitempty"`
+	RemediationIdgt           *string  `json:"remediationIDGT,omitempty"`
+	RemediationIdgte          *string  `json:"remediationIDGTE,omitempty"`
+	RemediationIdlt           *string  `json:"remediationIDLT,omitempty"`
+	RemediationIdlte          *string  `json:"remediationIDLTE,omitempty"`
+	RemediationIDContains     *string  `json:"remediationIDContains,omitempty"`
+	RemediationIDHasPrefix    *string  `json:"remediationIDHasPrefix,omitempty"`
+	RemediationIDHasSuffix    *string  `json:"remediationIDHasSuffix,omitempty"`
+	RemediationIDIsNil        *bool    `json:"remediationIDIsNil,omitempty"`
+	RemediationIDNotNil       *bool    `json:"remediationIDNotNil,omitempty"`
+	RemediationIDEqualFold    *string  `json:"remediationIDEqualFold,omitempty"`
+	RemediationIDContainsFold *string  `json:"remediationIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -53039,6 +53508,21 @@ type WorkflowObjectRefWhereInput struct {
 	// platform edge predicates
 	HasPlatform     *bool                 `json:"hasPlatform,omitempty"`
 	HasPlatformWith []*PlatformWhereInput `json:"hasPlatformWith,omitempty"`
+	// vulnerability edge predicates
+	HasVulnerability     *bool                      `json:"hasVulnerability,omitempty"`
+	HasVulnerabilityWith []*VulnerabilityWhereInput `json:"hasVulnerabilityWith,omitempty"`
+	// risk edge predicates
+	HasRisk     *bool             `json:"hasRisk,omitempty"`
+	HasRiskWith []*RiskWhereInput `json:"hasRiskWith,omitempty"`
+	// assessment edge predicates
+	HasAssessment     *bool                   `json:"hasAssessment,omitempty"`
+	HasAssessmentWith []*AssessmentWhereInput `json:"hasAssessmentWith,omitempty"`
+	// assessment_response edge predicates
+	HasAssessmentResponse     *bool                           `json:"hasAssessmentResponse,omitempty"`
+	HasAssessmentResponseWith []*AssessmentResponseWhereInput `json:"hasAssessmentResponseWith,omitempty"`
+	// remediation edge predicates
+	HasRemediation     *bool                    `json:"hasRemediation,omitempty"`
+	HasRemediationWith []*RemediationWhereInput `json:"hasRemediationWith,omitempty"`
 }
 
 // Metadata for a workflow object type
@@ -53079,6 +53563,8 @@ type WorkflowProposal struct {
 	Revision int64 `json:"revision"`
 	// Staged field updates for this domain; applied only after approval
 	Changes map[string]any `json:"changes,omitempty"`
+	// Staged field updates as opaque JSON; preferred over changes field
+	ProposedChanges *string `json:"proposedChanges,omitempty"`
 	// Hash of the current proposed changes for approval verification
 	ProposedHash *string `json:"proposedHash,omitempty"`
 	// Hash of the proposed changes that satisfied approvals (what was approved)

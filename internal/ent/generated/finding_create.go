@@ -380,6 +380,20 @@ func (_c *FindingCreate) SetNillableFindingStatusID(v *string) *FindingCreate {
 	return _c
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *FindingCreate) SetWorkflowEligibleMarker(v bool) *FindingCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableWorkflowEligibleMarker(v *bool) *FindingCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *FindingCreate) SetExternalID(v string) *FindingCreate {
 	_c.mutation.SetExternalID(v)
@@ -1285,6 +1299,10 @@ func (_c *FindingCreate) defaults() error {
 		v := finding.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := finding.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
+	}
 	if _, ok := _c.mutation.SecurityLevel(); !ok {
 		v := finding.DefaultSecurityLevel
 		_c.mutation.SetSecurityLevel(v)
@@ -1442,6 +1460,10 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.FindingStatusName(); ok {
 		_spec.SetField(finding.FieldFindingStatusName, field.TypeString, value)
 		_node.FindingStatusName = value
+	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(finding.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(finding.FieldExternalID, field.TypeString, value)

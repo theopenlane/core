@@ -3287,22 +3287,16 @@ func (r *createNotificationInputResolver) Channels(ctx context.Context, obj *gen
 	return nil
 }
 
-// VulnerabilityIds is the resolver for the vulnerabilityIds field.
-func (r *createScanInputResolver) VulnerabilityIds(ctx context.Context, obj *generated.CreateScanInput, data []string) error {
-	obj.VulnerabilityIds = data
-
-	return nil
-}
-
-// VulnerabilityIDs is the resolver for the vulnerabilityIDs field.
-func (r *createScanInputResolver) VulnerabilityIDs(ctx context.Context, obj *generated.CreateScanInput, data []string) error {
-	obj.VulnerabilityIDs = data
-
-	return nil
-}
-
 // ActionPlan returns gqlgenerated.ActionPlanResolver implementation.
 func (r *Resolver) ActionPlan() gqlgenerated.ActionPlanResolver { return &actionPlanResolver{r} }
+
+// Assessment returns gqlgenerated.AssessmentResolver implementation.
+func (r *Resolver) Assessment() gqlgenerated.AssessmentResolver { return &assessmentResolver{r} }
+
+// AssessmentResponse returns gqlgenerated.AssessmentResponseResolver implementation.
+func (r *Resolver) AssessmentResponse() gqlgenerated.AssessmentResponseResolver {
+	return &assessmentResponseResolver{r}
+}
 
 // Campaign returns gqlgenerated.CampaignResolver implementation.
 func (r *Resolver) Campaign() gqlgenerated.CampaignResolver { return &campaignResolver{r} }
@@ -3317,6 +3311,9 @@ func (r *Resolver) Control() gqlgenerated.ControlResolver { return &controlResol
 
 // Evidence returns gqlgenerated.EvidenceResolver implementation.
 func (r *Resolver) Evidence() gqlgenerated.EvidenceResolver { return &evidenceResolver{r} }
+
+// Finding returns gqlgenerated.FindingResolver implementation.
+func (r *Resolver) Finding() gqlgenerated.FindingResolver { return &findingResolver{r} }
 
 // Group returns gqlgenerated.GroupResolver implementation.
 func (r *Resolver) Group() gqlgenerated.GroupResolver { return &groupResolver{r} }
@@ -3346,8 +3343,22 @@ func (r *Resolver) Procedure() gqlgenerated.ProcedureResolver { return &procedur
 // Query returns gqlgenerated.QueryResolver implementation.
 func (r *Resolver) Query() gqlgenerated.QueryResolver { return &queryResolver{r} }
 
+// Remediation returns gqlgenerated.RemediationResolver implementation.
+func (r *Resolver) Remediation() gqlgenerated.RemediationResolver { return &remediationResolver{r} }
+
+// Risk returns gqlgenerated.RiskResolver implementation.
+func (r *Resolver) Risk() gqlgenerated.RiskResolver { return &riskResolver{r} }
+
 // Subcontrol returns gqlgenerated.SubcontrolResolver implementation.
 func (r *Resolver) Subcontrol() gqlgenerated.SubcontrolResolver { return &subcontrolResolver{r} }
+
+// Task returns gqlgenerated.TaskResolver implementation.
+func (r *Resolver) Task() gqlgenerated.TaskResolver { return &taskResolver{r} }
+
+// Vulnerability returns gqlgenerated.VulnerabilityResolver implementation.
+func (r *Resolver) Vulnerability() gqlgenerated.VulnerabilityResolver {
+	return &vulnerabilityResolver{r}
+}
 
 // WorkflowInstance returns gqlgenerated.WorkflowInstanceResolver implementation.
 func (r *Resolver) WorkflowInstance() gqlgenerated.WorkflowInstanceResolver {
@@ -3387,11 +3398,6 @@ func (r *Resolver) CreateNotificationInput() gqlgenerated.CreateNotificationInpu
 // CreateOrganizationInput returns gqlgenerated.CreateOrganizationInputResolver implementation.
 func (r *Resolver) CreateOrganizationInput() gqlgenerated.CreateOrganizationInputResolver {
 	return &createOrganizationInputResolver{r}
-}
-
-// CreateScanInput returns gqlgenerated.CreateScanInputResolver implementation.
-func (r *Resolver) CreateScanInput() gqlgenerated.CreateScanInputResolver {
-	return &createScanInputResolver{r}
 }
 
 // CreateTrustCenterFAQInput returns gqlgenerated.CreateTrustCenterFAQInputResolver implementation.
@@ -3459,6 +3465,11 @@ func (r *Resolver) UpdateProgramInput() gqlgenerated.UpdateProgramInputResolver 
 	return &updateProgramInputResolver{r}
 }
 
+// UpdateReviewInput returns gqlgenerated.UpdateReviewInputResolver implementation.
+func (r *Resolver) UpdateReviewInput() gqlgenerated.UpdateReviewInputResolver {
+	return &updateReviewInputResolver{r}
+}
+
 // UpdateRiskInput returns gqlgenerated.UpdateRiskInputResolver implementation.
 func (r *Resolver) UpdateRiskInput() gqlgenerated.UpdateRiskInputResolver {
 	return &updateRiskInputResolver{r}
@@ -3496,10 +3507,13 @@ func (r *Resolver) UpdateTrustCenterInput() gqlgenerated.UpdateTrustCenterInputR
 
 type (
 	actionPlanResolver                  struct{ *Resolver }
+	assessmentResolver                  struct{ *Resolver }
+	assessmentResponseResolver          struct{ *Resolver }
 	campaignResolver                    struct{ *Resolver }
 	campaignTargetResolver              struct{ *Resolver }
 	controlResolver                     struct{ *Resolver }
 	evidenceResolver                    struct{ *Resolver }
+	findingResolver                     struct{ *Resolver }
 	groupResolver                       struct{ *Resolver }
 	identityHolderResolver              struct{ *Resolver }
 	integrationResolver                 struct{ *Resolver }
@@ -3508,7 +3522,11 @@ type (
 	platformResolver                    struct{ *Resolver }
 	procedureResolver                   struct{ *Resolver }
 	queryResolver                       struct{ *Resolver }
+	remediationResolver                 struct{ *Resolver }
+	riskResolver                        struct{ *Resolver }
 	subcontrolResolver                  struct{ *Resolver }
+	taskResolver                        struct{ *Resolver }
+	vulnerabilityResolver               struct{ *Resolver }
 	workflowInstanceResolver            struct{ *Resolver }
 	workflowProposalResolver            struct{ *Resolver }
 	createDiscussionInputResolver       struct{ *Resolver }
@@ -3517,7 +3535,6 @@ type (
 	createMappedControlInputResolver    struct{ *Resolver }
 	createNotificationInputResolver     struct{ *Resolver }
 	createOrganizationInputResolver     struct{ *Resolver }
-	createScanInputResolver             struct{ *Resolver }
 	createTrustCenterFAQInputResolver   struct{ *Resolver }
 	createTrustCenterInputResolver      struct{ *Resolver }
 	updateActionPlanInputResolver       struct{ *Resolver }
@@ -3531,6 +3548,7 @@ type (
 	updateOrganizationInputResolver     struct{ *Resolver }
 	updateProcedureInputResolver        struct{ *Resolver }
 	updateProgramInputResolver          struct{ *Resolver }
+	updateReviewInputResolver           struct{ *Resolver }
 	updateRiskInputResolver             struct{ *Resolver }
 	updateStandardInputResolver         struct{ *Resolver }
 	updateSubcontrolInputResolver       struct{ *Resolver }

@@ -224,7 +224,33 @@ func (r *Runtime) ExecuteOperation(ctx context.Context, integration *ent.Integra
 		return nil, ErrInstallationRequired
 	}
 
-	ctx = intobvs.WithIntegration(ctx, integration.ID, integration.DefinitionID)
+	return r.executeOperationInline(ctx, integration, integration.DefinitionID, operation, credentials, config)
+}
+
+// ExecuteRuntimeOperation runs one system-initiated operation inline against a definition's cached runtime client,
+// with no Integration installation and no run tracking. Used for operator-owned calls that need their result back synchronously
+func (r *Runtime) ExecuteRuntimeOperation(ctx context.Context, definitionID, operationName string, config json.RawMessage) (json.RawMessage, error) {
+	operation, err := r.Registry().Operation(definitionID, operationName)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.executeOperationInline(ctx, nil, definitionID, operation, nil, config)
+}
+
+// executeOperationInline runs one integration operation inline without run tracking, if there is no integration ID it runs as an runtime client
+func (r *Runtime) executeOperationInline(ctx context.Context, integration *ent.Integration, definitionID string, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage) (json.RawMessage, error) {
+	if integration != nil {
+		ctx = intobvs.WithIntegration(ctx, integration.ID, integration.DefinitionID)
+	} else {
+		ctx = intobvs.WithIntegration(ctx, "", definitionID)
+		ctx = types.WithExecutionMetadata(ctx, types.ExecutionMetadata{
+			DefinitionID: definitionID,
+			Operation:    operation.Name,
+			Runtime:      true,
+		})
+	}
+
 	ctx = intobvs.WithOperation(ctx, operation.Name)
 
 	if len(config) > 0 {
@@ -644,7 +670,7 @@ func (r *Runtime) resolveOperationClient(ctx context.Context, integration *ent.I
 			return nil, credentials, meta.DefinitionID, ErrRuntimeClientNotFound
 		}
 
-		logx.FromContext(ctx).Info().Msg("runtime client resolved")
+		logx.FromContext(ctx).Debug().Msg("runtime client resolved")
 
 		return client, credentials, meta.DefinitionID, nil
 	}
@@ -668,7 +694,7 @@ func (r *Runtime) resolveOperationClient(ctx context.Context, integration *ent.I
 		return nil, credentials, integration.DefinitionID, err
 	}
 
-	logx.FromContext(ctx).Info().Msg("client initialized")
+	logx.FromContext(ctx).Debug().Msg("client initialized")
 
 	return client, credentials, integration.DefinitionID, nil
 }

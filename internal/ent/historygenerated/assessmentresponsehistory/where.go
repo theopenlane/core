@@ -118,6 +118,11 @@ func OwnerID(v string) predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// WorkflowEligibleMarker applies equality check predicate on the "workflow_eligible_marker" field. It's identical to WorkflowEligibleMarkerEQ.
+func WorkflowEligibleMarker(v bool) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
+}
+
 // AssessmentID applies equality check predicate on the "assessment_id" field. It's identical to AssessmentIDEQ.
 func AssessmentID(v string) predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldAssessmentID, v))
@@ -876,6 +881,26 @@ func OwnerIDEqualFold(v string) predicate.AssessmentResponseHistory {
 // OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
 func OwnerIDContainsFold(v string) predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldContainsFold(FieldOwnerID, v))
+}
+
+// WorkflowEligibleMarkerEQ applies the EQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerEQ(v bool) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerNEQ applies the NEQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNEQ(v bool) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerIsNil applies the IsNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerIsNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIsNull(FieldWorkflowEligibleMarker))
+}
+
+// WorkflowEligibleMarkerNotNil applies the NotNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNotNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotNull(FieldWorkflowEligibleMarker))
 }
 
 // AssessmentIDEQ applies the EQ predicate on the "assessment_id" field.

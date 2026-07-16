@@ -18,8 +18,14 @@ func init() {
 		if ref.ControlID != "" {
 			return &wf.Object{ID: ref.ControlID, Type: enums.WorkflowObjectTypeControl}, true
 		}
+		if ref.TaskID != "" {
+			return &wf.Object{ID: ref.TaskID, Type: enums.WorkflowObjectTypeTask}, true
+		}
 		if ref.InternalPolicyID != "" {
 			return &wf.Object{ID: ref.InternalPolicyID, Type: enums.WorkflowObjectTypeInternalPolicy}, true
+		}
+		if ref.FindingID != "" {
+			return &wf.Object{ID: ref.FindingID, Type: enums.WorkflowObjectTypeFinding}, true
 		}
 		if ref.EvidenceID != "" {
 			return &wf.Object{ID: ref.EvidenceID, Type: enums.WorkflowObjectTypeEvidence}, true
@@ -45,6 +51,21 @@ func init() {
 		if ref.PlatformID != "" {
 			return &wf.Object{ID: ref.PlatformID, Type: enums.WorkflowObjectTypePlatform}, true
 		}
+		if ref.VulnerabilityID != "" {
+			return &wf.Object{ID: ref.VulnerabilityID, Type: enums.WorkflowObjectTypeVulnerability}, true
+		}
+		if ref.RiskID != "" {
+			return &wf.Object{ID: ref.RiskID, Type: enums.WorkflowObjectTypeRisk}, true
+		}
+		if ref.AssessmentID != "" {
+			return &wf.Object{ID: ref.AssessmentID, Type: enums.WorkflowObjectTypeAssessment}, true
+		}
+		if ref.AssessmentResponseID != "" {
+			return &wf.Object{ID: ref.AssessmentResponseID, Type: enums.WorkflowObjectTypeAssessmentResponse}, true
+		}
+		if ref.RemediationID != "" {
+			return &wf.Object{ID: ref.RemediationID, Type: enums.WorkflowObjectTypeRemediation}, true
+		}
 		return nil, false
 	})
 
@@ -57,6 +78,10 @@ func init() {
 		switch obj.Type {
 		case enums.WorkflowObjectTypeActionPlan:
 			return query.Where(workflowobjectref.ActionPlanIDEQ(obj.ID)), true
+		case enums.WorkflowObjectTypeAssessment:
+			return query.Where(workflowobjectref.AssessmentIDEQ(obj.ID)), true
+		case enums.WorkflowObjectTypeAssessmentResponse:
+			return query.Where(workflowobjectref.AssessmentResponseIDEQ(obj.ID)), true
 		case enums.WorkflowObjectTypeCampaign:
 			return query.Where(workflowobjectref.CampaignIDEQ(obj.ID)), true
 		case enums.WorkflowObjectTypeCampaignTarget:
@@ -65,6 +90,8 @@ func init() {
 			return query.Where(workflowobjectref.ControlIDEQ(obj.ID)), true
 		case enums.WorkflowObjectTypeEvidence:
 			return query.Where(workflowobjectref.EvidenceIDEQ(obj.ID)), true
+		case enums.WorkflowObjectTypeFinding:
+			return query.Where(workflowobjectref.FindingIDEQ(obj.ID)), true
 		case enums.WorkflowObjectTypeIdentityHolder:
 			return query.Where(workflowobjectref.IdentityHolderIDEQ(obj.ID)), true
 		case enums.WorkflowObjectTypeInternalPolicy:
@@ -73,8 +100,16 @@ func init() {
 			return query.Where(workflowobjectref.PlatformIDEQ(obj.ID)), true
 		case enums.WorkflowObjectTypeProcedure:
 			return query.Where(workflowobjectref.ProcedureIDEQ(obj.ID)), true
+		case enums.WorkflowObjectTypeRemediation:
+			return query.Where(workflowobjectref.RemediationIDEQ(obj.ID)), true
+		case enums.WorkflowObjectTypeRisk:
+			return query.Where(workflowobjectref.RiskIDEQ(obj.ID)), true
 		case enums.WorkflowObjectTypeSubcontrol:
 			return query.Where(workflowobjectref.SubcontrolIDEQ(obj.ID)), true
+		case enums.WorkflowObjectTypeTask:
+			return query.Where(workflowobjectref.TaskIDEQ(obj.ID)), true
+		case enums.WorkflowObjectTypeVulnerability:
+			return query.Where(workflowobjectref.VulnerabilityIDEQ(obj.ID)), true
 		default:
 			return nil, false
 		}
@@ -89,6 +124,52 @@ func init() {
 			return nil
 		}
 		entObj, ok := obj.Node.(*generated.ActionPlan)
+		if !ok {
+			return nil
+		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
+		return map[string]any{
+			"object":           objectMap,
+			"changed_fields":   changedFields,
+			"changed_edges":    changedEdges,
+			"added_ids":        addedIDs,
+			"removed_ids":      removedIDs,
+			"event_type":       eventType,
+			"user_id":          userID,
+			"proposed_changes": proposedChanges,
+		}
+	})
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
+		if obj == nil || obj.Node == nil {
+			return nil
+		}
+		entObj, ok := obj.Node.(*generated.Assessment)
+		if !ok {
+			return nil
+		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
+		return map[string]any{
+			"object":           objectMap,
+			"changed_fields":   changedFields,
+			"changed_edges":    changedEdges,
+			"added_ids":        addedIDs,
+			"removed_ids":      removedIDs,
+			"event_type":       eventType,
+			"user_id":          userID,
+			"proposed_changes": proposedChanges,
+		}
+	})
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
+		if obj == nil || obj.Node == nil {
+			return nil
+		}
+		entObj, ok := obj.Node.(*generated.AssessmentResponse)
 		if !ok {
 			return nil
 		}
@@ -203,6 +284,29 @@ func init() {
 		if obj == nil || obj.Node == nil {
 			return nil
 		}
+		entObj, ok := obj.Node.(*generated.Finding)
+		if !ok {
+			return nil
+		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
+		return map[string]any{
+			"object":           objectMap,
+			"changed_fields":   changedFields,
+			"changed_edges":    changedEdges,
+			"added_ids":        addedIDs,
+			"removed_ids":      removedIDs,
+			"event_type":       eventType,
+			"user_id":          userID,
+			"proposed_changes": proposedChanges,
+		}
+	})
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
+		if obj == nil || obj.Node == nil {
+			return nil
+		}
 		entObj, ok := obj.Node.(*generated.IdentityHolder)
 		if !ok {
 			return nil
@@ -295,7 +399,99 @@ func init() {
 		if obj == nil || obj.Node == nil {
 			return nil
 		}
+		entObj, ok := obj.Node.(*generated.Remediation)
+		if !ok {
+			return nil
+		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
+		return map[string]any{
+			"object":           objectMap,
+			"changed_fields":   changedFields,
+			"changed_edges":    changedEdges,
+			"added_ids":        addedIDs,
+			"removed_ids":      removedIDs,
+			"event_type":       eventType,
+			"user_id":          userID,
+			"proposed_changes": proposedChanges,
+		}
+	})
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
+		if obj == nil || obj.Node == nil {
+			return nil
+		}
+		entObj, ok := obj.Node.(*generated.Risk)
+		if !ok {
+			return nil
+		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
+		return map[string]any{
+			"object":           objectMap,
+			"changed_fields":   changedFields,
+			"changed_edges":    changedEdges,
+			"added_ids":        addedIDs,
+			"removed_ids":      removedIDs,
+			"event_type":       eventType,
+			"user_id":          userID,
+			"proposed_changes": proposedChanges,
+		}
+	})
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
+		if obj == nil || obj.Node == nil {
+			return nil
+		}
 		entObj, ok := obj.Node.(*generated.Subcontrol)
+		if !ok {
+			return nil
+		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
+		return map[string]any{
+			"object":           objectMap,
+			"changed_fields":   changedFields,
+			"changed_edges":    changedEdges,
+			"added_ids":        addedIDs,
+			"removed_ids":      removedIDs,
+			"event_type":       eventType,
+			"user_id":          userID,
+			"proposed_changes": proposedChanges,
+		}
+	})
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
+		if obj == nil || obj.Node == nil {
+			return nil
+		}
+		entObj, ok := obj.Node.(*generated.Task)
+		if !ok {
+			return nil
+		}
+		objectMap, err := entObjectToMap(entObj)
+		if err != nil {
+			return nil
+		}
+		return map[string]any{
+			"object":           objectMap,
+			"changed_fields":   changedFields,
+			"changed_edges":    changedEdges,
+			"added_ids":        addedIDs,
+			"removed_ids":      removedIDs,
+			"event_type":       eventType,
+			"user_id":          userID,
+			"proposed_changes": proposedChanges,
+		}
+	})
+	wf.RegisterCELContextBuilder(func(obj *wf.Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
+		if obj == nil || obj.Node == nil {
+			return nil
+		}
+		entObj, ok := obj.Node.(*generated.Vulnerability)
 		if !ok {
 			return nil
 		}
@@ -336,6 +532,10 @@ func buildObservabilityFields(obj *wf.Object) map[string]any {
 	switch obj.Type {
 	case enums.WorkflowObjectTypeActionPlan:
 		fields[workflowobjectref.FieldActionPlanID] = obj.ID
+	case enums.WorkflowObjectTypeAssessment:
+		fields[workflowobjectref.FieldAssessmentID] = obj.ID
+	case enums.WorkflowObjectTypeAssessmentResponse:
+		fields[workflowobjectref.FieldAssessmentResponseID] = obj.ID
 	case enums.WorkflowObjectTypeCampaign:
 		fields[workflowobjectref.FieldCampaignID] = obj.ID
 	case enums.WorkflowObjectTypeCampaignTarget:
@@ -344,6 +544,8 @@ func buildObservabilityFields(obj *wf.Object) map[string]any {
 		fields[workflowobjectref.FieldControlID] = obj.ID
 	case enums.WorkflowObjectTypeEvidence:
 		fields[workflowobjectref.FieldEvidenceID] = obj.ID
+	case enums.WorkflowObjectTypeFinding:
+		fields[workflowobjectref.FieldFindingID] = obj.ID
 	case enums.WorkflowObjectTypeIdentityHolder:
 		fields[workflowobjectref.FieldIdentityHolderID] = obj.ID
 	case enums.WorkflowObjectTypeInternalPolicy:
@@ -352,8 +554,16 @@ func buildObservabilityFields(obj *wf.Object) map[string]any {
 		fields[workflowobjectref.FieldPlatformID] = obj.ID
 	case enums.WorkflowObjectTypeProcedure:
 		fields[workflowobjectref.FieldProcedureID] = obj.ID
+	case enums.WorkflowObjectTypeRemediation:
+		fields[workflowobjectref.FieldRemediationID] = obj.ID
+	case enums.WorkflowObjectTypeRisk:
+		fields[workflowobjectref.FieldRiskID] = obj.ID
 	case enums.WorkflowObjectTypeSubcontrol:
 		fields[workflowobjectref.FieldSubcontrolID] = obj.ID
+	case enums.WorkflowObjectTypeTask:
+		fields[workflowobjectref.FieldTaskID] = obj.ID
+	case enums.WorkflowObjectTypeVulnerability:
+		fields[workflowobjectref.FieldVulnerabilityID] = obj.ID
 	}
 	return fields
 }

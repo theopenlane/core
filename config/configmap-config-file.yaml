@@ -1035,6 +1035,28 @@ data:
         arn: {{ .Values.openlane.coreConfiguration.integrations.awssecurityhub.arn | quote }}
         {{- end }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.cloudflareruntime }}
+      cloudflareruntime:
+        {{- if .Values.openlane.coreConfiguration.integrations.cloudflareruntime.accountid }}
+        accountid: {{ .Values.openlane.coreConfiguration.integrations.cloudflareruntime.accountid | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan }}
+        domainscan:
+          {{- $sliceValue := (.Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan.nonvendorcategories | default (list)) }}
+          {{- if gt (len $sliceValue) 0 }}
+          nonvendorcategories:
+          {{- toYaml $sliceValue | nindent 12 }}
+          {{- end }}
+          {{- $sliceValue := (.Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan.deniedvendornames | default (list)) }}
+          {{- if gt (len $sliceValue) 0 }}
+          deniedvendornames:
+          {{- toYaml $sliceValue | nindent 12 }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan.scanttl }}
+          scanttl: {{ .Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan.scanttl }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.githubapp }}
       githubapp:
         {{- if .Values.openlane.coreConfiguration.integrations.githubapp.appslug }}

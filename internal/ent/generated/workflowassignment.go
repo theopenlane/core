@@ -64,6 +64,8 @@ type WorkflowAssignment struct {
 	RejectionMetadata models.WorkflowAssignmentRejection `json:"rejection_metadata,omitempty"`
 	// structured invalidation metadata
 	InvalidationMetadata models.WorkflowAssignmentInvalidation `json:"invalidation_metadata,omitempty"`
+	// consolidated terminal outcome metadata discriminated by decision (supersedes approval/rejection/invalidation metadata)
+	OutcomeMetadata models.AssignmentOutcome `json:"outcome_metadata,omitempty"`
 	// Timestamp when the assignment was decided
 	DecidedAt *time.Time `json:"decided_at,omitempty"`
 	// User who made the decision
@@ -160,7 +162,7 @@ func (*WorkflowAssignment) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case workflowassignment.FieldTags, workflowassignment.FieldMetadata, workflowassignment.FieldApprovalMetadata, workflowassignment.FieldRejectionMetadata, workflowassignment.FieldInvalidationMetadata:
+		case workflowassignment.FieldTags, workflowassignment.FieldMetadata, workflowassignment.FieldApprovalMetadata, workflowassignment.FieldRejectionMetadata, workflowassignment.FieldInvalidationMetadata, workflowassignment.FieldOutcomeMetadata:
 			values[i] = new([]byte)
 		case workflowassignment.FieldRequired:
 			values[i] = new(sql.NullBool)
@@ -320,6 +322,14 @@ func (_m *WorkflowAssignment) assignValues(columns []string, values []any) error
 			} else if value != nil && len(*value) > 0 {
 				if err := json.Unmarshal(*value, &_m.InvalidationMetadata); err != nil {
 					return fmt.Errorf("unmarshal field invalidation_metadata: %w", err)
+				}
+			}
+		case workflowassignment.FieldOutcomeMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field outcome_metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.OutcomeMetadata); err != nil {
+					return fmt.Errorf("unmarshal field outcome_metadata: %w", err)
 				}
 			}
 		case workflowassignment.FieldDecidedAt:
@@ -483,6 +493,9 @@ func (_m *WorkflowAssignment) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("invalidation_metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.InvalidationMetadata))
+	builder.WriteString(", ")
+	builder.WriteString("outcome_metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.OutcomeMetadata))
 	builder.WriteString(", ")
 	if v := _m.DecidedAt; v != nil {
 		builder.WriteString("decided_at=")

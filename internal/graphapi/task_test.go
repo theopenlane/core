@@ -768,7 +768,7 @@ func TestMutationCreateTask(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser.UserCtx,
-			expectedErr: "user not in organization",
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "happy path, using pat",
@@ -1037,7 +1037,7 @@ func TestMutationUpdateTask(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         sharedAdminUser.UserCtx,
-			expectedErr: "user not in organization",
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:   "update assignee to view only user",

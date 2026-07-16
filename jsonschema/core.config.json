@@ -149,6 +149,9 @@
         "awssecurityhub": {
           "$ref": "#/$defs/awssecurityhub.Config"
         },
+        "cloudflareruntime": {
+          "$ref": "#/$defs/cloudflare.RuntimeConfig"
+        },
         "githubapp": {
           "$ref": "#/$defs/githubapp.Config"
         },
@@ -184,6 +187,24 @@
         },
         "organizationdelete": {
           "$ref": "#/$defs/operations.OrganizationDeleteConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "cloudflare.RuntimeConfig": {
+      "properties": {
+        "apitoken": {
+          "type": "string",
+          "description": "Cloudflare API token for the operator-owned account"
+        },
+        "accountid": {
+          "type": "string",
+          "description": "Cloudflare account ID for the operator-owned account"
+        },
+        "domainscan": {
+          "$ref": "#/$defs/domainscan.ReportConfig",
+          "description": "Vendor/technology classification and enrichment behavior for onboarding domain scan reports"
         }
       },
       "additionalProperties": false,
@@ -446,6 +467,21 @@
       "additionalProperties": false,
       "type": "object",
       "description": "Config defines configuration for the CSRF middleware wrapper."
+    },
+    "domainscan.ReportConfig": {
+      "properties": {
+        "nonvendorcategories": {
+          "$ref": "#/$defs/[]string"
+        },
+        "deniedvendornames": {
+          "$ref": "#/$defs/[]string"
+        },
+        "scanttl": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "email.RuntimeEmailConfig": {
       "properties": {
@@ -1065,7 +1101,7 @@
         },
         "subjectid": {
           "type": "string",
-          "description": "SubjectID is the stable subject id of the virtual support identity used for created_by/updated_by\nattribution. It must be a valid ULID and is consistent without a backing user row"
+          "description": "SubjectID is the stable subject id of the virtual support identity used for created_by/updated_by\nattribution. It must be a valid ULID and is consistent without a backing user row. Default should match anon.SupportSubjectID"
         },
         "password": {
           "type": "string",

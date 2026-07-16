@@ -363,6 +363,76 @@ func (_c *WorkflowObjectRefHistoryCreate) SetNillablePlatformID(v *string) *Work
 	return _c
 }
 
+// SetVulnerabilityID sets the "vulnerability_id" field.
+func (_c *WorkflowObjectRefHistoryCreate) SetVulnerabilityID(v string) *WorkflowObjectRefHistoryCreate {
+	_c.mutation.SetVulnerabilityID(v)
+	return _c
+}
+
+// SetNillableVulnerabilityID sets the "vulnerability_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefHistoryCreate) SetNillableVulnerabilityID(v *string) *WorkflowObjectRefHistoryCreate {
+	if v != nil {
+		_c.SetVulnerabilityID(*v)
+	}
+	return _c
+}
+
+// SetRiskID sets the "risk_id" field.
+func (_c *WorkflowObjectRefHistoryCreate) SetRiskID(v string) *WorkflowObjectRefHistoryCreate {
+	_c.mutation.SetRiskID(v)
+	return _c
+}
+
+// SetNillableRiskID sets the "risk_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefHistoryCreate) SetNillableRiskID(v *string) *WorkflowObjectRefHistoryCreate {
+	if v != nil {
+		_c.SetRiskID(*v)
+	}
+	return _c
+}
+
+// SetAssessmentID sets the "assessment_id" field.
+func (_c *WorkflowObjectRefHistoryCreate) SetAssessmentID(v string) *WorkflowObjectRefHistoryCreate {
+	_c.mutation.SetAssessmentID(v)
+	return _c
+}
+
+// SetNillableAssessmentID sets the "assessment_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefHistoryCreate) SetNillableAssessmentID(v *string) *WorkflowObjectRefHistoryCreate {
+	if v != nil {
+		_c.SetAssessmentID(*v)
+	}
+	return _c
+}
+
+// SetAssessmentResponseID sets the "assessment_response_id" field.
+func (_c *WorkflowObjectRefHistoryCreate) SetAssessmentResponseID(v string) *WorkflowObjectRefHistoryCreate {
+	_c.mutation.SetAssessmentResponseID(v)
+	return _c
+}
+
+// SetNillableAssessmentResponseID sets the "assessment_response_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefHistoryCreate) SetNillableAssessmentResponseID(v *string) *WorkflowObjectRefHistoryCreate {
+	if v != nil {
+		_c.SetAssessmentResponseID(*v)
+	}
+	return _c
+}
+
+// SetRemediationID sets the "remediation_id" field.
+func (_c *WorkflowObjectRefHistoryCreate) SetRemediationID(v string) *WorkflowObjectRefHistoryCreate {
+	_c.mutation.SetRemediationID(v)
+	return _c
+}
+
+// SetNillableRemediationID sets the "remediation_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefHistoryCreate) SetNillableRemediationID(v *string) *WorkflowObjectRefHistoryCreate {
+	if v != nil {
+		_c.SetRemediationID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *WorkflowObjectRefHistoryCreate) SetID(v string) *WorkflowObjectRefHistoryCreate {
 	_c.mutation.SetID(v)
@@ -603,6 +673,26 @@ func (_c *WorkflowObjectRefHistoryCreate) createSpec() (*WorkflowObjectRefHistor
 	if value, ok := _c.mutation.PlatformID(); ok {
 		_spec.SetField(workflowobjectrefhistory.FieldPlatformID, field.TypeString, value)
 		_node.PlatformID = value
+	}
+	if value, ok := _c.mutation.VulnerabilityID(); ok {
+		_spec.SetField(workflowobjectrefhistory.FieldVulnerabilityID, field.TypeString, value)
+		_node.VulnerabilityID = value
+	}
+	if value, ok := _c.mutation.RiskID(); ok {
+		_spec.SetField(workflowobjectrefhistory.FieldRiskID, field.TypeString, value)
+		_node.RiskID = value
+	}
+	if value, ok := _c.mutation.AssessmentID(); ok {
+		_spec.SetField(workflowobjectrefhistory.FieldAssessmentID, field.TypeString, value)
+		_node.AssessmentID = value
+	}
+	if value, ok := _c.mutation.AssessmentResponseID(); ok {
+		_spec.SetField(workflowobjectrefhistory.FieldAssessmentResponseID, field.TypeString, value)
+		_node.AssessmentResponseID = value
+	}
+	if value, ok := _c.mutation.RemediationID(); ok {
+		_spec.SetField(workflowobjectrefhistory.FieldRemediationID, field.TypeString, value)
+		_node.RemediationID = value
 	}
 	return _node, _spec
 }

@@ -169,27 +169,28 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "AssessmentHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			assessmenthistory.FieldHistoryTime:           {Type: field.TypeTime, Column: assessmenthistory.FieldHistoryTime},
-			assessmenthistory.FieldRef:                   {Type: field.TypeString, Column: assessmenthistory.FieldRef},
-			assessmenthistory.FieldOperation:             {Type: field.TypeEnum, Column: assessmenthistory.FieldOperation},
-			assessmenthistory.FieldCreatedAt:             {Type: field.TypeTime, Column: assessmenthistory.FieldCreatedAt},
-			assessmenthistory.FieldUpdatedAt:             {Type: field.TypeTime, Column: assessmenthistory.FieldUpdatedAt},
-			assessmenthistory.FieldCreatedBy:             {Type: field.TypeString, Column: assessmenthistory.FieldCreatedBy},
-			assessmenthistory.FieldUpdatedBy:             {Type: field.TypeString, Column: assessmenthistory.FieldUpdatedBy},
-			assessmenthistory.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: assessmenthistory.FieldUpdatedByImpersonator},
-			assessmenthistory.FieldDeletedAt:             {Type: field.TypeTime, Column: assessmenthistory.FieldDeletedAt},
-			assessmenthistory.FieldDeletedBy:             {Type: field.TypeString, Column: assessmenthistory.FieldDeletedBy},
-			assessmenthistory.FieldTags:                  {Type: field.TypeJSON, Column: assessmenthistory.FieldTags},
-			assessmenthistory.FieldOwnerID:               {Type: field.TypeString, Column: assessmenthistory.FieldOwnerID},
-			assessmenthistory.FieldSystemOwned:           {Type: field.TypeBool, Column: assessmenthistory.FieldSystemOwned},
-			assessmenthistory.FieldInternalNotes:         {Type: field.TypeString, Column: assessmenthistory.FieldInternalNotes},
-			assessmenthistory.FieldSystemInternalID:      {Type: field.TypeString, Column: assessmenthistory.FieldSystemInternalID},
-			assessmenthistory.FieldName:                  {Type: field.TypeString, Column: assessmenthistory.FieldName},
-			assessmenthistory.FieldAssessmentType:        {Type: field.TypeEnum, Column: assessmenthistory.FieldAssessmentType},
-			assessmenthistory.FieldTemplateID:            {Type: field.TypeString, Column: assessmenthistory.FieldTemplateID},
-			assessmenthistory.FieldJsonconfig:            {Type: field.TypeJSON, Column: assessmenthistory.FieldJsonconfig},
-			assessmenthistory.FieldUischema:              {Type: field.TypeJSON, Column: assessmenthistory.FieldUischema},
-			assessmenthistory.FieldResponseDueDuration:   {Type: field.TypeInt64, Column: assessmenthistory.FieldResponseDueDuration},
+			assessmenthistory.FieldHistoryTime:            {Type: field.TypeTime, Column: assessmenthistory.FieldHistoryTime},
+			assessmenthistory.FieldRef:                    {Type: field.TypeString, Column: assessmenthistory.FieldRef},
+			assessmenthistory.FieldOperation:              {Type: field.TypeEnum, Column: assessmenthistory.FieldOperation},
+			assessmenthistory.FieldCreatedAt:              {Type: field.TypeTime, Column: assessmenthistory.FieldCreatedAt},
+			assessmenthistory.FieldUpdatedAt:              {Type: field.TypeTime, Column: assessmenthistory.FieldUpdatedAt},
+			assessmenthistory.FieldCreatedBy:              {Type: field.TypeString, Column: assessmenthistory.FieldCreatedBy},
+			assessmenthistory.FieldUpdatedBy:              {Type: field.TypeString, Column: assessmenthistory.FieldUpdatedBy},
+			assessmenthistory.FieldUpdatedByImpersonator:  {Type: field.TypeString, Column: assessmenthistory.FieldUpdatedByImpersonator},
+			assessmenthistory.FieldDeletedAt:              {Type: field.TypeTime, Column: assessmenthistory.FieldDeletedAt},
+			assessmenthistory.FieldDeletedBy:              {Type: field.TypeString, Column: assessmenthistory.FieldDeletedBy},
+			assessmenthistory.FieldTags:                   {Type: field.TypeJSON, Column: assessmenthistory.FieldTags},
+			assessmenthistory.FieldOwnerID:                {Type: field.TypeString, Column: assessmenthistory.FieldOwnerID},
+			assessmenthistory.FieldSystemOwned:            {Type: field.TypeBool, Column: assessmenthistory.FieldSystemOwned},
+			assessmenthistory.FieldInternalNotes:          {Type: field.TypeString, Column: assessmenthistory.FieldInternalNotes},
+			assessmenthistory.FieldSystemInternalID:       {Type: field.TypeString, Column: assessmenthistory.FieldSystemInternalID},
+			assessmenthistory.FieldWorkflowEligibleMarker: {Type: field.TypeBool, Column: assessmenthistory.FieldWorkflowEligibleMarker},
+			assessmenthistory.FieldName:                   {Type: field.TypeString, Column: assessmenthistory.FieldName},
+			assessmenthistory.FieldAssessmentType:         {Type: field.TypeEnum, Column: assessmenthistory.FieldAssessmentType},
+			assessmenthistory.FieldTemplateID:             {Type: field.TypeString, Column: assessmenthistory.FieldTemplateID},
+			assessmenthistory.FieldJsonconfig:             {Type: field.TypeJSON, Column: assessmenthistory.FieldJsonconfig},
+			assessmenthistory.FieldUischema:               {Type: field.TypeJSON, Column: assessmenthistory.FieldUischema},
+			assessmenthistory.FieldResponseDueDuration:    {Type: field.TypeInt64, Column: assessmenthistory.FieldResponseDueDuration},
 		},
 	}
 	graph.Nodes[2] = &sqlgraph.Node{
@@ -203,39 +204,40 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "AssessmentResponseHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			assessmentresponsehistory.FieldHistoryTime:           {Type: field.TypeTime, Column: assessmentresponsehistory.FieldHistoryTime},
-			assessmentresponsehistory.FieldRef:                   {Type: field.TypeString, Column: assessmentresponsehistory.FieldRef},
-			assessmentresponsehistory.FieldOperation:             {Type: field.TypeEnum, Column: assessmentresponsehistory.FieldOperation},
-			assessmentresponsehistory.FieldCreatedAt:             {Type: field.TypeTime, Column: assessmentresponsehistory.FieldCreatedAt},
-			assessmentresponsehistory.FieldUpdatedAt:             {Type: field.TypeTime, Column: assessmentresponsehistory.FieldUpdatedAt},
-			assessmentresponsehistory.FieldCreatedBy:             {Type: field.TypeString, Column: assessmentresponsehistory.FieldCreatedBy},
-			assessmentresponsehistory.FieldUpdatedBy:             {Type: field.TypeString, Column: assessmentresponsehistory.FieldUpdatedBy},
-			assessmentresponsehistory.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: assessmentresponsehistory.FieldUpdatedByImpersonator},
-			assessmentresponsehistory.FieldDeletedAt:             {Type: field.TypeTime, Column: assessmentresponsehistory.FieldDeletedAt},
-			assessmentresponsehistory.FieldDeletedBy:             {Type: field.TypeString, Column: assessmentresponsehistory.FieldDeletedBy},
-			assessmentresponsehistory.FieldOwnerID:               {Type: field.TypeString, Column: assessmentresponsehistory.FieldOwnerID},
-			assessmentresponsehistory.FieldAssessmentID:          {Type: field.TypeString, Column: assessmentresponsehistory.FieldAssessmentID},
-			assessmentresponsehistory.FieldIsTest:                {Type: field.TypeBool, Column: assessmentresponsehistory.FieldIsTest},
-			assessmentresponsehistory.FieldCampaignID:            {Type: field.TypeString, Column: assessmentresponsehistory.FieldCampaignID},
-			assessmentresponsehistory.FieldIdentityHolderID:      {Type: field.TypeString, Column: assessmentresponsehistory.FieldIdentityHolderID},
-			assessmentresponsehistory.FieldEntityID:              {Type: field.TypeString, Column: assessmentresponsehistory.FieldEntityID},
-			assessmentresponsehistory.FieldDisplayName:           {Type: field.TypeString, Column: assessmentresponsehistory.FieldDisplayName},
-			assessmentresponsehistory.FieldEmail:                 {Type: field.TypeString, Column: assessmentresponsehistory.FieldEmail},
-			assessmentresponsehistory.FieldSendAttempts:          {Type: field.TypeInt, Column: assessmentresponsehistory.FieldSendAttempts},
-			assessmentresponsehistory.FieldEmailDeliveredAt:      {Type: field.TypeTime, Column: assessmentresponsehistory.FieldEmailDeliveredAt},
-			assessmentresponsehistory.FieldEmailOpenedAt:         {Type: field.TypeTime, Column: assessmentresponsehistory.FieldEmailOpenedAt},
-			assessmentresponsehistory.FieldEmailClickedAt:        {Type: field.TypeTime, Column: assessmentresponsehistory.FieldEmailClickedAt},
-			assessmentresponsehistory.FieldEmailOpenCount:        {Type: field.TypeInt, Column: assessmentresponsehistory.FieldEmailOpenCount},
-			assessmentresponsehistory.FieldEmailClickCount:       {Type: field.TypeInt, Column: assessmentresponsehistory.FieldEmailClickCount},
-			assessmentresponsehistory.FieldLastEmailEventAt:      {Type: field.TypeTime, Column: assessmentresponsehistory.FieldLastEmailEventAt},
-			assessmentresponsehistory.FieldEmailMetadata:         {Type: field.TypeJSON, Column: assessmentresponsehistory.FieldEmailMetadata},
-			assessmentresponsehistory.FieldStatus:                {Type: field.TypeEnum, Column: assessmentresponsehistory.FieldStatus},
-			assessmentresponsehistory.FieldAssignedAt:            {Type: field.TypeTime, Column: assessmentresponsehistory.FieldAssignedAt},
-			assessmentresponsehistory.FieldStartedAt:             {Type: field.TypeTime, Column: assessmentresponsehistory.FieldStartedAt},
-			assessmentresponsehistory.FieldCompletedAt:           {Type: field.TypeTime, Column: assessmentresponsehistory.FieldCompletedAt},
-			assessmentresponsehistory.FieldDueDate:               {Type: field.TypeTime, Column: assessmentresponsehistory.FieldDueDate},
-			assessmentresponsehistory.FieldDocumentDataID:        {Type: field.TypeString, Column: assessmentresponsehistory.FieldDocumentDataID},
-			assessmentresponsehistory.FieldIsDraft:               {Type: field.TypeBool, Column: assessmentresponsehistory.FieldIsDraft},
+			assessmentresponsehistory.FieldHistoryTime:            {Type: field.TypeTime, Column: assessmentresponsehistory.FieldHistoryTime},
+			assessmentresponsehistory.FieldRef:                    {Type: field.TypeString, Column: assessmentresponsehistory.FieldRef},
+			assessmentresponsehistory.FieldOperation:              {Type: field.TypeEnum, Column: assessmentresponsehistory.FieldOperation},
+			assessmentresponsehistory.FieldCreatedAt:              {Type: field.TypeTime, Column: assessmentresponsehistory.FieldCreatedAt},
+			assessmentresponsehistory.FieldUpdatedAt:              {Type: field.TypeTime, Column: assessmentresponsehistory.FieldUpdatedAt},
+			assessmentresponsehistory.FieldCreatedBy:              {Type: field.TypeString, Column: assessmentresponsehistory.FieldCreatedBy},
+			assessmentresponsehistory.FieldUpdatedBy:              {Type: field.TypeString, Column: assessmentresponsehistory.FieldUpdatedBy},
+			assessmentresponsehistory.FieldUpdatedByImpersonator:  {Type: field.TypeString, Column: assessmentresponsehistory.FieldUpdatedByImpersonator},
+			assessmentresponsehistory.FieldDeletedAt:              {Type: field.TypeTime, Column: assessmentresponsehistory.FieldDeletedAt},
+			assessmentresponsehistory.FieldDeletedBy:              {Type: field.TypeString, Column: assessmentresponsehistory.FieldDeletedBy},
+			assessmentresponsehistory.FieldOwnerID:                {Type: field.TypeString, Column: assessmentresponsehistory.FieldOwnerID},
+			assessmentresponsehistory.FieldWorkflowEligibleMarker: {Type: field.TypeBool, Column: assessmentresponsehistory.FieldWorkflowEligibleMarker},
+			assessmentresponsehistory.FieldAssessmentID:           {Type: field.TypeString, Column: assessmentresponsehistory.FieldAssessmentID},
+			assessmentresponsehistory.FieldIsTest:                 {Type: field.TypeBool, Column: assessmentresponsehistory.FieldIsTest},
+			assessmentresponsehistory.FieldCampaignID:             {Type: field.TypeString, Column: assessmentresponsehistory.FieldCampaignID},
+			assessmentresponsehistory.FieldIdentityHolderID:       {Type: field.TypeString, Column: assessmentresponsehistory.FieldIdentityHolderID},
+			assessmentresponsehistory.FieldEntityID:               {Type: field.TypeString, Column: assessmentresponsehistory.FieldEntityID},
+			assessmentresponsehistory.FieldDisplayName:            {Type: field.TypeString, Column: assessmentresponsehistory.FieldDisplayName},
+			assessmentresponsehistory.FieldEmail:                  {Type: field.TypeString, Column: assessmentresponsehistory.FieldEmail},
+			assessmentresponsehistory.FieldSendAttempts:           {Type: field.TypeInt, Column: assessmentresponsehistory.FieldSendAttempts},
+			assessmentresponsehistory.FieldEmailDeliveredAt:       {Type: field.TypeTime, Column: assessmentresponsehistory.FieldEmailDeliveredAt},
+			assessmentresponsehistory.FieldEmailOpenedAt:          {Type: field.TypeTime, Column: assessmentresponsehistory.FieldEmailOpenedAt},
+			assessmentresponsehistory.FieldEmailClickedAt:         {Type: field.TypeTime, Column: assessmentresponsehistory.FieldEmailClickedAt},
+			assessmentresponsehistory.FieldEmailOpenCount:         {Type: field.TypeInt, Column: assessmentresponsehistory.FieldEmailOpenCount},
+			assessmentresponsehistory.FieldEmailClickCount:        {Type: field.TypeInt, Column: assessmentresponsehistory.FieldEmailClickCount},
+			assessmentresponsehistory.FieldLastEmailEventAt:       {Type: field.TypeTime, Column: assessmentresponsehistory.FieldLastEmailEventAt},
+			assessmentresponsehistory.FieldEmailMetadata:          {Type: field.TypeJSON, Column: assessmentresponsehistory.FieldEmailMetadata},
+			assessmentresponsehistory.FieldStatus:                 {Type: field.TypeEnum, Column: assessmentresponsehistory.FieldStatus},
+			assessmentresponsehistory.FieldAssignedAt:             {Type: field.TypeTime, Column: assessmentresponsehistory.FieldAssignedAt},
+			assessmentresponsehistory.FieldStartedAt:              {Type: field.TypeTime, Column: assessmentresponsehistory.FieldStartedAt},
+			assessmentresponsehistory.FieldCompletedAt:            {Type: field.TypeTime, Column: assessmentresponsehistory.FieldCompletedAt},
+			assessmentresponsehistory.FieldDueDate:                {Type: field.TypeTime, Column: assessmentresponsehistory.FieldDueDate},
+			assessmentresponsehistory.FieldDocumentDataID:         {Type: field.TypeString, Column: assessmentresponsehistory.FieldDocumentDataID},
+			assessmentresponsehistory.FieldIsDraft:                {Type: field.TypeBool, Column: assessmentresponsehistory.FieldIsDraft},
 		},
 	}
 	graph.Nodes[3] = &sqlgraph.Node{
@@ -1181,71 +1183,72 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "FindingHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			findinghistory.FieldHistoryTime:           {Type: field.TypeTime, Column: findinghistory.FieldHistoryTime},
-			findinghistory.FieldRef:                   {Type: field.TypeString, Column: findinghistory.FieldRef},
-			findinghistory.FieldOperation:             {Type: field.TypeEnum, Column: findinghistory.FieldOperation},
-			findinghistory.FieldCreatedAt:             {Type: field.TypeTime, Column: findinghistory.FieldCreatedAt},
-			findinghistory.FieldUpdatedAt:             {Type: field.TypeTime, Column: findinghistory.FieldUpdatedAt},
-			findinghistory.FieldCreatedBy:             {Type: field.TypeString, Column: findinghistory.FieldCreatedBy},
-			findinghistory.FieldUpdatedBy:             {Type: field.TypeString, Column: findinghistory.FieldUpdatedBy},
-			findinghistory.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: findinghistory.FieldUpdatedByImpersonator},
-			findinghistory.FieldDeletedAt:             {Type: field.TypeTime, Column: findinghistory.FieldDeletedAt},
-			findinghistory.FieldDeletedBy:             {Type: field.TypeString, Column: findinghistory.FieldDeletedBy},
-			findinghistory.FieldDisplayID:             {Type: field.TypeString, Column: findinghistory.FieldDisplayID},
-			findinghistory.FieldTags:                  {Type: field.TypeJSON, Column: findinghistory.FieldTags},
-			findinghistory.FieldOwnerID:               {Type: field.TypeString, Column: findinghistory.FieldOwnerID},
-			findinghistory.FieldReviewedBy:            {Type: field.TypeString, Column: findinghistory.FieldReviewedBy},
-			findinghistory.FieldReviewedByUserID:      {Type: field.TypeString, Column: findinghistory.FieldReviewedByUserID},
-			findinghistory.FieldReviewedByGroupID:     {Type: field.TypeString, Column: findinghistory.FieldReviewedByGroupID},
-			findinghistory.FieldAssignedTo:            {Type: field.TypeString, Column: findinghistory.FieldAssignedTo},
-			findinghistory.FieldAssignedToUserID:      {Type: field.TypeString, Column: findinghistory.FieldAssignedToUserID},
-			findinghistory.FieldAssignedToGroupID:     {Type: field.TypeString, Column: findinghistory.FieldAssignedToGroupID},
-			findinghistory.FieldSystemOwned:           {Type: field.TypeBool, Column: findinghistory.FieldSystemOwned},
-			findinghistory.FieldInternalNotes:         {Type: field.TypeString, Column: findinghistory.FieldInternalNotes},
-			findinghistory.FieldSystemInternalID:      {Type: field.TypeString, Column: findinghistory.FieldSystemInternalID},
-			findinghistory.FieldEnvironmentName:       {Type: field.TypeString, Column: findinghistory.FieldEnvironmentName},
-			findinghistory.FieldEnvironmentID:         {Type: field.TypeString, Column: findinghistory.FieldEnvironmentID},
-			findinghistory.FieldScopeName:             {Type: field.TypeString, Column: findinghistory.FieldScopeName},
-			findinghistory.FieldScopeID:               {Type: field.TypeString, Column: findinghistory.FieldScopeID},
-			findinghistory.FieldFindingStatusName:     {Type: field.TypeString, Column: findinghistory.FieldFindingStatusName},
-			findinghistory.FieldFindingStatusID:       {Type: field.TypeString, Column: findinghistory.FieldFindingStatusID},
-			findinghistory.FieldExternalID:            {Type: field.TypeString, Column: findinghistory.FieldExternalID},
-			findinghistory.FieldSecurityLevel:         {Type: field.TypeEnum, Column: findinghistory.FieldSecurityLevel},
-			findinghistory.FieldExternalOwnerID:       {Type: field.TypeString, Column: findinghistory.FieldExternalOwnerID},
-			findinghistory.FieldSource:                {Type: field.TypeString, Column: findinghistory.FieldSource},
-			findinghistory.FieldResourceName:          {Type: field.TypeString, Column: findinghistory.FieldResourceName},
-			findinghistory.FieldDisplayName:           {Type: field.TypeString, Column: findinghistory.FieldDisplayName},
-			findinghistory.FieldState:                 {Type: field.TypeString, Column: findinghistory.FieldState},
-			findinghistory.FieldCategory:              {Type: field.TypeString, Column: findinghistory.FieldCategory},
-			findinghistory.FieldCategories:            {Type: field.TypeJSON, Column: findinghistory.FieldCategories},
-			findinghistory.FieldFindingClass:          {Type: field.TypeString, Column: findinghistory.FieldFindingClass},
-			findinghistory.FieldSeverity:              {Type: field.TypeString, Column: findinghistory.FieldSeverity},
-			findinghistory.FieldNumericSeverity:       {Type: field.TypeFloat64, Column: findinghistory.FieldNumericSeverity},
-			findinghistory.FieldScore:                 {Type: field.TypeFloat64, Column: findinghistory.FieldScore},
-			findinghistory.FieldImpact:                {Type: field.TypeFloat64, Column: findinghistory.FieldImpact},
-			findinghistory.FieldExploitability:        {Type: field.TypeFloat64, Column: findinghistory.FieldExploitability},
-			findinghistory.FieldPriority:              {Type: field.TypeString, Column: findinghistory.FieldPriority},
-			findinghistory.FieldOpen:                  {Type: field.TypeBool, Column: findinghistory.FieldOpen},
-			findinghistory.FieldBlocksProduction:      {Type: field.TypeBool, Column: findinghistory.FieldBlocksProduction},
-			findinghistory.FieldProduction:            {Type: field.TypeBool, Column: findinghistory.FieldProduction},
-			findinghistory.FieldPublic:                {Type: field.TypeBool, Column: findinghistory.FieldPublic},
-			findinghistory.FieldValidated:             {Type: field.TypeBool, Column: findinghistory.FieldValidated},
-			findinghistory.FieldAssessmentID:          {Type: field.TypeString, Column: findinghistory.FieldAssessmentID},
-			findinghistory.FieldDescription:           {Type: field.TypeString, Column: findinghistory.FieldDescription},
-			findinghistory.FieldRecommendation:        {Type: field.TypeString, Column: findinghistory.FieldRecommendation},
-			findinghistory.FieldRecommendedActions:    {Type: field.TypeString, Column: findinghistory.FieldRecommendedActions},
-			findinghistory.FieldReferences:            {Type: field.TypeJSON, Column: findinghistory.FieldReferences},
-			findinghistory.FieldStepsToReproduce:      {Type: field.TypeJSON, Column: findinghistory.FieldStepsToReproduce},
-			findinghistory.FieldTargets:               {Type: field.TypeJSON, Column: findinghistory.FieldTargets},
-			findinghistory.FieldTargetDetails:         {Type: field.TypeJSON, Column: findinghistory.FieldTargetDetails},
-			findinghistory.FieldVector:                {Type: field.TypeString, Column: findinghistory.FieldVector},
-			findinghistory.FieldRemediationSLA:        {Type: field.TypeInt, Column: findinghistory.FieldRemediationSLA},
-			findinghistory.FieldEventTime:             {Type: field.TypeTime, Column: findinghistory.FieldEventTime},
-			findinghistory.FieldReportedAt:            {Type: field.TypeTime, Column: findinghistory.FieldReportedAt},
-			findinghistory.FieldSourceUpdatedAt:       {Type: field.TypeTime, Column: findinghistory.FieldSourceUpdatedAt},
-			findinghistory.FieldExternalURI:           {Type: field.TypeString, Column: findinghistory.FieldExternalURI},
-			findinghistory.FieldMetadata:              {Type: field.TypeJSON, Column: findinghistory.FieldMetadata},
-			findinghistory.FieldRawPayload:            {Type: field.TypeJSON, Column: findinghistory.FieldRawPayload},
+			findinghistory.FieldHistoryTime:            {Type: field.TypeTime, Column: findinghistory.FieldHistoryTime},
+			findinghistory.FieldRef:                    {Type: field.TypeString, Column: findinghistory.FieldRef},
+			findinghistory.FieldOperation:              {Type: field.TypeEnum, Column: findinghistory.FieldOperation},
+			findinghistory.FieldCreatedAt:              {Type: field.TypeTime, Column: findinghistory.FieldCreatedAt},
+			findinghistory.FieldUpdatedAt:              {Type: field.TypeTime, Column: findinghistory.FieldUpdatedAt},
+			findinghistory.FieldCreatedBy:              {Type: field.TypeString, Column: findinghistory.FieldCreatedBy},
+			findinghistory.FieldUpdatedBy:              {Type: field.TypeString, Column: findinghistory.FieldUpdatedBy},
+			findinghistory.FieldUpdatedByImpersonator:  {Type: field.TypeString, Column: findinghistory.FieldUpdatedByImpersonator},
+			findinghistory.FieldDeletedAt:              {Type: field.TypeTime, Column: findinghistory.FieldDeletedAt},
+			findinghistory.FieldDeletedBy:              {Type: field.TypeString, Column: findinghistory.FieldDeletedBy},
+			findinghistory.FieldDisplayID:              {Type: field.TypeString, Column: findinghistory.FieldDisplayID},
+			findinghistory.FieldTags:                   {Type: field.TypeJSON, Column: findinghistory.FieldTags},
+			findinghistory.FieldOwnerID:                {Type: field.TypeString, Column: findinghistory.FieldOwnerID},
+			findinghistory.FieldReviewedBy:             {Type: field.TypeString, Column: findinghistory.FieldReviewedBy},
+			findinghistory.FieldReviewedByUserID:       {Type: field.TypeString, Column: findinghistory.FieldReviewedByUserID},
+			findinghistory.FieldReviewedByGroupID:      {Type: field.TypeString, Column: findinghistory.FieldReviewedByGroupID},
+			findinghistory.FieldAssignedTo:             {Type: field.TypeString, Column: findinghistory.FieldAssignedTo},
+			findinghistory.FieldAssignedToUserID:       {Type: field.TypeString, Column: findinghistory.FieldAssignedToUserID},
+			findinghistory.FieldAssignedToGroupID:      {Type: field.TypeString, Column: findinghistory.FieldAssignedToGroupID},
+			findinghistory.FieldSystemOwned:            {Type: field.TypeBool, Column: findinghistory.FieldSystemOwned},
+			findinghistory.FieldInternalNotes:          {Type: field.TypeString, Column: findinghistory.FieldInternalNotes},
+			findinghistory.FieldSystemInternalID:       {Type: field.TypeString, Column: findinghistory.FieldSystemInternalID},
+			findinghistory.FieldEnvironmentName:        {Type: field.TypeString, Column: findinghistory.FieldEnvironmentName},
+			findinghistory.FieldEnvironmentID:          {Type: field.TypeString, Column: findinghistory.FieldEnvironmentID},
+			findinghistory.FieldScopeName:              {Type: field.TypeString, Column: findinghistory.FieldScopeName},
+			findinghistory.FieldScopeID:                {Type: field.TypeString, Column: findinghistory.FieldScopeID},
+			findinghistory.FieldFindingStatusName:      {Type: field.TypeString, Column: findinghistory.FieldFindingStatusName},
+			findinghistory.FieldFindingStatusID:        {Type: field.TypeString, Column: findinghistory.FieldFindingStatusID},
+			findinghistory.FieldWorkflowEligibleMarker: {Type: field.TypeBool, Column: findinghistory.FieldWorkflowEligibleMarker},
+			findinghistory.FieldExternalID:             {Type: field.TypeString, Column: findinghistory.FieldExternalID},
+			findinghistory.FieldSecurityLevel:          {Type: field.TypeEnum, Column: findinghistory.FieldSecurityLevel},
+			findinghistory.FieldExternalOwnerID:        {Type: field.TypeString, Column: findinghistory.FieldExternalOwnerID},
+			findinghistory.FieldSource:                 {Type: field.TypeString, Column: findinghistory.FieldSource},
+			findinghistory.FieldResourceName:           {Type: field.TypeString, Column: findinghistory.FieldResourceName},
+			findinghistory.FieldDisplayName:            {Type: field.TypeString, Column: findinghistory.FieldDisplayName},
+			findinghistory.FieldState:                  {Type: field.TypeString, Column: findinghistory.FieldState},
+			findinghistory.FieldCategory:               {Type: field.TypeString, Column: findinghistory.FieldCategory},
+			findinghistory.FieldCategories:             {Type: field.TypeJSON, Column: findinghistory.FieldCategories},
+			findinghistory.FieldFindingClass:           {Type: field.TypeString, Column: findinghistory.FieldFindingClass},
+			findinghistory.FieldSeverity:               {Type: field.TypeString, Column: findinghistory.FieldSeverity},
+			findinghistory.FieldNumericSeverity:        {Type: field.TypeFloat64, Column: findinghistory.FieldNumericSeverity},
+			findinghistory.FieldScore:                  {Type: field.TypeFloat64, Column: findinghistory.FieldScore},
+			findinghistory.FieldImpact:                 {Type: field.TypeFloat64, Column: findinghistory.FieldImpact},
+			findinghistory.FieldExploitability:         {Type: field.TypeFloat64, Column: findinghistory.FieldExploitability},
+			findinghistory.FieldPriority:               {Type: field.TypeString, Column: findinghistory.FieldPriority},
+			findinghistory.FieldOpen:                   {Type: field.TypeBool, Column: findinghistory.FieldOpen},
+			findinghistory.FieldBlocksProduction:       {Type: field.TypeBool, Column: findinghistory.FieldBlocksProduction},
+			findinghistory.FieldProduction:             {Type: field.TypeBool, Column: findinghistory.FieldProduction},
+			findinghistory.FieldPublic:                 {Type: field.TypeBool, Column: findinghistory.FieldPublic},
+			findinghistory.FieldValidated:              {Type: field.TypeBool, Column: findinghistory.FieldValidated},
+			findinghistory.FieldAssessmentID:           {Type: field.TypeString, Column: findinghistory.FieldAssessmentID},
+			findinghistory.FieldDescription:            {Type: field.TypeString, Column: findinghistory.FieldDescription},
+			findinghistory.FieldRecommendation:         {Type: field.TypeString, Column: findinghistory.FieldRecommendation},
+			findinghistory.FieldRecommendedActions:     {Type: field.TypeString, Column: findinghistory.FieldRecommendedActions},
+			findinghistory.FieldReferences:             {Type: field.TypeJSON, Column: findinghistory.FieldReferences},
+			findinghistory.FieldStepsToReproduce:       {Type: field.TypeJSON, Column: findinghistory.FieldStepsToReproduce},
+			findinghistory.FieldTargets:                {Type: field.TypeJSON, Column: findinghistory.FieldTargets},
+			findinghistory.FieldTargetDetails:          {Type: field.TypeJSON, Column: findinghistory.FieldTargetDetails},
+			findinghistory.FieldVector:                 {Type: field.TypeString, Column: findinghistory.FieldVector},
+			findinghistory.FieldRemediationSLA:         {Type: field.TypeInt, Column: findinghistory.FieldRemediationSLA},
+			findinghistory.FieldEventTime:              {Type: field.TypeTime, Column: findinghistory.FieldEventTime},
+			findinghistory.FieldReportedAt:             {Type: field.TypeTime, Column: findinghistory.FieldReportedAt},
+			findinghistory.FieldSourceUpdatedAt:        {Type: field.TypeTime, Column: findinghistory.FieldSourceUpdatedAt},
+			findinghistory.FieldExternalURI:            {Type: field.TypeString, Column: findinghistory.FieldExternalURI},
+			findinghistory.FieldMetadata:               {Type: field.TypeJSON, Column: findinghistory.FieldMetadata},
+			findinghistory.FieldRawPayload:             {Type: field.TypeJSON, Column: findinghistory.FieldRawPayload},
 		},
 	}
 	graph.Nodes[25] = &sqlgraph.Node{
@@ -2151,46 +2154,47 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "RemediationHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			remediationhistory.FieldHistoryTime:           {Type: field.TypeTime, Column: remediationhistory.FieldHistoryTime},
-			remediationhistory.FieldRef:                   {Type: field.TypeString, Column: remediationhistory.FieldRef},
-			remediationhistory.FieldOperation:             {Type: field.TypeEnum, Column: remediationhistory.FieldOperation},
-			remediationhistory.FieldCreatedAt:             {Type: field.TypeTime, Column: remediationhistory.FieldCreatedAt},
-			remediationhistory.FieldUpdatedAt:             {Type: field.TypeTime, Column: remediationhistory.FieldUpdatedAt},
-			remediationhistory.FieldCreatedBy:             {Type: field.TypeString, Column: remediationhistory.FieldCreatedBy},
-			remediationhistory.FieldUpdatedBy:             {Type: field.TypeString, Column: remediationhistory.FieldUpdatedBy},
-			remediationhistory.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: remediationhistory.FieldUpdatedByImpersonator},
-			remediationhistory.FieldDeletedAt:             {Type: field.TypeTime, Column: remediationhistory.FieldDeletedAt},
-			remediationhistory.FieldDeletedBy:             {Type: field.TypeString, Column: remediationhistory.FieldDeletedBy},
-			remediationhistory.FieldDisplayID:             {Type: field.TypeString, Column: remediationhistory.FieldDisplayID},
-			remediationhistory.FieldTags:                  {Type: field.TypeJSON, Column: remediationhistory.FieldTags},
-			remediationhistory.FieldOwnerID:               {Type: field.TypeString, Column: remediationhistory.FieldOwnerID},
-			remediationhistory.FieldSystemOwned:           {Type: field.TypeBool, Column: remediationhistory.FieldSystemOwned},
-			remediationhistory.FieldInternalNotes:         {Type: field.TypeString, Column: remediationhistory.FieldInternalNotes},
-			remediationhistory.FieldSystemInternalID:      {Type: field.TypeString, Column: remediationhistory.FieldSystemInternalID},
-			remediationhistory.FieldEnvironmentName:       {Type: field.TypeString, Column: remediationhistory.FieldEnvironmentName},
-			remediationhistory.FieldEnvironmentID:         {Type: field.TypeString, Column: remediationhistory.FieldEnvironmentID},
-			remediationhistory.FieldScopeName:             {Type: field.TypeString, Column: remediationhistory.FieldScopeName},
-			remediationhistory.FieldScopeID:               {Type: field.TypeString, Column: remediationhistory.FieldScopeID},
-			remediationhistory.FieldExternalID:            {Type: field.TypeString, Column: remediationhistory.FieldExternalID},
-			remediationhistory.FieldExternalOwnerID:       {Type: field.TypeString, Column: remediationhistory.FieldExternalOwnerID},
-			remediationhistory.FieldTitle:                 {Type: field.TypeString, Column: remediationhistory.FieldTitle},
-			remediationhistory.FieldStatus:                {Type: field.TypeEnum, Column: remediationhistory.FieldStatus},
-			remediationhistory.FieldState:                 {Type: field.TypeString, Column: remediationhistory.FieldState},
-			remediationhistory.FieldIntent:                {Type: field.TypeString, Column: remediationhistory.FieldIntent},
-			remediationhistory.FieldSummary:               {Type: field.TypeString, Column: remediationhistory.FieldSummary},
-			remediationhistory.FieldExplanation:           {Type: field.TypeString, Column: remediationhistory.FieldExplanation},
-			remediationhistory.FieldInstructions:          {Type: field.TypeString, Column: remediationhistory.FieldInstructions},
-			remediationhistory.FieldOwnerReference:        {Type: field.TypeString, Column: remediationhistory.FieldOwnerReference},
-			remediationhistory.FieldRepositoryURI:         {Type: field.TypeString, Column: remediationhistory.FieldRepositoryURI},
-			remediationhistory.FieldPullRequestURI:        {Type: field.TypeString, Column: remediationhistory.FieldPullRequestURI},
-			remediationhistory.FieldTicketReference:       {Type: field.TypeString, Column: remediationhistory.FieldTicketReference},
-			remediationhistory.FieldDueAt:                 {Type: field.TypeTime, Column: remediationhistory.FieldDueAt},
-			remediationhistory.FieldCompletedAt:           {Type: field.TypeTime, Column: remediationhistory.FieldCompletedAt},
-			remediationhistory.FieldPrGeneratedAt:         {Type: field.TypeTime, Column: remediationhistory.FieldPrGeneratedAt},
-			remediationhistory.FieldError:                 {Type: field.TypeString, Column: remediationhistory.FieldError},
-			remediationhistory.FieldSource:                {Type: field.TypeString, Column: remediationhistory.FieldSource},
-			remediationhistory.FieldExternalURI:           {Type: field.TypeString, Column: remediationhistory.FieldExternalURI},
-			remediationhistory.FieldMetadata:              {Type: field.TypeJSON, Column: remediationhistory.FieldMetadata},
+			remediationhistory.FieldHistoryTime:            {Type: field.TypeTime, Column: remediationhistory.FieldHistoryTime},
+			remediationhistory.FieldRef:                    {Type: field.TypeString, Column: remediationhistory.FieldRef},
+			remediationhistory.FieldOperation:              {Type: field.TypeEnum, Column: remediationhistory.FieldOperation},
+			remediationhistory.FieldCreatedAt:              {Type: field.TypeTime, Column: remediationhistory.FieldCreatedAt},
+			remediationhistory.FieldUpdatedAt:              {Type: field.TypeTime, Column: remediationhistory.FieldUpdatedAt},
+			remediationhistory.FieldCreatedBy:              {Type: field.TypeString, Column: remediationhistory.FieldCreatedBy},
+			remediationhistory.FieldUpdatedBy:              {Type: field.TypeString, Column: remediationhistory.FieldUpdatedBy},
+			remediationhistory.FieldUpdatedByImpersonator:  {Type: field.TypeString, Column: remediationhistory.FieldUpdatedByImpersonator},
+			remediationhistory.FieldDeletedAt:              {Type: field.TypeTime, Column: remediationhistory.FieldDeletedAt},
+			remediationhistory.FieldDeletedBy:              {Type: field.TypeString, Column: remediationhistory.FieldDeletedBy},
+			remediationhistory.FieldDisplayID:              {Type: field.TypeString, Column: remediationhistory.FieldDisplayID},
+			remediationhistory.FieldTags:                   {Type: field.TypeJSON, Column: remediationhistory.FieldTags},
+			remediationhistory.FieldOwnerID:                {Type: field.TypeString, Column: remediationhistory.FieldOwnerID},
+			remediationhistory.FieldSystemOwned:            {Type: field.TypeBool, Column: remediationhistory.FieldSystemOwned},
+			remediationhistory.FieldInternalNotes:          {Type: field.TypeString, Column: remediationhistory.FieldInternalNotes},
+			remediationhistory.FieldSystemInternalID:       {Type: field.TypeString, Column: remediationhistory.FieldSystemInternalID},
+			remediationhistory.FieldEnvironmentName:        {Type: field.TypeString, Column: remediationhistory.FieldEnvironmentName},
+			remediationhistory.FieldEnvironmentID:          {Type: field.TypeString, Column: remediationhistory.FieldEnvironmentID},
+			remediationhistory.FieldScopeName:              {Type: field.TypeString, Column: remediationhistory.FieldScopeName},
+			remediationhistory.FieldScopeID:                {Type: field.TypeString, Column: remediationhistory.FieldScopeID},
+			remediationhistory.FieldWorkflowEligibleMarker: {Type: field.TypeBool, Column: remediationhistory.FieldWorkflowEligibleMarker},
+			remediationhistory.FieldExternalID:             {Type: field.TypeString, Column: remediationhistory.FieldExternalID},
+			remediationhistory.FieldExternalOwnerID:        {Type: field.TypeString, Column: remediationhistory.FieldExternalOwnerID},
+			remediationhistory.FieldTitle:                  {Type: field.TypeString, Column: remediationhistory.FieldTitle},
+			remediationhistory.FieldStatus:                 {Type: field.TypeEnum, Column: remediationhistory.FieldStatus},
+			remediationhistory.FieldState:                  {Type: field.TypeString, Column: remediationhistory.FieldState},
+			remediationhistory.FieldIntent:                 {Type: field.TypeString, Column: remediationhistory.FieldIntent},
+			remediationhistory.FieldSummary:                {Type: field.TypeString, Column: remediationhistory.FieldSummary},
+			remediationhistory.FieldExplanation:            {Type: field.TypeString, Column: remediationhistory.FieldExplanation},
+			remediationhistory.FieldInstructions:           {Type: field.TypeString, Column: remediationhistory.FieldInstructions},
+			remediationhistory.FieldOwnerReference:         {Type: field.TypeString, Column: remediationhistory.FieldOwnerReference},
+			remediationhistory.FieldRepositoryURI:          {Type: field.TypeString, Column: remediationhistory.FieldRepositoryURI},
+			remediationhistory.FieldPullRequestURI:         {Type: field.TypeString, Column: remediationhistory.FieldPullRequestURI},
+			remediationhistory.FieldTicketReference:        {Type: field.TypeString, Column: remediationhistory.FieldTicketReference},
+			remediationhistory.FieldDueAt:                  {Type: field.TypeTime, Column: remediationhistory.FieldDueAt},
+			remediationhistory.FieldCompletedAt:            {Type: field.TypeTime, Column: remediationhistory.FieldCompletedAt},
+			remediationhistory.FieldPrGeneratedAt:          {Type: field.TypeTime, Column: remediationhistory.FieldPrGeneratedAt},
+			remediationhistory.FieldError:                  {Type: field.TypeString, Column: remediationhistory.FieldError},
+			remediationhistory.FieldSource:                 {Type: field.TypeString, Column: remediationhistory.FieldSource},
+			remediationhistory.FieldExternalURI:            {Type: field.TypeString, Column: remediationhistory.FieldExternalURI},
+			remediationhistory.FieldMetadata:               {Type: field.TypeJSON, Column: remediationhistory.FieldMetadata},
 		},
 	}
 	graph.Nodes[48] = &sqlgraph.Node{
@@ -2255,52 +2259,53 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "RiskHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			riskhistory.FieldHistoryTime:           {Type: field.TypeTime, Column: riskhistory.FieldHistoryTime},
-			riskhistory.FieldRef:                   {Type: field.TypeString, Column: riskhistory.FieldRef},
-			riskhistory.FieldOperation:             {Type: field.TypeEnum, Column: riskhistory.FieldOperation},
-			riskhistory.FieldCreatedAt:             {Type: field.TypeTime, Column: riskhistory.FieldCreatedAt},
-			riskhistory.FieldUpdatedAt:             {Type: field.TypeTime, Column: riskhistory.FieldUpdatedAt},
-			riskhistory.FieldCreatedBy:             {Type: field.TypeString, Column: riskhistory.FieldCreatedBy},
-			riskhistory.FieldUpdatedBy:             {Type: field.TypeString, Column: riskhistory.FieldUpdatedBy},
-			riskhistory.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: riskhistory.FieldUpdatedByImpersonator},
-			riskhistory.FieldDeletedAt:             {Type: field.TypeTime, Column: riskhistory.FieldDeletedAt},
-			riskhistory.FieldDeletedBy:             {Type: field.TypeString, Column: riskhistory.FieldDeletedBy},
-			riskhistory.FieldDisplayID:             {Type: field.TypeString, Column: riskhistory.FieldDisplayID},
-			riskhistory.FieldTags:                  {Type: field.TypeJSON, Column: riskhistory.FieldTags},
-			riskhistory.FieldOwnerID:               {Type: field.TypeString, Column: riskhistory.FieldOwnerID},
-			riskhistory.FieldRiskKindName:          {Type: field.TypeString, Column: riskhistory.FieldRiskKindName},
-			riskhistory.FieldRiskKindID:            {Type: field.TypeString, Column: riskhistory.FieldRiskKindID},
-			riskhistory.FieldRiskCategoryName:      {Type: field.TypeString, Column: riskhistory.FieldRiskCategoryName},
-			riskhistory.FieldRiskCategoryID:        {Type: field.TypeString, Column: riskhistory.FieldRiskCategoryID},
-			riskhistory.FieldEnvironmentName:       {Type: field.TypeString, Column: riskhistory.FieldEnvironmentName},
-			riskhistory.FieldEnvironmentID:         {Type: field.TypeString, Column: riskhistory.FieldEnvironmentID},
-			riskhistory.FieldScopeName:             {Type: field.TypeString, Column: riskhistory.FieldScopeName},
-			riskhistory.FieldScopeID:               {Type: field.TypeString, Column: riskhistory.FieldScopeID},
-			riskhistory.FieldExternalID:            {Type: field.TypeString, Column: riskhistory.FieldExternalID},
-			riskhistory.FieldIntegrationID:         {Type: field.TypeString, Column: riskhistory.FieldIntegrationID},
-			riskhistory.FieldObservedAt:            {Type: field.TypeTime, Column: riskhistory.FieldObservedAt},
-			riskhistory.FieldExternalUUID:          {Type: field.TypeString, Column: riskhistory.FieldExternalUUID},
-			riskhistory.FieldName:                  {Type: field.TypeString, Column: riskhistory.FieldName},
-			riskhistory.FieldStatus:                {Type: field.TypeEnum, Column: riskhistory.FieldStatus},
-			riskhistory.FieldImpact:                {Type: field.TypeEnum, Column: riskhistory.FieldImpact},
-			riskhistory.FieldLikelihood:            {Type: field.TypeEnum, Column: riskhistory.FieldLikelihood},
-			riskhistory.FieldScore:                 {Type: field.TypeInt, Column: riskhistory.FieldScore},
-			riskhistory.FieldMitigation:            {Type: field.TypeString, Column: riskhistory.FieldMitigation},
-			riskhistory.FieldMitigationJSON:        {Type: field.TypeJSON, Column: riskhistory.FieldMitigationJSON},
-			riskhistory.FieldDetails:               {Type: field.TypeString, Column: riskhistory.FieldDetails},
-			riskhistory.FieldDetailsJSON:           {Type: field.TypeJSON, Column: riskhistory.FieldDetailsJSON},
-			riskhistory.FieldBusinessCosts:         {Type: field.TypeString, Column: riskhistory.FieldBusinessCosts},
-			riskhistory.FieldBusinessCostsJSON:     {Type: field.TypeJSON, Column: riskhistory.FieldBusinessCostsJSON},
-			riskhistory.FieldStakeholderID:         {Type: field.TypeString, Column: riskhistory.FieldStakeholderID},
-			riskhistory.FieldDelegateID:            {Type: field.TypeString, Column: riskhistory.FieldDelegateID},
-			riskhistory.FieldMitigatedAt:           {Type: field.TypeTime, Column: riskhistory.FieldMitigatedAt},
-			riskhistory.FieldReviewRequired:        {Type: field.TypeBool, Column: riskhistory.FieldReviewRequired},
-			riskhistory.FieldLastReviewedAt:        {Type: field.TypeTime, Column: riskhistory.FieldLastReviewedAt},
-			riskhistory.FieldReviewFrequency:       {Type: field.TypeEnum, Column: riskhistory.FieldReviewFrequency},
-			riskhistory.FieldDueDate:               {Type: field.TypeTime, Column: riskhistory.FieldDueDate},
-			riskhistory.FieldNextReviewDueAt:       {Type: field.TypeTime, Column: riskhistory.FieldNextReviewDueAt},
-			riskhistory.FieldResidualScore:         {Type: field.TypeInt, Column: riskhistory.FieldResidualScore},
-			riskhistory.FieldRiskDecision:          {Type: field.TypeEnum, Column: riskhistory.FieldRiskDecision},
+			riskhistory.FieldHistoryTime:            {Type: field.TypeTime, Column: riskhistory.FieldHistoryTime},
+			riskhistory.FieldRef:                    {Type: field.TypeString, Column: riskhistory.FieldRef},
+			riskhistory.FieldOperation:              {Type: field.TypeEnum, Column: riskhistory.FieldOperation},
+			riskhistory.FieldCreatedAt:              {Type: field.TypeTime, Column: riskhistory.FieldCreatedAt},
+			riskhistory.FieldUpdatedAt:              {Type: field.TypeTime, Column: riskhistory.FieldUpdatedAt},
+			riskhistory.FieldCreatedBy:              {Type: field.TypeString, Column: riskhistory.FieldCreatedBy},
+			riskhistory.FieldUpdatedBy:              {Type: field.TypeString, Column: riskhistory.FieldUpdatedBy},
+			riskhistory.FieldUpdatedByImpersonator:  {Type: field.TypeString, Column: riskhistory.FieldUpdatedByImpersonator},
+			riskhistory.FieldDeletedAt:              {Type: field.TypeTime, Column: riskhistory.FieldDeletedAt},
+			riskhistory.FieldDeletedBy:              {Type: field.TypeString, Column: riskhistory.FieldDeletedBy},
+			riskhistory.FieldDisplayID:              {Type: field.TypeString, Column: riskhistory.FieldDisplayID},
+			riskhistory.FieldTags:                   {Type: field.TypeJSON, Column: riskhistory.FieldTags},
+			riskhistory.FieldOwnerID:                {Type: field.TypeString, Column: riskhistory.FieldOwnerID},
+			riskhistory.FieldRiskKindName:           {Type: field.TypeString, Column: riskhistory.FieldRiskKindName},
+			riskhistory.FieldRiskKindID:             {Type: field.TypeString, Column: riskhistory.FieldRiskKindID},
+			riskhistory.FieldRiskCategoryName:       {Type: field.TypeString, Column: riskhistory.FieldRiskCategoryName},
+			riskhistory.FieldRiskCategoryID:         {Type: field.TypeString, Column: riskhistory.FieldRiskCategoryID},
+			riskhistory.FieldEnvironmentName:        {Type: field.TypeString, Column: riskhistory.FieldEnvironmentName},
+			riskhistory.FieldEnvironmentID:          {Type: field.TypeString, Column: riskhistory.FieldEnvironmentID},
+			riskhistory.FieldScopeName:              {Type: field.TypeString, Column: riskhistory.FieldScopeName},
+			riskhistory.FieldScopeID:                {Type: field.TypeString, Column: riskhistory.FieldScopeID},
+			riskhistory.FieldWorkflowEligibleMarker: {Type: field.TypeBool, Column: riskhistory.FieldWorkflowEligibleMarker},
+			riskhistory.FieldExternalID:             {Type: field.TypeString, Column: riskhistory.FieldExternalID},
+			riskhistory.FieldIntegrationID:          {Type: field.TypeString, Column: riskhistory.FieldIntegrationID},
+			riskhistory.FieldObservedAt:             {Type: field.TypeTime, Column: riskhistory.FieldObservedAt},
+			riskhistory.FieldExternalUUID:           {Type: field.TypeString, Column: riskhistory.FieldExternalUUID},
+			riskhistory.FieldName:                   {Type: field.TypeString, Column: riskhistory.FieldName},
+			riskhistory.FieldStatus:                 {Type: field.TypeEnum, Column: riskhistory.FieldStatus},
+			riskhistory.FieldImpact:                 {Type: field.TypeEnum, Column: riskhistory.FieldImpact},
+			riskhistory.FieldLikelihood:             {Type: field.TypeEnum, Column: riskhistory.FieldLikelihood},
+			riskhistory.FieldScore:                  {Type: field.TypeInt, Column: riskhistory.FieldScore},
+			riskhistory.FieldMitigation:             {Type: field.TypeString, Column: riskhistory.FieldMitigation},
+			riskhistory.FieldMitigationJSON:         {Type: field.TypeJSON, Column: riskhistory.FieldMitigationJSON},
+			riskhistory.FieldDetails:                {Type: field.TypeString, Column: riskhistory.FieldDetails},
+			riskhistory.FieldDetailsJSON:            {Type: field.TypeJSON, Column: riskhistory.FieldDetailsJSON},
+			riskhistory.FieldBusinessCosts:          {Type: field.TypeString, Column: riskhistory.FieldBusinessCosts},
+			riskhistory.FieldBusinessCostsJSON:      {Type: field.TypeJSON, Column: riskhistory.FieldBusinessCostsJSON},
+			riskhistory.FieldStakeholderID:          {Type: field.TypeString, Column: riskhistory.FieldStakeholderID},
+			riskhistory.FieldDelegateID:             {Type: field.TypeString, Column: riskhistory.FieldDelegateID},
+			riskhistory.FieldMitigatedAt:            {Type: field.TypeTime, Column: riskhistory.FieldMitigatedAt},
+			riskhistory.FieldReviewRequired:         {Type: field.TypeBool, Column: riskhistory.FieldReviewRequired},
+			riskhistory.FieldLastReviewedAt:         {Type: field.TypeTime, Column: riskhistory.FieldLastReviewedAt},
+			riskhistory.FieldReviewFrequency:        {Type: field.TypeEnum, Column: riskhistory.FieldReviewFrequency},
+			riskhistory.FieldDueDate:                {Type: field.TypeTime, Column: riskhistory.FieldDueDate},
+			riskhistory.FieldNextReviewDueAt:        {Type: field.TypeTime, Column: riskhistory.FieldNextReviewDueAt},
+			riskhistory.FieldResidualScore:          {Type: field.TypeInt, Column: riskhistory.FieldResidualScore},
+			riskhistory.FieldRiskDecision:           {Type: field.TypeEnum, Column: riskhistory.FieldRiskDecision},
 		},
 	}
 	graph.Nodes[50] = &sqlgraph.Node{
@@ -2342,40 +2347,40 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "ScanHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			scanhistory.FieldHistoryTime:           {Type: field.TypeTime, Column: scanhistory.FieldHistoryTime},
-			scanhistory.FieldRef:                   {Type: field.TypeString, Column: scanhistory.FieldRef},
-			scanhistory.FieldOperation:             {Type: field.TypeEnum, Column: scanhistory.FieldOperation},
-			scanhistory.FieldCreatedAt:             {Type: field.TypeTime, Column: scanhistory.FieldCreatedAt},
-			scanhistory.FieldUpdatedAt:             {Type: field.TypeTime, Column: scanhistory.FieldUpdatedAt},
-			scanhistory.FieldCreatedBy:             {Type: field.TypeString, Column: scanhistory.FieldCreatedBy},
-			scanhistory.FieldUpdatedBy:             {Type: field.TypeString, Column: scanhistory.FieldUpdatedBy},
-			scanhistory.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: scanhistory.FieldUpdatedByImpersonator},
-			scanhistory.FieldDeletedAt:             {Type: field.TypeTime, Column: scanhistory.FieldDeletedAt},
-			scanhistory.FieldDeletedBy:             {Type: field.TypeString, Column: scanhistory.FieldDeletedBy},
-			scanhistory.FieldTags:                  {Type: field.TypeJSON, Column: scanhistory.FieldTags},
-			scanhistory.FieldOwnerID:               {Type: field.TypeString, Column: scanhistory.FieldOwnerID},
-			scanhistory.FieldReviewedBy:            {Type: field.TypeString, Column: scanhistory.FieldReviewedBy},
-			scanhistory.FieldReviewedByUserID:      {Type: field.TypeString, Column: scanhistory.FieldReviewedByUserID},
-			scanhistory.FieldReviewedByGroupID:     {Type: field.TypeString, Column: scanhistory.FieldReviewedByGroupID},
-			scanhistory.FieldAssignedTo:            {Type: field.TypeString, Column: scanhistory.FieldAssignedTo},
-			scanhistory.FieldAssignedToUserID:      {Type: field.TypeString, Column: scanhistory.FieldAssignedToUserID},
-			scanhistory.FieldAssignedToGroupID:     {Type: field.TypeString, Column: scanhistory.FieldAssignedToGroupID},
-			scanhistory.FieldEnvironmentName:       {Type: field.TypeString, Column: scanhistory.FieldEnvironmentName},
-			scanhistory.FieldEnvironmentID:         {Type: field.TypeString, Column: scanhistory.FieldEnvironmentID},
-			scanhistory.FieldScopeName:             {Type: field.TypeString, Column: scanhistory.FieldScopeName},
-			scanhistory.FieldScopeID:               {Type: field.TypeString, Column: scanhistory.FieldScopeID},
-			scanhistory.FieldTarget:                {Type: field.TypeString, Column: scanhistory.FieldTarget},
-			scanhistory.FieldScanType:              {Type: field.TypeEnum, Column: scanhistory.FieldScanType},
-			scanhistory.FieldMetadata:              {Type: field.TypeJSON, Column: scanhistory.FieldMetadata},
-			scanhistory.FieldScanDate:              {Type: field.TypeTime, Column: scanhistory.FieldScanDate},
-			scanhistory.FieldScanSchedule:          {Type: field.TypeString, Column: scanhistory.FieldScanSchedule},
-			scanhistory.FieldNextScanRunAt:         {Type: field.TypeTime, Column: scanhistory.FieldNextScanRunAt},
-			scanhistory.FieldPerformedBy:           {Type: field.TypeString, Column: scanhistory.FieldPerformedBy},
-			scanhistory.FieldPerformedByUserID:     {Type: field.TypeString, Column: scanhistory.FieldPerformedByUserID},
-			scanhistory.FieldPerformedByGroupID:    {Type: field.TypeString, Column: scanhistory.FieldPerformedByGroupID},
-			scanhistory.FieldGeneratedByPlatformID: {Type: field.TypeString, Column: scanhistory.FieldGeneratedByPlatformID},
-			scanhistory.FieldVulnerabilityIds:      {Type: field.TypeJSON, Column: scanhistory.FieldVulnerabilityIds},
-			scanhistory.FieldStatus:                {Type: field.TypeEnum, Column: scanhistory.FieldStatus},
+			scanhistory.FieldHistoryTime:                {Type: field.TypeTime, Column: scanhistory.FieldHistoryTime},
+			scanhistory.FieldRef:                        {Type: field.TypeString, Column: scanhistory.FieldRef},
+			scanhistory.FieldOperation:                  {Type: field.TypeEnum, Column: scanhistory.FieldOperation},
+			scanhistory.FieldCreatedAt:                  {Type: field.TypeTime, Column: scanhistory.FieldCreatedAt},
+			scanhistory.FieldUpdatedAt:                  {Type: field.TypeTime, Column: scanhistory.FieldUpdatedAt},
+			scanhistory.FieldCreatedBy:                  {Type: field.TypeString, Column: scanhistory.FieldCreatedBy},
+			scanhistory.FieldUpdatedBy:                  {Type: field.TypeString, Column: scanhistory.FieldUpdatedBy},
+			scanhistory.FieldUpdatedByImpersonator:      {Type: field.TypeString, Column: scanhistory.FieldUpdatedByImpersonator},
+			scanhistory.FieldDeletedAt:                  {Type: field.TypeTime, Column: scanhistory.FieldDeletedAt},
+			scanhistory.FieldDeletedBy:                  {Type: field.TypeString, Column: scanhistory.FieldDeletedBy},
+			scanhistory.FieldTags:                       {Type: field.TypeJSON, Column: scanhistory.FieldTags},
+			scanhistory.FieldOwnerID:                    {Type: field.TypeString, Column: scanhistory.FieldOwnerID},
+			scanhistory.FieldReviewedBy:                 {Type: field.TypeString, Column: scanhistory.FieldReviewedBy},
+			scanhistory.FieldReviewedByUserID:           {Type: field.TypeString, Column: scanhistory.FieldReviewedByUserID},
+			scanhistory.FieldReviewedByGroupID:          {Type: field.TypeString, Column: scanhistory.FieldReviewedByGroupID},
+			scanhistory.FieldAssignedTo:                 {Type: field.TypeString, Column: scanhistory.FieldAssignedTo},
+			scanhistory.FieldAssignedToUserID:           {Type: field.TypeString, Column: scanhistory.FieldAssignedToUserID},
+			scanhistory.FieldAssignedToGroupID:          {Type: field.TypeString, Column: scanhistory.FieldAssignedToGroupID},
+			scanhistory.FieldEnvironmentName:            {Type: field.TypeString, Column: scanhistory.FieldEnvironmentName},
+			scanhistory.FieldEnvironmentID:              {Type: field.TypeString, Column: scanhistory.FieldEnvironmentID},
+			scanhistory.FieldScopeName:                  {Type: field.TypeString, Column: scanhistory.FieldScopeName},
+			scanhistory.FieldScopeID:                    {Type: field.TypeString, Column: scanhistory.FieldScopeID},
+			scanhistory.FieldTarget:                     {Type: field.TypeString, Column: scanhistory.FieldTarget},
+			scanhistory.FieldScanType:                   {Type: field.TypeEnum, Column: scanhistory.FieldScanType},
+			scanhistory.FieldMetadata:                   {Type: field.TypeJSON, Column: scanhistory.FieldMetadata},
+			scanhistory.FieldScanDate:                   {Type: field.TypeTime, Column: scanhistory.FieldScanDate},
+			scanhistory.FieldScanSchedule:               {Type: field.TypeString, Column: scanhistory.FieldScanSchedule},
+			scanhistory.FieldNextScanRunAt:              {Type: field.TypeTime, Column: scanhistory.FieldNextScanRunAt},
+			scanhistory.FieldPerformedBy:                {Type: field.TypeString, Column: scanhistory.FieldPerformedBy},
+			scanhistory.FieldPerformedByUserID:          {Type: field.TypeString, Column: scanhistory.FieldPerformedByUserID},
+			scanhistory.FieldPerformedByGroupID:         {Type: field.TypeString, Column: scanhistory.FieldPerformedByGroupID},
+			scanhistory.FieldGeneratedByPlatformID:      {Type: field.TypeString, Column: scanhistory.FieldGeneratedByPlatformID},
+			scanhistory.FieldDiscoveredVulnerabilityIds: {Type: field.TypeJSON, Column: scanhistory.FieldDiscoveredVulnerabilityIds},
+			scanhistory.FieldStatus:                     {Type: field.TypeEnum, Column: scanhistory.FieldStatus},
 		},
 	}
 	graph.Nodes[52] = &sqlgraph.Node{
@@ -2592,39 +2597,40 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TaskHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			taskhistory.FieldHistoryTime:           {Type: field.TypeTime, Column: taskhistory.FieldHistoryTime},
-			taskhistory.FieldRef:                   {Type: field.TypeString, Column: taskhistory.FieldRef},
-			taskhistory.FieldOperation:             {Type: field.TypeEnum, Column: taskhistory.FieldOperation},
-			taskhistory.FieldCreatedAt:             {Type: field.TypeTime, Column: taskhistory.FieldCreatedAt},
-			taskhistory.FieldUpdatedAt:             {Type: field.TypeTime, Column: taskhistory.FieldUpdatedAt},
-			taskhistory.FieldCreatedBy:             {Type: field.TypeString, Column: taskhistory.FieldCreatedBy},
-			taskhistory.FieldUpdatedBy:             {Type: field.TypeString, Column: taskhistory.FieldUpdatedBy},
-			taskhistory.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: taskhistory.FieldUpdatedByImpersonator},
-			taskhistory.FieldDeletedAt:             {Type: field.TypeTime, Column: taskhistory.FieldDeletedAt},
-			taskhistory.FieldDeletedBy:             {Type: field.TypeString, Column: taskhistory.FieldDeletedBy},
-			taskhistory.FieldDisplayID:             {Type: field.TypeString, Column: taskhistory.FieldDisplayID},
-			taskhistory.FieldTags:                  {Type: field.TypeJSON, Column: taskhistory.FieldTags},
-			taskhistory.FieldOwnerID:               {Type: field.TypeString, Column: taskhistory.FieldOwnerID},
-			taskhistory.FieldTaskKindName:          {Type: field.TypeString, Column: taskhistory.FieldTaskKindName},
-			taskhistory.FieldTaskKindID:            {Type: field.TypeString, Column: taskhistory.FieldTaskKindID},
-			taskhistory.FieldEnvironmentName:       {Type: field.TypeString, Column: taskhistory.FieldEnvironmentName},
-			taskhistory.FieldEnvironmentID:         {Type: field.TypeString, Column: taskhistory.FieldEnvironmentID},
-			taskhistory.FieldScopeName:             {Type: field.TypeString, Column: taskhistory.FieldScopeName},
-			taskhistory.FieldScopeID:               {Type: field.TypeString, Column: taskhistory.FieldScopeID},
-			taskhistory.FieldExternalUUID:          {Type: field.TypeString, Column: taskhistory.FieldExternalUUID},
-			taskhistory.FieldTitle:                 {Type: field.TypeString, Column: taskhistory.FieldTitle},
-			taskhistory.FieldDetails:               {Type: field.TypeString, Column: taskhistory.FieldDetails},
-			taskhistory.FieldDetailsJSON:           {Type: field.TypeJSON, Column: taskhistory.FieldDetailsJSON},
-			taskhistory.FieldStatus:                {Type: field.TypeEnum, Column: taskhistory.FieldStatus},
-			taskhistory.FieldDue:                   {Type: field.TypeTime, Column: taskhistory.FieldDue},
-			taskhistory.FieldCompleted:             {Type: field.TypeTime, Column: taskhistory.FieldCompleted},
-			taskhistory.FieldAssigneeID:            {Type: field.TypeString, Column: taskhistory.FieldAssigneeID},
-			taskhistory.FieldAssignerID:            {Type: field.TypeString, Column: taskhistory.FieldAssignerID},
-			taskhistory.FieldSystemGenerated:       {Type: field.TypeBool, Column: taskhistory.FieldSystemGenerated},
-			taskhistory.FieldIsTemplate:            {Type: field.TypeBool, Column: taskhistory.FieldIsTemplate},
-			taskhistory.FieldIdempotencyKey:        {Type: field.TypeString, Column: taskhistory.FieldIdempotencyKey},
-			taskhistory.FieldExternalReferenceURL:  {Type: field.TypeJSON, Column: taskhistory.FieldExternalReferenceURL},
-			taskhistory.FieldParentTaskID:          {Type: field.TypeString, Column: taskhistory.FieldParentTaskID},
+			taskhistory.FieldHistoryTime:            {Type: field.TypeTime, Column: taskhistory.FieldHistoryTime},
+			taskhistory.FieldRef:                    {Type: field.TypeString, Column: taskhistory.FieldRef},
+			taskhistory.FieldOperation:              {Type: field.TypeEnum, Column: taskhistory.FieldOperation},
+			taskhistory.FieldCreatedAt:              {Type: field.TypeTime, Column: taskhistory.FieldCreatedAt},
+			taskhistory.FieldUpdatedAt:              {Type: field.TypeTime, Column: taskhistory.FieldUpdatedAt},
+			taskhistory.FieldCreatedBy:              {Type: field.TypeString, Column: taskhistory.FieldCreatedBy},
+			taskhistory.FieldUpdatedBy:              {Type: field.TypeString, Column: taskhistory.FieldUpdatedBy},
+			taskhistory.FieldUpdatedByImpersonator:  {Type: field.TypeString, Column: taskhistory.FieldUpdatedByImpersonator},
+			taskhistory.FieldDeletedAt:              {Type: field.TypeTime, Column: taskhistory.FieldDeletedAt},
+			taskhistory.FieldDeletedBy:              {Type: field.TypeString, Column: taskhistory.FieldDeletedBy},
+			taskhistory.FieldDisplayID:              {Type: field.TypeString, Column: taskhistory.FieldDisplayID},
+			taskhistory.FieldTags:                   {Type: field.TypeJSON, Column: taskhistory.FieldTags},
+			taskhistory.FieldOwnerID:                {Type: field.TypeString, Column: taskhistory.FieldOwnerID},
+			taskhistory.FieldTaskKindName:           {Type: field.TypeString, Column: taskhistory.FieldTaskKindName},
+			taskhistory.FieldTaskKindID:             {Type: field.TypeString, Column: taskhistory.FieldTaskKindID},
+			taskhistory.FieldEnvironmentName:        {Type: field.TypeString, Column: taskhistory.FieldEnvironmentName},
+			taskhistory.FieldEnvironmentID:          {Type: field.TypeString, Column: taskhistory.FieldEnvironmentID},
+			taskhistory.FieldScopeName:              {Type: field.TypeString, Column: taskhistory.FieldScopeName},
+			taskhistory.FieldScopeID:                {Type: field.TypeString, Column: taskhistory.FieldScopeID},
+			taskhistory.FieldWorkflowEligibleMarker: {Type: field.TypeBool, Column: taskhistory.FieldWorkflowEligibleMarker},
+			taskhistory.FieldExternalUUID:           {Type: field.TypeString, Column: taskhistory.FieldExternalUUID},
+			taskhistory.FieldTitle:                  {Type: field.TypeString, Column: taskhistory.FieldTitle},
+			taskhistory.FieldDetails:                {Type: field.TypeString, Column: taskhistory.FieldDetails},
+			taskhistory.FieldDetailsJSON:            {Type: field.TypeJSON, Column: taskhistory.FieldDetailsJSON},
+			taskhistory.FieldStatus:                 {Type: field.TypeEnum, Column: taskhistory.FieldStatus},
+			taskhistory.FieldDue:                    {Type: field.TypeTime, Column: taskhistory.FieldDue},
+			taskhistory.FieldCompleted:              {Type: field.TypeTime, Column: taskhistory.FieldCompleted},
+			taskhistory.FieldAssigneeID:             {Type: field.TypeString, Column: taskhistory.FieldAssigneeID},
+			taskhistory.FieldAssignerID:             {Type: field.TypeString, Column: taskhistory.FieldAssignerID},
+			taskhistory.FieldSystemGenerated:        {Type: field.TypeBool, Column: taskhistory.FieldSystemGenerated},
+			taskhistory.FieldIsTemplate:             {Type: field.TypeBool, Column: taskhistory.FieldIsTemplate},
+			taskhistory.FieldIdempotencyKey:         {Type: field.TypeString, Column: taskhistory.FieldIdempotencyKey},
+			taskhistory.FieldExternalReferenceURL:   {Type: field.TypeJSON, Column: taskhistory.FieldExternalReferenceURL},
+			taskhistory.FieldParentTaskID:           {Type: field.TypeString, Column: taskhistory.FieldParentTaskID},
 		},
 	}
 	graph.Nodes[58] = &sqlgraph.Node{
@@ -3149,6 +3155,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vulnerabilityhistory.FieldScopeID:                 {Type: field.TypeString, Column: vulnerabilityhistory.FieldScopeID},
 			vulnerabilityhistory.FieldVulnerabilityStatusName: {Type: field.TypeString, Column: vulnerabilityhistory.FieldVulnerabilityStatusName},
 			vulnerabilityhistory.FieldVulnerabilityStatusID:   {Type: field.TypeString, Column: vulnerabilityhistory.FieldVulnerabilityStatusID},
+			vulnerabilityhistory.FieldWorkflowEligibleMarker:  {Type: field.TypeBool, Column: vulnerabilityhistory.FieldWorkflowEligibleMarker},
 			vulnerabilityhistory.FieldExternalOwnerID:         {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalOwnerID},
 			vulnerabilityhistory.FieldSecurityLevel:           {Type: field.TypeEnum, Column: vulnerabilityhistory.FieldSecurityLevel},
 			vulnerabilityhistory.FieldExternalID:              {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalID},
@@ -3227,6 +3234,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowassignmenthistory.FieldApprovalMetadata:      {Type: field.TypeJSON, Column: workflowassignmenthistory.FieldApprovalMetadata},
 			workflowassignmenthistory.FieldRejectionMetadata:     {Type: field.TypeJSON, Column: workflowassignmenthistory.FieldRejectionMetadata},
 			workflowassignmenthistory.FieldInvalidationMetadata:  {Type: field.TypeJSON, Column: workflowassignmenthistory.FieldInvalidationMetadata},
+			workflowassignmenthistory.FieldOutcomeMetadata:       {Type: field.TypeJSON, Column: workflowassignmenthistory.FieldOutcomeMetadata},
 			workflowassignmenthistory.FieldDecidedAt:             {Type: field.TypeTime, Column: workflowassignmenthistory.FieldDecidedAt},
 			workflowassignmenthistory.FieldActorUserID:           {Type: field.TypeString, Column: workflowassignmenthistory.FieldActorUserID},
 			workflowassignmenthistory.FieldActorGroupID:          {Type: field.TypeString, Column: workflowassignmenthistory.FieldActorGroupID},
@@ -3381,6 +3389,14 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowinstancehistory.FieldCampaignTargetID:      {Type: field.TypeString, Column: workflowinstancehistory.FieldCampaignTargetID},
 			workflowinstancehistory.FieldIdentityHolderID:      {Type: field.TypeString, Column: workflowinstancehistory.FieldIdentityHolderID},
 			workflowinstancehistory.FieldPlatformID:            {Type: field.TypeString, Column: workflowinstancehistory.FieldPlatformID},
+			workflowinstancehistory.FieldAssessmentID:          {Type: field.TypeString, Column: workflowinstancehistory.FieldAssessmentID},
+			workflowinstancehistory.FieldAssessmentResponseID:  {Type: field.TypeString, Column: workflowinstancehistory.FieldAssessmentResponseID},
+			workflowinstancehistory.FieldFindingID:             {Type: field.TypeString, Column: workflowinstancehistory.FieldFindingID},
+			workflowinstancehistory.FieldIntegrationID:         {Type: field.TypeString, Column: workflowinstancehistory.FieldIntegrationID},
+			workflowinstancehistory.FieldRemediationID:         {Type: field.TypeString, Column: workflowinstancehistory.FieldRemediationID},
+			workflowinstancehistory.FieldRiskID:                {Type: field.TypeString, Column: workflowinstancehistory.FieldRiskID},
+			workflowinstancehistory.FieldTaskID:                {Type: field.TypeString, Column: workflowinstancehistory.FieldTaskID},
+			workflowinstancehistory.FieldVulnerabilityID:       {Type: field.TypeString, Column: workflowinstancehistory.FieldVulnerabilityID},
 		},
 	}
 	graph.Nodes[78] = &sqlgraph.Node{
@@ -3420,6 +3436,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowobjectrefhistory.FieldCampaignTargetID:      {Type: field.TypeString, Column: workflowobjectrefhistory.FieldCampaignTargetID},
 			workflowobjectrefhistory.FieldIdentityHolderID:      {Type: field.TypeString, Column: workflowobjectrefhistory.FieldIdentityHolderID},
 			workflowobjectrefhistory.FieldPlatformID:            {Type: field.TypeString, Column: workflowobjectrefhistory.FieldPlatformID},
+			workflowobjectrefhistory.FieldVulnerabilityID:       {Type: field.TypeString, Column: workflowobjectrefhistory.FieldVulnerabilityID},
+			workflowobjectrefhistory.FieldRiskID:                {Type: field.TypeString, Column: workflowobjectrefhistory.FieldRiskID},
+			workflowobjectrefhistory.FieldAssessmentID:          {Type: field.TypeString, Column: workflowobjectrefhistory.FieldAssessmentID},
+			workflowobjectrefhistory.FieldAssessmentResponseID:  {Type: field.TypeString, Column: workflowobjectrefhistory.FieldAssessmentResponseID},
+			workflowobjectrefhistory.FieldRemediationID:         {Type: field.TypeString, Column: workflowobjectrefhistory.FieldRemediationID},
 		},
 	}
 	return graph
@@ -3841,6 +3862,11 @@ func (f *AssessmentHistoryFilter) WhereSystemInternalID(p entql.StringP) {
 	f.Where(p.Field(assessmenthistory.FieldSystemInternalID))
 }
 
+// WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
+func (f *AssessmentHistoryFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
+	f.Where(p.Field(assessmenthistory.FieldWorkflowEligibleMarker))
+}
+
 // WhereName applies the entql string predicate on the name field.
 func (f *AssessmentHistoryFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(assessmenthistory.FieldName))
@@ -3964,6 +3990,11 @@ func (f *AssessmentResponseHistoryFilter) WhereDeletedBy(p entql.StringP) {
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *AssessmentResponseHistoryFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(assessmentresponsehistory.FieldOwnerID))
+}
+
+// WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
+func (f *AssessmentResponseHistoryFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
+	f.Where(p.Field(assessmentresponsehistory.FieldWorkflowEligibleMarker))
 }
 
 // WhereAssessmentID applies the entql string predicate on the assessment_id field.
@@ -8391,6 +8422,11 @@ func (f *FindingHistoryFilter) WhereFindingStatusID(p entql.StringP) {
 	f.Where(p.Field(findinghistory.FieldFindingStatusID))
 }
 
+// WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
+func (f *FindingHistoryFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
+	f.Where(p.Field(findinghistory.FieldWorkflowEligibleMarker))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *FindingHistoryFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(findinghistory.FieldExternalID))
@@ -12626,6 +12662,11 @@ func (f *RemediationHistoryFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(remediationhistory.FieldScopeID))
 }
 
+// WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
+func (f *RemediationHistoryFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
+	f.Where(p.Field(remediationhistory.FieldWorkflowEligibleMarker))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *RemediationHistoryFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(remediationhistory.FieldExternalID))
@@ -13101,6 +13142,11 @@ func (f *RiskHistoryFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(riskhistory.FieldScopeID))
 }
 
+// WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
+func (f *RiskHistoryFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
+	f.Where(p.Field(riskhistory.FieldWorkflowEligibleMarker))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *RiskHistoryFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(riskhistory.FieldExternalID))
@@ -13541,9 +13587,9 @@ func (f *ScanHistoryFilter) WhereGeneratedByPlatformID(p entql.StringP) {
 	f.Where(p.Field(scanhistory.FieldGeneratedByPlatformID))
 }
 
-// WhereVulnerabilityIds applies the entql json.RawMessage predicate on the vulnerability_ids field.
-func (f *ScanHistoryFilter) WhereVulnerabilityIds(p entql.BytesP) {
-	f.Where(p.Field(scanhistory.FieldVulnerabilityIds))
+// WhereDiscoveredVulnerabilityIds applies the entql json.RawMessage predicate on the discovered_vulnerability_ids field.
+func (f *ScanHistoryFilter) WhereDiscoveredVulnerabilityIds(p entql.BytesP) {
+	f.Where(p.Field(scanhistory.FieldDiscoveredVulnerabilityIds))
 }
 
 // WhereStatus applies the entql string predicate on the status field.
@@ -14574,6 +14620,11 @@ func (f *TaskHistoryFilter) WhereScopeName(p entql.StringP) {
 // WhereScopeID applies the entql string predicate on the scope_id field.
 func (f *TaskHistoryFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(taskhistory.FieldScopeID))
+}
+
+// WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
+func (f *TaskHistoryFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
+	f.Where(p.Field(taskhistory.FieldWorkflowEligibleMarker))
 }
 
 // WhereExternalUUID applies the entql string predicate on the external_uuid field.
@@ -16891,6 +16942,11 @@ func (f *VulnerabilityHistoryFilter) WhereVulnerabilityStatusID(p entql.StringP)
 	f.Where(p.Field(vulnerabilityhistory.FieldVulnerabilityStatusID))
 }
 
+// WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
+func (f *VulnerabilityHistoryFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldWorkflowEligibleMarker))
+}
+
 // WhereExternalOwnerID applies the entql string predicate on the external_owner_id field.
 func (f *VulnerabilityHistoryFilter) WhereExternalOwnerID(p entql.StringP) {
 	f.Where(p.Field(vulnerabilityhistory.FieldExternalOwnerID))
@@ -17254,6 +17310,11 @@ func (f *WorkflowAssignmentHistoryFilter) WhereRejectionMetadata(p entql.BytesP)
 // WhereInvalidationMetadata applies the entql json.RawMessage predicate on the invalidation_metadata field.
 func (f *WorkflowAssignmentHistoryFilter) WhereInvalidationMetadata(p entql.BytesP) {
 	f.Where(p.Field(workflowassignmenthistory.FieldInvalidationMetadata))
+}
+
+// WhereOutcomeMetadata applies the entql json.RawMessage predicate on the outcome_metadata field.
+func (f *WorkflowAssignmentHistoryFilter) WhereOutcomeMetadata(p entql.BytesP) {
+	f.Where(p.Field(workflowassignmenthistory.FieldOutcomeMetadata))
 }
 
 // WhereDecidedAt applies the entql time.Time predicate on the decided_at field.
@@ -17926,6 +17987,46 @@ func (f *WorkflowInstanceHistoryFilter) WherePlatformID(p entql.StringP) {
 	f.Where(p.Field(workflowinstancehistory.FieldPlatformID))
 }
 
+// WhereAssessmentID applies the entql string predicate on the assessment_id field.
+func (f *WorkflowInstanceHistoryFilter) WhereAssessmentID(p entql.StringP) {
+	f.Where(p.Field(workflowinstancehistory.FieldAssessmentID))
+}
+
+// WhereAssessmentResponseID applies the entql string predicate on the assessment_response_id field.
+func (f *WorkflowInstanceHistoryFilter) WhereAssessmentResponseID(p entql.StringP) {
+	f.Where(p.Field(workflowinstancehistory.FieldAssessmentResponseID))
+}
+
+// WhereFindingID applies the entql string predicate on the finding_id field.
+func (f *WorkflowInstanceHistoryFilter) WhereFindingID(p entql.StringP) {
+	f.Where(p.Field(workflowinstancehistory.FieldFindingID))
+}
+
+// WhereIntegrationID applies the entql string predicate on the integration_id field.
+func (f *WorkflowInstanceHistoryFilter) WhereIntegrationID(p entql.StringP) {
+	f.Where(p.Field(workflowinstancehistory.FieldIntegrationID))
+}
+
+// WhereRemediationID applies the entql string predicate on the remediation_id field.
+func (f *WorkflowInstanceHistoryFilter) WhereRemediationID(p entql.StringP) {
+	f.Where(p.Field(workflowinstancehistory.FieldRemediationID))
+}
+
+// WhereRiskID applies the entql string predicate on the risk_id field.
+func (f *WorkflowInstanceHistoryFilter) WhereRiskID(p entql.StringP) {
+	f.Where(p.Field(workflowinstancehistory.FieldRiskID))
+}
+
+// WhereTaskID applies the entql string predicate on the task_id field.
+func (f *WorkflowInstanceHistoryFilter) WhereTaskID(p entql.StringP) {
+	f.Where(p.Field(workflowinstancehistory.FieldTaskID))
+}
+
+// WhereVulnerabilityID applies the entql string predicate on the vulnerability_id field.
+func (f *WorkflowInstanceHistoryFilter) WhereVulnerabilityID(p entql.StringP) {
+	f.Where(p.Field(workflowinstancehistory.FieldVulnerabilityID))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *WorkflowObjectRefHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -18094,4 +18195,29 @@ func (f *WorkflowObjectRefHistoryFilter) WhereIdentityHolderID(p entql.StringP) 
 // WherePlatformID applies the entql string predicate on the platform_id field.
 func (f *WorkflowObjectRefHistoryFilter) WherePlatformID(p entql.StringP) {
 	f.Where(p.Field(workflowobjectrefhistory.FieldPlatformID))
+}
+
+// WhereVulnerabilityID applies the entql string predicate on the vulnerability_id field.
+func (f *WorkflowObjectRefHistoryFilter) WhereVulnerabilityID(p entql.StringP) {
+	f.Where(p.Field(workflowobjectrefhistory.FieldVulnerabilityID))
+}
+
+// WhereRiskID applies the entql string predicate on the risk_id field.
+func (f *WorkflowObjectRefHistoryFilter) WhereRiskID(p entql.StringP) {
+	f.Where(p.Field(workflowobjectrefhistory.FieldRiskID))
+}
+
+// WhereAssessmentID applies the entql string predicate on the assessment_id field.
+func (f *WorkflowObjectRefHistoryFilter) WhereAssessmentID(p entql.StringP) {
+	f.Where(p.Field(workflowobjectrefhistory.FieldAssessmentID))
+}
+
+// WhereAssessmentResponseID applies the entql string predicate on the assessment_response_id field.
+func (f *WorkflowObjectRefHistoryFilter) WhereAssessmentResponseID(p entql.StringP) {
+	f.Where(p.Field(workflowobjectrefhistory.FieldAssessmentResponseID))
+}
+
+// WhereRemediationID applies the entql string predicate on the remediation_id field.
+func (f *WorkflowObjectRefHistoryFilter) WhereRemediationID(p entql.StringP) {
+	f.Where(p.Field(workflowobjectrefhistory.FieldRemediationID))
 }

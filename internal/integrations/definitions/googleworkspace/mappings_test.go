@@ -53,14 +53,14 @@ func TestGoogleWorkspaceMappingsEvalMap(t *testing.T) {
 	accountMapped, err := jsonx.ToMap(accountRaw)
 	require.NoError(t, err)
 
-	assert.Equal(t, "user-123", accountMapped["externalID"])
-	assert.Equal(t, "alice@example.com", accountMapped["canonicalEmail"])
-	assert.Equal(t, "Alice Example", accountMapped["displayName"])
-	assert.Equal(t, "Alice", accountMapped["givenName"])
-	assert.Equal(t, "Example", accountMapped["familyName"])
-	assert.Equal(t, "/Engineering", accountMapped["organizationUnit"])
+	assert.Equal(t, "user-123", accountMapped["external_id"])
+	assert.Equal(t, "alice@example.com", accountMapped["canonical_email"])
+	assert.Equal(t, "Alice Example", accountMapped["display_name"])
+	assert.Equal(t, "Alice", accountMapped["given_name"])
+	assert.Equal(t, "Example", accountMapped["family_name"])
+	assert.Equal(t, "/Engineering", accountMapped["organization_unit"])
 	assert.Equal(t, "ACTIVE", accountMapped["status"])
-	assert.Equal(t, "ENFORCED", accountMapped["mfaState"])
+	assert.Equal(t, "ENFORCED", accountMapped["mfa_state"])
 
 	groupRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, integrationgenerated.IntegrationMappingSchemaDirectoryGroup).MapExpr, types.MappingEnvelope{
 		Resource: "eng@example.com",
@@ -77,9 +77,9 @@ func TestGoogleWorkspaceMappingsEvalMap(t *testing.T) {
 	groupMapped, err := jsonx.ToMap(groupRaw)
 	require.NoError(t, err)
 
-	assert.Equal(t, "group-123", groupMapped["externalID"])
+	assert.Equal(t, "group-123", groupMapped["external_id"])
 	assert.Equal(t, "eng@example.com", groupMapped["email"])
-	assert.Equal(t, "Engineering", groupMapped["displayName"])
+	assert.Equal(t, "Engineering", groupMapped["display_name"])
 	assert.Equal(t, "DISTRIBUTION", groupMapped["classification"])
 	assert.Equal(t, "ACTIVE", groupMapped["status"])
 
@@ -97,8 +97,8 @@ func TestGoogleWorkspaceMappingsEvalMap(t *testing.T) {
 	membershipMapped, err := jsonx.ToMap(membershipRaw)
 	require.NoError(t, err)
 
-	assert.Equal(t, "alice@example.com", membershipMapped["directoryAccountID"])
-	assert.Equal(t, "eng@example.com", membershipMapped["directoryGroupID"])
+	assert.Equal(t, "alice@example.com", membershipMapped["directory_account_id"])
+	assert.Equal(t, "eng@example.com", membershipMapped["directory_group_id"])
 	assert.Equal(t, "OWNER", membershipMapped["role"])
 }
 
@@ -113,14 +113,14 @@ func TestGoogleWorkspaceMappingsFallbacks(t *testing.T) {
 	accountMapped, err := jsonx.ToMap(accountRaw)
 	require.NoError(t, err)
 
-	assert.Equal(t, "user-sparse", accountMapped["externalID"])
-	assert.Equal(t, "sparse@example.com", accountMapped["canonicalEmail"])
-	assert.Equal(t, "", accountMapped["displayName"])
-	assert.Equal(t, "", accountMapped["givenName"])
-	assert.Equal(t, "", accountMapped["familyName"])
-	assert.Equal(t, "", accountMapped["organizationUnit"])
+	assert.Equal(t, "user-sparse", accountMapped["external_id"])
+	assert.Equal(t, "sparse@example.com", accountMapped["canonical_email"])
+	assert.Equal(t, "", accountMapped["display_name"])
+	assert.Equal(t, "", accountMapped["given_name"])
+	assert.Equal(t, "", accountMapped["family_name"])
+	assert.Equal(t, "", accountMapped["organization_unit"])
 	assert.Equal(t, "ACTIVE", accountMapped["status"])
-	assert.Equal(t, "DISABLED", accountMapped["mfaState"])
+	assert.Equal(t, "DISABLED", accountMapped["mfa_state"])
 
 	membershipRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, integrationgenerated.IntegrationMappingSchemaDirectoryMembership).MapExpr, types.MappingEnvelope{
 		Resource: "eng@example.com",

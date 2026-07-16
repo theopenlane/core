@@ -42,6 +42,8 @@ const (
 	FieldRevision = "revision"
 	// FieldChanges holds the string denoting the changes field in the database.
 	FieldChanges = "changes"
+	// FieldProposedChanges holds the string denoting the proposed_changes field in the database.
+	FieldProposedChanges = "proposed_changes"
 	// FieldProposedHash holds the string denoting the proposed_hash field in the database.
 	FieldProposedHash = "proposed_hash"
 	// FieldApprovedHash holds the string denoting the approved_hash field in the database.
@@ -105,6 +107,7 @@ var Columns = []string{
 	FieldState,
 	FieldRevision,
 	FieldChanges,
+	FieldProposedChanges,
 	FieldProposedHash,
 	FieldApprovedHash,
 	FieldSubmittedAt,

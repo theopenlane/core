@@ -8,6 +8,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 )
@@ -38,7 +39,7 @@ func TestScopedRelation(t *testing.T) {
 // TestCheckSubjectScopeOrgSupport asserts an org-scoped support session may read and write org data but
 // may never delete; delete is denied at the scope rule rather than falling through to FGA
 func TestCheckSubjectScopeOrgSupport(t *testing.T) {
-	const orgID = "01JSPPRT000000000000000000"
+	var orgID = ulids.New().String()
 
 	tests := []struct {
 		name       string

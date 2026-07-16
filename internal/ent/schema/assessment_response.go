@@ -101,6 +101,7 @@ func (AssessmentResponse) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("send_attempts"),
 				entgql.Skip(entgql.SkipMutationUpdateInput, entgql.SkipMutationCreateInput),
+				entx.FieldWorkflowEligible(),
 			).
 			Default(1),
 		field.Time("email_delivered_at").
@@ -152,6 +153,7 @@ func (AssessmentResponse) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("status"),
 				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
+				entx.FieldWorkflowEligible(),
 			),
 
 		field.Time("assigned_at").
@@ -169,6 +171,7 @@ func (AssessmentResponse) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("started_at"),
 				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
+				entx.FieldWorkflowEligible(),
 			),
 		field.Time("completed_at").
 			Comment("when the user completed the assessment").
@@ -176,12 +179,14 @@ func (AssessmentResponse) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("completed_at"),
 				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
+				entx.FieldWorkflowEligible(),
 			),
 		field.Time("due_date").
 			Comment("when the assessment response is due").
 			Optional().
 			Annotations(
 				entgql.OrderField("due_date"),
+				entx.FieldWorkflowEligible(),
 			),
 		field.String("document_data_id").
 			Optional().
@@ -196,6 +201,7 @@ func (AssessmentResponse) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("is_draft"),
 				entgql.Skip(entgql.SkipMutationUpdateInput, entgql.SkipMutationCreateInput),
+				entx.FieldWorkflowEligible(),
 			),
 	}
 }
@@ -209,6 +215,7 @@ func (ar AssessmentResponse) Mixin() []ent.Mixin {
 				withParents(Assessment{}, Campaign{}, Entity{}),
 				withOrganizationOwnerFieldOnly(),
 			),
+			WorkflowApprovalMixin{},
 		},
 	}.getMixins(ar)
 }
@@ -260,6 +267,12 @@ func (ar AssessmentResponse) Edges() []ent.Edge {
 			},
 		}),
 		defaultEdgeToWithPagination(ar, VendorRiskScore{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: ar,
+			edgeSchema: WorkflowObjectRef{},
+			name:       "workflow_object_refs",
+			ref:        "assessment_response",
+		}),
 	}
 }
 

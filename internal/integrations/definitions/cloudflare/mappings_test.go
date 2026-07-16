@@ -51,21 +51,21 @@ func TestSecurityCenterInsightsMapping(t *testing.T) {
 
 	mapped := mappingtest.EvalMap(t, spec, envelope)
 
-	assert.Equal(t, "8f13fada5c4fc26f2a4d795361185c7e-security_txt_not_enabled", mapped["externalID"])
-	assert.Equal(t, "6d3decf3259345241e8984cc27982f77", mapped["externalOwnerID"])
-	assert.Equal(t, "security_txt_not_enabled", mapped["displayName"])
-	assert.Equal(t, "google.com", mapped["resourceName"])
+	assert.Equal(t, "8f13fada5c4fc26f2a4d795361185c7e-security_txt_not_enabled", mapped["external_id"])
+	assert.Equal(t, "6d3decf3259345241e8984cc27982f77", mapped["external_owner_id"])
+	assert.Equal(t, "security_txt_not_enabled", mapped["display_name"])
+	assert.Equal(t, "google.com", mapped["resource_name"])
 	assert.Equal(t, "configuration_suggestion", mapped["category"])
 	assert.Equal(t, "Low", mapped["severity"])
 	assert.Equal(t, true, mapped["open"])
-	assert.Equal(t, "active", mapped["findingStatusName"])
+	assert.Equal(t, "active", mapped["finding_status_name"])
 	assert.Equal(t, "active", mapped["state"])
-	assert.Equal(t, "2026-05-19T01:31:29.583623Z", mapped["eventTime"])
-	assert.Equal(t, "2026-04-28T01:28:27.64868Z", mapped["sourceUpdatedAt"])
-	assert.Equal(t, "", mapped["recommendedActions"])
-	assert.Equal(t, "", mapped["externalURI"])
+	assert.Equal(t, "2026-05-19T01:31:29.583623Z", mapped["event_time"])
+	assert.Equal(t, "2026-04-28T01:28:27.64868Z", mapped["source_updated_at"])
+	assert.Equal(t, "", mapped["recommended_actions"])
+	assert.Equal(t, "", mapped["external_uri"])
 	assert.DeepEqual(t, []any{"google.com"}, mapped["targets"])
-	assert.DeepEqual(t, map[string]any{"affected_endpoints": []any{"google.com"}}, mapped["targetDetails"])
+	assert.DeepEqual(t, map[string]any{"affected_endpoints": []any{"google.com"}}, mapped["target_details"])
 	assert.DeepEqual(t, []any{}, mapped["references"])
 }
 
@@ -89,9 +89,9 @@ func TestDomainRegistrationsAssetMapping(t *testing.T) {
 
 	mapped := mappingtest.EvalMap(t, spec, envelope)
 
-	assert.Equal(t, "theopenlane.io", mapped["sourceIdentifier"])
-	assert.Equal(t, "theopenlane.io", mapped["displayName"])
+	assert.Equal(t, "theopenlane.io", mapped["source_identifier"])
+	assert.Equal(t, "theopenlane.io", mapped["display_name"])
 	assert.Equal(t, "theopenlane.io", mapped["name"])
-	assert.Equal(t, "DOMAIN", mapped["assetType"])
-	assert.Equal(t, "2026-01-15T12:30:00Z", mapped["observedAt"])
+	assert.Equal(t, "DOMAIN", mapped["asset_type"])
+	assert.Equal(t, "2026-01-15T12:30:00Z", mapped["observed_at"])
 }

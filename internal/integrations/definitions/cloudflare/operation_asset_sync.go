@@ -19,13 +19,13 @@ type AssetCollect struct{}
 
 // IngestHandle adapts asset collection to the ingest operation registration boundary
 func (a AssetCollect) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(cloudflareClient, func(ctx context.Context, request types.OperationRequest, client *cf.Client) ([]types.IngestPayloadSet, error) {
+	return providerkit.WithClientRequest(cloudflareClient, func(ctx context.Context, request types.OperationRequest, client *CloudflareClient) ([]types.IngestPayloadSet, error) {
 		return a.Run(ctx, request.Credentials, client)
 	})
 }
 
 // Run collects Cloudflare domain registrations and emits asset ingest payloads
-func (AssetCollect) Run(ctx context.Context, credentials types.CredentialBindings, client *cf.Client) ([]types.IngestPayloadSet, error) {
+func (AssetCollect) Run(ctx context.Context, credentials types.CredentialBindings, client *CloudflareClient) ([]types.IngestPayloadSet, error) {
 	meta, err := resolveCredential(credentials)
 	if err != nil {
 		return nil, err
@@ -65,7 +65,7 @@ type cloudflareRegistrationsResponse struct {
 	ResultInfo pagination.CursorPaginationResultInfo `json:"result_info"`
 }
 
-func fetchRegistrarRegistrations(ctx context.Context, client *cf.Client, accountID string) ([]registrar.Registration, error) {
+func fetchRegistrarRegistrations(ctx context.Context, client *CloudflareClient, accountID string) ([]registrar.Registration, error) {
 	domains := make([]registrar.Registration, 0)
 
 	for cursor := ""; ; {

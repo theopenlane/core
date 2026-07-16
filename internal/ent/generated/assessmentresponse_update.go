@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -127,6 +128,26 @@ func (_u *AssessmentResponseUpdate) SetNillableDeletedBy(v *string) *AssessmentR
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (_u *AssessmentResponseUpdate) ClearDeletedBy() *AssessmentResponseUpdate {
 	_u.mutation.ClearDeletedBy()
+	return _u
+}
+
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *AssessmentResponseUpdate) SetWorkflowEligibleMarker(v bool) *AssessmentResponseUpdate {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *AssessmentResponseUpdate) SetNillableWorkflowEligibleMarker(v *bool) *AssessmentResponseUpdate {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *AssessmentResponseUpdate) ClearWorkflowEligibleMarker() *AssessmentResponseUpdate {
+	_u.mutation.ClearWorkflowEligibleMarker()
 	return _u
 }
 
@@ -561,6 +582,21 @@ func (_u *AssessmentResponseUpdate) AddVendorRiskScores(v ...*VendorRiskScore) *
 	return _u.AddVendorRiskScoreIDs(ids...)
 }
 
+// AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
+func (_u *AssessmentResponseUpdate) AddWorkflowObjectRefIDs(ids ...string) *AssessmentResponseUpdate {
+	_u.mutation.AddWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// AddWorkflowObjectRefs adds the "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *AssessmentResponseUpdate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *AssessmentResponseUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowObjectRefIDs(ids...)
+}
+
 // Mutation returns the AssessmentResponseMutation object of the builder.
 func (_u *AssessmentResponseUpdate) Mutation() *AssessmentResponseMutation {
 	return _u.mutation
@@ -615,6 +651,27 @@ func (_u *AssessmentResponseUpdate) RemoveVendorRiskScores(v ...*VendorRiskScore
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveVendorRiskScoreIDs(ids...)
+}
+
+// ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *AssessmentResponseUpdate) ClearWorkflowObjectRefs() *AssessmentResponseUpdate {
+	_u.mutation.ClearWorkflowObjectRefs()
+	return _u
+}
+
+// RemoveWorkflowObjectRefIDs removes the "workflow_object_refs" edge to WorkflowObjectRef entities by IDs.
+func (_u *AssessmentResponseUpdate) RemoveWorkflowObjectRefIDs(ids ...string) *AssessmentResponseUpdate {
+	_u.mutation.RemoveWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowObjectRefs removes "workflow_object_refs" edges to WorkflowObjectRef entities.
+func (_u *AssessmentResponseUpdate) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRef) *AssessmentResponseUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowObjectRefIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -730,6 +787,12 @@ func (_u *AssessmentResponseUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(assessmentresponse.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(assessmentresponse.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(assessmentresponse.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.IsTest(); ok {
 		_spec.SetField(assessmentresponse.FieldIsTest, field.TypeBool, value)
@@ -1021,6 +1084,54 @@ func (_u *AssessmentResponseUpdate) sqlSave(ctx context.Context) (_node int, err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   assessmentresponse.WorkflowObjectRefsTable,
+			Columns: []string{assessmentresponse.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   assessmentresponse.WorkflowObjectRefsTable,
+			Columns: []string{assessmentresponse.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   assessmentresponse.WorkflowObjectRefsTable,
+			Columns: []string{assessmentresponse.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.AssessmentResponse
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -1134,6 +1245,26 @@ func (_u *AssessmentResponseUpdateOne) SetNillableDeletedBy(v *string) *Assessme
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (_u *AssessmentResponseUpdateOne) ClearDeletedBy() *AssessmentResponseUpdateOne {
 	_u.mutation.ClearDeletedBy()
+	return _u
+}
+
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *AssessmentResponseUpdateOne) SetWorkflowEligibleMarker(v bool) *AssessmentResponseUpdateOne {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *AssessmentResponseUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *AssessmentResponseUpdateOne {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *AssessmentResponseUpdateOne) ClearWorkflowEligibleMarker() *AssessmentResponseUpdateOne {
+	_u.mutation.ClearWorkflowEligibleMarker()
 	return _u
 }
 
@@ -1568,6 +1699,21 @@ func (_u *AssessmentResponseUpdateOne) AddVendorRiskScores(v ...*VendorRiskScore
 	return _u.AddVendorRiskScoreIDs(ids...)
 }
 
+// AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
+func (_u *AssessmentResponseUpdateOne) AddWorkflowObjectRefIDs(ids ...string) *AssessmentResponseUpdateOne {
+	_u.mutation.AddWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// AddWorkflowObjectRefs adds the "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *AssessmentResponseUpdateOne) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *AssessmentResponseUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowObjectRefIDs(ids...)
+}
+
 // Mutation returns the AssessmentResponseMutation object of the builder.
 func (_u *AssessmentResponseUpdateOne) Mutation() *AssessmentResponseMutation {
 	return _u.mutation
@@ -1622,6 +1768,27 @@ func (_u *AssessmentResponseUpdateOne) RemoveVendorRiskScores(v ...*VendorRiskSc
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveVendorRiskScoreIDs(ids...)
+}
+
+// ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *AssessmentResponseUpdateOne) ClearWorkflowObjectRefs() *AssessmentResponseUpdateOne {
+	_u.mutation.ClearWorkflowObjectRefs()
+	return _u
+}
+
+// RemoveWorkflowObjectRefIDs removes the "workflow_object_refs" edge to WorkflowObjectRef entities by IDs.
+func (_u *AssessmentResponseUpdateOne) RemoveWorkflowObjectRefIDs(ids ...string) *AssessmentResponseUpdateOne {
+	_u.mutation.RemoveWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowObjectRefs removes "workflow_object_refs" edges to WorkflowObjectRef entities.
+func (_u *AssessmentResponseUpdateOne) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRef) *AssessmentResponseUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowObjectRefIDs(ids...)
 }
 
 // Where appends a list predicates to the AssessmentResponseUpdate builder.
@@ -1767,6 +1934,12 @@ func (_u *AssessmentResponseUpdateOne) sqlSave(ctx context.Context) (_node *Asse
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(assessmentresponse.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(assessmentresponse.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(assessmentresponse.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.IsTest(); ok {
 		_spec.SetField(assessmentresponse.FieldIsTest, field.TypeBool, value)
@@ -2053,6 +2226,54 @@ func (_u *AssessmentResponseUpdateOne) sqlSave(ctx context.Context) (_node *Asse
 			},
 		}
 		edge.Schema = _u.schemaConfig.VendorRiskScore
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   assessmentresponse.WorkflowObjectRefsTable,
+			Columns: []string{assessmentresponse.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   assessmentresponse.WorkflowObjectRefsTable,
+			Columns: []string{assessmentresponse.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   assessmentresponse.WorkflowObjectRefsTable,
+			Columns: []string{assessmentresponse.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

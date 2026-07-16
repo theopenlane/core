@@ -2069,14 +2069,14 @@ func GeneratedByPlatformIDContainsFold(v string) predicate.Scan {
 	return predicate.Scan(sql.FieldContainsFold(FieldGeneratedByPlatformID, v))
 }
 
-// VulnerabilityIdsIsNil applies the IsNil predicate on the "vulnerability_ids" field.
-func VulnerabilityIdsIsNil() predicate.Scan {
-	return predicate.Scan(sql.FieldIsNull(FieldVulnerabilityIds))
+// DiscoveredVulnerabilityIdsIsNil applies the IsNil predicate on the "discovered_vulnerability_ids" field.
+func DiscoveredVulnerabilityIdsIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldDiscoveredVulnerabilityIds))
 }
 
-// VulnerabilityIdsNotNil applies the NotNil predicate on the "vulnerability_ids" field.
-func VulnerabilityIdsNotNil() predicate.Scan {
-	return predicate.Scan(sql.FieldNotNull(FieldVulnerabilityIds))
+// DiscoveredVulnerabilityIdsNotNil applies the NotNil predicate on the "discovered_vulnerability_ids" field.
+func DiscoveredVulnerabilityIdsNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldDiscoveredVulnerabilityIds))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.

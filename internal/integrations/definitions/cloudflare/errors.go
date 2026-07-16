@@ -31,4 +31,14 @@ var (
 	ErrFindingsFetchFailed = errors.New("cloudflare: findings fetch failed")
 	// ErrAssetsFetchFailed indicates the Registrar registrations list request failed
 	ErrAssetsFetchFailed = errors.New("cloudflare: assets fetch failed")
+	// ErrRuntimeConfigDecode indicates the runtime Cloudflare config could not be decoded
+	ErrRuntimeConfigDecode = errors.New("cloudflare: runtime config decode failed")
+	// ErrRuntimeConfigInvalid indicates the runtime Cloudflare config is missing required fields
+	ErrRuntimeConfigInvalid = errors.New("cloudflare: runtime config invalid")
+	// ErrDomainScanSubmitFailed indicates the URL Scanner bulk submission request failed
+	ErrDomainScanSubmitFailed = errors.New("cloudflare: domain scan submit failed")
+	// ErrDomainScanResultFailed indicates the URL Scanner result retrieval request failed
+	ErrDomainScanResultFailed = errors.New("cloudflare: domain scan result fetch failed")
+	// ErrDomainScanTaskFailed indicates Cloudflare reported the scan task itself failed
+	ErrDomainScanTaskFailed = errors.New("cloudflare: domain scan task failed")
 )

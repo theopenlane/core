@@ -284,6 +284,26 @@ func (_u *TaskUpdate) ClearScopeID() *TaskUpdate {
 	return _u
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *TaskUpdate) SetWorkflowEligibleMarker(v bool) *TaskUpdate {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *TaskUpdate) SetNillableWorkflowEligibleMarker(v *bool) *TaskUpdate {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *TaskUpdate) ClearWorkflowEligibleMarker() *TaskUpdate {
+	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
 // SetExternalUUID sets the "external_uuid" field.
 func (_u *TaskUpdate) SetExternalUUID(v string) *TaskUpdate {
 	_u.mutation.SetExternalUUID(v)
@@ -1449,6 +1469,12 @@ func (_u *TaskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(task.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(task.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(task.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.ExternalUUID(); ok {
 		_spec.SetField(task.FieldExternalUUID, field.TypeString, value)
@@ -2866,6 +2892,26 @@ func (_u *TaskUpdateOne) ClearScopeID() *TaskUpdateOne {
 	return _u
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *TaskUpdateOne) SetWorkflowEligibleMarker(v bool) *TaskUpdateOne {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *TaskUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *TaskUpdateOne {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *TaskUpdateOne) ClearWorkflowEligibleMarker() *TaskUpdateOne {
+	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
 // SetExternalUUID sets the "external_uuid" field.
 func (_u *TaskUpdateOne) SetExternalUUID(v string) *TaskUpdateOne {
 	_u.mutation.SetExternalUUID(v)
@@ -4061,6 +4107,12 @@ func (_u *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) {
 	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(task.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(task.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(task.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.ExternalUUID(); ok {
 		_spec.SetField(task.FieldExternalUUID, field.TypeString, value)

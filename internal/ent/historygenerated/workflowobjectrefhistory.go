@@ -71,8 +71,18 @@ type WorkflowObjectRefHistory struct {
 	// Identity holder referenced by this workflow instance
 	IdentityHolderID string `json:"identity_holder_id,omitempty"`
 	// Platform referenced by this workflow instance
-	PlatformID   string `json:"platform_id,omitempty"`
-	selectValues sql.SelectValues
+	PlatformID string `json:"platform_id,omitempty"`
+	// Vulnerability referenced by this workflow instance
+	VulnerabilityID string `json:"vulnerability_id,omitempty"`
+	// Risk referenced by this workflow instance
+	RiskID string `json:"risk_id,omitempty"`
+	// Assessment referenced by this workflow instance
+	AssessmentID string `json:"assessment_id,omitempty"`
+	// Assessment response referenced by this workflow instance
+	AssessmentResponseID string `json:"assessment_response_id,omitempty"`
+	// Remediation referenced by this workflow instance
+	RemediationID string `json:"remediation_id,omitempty"`
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -82,7 +92,7 @@ func (*WorkflowObjectRefHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case workflowobjectrefhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case workflowobjectrefhistory.FieldID, workflowobjectrefhistory.FieldRef, workflowobjectrefhistory.FieldCreatedBy, workflowobjectrefhistory.FieldUpdatedBy, workflowobjectrefhistory.FieldUpdatedByImpersonator, workflowobjectrefhistory.FieldDisplayID, workflowobjectrefhistory.FieldOwnerID, workflowobjectrefhistory.FieldWorkflowInstanceID, workflowobjectrefhistory.FieldControlID, workflowobjectrefhistory.FieldTaskID, workflowobjectrefhistory.FieldInternalPolicyID, workflowobjectrefhistory.FieldFindingID, workflowobjectrefhistory.FieldDirectoryAccountID, workflowobjectrefhistory.FieldDirectoryGroupID, workflowobjectrefhistory.FieldDirectoryMembershipID, workflowobjectrefhistory.FieldEvidenceID, workflowobjectrefhistory.FieldSubcontrolID, workflowobjectrefhistory.FieldActionPlanID, workflowobjectrefhistory.FieldProcedureID, workflowobjectrefhistory.FieldCampaignID, workflowobjectrefhistory.FieldCampaignTargetID, workflowobjectrefhistory.FieldIdentityHolderID, workflowobjectrefhistory.FieldPlatformID:
+		case workflowobjectrefhistory.FieldID, workflowobjectrefhistory.FieldRef, workflowobjectrefhistory.FieldCreatedBy, workflowobjectrefhistory.FieldUpdatedBy, workflowobjectrefhistory.FieldUpdatedByImpersonator, workflowobjectrefhistory.FieldDisplayID, workflowobjectrefhistory.FieldOwnerID, workflowobjectrefhistory.FieldWorkflowInstanceID, workflowobjectrefhistory.FieldControlID, workflowobjectrefhistory.FieldTaskID, workflowobjectrefhistory.FieldInternalPolicyID, workflowobjectrefhistory.FieldFindingID, workflowobjectrefhistory.FieldDirectoryAccountID, workflowobjectrefhistory.FieldDirectoryGroupID, workflowobjectrefhistory.FieldDirectoryMembershipID, workflowobjectrefhistory.FieldEvidenceID, workflowobjectrefhistory.FieldSubcontrolID, workflowobjectrefhistory.FieldActionPlanID, workflowobjectrefhistory.FieldProcedureID, workflowobjectrefhistory.FieldCampaignID, workflowobjectrefhistory.FieldCampaignTargetID, workflowobjectrefhistory.FieldIdentityHolderID, workflowobjectrefhistory.FieldPlatformID, workflowobjectrefhistory.FieldVulnerabilityID, workflowobjectrefhistory.FieldRiskID, workflowobjectrefhistory.FieldAssessmentID, workflowobjectrefhistory.FieldAssessmentResponseID, workflowobjectrefhistory.FieldRemediationID:
 			values[i] = new(sql.NullString)
 		case workflowobjectrefhistory.FieldHistoryTime, workflowobjectrefhistory.FieldCreatedAt, workflowobjectrefhistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -264,6 +274,36 @@ func (_m *WorkflowObjectRefHistory) assignValues(columns []string, values []any)
 			} else if value.Valid {
 				_m.PlatformID = value.String
 			}
+		case workflowobjectrefhistory.FieldVulnerabilityID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field vulnerability_id", values[i])
+			} else if value.Valid {
+				_m.VulnerabilityID = value.String
+			}
+		case workflowobjectrefhistory.FieldRiskID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_id", values[i])
+			} else if value.Valid {
+				_m.RiskID = value.String
+			}
+		case workflowobjectrefhistory.FieldAssessmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assessment_id", values[i])
+			} else if value.Valid {
+				_m.AssessmentID = value.String
+			}
+		case workflowobjectrefhistory.FieldAssessmentResponseID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assessment_response_id", values[i])
+			} else if value.Valid {
+				_m.AssessmentResponseID = value.String
+			}
+		case workflowobjectrefhistory.FieldRemediationID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field remediation_id", values[i])
+			} else if value.Valid {
+				_m.RemediationID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -379,6 +419,21 @@ func (_m *WorkflowObjectRefHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("platform_id=")
 	builder.WriteString(_m.PlatformID)
+	builder.WriteString(", ")
+	builder.WriteString("vulnerability_id=")
+	builder.WriteString(_m.VulnerabilityID)
+	builder.WriteString(", ")
+	builder.WriteString("risk_id=")
+	builder.WriteString(_m.RiskID)
+	builder.WriteString(", ")
+	builder.WriteString("assessment_id=")
+	builder.WriteString(_m.AssessmentID)
+	builder.WriteString(", ")
+	builder.WriteString("assessment_response_id=")
+	builder.WriteString(_m.AssessmentResponseID)
+	builder.WriteString(", ")
+	builder.WriteString("remediation_id=")
+	builder.WriteString(_m.RemediationID)
 	builder.WriteByte(')')
 	return builder.String()
 }

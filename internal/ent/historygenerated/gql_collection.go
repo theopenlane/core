@@ -505,6 +505,11 @@ func (_q *AssessmentHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, assessmenthistory.FieldSystemInternalID)
 				fieldSeen[assessmenthistory.FieldSystemInternalID] = struct{}{}
 			}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[assessmenthistory.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, assessmenthistory.FieldWorkflowEligibleMarker)
+				fieldSeen[assessmenthistory.FieldWorkflowEligibleMarker] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[assessmenthistory.FieldName]; !ok {
 				selectedFields = append(selectedFields, assessmenthistory.FieldName)
@@ -663,6 +668,11 @@ func (_q *AssessmentResponseHistoryQuery) collectField(ctx context.Context, oneN
 			if _, ok := fieldSeen[assessmentresponsehistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, assessmentresponsehistory.FieldOwnerID)
 				fieldSeen[assessmentresponsehistory.FieldOwnerID] = struct{}{}
+			}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[assessmentresponsehistory.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, assessmentresponsehistory.FieldWorkflowEligibleMarker)
+				fieldSeen[assessmentresponsehistory.FieldWorkflowEligibleMarker] = struct{}{}
 			}
 		case "assessmentID":
 			if _, ok := fieldSeen[assessmentresponsehistory.FieldAssessmentID]; !ok {
@@ -5842,6 +5852,11 @@ func (_q *FindingHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, findinghistory.FieldFindingStatusID)
 				fieldSeen[findinghistory.FieldFindingStatusID] = struct{}{}
 			}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[findinghistory.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldWorkflowEligibleMarker)
+				fieldSeen[findinghistory.FieldWorkflowEligibleMarker] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[findinghistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, findinghistory.FieldExternalID)
@@ -10854,6 +10869,11 @@ func (_q *RemediationHistoryQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, remediationhistory.FieldScopeID)
 				fieldSeen[remediationhistory.FieldScopeID] = struct{}{}
 			}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[remediationhistory.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, remediationhistory.FieldWorkflowEligibleMarker)
+				fieldSeen[remediationhistory.FieldWorkflowEligibleMarker] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[remediationhistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, remediationhistory.FieldExternalID)
@@ -11397,6 +11417,11 @@ func (_q *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, riskhistory.FieldScopeID)
 				fieldSeen[riskhistory.FieldScopeID] = struct{}{}
 			}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[riskhistory.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldWorkflowEligibleMarker)
+				fieldSeen[riskhistory.FieldWorkflowEligibleMarker] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[riskhistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, riskhistory.FieldExternalID)
@@ -11905,10 +11930,10 @@ func (_q *ScanHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, scanhistory.FieldGeneratedByPlatformID)
 				fieldSeen[scanhistory.FieldGeneratedByPlatformID] = struct{}{}
 			}
-		case "vulnerabilityIds":
-			if _, ok := fieldSeen[scanhistory.FieldVulnerabilityIds]; !ok {
-				selectedFields = append(selectedFields, scanhistory.FieldVulnerabilityIds)
-				fieldSeen[scanhistory.FieldVulnerabilityIds] = struct{}{}
+		case "discoveredVulnerabilityIds":
+			if _, ok := fieldSeen[scanhistory.FieldDiscoveredVulnerabilityIds]; !ok {
+				selectedFields = append(selectedFields, scanhistory.FieldDiscoveredVulnerabilityIds)
+				fieldSeen[scanhistory.FieldDiscoveredVulnerabilityIds] = struct{}{}
 			}
 		case "status":
 			if _, ok := fieldSeen[scanhistory.FieldStatus]; !ok {
@@ -13143,6 +13168,11 @@ func (_q *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[taskhistory.FieldScopeID]; !ok {
 				selectedFields = append(selectedFields, taskhistory.FieldScopeID)
 				fieldSeen[taskhistory.FieldScopeID] = struct{}{}
+			}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[taskhistory.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldWorkflowEligibleMarker)
+				fieldSeen[taskhistory.FieldWorkflowEligibleMarker] = struct{}{}
 			}
 		case "externalUUID":
 			if _, ok := fieldSeen[taskhistory.FieldExternalUUID]; !ok {
@@ -15959,6 +15989,11 @@ func (_q *VulnerabilityHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, vulnerabilityhistory.FieldVulnerabilityStatusID)
 				fieldSeen[vulnerabilityhistory.FieldVulnerabilityStatusID] = struct{}{}
 			}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldWorkflowEligibleMarker)
+				fieldSeen[vulnerabilityhistory.FieldWorkflowEligibleMarker] = struct{}{}
+			}
 		case "externalOwnerID":
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldExternalOwnerID]; !ok {
 				selectedFields = append(selectedFields, vulnerabilityhistory.FieldExternalOwnerID)
@@ -16357,6 +16392,11 @@ func (_q *WorkflowAssignmentHistoryQuery) collectField(ctx context.Context, oneN
 			if _, ok := fieldSeen[workflowassignmenthistory.FieldInvalidationMetadata]; !ok {
 				selectedFields = append(selectedFields, workflowassignmenthistory.FieldInvalidationMetadata)
 				fieldSeen[workflowassignmenthistory.FieldInvalidationMetadata] = struct{}{}
+			}
+		case "outcomeMetadata":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldOutcomeMetadata]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldOutcomeMetadata)
+				fieldSeen[workflowassignmenthistory.FieldOutcomeMetadata] = struct{}{}
 			}
 		case "decidedAt":
 			if _, ok := fieldSeen[workflowassignmenthistory.FieldDecidedAt]; !ok {
@@ -17139,6 +17179,46 @@ func (_q *WorkflowInstanceHistoryQuery) collectField(ctx context.Context, oneNod
 				selectedFields = append(selectedFields, workflowinstancehistory.FieldPlatformID)
 				fieldSeen[workflowinstancehistory.FieldPlatformID] = struct{}{}
 			}
+		case "assessmentID":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldAssessmentID]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldAssessmentID)
+				fieldSeen[workflowinstancehistory.FieldAssessmentID] = struct{}{}
+			}
+		case "assessmentResponseID":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldAssessmentResponseID]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldAssessmentResponseID)
+				fieldSeen[workflowinstancehistory.FieldAssessmentResponseID] = struct{}{}
+			}
+		case "findingID":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldFindingID]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldFindingID)
+				fieldSeen[workflowinstancehistory.FieldFindingID] = struct{}{}
+			}
+		case "integrationID":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldIntegrationID)
+				fieldSeen[workflowinstancehistory.FieldIntegrationID] = struct{}{}
+			}
+		case "remediationID":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldRemediationID]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldRemediationID)
+				fieldSeen[workflowinstancehistory.FieldRemediationID] = struct{}{}
+			}
+		case "riskID":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldRiskID]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldRiskID)
+				fieldSeen[workflowinstancehistory.FieldRiskID] = struct{}{}
+			}
+		case "taskID":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldTaskID]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldTaskID)
+				fieldSeen[workflowinstancehistory.FieldTaskID] = struct{}{}
+			}
+		case "vulnerabilityID":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldVulnerabilityID]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldVulnerabilityID)
+				fieldSeen[workflowinstancehistory.FieldVulnerabilityID] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -17352,6 +17432,31 @@ func (_q *WorkflowObjectRefHistoryQuery) collectField(ctx context.Context, oneNo
 			if _, ok := fieldSeen[workflowobjectrefhistory.FieldPlatformID]; !ok {
 				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldPlatformID)
 				fieldSeen[workflowobjectrefhistory.FieldPlatformID] = struct{}{}
+			}
+		case "vulnerabilityID":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldVulnerabilityID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldVulnerabilityID)
+				fieldSeen[workflowobjectrefhistory.FieldVulnerabilityID] = struct{}{}
+			}
+		case "riskID":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldRiskID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldRiskID)
+				fieldSeen[workflowobjectrefhistory.FieldRiskID] = struct{}{}
+			}
+		case "assessmentID":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldAssessmentID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldAssessmentID)
+				fieldSeen[workflowobjectrefhistory.FieldAssessmentID] = struct{}{}
+			}
+		case "assessmentResponseID":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldAssessmentResponseID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldAssessmentResponseID)
+				fieldSeen[workflowobjectrefhistory.FieldAssessmentResponseID] = struct{}{}
+			}
+		case "remediationID":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldRemediationID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldRemediationID)
+				fieldSeen[workflowobjectrefhistory.FieldRemediationID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

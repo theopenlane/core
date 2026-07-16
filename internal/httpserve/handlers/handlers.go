@@ -126,7 +126,7 @@ type SupportAccessConfig struct {
 	// DisplayName is the display name of the virtual support identity, used for record attribution
 	DisplayName string `json:"displayname" koanf:"displayname" default:"Openlane Support"`
 	// SubjectID is the stable subject id of the virtual support identity used for created_by/updated_by
-	// attribution. It must be a valid ULID and is consistent without a backing user row
+	// attribution. It must be a valid ULID and is consistent without a backing user row. Default should match anon.SupportSubjectID
 	SubjectID string `json:"subjectid" koanf:"subjectid" default:"01JSPPRT000000000000000000"`
 	// Password is the shared password for the virtual support identity, validated against this value
 	Password string `json:"password" koanf:"password" default:"" sensitive:"true"`

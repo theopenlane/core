@@ -393,6 +393,7 @@ func init() {
 	assessmentMixinHooks6 := assessmentMixin[6].Hooks()
 	assessmentMixinHooks7 := assessmentMixin[7].Hooks()
 	assessmentMixinHooks8 := assessmentMixin[8].Hooks()
+	assessmentMixinHooks9 := assessmentMixin[9].Hooks()
 	assessmentHooks := schema.Assessment{}.Hooks()
 
 	assessment.Hooks[1] = assessmentMixinHooks0[0]
@@ -417,9 +418,11 @@ func init() {
 
 	assessment.Hooks[11] = assessmentMixinHooks8[1]
 
-	assessment.Hooks[12] = assessmentHooks[0]
+	assessment.Hooks[12] = assessmentMixinHooks9[0]
 
-	assessment.Hooks[13] = assessmentHooks[1]
+	assessment.Hooks[13] = assessmentHooks[0]
+
+	assessment.Hooks[14] = assessmentHooks[1]
 	assessmentMixinInters2 := assessmentMixin[2].Interceptors()
 	assessmentMixinInters6 := assessmentMixin[6].Interceptors()
 	assessmentInters := schema.Assessment{}.Interceptors()
@@ -437,6 +440,8 @@ func init() {
 	_ = assessmentMixinFields6
 	assessmentMixinFields8 := assessmentMixin[8].Fields()
 	_ = assessmentMixinFields8
+	assessmentMixinFields9 := assessmentMixin[9].Fields()
+	_ = assessmentMixinFields9
 	assessmentFields := schema.Assessment{}.Fields()
 	_ = assessmentFields
 	// assessmentDescCreatedAt is the schema descriptor for created_at field.
@@ -461,6 +466,10 @@ func init() {
 	assessmentDescSystemOwned := assessmentMixinFields8[0].Descriptor()
 	// assessment.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	assessment.DefaultSystemOwned = assessmentDescSystemOwned.Default.(bool)
+	// assessmentDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
+	assessmentDescWorkflowEligibleMarker := assessmentMixinFields9[0].Descriptor()
+	// assessment.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
+	assessment.DefaultWorkflowEligibleMarker = assessmentDescWorkflowEligibleMarker.Default.(bool)
 	// assessmentDescName is the schema descriptor for name field.
 	assessmentDescName := assessmentFields[0].Descriptor()
 	// assessment.NameValidator is a validator for the "name" field. It is called by the builders before save.
@@ -483,6 +492,7 @@ func init() {
 	assessmentresponseMixinHooks1 := assessmentresponseMixin[1].Hooks()
 	assessmentresponseMixinHooks2 := assessmentresponseMixin[2].Hooks()
 	assessmentresponseMixinHooks5 := assessmentresponseMixin[5].Hooks()
+	assessmentresponseMixinHooks6 := assessmentresponseMixin[6].Hooks()
 	assessmentresponseHooks := schema.AssessmentResponse{}.Hooks()
 
 	assessmentresponse.Hooks[1] = assessmentresponseMixinHooks0[0]
@@ -495,9 +505,11 @@ func init() {
 
 	assessmentresponse.Hooks[5] = assessmentresponseMixinHooks5[1]
 
-	assessmentresponse.Hooks[6] = assessmentresponseHooks[0]
+	assessmentresponse.Hooks[6] = assessmentresponseMixinHooks6[0]
 
-	assessmentresponse.Hooks[7] = assessmentresponseHooks[1]
+	assessmentresponse.Hooks[7] = assessmentresponseHooks[0]
+
+	assessmentresponse.Hooks[8] = assessmentresponseHooks[1]
 	assessmentresponseMixinInters2 := assessmentresponseMixin[2].Interceptors()
 	assessmentresponseMixinInters5 := assessmentresponseMixin[5].Interceptors()
 	assessmentresponseInters := schema.AssessmentResponse{}.Interceptors()
@@ -511,6 +523,8 @@ func init() {
 	_ = assessmentresponseMixinFields3
 	assessmentresponseMixinFields5 := assessmentresponseMixin[5].Fields()
 	_ = assessmentresponseMixinFields5
+	assessmentresponseMixinFields6 := assessmentresponseMixin[6].Fields()
+	_ = assessmentresponseMixinFields6
 	assessmentresponseFields := schema.AssessmentResponse{}.Fields()
 	_ = assessmentresponseFields
 	// assessmentresponseDescCreatedAt is the schema descriptor for created_at field.
@@ -527,6 +541,10 @@ func init() {
 	assessmentresponseDescOwnerID := assessmentresponseMixinFields5[0].Descriptor()
 	// assessmentresponse.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	assessmentresponse.OwnerIDValidator = assessmentresponseDescOwnerID.Validators[0].(func(string) error)
+	// assessmentresponseDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
+	assessmentresponseDescWorkflowEligibleMarker := assessmentresponseMixinFields6[0].Descriptor()
+	// assessmentresponse.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
+	assessmentresponse.DefaultWorkflowEligibleMarker = assessmentresponseDescWorkflowEligibleMarker.Default.(bool)
 	// assessmentresponseDescAssessmentID is the schema descriptor for assessment_id field.
 	assessmentresponseDescAssessmentID := assessmentresponseFields[0].Descriptor()
 	// assessmentresponse.AssessmentIDValidator is a validator for the "assessment_id" field. It is called by the builders before save.
@@ -3038,6 +3056,7 @@ func init() {
 	findingMixinHooks10 := findingMixin[10].Hooks()
 	findingMixinHooks11 := findingMixin[11].Hooks()
 	findingMixinHooks12 := findingMixin[12].Hooks()
+	findingMixinHooks13 := findingMixin[13].Hooks()
 	findingHooks := schema.Finding{}.Hooks()
 
 	finding.Hooks[1] = findingMixinHooks0[0]
@@ -3066,7 +3085,9 @@ func init() {
 
 	finding.Hooks[13] = findingMixinHooks12[0]
 
-	finding.Hooks[14] = findingHooks[0]
+	finding.Hooks[14] = findingMixinHooks13[0]
+
+	finding.Hooks[15] = findingHooks[0]
 	findingMixinInters2 := findingMixin[2].Interceptors()
 	findingMixinInters6 := findingMixin[6].Interceptors()
 	findingMixinInters7 := findingMixin[7].Interceptors()
@@ -3084,6 +3105,8 @@ func init() {
 	_ = findingMixinFields6
 	findingMixinFields9 := findingMixin[9].Fields()
 	_ = findingMixinFields9
+	findingMixinFields13 := findingMixin[13].Fields()
+	_ = findingMixinFields13
 	findingFields := schema.Finding{}.Fields()
 	_ = findingFields
 	// findingDescCreatedAt is the schema descriptor for created_at field.
@@ -3112,6 +3135,10 @@ func init() {
 	findingDescSystemOwned := findingMixinFields9[0].Descriptor()
 	// finding.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	finding.DefaultSystemOwned = findingDescSystemOwned.Default.(bool)
+	// findingDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
+	findingDescWorkflowEligibleMarker := findingMixinFields13[0].Descriptor()
+	// finding.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
+	finding.DefaultWorkflowEligibleMarker = findingDescWorkflowEligibleMarker.Default.(bool)
 	// findingDescCategories is the schema descriptor for categories field.
 	findingDescCategories := findingFields[8].Descriptor()
 	// finding.DefaultCategories holds the default value on creation for the categories field.
@@ -5703,6 +5730,8 @@ func init() {
 	organizationsetting.Hooks[7] = organizationsettingHooks[2]
 
 	organizationsetting.Hooks[8] = organizationsettingHooks[3]
+
+	organizationsetting.Hooks[9] = organizationsettingHooks[4]
 	organizationsettingMixinInters2 := organizationsettingMixin[2].Interceptors()
 	organizationsettingInters := schema.OrganizationSetting{}.Interceptors()
 	organizationsetting.Interceptors[0] = organizationsettingMixinInters2[0]
@@ -6402,6 +6431,7 @@ func init() {
 	remediationMixinHooks8 := remediationMixin[8].Hooks()
 	remediationMixinHooks9 := remediationMixin[9].Hooks()
 	remediationMixinHooks10 := remediationMixin[10].Hooks()
+	remediationMixinHooks11 := remediationMixin[11].Hooks()
 
 	remediation.Hooks[1] = remediationMixinHooks0[0]
 
@@ -6426,6 +6456,8 @@ func init() {
 	remediation.Hooks[11] = remediationMixinHooks9[0]
 
 	remediation.Hooks[12] = remediationMixinHooks10[0]
+
+	remediation.Hooks[13] = remediationMixinHooks11[0]
 	remediationMixinInters2 := remediationMixin[2].Interceptors()
 	remediationMixinInters6 := remediationMixin[6].Interceptors()
 	remediationMixinInters7 := remediationMixin[7].Interceptors()
@@ -6443,6 +6475,8 @@ func init() {
 	_ = remediationMixinFields6
 	remediationMixinFields8 := remediationMixin[8].Fields()
 	_ = remediationMixinFields8
+	remediationMixinFields11 := remediationMixin[11].Fields()
+	_ = remediationMixinFields11
 	remediationFields := schema.Remediation{}.Fields()
 	_ = remediationFields
 	// remediationDescCreatedAt is the schema descriptor for created_at field.
@@ -6471,6 +6505,10 @@ func init() {
 	remediationDescSystemOwned := remediationMixinFields8[0].Descriptor()
 	// remediation.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	remediation.DefaultSystemOwned = remediationDescSystemOwned.Default.(bool)
+	// remediationDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
+	remediationDescWorkflowEligibleMarker := remediationMixinFields11[0].Descriptor()
+	// remediation.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
+	remediation.DefaultWorkflowEligibleMarker = remediationDescWorkflowEligibleMarker.Default.(bool)
 	// remediationDescID is the schema descriptor for id field.
 	remediationDescID := remediationMixinFields3[0].Descriptor()
 	// remediation.DefaultID holds the default value on creation for the id field.
@@ -6595,6 +6633,7 @@ func init() {
 	riskMixinHooks9 := riskMixin[9].Hooks()
 	riskMixinHooks10 := riskMixin[10].Hooks()
 	riskMixinHooks11 := riskMixin[11].Hooks()
+	riskMixinHooks12 := riskMixin[12].Hooks()
 	riskHooks := schema.Risk{}.Hooks()
 
 	risk.Hooks[1] = riskMixinHooks0[0]
@@ -6625,13 +6664,15 @@ func init() {
 
 	risk.Hooks[14] = riskMixinHooks11[0]
 
-	risk.Hooks[15] = riskHooks[0]
+	risk.Hooks[15] = riskMixinHooks12[0]
 
-	risk.Hooks[16] = riskHooks[1]
+	risk.Hooks[16] = riskHooks[0]
 
-	risk.Hooks[17] = riskHooks[2]
+	risk.Hooks[17] = riskHooks[1]
 
-	risk.Hooks[18] = riskHooks[3]
+	risk.Hooks[18] = riskHooks[2]
+
+	risk.Hooks[19] = riskHooks[3]
 	riskMixinInters2 := riskMixin[2].Interceptors()
 	riskMixinInters6 := riskMixin[6].Interceptors()
 	risk.Interceptors[0] = riskMixinInters2[0]
@@ -6645,6 +6686,8 @@ func init() {
 	_ = riskMixinFields4
 	riskMixinFields6 := riskMixin[6].Fields()
 	_ = riskMixinFields6
+	riskMixinFields12 := riskMixin[12].Fields()
+	_ = riskMixinFields12
 	riskFields := schema.Risk{}.Fields()
 	_ = riskFields
 	// riskDescCreatedAt is the schema descriptor for created_at field.
@@ -6669,6 +6712,10 @@ func init() {
 	riskDescOwnerID := riskMixinFields6[0].Descriptor()
 	// risk.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	risk.OwnerIDValidator = riskDescOwnerID.Validators[0].(func(string) error)
+	// riskDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
+	riskDescWorkflowEligibleMarker := riskMixinFields12[0].Descriptor()
+	// risk.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
+	risk.DefaultWorkflowEligibleMarker = riskDescWorkflowEligibleMarker.Default.(bool)
 	// riskDescName is the schema descriptor for name field.
 	riskDescName := riskFields[4].Descriptor()
 	// risk.NameValidator is a validator for the "name" field. It is called by the builders before save.
@@ -6839,10 +6886,10 @@ func init() {
 	scanDescScanSchedule := scanFields[4].Descriptor()
 	// scan.ScanScheduleValidator is a validator for the "scan_schedule" field. It is called by the builders before save.
 	scan.ScanScheduleValidator = scanDescScanSchedule.Validators[0].(func(string) error)
-	// scanDescVulnerabilityIds is the schema descriptor for vulnerability_ids field.
-	scanDescVulnerabilityIds := scanFields[10].Descriptor()
-	// scan.DefaultVulnerabilityIds holds the default value on creation for the vulnerability_ids field.
-	scan.DefaultVulnerabilityIds = scanDescVulnerabilityIds.Default.([]string)
+	// scanDescDiscoveredVulnerabilityIds is the schema descriptor for discovered_vulnerability_ids field.
+	scanDescDiscoveredVulnerabilityIds := scanFields[10].Descriptor()
+	// scan.DefaultDiscoveredVulnerabilityIds holds the default value on creation for the discovered_vulnerability_ids field.
+	scan.DefaultDiscoveredVulnerabilityIds = scanDescDiscoveredVulnerabilityIds.Default.([]string)
 	// scanDescID is the schema descriptor for id field.
 	scanDescID := scanMixinFields3[0].Descriptor()
 	// scan.DefaultID holds the default value on creation for the id field.
@@ -7667,6 +7714,7 @@ func init() {
 	taskMixinHooks7 := taskMixin[7].Hooks()
 	taskMixinHooks8 := taskMixin[8].Hooks()
 	taskMixinHooks9 := taskMixin[9].Hooks()
+	taskMixinHooks10 := taskMixin[10].Hooks()
 	taskHooks := schema.Task{}.Hooks()
 
 	task.Hooks[1] = taskMixinHooks0[0]
@@ -7689,11 +7737,13 @@ func init() {
 
 	task.Hooks[10] = taskMixinHooks9[0]
 
-	task.Hooks[11] = taskHooks[0]
+	task.Hooks[11] = taskMixinHooks10[0]
 
-	task.Hooks[12] = taskHooks[1]
+	task.Hooks[12] = taskHooks[0]
 
-	task.Hooks[13] = taskHooks[2]
+	task.Hooks[13] = taskHooks[1]
+
+	task.Hooks[14] = taskHooks[2]
 	taskMixinInters2 := taskMixin[2].Interceptors()
 	taskMixinInters6 := taskMixin[6].Interceptors()
 	task.Interceptors[0] = taskMixinInters2[0]
@@ -7707,6 +7757,8 @@ func init() {
 	_ = taskMixinFields4
 	taskMixinFields6 := taskMixin[6].Fields()
 	_ = taskMixinFields6
+	taskMixinFields10 := taskMixin[10].Fields()
+	_ = taskMixinFields10
 	taskFields := schema.Task{}.Fields()
 	_ = taskFields
 	// taskDescCreatedAt is the schema descriptor for created_at field.
@@ -7731,6 +7783,10 @@ func init() {
 	taskDescOwnerID := taskMixinFields6[0].Descriptor()
 	// task.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	task.OwnerIDValidator = taskDescOwnerID.Validators[0].(func(string) error)
+	// taskDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
+	taskDescWorkflowEligibleMarker := taskMixinFields10[0].Descriptor()
+	// task.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
+	task.DefaultWorkflowEligibleMarker = taskDescWorkflowEligibleMarker.Default.(bool)
 	// taskDescTitle is the schema descriptor for title field.
 	taskDescTitle := taskFields[1].Descriptor()
 	// task.TitleValidator is a validator for the "title" field. It is called by the builders before save.
@@ -9091,6 +9147,7 @@ func init() {
 	vulnerabilityMixinHooks10 := vulnerabilityMixin[10].Hooks()
 	vulnerabilityMixinHooks11 := vulnerabilityMixin[11].Hooks()
 	vulnerabilityMixinHooks12 := vulnerabilityMixin[12].Hooks()
+	vulnerabilityMixinHooks13 := vulnerabilityMixin[13].Hooks()
 	vulnerabilityHooks := schema.Vulnerability{}.Hooks()
 
 	vulnerability.Hooks[1] = vulnerabilityMixinHooks0[0]
@@ -9121,7 +9178,9 @@ func init() {
 
 	vulnerability.Hooks[14] = vulnerabilityMixinHooks12[0]
 
-	vulnerability.Hooks[15] = vulnerabilityHooks[0]
+	vulnerability.Hooks[15] = vulnerabilityMixinHooks13[0]
+
+	vulnerability.Hooks[16] = vulnerabilityHooks[0]
 	vulnerabilityMixinInters2 := vulnerabilityMixin[2].Interceptors()
 	vulnerabilityMixinInters6 := vulnerabilityMixin[6].Interceptors()
 	vulnerability.Interceptors[0] = vulnerabilityMixinInters2[0]
@@ -9137,6 +9196,8 @@ func init() {
 	_ = vulnerabilityMixinFields6
 	vulnerabilityMixinFields9 := vulnerabilityMixin[9].Fields()
 	_ = vulnerabilityMixinFields9
+	vulnerabilityMixinFields13 := vulnerabilityMixin[13].Fields()
+	_ = vulnerabilityMixinFields13
 	vulnerabilityFields := schema.Vulnerability{}.Fields()
 	_ = vulnerabilityFields
 	// vulnerabilityDescCreatedAt is the schema descriptor for created_at field.
@@ -9165,6 +9226,10 @@ func init() {
 	vulnerabilityDescSystemOwned := vulnerabilityMixinFields9[0].Descriptor()
 	// vulnerability.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	vulnerability.DefaultSystemOwned = vulnerabilityDescSystemOwned.Default.(bool)
+	// vulnerabilityDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
+	vulnerabilityDescWorkflowEligibleMarker := vulnerabilityMixinFields13[0].Descriptor()
+	// vulnerability.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
+	vulnerability.DefaultWorkflowEligibleMarker = vulnerabilityDescWorkflowEligibleMarker.Default.(bool)
 	// vulnerabilityDescExternalID is the schema descriptor for external_id field.
 	vulnerabilityDescExternalID := vulnerabilityFields[2].Descriptor()
 	// vulnerability.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.

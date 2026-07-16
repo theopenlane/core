@@ -20,6 +20,22 @@ func (c *Client) EnrichWebhookPayload(ctx context.Context, objectType enums.Work
 		// No fields marked with WebhookPayloadField annotation
 		payload["id"] = entity.ID
 		return nil
+	case enums.WorkflowObjectTypeAssessment:
+		entity, err := c.Assessment.Get(ctx, objectID)
+		if err != nil {
+			return err
+		}
+		// No fields marked with WebhookPayloadField annotation
+		payload["id"] = entity.ID
+		return nil
+	case enums.WorkflowObjectTypeAssessmentResponse:
+		entity, err := c.AssessmentResponse.Get(ctx, objectID)
+		if err != nil {
+			return err
+		}
+		// No fields marked with WebhookPayloadField annotation
+		payload["id"] = entity.ID
+		return nil
 	case enums.WorkflowObjectTypeCampaign:
 		entity, err := c.Campaign.Get(ctx, objectID)
 		if err != nil {
@@ -47,6 +63,14 @@ func (c *Client) EnrichWebhookPayload(ctx context.Context, objectType enums.Work
 		return nil
 	case enums.WorkflowObjectTypeEvidence:
 		entity, err := c.Evidence.Get(ctx, objectID)
+		if err != nil {
+			return err
+		}
+		// No fields marked with WebhookPayloadField annotation
+		payload["id"] = entity.ID
+		return nil
+	case enums.WorkflowObjectTypeFinding:
+		entity, err := c.Finding.Get(ctx, objectID)
 		if err != nil {
 			return err
 		}
@@ -85,6 +109,22 @@ func (c *Client) EnrichWebhookPayload(ctx context.Context, objectType enums.Work
 		// No fields marked with WebhookPayloadField annotation
 		payload["id"] = entity.ID
 		return nil
+	case enums.WorkflowObjectTypeRemediation:
+		entity, err := c.Remediation.Get(ctx, objectID)
+		if err != nil {
+			return err
+		}
+		// No fields marked with WebhookPayloadField annotation
+		payload["id"] = entity.ID
+		return nil
+	case enums.WorkflowObjectTypeRisk:
+		entity, err := c.Risk.Get(ctx, objectID)
+		if err != nil {
+			return err
+		}
+		// No fields marked with WebhookPayloadField annotation
+		payload["id"] = entity.ID
+		return nil
 	case enums.WorkflowObjectTypeSubcontrol:
 		entity, err := c.Subcontrol.Get(ctx, objectID)
 		if err != nil {
@@ -92,6 +132,22 @@ func (c *Client) EnrichWebhookPayload(ctx context.Context, objectType enums.Work
 		}
 		payload["title"] = entity.Title
 		payload["status"] = entity.Status
+		return nil
+	case enums.WorkflowObjectTypeTask:
+		entity, err := c.Task.Get(ctx, objectID)
+		if err != nil {
+			return err
+		}
+		// No fields marked with WebhookPayloadField annotation
+		payload["id"] = entity.ID
+		return nil
+	case enums.WorkflowObjectTypeVulnerability:
+		entity, err := c.Vulnerability.Get(ctx, objectID)
+		if err != nil {
+			return err
+		}
+		// No fields marked with WebhookPayloadField annotation
+		payload["id"] = entity.ID
 		return nil
 	default:
 		return fmt.Errorf("unsupported object type: %s", objectType)
@@ -101,6 +157,26 @@ func (c *Client) EnrichWebhookPayload(ctx context.Context, objectType enums.Work
 // EnrichActionPlanWebhookPayload enriches a webhook payload with ActionPlan fields
 func (c *Client) EnrichActionPlanWebhookPayload(ctx context.Context, id string, payload map[string]any) error {
 	entity, err := c.ActionPlan.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+	payload["id"] = entity.ID
+	return nil
+}
+
+// EnrichAssessmentWebhookPayload enriches a webhook payload with Assessment fields
+func (c *Client) EnrichAssessmentWebhookPayload(ctx context.Context, id string, payload map[string]any) error {
+	entity, err := c.Assessment.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+	payload["id"] = entity.ID
+	return nil
+}
+
+// EnrichAssessmentResponseWebhookPayload enriches a webhook payload with AssessmentResponse fields
+func (c *Client) EnrichAssessmentResponseWebhookPayload(ctx context.Context, id string, payload map[string]any) error {
+	entity, err := c.AssessmentResponse.Get(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -150,6 +226,16 @@ func (c *Client) EnrichEvidenceWebhookPayload(ctx context.Context, id string, pa
 	return nil
 }
 
+// EnrichFindingWebhookPayload enriches a webhook payload with Finding fields
+func (c *Client) EnrichFindingWebhookPayload(ctx context.Context, id string, payload map[string]any) error {
+	entity, err := c.Finding.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+	payload["id"] = entity.ID
+	return nil
+}
+
 // EnrichIdentityHolderWebhookPayload enriches a webhook payload with IdentityHolder fields
 func (c *Client) EnrichIdentityHolderWebhookPayload(ctx context.Context, id string, payload map[string]any) error {
 	entity, err := c.IdentityHolder.Get(ctx, id)
@@ -190,6 +276,26 @@ func (c *Client) EnrichProcedureWebhookPayload(ctx context.Context, id string, p
 	return nil
 }
 
+// EnrichRemediationWebhookPayload enriches a webhook payload with Remediation fields
+func (c *Client) EnrichRemediationWebhookPayload(ctx context.Context, id string, payload map[string]any) error {
+	entity, err := c.Remediation.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+	payload["id"] = entity.ID
+	return nil
+}
+
+// EnrichRiskWebhookPayload enriches a webhook payload with Risk fields
+func (c *Client) EnrichRiskWebhookPayload(ctx context.Context, id string, payload map[string]any) error {
+	entity, err := c.Risk.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+	payload["id"] = entity.ID
+	return nil
+}
+
 // EnrichSubcontrolWebhookPayload enriches a webhook payload with Subcontrol fields
 func (c *Client) EnrichSubcontrolWebhookPayload(ctx context.Context, id string, payload map[string]any) error {
 	entity, err := c.Subcontrol.Get(ctx, id)
@@ -198,5 +304,25 @@ func (c *Client) EnrichSubcontrolWebhookPayload(ctx context.Context, id string, 
 	}
 	payload["title"] = entity.Title
 	payload["status"] = entity.Status
+	return nil
+}
+
+// EnrichTaskWebhookPayload enriches a webhook payload with Task fields
+func (c *Client) EnrichTaskWebhookPayload(ctx context.Context, id string, payload map[string]any) error {
+	entity, err := c.Task.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+	payload["id"] = entity.ID
+	return nil
+}
+
+// EnrichVulnerabilityWebhookPayload enriches a webhook payload with Vulnerability fields
+func (c *Client) EnrichVulnerabilityWebhookPayload(ctx context.Context, id string, payload map[string]any) error {
+	entity, err := c.Vulnerability.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+	payload["id"] = entity.ID
 	return nil
 }
