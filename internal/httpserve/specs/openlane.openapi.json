@@ -303,6 +303,7 @@
     },
     "schemas": {
       "AccountAccessRequest": {
+        "description": "AccountAccessRequest contains organization ID for checking access permissions",
         "properties": {
           "object_id": {
             "description": "The ID of the object to check access for",
@@ -328,6 +329,7 @@
         "type": "object"
       },
       "AccountFeaturesResponse": {
+        "description": "AccountFeaturesResponse holds the fields that are sent on a response to the `/account/features` endpoint",
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -361,6 +363,7 @@
         "type": "object"
       },
       "AccountRolesMeResponse": {
+        "description": "AccountRolesMeResponse holds the organization responsibility roles assigned to the authenticated caller.",
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -411,6 +414,7 @@
         "type": "object"
       },
       "AccountRolesOrganizationResponse": {
+        "description": "AccountRolesOrganizationResponse holds the fields that are sent on a response to the `/account/roles/organization` endpoint",
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -444,6 +448,7 @@
         "type": "object"
       },
       "AccountRolesRequest": {
+        "description": "AccountRolesRequest contains object IDs for retrieving roles associated with them",
         "properties": {
           "object_id": {
             "description": " @deprecated use ObjectIDs instead. The ID of the object to check roles for",
@@ -480,6 +485,7 @@
         "type": "object"
       },
       "DeleteIntegrationResponse": {
+        "description": "DeleteIntegrationResponse is the response for deleting an integration",
         "properties": {
           "deletedId": {
             "type": "string"
@@ -510,6 +516,7 @@
         "type": "object"
       },
       "DisconnectIntegrationRequest": {
+        "description": "DisconnectIntegrationRequest is the request payload for disconnecting an integration",
         "properties": {
           "IntegrationID": {
             "description": "Integration ID to disconnect",
@@ -520,6 +527,7 @@
         "type": "object"
       },
       "ErrorReply": {
+        "description": "Reply contains standard fields that are used for generic API responses and errors",
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -592,6 +600,7 @@
         "type": "object"
       },
       "ForgotPasswordRequest": {
+        "description": "ForgotPasswordRequest contains fields for a forgot password request",
         "properties": {
           "email": {
             "description": "The email address associated with the account to send the password reset email to",
@@ -602,6 +611,7 @@
         "type": "object"
       },
       "ForgotPasswordResponse": {
+        "description": "ForgotPasswordResponse contains fields for a forgot password response",
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -625,6 +635,7 @@
         "type": "object"
       },
       "GetQuestionnaireResponse": {
+        "description": "GetQuestionnaireResponse is the response containing the questionnaire template's JSON configuration",
         "properties": {
           "jsonconfig": {
             "additionalProperties": {},
@@ -708,6 +719,7 @@
         "type": "object"
       },
       "IntegrationProvidersResponse": {
+        "description": "IntegrationProvidersResponse is the response listing available integration definitions.",
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -719,13 +731,17 @@
           },
           "providers": {
             "items": {
+              "description": "Definition is the installable and executable integration unit",
               "properties": {
                 "clients": {
                   "items": {
+                    "description": "ClientRegistration declares one buildable client for a definition",
                     "properties": {
                       "configSchema": {},
                       "credentialRefs": {
-                        "items": {},
+                        "items": {
+                          "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition\nIt is used in registration structs, bindings, and persistence where the credential schema type is not needed"
+                        },
                         "type": "array"
                       },
                       "description": {
@@ -738,26 +754,37 @@
                 },
                 "connections": {
                   "items": {
+                    "description": "ConnectionRegistration describes one connection mode for a definition",
                     "properties": {
                       "auth": {
+                        "description": "AuthRegistration describes how one connection mode starts and completes auth",
                         "nullable": true,
                         "properties": {
-                          "credentialRef": {}
+                          "credentialRef": {
+                            "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition\nIt is used in registration structs, bindings, and persistence where the credential schema type is not needed"
+                          }
                         },
                         "type": "object"
                       },
-                      "credentialRef": {},
+                      "credentialRef": {
+                        "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition\nIt is used in registration structs, bindings, and persistence where the credential schema type is not needed"
+                      },
                       "credentialRefs": {
-                        "items": {},
+                        "items": {
+                          "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition\nIt is used in registration structs, bindings, and persistence where the credential schema type is not needed"
+                        },
                         "type": "array"
                       },
                       "description": {
                         "type": "string"
                       },
                       "disconnect": {
+                        "description": "DisconnectRegistration describes how one definition handles installation teardown",
                         "nullable": true,
                         "properties": {
-                          "credentialRef": {},
+                          "credentialRef": {
+                            "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition\nIt is used in registration structs, bindings, and persistence where the credential schema type is not needed"
+                          },
                           "description": {
                             "type": "string"
                           },
@@ -766,10 +793,12 @@
                         "type": "object"
                       },
                       "installation": {
+                        "description": "InstallationRegistration describes how one connection mode derives installation metadata",
                         "nullable": true
                       },
                       "meta": {
                         "additionalProperties": {
+                          "description": "MetaInfo is data to store for the UI to present to the user during credential setup of an integration",
                           "properties": {
                             "AllowCopy": {
                               "type": "boolean"
@@ -795,6 +824,7 @@
                 },
                 "credentialRegistrations": {
                   "items": {
+                    "description": "CredentialRegistration declares how a definition accepts credentials",
                     "properties": {
                       "description": {
                         "type": "string"
@@ -805,7 +835,9 @@
                       "recommended": {
                         "type": "boolean"
                       },
-                      "ref": {},
+                      "ref": {
+                        "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition\nIt is used in registration structs, bindings, and persistence where the credential schema type is not needed"
+                      },
                       "schema": {}
                     },
                     "type": "object"
@@ -814,11 +846,13 @@
                 },
                 "mappings": {
                   "items": {
+                    "description": "MappingRegistration declares one default mapping shipped with a definition",
                     "properties": {
                       "schema": {
                         "type": "string"
                       },
                       "spec": {
+                        "description": "MappingOverride is one mapping customization",
                         "properties": {
                           "filterExpr": {
                             "type": "string"
@@ -839,6 +873,7 @@
                 },
                 "operations": {
                   "items": {
+                    "description": "OperationRegistration declares one executable operation for a definition",
                     "properties": {
                       "configSchema": {},
                       "customerSelectable": {
@@ -853,6 +888,7 @@
                       },
                       "ingest": {
                         "items": {
+                          "description": "IngestContract declares one ingest target emitted by an operation",
                           "properties": {
                             "schema": {
                               "type": "string"
@@ -866,6 +902,7 @@
                         "type": "string"
                       },
                       "policy": {
+                        "description": "ExecutionPolicy controls synchronous execution behavior for one operation",
                         "properties": {
                           "inline": {
                             "type": "boolean"
@@ -895,6 +932,7 @@
                   "type": "array"
                 },
                 "operatorConfig": {
+                  "description": "OperatorConfigRegistration describes operator-owned configuration for a definition",
                   "nullable": true,
                   "properties": {
                     "schema": {}
@@ -902,15 +940,19 @@
                   "type": "object"
                 },
                 "runtimeIntegration": {
+                  "description": "RuntimeIntegrationRegistration is the non-generic registration stored on a Definition",
                   "nullable": true,
                   "properties": {
                     "config": {},
-                    "ref": {},
+                    "ref": {
+                      "description": "RuntimeRefID is the stable identifier for a runtime integration config, derived from the Go type name"
+                    },
                     "schema": {}
                   },
                   "type": "object"
                 },
                 "spec": {
+                  "description": "DefinitionSpec describes the catalog-visible metadata for one definition",
                   "properties": {
                     "active": {
                       "type": "boolean"
@@ -949,6 +991,7 @@
                   "type": "object"
                 },
                 "userInput": {
+                  "description": "UserInputRegistration describes installation-scoped user input",
                   "nullable": true,
                   "properties": {
                     "schema": {}
@@ -957,15 +1000,18 @@
                 },
                 "webhooks": {
                   "items": {
+                    "description": "WebhookRegistration declares one inbound webhook contract for a definition",
                     "properties": {
                       "endpointUrlTemplate": {
                         "type": "string"
                       },
                       "events": {
                         "items": {
+                          "description": "WebhookEventRegistration declares one supported inbound event for a definition webhook",
                           "properties": {
                             "ingest": {
                               "items": {
+                                "description": "IngestContract declares one ingest target emitted by an operation",
                                 "properties": {
                                   "schema": {
                                     "type": "string"
@@ -1013,6 +1059,7 @@
         "type": "object"
       },
       "InviteResponse": {
+        "description": "InviteResponse holds the fields that are sent on a response to an accepted invitation",
         "properties": {
           "access_token": {
             "description": "The access token to be used for authentication",
@@ -1076,6 +1123,7 @@
         "type": "object"
       },
       "LoginRequest": {
+        "description": "LoginRequest contains credentials for user authentication",
         "properties": {
           "password": {
             "description": "The password associated with the account",
@@ -1099,6 +1147,7 @@
         "type": "object"
       },
       "LoginResponse": {
+        "description": "LoginResponse contains authentication tokens and user information after successful login",
         "properties": {
           "access_token": {
             "description": "The access token to be used for authentication",
@@ -1148,6 +1197,7 @@
         "type": "object"
       },
       "LogoutRequest": {
+        "description": "LogoutRequest optionally carries the refresh token to revoke when it is not supplied via cookie",
         "properties": {
           "refresh_token": {
             "description": "Optional refresh token to revoke when not provided via cookie",
@@ -1157,6 +1207,7 @@
         "type": "object"
       },
       "LogoutResponse": {
+        "description": "LogoutResponse confirms the session and tokens were revoked",
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -1180,6 +1231,7 @@
         "type": "object"
       },
       "OrganizationRolesRequest": {
+        "description": "OrganizationRolesRequest contains functional roles that can be assigned to users or groups in addition to their base level org role such as member, admin, etc.",
         "properties": {
           "group_ids": {
             "description": "Group IDs to assign the role to",
@@ -1211,6 +1263,7 @@
         "type": "object"
       },
       "OrganizationRolesResponse": {
+        "description": "OrganizationRolesResponse contains the newly assigned/removed role.",
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -1308,17 +1361,21 @@
         "type": "object"
       },
       "ProductCatalogResponse": {
+        "description": "ProductCatalogResponse holds the fields that are sent on a response to the `/products` endpoint",
         "properties": {
           "addons": {
             "additionalProperties": {
+              "description": "Feature defines a purchasable module or addon feature",
               "properties": {
                 "audience": {
                   "type": "string"
                 },
                 "billing": {
+                  "description": "Billing contains one or more price options for a module or addon",
                   "properties": {
                     "prices": {
                       "items": {
+                        "description": "ItemPrice describes a single price option for a module or addon",
                         "properties": {
                           "interval": {
                             "type": "string"
@@ -1372,6 +1429,7 @@
                   "type": "string"
                 },
                 "usage": {
+                  "description": "Usage defines usage limits granted by a feature.",
                   "nullable": true,
                   "properties": {
                     "evidence_storage_gb": {
@@ -1400,14 +1458,17 @@
           },
           "modules": {
             "additionalProperties": {
+              "description": "Feature defines a purchasable module or addon feature",
               "properties": {
                 "audience": {
                   "type": "string"
                 },
                 "billing": {
+                  "description": "Billing contains one or more price options for a module or addon",
                   "properties": {
                     "prices": {
                       "items": {
+                        "description": "ItemPrice describes a single price option for a module or addon",
                         "properties": {
                           "interval": {
                             "type": "string"
@@ -1461,6 +1522,7 @@
                   "type": "string"
                 },
                 "usage": {
+                  "description": "Usage defines usage limits granted by a feature.",
                   "nullable": true,
                   "properties": {
                     "evidence_storage_gb": {
@@ -1496,6 +1558,7 @@
         "type": "object"
       },
       "RefreshRequest": {
+        "description": "RefreshRequest contains the refresh token used to obtain new access tokens",
         "properties": {
           "refresh_token": {
             "description": "The token to be used to refresh the access token after expiration",
@@ -1505,6 +1568,7 @@
         "type": "object"
       },
       "RefreshResponse": {
+        "description": "RefreshResponse contains new authentication tokens after successful refresh",
         "properties": {
           "access_token": {
             "description": "The access token to be used for authentication",
@@ -1545,6 +1609,7 @@
         "type": "object"
       },
       "RegisterRequest": {
+        "description": "RegisterRequest contains user registration information for creating new accounts",
         "properties": {
           "email": {
             "description": "The email address of the user",
@@ -1575,6 +1640,7 @@
         "type": "object"
       },
       "RegisterResponse": {
+        "description": "RegisterResponse contains authentication tokens and user information after successful registration",
         "properties": {
           "email": {
             "description": "The email address of the user",
@@ -1608,6 +1674,7 @@
         "type": "object"
       },
       "ResendQuestionnaireRequest": {
+        "description": "ResendQuestionnaireRequest contains fields for requesting a new questionnaire auth email",
         "properties": {
           "assessment_id": {
             "description": "The ID of the assessment",
@@ -1621,6 +1688,7 @@
         "type": "object"
       },
       "ResendRequest": {
+        "description": "ResendRequest contains fields for a resend email verification request to the `/resend` endpoint",
         "properties": {
           "email": {
             "description": "The email address to resend the verification email to, must match the email address on the existing account",
@@ -1630,6 +1698,7 @@
         "type": "object"
       },
       "ResendResponse": {
+        "description": "ResendResponse holds the fields that are sent on a response to the `/resend` endpoint",
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -1653,6 +1722,7 @@
         "type": "object"
       },
       "ResetPasswordRequest": {
+        "description": "ResetPasswordRequest contains user input required to reset a user's password using /password-reset endpoint",
         "properties": {
           "password": {
             "description": "The new password to be used for authentication",
@@ -1666,6 +1736,7 @@
         "type": "object"
       },
       "ResetPasswordResponse": {
+        "description": "ResetPasswordResponse is the response returned from a non-successful password reset request\non success, no content is returned (204)",
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -1785,6 +1856,7 @@
         "type": "object"
       },
       "SSOLoginResponse": {
+        "description": "SSOLoginResponse is the response for the SSO login",
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -2110,6 +2182,7 @@
         "type": "object"
       },
       "SubmitQuestionnaireRequest": {
+        "description": "SubmitQuestionnaireRequest is the request to submit questionnaire response data",
         "properties": {
           "assessment_id": {
             "type": "string"
@@ -2125,6 +2198,7 @@
         "type": "object"
       },
       "SubmitQuestionnaireResponse": {
+        "description": "SubmitQuestionnaireResponse is the response after successfully submitting questionnaire data",
         "properties": {
           "completed_at": {
             "type": "string"
@@ -2139,6 +2213,7 @@
         "type": "object"
       },
       "SwitchOrganizationRequest": {
+        "description": "SwitchOrganizationRequest contains the target organization ID being switched to for the /switch endpoint",
         "properties": {
           "target_organization_id": {
             "description": "The ID of the organization to switch to",
@@ -2149,6 +2224,7 @@
         "type": "object"
       },
       "SwitchOrganizationResponse": {
+        "description": "SwitchOrganizationResponse holds the new authentication and session information for the user for the new organization",
         "properties": {
           "access_token": {
             "description": "The access token to be used for authentication",
@@ -2195,6 +2271,7 @@
         "type": "object"
       },
       "UnsubscribeRequest": {
+        "description": "UnsubscribeRequest contains the token used to unsubscribe from communications",
         "properties": {
           "Token": {
             "description": "The token to be used to unsubscribe, token is sent via email",
@@ -2204,6 +2281,7 @@
         "type": "object"
       },
       "UnsubscribeResponse": {
+        "description": "UnsubscribeResponse holds the fields that are sent on a response to the `/unsubscribe` endpoint",
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -2455,6 +2533,7 @@
         "type": "object"
       },
       "VerifyResponse": {
+        "description": "VerifyResponse holds the fields that are sent on a response to the `/verify` endpoint",
         "properties": {
           "access_token": {
             "description": "The access token to be used for authentication",
@@ -2505,6 +2584,7 @@
         "type": "object"
       },
       "VerifySubscribeRequest": {
+        "description": "VerifySubscribeRequest contains subscription verification information",
         "properties": {
           "Token": {
             "description": "The token to be used to verify the subscription, token is sent via email",
@@ -2514,6 +2594,7 @@
         "type": "object"
       },
       "VerifySubscribeResponse": {
+        "description": "VerifySubscribeResponse holds the fields that are sent on a response to the `/subscribe/verify` endpoint",
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
