@@ -23,9 +23,7 @@ import (
 func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
 	t := suite.T()
 
-	// Create operation for SwitchHandler
-	operation := suite.createImpersonationOperation("SwitchHandler", "Switch organization context")
-	suite.registerTestHandler("POST", "switch", operation, suite.h.SwitchHandler)
+	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -83,9 +81,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
 func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforced() {
 	t := suite.T()
 
-	// Create operation for SwitchHandler
-	operation := suite.createImpersonationOperation("SwitchHandler", "Switch organization context")
-	suite.registerTestHandler("POST", "switch", operation, suite.h.SwitchHandler)
+	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -139,7 +135,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforced() {
 
 	// Should return success with NeedsTFA flag
 	assert.Equal(t, http.StatusOK, rec.Code)
-	var out models.SwitchOrganizationReply
+	var out models.SwitchOrganizationResponse
 	err := json.NewDecoder(rec.Body).Decode(&out)
 	assert.NoError(t, err)
 	assert.True(t, out.Success)
@@ -149,9 +145,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforced() {
 func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforcedUserHasTFA() {
 	t := suite.T()
 
-	// Create operation for SwitchHandler
-	operation := suite.createImpersonationOperation("SwitchHandler", "Switch organization context")
-	suite.registerTestHandler("POST", "switch", operation, suite.h.SwitchHandler)
+	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -205,7 +199,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforcedUserHasTFA() {
 
 	// Should succeed normally since user has TFA
 	assert.Equal(t, http.StatusOK, rec.Code)
-	var out models.SwitchOrganizationReply
+	var out models.SwitchOrganizationResponse
 	err := json.NewDecoder(rec.Body).Decode(&out)
 	assert.NoError(t, err)
 	assert.True(t, out.Success)

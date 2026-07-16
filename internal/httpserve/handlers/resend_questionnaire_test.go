@@ -23,8 +23,7 @@ import (
 func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("ResendQuestionnaireEmail", "Resend questionnaire authentication email")
-	suite.registerTestHandler("POST", "/questionnaire/resend", operation, suite.h.ResendQuestionnaireEmail)
+	suite.registerTestHandler("POST", "/questionnaire/resend", suite.h.ResendQuestionnaireEmail)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := privacy.DecisionContext(ec, privacy.Allow)

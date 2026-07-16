@@ -13,12 +13,26 @@ import (
 func TestNewRouter(t *testing.T) {
 	t.Parallel()
 
-	r, err := NewRouter(LogConfig{})
+	r := NewRouter(LogConfig{})
+	if r.Echo == nil {
+		t.Fatalf("router not properly initialized")
+	}
+
+	if r.OAS != nil {
+		t.Fatalf("runtime router should carry no OpenAPI state")
+	}
+}
+
+func TestNewSpecRouter(t *testing.T) {
+	t.Parallel()
+
+	r, err := NewSpecRouter(LogConfig{})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if r.Echo == nil || r.OAS == nil {
-		t.Fatalf("router not properly initialized")
+
+	if r.Echo == nil || r.OAS == nil || r.SchemaRegistry == nil {
+		t.Fatalf("spec router not properly initialized")
 	}
 }
 

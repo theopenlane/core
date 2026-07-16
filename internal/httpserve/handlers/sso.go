@@ -41,15 +41,11 @@ var ssoNonceContextKey = contextx.NewKey[nonce]()
 // SSOLoginHandler redirects the user to the organization's configured IdP for authentication
 // It sets state and nonce cookies, builds the OIDC auth URL, and issues a redirect
 // see docs/SSO.md for more details on the SSO flow
-func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, apimodels.ExampleSSOLoginRequest, rout.Reply{}, openapi.Registry)
+func (h *Handler) SSOLoginHandler(ctx echo.Context) error {
+	in, err := BindAndValidate[apimodels.SSOLoginRequest](ctx)
 	if err != nil {
 		metrics.RecordLogin(false)
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	orgID := in.OrganizationID
@@ -74,29 +70,25 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) err
 	authURL, err := h.generateSSOAuthURL(ctx, orgID)
 	if err != nil {
 		metrics.RecordLogin(false)
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
-	out := apimodels.SSOLoginReply{
+	out := apimodels.SSOLoginResponse{
 		Reply:       rout.Reply{Success: true},
 		RedirectURI: authURL,
 	}
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }
 
 // SSOInitiateHandler resolves an organization by its public slug and starts the SSO login flow, keyed by
 // the shareable /orgs/<slug_name>/sso URL the console hosts. It mirrors SSOLoginHandler: it sets the
 // state/nonce/organization_id cookies and returns the identity provider redirect URL so the console proxy
 // can mediate the flow on the UI origin, rather than redirecting straight to the provider from the API
-func (h *Handler) SSOInitiateHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, apimodels.ExampleSSOInitiateRequest, apimodels.SSOLoginReply{}, openapi.Registry)
+func (h *Handler) SSOInitiateHandler(ctx echo.Context) error {
+	in, err := BindAndValidate[apimodels.SSOInitiateRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	allowCtx := privacy.DecisionContext(ctx.Request().Context(), privacy.Allow)
@@ -106,61 +98,61 @@ func (h *Handler) SSOInitiateHandler(ctx echo.Context, openapi *OpenAPIContext) 
 		Only(allowCtx)
 	if err != nil {
 		if generated.IsNotFound(err) {
-			return h.NotFound(ctx, ErrNotFound, openapi)
+			return h.NotFound(ctx, ErrNotFound)
 		}
 
 		metrics.RecordLogin(false)
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	authURL, err := h.generateSSOAuthURL(ctx, org.ID)
 	if err != nil {
 		metrics.RecordLogin(false)
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
-	return h.Success(ctx, apimodels.SSOLoginReply{
+	return h.Success(ctx, apimodels.SSOLoginResponse{
 		Reply:       rout.Reply{Success: true},
 		RedirectURI: authURL,
-	}, openapi)
+	})
 }
 
 // SSOCallbackHandler completes the OIDC login flow after the user returns from the IdP
 // It validates state/nonce, exchanges the code for tokens, provisions the user if needed, and issues a session
-func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) error {
+func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
 
-	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, apimodels.ExampleSSOCallbackRequest, apimodels.LoginReply{}, openapi.Registry)
+	in, err := BindAndValidate[apimodels.SSOCallbackRequest](ctx)
 	if err != nil {
 		metrics.RecordLogin(false)
-		return h.InvalidInput(ctx, err, openapi)
+		return h.InvalidInput(ctx, err)
 	}
 
 	if in.OrganizationID == "" {
 		metrics.RecordLogin(false)
-		return h.BadRequest(ctx, ErrMissingField, openapi)
+		return h.BadRequest(ctx, ErrMissingField)
 	}
 
 	// Build the OIDC config for the org
 	rpCfg, err := h.oidcConfig(reqCtx, in.OrganizationID)
 	if err != nil {
 		metrics.RecordLogin(false)
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	// Validate state matches what was set in the cookie
 	stateCookie, err := sessions.GetCookie(ctx.Request(), "state")
 	if err != nil || in.State != stateCookie.Value {
 		metrics.RecordLogin(false)
-		return h.BadRequest(ctx, ErrStateMismatch, openapi)
+		return h.BadRequest(ctx, ErrStateMismatch)
 	}
 
 	// Validate nonce exists in the cookie
 	nonceCookie, err := sessions.GetCookie(ctx.Request(), "nonce")
 	if err != nil {
 		metrics.RecordLogin(false)
-		return h.BadRequest(ctx, ErrNonceMissing, openapi)
+		return h.BadRequest(ctx, ErrNonceMissing)
 	}
 
 	// attach nonce to context for OIDC token validation
@@ -169,7 +161,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 	tokens, err := rp.CodeExchange[*oidc.IDTokenClaims](nonceCtx, in.Code, rpCfg)
 	if err != nil {
 		metrics.RecordLogin(false)
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	// attach the OIDC email to the context for user provisioning
@@ -181,14 +173,14 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 		if errors.Is(err, entval.ErrEmailNotAllowed) {
 			logx.FromContext(reqCtx).Error().Err(err).Str("email", tokens.IDTokenClaims.Email).Msg("email not allowed")
 
-			return h.InvalidInput(ctx, err, openapi)
+			return h.InvalidInput(ctx, err)
 		}
 
 		metrics.RecordLogin(false)
 
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error provisioning user")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// OIDC has already verified the user's email. Marking it confirmed before session generation triggers
@@ -198,7 +190,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 			metrics.RecordLogin(false)
 			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to set SSO email as verified")
 
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
 	}
 
@@ -217,7 +209,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 		metrics.RecordLogin(false)
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to provision organization membership for sso user")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// build the OAuth session request
@@ -243,12 +235,12 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 				Str("organization_id", orgCookie.Value).
 				Msg("sso user authenticated but is not a member of the organization")
 
-			return h.Forbidden(ctx, ErrSSONoOrganizationAccess, openapi)
+			return h.Forbidden(ctx, ErrSSONoOrganizationAccess)
 		}
 
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	if tokenID, tErr := sessions.GetCookie(ctx.Request(), "token_id"); tErr == nil {
@@ -260,7 +252,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 		ssoCaller, ok := auth.CallerFromContext(userCtx)
 		if !ok || ssoCaller == nil {
 			logx.FromContext(reqCtx).Error().Msg("missing caller context for SSO token authorization")
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
 
 		ssoCaller.OrganizationIDs = []string{orgCookie.Value}
@@ -272,7 +264,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 		if aErr != nil {
 			logx.FromContext(reqCtx).Error().Err(aErr).Msg("unable to authorize token for SSO")
 
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
 
 		h.clearAuthFlowCookies(ctx.Response().Writer, "token_id", "token_type")
@@ -285,7 +277,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 		}
 	}
 
-	out := apimodels.LoginReply{
+	out := apimodels.LoginResponse{
 		Reply:      rout.Reply{Success: true},
 		TFAEnabled: entUser.Edges.Setting.IsTfaEnabled,
 		Message:    "success",
@@ -298,7 +290,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 
 		req, _ := httpsling.Request(httpsling.Get(ret.Value), httpsling.QueryParam("email", tokens.IDTokenClaims.Email))
 
-		return h.Redirect(ctx, req.URL.String(), openapi)
+		return h.Redirect(ctx, req.URL.String())
 	}
 
 	// clean up the org ID cookie after successful login
@@ -306,7 +298,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 
 	metrics.RecordLogin(true)
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }
 
 // rpConfig holds the configuration for the relying party
@@ -418,7 +410,7 @@ func (h *Handler) ssoCallbackURL() string { return h.OauthProvider.RedirectURL }
 
 // orgEnforcementsForUser checks the user's default org SSO and TFA requirements
 // Returns the org settings status which includes both SSO and TFA enforcement
-func (h *Handler) orgEnforcementsForUser(ctx context.Context, email string) *apimodels.SSOStatusReply {
+func (h *Handler) orgEnforcementsForUser(ctx context.Context, email string) *apimodels.SSOStatusResponse {
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	user, err := h.getUserByEmail(allowCtx, email)

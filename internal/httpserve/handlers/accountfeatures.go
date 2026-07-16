@@ -16,14 +16,10 @@ import (
 )
 
 // AccountFeaturesHandler lists all features the authenticated user has access to in relation to an organization
-func (h *Handler) AccountFeaturesHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, models.ExampleAccountFeaturesRequest, models.ExampleAccountFeaturesReply, openapi.Registry)
+func (h *Handler) AccountFeaturesHandler(ctx echo.Context) error {
+	in, err := BindAndValidate[models.AccountFeaturesRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -32,12 +28,12 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context, openapi *OpenAPIConte
 	if !ok || caller == nil {
 		logx.FromContext(reqCtx).Error().Msg("error getting authenticated user")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	orgID, err := h.getOrganizationID(in.ID, caller)
 	if err != nil {
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	in.ID = orgID
@@ -53,17 +49,17 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context, openapi *OpenAPIConte
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error getting features")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// sort for consistency
 	sort.Strings(features)
 
-	return h.Success(ctx, models.AccountFeaturesReply{
+	return h.Success(ctx, models.AccountFeaturesResponse{
 		Reply:          rout.Reply{Success: true},
 		Features:       features,
 		OrganizationID: in.ID,
-	}, openapi)
+	})
 }
 
 // getOrganizationID returns the organization ID to use for the request based on the input and caller

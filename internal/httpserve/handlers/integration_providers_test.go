@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
@@ -20,9 +19,7 @@ import (
 func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "ListIntegrationProviders"
-	suite.registerRouteOnce(http.MethodGet, "/v1/integrations/providers", op, suite.h.ListIntegrationProviders)
+	suite.registerRouteOnce(http.MethodGet, "/v1/integrations/providers", suite.h.ListIntegrationProviders)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{
 		configTestDefinitionBuilder(configTestProviderID, false),

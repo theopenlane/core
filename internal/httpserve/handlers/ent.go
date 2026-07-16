@@ -12,13 +12,11 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	apimodels "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
@@ -701,42 +699,6 @@ func (h *Handler) checkForEventID(ctx context.Context, id string) (bool, error) 
 	}
 
 	return exists, nil
-}
-
-func (h *Handler) getOrgByJobRunnerVerificationToken(ctx context.Context, token string) (*ent.JobRunnerRegistrationToken, error) {
-	registrationToken, err := transaction.FromContext(ctx).
-		JobRunnerRegistrationToken.Query().
-		Where(
-			jobrunnerregistrationtoken.Token(token),
-		).
-		Only(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error fetching runner registration token from database")
-
-		return nil, err
-	}
-
-	return registrationToken, nil
-}
-
-func (h *Handler) createJobRunner(ctx context.Context, token *ent.JobRunnerRegistrationToken, req apimodels.JobRunnerRegistrationRequest) error {
-	input := ent.CreateJobRunnerInput{
-		Name:    req.Name,
-		Tags:    req.Tags,
-		OwnerID: &token.OwnerID,
-	}
-
-	err := transaction.FromContext(ctx).JobRunner.Create().
-		SetInput(input).
-		SetCreatedBy(token.ID).
-		SetUpdatedBy(token.ID).
-		Exec(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("could not create job runner")
-		return err
-	}
-
-	return nil
 }
 
 // getOrganizationSettingByOrgID returns the organization setting for a given organization

@@ -3,27 +3,8 @@ package route
 import (
 	"net/http"
 
-	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
-
-// registerWebfingerHandler registers the /.well-known/webfinger handler
-func registerWebfingerHandler(router *Router) error {
-	config := Config{
-		Path:        "/.well-known/webfinger",
-		Method:      http.MethodGet,
-		Name:        "Webfinger",
-		Description: "WebFinger endpoint for federated identity",
-		Tags:        []string{"webfinger"},
-		OperationID: "Webfinger",
-		Security:    &openapi3.SecurityRequirements{},
-		Middlewares: *publicEndpoint,
-		RateLimit:   publicStaticRateLimit,
-		Handler:     router.Handler.WebfingerHandler,
-	}
-
-	// unversioned because .well-known
-	return router.AddUnversionedHandlerRoute(config)
-}
 
 // registerSSOLoginHandler starts the OIDC login flow.
 func registerSSOLoginHandler(router *Router) error {
@@ -34,7 +15,7 @@ func registerSSOLoginHandler(router *Router) error {
 		Description: "Initiate SSO login flow",
 		Tags:        []string{"sso"},
 		OperationID: "SSOLogin",
-		Security:    &openapi3.SecurityRequirements{},
+		Security:    handlers.PublicSecurity,
 		Middlewares: *unauthenticatedEndpoint,
 		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.SSOLoginHandler,
@@ -46,16 +27,17 @@ func registerSSOLoginHandler(router *Router) error {
 // registerSSOInitiateHandler is the public, shareable per-organization SSO entry point.
 func registerSSOInitiateHandler(router *Router) error {
 	config := Config{
-		Path:        "/orgs/:slug_name/sso",
-		Method:      http.MethodGet,
-		Name:        "SSOInitiate",
-		Description: "Initiate an organization's SSO flow from its shareable slug URL",
-		Tags:        []string{"sso"},
-		OperationID: "SSOInitiate",
-		Security:    &openapi3.SecurityRequirements{},
-		Middlewares: *unauthenticatedEndpoint,
-		RateLimit:   authFlowRateLimit,
-		Handler:     router.Handler.SSOInitiateHandler,
+		Path:         "/orgs/:slug_name/sso",
+		Method:       http.MethodGet,
+		Name:         "SSOInitiate",
+		Description:  "Initiate an organization's SSO flow from its shareable slug URL",
+		Tags:         []string{"Authentication"},
+		OperationID:  "SSOInitiate",
+		IncludeInOAS: true,
+		Security:     handlers.PublicSecurity,
+		Middlewares:  *unauthenticatedEndpoint,
+		RateLimit:    authFlowRateLimit,
+		Handler:      router.Handler.SSOInitiateHandler,
 	}
 
 	return router.AddV1HandlerRoute(config)
@@ -70,7 +52,7 @@ func registerSSOCallbackHandler(router *Router) error {
 		Description: "Complete SSO login flow callback",
 		Tags:        []string{"sso"},
 		OperationID: "SSOCallback",
-		Security:    &openapi3.SecurityRequirements{},
+		Security:    handlers.PublicSecurity,
 		Middlewares: *unauthenticatedEndpoint,
 		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.SSOCallbackHandler,

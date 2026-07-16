@@ -26,8 +26,7 @@ import (
 func (suite *HandlerTestSuite) TestGetQuestionnaire() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("GetQuestionnaire", "Get questionnaire template configuration")
-	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", operation, suite.h.GetQuestionnaire)
+	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := privacy.DecisionContext(ec, privacy.Allow)
@@ -173,8 +172,7 @@ func (suite *HandlerTestSuite) TestGetQuestionnaire() {
 func (suite *HandlerTestSuite) TestGetQuestionnaireNoTemplate() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("GetQuestionnaire", "Get questionnaire template configuration")
-	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", operation, suite.h.GetQuestionnaire)
+	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := privacy.DecisionContext(ec, privacy.Allow)
@@ -253,8 +251,7 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireNoTemplate() {
 func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("GetQuestionnaire", "Get questionnaire template configuration")
-	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", operation, suite.h.GetQuestionnaire)
+	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := privacy.DecisionContext(ec, privacy.Allow)
@@ -375,11 +372,8 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 func (suite *HandlerTestSuite) TestAnonymousQuestionnaireRejectsDraft() {
 	t := suite.T()
 
-	submitOp := suite.createImpersonationOperation("SubmitQuestionnaire", "Submit questionnaire response data")
-	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", submitOp, suite.h.SubmitQuestionnaire)
-
-	getOp := suite.createImpersonationOperation("GetQuestionnaire", "Get questionnaire template configuration")
-	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", getOp, suite.h.GetQuestionnaire)
+	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
+	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := privacy.DecisionContext(ec, privacy.Allow)
@@ -456,11 +450,8 @@ func (suite *HandlerTestSuite) TestAnonymousQuestionnaireRejectsDraft() {
 func (suite *HandlerTestSuite) TestIdentifiedQuestionnaireAllowsDraft() {
 	t := suite.T()
 
-	submitOp := suite.createImpersonationOperation("SubmitQuestionnaire", "Submit questionnaire response data")
-	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", submitOp, suite.h.SubmitQuestionnaire)
-
-	getOp := suite.createImpersonationOperation("GetQuestionnaire", "Get questionnaire template configuration")
-	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", getOp, suite.h.GetQuestionnaire)
+	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
+	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := privacy.DecisionContext(ec, privacy.Allow)
@@ -604,8 +595,7 @@ func (suite *HandlerTestSuite) TestIdentifiedQuestionnaireAllowsDraft() {
 func (suite *HandlerTestSuite) TestSubmitQuestionnaire() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("SubmitQuestionnaire", "Submit questionnaire response data")
-	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", operation, suite.h.SubmitQuestionnaire)
+	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := privacy.DecisionContext(ec, privacy.Allow)
@@ -800,8 +790,7 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaire() {
 func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("SubmitQuestionnaire", "Submit questionnaire response data")
-	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", operation, suite.h.SubmitQuestionnaire)
+	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := privacy.DecisionContext(ec, privacy.Allow)
@@ -931,8 +920,7 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 func (suite *HandlerTestSuite) TestSubmitQuestionnaireCaller() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("SubmitQuestionnaire", "Submit questionnaire response data")
-	suite.registerTestHandler("POST", "/questionnaire", operation, suite.h.SubmitQuestionnaire)
+	suite.registerTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
 
 	templateType := enums.Document
 	jsonConfig := map[string]any{
@@ -1091,8 +1079,7 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireCaller() {
 func (suite *HandlerTestSuite) TestSubmitQuestionnaireDraft() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("SubmitQuestionnaire", "Submit questionnaire response data")
-	suite.registerTestHandler("POST", "/questionnaire", operation, suite.h.SubmitQuestionnaire)
+	suite.registerTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := privacy.DecisionContext(ec, privacy.Allow)

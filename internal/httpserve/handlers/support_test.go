@@ -68,10 +68,8 @@ func (suite *HandlerTestSuite) createConsentingOrg(ctx context.Context) *ent.Org
 func (suite *HandlerTestSuite) TestSupportAccessLoginAndCallback() {
 	t := suite.T()
 
-	loginOp := suite.createImpersonationOperation("LoginHandler", "Login handler")
-	callbackOp := suite.createImpersonationOperation("SupportCallback", "Support callback handler")
-	suite.registerTestHandler("POST", "v1/login", loginOp, suite.h.LoginHandler)
-	suite.registerTestHandler("POST", "v1/support/callback", callbackOp, suite.h.SupportCallbackHandler)
+	suite.registerTestHandler("POST", "v1/login", suite.h.LoginHandler)
+	suite.registerTestHandler("POST", "v1/support/callback", suite.h.SupportCallbackHandler)
 
 	testCases := []struct {
 		name           string
@@ -124,7 +122,7 @@ func (suite *HandlerTestSuite) TestSupportAccessLoginAndCallback() {
 
 			require.Equal(t, http.StatusOK, loginRec.Code)
 
-			var loginOut models.LoginReply
+			var loginOut models.LoginResponse
 			require.NoError(t, json.NewDecoder(loginRec.Body).Decode(&loginOut))
 			assert.True(t, loginOut.Success)
 			assert.NotEmpty(t, loginOut.RedirectURI, "first factor should return the identity provider redirect")
@@ -154,7 +152,7 @@ func (suite *HandlerTestSuite) TestSupportAccessLoginAndCallback() {
 
 			require.Equal(t, http.StatusOK, cbRec.Code)
 
-			var cbOut models.SupportAccessReply
+			var cbOut models.SupportAccessResponse
 			require.NoError(t, json.NewDecoder(cbRec.Body).Decode(&cbOut))
 			assert.True(t, cbOut.Success)
 			assert.NotEmpty(t, cbOut.Token)
@@ -176,8 +174,7 @@ func (suite *HandlerTestSuite) TestSupportAccessLoginAndCallback() {
 func (suite *HandlerTestSuite) TestSupportAccessRejectsWrongPassword() {
 	t := suite.T()
 
-	loginOp := suite.createImpersonationOperation("LoginHandler", "Login handler")
-	suite.registerTestHandler("POST", "v1/login", loginOp, suite.h.LoginHandler)
+	suite.registerTestHandler("POST", "v1/login", suite.h.LoginHandler)
 
 	oidc := newMockOIDCServer(t)
 	defer oidc.Close()
@@ -208,8 +205,7 @@ func (suite *HandlerTestSuite) TestSupportAccessRejectsWrongPassword() {
 func (suite *HandlerTestSuite) TestSupportAccessRejectsNonConsentingOrg() {
 	t := suite.T()
 
-	loginOp := suite.createImpersonationOperation("LoginHandler", "Login handler")
-	suite.registerTestHandler("POST", "v1/login", loginOp, suite.h.LoginHandler)
+	suite.registerTestHandler("POST", "v1/login", suite.h.LoginHandler)
 
 	oidc := newMockOIDCServer(t)
 	defer oidc.Close()
@@ -253,10 +249,8 @@ func (suite *HandlerTestSuite) TestSupportAccessRejectsNonConsentingOrg() {
 func (suite *HandlerTestSuite) TestSupportAccessRejectsDomainMismatch() {
 	t := suite.T()
 
-	loginOp := suite.createImpersonationOperation("LoginHandler", "Login handler")
-	callbackOp := suite.createImpersonationOperation("SupportCallback", "Support callback handler")
-	suite.registerTestHandler("POST", "v1/login", loginOp, suite.h.LoginHandler)
-	suite.registerTestHandler("POST", "v1/support/callback", callbackOp, suite.h.SupportCallbackHandler)
+	suite.registerTestHandler("POST", "v1/login", suite.h.LoginHandler)
+	suite.registerTestHandler("POST", "v1/support/callback", suite.h.SupportCallbackHandler)
 
 	// individual from a domain that is not allowed
 	oidc := newMockOIDCServer(t,
@@ -332,10 +326,8 @@ func (suite *HandlerTestSuite) supportCallerContext(token string) context.Contex
 // supportSessionToken runs the full two-factor support login against a mock identity provider and returns
 // the issued impersonation token along with the consenting organization it targets
 func (suite *HandlerTestSuite) supportSessionToken(t *testing.T) (string, *ent.Organization) {
-	loginOp := suite.createImpersonationOperation("LoginHandler", "Login handler")
-	callbackOp := suite.createImpersonationOperation("SupportCallback", "Support callback handler")
-	suite.registerTestHandler("POST", "v1/login", loginOp, suite.h.LoginHandler)
-	suite.registerTestHandler("POST", "v1/support/callback", callbackOp, suite.h.SupportCallbackHandler)
+	suite.registerTestHandler("POST", "v1/login", suite.h.LoginHandler)
+	suite.registerTestHandler("POST", "v1/support/callback", suite.h.SupportCallbackHandler)
 
 	oidc := newMockOIDCServer(t,
 		withExpectedCode("code123"),
@@ -382,7 +374,7 @@ func (suite *HandlerTestSuite) supportSessionToken(t *testing.T) (string, *ent.O
 	suite.e.ServeHTTP(cbRec, cbReq)
 	require.Equal(t, http.StatusOK, cbRec.Code)
 
-	var cbOut models.SupportAccessReply
+	var cbOut models.SupportAccessResponse
 	require.NoError(t, json.NewDecoder(cbRec.Body).Decode(&cbOut))
 	require.NotEmpty(t, cbOut.Token)
 

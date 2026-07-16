@@ -10,7 +10,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
@@ -64,28 +63,6 @@ import (
 	_ "github.com/theopenlane/core/internal/ent/historygenerated/runtime"
 )
 
-// TestOperations consolidates all test operations for easier access
-type TestOperations struct {
-	Account struct {
-		Access   *openapi3.Operation
-		Roles    *openapi3.Operation
-		Features *openapi3.Operation
-	}
-	Auth struct {
-		Login    *openapi3.Operation
-		Register *openapi3.Operation
-		Refresh  *openapi3.Operation
-	}
-	Organization struct {
-		Switch *openapi3.Operation
-		Invite *openapi3.Operation
-	}
-	Email struct {
-		Verify *openapi3.Operation
-		Resend *openapi3.Operation
-	}
-}
-
 var (
 	// commonly used vars in tests
 	emptyResponse    = "null\n"
@@ -126,10 +103,6 @@ type HandlerTestSuite struct {
 	sharedSlackRecorder  *slackWebhookRecorder
 	registeredRoutes     map[string]struct{}
 	sharedAuthMiddleware echo.MiddlewareFunc
-
-	// OpenAPI operations for reuse in tests
-	startImpersonationOp *openapi3.Operation
-	endImpersonationOp   *openapi3.Operation
 }
 
 // TestHandlerTestSuite runs all the tests in the HandlerTestSuite
@@ -347,9 +320,8 @@ func (suite *HandlerTestSuite) SetupTest() {
 	suite.api, err = coreutils.TestClient(suite.db, suite.objectStore)
 	require.NoError(t, err)
 
-	// setup router with schema registry
-	suite.router, err = setupRouter()
-	require.NoError(t, err)
+	// setup runtime router
+	suite.router = setupRouter()
 
 	// setup handler
 	suite.h = handlerSetup(suite.db)
@@ -371,10 +343,6 @@ func (suite *HandlerTestSuite) SetupTest() {
 	}
 	suite.e.Use(transactionConfig.Middleware)
 
-	// Setup reusable OpenAPI operations
-	suite.startImpersonationOp = suite.createImpersonationOperation("StartImpersonationHandler", "Test start impersonation")
-	suite.endImpersonationOp = suite.createImpersonationOperation("EndImpersonationHandler", "Test end impersonation")
-
 	// shared auth middleware once per test to avoid JWK cache causing
 	// an infinite hanging
 	suite.sharedAuthMiddleware = suite.createAuthMiddleware()
@@ -382,24 +350,9 @@ func (suite *HandlerTestSuite) SetupTest() {
 	suite.setupTestData(ctx)
 }
 
-// createImpersonationOperation creates a reusable OpenAPI operation for impersonation tests
-func (suite *HandlerTestSuite) createImpersonationOperation(operationID, description string) *openapi3.Operation {
-	operation := openapi3.NewOperation()
-	operation.Description = description
-	operation.Tags = []string{"impersonation"}
-	operation.OperationID = operationID
-	operation.Security = handlers.BearerSecurity()
-	return operation
-}
-
 // registerAuthenticatedTestHandler registers a handler with authentication middleware for testing authenticated endpoints
-func (suite *HandlerTestSuite) registerAuthenticatedTestHandler(method, path string, operation *openapi3.Operation, handlerFunc func(echo.Context, *handlers.OpenAPIContext) error) {
-	suite.e.Add(method, path, func(c echo.Context) error {
-		return handlerFunc(c, &handlers.OpenAPIContext{
-			Operation: operation,
-			Registry:  suite.router.SchemaRegistry,
-		})
-	}, suite.sharedAuthMiddleware)
+func (suite *HandlerTestSuite) registerAuthenticatedTestHandler(method, path string, handlerFunc func(echo.Context) error) {
+	suite.e.Add(method, path, handlerFunc, suite.sharedAuthMiddleware)
 }
 
 // createAuthMiddleware creates authentication middleware for tests
@@ -422,23 +375,18 @@ func (suite *HandlerTestSuite) createAuthMiddleware() echo.MiddlewareFunc {
 	return authmiddleware.Authenticate(&conf)
 }
 
-// registerTestHandler is a helper to register test handlers with OpenAPI context
-func (suite *HandlerTestSuite) registerTestHandler(method, path string, operation *openapi3.Operation, handlerFunc func(echo.Context, *handlers.OpenAPIContext) error) {
-	suite.e.Add(method, path, func(c echo.Context) error {
-		return handlerFunc(c, &handlers.OpenAPIContext{
-			Operation: operation,
-			Registry:  suite.router.SchemaRegistry,
-		})
-	})
+// registerTestHandler is a helper to register test handlers
+func (suite *HandlerTestSuite) registerTestHandler(method, path string, handlerFunc func(echo.Context) error) {
+	suite.e.Add(method, path, handlerFunc)
 }
 
-func (suite *HandlerTestSuite) registerRouteOnce(method, path string, operation *openapi3.Operation, handlerFunc func(echo.Context, *handlers.OpenAPIContext) error) {
+func (suite *HandlerTestSuite) registerRouteOnce(method, path string, handlerFunc func(echo.Context) error) {
 	key := method + " " + path
 	if _, exists := suite.registeredRoutes[key]; exists {
 		return
 	}
 	suite.registeredRoutes[key] = struct{}{}
-	suite.registerTestHandler(method, path, operation, handlerFunc)
+	suite.registerTestHandler(method, path, handlerFunc)
 }
 
 func (suite *HandlerTestSuite) TearDownTest() {
@@ -479,8 +427,7 @@ func (suite *HandlerTestSuite) WaitForEvents() {
 	suite.galaRuntime.WaitIdle()
 }
 
-func setupRouter() (*route.Router, error) {
-	// Create a test router with proper schema registry setup
+func setupRouter() *route.Router {
 	return server.NewRouter(server.LogConfig{
 		PrettyLog: true,
 		LogLevel:  1, // INFO level

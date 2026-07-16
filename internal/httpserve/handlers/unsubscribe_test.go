@@ -20,8 +20,7 @@ import (
 func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("UnsubscribeHandler", "Unsubscribe")
-	suite.registerTestHandler("POST", "unsubscribe", operation, suite.h.UnsubscribeHandler)
+	suite.registerTestHandler("POST", "unsubscribe", suite.h.UnsubscribeHandler)
 
 	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
@@ -39,7 +38,7 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 		res := recorder.Result()
 		defer res.Body.Close()
 
-		var out *models.UnsubscribeReply
+		var out *models.UnsubscribeResponse
 		require.NoError(t, json.NewDecoder(res.Body).Decode(&out))
 
 		assert.Equal(t, http.StatusOK, recorder.Code)
@@ -124,7 +123,7 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 		res2 := recorder2.Result()
 		defer res2.Body.Close()
 
-		var out2 *models.UnsubscribeReply
+		var out2 *models.UnsubscribeResponse
 		require.NoError(t, json.NewDecoder(res2.Body).Decode(&out2))
 		assert.Contains(t, out2.Message, "already unsubscribed")
 

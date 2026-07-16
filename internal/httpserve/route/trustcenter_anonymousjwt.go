@@ -15,7 +15,7 @@ func registerTrustCenterAnonymousJWTHandler(router *Router) error {
 		Description: "Create anonymous JWT token for trust center access",
 		Tags:        []string{"trustcenter", "authentication"},
 		OperationID: "TrustCenterAnonymousJWT",
-		Security:    handlers.BasicSecurity(),
+		Security:    handlers.PublicSecurity,
 		Middlewares: *unauthenticatedEndpoint,
 		Handler:     router.Handler.CreateTrustCenterAnonymousJWT,
 	}

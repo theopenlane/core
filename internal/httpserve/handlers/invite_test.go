@@ -27,9 +27,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 	t := suite.T()
 
 	// add handler
-	// Create operation for OrganizationInviteAccept
-	operation := suite.createImpersonationOperation("OrganizationInviteAccept", "Accept organization invite")
-	suite.registerTestHandler("GET", "invite", operation, suite.h.OrganizationInviteAccept)
+	suite.registerTestHandler("GET", "invite", suite.h.OrganizationInviteAccept)
 
 	// bypass auth
 	ctx := context.Background()
@@ -118,7 +116,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *apimodels.InviteReply
+			var out *apimodels.InviteResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
@@ -197,8 +195,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_ExistingMemberNoReInvitation() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("OrganizationInviteAccept", "Accept organization invite")
-	suite.registerTestHandler("GET", "invite", operation, suite.h.OrganizationInviteAccept)
+	suite.registerTestHandler("GET", "invite", suite.h.OrganizationInviteAccept)
 
 	testUser := suite.userBuilder(context.Background())
 
@@ -256,8 +253,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_ExistingMemberNoReInvi
 func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_OwnerRoleBecomesSuperAdmin() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("OrganizationInviteAccept", "Accept organization invite")
-	suite.registerTestHandler(http.MethodGet, "invite", operation, suite.h.OrganizationInviteAccept)
+	suite.registerTestHandler(http.MethodGet, "invite", suite.h.OrganizationInviteAccept)
 
 	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 

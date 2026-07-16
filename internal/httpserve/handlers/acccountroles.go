@@ -15,9 +15,9 @@ import (
 )
 
 // AccountAccessHandler list roles a subject has access to in relation an object
-func (h *Handler) AccountRolesHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	return ProcessAuthenticatedRequest(ctx, h, openapi, models.ExampleAccountRolesRequest, models.ExampleAccountRolesReply,
-		func(reqCtx context.Context, in *models.AccountRolesRequest, caller *auth.Caller) (*models.AccountRolesReply, error) {
+func (h *Handler) AccountRolesHandler(ctx echo.Context) error {
+	return ProcessAuthenticatedRequest(ctx, h,
+		func(reqCtx context.Context, in *models.AccountRolesRequest, caller *auth.Caller) (*models.AccountRolesResponse, error) {
 			ids := in.ObjectIDs
 			if len(ids) == 0 {
 				ids = []string{in.ObjectID}
@@ -43,7 +43,7 @@ func (h *Handler) AccountRolesHandler(ctx echo.Context, openapi *OpenAPIContext)
 				objectRoles[id] = roles
 			}
 
-			resp := &models.AccountRolesReply{
+			resp := &models.AccountRolesResponse{
 				Reply:       rout.Reply{Success: true},
 				ObjectRoles: objectRoles,
 			}

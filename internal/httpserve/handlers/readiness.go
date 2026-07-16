@@ -8,8 +8,8 @@ import (
 	echo "github.com/theopenlane/echox"
 )
 
-// StatusReply returns server status
-type StatusReply struct {
+// StatusResponse returns server status
+type StatusResponse struct {
 	Status map[string]string `json:"status"`
 }
 
@@ -54,7 +54,7 @@ func (c *Checks) ReadyHandler(ctx echo.Context) error {
 		return ctx.JSON(http.StatusServiceUnavailable, status)
 	}
 
-	out := &StatusReply{
+	out := &StatusResponse{
 		Status: status,
 	}
 

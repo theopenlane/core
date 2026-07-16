@@ -32,8 +32,7 @@ const (
 func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsCookiesAndReturnsURL() {
 	t := suite.T()
 
-	op := suite.createImpersonationOperation("StartIntegrationOAuth", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, op, suite.h.StartIntegrationAuth)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -57,8 +56,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsCookiesAndReturnsURL() {
 func (suite *HandlerTestSuite) TestStartOAuthFlow_InvalidProvider() {
 	t := suite.T()
 
-	op := suite.createImpersonationOperation("StartIntegrationOAuthInvalid", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, op, suite.h.StartIntegrationAuth)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -78,8 +76,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_InvalidProvider() {
 func (suite *HandlerTestSuite) TestStartOAuthFlow_Unauthorized() {
 	t := suite.T()
 
-	op := suite.createImpersonationOperation("StartIntegrationOAuthUnauthorized", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, op, suite.h.StartIntegrationAuth)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
 	body, err := json.Marshal(handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID, CredentialRef: testAuthCredentialRef.String()})
 	assert.NoError(t, err)
@@ -96,11 +93,8 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_Unauthorized() {
 func (suite *HandlerTestSuite) TestHandleOAuthCallback_Success() {
 	t := suite.T()
 
-	startOp := suite.createImpersonationOperation("StartIntegrationOAuthCallback", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartIntegrationAuth)
-
-	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthCallback", "Handle integration OAuth callback")
-	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
+	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -142,11 +136,8 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_Success() {
 func (suite *HandlerTestSuite) TestHandleOAuthCallback_StateMismatch() {
 	t := suite.T()
 
-	startOp := suite.createImpersonationOperation("StartIntegrationOAuthStateMismatch", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartIntegrationAuth)
-
-	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthStateMismatch", "Handle integration OAuth callback")
-	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
+	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -181,8 +172,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_StateMismatch() {
 func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCookies() {
 	t := suite.T()
 
-	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthMissingCookies", "Handle integration OAuth callback")
-	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
+	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -197,8 +187,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCookies() {
 func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsDefinitionBasedRedirectCookie() {
 	t := suite.T()
 
-	op := suite.createImpersonationOperation("StartIntegrationOAuthRedirectCookie", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, op, suite.h.StartIntegrationAuth)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -214,8 +203,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsDefinitionBasedRedirectCoo
 
 	suite.h.ConsoleURL = "http://console.example/"
 
-	op := suite.createImpersonationOperation("StartIntegrationOAuthRedirectCookieTrailingSlash", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, op, suite.h.StartIntegrationAuth)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -229,8 +217,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsDefinitionBasedRedirectCoo
 func (suite *HandlerTestSuite) TestStartOAuthFlow_MissingProvider() {
 	t := suite.T()
 
-	op := suite.createImpersonationOperation("StartIntegrationOAuthMissingProvider", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, op, suite.h.StartIntegrationAuth)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -250,8 +237,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_MissingProvider() {
 func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingState() {
 	t := suite.T()
 
-	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthMissingState", "Handle integration OAuth callback")
-	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
+	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -266,11 +252,8 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingState() {
 func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCode() {
 	t := suite.T()
 
-	startOp := suite.createImpersonationOperation("StartIntegrationOAuthMissingCode", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartIntegrationAuth)
-
-	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthMissingCode", "Handle integration OAuth callback")
-	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
+	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -303,11 +286,8 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCode() {
 func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingProviderState() {
 	t := suite.T()
 
-	startOp := suite.createImpersonationOperation("StartIntegrationOAuthMissingProviderState", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartIntegrationAuth)
-
-	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthMissingProviderState", "Handle integration OAuth callback")
-	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
+	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -336,11 +316,8 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingProviderState() {
 func (suite *HandlerTestSuite) TestHandleOAuthCallback_InvalidCookieOrgID() {
 	t := suite.T()
 
-	startOp := suite.createImpersonationOperation("StartIntegrationOAuthInvalidOrg", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartIntegrationAuth)
-
-	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthInvalidOrg", "Handle integration OAuth callback")
-	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
+	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})

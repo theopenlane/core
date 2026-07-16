@@ -18,21 +18,21 @@ import (
 // ConfigureIntegrationProvider stores non-OAuth credentials for a provider definition.
 // When installation_id is provided the credentials on that installation are updated.
 // When omitted a new installation is created and its ID is returned in the response
-func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *OpenAPIContext) error {
-	payload, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, ExampleConfigureIntegrationRequest, ConfigureIntegrationResponse{}, openapiCtx.Registry)
+func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
+	payload, err := BindAndValidate[ConfigureIntegrationRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapiCtx)
+		return h.InvalidInput(ctx, err)
 	}
 
-	if isRegistrationContext(ctx) {
-		return nil
+	if h.IntegrationsRuntime == nil {
+		return h.BadRequest(ctx, ErrIntegrationsNotEnabled)
 	}
 
 	requestCtx := ctx.Request().Context()
 
 	caller, ok := auth.CallerFromContext(requestCtx)
 	if !ok || caller == nil {
-		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
+		return h.Unauthorized(ctx, auth.ErrNoAuthUser)
 	}
 
 	systemCtx := auth.WithCaller(
@@ -43,14 +43,14 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 
 	def, ok := h.IntegrationsRuntime.Registry().Definition(payload.DefinitionID)
 	if !ok || !def.Active {
-		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
+		return h.BadRequest(ctx, ErrInvalidProvider)
 	}
 
 	installationRec, isNewInstallation, err := h.IntegrationsRuntime.EnsureInstallation(requestCtx, caller.OrganizationID, payload.IntegrationID, def)
 	if err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Interface("payload", payload).Msg("failed to resolve installation")
 
-		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
+		return h.BadRequest(ctx, ErrIntegrationNotFound)
 	}
 
 	var credential *types.CredentialSet
@@ -63,7 +63,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		// do not log payload, it can contain secrets
 		logx.FromContext(requestCtx).Error().Err(err).Msg("reconcile failed")
 
-		return h.BadRequest(ctx, err, openapiCtx)
+		return h.BadRequest(ctx, err)
 	}
 
 	if len(def.CredentialRegistrations) == 0 && installationRec.Status == enums.IntegrationStatusPending {
@@ -72,7 +72,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 			Exec(requestCtx); err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to mark credential-less installation connected")
 
-			return h.BadRequest(ctx, ErrProcessingRequest, openapiCtx)
+			return h.BadRequest(ctx, ErrProcessingRequest)
 		}
 
 		installationRec.Status = enums.IntegrationStatusConnected
@@ -95,7 +95,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		if webhookErr != nil {
 			logx.FromContext(requestCtx).Error().Err(webhookErr).Str("installation_id", installationRec.ID).Str("webhook", registration.Name).Msg("failed to ensure installation webhook")
 
-			return h.BadRequest(ctx, ErrProcessingRequest, openapiCtx)
+			return h.BadRequest(ctx, ErrProcessingRequest)
 		}
 
 		if i == 0 && webhook != nil {

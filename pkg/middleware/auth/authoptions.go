@@ -56,7 +56,7 @@ type Options struct {
 
 // Reauthenticator generates new access and refresh pair given a valid refresh token.
 type Reauthenticator interface {
-	Refresh(context.Context, *api.RefreshRequest) (*api.LoginReply, error)
+	Refresh(context.Context, *api.RefreshRequest) (*api.LoginResponse, error)
 }
 
 // DefaultAuthOptions is the default auth options used by the middleware.

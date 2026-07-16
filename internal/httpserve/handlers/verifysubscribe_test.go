@@ -22,9 +22,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
 	t := suite.T()
 
 	// add handler
-	// Create operation for VerifySubscriptionHandler
-	operation := suite.createImpersonationOperation("VerifySubscriptionHandler", "Verify subscription")
-	suite.registerTestHandler("POST", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
+	suite.registerTestHandler("POST", "subscribe/verify", suite.h.VerifySubscriptionHandler)
 
 	expiredTTL := time.Now().AddDate(0, 0, -1).Format(time.RFC3339Nano)
 
@@ -82,7 +80,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *models.VerifySubscribeReply
+			var out *models.VerifySubscribeResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
@@ -113,8 +111,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
 func (suite *HandlerTestSuite) TestVerifySubscribeDoesNotResurrectUnsubscribed() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("VerifySubscriptionHandler", "Verify subscription")
-	suite.registerTestHandler("POST", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
+	suite.registerTestHandler("POST", "subscribe/verify", suite.h.VerifySubscriptionHandler)
 
 	suite.ClearTestData()
 
@@ -145,8 +142,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeDoesNotResurrectUnsubscribed()
 func (suite *HandlerTestSuite) TestVerifySubscribeTrustCenterSubscriber() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("VerifySubscriptionHandler", "Verify subscription")
-	suite.registerTestHandler("POST", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
+	suite.registerTestHandler("POST", "subscribe/verify", suite.h.VerifySubscriptionHandler)
 
 	suite.ClearTestData()
 
@@ -182,8 +178,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeTrustCenterSubscriber() {
 func (suite *HandlerTestSuite) TestVerifySubscribeUnknownToken() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("VerifySubscriptionHandler", "Verify subscription")
-	suite.registerTestHandler("POST", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
+	suite.registerTestHandler("POST", "subscribe/verify", suite.h.VerifySubscriptionHandler)
 
 	suite.ClearTestData()
 
@@ -199,8 +194,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeUnknownToken() {
 func (suite *HandlerTestSuite) TestVerifySubscribeTokenSingleUse() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("VerifySubscriptionHandler", "Verify subscription")
-	suite.registerTestHandler("POST", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
+	suite.registerTestHandler("POST", "subscribe/verify", suite.h.VerifySubscriptionHandler)
 
 	suite.ClearTestData()
 
@@ -240,8 +234,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeTokenSingleUse() {
 func (suite *HandlerTestSuite) TestVerifySubscribeTrustCenterExpiredResend() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("VerifySubscriptionHandler", "Verify subscription")
-	suite.registerTestHandler("POST", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
+	suite.registerTestHandler("POST", "subscribe/verify", suite.h.VerifySubscriptionHandler)
 
 	suite.ClearTestData()
 

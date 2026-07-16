@@ -19,14 +19,10 @@ import (
 )
 
 // VerifySubscriptionHandler is the handler for the subscription verification endpoint
-func (h *Handler) VerifySubscriptionHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleVerifySubscriptionSuccessRequest, models.ExampleVerifySubscriptionResponse, openapi.Registry)
+func (h *Handler) VerifySubscriptionHandler(ctx echo.Context) error {
+	in, err := BindAndValidate[models.VerifySubscribeRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -37,12 +33,12 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context, openapi *OpenAPICo
 	entSubscriber, err := h.getSubscriberByToken(ctxWithToken, in.Token)
 	if err != nil {
 		if generated.IsNotFound(err) {
-			return h.BadRequest(ctx, err, openapi)
+			return h.BadRequest(ctx, err)
 		}
 
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving subscriber")
 
-		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
+		return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
 	}
 
 	// scope the caller to the subscriber's owning org so the update passes the org-ownership pre-policy
@@ -56,49 +52,49 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context, openapi *OpenAPICo
 	if entSubscriber.VerifiedEmail {
 		logx.FromContext(reqCtx).Error().Err(ErrSubscriptionTokenAlreadyUsed).Msg("subscription verify token replayed")
 
-		return h.BadRequest(ctx, ErrSubscriptionTokenAlreadyUsed, openapi)
+		return h.BadRequest(ctx, ErrSubscriptionTokenAlreadyUsed)
 	}
 
 	// never resurrect an unsubscribed contact; re-subscription goes through createSubscriber
 	if entSubscriber.Unsubscribed {
 		logx.FromContext(reqCtx).Warn().Str("subscriber_id", entSubscriber.ID).Msg("verify link replayed for unsubscribed contact")
 
-		return h.BadRequest(ctx, ErrSubscriberUnsubscribed, openapi)
+		return h.BadRequest(ctx, ErrSubscriberUnsubscribed)
 	}
 
 	if err := h.verifySubscriberToken(ctxWithToken, entSubscriber); err != nil {
 		switch {
 		case errors.Is(err, ErrExpiredToken):
 			// a fresh link was already emailed; confirmation is still pending on that link
-			return h.Success(ctx, &models.VerifySubscribeReply{
+			return h.Success(ctx, &models.VerifySubscribeResponse{
 				Reply:   rout.Reply{Success: true},
 				Message: "The verification link has expired, a new one has been sent - check your inbox to confirm.",
-			}, openapi)
+			})
 		case errors.Is(err, ErrMaxAttempts):
 			logx.FromContext(reqCtx).Error().Err(err).Str("subscriber_id", entSubscriber.ID).Msg("subscriber exceeded verification attempts")
 
-			return h.BadRequest(ctx, ErrMaxAttempts, openapi)
+			return h.BadRequest(ctx, ErrMaxAttempts)
 		default:
 			logx.FromContext(reqCtx).Error().Err(err).Msg("error verifying subscriber token")
 
-			return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
+			return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
 		}
 	}
 
 	if err := h.updateSubscriberVerifiedEmail(ctxWithToken, entSubscriber.ID, generated.UpdateSubscriberInput{Email: &entSubscriber.Email}); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error updating subscriber")
 
-		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
+		return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
 	}
 
 	// the confirmation UX lives on the trust center's own domain (the page that called this endpoint), so
 	// reply inline; the caller lands the subscriber on the trust center
-	out := &models.VerifySubscribeReply{
+	out := &models.VerifySubscribeResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "Subscription confirmed, looking forward to sending you updates!",
 	}
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }
 
 // verifySubscriberToken checks the token provided by the user and verifies it against the database
