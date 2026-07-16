@@ -2,7 +2,6 @@ package slack
 
 import (
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -27,7 +26,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 func slackMappings() []types.MappingRegistration {
 	return []types.MappingRegistration{
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+			Schema: entityops.SchemaDirectoryAccount.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprDirectoryAccount,

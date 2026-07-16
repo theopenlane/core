@@ -2,7 +2,6 @@ package scim
 
 import (
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -40,21 +39,21 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr([]providerkit.CelMapEntr
 func scimMappings() []types.MappingRegistration {
 	return []types.MappingRegistration{
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+			Schema: entityops.SchemaDirectoryAccount.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprDirectoryAccount,
 			},
 		},
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+			Schema: entityops.SchemaDirectoryGroup.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprDirectoryGroup,
 			},
 		},
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+			Schema: entityops.SchemaDirectoryMembership.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprDirectoryMembership,

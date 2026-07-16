@@ -8,7 +8,7 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -16,7 +16,7 @@ import (
 
 // TestGitHubDirectoryMembershipMapping verifies team membership payloads carry the provider role through to the mapped document
 func TestGitHubDirectoryMembershipMapping(t *testing.T) {
-	spec := githubMappingSpecForSchema(t, integrationgenerated.IntegrationMappingSchemaDirectoryMembership)
+	spec := githubMappingSpecForSchema(t, entityops.SchemaDirectoryMembership.Name)
 
 	maintainerRaw, err := providerkit.EvalMap(context.Background(), spec.MapExpr, types.MappingEnvelope{
 		Resource: "acme/security",
@@ -45,7 +45,7 @@ func TestGitHubDirectoryMembershipMapping(t *testing.T) {
 
 // TestGitHubDirectoryAccountMapping verifies confirmed email aliases flow into the mapped account document
 func TestGitHubDirectoryAccountMapping(t *testing.T) {
-	spec := githubMappingSpecForSchema(t, integrationgenerated.IntegrationMappingSchemaDirectoryAccount)
+	spec := githubMappingSpecForSchema(t, entityops.SchemaDirectoryAccount.Name)
 
 	withAliasesRaw, err := providerkit.EvalMap(context.Background(), spec.MapExpr, types.MappingEnvelope{
 		Resource: "acme",

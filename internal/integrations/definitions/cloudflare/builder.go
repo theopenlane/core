@@ -5,8 +5,7 @@ import (
 	"time"
 
 	"github.com/samber/lo"
-
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -90,13 +89,13 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+							Schema: entityops.SchemaDirectoryAccount.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+							Schema: entityops.SchemaDirectoryGroup.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+							Schema: entityops.SchemaDirectoryMembership.Name,
 						},
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
@@ -115,7 +114,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) FindingsSync { return u.FindingsSync }),
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaFinding,
+							Schema: entityops.SchemaFinding.Name,
 						},
 					},
 					IngestHandle:        FindingsCollect{}.IngestHandle(),
@@ -132,7 +131,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) AssetSync { return u.AssetSync }),
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaAsset,
+							Schema: entityops.SchemaAsset.Name,
 						},
 					},
 					IngestHandle:        AssetCollect{}.IngestHandle(),

@@ -16,6 +16,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
@@ -27,7 +28,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
@@ -281,7 +281,7 @@ type mappedTransform struct {
 }
 
 var questionnaireTransformInputTypes = map[string]reflect.Type{
-	integrationgenerated.IntegrationMappingSchemaEntity: reflect.TypeOf(entgen.CreateEntityInput{}),
+	entityops.SchemaEntity.Name: reflect.TypeOf(entgen.CreateEntityInput{}),
 }
 
 func transformQuestionnaire(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest) error {
@@ -308,7 +308,7 @@ func handleEntityTransform(ctx context.Context, client *entgen.Client, req quest
 		return err
 	}
 
-	mapped, err := buildMappedTransformPayload(integrationgenerated.IntegrationMappingSchemaEntity, values, req)
+	mapped, err := buildMappedTransformPayload(entityops.SchemaEntity.Name, values, req)
 	if err != nil {
 		return err
 	}
@@ -317,7 +317,7 @@ func handleEntityTransform(ctx context.Context, client *entgen.Client, req quest
 		return err
 	}
 
-	record, err := persistTransformPayload(ctx, client, req, integrationgenerated.IntegrationMappingSchemaEntity, mapped)
+	record, err := persistTransformPayload(ctx, client, req, entityops.SchemaEntity.Name, mapped)
 	if err != nil {
 		return err
 	}
@@ -544,7 +544,7 @@ func applyTransform(value any, transform enums.TemplateProjectionTransform) (any
 }
 
 func buildMappedTransformPayload(schemaName string, values map[string]any, req questionnaireTransformRequest) (mappedTransform, error) {
-	schema, ok := integrationgenerated.IntegrationMappingSchemas[schemaName]
+	schema, ok := entityops.LookupSchema(schemaName)
 	if !ok {
 		return mappedTransform{}, &questionnaireValidationError{Message: fmt.Sprintf("unsupported transform schema %q", schemaName)}
 	}
@@ -568,14 +568,14 @@ func buildMappedTransformPayload(schemaName string, values map[string]any, req q
 		mapped.Payload[inputKey] = value
 	}
 
-	mapped.Payload[integrationgenerated.IntegrationMappingEntityOwnerID] = req.OrganizationID
-	mapped.Payload[integrationgenerated.IntegrationMappingEntityVendorMetadata] = transformMetadata(req)
+	mapped.Payload[entityops.InputKeyEntityOwnerID] = req.OrganizationID
+	mapped.Payload[entityops.InputKeyEntityVendorMetadata] = transformMetadata(req)
 
-	if _, ok := mapped.Payload[integrationgenerated.IntegrationMappingEntityExternalID]; !ok {
-		mapped.Payload[integrationgenerated.IntegrationMappingEntityExternalID] = mapped.Payload[integrationgenerated.IntegrationMappingEntityName]
+	if _, ok := mapped.Payload[entityops.InputKeyEntityExternalID]; !ok {
+		mapped.Payload[entityops.InputKeyEntityExternalID] = mapped.Payload[entityops.InputKeyEntityName]
 	}
 
-	mapped.ExternalID = strings.TrimSpace(getStringValue(mapped.Payload[integrationgenerated.IntegrationMappingEntityExternalID]))
+	mapped.ExternalID = strings.TrimSpace(getStringValue(mapped.Payload[entityops.InputKeyEntityExternalID]))
 	if mapped.ExternalID == "" {
 		return mappedTransform{}, &questionnaireValidationError{Message: "entity transform requires external_id or name"}
 	}
@@ -583,7 +583,7 @@ func buildMappedTransformPayload(schemaName string, values map[string]any, req q
 	return mapped, nil
 }
 
-func getIntegrationKey(schemaName string, schema integrationgenerated.IntegrationMappingSchema, key string) (string, bool) {
+func getIntegrationKey(schemaName string, schema *entityops.Schema, key string) (string, bool) {
 	if _, ok := schema.AllowedKeys[key]; ok {
 		return key, true
 	}
@@ -594,7 +594,7 @@ func getIntegrationKey(schemaName string, schema integrationgenerated.Integratio
 	}
 
 	for _, field := range schema.Fields {
-		if key == field.EntField || strings.EqualFold(key, field.InputKey) || normalizedKey == field.InputKey {
+		if key == field.Name || strings.EqualFold(key, field.InputKey) || normalizedKey == field.InputKey {
 			return field.InputKey, true
 		}
 	}
@@ -655,8 +655,7 @@ func persistTransformPayload(ctx context.Context, client *entgen.Client, req que
 	}, "", []integrationtypes.IngestContract{
 		{Schema: schema},
 	}, sets, operations.IngestOptions{
-		Source: integrationgenerated.IntegrationIngestSourceDirect,
-		RunID:  req.IntegrationRunID,
+		RunID: req.IntegrationRunID,
 	}); err != nil {
 		return nil, fmt.Errorf("persist transformed input: %w", err)
 	}
@@ -685,7 +684,7 @@ func questionnaireTransformDefinition() integrationtypes.Definition {
 		},
 		Mappings: []integrationtypes.MappingRegistration{
 			{
-				Schema: integrationgenerated.IntegrationMappingSchemaEntity,
+				Schema: entityops.SchemaEntity.Name,
 				Spec: integrationtypes.MappingOverride{
 					MapExpr: "",
 				},

@@ -9,11 +9,12 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -24,8 +25,10 @@ type IngestOptions struct {
 	DirectorySyncRunID string
 	// SkipDirectorySyncRunFinalization instructs the processor not to finalize the directory sync run after processing
 	SkipDirectorySyncRunFinalization bool
-	// Source identifies the mechanism that produced the ingest data (e.g. webhook, poll, manual)
-	Source integrationgenerated.IntegrationIngestSource
+	// CompleteDirectorySnapshot signals that the batch carries the provider's complete directory
+	// membership state, authorizing removal inference for memberships the batch did not confirm;
+	// partial sources (webhooks, scim, single-record pushes) leave this false
+	CompleteDirectorySnapshot bool
 	// RunID is a caller-supplied correlation identifier for the overall operation run
 	RunID string
 	// Webhook is the webhook name or identifier that triggered this ingest
@@ -38,15 +41,16 @@ type IngestOptions struct {
 	WorkflowMeta *types.WorkflowMeta
 }
 
-// IngestOptionsFromMetadata derives ingest options from execution metadata
-func IngestOptionsFromMetadata(source integrationgenerated.IntegrationIngestSource, m types.ExecutionMetadata) IngestOptions {
+// IngestOptionsFromOperationContext derives ingest options from an integration operation context
+func IngestOptionsFromOperationContext(oc gala.OperationContext) IngestOptions {
+	src := types.IntegrationSourceFrom(oc)
+
 	return IngestOptions{
-		Source:       source,
-		RunID:        m.RunID,
-		Webhook:      m.Webhook,
-		WebhookEvent: m.Event,
-		DeliveryID:   m.DeliveryID,
-		WorkflowMeta: m.Workflow,
+		RunID:        src.RunID,
+		Webhook:      src.Webhook,
+		WebhookEvent: src.Event,
+		DeliveryID:   src.DeliveryID,
+		WorkflowMeta: src.Workflow,
 	}
 }
 
@@ -68,9 +72,9 @@ type mappedIngestRecord struct {
 
 // directorySyncRunSchemas is the set of mapping schemas that require a directory sync run record
 var directorySyncRunSchemas = map[string]struct{}{
-	integrationgenerated.IntegrationMappingSchemaDirectoryAccount:    {},
-	integrationgenerated.IntegrationMappingSchemaDirectoryGroup:      {},
-	integrationgenerated.IntegrationMappingSchemaDirectoryMembership: {},
+	entityops.SchemaDirectoryAccount.Name:    {},
+	entityops.SchemaDirectoryGroup.Name:      {},
+	entityops.SchemaDirectoryMembership.Name: {},
 }
 
 // EmitPayloadSets transforms one batch of mapped payload sets and dispatches them through the appropriate ingest path
@@ -89,10 +93,14 @@ func EmitPayloadSets(ctx context.Context, ic IngestContext, operationName string
 	})
 }
 
-// ProcessPayloadSets persists one batch of mapped payload sets synchronously
+// ProcessPayloadSets persists one batch of mapped payload sets synchronously. Cross-object links are
+// resolved and injected into each create input upstream in applyPayloadSets, so persistence creates
+// each record with its edges already set
 func ProcessPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
 	return applyPayloadSets(ctx, ic, operationName, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
-		return persistMappedRecord(handleCtx, ic.DB, ic.Integration, record.Schema, record.Payload)
+		_, err := persistMappedRecord(handleCtx, ic.DB, ic.Integration, record.Schema, record.Payload)
+
+		return err
 	})
 }
 
@@ -138,11 +146,11 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 			return ErrIngestSchemaNotDeclared
 		}
 
-		if _, ok := integrationgenerated.IntegrationMappingSchemas[payloadSet.Schema]; !ok {
+		if _, ok := entityops.LookupSchema(payloadSet.Schema); !ok {
 			return ErrIngestSchemaNotFound
 		}
 
-		if payloadSet.Schema == integrationgenerated.IntegrationMappingSchemaDirectoryMembership {
+		if payloadSet.Schema == entityops.SchemaDirectoryMembership.Name {
 			membershipSetSeen = true
 		}
 
@@ -161,6 +169,26 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 				continue
 			}
 
+			// resolve the effective cross-object link rules (installation override or definition
+			// default) and inject the matched target ids into the create input, so the record is
+			// created (or emitted for async creation) with its edges already set
+			mapping, _ := findMapping(definition.Mappings, record.Schema, record.Variant)
+
+			rules := resolveInstallationLinkRules(ic.Integration, definition, operationName)
+			if len(rules) == 0 {
+				rules = mapping.Links
+			}
+
+			record.Payload, err = injectLinks(ctx, ic.DB, ic.Integration.OwnerID, rules, record.Schema, record.Payload)
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("schema", payloadSet.Schema).Str("resource", envelope.Resource).Msg("ingest link injection failed")
+
+				attempted++
+				failed++
+
+				continue
+			}
+
 			attempted++
 
 			if handleErr := handle(ctx, record); handleErr != nil {
@@ -175,10 +203,10 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 		return fmt.Errorf("%w: %d of %d records failed", ErrIngestRecordsFailed, failed, attempted)
 	}
 
-	// operation-run directory syncs carry the complete membership snapshot, so any active
-	// membership the run did not confirm was removed upstream; partial sources (scim, webhooks)
-	// and runs finalized elsewhere never authorize removal inference
-	if directorySync && membershipSetSeen && !options.SkipDirectorySyncRunFinalization && options.Source == integrationgenerated.IntegrationIngestSourceOperation {
+	// complete-snapshot directory syncs carry the full membership state, so any active membership
+	// the run did not confirm was removed upstream; partial sources (scim, webhooks) and runs
+	// finalized elsewhere never authorize removal inference
+	if directorySync && membershipSetSeen && !options.SkipDirectorySyncRunFinalization && options.CompleteDirectorySnapshot {
 		if err := markUnconfirmedDirectoryMembershipsRemoved(ctx, ic.DB, ic.Integration.ID, directorySyncRunID); err != nil {
 			return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
 		}
@@ -265,6 +293,35 @@ func resolveInstallationFilterExpr(installation *ent.Integration, definition typ
 	}
 
 	return cfg.FilterExpr, nil
+}
+
+// installationLinkConfig holds the per-installation cross-object link overrides stored in the
+// integration's client config; it mirrors the operation-scoped UserInput link rows
+type installationLinkConfig struct {
+	// Links overrides the definition's default link rules for the operation
+	Links []types.LinkRule `json:"links,omitempty"`
+}
+
+// resolveInstallationLinkRules pulls the link-rule overrides for the current operation out of the
+// installation config, mirroring resolveInstallationFilterExpr: the operation's ConfigResolver
+// extracts the operation-specific section first, otherwise it falls back to a top-level links field.
+// Returns nil when the installation supplies no override, so the caller uses the definition default
+func resolveInstallationLinkRules(installation *ent.Integration, definition types.Definition, operationName string) []types.LinkRule {
+	if operationName != "" {
+		if op, ok := lo.Find(definition.Operations, func(o types.OperationRegistration) bool { return o.Name == operationName }); ok && op.ConfigResolver != nil {
+			var cfg installationLinkConfig
+			if err := jsonx.UnmarshalIfPresent(op.ConfigResolver(installation.Config.ClientConfig), &cfg); err == nil && len(cfg.Links) > 0 {
+				return cfg.Links
+			}
+		}
+	}
+
+	var cfg installationLinkConfig
+	if err := jsonx.UnmarshalIfPresent(installation.Config.ClientConfig, &cfg); err != nil {
+		return nil
+	}
+
+	return cfg.Links
 }
 
 // envelopeIncludedByFilters evaluates the installation-level and mapping-level filter expressions against the data envelope

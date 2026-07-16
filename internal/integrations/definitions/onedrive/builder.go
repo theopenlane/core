@@ -3,7 +3,7 @@ package onedrive
 import (
 	"fmt"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -114,7 +114,7 @@ func Builder(cfg Config) registry.Builder {
 					Policy:      types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaInternalPolicy,
+							Schema: entityops.SchemaInternalPolicy.Name,
 						},
 					},
 					IngestHandle: FolderSync{}.IngestHandle(),

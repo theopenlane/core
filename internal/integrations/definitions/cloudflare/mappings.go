@@ -2,7 +2,6 @@ package cloudflare
 
 import (
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -69,35 +68,38 @@ var mapExprAsset = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 func cloudflareMappings() []types.MappingRegistration {
 	return []types.MappingRegistration{
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+			Schema: entityops.SchemaDirectoryAccount.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprDirectoryAccount,
 			},
 		},
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+			Schema: entityops.SchemaDirectoryGroup.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprDirectoryGroup,
 			},
 		},
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+			Schema: entityops.SchemaDirectoryMembership.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprDirectoryMembership,
 			},
 		},
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaFinding,
+			Schema: entityops.SchemaFinding.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprFinding,
+				Links: []types.LinkRule{
+					{TargetSchema: entityops.SchemaControl.Name, TargetField: "ref_code", SourceField: "category", SourceList: "categories"},
+				},
 			},
 		},
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaAsset,
+			Schema: entityops.SchemaAsset.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprAsset,

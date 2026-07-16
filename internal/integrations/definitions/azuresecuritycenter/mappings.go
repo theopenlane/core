@@ -2,7 +2,6 @@ package azuresecuritycenter
 
 import (
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -60,7 +59,7 @@ var mapExprSubAssessment = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 func azureSecurityCenterMappings() []types.MappingRegistration {
 	return []types.MappingRegistration{
 		{
-			Schema:  integrationgenerated.IntegrationMappingSchemaVulnerability,
+			Schema:  entityops.SchemaVulnerability.Name,
 			Variant: variantAssessment,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
@@ -68,7 +67,7 @@ func azureSecurityCenterMappings() []types.MappingRegistration {
 			},
 		},
 		{
-			Schema:  integrationgenerated.IntegrationMappingSchemaVulnerability,
+			Schema:  entityops.SchemaVulnerability.Name,
 			Variant: variantSubAssessment,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",

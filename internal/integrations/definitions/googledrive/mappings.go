@@ -2,7 +2,6 @@ package googledrive
 
 import (
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -19,7 +18,7 @@ var mapExprInternalPolicy = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 func googleDriveMappings() []types.MappingRegistration {
 	return []types.MappingRegistration{
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaInternalPolicy,
+			Schema: entityops.SchemaInternalPolicy.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprInternalPolicy,

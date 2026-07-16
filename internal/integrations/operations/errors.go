@@ -39,10 +39,18 @@ var (
 	ErrIngestPersistFailed = errors.New("integrations/operations: ingest persistence failed")
 	// ErrIngestRecordsFailed indicates one or more records in the batch failed to map or persist
 	ErrIngestRecordsFailed = errors.New("integrations/operations: ingest records failed")
+	// ErrIngestIntegrationUnresolved indicates the integration record could not be resolved for an ingest operation
+	ErrIngestIntegrationUnresolved = errors.New("integrations/operations: ingest integration unresolved")
 	// ErrOperationDisabled indicates the operation is disabled for this installation and the reconcile cycle should stop
 	ErrOperationDisabled = errors.New("integrations/operations: operation disabled")
 	// ErrExportFailed indicates the Drive file export request failed
 	ErrExportFailed = errors.New("integrations/operations: file export failed")
 	// ErrResultEncode indicates an operation result could not be serialized
 	ErrResultEncode = errors.New("integrations/operations: result encode failed")
+	// ErrLinkEdgeNotFound indicates the link edge name does not exist on the source schema
+	ErrLinkEdgeNotFound = errors.New("integrations/operations: link edge not found on source schema")
+	// ErrLinkTargetSchemaNotFound indicates the link target schema could not be resolved
+	ErrLinkTargetSchemaNotFound = errors.New("integrations/operations: link target schema not found")
+	// ErrLinkFailed indicates a link operation failed
+	ErrLinkFailed = errors.New("integrations/operations: link operation failed")
 )

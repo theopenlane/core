@@ -9,7 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/securityhub"
 	securityhubtypes "github.com/aws/aws-sdk-go-v2/service/securityhub/types"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
@@ -91,11 +91,11 @@ func (FindingsCollect) Run(ctx context.Context, c *securityhub.Client, credentia
 
 	return []types.IngestPayloadSet{
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaFinding,
+			Schema:    entityops.SchemaFinding.Name,
 			Envelopes: findingEnvelopes,
 		},
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaVulnerability,
+			Schema:    entityops.SchemaVulnerability.Name,
 			Envelopes: vulnerabilityEnvelopes,
 		},
 	}, nil

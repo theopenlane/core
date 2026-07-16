@@ -5,7 +5,6 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
@@ -25,7 +24,7 @@ type IngestContext struct {
 
 // WebhookEnvelope is the durable payload emitted for one inbound integration webhook event
 type WebhookEnvelope struct {
-	types.ExecutionMetadata
+	gala.OperationContext
 	// Payload is the raw webhook request body
 	Payload json.RawMessage `json:"payload"`
 	// Headers contains the inbound HTTP request headers
@@ -34,7 +33,7 @@ type WebhookEnvelope struct {
 
 // Envelope is the payload emitted to the operation topic
 type Envelope struct {
-	types.ExecutionMetadata
+	gala.OperationContext
 	// Config is the operation configuration payload
 	Config json.RawMessage `json:"config,omitempty"`
 	// ForceClientRebuild requests client cache bypass

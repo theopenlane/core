@@ -2,7 +2,6 @@ package awssecurityhub
 
 import (
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -88,21 +87,21 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr([]providerkit.CelMapEntr
 func awsIamMappings() []types.MappingRegistration {
 	return []types.MappingRegistration{
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+			Schema: entityops.SchemaDirectoryAccount.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprDirectoryAccount,
 			},
 		},
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+			Schema: entityops.SchemaDirectoryGroup.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprDirectoryGroup,
 			},
 		},
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+			Schema: entityops.SchemaDirectoryMembership.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprDirectoryMembership,
@@ -115,14 +114,14 @@ func awsIamMappings() []types.MappingRegistration {
 func awsSecurityHubMappings() []types.MappingRegistration {
 	return []types.MappingRegistration{
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaFinding,
+			Schema: entityops.SchemaFinding.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprFinding,
 			},
 		},
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
+			Schema: entityops.SchemaVulnerability.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprVulnerability,

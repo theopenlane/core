@@ -1,7 +1,7 @@
 package keycloak
 
 import (
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -78,13 +78,13 @@ func Builder() registry.Builder {
 					RequiredPermissions: []string{"view-realm", "view-users", "query-groups", "view-events"},
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+							Schema: entityops.SchemaDirectoryAccount.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+							Schema: entityops.SchemaDirectoryGroup.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+							Schema: entityops.SchemaDirectoryMembership.Name,
 						},
 					},
 					IngestHandle: DirectorySync{}.IngestHandle(),

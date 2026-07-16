@@ -2,7 +2,6 @@ package tailscale
 
 import (
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -48,28 +47,28 @@ var mapExprAsset = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 func tailscaleMappings() []types.MappingRegistration {
 	return []types.MappingRegistration{
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+			Schema: entityops.SchemaDirectoryAccount.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprDirectoryAccount,
 			},
 		},
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+			Schema: entityops.SchemaDirectoryGroup.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprDirectoryGroup,
 			},
 		},
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+			Schema: entityops.SchemaDirectoryMembership.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprDirectoryMembership,
 			},
 		},
 		{
-			Schema:  integrationgenerated.IntegrationMappingSchemaAsset,
+			Schema:  entityops.SchemaAsset.Name,
 			Variant: deviceAssetVariant,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",

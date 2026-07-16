@@ -2,7 +2,6 @@ package gcpscc
 
 import (
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -105,21 +104,21 @@ var mapExprRisk = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 func gcpsccMappings() []types.MappingRegistration {
 	return []types.MappingRegistration{
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaRisk,
+			Schema: entityops.SchemaRisk.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprRisk,
 			},
 		},
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
+			Schema: entityops.SchemaVulnerability.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprVuln,
 			},
 		},
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaFinding,
+			Schema: entityops.SchemaFinding.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprFinding,

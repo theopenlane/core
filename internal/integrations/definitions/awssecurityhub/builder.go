@@ -1,7 +1,7 @@
 package awssecurityhub
 
 import (
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -117,10 +117,10 @@ func Builder(cfg Config) registry.Builder {
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) FindingSyncConfig { return u.FindingSync }),
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaFinding,
+							Schema: entityops.SchemaFinding.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
+							Schema: entityops.SchemaVulnerability.Name,
 						},
 					},
 					IngestHandle:        FindingsCollect{}.IngestHandle(),
@@ -137,13 +137,13 @@ func Builder(cfg Config) registry.Builder {
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+							Schema: entityops.SchemaDirectoryAccount.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+							Schema: entityops.SchemaDirectoryGroup.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+							Schema: entityops.SchemaDirectoryMembership.Name,
 						},
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
@@ -163,7 +163,7 @@ func Builder(cfg Config) registry.Builder {
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) CheckSync { return u.CheckSync }),
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaCheckResult,
+							Schema: entityops.SchemaCheckResult.Name,
 						},
 					},
 					IngestHandle: CheckSync{}.IngestHandle(),
@@ -188,7 +188,7 @@ func Builder(cfg Config) registry.Builder {
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) AssetSync { return u.AssetSync }),
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaAsset,
+							Schema: entityops.SchemaAsset.Name,
 						},
 					},
 					IngestHandle:        AssetSync{}.IngestHandle(),

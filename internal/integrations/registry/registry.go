@@ -2,9 +2,11 @@ package registry
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/mapx"
@@ -59,6 +61,8 @@ func (r *Registry) Register(def types.Definition) error {
 	if err := r.validateDefinition(def); err != nil {
 		return err
 	}
+
+	populateMappingLinkTargets(def.Mappings)
 
 	entry, err := compileDefinition(def)
 	if err != nil {
@@ -186,6 +190,79 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 	if def.RuntimeIntegration != nil {
 		if def.RuntimeIntegration.Build == nil {
 			return ErrRuntimeBuildRequired
+		}
+	}
+
+	if err := validateMappingLinks(def.Mappings); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// populateMappingLinkTargets fills each mapping's cross-link inventory from the entityops catalog —
+// the object types the source schema can link to and the match-able fields on each side — so the
+// definition payload carries everything the UI needs to render the cross-link dropdown and pickers
+func populateMappingLinkTargets(mappings []types.MappingRegistration) {
+	for i := range mappings {
+		sourceSchema, ok := entityops.LookupSchema(mappings[i].Schema)
+		if !ok {
+			continue
+		}
+
+		sourceFields := linkFieldInfos(sourceSchema.Fields)
+
+		var targets []types.LinkTargetInfo
+
+		for _, edge := range sourceSchema.Edges {
+			if edge.TargetType == "" || edge.Target == nil {
+				continue
+			}
+
+			targets = append(targets, types.LinkTargetInfo{
+				TargetType:   edge.TargetType,
+				Label:        edge.Label,
+				TargetFields: linkFieldInfos(edge.Target.Fields),
+				SourceFields: sourceFields,
+			})
+		}
+
+		mappings[i].LinkTargets = targets
+	}
+}
+
+// linkFieldInfos projects the match-able (indexed string) fields of a schema into the link field info
+// surfaced to the UI
+func linkFieldInfos(fields []entityops.FieldDescriptor) []types.LinkFieldInfo {
+	return lo.FilterMap(fields, func(f entityops.FieldDescriptor, _ int) (types.LinkFieldInfo, bool) {
+		if !f.MatchKey {
+			return types.LinkFieldInfo{}, false
+		}
+
+		return types.LinkFieldInfo{Name: f.Name, Label: f.Label, Type: f.Type}, true
+	})
+}
+
+// validateMappingLinks verifies that every link rule a mapping declares targets an object the source
+// schema actually has an edge to, so a typo in a definition's link defaults fails at registration
+func validateMappingLinks(mappings []types.MappingRegistration) error {
+	for _, mapping := range mappings {
+		if len(mapping.Spec.Links) == 0 {
+			continue
+		}
+
+		sourceSchema, ok := entityops.LookupSchema(mapping.Schema)
+		if !ok {
+			continue
+		}
+
+		for _, rule := range mapping.Spec.Links {
+			_, found := lo.Find(sourceSchema.Edges, func(e entityops.EdgeDescriptor) bool {
+				return e.TargetType == rule.TargetSchema
+			})
+			if !found {
+				return fmt.Errorf("%w: %s has no edge to %s", ErrLinkEdgeNotFound, sourceSchema.Name, rule.TargetSchema)
+			}
 		}
 	}
 

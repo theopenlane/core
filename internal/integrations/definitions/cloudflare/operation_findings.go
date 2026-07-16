@@ -8,7 +8,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/security_center"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
@@ -62,7 +62,7 @@ func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBind
 
 	return []types.IngestPayloadSet{
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaFinding,
+			Schema:    entityops.SchemaFinding.Name,
 			Envelopes: envelopes,
 		},
 	}, nil

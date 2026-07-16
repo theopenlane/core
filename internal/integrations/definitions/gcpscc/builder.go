@@ -1,7 +1,7 @@
 package gcpscc
 
 import (
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -76,13 +76,13 @@ func Builder() registry.Builder {
 					Policy:       types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
+							Schema: entityops.SchemaVulnerability.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaFinding,
+							Schema: entityops.SchemaFinding.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaRisk,
+							Schema: entityops.SchemaRisk.Name,
 						},
 					},
 					IngestHandle:        FindingsCollect{}.IngestHandle(),

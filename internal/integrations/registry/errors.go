@@ -51,4 +51,6 @@ var (
 	ErrBuilderNil = errors.New("integrations/registry: builder is nil")
 	// ErrRuntimeBuildRequired indicates a runtime integration registration is missing its Build function
 	ErrRuntimeBuildRequired = errors.New("integrations/registry: runtime integration build function required")
+	// ErrLinkEdgeNotFound indicates a mapping opted into a link edge that does not exist on the source schema
+	ErrLinkEdgeNotFound = errors.New("integrations/registry: link edge not found on source schema")
 )

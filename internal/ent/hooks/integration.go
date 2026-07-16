@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 // HookIntegrationPrimaryDirectory enforces the one-primary-directory-per-org invariant
@@ -48,16 +49,19 @@ func HookIntegrationPrimaryDirectory() ent.Hook {
 
 // shouldSkipIntegrationPrimaryDirectorySync reports whether sibling clearing should be bypassed
 func shouldSkipIntegrationPrimaryDirectorySync(ctx context.Context) bool {
-	metadata, _ := integrationtypes.ExecutionMetadataFromContext(ctx)
-	return metadata.SkipPrimaryDirectorySync
+	oc, _ := gala.OperationContextFromContext(ctx)
+	return integrationtypes.IntegrationSourceFrom(oc).SkipPrimaryDirectorySync
 }
 
 // withSkipIntegrationPrimaryDirectorySync marks a context to bypass recursive hook re-entry
 func withSkipIntegrationPrimaryDirectorySync(ctx context.Context) context.Context {
-	metadata, _ := integrationtypes.ExecutionMetadataFromContext(ctx)
-	metadata.SkipPrimaryDirectorySync = true
+	oc, _ := gala.OperationContextFromContext(ctx)
+	src := integrationtypes.IntegrationSourceFrom(oc)
+	src.SkipPrimaryDirectorySync = true
 
-	return integrationtypes.WithExecutionMetadata(ctx, metadata)
+	_ = gala.SetAttributes(&oc, src)
+
+	return gala.WithOperationContext(ctx, oc)
 }
 
 // HookIntegrationCampaignEmail enforces the one-campaign-email-per-org invariant.
@@ -96,14 +100,17 @@ func HookIntegrationCampaignEmail() ent.Hook {
 
 // shouldSkipIntegrationCampaignEmailSync reports whether sibling clearing should be bypassed
 func shouldSkipIntegrationCampaignEmailSync(ctx context.Context) bool {
-	metadata, _ := integrationtypes.ExecutionMetadataFromContext(ctx)
-	return metadata.SkipCampaignEmailSync
+	oc, _ := gala.OperationContextFromContext(ctx)
+	return integrationtypes.IntegrationSourceFrom(oc).SkipCampaignEmailSync
 }
 
 // withSkipIntegrationCampaignEmailSync marks a context to bypass recursive hook re-entry
 func withSkipIntegrationCampaignEmailSync(ctx context.Context) context.Context {
-	metadata, _ := integrationtypes.ExecutionMetadataFromContext(ctx)
-	metadata.SkipCampaignEmailSync = true
+	oc, _ := gala.OperationContextFromContext(ctx)
+	src := integrationtypes.IntegrationSourceFrom(oc)
+	src.SkipCampaignEmailSync = true
 
-	return integrationtypes.WithExecutionMetadata(ctx, metadata)
+	_ = gala.SetAttributes(&oc, src)
+
+	return gala.WithOperationContext(ctx, oc)
 }

@@ -6,7 +6,6 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -190,7 +189,7 @@ func githubAppMappings() []types.MappingRegistration {
 
 	vulnMappings := lo.MapToSlice(overrides, func(variant string, override types.MappingOverride) types.MappingRegistration {
 		return types.MappingRegistration{
-			Schema:  integrationgenerated.IntegrationMappingSchemaVulnerability,
+			Schema:  entityops.SchemaVulnerability.Name,
 			Variant: variant,
 			Spec:    override,
 		}
@@ -198,7 +197,7 @@ func githubAppMappings() []types.MappingRegistration {
 
 	return append(vulnMappings,
 		types.MappingRegistration{
-			Schema:  integrationgenerated.IntegrationMappingSchemaAsset,
+			Schema:  entityops.SchemaAsset.Name,
 			Variant: repositoryAssetVariant,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
@@ -206,21 +205,21 @@ func githubAppMappings() []types.MappingRegistration {
 			},
 		},
 		types.MappingRegistration{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+			Schema: entityops.SchemaDirectoryAccount.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprDirectoryAccount,
 			},
 		},
 		types.MappingRegistration{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+			Schema: entityops.SchemaDirectoryGroup.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprDirectoryGroup,
 			},
 		},
 		types.MappingRegistration{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+			Schema: entityops.SchemaDirectoryMembership.Name,
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprDirectoryMembership,
