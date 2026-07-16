@@ -126,3 +126,39 @@ func TestFilterType(t *testing.T) {
 		})
 	}
 }
+
+func TestEmailDomainConditionContext(t *testing.T) {
+	tests := []struct {
+		name  string
+		email string
+		want  *map[string]any
+	}{
+		{
+			name:  "valid email",
+			email: "person@example.com",
+			want:  &map[string]any{"email_domain": "example.com"},
+		},
+		{
+			name:  "normalizes domain",
+			email: "person@ EXAMPLE.COM ",
+			want:  &map[string]any{"email_domain": "example.com"},
+		},
+		{
+			name:  "missing separator",
+			email: "person.example.com",
+		},
+		{
+			name:  "missing domain",
+			email: "person@",
+		},
+		{
+			name: "empty email",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.want, emailDomainConditionContext(tt.email))
+		})
+	}
+}
