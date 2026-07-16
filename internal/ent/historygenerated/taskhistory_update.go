@@ -358,6 +358,18 @@ func (_u *TaskHistoryUpdate) ClearDetailsJSON() *TaskHistoryUpdate {
 	return _u
 }
 
+// SetMetadata sets the "metadata" field.
+func (_u *TaskHistoryUpdate) SetMetadata(v map[string]interface{}) *TaskHistoryUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *TaskHistoryUpdate) ClearMetadata() *TaskHistoryUpdate {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *TaskHistoryUpdate) SetStatus(v enums.TaskStatus) *TaskHistoryUpdate {
 	_u.mutation.SetStatus(v)
@@ -477,6 +489,101 @@ func (_u *TaskHistoryUpdate) SetNillableIsTemplate(v *bool) *TaskHistoryUpdate {
 	if v != nil {
 		_u.SetIsTemplate(*v)
 	}
+	return _u
+}
+
+// SetIsSuggested sets the "is_suggested" field.
+func (_u *TaskHistoryUpdate) SetIsSuggested(v bool) *TaskHistoryUpdate {
+	_u.mutation.SetIsSuggested(v)
+	return _u
+}
+
+// SetNillableIsSuggested sets the "is_suggested" field if the given value is not nil.
+func (_u *TaskHistoryUpdate) SetNillableIsSuggested(v *bool) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetIsSuggested(*v)
+	}
+	return _u
+}
+
+// SetPriority sets the "priority" field.
+func (_u *TaskHistoryUpdate) SetPriority(v int) *TaskHistoryUpdate {
+	_u.mutation.ResetPriority()
+	_u.mutation.SetPriority(v)
+	return _u
+}
+
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (_u *TaskHistoryUpdate) SetNillablePriority(v *int) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetPriority(*v)
+	}
+	return _u
+}
+
+// AddPriority adds value to the "priority" field.
+func (_u *TaskHistoryUpdate) AddPriority(v int) *TaskHistoryUpdate {
+	_u.mutation.AddPriority(v)
+	return _u
+}
+
+// SetAvailableAt sets the "available_at" field.
+func (_u *TaskHistoryUpdate) SetAvailableAt(v models.DateTime) *TaskHistoryUpdate {
+	_u.mutation.SetAvailableAt(v)
+	return _u
+}
+
+// SetNillableAvailableAt sets the "available_at" field if the given value is not nil.
+func (_u *TaskHistoryUpdate) SetNillableAvailableAt(v *models.DateTime) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetAvailableAt(*v)
+	}
+	return _u
+}
+
+// ClearAvailableAt clears the value of the "available_at" field.
+func (_u *TaskHistoryUpdate) ClearAvailableAt() *TaskHistoryUpdate {
+	_u.mutation.ClearAvailableAt()
+	return _u
+}
+
+// SetSource sets the "source" field.
+func (_u *TaskHistoryUpdate) SetSource(v string) *TaskHistoryUpdate {
+	_u.mutation.SetSource(v)
+	return _u
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (_u *TaskHistoryUpdate) SetNillableSource(v *string) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetSource(*v)
+	}
+	return _u
+}
+
+// ClearSource clears the value of the "source" field.
+func (_u *TaskHistoryUpdate) ClearSource() *TaskHistoryUpdate {
+	_u.mutation.ClearSource()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *TaskHistoryUpdate) SetSourceKey(v string) *TaskHistoryUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *TaskHistoryUpdate) SetNillableSourceKey(v *string) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *TaskHistoryUpdate) ClearSourceKey() *TaskHistoryUpdate {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -734,6 +841,12 @@ func (_u *TaskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.DetailsJSONCleared() {
 		_spec.ClearField(taskhistory.FieldDetailsJSON, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(taskhistory.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(taskhistory.FieldMetadata, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(taskhistory.FieldStatus, field.TypeEnum, value)
 	}
@@ -766,6 +879,33 @@ func (_u *TaskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if value, ok := _u.mutation.IsTemplate(); ok {
 		_spec.SetField(taskhistory.FieldIsTemplate, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IsSuggested(); ok {
+		_spec.SetField(taskhistory.FieldIsSuggested, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.Priority(); ok {
+		_spec.SetField(taskhistory.FieldPriority, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedPriority(); ok {
+		_spec.AddField(taskhistory.FieldPriority, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AvailableAt(); ok {
+		_spec.SetField(taskhistory.FieldAvailableAt, field.TypeTime, value)
+	}
+	if _u.mutation.AvailableAtCleared() {
+		_spec.ClearField(taskhistory.FieldAvailableAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.Source(); ok {
+		_spec.SetField(taskhistory.FieldSource, field.TypeString, value)
+	}
+	if _u.mutation.SourceCleared() {
+		_spec.ClearField(taskhistory.FieldSource, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(taskhistory.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(taskhistory.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.IdempotencyKey(); ok {
 		_spec.SetField(taskhistory.FieldIdempotencyKey, field.TypeString, value)
@@ -1136,6 +1276,18 @@ func (_u *TaskHistoryUpdateOne) ClearDetailsJSON() *TaskHistoryUpdateOne {
 	return _u
 }
 
+// SetMetadata sets the "metadata" field.
+func (_u *TaskHistoryUpdateOne) SetMetadata(v map[string]interface{}) *TaskHistoryUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *TaskHistoryUpdateOne) ClearMetadata() *TaskHistoryUpdateOne {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *TaskHistoryUpdateOne) SetStatus(v enums.TaskStatus) *TaskHistoryUpdateOne {
 	_u.mutation.SetStatus(v)
@@ -1255,6 +1407,101 @@ func (_u *TaskHistoryUpdateOne) SetNillableIsTemplate(v *bool) *TaskHistoryUpdat
 	if v != nil {
 		_u.SetIsTemplate(*v)
 	}
+	return _u
+}
+
+// SetIsSuggested sets the "is_suggested" field.
+func (_u *TaskHistoryUpdateOne) SetIsSuggested(v bool) *TaskHistoryUpdateOne {
+	_u.mutation.SetIsSuggested(v)
+	return _u
+}
+
+// SetNillableIsSuggested sets the "is_suggested" field if the given value is not nil.
+func (_u *TaskHistoryUpdateOne) SetNillableIsSuggested(v *bool) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetIsSuggested(*v)
+	}
+	return _u
+}
+
+// SetPriority sets the "priority" field.
+func (_u *TaskHistoryUpdateOne) SetPriority(v int) *TaskHistoryUpdateOne {
+	_u.mutation.ResetPriority()
+	_u.mutation.SetPriority(v)
+	return _u
+}
+
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (_u *TaskHistoryUpdateOne) SetNillablePriority(v *int) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetPriority(*v)
+	}
+	return _u
+}
+
+// AddPriority adds value to the "priority" field.
+func (_u *TaskHistoryUpdateOne) AddPriority(v int) *TaskHistoryUpdateOne {
+	_u.mutation.AddPriority(v)
+	return _u
+}
+
+// SetAvailableAt sets the "available_at" field.
+func (_u *TaskHistoryUpdateOne) SetAvailableAt(v models.DateTime) *TaskHistoryUpdateOne {
+	_u.mutation.SetAvailableAt(v)
+	return _u
+}
+
+// SetNillableAvailableAt sets the "available_at" field if the given value is not nil.
+func (_u *TaskHistoryUpdateOne) SetNillableAvailableAt(v *models.DateTime) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetAvailableAt(*v)
+	}
+	return _u
+}
+
+// ClearAvailableAt clears the value of the "available_at" field.
+func (_u *TaskHistoryUpdateOne) ClearAvailableAt() *TaskHistoryUpdateOne {
+	_u.mutation.ClearAvailableAt()
+	return _u
+}
+
+// SetSource sets the "source" field.
+func (_u *TaskHistoryUpdateOne) SetSource(v string) *TaskHistoryUpdateOne {
+	_u.mutation.SetSource(v)
+	return _u
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (_u *TaskHistoryUpdateOne) SetNillableSource(v *string) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetSource(*v)
+	}
+	return _u
+}
+
+// ClearSource clears the value of the "source" field.
+func (_u *TaskHistoryUpdateOne) ClearSource() *TaskHistoryUpdateOne {
+	_u.mutation.ClearSource()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *TaskHistoryUpdateOne) SetSourceKey(v string) *TaskHistoryUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *TaskHistoryUpdateOne) SetNillableSourceKey(v *string) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *TaskHistoryUpdateOne) ClearSourceKey() *TaskHistoryUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -1542,6 +1789,12 @@ func (_u *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHistory
 	if _u.mutation.DetailsJSONCleared() {
 		_spec.ClearField(taskhistory.FieldDetailsJSON, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(taskhistory.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(taskhistory.FieldMetadata, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(taskhistory.FieldStatus, field.TypeEnum, value)
 	}
@@ -1574,6 +1827,33 @@ func (_u *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHistory
 	}
 	if value, ok := _u.mutation.IsTemplate(); ok {
 		_spec.SetField(taskhistory.FieldIsTemplate, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IsSuggested(); ok {
+		_spec.SetField(taskhistory.FieldIsSuggested, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.Priority(); ok {
+		_spec.SetField(taskhistory.FieldPriority, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedPriority(); ok {
+		_spec.AddField(taskhistory.FieldPriority, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AvailableAt(); ok {
+		_spec.SetField(taskhistory.FieldAvailableAt, field.TypeTime, value)
+	}
+	if _u.mutation.AvailableAtCleared() {
+		_spec.ClearField(taskhistory.FieldAvailableAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.Source(); ok {
+		_spec.SetField(taskhistory.FieldSource, field.TypeString, value)
+	}
+	if _u.mutation.SourceCleared() {
+		_spec.ClearField(taskhistory.FieldSource, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(taskhistory.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(taskhistory.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.IdempotencyKey(); ok {
 		_spec.SetField(taskhistory.FieldIdempotencyKey, field.TypeString, value)

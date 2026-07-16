@@ -2457,6 +2457,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standardhistory.FieldIsPublic:              {Type: field.TypeBool, Column: standardhistory.FieldIsPublic},
 			standardhistory.FieldFreeToUse:             {Type: field.TypeBool, Column: standardhistory.FieldFreeToUse},
 			standardhistory.FieldStandardType:          {Type: field.TypeString, Column: standardhistory.FieldStandardType},
+			standardhistory.FieldPriority:              {Type: field.TypeInt, Column: standardhistory.FieldPriority},
 			standardhistory.FieldVersion:               {Type: field.TypeString, Column: standardhistory.FieldVersion},
 			standardhistory.FieldLogoFileID:            {Type: field.TypeString, Column: standardhistory.FieldLogoFileID},
 		},
@@ -2626,6 +2627,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			taskhistory.FieldTitle:                  {Type: field.TypeString, Column: taskhistory.FieldTitle},
 			taskhistory.FieldDetails:                {Type: field.TypeString, Column: taskhistory.FieldDetails},
 			taskhistory.FieldDetailsJSON:            {Type: field.TypeJSON, Column: taskhistory.FieldDetailsJSON},
+			taskhistory.FieldMetadata:               {Type: field.TypeJSON, Column: taskhistory.FieldMetadata},
 			taskhistory.FieldStatus:                 {Type: field.TypeEnum, Column: taskhistory.FieldStatus},
 			taskhistory.FieldDue:                    {Type: field.TypeTime, Column: taskhistory.FieldDue},
 			taskhistory.FieldCompleted:              {Type: field.TypeTime, Column: taskhistory.FieldCompleted},
@@ -2633,6 +2635,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 			taskhistory.FieldAssignerID:             {Type: field.TypeString, Column: taskhistory.FieldAssignerID},
 			taskhistory.FieldSystemGenerated:        {Type: field.TypeBool, Column: taskhistory.FieldSystemGenerated},
 			taskhistory.FieldIsTemplate:             {Type: field.TypeBool, Column: taskhistory.FieldIsTemplate},
+			taskhistory.FieldIsSuggested:            {Type: field.TypeBool, Column: taskhistory.FieldIsSuggested},
+			taskhistory.FieldPriority:               {Type: field.TypeInt, Column: taskhistory.FieldPriority},
+			taskhistory.FieldAvailableAt:            {Type: field.TypeTime, Column: taskhistory.FieldAvailableAt},
+			taskhistory.FieldSource:                 {Type: field.TypeString, Column: taskhistory.FieldSource},
+			taskhistory.FieldSourceKey:              {Type: field.TypeString, Column: taskhistory.FieldSourceKey},
 			taskhistory.FieldIdempotencyKey:         {Type: field.TypeString, Column: taskhistory.FieldIdempotencyKey},
 			taskhistory.FieldExternalReferenceURL:   {Type: field.TypeJSON, Column: taskhistory.FieldExternalReferenceURL},
 			taskhistory.FieldParentTaskID:           {Type: field.TypeString, Column: taskhistory.FieldParentTaskID},
@@ -13932,6 +13939,11 @@ func (f *StandardHistoryFilter) WhereStandardType(p entql.StringP) {
 	f.Where(p.Field(standardhistory.FieldStandardType))
 }
 
+// WherePriority applies the entql int predicate on the priority field.
+func (f *StandardHistoryFilter) WherePriority(p entql.IntP) {
+	f.Where(p.Field(standardhistory.FieldPriority))
+}
+
 // WhereVersion applies the entql string predicate on the version field.
 func (f *StandardHistoryFilter) WhereVersion(p entql.StringP) {
 	f.Where(p.Field(standardhistory.FieldVersion))
@@ -14677,6 +14689,11 @@ func (f *TaskHistoryFilter) WhereDetailsJSON(p entql.BytesP) {
 	f.Where(p.Field(taskhistory.FieldDetailsJSON))
 }
 
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *TaskHistoryFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(taskhistory.FieldMetadata))
+}
+
 // WhereStatus applies the entql string predicate on the status field.
 func (f *TaskHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(taskhistory.FieldStatus))
@@ -14710,6 +14727,31 @@ func (f *TaskHistoryFilter) WhereSystemGenerated(p entql.BoolP) {
 // WhereIsTemplate applies the entql bool predicate on the is_template field.
 func (f *TaskHistoryFilter) WhereIsTemplate(p entql.BoolP) {
 	f.Where(p.Field(taskhistory.FieldIsTemplate))
+}
+
+// WhereIsSuggested applies the entql bool predicate on the is_suggested field.
+func (f *TaskHistoryFilter) WhereIsSuggested(p entql.BoolP) {
+	f.Where(p.Field(taskhistory.FieldIsSuggested))
+}
+
+// WherePriority applies the entql int predicate on the priority field.
+func (f *TaskHistoryFilter) WherePriority(p entql.IntP) {
+	f.Where(p.Field(taskhistory.FieldPriority))
+}
+
+// WhereAvailableAt applies the entql time.Time predicate on the available_at field.
+func (f *TaskHistoryFilter) WhereAvailableAt(p entql.TimeP) {
+	f.Where(p.Field(taskhistory.FieldAvailableAt))
+}
+
+// WhereSource applies the entql string predicate on the source field.
+func (f *TaskHistoryFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldSource))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *TaskHistoryFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldSourceKey))
 }
 
 // WhereIdempotencyKey applies the entql string predicate on the idempotency_key field.

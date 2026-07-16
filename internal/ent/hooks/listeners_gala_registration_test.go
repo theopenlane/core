@@ -43,6 +43,20 @@ func TestRegisterGalaOrganizationAvatarListeners(t *testing.T) {
 	require.False(t, registry.InterestedIn(topic, ent.OpUpdate.String()))
 }
 
+func TestRegisterGalaOnboardingListeners(t *testing.T) {
+	t.Parallel()
+
+	registry := gala.NewRegistry()
+
+	ids, err := RegisterGalaOnboardingListeners(registry)
+	require.NoError(t, err)
+	require.Len(t, ids, 1)
+
+	topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeOnboarding)
+	require.True(t, registry.InterestedIn(topic, ent.OpCreate.String()))
+	require.False(t, registry.InterestedIn(topic, ent.OpUpdate.String()))
+}
+
 func TestRegisterGalaTrustCenterCacheListeners(t *testing.T) {
 	t.Parallel()
 

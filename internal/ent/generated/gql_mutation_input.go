@@ -24865,6 +24865,7 @@ type CreateStandardInput struct {
 	IsPublic                 *bool                 `json:"is_public,omitempty"`
 	FreeToUse                *bool                 `json:"free_to_use,omitempty"`
 	StandardType             *string               `json:"standard_type,omitempty"`
+	Priority                 *int                  `json:"priority,omitempty"`
 	Version                  *string               `json:"version,omitempty"`
 	OwnerID                  *string               `json:"owner_id,omitempty"`
 	ControlIDs               []string              `json:"control_ids,omitempty"`
@@ -24921,6 +24922,9 @@ func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.StandardType; v != nil {
 		m.SetStandardType(*v)
+	}
+	if v := i.Priority; v != nil {
+		m.SetPriority(*v)
 	}
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
@@ -24986,6 +24990,7 @@ type UpdateStandardInput struct {
 	FreeToUse                      *bool `json:"free_to_use,omitempty"`
 	ClearStandardType              bool
 	StandardType                   *string `json:"standard_type,omitempty"`
+	Priority                       *int    `json:"priority,omitempty"`
 	ClearVersion                   bool
 	Version                        *string `json:"version,omitempty"`
 	ClearOwner                     bool
@@ -25106,6 +25111,9 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.StandardType; v != nil {
 		m.SetStandardType(*v)
+	}
+	if v := i.Priority; v != nil {
+		m.SetPriority(*v)
 	}
 	if i.ClearVersion {
 		m.ClearVersion()
@@ -26705,47 +26713,53 @@ func (c *TagDefinitionUpdateOne) SetInput(i UpdateTagDefinitionInput) *TagDefini
 
 // CreateTaskInput represents a mutation input for creating tasks.
 type CreateTaskInput struct {
-	Tags                     []string          `json:"tags,omitempty"`
-	TaskKindName             *string           `json:"task_kind_name,omitempty"`
-	EnvironmentName          *string           `json:"environment_name,omitempty"`
-	ScopeName                *string           `json:"scope_name,omitempty"`
-	WorkflowEligibleMarker   *bool             `json:"workflow_eligible_marker,omitempty"`
-	ExternalUUID             *string           `json:"external_uuid,omitempty"`
-	Title                    string            `json:"title,omitempty"`
-	Details                  *string           `json:"details,omitempty"`
-	DetailsJSON              []interface{}     `json:"details_json,omitempty"`
-	Status                   *enums.TaskStatus `json:"status,omitempty"`
-	Due                      *models.DateTime  `json:"due,omitempty"`
-	Completed                *models.DateTime  `json:"completed,omitempty"`
-	SystemGenerated          *bool             `json:"system_generated,omitempty"`
-	IsTemplate               *bool             `json:"is_template,omitempty"`
-	ExternalReferenceURL     []string          `json:"external_reference_url,omitempty"`
-	OwnerID                  *string           `json:"owner_id,omitempty"`
-	TaskKindID               *string           `json:"task_kind_id,omitempty"`
-	EnvironmentID            *string           `json:"environment_id,omitempty"`
-	ScopeID                  *string           `json:"scope_id,omitempty"`
-	AssignerID               *string           `json:"assigner_id,omitempty"`
-	AssigneeID               *string           `json:"assignee_id,omitempty"`
-	CommentIDs               []string          `json:"comment_ids,omitempty"`
-	GroupIDs                 []string          `json:"group_ids,omitempty"`
-	InternalPolicyIDs        []string          `json:"internal_policy_ids,omitempty"`
-	ProcedureIDs             []string          `json:"procedure_ids,omitempty"`
-	ControlIDs               []string          `json:"control_ids,omitempty"`
-	SubcontrolIDs            []string          `json:"subcontrol_ids,omitempty"`
-	ControlObjectiveIDs      []string          `json:"control_objective_ids,omitempty"`
-	ProgramIDs               []string          `json:"program_ids,omitempty"`
-	RiskIDs                  []string          `json:"risk_ids,omitempty"`
-	PlatformIDs              []string          `json:"platform_ids,omitempty"`
-	ScanIDs                  []string          `json:"scan_ids,omitempty"`
-	IdentityHolderIDs        []string          `json:"identity_holder_ids,omitempty"`
-	ControlImplementationIDs []string          `json:"control_implementation_ids,omitempty"`
-	ActionPlanIDs            []string          `json:"action_plan_ids,omitempty"`
-	EvidenceIDs              []string          `json:"evidence_ids,omitempty"`
-	WorkflowObjectRefIDs     []string          `json:"workflow_object_ref_ids,omitempty"`
-	VulnerabilityIDs         []string          `json:"vulnerability_ids,omitempty"`
-	FindingIDs               []string          `json:"finding_ids,omitempty"`
-	ParentID                 *string           `json:"parent_id,omitempty"`
-	TaskIDs                  []string          `json:"task_ids,omitempty"`
+	Tags                     []string               `json:"tags,omitempty"`
+	TaskKindName             *string                `json:"task_kind_name,omitempty"`
+	EnvironmentName          *string                `json:"environment_name,omitempty"`
+	ScopeName                *string                `json:"scope_name,omitempty"`
+	WorkflowEligibleMarker   *bool                  `json:"workflow_eligible_marker,omitempty"`
+	ExternalUUID             *string                `json:"external_uuid,omitempty"`
+	Title                    string                 `json:"title,omitempty"`
+	Details                  *string                `json:"details,omitempty"`
+	DetailsJSON              []interface{}          `json:"details_json,omitempty"`
+	Metadata                 map[string]interface{} `json:"metadata,omitempty"`
+	Status                   *enums.TaskStatus      `json:"status,omitempty"`
+	Due                      *models.DateTime       `json:"due,omitempty"`
+	Completed                *models.DateTime       `json:"completed,omitempty"`
+	SystemGenerated          *bool                  `json:"system_generated,omitempty"`
+	IsTemplate               *bool                  `json:"is_template,omitempty"`
+	IsSuggested              *bool                  `json:"is_suggested,omitempty"`
+	Priority                 *int                   `json:"priority,omitempty"`
+	AvailableAt              *models.DateTime       `json:"available_at,omitempty"`
+	Source                   *string                `json:"source,omitempty"`
+	SourceKey                *string                `json:"source_key,omitempty"`
+	ExternalReferenceURL     []string               `json:"external_reference_url,omitempty"`
+	OwnerID                  *string                `json:"owner_id,omitempty"`
+	TaskKindID               *string                `json:"task_kind_id,omitempty"`
+	EnvironmentID            *string                `json:"environment_id,omitempty"`
+	ScopeID                  *string                `json:"scope_id,omitempty"`
+	AssignerID               *string                `json:"assigner_id,omitempty"`
+	AssigneeID               *string                `json:"assignee_id,omitempty"`
+	CommentIDs               []string               `json:"comment_ids,omitempty"`
+	GroupIDs                 []string               `json:"group_ids,omitempty"`
+	InternalPolicyIDs        []string               `json:"internal_policy_ids,omitempty"`
+	ProcedureIDs             []string               `json:"procedure_ids,omitempty"`
+	ControlIDs               []string               `json:"control_ids,omitempty"`
+	SubcontrolIDs            []string               `json:"subcontrol_ids,omitempty"`
+	ControlObjectiveIDs      []string               `json:"control_objective_ids,omitempty"`
+	ProgramIDs               []string               `json:"program_ids,omitempty"`
+	RiskIDs                  []string               `json:"risk_ids,omitempty"`
+	PlatformIDs              []string               `json:"platform_ids,omitempty"`
+	ScanIDs                  []string               `json:"scan_ids,omitempty"`
+	IdentityHolderIDs        []string               `json:"identity_holder_ids,omitempty"`
+	ControlImplementationIDs []string               `json:"control_implementation_ids,omitempty"`
+	ActionPlanIDs            []string               `json:"action_plan_ids,omitempty"`
+	EvidenceIDs              []string               `json:"evidence_ids,omitempty"`
+	WorkflowObjectRefIDs     []string               `json:"workflow_object_ref_ids,omitempty"`
+	VulnerabilityIDs         []string               `json:"vulnerability_ids,omitempty"`
+	FindingIDs               []string               `json:"finding_ids,omitempty"`
+	ParentID                 *string                `json:"parent_id,omitempty"`
+	TaskIDs                  []string               `json:"task_ids,omitempty"`
 }
 
 // Mutate applies the CreateTaskInput on the TaskMutation builder.
@@ -26775,6 +26789,9 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.DetailsJSON; v != nil {
 		m.SetDetailsJSON(v)
 	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
@@ -26789,6 +26806,21 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.IsTemplate; v != nil {
 		m.SetIsTemplate(*v)
+	}
+	if v := i.IsSuggested; v != nil {
+		m.SetIsSuggested(*v)
+	}
+	if v := i.Priority; v != nil {
+		m.SetPriority(*v)
+	}
+	if v := i.AvailableAt; v != nil {
+		m.SetAvailableAt(*v)
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if v := i.SourceKey; v != nil {
+		m.SetSourceKey(*v)
 	}
 	if v := i.ExternalReferenceURL; v != nil {
 		m.SetExternalReferenceURL(v)
@@ -26900,13 +26932,23 @@ type UpdateTaskInput struct {
 	ClearDetailsJSON               bool
 	DetailsJSON                    []interface{} `json:"details_json,omitempty"`
 	AppendDetailsJSON              []interface{}
-	Status                         *enums.TaskStatus `json:"status,omitempty"`
+	ClearMetadata                  bool
+	Metadata                       map[string]interface{} `json:"metadata,omitempty"`
+	Status                         *enums.TaskStatus      `json:"status,omitempty"`
 	ClearDue                       bool
 	Due                            *models.DateTime `json:"due,omitempty"`
 	ClearCompleted                 bool
 	Completed                      *models.DateTime `json:"completed,omitempty"`
 	SystemGenerated                *bool            `json:"system_generated,omitempty"`
 	IsTemplate                     *bool            `json:"is_template,omitempty"`
+	IsSuggested                    *bool            `json:"is_suggested,omitempty"`
+	Priority                       *int             `json:"priority,omitempty"`
+	ClearAvailableAt               bool
+	AvailableAt                    *models.DateTime `json:"available_at,omitempty"`
+	ClearSource                    bool
+	Source                         *string `json:"source,omitempty"`
+	ClearSourceKey                 bool
+	SourceKey                      *string `json:"source_key,omitempty"`
 	ClearExternalReferenceURL      bool
 	ExternalReferenceURL           []string `json:"external_reference_url,omitempty"`
 	AppendExternalReferenceURL     []string
@@ -27040,6 +27082,12 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	if i.AppendDetailsJSON != nil {
 		m.AppendDetailsJSON(i.DetailsJSON)
 	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
@@ -27060,6 +27108,30 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.IsTemplate; v != nil {
 		m.SetIsTemplate(*v)
+	}
+	if v := i.IsSuggested; v != nil {
+		m.SetIsSuggested(*v)
+	}
+	if v := i.Priority; v != nil {
+		m.SetPriority(*v)
+	}
+	if i.ClearAvailableAt {
+		m.ClearAvailableAt()
+	}
+	if v := i.AvailableAt; v != nil {
+		m.SetAvailableAt(*v)
+	}
+	if i.ClearSource {
+		m.ClearSource()
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if i.ClearSourceKey {
+		m.ClearSourceKey()
+	}
+	if v := i.SourceKey; v != nil {
+		m.SetSourceKey(*v)
 	}
 	if i.ClearExternalReferenceURL {
 		m.ClearExternalReferenceURL()

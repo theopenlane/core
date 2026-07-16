@@ -188,6 +188,11 @@ func StandardType(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldStandardType, v))
 }
 
+// Priority applies equality check predicate on the "priority" field. It's identical to PriorityEQ.
+func Priority(v int) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldPriority, v))
+}
+
 // Version applies equality check predicate on the "version" field. It's identical to VersionEQ.
 func Version(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldEQ(FieldVersion, v))
@@ -1791,6 +1796,46 @@ func StandardTypeEqualFold(v string) predicate.StandardHistory {
 // StandardTypeContainsFold applies the ContainsFold predicate on the "standard_type" field.
 func StandardTypeContainsFold(v string) predicate.StandardHistory {
 	return predicate.StandardHistory(sql.FieldContainsFold(FieldStandardType, v))
+}
+
+// PriorityEQ applies the EQ predicate on the "priority" field.
+func PriorityEQ(v int) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldEQ(FieldPriority, v))
+}
+
+// PriorityNEQ applies the NEQ predicate on the "priority" field.
+func PriorityNEQ(v int) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNEQ(FieldPriority, v))
+}
+
+// PriorityIn applies the In predicate on the "priority" field.
+func PriorityIn(vs ...int) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldIn(FieldPriority, vs...))
+}
+
+// PriorityNotIn applies the NotIn predicate on the "priority" field.
+func PriorityNotIn(vs ...int) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldNotIn(FieldPriority, vs...))
+}
+
+// PriorityGT applies the GT predicate on the "priority" field.
+func PriorityGT(v int) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldGT(FieldPriority, v))
+}
+
+// PriorityGTE applies the GTE predicate on the "priority" field.
+func PriorityGTE(v int) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldGTE(FieldPriority, v))
+}
+
+// PriorityLT applies the LT predicate on the "priority" field.
+func PriorityLT(v int) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldLT(FieldPriority, v))
+}
+
+// PriorityLTE applies the LTE predicate on the "priority" field.
+func PriorityLTE(v int) predicate.StandardHistory {
+	return predicate.StandardHistory(sql.FieldLTE(FieldPriority, v))
 }
 
 // VersionEQ applies the EQ predicate on the "version" field.

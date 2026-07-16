@@ -2541,6 +2541,10 @@ func init() {
 	standardhistoryDescFreeToUse := standardhistoryFields[27].Descriptor()
 	// standardhistory.DefaultFreeToUse holds the default value on creation for the free_to_use field.
 	standardhistory.DefaultFreeToUse = standardhistoryDescFreeToUse.Default.(bool)
+	// standardhistoryDescPriority is the schema descriptor for priority field.
+	standardhistoryDescPriority := standardhistoryFields[29].Descriptor()
+	// standardhistory.DefaultPriority holds the default value on creation for the priority field.
+	standardhistory.DefaultPriority = standardhistoryDescPriority.Default.(int)
 	// standardhistoryDescID is the schema descriptor for id field.
 	standardhistoryDescID := standardhistoryFields[10].Descriptor()
 	// standardhistory.DefaultID holds the default value on creation for the id field.
@@ -2698,13 +2702,21 @@ func init() {
 	// taskhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	taskhistory.DefaultWorkflowEligibleMarker = taskhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// taskhistoryDescSystemGenerated is the schema descriptor for system_generated field.
-	taskhistoryDescSystemGenerated := taskhistoryFields[30].Descriptor()
+	taskhistoryDescSystemGenerated := taskhistoryFields[31].Descriptor()
 	// taskhistory.DefaultSystemGenerated holds the default value on creation for the system_generated field.
 	taskhistory.DefaultSystemGenerated = taskhistoryDescSystemGenerated.Default.(bool)
 	// taskhistoryDescIsTemplate is the schema descriptor for is_template field.
-	taskhistoryDescIsTemplate := taskhistoryFields[31].Descriptor()
+	taskhistoryDescIsTemplate := taskhistoryFields[32].Descriptor()
 	// taskhistory.DefaultIsTemplate holds the default value on creation for the is_template field.
 	taskhistory.DefaultIsTemplate = taskhistoryDescIsTemplate.Default.(bool)
+	// taskhistoryDescIsSuggested is the schema descriptor for is_suggested field.
+	taskhistoryDescIsSuggested := taskhistoryFields[33].Descriptor()
+	// taskhistory.DefaultIsSuggested holds the default value on creation for the is_suggested field.
+	taskhistory.DefaultIsSuggested = taskhistoryDescIsSuggested.Default.(bool)
+	// taskhistoryDescPriority is the schema descriptor for priority field.
+	taskhistoryDescPriority := taskhistoryFields[34].Descriptor()
+	// taskhistory.DefaultPriority holds the default value on creation for the priority field.
+	taskhistory.DefaultPriority = taskhistoryDescPriority.Default.(int)
 	// taskhistoryDescID is the schema descriptor for id field.
 	taskhistoryDescID := taskhistoryFields[10].Descriptor()
 	// taskhistory.DefaultID holds the default value on creation for the id field.

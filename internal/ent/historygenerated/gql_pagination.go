@@ -23820,6 +23820,20 @@ var (
 			}
 		},
 	}
+	// StandardHistoryOrderFieldPriority orders StandardHistory by priority.
+	StandardHistoryOrderFieldPriority = &StandardHistoryOrderField{
+		Value: func(_m *StandardHistory) (ent.Value, error) {
+			return _m.Priority, nil
+		},
+		column: standardhistory.FieldPriority,
+		toTerm: standardhistory.ByPriority,
+		toCursor: func(_m *StandardHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Priority,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -23846,6 +23860,8 @@ func (f StandardHistoryOrderField) String() string {
 		str = "STATUS"
 	case StandardHistoryOrderFieldStandardType.column:
 		str = "standard_type"
+	case StandardHistoryOrderFieldPriority.column:
+		str = "priority"
 	}
 	return str
 }
@@ -23882,6 +23898,8 @@ func (f *StandardHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *StandardHistoryOrderFieldStatus
 	case "standard_type":
 		*f = *StandardHistoryOrderFieldStandardType
+	case "priority":
+		*f = *StandardHistoryOrderFieldPriority
 	default:
 		return fmt.Errorf("%s is not a valid StandardHistoryOrderField", str)
 	}
@@ -25447,6 +25465,61 @@ var (
 			}
 		},
 	}
+	// TaskHistoryOrderFieldIsSuggested orders TaskHistory by is_suggested.
+	TaskHistoryOrderFieldIsSuggested = &TaskHistoryOrderField{
+		Value: func(_m *TaskHistory) (ent.Value, error) {
+			return _m.IsSuggested, nil
+		},
+		column: taskhistory.FieldIsSuggested,
+		toTerm: taskhistory.ByIsSuggested,
+		toCursor: func(_m *TaskHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IsSuggested,
+			}
+		},
+	}
+	// TaskHistoryOrderFieldPriority orders TaskHistory by priority.
+	TaskHistoryOrderFieldPriority = &TaskHistoryOrderField{
+		Value: func(_m *TaskHistory) (ent.Value, error) {
+			return _m.Priority, nil
+		},
+		column: taskhistory.FieldPriority,
+		toTerm: taskhistory.ByPriority,
+		toCursor: func(_m *TaskHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Priority,
+			}
+		},
+	}
+	// TaskHistoryOrderFieldAvailableAt orders TaskHistory by available_at.
+	TaskHistoryOrderFieldAvailableAt = &TaskHistoryOrderField{
+		Value: func(_m *TaskHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.AvailableAt == nil {
+				return nil, nil
+			}
+			return _m.AvailableAt, nil
+		},
+		column: taskhistory.FieldAvailableAt,
+		toTerm: func(opts ...sql.OrderTermOption) taskhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return taskhistory.ByAvailableAt(opts...)
+		},
+		toCursor: func(_m *TaskHistory) Cursor {
+			if _m.AvailableAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.AvailableAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -25469,6 +25542,12 @@ func (f TaskHistoryOrderField) String() string {
 		str = "completed"
 	case TaskHistoryOrderFieldIsTemplate.column:
 		str = "is_template"
+	case TaskHistoryOrderFieldIsSuggested.column:
+		str = "is_suggested"
+	case TaskHistoryOrderFieldPriority.column:
+		str = "priority"
+	case TaskHistoryOrderFieldAvailableAt.column:
+		str = "available_at"
 	}
 	return str
 }
@@ -25501,6 +25580,12 @@ func (f *TaskHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TaskHistoryOrderFieldCompleted
 	case "is_template":
 		*f = *TaskHistoryOrderFieldIsTemplate
+	case "is_suggested":
+		*f = *TaskHistoryOrderFieldIsSuggested
+	case "priority":
+		*f = *TaskHistoryOrderFieldPriority
+	case "available_at":
+		*f = *TaskHistoryOrderFieldAvailableAt
 	default:
 		return fmt.Errorf("%s is not a valid TaskHistoryOrderField", str)
 	}

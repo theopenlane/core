@@ -12338,6 +12338,11 @@ func (_q *StandardHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, standardhistory.FieldStandardType)
 				fieldSeen[standardhistory.FieldStandardType] = struct{}{}
 			}
+		case "priority":
+			if _, ok := fieldSeen[standardhistory.FieldPriority]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldPriority)
+				fieldSeen[standardhistory.FieldPriority] = struct{}{}
+			}
 		case "version":
 			if _, ok := fieldSeen[standardhistory.FieldVersion]; !ok {
 				selectedFields = append(selectedFields, standardhistory.FieldVersion)
@@ -13219,6 +13224,11 @@ func (_q *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, taskhistory.FieldDetailsJSON)
 				fieldSeen[taskhistory.FieldDetailsJSON] = struct{}{}
 			}
+		case "metadata":
+			if _, ok := fieldSeen[taskhistory.FieldMetadata]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldMetadata)
+				fieldSeen[taskhistory.FieldMetadata] = struct{}{}
+			}
 		case "status":
 			if _, ok := fieldSeen[taskhistory.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, taskhistory.FieldStatus)
@@ -13253,6 +13263,31 @@ func (_q *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[taskhistory.FieldIsTemplate]; !ok {
 				selectedFields = append(selectedFields, taskhistory.FieldIsTemplate)
 				fieldSeen[taskhistory.FieldIsTemplate] = struct{}{}
+			}
+		case "isSuggested":
+			if _, ok := fieldSeen[taskhistory.FieldIsSuggested]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldIsSuggested)
+				fieldSeen[taskhistory.FieldIsSuggested] = struct{}{}
+			}
+		case "priority":
+			if _, ok := fieldSeen[taskhistory.FieldPriority]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldPriority)
+				fieldSeen[taskhistory.FieldPriority] = struct{}{}
+			}
+		case "availableAt":
+			if _, ok := fieldSeen[taskhistory.FieldAvailableAt]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldAvailableAt)
+				fieldSeen[taskhistory.FieldAvailableAt] = struct{}{}
+			}
+		case "source":
+			if _, ok := fieldSeen[taskhistory.FieldSource]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldSource)
+				fieldSeen[taskhistory.FieldSource] = struct{}{}
+			}
+		case "sourceKey":
+			if _, ok := fieldSeen[taskhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldSourceKey)
+				fieldSeen[taskhistory.FieldSourceKey] = struct{}{}
 			}
 		case "idempotencyKey":
 			if _, ok := fieldSeen[taskhistory.FieldIdempotencyKey]; !ok {

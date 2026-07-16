@@ -92,6 +92,9 @@ func (Task) Fields() []ent.Field {
 				entgql.Type("[Any!]"),
 			).
 			Comment("structured details of the task in JSON format"),
+		field.JSON("metadata", map[string]any{}).
+			Optional().
+			Comment("structured metadata used by clients for task presentation and routing"),
 		field.Enum("status").
 			GoType(enums.TaskStatus("")).
 			Comment("the status of the task").
@@ -143,6 +146,32 @@ func (Task) Fields() []ent.Field {
 				entgql.OrderField("is_template"),
 			).
 			Default(false),
+		field.Bool("is_suggested").
+			Comment("indicates if the task is suggested by the system as a recommended next action").
+			Annotations(
+				entgql.OrderField("is_suggested"),
+			).
+			Default(false),
+		field.Int("priority").
+			Comment("relative ordering priority for suggested and system-generated tasks").
+			Annotations(
+				entgql.OrderField("priority"),
+			).
+			Default(0),
+		field.Time("available_at").
+			GoType(models.DateTime{}).
+			Comment("the time when the task should become available to users").
+			Annotations(
+				entgql.OrderField("available_at"),
+			).
+			Nillable().
+			Optional(),
+		field.String("source").
+			Comment("the system or workflow that created or suggested the task").
+			Optional(),
+		field.String("source_key").
+			Comment("stable source-specific key for the task").
+			Optional(),
 		field.String("idempotency_key").
 			Comment("key to prevent duplicates for auto-generated task based on rules").
 			Annotations(
@@ -165,6 +194,10 @@ func (Task) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("external_uuid", ownerFieldName).
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields(ownerFieldName, "idempotency_key").
+			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL AND idempotency_key IS NOT NULL")),
+		index.Fields(ownerFieldName, "is_suggested", "available_at", "priority").
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 

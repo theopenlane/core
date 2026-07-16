@@ -353,6 +353,20 @@ func (_c *StandardCreate) SetNillableStandardType(v *string) *StandardCreate {
 	return _c
 }
 
+// SetPriority sets the "priority" field.
+func (_c *StandardCreate) SetPriority(v int) *StandardCreate {
+	_c.mutation.SetPriority(v)
+	return _c
+}
+
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (_c *StandardCreate) SetNillablePriority(v *int) *StandardCreate {
+	if v != nil {
+		_c.SetPriority(*v)
+	}
+	return _c
+}
+
 // SetVersion sets the "version" field.
 func (_c *StandardCreate) SetVersion(v string) *StandardCreate {
 	_c.mutation.SetVersion(v)
@@ -540,6 +554,10 @@ func (_c *StandardCreate) defaults() error {
 		v := standard.DefaultFreeToUse
 		_c.mutation.SetFreeToUse(v)
 	}
+	if _, ok := _c.mutation.Priority(); !ok {
+		v := standard.DefaultPriority
+		_c.mutation.SetPriority(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if standard.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized standard.DefaultID (forgotten import generated/runtime?)")
@@ -579,6 +597,9 @@ func (_c *StandardCreate) check() error {
 		if err := standard.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Standard.status": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.Priority(); !ok {
+		return &ValidationError{Name: "priority", err: errors.New(`generated: missing required field "Standard.priority"`)}
 	}
 	return nil
 }
@@ -711,6 +732,10 @@ func (_c *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.StandardType(); ok {
 		_spec.SetField(standard.FieldStandardType, field.TypeString, value)
 		_node.StandardType = value
+	}
+	if value, ok := _c.mutation.Priority(); ok {
+		_spec.SetField(standard.FieldPriority, field.TypeInt, value)
+		_node.Priority = value
 	}
 	if value, ok := _c.mutation.Version(); ok {
 		_spec.SetField(standard.FieldVersion, field.TypeString, value)

@@ -3910,6 +3910,287 @@ paths:
             summary: Logout
             tags:
                 - Authentication
+                - logout
+    /v1/onboarding/questions:
+        get:
+            description: List backend-defined onboarding steps and questions
+            operationId: ListOnboardingQuestions
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            examples:
+                                success:
+                                    value:
+                                        steps:
+                                            - description: We'll use this information to configure your workspace.
+                                              hidden: false
+                                              key: company_info
+                                              order: 1
+                                              questions:
+                                                - hidden: false
+                                                  inputType: string
+                                                  key: company_name
+                                                  label: Company Name
+                                                  required: true
+                                                - description: We'll use this to setup auto-join to your organization for your teammates and discovery of your vendors and assets automatically.
+                                                  hidden: false
+                                                  inputType: multi-input
+                                                  key: company_domains
+                                                  label: Company Domains
+                                                  required: false
+                                                - hidden: false
+                                                  inputType: select
+                                                  key: company_size
+                                                  label: Company Size
+                                                  options:
+                                                    - hidden: false
+                                                      label: 1-10
+                                                      value: 1-10
+                                                    - hidden: false
+                                                      label: 11-50
+                                                      value: 11-50
+                                                    - hidden: false
+                                                      label: 51-200
+                                                      value: 51-200
+                                                    - hidden: false
+                                                      label: 201-500
+                                                      value: 201-500
+                                                    - hidden: false
+                                                      label: 501-1000
+                                                      value: 501-1000
+                                                    - hidden: false
+                                                      label: 1001+
+                                                      value: 1001+
+                                                  required: false
+                                                - hidden: false
+                                                  inputType: select
+                                                  key: company_sector
+                                                  label: Company Sector
+                                                  options:
+                                                    - hidden: false
+                                                      label: Technology
+                                                      value: technology
+                                                    - hidden: false
+                                                      label: Healthcare
+                                                      value: healthcare
+                                                    - hidden: false
+                                                      label: Financial Services
+                                                      value: financial_services
+                                                    - hidden: false
+                                                      label: Retail
+                                                      value: retail
+                                                    - hidden: false
+                                                      label: Education
+                                                      value: education
+                                                    - hidden: false
+                                                      label: Other
+                                                      value: other
+                                                  required: false
+                                                - dependsOn:
+                                                    equals: other
+                                                    key: company_sector
+                                                  hidden: false
+                                                  inputType: string
+                                                  key: company_sector_other
+                                                  label: Please specify
+                                                  required: false
+                                              title: Company Info
+                                            - description: Help us personalize recommendations and templates.
+                                              hidden: false
+                                              key: user_info
+                                              order: 2
+                                              questions:
+                                                - hidden: false
+                                                  inputType: select
+                                                  key: user_role
+                                                  label: Role
+                                                  options:
+                                                    - hidden: false
+                                                      label: Founder / Executive
+                                                      value: founder
+                                                    - hidden: false
+                                                      label: Security
+                                                      value: security
+                                                    - hidden: false
+                                                      label: Engineering
+                                                      value: engineering
+                                                    - hidden: false
+                                                      label: Compliance
+                                                      value: compliance
+                                                    - hidden: false
+                                                      label: Operations
+                                                      value: operations
+                                                    - hidden: false
+                                                      label: Other
+                                                      value: other
+                                                  required: false
+                                                - dependsOn:
+                                                    equals: other
+                                                    key: user_role
+                                                  hidden: false
+                                                  inputType: string
+                                                  key: user_role_other
+                                                  label: Please specify
+                                                  required: false
+                                                - hidden: false
+                                                  inputType: select
+                                                  key: user_department
+                                                  label: Department
+                                                  options:
+                                                    - hidden: false
+                                                      label: Security
+                                                      value: security
+                                                    - hidden: false
+                                                      label: Engineering
+                                                      value: engineering
+                                                    - hidden: false
+                                                      label: Compliance
+                                                      value: compliance
+                                                    - hidden: false
+                                                      label: Legal
+                                                      value: legal
+                                                    - hidden: false
+                                                      label: Operations
+                                                      value: operations
+                                                    - hidden: false
+                                                      label: Other
+                                                      value: other
+                                                  required: false
+                                              title: User Info
+                                            - hidden: false
+                                              key: compliance_setup
+                                              order: 3
+                                              questions:
+                                                - description: Select all frameworks you are currently pursuing.
+                                                  hidden: false
+                                                  inputType: multiselect
+                                                  key: frameworks
+                                                  label: What compliance program(s) are you working toward?
+                                                  required: false
+                                                - dependsOn:
+                                                    equals: other
+                                                    key: frameworks
+                                                  hidden: false
+                                                  inputType: string
+                                                  key: other_framework_description
+                                                  label: Which other framework(s)?
+                                                  required: false
+                                              title: Compliance Setup
+                                            - description: We'll tailor recommendations based on what you already have.
+                                              hidden: false
+                                              key: starting_point
+                                              order: 4
+                                              questions:
+                                                - description: Controls are the security and operational practices your organization follows, like requiring MFA, reviewing access, or backing up data.
+                                                  hidden: false
+                                                  inputType: boolean
+                                                  key: has_existing_controls
+                                                  label: Do you already have controls documented?
+                                                  required: false
+                                                - description: Policies and procedures explain how your organization works, like how employees handle data, respond to incidents, or request access.
+                                                  hidden: false
+                                                  inputType: boolean
+                                                  key: has_existing_policies
+                                                  label: Do you already have policies and procedures documented?
+                                                  required: false
+                                              title: Starting Point
+                                            - description: '[Optional] Help us recommend the right partners and resources.'
+                                              hidden: false
+                                              key: support_preferences
+                                              order: 5
+                                              questions:
+                                                - description: We can suggest audit partners and next steps when you're ready.
+                                                  hidden: false
+                                                  inputType: select
+                                                  key: auditor_status
+                                                  label: Are you currently working with an auditor?
+                                                  options:
+                                                    - hidden: false
+                                                      label: "Yes"
+                                                      value: "yes"
+                                                    - hidden: false
+                                                      label: Need recommendations
+                                                      value: recommendations
+                                                    - hidden: false
+                                                      label: Not yet
+                                                      value: not_yet
+                                                  required: false
+                                                - dependsOn:
+                                                    equals: "yes"
+                                                    key: auditor_status
+                                                  hidden: false
+                                                  inputType: string
+                                                  key: auditor_name
+                                                  label: Auditor name
+                                                  required: false
+                                                - dependsOn:
+                                                    equals: "yes"
+                                                    key: auditor_status
+                                                  format: email
+                                                  hidden: false
+                                                  inputType: string
+                                                  key: auditor_email
+                                                  label: Auditor email
+                                                  required: false
+                                                - description: We can suggest partners and next steps when you're ready.
+                                                  hidden: false
+                                                  inputType: select
+                                                  key: vciso_preference
+                                                  label: Do you want help from a hands-on compliance partner?
+                                                  options:
+                                                    - hidden: false
+                                                      label: "No"
+                                                      value: "no"
+                                                    - hidden: false
+                                                      label: Connect me with a vCISO
+                                                      value: connect_vciso_partner
+                                                    - hidden: false
+                                                      label: I have a partner
+                                                      value: existing_partner
+                                                  required: false
+                                                - checkboxLabel: Yes, have someone reach out to me
+                                                  description: Our team can help with onboarding, product questions, and best practices.
+                                                  hidden: false
+                                                  inputType: checkbox
+                                                  key: demo_requested
+                                                  label: Would you like help getting started?
+                                                  required: false
+                                              title: Support Preferences
+                                            - hidden: false
+                                              key: trial
+                                              modules:
+                                                - description: Automate evidence collection and task tracking to simplify SOC 2, ISO 27001, and other certification workflows
+                                                  key: compliance_module
+                                                  title: Core Compliance Module
+                                                - description: A complete, always-current record of your organization platforms, systems and their owners, assets, vendors, personnel, and contacts
+                                                  key: registry_module
+                                                  title: Registry
+                                                - description: Build customer trust with a professional security portal. Share compliance documentation securely with stakeholders
+                                                  key: trust_center_module
+                                                  title: Trust Center
+                                              order: 6
+                                              questions: []
+                                              title: Your free 30-day trial
+                                        success: true
+                                        version: "2026-07-16"
+                            schema:
+                                $ref: '#/components/schemas/OnboardingQuestionsReply'
+                    description: Success
+                "400":
+                    description: Bad Request
+                "401":
+                    description: Unauthorized
+                "500":
+                    description: Internal Server Error
+            security:
+                - bearer: []
+                - oauth2: []
+                - basic: []
+                - apiKey: []
+            summary: ListOnboardingQuestions
+            tags:
+                - onboarding
     /v1/orgs/{slug_name}/sso:
         get:
             description: Initiate an organization's SSO flow from its shareable slug URL
