@@ -880,6 +880,7 @@ type ComplexityRoot struct {
 	}
 
 	EntityHistory struct {
+		Aliases                               func(childComplexity int) int
 		AnnualSpend                           func(childComplexity int) int
 		ApprovedForUse                        func(childComplexity int) int
 		AutoRenews                            func(childComplexity int) int
@@ -7580,6 +7581,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplateHistoryEdge.Node(childComplexity), true
 
+	case "EntityHistory.aliases":
+		if e.ComplexityRoot.EntityHistory.Aliases == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.Aliases(childComplexity), true
 	case "EntityHistory.annualSpend":
 		if e.ComplexityRoot.EntityHistory.AnnualSpend == nil {
 			break
@@ -32377,6 +32384,10 @@ type EntityHistory implements Node {
   domains associated with the entity
   """
   domains: [String!]
+  """
+  common matching names that should match with the entity
+  """
+  aliases: [String!]
   """
   The type of the entity
   """
@@ -69274,6 +69285,8 @@ func (ec *executionContext) childFields_EntityHistory(ctx context.Context, field
 		return ec.fieldContext_EntityHistory_description(ctx, field)
 	case "domains":
 		return ec.fieldContext_EntityHistory_domains(ctx, field)
+	case "aliases":
+		return ec.fieldContext_EntityHistory_aliases(ctx, field)
 	case "entityTypeID":
 		return ec.fieldContext_EntityHistory_entityTypeID(ctx, field)
 	case "status":

@@ -985,6 +985,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entityhistory.FieldDisplayName:                           {Type: field.TypeString, Column: entityhistory.FieldDisplayName},
 			entityhistory.FieldDescription:                           {Type: field.TypeString, Column: entityhistory.FieldDescription},
 			entityhistory.FieldDomains:                               {Type: field.TypeJSON, Column: entityhistory.FieldDomains},
+			entityhistory.FieldAliases:                               {Type: field.TypeJSON, Column: entityhistory.FieldAliases},
 			entityhistory.FieldEntityTypeID:                          {Type: field.TypeString, Column: entityhistory.FieldEntityTypeID},
 			entityhistory.FieldStatus:                                {Type: field.TypeEnum, Column: entityhistory.FieldStatus},
 			entityhistory.FieldApprovedForUse:                        {Type: field.TypeBool, Column: entityhistory.FieldApprovedForUse},
@@ -7415,6 +7416,11 @@ func (f *EntityHistoryFilter) WhereDescription(p entql.StringP) {
 // WhereDomains applies the entql json.RawMessage predicate on the domains field.
 func (f *EntityHistoryFilter) WhereDomains(p entql.BytesP) {
 	f.Where(p.Field(entityhistory.FieldDomains))
+}
+
+// WhereAliases applies the entql json.RawMessage predicate on the aliases field.
+func (f *EntityHistoryFilter) WhereAliases(p entql.BytesP) {
+	f.Where(p.Field(entityhistory.FieldAliases))
 }
 
 // WhereEntityTypeID applies the entql string predicate on the entity_type_id field.

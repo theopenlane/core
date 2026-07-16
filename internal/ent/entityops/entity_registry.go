@@ -4094,6 +4094,7 @@ func init() {
 		{Name: "workflow_instance_id", Label: "WorkflowInstanceID", Type: "string", MatchKey: true},
 	}
 	SchemaEntity.Fields = []FieldDescriptor{
+		{Name: "aliases", Label: "Aliases", Type: "[]string", InputKey: "aliases"},
 		{Name: "annual_spend", Label: "AnnualSpend", Type: "float64", InputKey: "annual_spend"},
 		{Name: "approved_for_use", Label: "ApprovedForUse", Type: "bool", InputKey: "approved_for_use"},
 		{Name: "auto_renews", Label: "AutoRenews", Type: "bool", InputKey: "auto_renews"},

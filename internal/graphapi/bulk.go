@@ -2718,7 +2718,7 @@ func (r *mutationResolver) bulkUpdateEntity(ctx context.Context, ids []string, i
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendDomains(input.AppendDomains).AppendLinkedAssetIds(input.AppendLinkedAssetIds).AppendProvidedServices(input.AppendProvidedServices).AppendLinks(input.AppendLinks).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendDomains(input.AppendDomains).AppendAliases(input.AppendAliases).AppendLinkedAssetIds(input.AppendLinkedAssetIds).AppendProvidedServices(input.AppendProvidedServices).AppendLinks(input.AppendLinks).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("entity_id", id).Msg("failed to update entity in bulk operation")
 			continue
@@ -2759,7 +2759,7 @@ func (r *mutationResolver) bulkUpdateCSVEntity(ctx context.Context, inputs []*cs
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDomains(input.Input.AppendDomains).AppendLinkedAssetIds(input.Input.AppendLinkedAssetIds).AppendProvidedServices(input.Input.AppendProvidedServices).AppendLinks(input.Input.AppendLinks).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDomains(input.Input.AppendDomains).AppendAliases(input.Input.AppendAliases).AppendLinkedAssetIds(input.Input.AppendLinkedAssetIds).AppendProvidedServices(input.Input.AppendProvidedServices).AppendLinks(input.Input.AppendLinks).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("entity_id", input.ID).Msg("failed to update entity in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "entity"})

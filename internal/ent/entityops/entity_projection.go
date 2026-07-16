@@ -674,6 +674,7 @@ type EmailTemplateProjection struct {
 type EntityProjection struct {
 	// ID is the entity identifier, exposed to expressions as "id"
 	ID                                    string                 `json:"id,omitempty"`
+	Aliases                               []string               `json:"aliases,omitempty"`
 	AnnualSpend                           float64                `json:"annual_spend,omitempty"`
 	ApprovedForUse                        bool                   `json:"approved_for_use,omitempty"`
 	AutoRenews                            bool                   `json:"auto_renews,omitempty"`

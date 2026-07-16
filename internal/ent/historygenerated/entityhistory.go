@@ -95,6 +95,8 @@ type EntityHistory struct {
 	Description string `json:"description,omitempty"`
 	// domains associated with the entity
 	Domains []string `json:"domains,omitempty"`
+	// common matching names that should match with the entity
+	Aliases []string `json:"aliases,omitempty"`
 	// The type of the entity
 	EntityTypeID string `json:"entity_type_id,omitempty"`
 	// status of the entity
@@ -169,7 +171,7 @@ func (*EntityHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case entityhistory.FieldLastReviewedAt, entityhistory.FieldSoc2PeriodEnd, entityhistory.FieldContractStartDate, entityhistory.FieldContractEndDate, entityhistory.FieldNextReviewAt, entityhistory.FieldContractRenewalAt, entityhistory.FieldObservedAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
-		case entityhistory.FieldTags, entityhistory.FieldDomains, entityhistory.FieldLinkedAssetIds, entityhistory.FieldProvidedServices, entityhistory.FieldLinks, entityhistory.FieldVendorMetadata:
+		case entityhistory.FieldTags, entityhistory.FieldDomains, entityhistory.FieldAliases, entityhistory.FieldLinkedAssetIds, entityhistory.FieldProvidedServices, entityhistory.FieldLinks, entityhistory.FieldVendorMetadata:
 			values[i] = new([]byte)
 		case entityhistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -426,6 +428,14 @@ func (_m *EntityHistory) assignValues(columns []string, values []any) error {
 			} else if value != nil && len(*value) > 0 {
 				if err := json.Unmarshal(*value, &_m.Domains); err != nil {
 					return fmt.Errorf("unmarshal field domains: %w", err)
+				}
+			}
+		case entityhistory.FieldAliases:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field aliases", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Aliases); err != nil {
+					return fmt.Errorf("unmarshal field aliases: %w", err)
 				}
 			}
 		case entityhistory.FieldEntityTypeID:
@@ -787,6 +797,9 @@ func (_m *EntityHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("domains=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Domains))
+	builder.WriteString(", ")
+	builder.WriteString("aliases=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Aliases))
 	builder.WriteString(", ")
 	builder.WriteString("entity_type_id=")
 	builder.WriteString(_m.EntityTypeID)

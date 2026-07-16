@@ -11622,6 +11622,10 @@ type EntityHistory implements Node {
 	"""
 	domains: [String!]
 	"""
+	common matching names that should match with the entity
+	"""
+	aliases: [String!]
+	"""
 	The type of the entity
 	"""
 	entityTypeID: String

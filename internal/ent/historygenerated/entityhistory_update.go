@@ -604,6 +604,24 @@ func (_u *EntityHistoryUpdate) ClearDomains() *EntityHistoryUpdate {
 	return _u
 }
 
+// SetAliases sets the "aliases" field.
+func (_u *EntityHistoryUpdate) SetAliases(v []string) *EntityHistoryUpdate {
+	_u.mutation.SetAliases(v)
+	return _u
+}
+
+// AppendAliases appends value to the "aliases" field.
+func (_u *EntityHistoryUpdate) AppendAliases(v []string) *EntityHistoryUpdate {
+	_u.mutation.AppendAliases(v)
+	return _u
+}
+
+// ClearAliases clears the value of the "aliases" field.
+func (_u *EntityHistoryUpdate) ClearAliases() *EntityHistoryUpdate {
+	_u.mutation.ClearAliases()
+	return _u
+}
+
 // SetEntityTypeID sets the "entity_type_id" field.
 func (_u *EntityHistoryUpdate) SetEntityTypeID(v string) *EntityHistoryUpdate {
 	_u.mutation.SetEntityTypeID(v)
@@ -1542,6 +1560,17 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.DomainsCleared() {
 		_spec.ClearField(entityhistory.FieldDomains, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.Aliases(); ok {
+		_spec.SetField(entityhistory.FieldAliases, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedAliases(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, entityhistory.FieldAliases, value)
+		})
+	}
+	if _u.mutation.AliasesCleared() {
+		_spec.ClearField(entityhistory.FieldAliases, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.EntityTypeID(); ok {
 		_spec.SetField(entityhistory.FieldEntityTypeID, field.TypeString, value)
 	}
@@ -2350,6 +2379,24 @@ func (_u *EntityHistoryUpdateOne) AppendDomains(v []string) *EntityHistoryUpdate
 // ClearDomains clears the value of the "domains" field.
 func (_u *EntityHistoryUpdateOne) ClearDomains() *EntityHistoryUpdateOne {
 	_u.mutation.ClearDomains()
+	return _u
+}
+
+// SetAliases sets the "aliases" field.
+func (_u *EntityHistoryUpdateOne) SetAliases(v []string) *EntityHistoryUpdateOne {
+	_u.mutation.SetAliases(v)
+	return _u
+}
+
+// AppendAliases appends value to the "aliases" field.
+func (_u *EntityHistoryUpdateOne) AppendAliases(v []string) *EntityHistoryUpdateOne {
+	_u.mutation.AppendAliases(v)
+	return _u
+}
+
+// ClearAliases clears the value of the "aliases" field.
+func (_u *EntityHistoryUpdateOne) ClearAliases() *EntityHistoryUpdateOne {
+	_u.mutation.ClearAliases()
 	return _u
 }
 
@@ -3320,6 +3367,17 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 	}
 	if _u.mutation.DomainsCleared() {
 		_spec.ClearField(entityhistory.FieldDomains, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Aliases(); ok {
+		_spec.SetField(entityhistory.FieldAliases, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedAliases(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, entityhistory.FieldAliases, value)
+		})
+	}
+	if _u.mutation.AliasesCleared() {
+		_spec.ClearField(entityhistory.FieldAliases, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.EntityTypeID(); ok {
 		_spec.SetField(entityhistory.FieldEntityTypeID, field.TypeString, value)

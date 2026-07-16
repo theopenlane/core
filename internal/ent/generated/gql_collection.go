@@ -21456,6 +21456,11 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				selectedFields = append(selectedFields, entity.FieldDomains)
 				fieldSeen[entity.FieldDomains] = struct{}{}
 			}
+		case "aliases":
+			if _, ok := fieldSeen[entity.FieldAliases]; !ok {
+				selectedFields = append(selectedFields, entity.FieldAliases)
+				fieldSeen[entity.FieldAliases] = struct{}{}
+			}
 		case "entityTypeID":
 			if _, ok := fieldSeen[entity.FieldEntityTypeID]; !ok {
 				selectedFields = append(selectedFields, entity.FieldEntityTypeID)

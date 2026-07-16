@@ -14106,6 +14106,10 @@ input CreateEntityInput {
 	"""
 	domains: [String!]
 	"""
+	common matching names that should match with the entity
+	"""
+	aliases: [String!]
+	"""
 	status of the entity
 	"""
 	status: EntityEntityStatus
@@ -25634,6 +25638,10 @@ type Entity implements Node {
 	"""
 	domains: [String!]
 	"""
+	common matching names that should match with the entity
+	"""
+	aliases: [String!]
+	"""
 	The type of the entity
 	"""
 	entityTypeID: ID
@@ -28106,6 +28114,10 @@ input EntityWhereInput {
 	Filter for domainsHas to contain a specific value
 	"""
 	domainsHas: String
+	"""
+	Filter for aliasesHas to contain a specific value
+	"""
+	aliasesHas: String
 	"""
 	Filter for linkedAssetIdsHas to contain a specific value
 	"""
@@ -94332,6 +94344,12 @@ input UpdateEntityInput {
 	domains: [String!]
 	appendDomains: [String!]
 	clearDomains: Boolean
+	"""
+	common matching names that should match with the entity
+	"""
+	aliases: [String!]
+	appendAliases: [String!]
+	clearAliases: Boolean
 	"""
 	status of the entity
 	"""
