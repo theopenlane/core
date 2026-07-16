@@ -33662,6 +33662,10 @@ type StandardHistory implements Node {
 	"""
 	standardType: String
 	"""
+	priority for displaying standards
+	"""
+	priority: Int!
+	"""
 	version of the standard
 	"""
 	version: String
@@ -33735,6 +33739,7 @@ enum StandardHistoryOrderField {
 	governing_body
 	STATUS
 	standard_type
+	priority
 }
 """
 StandardHistoryStandardStatus is enum for the field status
@@ -34125,6 +34130,17 @@ input StandardHistoryWhereInput {
 	standardTypeNotNil: Boolean
 	standardTypeEqualFold: String
 	standardTypeContainsFold: String
+	"""
+	priority field predicates
+	"""
+	priority: Int
+	priorityNEQ: Int
+	priorityIn: [Int!]
+	priorityNotIn: [Int!]
+	priorityGT: Int
+	priorityGTE: Int
+	priorityLT: Int
+	priorityLTE: Int
 	"""
 	version field predicates
 	"""
@@ -35883,6 +35899,10 @@ type TaskHistory implements Node {
 	"""
 	detailsJSON: [Any!]
 	"""
+	structured metadata used by clients for task presentation and routing
+	"""
+	metadata: Map
+	"""
 	the status of the task
 	"""
 	status: TaskHistoryTaskStatus!
@@ -35910,6 +35930,26 @@ type TaskHistory implements Node {
 	indicates if the task is intended to be used as a template
 	"""
 	isTemplate: Boolean!
+	"""
+	indicates if the task is suggested by the system as a recommended next action
+	"""
+	isSuggested: Boolean!
+	"""
+	relative ordering priority for suggested and system-generated tasks
+	"""
+	priority: Int!
+	"""
+	the time when the task should become available to users
+	"""
+	availableAt: DateTime
+	"""
+	the system or workflow that created or suggested the task
+	"""
+	source: String
+	"""
+	stable source-specific key for the task
+	"""
+	sourceKey: String
 	"""
 	key to prevent duplicates for auto-generated task based on rules
 	"""
@@ -35986,6 +36026,9 @@ enum TaskHistoryOrderField {
 	due
 	completed
 	is_template
+	is_suggested
+	priority
+	available_at
 }
 """
 TaskHistoryTaskStatus is enum for the field status
@@ -36414,6 +36457,71 @@ input TaskHistoryWhereInput {
 	"""
 	isTemplate: Boolean
 	isTemplateNEQ: Boolean
+	"""
+	is_suggested field predicates
+	"""
+	isSuggested: Boolean
+	isSuggestedNEQ: Boolean
+	"""
+	priority field predicates
+	"""
+	priority: Int
+	priorityNEQ: Int
+	priorityIn: [Int!]
+	priorityNotIn: [Int!]
+	priorityGT: Int
+	priorityGTE: Int
+	priorityLT: Int
+	priorityLTE: Int
+	"""
+	available_at field predicates
+	"""
+	availableAt: DateTime
+	availableAtNEQ: DateTime
+	availableAtIn: [DateTime!]
+	availableAtNotIn: [DateTime!]
+	availableAtGT: DateTime
+	availableAtGTE: DateTime
+	availableAtLT: DateTime
+	availableAtLTE: DateTime
+	availableAtIsNil: Boolean
+	availableAtNotNil: Boolean
+	"""
+	source field predicates
+	"""
+	source: String
+	sourceNEQ: String
+	sourceIn: [String!]
+	sourceNotIn: [String!]
+	sourceGT: String
+	sourceGTE: String
+	sourceLT: String
+	sourceLTE: String
+	sourceContains: String
+	sourceHasPrefix: String
+	sourceHasSuffix: String
+	sourceIsNil: Boolean
+	sourceNotNil: Boolean
+	sourceEqualFold: String
+	sourceContainsFold: String
+	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyGT: String
+	sourceKeyGTE: String
+	sourceKeyLT: String
+	sourceKeyLTE: String
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
 	"""
 	idempotency_key field predicates
 	"""

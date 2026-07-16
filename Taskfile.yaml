@@ -20,6 +20,9 @@ includes:
   catalog:
     taskfile: ./pkg/catalog/Taskfile.yaml
     dir: ./pkg/catalog
+  onboarding:
+    taskfile: ./internal/onboarding/Taskfile.yaml
+    dir: ./internal/onboarding
   bats:
     taskfile: ./.buildkite/tests/Taskfile.yaml
 
@@ -67,6 +70,7 @@ tasks:
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     deps:
+      - task: generate:onboarding:smart
       - task: generate:core
       - task: generate:catalog:smart
       - task: fga:generate
@@ -136,6 +140,22 @@ tasks:
     method: checksum
     cmds:
       - go generate pkg/catalog/generate.go
+
+  generate:onboarding:smart:
+    desc: Generate onboarding code from YAML definitions
+    aliases: ['generate:onboarding']
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
+    sources:
+      - internal/onboarding/generate.go
+      - internal/onboarding/types.go
+      - internal/onboarding/genyaml/**/*.go
+      - internal/onboarding/onboarding.yaml
+    generates:
+      - internal/onboarding/onboarding_gen.go
+    method: checksum
+    cmds:
+      - go generate internal/onboarding/generate.go
 
   generate:openapi:smart:
     desc: Generate OpenAPI specification with checksum tracking

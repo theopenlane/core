@@ -7083,6 +7083,7 @@ var (
 		{Name: "is_public", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "free_to_use", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "standard_type", Type: field.TypeString, Nullable: true},
+		{Name: "priority", Type: field.TypeInt, Default: 0},
 		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
@@ -7095,13 +7096,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "standards_organizations_standards",
-				Columns:    []*schema.Column{StandardsColumns[26]},
+				Columns:    []*schema.Column{StandardsColumns[27]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "standards_files_logo_file",
-				Columns:    []*schema.Column{StandardsColumns[27]},
+				Columns:    []*schema.Column{StandardsColumns[28]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -7110,7 +7111,7 @@ var (
 			{
 				Name:    "standard_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{StandardsColumns[26]},
+				Columns: []*schema.Column{StandardsColumns[27]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -7619,11 +7620,17 @@ var (
 		{Name: "title", Type: field.TypeString},
 		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details_json", Type: field.TypeJSON, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO"}, Default: "OPEN"},
 		{Name: "due", Type: field.TypeTime, Nullable: true},
 		{Name: "completed", Type: field.TypeTime, Nullable: true},
 		{Name: "system_generated", Type: field.TypeBool, Default: false},
 		{Name: "is_template", Type: field.TypeBool, Default: false},
+		{Name: "is_suggested", Type: field.TypeBool, Default: false},
+		{Name: "priority", Type: field.TypeInt, Default: 0},
+		{Name: "available_at", Type: field.TypeTime, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "source_key", Type: field.TypeString, Nullable: true},
 		{Name: "idempotency_key", Type: field.TypeString, Nullable: true},
 		{Name: "external_reference_url", Type: field.TypeJSON, Nullable: true},
 		{Name: "custom_type_enum_tasks", Type: field.TypeString, Nullable: true},
@@ -7646,67 +7653,67 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tasks_custom_type_enums_tasks",
-				Columns:    []*schema.Column{TasksColumns[25]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "tasks_integrations_tasks",
-				Columns:    []*schema.Column{TasksColumns[26]},
-				RefColumns: []*schema.Column{IntegrationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "tasks_organizations_tasks",
-				Columns:    []*schema.Column{TasksColumns[27]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "tasks_remediations_tasks",
-				Columns:    []*schema.Column{TasksColumns[28]},
-				RefColumns: []*schema.Column{RemediationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "tasks_reviews_tasks",
-				Columns:    []*schema.Column{TasksColumns[29]},
-				RefColumns: []*schema.Column{ReviewsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "tasks_custom_type_enums_task_kind",
-				Columns:    []*schema.Column{TasksColumns[30]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "tasks_custom_type_enums_environment",
 				Columns:    []*schema.Column{TasksColumns[31]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "tasks_custom_type_enums_scope",
+				Symbol:     "tasks_integrations_tasks",
 				Columns:    []*schema.Column{TasksColumns[32]},
+				RefColumns: []*schema.Column{IntegrationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tasks_organizations_tasks",
+				Columns:    []*schema.Column{TasksColumns[33]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tasks_remediations_tasks",
+				Columns:    []*schema.Column{TasksColumns[34]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tasks_reviews_tasks",
+				Columns:    []*schema.Column{TasksColumns[35]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tasks_custom_type_enums_task_kind",
+				Columns:    []*schema.Column{TasksColumns[36]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tasks_custom_type_enums_environment",
+				Columns:    []*schema.Column{TasksColumns[37]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tasks_custom_type_enums_scope",
+				Columns:    []*schema.Column{TasksColumns[38]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_tasks_tasks",
-				Columns:    []*schema.Column{TasksColumns[33]},
+				Columns:    []*schema.Column{TasksColumns[39]},
 				RefColumns: []*schema.Column{TasksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_users_assigner_tasks",
-				Columns:    []*schema.Column{TasksColumns[34]},
+				Columns:    []*schema.Column{TasksColumns[40]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_users_assignee_tasks",
-				Columns:    []*schema.Column{TasksColumns[35]},
+				Columns:    []*schema.Column{TasksColumns[41]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -7715,12 +7722,12 @@ var (
 			{
 				Name:    "task_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{TasksColumns[8], TasksColumns[27]},
+				Columns: []*schema.Column{TasksColumns[8], TasksColumns[33]},
 			},
 			{
 				Name:    "task_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{TasksColumns[27]},
+				Columns: []*schema.Column{TasksColumns[33]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -7728,7 +7735,23 @@ var (
 			{
 				Name:    "task_external_uuid_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{TasksColumns[14], TasksColumns[27]},
+				Columns: []*schema.Column{TasksColumns[14], TasksColumns[33]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "task_owner_id_idempotency_key",
+				Unique:  true,
+				Columns: []*schema.Column{TasksColumns[33], TasksColumns[29]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL AND idempotency_key IS NOT NULL",
+				},
+			},
+			{
+				Name:    "task_owner_id_is_suggested_available_at_priority",
+				Unique:  false,
+				Columns: []*schema.Column{TasksColumns[33], TasksColumns[24], TasksColumns[26], TasksColumns[25]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},

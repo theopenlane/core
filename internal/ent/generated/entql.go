@@ -2989,6 +2989,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standard.FieldIsPublic:              {Type: field.TypeBool, Column: standard.FieldIsPublic},
 			standard.FieldFreeToUse:             {Type: field.TypeBool, Column: standard.FieldFreeToUse},
 			standard.FieldStandardType:          {Type: field.TypeString, Column: standard.FieldStandardType},
+			standard.FieldPriority:              {Type: field.TypeInt, Column: standard.FieldPriority},
 			standard.FieldVersion:               {Type: field.TypeString, Column: standard.FieldVersion},
 			standard.FieldLogoFileID:            {Type: field.TypeString, Column: standard.FieldLogoFileID},
 		},
@@ -3237,6 +3238,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldTitle:                  {Type: field.TypeString, Column: task.FieldTitle},
 			task.FieldDetails:                {Type: field.TypeString, Column: task.FieldDetails},
 			task.FieldDetailsJSON:            {Type: field.TypeJSON, Column: task.FieldDetailsJSON},
+			task.FieldMetadata:               {Type: field.TypeJSON, Column: task.FieldMetadata},
 			task.FieldStatus:                 {Type: field.TypeEnum, Column: task.FieldStatus},
 			task.FieldDue:                    {Type: field.TypeTime, Column: task.FieldDue},
 			task.FieldCompleted:              {Type: field.TypeTime, Column: task.FieldCompleted},
@@ -3244,6 +3246,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldAssignerID:             {Type: field.TypeString, Column: task.FieldAssignerID},
 			task.FieldSystemGenerated:        {Type: field.TypeBool, Column: task.FieldSystemGenerated},
 			task.FieldIsTemplate:             {Type: field.TypeBool, Column: task.FieldIsTemplate},
+			task.FieldIsSuggested:            {Type: field.TypeBool, Column: task.FieldIsSuggested},
+			task.FieldPriority:               {Type: field.TypeInt, Column: task.FieldPriority},
+			task.FieldAvailableAt:            {Type: field.TypeTime, Column: task.FieldAvailableAt},
+			task.FieldSource:                 {Type: field.TypeString, Column: task.FieldSource},
+			task.FieldSourceKey:              {Type: field.TypeString, Column: task.FieldSourceKey},
 			task.FieldIdempotencyKey:         {Type: field.TypeString, Column: task.FieldIdempotencyKey},
 			task.FieldExternalReferenceURL:   {Type: field.TypeJSON, Column: task.FieldExternalReferenceURL},
 			task.FieldParentTaskID:           {Type: field.TypeString, Column: task.FieldParentTaskID},
@@ -44819,6 +44826,11 @@ func (f *StandardFilter) WhereStandardType(p entql.StringP) {
 	f.Where(p.Field(standard.FieldStandardType))
 }
 
+// WherePriority applies the entql int predicate on the priority field.
+func (f *StandardFilter) WherePriority(p entql.IntP) {
+	f.Where(p.Field(standard.FieldPriority))
+}
+
 // WhereVersion applies the entql string predicate on the version field.
 func (f *StandardFilter) WhereVersion(p entql.StringP) {
 	f.Where(p.Field(standard.FieldVersion))
@@ -46584,6 +46596,11 @@ func (f *TaskFilter) WhereDetailsJSON(p entql.BytesP) {
 	f.Where(p.Field(task.FieldDetailsJSON))
 }
 
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *TaskFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(task.FieldMetadata))
+}
+
 // WhereStatus applies the entql string predicate on the status field.
 func (f *TaskFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(task.FieldStatus))
@@ -46617,6 +46634,31 @@ func (f *TaskFilter) WhereSystemGenerated(p entql.BoolP) {
 // WhereIsTemplate applies the entql bool predicate on the is_template field.
 func (f *TaskFilter) WhereIsTemplate(p entql.BoolP) {
 	f.Where(p.Field(task.FieldIsTemplate))
+}
+
+// WhereIsSuggested applies the entql bool predicate on the is_suggested field.
+func (f *TaskFilter) WhereIsSuggested(p entql.BoolP) {
+	f.Where(p.Field(task.FieldIsSuggested))
+}
+
+// WherePriority applies the entql int predicate on the priority field.
+func (f *TaskFilter) WherePriority(p entql.IntP) {
+	f.Where(p.Field(task.FieldPriority))
+}
+
+// WhereAvailableAt applies the entql time.Time predicate on the available_at field.
+func (f *TaskFilter) WhereAvailableAt(p entql.TimeP) {
+	f.Where(p.Field(task.FieldAvailableAt))
+}
+
+// WhereSource applies the entql string predicate on the source field.
+func (f *TaskFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(task.FieldSource))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *TaskFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(task.FieldSourceKey))
 }
 
 // WhereIdempotencyKey applies the entql string predicate on the idempotency_key field.

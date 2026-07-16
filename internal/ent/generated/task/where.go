@@ -194,6 +194,31 @@ func IsTemplate(v bool) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldIsTemplate, v))
 }
 
+// IsSuggested applies equality check predicate on the "is_suggested" field. It's identical to IsSuggestedEQ.
+func IsSuggested(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldIsSuggested, v))
+}
+
+// Priority applies equality check predicate on the "priority" field. It's identical to PriorityEQ.
+func Priority(v int) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldPriority, v))
+}
+
+// AvailableAt applies equality check predicate on the "available_at" field. It's identical to AvailableAtEQ.
+func AvailableAt(v models.DateTime) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAvailableAt, v))
+}
+
+// Source applies equality check predicate on the "source" field. It's identical to SourceEQ.
+func Source(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldSource, v))
+}
+
+// SourceKey applies equality check predicate on the "source_key" field. It's identical to SourceKeyEQ.
+func SourceKey(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldSourceKey, v))
+}
+
 // IdempotencyKey applies equality check predicate on the "idempotency_key" field. It's identical to IdempotencyKeyEQ.
 func IdempotencyKey(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldIdempotencyKey, v))
@@ -1499,6 +1524,16 @@ func DetailsJSONNotNil() predicate.Task {
 	return predicate.Task(sql.FieldNotNull(FieldDetailsJSON))
 }
 
+// MetadataIsNil applies the IsNil predicate on the "metadata" field.
+func MetadataIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldMetadata))
+}
+
+// MetadataNotNil applies the NotNil predicate on the "metadata" field.
+func MetadataNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldMetadata))
+}
+
 // StatusEQ applies the EQ predicate on the "status" field.
 func StatusEQ(v enums.TaskStatus) predicate.Task {
 	vc := v
@@ -1797,6 +1832,256 @@ func IsTemplateEQ(v bool) predicate.Task {
 // IsTemplateNEQ applies the NEQ predicate on the "is_template" field.
 func IsTemplateNEQ(v bool) predicate.Task {
 	return predicate.Task(sql.FieldNEQ(FieldIsTemplate, v))
+}
+
+// IsSuggestedEQ applies the EQ predicate on the "is_suggested" field.
+func IsSuggestedEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldIsSuggested, v))
+}
+
+// IsSuggestedNEQ applies the NEQ predicate on the "is_suggested" field.
+func IsSuggestedNEQ(v bool) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldIsSuggested, v))
+}
+
+// PriorityEQ applies the EQ predicate on the "priority" field.
+func PriorityEQ(v int) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldPriority, v))
+}
+
+// PriorityNEQ applies the NEQ predicate on the "priority" field.
+func PriorityNEQ(v int) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldPriority, v))
+}
+
+// PriorityIn applies the In predicate on the "priority" field.
+func PriorityIn(vs ...int) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldPriority, vs...))
+}
+
+// PriorityNotIn applies the NotIn predicate on the "priority" field.
+func PriorityNotIn(vs ...int) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldPriority, vs...))
+}
+
+// PriorityGT applies the GT predicate on the "priority" field.
+func PriorityGT(v int) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldPriority, v))
+}
+
+// PriorityGTE applies the GTE predicate on the "priority" field.
+func PriorityGTE(v int) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldPriority, v))
+}
+
+// PriorityLT applies the LT predicate on the "priority" field.
+func PriorityLT(v int) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldPriority, v))
+}
+
+// PriorityLTE applies the LTE predicate on the "priority" field.
+func PriorityLTE(v int) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldPriority, v))
+}
+
+// AvailableAtEQ applies the EQ predicate on the "available_at" field.
+func AvailableAtEQ(v models.DateTime) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldAvailableAt, v))
+}
+
+// AvailableAtNEQ applies the NEQ predicate on the "available_at" field.
+func AvailableAtNEQ(v models.DateTime) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldAvailableAt, v))
+}
+
+// AvailableAtIn applies the In predicate on the "available_at" field.
+func AvailableAtIn(vs ...models.DateTime) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldAvailableAt, vs...))
+}
+
+// AvailableAtNotIn applies the NotIn predicate on the "available_at" field.
+func AvailableAtNotIn(vs ...models.DateTime) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldAvailableAt, vs...))
+}
+
+// AvailableAtGT applies the GT predicate on the "available_at" field.
+func AvailableAtGT(v models.DateTime) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldAvailableAt, v))
+}
+
+// AvailableAtGTE applies the GTE predicate on the "available_at" field.
+func AvailableAtGTE(v models.DateTime) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldAvailableAt, v))
+}
+
+// AvailableAtLT applies the LT predicate on the "available_at" field.
+func AvailableAtLT(v models.DateTime) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldAvailableAt, v))
+}
+
+// AvailableAtLTE applies the LTE predicate on the "available_at" field.
+func AvailableAtLTE(v models.DateTime) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldAvailableAt, v))
+}
+
+// AvailableAtIsNil applies the IsNil predicate on the "available_at" field.
+func AvailableAtIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldAvailableAt))
+}
+
+// AvailableAtNotNil applies the NotNil predicate on the "available_at" field.
+func AvailableAtNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldAvailableAt))
+}
+
+// SourceEQ applies the EQ predicate on the "source" field.
+func SourceEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldSource, v))
+}
+
+// SourceNEQ applies the NEQ predicate on the "source" field.
+func SourceNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldSource, v))
+}
+
+// SourceIn applies the In predicate on the "source" field.
+func SourceIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldSource, vs...))
+}
+
+// SourceNotIn applies the NotIn predicate on the "source" field.
+func SourceNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldSource, vs...))
+}
+
+// SourceGT applies the GT predicate on the "source" field.
+func SourceGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldSource, v))
+}
+
+// SourceGTE applies the GTE predicate on the "source" field.
+func SourceGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldSource, v))
+}
+
+// SourceLT applies the LT predicate on the "source" field.
+func SourceLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldSource, v))
+}
+
+// SourceLTE applies the LTE predicate on the "source" field.
+func SourceLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldSource, v))
+}
+
+// SourceContains applies the Contains predicate on the "source" field.
+func SourceContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldSource, v))
+}
+
+// SourceHasPrefix applies the HasPrefix predicate on the "source" field.
+func SourceHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldSource, v))
+}
+
+// SourceHasSuffix applies the HasSuffix predicate on the "source" field.
+func SourceHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldSource, v))
+}
+
+// SourceIsNil applies the IsNil predicate on the "source" field.
+func SourceIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldSource))
+}
+
+// SourceNotNil applies the NotNil predicate on the "source" field.
+func SourceNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldSource))
+}
+
+// SourceEqualFold applies the EqualFold predicate on the "source" field.
+func SourceEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldSource, v))
+}
+
+// SourceContainsFold applies the ContainsFold predicate on the "source" field.
+func SourceContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldSource, v))
+}
+
+// SourceKeyEQ applies the EQ predicate on the "source_key" field.
+func SourceKeyEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldSourceKey, v))
+}
+
+// SourceKeyNEQ applies the NEQ predicate on the "source_key" field.
+func SourceKeyNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldSourceKey, v))
+}
+
+// SourceKeyIn applies the In predicate on the "source_key" field.
+func SourceKeyIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldSourceKey, vs...))
+}
+
+// SourceKeyNotIn applies the NotIn predicate on the "source_key" field.
+func SourceKeyNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldSourceKey, vs...))
+}
+
+// SourceKeyGT applies the GT predicate on the "source_key" field.
+func SourceKeyGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldSourceKey, v))
+}
+
+// SourceKeyGTE applies the GTE predicate on the "source_key" field.
+func SourceKeyGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldSourceKey, v))
+}
+
+// SourceKeyLT applies the LT predicate on the "source_key" field.
+func SourceKeyLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldSourceKey, v))
+}
+
+// SourceKeyLTE applies the LTE predicate on the "source_key" field.
+func SourceKeyLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldSourceKey, v))
+}
+
+// SourceKeyContains applies the Contains predicate on the "source_key" field.
+func SourceKeyContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldSourceKey, v))
+}
+
+// SourceKeyHasPrefix applies the HasPrefix predicate on the "source_key" field.
+func SourceKeyHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldSourceKey, v))
+}
+
+// SourceKeyHasSuffix applies the HasSuffix predicate on the "source_key" field.
+func SourceKeyHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldSourceKey, v))
+}
+
+// SourceKeyIsNil applies the IsNil predicate on the "source_key" field.
+func SourceKeyIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldSourceKey))
+}
+
+// SourceKeyNotNil applies the NotNil predicate on the "source_key" field.
+func SourceKeyNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldSourceKey))
+}
+
+// SourceKeyEqualFold applies the EqualFold predicate on the "source_key" field.
+func SourceKeyEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldSourceKey, v))
+}
+
+// SourceKeyContainsFold applies the ContainsFold predicate on the "source_key" field.
+func SourceKeyContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldSourceKey, v))
 }
 
 // IdempotencyKeyEQ applies the EQ predicate on the "idempotency_key" field.

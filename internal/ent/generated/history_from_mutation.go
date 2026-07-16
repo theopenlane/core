@@ -21150,6 +21150,10 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetStandardType(standardType)
 	}
 
+	if priority, exists := m.Priority(); exists {
+		create = create.SetPriority(priority)
+	}
+
 	if version, exists := m.Version(); exists {
 		create = create.SetVersion(version)
 	}
@@ -21339,6 +21343,12 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStandardType(standard.StandardType)
 		}
 
+		if priority, exists := m.Priority(); exists {
+			create = create.SetPriority(priority)
+		} else {
+			create = create.SetPriority(standard.Priority)
+		}
+
 		if version, exists := m.Version(); exists {
 			create = create.SetVersion(version)
 		} else {
@@ -21411,6 +21421,7 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetIsPublic(standard.IsPublic).
 			SetFreeToUse(standard.FreeToUse).
 			SetStandardType(standard.StandardType).
+			SetPriority(standard.Priority).
 			SetVersion(standard.Version).
 			SetNillableLogoFileID(standard.LogoFileID).
 			Save(ctx)
@@ -22697,6 +22708,10 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDetailsJSON(detailsJSON)
 	}
 
+	if metadata, exists := m.Metadata(); exists {
+		create = create.SetMetadata(metadata)
+	}
+
 	if status, exists := m.Status(); exists {
 		create = create.SetStatus(status)
 	}
@@ -22723,6 +22738,26 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if isTemplate, exists := m.IsTemplate(); exists {
 		create = create.SetIsTemplate(isTemplate)
+	}
+
+	if isSuggested, exists := m.IsSuggested(); exists {
+		create = create.SetIsSuggested(isSuggested)
+	}
+
+	if priority, exists := m.Priority(); exists {
+		create = create.SetPriority(priority)
+	}
+
+	if availableAt, exists := m.AvailableAt(); exists {
+		create = create.SetNillableAvailableAt(&availableAt)
+	}
+
+	if source, exists := m.Source(); exists {
+		create = create.SetSource(source)
+	}
+
+	if sourceKey, exists := m.SourceKey(); exists {
+		create = create.SetSourceKey(sourceKey)
 	}
 
 	if idempotencyKey, exists := m.IdempotencyKey(); exists {
@@ -22894,6 +22929,12 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDetailsJSON(task.DetailsJSON)
 		}
 
+		if metadata, exists := m.Metadata(); exists {
+			create = create.SetMetadata(metadata)
+		} else {
+			create = create.SetMetadata(task.Metadata)
+		}
+
 		if status, exists := m.Status(); exists {
 			create = create.SetStatus(status)
 		} else {
@@ -22934,6 +22975,36 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetIsTemplate(isTemplate)
 		} else {
 			create = create.SetIsTemplate(task.IsTemplate)
+		}
+
+		if isSuggested, exists := m.IsSuggested(); exists {
+			create = create.SetIsSuggested(isSuggested)
+		} else {
+			create = create.SetIsSuggested(task.IsSuggested)
+		}
+
+		if priority, exists := m.Priority(); exists {
+			create = create.SetPriority(priority)
+		} else {
+			create = create.SetPriority(task.Priority)
+		}
+
+		if availableAt, exists := m.AvailableAt(); exists {
+			create = create.SetNillableAvailableAt(&availableAt)
+		} else {
+			create = create.SetNillableAvailableAt(task.AvailableAt)
+		}
+
+		if source, exists := m.Source(); exists {
+			create = create.SetSource(source)
+		} else {
+			create = create.SetSource(task.Source)
+		}
+
+		if sourceKey, exists := m.SourceKey(); exists {
+			create = create.SetSourceKey(sourceKey)
+		} else {
+			create = create.SetSourceKey(task.SourceKey)
 		}
 
 		if idempotencyKey, exists := m.IdempotencyKey(); exists {
@@ -23010,6 +23081,7 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetTitle(task.Title).
 			SetDetails(task.Details).
 			SetDetailsJSON(task.DetailsJSON).
+			SetMetadata(task.Metadata).
 			SetStatus(task.Status).
 			SetNillableDue(task.Due).
 			SetNillableCompleted(task.Completed).
@@ -23017,6 +23089,11 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetAssignerID(task.AssignerID).
 			SetSystemGenerated(task.SystemGenerated).
 			SetIsTemplate(task.IsTemplate).
+			SetIsSuggested(task.IsSuggested).
+			SetPriority(task.Priority).
+			SetNillableAvailableAt(task.AvailableAt).
+			SetSource(task.Source).
+			SetSourceKey(task.SourceKey).
 			SetIdempotencyKey(task.IdempotencyKey).
 			SetExternalReferenceURL(task.ExternalReferenceURL).
 			SetNillableParentTaskID(task.ParentTaskID).

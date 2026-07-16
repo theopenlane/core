@@ -7153,6 +7153,10 @@ func init() {
 	standardDescFreeToUse := standardFields[10].Descriptor()
 	// standard.DefaultFreeToUse holds the default value on creation for the free_to_use field.
 	standard.DefaultFreeToUse = standardDescFreeToUse.Default.(bool)
+	// standardDescPriority is the schema descriptor for priority field.
+	standardDescPriority := standardFields[12].Descriptor()
+	// standard.DefaultPriority holds the default value on creation for the priority field.
+	standard.DefaultPriority = standardDescPriority.Default.(int)
 	// standardDescID is the schema descriptor for id field.
 	standardDescID := standardMixinFields3[0].Descriptor()
 	// standard.DefaultID holds the default value on creation for the id field.
@@ -7790,15 +7794,23 @@ func init() {
 	// task.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	task.TitleValidator = taskDescTitle.Validators[0].(func(string) error)
 	// taskDescSystemGenerated is the schema descriptor for system_generated field.
-	taskDescSystemGenerated := taskFields[9].Descriptor()
+	taskDescSystemGenerated := taskFields[10].Descriptor()
 	// task.DefaultSystemGenerated holds the default value on creation for the system_generated field.
 	task.DefaultSystemGenerated = taskDescSystemGenerated.Default.(bool)
 	// taskDescIsTemplate is the schema descriptor for is_template field.
-	taskDescIsTemplate := taskFields[10].Descriptor()
+	taskDescIsTemplate := taskFields[11].Descriptor()
 	// task.DefaultIsTemplate holds the default value on creation for the is_template field.
 	task.DefaultIsTemplate = taskDescIsTemplate.Default.(bool)
+	// taskDescIsSuggested is the schema descriptor for is_suggested field.
+	taskDescIsSuggested := taskFields[12].Descriptor()
+	// task.DefaultIsSuggested holds the default value on creation for the is_suggested field.
+	task.DefaultIsSuggested = taskDescIsSuggested.Default.(bool)
+	// taskDescPriority is the schema descriptor for priority field.
+	taskDescPriority := taskFields[13].Descriptor()
+	// task.DefaultPriority holds the default value on creation for the priority field.
+	task.DefaultPriority = taskDescPriority.Default.(int)
 	// taskDescExternalReferenceURL is the schema descriptor for external_reference_url field.
-	taskDescExternalReferenceURL := taskFields[12].Descriptor()
+	taskDescExternalReferenceURL := taskFields[18].Descriptor()
 	// task.ExternalReferenceURLValidator is a validator for the "external_reference_url" field. It is called by the builders before save.
 	task.ExternalReferenceURLValidator = taskDescExternalReferenceURL.Validators[0].(func([]string) error)
 	// taskDescID is the schema descriptor for id field.

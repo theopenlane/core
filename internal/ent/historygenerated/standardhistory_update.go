@@ -457,6 +457,27 @@ func (_u *StandardHistoryUpdate) ClearStandardType() *StandardHistoryUpdate {
 	return _u
 }
 
+// SetPriority sets the "priority" field.
+func (_u *StandardHistoryUpdate) SetPriority(v int) *StandardHistoryUpdate {
+	_u.mutation.ResetPriority()
+	_u.mutation.SetPriority(v)
+	return _u
+}
+
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (_u *StandardHistoryUpdate) SetNillablePriority(v *int) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetPriority(*v)
+	}
+	return _u
+}
+
+// AddPriority adds value to the "priority" field.
+func (_u *StandardHistoryUpdate) AddPriority(v int) *StandardHistoryUpdate {
+	_u.mutation.AddPriority(v)
+	return _u
+}
+
 // SetVersion sets the "version" field.
 func (_u *StandardHistoryUpdate) SetVersion(v string) *StandardHistoryUpdate {
 	_u.mutation.SetVersion(v)
@@ -722,6 +743,12 @@ func (_u *StandardHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if _u.mutation.StandardTypeCleared() {
 		_spec.ClearField(standardhistory.FieldStandardType, field.TypeString)
+	}
+	if value, ok := _u.mutation.Priority(); ok {
+		_spec.SetField(standardhistory.FieldPriority, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedPriority(); ok {
+		_spec.AddField(standardhistory.FieldPriority, field.TypeInt, value)
 	}
 	if value, ok := _u.mutation.Version(); ok {
 		_spec.SetField(standardhistory.FieldVersion, field.TypeString, value)
@@ -1181,6 +1208,27 @@ func (_u *StandardHistoryUpdateOne) ClearStandardType() *StandardHistoryUpdateOn
 	return _u
 }
 
+// SetPriority sets the "priority" field.
+func (_u *StandardHistoryUpdateOne) SetPriority(v int) *StandardHistoryUpdateOne {
+	_u.mutation.ResetPriority()
+	_u.mutation.SetPriority(v)
+	return _u
+}
+
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (_u *StandardHistoryUpdateOne) SetNillablePriority(v *int) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetPriority(*v)
+	}
+	return _u
+}
+
+// AddPriority adds value to the "priority" field.
+func (_u *StandardHistoryUpdateOne) AddPriority(v int) *StandardHistoryUpdateOne {
+	_u.mutation.AddPriority(v)
+	return _u
+}
+
 // SetVersion sets the "version" field.
 func (_u *StandardHistoryUpdateOne) SetVersion(v string) *StandardHistoryUpdateOne {
 	_u.mutation.SetVersion(v)
@@ -1476,6 +1524,12 @@ func (_u *StandardHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Standar
 	}
 	if _u.mutation.StandardTypeCleared() {
 		_spec.ClearField(standardhistory.FieldStandardType, field.TypeString)
+	}
+	if value, ok := _u.mutation.Priority(); ok {
+		_spec.SetField(standardhistory.FieldPriority, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedPriority(); ok {
+		_spec.AddField(standardhistory.FieldPriority, field.TypeInt, value)
 	}
 	if value, ok := _u.mutation.Version(); ok {
 		_spec.SetField(standardhistory.FieldVersion, field.TypeString, value)

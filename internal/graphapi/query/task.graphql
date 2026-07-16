@@ -3,6 +3,7 @@ mutation CreateBulkCSVTask ($input: Upload!) {
 		tasks {
 			assigneeID
 			assignerID
+			availableAt
 			completed
 			createdAt
 			createdBy
@@ -16,11 +17,16 @@ mutation CreateBulkCSVTask ($input: Upload!) {
 			externalUUID
 			id
 			idempotencyKey
+			isSuggested
 			isTemplate
+			metadata
 			ownerID
 			parentTaskID
+			priority
 			scopeID
 			scopeName
+			source
+			sourceKey
 			status
 			systemGenerated
 			tags
@@ -62,6 +68,7 @@ mutation CreateBulkTask ($input: [CreateTaskInput!]) {
 		tasks {
 			assigneeID
 			assignerID
+			availableAt
 			completed
 			createdAt
 			createdBy
@@ -75,11 +82,16 @@ mutation CreateBulkTask ($input: [CreateTaskInput!]) {
 			externalUUID
 			id
 			idempotencyKey
+			isSuggested
 			isTemplate
+			metadata
 			ownerID
 			parentTaskID
+			priority
 			scopeID
 			scopeName
+			source
+			sourceKey
 			status
 			systemGenerated
 			tags
@@ -121,6 +133,7 @@ mutation CreateTask ($input: CreateTaskInput!) {
 		task {
 			assigneeID
 			assignerID
+			availableAt
 			completed
 			createdAt
 			createdBy
@@ -134,11 +147,16 @@ mutation CreateTask ($input: CreateTaskInput!) {
 			externalUUID
 			id
 			idempotencyKey
+			isSuggested
 			isTemplate
+			metadata
 			ownerID
 			parentTaskID
+			priority
 			scopeID
 			scopeName
+			source
+			sourceKey
 			status
 			systemGenerated
 			tags
@@ -193,6 +211,7 @@ query GetAllTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 			node {
 				assigneeID
 				assignerID
+				availableAt
 				completed
 				createdAt
 				createdBy
@@ -206,11 +225,16 @@ query GetAllTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				externalUUID
 				id
 				idempotencyKey
+				isSuggested
 				isTemplate
+				metadata
 				ownerID
 				parentTaskID
+				priority
 				scopeID
 				scopeName
+				source
+				sourceKey
 				status
 				systemGenerated
 				tags
@@ -266,6 +290,7 @@ query GetTaskByID ($taskId: ID!) {
 	task(id: $taskId) {
 		assigneeID
 		assignerID
+		availableAt
 		completed
 		createdAt
 		createdBy
@@ -279,11 +304,16 @@ query GetTaskByID ($taskId: ID!) {
 		externalUUID
 		id
 		idempotencyKey
+		isSuggested
 		isTemplate
+		metadata
 		ownerID
 		parentTaskID
+		priority
 		scopeID
 		scopeName
+		source
+		sourceKey
 		status
 		systemGenerated
 		tags
@@ -346,6 +376,7 @@ query GetTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 			node {
 				assigneeID
 				assignerID
+				availableAt
 				completed
 				createdAt
 				createdBy
@@ -359,11 +390,16 @@ query GetTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				externalUUID
 				id
 				idempotencyKey
+				isSuggested
 				isTemplate
+				metadata
 				ownerID
 				parentTaskID
+				priority
 				scopeID
 				scopeName
+				source
+				sourceKey
 				status
 				systemGenerated
 				tags
@@ -416,6 +452,7 @@ mutation UpdateBulkTask ($ids: [ID!]!, $input: UpdateTaskInput!) {
 		tasks {
 			assigneeID
 			assignerID
+			availableAt
 			completed
 			createdAt
 			createdBy
@@ -429,11 +466,16 @@ mutation UpdateBulkTask ($ids: [ID!]!, $input: UpdateTaskInput!) {
 			externalUUID
 			id
 			idempotencyKey
+			isSuggested
 			isTemplate
+			metadata
 			ownerID
 			parentTaskID
+			priority
 			scopeID
 			scopeName
+			source
+			sourceKey
 			status
 			systemGenerated
 			tags
@@ -476,6 +518,7 @@ mutation UpdateTask ($updateTaskId: ID!, $input: UpdateTaskInput!) {
 		task {
 			assigneeID
 			assignerID
+			availableAt
 			completed
 			createdAt
 			createdBy
@@ -489,11 +532,16 @@ mutation UpdateTask ($updateTaskId: ID!, $input: UpdateTaskInput!) {
 			externalUUID
 			id
 			idempotencyKey
+			isSuggested
 			isTemplate
+			metadata
 			ownerID
 			parentTaskID
+			priority
 			scopeID
 			scopeName
+			source
+			sourceKey
 			status
 			systemGenerated
 			tags

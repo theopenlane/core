@@ -2463,6 +2463,7 @@ type ComplexityRoot struct {
 		Name                  func(childComplexity int) int
 		Operation             func(childComplexity int) int
 		OwnerID               func(childComplexity int) int
+		Priority              func(childComplexity int) int
 		Ref                   func(childComplexity int) int
 		Revision              func(childComplexity int) int
 		ShortName             func(childComplexity int) int
@@ -2621,6 +2622,7 @@ type ComplexityRoot struct {
 	TaskHistory struct {
 		AssigneeID             func(childComplexity int) int
 		AssignerID             func(childComplexity int) int
+		AvailableAt            func(childComplexity int) int
 		Completed              func(childComplexity int) int
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
@@ -2635,13 +2637,18 @@ type ComplexityRoot struct {
 		HistoryTime            func(childComplexity int) int
 		ID                     func(childComplexity int) int
 		IdempotencyKey         func(childComplexity int) int
+		IsSuggested            func(childComplexity int) int
 		IsTemplate             func(childComplexity int) int
+		Metadata               func(childComplexity int) int
 		Operation              func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
 		ParentTaskID           func(childComplexity int) int
+		Priority               func(childComplexity int) int
 		Ref                    func(childComplexity int) int
 		ScopeID                func(childComplexity int) int
 		ScopeName              func(childComplexity int) int
+		Source                 func(childComplexity int) int
+		SourceKey              func(childComplexity int) int
 		Status                 func(childComplexity int) int
 		SystemGenerated        func(childComplexity int) int
 		Tags                   func(childComplexity int) int
@@ -15716,6 +15723,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.StandardHistory.OwnerID(childComplexity), true
+	case "StandardHistory.priority":
+		if e.ComplexityRoot.StandardHistory.Priority == nil {
+			break
+		}
+
+		return e.ComplexityRoot.StandardHistory.Priority(childComplexity), true
 	case "StandardHistory.ref":
 		if e.ComplexityRoot.StandardHistory.Ref == nil {
 			break
@@ -16460,6 +16473,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TaskHistory.AssignerID(childComplexity), true
+	case "TaskHistory.availableAt":
+		if e.ComplexityRoot.TaskHistory.AvailableAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.AvailableAt(childComplexity), true
 	case "TaskHistory.completed":
 		if e.ComplexityRoot.TaskHistory.Completed == nil {
 			break
@@ -16544,12 +16563,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TaskHistory.IdempotencyKey(childComplexity), true
+	case "TaskHistory.isSuggested":
+		if e.ComplexityRoot.TaskHistory.IsSuggested == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.IsSuggested(childComplexity), true
 	case "TaskHistory.isTemplate":
 		if e.ComplexityRoot.TaskHistory.IsTemplate == nil {
 			break
 		}
 
 		return e.ComplexityRoot.TaskHistory.IsTemplate(childComplexity), true
+	case "TaskHistory.metadata":
+		if e.ComplexityRoot.TaskHistory.Metadata == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.Metadata(childComplexity), true
 	case "TaskHistory.operation":
 		if e.ComplexityRoot.TaskHistory.Operation == nil {
 			break
@@ -16568,6 +16599,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TaskHistory.ParentTaskID(childComplexity), true
+	case "TaskHistory.priority":
+		if e.ComplexityRoot.TaskHistory.Priority == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.Priority(childComplexity), true
 	case "TaskHistory.ref":
 		if e.ComplexityRoot.TaskHistory.Ref == nil {
 			break
@@ -16586,6 +16623,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TaskHistory.ScopeName(childComplexity), true
+	case "TaskHistory.source":
+		if e.ComplexityRoot.TaskHistory.Source == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.Source(childComplexity), true
+	case "TaskHistory.sourceKey":
+		if e.ComplexityRoot.TaskHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.SourceKey(childComplexity), true
 	case "TaskHistory.status":
 		if e.ComplexityRoot.TaskHistory.Status == nil {
 			break
@@ -54377,6 +54426,10 @@ type StandardHistory implements Node {
   """
   standardType: String
   """
+  priority for displaying standards
+  """
+  priority: Int!
+  """
   version of the standard
   """
   version: String
@@ -54450,6 +54503,7 @@ enum StandardHistoryOrderField {
   governing_body
   STATUS
   standard_type
+  priority
 }
 """
 StandardHistoryStandardStatus is enum for the field status
@@ -54840,6 +54894,17 @@ input StandardHistoryWhereInput {
   standardTypeNotNil: Boolean
   standardTypeEqualFold: String
   standardTypeContainsFold: String
+  """
+  priority field predicates
+  """
+  priority: Int
+  priorityNEQ: Int
+  priorityIn: [Int!]
+  priorityNotIn: [Int!]
+  priorityGT: Int
+  priorityGTE: Int
+  priorityLT: Int
+  priorityLTE: Int
   """
   version field predicates
   """
@@ -56598,6 +56663,10 @@ type TaskHistory implements Node {
   """
   detailsJSON: [Any!]
   """
+  structured metadata used by clients for task presentation and routing
+  """
+  metadata: Map
+  """
   the status of the task
   """
   status: TaskHistoryTaskStatus!
@@ -56625,6 +56694,26 @@ type TaskHistory implements Node {
   indicates if the task is intended to be used as a template
   """
   isTemplate: Boolean!
+  """
+  indicates if the task is suggested by the system as a recommended next action
+  """
+  isSuggested: Boolean!
+  """
+  relative ordering priority for suggested and system-generated tasks
+  """
+  priority: Int!
+  """
+  the time when the task should become available to users
+  """
+  availableAt: DateTime
+  """
+  the system or workflow that created or suggested the task
+  """
+  source: String
+  """
+  stable source-specific key for the task
+  """
+  sourceKey: String
   """
   key to prevent duplicates for auto-generated task based on rules
   """
@@ -56701,6 +56790,9 @@ enum TaskHistoryOrderField {
   due
   completed
   is_template
+  is_suggested
+  priority
+  available_at
 }
 """
 TaskHistoryTaskStatus is enum for the field status
@@ -57129,6 +57221,71 @@ input TaskHistoryWhereInput {
   """
   isTemplate: Boolean
   isTemplateNEQ: Boolean
+  """
+  is_suggested field predicates
+  """
+  isSuggested: Boolean
+  isSuggestedNEQ: Boolean
+  """
+  priority field predicates
+  """
+  priority: Int
+  priorityNEQ: Int
+  priorityIn: [Int!]
+  priorityNotIn: [Int!]
+  priorityGT: Int
+  priorityGTE: Int
+  priorityLT: Int
+  priorityLTE: Int
+  """
+  available_at field predicates
+  """
+  availableAt: DateTime
+  availableAtNEQ: DateTime
+  availableAtIn: [DateTime!]
+  availableAtNotIn: [DateTime!]
+  availableAtGT: DateTime
+  availableAtGTE: DateTime
+  availableAtLT: DateTime
+  availableAtLTE: DateTime
+  availableAtIsNil: Boolean
+  availableAtNotNil: Boolean
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyGT: String
+  sourceKeyGTE: String
+  sourceKeyLT: String
+  sourceKeyLTE: String
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
   """
   idempotency_key field predicates
   """
@@ -72222,6 +72379,8 @@ func (ec *executionContext) childFields_StandardHistory(ctx context.Context, fie
 		return ec.fieldContext_StandardHistory_freeToUse(ctx, field)
 	case "standardType":
 		return ec.fieldContext_StandardHistory_standardType(ctx, field)
+	case "priority":
+		return ec.fieldContext_StandardHistory_priority(ctx, field)
 	case "version":
 		return ec.fieldContext_StandardHistory_version(ctx, field)
 	case "logoFileID":
@@ -72560,6 +72719,8 @@ func (ec *executionContext) childFields_TaskHistory(ctx context.Context, field g
 		return ec.fieldContext_TaskHistory_details(ctx, field)
 	case "detailsJSON":
 		return ec.fieldContext_TaskHistory_detailsJSON(ctx, field)
+	case "metadata":
+		return ec.fieldContext_TaskHistory_metadata(ctx, field)
 	case "status":
 		return ec.fieldContext_TaskHistory_status(ctx, field)
 	case "due":
@@ -72574,6 +72735,16 @@ func (ec *executionContext) childFields_TaskHistory(ctx context.Context, field g
 		return ec.fieldContext_TaskHistory_systemGenerated(ctx, field)
 	case "isTemplate":
 		return ec.fieldContext_TaskHistory_isTemplate(ctx, field)
+	case "isSuggested":
+		return ec.fieldContext_TaskHistory_isSuggested(ctx, field)
+	case "priority":
+		return ec.fieldContext_TaskHistory_priority(ctx, field)
+	case "availableAt":
+		return ec.fieldContext_TaskHistory_availableAt(ctx, field)
+	case "source":
+		return ec.fieldContext_TaskHistory_source(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_TaskHistory_sourceKey(ctx, field)
 	case "idempotencyKey":
 		return ec.fieldContext_TaskHistory_idempotencyKey(ctx, field)
 	case "externalReferenceURL":

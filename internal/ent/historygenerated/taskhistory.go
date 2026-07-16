@@ -71,6 +71,8 @@ type TaskHistory struct {
 	Details string `json:"details,omitempty"`
 	// structured details of the task in JSON format
 	DetailsJSON []interface{} `json:"details_json,omitempty"`
+	// structured metadata used by clients for task presentation and routing
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// the status of the task
 	Status enums.TaskStatus `json:"status,omitempty"`
 	// the due date of the task
@@ -85,6 +87,16 @@ type TaskHistory struct {
 	SystemGenerated bool `json:"system_generated,omitempty"`
 	// indicates if the task is intended to be used as a template
 	IsTemplate bool `json:"is_template,omitempty"`
+	// indicates if the task is suggested by the system as a recommended next action
+	IsSuggested bool `json:"is_suggested,omitempty"`
+	// relative ordering priority for suggested and system-generated tasks
+	Priority int `json:"priority,omitempty"`
+	// the time when the task should become available to users
+	AvailableAt *models.DateTime `json:"available_at,omitempty"`
+	// the system or workflow that created or suggested the task
+	Source string `json:"source,omitempty"`
+	// stable source-specific key for the task
+	SourceKey string `json:"source_key,omitempty"`
 	// key to prevent duplicates for auto-generated task based on rules
 	IdempotencyKey string `json:"idempotency_key,omitempty"`
 	// an optional external reference URL for the task
@@ -99,15 +111,17 @@ func (*TaskHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case taskhistory.FieldDue, taskhistory.FieldCompleted:
+		case taskhistory.FieldDue, taskhistory.FieldCompleted, taskhistory.FieldAvailableAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
-		case taskhistory.FieldTags, taskhistory.FieldDetailsJSON, taskhistory.FieldExternalReferenceURL:
+		case taskhistory.FieldTags, taskhistory.FieldDetailsJSON, taskhistory.FieldMetadata, taskhistory.FieldExternalReferenceURL:
 			values[i] = new([]byte)
 		case taskhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case taskhistory.FieldWorkflowEligibleMarker, taskhistory.FieldSystemGenerated, taskhistory.FieldIsTemplate:
+		case taskhistory.FieldWorkflowEligibleMarker, taskhistory.FieldSystemGenerated, taskhistory.FieldIsTemplate, taskhistory.FieldIsSuggested:
 			values[i] = new(sql.NullBool)
-		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldUpdatedByImpersonator, taskhistory.FieldDeletedBy, taskhistory.FieldDisplayID, taskhistory.FieldOwnerID, taskhistory.FieldTaskKindName, taskhistory.FieldTaskKindID, taskhistory.FieldEnvironmentName, taskhistory.FieldEnvironmentID, taskhistory.FieldScopeName, taskhistory.FieldScopeID, taskhistory.FieldExternalUUID, taskhistory.FieldTitle, taskhistory.FieldDetails, taskhistory.FieldStatus, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID, taskhistory.FieldIdempotencyKey, taskhistory.FieldParentTaskID:
+		case taskhistory.FieldPriority:
+			values[i] = new(sql.NullInt64)
+		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldUpdatedByImpersonator, taskhistory.FieldDeletedBy, taskhistory.FieldDisplayID, taskhistory.FieldOwnerID, taskhistory.FieldTaskKindName, taskhistory.FieldTaskKindID, taskhistory.FieldEnvironmentName, taskhistory.FieldEnvironmentID, taskhistory.FieldScopeName, taskhistory.FieldScopeID, taskhistory.FieldExternalUUID, taskhistory.FieldTitle, taskhistory.FieldDetails, taskhistory.FieldStatus, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID, taskhistory.FieldSource, taskhistory.FieldSourceKey, taskhistory.FieldIdempotencyKey, taskhistory.FieldParentTaskID:
 			values[i] = new(sql.NullString)
 		case taskhistory.FieldHistoryTime, taskhistory.FieldCreatedAt, taskhistory.FieldUpdatedAt, taskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -282,6 +296,14 @@ func (_m *TaskHistory) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field details_json: %w", err)
 				}
 			}
+		case taskhistory.FieldMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
 		case taskhistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
@@ -325,6 +347,37 @@ func (_m *TaskHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field is_template", values[i])
 			} else if value.Valid {
 				_m.IsTemplate = value.Bool
+			}
+		case taskhistory.FieldIsSuggested:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_suggested", values[i])
+			} else if value.Valid {
+				_m.IsSuggested = value.Bool
+			}
+		case taskhistory.FieldPriority:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field priority", values[i])
+			} else if value.Valid {
+				_m.Priority = int(value.Int64)
+			}
+		case taskhistory.FieldAvailableAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field available_at", values[i])
+			} else if value.Valid {
+				_m.AvailableAt = new(models.DateTime)
+				*_m.AvailableAt = *value.S.(*models.DateTime)
+			}
+		case taskhistory.FieldSource:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source", values[i])
+			} else if value.Valid {
+				_m.Source = value.String
+			}
+		case taskhistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case taskhistory.FieldIdempotencyKey:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -459,6 +512,9 @@ func (_m *TaskHistory) String() string {
 	builder.WriteString("details_json=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DetailsJSON))
 	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
@@ -483,6 +539,23 @@ func (_m *TaskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_template=")
 	builder.WriteString(fmt.Sprintf("%v", _m.IsTemplate))
+	builder.WriteString(", ")
+	builder.WriteString("is_suggested=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsSuggested))
+	builder.WriteString(", ")
+	builder.WriteString("priority=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Priority))
+	builder.WriteString(", ")
+	if v := _m.AvailableAt; v != nil {
+		builder.WriteString("available_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("source=")
+	builder.WriteString(_m.Source)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("idempotency_key=")
 	builder.WriteString(_m.IdempotencyKey)

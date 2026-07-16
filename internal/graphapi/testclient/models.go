@@ -9543,6 +9543,8 @@ type CreateStandardInput struct {
 	FreeToUse *bool `json:"freeToUse,omitempty"`
 	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType *string `json:"standardType,omitempty"`
+	// priority for displaying standards
+	Priority *int64 `json:"priority,omitempty"`
 	// version of the standard
 	Version                  *string  `json:"version,omitempty"`
 	OwnerID                  *string  `json:"ownerID,omitempty"`
@@ -9761,6 +9763,8 @@ type CreateTaskInput struct {
 	Details *string `json:"details,omitempty"`
 	// structured details of the task in JSON format
 	DetailsJSON []any `json:"detailsJSON,omitempty"`
+	// structured metadata used by clients for task presentation and routing
+	Metadata map[string]any `json:"metadata,omitempty"`
 	// the status of the task
 	Status *enums.TaskStatus `json:"status,omitempty"`
 	// the due date of the task
@@ -9771,6 +9775,16 @@ type CreateTaskInput struct {
 	SystemGenerated *bool `json:"systemGenerated,omitempty"`
 	// indicates if the task is intended to be used as a template
 	IsTemplate *bool `json:"isTemplate,omitempty"`
+	// indicates if the task is suggested by the system as a recommended next action
+	IsSuggested *bool `json:"isSuggested,omitempty"`
+	// relative ordering priority for suggested and system-generated tasks
+	Priority *int64 `json:"priority,omitempty"`
+	// the time when the task should become available to users
+	AvailableAt *models.DateTime `json:"availableAt,omitempty"`
+	// the system or workflow that created or suggested the task
+	Source *string `json:"source,omitempty"`
+	// stable source-specific key for the task
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// an optional external reference URL for the task
 	ExternalReferenceURL     []string `json:"externalReferenceURL,omitempty"`
 	OwnerID                  *string  `json:"ownerID,omitempty"`
@@ -34975,6 +34989,8 @@ type Standard struct {
 	FreeToUse *bool `json:"freeToUse,omitempty"`
 	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType *string `json:"standardType,omitempty"`
+	// priority for displaying standards
+	Priority int64 `json:"priority"`
 	// version of the standard
 	Version *string `json:"version,omitempty"`
 	// URL of the logo
@@ -35338,6 +35354,15 @@ type StandardWhereInput struct {
 	StandardTypeNotNil       *bool    `json:"standardTypeNotNil,omitempty"`
 	StandardTypeEqualFold    *string  `json:"standardTypeEqualFold,omitempty"`
 	StandardTypeContainsFold *string  `json:"standardTypeContainsFold,omitempty"`
+	// priority field predicates
+	Priority      *int64  `json:"priority,omitempty"`
+	PriorityNeq   *int64  `json:"priorityNEQ,omitempty"`
+	PriorityIn    []int64 `json:"priorityIn,omitempty"`
+	PriorityNotIn []int64 `json:"priorityNotIn,omitempty"`
+	PriorityGt    *int64  `json:"priorityGT,omitempty"`
+	PriorityGte   *int64  `json:"priorityGTE,omitempty"`
+	PriorityLt    *int64  `json:"priorityLT,omitempty"`
+	PriorityLte   *int64  `json:"priorityLTE,omitempty"`
 	// version field predicates
 	Version             *string  `json:"version,omitempty"`
 	VersionNeq          *string  `json:"versionNEQ,omitempty"`
@@ -37634,6 +37659,8 @@ type Task struct {
 	Details *string `json:"details,omitempty"`
 	// structured details of the task in JSON format
 	DetailsJSON []any `json:"detailsJSON,omitempty"`
+	// structured metadata used by clients for task presentation and routing
+	Metadata map[string]any `json:"metadata,omitempty"`
 	// the status of the task
 	Status enums.TaskStatus `json:"status"`
 	// the due date of the task
@@ -37648,6 +37675,16 @@ type Task struct {
 	SystemGenerated bool `json:"systemGenerated"`
 	// indicates if the task is intended to be used as a template
 	IsTemplate bool `json:"isTemplate"`
+	// indicates if the task is suggested by the system as a recommended next action
+	IsSuggested bool `json:"isSuggested"`
+	// relative ordering priority for suggested and system-generated tasks
+	Priority int64 `json:"priority"`
+	// the time when the task should become available to users
+	AvailableAt *models.DateTime `json:"availableAt,omitempty"`
+	// the system or workflow that created or suggested the task
+	Source *string `json:"source,omitempty"`
+	// stable source-specific key for the task
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// key to prevent duplicates for auto-generated task based on rules
 	IdempotencyKey *string `json:"idempotencyKey,omitempty"`
 	// an optional external reference URL for the task
@@ -38089,6 +38126,61 @@ type TaskWhereInput struct {
 	// is_template field predicates
 	IsTemplate    *bool `json:"isTemplate,omitempty"`
 	IsTemplateNeq *bool `json:"isTemplateNEQ,omitempty"`
+	// is_suggested field predicates
+	IsSuggested    *bool `json:"isSuggested,omitempty"`
+	IsSuggestedNeq *bool `json:"isSuggestedNEQ,omitempty"`
+	// priority field predicates
+	Priority      *int64  `json:"priority,omitempty"`
+	PriorityNeq   *int64  `json:"priorityNEQ,omitempty"`
+	PriorityIn    []int64 `json:"priorityIn,omitempty"`
+	PriorityNotIn []int64 `json:"priorityNotIn,omitempty"`
+	PriorityGt    *int64  `json:"priorityGT,omitempty"`
+	PriorityGte   *int64  `json:"priorityGTE,omitempty"`
+	PriorityLt    *int64  `json:"priorityLT,omitempty"`
+	PriorityLte   *int64  `json:"priorityLTE,omitempty"`
+	// available_at field predicates
+	AvailableAt       *models.DateTime   `json:"availableAt,omitempty"`
+	AvailableAtNeq    *models.DateTime   `json:"availableAtNEQ,omitempty"`
+	AvailableAtIn     []*models.DateTime `json:"availableAtIn,omitempty"`
+	AvailableAtNotIn  []*models.DateTime `json:"availableAtNotIn,omitempty"`
+	AvailableAtGt     *models.DateTime   `json:"availableAtGT,omitempty"`
+	AvailableAtGte    *models.DateTime   `json:"availableAtGTE,omitempty"`
+	AvailableAtLt     *models.DateTime   `json:"availableAtLT,omitempty"`
+	AvailableAtLte    *models.DateTime   `json:"availableAtLTE,omitempty"`
+	AvailableAtIsNil  *bool              `json:"availableAtIsNil,omitempty"`
+	AvailableAtNotNil *bool              `json:"availableAtNotNil,omitempty"`
+	// source field predicates
+	Source             *string  `json:"source,omitempty"`
+	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
+	SourceIn           []string `json:"sourceIn,omitempty"`
+	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
+	SourceGt           *string  `json:"sourceGT,omitempty"`
+	SourceGte          *string  `json:"sourceGTE,omitempty"`
+	SourceLt           *string  `json:"sourceLT,omitempty"`
+	SourceLte          *string  `json:"sourceLTE,omitempty"`
+	SourceContains     *string  `json:"sourceContains,omitempty"`
+	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
+	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
+	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
+	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
+	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
+	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyGt           *string  `json:"sourceKeyGT,omitempty"`
+	SourceKeyGte          *string  `json:"sourceKeyGTE,omitempty"`
+	SourceKeyLt           *string  `json:"sourceKeyLT,omitempty"`
+	SourceKeyLte          *string  `json:"sourceKeyLTE,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// idempotency_key field predicates
 	IdempotencyKey             *string  `json:"idempotencyKey,omitempty"`
 	IdempotencyKeyNeq          *string  `json:"idempotencyKeyNEQ,omitempty"`
@@ -46872,6 +46964,8 @@ type UpdateStandardInput struct {
 	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType      *string `json:"standardType,omitempty"`
 	ClearStandardType *bool   `json:"clearStandardType,omitempty"`
+	// priority for displaying standards
+	Priority *int64 `json:"priority,omitempty"`
 	// version of the standard
 	Version                        *string             `json:"version,omitempty"`
 	ClearVersion                   *bool               `json:"clearVersion,omitempty"`
@@ -47247,6 +47341,9 @@ type UpdateTaskInput struct {
 	DetailsJSON       []any `json:"detailsJSON,omitempty"`
 	AppendDetailsJSON []any `json:"appendDetailsJSON,omitempty"`
 	ClearDetailsJSON  *bool `json:"clearDetailsJSON,omitempty"`
+	// structured metadata used by clients for task presentation and routing
+	Metadata      map[string]any `json:"metadata,omitempty"`
+	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
 	// the status of the task
 	Status *enums.TaskStatus `json:"status,omitempty"`
 	// the due date of the task
@@ -47259,6 +47356,19 @@ type UpdateTaskInput struct {
 	SystemGenerated *bool `json:"systemGenerated,omitempty"`
 	// indicates if the task is intended to be used as a template
 	IsTemplate *bool `json:"isTemplate,omitempty"`
+	// indicates if the task is suggested by the system as a recommended next action
+	IsSuggested *bool `json:"isSuggested,omitempty"`
+	// relative ordering priority for suggested and system-generated tasks
+	Priority *int64 `json:"priority,omitempty"`
+	// the time when the task should become available to users
+	AvailableAt      *models.DateTime `json:"availableAt,omitempty"`
+	ClearAvailableAt *bool            `json:"clearAvailableAt,omitempty"`
+	// the system or workflow that created or suggested the task
+	Source      *string `json:"source,omitempty"`
+	ClearSource *bool   `json:"clearSource,omitempty"`
+	// stable source-specific key for the task
+	SourceKey      *string `json:"sourceKey,omitempty"`
+	ClearSourceKey *bool   `json:"clearSourceKey,omitempty"`
 	// an optional external reference URL for the task
 	ExternalReferenceURL           []string         `json:"externalReferenceURL,omitempty"`
 	AppendExternalReferenceURL     []string         `json:"appendExternalReferenceURL,omitempty"`
@@ -58187,6 +58297,7 @@ const (
 	StandardOrderFieldGoverningBody StandardOrderField = "governing_body"
 	StandardOrderFieldStatus        StandardOrderField = "STATUS"
 	StandardOrderFieldStandardType  StandardOrderField = "standard_type"
+	StandardOrderFieldPriority      StandardOrderField = "priority"
 )
 
 var AllStandardOrderField = []StandardOrderField{
@@ -58199,11 +58310,12 @@ var AllStandardOrderField = []StandardOrderField{
 	StandardOrderFieldGoverningBody,
 	StandardOrderFieldStatus,
 	StandardOrderFieldStandardType,
+	StandardOrderFieldPriority,
 }
 
 func (e StandardOrderField) IsValid() bool {
 	switch e {
-	case StandardOrderFieldCreatedAt, StandardOrderFieldUpdatedAt, StandardOrderFieldRevision, StandardOrderFieldName, StandardOrderFieldShortName, StandardOrderFieldFramework, StandardOrderFieldGoverningBody, StandardOrderFieldStatus, StandardOrderFieldStandardType:
+	case StandardOrderFieldCreatedAt, StandardOrderFieldUpdatedAt, StandardOrderFieldRevision, StandardOrderFieldName, StandardOrderFieldShortName, StandardOrderFieldFramework, StandardOrderFieldGoverningBody, StandardOrderFieldStatus, StandardOrderFieldStandardType, StandardOrderFieldPriority:
 		return true
 	}
 	return false
@@ -58620,13 +58732,16 @@ func (e TagDefinitionOrderField) MarshalJSON() ([]byte, error) {
 type TaskOrderField string
 
 const (
-	TaskOrderFieldCreatedAt  TaskOrderField = "created_at"
-	TaskOrderFieldUpdatedAt  TaskOrderField = "updated_at"
-	TaskOrderFieldTitle      TaskOrderField = "title"
-	TaskOrderFieldStatus     TaskOrderField = "STATUS"
-	TaskOrderFieldDue        TaskOrderField = "due"
-	TaskOrderFieldCompleted  TaskOrderField = "completed"
-	TaskOrderFieldIsTemplate TaskOrderField = "is_template"
+	TaskOrderFieldCreatedAt   TaskOrderField = "created_at"
+	TaskOrderFieldUpdatedAt   TaskOrderField = "updated_at"
+	TaskOrderFieldTitle       TaskOrderField = "title"
+	TaskOrderFieldStatus      TaskOrderField = "STATUS"
+	TaskOrderFieldDue         TaskOrderField = "due"
+	TaskOrderFieldCompleted   TaskOrderField = "completed"
+	TaskOrderFieldIsTemplate  TaskOrderField = "is_template"
+	TaskOrderFieldIsSuggested TaskOrderField = "is_suggested"
+	TaskOrderFieldPriority    TaskOrderField = "priority"
+	TaskOrderFieldAvailableAt TaskOrderField = "available_at"
 )
 
 var AllTaskOrderField = []TaskOrderField{
@@ -58637,11 +58752,14 @@ var AllTaskOrderField = []TaskOrderField{
 	TaskOrderFieldDue,
 	TaskOrderFieldCompleted,
 	TaskOrderFieldIsTemplate,
+	TaskOrderFieldIsSuggested,
+	TaskOrderFieldPriority,
+	TaskOrderFieldAvailableAt,
 }
 
 func (e TaskOrderField) IsValid() bool {
 	switch e {
-	case TaskOrderFieldCreatedAt, TaskOrderFieldUpdatedAt, TaskOrderFieldTitle, TaskOrderFieldStatus, TaskOrderFieldDue, TaskOrderFieldCompleted, TaskOrderFieldIsTemplate:
+	case TaskOrderFieldCreatedAt, TaskOrderFieldUpdatedAt, TaskOrderFieldTitle, TaskOrderFieldStatus, TaskOrderFieldDue, TaskOrderFieldCompleted, TaskOrderFieldIsTemplate, TaskOrderFieldIsSuggested, TaskOrderFieldPriority, TaskOrderFieldAvailableAt:
 		return true
 	}
 	return false

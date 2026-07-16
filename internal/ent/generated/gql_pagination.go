@@ -30540,6 +30540,20 @@ var (
 			}
 		},
 	}
+	// StandardOrderFieldPriority orders Standard by priority.
+	StandardOrderFieldPriority = &StandardOrderField{
+		Value: func(_m *Standard) (ent.Value, error) {
+			return _m.Priority, nil
+		},
+		column: standard.FieldPriority,
+		toTerm: standard.ByPriority,
+		toCursor: func(_m *Standard) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Priority,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -30564,6 +30578,8 @@ func (f StandardOrderField) String() string {
 		str = "STATUS"
 	case StandardOrderFieldStandardType.column:
 		str = "standard_type"
+	case StandardOrderFieldPriority.column:
+		str = "priority"
 	}
 	return str
 }
@@ -30598,6 +30614,8 @@ func (f *StandardOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *StandardOrderFieldStatus
 	case "standard_type":
 		*f = *StandardOrderFieldStandardType
+	case "priority":
+		*f = *StandardOrderFieldPriority
 	default:
 		return fmt.Errorf("%s is not a valid StandardOrderField", str)
 	}
@@ -33517,6 +33535,61 @@ var (
 			}
 		},
 	}
+	// TaskOrderFieldIsSuggested orders Task by is_suggested.
+	TaskOrderFieldIsSuggested = &TaskOrderField{
+		Value: func(_m *Task) (ent.Value, error) {
+			return _m.IsSuggested, nil
+		},
+		column: task.FieldIsSuggested,
+		toTerm: task.ByIsSuggested,
+		toCursor: func(_m *Task) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IsSuggested,
+			}
+		},
+	}
+	// TaskOrderFieldPriority orders Task by priority.
+	TaskOrderFieldPriority = &TaskOrderField{
+		Value: func(_m *Task) (ent.Value, error) {
+			return _m.Priority, nil
+		},
+		column: task.FieldPriority,
+		toTerm: task.ByPriority,
+		toCursor: func(_m *Task) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Priority,
+			}
+		},
+	}
+	// TaskOrderFieldAvailableAt orders Task by available_at.
+	TaskOrderFieldAvailableAt = &TaskOrderField{
+		Value: func(_m *Task) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.AvailableAt == nil {
+				return nil, nil
+			}
+			return _m.AvailableAt, nil
+		},
+		column: task.FieldAvailableAt,
+		toTerm: func(opts ...sql.OrderTermOption) task.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return task.ByAvailableAt(opts...)
+		},
+		toCursor: func(_m *Task) Cursor {
+			if _m.AvailableAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.AvailableAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -33537,6 +33610,12 @@ func (f TaskOrderField) String() string {
 		str = "completed"
 	case TaskOrderFieldIsTemplate.column:
 		str = "is_template"
+	case TaskOrderFieldIsSuggested.column:
+		str = "is_suggested"
+	case TaskOrderFieldPriority.column:
+		str = "priority"
+	case TaskOrderFieldAvailableAt.column:
+		str = "available_at"
 	}
 	return str
 }
@@ -33567,6 +33646,12 @@ func (f *TaskOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TaskOrderFieldCompleted
 	case "is_template":
 		*f = *TaskOrderFieldIsTemplate
+	case "is_suggested":
+		*f = *TaskOrderFieldIsSuggested
+	case "priority":
+		*f = *TaskOrderFieldPriority
+	case "available_at":
+		*f = *TaskOrderFieldAvailableAt
 	default:
 		return fmt.Errorf("%s is not a valid TaskOrderField", str)
 	}

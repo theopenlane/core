@@ -2542,6 +2542,16 @@ type ProductCatalogReply struct {
 	models.Catalog
 }
 
+// OnboardingQuestionsReply holds the fields sent on a response to the onboarding questions endpoint.
+type OnboardingQuestionsReply struct {
+	// Reply is the reply value.
+	rout.Reply
+	// Version is the onboarding questionnaire version.
+	Version string `json:"version"`
+	// Steps is the list of onboarding steps and questions.
+	Steps []models.Step `json:"steps"`
+}
+
 // ExampleResponse returns an example ProductCatalogReply for OpenAPI documentation
 func (r *ProductCatalogReply) ExampleResponse() any {
 	return ExampleProductCatalogReply
