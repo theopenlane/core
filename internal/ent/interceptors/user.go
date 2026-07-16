@@ -129,11 +129,13 @@ func filterUsingFGA(ctx context.Context, q *generated.UserQuery) error {
 	orgIDs := caller.OrgIDs()
 
 	userIDs := []string{}
+	conditionContext := emailDomainConditionContext(caller.SubjectEmail)
 
 	for _, orgID := range orgIDs {
 		req := fgax.ListRequest{
-			ObjectID:   orgID,
-			ObjectType: generated.TypeOrganization,
+			ObjectID:         orgID,
+			ObjectType:       generated.TypeOrganization,
+			ConditionContext: conditionContext,
 		}
 
 		listUserResp, err := q.Authz.ListUserRequest(ctx, req)
@@ -148,9 +150,10 @@ func filterUsingFGA(ctx context.Context, q *generated.UserQuery) error {
 		// auditors do not have can_view on the org, so they must be listed separately
 		// auditor inherits from parent via "auditor from parent" in the FGA model
 		auditorReq := fgax.ListRequest{
-			ObjectID:   orgID,
-			ObjectType: generated.TypeOrganization,
-			Relation:   fgax.AuditorRelation,
+			ObjectID:         orgID,
+			ObjectType:       generated.TypeOrganization,
+			Relation:         fgax.AuditorRelation,
+			ConditionContext: conditionContext,
 		}
 
 		listAuditorResp, err := q.Authz.ListUserRequest(ctx, auditorReq)
@@ -166,4 +169,18 @@ func filterUsingFGA(ctx context.Context, q *generated.UserQuery) error {
 	q.Where(user.IDIn(userIDs...))
 
 	return nil
+}
+
+func emailDomainConditionContext(email string) *map[string]any {
+	at := strings.LastIndex(email, "@")
+	if at < 0 || at+1 >= len(email) {
+		return nil
+	}
+
+	domain := strings.ToLower(strings.TrimSpace(email[at+1:]))
+	if domain == "" {
+		return nil
+	}
+
+	return &map[string]any{"email_domain": domain}
 }
