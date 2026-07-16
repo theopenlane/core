@@ -129,14 +129,17 @@
           "type": "boolean"
         },
         "nocacheheaders": {
-          "$ref": "#/$defs/map[string]string"
+          "$ref": "#/$defs/map[string]string",
+          "description": "noCacheHeaders is the header \u003c-\u003e match map pair to match in http for entity headers to remove"
         },
         "etagheaders": {
-          "$ref": "#/$defs/[]string"
+          "$ref": "#/$defs/[]string",
+          "description": "etagHeaders is the string of entity headers to remove"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "Config is the config values for the cache-control middleware"
     },
     "catalog.Config": {
       "properties": {
@@ -210,203 +213,260 @@
     "config.Auth": {
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enabled authentication on the server, not recommended to disable"
         },
         "token": {
-          "$ref": "#/$defs/tokens.Config"
+          "$ref": "#/$defs/tokens.Config",
+          "description": "Token contains the token config settings for the issued tokens"
         },
         "supportedproviders": {
-          "$ref": "#/$defs/[]string"
+          "$ref": "#/$defs/[]string",
+          "description": "SupportedProviders are the supported oauth providers that have been configured"
         },
         "providers": {
-          "$ref": "#/$defs/handlers.OauthProviderConfig"
+          "$ref": "#/$defs/handlers.OauthProviderConfig",
+          "description": "Providers contains supported oauth2 providers configuration"
         },
         "supportaccess": {
-          "$ref": "#/$defs/handlers.SupportAccessConfig"
+          "$ref": "#/$defs/handlers.SupportAccessConfig",
+          "description": "SupportAccess contains the configuration for the Openlane support access flow"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
         "token"
-      ]
+      ],
+      "description": "Auth settings including oauth2 providers and token configuration"
     },
     "config.Backfill": {
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enabled runs the backfill routines on server startup"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "Backfill configures one-time startup data backfill routines that populate fields introduced by recent\nmigrations for organizations and memberships that pre-date them"
     },
     "config.KeyWatcher": {
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enabled indicates whether the key watcher is enabled"
         },
         "keydir": {
-          "type": "string"
+          "type": "string",
+          "description": "KeyDir is the path to the directory containing PEM keys for JWT signing"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "KeyWatcher contains settings for the key watcher that manages JWT signing keys"
     },
     "config.PoolConfig": {
       "properties": {
         "maxworkers": {
-          "type": "integer"
+          "type": "integer",
+          "description": "MaxWorkers is the maximum number of workers in the pool"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "PoolConfig contains the settings for the goroutine pool"
     },
     "config.Server": {
       "properties": {
         "dev": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Dev enables echo's dev mode options"
         },
         "listen": {
-          "type": "string"
+          "type": "string",
+          "description": "Listen sets the listen address to serve the echo server on"
         },
         "metricsport": {
-          "type": "string"
+          "type": "string",
+          "description": "MetricsPort sets the port for the metrics endpoint"
         },
         "shutdowngraceperiod": {
-          "type": "integer"
+          "type": "integer",
+          "description": "ShutdownGracePeriod sets the grace period for in flight requests before shutting down"
         },
         "readtimeout": {
-          "type": "integer"
+          "type": "integer",
+          "description": "ReadTimeout sets the maximum duration for reading the entire request including the body"
         },
         "writetimeout": {
-          "type": "integer"
+          "type": "integer",
+          "description": "WriteTimeout sets the maximum duration before timing out writes of the response"
         },
         "idletimeout": {
-          "type": "integer"
+          "type": "integer",
+          "description": "IdleTimeout sets the maximum amount of time to wait for the next request when keep-alives are enabled"
         },
         "readheadertimeout": {
-          "type": "integer"
+          "type": "integer",
+          "description": "ReadHeaderTimeout sets the amount of time allowed to read request headers"
         },
         "tls": {
-          "$ref": "#/$defs/config.TLS"
+          "$ref": "#/$defs/config.TLS",
+          "description": "TLS contains the tls configuration settings"
         },
         "cors": {
-          "$ref": "#/$defs/cors.Config"
+          "$ref": "#/$defs/cors.Config",
+          "description": "CORS contains settings to allow cross origin settings and insecure cookies"
         },
         "secure": {
-          "$ref": "#/$defs/secure.Config"
+          "$ref": "#/$defs/secure.Config",
+          "description": "Secure contains settings for the secure middleware"
         },
         "cachecontrol": {
-          "$ref": "#/$defs/cachecontrol.Config"
+          "$ref": "#/$defs/cachecontrol.Config",
+          "description": "CacheControl contains settings for the cache control middleware"
         },
         "mime": {
-          "$ref": "#/$defs/mime.Config"
+          "$ref": "#/$defs/mime.Config",
+          "description": "Mime contains settings for the mime middleware"
         },
         "graphpool": {
-          "$ref": "#/$defs/config.PoolConfig"
+          "$ref": "#/$defs/config.PoolConfig",
+          "description": "GraphPool contains settings for the goroutine pool used by the graph resolvers"
         },
         "enablegraphextensions": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "EnableGraphExtensions enables the graph extensions for the graph resolvers"
         },
         "enablegraphsubscriptions": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "EnableGraphSubscriptions enables graphql subscriptions to the server using websockets or sse"
         },
         "complexitylimit": {
-          "type": "integer"
+          "type": "integer",
+          "description": "ComplexityLimit sets the maximum complexity allowed for a query"
         },
         "maxresultlimit": {
-          "type": "integer"
+          "type": "integer",
+          "description": "MaxResultLimit sets the maximum number of results allowed for a query"
         },
         "csrfprotection": {
-          "$ref": "#/$defs/csrf.Config"
+          "$ref": "#/$defs/csrf.Config",
+          "description": "CSRFProtection enables CSRF protection for the server"
         },
         "secretmanager": {
-          "type": "string"
+          "type": "string",
+          "description": "SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key"
         },
         "defaulttrustcenterdomain": {
-          "type": "string"
+          "type": "string",
+          "description": "DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set"
         },
         "trustcentercnametarget": {
-          "type": "string"
+          "type": "string",
+          "description": "TrustCenterCnameTarget is the cname target for the trust center\nUsed for mapping the vanity domains to the trust centers"
         },
         "trustcenterpreviewzoneid": {
-          "type": "string"
+          "type": "string",
+          "description": "TrustCenterPreviewZoneID is the cloudflare zone id for the trust center preview domain"
         },
         "notificationlookbackdays": {
-          "type": "integer"
+          "type": "integer",
+          "description": "NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription\nUnread notifications are always pulled regardless of this setting"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
         "listen"
-      ]
+      ],
+      "description": "Server settings for the echo server"
     },
     "config.TLS": {
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enabled turns on TLS settings for the server"
         },
         "certfile": {
-          "type": "string"
+          "type": "string",
+          "description": "CertFile location for the TLS server"
         },
         "certkey": {
-          "type": "string"
+          "type": "string",
+          "description": "CertKey file location for the TLS server"
         },
         "autocert": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "AutoCert generates the cert with letsencrypt, this does not work on localhost"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "TLS settings for the server for secure connections"
     },
     "cors.Config": {
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enable or disable the CORS middleware"
         },
         "prefixes": {
-          "$ref": "#/$defs/map[string][]string"
+          "$ref": "#/$defs/map[string][]string",
+          "description": "Prefixes is a map of prefixes to allowed origins"
         },
         "alloworigins": {
-          "$ref": "#/$defs/[]string"
+          "$ref": "#/$defs/[]string",
+          "description": "AllowOrigins is a list of allowed origins"
         },
         "cookieinsecure": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "CookieInsecure sets the cookie to be insecure"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "Config holds the cors configuration settings"
     },
     "csrf.Config": {
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enabled indicates whether CSRF protection is enabled."
         },
         "header": {
-          "type": "string"
+          "type": "string",
+          "description": "Header specifies the header name to look for the CSRF token."
         },
         "cookie": {
-          "type": "string"
+          "type": "string",
+          "description": "Cookie specifies the cookie name used to store the CSRF token."
         },
         "secure": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Secure sets the Secure flag on the CSRF cookie."
         },
         "samesite": {
-          "type": "string"
+          "type": "string",
+          "description": "SameSite configures the SameSite attribute on the CSRF cookie. Valid\nvalues are \"Lax\", \"Strict\", \"None\" and \"Default\"."
         },
         "cookiehttponly": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "CookieHTTPOnly indicates whether the CSRF cookie is HTTP only."
         },
         "cookiedomain": {
-          "type": "string"
+          "type": "string",
+          "description": "CookieDomain specifies the domain for the CSRF cookie, default to no domain"
         },
         "cookiepath": {
-          "type": "string"
+          "type": "string",
+          "description": "CookiePath specifies the path for the CSRF cookie, default to \"/\""
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "Config defines configuration for the CSRF middleware wrapper."
     },
     "domainscan.ReportConfig": {
       "properties": {
@@ -576,103 +636,132 @@
     "entconfig.Billing": {
       "properties": {
         "requirepaymentmethod": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "RequirePaymentMethod indicates whether to check if a payment method\nexists for orgs before they can access some resource"
         },
         "bypassemaildomains": {
-          "$ref": "#/$defs/[]string"
+          "$ref": "#/$defs/[]string",
+          "description": "BypassEmailDomains is a list of domains that should be allowed to bypass\nthe checks if RequirePaymentMethod above is enabled"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "Billing settings for feature access"
     },
     "entconfig.Config": {
       "properties": {
         "entitytypes": {
-          "$ref": "#/$defs/[]string"
+          "$ref": "#/$defs/[]string",
+          "description": "EntityTypes is the list of entity types to create by default for the organization"
         },
         "summarizer": {
-          "$ref": "#/$defs/summarizer.Config"
+          "$ref": "#/$defs/summarizer.Config",
+          "description": "Summarizer contains configuration for text summarization"
         },
         "maxpoolsize": {
-          "type": "integer"
+          "type": "integer",
+          "description": "MaxPoolSize is the max worker pool size that can be used by the ent client"
         },
         "modules": {
-          "$ref": "#/$defs/entconfig.Modules"
+          "$ref": "#/$defs/entconfig.Modules",
+          "description": "Modules contains the configuration for the module system"
         },
         "maxschemaimportsize": {
-          "type": "integer"
+          "type": "integer",
+          "description": "MaxSchemaImportSize is the maximum size allowed for schema imports in bytes"
         },
         "emailvalidation": {
-          "$ref": "#/$defs/validator.EmailVerificationConfig"
+          "$ref": "#/$defs/validator.EmailVerificationConfig",
+          "description": "EmailValidation contains configuration for email validation"
         },
         "billing": {
-          "$ref": "#/$defs/entconfig.Billing"
+          "$ref": "#/$defs/entconfig.Billing",
+          "description": "Billing contains configuration for billing related features"
         },
         "notifications": {
-          "$ref": "#/$defs/entconfig.Notifications"
+          "$ref": "#/$defs/entconfig.Notifications",
+          "description": "Notifications contains configuration for notifications sent to users based on events"
         },
         "questionnaireproducturl": {
-          "type": "string"
+          "type": "string",
+          "description": "QuestionnaireProductURL is the product URL used to build questionnaire access links"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "Config holds the configuration for the ent server"
     },
     "entconfig.Modules": {
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enabled indicates whether to check and verify module access"
         },
         "usesandbox": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "UseSandbox indicates whether to use the sandbox catalog for module access checks"
         },
         "devmode": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "DevMode enables all modules for local development regardless of trial status"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "Modules settings for features access"
     },
     "entconfig.Notifications": {
       "properties": {
         "consoleurl": {
-          "type": "string"
+          "type": "string",
+          "description": "ConsoleURL for ui links used in notifications"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "Notifications settings for notifications sent to users based on events"
     },
     "entitlements.Config": {
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enabled determines if the entitlements service is enabled"
         },
         "privatestripekey": {
-          "type": "string"
+          "type": "string",
+          "description": "PrivateStripeKey is the key for the stripe service"
         },
         "stripewebhooksecret": {
-          "type": "string"
+          "type": "string",
+          "description": "StripeWebhookSecret is the secret for the stripe service (legacy, use StripeWebhookSecrets for version-specific secrets)"
         },
         "stripewebhooksecrets": {
-          "$ref": "#/$defs/map[string]string"
+          "$ref": "#/$defs/map[string]string",
+          "description": "StripeWebhookSecrets is a map of API version to webhook secrets for safe migration rollback"
         },
         "stripewebhookurl": {
-          "type": "string"
+          "type": "string",
+          "description": "StripeWebhookURL is the URL for the stripe webhook"
         },
         "stripebillingportalsuccessurl": {
-          "type": "string"
+          "type": "string",
+          "description": "StripeBillingPortalSuccessURL"
         },
         "stripecancellationreturnurl": {
-          "type": "string"
+          "type": "string",
+          "description": "StripeCancellationReturnURL is the URL for the stripe cancellation return"
         },
         "stripewebhookevents": {
-          "$ref": "#/$defs/[]string"
+          "$ref": "#/$defs/[]string",
+          "description": "StripeWebhookEvents is the list of events to register when creating a webhook endpoint"
         },
         "stripewebhookapiversion": {
-          "type": "string"
+          "type": "string",
+          "description": "StripeWebhookAPIVersion is the Stripe API version currently accepted by the webhook handler"
         },
         "stripewebhookdiscardapiversion": {
-          "type": "string"
+          "type": "string",
+          "description": "StripeWebhookDiscardAPIVersion is the Stripe API version to discard during migration"
         }
       },
       "additionalProperties": false,
@@ -949,80 +1038,103 @@
     "handlers.CloudflareConfig": {
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enabled toggles the Cloudflare snapshot handler"
         },
         "apitoken": {
-          "type": "string"
+          "type": "string",
+          "description": "APIToken is the API token used for Cloudflare client initialization"
         },
         "accountid": {
-          "type": "string"
+          "type": "string",
+          "description": "AccountID is the Cloudflare account ID to use for snapshot operations"
         },
         "clientid": {
-          "type": "string"
+          "type": "string",
+          "description": "ClientID is the Cloudflare Access client ID for shortlink API requests"
         },
         "clientsecret": {
-          "type": "string"
+          "type": "string",
+          "description": "ClientSecret is the Cloudflare Access client secret for shortlink API requests"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "CloudflareConfig contains configuration for Cloudflare integration."
     },
     "handlers.OauthProviderConfig": {
       "properties": {
         "redirecturl": {
-          "type": "string"
+          "type": "string",
+          "description": "RedirectURL is the URL that the OAuth2 client will redirect to after authentication is complete"
         },
         "github": {
-          "$ref": "#/$defs/github.ProviderConfig"
+          "$ref": "#/$defs/github.ProviderConfig",
+          "description": "Github contains the configuration settings for the Github Oauth Provider"
         },
         "google": {
-          "$ref": "#/$defs/google.ProviderConfig"
+          "$ref": "#/$defs/google.ProviderConfig",
+          "description": "Google contains the configuration settings for the Google Oauth Provider"
         },
         "webauthn": {
-          "$ref": "#/$defs/webauthn.ProviderConfig"
+          "$ref": "#/$defs/webauthn.ProviderConfig",
+          "description": "Webauthn contains the configuration settings for the Webauthn Oauth Provider"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "OauthProviderConfig represents the configuration for OAuth providers such as Github and Google"
     },
     "handlers.SupportAccessConfig": {
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enabled toggles the support access endpoints"
         },
         "email": {
-          "type": "string"
+          "type": "string",
+          "description": "Email is the email of the virtual support identity, used as the first factor username"
         },
         "displayname": {
-          "type": "string"
+          "type": "string",
+          "description": "DisplayName is the display name of the virtual support identity, used for record attribution"
         },
         "subjectid": {
-          "type": "string"
+          "type": "string",
+          "description": "SubjectID is the stable subject id of the virtual support identity used for created_by/updated_by\nattribution. It must be a valid ULID and is consistent without a backing user row. Default should match anon.SupportSubjectID"
         },
         "password": {
-          "type": "string"
+          "type": "string",
+          "description": "Password is the shared password for the virtual support identity, validated against this value"
         },
         "clientid": {
-          "type": "string"
+          "type": "string",
+          "description": "ClientID is the client ID for the second factor identity provider"
         },
         "clientsecret": {
-          "type": "string"
+          "type": "string",
+          "description": "ClientSecret is the client secret for the second factor identity provider"
         },
         "issuerurl": {
-          "type": "string"
+          "type": "string",
+          "description": "IssuerURL is the issuer URL of the second factor identity provider"
         },
         "discoveryendpoint": {
-          "type": "string"
+          "type": "string",
+          "description": "DiscoveryEndpoint is the optional OIDC discovery endpoint of the second factor identity provider"
         },
         "redirecturl": {
-          "type": "string"
+          "type": "string",
+          "description": "RedirectURL is the callback URL registered with the second factor identity provider"
         },
         "alloweddomain": {
-          "type": "string"
+          "type": "string",
+          "description": "AllowedDomain restricts which email domain may complete the second factor (e.g. theopenlane.io)"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "SupportAccessConfig contains configuration for the Openlane support access flow. The support\nidentity is virtual and authenticated entirely from these values, never from the database. This is\nthe single place that holds the support identity, its shared password, and the second factor\nidentity provider configuration, since both authentications must occur together"
     },
     "map[string][]string": {
       "additionalProperties": {
@@ -1072,17 +1184,21 @@
     "mime.Config": {
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enabled indicates if the mime middleware should be enabled"
         },
         "mimetypesfile": {
-          "type": "string"
+          "type": "string",
+          "description": "MimeTypesFile is the file to load mime types from"
         },
         "defaultcontenttype": {
-          "type": "string"
+          "type": "string",
+          "description": "DefaultContentType is the default content type to set if no mime type is found"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "Config defines the config for Mime middleware"
     },
     "oidclocal.Config": {
       "properties": {
@@ -1173,56 +1289,72 @@
           "type": "boolean"
         },
         "options": {
-          "$ref": "#/$defs/[]ratelimit.RateOption"
+          "$ref": "#/$defs/[]ratelimit.RateOption",
+          "description": "Options enables configuring multiple concurrent rate windows that must all pass."
         },
         "headers": {
-          "$ref": "#/$defs/[]string"
+          "$ref": "#/$defs/[]string",
+          "description": "Headers determines which headers are inspected to determine the origin IP.\nDefaults to CF-Connecting-IP, True-Client-IP, RemoteAddr."
         },
         "forwardedindexfrombehind": {
-          "type": "integer"
+          "type": "integer",
+          "description": "ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.\n0 means the closest client, 1 the proxy behind it, etc."
         },
         "includepath": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "IncludePath appends the request path to the limiter key when true."
         },
         "includemethod": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "IncludeMethod appends the request method to the limiter key when true."
         },
         "keyprefix": {
-          "type": "string"
+          "type": "string",
+          "description": "KeyPrefix allows scoping the limiter key space with a static prefix."
         },
         "denystatus": {
-          "type": "integer"
+          "type": "integer",
+          "description": "DenyStatus overrides the HTTP status code returned when a rate limit is exceeded."
         },
         "denymessage": {
-          "type": "string"
+          "type": "string",
+          "description": "DenyMessage customises the error payload when a rate limit is exceeded."
         },
         "sendretryafterheader": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "SendRetryAfterHeader toggles whether the Retry-After header should be added when available."
         },
         "dryrun": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "DryRun enables logging rate limit decisions without blocking requests."
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "Config defines the configuration settings for the rate limiter middleware."
     },
     "ratelimit.RateOption": {
       "properties": {
         "requests": {
-          "type": "integer"
+          "type": "integer",
+          "description": "Requests is the number of requests allowed within the configured window."
         },
         "window": {
-          "type": "integer"
+          "type": "integer",
+          "description": "Window is the duration of the sliding window."
         },
         "expiration": {
-          "type": "integer"
+          "type": "integer",
+          "description": "Expiration controls how long counters are retained before eviction.\nWhen unset, Expiration defaults to twice the Window duration."
         },
         "flushinterval": {
-          "type": "integer"
+          "type": "integer",
+          "description": "FlushInterval defines how frequently expired values are purged from memory.\nWhen unset, FlushInterval defaults to 10s."
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "RateOption defines a distinct rate limiting window and request allowance."
     },
     "river.Config": {
       "properties": {
@@ -1388,35 +1520,45 @@
     "secure.Config": {
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enabled indicates if the secure middleware should be enabled"
         },
         "xssprotection": {
-          "type": "string"
+          "type": "string",
+          "description": "XSSProtection is the value to set the X-XSS-Protection header to - default is 1; mode=block"
         },
         "contenttypenosniff": {
-          "type": "string"
+          "type": "string",
+          "description": "ContentTypeNosniff is the value to set the X-Content-Type-Options header to - default is nosniff"
         },
         "xframeoptions": {
-          "type": "string"
+          "type": "string",
+          "description": "XFrameOptions is the value to set the X-Frame-Options header to - default is SAMEORIGIN"
         },
         "hstspreloadenabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "HSTSPreloadEnabled is a boolean to enable HSTS preloading - default is false"
         },
         "hstsmaxage": {
-          "type": "integer"
+          "type": "integer",
+          "description": "HSTSMaxAge is the max age to set the HSTS header to - default is 31536000"
         },
         "contentsecuritypolicy": {
-          "type": "string"
+          "type": "string",
+          "description": "ContentSecurityPolicy is the value to set the Content-Security-Policy header to - default is default-src 'self'"
         },
         "referrerpolicy": {
-          "type": "string"
+          "type": "string",
+          "description": "ReferrerPolicy is the value to set the Referrer-Policy header to - default is same-origin"
         },
         "cspreportonly": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "CSPReportOnly is a boolean to enable the Content-Security-Policy-Report-Only header - default is false"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "Config contains the types used in the mw middleware"
     },
     "sessions.Config": {
       "properties": {
@@ -1507,91 +1649,117 @@
     "storage.ProviderConfig": {
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enabled indicates if object storage is enabled"
         },
         "keys": {
-          "$ref": "#/$defs/[]string"
+          "$ref": "#/$defs/[]string",
+          "description": "Keys are the form field keys that will be processed for uploads"
         },
         "maxsizemb": {
-          "type": "integer"
+          "type": "integer",
+          "description": "MaxSizeMB is the maximum file size allowed in MB"
         },
         "maxmemorymb": {
-          "type": "integer"
+          "type": "integer",
+          "description": "MaxMemoryMB is the maximum memory to use for file uploads in MB"
         },
         "devmode": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "DevMode automatically configures a local disk storage provider (and ensures directories exist) and ignores other provider configs"
         },
         "providers": {
-          "$ref": "#/$defs/storage.Providers"
+          "$ref": "#/$defs/storage.Providers",
+          "description": "Providers contains configuration for each storage provider"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "ProviderConfig contains configuration for object storage providers"
     },
     "storage.ProviderConfigs": {
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enabled indicates if this provider is enabled"
         },
         "ensureavailable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "EnsureAvailable enforces provider availability before completing server startup"
         },
         "region": {
-          "type": "string"
+          "type": "string",
+          "description": "Region for cloud providers"
         },
         "bucket": {
-          "type": "string"
+          "type": "string",
+          "description": "Bucket name for cloud providers"
         },
         "endpoint": {
-          "type": "string"
+          "type": "string",
+          "description": "Endpoint for custom endpoints"
         },
         "proxypresignenabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "ProxyPresignEnabled toggles proxy-signed download URL generation"
         },
         "baseurl": {
-          "type": "string"
+          "type": "string",
+          "description": "BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)."
         },
         "credentials": {
-          "$ref": "#/$defs/storage.ProviderCredentials"
+          "$ref": "#/$defs/storage.ProviderCredentials",
+          "description": "Credentials contains the credentials for accessing the provider"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "ProviderConfigs contains configuration for all storage providers\nThis is structured to allow easy extension for additional providers in the future"
     },
     "storage.ProviderCredentials": {
       "properties": {
         "accesskeyid": {
-          "type": "string"
+          "type": "string",
+          "description": "AccessKeyID for cloud providers"
         },
         "secretaccesskey": {
-          "type": "string"
+          "type": "string",
+          "description": "SecretAccessKey for cloud providers"
         },
         "projectid": {
-          "type": "string"
+          "type": "string",
+          "description": "ProjectID for GCS"
         },
         "accountid": {
-          "type": "string"
+          "type": "string",
+          "description": "AccountID for Cloudflare R2"
         },
         "apitoken": {
-          "type": "string"
+          "type": "string",
+          "description": "APIToken for Cloudflare R2"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "ProviderCredentials contains credentials for a storage provider"
     },
     "storage.Providers": {
       "properties": {
         "s3": {
-          "$ref": "#/$defs/storage.ProviderConfigs"
+          "$ref": "#/$defs/storage.ProviderConfigs",
+          "description": "S3 provider configuration"
         },
         "r2": {
-          "$ref": "#/$defs/storage.ProviderConfigs"
+          "$ref": "#/$defs/storage.ProviderConfigs",
+          "description": "R2 provider configuration"
         },
         "disk": {
-          "$ref": "#/$defs/storage.ProviderConfigs"
+          "$ref": "#/$defs/storage.ProviderConfigs",
+          "description": "Disk provider configuration"
         },
         "database": {
-          "$ref": "#/$defs/storage.ProviderConfigs"
+          "$ref": "#/$defs/storage.ProviderConfigs",
+          "description": "Database provider configuration"
         }
       },
       "additionalProperties": false,
@@ -1600,92 +1768,117 @@
     "summarizer.AnthropicConfig": {
       "properties": {
         "betaheader": {
-          "type": "string"
+          "type": "string",
+          "description": "BetaHeader specifies the beta API features to enable"
         },
         "legacytextcompletion": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "LegacyTextCompletion enables legacy text completion API"
         },
         "baseurl": {
-          "type": "string"
+          "type": "string",
+          "description": "BaseURL specifies the API endpoint"
         },
         "model": {
-          "type": "string"
+          "type": "string",
+          "description": "Model specifies the model name to use"
         },
         "apikey": {
-          "type": "string"
+          "type": "string",
+          "description": "APIKey contains the authentication key for the service"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "AnthropicConfig contains Anthropic specific configuration"
     },
     "summarizer.CloudflareConfig": {
       "properties": {
         "model": {
-          "type": "string"
+          "type": "string",
+          "description": "Model specifies the model name to use"
         },
         "apikey": {
-          "type": "string"
+          "type": "string",
+          "description": "APIKey contains the authentication key for the service"
         },
         "accountid": {
-          "type": "string"
+          "type": "string",
+          "description": "AccountID specifies the Cloudflare account ID"
         },
         "serverurl": {
-          "type": "string"
+          "type": "string",
+          "description": "ServerURL specifies the API endpoint"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "CloudflareConfig contains Cloudflare specific configuration"
     },
     "summarizer.Config": {
       "properties": {
         "type": {
-          "type": "string"
+          "type": "string",
+          "description": "Type specifies the summarization algorithm to use"
         },
         "llm": {
-          "$ref": "#/$defs/summarizer.LLM"
+          "$ref": "#/$defs/summarizer.LLM",
+          "description": "LLM contains configuration for large language model based summarization"
         },
         "maximumsentences": {
-          "type": "integer"
+          "type": "integer",
+          "description": "MaximumSentences specifies the maximum number of sentences in the summary"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "Config holds configuration for the text summarization functionality"
     },
     "summarizer.LLM": {
       "properties": {
         "provider": {
-          "type": "string"
+          "type": "string",
+          "description": "Provider specifies which LLM service to use"
         },
         "anthropic": {
-          "$ref": "#/$defs/summarizer.AnthropicConfig"
+          "$ref": "#/$defs/summarizer.AnthropicConfig",
+          "description": "Anthropic contains configuration for Anthropic's API"
         },
         "cloudflare": {
-          "$ref": "#/$defs/summarizer.CloudflareConfig"
+          "$ref": "#/$defs/summarizer.CloudflareConfig",
+          "description": "Cloudflare contains configuration for Cloudflare's API"
         },
         "openai": {
-          "$ref": "#/$defs/summarizer.OpenAIConfig"
+          "$ref": "#/$defs/summarizer.OpenAIConfig",
+          "description": "OpenAI contains configuration for OpenAI's API"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "LLM contains configuration for multiple LLM providers"
     },
     "summarizer.OpenAIConfig": {
       "properties": {
         "model": {
-          "type": "string"
+          "type": "string",
+          "description": "Model specifies the model name to use"
         },
         "apikey": {
-          "type": "string"
+          "type": "string",
+          "description": "APIKey contains the authentication key for the service"
         },
         "url": {
-          "type": "string"
+          "type": "string",
+          "description": "URL specifies the API endpoint"
         },
         "organizationid": {
-          "type": "string"
+          "type": "string",
+          "description": "OrganizationID specifies the OpenAI organization ID"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "OpenAIConfig contains OpenAI specific configuration"
     },
     "tokens.APITokenConfig": {
       "properties": {
@@ -1825,38 +2018,48 @@
     "validator.AllowedEmailTypes": {
       "properties": {
         "disposable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Disposable indicates whether disposable email addresses are allowed"
         },
         "free": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Free indicates whether free email addresses are allowed"
         },
         "role": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Role indicates whether role-based email addresses are allowed"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "AllowedEmailTypes defines the allowed email types for verification"
     },
     "validator.EmailVerificationConfig": {
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enabled indicates whether email verification is enabled"
         },
         "enableautoupdatedisposable": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "EnableAutoUpdateDisposable indicates whether to automatically update disposable email addresses"
         },
         "enablegravatarcheck": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "EnableGravatarCheck indicates whether to check for Gravatar existence"
         },
         "enablesmtpcheck": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "EnableSMTPCheck indicates whether to check email by smtp"
         },
         "allowedemailtypes": {
-          "$ref": "#/$defs/validator.AllowedEmailTypes"
+          "$ref": "#/$defs/validator.AllowedEmailTypes",
+          "description": "AllowedEmailTypes defines the allowed email types for verification"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "EmailVerificationConfig is the configuration for email verification"
     },
     "webauthn.ProviderConfig": {
       "properties": {
@@ -1977,69 +2180,91 @@
   },
   "properties": {
     "domain": {
-      "type": "string"
+      "type": "string",
+      "description": "Domain provides a global domain value for other modules to inherit"
     },
     "refreshinterval": {
-      "type": "integer"
+      "type": "integer",
+      "description": "RefreshInterval determines how often to reload the config"
     },
     "server": {
-      "$ref": "#/$defs/config.Server"
+      "$ref": "#/$defs/config.Server",
+      "description": "Server contains the echo server settings"
     },
     "entconfig": {
-      "$ref": "#/$defs/entconfig.Config"
+      "$ref": "#/$defs/entconfig.Config",
+      "description": "EntConfig contains the ent configuration used by the ent middleware"
     },
     "auth": {
-      "$ref": "#/$defs/config.Auth"
+      "$ref": "#/$defs/config.Auth",
+      "description": "Auth contains the authentication token settings and provider(s)"
     },
     "authz": {
-      "$ref": "#/$defs/fgax.Config"
+      "$ref": "#/$defs/fgax.Config",
+      "description": "Authz contains the authorization settings for fine grained access control"
     },
     "db": {
-      "$ref": "#/$defs/entx.Config"
+      "$ref": "#/$defs/entx.Config",
+      "description": "DB contains the database configuration for the ent client"
     },
     "jobqueue": {
-      "$ref": "#/$defs/riverqueue.Config"
+      "$ref": "#/$defs/riverqueue.Config",
+      "description": "JobQueue contains the configuration for the job queue (river) client"
     },
     "redis": {
-      "$ref": "#/$defs/cache.Config"
+      "$ref": "#/$defs/cache.Config",
+      "description": "Redis contains the redis configuration for the key-value store"
     },
     "sessions": {
-      "$ref": "#/$defs/sessions.Config"
+      "$ref": "#/$defs/sessions.Config",
+      "description": "Sessions config for user sessions and cookies"
     },
     "totp": {
-      "$ref": "#/$defs/totp.Config"
+      "$ref": "#/$defs/totp.Config",
+      "description": "TOTP contains the configuration for the TOTP provider"
     },
     "ratelimit": {
-      "$ref": "#/$defs/ratelimit.Config"
+      "$ref": "#/$defs/ratelimit.Config",
+      "description": "Ratelimit contains the configuration for the global rate limiter applied to all requests"
     },
     "ratelimitunmatched": {
-      "$ref": "#/$defs/ratelimit.Config"
+      "$ref": "#/$defs/ratelimit.Config",
+      "description": "RatelimitUnmatched contains the rate limiter configuration applied only to requests that do not match a registered route"
     },
     "objectstorage": {
-      "$ref": "#/$defs/storage.ProviderConfig"
+      "$ref": "#/$defs/storage.ProviderConfig",
+      "description": "ObjectStorage contains the configuration for the object storage backend"
     },
     "subscription": {
-      "$ref": "#/$defs/entitlements.Config"
+      "$ref": "#/$defs/entitlements.Config",
+      "description": "Entitlements contains the configuration for the entitlements service"
     },
     "keywatcher": {
-      "$ref": "#/$defs/config.KeyWatcher"
+      "$ref": "#/$defs/config.KeyWatcher",
+      "description": "Keywatcher contains the configuration for the key watcher that manages JWT signing keys"
     },
     "integrations": {
-      "$ref": "#/$defs/catalog.Config"
+      "$ref": "#/$defs/catalog.Config",
+      "description": "Integrations contains operator-level credentials for all v2 integration definitions"
     },
     "workflows": {
-      "$ref": "#/$defs/workflows.Config"
+      "$ref": "#/$defs/workflows.Config",
+      "description": "Workflows contains the configuration for the workflows engine"
     },
     "cloudflare": {
-      "$ref": "#/$defs/handlers.CloudflareConfig"
+      "$ref": "#/$defs/handlers.CloudflareConfig",
+      "description": "Cloudflare contains configuration for Cloudflare integration"
     },
     "shortlinks": {
-      "$ref": "#/$defs/shortlinks.Config"
+      "$ref": "#/$defs/shortlinks.Config",
+      "description": "Shortlinks contains configuration for the URL shortening service"
     },
     "backfill": {
-      "$ref": "#/$defs/config.Backfill"
+      "$ref": "#/$defs/config.Backfill",
+      "description": "Backfill contains configuration for one-time startup data backfill routines"
     }
   },
   "additionalProperties": false,
-  "type": "object"
+  "type": "object",
+  "description": "Config contains the configuration for the core server"
 }

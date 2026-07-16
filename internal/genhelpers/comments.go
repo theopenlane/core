@@ -14,7 +14,7 @@ import (
 // for exported struct fields; the key format is shared by the jsonschema reflector comment map
 // and the OpenAPI schema customizer so both generators source descriptions the same way
 func LoadCommentMap(patterns ...string) (map[string]string, error) {
-	cfg := &packages.Config{Mode: packages.NeedName | packages.NeedSyntax}
+	cfg := &packages.Config{Mode: packages.NeedName | packages.NeedSyntax | packages.NeedCompiledGoFiles}
 
 	pkgs, err := packages.Load(cfg, patterns...)
 	if err != nil {
