@@ -146,7 +146,8 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 			return ErrIngestSchemaNotDeclared
 		}
 
-		if _, ok := entityops.LookupSchema(payloadSet.Schema); !ok {
+		sourceSchema, ok := entityops.LookupSchema(payloadSet.Schema)
+		if !ok {
 			return ErrIngestSchemaNotFound
 		}
 
@@ -155,7 +156,17 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 		}
 
 		for _, envelope := range payloadSet.Envelopes {
-			record, include, mapErr := mapIngestRecord(ctx, definition, payloadSet.Schema, envelope, installationFilterExpr)
+			mapping, found := findMapping(definition.Mappings, payloadSet.Schema, envelope.Variant)
+			if !found {
+				logx.FromContext(ctx).Error().Err(ErrIngestMappingNotFound).Str("schema", payloadSet.Schema).Str("resource", envelope.Resource).Msg("error mapping ingest record")
+
+				attempted++
+				failed++
+
+				continue
+			}
+
+			record, include, mapErr := mapIngestRecord(ctx, mapping, payloadSet.Schema, envelope, installationFilterExpr)
 			if mapErr != nil {
 				logx.FromContext(ctx).Error().Err(mapErr).Str("schema", payloadSet.Schema).Str("resource", envelope.Resource).Msg("error mapping ingest record")
 
@@ -169,17 +180,10 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 				continue
 			}
 
-			// resolve the effective cross-object link rules (installation override or definition
-			// default) and inject the matched target ids into the create input, so the record is
-			// created (or emitted for async creation) with its edges already set
-			mapping, _ := findMapping(definition.Mappings, record.Schema, record.Variant)
-
-			rules := resolveInstallationLinkRules(ic.Integration, definition, operationName)
-			if len(rules) == 0 {
-				rules = mapping.Links
-			}
-
-			record.Payload, err = injectLinks(ctx, ic.DB, ic.Integration.OwnerID, rules, record.Schema, record.Payload)
+			// inject the mapping's cross-object links into the create input, so the record is
+			// created (or emitted for async creation) with its edges already set; link rules are
+			// declared on the definition's mapping and validated at registration
+			record.Payload, err = injectLinks(ctx, ic.DB, ic.Integration.OwnerID, mapping.Links, sourceSchema, record.Payload)
 			if err != nil {
 				logx.FromContext(ctx).Error().Err(err).Str("schema", payloadSet.Schema).Str("resource", envelope.Resource).Msg("ingest link injection failed")
 
@@ -239,13 +243,9 @@ func markUnconfirmedDirectoryMembershipsRemoved(ctx context.Context, db *ent.Cli
 	return nil
 }
 
-// mapIngestRecord applies user-defined CEL expression filters over the data envelope so that we can filter out the data we import
-func mapIngestRecord(ctx context.Context, definition types.Definition, schema string, envelope types.MappingEnvelope, installationFilterExpr string) (mappedIngestRecord, bool, error) {
-	mapping, found := findMapping(definition.Mappings, schema, envelope.Variant)
-	if !found {
-		return mappedIngestRecord{}, false, ErrIngestMappingNotFound
-	}
-
+// mapIngestRecord applies the resolved mapping's filters and map expression to one data envelope,
+// returning the mapped record and whether the envelope passed the include filters
+func mapIngestRecord(ctx context.Context, mapping types.MappingOverride, schema string, envelope types.MappingEnvelope, installationFilterExpr string) (mappedIngestRecord, bool, error) {
 	matched, err := envelopeIncludedByFilters(ctx, installationFilterExpr, mapping.FilterExpr, envelope)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("ingest filter failed")
@@ -293,35 +293,6 @@ func resolveInstallationFilterExpr(installation *ent.Integration, definition typ
 	}
 
 	return cfg.FilterExpr, nil
-}
-
-// installationLinkConfig holds the per-installation cross-object link overrides stored in the
-// integration's client config; it mirrors the operation-scoped UserInput link rows
-type installationLinkConfig struct {
-	// Links overrides the definition's default link rules for the operation
-	Links []types.LinkRule `json:"links,omitempty"`
-}
-
-// resolveInstallationLinkRules pulls the link-rule overrides for the current operation out of the
-// installation config, mirroring resolveInstallationFilterExpr: the operation's ConfigResolver
-// extracts the operation-specific section first, otherwise it falls back to a top-level links field.
-// Returns nil when the installation supplies no override, so the caller uses the definition default
-func resolveInstallationLinkRules(installation *ent.Integration, definition types.Definition, operationName string) []types.LinkRule {
-	if operationName != "" {
-		if op, ok := lo.Find(definition.Operations, func(o types.OperationRegistration) bool { return o.Name == operationName }); ok && op.ConfigResolver != nil {
-			var cfg installationLinkConfig
-			if err := jsonx.UnmarshalIfPresent(op.ConfigResolver(installation.Config.ClientConfig), &cfg); err == nil && len(cfg.Links) > 0 {
-				return cfg.Links
-			}
-		}
-	}
-
-	var cfg installationLinkConfig
-	if err := jsonx.UnmarshalIfPresent(installation.Config.ClientConfig, &cfg); err != nil {
-		return nil
-	}
-
-	return cfg.Links
 }
 
 // envelopeIncludedByFilters evaluates the installation-level and mapping-level filter expressions against the data envelope

@@ -3,7 +3,6 @@ package gcpscc
 import (
 	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // mapExprFinding is the CEL mapping expression for GCP Security Command Center finding payloads
@@ -99,30 +98,3 @@ var mapExprRisk = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: entityops.InputKeyRiskRiskCategoryName, Expr: `'finding_class' in payload ? payload.finding_class : ""`},
 	{Key: entityops.InputKeyRiskMitigation, Expr: `'next_steps' in payload ? payload.next_steps : ""`},
 })
-
-// gcpsccMappings returns the default SCC ingest mappings
-func gcpsccMappings() []types.MappingRegistration {
-	return []types.MappingRegistration{
-		{
-			Schema: entityops.SchemaRisk.Name,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprRisk,
-			},
-		},
-		{
-			Schema: entityops.SchemaVulnerability.Name,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprVuln,
-			},
-		},
-		{
-			Schema: entityops.SchemaFinding.Name,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprFinding,
-			},
-		},
-	}
-}

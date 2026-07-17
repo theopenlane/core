@@ -112,7 +112,7 @@ func TestResolveCanonicalEmail(t *testing.T) {
 func githubMappingSpecForSchema(t *testing.T, schema string) types.MappingOverride {
 	t.Helper()
 
-	for _, mapping := range githubAppMappings() {
+	for _, mapping := range testMappings(t) {
 		if mapping.Schema == schema {
 			return mapping.Spec
 		}

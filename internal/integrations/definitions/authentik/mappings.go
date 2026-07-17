@@ -3,7 +3,6 @@ package authentik
 import (
 	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // mapExprDirectoryAccount is the CEL mapping expression for Authentik user payloads mapped to DirectoryAccount
@@ -36,30 +35,3 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr([]providerkit.CelMapEntr
 	{Key: entityops.InputKeyDirectoryMembershipRole, Expr: `dyn("MEMBER")`},
 	{Key: entityops.InputKeyDirectoryMembershipMetadata, Expr: "payload"},
 })
-
-// authentikMappings returns the built-in Authentik ingest mappings
-func authentikMappings() []types.MappingRegistration {
-	return []types.MappingRegistration{
-		{
-			Schema: entityops.SchemaDirectoryAccount.Name,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryAccount,
-			},
-		},
-		{
-			Schema: entityops.SchemaDirectoryGroup.Name,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryGroup,
-			},
-		},
-		{
-			Schema: entityops.SchemaDirectoryMembership.Name,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryMembership,
-			},
-		},
-	}
-}

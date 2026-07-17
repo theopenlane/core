@@ -47,10 +47,6 @@ var (
 	ErrExportFailed = errors.New("integrations/operations: file export failed")
 	// ErrResultEncode indicates an operation result could not be serialized
 	ErrResultEncode = errors.New("integrations/operations: result encode failed")
-	// ErrLinkEdgeNotFound indicates the link edge name does not exist on the source schema
-	ErrLinkEdgeNotFound = errors.New("integrations/operations: link edge not found on source schema")
-	// ErrLinkTargetSchemaNotFound indicates the link target schema could not be resolved
-	ErrLinkTargetSchemaNotFound = errors.New("integrations/operations: link target schema not found")
 	// ErrLinkFailed indicates a link operation failed
 	ErrLinkFailed = errors.New("integrations/operations: link operation failed")
 )

@@ -122,7 +122,15 @@ func Builder(cfg Config) registry.Builder {
 					Schedule:     gala.NewFullFetchSchedule(),
 				},
 			},
-			Mappings: oneDriveMappings(),
+			Mappings: []types.MappingRegistration{
+				{
+					Schema: entityops.SchemaInternalPolicy.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprInternalPolicy,
+					},
+				},
+			},
 		}, nil
 	})
 }

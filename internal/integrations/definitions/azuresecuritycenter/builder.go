@@ -95,7 +95,24 @@ func Builder() registry.Builder {
 					IngestHandle: SubAssessmentsCollect{}.IngestHandle(),
 				},
 			},
-			Mappings: azureSecurityCenterMappings(),
+			Mappings: []types.MappingRegistration{
+				{
+					Schema:  entityops.SchemaVulnerability.Name,
+					Variant: variantAssessment,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprAssessment,
+					},
+				},
+				{
+					Schema:  entityops.SchemaVulnerability.Name,
+					Variant: variantSubAssessment,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprSubAssessment,
+					},
+				},
+			},
 		}, nil
 	})
 }

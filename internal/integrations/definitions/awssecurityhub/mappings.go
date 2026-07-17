@@ -3,7 +3,6 @@ package awssecurityhub
 import (
 	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // mapExprFinding is the CEL mapping expression for AWS Security Hub finding payloads
@@ -82,50 +81,3 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr([]providerkit.CelMapEntr
 	{Key: entityops.InputKeyDirectoryMembershipRole, Expr: `dyn("MEMBER")`},
 	{Key: entityops.InputKeyDirectoryMembershipMetadata, Expr: "payload"},
 })
-
-// awsIamMappings returns the built-in AWS IAM directory sync ingest mappings
-func awsIamMappings() []types.MappingRegistration {
-	return []types.MappingRegistration{
-		{
-			Schema: entityops.SchemaDirectoryAccount.Name,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryAccount,
-			},
-		},
-		{
-			Schema: entityops.SchemaDirectoryGroup.Name,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryGroup,
-			},
-		},
-		{
-			Schema: entityops.SchemaDirectoryMembership.Name,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryMembership,
-			},
-		},
-	}
-}
-
-// awsSecurityHubMappings returns the built-in Security Hub ingest mappings
-func awsSecurityHubMappings() []types.MappingRegistration {
-	return []types.MappingRegistration{
-		{
-			Schema: entityops.SchemaFinding.Name,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprFinding,
-			},
-		},
-		{
-			Schema: entityops.SchemaVulnerability.Name,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprVulnerability,
-			},
-		},
-	}
-}

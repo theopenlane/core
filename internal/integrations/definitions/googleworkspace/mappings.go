@@ -3,7 +3,6 @@ package googleworkspace
 import (
 	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // mapExprDirectoryAccount is the CEL mapping expression for Google Workspace user payloads mapped to DirectoryAccount
@@ -47,30 +46,3 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr([]providerkit.CelMapEntr
 	{Key: entityops.InputKeyDirectoryMembershipRole, Expr: `dyn('role' in payload && payload.role != "" ? payload.role : "MEMBER")`},
 	{Key: entityops.InputKeyDirectoryMembershipMetadata, Expr: "payload"},
 })
-
-// googleWorkspaceMappings returns the built-in Google Workspace ingest mappings
-func googleWorkspaceMappings() []types.MappingRegistration {
-	return []types.MappingRegistration{
-		{
-			Schema: entityops.SchemaDirectoryAccount.Name,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryAccount,
-			},
-		},
-		{
-			Schema: entityops.SchemaDirectoryGroup.Name,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryGroup,
-			},
-		},
-		{
-			Schema: entityops.SchemaDirectoryMembership.Name,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryMembership,
-			},
-		},
-	}
-}

@@ -2,6 +2,7 @@ package awssecurityhub
 
 import (
 	"github.com/theopenlane/core/internal/ent/entityops"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -196,7 +197,51 @@ func Builder(cfg Config) registry.Builder {
 					DisabledForAll:      true,
 				},
 			},
-			Mappings: append(awsSecurityHubMappings(), awsIamMappings()...),
+			Mappings: []types.MappingRegistration{
+				{
+					Schema: entityops.SchemaFinding.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprFinding,
+						Links: []types.LinkRule{
+							{
+								TargetSchema: entityops.SchemaControl.Name,
+								TargetField:  control.FieldRefCode,
+								SourceField:  entityops.InputKeyFindingCategory,
+								SourceList:   entityops.InputKeyFindingCategories,
+							},
+						},
+					},
+				},
+				{
+					Schema: entityops.SchemaVulnerability.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprVulnerability,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryAccount.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryAccount,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryGroup.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryGroup,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryMembership.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryMembership,
+					},
+				},
+			},
 		}, nil
 	})
 }

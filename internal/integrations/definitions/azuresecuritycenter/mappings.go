@@ -3,7 +3,6 @@ package azuresecuritycenter
 import (
 	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // mapExprAssessment maps AssessmentPayload fields to the Vulnerability schema.
@@ -54,25 +53,3 @@ var mapExprSubAssessment = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: entityops.InputKeyVulnerabilitySourceUpdatedAt, Expr: `'time_generated' in payload ? payload.time_generated : null`},
 	{Key: entityops.InputKeyVulnerabilityRawPayload, Expr: "payload"},
 })
-
-// azureSecurityCenterMappings returns the built-in Azure Security Center ingest mappings
-func azureSecurityCenterMappings() []types.MappingRegistration {
-	return []types.MappingRegistration{
-		{
-			Schema:  entityops.SchemaVulnerability.Name,
-			Variant: variantAssessment,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprAssessment,
-			},
-		},
-		{
-			Schema:  entityops.SchemaVulnerability.Name,
-			Variant: variantSubAssessment,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprSubAssessment,
-			},
-		},
-	}
-}

@@ -14,8 +14,18 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
+// testMappings returns the ingest mappings from the built Google Workspace definition
+func testMappings(t *testing.T) []types.MappingRegistration {
+	t.Helper()
+
+	def, err := Builder(Config{})()
+	require.NoError(t, err)
+
+	return def.Mappings
+}
+
 func TestMappingExpressionsValid(t *testing.T) {
-	for _, m := range googleWorkspaceMappings() {
+	for _, m := range testMappings(t) {
 		name := m.Schema
 		if m.Variant != "" {
 			name += "/" + m.Variant
@@ -149,7 +159,7 @@ func TestGoogleWorkspaceMappingsFallbacks(t *testing.T) {
 func mappingSpecForSchema(t *testing.T, schema string) types.MappingOverride {
 	t.Helper()
 
-	for _, mapping := range googleWorkspaceMappings() {
+	for _, mapping := range testMappings(t) {
 		if mapping.Schema == schema {
 			return mapping.Spec
 		}

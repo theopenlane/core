@@ -169,7 +169,69 @@ func Builder(cfg Config) registry.Builder {
 					Schedule:            gala.NewFullFetchSchedule(),
 				},
 			},
-			Mappings: githubAppMappings(),
+			Mappings: []types.MappingRegistration{
+				{
+					Schema:  entityops.SchemaVulnerability.Name,
+					Variant: githubAlertTypeDependabot,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDependabot,
+					},
+				},
+				{
+					Schema:  entityops.SchemaVulnerability.Name,
+					Variant: githubAlertTypeDependabotPoll,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDependabotPoll,
+					},
+				},
+				{
+					Schema:  entityops.SchemaVulnerability.Name,
+					Variant: githubAlertTypeCodeScanning,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprCodeScanning,
+					},
+				},
+				{
+					Schema:  entityops.SchemaVulnerability.Name,
+					Variant: githubAlertTypeSecretScan,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprSecretScanning,
+					},
+				},
+				{
+					Schema:  entityops.SchemaAsset.Name,
+					Variant: repositoryAssetVariant,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprRepositoryAsset,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryAccount.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryAccount,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryGroup.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryGroup,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryMembership.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryMembership,
+					},
+				},
+			},
 			Webhooks: []types.WebhookRegistration{
 				{
 					Name:               InstallationEventsWebhook.Name(),

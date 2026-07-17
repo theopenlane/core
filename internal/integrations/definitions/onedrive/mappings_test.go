@@ -10,8 +10,18 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+// testMappings builds the OneDrive definition and returns its registered mappings
+func testMappings(t *testing.T) []types.MappingRegistration {
+	t.Helper()
+
+	def, err := Builder(Config{})()
+	assert.NilError(t, err)
+
+	return def.Mappings
+}
+
 func TestMappingExpressionsValid(t *testing.T) {
-	for _, m := range oneDriveMappings() {
+	for _, m := range testMappings(t) {
 		name := m.Schema
 		if m.Variant != "" {
 			name += "/" + m.Variant
@@ -28,7 +38,7 @@ func TestMappingExpressionsValid(t *testing.T) {
 }
 
 func TestInternalPolicyMappingWithWebURL(t *testing.T) {
-	spec := mappingtest.MappingSpec(t, oneDriveMappings(), "InternalPolicy")
+	spec := mappingtest.MappingSpec(t, testMappings(t), "InternalPolicy")
 
 	payload := mappingtest.LoadExample(t, "examples", "document_with_weburl.json")
 
@@ -48,7 +58,7 @@ func TestInternalPolicyMappingWithWebURL(t *testing.T) {
 }
 
 func TestInternalPolicyMappingWithoutWebURL(t *testing.T) {
-	spec := mappingtest.MappingSpec(t, oneDriveMappings(), "InternalPolicy")
+	spec := mappingtest.MappingSpec(t, testMappings(t), "InternalPolicy")
 
 	payload := mappingtest.LoadExample(t, "examples", "document_without_weburl.json")
 

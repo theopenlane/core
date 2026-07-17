@@ -2,6 +2,7 @@ package gcpscc
 
 import (
 	"github.com/theopenlane/core/internal/ent/entityops"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -90,7 +91,37 @@ func Builder() registry.Builder {
 					ConfigResolver:      providerkit.ConfigFrom(func(u UserInput) FindingsSyncConfig { return u.FindingsSync }),
 				},
 			},
-			Mappings: gcpsccMappings(),
+			Mappings: []types.MappingRegistration{
+				{
+					Schema: entityops.SchemaRisk.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprRisk,
+					},
+				},
+				{
+					Schema: entityops.SchemaVulnerability.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprVuln,
+					},
+				},
+				{
+					Schema: entityops.SchemaFinding.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprFinding,
+						Links: []types.LinkRule{
+							{
+								TargetSchema: entityops.SchemaControl.Name,
+								TargetField:  control.FieldRefCode,
+								SourceField:  entityops.InputKeyFindingCategory,
+								SourceList:   entityops.InputKeyFindingCategories,
+							},
+						},
+					},
+				},
+			},
 		}, nil
 	})
 }

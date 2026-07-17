@@ -5,10 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/internal/ent/entityops"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -16,36 +15,24 @@ import (
 // injectLinks resolves the mapping's cross-object link rules and writes the matched target ids into
 // the mapped create-input payload under each edge's create-input key, so the record is created (or
 // emitted for async creation) with its edges already set rather than linked in a post-persist step.
-// rules are the effective link rules (installation override or definition default); payload is the
-// mapped create-input JSON, re-keyed into the snake_case source context the rule matches read
-func injectLinks(ctx context.Context, db *ent.Client, ownerID string, rules []types.LinkRule, schemaName string, payload json.RawMessage) (json.RawMessage, error) {
+// rules are the effective link rules (installation override or definition default); the payload's
+// snake_case input keys double as the source context the rule matches and CEL expressions read.
+// Each rule translates to a shared LinkSpec keyed by the resolved edge name — the same shape a
+// workflow definition uses — with ambiguous target types rejected rather than guessed at
+func injectLinks(ctx context.Context, db *ent.Client, ownerID string, rules []types.LinkRule, sourceSchema *entityops.Schema, payload json.RawMessage) (json.RawMessage, error) {
 	if len(rules) == 0 {
 		return payload, nil
 	}
 
-	sourceSchema, ok := entityops.LookupSchema(schemaName)
-	if !ok {
-		return nil, fmt.Errorf("%w: %s", ErrLinkTargetSchemaNotFound, schemaName)
-	}
-
-	source := payload
-	if sourceSchema.SourceContext != nil {
-		source = sourceSchema.SourceContext(payload)
-	}
-
-	// translate each provider link rule (keyed by target schema) into a shared LinkSpec keyed by the
-	// resolved edge name; the source entity's own mapped fields back the match via SourceContext
 	links := make([]entityops.LinkSpec, 0, len(rules))
 
 	for _, rule := range rules {
-		edge, found := lo.Find(sourceSchema.Edges, func(e entityops.EdgeDescriptor) bool {
-			return e.TargetType == rule.TargetSchema
-		})
-		if !found {
-			return nil, fmt.Errorf("%w: %s has no edge to %s", ErrLinkEdgeNotFound, schemaName, rule.TargetSchema)
+		edge, err := registry.ResolveLinkEdge(sourceSchema, rule)
+		if err != nil {
+			return nil, fmt.Errorf("%w: %w", ErrLinkFailed, err)
 		}
 
-		selector := entityops.TargetSelector{SourceContext: source}
+		selector := entityops.TargetSelector{SourceContext: payload}
 
 		if rule.TargetField != "" {
 			selector.KeyMatch = &entityops.KeyMatch{
@@ -62,7 +49,7 @@ func injectLinks(ctx context.Context, db *ent.Client, ownerID string, rules []ty
 
 	payload, err := entityops.InjectCreateLinks(ctx, db, ownerID, sourceSchema, payload, links)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("schema", schemaName).Msg("ingest link target resolution failed")
+		logx.FromContext(ctx).Error().Err(err).Str("schema", sourceSchema.Name).Msg("ingest link target resolution failed")
 
 		return nil, fmt.Errorf("%w: %w", ErrLinkFailed, err)
 	}

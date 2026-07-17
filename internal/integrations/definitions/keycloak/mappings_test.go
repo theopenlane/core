@@ -11,8 +11,18 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+// testMappings returns the ingest mappings from the built Keycloak definition
+func testMappings(t *testing.T) []types.MappingRegistration {
+	t.Helper()
+
+	def, err := Builder()()
+	assert.NilError(t, err)
+
+	return def.Mappings
+}
+
 func TestMappingExpressionsValid(t *testing.T) {
-	for _, m := range keycloakMappings() {
+	for _, m := range testMappings(t) {
 		name := m.Schema
 		if m.Variant != "" {
 			name += "/" + m.Variant
@@ -29,7 +39,7 @@ func TestMappingExpressionsValid(t *testing.T) {
 }
 
 func TestExamplePayloads(t *testing.T) {
-	mappings := keycloakMappings()
+	mappings := testMappings(t)
 	accountSpec := mappingtest.MappingSpec(t, mappings, "DirectoryAccount")
 	groupSpec := mappingtest.MappingSpec(t, mappings, "DirectoryGroup")
 	membershipSpec := mappingtest.MappingSpec(t, mappings, "DirectoryMembership")

@@ -448,22 +448,16 @@ func TestMapIngestRecord(t *testing.T) {
 			},
 			wantInclude: false,
 		},
-		{
-			name:   "no mapping found",
-			schema: "unknown_schema",
-			envelope: types.MappingEnvelope{
-				Variant: "",
-				Payload: json.RawMessage(`{}`),
-			},
-			wantErr: ErrIngestMappingNotFound,
-		},
 	}
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			record, include, err := mapIngestRecord(context.Background(), definition, tc.schema, tc.envelope, "")
+			mapping, found := findMapping(definition.Mappings, tc.schema, tc.envelope.Variant)
+			assert.Assert(t, found)
+
+			record, include, err := mapIngestRecord(context.Background(), mapping, tc.schema, tc.envelope, "")
 			if tc.wantErr != nil {
 				assert.ErrorIs(t, err, tc.wantErr)
 				return

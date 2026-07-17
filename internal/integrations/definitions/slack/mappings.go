@@ -3,7 +3,6 @@ package slack
 import (
 	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // mapExprDirectoryAccount is the CEL mapping expression for Slack workspace user payloads mapped to DirectoryAccount
@@ -21,16 +20,3 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: entityops.InputKeyDirectoryAccountProfile, Expr: "payload"},
 	{Key: entityops.InputKeyDirectoryAccountAccountType, Expr: `payload.is_bot ? "SERVICE" : payload.is_external ? "GUEST" : "USER"`},
 })
-
-// slackMappings returns the built-in Slack ingest mappings
-func slackMappings() []types.MappingRegistration {
-	return []types.MappingRegistration{
-		{
-			Schema: entityops.SchemaDirectoryAccount.Name,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryAccount,
-			},
-		},
-	}
-}
