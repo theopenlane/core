@@ -1,4 +1,4 @@
-h1:zpnzhVcmS3ZqKFdhfCpYZhLeyLmNHZ7j28PI4EWxaeo=
+h1:H6n4xB2yn7/np8QXKQUMOxefQEUbRR/yiMrp0VULmns=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -160,3 +160,5 @@ h1:zpnzhVcmS3ZqKFdhfCpYZhLeyLmNHZ7j28PI4EWxaeo=
 20260713225823_discoveredvulnids_history.sql h1:6eTTmGu2J1spPKmfQ4jVG23wZI5BrjOmY9u6w4a2K6k=
 20260715204512_entity_aliases.sql h1:zC+MMNkgQyvOuYgxTHNC/os+1WATHufkvr6FGZ0doTM=
 20260715204519_entity_aliases_history.sql h1:xs9M7CgSoLbnk8q7pSaXRKY7+sOIlspDaeLs2Fwi8ho=
+20260717174105_campaign_targets.sql h1:KkckC0Wf5Rtg/igjlKH7WpyirbhEq2cvVJdF6zrRKNI=
+20260717174109_campaign_targets_history.sql h1:WG37WkdOv4ofJwb1LonrUIJCFrNdxsoWSQ65iC8LkyY=
