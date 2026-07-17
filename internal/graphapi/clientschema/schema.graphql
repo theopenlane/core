@@ -92863,8 +92863,6 @@ input UpdateCampaignTargetInput {
 	"""
 	metadata: Map
 	clearMetadata: Boolean
-	campaignID: ID
-	clearCampaign: Boolean
 	contactID: ID
 	clearContact: Boolean
 	userID: ID

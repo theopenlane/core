@@ -2685,8 +2685,6 @@ type UpdateCampaignTargetInput struct {
 	CompletedAt                 *models.DateTime `json:"completed_at,omitempty"`
 	ClearMetadata               bool
 	Metadata                    map[string]interface{} `json:"metadata,omitempty"`
-	ClearCampaign               bool
-	CampaignID                  *string `json:"campaign_id,omitempty"`
 	ClearContact                bool
 	ContactID                   *string `json:"contact_id,omitempty"`
 	ClearUser                   bool
@@ -2737,12 +2735,6 @@ func (i *UpdateCampaignTargetInput) Mutate(m *CampaignTargetMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
-	}
-	if i.ClearCampaign {
-		m.ClearCampaign()
-	}
-	if v := i.CampaignID; v != nil {
-		m.SetCampaignID(*v)
 	}
 	if i.ClearContact {
 		m.ClearContact()

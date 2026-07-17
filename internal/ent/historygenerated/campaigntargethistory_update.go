@@ -147,26 +147,6 @@ func (_u *CampaignTargetHistoryUpdate) ClearWorkflowEligibleMarker() *CampaignTa
 	return _u
 }
 
-// SetCampaignID sets the "campaign_id" field.
-func (_u *CampaignTargetHistoryUpdate) SetCampaignID(v string) *CampaignTargetHistoryUpdate {
-	_u.mutation.SetCampaignID(v)
-	return _u
-}
-
-// SetNillableCampaignID sets the "campaign_id" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdate) SetNillableCampaignID(v *string) *CampaignTargetHistoryUpdate {
-	if v != nil {
-		_u.SetCampaignID(*v)
-	}
-	return _u
-}
-
-// ClearCampaignID clears the value of the "campaign_id" field.
-func (_u *CampaignTargetHistoryUpdate) ClearCampaignID() *CampaignTargetHistoryUpdate {
-	_u.mutation.ClearCampaignID()
-	return _u
-}
-
 // SetContactID sets the "contact_id" field.
 func (_u *CampaignTargetHistoryUpdate) SetContactID(v string) *CampaignTargetHistoryUpdate {
 	_u.mutation.SetContactID(v)
@@ -470,9 +450,6 @@ func (_u *CampaignTargetHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(campaigntargethistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
-	if value, ok := _u.mutation.CampaignID(); ok {
-		_spec.SetField(campaigntargethistory.FieldCampaignID, field.TypeString, value)
-	}
 	if _u.mutation.CampaignIDCleared() {
 		_spec.ClearField(campaigntargethistory.FieldCampaignID, field.TypeString)
 	}
@@ -663,26 +640,6 @@ func (_u *CampaignTargetHistoryUpdateOne) SetNillableWorkflowEligibleMarker(v *b
 // ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
 func (_u *CampaignTargetHistoryUpdateOne) ClearWorkflowEligibleMarker() *CampaignTargetHistoryUpdateOne {
 	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetCampaignID sets the "campaign_id" field.
-func (_u *CampaignTargetHistoryUpdateOne) SetCampaignID(v string) *CampaignTargetHistoryUpdateOne {
-	_u.mutation.SetCampaignID(v)
-	return _u
-}
-
-// SetNillableCampaignID sets the "campaign_id" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdateOne) SetNillableCampaignID(v *string) *CampaignTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetCampaignID(*v)
-	}
-	return _u
-}
-
-// ClearCampaignID clears the value of the "campaign_id" field.
-func (_u *CampaignTargetHistoryUpdateOne) ClearCampaignID() *CampaignTargetHistoryUpdateOne {
-	_u.mutation.ClearCampaignID()
 	return _u
 }
 
@@ -1018,9 +975,6 @@ func (_u *CampaignTargetHistoryUpdateOne) sqlSave(ctx context.Context) (_node *C
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(campaigntargethistory.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if value, ok := _u.mutation.CampaignID(); ok {
-		_spec.SetField(campaigntargethistory.FieldCampaignID, field.TypeString, value)
 	}
 	if _u.mutation.CampaignIDCleared() {
 		_spec.ClearField(campaigntargethistory.FieldCampaignID, field.TypeString)

@@ -42308,8 +42308,6 @@ type UpdateCampaignTargetInput struct {
 	// additional metadata about the campaign target
 	Metadata                   map[string]any `json:"metadata,omitempty"`
 	ClearMetadata              *bool          `json:"clearMetadata,omitempty"`
-	CampaignID                 *string        `json:"campaignID,omitempty"`
-	ClearCampaign              *bool          `json:"clearCampaign,omitempty"`
 	ContactID                  *string        `json:"contactID,omitempty"`
 	ClearContact               *bool          `json:"clearContact,omitempty"`
 	UserID                     *string        `json:"userID,omitempty"`
