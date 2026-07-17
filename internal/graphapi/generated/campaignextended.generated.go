@@ -276,7 +276,7 @@ func (ec *executionContext) unmarshalInputCreateCampaignWithTargetsInput(ctx con
 			it.Campaign = data
 		case "targets":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("targets"))
-			data, err := ec.unmarshalOCreateCampaignTargetInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateCampaignTargetInputᚄ(ctx, v)
+			data, err := ec.unmarshalOCreateCampaignTargetInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateCampaignTargetInput(ctx, v)
 			if err != nil {
 				return it, err
 			}

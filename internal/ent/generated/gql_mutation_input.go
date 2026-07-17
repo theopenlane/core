@@ -2613,7 +2613,7 @@ type CreateCampaignTargetInput struct {
 	CompletedAt            *models.DateTime                `json:"completed_at,omitempty"`
 	Metadata               map[string]interface{}          `json:"metadata,omitempty"`
 	OwnerID                *string                         `json:"owner_id,omitempty"`
-	CampaignID             string                          `json:"campaign_id,omitempty"`
+	CampaignID             *string                         `json:"campaign_id,omitempty"`
 	ContactID              *string                         `json:"contact_id,omitempty"`
 	UserID                 *string                         `json:"user_id,omitempty"`
 	GroupID                *string                         `json:"group_id,omitempty"`
@@ -2645,7 +2645,9 @@ func (i *CreateCampaignTargetInput) Mutate(m *CampaignTargetMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
-	m.SetCampaignID(i.CampaignID)
+	if v := i.CampaignID; v != nil {
+		m.SetCampaignID(*v)
+	}
 	if v := i.ContactID; v != nil {
 		m.SetContactID(*v)
 	}
@@ -2683,7 +2685,6 @@ type UpdateCampaignTargetInput struct {
 	CompletedAt                 *models.DateTime `json:"completed_at,omitempty"`
 	ClearMetadata               bool
 	Metadata                    map[string]interface{} `json:"metadata,omitempty"`
-	CampaignID                  *string                `json:"campaign_id,omitempty"`
 	ClearContact                bool
 	ContactID                   *string `json:"contact_id,omitempty"`
 	ClearUser                   bool
@@ -2734,9 +2735,6 @@ func (i *UpdateCampaignTargetInput) Mutate(m *CampaignTargetMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
-	}
-	if v := i.CampaignID; v != nil {
-		m.SetCampaignID(*v)
 	}
 	if i.ClearContact {
 		m.ClearContact()

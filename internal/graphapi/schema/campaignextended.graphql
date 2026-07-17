@@ -9,7 +9,7 @@ input CreateCampaignWithTargetsInput {
     """
     list of targets to create for the campaign
     """
-    targets: [CreateCampaignTargetInput!]
+    targets: [CreateCampaignTargetInput]
 }
 
 """

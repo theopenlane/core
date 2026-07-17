@@ -730,7 +730,7 @@ var (
 		{Name: "sent_at", Type: field.TypeTime, Nullable: true},
 		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "campaign_id", Type: field.TypeString},
+		{Name: "campaign_id", Type: field.TypeString, Nullable: true},
 		{Name: "contact_id", Type: field.TypeString, Nullable: true},
 		{Name: "group_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -747,7 +747,7 @@ var (
 				Symbol:     "campaign_targets_campaigns_campaign_targets",
 				Columns:    []*schema.Column{CampaignTargetsColumns[15]},
 				RefColumns: []*schema.Column{CampaignsColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "campaign_targets_contacts_campaign_targets",

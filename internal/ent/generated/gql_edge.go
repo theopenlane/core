@@ -1338,7 +1338,7 @@ func (_m *CampaignTarget) Campaign(ctx context.Context) (*Campaign, error) {
 	if IsNotLoaded(err) {
 		result, err = _m.QueryCampaign().Only(ctx)
 	}
-	return result, err
+	return result, MaskNotFound(err)
 }
 
 func (_m *CampaignTarget) Contact(ctx context.Context) (*Contact, error) {

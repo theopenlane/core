@@ -103,6 +103,35 @@ func TestCreateCampaignWithTargets(t *testing.T) {
 		assert.Assert(t, err != nil)
 	})
 
+	// run as a graphql request to ensure it passes graphql validation
+	t.Run("succeeds when targets omit campaignID", func(t *testing.T) {
+		concreteClient, ok := suite.client.api.TestGraphClient.(*testclient.Client)
+		assert.Assert(t, ok)
+
+		testUID := ulids.New().String()
+		vars := map[string]any{
+			"input": map[string]any{
+				"campaign": map[string]any{
+					"name":                fmt.Sprintf("campaign-%s", testUID),
+					"assessmentID":        assessmentID,
+					"recurrenceFrequency": "YEARLY",
+				},
+				"targets": []map[string]any{
+					{"email": fmt.Sprintf("target-%s@test.example", testUID)},
+				},
+			},
+		}
+
+		var resp testclient.CreateCampaignWithTargets
+		err := concreteClient.Client.Post(sharedTestUser1.UserCtx, "CreateCampaignWithTargets", testclient.CreateCampaignWithTargetsDocument, &resp, vars)
+		assert.NilError(t, err)
+		assert.Assert(t, resp.CreateCampaignWithTargets.Campaign.ID != "")
+		assert.Check(t, is.Equal(1, len(resp.CreateCampaignWithTargets.CampaignTargets)))
+
+		// cleanup
+		cleanupCampaignWithTargets(t, resp.CreateCampaignWithTargets.Campaign.ID, resp.CreateCampaignWithTargets.CampaignTargets)
+	})
+
 	// cleanup assessment and template
 	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessmentID}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(sharedTestUser1.UserCtx, t)

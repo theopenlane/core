@@ -5512,6 +5512,7 @@ func init() {
 			Label:       "Campaign",
 			Target:      SchemaCampaign,
 			TargetType:  "Campaign",
+			Immutable:   true,
 			Unique:      true,
 			CreateField: "campaignID",
 			Field:       "campaign_id",
