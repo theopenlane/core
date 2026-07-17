@@ -5269,7 +5269,7 @@ type CampaignTarget implements Node {
   """
   the campaign this target belongs to
   """
-  campaignID: ID!
+  campaignID: ID
   """
   the contact associated with the campaign target
   """
@@ -5311,7 +5311,7 @@ type CampaignTarget implements Node {
   """
   metadata: Map
   owner: Organization
-  campaign: Campaign!
+  campaign: Campaign
   contact: Contact
   user: User
   group: Group
@@ -5553,6 +5553,8 @@ input CampaignTargetWhereInput {
   campaignIDContains: ID
   campaignIDHasPrefix: ID
   campaignIDHasSuffix: ID
+  campaignIDIsNil: Boolean
+  campaignIDNotNil: Boolean
   campaignIDEqualFold: ID
   campaignIDContainsFold: ID
   """
@@ -11605,7 +11607,7 @@ input CreateCampaignTargetInput {
   """
   metadata: Map
   ownerID: ID
-  campaignID: ID!
+  campaignID: ID
   contactID: ID
   userID: ID
   groupID: ID
@@ -77976,6 +77978,7 @@ input UpdateCampaignTargetInput {
   metadata: Map
   clearMetadata: Boolean
   campaignID: ID
+  clearCampaign: Boolean
   contactID: ID
   clearContact: Boolean
   userID: ID

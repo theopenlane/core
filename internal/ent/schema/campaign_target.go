@@ -52,6 +52,7 @@ func (CampaignTarget) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("campaign_id").
 			Comment("the campaign this target belongs to").
+			Optional(). // make optional, but not empty, it shouldn't be empty but it isn't required to be passed in through the graphql mutation
 			NotEmpty(),
 		field.String("contact_id").
 			Comment("the contact associated with the campaign target").
@@ -141,7 +142,7 @@ func (c CampaignTarget) Edges() []ent.Edge {
 			fromSchema: c,
 			edgeSchema: Campaign{},
 			field:      "campaign_id",
-			required:   true,
+			required:   false,
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: c,

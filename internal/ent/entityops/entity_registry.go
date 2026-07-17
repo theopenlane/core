@@ -5514,6 +5514,7 @@ func init() {
 			TargetType:  "Campaign",
 			Unique:      true,
 			CreateField: "campaignID",
+			ClearField:  "clearCampaign",
 			Field:       "campaign_id",
 		},
 		{

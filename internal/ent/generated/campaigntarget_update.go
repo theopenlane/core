@@ -165,6 +165,12 @@ func (_u *CampaignTargetUpdate) SetNillableCampaignID(v *string) *CampaignTarget
 	return _u
 }
 
+// ClearCampaignID clears the value of the "campaign_id" field.
+func (_u *CampaignTargetUpdate) ClearCampaignID() *CampaignTargetUpdate {
+	_u.mutation.ClearCampaignID()
+	return _u
+}
+
 // SetContactID sets the "contact_id" field.
 func (_u *CampaignTargetUpdate) SetContactID(v string) *CampaignTargetUpdate {
 	_u.mutation.SetContactID(v)
@@ -499,9 +505,6 @@ func (_u *CampaignTargetUpdate) check() error {
 		if err := campaigntarget.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "CampaignTarget.status": %w`, err)}
 		}
-	}
-	if _u.mutation.CampaignCleared() && len(_u.mutation.CampaignIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "CampaignTarget.campaign"`)
 	}
 	return nil
 }
@@ -949,6 +952,12 @@ func (_u *CampaignTargetUpdateOne) SetNillableCampaignID(v *string) *CampaignTar
 	return _u
 }
 
+// ClearCampaignID clears the value of the "campaign_id" field.
+func (_u *CampaignTargetUpdateOne) ClearCampaignID() *CampaignTargetUpdateOne {
+	_u.mutation.ClearCampaignID()
+	return _u
+}
+
 // SetContactID sets the "contact_id" field.
 func (_u *CampaignTargetUpdateOne) SetContactID(v string) *CampaignTargetUpdateOne {
 	_u.mutation.SetContactID(v)
@@ -1296,9 +1305,6 @@ func (_u *CampaignTargetUpdateOne) check() error {
 		if err := campaigntarget.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "CampaignTarget.status": %w`, err)}
 		}
-	}
-	if _u.mutation.CampaignCleared() && len(_u.mutation.CampaignIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "CampaignTarget.campaign"`)
 	}
 	return nil
 }

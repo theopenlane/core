@@ -161,6 +161,12 @@ func (_u *CampaignTargetHistoryUpdate) SetNillableCampaignID(v *string) *Campaig
 	return _u
 }
 
+// ClearCampaignID clears the value of the "campaign_id" field.
+func (_u *CampaignTargetHistoryUpdate) ClearCampaignID() *CampaignTargetHistoryUpdate {
+	_u.mutation.ClearCampaignID()
+	return _u
+}
+
 // SetContactID sets the "contact_id" field.
 func (_u *CampaignTargetHistoryUpdate) SetContactID(v string) *CampaignTargetHistoryUpdate {
 	_u.mutation.SetContactID(v)
@@ -467,6 +473,9 @@ func (_u *CampaignTargetHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if value, ok := _u.mutation.CampaignID(); ok {
 		_spec.SetField(campaigntargethistory.FieldCampaignID, field.TypeString, value)
 	}
+	if _u.mutation.CampaignIDCleared() {
+		_spec.ClearField(campaigntargethistory.FieldCampaignID, field.TypeString)
+	}
 	if value, ok := _u.mutation.ContactID(); ok {
 		_spec.SetField(campaigntargethistory.FieldContactID, field.TypeString, value)
 	}
@@ -668,6 +677,12 @@ func (_u *CampaignTargetHistoryUpdateOne) SetNillableCampaignID(v *string) *Camp
 	if v != nil {
 		_u.SetCampaignID(*v)
 	}
+	return _u
+}
+
+// ClearCampaignID clears the value of the "campaign_id" field.
+func (_u *CampaignTargetHistoryUpdateOne) ClearCampaignID() *CampaignTargetHistoryUpdateOne {
+	_u.mutation.ClearCampaignID()
 	return _u
 }
 
@@ -1006,6 +1021,9 @@ func (_u *CampaignTargetHistoryUpdateOne) sqlSave(ctx context.Context) (_node *C
 	}
 	if value, ok := _u.mutation.CampaignID(); ok {
 		_spec.SetField(campaigntargethistory.FieldCampaignID, field.TypeString, value)
+	}
+	if _u.mutation.CampaignIDCleared() {
+		_spec.ClearField(campaigntargethistory.FieldCampaignID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ContactID(); ok {
 		_spec.SetField(campaigntargethistory.FieldContactID, field.TypeString, value)

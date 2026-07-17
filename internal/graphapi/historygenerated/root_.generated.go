@@ -24637,7 +24637,7 @@ type CampaignTargetHistory implements Node {
   """
   the campaign this target belongs to
   """
-  campaignID: String!
+  campaignID: String
   """
   the contact associated with the campaign target
   """
@@ -24929,6 +24929,8 @@ input CampaignTargetHistoryWhereInput {
   campaignIDContains: String
   campaignIDHasPrefix: String
   campaignIDHasSuffix: String
+  campaignIDIsNil: Boolean
+  campaignIDNotNil: Boolean
   campaignIDEqualFold: String
   campaignIDContainsFold: String
   """

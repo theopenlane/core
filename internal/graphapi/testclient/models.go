@@ -2981,7 +2981,7 @@ type CampaignTarget struct {
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// the campaign this target belongs to
-	CampaignID string `json:"campaignID"`
+	CampaignID *string `json:"campaignID,omitempty"`
 	// the contact associated with the campaign target
 	ContactID *string `json:"contactID,omitempty"`
 	// the user associated with the campaign target
@@ -3003,7 +3003,7 @@ type CampaignTarget struct {
 	// additional metadata about the campaign target
 	Metadata           map[string]any               `json:"metadata,omitempty"`
 	Owner              *Organization                `json:"owner,omitempty"`
-	Campaign           *Campaign                    `json:"campaign"`
+	Campaign           *Campaign                    `json:"campaign,omitempty"`
 	Contact            *Contact                     `json:"contact,omitempty"`
 	User               *User                        `json:"user,omitempty"`
 	Group              *Group                       `json:"group,omitempty"`
@@ -3191,6 +3191,8 @@ type CampaignTargetWhereInput struct {
 	CampaignIDContains     *string  `json:"campaignIDContains,omitempty"`
 	CampaignIDHasPrefix    *string  `json:"campaignIDHasPrefix,omitempty"`
 	CampaignIDHasSuffix    *string  `json:"campaignIDHasSuffix,omitempty"`
+	CampaignIDIsNil        *bool    `json:"campaignIDIsNil,omitempty"`
+	CampaignIDNotNil       *bool    `json:"campaignIDNotNil,omitempty"`
 	CampaignIDEqualFold    *string  `json:"campaignIDEqualFold,omitempty"`
 	CampaignIDContainsFold *string  `json:"campaignIDContainsFold,omitempty"`
 	// contact_id field predicates
@@ -6868,7 +6870,7 @@ type CreateCampaignTargetInput struct {
 	// additional metadata about the campaign target
 	Metadata             map[string]any `json:"metadata,omitempty"`
 	OwnerID              *string        `json:"ownerID,omitempty"`
-	CampaignID           string         `json:"campaignID"`
+	CampaignID           *string        `json:"campaignID,omitempty"`
 	ContactID            *string        `json:"contactID,omitempty"`
 	UserID               *string        `json:"userID,omitempty"`
 	GroupID              *string        `json:"groupID,omitempty"`
@@ -42307,6 +42309,7 @@ type UpdateCampaignTargetInput struct {
 	Metadata                   map[string]any `json:"metadata,omitempty"`
 	ClearMetadata              *bool          `json:"clearMetadata,omitempty"`
 	CampaignID                 *string        `json:"campaignID,omitempty"`
+	ClearCampaign              *bool          `json:"clearCampaign,omitempty"`
 	ContactID                  *string        `json:"contactID,omitempty"`
 	ClearContact               *bool          `json:"clearContact,omitempty"`
 	UserID                     *string        `json:"userID,omitempty"`

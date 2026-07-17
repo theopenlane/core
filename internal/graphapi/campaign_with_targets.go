@@ -32,7 +32,7 @@ func (r *mutationResolver) createCampaignWithTargets(ctx context.Context, campai
 		return nil, err
 	}
 
-	createdTargets, err := r.createTargetsForCampaign(ctx, createdCampaign.ID, validTargets)
+	createdTargets, err := r.createTargetsForCampaign(ctx, &createdCampaign.ID, validTargets)
 	if err != nil {
 		return nil, err
 	}
@@ -97,7 +97,7 @@ func (r *mutationResolver) createCampaign(ctx context.Context, input *generated.
 }
 
 // createTargetsForCampaign creates campaign targets linked to the campaign.
-func (r *mutationResolver) createTargetsForCampaign(ctx context.Context, campaignID string, targets []*generated.CreateCampaignTargetInput) ([]*generated.CampaignTarget, error) {
+func (r *mutationResolver) createTargetsForCampaign(ctx context.Context, campaignID *string, targets []*generated.CreateCampaignTargetInput) ([]*generated.CampaignTarget, error) {
 	if len(targets) == 0 {
 		return nil, nil
 	}
