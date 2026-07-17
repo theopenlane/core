@@ -41,12 +41,14 @@ func TestCampaignTargetLimit(t *testing.T) {
 
 	assessmentID := assessmentResp.CreateAssessment.Assessment.ID
 
-	defer func() {
+	t.Cleanup(func() {
 		(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessmentID}).MustDelete(sharedTestUser1.UserCtx, t)
 		(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	}()
+	})
 
 	t.Run("rejects more than 500 targets", func(t *testing.T) {
+		t.Parallel()
+
 		targets := make([]*testclient.CreateCampaignTargetInput, 501)
 		for i := range targets {
 			targets[i] = &testclient.CreateCampaignTargetInput{
@@ -69,6 +71,8 @@ func TestCampaignTargetLimit(t *testing.T) {
 	})
 
 	t.Run("accepts exactly 500 targets", func(t *testing.T) {
+		t.Parallel()
+
 		targets := make([]*testclient.CreateCampaignTargetInput, 500)
 		for i := range targets {
 			targets[i] = &testclient.CreateCampaignTargetInput{
@@ -94,6 +98,8 @@ func TestCampaignTargetLimit(t *testing.T) {
 	})
 
 	t.Run("nil targets allowed", func(t *testing.T) {
+		t.Parallel()
+
 		targets := make([]*testclient.CreateCampaignTargetInput, 502)
 		for i := range targets {
 			targets[i] = &testclient.CreateCampaignTargetInput{
@@ -133,12 +139,12 @@ func TestCampaignDispatchStatusRestrictions(t *testing.T) {
 		}).
 		SaveX(ctx)
 
-	defer func() {
+	t.Cleanup(func() {
 		(&Cleanup[*generated.EmailTemplateDeleteOne]{
 			client: suite.client.db.EmailTemplate,
 			ID:     emailTemplate.ID,
 		}).MustDelete(sharedTestUser1.UserCtx, t)
-	}()
+	})
 
 	tests := []struct {
 		name        string
