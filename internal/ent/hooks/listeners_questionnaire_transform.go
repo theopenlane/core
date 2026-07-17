@@ -584,12 +584,12 @@ func buildMappedTransformPayload(schemaName string, values map[string]any, req q
 }
 
 func getIntegrationKey(schemaName string, schema *entityops.Schema, key string) (string, bool) {
-	if _, ok := schema.AllowedKeys[key]; ok {
+	if schema.AllowedKey(key) {
 		return key, true
 	}
 
 	normalizedKey := strcase.LowerCamelCase(key)
-	if _, ok := schema.AllowedKeys[normalizedKey]; ok {
+	if schema.AllowedKey(normalizedKey) {
 		return normalizedKey, true
 	}
 
