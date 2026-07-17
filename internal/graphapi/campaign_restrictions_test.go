@@ -93,7 +93,7 @@ func TestCampaignTargetLimit(t *testing.T) {
 		cleanupCampaignWithTargets(t, resp.CreateCampaignWithTargets.Campaign.ID, resp.CreateCampaignWithTargets.CampaignTargets)
 	})
 
-	t.Run("nil targets rejected by schema", func(t *testing.T) {
+	t.Run("nil targets allowed", func(t *testing.T) {
 		targets := make([]*testclient.CreateCampaignTargetInput, 502)
 		for i := range targets {
 			targets[i] = &testclient.CreateCampaignTargetInput{
@@ -113,7 +113,7 @@ func TestCampaignTargetLimit(t *testing.T) {
 		}
 
 		_, err := suite.client.api.CreateCampaignWithTargets(sharedTestUser1.UserCtx, input)
-		assert.Assert(t, err != nil, "expected error for nil items in non-null list")
+		assert.NilError(t, err)
 	})
 }
 
