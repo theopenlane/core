@@ -287,7 +287,13 @@ func (f Finding) Edges() []ent.Edge {
 			edgeSchema: Integration{},
 			comment:    "integration that produced the finding",
 		}),
-		defaultEdgeToWithPagination(f, Vulnerability{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: f,
+			edgeSchema: Vulnerability{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Vulnerability{}.Name()),
+			},
+		}),
 		defaultEdgeToWithPagination(f, ActionPlan{}),
 		edge.To("controls", Control.Type).
 			Annotations(
@@ -298,11 +304,41 @@ func (f Finding) Edges() []ent.Edge {
 				entx.IntegrationMappingField(),
 			).
 			Through("control_mappings", FindingControl.Type),
-		defaultEdgeToWithPagination(f, Subcontrol{}),
-		defaultEdgeToWithPagination(f, Risk{}),
-		defaultEdgeToWithPagination(f, Program{}),
-		defaultEdgeToWithPagination(f, Asset{}),
-		defaultEdgeToWithPagination(f, Entity{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: f,
+			edgeSchema: Subcontrol{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Subcontrol{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: f,
+			edgeSchema: Risk{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Risk{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: f,
+			edgeSchema: Program{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Program{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: f,
+			edgeSchema: Asset{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Asset{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: f,
+			edgeSchema: Entity{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Entity{}.Name()),
+			},
+		}),
 		defaultEdgeToWithPagination(f, Scan{}),
 		defaultEdgeToWithPagination(f, Task{}),
 		defaultEdgeToWithPagination(f, DirectoryAccount{}),

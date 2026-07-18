@@ -153,6 +153,13 @@ func TestCreateReview(t *testing.T) {
 	programInOrg2 := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 	controlInOrg2 := (&ControlBuilder{client: suite.client, ProgramID: programInOrg2.ID}).MustNew(sharedTestUser2.UserCtx, t)
 
+	firstProgramReviewResp, err := suite.client.api.CreateReview(sharedTestUser1.UserCtx, testclient.CreateReviewInput{
+		Title:      "First Program Review",
+		ProgramIDs: []string{program.ID},
+	})
+	assert.NilError(t, err)
+	assert.Check(t, firstProgramReviewResp != nil)
+
 	entitiesToCleanup := []string{entity1.ID}
 	entityTypesToCleanup := []string{entity1.EntityTypeID}
 	controlsToCleanup := []string{control.ID}
@@ -198,6 +205,15 @@ func TestCreateReview(t *testing.T) {
 			},
 			client: suite.client.api,
 			ctx:    sharedAuditorUser.UserCtx,
+		},
+		{
+			name: "happy path, second review linked to same program",
+			reviewInput: testclient.CreateReviewInput{
+				Title:      "Second Program Review",
+				ProgramIDs: []string{program.ID},
+			},
+			client: suite.client.api,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, auditor creating review linked to program with reviewer",
@@ -305,6 +321,15 @@ func TestCreateReview(t *testing.T) {
 				if len(programs) > 0 {
 					assert.Check(t, is.Equal(tc.reviewInput.ProgramIDs[0], programs[0].ID))
 				}
+
+				if tc.reviewInput.ProgramIDs[0] == program.ID {
+					entProgram, err := suite.client.db.Program.Get(ctx, program.ID)
+					assert.NilError(t, err)
+
+					linkedReviews, err := entProgram.QueryReviews().All(ctx)
+					assert.NilError(t, err)
+					assert.Check(t, is.Len(linkedReviews, 2))
+				}
 			}
 
 			if len(tc.reviewInput.ControlIDs) > 0 {
@@ -330,6 +355,7 @@ func TestCreateReview(t *testing.T) {
 	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: entitiesToCleanup}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: entityTypesToCleanup}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlsToCleanup}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ReviewDeleteOne]{client: suite.client.db.Review, ID: firstProgramReviewResp.CreateReview.Review.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: programsToCleanup}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlsNoAccessToCleanup}).MustDelete(sharedTestUser2.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: programsNoAccessToCleanup}).MustDelete(sharedTestUser2.UserCtx, t)

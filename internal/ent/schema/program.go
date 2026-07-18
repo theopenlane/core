@@ -215,6 +215,34 @@ func (p Program) Edges() []ent.Edge {
 		// programs can have 1:many associated action plans
 		defaultEdgeToWithPagination(p, ActionPlan{}),
 		defaultEdgeToWithPagination(p, SystemDetail{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: Finding{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Finding{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: Vulnerability{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Vulnerability{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: Review{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Review{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: Remediation{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Remediation{}.Name()),
+			},
+		}),
 		edge.From("users", User.Type).
 			Ref("programs").
 			// Skip the mutation input for the users edge

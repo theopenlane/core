@@ -220,6 +220,10 @@ func (a Asset) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(a, Control{}),
 		defaultEdgeFromWithPagination(a, Subcontrol{}),
 		defaultEdgeFromWithPagination(a, InternalPolicy{}),
+		defaultEdgeFromWithPagination(a, Finding{}),
+		defaultEdgeFromWithPagination(a, Vulnerability{}),
+		defaultEdgeFromWithPagination(a, Review{}),
+		defaultEdgeFromWithPagination(a, Remediation{}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: a,
 			name:       "source_platform",

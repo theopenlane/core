@@ -376,6 +376,10 @@ func (e Entity) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(e, IdentityHolder{}),
 		defaultEdgeFromWithPagination(e, Control{}),
 		defaultEdgeFromWithPagination(e, Subcontrol{}),
+		defaultEdgeFromWithPagination(e, Finding{}),
+		defaultEdgeFromWithPagination(e, Vulnerability{}),
+		defaultEdgeFromWithPagination(e, Review{}),
+		defaultEdgeFromWithPagination(e, Remediation{}),
 		defaultEdgeFromWithPagination(e, Platform{}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: e,

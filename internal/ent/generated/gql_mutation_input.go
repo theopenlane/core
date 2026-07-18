@@ -1325,6 +1325,10 @@ type CreateAssetInput struct {
 	ControlIDs                  []string          `json:"control_ids,omitempty"`
 	SubcontrolIDs               []string          `json:"subcontrol_ids,omitempty"`
 	InternalPolicyIDs           []string          `json:"internal_policy_ids,omitempty"`
+	FindingIDs                  []string          `json:"finding_ids,omitempty"`
+	VulnerabilityIDs            []string          `json:"vulnerability_ids,omitempty"`
+	ReviewIDs                   []string          `json:"review_ids,omitempty"`
+	RemediationIDs              []string          `json:"remediation_ids,omitempty"`
 	SourcePlatformID            *string           `json:"source_platform_id,omitempty"`
 	IntegrationID               *string           `json:"integration_id,omitempty"`
 	ConnectedAssetIDs           []string          `json:"connected_asset_ids,omitempty"`
@@ -1487,6 +1491,18 @@ func (i *CreateAssetInput) Mutate(m *AssetMutation) {
 	if v := i.InternalPolicyIDs; len(v) > 0 {
 		m.AddInternalPolicyIDs(v...)
 	}
+	if v := i.FindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.VulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.ReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
 	if v := i.SourcePlatformID; v != nil {
 		m.SetSourcePlatformID(*v)
 	}
@@ -1622,6 +1638,18 @@ type UpdateAssetInput struct {
 	ClearInternalPolicies            bool
 	AddInternalPolicyIDs             []string `json:"add_internal_policy_ids,omitempty"`
 	RemoveInternalPolicyIDs          []string `json:"remove_internal_policy_ids,omitempty"`
+	ClearFindings                    bool
+	AddFindingIDs                    []string `json:"add_finding_ids,omitempty"`
+	RemoveFindingIDs                 []string `json:"remove_finding_ids,omitempty"`
+	ClearVulnerabilities             bool
+	AddVulnerabilityIDs              []string `json:"add_vulnerability_ids,omitempty"`
+	RemoveVulnerabilityIDs           []string `json:"remove_vulnerability_ids,omitempty"`
+	ClearReviews                     bool
+	AddReviewIDs                     []string `json:"add_review_ids,omitempty"`
+	RemoveReviewIDs                  []string `json:"remove_review_ids,omitempty"`
+	ClearRemediations                bool
+	AddRemediationIDs                []string `json:"add_remediation_ids,omitempty"`
+	RemoveRemediationIDs             []string `json:"remove_remediation_ids,omitempty"`
 	ClearSourcePlatform              bool
 	SourcePlatformID                 *string `json:"source_platform_id,omitempty"`
 	ClearConnectedAssets             bool
@@ -1972,6 +2000,42 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
 		m.RemoveInternalPolicyIDs(v...)
+	}
+	if i.ClearFindings {
+		m.ClearFindings()
+	}
+	if v := i.AddFindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RemoveFindingIDs; len(v) > 0 {
+		m.RemoveFindingIDs(v...)
+	}
+	if i.ClearVulnerabilities {
+		m.ClearVulnerabilities()
+	}
+	if v := i.AddVulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
+		m.RemoveVulnerabilityIDs(v...)
+	}
+	if i.ClearReviews {
+		m.ClearReviews()
+	}
+	if v := i.AddReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemoveReviewIDs; len(v) > 0 {
+		m.RemoveReviewIDs(v...)
+	}
+	if i.ClearRemediations {
+		m.ClearRemediations()
+	}
+	if v := i.AddRemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.RemoveRemediationIDs; len(v) > 0 {
+		m.RemoveRemediationIDs(v...)
 	}
 	if i.ClearSourcePlatform {
 		m.ClearSourcePlatform()
@@ -3301,6 +3365,7 @@ type CreateControlInput struct {
 	CheckResultIDs             []string                            `json:"check_result_ids,omitempty"`
 	ProgramIDs                 []string                            `json:"program_ids,omitempty"`
 	PlatformIDs                []string                            `json:"platform_ids,omitempty"`
+	VulnerabilityIDs           []string                            `json:"vulnerability_ids,omitempty"`
 	AssetIDs                   []string                            `json:"asset_ids,omitempty"`
 	EntityIDs                  []string                            `json:"entity_ids,omitempty"`
 	IdentityHolderIDs          []string                            `json:"identity_holder_ids,omitempty"`
@@ -3498,6 +3563,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.PlatformIDs; len(v) > 0 {
 		m.AddPlatformIDs(v...)
 	}
+	if v := i.VulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
 	if v := i.AssetIDs; len(v) > 0 {
 		m.AddAssetIDs(v...)
 	}
@@ -3684,6 +3752,9 @@ type UpdateControlInput struct {
 	ClearPlatforms                  bool
 	AddPlatformIDs                  []string `json:"add_platform_ids,omitempty"`
 	RemovePlatformIDs               []string `json:"remove_platform_ids,omitempty"`
+	ClearVulnerabilities            bool
+	AddVulnerabilityIDs             []string `json:"add_vulnerability_ids,omitempty"`
+	RemoveVulnerabilityIDs          []string `json:"remove_vulnerability_ids,omitempty"`
 	ClearAssets                     bool
 	AddAssetIDs                     []string `json:"add_asset_ids,omitempty"`
 	RemoveAssetIDs                  []string `json:"remove_asset_ids,omitempty"`
@@ -4161,6 +4232,15 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.RemovePlatformIDs; len(v) > 0 {
 		m.RemovePlatformIDs(v...)
+	}
+	if i.ClearVulnerabilities {
+		m.ClearVulnerabilities()
+	}
+	if v := i.AddVulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
+		m.RemoveVulnerabilityIDs(v...)
 	}
 	if i.ClearAssets {
 		m.ClearAssets()
@@ -7523,6 +7603,10 @@ type CreateEntityInput struct {
 	IdentityHolderIDs                     []string               `json:"identity_holder_ids,omitempty"`
 	ControlIDs                            []string               `json:"control_ids,omitempty"`
 	SubcontrolIDs                         []string               `json:"subcontrol_ids,omitempty"`
+	FindingIDs                            []string               `json:"finding_ids,omitempty"`
+	VulnerabilityIDs                      []string               `json:"vulnerability_ids,omitempty"`
+	ReviewIDs                             []string               `json:"review_ids,omitempty"`
+	RemediationIDs                        []string               `json:"remediation_ids,omitempty"`
 	PlatformIDs                           []string               `json:"platform_ids,omitempty"`
 	OutOfScopePlatformIDs                 []string               `json:"out_of_scope_platform_ids,omitempty"`
 	SourcePlatformIDs                     []string               `json:"source_platform_ids,omitempty"`
@@ -7755,6 +7839,18 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.SubcontrolIDs; len(v) > 0 {
 		m.AddSubcontrolIDs(v...)
 	}
+	if v := i.FindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.VulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.ReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
 	if v := i.PlatformIDs; len(v) > 0 {
 		m.AddPlatformIDs(v...)
 	}
@@ -7954,6 +8050,18 @@ type UpdateEntityInput struct {
 	ClearSubcontrols                           bool
 	AddSubcontrolIDs                           []string `json:"add_subcontrol_ids,omitempty"`
 	RemoveSubcontrolIDs                        []string `json:"remove_subcontrol_ids,omitempty"`
+	ClearFindings                              bool
+	AddFindingIDs                              []string `json:"add_finding_ids,omitempty"`
+	RemoveFindingIDs                           []string `json:"remove_finding_ids,omitempty"`
+	ClearVulnerabilities                       bool
+	AddVulnerabilityIDs                        []string `json:"add_vulnerability_ids,omitempty"`
+	RemoveVulnerabilityIDs                     []string `json:"remove_vulnerability_ids,omitempty"`
+	ClearReviews                               bool
+	AddReviewIDs                               []string `json:"add_review_ids,omitempty"`
+	RemoveReviewIDs                            []string `json:"remove_review_ids,omitempty"`
+	ClearRemediations                          bool
+	AddRemediationIDs                          []string `json:"add_remediation_ids,omitempty"`
+	RemoveRemediationIDs                       []string `json:"remove_remediation_ids,omitempty"`
 	ClearPlatforms                             bool
 	AddPlatformIDs                             []string `json:"add_platform_ids,omitempty"`
 	RemovePlatformIDs                          []string `json:"remove_platform_ids,omitempty"`
@@ -8486,6 +8594,42 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
 		m.RemoveSubcontrolIDs(v...)
+	}
+	if i.ClearFindings {
+		m.ClearFindings()
+	}
+	if v := i.AddFindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RemoveFindingIDs; len(v) > 0 {
+		m.RemoveFindingIDs(v...)
+	}
+	if i.ClearVulnerabilities {
+		m.ClearVulnerabilities()
+	}
+	if v := i.AddVulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
+		m.RemoveVulnerabilityIDs(v...)
+	}
+	if i.ClearReviews {
+		m.ClearReviews()
+	}
+	if v := i.AddReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemoveReviewIDs; len(v) > 0 {
+		m.RemoveReviewIDs(v...)
+	}
+	if i.ClearRemediations {
+		m.ClearRemediations()
+	}
+	if v := i.AddRemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.RemoveRemediationIDs; len(v) > 0 {
+		m.RemoveRemediationIDs(v...)
 	}
 	if i.ClearPlatforms {
 		m.ClearPlatforms()
@@ -21236,6 +21380,10 @@ type CreateProgramInput struct {
 	NarrativeIDs         []string             `json:"narrative_ids,omitempty"`
 	ActionPlanIDs        []string             `json:"action_plan_ids,omitempty"`
 	SystemDetailIDs      []string             `json:"system_detail_ids,omitempty"`
+	FindingIDs           []string             `json:"finding_ids,omitempty"`
+	VulnerabilityIDs     []string             `json:"vulnerability_ids,omitempty"`
+	ReviewIDs            []string             `json:"review_ids,omitempty"`
+	RemediationIDs       []string             `json:"remediation_ids,omitempty"`
 	ProgramOwnerID       *string              `json:"program_owner_id,omitempty"`
 }
 
@@ -21338,6 +21486,18 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.SystemDetailIDs; len(v) > 0 {
 		m.AddSystemDetailIDs(v...)
 	}
+	if v := i.FindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.VulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.ReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
 	if v := i.ProgramOwnerID; v != nil {
 		m.SetProgramOwnerID(*v)
 	}
@@ -21429,6 +21589,18 @@ type UpdateProgramInput struct {
 	ClearSystemDetails        bool
 	AddSystemDetailIDs        []string `json:"add_system_detail_ids,omitempty"`
 	RemoveSystemDetailIDs     []string `json:"remove_system_detail_ids,omitempty"`
+	ClearFindings             bool
+	AddFindingIDs             []string `json:"add_finding_ids,omitempty"`
+	RemoveFindingIDs          []string `json:"remove_finding_ids,omitempty"`
+	ClearVulnerabilities      bool
+	AddVulnerabilityIDs       []string `json:"add_vulnerability_ids,omitempty"`
+	RemoveVulnerabilityIDs    []string `json:"remove_vulnerability_ids,omitempty"`
+	ClearReviews              bool
+	AddReviewIDs              []string `json:"add_review_ids,omitempty"`
+	RemoveReviewIDs           []string `json:"remove_review_ids,omitempty"`
+	ClearRemediations         bool
+	AddRemediationIDs         []string `json:"add_remediation_ids,omitempty"`
+	RemoveRemediationIDs      []string `json:"remove_remediation_ids,omitempty"`
 	ClearProgramOwner         bool
 	ProgramOwnerID            *string `json:"program_owner_id,omitempty"`
 }
@@ -21668,6 +21840,42 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.RemoveSystemDetailIDs; len(v) > 0 {
 		m.RemoveSystemDetailIDs(v...)
+	}
+	if i.ClearFindings {
+		m.ClearFindings()
+	}
+	if v := i.AddFindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RemoveFindingIDs; len(v) > 0 {
+		m.RemoveFindingIDs(v...)
+	}
+	if i.ClearVulnerabilities {
+		m.ClearVulnerabilities()
+	}
+	if v := i.AddVulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
+		m.RemoveVulnerabilityIDs(v...)
+	}
+	if i.ClearReviews {
+		m.ClearReviews()
+	}
+	if v := i.AddReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemoveReviewIDs; len(v) > 0 {
+		m.RemoveReviewIDs(v...)
+	}
+	if i.ClearRemediations {
+		m.ClearRemediations()
+	}
+	if v := i.AddRemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.RemoveRemediationIDs; len(v) > 0 {
+		m.RemoveRemediationIDs(v...)
 	}
 	if i.ClearProgramOwner {
 		m.ClearProgramOwner()
@@ -23077,6 +23285,8 @@ type CreateRiskInput struct {
 	DiscussionIDs          []string              `json:"discussion_ids,omitempty"`
 	ReviewIDs              []string              `json:"review_ids,omitempty"`
 	RemediationIDs         []string              `json:"remediation_ids,omitempty"`
+	VulnerabilityIDs       []string              `json:"vulnerability_ids,omitempty"`
+	FindingIDs             []string              `json:"finding_ids,omitempty"`
 	WorkflowObjectRefIDs   []string              `json:"workflow_object_ref_ids,omitempty"`
 }
 
@@ -23242,6 +23452,12 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.RemediationIDs; len(v) > 0 {
 		m.AddRemediationIDs(v...)
 	}
+	if v := i.VulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.FindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
 	}
@@ -23382,6 +23598,12 @@ type UpdateRiskInput struct {
 	ClearRemediations           bool
 	AddRemediationIDs           []string `json:"add_remediation_ids,omitempty"`
 	RemoveRemediationIDs        []string `json:"remove_remediation_ids,omitempty"`
+	ClearVulnerabilities        bool
+	AddVulnerabilityIDs         []string `json:"add_vulnerability_ids,omitempty"`
+	RemoveVulnerabilityIDs      []string `json:"remove_vulnerability_ids,omitempty"`
+	ClearFindings               bool
+	AddFindingIDs               []string `json:"add_finding_ids,omitempty"`
+	RemoveFindingIDs            []string `json:"remove_finding_ids,omitempty"`
 	ClearWorkflowObjectRefs     bool
 	AddWorkflowObjectRefIDs     []string `json:"add_workflow_object_ref_ids,omitempty"`
 	RemoveWorkflowObjectRefIDs  []string `json:"remove_workflow_object_ref_ids,omitempty"`
@@ -23769,6 +23991,24 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.RemoveRemediationIDs; len(v) > 0 {
 		m.RemoveRemediationIDs(v...)
+	}
+	if i.ClearVulnerabilities {
+		m.ClearVulnerabilities()
+	}
+	if v := i.AddVulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
+		m.RemoveVulnerabilityIDs(v...)
+	}
+	if i.ClearFindings {
+		m.ClearFindings()
+	}
+	if v := i.AddFindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RemoveFindingIDs; len(v) > 0 {
+		m.RemoveFindingIDs(v...)
 	}
 	if i.ClearWorkflowObjectRefs {
 		m.ClearWorkflowObjectRefs()
@@ -25007,6 +25247,8 @@ type CreateSubcontrolInput struct {
 	AssetIDs                   []string                           `json:"asset_ids,omitempty"`
 	EntityIDs                  []string                           `json:"entity_ids,omitempty"`
 	IdentityHolderIDs          []string                           `json:"identity_holder_ids,omitempty"`
+	VulnerabilityIDs           []string                           `json:"vulnerability_ids,omitempty"`
+	FindingIDs                 []string                           `json:"finding_ids,omitempty"`
 }
 
 // Mutate applies the CreateSubcontrolInput on the SubcontrolMutation builder.
@@ -25181,6 +25423,12 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.IdentityHolderIDs; len(v) > 0 {
 		m.AddIdentityHolderIDs(v...)
 	}
+	if v := i.VulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.FindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateSubcontrolInput on the SubcontrolCreate builder.
@@ -25332,6 +25580,12 @@ type UpdateSubcontrolInput struct {
 	ClearIdentityHolders            bool
 	AddIdentityHolderIDs            []string `json:"add_identity_holder_ids,omitempty"`
 	RemoveIdentityHolderIDs         []string `json:"remove_identity_holder_ids,omitempty"`
+	ClearVulnerabilities            bool
+	AddVulnerabilityIDs             []string `json:"add_vulnerability_ids,omitempty"`
+	RemoveVulnerabilityIDs          []string `json:"remove_vulnerability_ids,omitempty"`
+	ClearFindings                   bool
+	AddFindingIDs                   []string `json:"add_finding_ids,omitempty"`
+	RemoveFindingIDs                []string `json:"remove_finding_ids,omitempty"`
 }
 
 // Mutate applies the UpdateSubcontrolInput on the SubcontrolMutation builder.
@@ -25758,6 +26012,24 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
 		m.RemoveIdentityHolderIDs(v...)
+	}
+	if i.ClearVulnerabilities {
+		m.ClearVulnerabilities()
+	}
+	if v := i.AddVulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
+		m.RemoveVulnerabilityIDs(v...)
+	}
+	if i.ClearFindings {
+		m.ClearFindings()
+	}
+	if v := i.AddFindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RemoveFindingIDs; len(v) > 0 {
+		m.RemoveFindingIDs(v...)
 	}
 }
 

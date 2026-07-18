@@ -137,7 +137,6 @@ type Control struct {
 	// The values are being populated by the ControlQuery when eager-loading is set.
 	Edges                     ControlEdges `json:"edges"`
 	custom_type_enum_controls *string
-	vulnerability_controls    *string
 	selectValues              sql.SelectValues
 }
 
@@ -195,6 +194,8 @@ type ControlEdges struct {
 	Programs []*Program `json:"programs,omitempty"`
 	// Platforms holds the value of the platforms edge.
 	Platforms []*Platform `json:"platforms,omitempty"`
+	// Vulnerabilities holds the value of the vulnerabilities edge.
+	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
 	// Assets holds the value of the assets edge.
 	Assets []*Asset `json:"assets,omitempty"`
 	// Entities holds the value of the entities edge.
@@ -221,9 +222,9 @@ type ControlEdges struct {
 	ControlMappings []*FindingControl `json:"control_mappings,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [38]bool
+	loadedTypes [39]bool
 	// totalCount holds the count of the edges above.
-	totalCount [36]map[string]int
+	totalCount [37]map[string]int
 
 	namedEvidence               map[string][]*Evidence
 	namedControlObjectives      map[string][]*ControlObjective
@@ -243,6 +244,7 @@ type ControlEdges struct {
 	namedCheckResults           map[string][]*CheckResult
 	namedPrograms               map[string][]*Program
 	namedPlatforms              map[string][]*Platform
+	namedVulnerabilities        map[string][]*Vulnerability
 	namedAssets                 map[string][]*Asset
 	namedEntities               map[string][]*Entity
 	namedIdentityHolders        map[string][]*IdentityHolder
@@ -507,10 +509,19 @@ func (e ControlEdges) PlatformsOrErr() ([]*Platform, error) {
 	return nil, &NotLoadedError{edge: "platforms"}
 }
 
+// VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
+	if e.loadedTypes[26] {
+		return e.Vulnerabilities, nil
+	}
+	return nil, &NotLoadedError{edge: "vulnerabilities"}
+}
+
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[27] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -519,7 +530,7 @@ func (e ControlEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[27] {
+	if e.loadedTypes[28] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -528,7 +539,7 @@ func (e ControlEdges) EntitiesOrErr() ([]*Entity, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[28] {
+	if e.loadedTypes[29] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
@@ -537,7 +548,7 @@ func (e ControlEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // CampaignsOrErr returns the Campaigns value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) CampaignsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[29] {
+	if e.loadedTypes[30] {
 		return e.Campaigns, nil
 	}
 	return nil, &NotLoadedError{edge: "campaigns"}
@@ -546,7 +557,7 @@ func (e ControlEdges) CampaignsOrErr() ([]*Campaign, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[30] {
+	if e.loadedTypes[31] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -555,7 +566,7 @@ func (e ControlEdges) FindingsOrErr() ([]*Finding, error) {
 // ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
-	if e.loadedTypes[31] {
+	if e.loadedTypes[32] {
 		return e.ControlImplementations, nil
 	}
 	return nil, &NotLoadedError{edge: "control_implementations"}
@@ -564,7 +575,7 @@ func (e ControlEdges) ControlImplementationsOrErr() ([]*ControlImplementation, e
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[32] {
+	if e.loadedTypes[33] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -573,7 +584,7 @@ func (e ControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // ScheduledJobsOrErr returns the ScheduledJobs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ScheduledJobsOrErr() ([]*ScheduledJob, error) {
-	if e.loadedTypes[33] {
+	if e.loadedTypes[34] {
 		return e.ScheduledJobs, nil
 	}
 	return nil, &NotLoadedError{edge: "scheduled_jobs"}
@@ -582,7 +593,7 @@ func (e ControlEdges) ScheduledJobsOrErr() ([]*ScheduledJob, error) {
 // MappedToControlsOrErr returns the MappedToControls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) MappedToControlsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[34] {
+	if e.loadedTypes[35] {
 		return e.MappedToControls, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_to_controls"}
@@ -591,7 +602,7 @@ func (e ControlEdges) MappedToControlsOrErr() ([]*MappedControl, error) {
 // MappedFromControlsOrErr returns the MappedFromControls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) MappedFromControlsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[35] {
+	if e.loadedTypes[36] {
 		return e.MappedFromControls, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_from_controls"}
@@ -600,7 +611,7 @@ func (e ControlEdges) MappedFromControlsOrErr() ([]*MappedControl, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[36] {
+	if e.loadedTypes[37] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -609,7 +620,7 @@ func (e ControlEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
 // ControlMappingsOrErr returns the ControlMappings value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ControlMappingsOrErr() ([]*FindingControl, error) {
-	if e.loadedTypes[37] {
+	if e.loadedTypes[38] {
 		return e.ControlMappings, nil
 	}
 	return nil, &NotLoadedError{edge: "control_mappings"}
@@ -629,8 +640,6 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		case control.ForeignKeys[0]: // custom_type_enum_controls
-			values[i] = new(sql.NullString)
-		case control.ForeignKeys[1]: // vulnerability_controls
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -1016,13 +1025,6 @@ func (_m *Control) assignValues(columns []string, values []any) error {
 				_m.custom_type_enum_controls = new(string)
 				*_m.custom_type_enum_controls = value.String
 			}
-		case control.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field vulnerability_controls", values[i])
-			} else if value.Valid {
-				_m.vulnerability_controls = new(string)
-				*_m.vulnerability_controls = value.String
-			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -1164,6 +1166,11 @@ func (_m *Control) QueryPrograms() *ProgramQuery {
 // QueryPlatforms queries the "platforms" edge of the Control entity.
 func (_m *Control) QueryPlatforms() *PlatformQuery {
 	return NewControlClient(_m.config).QueryPlatforms(_m)
+}
+
+// QueryVulnerabilities queries the "vulnerabilities" edge of the Control entity.
+func (_m *Control) QueryVulnerabilities() *VulnerabilityQuery {
+	return NewControlClient(_m.config).QueryVulnerabilities(_m)
 }
 
 // QueryAssets queries the "assets" edge of the Control entity.
@@ -1859,6 +1866,30 @@ func (_m *Control) appendNamedPlatforms(name string, edges ...*Platform) {
 		_m.Edges.namedPlatforms[name] = []*Platform{}
 	} else {
 		_m.Edges.namedPlatforms[name] = append(_m.Edges.namedPlatforms[name], edges...)
+	}
+}
+
+// NamedVulnerabilities returns the Vulnerabilities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Control) NamedVulnerabilities(name string) ([]*Vulnerability, error) {
+	if _m.Edges.namedVulnerabilities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedVulnerabilities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Control) appendNamedVulnerabilities(name string, edges ...*Vulnerability) {
+	if _m.Edges.namedVulnerabilities == nil {
+		_m.Edges.namedVulnerabilities = make(map[string][]*Vulnerability)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedVulnerabilities[name] = []*Vulnerability{}
+	} else {
+		_m.Edges.namedVulnerabilities[name] = append(_m.Edges.namedVulnerabilities[name], edges...)
 	}
 }
 

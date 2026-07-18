@@ -22,6 +22,15 @@ func TestMutationCreateFinding(t *testing.T) {
 
 	control := (&ControlBuilder{client: suite.client, ControlEditorGroupID: editingGroup.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
+	firstControlFindingResp, err := suite.client.api.CreateFinding(sharedTestUser1.UserCtx, testclient.CreateFindingInput{
+		DisplayName: lo.ToPtr("First Control Finding"),
+		ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
+		OwnerID:     &sharedTestUser1.OrganizationID,
+		ControlIDs:  []string{control.ID},
+	})
+	assert.NilError(t, err)
+	assert.Check(t, firstControlFindingResp != nil)
+
 	resp, err := suite.client.api.CreateReview(sharedAuditorUser.UserCtx, testclient.CreateReviewInput{
 		Title: "Auditor finding for review",
 	})
@@ -85,6 +94,15 @@ func TestMutationCreateFinding(t *testing.T) {
 			ctx:         sharedAuditorUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
+		{
+			name: "happy path, second finding under same control",
+			request: testclient.CreateFindingInput{
+				DisplayName: lo.ToPtr("Second Control Finding"),
+				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
+				ControlIDs:  []string{control.ID},
+				OwnerID:     &sharedTestUser1.OrganizationID,
+			},
+		},
 	}
 
 	for _, tc := range tt {
@@ -135,11 +153,23 @@ func TestMutationCreateFinding(t *testing.T) {
 				assert.Check(t, *resp.CreateFinding.Finding.ReviewedByGroupID == "", "expected ReviewedByGroupID to be empty but was %v", resp.CreateFinding.Finding.ReviewedByGroupID)
 			}
 
+			if len(tc.request.ControlIDs) > 0 {
+				ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
+
+				entControl, err := suite.client.db.Control.Get(ctx, tc.request.ControlIDs[0])
+				assert.NilError(t, err)
+
+				linkedFindings, err := entControl.QueryFindings().All(ctx)
+				assert.NilError(t, err)
+				assert.Check(t, is.Len(linkedFindings, 2))
+			}
+
 			(&Cleanup[*generated.FindingDeleteOne]{client: suite.client.db.Finding, ID: resp.CreateFinding.Finding.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 		})
 	}
 
 	(&Cleanup[*generated.FindingDeleteOne]{client: suite.client.db.Finding, ID: finding.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.FindingDeleteOne]{client: suite.client.db.Finding, ID: firstControlFindingResp.CreateFinding.Finding.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.GroupMembershipDeleteOne]{client: suite.client.db.GroupMembership, ID: groupMember.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: editingGroup.ID}).MustDelete(sharedTestUser1.UserCtx, t)

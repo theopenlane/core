@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
@@ -24,10 +25,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
@@ -63,6 +67,10 @@ type AssetQuery struct {
 	withControls                 *ControlQuery
 	withSubcontrols              *SubcontrolQuery
 	withInternalPolicies         *InternalPolicyQuery
+	withFindings                 *FindingQuery
+	withVulnerabilities          *VulnerabilityQuery
+	withReviews                  *ReviewQuery
+	withRemediations             *RemediationQuery
 	withSourcePlatform           *PlatformQuery
 	withIntegration              *IntegrationQuery
 	withConnectedAssets          *AssetQuery
@@ -82,6 +90,10 @@ type AssetQuery struct {
 	withNamedControls            map[string]*ControlQuery
 	withNamedSubcontrols         map[string]*SubcontrolQuery
 	withNamedInternalPolicies    map[string]*InternalPolicyQuery
+	withNamedFindings            map[string]*FindingQuery
+	withNamedVulnerabilities     map[string]*VulnerabilityQuery
+	withNamedReviews             map[string]*ReviewQuery
+	withNamedRemediations        map[string]*RemediationQuery
 	withNamedConnectedAssets     map[string]*AssetQuery
 	withNamedConnectedFrom       map[string]*AssetQuery
 	// intermediate query (i.e. traversal path).
@@ -695,6 +707,106 @@ func (_q *AssetQuery) QueryInternalPolicies() *InternalPolicyQuery {
 	return query
 }
 
+// QueryFindings chains the current query on the "findings" edge.
+func (_q *AssetQuery) QueryFindings() *FindingQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, asset.FindingsTable, asset.FindingsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingAssets
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryVulnerabilities chains the current query on the "vulnerabilities" edge.
+func (_q *AssetQuery) QueryVulnerabilities() *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, asset.VulnerabilitiesTable, asset.VulnerabilitiesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.VulnerabilityAssets
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviews chains the current query on the "reviews" edge.
+func (_q *AssetQuery) QueryReviews() *ReviewQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(review.Table, review.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, asset.ReviewsTable, asset.ReviewsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.ReviewAssets
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRemediations chains the current query on the "remediations" edge.
+func (_q *AssetQuery) QueryRemediations() *RemediationQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(remediation.Table, remediation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, asset.RemediationsTable, asset.RemediationsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.RemediationAssets
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QuerySourcePlatform chains the current query on the "source_platform" edge.
 func (_q *AssetQuery) QuerySourcePlatform() *PlatformQuery {
 	query := (&PlatformClient{config: _q.config}).Query()
@@ -1010,6 +1122,10 @@ func (_q *AssetQuery) Clone() *AssetQuery {
 		withControls:                _q.withControls.Clone(),
 		withSubcontrols:             _q.withSubcontrols.Clone(),
 		withInternalPolicies:        _q.withInternalPolicies.Clone(),
+		withFindings:                _q.withFindings.Clone(),
+		withVulnerabilities:         _q.withVulnerabilities.Clone(),
+		withReviews:                 _q.withReviews.Clone(),
+		withRemediations:            _q.withRemediations.Clone(),
 		withSourcePlatform:          _q.withSourcePlatform.Clone(),
 		withIntegration:             _q.withIntegration.Clone(),
 		withConnectedAssets:         _q.withConnectedAssets.Clone(),
@@ -1274,6 +1390,50 @@ func (_q *AssetQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *
 	return _q
 }
 
+// WithFindings tells the query-builder to eager-load the nodes that are connected to
+// the "findings" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithFindings(opts ...func(*FindingQuery)) *AssetQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFindings = query
+	return _q
+}
+
+// WithVulnerabilities tells the query-builder to eager-load the nodes that are connected to
+// the "vulnerabilities" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithVulnerabilities(opts ...func(*VulnerabilityQuery)) *AssetQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withVulnerabilities = query
+	return _q
+}
+
+// WithReviews tells the query-builder to eager-load the nodes that are connected to
+// the "reviews" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithReviews(opts ...func(*ReviewQuery)) *AssetQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviews = query
+	return _q
+}
+
+// WithRemediations tells the query-builder to eager-load the nodes that are connected to
+// the "remediations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithRemediations(opts ...func(*RemediationQuery)) *AssetQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withRemediations = query
+	return _q
+}
+
 // WithSourcePlatform tells the query-builder to eager-load the nodes that are connected to
 // the "source_platform" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *AssetQuery) WithSourcePlatform(opts ...func(*PlatformQuery)) *AssetQuery {
@@ -1403,7 +1563,7 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 		nodes       = []*Asset{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [27]bool{
+		loadedTypes = [31]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1427,6 +1587,10 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 			_q.withControls != nil,
 			_q.withSubcontrols != nil,
 			_q.withInternalPolicies != nil,
+			_q.withFindings != nil,
+			_q.withVulnerabilities != nil,
+			_q.withReviews != nil,
+			_q.withRemediations != nil,
 			_q.withSourcePlatform != nil,
 			_q.withIntegration != nil,
 			_q.withConnectedAssets != nil,
@@ -1609,6 +1773,34 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 			return nil, err
 		}
 	}
+	if query := _q.withFindings; query != nil {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *Asset) { n.Edges.Findings = []*Finding{} },
+			func(n *Asset, e *Finding) { n.Edges.Findings = append(n.Edges.Findings, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withVulnerabilities; query != nil {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *Asset) { n.Edges.Vulnerabilities = []*Vulnerability{} },
+			func(n *Asset, e *Vulnerability) { n.Edges.Vulnerabilities = append(n.Edges.Vulnerabilities, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviews; query != nil {
+		if err := _q.loadReviews(ctx, query, nodes,
+			func(n *Asset) { n.Edges.Reviews = []*Review{} },
+			func(n *Asset, e *Review) { n.Edges.Reviews = append(n.Edges.Reviews, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withRemediations; query != nil {
+		if err := _q.loadRemediations(ctx, query, nodes,
+			func(n *Asset) { n.Edges.Remediations = []*Remediation{} },
+			func(n *Asset, e *Remediation) { n.Edges.Remediations = append(n.Edges.Remediations, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withSourcePlatform; query != nil {
 		if err := _q.loadSourcePlatform(ctx, query, nodes, nil,
 			func(n *Asset, e *Platform) { n.Edges.SourcePlatform = e }); err != nil {
@@ -1716,6 +1908,34 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 		if err := _q.loadInternalPolicies(ctx, query, nodes,
 			func(n *Asset) { n.appendNamedInternalPolicies(name) },
 			func(n *Asset, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFindings {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *Asset) { n.appendNamedFindings(name) },
+			func(n *Asset, e *Finding) { n.appendNamedFindings(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedVulnerabilities {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *Asset) { n.appendNamedVulnerabilities(name) },
+			func(n *Asset, e *Vulnerability) { n.appendNamedVulnerabilities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedReviews {
+		if err := _q.loadReviews(ctx, query, nodes,
+			func(n *Asset) { n.appendNamedReviews(name) },
+			func(n *Asset, e *Review) { n.appendNamedReviews(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedRemediations {
+		if err := _q.loadRemediations(ctx, query, nodes,
+			func(n *Asset) { n.appendNamedRemediations(name) },
+			func(n *Asset, e *Remediation) { n.appendNamedRemediations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2711,6 +2931,254 @@ func (_q *AssetQuery) loadInternalPolicies(ctx context.Context, query *InternalP
 	}
 	return nil
 }
+func (_q *AssetQuery) loadFindings(ctx context.Context, query *FindingQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *Finding)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Asset)
+	nids := make(map[string]map[*Asset]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(asset.FindingsTable)
+		joinT.Schema(_q.schemaConfig.FindingAssets)
+		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(asset.FindingsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(asset.FindingsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(asset.FindingsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Asset]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Finding](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "findings" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *AssetQuery) loadVulnerabilities(ctx context.Context, query *VulnerabilityQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *Vulnerability)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Asset)
+	nids := make(map[string]map[*Asset]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(asset.VulnerabilitiesTable)
+		joinT.Schema(_q.schemaConfig.VulnerabilityAssets)
+		s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(asset.VulnerabilitiesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(asset.VulnerabilitiesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(asset.VulnerabilitiesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Asset]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Vulnerability](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "vulnerabilities" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *AssetQuery) loadReviews(ctx context.Context, query *ReviewQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *Review)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Asset)
+	nids := make(map[string]map[*Asset]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(asset.ReviewsTable)
+		joinT.Schema(_q.schemaConfig.ReviewAssets)
+		s.Join(joinT).On(s.C(review.FieldID), joinT.C(asset.ReviewsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(asset.ReviewsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(asset.ReviewsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Asset]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Review](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "reviews" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *AssetQuery) loadRemediations(ctx context.Context, query *RemediationQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *Remediation)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Asset)
+	nids := make(map[string]map[*Asset]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(asset.RemediationsTable)
+		joinT.Schema(_q.schemaConfig.RemediationAssets)
+		s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(asset.RemediationsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(asset.RemediationsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(asset.RemediationsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Asset]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Remediation](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "remediations" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *AssetQuery) loadSourcePlatform(ctx context.Context, query *PlatformQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *Platform)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Asset)
@@ -3196,6 +3664,62 @@ func (_q *AssetQuery) WithNamedInternalPolicies(name string, opts ...func(*Inter
 		_q.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
 	}
 	_q.withNamedInternalPolicies[name] = query
+	return _q
+}
+
+// WithNamedFindings tells the query-builder to eager-load the nodes that are connected to the "findings"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithNamedFindings(name string, opts ...func(*FindingQuery)) *AssetQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFindings == nil {
+		_q.withNamedFindings = make(map[string]*FindingQuery)
+	}
+	_q.withNamedFindings[name] = query
+	return _q
+}
+
+// WithNamedVulnerabilities tells the query-builder to eager-load the nodes that are connected to the "vulnerabilities"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithNamedVulnerabilities(name string, opts ...func(*VulnerabilityQuery)) *AssetQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedVulnerabilities == nil {
+		_q.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery)
+	}
+	_q.withNamedVulnerabilities[name] = query
+	return _q
+}
+
+// WithNamedReviews tells the query-builder to eager-load the nodes that are connected to the "reviews"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithNamedReviews(name string, opts ...func(*ReviewQuery)) *AssetQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedReviews == nil {
+		_q.withNamedReviews = make(map[string]*ReviewQuery)
+	}
+	_q.withNamedReviews[name] = query
+	return _q
+}
+
+// WithNamedRemediations tells the query-builder to eager-load the nodes that are connected to the "remediations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithNamedRemediations(name string, opts ...func(*RemediationQuery)) *AssetQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedRemediations == nil {
+		_q.withNamedRemediations = make(map[string]*RemediationQuery)
+	}
+	_q.withNamedRemediations[name] = query
 	return _q
 }
 

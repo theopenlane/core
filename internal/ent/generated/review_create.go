@@ -1271,16 +1271,16 @@ func (_c *ReviewCreate) createSpec() (*Review, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.ProgramsTable,
-			Columns: []string{review.ProgramsColumn},
+			Columns: review.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Program
+		edge.Schema = _c.schemaConfig.ReviewPrograms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1288,16 +1288,16 @@ func (_c *ReviewCreate) createSpec() (*Review, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.AssetsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.AssetsTable,
-			Columns: []string{review.AssetsColumn},
+			Columns: review.AssetsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Asset
+		edge.Schema = _c.schemaConfig.ReviewAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1305,16 +1305,16 @@ func (_c *ReviewCreate) createSpec() (*Review, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.EntitiesTable,
-			Columns: []string{review.EntitiesColumn},
+			Columns: review.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Entity
+		edge.Schema = _c.schemaConfig.ReviewEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
