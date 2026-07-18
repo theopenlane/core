@@ -7,8 +7,8 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	generated "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/internal/integrations/operations"
 	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // sendSystemEmail marshals the input and executes a system email operation via
@@ -24,7 +24,7 @@ func sendSystemEmail(ctx context.Context, client *generated.Client, operationNam
 		return err
 	}
 
-	_, err = rt.Dispatch(ctx, operations.DispatchRequest{
+	_, err = rt.Dispatch(ctx, types.DispatchRequest{
 		DefinitionID: email.DefinitionID.ID(),
 		Operation:    operationName,
 		Config:       config,

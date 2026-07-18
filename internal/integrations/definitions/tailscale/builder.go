@@ -92,7 +92,7 @@ func Builder() registry.Builder {
 					IngestHandle:        DirectorySync{}.IngestHandle(),
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"users:read", "policy_file:read"},
-					ReconcileSchedule:   gala.NewFullFetchSchedule(),
+					Schedule:            gala.NewFullFetchSchedule(),
 				},
 				{
 					Name:           assetSyncOperation.Name(),
@@ -111,7 +111,7 @@ func Builder() registry.Builder {
 					IngestHandle:        AssetSync{}.IngestHandle(),
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"devices:core:read", "devices:posture_attributes:read", "devices:routes:read"},
-					ReconcileSchedule:   gala.NewFullFetchSchedule(),
+					Schedule:            gala.NewFullFetchSchedule(),
 				},
 			},
 			Mappings: tailscaleMappings(),

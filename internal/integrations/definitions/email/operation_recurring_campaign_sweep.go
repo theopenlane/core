@@ -1,11 +1,9 @@
-package runtime
+package email
 
 import (
 	"context"
 	"encoding/json"
 	"time"
-
-	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -13,42 +11,34 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// SeedRecurringCampaigns starts the durable recurring campaign polling loop
-// after runtime listeners have been registered. It is a no-op when an active job
-// already exists, preventing duplicate loops from accumulating across restarts
-func (r *Runtime) SeedRecurringCampaigns(ctx context.Context) error {
-	active, err := r.Gala().HasActiveJobForTopic(ctx, operations.RecurringCampaignTopic)
-	if err != nil {
-		return err
+// RecurringCampaignSweep configures one recurring campaign sweep cycle
+type RecurringCampaignSweep struct{}
+
+var recurringCampaignSweepSchema, RecurringCampaignOp = providerkit.OperationSchema[RecurringCampaignSweep]() //nolint:revive
+
+// Handle adapts the recurring campaign sweep to the generic operation registration boundary
+func (r RecurringCampaignSweep) Handle() types.OperationHandler {
+	return func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+		processed, err := r.Run(ctx, req)
+		if err != nil {
+			return nil, err
+		}
+
+		return providerkit.EncodeResult(types.ScheduledCycleResult{Processed: processed}, ErrResultEncode)
 	}
-
-	if active {
-		logx.FromContext(ctx).Debug().Msg("recurring campaign poller already active, skipping seed")
-		return nil
-	}
-
-	receipt := r.Gala().EmitWithHeaders(ctx, operations.RecurringCampaignTopic, operations.RecurringCampaignEnvelope{}, gala.Headers{
-		Tags: []string{"campaigns"},
-	})
-
-	return receipt.Err
 }
 
-// HandleRecurringCampaigns queries all due recurring campaigns and dispatches
-// each one through the email integration runtime. Returns the number of
-// campaigns dispatched as the delta for adaptive scheduling
-func (r *Runtime) HandleRecurringCampaigns(ctx context.Context, _ operations.RecurringCampaignEnvelope) (int, error) {
-	db := r.DB()
+// Run executes one recurring campaign sweep and returns the number of campaigns dispatched
+func (RecurringCampaignSweep) Run(ctx context.Context, req types.OperationRequest) (int, error) {
+	db := req.DB
 	now := time.Now()
-	systemCtx := auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), &auth.Caller{
-		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
-	})
+	systemCtx := systemSweepContext(ctx)
 
 	campaigns, err := db.Campaign.Query().
 		Where(dueCampaignPredicates(now)...).
@@ -67,7 +57,7 @@ func (r *Runtime) HandleRecurringCampaigns(ctx context.Context, _ operations.Rec
 	dispatched := 0
 
 	for _, camp := range campaigns {
-		if err := r.dispatchRecurringCampaign(systemCtx, camp, now); err != nil {
+		if err := dispatchRecurringCampaign(systemCtx, req, camp, now); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("campaign_id", camp.ID).Str("owner_id", camp.OwnerID).Msg("failed dispatching recurring campaign")
 
 			continue
@@ -79,9 +69,7 @@ func (r *Runtime) HandleRecurringCampaigns(ctx context.Context, _ operations.Rec
 	return dispatched, nil
 }
 
-// dueCampaignPredicates returns the where clauses for campaigns eligible for
-// recurring dispatch: recurring, active status, next_run_at <= now, and
-// optionally bounded by recurrence_end_at
+// dueCampaignPredicates returns the where clauses for campaigns eligible for recurring dispatch
 func dueCampaignPredicates(now time.Time) []predicate.Campaign {
 	return []predicate.Campaign{
 		campaign.IsRecurring(true),
@@ -96,10 +84,9 @@ func dueCampaignPredicates(now time.Time) []predicate.Campaign {
 	}
 }
 
-// dispatchRecurringCampaign dispatches a single recurring campaign and advances
-// its scheduling fields
-func (r *Runtime) dispatchRecurringCampaign(ctx context.Context, camp *ent.Campaign, now time.Time) error {
-	input := emaildef.CampaignDispatchInput{
+// dispatchRecurringCampaign dispatches a single recurring campaign and advances its scheduling fields
+func dispatchRecurringCampaign(ctx context.Context, req types.OperationRequest, camp *ent.Campaign, now time.Time) error {
+	input := CampaignDispatchInput{
 		CampaignID: camp.ID,
 		Resend:     true,
 	}
@@ -112,13 +99,13 @@ func (r *Runtime) dispatchRecurringCampaign(ctx context.Context, camp *ent.Campa
 
 	switch camp.CampaignType {
 	case enums.CampaignTypeQuestionnaire:
-		operation = emaildef.SendQuestionnaireCampaignOp.Name()
-		config, err = json.Marshal(emaildef.SendQuestionnaireCampaignRequest{
+		operation = SendQuestionnaireCampaignOp.Name()
+		config, err = json.Marshal(SendQuestionnaireCampaignRequest{
 			CampaignDispatchInput: input,
 		})
 	default:
-		operation = emaildef.SendCampaignOp.Name()
-		config, err = json.Marshal(emaildef.SendBrandedCampaignRequest{
+		operation = SendCampaignOp.Name()
+		config, err = json.Marshal(SendBrandedCampaignRequest{
 			CampaignDispatchInput: input,
 		})
 	}
@@ -127,24 +114,22 @@ func (r *Runtime) dispatchRecurringCampaign(ctx context.Context, camp *ent.Campa
 		return err
 	}
 
-	integrationID, err := r.ResolveOwnerIntegration(ctx, emaildef.DefinitionID.ID(), camp.OwnerID, func(inst *ent.Integration) bool {
+	integrationID, err := operations.ResolveOwnerIntegration(ctx, req.DB, DefinitionID.ID(), camp.OwnerID, func(inst *ent.Integration) bool {
 		return inst.CampaignEmail
 	})
 	if err != nil {
 		return err
 	}
 
-	req := operations.DispatchRequest{
+	if _, err := req.Dispatch(ctx, types.DispatchRequest{
 		IntegrationID: integrationID,
-		DefinitionID:  emaildef.DefinitionID.ID(),
+		DefinitionID:  DefinitionID.ID(),
 		OwnerID:       camp.OwnerID,
 		Operation:     operation,
 		Config:        config,
 		RunType:       enums.IntegrationRunTypeScheduled,
 		Runtime:       integrationID == "",
-	}
-
-	if _, err := r.Dispatch(ctx, req); err != nil {
+	}); err != nil {
 		return err
 	}
 
@@ -152,7 +137,7 @@ func (r *Runtime) dispatchRecurringCampaign(ctx context.Context, camp *ent.Campa
 	nowDT := models.DateTime(now)
 	exhausted := camp.RecurrenceEndAt != nil && !camp.RecurrenceEndAt.IsZero() && !nextRun.Before(time.Time(*camp.RecurrenceEndAt))
 
-	update := r.DB().Campaign.UpdateOneID(camp.ID).
+	update := req.DB.Campaign.UpdateOneID(camp.ID).
 		SetLastRunAt(nowDT)
 
 	switch {

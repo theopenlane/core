@@ -225,7 +225,7 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 			}, envelope.Webhook, registration.Ingest, payloadSets, operations.IngestOptionsFromMetadata(integrationgenerated.IntegrationIngestSourceWebhook, metadata))
 		},
 		DispatchOperation: func(dispatchCtx context.Context, operation string, config json.RawMessage) error {
-			_, dispatchErr := r.Dispatch(dispatchCtx, operations.DispatchRequest{
+			_, dispatchErr := r.Dispatch(dispatchCtx, types.DispatchRequest{
 				IntegrationID: integration.ID,
 				Operation:     operation,
 				Config:        jsonx.CloneRawMessage(config),

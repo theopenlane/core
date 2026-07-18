@@ -1,9 +1,8 @@
-package runtime
+package cloudflare
 
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/url"
 	"time"
@@ -17,51 +16,86 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
 	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/domainscan"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// errDomainScanTaskFailed is returned when Cloudflare reports the scan task itself failed
-var errDomainScanTaskFailed = errors.New("domain scan: cloudflare scan task failed")
-
-// errDomainScanMaxAttemptsReached is returned when a scan never completes within the poll budget
-var errDomainScanMaxAttemptsReached = errors.New("domain scan: max poll attempts reached")
-
 // domainScanEnrichmentMetadataKey is the Scan.Metadata key used to carry the enrichment data
 // gathered concurrently with URL Scanner submission and polling, until the poll cycle
 // finishes and needs it to build the final report
 const domainScanEnrichmentMetadataKey = "enrichment"
 
-// HandleDomainScanCreate submits an organization's domains to Cloudflare's URL Scanner
-func (r *Runtime) HandleDomainScanCreate(ctx context.Context, envelope operations.DomainScanCreateEnvelope) error {
+// domainScanSaga orchestrates the durable domain scan flow: submit, poll, finalize
+type domainScanSaga struct {
+	// services exposes runtime execution, persistence, and event capabilities
+	services types.RuntimeServices
+}
+
+// domainScanListeners declares the standalone gala listeners implementing the domain scan saga
+func domainScanListeners() types.GalaListenerRegistration {
+	return types.GalaListenerRegistration{
+		Name: "cloudflare.domainscan",
+		Register: func(registry *gala.Registry, services types.RuntimeServices) ([]gala.ListenerID, error) {
+			saga := domainScanSaga{services: services}
+
+			createIDs, err := gala.RegisterListeners(registry, gala.Definition[operations.DomainScanCreateEnvelope]{
+				Topic: gala.Topic[operations.DomainScanCreateEnvelope]{Name: operations.DomainScanCreateTopic},
+				Name:  operations.DomainScanCreateListenerName,
+				Handle: func(hc gala.HandlerContext, envelope operations.DomainScanCreateEnvelope) error {
+					return saga.handleCreate(hc.Context, envelope)
+				},
+			})
+			if err != nil {
+				return nil, err
+			}
+
+			pollIDs, err := gala.RegisterListeners(registry, gala.Definition[operations.DomainScanPollEnvelope]{
+				Topic: gala.Topic[operations.DomainScanPollEnvelope]{Name: operations.DomainScanPollTopic},
+				Name:  operations.DomainScanPollListenerName,
+				Handle: func(hc gala.HandlerContext, envelope operations.DomainScanPollEnvelope) error {
+					_, err := saga.handlePoll(hc.Context, envelope)
+					return err
+				},
+			})
+			if err != nil {
+				return nil, err
+			}
+
+			return append(createIDs, pollIDs...), nil
+		},
+	}
+}
+
+// handleCreate submits an organization's domains to Cloudflare's URL Scanner
+func (s domainScanSaga) handleCreate(ctx context.Context, envelope operations.DomainScanCreateEnvelope) error {
 	logger := logx.FromContext(ctx).With().
 		Str("organization_id", envelope.OrganizationID).
 		Strs("domains", envelope.Domains).
 		Logger()
 
-	config, err := json.Marshal(cloudflare.DomainScanSubmit{
+	config, err := json.Marshal(DomainScanSubmit{
 		Domains: envelope.Domains,
 	})
 	if err != nil {
 		return err
 	}
 
-	response, err := r.ExecuteRuntimeOperation(ctx, cloudflare.DefinitionID.ID(), cloudflare.DomainScanSubmitOp.Name(), config)
+	response, err := s.services.ExecuteRuntimeOperation(ctx, DefinitionID.ID(), DomainScanSubmitOp.Name(), config)
 	if err != nil {
 		logger.Error().Err(err).Msg("domain scan: failed submitting scans to cloudflare")
 		return err
 	}
 
-	var result cloudflare.DomainScanSubmitResult
+	var result DomainScanSubmitResult
 	if err := json.Unmarshal(response, &result); err != nil {
 		return err
 	}
 
-	enrichments := r.gatherDomainScanEnrichments(ctx, result.Scans, envelope.ForceRefresh, logger)
+	enrichments := s.gatherDomainScanEnrichments(ctx, result.Scans, envelope.ForceRefresh, logger)
 
 	systemCtx := domainScanSystemContext(ctx, envelope.OrganizationID)
 
@@ -71,7 +105,7 @@ func (r *Runtime) HandleDomainScanCreate(ctx context.Context, envelope operation
 	}
 
 	for i, scan := range result.Scans {
-		scanRecord, err := r.DB().Scan.Create().
+		scanRecord, err := s.services.DB().Scan.Create().
 			SetOwnerID(envelope.OrganizationID).
 			SetTarget(hostFromURL(scan.URL)).
 			SetScanType(enums.ScanTypeDomain).
@@ -87,7 +121,7 @@ func (r *Runtime) HandleDomainScanCreate(ctx context.Context, envelope operation
 
 		scheduledAt := time.Now().Add(operations.DomainScanInitialWait)
 
-		receipt := r.Gala().EmitWithHeaders(ctx, operations.DomainScanPollTopic, operations.DomainScanPollEnvelope{
+		receipt := s.services.Gala().EmitWithHeaders(ctx, operations.DomainScanPollTopic, operations.DomainScanPollEnvelope{
 			OrganizationID: envelope.OrganizationID,
 			ScanResultID:   scan.UUID,
 			InternalScanID: scanRecord.ID,
@@ -125,7 +159,7 @@ func hostFromURL(rawURL string) string {
 // every submitted scan concurrently, so enrichment overlaps with URL Scanner processing
 // instead of waiting for it to complete. Each lookup is best-effort: a failure is logged and
 // that scan's Enrichment is left zero-valued rather than failing the whole batch
-func (r *Runtime) gatherDomainScanEnrichments(ctx context.Context, scans []url_scanner.ScanBulkNewResponse, forceRefresh bool, logger zerolog.Logger) []domainscan.Enrichment {
+func (s domainScanSaga) gatherDomainScanEnrichments(ctx context.Context, scans []url_scanner.ScanBulkNewResponse, forceRefresh bool, logger zerolog.Logger) []domainscan.Enrichment {
 	enrichments := make([]domainscan.Enrichment, len(scans))
 
 	var g errgroup.Group
@@ -134,7 +168,7 @@ func (r *Runtime) gatherDomainScanEnrichments(ctx context.Context, scans []url_s
 		g.Go(func() error {
 			domain := hostFromURL(scan.URL)
 
-			config, err := json.Marshal(cloudflare.DomainScanGatherEnrichment{
+			config, err := json.Marshal(DomainScanGatherEnrichment{
 				Domain:       domain,
 				ForceRefresh: forceRefresh,
 			})
@@ -143,13 +177,13 @@ func (r *Runtime) gatherDomainScanEnrichments(ctx context.Context, scans []url_s
 				return nil
 			}
 
-			response, err := r.ExecuteRuntimeOperation(ctx, cloudflare.DefinitionID.ID(), cloudflare.DomainScanGatherEnrichmentOp.Name(), config)
+			response, err := s.services.ExecuteRuntimeOperation(ctx, DefinitionID.ID(), DomainScanGatherEnrichmentOp.Name(), config)
 			if err != nil {
 				logger.Error().Err(err).Str("domain", domain).Msg("domain scan: failed gathering enrichment")
 				return nil
 			}
 
-			var result cloudflare.DomainScanGatherEnrichmentResult
+			var result DomainScanGatherEnrichmentResult
 			if err := json.Unmarshal(response, &result); err != nil {
 				logger.Error().Err(err).Str("domain", domain).Msg("domain scan: failed decoding gathered enrichment")
 				return nil
@@ -166,39 +200,39 @@ func (r *Runtime) gatherDomainScanEnrichments(ctx context.Context, scans []url_s
 	return enrichments
 }
 
-// HandleDomainScanPoll processes one poll cycle for a submitted scan: re-emitting itself for
+// handlePoll processes one poll cycle for a submitted scan: re-emitting itself for
 // another attempt while the scan is still processing, giving up after the attempt budget is
 // exhausted, and finalizing the scan once ready
-func (r *Runtime) HandleDomainScanPoll(ctx context.Context, envelope operations.DomainScanPollEnvelope) (bool, error) {
+func (s domainScanSaga) handlePoll(ctx context.Context, envelope operations.DomainScanPollEnvelope) (bool, error) {
 	logger := logx.FromContext(ctx).With().
 		Str("organization_id", envelope.OrganizationID).
 		Str("scan_result_id", envelope.ScanResultID).
 		Int("attempt", envelope.Attempt).
 		Logger()
 
-	config, err := json.Marshal(cloudflare.DomainScanPoll{
+	config, err := json.Marshal(DomainScanPoll{
 		ScanResultID: envelope.ScanResultID,
 	})
 	if err != nil {
 		return true, river.JobCancel(err)
 	}
 
-	response, err := r.ExecuteRuntimeOperation(ctx, cloudflare.DefinitionID.ID(), cloudflare.DomainScanPollOp.Name(), config)
+	response, err := s.services.ExecuteRuntimeOperation(ctx, DefinitionID.ID(), DomainScanPollOp.Name(), config)
 	if err != nil {
 		logger.Error().Err(err).Msg("domain scan: failed polling cloudflare for scan result")
 		return true, river.JobCancel(err)
 	}
 
-	var result cloudflare.DomainScanPollResult
+	var result DomainScanPollResult
 	if err := json.Unmarshal(response, &result); err != nil {
 		return true, river.JobCancel(err)
 	}
 
 	if len(result.TaskErrors) > 0 {
-		taskErr := fmt.Errorf("%w: %s", errDomainScanTaskFailed, result.TaskErrors.Error())
+		taskErr := fmt.Errorf("%w: %s", ErrDomainScanTaskFailed, result.TaskErrors.Error())
 		// logged as info because it could be a retryable error
 		logger.Info().Err(taskErr).Msg("domain scan: cloudflare scan task failed")
-		r.markDomainScanFailed(ctx, envelope.OrganizationID, envelope.InternalScanID)
+		s.markDomainScanFailed(ctx, envelope.OrganizationID, envelope.InternalScanID)
 
 		return true, river.JobCancel(taskErr)
 	}
@@ -206,14 +240,14 @@ func (r *Runtime) HandleDomainScanPoll(ctx context.Context, envelope operations.
 	if !result.Result.Task.Success {
 		if envelope.Attempt >= operations.DomainScanMaxAttempts {
 			logger.Warn().Msg("domain scan: max poll attempts reached, giving up")
-			r.markDomainScanFailed(ctx, envelope.OrganizationID, envelope.InternalScanID)
+			s.markDomainScanFailed(ctx, envelope.OrganizationID, envelope.InternalScanID)
 
-			return true, river.JobCancel(errDomainScanMaxAttemptsReached)
+			return true, river.JobCancel(ErrDomainScanMaxAttemptsReached)
 		}
 
 		scheduledAt := time.Now().Add(operations.DomainScanPollBackoff(envelope.Attempt))
 
-		receipt := r.Gala().EmitWithHeaders(ctx, operations.DomainScanPollTopic, operations.DomainScanPollEnvelope{
+		receipt := s.services.Gala().EmitWithHeaders(ctx, operations.DomainScanPollTopic, operations.DomainScanPollEnvelope{
 			OrganizationID: envelope.OrganizationID,
 			ScanResultID:   envelope.ScanResultID,
 			InternalScanID: envelope.InternalScanID,
@@ -229,7 +263,7 @@ func (r *Runtime) HandleDomainScanPoll(ctx context.Context, envelope operations.
 		return false, nil
 	}
 
-	if err := r.finalizeDomainScan(ctx, envelope.OrganizationID, envelope.InternalScanID, result); err != nil {
+	if err := s.finalizeDomainScan(ctx, envelope.OrganizationID, envelope.InternalScanID, result); err != nil {
 		logger.Error().Err(err).Msg("domain scan: failed finalizing scan")
 		return true, err
 	}
@@ -242,23 +276,23 @@ func (r *Runtime) HandleDomainScanPoll(ctx context.Context, envelope operations.
 // markDomainScanFailed marks a Scan record as failed when its poll cycle gives up.
 // Best-effort: failures updating the record are logged but not propagated, since the caller is already
 // returning the original poll failure
-func (r *Runtime) markDomainScanFailed(ctx context.Context, organizationID, internalScanID string) {
+func (s domainScanSaga) markDomainScanFailed(ctx context.Context, organizationID, internalScanID string) {
 	systemCtx := domainScanSystemContext(ctx, organizationID)
 
-	if err := r.DB().Scan.UpdateOneID(internalScanID).SetStatus(enums.ScanStatusFailed).Exec(systemCtx); err != nil {
+	if err := s.services.DB().Scan.UpdateOneID(internalScanID).SetStatus(enums.ScanStatusFailed).Exec(systemCtx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("internal_scan_id", internalScanID).Msg("domain scan: failed marking scan as failed")
 	}
 }
 
 // finalizeDomainScan enriches the completed scan result and builds the structured scan report through
-// ExecuteRuntimeOperation, updates the Scan record (created in "processing" status by HandleDomainScanCreate
+// the runtime operation, updates the Scan record (created in "processing" status by handleCreate
 // to completed), then notifies the organization
-func (r *Runtime) finalizeDomainScan(ctx context.Context, organizationID, internalScanID string, result cloudflare.DomainScanPollResult) error {
+func (s domainScanSaga) finalizeDomainScan(ctx context.Context, organizationID, internalScanID string, result DomainScanPollResult) error {
 	domain := hostFromURL(result.Result.Task.URL)
 
 	systemCtx := domainScanSystemContext(ctx, organizationID)
 
-	scanRecord, err := r.DB().Scan.Get(systemCtx, internalScanID)
+	scanRecord, err := s.services.DB().Scan.Get(systemCtx, internalScanID)
 	if err != nil {
 		return err
 	}
@@ -276,7 +310,7 @@ func (r *Runtime) finalizeDomainScan(ctx context.Context, organizationID, intern
 		return err
 	}
 
-	config, err := json.Marshal(cloudflare.DomainScanBuildReport{
+	config, err := json.Marshal(DomainScanBuildReport{
 		InternalScanID: internalScanID,
 		Result:         resultJSON,
 		Enrichment:     enrichment,
@@ -285,24 +319,24 @@ func (r *Runtime) finalizeDomainScan(ctx context.Context, organizationID, intern
 		return err
 	}
 
-	response, err := r.ExecuteRuntimeOperation(ctx, cloudflare.DefinitionID.ID(), cloudflare.DomainScanBuildReportOp.Name(), config)
+	response, err := s.services.ExecuteRuntimeOperation(ctx, DefinitionID.ID(), DomainScanBuildReportOp.Name(), config)
 	if err != nil {
 		return err
 	}
 
-	var enriched cloudflare.DomainScanBuildReportResult
+	var enriched DomainScanBuildReportResult
 	if err := json.Unmarshal(response, &enriched); err != nil {
 		return err
 	}
 
-	if err := r.DB().Scan.UpdateOneID(internalScanID).
+	if err := s.services.DB().Scan.UpdateOneID(internalScanID).
 		SetStatus(enums.ScanStatusCompleted).
 		SetMetadata(enriched.Data).
 		Exec(systemCtx); err != nil {
 		return err
 	}
 
-	_, err = r.DB().Notification.Create().
+	_, err = s.services.DB().Notification.Create().
 		SetOwnerID(organizationID).
 		SetNotificationType(enums.NotificationTypeOrganization).
 		SetObjectType("scan.created").

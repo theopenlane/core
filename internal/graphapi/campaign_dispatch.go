@@ -17,8 +17,8 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/internal/integrations/operations"
 	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
@@ -304,9 +304,9 @@ func resolveCampaignScheduleAt(now time.Time, campaignObj *generated.Campaign, a
 }
 
 // buildCampaignEmailDispatchRequest constructs the integration dispatch request for the campaign email operation
-func (r *mutationResolver) buildCampaignEmailDispatchRequest(ctx context.Context, rt *intruntime.Runtime, campaignObj *generated.Campaign, resend bool, includeOverdue bool, testEmail string, scheduledAt *time.Time) (operations.DispatchRequest, error) {
+func (r *mutationResolver) buildCampaignEmailDispatchRequest(ctx context.Context, rt *intruntime.Runtime, campaignObj *generated.Campaign, resend bool, includeOverdue bool, testEmail string, scheduledAt *time.Time) (types.DispatchRequest, error) {
 	if campaignObj == nil {
-		return operations.DispatchRequest{}, emaildef.ErrCampaignNotFound
+		return types.DispatchRequest{}, emaildef.ErrCampaignNotFound
 	}
 
 	operation := emaildef.SendCampaignOp.Name()
@@ -329,17 +329,17 @@ func (r *mutationResolver) buildCampaignEmailDispatchRequest(ctx context.Context
 		})
 	}
 	if err != nil {
-		return operations.DispatchRequest{}, err
+		return types.DispatchRequest{}, err
 	}
 
 	integrationID, err := rt.ResolveOwnerIntegration(ctx, emaildef.DefinitionID.ID(), campaignObj.OwnerID, func(inst *generated.Integration) bool {
 		return inst.CampaignEmail
 	})
 	if err != nil {
-		return operations.DispatchRequest{}, err
+		return types.DispatchRequest{}, err
 	}
 
-	return operations.DispatchRequest{
+	return types.DispatchRequest{
 		IntegrationID: integrationID,
 		DefinitionID:  emaildef.DefinitionID.ID(),
 		OwnerID:       campaignObj.OwnerID,
