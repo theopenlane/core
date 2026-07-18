@@ -102,7 +102,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					IngestHandle:        DirectorySync{}.IngestHandle(),
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"Account Settings Read", "Access: Users Read", "Access: Groups Read", "Access: Organizations, Identity Providers, and Groups Read"},
-					ReconcileSchedule:   gala.NewFullFetchSchedule(),
+					Schedule:            gala.NewFullFetchSchedule(),
 				},
 				{
 					Name:           findingsSyncOperation.Name(),
@@ -138,7 +138,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					IngestHandle:        AssetCollect{}.IngestHandle(),
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"Registrar Domains Read"},
-					ReconcileSchedule: gala.NewFullFetchSchedule(
+					Schedule: gala.NewFullFetchSchedule(
 						gala.WithMinInterval(assetSyncMinIntervalHours*time.Hour),
 						gala.WithMaxInterval(assetSyncMaxIntervalDays*assetSyncMinIntervalHours*time.Hour),
 					),
@@ -164,9 +164,9 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					CustomerSelectable: lo.ToPtr(false),
 				},
 				{
-					Name:               DomainScanGatherEnrichmentOp.Name(),
+					Name:               DomainScanEnrichmentOp.Name(),
 					Description:        "Gather company profile, compliance, and DNS vendor data for a domain",
-					Topic:              DefinitionID.OperationTopic(DomainScanGatherEnrichmentOp.Name()),
+					Topic:              DefinitionID.OperationTopic(DomainScanEnrichmentOp.Name()),
 					ClientRef:          cloudflareClient.ID(),
 					ConfigSchema:       domainScanGatherEnrichmentSchema,
 					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
@@ -185,6 +185,9 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 				},
 			},
 			Mappings: cloudflareMappings(),
+			GalaListeners: []types.GalaListenerRegistration{
+				domainScanListeners(),
+			},
 		}
 
 		if runtime.Provisioned() {

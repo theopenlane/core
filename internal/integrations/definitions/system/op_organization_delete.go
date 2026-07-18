@@ -1,66 +1,52 @@
-package runtime
+package system
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"time"
-
-	"github.com/stripe/stripe-go/v84"
-	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/consts"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// SeedOrganizationDeletes starts the durable organization deletion polling loop
-// after runtime listeners have been registered.
-func (r *Runtime) SeedOrganizationDeletes(ctx context.Context) error {
-	if !r.organizationDeleteConfig.Enabled {
-		logx.FromContext(ctx).Info().Msg("organization delete listener disabled, skipping seed")
-		return nil
+// Handle adapts the organization deletion sweep to the generic operation registration boundary;
+// the receiver carries the operator defaults and request config overlays a copy
+func (o OrganizationDeleteSweep) Handle() types.OperationHandler {
+	return func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+		sweep := o
+
+		if err := jsonx.UnmarshalIfPresent(req.Config, &sweep); err != nil {
+			return nil, ErrOperationConfigInvalid
+		}
+
+		processed, err := sweep.Run(ctx, req)
+		if err != nil {
+			return nil, err
+		}
+
+		return providerkit.EncodeResult(types.ScheduledCycleResult{Processed: processed}, ErrResultEncode)
 	}
-
-	active, err := r.Gala().HasActiveJobForTopic(ctx, operations.OrganizationDeleteTopic)
-	if err != nil {
-		return err
-	}
-
-	if active {
-		logx.FromContext(ctx).Debug().Msg("organization delete poller already active, skipping seed")
-		return nil
-	}
-
-	receipt := r.Gala().EmitWithHeaders(ctx, operations.OrganizationDeleteTopic, operations.OrganizationDeleteEnvelope{}, gala.Headers{
-		Tags: []string{"organization-delete"},
-	})
-
-	return receipt.Err
 }
 
-// HandleOrganizationDeletes clears recovered org deletion markers, then deletes
-// overdue non-personal organizations that still have no active or trialing subscription.
-func (r *Runtime) HandleOrganizationDeletes(ctx context.Context, _ operations.OrganizationDeleteEnvelope) (int, error) {
-	db := r.DB()
+// Run executes one organization deletion sweep and returns the number of deleted organizations
+func (sweep OrganizationDeleteSweep) Run(ctx context.Context, req types.OperationRequest) (int, error) {
+	db := req.DB
 	logger := logx.FromContext(ctx)
 
-	cfg := r.organizationDeleteConfig
-	if cfg.MaxDeletesPerRun <= 0 {
-		cfg.MaxDeletesPerRun = operations.DefaultOrganizationDeleteMaxPerRun
+	if sweep.MaxDeletesPerRun <= 0 {
+		sweep.MaxDeletesPerRun = DefaultOrganizationDeleteMaxPerRun
 	}
 
-	systemCtx := auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), &auth.Caller{
-		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
-	})
+	systemCtx := systemSweepContext(ctx)
 
-	if err := r.clearRecoveredOrganizationDeletions(systemCtx); err != nil {
+	if err := clearRecoveredOrganizationDeletions(systemCtx, req); err != nil {
 		return 0, err
 	}
 
@@ -78,7 +64,7 @@ func (r *Runtime) HandleOrganizationDeletes(ctx context.Context, _ operations.Or
 		).
 		WithOrganization().
 		Order(organizationsetting.ByUpdatedAt()).
-		Limit(cfg.MaxDeletesPerRun).
+		Limit(sweep.MaxDeletesPerRun).
 		All(systemCtx)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed querying organizations pending deletion")
@@ -114,8 +100,10 @@ func (r *Runtime) HandleOrganizationDeletes(ctx context.Context, _ operations.Or
 	return len(deletedOrgs), nil
 }
 
-func (r *Runtime) clearRecoveredOrganizationDeletions(ctx context.Context) error {
-	db := r.DB()
+// clearRecoveredOrganizationDeletions clears pending deletion markers on organizations whose
+// billing status recovered since being marked
+func clearRecoveredOrganizationDeletions(ctx context.Context, req types.OperationRequest) error {
+	db := req.DB
 	logger := logx.FromContext(ctx)
 
 	settings, err := db.OrganizationSetting.Query().
@@ -151,13 +139,4 @@ func (r *Runtime) clearRecoveredOrganizationDeletions(ctx context.Context) error
 	}
 
 	return nil
-}
-
-func activeOrTrialingSubscriptionPredicates() []predicate.OrgSubscription {
-	return []predicate.OrgSubscription{
-		orgsubscription.Or(
-			orgsubscription.ActiveEQ(true),
-			orgsubscription.StripeSubscriptionStatusEQ(string(stripe.SubscriptionStatusTrialing)),
-		),
-	}
 }

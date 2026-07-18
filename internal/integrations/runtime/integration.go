@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
@@ -50,33 +51,9 @@ func (r *Runtime) ResolveIntegration(ctx context.Context, lookup IntegrationLook
 }
 
 // ResolveOwnerIntegration finds a connected integration for the given definition
-// and owner. When multiple connected integrations exist, the optional prefer
-// function selects among them. Returns empty string with no error when no
-// integration is found, allowing the caller to fall through to runtime dispatch
+// and owner through the shared operations resolver
 func (r *Runtime) ResolveOwnerIntegration(ctx context.Context, definitionID, ownerID string, prefer ...func(*ent.Integration) bool) (string, error) {
-	integrations, err := r.DB().Integration.Query().
-		Where(
-			integration.OwnerIDEQ(ownerID),
-			integration.DefinitionIDEQ(definitionID),
-			integration.StatusEQ(enums.IntegrationStatusConnected),
-		).All(ctx)
-	if err != nil {
-		return "", err
-	}
-
-	if len(integrations) == 1 {
-		return integrations[0].ID, nil
-	}
-
-	if len(prefer) > 0 {
-		for _, inst := range integrations {
-			if prefer[0](inst) {
-				return inst.ID, nil
-			}
-		}
-	}
-
-	return "", nil
+	return operations.ResolveOwnerIntegration(ctx, r.DB(), definitionID, ownerID, prefer...)
 }
 
 // EnsureInstallation returns an existing installation when integrationID is provided, or creates a new one

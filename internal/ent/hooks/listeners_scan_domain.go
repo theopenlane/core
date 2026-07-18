@@ -1,13 +1,18 @@
 package hooks
 
 import (
+	"context"
+	"encoding/json"
+
 	"entgo.io/ent"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
 )
@@ -57,9 +62,34 @@ func handleScanDomainCreated(ctx gala.HandlerContext, payload eventqueue.Mutatio
 		return nil
 	}
 
-	forceRefresh, _ := scanRecord.Metadata["forceRefresh"].(bool)
+	// forceRefresh, _ := scanRecord.Metadata["forceRefresh"].(bool)
 
-	return rt.HandleDomainScanSubmit(ctx.Context, scanRecord.OwnerID, scanRecord.ID, scanRecord.Target, forceRefresh)
+	// return rt.HandleDomainScanSubmit(ctx.Context, scanRecord.OwnerID, scanRecord.ID, scanRecord.Target, forceRefresh)
+	return nil
+}
+
+// sendSystemEmail marshals the input and executes a system email operation via
+// the integration runtime on the ent client
+func createDomainScan(ctx context.Context, client *generated.Client, input any) error {
+	rt := intruntime.FromClient(ctx, client)
+	if rt == nil {
+		return nil
+	}
+
+	config, err := json.Marshal(input)
+	if err != nil {
+		return err
+	}
+
+	_, err = rt.Dispatch(ctx, types.DispatchRequest{
+		DefinitionID: cloudflare.DefinitionID.ID(),
+		Operation:    cloudflare.DomainScanSubmitOp.Name(),
+		Config:       config,
+		RunType:      enums.IntegrationRunTypeEvent,
+		Runtime:      true,
+	})
+
+	return err
 }
 
 // isPendingDomainScan reports whether scanRecord is a domain-type Scan still awaiting submission.

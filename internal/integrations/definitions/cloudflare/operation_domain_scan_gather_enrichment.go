@@ -31,7 +31,7 @@ type DomainScanGatherEnrichmentResult struct {
 
 // Handle adapts domain scan enrichment gathering to the generic operation registration boundary
 func (e DomainScanGatherEnrichment) Handle() types.OperationHandler {
-	return providerkit.WithClientConfig(cloudflareClient, DomainScanGatherEnrichmentOp, ErrOperationConfigInvalid, func(ctx context.Context, client *CloudflareClient, cfg DomainScanGatherEnrichment) (json.RawMessage, error) {
+	return providerkit.WithClientConfig(cloudflareClient, DomainScanEnrichmentOp, ErrOperationConfigInvalid, func(ctx context.Context, client *CloudflareClient, cfg DomainScanGatherEnrichment) (json.RawMessage, error) {
 		result, err := e.Run(ctx, client, cfg)
 		if err != nil {
 			return nil, err

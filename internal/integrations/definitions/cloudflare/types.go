@@ -28,7 +28,7 @@ var (
 	// domainScanPollSchema is the operation ref for polling a submitted URL Scanner result
 	domainScanPollSchema, DomainScanPollOp = providerkit.OperationSchema[DomainScanPoll]() //nolint:revive
 	// domainScanGatherEnrichmentSchema is the operation ref for gathering enrichment data for a domain
-	domainScanGatherEnrichmentSchema, DomainScanGatherEnrichmentOp = providerkit.OperationSchema[DomainScanGatherEnrichment]() //nolint:revive
+	domainScanGatherEnrichmentSchema, DomainScanEnrichmentOp = providerkit.OperationSchema[DomainScanGatherEnrichment]() //nolint:revive
 	// domainScanBuildReportSchema is the operation ref for building the scan report from a completed URL Scanner result and gathered enrichment
 	domainScanBuildReportSchema, DomainScanBuildReportOp = providerkit.OperationSchema[DomainScanBuildReport]() //nolint:revive
 	// runtimeCloudflareSchema is the JSON schema and typed ref for the runtime Cloudflare config

@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -130,7 +131,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context) error {
 		})
 	}
 
-	result, err := h.IntegrationsRuntime.Dispatch(queueCtx, operations.DispatchRequest{
+	result, err := h.IntegrationsRuntime.Dispatch(queueCtx, types.DispatchRequest{
 		IntegrationID: integrationRef.ID,
 		Operation:     operationName,
 		Config:        configDoc,

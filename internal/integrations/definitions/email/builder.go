@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/resend/resend-go/v3"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -93,6 +94,28 @@ func Builder(cfg *RuntimeEmailConfig, devMode bool) registry.Builder {
 					ConfigSchema: sendQuestionnaireCampaignSchema,
 					Policy:       types.ExecutionPolicy{SkipRunRecord: true},
 					Handle:       SendQuestionnaireCampaign{}.Handle(),
+				},
+				// global singleton sweeps: no client ref, they route dispatches to each
+				// org's email installation or the runtime provider
+				types.OperationRegistration{
+					Name:                RecurringCampaignOp.Name(),
+					Description:         "Dispatch due recurring campaigns",
+					Topic:               DefinitionID.OperationTopic(RecurringCampaignOp.Name()),
+					ConfigSchema:        recurringCampaignSweepSchema,
+					Policy:              types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true},
+					Handle:              RecurringCampaignSweep{}.Handle(),
+					CustomerSelectable:  lo.ToPtr(false),
+					SkipDefaultLookback: true,
+				},
+				types.OperationRegistration{
+					Name:                TrustCenterNotificationOp.Name(),
+					Description:         "Notify trust center subscribers about stable posts and subprocessor changes",
+					Topic:               DefinitionID.OperationTopic(TrustCenterNotificationOp.Name()),
+					ConfigSchema:        trustCenterNotificationSweepSchema,
+					Policy:              types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true},
+					Handle:              TrustCenterNotificationSweep{}.Handle(),
+					CustomerSelectable:  lo.ToPtr(false),
+					SkipDefaultLookback: true,
 				},
 			),
 		}

@@ -28,10 +28,20 @@ type WorkflowMeta struct {
 type ExecutionPolicy struct {
 	// Inline indicates the operation should execute synchronously for direct API callers
 	Inline bool `json:"inline,omitempty"`
-	// Reconcile indicates the operation should be dispatched on a recurring schedule
+	// Reconcile indicates the operation should be dispatched on a recurring schedule per connected installation
 	Reconcile bool `json:"reconcile,omitempty"`
+	// Scheduled indicates the operation runs on a recurring schedule through the runtime
+	// provider path, with no installation; used for system-level sweeps
+	Scheduled bool `json:"scheduled,omitempty"`
 	// SkipRunRecord indicates the IntegrationRun record creation should be skipped
 	SkipRunRecord bool `json:"skipRunRecord,omitempty"`
+}
+
+// ScheduledCycleResult is the conventional response payload for scheduled runtime operations,
+// carrying the cycle delta used for adaptive scheduling
+type ScheduledCycleResult struct {
+	// Processed is the number of records handled during the cycle
+	Processed int `json:"processed"`
 }
 
 // IngestContract declares one ingest target emitted by an operation
@@ -55,6 +65,9 @@ type OperationRequest struct {
 	LastRunAt *time.Time
 	// DB is the ent client for operations that need database access
 	DB *generated.Client
+	// Dispatch enqueues other integration operations through the runtime-managed dispatcher,
+	// used by operations that orchestrate downstream dispatches
+	Dispatch DispatchFunc
 }
 
 // OperationHandler executes one definition operation
@@ -101,9 +114,10 @@ type OperationRegistration struct {
 	// when set, the resolved config is used as the operation config for reconcile runs and as the
 	// source for per-operation filter expressions in the ingest pipeline
 	ConfigResolver func(userInput json.RawMessage) json.RawMessage `json:"-"`
-	// ReconcileSchedule overrides the default adaptive schedule for this operation's reconcile cycles;
-	// useful for operations that always do a full fetch and should run less frequently
-	ReconcileSchedule *gala.Schedule `json:"-"`
+	// Schedule overrides the default adaptive schedule for this operation's recurring
+	// reconcile or scheduled cycles; useful for operations that always do a full fetch
+	// and should run less frequently, or scheduled sweeps with fixed cadences
+	Schedule *gala.Schedule `json:"-"`
 	// SkipDefaultLookback disables the runtime's default lookback window on initial runs;
 	// when true, LastRunAt is nil on first run so the handler performs a full fetch
 	SkipDefaultLookback bool `json:"-"`

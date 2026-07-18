@@ -13,7 +13,6 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
-	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -396,7 +395,7 @@ func (r *Runtime) notifyIntegrationInstalled(ctx context.Context, installation *
 		return
 	}
 
-	if _, err := r.Dispatch(ctx, operations.DispatchRequest{
+	if _, err := r.Dispatch(ctx, types.DispatchRequest{
 		DefinitionID: slackdef.DefinitionID.ID(),
 		Operation:    slackdef.IntegrationInstalledOp.Name(),
 		Config:       config,
