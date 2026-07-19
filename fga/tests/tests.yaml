@@ -366,7 +366,7 @@ tests:
           can_create_trust_center_subprocessor: false
           can_create_campaign: false
           can_create_campaign_target: false
-          can_create_finding: false
+          can_create_finding: true
           can_create_vulnerability: false
           can_create_remediation: false
           can_create_review: true
