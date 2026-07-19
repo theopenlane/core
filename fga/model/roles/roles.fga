@@ -15,7 +15,7 @@ extend type organization
 
     # @create: comment, discussion, task, finding_control
     # @view: control, subcontrol, program, evidence, internal_policy, procedure, review, platform
-    # @crud: evidence, review
+    # @crud: evidence, review, finding
     define auditor: [user] or auditor from parent
 
     # @inherit: can_manage_compliance, can_manage_policies, can_manage_registry, can_manage_risk

@@ -76,15 +76,6 @@ func TestMutationCreateFinding(t *testing.T) {
 			},
 			ctx: sharedAuditorUser.UserCtx,
 		},
-		{
-			name: "unauthorized auditor",
-			request: testclient.CreateFindingInput{
-				DisplayName: lo.ToPtr("Auditor Finding Without Parent"),
-				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
-			},
-			ctx:         sharedAuditorUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
-		},
 	}
 
 	for _, tc := range tt {
@@ -169,12 +160,11 @@ func TestMutationCreateFindingUnderLinkedObject(t *testing.T) {
 			},
 		},
 		{
-			name: "auditor cannot create without linking to a parent object",
+			name: "auditor can create without linking to a parent object",
 			request: testclient.CreateFindingInput{
 				DisplayName: lo.ToPtr("finding not linked to an object"),
 				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
 			},
-			expectedErr: notAuthorizedErrorMsg,
 		},
 	}
 
@@ -305,7 +295,7 @@ func TestMutationCreateBulkFinding(t *testing.T) {
 			expectedErr: "input is required",
 		},
 		{
-			name: "auditor without parent is not authorized",
+			name: "auditor without parent is authorized",
 			requests: []*testclient.CreateFindingInput{
 				{
 					DisplayName: lo.ToPtr("Auditor Bulk Finding Without Parent"),
@@ -313,8 +303,8 @@ func TestMutationCreateBulkFinding(t *testing.T) {
 					OwnerID:     &sharedTestUser1.OrganizationID,
 				},
 			},
-			ctx:         sharedAuditorUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			ctx:           sharedAuditorUser.UserCtx,
+			expectedCount: 1,
 		},
 	}
 
@@ -398,13 +388,12 @@ func TestMutationUpdateFinding(t *testing.T) {
 			expectedErr: "already exists",
 		},
 		{
-			name: "auditor cannot update existing finding",
+			name: "auditor can update existing finding",
 			id:   finding.ID,
 			request: testclient.UpdateFindingInput{
 				DisplayName: lo.ToPtr("Auditor Update"),
 			},
-			ctx:         sharedAuditorUser.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			ctx: sharedAuditorUser.UserCtx,
 		},
 		{
 			name: "not authorized, valid id",
@@ -510,6 +499,7 @@ func TestMutationUpdateFinding(t *testing.T) {
 func TestMutationDeleteFinding(t *testing.T) {
 	finding := createFinding(t, sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID, "Delete Finding")
 	anotherOrgFinding := createFinding(t, sharedTestUser2.UserCtx, sharedTestUser2.OrganizationID, "Unauthorized Delete Finding")
+	auditorFinding := createFinding(t, sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID, "Auditor Delete Finding")
 
 	testCases := []struct {
 		name        string
@@ -518,10 +508,9 @@ func TestMutationDeleteFinding(t *testing.T) {
 		expectedErr string
 	}{
 		{
-			name:        "auditor cannot delete existing finding",
-			idToDelete:  finding.ID,
-			ctx:         sharedAuditorUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			name:       "auditor can delete existing finding",
+			idToDelete: auditorFinding.ID,
+			ctx:        sharedAuditorUser.UserCtx,
 		},
 		{
 			name:        "not authorized, valid id",
@@ -580,6 +569,7 @@ func TestMutationDeleteBulkFinding(t *testing.T) {
 	finding3 := createFinding(t, sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID, "Bulk Delete Finding 3")
 
 	orgFinding := createFinding(t, sharedTestUser2.UserCtx, sharedTestUser2.OrganizationID, "Unauthorized Bulk Delete Finding")
+	auditorFinding := createFinding(t, sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID, "Auditor Bulk Delete Finding")
 
 	testCases := []struct {
 		name                 string
@@ -589,10 +579,10 @@ func TestMutationDeleteBulkFinding(t *testing.T) {
 		expectedDeletedCount int
 	}{
 		{
-			name:                 "auditor cannot delete existing finding",
-			idsToDelete:          []string{finding1.ID},
+			name:                 "auditor can delete existing finding",
+			idsToDelete:          []string{auditorFinding.ID},
 			ctx:                  sharedAuditorUser.UserCtx,
-			expectedDeletedCount: 0,
+			expectedDeletedCount: 1,
 		},
 		{
 			name:                 "happy path",
