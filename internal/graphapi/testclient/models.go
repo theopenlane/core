@@ -1960,6 +1960,10 @@ type Asset struct {
 	Controls                *ControlConnection        `json:"controls"`
 	Subcontrols             *SubcontrolConnection     `json:"subcontrols"`
 	InternalPolicies        *InternalPolicyConnection `json:"internalPolicies"`
+	Findings                *FindingConnection        `json:"findings"`
+	Vulnerabilities         *VulnerabilityConnection  `json:"vulnerabilities"`
+	Reviews                 *ReviewConnection         `json:"reviews"`
+	Remediations            *RemediationConnection    `json:"remediations"`
 	SourcePlatform          *Platform                 `json:"sourcePlatform,omitempty"`
 	// integration that owns this asset
 	Integration     *Integration     `json:"integration,omitempty"`
@@ -2772,6 +2776,18 @@ type AssetWhereInput struct {
 	// internal_policies edge predicates
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
+	// findings edge predicates
+	HasFindings     *bool                `json:"hasFindings,omitempty"`
+	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
+	// vulnerabilities edge predicates
+	HasVulnerabilities     *bool                      `json:"hasVulnerabilities,omitempty"`
+	HasVulnerabilitiesWith []*VulnerabilityWhereInput `json:"hasVulnerabilitiesWith,omitempty"`
+	// reviews edge predicates
+	HasReviews     *bool               `json:"hasReviews,omitempty"`
+	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
+	// remediations edge predicates
+	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
+	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
 	// source_platform edge predicates
 	HasSourcePlatform     *bool                 `json:"hasSourcePlatform,omitempty"`
 	HasSourcePlatformWith []*PlatformWhereInput `json:"hasSourcePlatformWith,omitempty"`
@@ -4758,6 +4774,7 @@ type Control struct {
 	CheckResults           *CheckResultConnection           `json:"checkResults"`
 	Programs               *ProgramConnection               `json:"programs"`
 	Platforms              *PlatformConnection              `json:"platforms"`
+	Vulnerabilities        *VulnerabilityConnection         `json:"vulnerabilities"`
 	Assets                 *AssetConnection                 `json:"assets"`
 	Entities               *EntityConnection                `json:"entities"`
 	IdentityHolders        *IdentityHolderConnection        `json:"identityHolders"`
@@ -6465,6 +6482,9 @@ type ControlWhereInput struct {
 	// platforms edge predicates
 	HasPlatforms     *bool                 `json:"hasPlatforms,omitempty"`
 	HasPlatformsWith []*PlatformWhereInput `json:"hasPlatformsWith,omitempty"`
+	// vulnerabilities edge predicates
+	HasVulnerabilities     *bool                      `json:"hasVulnerabilities,omitempty"`
+	HasVulnerabilitiesWith []*VulnerabilityWhereInput `json:"hasVulnerabilitiesWith,omitempty"`
 	// assets edge predicates
 	HasAssets     *bool              `json:"hasAssets,omitempty"`
 	HasAssetsWith []*AssetWhereInput `json:"hasAssetsWith,omitempty"`
@@ -6771,6 +6791,10 @@ type CreateAssetInput struct {
 	ControlIDs                []string         `json:"controlIDs,omitempty"`
 	SubcontrolIDs             []string         `json:"subcontrolIDs,omitempty"`
 	InternalPolicyIDs         []string         `json:"internalPolicyIDs,omitempty"`
+	FindingIDs                []string         `json:"findingIDs,omitempty"`
+	VulnerabilityIDs          []string         `json:"vulnerabilityIDs,omitempty"`
+	ReviewIDs                 []string         `json:"reviewIDs,omitempty"`
+	RemediationIDs            []string         `json:"remediationIDs,omitempty"`
 	SourcePlatformID          *string          `json:"sourcePlatformID,omitempty"`
 	IntegrationID             *string          `json:"integrationID,omitempty"`
 	ConnectedAssetIDs         []string         `json:"connectedAssetIDs,omitempty"`
@@ -7075,11 +7099,11 @@ type CreateControlInput struct {
 	CheckResultIDs           []string                            `json:"checkResultIDs,omitempty"`
 	ProgramIDs               []string                            `json:"programIDs,omitempty"`
 	PlatformIDs              []string                            `json:"platformIDs,omitempty"`
+	VulnerabilityIDs         []string                            `json:"vulnerabilityIDs,omitempty"`
 	AssetIDs                 []string                            `json:"assetIDs,omitempty"`
 	EntityIDs                []string                            `json:"entityIDs,omitempty"`
 	IdentityHolderIDs        []string                            `json:"identityHolderIDs,omitempty"`
 	CampaignIDs              []string                            `json:"campaignIDs,omitempty"`
-	FindingIDs               []string                            `json:"findingIDs,omitempty"`
 	ControlImplementationIDs []string                            `json:"controlImplementationIDs,omitempty"`
 	SubcontrolIDs            []string                            `json:"subcontrolIDs,omitempty"`
 	ScheduledJobIDs          []string                            `json:"scheduledJobIDs,omitempty"`
@@ -7287,7 +7311,6 @@ type CreateDirectoryAccountInput struct {
 	PlatformID           *string  `json:"platformID,omitempty"`
 	IdentityHolderID     *string  `json:"identityHolderID,omitempty"`
 	AvatarFileID         *string  `json:"avatarFileID,omitempty"`
-	GroupIDs             []string `json:"groupIDs,omitempty"`
 	FindingIDs           []string `json:"findingIDs,omitempty"`
 	WorkflowObjectRefIDs []string `json:"workflowObjectRefIDs,omitempty"`
 }
@@ -7637,6 +7660,10 @@ type CreateEntityInput struct {
 	IdentityHolderIDs                   []string         `json:"identityHolderIDs,omitempty"`
 	ControlIDs                          []string         `json:"controlIDs,omitempty"`
 	SubcontrolIDs                       []string         `json:"subcontrolIDs,omitempty"`
+	FindingIDs                          []string         `json:"findingIDs,omitempty"`
+	VulnerabilityIDs                    []string         `json:"vulnerabilityIDs,omitempty"`
+	ReviewIDs                           []string         `json:"reviewIDs,omitempty"`
+	RemediationIDs                      []string         `json:"remediationIDs,omitempty"`
 	PlatformIDs                         []string         `json:"platformIDs,omitempty"`
 	OutOfScopePlatformIDs               []string         `json:"outOfScopePlatformIDs,omitempty"`
 	SourcePlatformIDs                   []string         `json:"sourcePlatformIDs,omitempty"`
@@ -7949,7 +7976,6 @@ type CreateFindingInput struct {
 	IntegrationIDs       []string       `json:"integrationIDs,omitempty"`
 	VulnerabilityIDs     []string       `json:"vulnerabilityIDs,omitempty"`
 	ActionPlanIDs        []string       `json:"actionPlanIDs,omitempty"`
-	ControlIDs           []string       `json:"controlIDs,omitempty"`
 	SubcontrolIDs        []string       `json:"subcontrolIDs,omitempty"`
 	RiskIDs              []string       `json:"riskIDs,omitempty"`
 	ProgramIDs           []string       `json:"programIDs,omitempty"`
@@ -9147,6 +9173,10 @@ type CreateProgramInput struct {
 	NarrativeIDs        []string `json:"narrativeIDs,omitempty"`
 	ActionPlanIDs       []string `json:"actionPlanIDs,omitempty"`
 	SystemDetailIDs     []string `json:"systemDetailIDs,omitempty"`
+	FindingIDs          []string `json:"findingIDs,omitempty"`
+	VulnerabilityIDs    []string `json:"vulnerabilityIDs,omitempty"`
+	ReviewIDs           []string `json:"reviewIDs,omitempty"`
+	RemediationIDs      []string `json:"remediationIDs,omitempty"`
 	ProgramOwnerID      *string  `json:"programOwnerID,omitempty"`
 }
 
@@ -9408,6 +9438,8 @@ type CreateRiskInput struct {
 	DiscussionIDs        []string            `json:"discussionIDs,omitempty"`
 	ReviewIDs            []string            `json:"reviewIDs,omitempty"`
 	RemediationIDs       []string            `json:"remediationIDs,omitempty"`
+	VulnerabilityIDs     []string            `json:"vulnerabilityIDs,omitempty"`
+	FindingIDs           []string            `json:"findingIDs,omitempty"`
 	WorkflowObjectRefIDs []string            `json:"workflowObjectRefIDs,omitempty"`
 }
 
@@ -9651,6 +9683,8 @@ type CreateSubcontrolInput struct {
 	AssetIDs                 []string `json:"assetIDs,omitempty"`
 	EntityIDs                []string `json:"entityIDs,omitempty"`
 	IdentityHolderIDs        []string `json:"identityHolderIDs,omitempty"`
+	VulnerabilityIDs         []string `json:"vulnerabilityIDs,omitempty"`
+	FindingIDs               []string `json:"findingIDs,omitempty"`
 }
 
 // CreateSubprocessorInput is used for create Subprocessor object.
@@ -14910,6 +14944,10 @@ type Entity struct {
 	IdentityHolders                   *IdentityHolderConnection     `json:"identityHolders"`
 	Controls                          *ControlConnection            `json:"controls"`
 	Subcontrols                       *SubcontrolConnection         `json:"subcontrols"`
+	Findings                          *FindingConnection            `json:"findings"`
+	Vulnerabilities                   *VulnerabilityConnection      `json:"vulnerabilities"`
+	Reviews                           *ReviewConnection             `json:"reviews"`
+	Remediations                      *RemediationConnection        `json:"remediations"`
 	Platforms                         *PlatformConnection           `json:"platforms"`
 	OutOfScopePlatforms               *PlatformConnection           `json:"outOfScopePlatforms"`
 	SourcePlatforms                   *PlatformConnection           `json:"sourcePlatforms"`
@@ -16093,6 +16131,18 @@ type EntityWhereInput struct {
 	// subcontrols edge predicates
 	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
 	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
+	// findings edge predicates
+	HasFindings     *bool                `json:"hasFindings,omitempty"`
+	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
+	// vulnerabilities edge predicates
+	HasVulnerabilities     *bool                      `json:"hasVulnerabilities,omitempty"`
+	HasVulnerabilitiesWith []*VulnerabilityWhereInput `json:"hasVulnerabilitiesWith,omitempty"`
+	// reviews edge predicates
+	HasReviews     *bool               `json:"hasReviews,omitempty"`
+	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
+	// remediations edge predicates
+	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
+	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
 	// platforms edge predicates
 	HasPlatforms     *bool                 `json:"hasPlatforms,omitempty"`
 	HasPlatformsWith []*PlatformWhereInput `json:"hasPlatformsWith,omitempty"`
@@ -30629,6 +30679,10 @@ type Program struct {
 	Narratives        *NarrativeConnection         `json:"narratives"`
 	ActionPlans       *ActionPlanConnection        `json:"actionPlans"`
 	SystemDetails     *SystemDetailConnection      `json:"systemDetails"`
+	Findings          *FindingConnection           `json:"findings"`
+	Vulnerabilities   *VulnerabilityConnection     `json:"vulnerabilities"`
+	Reviews           *ReviewConnection            `json:"reviews"`
+	Remediations      *RemediationConnection       `json:"remediations"`
 	Users             *UserConnection              `json:"users"`
 	ProgramOwner      *User                        `json:"programOwner,omitempty"`
 	Members           *ProgramMembershipConnection `json:"members"`
@@ -31250,6 +31304,18 @@ type ProgramWhereInput struct {
 	// system_details edge predicates
 	HasSystemDetails     *bool                     `json:"hasSystemDetails,omitempty"`
 	HasSystemDetailsWith []*SystemDetailWhereInput `json:"hasSystemDetailsWith,omitempty"`
+	// findings edge predicates
+	HasFindings     *bool                `json:"hasFindings,omitempty"`
+	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
+	// vulnerabilities edge predicates
+	HasVulnerabilities     *bool                      `json:"hasVulnerabilities,omitempty"`
+	HasVulnerabilitiesWith []*VulnerabilityWhereInput `json:"hasVulnerabilitiesWith,omitempty"`
+	// reviews edge predicates
+	HasReviews     *bool               `json:"hasReviews,omitempty"`
+	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
+	// remediations edge predicates
+	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
+	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
 	// users edge predicates
 	HasUsers     *bool             `json:"hasUsers,omitempty"`
 	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
@@ -32841,6 +32907,8 @@ type Risk struct {
 	Discussions        *DiscussionConnection        `json:"discussions"`
 	Reviews            *ReviewConnection            `json:"reviews"`
 	Remediations       *RemediationConnection       `json:"remediations"`
+	Vulnerabilities    *VulnerabilityConnection     `json:"vulnerabilities"`
+	Findings           *FindingConnection           `json:"findings"`
 	WorkflowObjectRefs *WorkflowObjectRefConnection `json:"workflowObjectRefs"`
 	// Indicates if this risk has pending changes awaiting workflow approval
 	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
@@ -33506,6 +33574,12 @@ type RiskWhereInput struct {
 	// remediations edge predicates
 	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
 	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
+	// vulnerabilities edge predicates
+	HasVulnerabilities     *bool                      `json:"hasVulnerabilities,omitempty"`
+	HasVulnerabilitiesWith []*VulnerabilityWhereInput `json:"hasVulnerabilitiesWith,omitempty"`
+	// findings edge predicates
+	HasFindings     *bool                `json:"hasFindings,omitempty"`
+	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
@@ -35520,6 +35594,8 @@ type Subcontrol struct {
 	Assets                 *AssetConnection                 `json:"assets"`
 	Entities               *EntityConnection                `json:"entities"`
 	IdentityHolders        *IdentityHolderConnection        `json:"identityHolders"`
+	Vulnerabilities        *VulnerabilityConnection         `json:"vulnerabilities"`
+	Findings               *FindingConnection               `json:"findings"`
 	// relatedControls show the controls and frameworks mapped to this control
 	RelatedControls []*ControlInfo `json:"relatedControls,omitempty"`
 	// Indicates if this subcontrol has pending changes awaiting workflow approval
@@ -36173,6 +36249,12 @@ type SubcontrolWhereInput struct {
 	// identity_holders edge predicates
 	HasIdentityHolders     *bool                       `json:"hasIdentityHolders,omitempty"`
 	HasIdentityHoldersWith []*IdentityHolderWhereInput `json:"hasIdentityHoldersWith,omitempty"`
+	// vulnerabilities edge predicates
+	HasVulnerabilities     *bool                      `json:"hasVulnerabilities,omitempty"`
+	HasVulnerabilitiesWith []*VulnerabilityWhereInput `json:"hasVulnerabilitiesWith,omitempty"`
+	// findings edge predicates
+	HasFindings     *bool                `json:"hasFindings,omitempty"`
+	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 	// Filter for aliasesHas to contain a specific value
@@ -42151,6 +42233,18 @@ type UpdateAssetInput struct {
 	AddInternalPolicyIDs         []string         `json:"addInternalPolicyIDs,omitempty"`
 	RemoveInternalPolicyIDs      []string         `json:"removeInternalPolicyIDs,omitempty"`
 	ClearInternalPolicies        *bool            `json:"clearInternalPolicies,omitempty"`
+	AddFindingIDs                []string         `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs             []string         `json:"removeFindingIDs,omitempty"`
+	ClearFindings                *bool            `json:"clearFindings,omitempty"`
+	AddVulnerabilityIDs          []string         `json:"addVulnerabilityIDs,omitempty"`
+	RemoveVulnerabilityIDs       []string         `json:"removeVulnerabilityIDs,omitempty"`
+	ClearVulnerabilities         *bool            `json:"clearVulnerabilities,omitempty"`
+	AddReviewIDs                 []string         `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs              []string         `json:"removeReviewIDs,omitempty"`
+	ClearReviews                 *bool            `json:"clearReviews,omitempty"`
+	AddRemediationIDs            []string         `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs         []string         `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations            *bool            `json:"clearRemediations,omitempty"`
 	SourcePlatformID             *string          `json:"sourcePlatformID,omitempty"`
 	ClearSourcePlatform          *bool            `json:"clearSourcePlatform,omitempty"`
 	AddConnectedAssetIDs         []string         `json:"addConnectedAssetIDs,omitempty"`
@@ -42655,6 +42749,9 @@ type UpdateControlInput struct {
 	AddPlatformIDs                 []string                            `json:"addPlatformIDs,omitempty"`
 	RemovePlatformIDs              []string                            `json:"removePlatformIDs,omitempty"`
 	ClearPlatforms                 *bool                               `json:"clearPlatforms,omitempty"`
+	AddVulnerabilityIDs            []string                            `json:"addVulnerabilityIDs,omitempty"`
+	RemoveVulnerabilityIDs         []string                            `json:"removeVulnerabilityIDs,omitempty"`
+	ClearVulnerabilities           *bool                               `json:"clearVulnerabilities,omitempty"`
 	AddAssetIDs                    []string                            `json:"addAssetIDs,omitempty"`
 	RemoveAssetIDs                 []string                            `json:"removeAssetIDs,omitempty"`
 	ClearAssets                    *bool                               `json:"clearAssets,omitempty"`
@@ -42667,9 +42764,6 @@ type UpdateControlInput struct {
 	AddCampaignIDs                 []string                            `json:"addCampaignIDs,omitempty"`
 	RemoveCampaignIDs              []string                            `json:"removeCampaignIDs,omitempty"`
 	ClearCampaigns                 *bool                               `json:"clearCampaigns,omitempty"`
-	AddFindingIDs                  []string                            `json:"addFindingIDs,omitempty"`
-	RemoveFindingIDs               []string                            `json:"removeFindingIDs,omitempty"`
-	ClearFindings                  *bool                               `json:"clearFindings,omitempty"`
 	AddControlImplementationIDs    []string                            `json:"addControlImplementationIDs,omitempty"`
 	RemoveControlImplementationIDs []string                            `json:"removeControlImplementationIDs,omitempty"`
 	ClearControlImplementations    *bool                               `json:"clearControlImplementations,omitempty"`
@@ -42978,9 +43072,6 @@ type UpdateDirectoryAccountInput struct {
 	ClearIdentityHolder        *bool    `json:"clearIdentityHolder,omitempty"`
 	AvatarFileID               *string  `json:"avatarFileID,omitempty"`
 	ClearAvatarFile            *bool    `json:"clearAvatarFile,omitempty"`
-	AddGroupIDs                []string `json:"addGroupIDs,omitempty"`
-	RemoveGroupIDs             []string `json:"removeGroupIDs,omitempty"`
-	ClearGroups                *bool    `json:"clearGroups,omitempty"`
 	AddFindingIDs              []string `json:"addFindingIDs,omitempty"`
 	RemoveFindingIDs           []string `json:"removeFindingIDs,omitempty"`
 	ClearFindings              *bool    `json:"clearFindings,omitempty"`
@@ -43526,6 +43617,18 @@ type UpdateEntityInput struct {
 	AddSubcontrolIDs                       []string         `json:"addSubcontrolIDs,omitempty"`
 	RemoveSubcontrolIDs                    []string         `json:"removeSubcontrolIDs,omitempty"`
 	ClearSubcontrols                       *bool            `json:"clearSubcontrols,omitempty"`
+	AddFindingIDs                          []string         `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs                       []string         `json:"removeFindingIDs,omitempty"`
+	ClearFindings                          *bool            `json:"clearFindings,omitempty"`
+	AddVulnerabilityIDs                    []string         `json:"addVulnerabilityIDs,omitempty"`
+	RemoveVulnerabilityIDs                 []string         `json:"removeVulnerabilityIDs,omitempty"`
+	ClearVulnerabilities                   *bool            `json:"clearVulnerabilities,omitempty"`
+	AddReviewIDs                           []string         `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs                        []string         `json:"removeReviewIDs,omitempty"`
+	ClearReviews                           *bool            `json:"clearReviews,omitempty"`
+	AddRemediationIDs                      []string         `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs                   []string         `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations                      *bool            `json:"clearRemediations,omitempty"`
 	AddPlatformIDs                         []string         `json:"addPlatformIDs,omitempty"`
 	RemovePlatformIDs                      []string         `json:"removePlatformIDs,omitempty"`
 	ClearPlatforms                         *bool            `json:"clearPlatforms,omitempty"`
@@ -44050,9 +44153,6 @@ type UpdateFindingInput struct {
 	AddActionPlanIDs           []string       `json:"addActionPlanIDs,omitempty"`
 	RemoveActionPlanIDs        []string       `json:"removeActionPlanIDs,omitempty"`
 	ClearActionPlans           *bool          `json:"clearActionPlans,omitempty"`
-	AddControlIDs              []string       `json:"addControlIDs,omitempty"`
-	RemoveControlIDs           []string       `json:"removeControlIDs,omitempty"`
-	ClearControls              *bool          `json:"clearControls,omitempty"`
 	AddSubcontrolIDs           []string       `json:"addSubcontrolIDs,omitempty"`
 	RemoveSubcontrolIDs        []string       `json:"removeSubcontrolIDs,omitempty"`
 	ClearSubcontrols           *bool          `json:"clearSubcontrols,omitempty"`
@@ -46216,6 +46316,18 @@ type UpdateProgramInput struct {
 	AddSystemDetailIDs        []string                     `json:"addSystemDetailIDs,omitempty"`
 	RemoveSystemDetailIDs     []string                     `json:"removeSystemDetailIDs,omitempty"`
 	ClearSystemDetails        *bool                        `json:"clearSystemDetails,omitempty"`
+	AddFindingIDs             []string                     `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs          []string                     `json:"removeFindingIDs,omitempty"`
+	ClearFindings             *bool                        `json:"clearFindings,omitempty"`
+	AddVulnerabilityIDs       []string                     `json:"addVulnerabilityIDs,omitempty"`
+	RemoveVulnerabilityIDs    []string                     `json:"removeVulnerabilityIDs,omitempty"`
+	ClearVulnerabilities      *bool                        `json:"clearVulnerabilities,omitempty"`
+	AddReviewIDs              []string                     `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs           []string                     `json:"removeReviewIDs,omitempty"`
+	ClearReviews              *bool                        `json:"clearReviews,omitempty"`
+	AddRemediationIDs         []string                     `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs      []string                     `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations         *bool                        `json:"clearRemediations,omitempty"`
 	ProgramOwnerID            *string                      `json:"programOwnerID,omitempty"`
 	ClearProgramOwner         *bool                        `json:"clearProgramOwner,omitempty"`
 	AddProgramMembers         []*AddProgramMembershipInput `json:"addProgramMembers,omitempty"`
@@ -46661,6 +46773,12 @@ type UpdateRiskInput struct {
 	AddRemediationIDs          []string                `json:"addRemediationIDs,omitempty"`
 	RemoveRemediationIDs       []string                `json:"removeRemediationIDs,omitempty"`
 	ClearRemediations          *bool                   `json:"clearRemediations,omitempty"`
+	AddVulnerabilityIDs        []string                `json:"addVulnerabilityIDs,omitempty"`
+	RemoveVulnerabilityIDs     []string                `json:"removeVulnerabilityIDs,omitempty"`
+	ClearVulnerabilities       *bool                   `json:"clearVulnerabilities,omitempty"`
+	AddFindingIDs              []string                `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs           []string                `json:"removeFindingIDs,omitempty"`
+	ClearFindings              *bool                   `json:"clearFindings,omitempty"`
 	AddWorkflowObjectRefIDs    []string                `json:"addWorkflowObjectRefIDs,omitempty"`
 	RemoveWorkflowObjectRefIDs []string                `json:"removeWorkflowObjectRefIDs,omitempty"`
 	ClearWorkflowObjectRefs    *bool                   `json:"clearWorkflowObjectRefs,omitempty"`
@@ -47081,6 +47199,12 @@ type UpdateSubcontrolInput struct {
 	AddIdentityHolderIDs           []string                `json:"addIdentityHolderIDs,omitempty"`
 	RemoveIdentityHolderIDs        []string                `json:"removeIdentityHolderIDs,omitempty"`
 	ClearIdentityHolders           *bool                   `json:"clearIdentityHolders,omitempty"`
+	AddVulnerabilityIDs            []string                `json:"addVulnerabilityIDs,omitempty"`
+	RemoveVulnerabilityIDs         []string                `json:"removeVulnerabilityIDs,omitempty"`
+	ClearVulnerabilities           *bool                   `json:"clearVulnerabilities,omitempty"`
+	AddFindingIDs                  []string                `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs               []string                `json:"removeFindingIDs,omitempty"`
+	ClearFindings                  *bool                   `json:"clearFindings,omitempty"`
 	AddDiscussion                  *CreateDiscussionInput  `json:"addDiscussion,omitempty"`
 	UpdateDiscussion               *UpdateDiscussionsInput `json:"updateDiscussion,omitempty"`
 	DeleteDiscussion               *string                 `json:"deleteDiscussion,omitempty"`

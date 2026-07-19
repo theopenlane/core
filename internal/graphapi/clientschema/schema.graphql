@@ -3895,6 +3895,130 @@ type Asset implements Node {
 		"""
 		where: InternalPolicyWhereInput
 	): InternalPolicyConnection!
+	findings(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Findings returned from the connection.
+		"""
+		orderBy: [FindingOrder!]
+
+		"""
+		Filtering options for Findings returned from the connection.
+		"""
+		where: FindingWhereInput
+	): FindingConnection!
+	vulnerabilities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Vulnerabilities returned from the connection.
+		"""
+		orderBy: [VulnerabilityOrder!]
+
+		"""
+		Filtering options for Vulnerabilities returned from the connection.
+		"""
+		where: VulnerabilityWhereInput
+	): VulnerabilityConnection!
+	reviews(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Reviews returned from the connection.
+		"""
+		orderBy: [ReviewOrder!]
+
+		"""
+		Filtering options for Reviews returned from the connection.
+		"""
+		where: ReviewWhereInput
+	): ReviewConnection!
+	remediations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Remediations returned from the connection.
+		"""
+		orderBy: [RemediationOrder!]
+
+		"""
+		Filtering options for Remediations returned from the connection.
+		"""
+		where: RemediationWhereInput
+	): RemediationConnection!
 	sourcePlatform: Platform
 	"""
 	integration that owns this asset
@@ -4986,6 +5110,26 @@ input AssetWhereInput {
 	"""
 	hasInternalPolicies: Boolean
 	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
+	"""
+	findings edge predicates
+	"""
+	hasFindings: Boolean
+	hasFindingsWith: [FindingWhereInput!]
+	"""
+	vulnerabilities edge predicates
+	"""
+	hasVulnerabilities: Boolean
+	hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+	"""
+	reviews edge predicates
+	"""
+	hasReviews: Boolean
+	hasReviewsWith: [ReviewWhereInput!]
+	"""
+	remediations edge predicates
+	"""
+	hasRemediations: Boolean
+	hasRemediationsWith: [RemediationWhereInput!]
 	"""
 	source_platform edge predicates
 	"""
@@ -9036,6 +9180,37 @@ type Control implements Node {
 		"""
 		where: PlatformWhereInput
 	): PlatformConnection!
+	vulnerabilities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Vulnerabilities returned from the connection.
+		"""
+		orderBy: [VulnerabilityOrder!]
+
+		"""
+		Filtering options for Vulnerabilities returned from the connection.
+		"""
+		where: VulnerabilityWhereInput
+	): VulnerabilityConnection!
 	assets(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -12292,6 +12467,11 @@ input ControlWhereInput {
 	hasPlatforms: Boolean
 	hasPlatformsWith: [PlatformWhereInput!]
 	"""
+	vulnerabilities edge predicates
+	"""
+	hasVulnerabilities: Boolean
+	hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+	"""
 	assets edge predicates
 	"""
 	hasAssets: Boolean
@@ -12808,6 +12988,10 @@ input CreateAssetInput {
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
 	internalPolicyIDs: [ID!]
+	findingIDs: [ID!]
+	vulnerabilityIDs: [ID!]
+	reviewIDs: [ID!]
+	remediationIDs: [ID!]
 	sourcePlatformID: ID
 	integrationID: ID
 	connectedAssetIDs: [ID!]
@@ -13313,11 +13497,11 @@ input CreateControlInput {
 	checkResultIDs: [ID!]
 	programIDs: [ID!]
 	platformIDs: [ID!]
+	vulnerabilityIDs: [ID!]
 	assetIDs: [ID!]
 	entityIDs: [ID!]
 	identityHolderIDs: [ID!]
 	campaignIDs: [ID!]
-	findingIDs: [ID!]
 	controlImplementationIDs: [ID!]
 	subcontrolIDs: [ID!]
 	scheduledJobIDs: [ID!]
@@ -13665,7 +13849,6 @@ input CreateDirectoryAccountInput {
 	platformID: ID
 	identityHolderID: ID
 	avatarFileID: ID
-	groupIDs: [ID!]
 	findingIDs: [ID!]
 	workflowObjectRefIDs: [ID!]
 }
@@ -14256,6 +14439,10 @@ input CreateEntityInput {
 	identityHolderIDs: [ID!]
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
+	findingIDs: [ID!]
+	vulnerabilityIDs: [ID!]
+	reviewIDs: [ID!]
+	remediationIDs: [ID!]
 	platformIDs: [ID!]
 	outOfScopePlatformIDs: [ID!]
 	sourcePlatformIDs: [ID!]
@@ -14773,7 +14960,6 @@ input CreateFindingInput {
 	integrationIDs: [ID!]
 	vulnerabilityIDs: [ID!]
 	actionPlanIDs: [ID!]
-	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
 	riskIDs: [ID!]
 	programIDs: [ID!]
@@ -16604,6 +16790,10 @@ input CreateProgramInput {
 	narrativeIDs: [ID!]
 	actionPlanIDs: [ID!]
 	systemDetailIDs: [ID!]
+	findingIDs: [ID!]
+	vulnerabilityIDs: [ID!]
+	reviewIDs: [ID!]
+	remediationIDs: [ID!]
 	programOwnerID: ID
 }
 """
@@ -17034,6 +17224,8 @@ input CreateRiskInput {
 	discussionIDs: [ID!]
 	reviewIDs: [ID!]
 	remediationIDs: [ID!]
+	vulnerabilityIDs: [ID!]
+	findingIDs: [ID!]
 	workflowObjectRefIDs: [ID!]
 }
 """
@@ -17427,6 +17619,8 @@ input CreateSubcontrolInput {
 	assetIDs: [ID!]
 	entityIDs: [ID!]
 	identityHolderIDs: [ID!]
+	vulnerabilityIDs: [ID!]
+	findingIDs: [ID!]
 }
 """
 CreateSubprocessorInput is used for create Subprocessor object.
@@ -26370,6 +26564,130 @@ type Entity implements Node {
 		"""
 		where: SubcontrolWhereInput
 	): SubcontrolConnection!
+	findings(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Findings returned from the connection.
+		"""
+		orderBy: [FindingOrder!]
+
+		"""
+		Filtering options for Findings returned from the connection.
+		"""
+		where: FindingWhereInput
+	): FindingConnection!
+	vulnerabilities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Vulnerabilities returned from the connection.
+		"""
+		orderBy: [VulnerabilityOrder!]
+
+		"""
+		Filtering options for Vulnerabilities returned from the connection.
+		"""
+		where: VulnerabilityWhereInput
+	): VulnerabilityConnection!
+	reviews(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Reviews returned from the connection.
+		"""
+		orderBy: [ReviewOrder!]
+
+		"""
+		Filtering options for Reviews returned from the connection.
+		"""
+		where: ReviewWhereInput
+	): ReviewConnection!
+	remediations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Remediations returned from the connection.
+		"""
+		orderBy: [RemediationOrder!]
+
+		"""
+		Filtering options for Remediations returned from the connection.
+		"""
+		where: RemediationWhereInput
+	): RemediationConnection!
 	platforms(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -28078,6 +28396,26 @@ input EntityWhereInput {
 	"""
 	hasSubcontrols: Boolean
 	hasSubcontrolsWith: [SubcontrolWhereInput!]
+	"""
+	findings edge predicates
+	"""
+	hasFindings: Boolean
+	hasFindingsWith: [FindingWhereInput!]
+	"""
+	vulnerabilities edge predicates
+	"""
+	hasVulnerabilities: Boolean
+	hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+	"""
+	reviews edge predicates
+	"""
+	hasReviews: Boolean
+	hasReviewsWith: [ReviewWhereInput!]
+	"""
+	remediations edge predicates
+	"""
+	hasRemediations: Boolean
+	hasRemediationsWith: [RemediationWhereInput!]
 	"""
 	platforms edge predicates
 	"""
@@ -66878,6 +67216,130 @@ type Program implements Node {
 		"""
 		where: SystemDetailWhereInput
 	): SystemDetailConnection!
+	findings(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Findings returned from the connection.
+		"""
+		orderBy: [FindingOrder!]
+
+		"""
+		Filtering options for Findings returned from the connection.
+		"""
+		where: FindingWhereInput
+	): FindingConnection!
+	vulnerabilities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Vulnerabilities returned from the connection.
+		"""
+		orderBy: [VulnerabilityOrder!]
+
+		"""
+		Filtering options for Vulnerabilities returned from the connection.
+		"""
+		where: VulnerabilityWhereInput
+	): VulnerabilityConnection!
+	reviews(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Reviews returned from the connection.
+		"""
+		orderBy: [ReviewOrder!]
+
+		"""
+		Filtering options for Reviews returned from the connection.
+		"""
+		where: ReviewWhereInput
+	): ReviewConnection!
+	remediations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Remediations returned from the connection.
+		"""
+		orderBy: [RemediationOrder!]
+
+		"""
+		Filtering options for Remediations returned from the connection.
+		"""
+		where: RemediationWhereInput
+	): RemediationConnection!
 	users(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -67777,6 +68239,26 @@ input ProgramWhereInput {
 	"""
 	hasSystemDetails: Boolean
 	hasSystemDetailsWith: [SystemDetailWhereInput!]
+	"""
+	findings edge predicates
+	"""
+	hasFindings: Boolean
+	hasFindingsWith: [FindingWhereInput!]
+	"""
+	vulnerabilities edge predicates
+	"""
+	hasVulnerabilities: Boolean
+	hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+	"""
+	reviews edge predicates
+	"""
+	hasReviews: Boolean
+	hasReviewsWith: [ReviewWhereInput!]
+	"""
+	remediations edge predicates
+	"""
+	hasRemediations: Boolean
+	hasRemediationsWith: [RemediationWhereInput!]
 	"""
 	users edge predicates
 	"""
@@ -76861,6 +77343,68 @@ type Risk implements Node {
 		"""
 		where: RemediationWhereInput
 	): RemediationConnection!
+	vulnerabilities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Vulnerabilities returned from the connection.
+		"""
+		orderBy: [VulnerabilityOrder!]
+
+		"""
+		Filtering options for Vulnerabilities returned from the connection.
+		"""
+		where: VulnerabilityWhereInput
+	): VulnerabilityConnection!
+	findings(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Findings returned from the connection.
+		"""
+		orderBy: [FindingOrder!]
+
+		"""
+		Filtering options for Findings returned from the connection.
+		"""
+		where: FindingWhereInput
+	): FindingConnection!
 	workflowObjectRefs(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -77812,6 +78356,16 @@ input RiskWhereInput {
 	"""
 	hasRemediations: Boolean
 	hasRemediationsWith: [RemediationWhereInput!]
+	"""
+	vulnerabilities edge predicates
+	"""
+	hasVulnerabilities: Boolean
+	hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+	"""
+	findings edge predicates
+	"""
+	hasFindings: Boolean
+	hasFindingsWith: [FindingWhereInput!]
 	"""
 	workflow_object_refs edge predicates
 	"""
@@ -81827,6 +82381,68 @@ type Subcontrol implements Node {
 		"""
 		where: IdentityHolderWhereInput
 	): IdentityHolderConnection!
+	vulnerabilities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Vulnerabilities returned from the connection.
+		"""
+		orderBy: [VulnerabilityOrder!]
+
+		"""
+		Filtering options for Vulnerabilities returned from the connection.
+		"""
+		where: VulnerabilityWhereInput
+	): VulnerabilityConnection!
+	findings(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Findings returned from the connection.
+		"""
+		orderBy: [FindingOrder!]
+
+		"""
+		Filtering options for Findings returned from the connection.
+		"""
+		where: FindingWhereInput
+	): FindingConnection!
 	"""
 	relatedControls show the controls and frameworks mapped to this control
 	"""
@@ -82699,6 +83315,16 @@ input SubcontrolWhereInput {
 	"""
 	hasIdentityHolders: Boolean
 	hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+	"""
+	vulnerabilities edge predicates
+	"""
+	hasVulnerabilities: Boolean
+	hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+	"""
+	findings edge predicates
+	"""
+	hasFindings: Boolean
+	hasFindingsWith: [FindingWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -92640,6 +93266,18 @@ input UpdateAssetInput {
 	addInternalPolicyIDs: [ID!]
 	removeInternalPolicyIDs: [ID!]
 	clearInternalPolicies: Boolean
+	addFindingIDs: [ID!]
+	removeFindingIDs: [ID!]
+	clearFindings: Boolean
+	addVulnerabilityIDs: [ID!]
+	removeVulnerabilityIDs: [ID!]
+	clearVulnerabilities: Boolean
+	addReviewIDs: [ID!]
+	removeReviewIDs: [ID!]
+	clearReviews: Boolean
+	addRemediationIDs: [ID!]
+	removeRemediationIDs: [ID!]
+	clearRemediations: Boolean
 	sourcePlatformID: ID
 	clearSourcePlatform: Boolean
 	addConnectedAssetIDs: [ID!]
@@ -93338,6 +93976,9 @@ input UpdateControlInput {
 	addPlatformIDs: [ID!]
 	removePlatformIDs: [ID!]
 	clearPlatforms: Boolean
+	addVulnerabilityIDs: [ID!]
+	removeVulnerabilityIDs: [ID!]
+	clearVulnerabilities: Boolean
 	addAssetIDs: [ID!]
 	removeAssetIDs: [ID!]
 	clearAssets: Boolean
@@ -93350,9 +93991,6 @@ input UpdateControlInput {
 	addCampaignIDs: [ID!]
 	removeCampaignIDs: [ID!]
 	clearCampaigns: Boolean
-	addFindingIDs: [ID!]
-	removeFindingIDs: [ID!]
-	clearFindings: Boolean
 	addControlImplementationIDs: [ID!]
 	removeControlImplementationIDs: [ID!]
 	clearControlImplementations: Boolean
@@ -93788,9 +94426,6 @@ input UpdateDirectoryAccountInput {
 	clearIdentityHolder: Boolean
 	avatarFileID: ID
 	clearAvatarFile: Boolean
-	addGroupIDs: [ID!]
-	removeGroupIDs: [ID!]
-	clearGroups: Boolean
 	addFindingIDs: [ID!]
 	removeFindingIDs: [ID!]
 	clearFindings: Boolean
@@ -94574,6 +95209,18 @@ input UpdateEntityInput {
 	addSubcontrolIDs: [ID!]
 	removeSubcontrolIDs: [ID!]
 	clearSubcontrols: Boolean
+	addFindingIDs: [ID!]
+	removeFindingIDs: [ID!]
+	clearFindings: Boolean
+	addVulnerabilityIDs: [ID!]
+	removeVulnerabilityIDs: [ID!]
+	clearVulnerabilities: Boolean
+	addReviewIDs: [ID!]
+	removeReviewIDs: [ID!]
+	clearReviews: Boolean
+	addRemediationIDs: [ID!]
+	removeRemediationIDs: [ID!]
+	clearRemediations: Boolean
 	addPlatformIDs: [ID!]
 	removePlatformIDs: [ID!]
 	clearPlatforms: Boolean
@@ -95297,9 +95944,6 @@ input UpdateFindingInput {
 	addActionPlanIDs: [ID!]
 	removeActionPlanIDs: [ID!]
 	clearActionPlans: Boolean
-	addControlIDs: [ID!]
-	removeControlIDs: [ID!]
-	clearControls: Boolean
 	addSubcontrolIDs: [ID!]
 	removeSubcontrolIDs: [ID!]
 	clearSubcontrols: Boolean
@@ -98045,6 +98689,18 @@ input UpdateProgramInput {
 	addSystemDetailIDs: [ID!]
 	removeSystemDetailIDs: [ID!]
 	clearSystemDetails: Boolean
+	addFindingIDs: [ID!]
+	removeFindingIDs: [ID!]
+	clearFindings: Boolean
+	addVulnerabilityIDs: [ID!]
+	removeVulnerabilityIDs: [ID!]
+	clearVulnerabilities: Boolean
+	addReviewIDs: [ID!]
+	removeReviewIDs: [ID!]
+	clearReviews: Boolean
+	addRemediationIDs: [ID!]
+	removeRemediationIDs: [ID!]
+	clearRemediations: Boolean
 	programOwnerID: ID
 	clearProgramOwner: Boolean
 	addProgramMembers: [AddProgramMembershipInput!]
@@ -98648,6 +99304,12 @@ input UpdateRiskInput {
 	addRemediationIDs: [ID!]
 	removeRemediationIDs: [ID!]
 	clearRemediations: Boolean
+	addVulnerabilityIDs: [ID!]
+	removeVulnerabilityIDs: [ID!]
+	clearVulnerabilities: Boolean
+	addFindingIDs: [ID!]
+	removeFindingIDs: [ID!]
+	clearFindings: Boolean
 	addWorkflowObjectRefIDs: [ID!]
 	removeWorkflowObjectRefIDs: [ID!]
 	clearWorkflowObjectRefs: Boolean
@@ -99212,6 +99874,12 @@ input UpdateSubcontrolInput {
 	addIdentityHolderIDs: [ID!]
 	removeIdentityHolderIDs: [ID!]
 	clearIdentityHolders: Boolean
+	addVulnerabilityIDs: [ID!]
+	removeVulnerabilityIDs: [ID!]
+	clearVulnerabilities: Boolean
+	addFindingIDs: [ID!]
+	removeFindingIDs: [ID!]
+	clearFindings: Boolean
 	addDiscussion: CreateDiscussionInput
 	updateDiscussion: UpdateDiscussionsInput
 	deleteDiscussion: ID

@@ -125,10 +125,8 @@ type Subcontrol struct {
 	// The values are being populated by the SubcontrolQuery when eager-loading is set.
 	Edges                        SubcontrolEdges `json:"edges"`
 	custom_type_enum_subcontrols *string
-	finding_subcontrols          *string
 	program_subcontrols          *string
 	user_subcontrols             *string
-	vulnerability_subcontrols    *string
 	selectValues                 sql.SelectValues
 }
 
@@ -188,11 +186,15 @@ type SubcontrolEdges struct {
 	Entities []*Entity `json:"entities,omitempty"`
 	// IdentityHolders holds the value of the identity_holders edge.
 	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
+	// Vulnerabilities holds the value of the vulnerabilities edge.
+	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
+	// Findings holds the value of the findings edge.
+	Findings []*Finding `json:"findings,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [27]bool
+	loadedTypes [29]bool
 	// totalCount holds the count of the edges above.
-	totalCount [25]map[string]int
+	totalCount [27]map[string]int
 
 	namedEvidence               map[string][]*Evidence
 	namedControlObjectives      map[string][]*ControlObjective
@@ -215,6 +217,8 @@ type SubcontrolEdges struct {
 	namedAssets                 map[string][]*Asset
 	namedEntities               map[string][]*Entity
 	namedIdentityHolders        map[string][]*IdentityHolder
+	namedVulnerabilities        map[string][]*Vulnerability
+	namedFindings               map[string][]*Finding
 }
 
 // EvidenceOrErr returns the Evidence value or an error if the edge
@@ -472,6 +476,24 @@ func (e SubcontrolEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 	return nil, &NotLoadedError{edge: "identity_holders"}
 }
 
+// VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
+	if e.loadedTypes[27] {
+		return e.Vulnerabilities, nil
+	}
+	return nil, &NotLoadedError{edge: "vulnerabilities"}
+}
+
+// FindingsOrErr returns the Findings value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) FindingsOrErr() ([]*Finding, error) {
+	if e.loadedTypes[28] {
+		return e.Findings, nil
+	}
+	return nil, &NotLoadedError{edge: "findings"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -487,13 +509,9 @@ func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case subcontrol.ForeignKeys[0]: // custom_type_enum_subcontrols
 			values[i] = new(sql.NullString)
-		case subcontrol.ForeignKeys[1]: // finding_subcontrols
+		case subcontrol.ForeignKeys[1]: // program_subcontrols
 			values[i] = new(sql.NullString)
-		case subcontrol.ForeignKeys[2]: // program_subcontrols
-			values[i] = new(sql.NullString)
-		case subcontrol.ForeignKeys[3]: // user_subcontrols
-			values[i] = new(sql.NullString)
-		case subcontrol.ForeignKeys[4]: // vulnerability_subcontrols
+		case subcontrol.ForeignKeys[2]: // user_subcontrols
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -845,31 +863,17 @@ func (_m *Subcontrol) assignValues(columns []string, values []any) error {
 			}
 		case subcontrol.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field finding_subcontrols", values[i])
-			} else if value.Valid {
-				_m.finding_subcontrols = new(string)
-				*_m.finding_subcontrols = value.String
-			}
-		case subcontrol.ForeignKeys[2]:
-			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field program_subcontrols", values[i])
 			} else if value.Valid {
 				_m.program_subcontrols = new(string)
 				*_m.program_subcontrols = value.String
 			}
-		case subcontrol.ForeignKeys[3]:
+		case subcontrol.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field user_subcontrols", values[i])
 			} else if value.Valid {
 				_m.user_subcontrols = new(string)
 				*_m.user_subcontrols = value.String
-			}
-		case subcontrol.ForeignKeys[4]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field vulnerability_subcontrols", values[i])
-			} else if value.Valid {
-				_m.vulnerability_subcontrols = new(string)
-				*_m.vulnerability_subcontrols = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -1017,6 +1021,16 @@ func (_m *Subcontrol) QueryEntities() *EntityQuery {
 // QueryIdentityHolders queries the "identity_holders" edge of the Subcontrol entity.
 func (_m *Subcontrol) QueryIdentityHolders() *IdentityHolderQuery {
 	return NewSubcontrolClient(_m.config).QueryIdentityHolders(_m)
+}
+
+// QueryVulnerabilities queries the "vulnerabilities" edge of the Subcontrol entity.
+func (_m *Subcontrol) QueryVulnerabilities() *VulnerabilityQuery {
+	return NewSubcontrolClient(_m.config).QueryVulnerabilities(_m)
+}
+
+// QueryFindings queries the "findings" edge of the Subcontrol entity.
+func (_m *Subcontrol) QueryFindings() *FindingQuery {
+	return NewSubcontrolClient(_m.config).QueryFindings(_m)
 }
 
 // Update returns a builder for updating this Subcontrol.
@@ -1706,6 +1720,54 @@ func (_m *Subcontrol) appendNamedIdentityHolders(name string, edges ...*Identity
 		_m.Edges.namedIdentityHolders[name] = []*IdentityHolder{}
 	} else {
 		_m.Edges.namedIdentityHolders[name] = append(_m.Edges.namedIdentityHolders[name], edges...)
+	}
+}
+
+// NamedVulnerabilities returns the Vulnerabilities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Subcontrol) NamedVulnerabilities(name string) ([]*Vulnerability, error) {
+	if _m.Edges.namedVulnerabilities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedVulnerabilities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Subcontrol) appendNamedVulnerabilities(name string, edges ...*Vulnerability) {
+	if _m.Edges.namedVulnerabilities == nil {
+		_m.Edges.namedVulnerabilities = make(map[string][]*Vulnerability)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedVulnerabilities[name] = []*Vulnerability{}
+	} else {
+		_m.Edges.namedVulnerabilities[name] = append(_m.Edges.namedVulnerabilities[name], edges...)
+	}
+}
+
+// NamedFindings returns the Findings named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Subcontrol) NamedFindings(name string) ([]*Finding, error) {
+	if _m.Edges.namedFindings == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedFindings[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Subcontrol) appendNamedFindings(name string, edges ...*Finding) {
+	if _m.Edges.namedFindings == nil {
+		_m.Edges.namedFindings = make(map[string][]*Finding)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedFindings[name] = []*Finding{}
+	} else {
+		_m.Edges.namedFindings[name] = append(_m.Edges.namedFindings[name], edges...)
 	}
 }
 
