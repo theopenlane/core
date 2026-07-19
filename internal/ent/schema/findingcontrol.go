@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
@@ -84,8 +85,7 @@ func (fc FindingControl) Edges() []ent.Edge {
 			required:   true,
 			immutable:  true,
 			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
+				accessmap.EdgeViewCheck(Finding{}.Name())},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: fc,
@@ -94,7 +94,7 @@ func (fc FindingControl) Edges() []ent.Edge {
 			required:   true,
 			immutable:  true,
 			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
+				accessmap.EdgeViewCheck(Control{}.Name()),
 			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
@@ -103,7 +103,7 @@ func (fc FindingControl) Edges() []ent.Edge {
 			field:      "standard_id",
 			immutable:  true,
 			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
+				accessmap.EdgeViewCheck(Standard{}.Name()),
 			},
 		}),
 	}
@@ -145,7 +145,10 @@ func (FindingControl) Annotations() []schema.Annotation {
 func (FindingControl) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			policy.CheckCreateAccess(),
+			policy.CanCreateObjectsUnderParents([]string{Control{}.PluralName(), Finding{}.PluralName()}),
 			policy.CheckOrgWriteAccess(),
+			entfga.CheckEditAccess[*generated.FindingControlMutation](),
 		),
 	)
 }

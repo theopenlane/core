@@ -3,8 +3,11 @@
 package entityops
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+
+	"github.com/theopenlane/core/internal/ent/generated"
 )
 
 // SchemaDescriptor is the canonical identity for an entity schema
@@ -17,12 +20,6 @@ type SchemaDescriptor struct {
 	Camel string `json:"-"`
 	// Lower is the lowercase no-separator form used for fuzzy lookup
 	Lower string `json:"-"`
-	// Plural is the PascalCase plural form
-	Plural string `json:"-"`
-	// Table is the database table name
-	Table string `json:"-"`
-	// Label is the human-readable display label
-	Label string `json:"-"`
 }
 
 // String returns the PascalCase canonical name
@@ -78,6 +75,8 @@ type FieldDescriptor struct {
 	MatchKey bool `json:"matchKey,omitempty"`
 	// InputKey is the integration mapping create-input key (lowerCamel); empty for non-mapped fields
 	InputKey string `json:"inputKey,omitempty"`
+	// LookupKey reports whether the field is the ingest upsert lookup column for its schema
+	LookupKey bool `json:"lookupKey,omitempty"`
 }
 
 // EdgeDescriptor describes an edge on a schema. It is the single edge-capability record shared by
@@ -99,18 +98,27 @@ type EdgeDescriptor struct {
 	// Immutable reports whether the edge is set only at create time; LinkTargets and UnlinkTargets
 	// reject immutable edges since the update input has no setters for them
 	Immutable bool `json:"immutable,omitempty"`
-	// CreateField is the create-input JSON key used to set this edge at create time (e.g. "controlIDs");
-	// for unique edges it doubles as the update-input key used by LinkTargets
+	// CreateField is the create-input JSON key used to set this edge at create time, matching the
+	// input's snake_case json tag (e.g. "control_ids"); for unique edges it doubles as the
+	// update-input key used by LinkTargets
 	CreateField string `json:"createField,omitempty"`
-	// AddField is the update-input key that adds targets to a to-many edge (e.g. "addControlIDs");
+	// AddField is the update-input key that adds targets to a to-many edge (e.g. "add_control_ids");
 	// empty for unique or immutable edges
 	AddField string `json:"addField,omitempty"`
-	// RemoveField is the update-input key that removes targets from a to-many edge (e.g. "removeControlIDs");
-	// empty for unique or immutable edges
+	// RemoveField is the update-input key that removes targets from a to-many edge
+	// (e.g. "remove_control_ids"); empty for unique or immutable edges
 	RemoveField string `json:"removeField,omitempty"`
-	// ClearField is the update-input key that clears an optional unique edge (e.g. "clearControl");
-	// empty for to-many, required, or immutable edges
+	// ClearField is the update-input key that clears an optional unique edge; it stays camelCase
+	// (e.g. "clearControl") because the generated clear booleans are untagged and bind by
+	// case-insensitive field name. Empty for to-many, required, or immutable edges
 	ClearField string `json:"clearField,omitempty"`
+	// Through reports whether the edge goes through a join entity (edge schema). Through edges
+	// are linked by creating join entity rows — one per target, each with its own generated id —
+	// because batch edge adds cannot produce per-row entity ids
+	Through bool `json:"through,omitempty"`
+	// LinkThrough creates the join entity rows binding the source to each target, skipping pairs
+	// that already exist; nil for plain edges
+	LinkThrough func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) error `json:"-"`
 	// WorkflowEligible reports whether the edge may drive workflow conditions and triggers
 	WorkflowEligible bool `json:"workflowEligible,omitempty"`
 }

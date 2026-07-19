@@ -3370,7 +3370,6 @@ type CreateControlInput struct {
 	EntityIDs                  []string                            `json:"entity_ids,omitempty"`
 	IdentityHolderIDs          []string                            `json:"identity_holder_ids,omitempty"`
 	CampaignIDs                []string                            `json:"campaign_ids,omitempty"`
-	FindingIDs                 []string                            `json:"finding_ids,omitempty"`
 	ControlImplementationIDs   []string                            `json:"control_implementation_ids,omitempty"`
 	SubcontrolIDs              []string                            `json:"subcontrol_ids,omitempty"`
 	ScheduledJobIDs            []string                            `json:"scheduled_job_ids,omitempty"`
@@ -3578,9 +3577,6 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.CampaignIDs; len(v) > 0 {
 		m.AddCampaignIDs(v...)
 	}
-	if v := i.FindingIDs; len(v) > 0 {
-		m.AddFindingIDs(v...)
-	}
 	if v := i.ControlImplementationIDs; len(v) > 0 {
 		m.AddControlImplementationIDs(v...)
 	}
@@ -3767,9 +3763,6 @@ type UpdateControlInput struct {
 	ClearCampaigns                  bool
 	AddCampaignIDs                  []string `json:"add_campaign_ids,omitempty"`
 	RemoveCampaignIDs               []string `json:"remove_campaign_ids,omitempty"`
-	ClearFindings                   bool
-	AddFindingIDs                   []string `json:"add_finding_ids,omitempty"`
-	RemoveFindingIDs                []string `json:"remove_finding_ids,omitempty"`
 	ClearControlImplementations     bool
 	AddControlImplementationIDs     []string `json:"add_control_implementation_ids,omitempty"`
 	RemoveControlImplementationIDs  []string `json:"remove_control_implementation_ids,omitempty"`
@@ -4277,15 +4270,6 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.RemoveCampaignIDs; len(v) > 0 {
 		m.RemoveCampaignIDs(v...)
-	}
-	if i.ClearFindings {
-		m.ClearFindings()
-	}
-	if v := i.AddFindingIDs; len(v) > 0 {
-		m.AddFindingIDs(v...)
-	}
-	if v := i.RemoveFindingIDs; len(v) > 0 {
-		m.RemoveFindingIDs(v...)
 	}
 	if i.ClearControlImplementations {
 		m.ClearControlImplementations()
@@ -5550,7 +5534,6 @@ type CreateDirectoryAccountInput struct {
 	PlatformID           *string                         `json:"platform_id,omitempty"`
 	IdentityHolderID     *string                         `json:"identity_holder_id,omitempty"`
 	AvatarFileID         *string                         `json:"avatar_file_id,omitempty"`
-	GroupIDs             []string                        `json:"group_ids,omitempty"`
 	FindingIDs           []string                        `json:"finding_ids,omitempty"`
 	WorkflowObjectRefIDs []string                        `json:"workflow_object_ref_ids,omitempty"`
 }
@@ -5678,9 +5661,6 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.AvatarFileID; v != nil {
 		m.SetAvatarFileID(*v)
 	}
-	if v := i.GroupIDs; len(v) > 0 {
-		m.AddGroupIDs(v...)
-	}
 	if v := i.FindingIDs; len(v) > 0 {
 		m.AddFindingIDs(v...)
 	}
@@ -5765,9 +5745,6 @@ type UpdateDirectoryAccountInput struct {
 	IdentityHolderID           *string `json:"identity_holder_id,omitempty"`
 	ClearAvatarFile            bool
 	AvatarFileID               *string `json:"avatar_file_id,omitempty"`
-	ClearGroups                bool
-	AddGroupIDs                []string `json:"add_group_ids,omitempty"`
-	RemoveGroupIDs             []string `json:"remove_group_ids,omitempty"`
 	ClearFindings              bool
 	AddFindingIDs              []string `json:"add_finding_ids,omitempty"`
 	RemoveFindingIDs           []string `json:"remove_finding_ids,omitempty"`
@@ -5981,15 +5958,6 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.AvatarFileID; v != nil {
 		m.SetAvatarFileID(*v)
-	}
-	if i.ClearGroups {
-		m.ClearGroups()
-	}
-	if v := i.AddGroupIDs; len(v) > 0 {
-		m.AddGroupIDs(v...)
-	}
-	if v := i.RemoveGroupIDs; len(v) > 0 {
-		m.RemoveGroupIDs(v...)
 	}
 	if i.ClearFindings {
 		m.ClearFindings()
@@ -10277,7 +10245,6 @@ type CreateFindingInput struct {
 	IntegrationIDs         []string               `json:"integration_ids,omitempty"`
 	VulnerabilityIDs       []string               `json:"vulnerability_ids,omitempty"`
 	ActionPlanIDs          []string               `json:"action_plan_ids,omitempty"`
-	ControlIDs             []string               `json:"control_ids,omitempty"`
 	SubcontrolIDs          []string               `json:"subcontrol_ids,omitempty"`
 	RiskIDs                []string               `json:"risk_ids,omitempty"`
 	ProgramIDs             []string               `json:"program_ids,omitempty"`
@@ -10471,9 +10438,6 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	if v := i.ActionPlanIDs; len(v) > 0 {
 		m.AddActionPlanIDs(v...)
 	}
-	if v := i.ControlIDs; len(v) > 0 {
-		m.AddControlIDs(v...)
-	}
 	if v := i.SubcontrolIDs; len(v) > 0 {
 		m.AddSubcontrolIDs(v...)
 	}
@@ -10653,9 +10617,6 @@ type UpdateFindingInput struct {
 	ClearActionPlans            bool
 	AddActionPlanIDs            []string `json:"add_action_plan_ids,omitempty"`
 	RemoveActionPlanIDs         []string `json:"remove_action_plan_ids,omitempty"`
-	ClearControls               bool
-	AddControlIDs               []string `json:"add_control_ids,omitempty"`
-	RemoveControlIDs            []string `json:"remove_control_ids,omitempty"`
 	ClearSubcontrols            bool
 	AddSubcontrolIDs            []string `json:"add_subcontrol_ids,omitempty"`
 	RemoveSubcontrolIDs         []string `json:"remove_subcontrol_ids,omitempty"`
@@ -11076,15 +11037,6 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.RemoveActionPlanIDs; len(v) > 0 {
 		m.RemoveActionPlanIDs(v...)
-	}
-	if i.ClearControls {
-		m.ClearControls()
-	}
-	if v := i.AddControlIDs; len(v) > 0 {
-		m.AddControlIDs(v...)
-	}
-	if v := i.RemoveControlIDs; len(v) > 0 {
-		m.RemoveControlIDs(v...)
 	}
 	if i.ClearSubcontrols {
 		m.ClearSubcontrols()

@@ -13502,7 +13502,6 @@ input CreateControlInput {
 	entityIDs: [ID!]
 	identityHolderIDs: [ID!]
 	campaignIDs: [ID!]
-	findingIDs: [ID!]
 	controlImplementationIDs: [ID!]
 	subcontrolIDs: [ID!]
 	scheduledJobIDs: [ID!]
@@ -13850,7 +13849,6 @@ input CreateDirectoryAccountInput {
 	platformID: ID
 	identityHolderID: ID
 	avatarFileID: ID
-	groupIDs: [ID!]
 	findingIDs: [ID!]
 	workflowObjectRefIDs: [ID!]
 }
@@ -14962,7 +14960,6 @@ input CreateFindingInput {
 	integrationIDs: [ID!]
 	vulnerabilityIDs: [ID!]
 	actionPlanIDs: [ID!]
-	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
 	riskIDs: [ID!]
 	programIDs: [ID!]
@@ -93994,9 +93991,6 @@ input UpdateControlInput {
 	addCampaignIDs: [ID!]
 	removeCampaignIDs: [ID!]
 	clearCampaigns: Boolean
-	addFindingIDs: [ID!]
-	removeFindingIDs: [ID!]
-	clearFindings: Boolean
 	addControlImplementationIDs: [ID!]
 	removeControlImplementationIDs: [ID!]
 	clearControlImplementations: Boolean
@@ -94432,9 +94426,6 @@ input UpdateDirectoryAccountInput {
 	clearIdentityHolder: Boolean
 	avatarFileID: ID
 	clearAvatarFile: Boolean
-	addGroupIDs: [ID!]
-	removeGroupIDs: [ID!]
-	clearGroups: Boolean
 	addFindingIDs: [ID!]
 	removeFindingIDs: [ID!]
 	clearFindings: Boolean
@@ -95953,9 +95944,6 @@ input UpdateFindingInput {
 	addActionPlanIDs: [ID!]
 	removeActionPlanIDs: [ID!]
 	clearActionPlans: Boolean
-	addControlIDs: [ID!]
-	removeControlIDs: [ID!]
-	clearControls: Boolean
 	addSubcontrolIDs: [ID!]
 	removeSubcontrolIDs: [ID!]
 	clearSubcontrols: Boolean

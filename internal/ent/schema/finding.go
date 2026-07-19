@@ -302,6 +302,7 @@ func (f Finding) Edges() []ent.Edge {
 				entgql.MultiOrder(),
 				accessmap.EdgeViewCheck(Control{}.Name()),
 				entx.IntegrationMappingField(),
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			).
 			Through("control_mappings", FindingControl.Type),
 		edgeToWithPagination(&edgeDefinition{

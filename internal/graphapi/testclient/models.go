@@ -7104,7 +7104,6 @@ type CreateControlInput struct {
 	EntityIDs                []string                            `json:"entityIDs,omitempty"`
 	IdentityHolderIDs        []string                            `json:"identityHolderIDs,omitempty"`
 	CampaignIDs              []string                            `json:"campaignIDs,omitempty"`
-	FindingIDs               []string                            `json:"findingIDs,omitempty"`
 	ControlImplementationIDs []string                            `json:"controlImplementationIDs,omitempty"`
 	SubcontrolIDs            []string                            `json:"subcontrolIDs,omitempty"`
 	ScheduledJobIDs          []string                            `json:"scheduledJobIDs,omitempty"`
@@ -7312,7 +7311,6 @@ type CreateDirectoryAccountInput struct {
 	PlatformID           *string  `json:"platformID,omitempty"`
 	IdentityHolderID     *string  `json:"identityHolderID,omitempty"`
 	AvatarFileID         *string  `json:"avatarFileID,omitempty"`
-	GroupIDs             []string `json:"groupIDs,omitempty"`
 	FindingIDs           []string `json:"findingIDs,omitempty"`
 	WorkflowObjectRefIDs []string `json:"workflowObjectRefIDs,omitempty"`
 }
@@ -7978,7 +7976,6 @@ type CreateFindingInput struct {
 	IntegrationIDs       []string       `json:"integrationIDs,omitempty"`
 	VulnerabilityIDs     []string       `json:"vulnerabilityIDs,omitempty"`
 	ActionPlanIDs        []string       `json:"actionPlanIDs,omitempty"`
-	ControlIDs           []string       `json:"controlIDs,omitempty"`
 	SubcontrolIDs        []string       `json:"subcontrolIDs,omitempty"`
 	RiskIDs              []string       `json:"riskIDs,omitempty"`
 	ProgramIDs           []string       `json:"programIDs,omitempty"`
@@ -42767,9 +42764,6 @@ type UpdateControlInput struct {
 	AddCampaignIDs                 []string                            `json:"addCampaignIDs,omitempty"`
 	RemoveCampaignIDs              []string                            `json:"removeCampaignIDs,omitempty"`
 	ClearCampaigns                 *bool                               `json:"clearCampaigns,omitempty"`
-	AddFindingIDs                  []string                            `json:"addFindingIDs,omitempty"`
-	RemoveFindingIDs               []string                            `json:"removeFindingIDs,omitempty"`
-	ClearFindings                  *bool                               `json:"clearFindings,omitempty"`
 	AddControlImplementationIDs    []string                            `json:"addControlImplementationIDs,omitempty"`
 	RemoveControlImplementationIDs []string                            `json:"removeControlImplementationIDs,omitempty"`
 	ClearControlImplementations    *bool                               `json:"clearControlImplementations,omitempty"`
@@ -43078,9 +43072,6 @@ type UpdateDirectoryAccountInput struct {
 	ClearIdentityHolder        *bool    `json:"clearIdentityHolder,omitempty"`
 	AvatarFileID               *string  `json:"avatarFileID,omitempty"`
 	ClearAvatarFile            *bool    `json:"clearAvatarFile,omitempty"`
-	AddGroupIDs                []string `json:"addGroupIDs,omitempty"`
-	RemoveGroupIDs             []string `json:"removeGroupIDs,omitempty"`
-	ClearGroups                *bool    `json:"clearGroups,omitempty"`
 	AddFindingIDs              []string `json:"addFindingIDs,omitempty"`
 	RemoveFindingIDs           []string `json:"removeFindingIDs,omitempty"`
 	ClearFindings              *bool    `json:"clearFindings,omitempty"`
@@ -44162,9 +44153,6 @@ type UpdateFindingInput struct {
 	AddActionPlanIDs           []string       `json:"addActionPlanIDs,omitempty"`
 	RemoveActionPlanIDs        []string       `json:"removeActionPlanIDs,omitempty"`
 	ClearActionPlans           *bool          `json:"clearActionPlans,omitempty"`
-	AddControlIDs              []string       `json:"addControlIDs,omitempty"`
-	RemoveControlIDs           []string       `json:"removeControlIDs,omitempty"`
-	ClearControls              *bool          `json:"clearControls,omitempty"`
 	AddSubcontrolIDs           []string       `json:"addSubcontrolIDs,omitempty"`
 	RemoveSubcontrolIDs        []string       `json:"removeSubcontrolIDs,omitempty"`
 	ClearSubcontrols           *bool          `json:"clearSubcontrols,omitempty"`

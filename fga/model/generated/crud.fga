@@ -142,7 +142,7 @@ extend type organization
     define can_view_finding_control: [service, user] or can_edit_finding_control or full_access
     define can_edit_finding_control: [service, user] or can_delete_finding_control or full_access
     define can_delete_finding_control: [service, user] or full_access
-    define can_create_finding_control: can_edit or can_edit_finding_control
+    define can_create_finding_control: can_edit or can_edit_finding_control or auditor
 
     define can_view_group: [service, user, group#member] or can_edit_group or can_manage_group or full_access
     define can_edit_group: [service, user, group#member] or can_delete_group or can_manage_group or full_access

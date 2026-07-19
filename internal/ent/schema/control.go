@@ -115,6 +115,7 @@ func (c Control) Edges() []ent.Edge {
 				entgql.RelayConnection(),
 				entgql.QueryField(),
 				entgql.MultiOrder(),
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			).
 			Through("control_mappings", FindingControl.Type),
 		edgeToWithPagination(&edgeDefinition{

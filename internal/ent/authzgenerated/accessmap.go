@@ -1891,17 +1891,17 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 }, "finding_control": {"finding": {
 	ObjectType:          "finding",
 	SkipEditCheck:       true,
-	CheckViewAccess:     false,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "control": {
 	ObjectType:          "control",
 	SkipEditCheck:       true,
-	CheckViewAccess:     false,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "standard": {
 	ObjectType:          "standard",
 	SkipEditCheck:       true,
-	CheckViewAccess:     false,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 },
 }, "group": {"owner": {

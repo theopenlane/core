@@ -20,13 +20,9 @@ func TestMutationCreateFinding(t *testing.T) {
 	editingGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	groupMember := (&GroupMemberBuilder{client: suite.client, GroupID: editingGroup.ID, UserID: sharedAuditorUser.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
-	control := (&ControlBuilder{client: suite.client, ControlEditorGroupID: editingGroup.ID}).MustNew(sharedTestUser1.UserCtx, t)
-
 	firstControlFindingResp, err := suite.client.api.CreateFinding(sharedTestUser1.UserCtx, testclient.CreateFindingInput{
 		DisplayName: lo.ToPtr("First Control Finding"),
 		ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
-		OwnerID:     &sharedTestUser1.OrganizationID,
-		ControlIDs:  []string{control.ID},
 	})
 	assert.NilError(t, err)
 	assert.Check(t, firstControlFindingResp != nil)
@@ -61,7 +57,6 @@ func TestMutationCreateFinding(t *testing.T) {
 			request: testclient.CreateFindingInput{
 				DisplayName: lo.ToPtr("Finding"),
 				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
-				OwnerID:     &sharedTestUser1.OrganizationID,
 			},
 		},
 		{
@@ -69,8 +64,6 @@ func TestMutationCreateFinding(t *testing.T) {
 			request: testclient.CreateFindingInput{
 				DisplayName: lo.ToPtr("Auditor"),
 				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
-				ControlIDs:  []string{control.ID},
-				OwnerID:     &sharedTestUser1.OrganizationID,
 			},
 			ctx: sharedAuditorUser.UserCtx,
 		},
@@ -80,7 +73,6 @@ func TestMutationCreateFinding(t *testing.T) {
 				DisplayName: lo.ToPtr("Auditor Review Finding"),
 				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
 				ReviewIDs:   []string{resp.CreateReview.Review.ID},
-				OwnerID:     &sharedTestUser1.OrganizationID,
 			},
 			ctx: sharedAuditorUser.UserCtx,
 		},
@@ -89,19 +81,9 @@ func TestMutationCreateFinding(t *testing.T) {
 			request: testclient.CreateFindingInput{
 				DisplayName: lo.ToPtr("Auditor Finding Without Parent"),
 				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
-				OwnerID:     &sharedTestUser1.OrganizationID,
 			},
 			ctx:         sharedAuditorUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
-		},
-		{
-			name: "happy path, second finding under same control",
-			request: testclient.CreateFindingInput{
-				DisplayName: lo.ToPtr("Second Control Finding"),
-				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
-				ControlIDs:  []string{control.ID},
-				OwnerID:     &sharedTestUser1.OrganizationID,
-			},
 		},
 	}
 
@@ -153,32 +135,18 @@ func TestMutationCreateFinding(t *testing.T) {
 				assert.Check(t, *resp.CreateFinding.Finding.ReviewedByGroupID == "", "expected ReviewedByGroupID to be empty but was %v", resp.CreateFinding.Finding.ReviewedByGroupID)
 			}
 
-			if len(tc.request.ControlIDs) > 0 {
-				ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
-
-				entControl, err := suite.client.db.Control.Get(ctx, tc.request.ControlIDs[0])
-				assert.NilError(t, err)
-
-				linkedFindings, err := entControl.QueryFindings().All(ctx)
-				assert.NilError(t, err)
-				assert.Check(t, is.Len(linkedFindings, 2))
-			}
-
 			(&Cleanup[*generated.FindingDeleteOne]{client: suite.client.db.Finding, ID: resp.CreateFinding.Finding.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 		})
 	}
 
-	(&Cleanup[*generated.FindingDeleteOne]{client: suite.client.db.Finding, ID: finding.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.FindingDeleteOne]{client: suite.client.db.Finding, ID: firstControlFindingResp.CreateFinding.Finding.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.FindingDeleteOne]{client: suite.client.db.Finding, IDs: []string{finding.ID, firstControlFindingResp.CreateFinding.Finding.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.GroupMembershipDeleteOne]{client: suite.client.db.GroupMembership, ID: groupMember.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: editingGroup.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.ReviewDeleteOne]{client: suite.client.db.Review, ID: resp.CreateReview.Review.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
-
 func TestMutationCreateFindingUnderLinkedObject(t *testing.T) {
-
 	control := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	org2Control := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 
 	resp, err := suite.client.api.CreateReview(sharedAuditorUser.UserCtx, testclient.CreateReviewInput{
@@ -193,21 +161,11 @@ func TestMutationCreateFindingUnderLinkedObject(t *testing.T) {
 		expectedErr string
 	}{
 		{
-			name: "auditor can create under control",
-			request: testclient.CreateFindingInput{
-				DisplayName: lo.ToPtr("Finding control"),
-				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
-				ControlIDs:  []string{control.ID},
-				OwnerID:     &sharedTestUser1.OrganizationID,
-			},
-		},
-		{
 			name: "auditor can create under review",
 			request: testclient.CreateFindingInput{
 				DisplayName: lo.ToPtr("Finding review"),
 				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
 				ReviewIDs:   []string{resp.CreateReview.Review.ID},
-				OwnerID:     &sharedTestUser1.OrganizationID,
 			},
 		},
 		{
@@ -215,17 +173,6 @@ func TestMutationCreateFindingUnderLinkedObject(t *testing.T) {
 			request: testclient.CreateFindingInput{
 				DisplayName: lo.ToPtr("finding not linked to an object"),
 				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
-				OwnerID:     &sharedTestUser1.OrganizationID,
-			},
-			expectedErr: notAuthorizedErrorMsg,
-		},
-		{
-			name: "auditor cannot create finding link to unauthorized control",
-			request: testclient.CreateFindingInput{
-				DisplayName: lo.ToPtr("finding linked to control from org 2"),
-				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
-				ControlIDs:  []string{org2Control.ID},
-				OwnerID:     &sharedTestUser1.OrganizationID,
 			},
 			expectedErr: notAuthorizedErrorMsg,
 		},
@@ -249,7 +196,68 @@ func TestMutationCreateFindingUnderLinkedObject(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	// controls are linked to a finding after creation via the finding_control join, not
+	// through CreateFindingInput, so exercise CreateFindingControl separately
+	t.Run("auditor can create finding control under multiple controls", func(t *testing.T) {
+		findingResp, err := suite.client.api.CreateFinding(sharedAuditorUser.UserCtx, testclient.CreateFindingInput{
+			DisplayName: lo.ToPtr("Finding multiple controls"),
+			ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
+			ReviewIDs:   []string{resp.CreateReview.Review.ID},
+		})
+		assert.NilError(t, err)
+		assert.Assert(t, findingResp != nil)
+
+		findingID := findingResp.CreateFinding.Finding.ID
+
+		fcIDs := make([]string, 0, 2)
+
+		for _, c := range []string{control.ID, control2.ID} {
+			fcResp, err := suite.client.api.CreateFindingControl(sharedAuditorUser.UserCtx, testclient.CreateFindingControlInput{
+				FindingID: findingID,
+				ControlID: c,
+			})
+			assert.NilError(t, err)
+			assert.Assert(t, fcResp != nil)
+			assert.Check(t, is.Equal(c, fcResp.CreateFindingControl.FindingControl.ControlID))
+
+			fcIDs = append(fcIDs, fcResp.CreateFindingControl.FindingControl.ID)
+		}
+
+		// confirm the finding is now linked to both controls, not just the last one created
+		ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
+
+		entFinding, err := suite.client.db.Finding.Get(ctx, findingID)
+		assert.NilError(t, err)
+
+		linkedControls, err := entFinding.QueryControls().All(ctx)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(linkedControls, 2))
+
+		(&Cleanup[*generated.FindingControlDeleteOne]{client: suite.client.db.FindingControl, IDs: fcIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+		(&Cleanup[*generated.FindingDeleteOne]{client: suite.client.db.Finding, ID: findingID}).MustDelete(sharedTestUser1.UserCtx, t)
+	})
+
+	t.Run("auditor cannot create finding control link to unauthorized control", func(t *testing.T) {
+		findingResp, err := suite.client.api.CreateFinding(sharedAuditorUser.UserCtx, testclient.CreateFindingInput{
+			DisplayName: lo.ToPtr("Finding linked to control from org 2"),
+			ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
+			ReviewIDs:   []string{resp.CreateReview.Review.ID},
+		})
+		assert.NilError(t, err)
+		assert.Assert(t, findingResp != nil)
+
+		findingID := findingResp.CreateFinding.Finding.ID
+
+		_, err = suite.client.api.CreateFindingControl(sharedAuditorUser.UserCtx, testclient.CreateFindingControlInput{
+			FindingID: findingID,
+			ControlID: org2Control.ID,
+		})
+		assert.ErrorContains(t, err, notAuthorizedErrorMsg)
+
+		(&Cleanup[*generated.FindingDeleteOne]{client: suite.client.db.Finding, ID: findingID}).MustDelete(sharedTestUser1.UserCtx, t)
+	})
+
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control.ID, control2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: org2Control.ID}).MustDelete(sharedTestUser2.UserCtx, t)
 	(&Cleanup[*generated.ReviewDeleteOne]{client: suite.client.db.Review, ID: resp.CreateReview.Review.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
