@@ -175,9 +175,6 @@ func (s domainScanSaga) submitAndScheduleDomainScans(ctx context.Context, organi
 	// this one) knows the full group to check against once it's this one's turn to finish
 	siblingScanIDs := slices.Collect(maps.Values(scanIDs))
 
-	// mark every scan processing as soon as this job actually starts working, rather than
-	// leaving them in "pending" (indistinguishable from "not yet picked up") for however long
-	// the Cloudflare submission and enrichment gathering below take
 	if err := s.services.DB().Scan.Update().
 		Where(scan.IDIn(siblingScanIDs...)).
 		SetStatus(enums.ScanStatusProcessing).
@@ -273,9 +270,7 @@ func (s domainScanSaga) submitAndScheduleDomainScans(ctx context.Context, organi
 }
 
 // domainScanSystemContext builds a context authorized to create/update Scan and Notification records
-// for organizationID on behalf of the system. CapBypassOrgFilter is deliberately omitted so every
-// query made through this context stays auto-scoped to organizationID - every use of this context
-// operates on a single org, so nothing should ever need to see across orgs
+// for organizationID on behalf of the system
 func domainScanSystemContext(ctx context.Context, organizationID string) context.Context {
 	return auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), &auth.Caller{
 		OrganizationID: organizationID,
@@ -453,10 +448,7 @@ func (s domainScanSaga) markDomainScansFailed(ctx context.Context, organizationI
 }
 
 // finalizeDomainScan builds the structured scan report and marks the Scan record completed, then
-// notifies the organization once every sibling in the group has finished. result is nil when the
-// URL Scanner task itself never produced a usable result (it errored, or the poll budget was
-// exhausted) - the report is still built from whatever enrichment data was already gathered, so
-// the scan completes with partial data instead of a bare failure
+// notifies the organization once every sibling in the group has finished
 func (s domainScanSaga) finalizeDomainScan(ctx context.Context, organizationID, internalScanID string, siblingScanIDs []string, result *DomainScanPollResult) error {
 	systemCtx := domainScanSystemContext(ctx, organizationID)
 
@@ -465,9 +457,6 @@ func (s domainScanSaga) finalizeDomainScan(ctx context.Context, organizationID, 
 		return err
 	}
 
-	// enrichment was already gathered concurrently with URL Scanner submission and polling
-	// (see gatherDomainScanEnrichments); round-trip it since ent's field.JSON decodes the
-	// stored struct back as a map[string]any
 	var enrichment domainscan.Enrichment
 	if err := jsonx.RoundTrip(scanRecord.Metadata[domainScanEnrichmentMetadataKey], &enrichment); err != nil {
 		return err
@@ -514,10 +503,7 @@ func (s domainScanSaga) finalizeDomainScan(ctx context.Context, organizationID, 
 }
 
 // maybeNotifyDomainScanGroup checks whether every sibling scan in siblingScanIDs (a single-element
-// slice for a one-off scan) has reached a terminal state (completed or failed); if any is still
-// processing it returns nil without doing anything, since it'll be called again when that one
-// finishes. Once every sibling is terminal, it combines their reports and sends one Notification
-// for the whole group, so a submission of N domains produces exactly one notification, not N
+// slice for a one-off scan) has reached a terminal state (completed or failed)
 func (s domainScanSaga) maybeNotifyDomainScanGroup(ctx context.Context, organizationID string, siblingScanIDs []string) error {
 	if organizationID == "" {
 		return nil

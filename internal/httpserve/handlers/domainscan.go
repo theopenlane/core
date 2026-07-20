@@ -9,6 +9,7 @@ import (
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
 	"github.com/theopenlane/core/pkg/logx"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
@@ -27,6 +28,15 @@ const domainScanPerformedBy = "openlane_domain_scan"
 // DomainScanHandler queues a domain scan by creating one pending Scan record and returning
 // immediately with its ID. Requests are limited to one per hour, with the exception of system admins
 func (h *Handler) DomainScanHandler(ctx echo.Context) error {
+	if h.IntegrationsRuntime == nil {
+		return h.BadRequest(ctx, ErrDomainScanNotEnabled)
+	}
+
+	def, ok := h.IntegrationsRuntime.Registry().Definition(cloudflare.DefinitionID.ID())
+	if !ok || !def.Active {
+		return h.BadRequest(ctx, ErrDomainScanNotEnabled)
+	}
+
 	req, err := BindAndValidate[models.DomainScanRequest](ctx)
 	if err != nil {
 		return h.InvalidInput(ctx, err)

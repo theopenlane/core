@@ -32,9 +32,8 @@ type importSummary struct {
 	FindingIDs      []string `json:"finding_ids,omitempty"`
 }
 
-// HandleImportDomainScanReview creates the
-// records for a reviewer-accepted domain scan report, all under one transaction, and sends a
-// follow-up Notification once done
+// HandleImportDomainScanReview creates the records for a reviewer-accepted domain scan report,
+// all under one transaction, and sends a follow-up Notification once done
 func (s domainScanSaga) HandleImportDomainScanReview(ctx context.Context, envelope operations.ImportDomainScanReviewEnvelope) error {
 	ctx = logx.WithFields(ctx, logx.LogFields{
 		"organization_id": envelope.OrganizationID,
@@ -85,10 +84,6 @@ func (s domainScanSaga) notifyDomainScanImportComplete(ctx context.Context, orga
 func importDomainScanReview(ctx context.Context, client *generated.Client, envelope operations.ImportDomainScanReviewEnvelope) (importSummary, error) {
 	var summary importSummary
 
-	if len(envelope.Systems) > 0 && len(envelope.Platforms) == 0 {
-		return summary, fmt.Errorf("%w: systems were submitted without any platform to attach them to", ErrDomainScanImportInvalid)
-	}
-
 	assetIDByRef, err := createDomainScanAssets(ctx, client, envelope.OrganizationID, envelope.Assets, envelope.ScanIDs)
 	if err != nil {
 		return summary, err
@@ -112,8 +107,10 @@ func importDomainScanReview(ctx context.Context, client *generated.Client, envel
 		summary.EntityIDs = append(summary.EntityIDs, id)
 	}
 
+	platformIDByRef := map[string]string{}
+
 	if len(envelope.Platforms) > 0 {
-		platformIDByRef, err := createDomainScanPlatforms(ctx, client, envelope.OrganizationID, envelope.Platforms, envelope.ScanIDs, entityIDByRef, assetIDByRef)
+		platformIDByRef, err = createDomainScanPlatforms(ctx, client, envelope.OrganizationID, envelope.Platforms, envelope.ScanIDs, entityIDByRef, assetIDByRef)
 		if err != nil {
 			return summary, err
 		}
@@ -121,7 +118,9 @@ func importDomainScanReview(ctx context.Context, client *generated.Client, envel
 		for _, id := range platformIDByRef {
 			summary.PlatformIDs = append(summary.PlatformIDs, id)
 		}
+	}
 
+	if len(envelope.Systems) > 0 {
 		summary.SystemDetailIDs, err = createDomainScanSystemDetails(ctx, client, envelope.OrganizationID, envelope.Systems, platformIDByRef, entityIDByRef, assetIDByRef)
 		if err != nil {
 			return summary, err
@@ -273,7 +272,7 @@ func domainScanMappingMatches(assets []operations.ImportDomainScanReviewAsset, a
 	return ids
 }
 
-// createDomainScanAssets creates one Asset per accepted asset, returning a ref -> Asset ID map
+// createDomainScanAssets creates one Asset per accepted asset
 func createDomainScanAssets(ctx context.Context, client *generated.Client, ownerID string, assets []operations.ImportDomainScanReviewAsset, scanIDs []string) (map[string]string, error) {
 	ids := make(map[string]string, len(assets))
 
@@ -283,14 +282,8 @@ func createDomainScanAssets(ctx context.Context, client *generated.Client, owner
 			OwnerID:    &ownerID,
 			Categories: asset.Categories,
 			ScanIDs:    scanIDs,
-		}
-
-		if asset.Identifier != "" {
-			input.Identifier = &asset.Identifier
-		}
-
-		if asset.Website != "" {
-			input.Website = &asset.Website
+			Identifier: &asset.Identifier,
+			Website:    &asset.Website,
 		}
 
 		created, err := client.Asset.Create().SetInput(input).Save(ctx)
@@ -342,9 +335,6 @@ func createDomainScanSystemDetails(ctx context.Context, client *generated.Client
 
 	for _, system := range systems {
 		platformIDs := resolveDomainScanRefs(system.PlatformRefs, platformIDByRef)
-		if len(platformIDs) == 0 {
-			return nil, fmt.Errorf("%w: system %q has no platform to attach to", ErrDomainScanImportInvalid, system.Name)
-		}
 
 		input := generated.CreateSystemDetailInput{
 			SystemName:  system.Name,
@@ -352,10 +342,7 @@ func createDomainScanSystemDetails(ctx context.Context, client *generated.Client
 			PlatformIDs: platformIDs,
 			EntityIDs:   resolveDomainScanRefs(system.EntityRefs, entityIDByRef),
 			AssetIDs:    resolveDomainScanRefs(system.AssetRefs, assetIDByRef),
-		}
-
-		if system.Description != "" {
-			input.Description = &system.Description
+			Description: &system.Description,
 		}
 
 		created, err := client.SystemDetail.Create().SetInput(input).Save(ctx)
@@ -383,18 +370,9 @@ func createDomainScanFindings(ctx context.Context, client *generated.Client, own
 			AssetIDs: domainScanMappingMatches(assets, assetIDByRef, func(assetDomain string) bool {
 				return domain != "" && (assetDomain == domain || strings.HasSuffix(assetDomain, "."+domain))
 			}),
-		}
-
-		if finding.Category != "" {
-			input.Category = &finding.Category
-		}
-
-		if finding.Description != "" {
-			input.Description = &finding.Description
-		}
-
-		if finding.Severity != "" {
-			input.Severity = &finding.Severity
+			Category:    &finding.Category,
+			Description: &finding.Description,
+			Severity:    &finding.Severity,
 		}
 
 		created, err := client.Finding.Create().SetInput(input).Save(ctx)

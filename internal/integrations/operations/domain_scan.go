@@ -12,7 +12,7 @@ import (
 const (
 	// DomainScanPollIntervalMin is the wait before the first retry, and the starting point the backoff doubles from
 	DomainScanPollIntervalMin = 10 * time.Second
-	// DomainScanPollIntervalMax caps how long the backoff is allowed togrow to between poll cycles
+	// DomainScanPollIntervalMax caps how long the backoff is allowed to grow to between poll cycles
 	DomainScanPollIntervalMax = 60 * time.Second
 	// DomainScanMaxAttempts bounds how many poll cycles are attempted before giving up on a scan
 	DomainScanMaxAttempts = 30
@@ -95,9 +95,8 @@ type DomainScanPollEnvelope struct {
 	InternalScanID string `json:"internalScanId"`
 	// Attempt is the number of poll cycles already attempted for this scan
 	Attempt int `json:"attempt"`
-	// SiblingScanIDs lists every internal Scan ID submitted together with this one (a
-	// single-element slice for a one-off scan), so the last one to finish can gather and
-	// combine every sibling's report into a single notification
+	// SiblingScanIDs lists every internal Scan ID submitted together with this one
+	// so the last one to finish can gather and combine every sibling's report into a single notification
 	SiblingScanIDs []string `json:"siblingScanIds"`
 }
 

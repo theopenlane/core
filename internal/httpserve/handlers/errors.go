@@ -29,6 +29,8 @@ var (
 	ErrProcessingRequest = errors.New("error processing request, please try again")
 	// ErrDomainScanRateLimited is returned when an organization has already triggered a domain scan within the rate limit window
 	ErrDomainScanRateLimited = errors.New("domain scan already requested recently for this organization, please try again later")
+	// ErrDomainScanNotEnabled is returned when domain scanning is not available on this server
+	ErrDomainScanNotEnabled = errors.New("domain scan is not enabled")
 	// ErrMissingRequiredFields is returned when the login request has an empty username or password
 	ErrMissingRequiredFields = errors.New("invalid request, missing username and/or password")
 	// ErrInvalidInput is returned when the input is invalid
